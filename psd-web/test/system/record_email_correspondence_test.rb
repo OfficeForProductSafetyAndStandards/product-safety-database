@@ -142,8 +142,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Timeline"
-    within id: "activity" do
-      assert_equal("Email added", first("h3").text)
+
+    within id: "div.timeline" do
+      assert_equal("Email added", first('h3').text)
       assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
     end
   end
@@ -162,8 +163,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Timeline"
-    within id: "activity" do
-      assert_equal(@correspondence.overview, first("h3").text)
+
+    within "div.timeline" do
+      assert_equal(@correspondence.overview, first('h3').text)
     end
   end
 
@@ -185,8 +187,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Timeline"
-    within id: "activity" do
-      assert_equal(@correspondence.overview, first("h3").text)
+
+    within "div.timeline" do
+      assert_equal(@correspondence.overview, first('h3').text)
     end
   end
 
@@ -202,9 +205,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     sign_in_as same_org_user
     visit investigation_path(@investigation)
 
-    click_on Timeline
-    within id: "activity" do
-      assert_equal(@correspondence.overview, first("h3").text)
+    click_on "Timeline"
+    within id: "div.timeline" do
+      assert_equal(@correspondence.overview, first('h3').text)
     end
   end
 
