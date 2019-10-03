@@ -14,9 +14,9 @@ if [[ $(./infrastructure/ci/get-changed-components.sh) =~ ((^| )$COMPONENT($| ))
     cf logout
 
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    docker pull beisopss/$COMPONENT:$BUILD_ID
-    docker tag beisopss/$COMPONENT:$BUILD_ID beisopss/$COMPONENT:$BRANCH
-    docker push beisopss/$COMPONENT:$BRANCH
+    docker pull $DOCKER_ORG/$COMPONENT:$BUILD_ID
+    docker tag $DOCKER_ORG/$COMPONENT:$BUILD_ID $DOCKER_ORG/$COMPONENT:$BRANCH
+    docker push $DOCKER_ORG/$COMPONENT:$BRANCH
 else
     echo 'Deployment not required.'
 fi
