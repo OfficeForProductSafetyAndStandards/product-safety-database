@@ -4,37 +4,6 @@ services:
   db:
     image: ${DOCKER_ORG}/db:${TRAVIS_BUILD_NUMBER}
 
-  keycloak:
-    environment:
-      - NOTIFY_API_KEY
-    image: ${DOCKER_ORG}/keycloak:${TRAVIS_BUILD_NUMBER}
-
-  antivirus:
-    image: ${DOCKER_ORG}/antivirus:${TRAVIS_BUILD_NUMBER}
-
-  maintenance:
-    image: ${DOCKER_ORG}/maintenance:${TRAVIS_BUILD_NUMBER}
-
-  cosmetics-web:
-    command: tail -f /dev/null
-    image: ${DOCKER_ORG}/cosmetics-web:${TRAVIS_BUILD_NUMBER}
-    volumes:
-      - ~/bundle-cache:/usr/local/bundle
-      - ~/coverage-cache/cosmetics:/cosmetics-web/coverage
-    environment:
-      - CI
-      - TRAVIS
-      - TRAVIS_BRANCH
-      - TRAVIS_JOB_ID
-      - TRAVIS_PULL_REQUEST
-      - SEARCH_HOST=localhost
-      - SUBMIT_HOST=localhost
-  cosmetics-worker:
-    command: tail -f /dev/null
-    image: ${DOCKER_ORG}/cosmetics-worker:${TRAVIS_BUILD_NUMBER}
-    volumes:
-      - ~/bundle-cache:/usr/local/bundle
-
   psd-web:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-web:${TRAVIS_BUILD_NUMBER}
@@ -58,6 +27,5 @@ services:
     image: dadarek/wait-for-dependencies
     depends_on:
       - elasticsearch
-      - keycloak
       - redis
-    command: elasticsearch:9200 keycloak:8080
+    command: elasticsearch:9200

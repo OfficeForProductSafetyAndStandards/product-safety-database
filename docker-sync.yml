@@ -4,14 +4,6 @@ options:
   compose-dev-file-path: 'docker-compose.sync.yml'
   verbose: true
 syncs:
-  antivirus-sync:
-    src: './antivirus'
-  maintenance-sync:
-    src: './maintenance'
-    sync_excludes: ['node_modules']
-  cosmetics-web-sync:
-    src: './cosmetics-web'
-    sync_excludes: ['node_modules', 'tmp', 'vendor/shared-web']
   psd-web-sync:
     src: './psd-web'
     sync_excludes: ['node_modules', 'tmp', 'vendor/shared-web']

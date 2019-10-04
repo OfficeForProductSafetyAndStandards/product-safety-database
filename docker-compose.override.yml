@@ -9,33 +9,12 @@ services:
     ports:
       - "9200:9200"
 
-  keycloak:
-    env_file:
-      - .env
-      - .env.keycloak
-    volumes:
-      - ${PWD-.}/keycloak/configuration:/opt/jboss/keycloak/configuration
-
-  cosmetics-web:
-    command: bin/rails s -p 3002 -b 0.0.0.0
-    ports:
-      - "3002:3002"
-    env_file:
-      - .env
-      - .env.keycloak.cosmetics
-  cosmetics-worker:
-    env_file:
-      - .env
-      - .env.antivirus
-
   psd-web:
     command: bin/rails s -p 3000 -b 0.0.0.0
     ports:
       - "3000:3000"
     env_file:
       - .env
-      - .env.keycloak.psd
   psd-worker:
     env_file:
       - .env
-      - .env.antivirus
