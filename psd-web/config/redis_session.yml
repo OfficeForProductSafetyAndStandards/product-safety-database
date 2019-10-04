@@ -1,5 +1,5 @@
 default: &default
-  host: 'redis'
+  host: <%= ENV.fetch('REDIS_HOST', 'redis') %>
   db: 1
 
 development:

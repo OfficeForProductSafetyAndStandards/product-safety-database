@@ -22,6 +22,8 @@ gem "shared-web", path: "./vendor/shared-web"
 
 
 group :development, :test do
+  gem 'dotenv-rails'
+  gem 'pry'
   gem "roo", "~> 2.8.2"
   gem "rspec-mocks"
 

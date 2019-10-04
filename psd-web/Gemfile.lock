@@ -135,6 +135,7 @@ GEM
     cf-app-utils (0.6)
     childprocess (1.0.1)
       rake (< 13.0)
+    coderay (1.1.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
     coveralls (0.8.23)
@@ -151,6 +152,10 @@ GEM
     docile (1.3.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     elasticsearch (6.8.0)
       elasticsearch-api (= 6.8.0)
       elasticsearch-transport (= 6.8.0)
@@ -239,6 +244,9 @@ GEM
     pg (1.1.4)
     pghero (2.2.1)
       activerecord
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     public_suffix (3.1.0)
     puma (3.12.1)
     pundit (2.0.1)
@@ -432,9 +440,11 @@ DEPENDENCIES
   axlsx!
   axlsx_rails
   cf-app-utils
+  dotenv-rails
   jbuilder (~> 2.9)
   pg (~> 1.1)
   pghero
+  pry
   puma (~> 3.12)
   pundit
   redcarpet
@@ -453,4 +463,4 @@ RUBY VERSION
    ruby 2.5.5p157
 
 BUNDLED WITH
-   1.17.3
+   2.0.2
