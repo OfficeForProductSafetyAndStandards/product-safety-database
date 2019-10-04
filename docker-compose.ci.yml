@@ -1,9 +1,6 @@
 version: '3'
 
 services:
-  db:
-    image: ${DOCKER_ORG}/db
-
   psd-web:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-web:${TRAVIS_BUILD_NUMBER}
