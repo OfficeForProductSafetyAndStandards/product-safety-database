@@ -8,7 +8,7 @@ This folder also contains the code for the [background worker](../psd-worker/REA
 
 The site is written in [Ruby on Rails](https://rubyonrails.org/).
 
-We're using [Slim](http://slim-lang.com/) as our HTML templating language, 
+We're using [Slim](http://slim-lang.com/) as our HTML templating language,
 ES6 JavaScript and [Sass](https://sass-lang.com/) for styling transplied with webpack.
 
 ## Getting Setup
@@ -44,7 +44,7 @@ In order to get things like code completion and linting, it's necessary to insta
 
 To make managing ruby versions easier, you can use [rbenv](https://github.com/rbenv/rbenv).
 Once rbenv is installed, run the following commands:
-    
+
     # Install the version of ruby specified in `.ruby-version`.
     rbenv install
     # Install bundler
@@ -65,7 +65,7 @@ RubyMine comes with db inspection tools, too. To connect to the dev db, you'll n
 
 ### Debugging
 
-Debugging is available by running `docker-compose -f docker-compose.yml -f docker-compose.debug.yml up psd-web` and then 
+Debugging is available by running `docker-compose -f docker-compose.yml -f docker-compose.debug.yml up psd-web` and then
 - the `Docker: Attach to PSD` configuration, if in VS Code.
 - the `Remote Debug` configuration, if in RubyMine
 Note, that when run in this mode, the website won't launch until the debugger is connected!
@@ -120,7 +120,7 @@ To create an Elasticsearch instance for the current space:
 
 #### Redis
 
-To create a redis instance for the current space. 
+To create a redis instance for the current space.
 
     cf marketplace -s redis
     cf create-service redis tiny-3.2 psd-queue
@@ -210,3 +210,6 @@ Once all the credentials are created, the app can be deployed using:
 #### PSD Worker
 
 See [psd-worker/README.md](../psd-worker/README.md#deployment-from-scratch).
+
+#
+
