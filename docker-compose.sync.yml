@@ -9,47 +9,12 @@ services:
     ports:
       - "9200:9200"
 
-  keycloak:
-    env_file:
-      - .env
-      - .env.keycloak
-
-  antivirus:
-    volumes:
-      - antivirus-sync:/antivirus:nocopy
-      - bundle-cache:/usr/local/bundle
-
-  maintenance:
-    volumes:
-      - maintenance-sync:/maintenance:nocopy
-
-  cosmetics-web:
-    command: bin/rails s -p 3002 -b 0.0.0.0
-    ports:
-      - "3002:3002"
-    env_file:
-      - .env
-      - .env.keycloak.cosmetics
-    volumes:
-      - cosmetics-web-sync:/cosmetics-web:nocopy
-      - shared-web-sync:/cosmetics-web/vendor/shared-web:nocopy
-      - bundle-cache:/usr/local/bundle
-  cosmetics-worker:
-    env_file:
-      - .env
-      - .env.antivirus
-    volumes:
-      - cosmetics-web-sync:/cosmetics-web:nocopy
-      - shared-web-sync:/cosmetics-web/vendor/shared-web:nocopy
-      - bundle-cache:/usr/local/bundle
-
   psd-web:
     command: bin/rails s -p 3000 -b 0.0.0.0
     ports:
       - "3000:3000"
     env_file:
       - .env
-      - .env.keycloak.psd
     volumes:
       - psd-web-sync:/psd-web:nocopy
       - shared-web-sync:/psd-web/vendor/shared-web:nocopy
@@ -57,19 +22,12 @@ services:
   psd-worker:
     env_file:
       - .env
-      - .env.antivirus
     volumes:
       - psd-web-sync:/psd-web:nocopy
       - shared-web-sync:/psd-web/vendor/shared-web:nocopy
       - bundle-cache:/usr/local/bundle
 
 volumes:
-  antivirus-sync:
-    external: true
-  maintenance-sync:
-    external: true
-  cosmetics-web-sync:
-    external: true
   psd-web-sync:
     external: true
   shared-web-sync:

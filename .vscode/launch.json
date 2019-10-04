@@ -13,16 +13,6 @@
             "remotePort": "1234",
             "remoteWorkspaceRoot": "/psd-web",
             "showDebuggerOutput": true,
-        },
-        {
-            "name": "Docker: Attach to Cosmetics",
-            "type": "Ruby",
-            "request": "attach",
-            "cwd": "${workspaceRoot}/cosmetics-web",
-            "remoteHost": "localhost",
-            "remotePort": "1235",
-            "remoteWorkspaceRoot": "/cosmetics-web",
-            "showDebuggerOutput": true,
         }
     ]
 }

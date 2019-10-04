@@ -54,10 +54,6 @@ You should sign up using GitHub OAuth to ensure MFA.
 
 [logstash-filters.conf](./logstash-filters.conf) provides a set of rules which logstash can use to parse logs.
 
-We're using [ElastAlerts](https://github.com/Yelp/elastalert) within Logit to track the logs and send alerts in certain scenarios (eg. a spike in unsuccessful file uploads). 
-The config files for these alerts can be found in the `elastalert` folder. 
-Please note the email address and the Slack webhook URL are placeholder values and will need updating. These values can be obtained from the existing alerts on Logit.
-
 
 ### S3
 
@@ -72,7 +68,7 @@ See [the root README](../README.md#amazon-web-services) for more details about s
 Our metrics are sent to an ELK stack and S3 using [the paas-metric-exporter app](./paas-metric-exporter).
 
 We have set up a regular job to query the database and to print certain metrics into the logs. This was all done in [PR #962](https://github.com/UKGovernmentBEIS/beis-opss/pull/962).
-The metrics are sent in JSON format and logstash is clever enough to split these out into separate logs for each key-value pair. 
+The metrics are sent in JSON format and logstash is clever enough to split these out into separate logs for each key-value pair.
 However, you will need to add an extra filter in [logstash-filters.conf](./logstash-filters.conf), in order to create new fields on the logs instead of the data all being captured in the `message` field.
 
 
@@ -84,7 +80,7 @@ Deploy the app by running `cf push --no-start` from the `paas-metric-exporter` f
 Once the app has been created, define the following environment variables:
 
 Set the metrics to be logged to stdout using:
-    
+
     cf set-env metric-exporter DEBUG true
 
 Tell the app to connect to the London PaaS API

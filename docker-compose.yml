@@ -6,8 +6,6 @@ services:
       context: ./db
     volumes:
       - postgres-volume:/var/lib/postgresql/data
-    env_file:
-      - .env.keycloak
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3
@@ -21,79 +19,6 @@ services:
     image: redis
     hostname: redis
 
-  keycloak:
-    build:
-      context: ./keycloak
-    env_file:
-      - .env.keycloak
-    depends_on:
-      - db
-    ports:
-      - "8080:8080"
-#    This can speed up development when working on themes in keycloak, by not requiring to rebuild the keycloak image
-#    to pickup changes, instead simply restarting the keycloak container
-#    volumes:
-#      - ${PWD-.}/keycloak/govuk-theme/govuk:/opt/jboss/keycloak/themes/govuk
-
-  antivirus:
-    build:
-      context: ./antivirus
-    env_file:
-      - .env.antivirus
-    environment:
-      - PORT=3006
-    ports:
-      - "3006:3006"
-    volumes:
-      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/antivirus:/antivirus
-      - bundle-cache:/usr/local/bundle
-
-  maintenance:
-    build:
-      context: .
-      dockerfile: ./maintenance/Dockerfile
-    ports:
-      - "3005:3005"
-    volumes:
-      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/maintenance:/maintenance
-
-  cosmetics-web:
-    build:
-      context: .
-      dockerfile: ./cosmetics-web/Dockerfile
-    volumes:
-      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/cosmetics-web:/cosmetics-web
-      - ${PWD-.}/shared-web:/cosmetics-web/vendor/shared-web
-      - bundle-cache:/usr/local/bundle
-    depends_on:
-      - db
-      - elasticsearch
-      - keycloak
-      - redis
-      - cosmetics-worker
-    env_file:
-        - .env.keycloak.cosmetics
-  cosmetics-worker:
-    build:
-      context: .
-      dockerfile: ./cosmetics-worker/Dockerfile
-    command: bin/sidekiq -C config/sidekiq.yml
-    volumes:
-      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/cosmetics-web:/cosmetics-web
-      - ${PWD-.}/shared-web:/cosmetics-web/vendor/shared-web
-      - bundle-cache:/usr/local/bundle
-    depends_on:
-      - antivirus
-      - db
-      - elasticsearch
-      - redis
-    env_file:
-      - .env.antivirus
-
   psd-web:
     build:
       context: .
@@ -106,11 +31,8 @@ services:
     depends_on:
       - db
       - elasticsearch
-      - keycloak
       - redis
       - psd-worker
-    env_file:
-      - .env.keycloak.psd
   psd-worker:
     build:
       context: .
@@ -122,12 +44,9 @@ services:
       - ${PWD-.}/shared-web:/psd-web/vendor/shared-web
       - bundle-cache:/usr/local/bundle
     depends_on:
-      - antivirus
       - db
       - elasticsearch
       - redis
-    env_file:
-      - .env.antivirus
 
 volumes:
   postgres-volume:
