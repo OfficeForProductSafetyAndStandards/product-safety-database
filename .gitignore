@@ -147,6 +147,7 @@ $RECYCLE.BIN/
 .env
 
 psd-web/.ruby-gemset
+psd-web/vendor/shared-web
 
 *.log
 
