@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  db:
+    image: postgres:10.5
+
+  keycloak:
+    environment:
+      - NOTIFY_API_KEY
+    image: beisopss/keycloak:prod
+
+  antivirus:
+    image: beisopss/antivirus:prod
+
   psd-web:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-web:${TRAVIS_BUILD_NUMBER}
@@ -14,6 +25,7 @@ services:
       - TRAVIS_JOB_ID
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
+      - KEYCLOAK_AUTH_URL=http://keycloak:8080/auth
   psd-worker:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-worker:${TRAVIS_BUILD_NUMBER}
