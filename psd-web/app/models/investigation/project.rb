@@ -2,7 +2,7 @@ class Investigation::Project < Investigation
   validates :user_title, :description, presence: true
 
   # Elasticsearch index name must be declared in children and parent
-  index_name [Rails.env, "investigations"].join("_")
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
   def self.model_name
     self.superclass.model_name

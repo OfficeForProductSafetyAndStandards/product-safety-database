@@ -229,7 +229,6 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
   end
 
   create_table "user_attributes", primary_key: "user_id", id: :uuid, default: nil, force: :cascade do |t|
-    t.boolean "boolean", default: false, null: false
     t.datetime "created_at", null: false
     t.boolean "has_accepted_declaration"
     t.boolean "has_been_sent_welcome_email"

@@ -5,7 +5,7 @@ class Product < ApplicationRecord
   include AttachmentConcern
   include SanitizationHelper
 
-  index_name [Rails.env, "products"].join("_")
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
   before_validation { trim_line_endings(:description) }
   validates :name, presence: true

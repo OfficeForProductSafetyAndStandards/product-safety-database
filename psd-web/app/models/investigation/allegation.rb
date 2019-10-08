@@ -4,7 +4,7 @@ class Investigation::Allegation < Investigation
   validates :non_compliant_reason, presence: true, on: :non_compliant
 
   # Elasticsearch index name must be declared in children and parent
-  index_name [Rails.env, "investigations"].join("_")
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
   def self.model_name
     self.superclass.model_name
