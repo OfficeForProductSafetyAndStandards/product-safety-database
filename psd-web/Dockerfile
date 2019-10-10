@@ -1,21 +1,41 @@
-FROM ruby:2.5.5
+FROM ruby:2.5.5 AS base
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 ENV CHROMIUM_DRIVER_VERSION 2.41
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get update && apt-get install -y build-essential postgresql-client libjemalloc2
 
+WORKDIR /psd-web/
+
+COPY ./psd-web/.ruby-version /psd-web/
+COPY ./psd-web/Gemfile* /psd-web/
+COPY ./shared-web /psd-web/vendor/shared-web
+
+ENTRYPOINT ["bundle", "exec"]
+
+CMD ["./start-rails.sh"]
+
+FROM base AS dev
+
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 RUN curl -sS https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main"  | tee /etc/apt/sources.list.d/google.list
-
-RUN apt-get update && apt-get install -y \ 
-  build-essential \
+RUN apt-get update && apt-get install -y \
   nodejs \
-  yarn \
+  yarn
+
+RUN bundle install
+
+FROM dev AS asssets-builder
+RUN rails assets:precompile
+
+FROM dev AS test
+
+RUN apt-get update && apt-get install -y \
   unzip \
   google-chrome-stable
 
@@ -24,11 +44,4 @@ RUN curl -o /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$CH
   && rm /tmp/chromedriver.zip \
   && chmod ugo+rx /usr/bin/chromedriver
 
-WORKDIR /psd-web
-
-COPY ./psd-web .
-COPY ./shared-web ./vendor/shared-web
-
-COPY ./psd-web/docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+COPY --from=assets-builder /psd-web/public /psd-web/public

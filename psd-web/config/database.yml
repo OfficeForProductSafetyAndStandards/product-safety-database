@@ -1,6 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  database: psd_<%= Rails.env %>
   url: <%= ENV.fetch('DATABASE_URL', "postgres://localhost/psd_#{Rails.env.development? ? 'dev' : 'test'}?user=postgres") %>
   pool: 5
 
