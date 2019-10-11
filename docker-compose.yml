@@ -2,7 +2,23 @@ version: '3'
 
 services:
   db:
-    image: postgres:10.5
+    build:
+      context: ./db
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    env_file:
+      - .env.keycloak
+
+  keycloak:
+    image: beisopss/keycloak:prod
+    env_file:
+      - .env.keycloak
+    environment:
+      - NOTIFY_API_KEY
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3
@@ -30,6 +46,10 @@ services:
       - elasticsearch
       - redis
       - psd-worker
+      - keycloak
+    env_file:
+      - .env.keycloak.psd
+
   psd-worker:
     build:
       context: .

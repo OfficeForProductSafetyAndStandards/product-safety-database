@@ -1,14 +1,6 @@
 version: '3'
 
 services:
-  db:
-    image: postgres:10.5
-
-  keycloak:
-    environment:
-      - NOTIFY_API_KEY
-    image: beisopss/keycloak:prod
-
   antivirus:
     image: beisopss/antivirus:prod
 
@@ -36,5 +28,6 @@ services:
     image: dadarek/wait-for-dependencies
     depends_on:
       - elasticsearch
+      - keycloak
       - redis
-    command: elasticsearch:9200
+    command: elasticsearch:9200 keycloak:8080
