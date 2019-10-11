@@ -13,7 +13,7 @@ function docker_tag_exists {
 }
 
 echo "Logging into DockerHub"
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
 CHANGED_COMPONENTS="$(./infrastructure/ci/get-changed-components.sh)"
 
