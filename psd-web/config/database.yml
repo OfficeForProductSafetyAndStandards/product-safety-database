@@ -1,7 +1,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  url: <%= ENV.fetch('DATABASE_URL', "postgres://localhost/psd_#{Rails.env.development? ? 'dev' : 'test'}?user=postgres") %>
+  url: <%= ENV.fetch('DATABASE_URL', "postgres://db/psd_#{Rails.env.development? ? 'dev' : 'test'}?user=postgres") %>
   pool: 5
 
 development:
@@ -11,7 +11,7 @@ test:
   <<: *default
 
 production:
-  url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_name("psd-database")["uri"] %>
+  url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_label("postgres")["uri"] %>
   connect_timeout: 2
   variables:
     statement_timeout: <%= ENV["STATEMENT_TIMEOUT"] || "500ms" %>
