@@ -25,11 +25,11 @@ end
 
 
 Sidekiq.configure_server do |config|
-  config.redis = Rails.application.config_for(:redis_queue)
+  config.redis = Rails.application.config_for(:redis_store)
   remove_files_without_attachments_job
   create_log_db_metrics_job
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = Rails.application.config_for(:redis_queue)
+  config.redis = Rails.application.config_for(:redis_store)
 end
