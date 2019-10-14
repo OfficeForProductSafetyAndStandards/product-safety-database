@@ -317,7 +317,6 @@ GEM
       rubocop (>= 0.60.0)
     ruby-debug-ide (0.7.0)
       rake (>= 0.8.1)
-    ruby-prof (1.0.0)
     ruby-progressbar (1.10.1)
     rubyzip (1.2.3)
     sass (3.7.4)
@@ -391,7 +390,6 @@ GEM
       tins (~> 1.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
-    test-prof (0.10.0)
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.9)
@@ -445,7 +443,6 @@ DEPENDENCIES
   rubocop (= 0.71.0)
   rubocop-performance (= 1.4.0)
   ruby-debug-ide (= 0.7.0)
-  ruby-prof
   rubyzip (>= 1.2.1)
   scout_apm
   selenium-webdriver (= 3.142.3)
@@ -456,7 +453,6 @@ DEPENDENCIES
   slim_lint (= 0.17.0)
   solargraph (= 0.33.2)
   strong_migrations
-  test-prof
   wicked
 
 RUBY VERSION
