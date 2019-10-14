@@ -14,6 +14,13 @@ end
 require "rails/test_help"
 require "rspec/mocks/standalone"
 require 'minitest/profile'
+require 'webmock/minitest'
+
+WebMock.disable_net_connect!(
+  allow_localhost: true,
+  allow: [
+  /elasticsearch/,
+])
 
 class ActiveSupport::TestCase
   include ::RSpec::Mocks::ExampleMethods

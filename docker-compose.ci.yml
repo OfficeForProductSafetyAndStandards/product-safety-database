@@ -15,7 +15,8 @@ services:
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
       - DATABASE_URL=postgres://postgres@db:5432/psd_test
-      - KEYCLOAK_AUTH_URL=http://localhost:8080/auth
+      - KEYCLOAK_AUTH_URL=http://keycloak:8080/auth
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
   psd-worker:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-worker:${TRAVIS_BUILD_NUMBER}
@@ -29,7 +30,7 @@ services:
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
       - DATABASE_URL=postgres://postgres@db:5432/psd_test
-      - KEYCLOAK_AUTH_URL=http://localhost:8080/auth
+      - KEYCLOAK_AUTH_URL=http://keycloak:8080/auth
 
   start_dependencies:
     image: dadarek/wait-for-dependencies
