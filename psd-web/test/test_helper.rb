@@ -1,17 +1,19 @@
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 
-# It's important that simplecov is "require"d early in the file
-require 'simplecov'
-require 'simplecov-console'
-SimpleCov.formatters = [
-  SimpleCov::Formatter::HTMLFormatter,
-  SimpleCov::Formatter::Console
-]
-SimpleCov.start
-
+if ENV['CI']
+  # It's important that simplecov is "require"d early in the file
+  require 'simplecov'
+  require 'simplecov-console'
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::Console
+  ]
+  SimpleCov.start
+end
 require "rails/test_help"
 require "rspec/mocks/standalone"
+require 'minitest/profile'
 
 class ActiveSupport::TestCase
   include ::RSpec::Mocks::ExampleMethods

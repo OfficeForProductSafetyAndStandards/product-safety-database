@@ -28,9 +28,7 @@ services:
       - TRAVIS_JOB_ID
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
-      - DATABSE_URL=postgres:postgres@db:5432
-    volumes:
-      - ~/bundle-cache:/usr/local/bundle
+      - DATABASE_URL=postgres://postgres@db:5432/psd_test
 
   start_dependencies:
     image: dadarek/wait-for-dependencies
