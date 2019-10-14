@@ -14,7 +14,7 @@ services:
       - TRAVIS_JOB_ID
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
-      - DATABASE_URL=DATABASE_URL=postgres://postgres@postgres:5432/psd_test
+      - DATABASE_URL=postgres://postgres@db:5432/psd_test
   psd-worker:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-worker:${TRAVIS_BUILD_NUMBER}
@@ -27,7 +27,7 @@ services:
       - TRAVIS_JOB_ID
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
-      - DATABASE_URL=DATABASE_URL=postgres://postgres@postgres:5432/psd_test
+      - DATABASE_URL=postgres://postgres@db:5432/psd_test
 
   start_dependencies:
     image: dadarek/wait-for-dependencies
