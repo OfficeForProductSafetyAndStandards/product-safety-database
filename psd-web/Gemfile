@@ -43,4 +43,5 @@ group :test do
   gem "selenium-webdriver", "3.142.3"
   gem "simplecov", "0.16.1"
   gem "simplecov-console", "0.5.0"
+  gem 'minitest-profile'
 end
