@@ -117,6 +117,14 @@ Anything merged into the branch `prod` (only via a Pull Request) will cause Trav
 space.
 Please only do this if you are confident that this is a stable commit.
 
+### Review applications
+
+In order to make PR review process fast and independent, there is possibility to create
+short lived environment for given change. In order to do start your environment, run
+`REVIEW_INSTANCE_NAME=ticket-123 ./psd-web/deploy-review.sh`, where `ticket-123` is desired name of review app.
+
+By default, database is shared, but it can be overriden by setting `DB_NAME` env variable.
+
 ### Deployment from scratch
 
 Once you have a GOV.UK PaaS account as mentioned above, you should install the Cloud Foundry CLI (`cf`) from

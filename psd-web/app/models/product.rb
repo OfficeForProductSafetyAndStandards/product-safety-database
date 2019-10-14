@@ -2,10 +2,9 @@ class Product < ApplicationRecord
   include Shared::Web::CountriesHelper
   include Documentable
   include Searchable
+  include Indexable
   include AttachmentConcern
   include SanitizationHelper
-
-  index_name [Rails.env, "products"].join("_")
 
   before_validation { trim_line_endings(:description) }
   validates :name, presence: true

@@ -1,13 +1,12 @@
 class Investigation::Enquiry < Investigation
   include Shared::Web::Concerns::DateConcern
+  include Indexable
+
   validates :user_title, :description, presence: true, on: :enquiry_details
   validates :date_received, presence: true, on: :about_enquiry, unless: :partially_filled_date?
   validate :date_cannot_be_in_the_future, on: :about_enquiry
 
   date_attribute :date_received, required: false
-
-  # Elasticsearch index name must be declared in children and parent
-  index_name [Rails.env, "investigations"].join("_")
 
   def self.model_name
     self.superclass.model_name

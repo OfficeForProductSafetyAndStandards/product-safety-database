@@ -1,8 +1,7 @@
 class Investigation::Project < Investigation
-  validates :user_title, :description, presence: true
+  include Indexable
 
-  # Elasticsearch index name must be declared in children and parent
-  index_name [Rails.env, "investigations"].join("_")
+  validates :user_title, :description, presence: true
 
   def self.model_name
     self.superclass.model_name
