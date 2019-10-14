@@ -50,7 +50,9 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   config.cache_store = :memory_store
-
+  config.cache_store = :redis_cache_store, {
+    url: Rails.application.config_for(:redis_store)
+  }
   config.action_mailer.perform_caching = false
 
   # Url for mailer
