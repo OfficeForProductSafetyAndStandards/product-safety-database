@@ -12,7 +12,7 @@ class InvestigationsXlsExportTest < ActionDispatch::IntegrationTest
   test "exports all investigations" do
     path = Rails.root + 'test/fixtures/files/cases1.xlsx'
     create_stub_investigations(50)
-    Investigation.import refresh: true
+    Investigation.import refresh: true, force: true
 
     count = Investigation.where(is_closed: false).count
     file = get_file(path)
@@ -23,7 +23,7 @@ class InvestigationsXlsExportTest < ActionDispatch::IntegrationTest
   test "treats formulas as text" do
     path = Rails.root + 'test/fixtures/files/cases2.xlsx'
     Investigation::Allegation.new(description: "=A1").save
-    Investigation.import refresh: true
+    Investigation.import refresh: true, force: true
 
     file = get_file(path, "A1")
     cell_a1 = file.sheet('Cases').cell(1, 1)
