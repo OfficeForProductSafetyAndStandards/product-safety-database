@@ -32,7 +32,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       if @product.update(product_params)
         format.html {
-          redirect_to @product, flash: { success: "Product was successfully updated." }
+          redirect_to @product, flash: { success: 'Product was successfully updated.' }
         }
         format.json { render :show, status: :ok, location: @product }
       else
@@ -47,7 +47,7 @@ class ProductsController < ApplicationController
   def destroy
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, flash: { success: "Product was successfully deleted." } }
+      format.html { redirect_to products_url, flash: { success: 'Product was successfully deleted.' } }
       format.json { head :no_content }
     end
   end
