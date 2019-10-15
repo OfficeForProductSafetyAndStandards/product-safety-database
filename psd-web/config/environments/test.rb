@@ -7,10 +7,9 @@ Rails.application.configure do
   # and recreated between test runs. Don't rely on the data there!
   config.cache_classes = true
 
-  # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
+  # We need to eager load models due to ElasticSearch indexes needing to be
+  # created before tests run. See config.after_initialize block below.
+  config.eager_load = true
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
@@ -49,4 +48,14 @@ Rails.application.configure do
     host: ENV['HTTP_HOST'] || "localhost",
     port: ENV['HTTP_PORT'] || 3001
   }
+
+  config.after_initialize do
+    unless Sidekiq.server?
+      ActiveRecord::Base.descendants.each do |model|
+        if model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__)
+          model.import force: true
+        end
+      end
+    end
+  end
 end

@@ -24,22 +24,6 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # Import all relevant models into Elasticsearch
-  def self.import_into_elasticsearch
-    unless @models_imported
-      ActiveRecord::Base.descendants.each do |model|
-        if model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__)
-          model.import force: true, refresh: true
-        end
-      end
-      @models_imported = true
-    end
-  end
-
-  def setup
-    self.class.import_into_elasticsearch
-  end
-
   # On top of mocking out external services, this method also sets the user to an initial,
   # sensible value, but it should only be run once per test.
   # To change currently logged in user afterwards call `sign_in_as(...)`
@@ -139,7 +123,8 @@ class ActiveSupport::TestCase
   end
 
   def load_case(key)
-    Investigation.import force: true, refresh: true
+    Investigation.__elasticsearch__.refresh_index!
+
     investigation = investigations(key)
     investigation.assignee = User.current
     investigation.save
