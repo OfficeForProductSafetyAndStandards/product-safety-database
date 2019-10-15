@@ -22,6 +22,7 @@ gem "shared-web", path: "./vendor/shared-web"
 
 group :development, :test do
   gem "brakeman", "4.5.1"
+  gem 'byebug'
   gem "capybara", "3.24.0"
   gem "coveralls", "0.8.23"
   gem "debase", "0.2.2"
@@ -40,5 +41,4 @@ group :development, :test do
   gem "simplecov-console", "0.5.0"
   gem "slim_lint", "0.17.0"
   gem "solargraph", "0.33.2"
-  gem 'byebug'
 end

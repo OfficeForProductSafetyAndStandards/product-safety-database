@@ -17,23 +17,12 @@ services:
       - TRAVIS_JOB_ID
       - TRAVIS_PULL_REQUEST
       - NOTIFY_API_KEY
-      - KEYCLOAK_AUTH_URL=http://keycloak:8080/auth
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   psd-worker:
     command: tail -f /dev/null
     image: ${DOCKER_ORG}/psd-worker:${TRAVIS_BUILD_NUMBER}
     volumes:
       - ~/bundle-cache:/usr/local/bundle
-    environment:
-      - CI
-      - TRAVIS
-      - TRAVIS_BRANCH
-      - TRAVIS_JOB_ID
-      - TRAVIS_PULL_REQUEST
-      - NOTIFY_API_KEY
-      - KEYCLOAK_AUTH_URL=http://keycloak:8080/auth
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
 
   start_dependencies:
     image: dadarek/wait-for-dependencies

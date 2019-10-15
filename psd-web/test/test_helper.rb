@@ -139,6 +139,7 @@ class ActiveSupport::TestCase
   end
 
   def load_case(key)
+    Investigation.import force: true, refresh: true
     investigation = investigations(key)
     investigation.assignee = User.current
     investigation.save
