@@ -24,6 +24,8 @@ RUN curl -o /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$CH
   && rm /tmp/chromedriver.zip \
   && chmod ugo+rx /usr/bin/chromedriver
 
+RUN gem install bundler:2.0.2
+
 WORKDIR /psd-web
 
 COPY ./psd-web .
