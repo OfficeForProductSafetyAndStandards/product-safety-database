@@ -12,34 +12,34 @@ module Keycloak
   end
 
   module Internal
-    def self.access_token
-      @access_token ||= Shared::Web::Token.new(Keycloak::Client.configuration['token_endpoint'])
+    def self.token
+      @token ||= Shared::Web::Token.new(Keycloak::Client.configuration['token_endpoint'])
     end
 
     def self.get_group(group_id)
       request_uri = Keycloak::Admin.full_url("groups/#{group_id}")
-      Keycloak.generic_request(access_token.token, request_uri, nil, nil, "GET")
+      Keycloak.generic_request(token.access_token, request_uri, nil, nil, "GET")
     end
 
     def self.get_user_groups(query_parameters = nil)
       request_uri = Keycloak::Client.auth_server_url + "/realms/#{Keycloak::Client.realm}/admin/user-groups"
-      Keycloak.generic_request(access_token.token, request_uri, query_parameters, nil, "GET")
+      Keycloak.generic_request(token.access_token, request_uri, query_parameters, nil, "GET")
     end
 
     def self.add_user_group(user_id, group_id)
       request_uri = Keycloak::Admin.full_url("users/#{user_id}/groups/#{group_id}")
-      Keycloak.generic_request(access_token.token, request_uri, nil, nil, "PUT")
+      Keycloak.generic_request(token.access_token, request_uri, nil, nil, "PUT")
     end
 
     def self.create_user(user_rep)
       request_uri = Keycloak::Admin.full_url("users/")
-      Keycloak.generic_request(access_token.token, request_uri, nil, user_rep, "POST")
+      Keycloak.generic_request(token.access_token, request_uri, nil, user_rep, "POST")
     end
 
     def self.execute_actions_email(user_id, actions, client_id, redirect_uri)
       request_uri = Keycloak::Admin.full_url("users/#{user_id}/execute-actions-email")
       query_params = { client_id: client_id, redirect_uri: redirect_uri }
-      Keycloak.generic_request(access_token.token, request_uri, query_params, actions, "PUT")
+      Keycloak.generic_request(token.access_token, request_uri, query_params, actions, "PUT")
     end
   end
 end

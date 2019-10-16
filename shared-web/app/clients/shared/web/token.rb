@@ -1,21 +1,20 @@
 module Shared
   module Web
-    class Token 
-          
+    class Token
       REQUEST_HEADER = { 'Content-Type' => 'application/x-www-form-urlencoded' }.freeze
 
       def initialize(token_endpoint)
         self.token_endpoint = token_endpoint
       end
 
-      def token
-        return refresh! if access_token.nil? || expired?
+      def access_token
+        return refresh! if token.nil? || expired?
 
-        access_token
+        token
       end
 
       private
-      attr_accessor :expires_at, :expires_in, :token_endpoint, :access_token
+      attr_accessor :expires_at, :expires_in, :token_endpoint, :token
 
       def expired?
         expires_at < Time.now.to_i
@@ -27,12 +26,12 @@ module Shared
           when 200..399
             json_response = JSON response.body
             self.expires_at = Time.now.to_i + json_response['expires_in']
-            self.access_token = json_response['access_token']
+            self.token = json_response['access_token']
           else
             response.return!
           end
         end
-        access_token
+        token
       end
 
       def payload
@@ -49,7 +48,6 @@ module Shared
       def secret
         ENV.fetch("KEYCLOAK_CLIENT_SECRET")
       end
-    end 
+    end
   end
 end
-
