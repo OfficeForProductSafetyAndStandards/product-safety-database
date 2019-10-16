@@ -65,6 +65,9 @@ linters:
       - Style/IfUnlessModifier
       - Style/Next
       - Style/WhileUntilModifier
+      - Style/TrailingCommaInHashLiteral
+      - Style/TrailingCommaInArrayLiteral
+      - Style/StringLiterals
       # This one flags some false positives in slim files
       - Style/IdenticalConditionalBranches
 
