@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class TestTest < ActiveSupport::TestCase
   setup do
@@ -88,7 +88,7 @@ private
       legislation: "Legislation B"
     )
     test_image = file_fixture("testImage.png")
-    result.documents.attach(io: File.open(test_image), filename: 'testImage.png')
+    result.documents.attach(io: File.open(test_image), filename: "testImage.png")
     result
   end
 end

@@ -1,7 +1,7 @@
 def remove_files_without_attachments_job
   remove_files_without_attachments_job = Sidekiq::Cron::Job.new(
-    name: 'remove files not attached to anything, midnight every sunday',
-    cron: '0 0 * * 0',
+    name: "remove files not attached to anything, midnight every sunday",
+    cron: "0 0 * * 0",
     class: "RemoveFilesWithoutAttachmentsJob"
   )
   unless remove_files_without_attachments_job.save
@@ -12,10 +12,10 @@ end
 
 def create_log_db_metrics_job
   log_db_metrics_job = Sidekiq::Cron::Job.new(
-    name: 'log db metrics, every day at 1am',
-    cron: '0 1 * * *',
-    class: 'LogDbMetricsJob',
-    queue: 'psd'
+    name: "log db metrics, every day at 1am",
+    cron: "0 1 * * *",
+    class: "LogDbMetricsJob",
+    queue: "psd"
   )
   unless log_db_metrics_job.save
     Rails.logger.error "***** WARNING - Log DB metrics job was not saved! *****"

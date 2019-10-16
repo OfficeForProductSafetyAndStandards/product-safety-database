@@ -54,7 +54,7 @@ class User < Shared::Web::User
                       .map(&method(:populate_name))
                       .reject { |user| user[:organisation_id].blank? }
 
-      self.safe_load(users, data_name: 'users')
+      self.safe_load(users, data_name: "users")
     rescue StandardError => e
       Rails.logger.error "Failed to fetch users from Keycloak: #{e.message}"
       self.data = nil
@@ -85,7 +85,7 @@ class User < Shared::Web::User
   end
 
   def team_names
-    teams.map(&:name).join(', ')
+    teams.map(&:name).join(", ")
   end
 
   def assignee_short_name

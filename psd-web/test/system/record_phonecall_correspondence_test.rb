@@ -79,8 +79,8 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     fill_in_content_form
     click_button "Continue"
     click_on "Edit details"
-    assert_equal(@correspondence.correspondent_name, find_field('correspondence_phone_call[correspondent_name]').value)
-    assert_equal(@correspondence.phone_number, find_field('correspondence_phone_call[phone_number]').value)
+    assert_equal(@correspondence.correspondent_name, find_field("correspondence_phone_call[correspondent_name]").value)
+    assert_equal(@correspondence.phone_number, find_field("correspondence_phone_call[phone_number]").value)
   end
 
   test "confirmation continue should go to case page" do
@@ -106,7 +106,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Activity"
     within id: "activity" do
-      assert_equal("Phone call added", first('h3').text)
+      assert_equal("Phone call added", first("h3").text)
       assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
     end
   end
@@ -126,7 +126,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Activity"
     within id: "activity" do
-      assert_equal(@correspondence.overview, first('h3').text)
+      assert_equal(@correspondence.overview, first("h3").text)
     end
   end
 
@@ -149,7 +149,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Activity"
     within id: "activity" do
-      assert_equal(@correspondence.overview, first('h3').text)
+      assert_equal(@correspondence.overview, first("h3").text)
     end
   end
 
@@ -167,7 +167,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Activity"
     within id: "activity" do
-      assert_equal(@correspondence.overview, first('h3').text)
+      assert_equal(@correspondence.overview, first("h3").text)
     end
   end
 

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class CorrectiveActionsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -14,7 +14,7 @@ class CorrectiveActionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should redirect new corrective action request to first wizard step" do
     get new_investigation_corrective_action_path(@investigation)
-    assert_redirected_to investigation_corrective_actions_path(@investigation) + '/details'
+    assert_redirected_to investigation_corrective_actions_path(@investigation) + "/details"
   end
 
   test "should create corrective action" do
@@ -33,7 +33,7 @@ class CorrectiveActionsControllerTest < ActionDispatch::IntegrationTest
           },
           related_file: "Yes",
           file: {
-              file: fixture_file_upload('files/testImage.png', 'application/png')
+              file: fixture_file_upload("files/testImage.png", "application/png")
           }
         }
       }
@@ -57,7 +57,7 @@ class CorrectiveActionsControllerTest < ActionDispatch::IntegrationTest
         },
         related_file: "Yes",
         file: {
-            file: fixture_file_upload('files/testImage.png', 'application/png')
+            file: fixture_file_upload("files/testImage.png", "application/png")
         }
       }
     }

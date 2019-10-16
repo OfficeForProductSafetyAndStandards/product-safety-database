@@ -1,6 +1,6 @@
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  mount Shared::Web::Engine => '/', as: 'shared_engine'
+  mount Shared::Web::Engine => "/", as: "shared_engine"
 
   concern :document_attachable do
     resources :documents, controller: "documents" do
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
 
   namespace :declaration do
-    get :index, path: ''
+    get :index, path: ""
     post :accept
   end
 
@@ -50,15 +50,15 @@ Rails.application.routes.draw do
 
     resources :products, only: %i[new create], controller: "investigations/products" do
       member do
-        put :link, path: ''
+        put :link, path: ""
         get :remove
-        delete :unlink, path: ''
+        delete :unlink, path: ""
       end
     end
     resources :businesses, only: %i[update show new create], controller: "investigations/businesses" do
       member do
         get :remove
-        delete :unlink, path: ''
+        delete :unlink, path: ""
       end
     end
 

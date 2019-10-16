@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class TestsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -13,12 +13,12 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should redirect new test request action to first wizard step" do
     get new_request_investigation_tests_path(@investigation)
-    assert_redirected_to investigation_tests_path(@investigation) + '/details'
+    assert_redirected_to investigation_tests_path(@investigation) + "/details"
   end
 
   test "should redirect new test result action to first wizard step" do
     get new_result_investigation_tests_path(@investigation)
-    assert_redirected_to investigation_tests_path(@investigation) + '/details'
+    assert_redirected_to investigation_tests_path(@investigation) + "/details"
   end
 
   test "should create test request" do
@@ -58,7 +58,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
           },
           result: "Fail",
           file: {
-              file: fixture_file_upload('files/testImage.png', 'application/png')
+              file: fixture_file_upload("files/testImage.png", "application/png")
           }
         }
       }

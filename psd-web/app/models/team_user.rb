@@ -11,7 +11,7 @@ class TeamUser < ActiveHash::Base
         User.all.map(&:id), Team.all.map(&:id), force: force
       )
 
-      self.safe_load(team_users, data_name: 'team_users')
+      self.safe_load(team_users, data_name: "team_users")
     rescue StandardError => e
       Rails.logger.error "Failed to fetch team memberships from Keycloak: #{e.message}"
       self.data = nil

@@ -44,7 +44,7 @@ class UpdateBusinessAndLocationFields < ActiveRecord::Migration[5.2]
 
           change_table :locations, bulk: true do |t|
             Location.all.each do |loc|
-              loc.update! address: loc.address_line_1 + ', ' + loc.address_line_2
+              loc.update! address: loc.address_line_1 + ", " + loc.address_line_2
             end
             t.rename :address_line_1, :address
             t.remove :address_line_2

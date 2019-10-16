@@ -11,9 +11,9 @@ gem "pghero"
 gem "puma"
 gem "pundit"
 gem "redcarpet"
-gem 'redis-rails'
+gem "redis-rails"
 gem "rubyzip"
-gem 'scout_apm'
+gem "scout_apm"
 gem "slim-rails"
 gem "strong_migrations"
 gem "wicked"
@@ -26,11 +26,11 @@ group :development, :test do
   gem "capybara"
   gem "coveralls"
   gem "debase"
-  gem 'dotenv-rails'
+  gem "dotenv-rails"
   gem "govuk-lint"
   gem "listen"
   gem "m"
-  gem 'pry'
+  gem "pry"
   gem "roo"
   gem "rspec-mocks"
   gem "rubocop"

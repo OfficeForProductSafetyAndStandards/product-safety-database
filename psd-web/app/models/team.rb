@@ -32,7 +32,7 @@ class Team < ActiveHash::Base
     Organisation.load(force: force)
     begin
       teams = Shared::Web::KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
-      self.safe_load(teams, data_name: 'teams')
+      self.safe_load(teams, data_name: "teams")
       self.ensure_names_up_to_date
     rescue StandardError => e
       Rails.logger.error "Failed to fetch teams from Keycloak: #{e.message}"

@@ -5,7 +5,7 @@ class IntroductionTest < ApplicationSystemTestCase
     mock_out_keycloak_and_notify
     mock_user_as_non_opss User.current
 
-    visit '/'
+    visit "/"
   end
 
   teardown do
@@ -13,7 +13,7 @@ class IntroductionTest < ApplicationSystemTestCase
   end
 
   test "shows steps in order then redirects to homepage" do
-    assert_current_path '/introduction/overview'
+    assert_current_path "/introduction/overview"
     assert_selector "h1", text: "Report, track and share product safety information"
     click_on "Continue"
 
@@ -37,19 +37,19 @@ class IntroductionTest < ApplicationSystemTestCase
   end
 
   test "users will not be shown the introduction twice" do
-    assert_current_path '/introduction/overview'
+    assert_current_path "/introduction/overview"
     click_on "Continue"
     click_on "Continue"
     click_on "Continue"
     click_on "Get started"
-    visit '/'
-    assert_current_path '/'
+    visit "/"
+    assert_current_path "/"
   end
 
   test "does not show introduction to opss users" do
     mock_user_as_opss User.current
 
-    visit '/'
+    visit "/"
 
     assert_current_path "/cases"
   end

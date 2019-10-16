@@ -1,2 +1,20 @@
 inherit_gem:
   shared-web: .rubocop.yml
+
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'vendor/shared-web/**/*'
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Rails/HelperInstanceVariable:
+  Enabled: false

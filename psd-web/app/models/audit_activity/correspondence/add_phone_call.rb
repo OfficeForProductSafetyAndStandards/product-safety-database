@@ -28,9 +28,9 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
 
   def self.build_phone_number correspondence
     output = ""
-    output += '(' if correspondence.correspondent_name.present?
+    output += "(" if correspondence.correspondent_name.present?
     output += self.sanitize_text correspondence.phone_number
-    output += ')' if correspondence.correspondent_name.present?
+    output += ")" if correspondence.correspondent_name.present?
     output + "<br>"
   end
 

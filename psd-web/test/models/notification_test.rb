@@ -150,6 +150,6 @@ class NotificationTest < ActiveSupport::TestCase
 
   def make_generic_change
     # Should not be changing the assignee, since it's a special case
-    @investigation.add_business(Business.create(trading_name: 'Test Company'), "Test relationship")
+    @investigation.add_business(Business.create(trading_name: "Test Company"), "Test relationship")
   end
 end

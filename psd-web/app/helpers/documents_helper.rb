@@ -60,7 +60,7 @@ module DocumentsHelper
 
   def pretty_type_description(document)
     description = ""
-    description += document_file_extension(document) + ' ' if document_file_extension document
+    description += document_file_extension(document) + " " if document_file_extension document
     description + image_document_text(document)
   end
 

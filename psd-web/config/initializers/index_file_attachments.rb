@@ -13,5 +13,5 @@ module ActiveStorageAttachmentExtension
 end
 
 Rails.configuration.to_prepare do
-  ActiveStorage::Attachment.send :include, ::ActiveStorageAttachmentExtension
+  ActiveStorage::Attachment.include ::ActiveStorageAttachmentExtension
 end
