@@ -24,6 +24,12 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  ActiveRecord::Base.descendants.each do |model|
+    if model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__)
+      model.__elasticsearch__.refresh_index!
+    end
+  end
+
   # On top of mocking out external services, this method also sets the user to an initial,
   # sensible value, but it should only be run once per test.
   # To change currently logged in user afterwards call `sign_in_as(...)`
