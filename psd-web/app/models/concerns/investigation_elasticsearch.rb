@@ -1,10 +1,10 @@
 # rubocop:disable Metrics/BlockLength
 module InvestigationElasticsearch
   extend ActiveSupport::Concern
+
   included do
     include Searchable
-    # Elasticsearch index name must be declared in children and parent
-    index_name [Rails.env, "investigations"].join("_")
+    include Indexable
 
     settings do
       mappings do

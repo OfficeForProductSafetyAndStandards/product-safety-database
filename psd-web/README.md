@@ -11,6 +11,15 @@ The site is written in [Ruby on Rails](https://rubyonrails.org/).
 We're using [Slim](http://slim-lang.com/) as our HTML templating language,
 ES6 JavaScript and [Sass](https://sass-lang.com/) for styling transplied with webpack.
 
+### Using environment variables
+
+To set environment variables to configuration, copy `development` and `test` files:
+
+`cp .env.test.example .env.test`
+`cp .env.development.example .env.development`
+
+Keys are not in the repo, please ask team member to share their config.
+
 ## Getting Setup
 
 This assumes you've followed the setup steps in [the root README](../README.md#getting-setup).

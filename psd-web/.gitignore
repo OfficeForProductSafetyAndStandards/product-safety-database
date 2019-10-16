@@ -1,5 +1,9 @@
 # Created by https://www.gitignore.io/api/ruby,node,rails
 
+.env.development
+.env.test
+*.swp
+*.swo
 ### Node ###
 # Logs
 logs

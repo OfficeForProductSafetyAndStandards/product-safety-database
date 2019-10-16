@@ -1,10 +1,9 @@
 class Business < ApplicationRecord
   include BusinessesHelper
   include Searchable
+  include Indexable
   include Documentable
   include AttachmentConcern
-
-  index_name [Rails.env, "businesses"].join("_")
 
   settings do
     mappings do

@@ -1,6 +1,6 @@
 default: &default
   url: <%= ENV.fetch('REDIS_URL', 'redis://redis:6379') %>
-  db: 1
+  db: 0
 
 development:
   <<: *default
@@ -9,4 +9,4 @@ test:
   <<: *default
 
 production:
-  url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_name("psd-session")["uri"] %>
+  url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_name("psd-queue")["uri"] %>
