@@ -24,13 +24,13 @@ for COMPONENT in "${COMPONENTS[@]}"; do
     elif docker_tag_exists $DOCKER_ORG/$COMPONENT $BRANCH; then
         echo "No changes for component $COMPONENT, pulling $BRANCH image"
         docker pull $DOCKER_ORG/$COMPONENT:$BRANCH
-        docker tag $DOCKER_ORG/$COMPONENT:$BRANCH $DOCKER_ORG/$COMPONENT:$TRAVIS_BUILD_NUMBER
+        docker tag $DOCKER_ORG/$COMPONENT:$BRANCH $DOCKER_ORG/$COMPONENT:$BUILD_ID
     else
         echo "No changes for component $COMPONENT, but $BRANCH image does not exist in repo"
         echo "Building component $COMPONENT"
         DOCKER_ORG=$DOCKER_ORG docker-compose -f docker-compose.yml -f docker-compose.ci.yml build $COMPONENT
     fi
 
-    echo "Pushing image for component $COMPONENT with tag $TRAVIS_BUILD_NUMBER"
-    docker push $DOCKER_ORG/$COMPONENT:$TRAVIS_BUILD_NUMBER
+    echo "Pushing image for component $COMPONENT with tag $BUILD_ID"
+    docker push $DOCKER_ORG/$COMPONENT:$BUILD_ID
 done
