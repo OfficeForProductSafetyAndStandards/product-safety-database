@@ -3,6 +3,7 @@ inherit_gem:
 
 AllCops:
   Exclude:
+    - 'bin/**/*'
     - 'db/schema.rb'
     - 'node_modules/**/*'
     - 'vendor/shared-web/**/*'
