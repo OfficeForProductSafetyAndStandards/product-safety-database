@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  business: one
+  business_id: 1
   name: MyString
   address_line_1: MyString
   address_line_2: MyString
@@ -11,7 +11,7 @@ one:
   postal_code: MyString
 
 two:
-  business: two
+  business_id: 2
   name: MyString
   address_line_1: MyString
   address_line_2: MyString
