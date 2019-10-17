@@ -152,3 +152,7 @@ psd-web/.ruby-gemset
 
 # Redis snapshots. See https://redis.io/topics/persistence
 dump.rdb
+
+shared-web/.ruby-gemset
+
+shared-web/.ruby-version
