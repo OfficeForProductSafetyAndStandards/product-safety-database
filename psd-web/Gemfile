@@ -15,6 +15,7 @@ gem "redis-rails"
 gem "rubyzip"
 gem "scout_apm"
 gem "slim-rails"
+gem "sprockets", "= 4.0.0.beta10"
 gem "strong_migrations"
 gem "wicked"
 
