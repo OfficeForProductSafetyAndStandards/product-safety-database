@@ -10,3 +10,6 @@ Rails.application.config.product_constants = YAML.load_file(
 Rails.application.config.team_names = YAML.load_file(
   Rails.root.join("config", "important_team_names.yml")
 )
+Rails.application.config.whitelisted_emails = YAML.load_file(
+  Rails.root.join("config", "whitelisted_emails.yml")
+)
