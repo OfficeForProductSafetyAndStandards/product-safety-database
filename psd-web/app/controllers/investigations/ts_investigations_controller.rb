@@ -1,6 +1,6 @@
 class Investigations::TsInvestigationsController < ApplicationController
   include Wicked::Wizard
-  include Shared::Web::CountriesHelper
+  include CountriesHelper
   include ProductsHelper
   include BusinessesHelper
   include CorrectiveActionsConcern

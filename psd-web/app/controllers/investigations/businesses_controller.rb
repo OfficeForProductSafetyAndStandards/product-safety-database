@@ -1,6 +1,6 @@
 class Investigations::BusinessesController < ApplicationController
   include BusinessesHelper
-  include Shared::Web::CountriesHelper
+  include CountriesHelper
   include Wicked::Wizard
   skip_before_action :setup_wizard, only: %i[remove unlink]
   steps :type, :details

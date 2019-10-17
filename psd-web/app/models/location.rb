@@ -1,5 +1,5 @@
 class Location < ApplicationRecord
-  include Shared::Web::CountriesHelper
+  include CountriesHelper
 
   default_scope { order(created_at: :asc) }
 
