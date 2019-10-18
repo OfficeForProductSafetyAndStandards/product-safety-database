@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  include Shared::Web::CountriesHelper
+  include CountriesHelper
 
   before_action :set_location, only: %i[show edit update remove destroy]
   before_action :create_location, only: %i[create]

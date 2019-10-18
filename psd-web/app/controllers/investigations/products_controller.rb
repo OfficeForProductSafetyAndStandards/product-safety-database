@@ -1,5 +1,5 @@
 class Investigations::ProductsController < ApplicationController
-  include Shared::Web::CountriesHelper
+  include CountriesHelper
   include ProductsHelper
 
   before_action :set_investigation
