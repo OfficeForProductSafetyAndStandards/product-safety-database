@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  include Shared::Web::CountriesHelper
+  include CountriesHelper
   include Documentable
   include Searchable
   include Indexable
