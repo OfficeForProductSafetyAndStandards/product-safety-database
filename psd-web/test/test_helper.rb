@@ -27,6 +27,7 @@ class ActiveSupport::TestCase
   # Import all relevant models into Elasticsearch
   def self.import_into_elasticsearch
     unless @models_imported
+      pp ActiveRecord::Base.descendants
       ActiveRecord::Base.descendants.each do |model|
         if model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__)
           model.import force: true, refresh: true
@@ -36,7 +37,7 @@ class ActiveSupport::TestCase
     end
   end
 
-  def setup
+  setup do
     self.class.import_into_elasticsearch
   end
 
