@@ -1,5 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
+pp '*' * 80
+pp Rails.env
 
 # It's important that simplecov is "require"d early in the file
 require "simplecov"
@@ -27,7 +29,6 @@ class ActiveSupport::TestCase
   # Import all relevant models into Elasticsearch
   def self.import_into_elasticsearch
     unless @models_imported
-      pp ActiveRecord::Base.descendants
       ActiveRecord::Base.descendants.each do |model|
         if model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__)
           model.import force: true, refresh: true
