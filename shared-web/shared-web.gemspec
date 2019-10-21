@@ -19,13 +19,12 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "5.2.3"
   s.add_dependency "request_store", "1.4.1"
   s.add_dependency "rest-client", "2.0.2"
+  s.add_dependency "rspec"
   s.add_dependency "sentry-raven", "2.9.0"
   s.add_dependency "sidekiq", "5.2.7"
   s.add_dependency "sidekiq-cron", "1.1.0"
   # s.add_dependency "slowpoke", "0.3.0"
+  s.add_dependency "webmock"
   s.add_dependency "webpacker", "4.0.7"
   s.add_dependency "will_paginate", "3.1.7"
-
-  s.add_development_dependency "rspec"
-  s.add_development_dependency "webmock"
 end
