@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 inherit_gem:
   govuk-lint: configs/rubocop/all.yml
 
@@ -13,6 +15,7 @@ AllCops:
     - './../../node_modules/**/*'
     - './../../tmp/**/*'
     - 'bin/**/*'
+    - './node_modules/**/*'
 
 Rails:
   Enabled: true

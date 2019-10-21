@@ -13,7 +13,8 @@ module Shared
         token
       end
 
-      private
+    private
+
       attr_accessor :expires_at, :expires_in, :token_endpoint, :token
 
       def expired?
@@ -21,7 +22,7 @@ module Shared
       end
 
       def refresh!
-        RestClient.post(token_endpoint, payload, REQUEST_HEADER) do |response, request, result|
+        RestClient.post(token_endpoint, payload, REQUEST_HEADER) do |response, _request, _result|
           case response.code
           when 200..399
             json_response = JSON response.body
@@ -37,8 +38,7 @@ module Shared
       def payload
         { 'client_id' => client_id,
         'client_secret' => secret,
-        'grant_type' => 'client_credentials'
-        }
+        'grant_type' => 'client_credentials' }
       end
 
       def client_id

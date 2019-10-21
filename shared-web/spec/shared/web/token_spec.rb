@@ -11,7 +11,8 @@ RSpec.describe Shared::Web::Token do
     stub_request(:post, "http://#{token_endpoint}/").
       with(
         body: { 'client_id' => client_id, 'client_secret' => client_secret, 'grant_type' => 'client_credentials' },
-        headers: { 'Content-Type' => 'application/x-www-form-urlencoded' }).
+        headers: { 'Content-Type' => 'application/x-www-form-urlencoded' }
+      ).
       to_return(status: returned_status, body: json_body, headers: {})
   end
 
@@ -44,7 +45,7 @@ RSpec.describe Shared::Web::Token do
         let(:returned_status) { 400 }
 
         it 'raises exception' do
-          expect{subject.access_token}.to raise_exception(RestClient::BadRequest)
+          expect { subject.access_token }.to raise_exception(RestClient::BadRequest)
         end
       end
     end
@@ -58,7 +59,7 @@ RSpec.describe Shared::Web::Token do
 
       context 'which is not expired' do
         before do
-          subject.send(:expires_at=, Time.now.to_i+10)
+          subject.send(:expires_at=, Time.now.to_i + 10)
         end
 
         it 'returns the existing token without requesting from Keycloak' do
@@ -69,7 +70,7 @@ RSpec.describe Shared::Web::Token do
 
       context 'which is expired' do
         before do
-          subject.send(:expires_at=, Time.now.to_i-10)
+          subject.send(:expires_at=, Time.now.to_i - 10)
         end
 
         it 'gets a new token from Keycloak and returns it' do
