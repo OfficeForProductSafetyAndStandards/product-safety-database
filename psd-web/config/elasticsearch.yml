@@ -1,6 +1,5 @@
 default: &default
   :url: <%= ENV.fetch('ELASTICSEARCH_URL', "http://elasticsearch:9200") %>
-  :log: true
   :transport_options:
     :request:
       :timeout: 5
