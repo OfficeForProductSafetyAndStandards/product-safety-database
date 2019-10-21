@@ -19,7 +19,7 @@ class HomepageControllerTest < ActionDispatch::IntegrationTest
     mock_user_as_non_opss(User.current)
     allow(User.current).to receive(:has_viewed_introduction).and_return true
 
-    get '/'
+    get "/"
     assert_response :success
   end
 

@@ -9,13 +9,13 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     mock_user_as_non_opss(@non_opss_user)
 
     @investigation_one = load_case(:one)
-    @investigation_one.created_at = Time.zone.parse('2014-07-11 21:00')
+    @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
     @investigation_one.assignee = User.find_by(name: "Test User_four")
     @investigation_one.source = sources(:investigation_one)
     @investigation_one.save
 
     @investigation_two = load_case(:two)
-    @investigation_two.created_at = Time.zone.parse('2015-07-11 21:00')
+    @investigation_two.created_at = Time.zone.parse("2015-07-11 21:00")
     @investigation_two.assignee = @assignee
     @investigation_two.save
 
@@ -28,9 +28,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     @investigation_no_products.save
 
     # The updated_at values must be set separately in order to be respected
-    @investigation_one.updated_at = Time.zone.parse('2017-07-11 21:00')
+    @investigation_one.updated_at = Time.zone.parse("2017-07-11 21:00")
     @investigation_one.save
-    @investigation_two.updated_at = Time.zone.parse('2016-07-11 21:00')
+    @investigation_two.updated_at = Time.zone.parse("2016-07-11 21:00")
     @investigation_two.save
 
     Investigation.import refresh: true, force: true
@@ -90,7 +90,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
       investigation: {
         description: ""
       }
-    }, headers: { "HTTP_REFERER": '/cases/1111-1111/edit_summary' }
+    }, headers: { "HTTP_REFERER": "/cases/1111-1111/edit_summary" }
     assert_includes(CGI.unescapeHTML(response.body), "Description can't be blank")
   end
 

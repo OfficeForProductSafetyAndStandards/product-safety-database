@@ -9,7 +9,7 @@
     text: text content for the banner (ignored if html is also provided)
 
 ruby:
-  banner_classes = ["hmcts-banner"]
+  banner_classes = %w[hmcts-banner]
   banner_classes.push "hmcts-banner--#{type}" if local_assigns[:type] && type.to_sym != :information
   banner_classes.push classes if local_assigns[:classes]
 

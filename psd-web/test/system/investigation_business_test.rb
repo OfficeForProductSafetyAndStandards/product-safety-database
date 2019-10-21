@@ -27,7 +27,7 @@ class InvestigationBusinessTest < ApplicationSystemTestCase
     select_business_type
     click_on "Continue"
     fill_in "business[legal_name]", with: @business.legal_name
-    fill_in "business[trading_name]", with: ''
+    fill_in "business[trading_name]", with: ""
     fill_in "business[company_number]", with: @business.company_number
     click_on "Save business"
     assert_text "Trading name can't be blank"

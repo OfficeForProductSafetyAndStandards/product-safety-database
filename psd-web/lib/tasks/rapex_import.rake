@@ -76,7 +76,7 @@ def create_product_attachments(notification, product)
     fullsize_clean_url = clean_url.sub!("s.jpg", "f.jpg")
     file = download_url(fullsize_clean_url)
     file_content_type = file.content_type_parse.first
-    file_type = file_content_type.split('/').last
+    file_type = file_content_type.split("/").last
     product.documents.attach(io: file, filename: "#{product.name}.#{file_type}", content_type: file_content_type)
   end
 end

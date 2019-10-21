@@ -30,7 +30,7 @@ class Investigation::Enquiry < Investigation
 
   def date_cannot_be_in_the_future
     if date_received.present? && date_received > Time.zone.today
-      errors.add(:date_received, 'Date received must be today or in the past')
+      errors.add(:date_received, "Date received must be today or in the past")
     end
   end
 

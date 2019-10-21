@@ -84,7 +84,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
     fill_in_content_form
     click_button "Continue"
     click_on "Edit details"
-    assert_equal(@correspondence.correspondent_name, find_field('correspondence_meeting[correspondent_name]').value)
+    assert_equal(@correspondence.correspondent_name, find_field("correspondence_meeting[correspondent_name]").value)
   end
 
   test "confirmation continue returns to case page" do

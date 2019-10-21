@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class NewUserTest < ActiveSupport::TestCase
   test "new user email address is validated" do

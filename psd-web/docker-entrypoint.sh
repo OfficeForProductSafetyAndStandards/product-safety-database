@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
+gem install bundler:2.0.2
+
 # Ensure all gems are installed.
-bin/bundle check || bin/bundle install
+bundle check || bundle install
 
 # Ensure all node packages are installed.
 yarn install

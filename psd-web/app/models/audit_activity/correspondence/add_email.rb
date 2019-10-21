@@ -42,9 +42,9 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
 
   def self.build_email_address correspondence
     output = ""
-    output += '(' if correspondence.correspondent_name.present?
+    output += "(" if correspondence.correspondent_name.present?
     output += self.sanitize_text correspondence.email_address
-    output += ')' if correspondence.correspondent_name.present?
+    output += ")" if correspondence.correspondent_name.present?
     output + "<br>"
   end
 

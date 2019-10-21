@@ -2,8 +2,8 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 
 # It's important that simplecov is "require"d early in the file
-require 'simplecov'
-require 'simplecov-console'
+require "simplecov"
+require "simplecov-console"
 SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
   SimpleCov::Formatter::Console
@@ -128,7 +128,7 @@ class ActiveSupport::TestCase
   end
 
   def assert_same_elements(expected, actual, msg = nil)
-    full_message = message(msg, '') { diff(expected, actual) }
+    full_message = message(msg, "") { diff(expected, actual) }
     condition = (expected.size == actual.size) && (expected - actual == [])
     assert(condition, full_message)
   end

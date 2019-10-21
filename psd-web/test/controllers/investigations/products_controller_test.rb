@@ -39,7 +39,7 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference ["InvestigationProduct.count", "Product.count"] do
       post investigation_products_url(@investigation), params: {
         product: {
-          name: '',
+          name: "",
           batch_number: @product.batch_number,
           product_type: @product.product_type,
           category: @product.category,

@@ -36,6 +36,6 @@ class KeycloakTest < ApplicationSystemTestCase
   end
 
   def sign_out_if_signed_in
-    click_link('Sign out') if has_link?('Sign out')
+    click_link("Sign out") if has_link?("Sign out")
   end
 end

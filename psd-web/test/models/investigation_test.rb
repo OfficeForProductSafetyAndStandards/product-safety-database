@@ -54,14 +54,14 @@ class InvestigationTest < ActiveSupport::TestCase
   test "should create an activity when product is added to investigation" do
     @investigation = create_new_case
     assert_difference"Activity.count" do
-      @product = Product.new(name: 'Test Product', product_type: "test product type", category: "test product category")
+      @product = Product.new(name: "Test Product", product_type: "test product type", category: "test product category")
       @investigation.products << @product
     end
   end
 
   test "should create an activity when product is removed from investigation" do
     @investigation = create_new_case
-    @product = Product.new(name: 'Test Product', product_type: "test product type", category: "test product category")
+    @product = Product.new(name: "Test Product", product_type: "test product type", category: "test product category")
     @investigation.products << @product
     assert_difference"Activity.count" do
       @investigation.products.delete(@product)
@@ -245,8 +245,8 @@ class InvestigationTest < ActiveSupport::TestCase
 
   test "pretty_id should contain YYMM" do
     investigation = create_new_case
-    assert_includes investigation.pretty_id, Time.zone.now.strftime('%y').to_s
-    assert_includes investigation.pretty_id, Time.zone.now.strftime('%m').to_s
+    assert_includes investigation.pretty_id, Time.zone.now.strftime("%y").to_s
+    assert_includes investigation.pretty_id, Time.zone.now.strftime("%m").to_s
   end
 
   test "pretty_id should be unique" do
