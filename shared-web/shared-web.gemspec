@@ -1,5 +1,6 @@
 $:.push File.expand_path("lib", __dir__)
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |s|
   s.name        = "shared-web"
   s.version     = "1.0.0"
@@ -31,3 +32,4 @@ Gem::Specification.new do |s|
   s.add_dependency "webpacker", "4.0.7"
   s.add_dependency "will_paginate", "3.1.7"
 end
+# rubocop:enable Metrics/BlockLength
