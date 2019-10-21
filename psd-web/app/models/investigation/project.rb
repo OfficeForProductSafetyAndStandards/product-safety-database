@@ -1,5 +1,4 @@
 class Investigation::Project < Investigation
-  include Indexable
 
   validates :user_title, :description, presence: true
 
