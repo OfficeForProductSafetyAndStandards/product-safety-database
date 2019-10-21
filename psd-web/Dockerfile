@@ -2,7 +2,7 @@ FROM ruby:2.5.5
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
-ENV CHROMIUM_DRIVER_VERSION 2.41
+ENV CHROMIUM_DRIVER_VERSION 78.0.3904.11
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 
