@@ -22,6 +22,11 @@ services:
     ports:
       - "8080:8080"
       - "9990:9990"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3
@@ -32,6 +37,11 @@ services:
       - elasticsearch-volume:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
 
   redis:
     image: redis
