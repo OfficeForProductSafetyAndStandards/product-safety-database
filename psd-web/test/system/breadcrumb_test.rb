@@ -7,6 +7,8 @@ class BreadcrumbTest < ApplicationSystemTestCase
     @product = @investigation_products.products.first
     @investigation_businesses = load_case(:search_related_businesses)
     @business = @investigation_businesses.businesses.first
+    @investigation_products.class.__elasticsearch__.refresh_index!
+    @investigation_businessesclass.__elasticsearch__.refresh_index!
   end
 
   teardown do

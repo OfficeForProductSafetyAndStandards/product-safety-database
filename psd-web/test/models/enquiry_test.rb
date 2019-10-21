@@ -22,6 +22,7 @@ class EnquiryTest < ActiveSupport::TestCase
 
   test "Enquiry date received can be nil, for old enquiries" do
     investigation = load_case(:enquiry)
+    investigation.class.__elasticsearch__.refresh_index!
     investigation.date_received = nil
     assert(investigation.valid?)
   end

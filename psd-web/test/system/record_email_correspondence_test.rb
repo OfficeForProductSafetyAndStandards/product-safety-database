@@ -10,6 +10,8 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     @investigation.source = sources(:investigation_one)
     set_investigation_source! @investigation, User.current
     @correspondence = correspondences(:email)
+
+    @investigation.class.__elasticsearch__.refresh_index!
     visit new_investigation_email_url(@investigation)
   end
 
@@ -107,7 +109,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "confirmation continue should go to case page" do
-    visit new_investigation_email_url(load_case(:no_products))
+    allegation = load_case(:no_products)
+    visit new_investigation_email_url(allegation)
+    allegation.class.__elasticsearch__.refresh_index!
     fill_in_context_form
     click_button "Continue"
     fill_in_content_form

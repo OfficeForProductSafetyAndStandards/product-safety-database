@@ -5,6 +5,8 @@ class CorrectiveActionTest < ActiveSupport::TestCase
     @investigation = load_case(:one)
     @business = businesses(:one)
     @product = products(:one)
+
+    @investigation.class.__elasticsearch__.refresh_index!
     mock_out_keycloak_and_notify
   end
 
