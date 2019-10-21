@@ -1,7 +1,5 @@
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
-pp '*' * 80
-pp Rails.env
 
 # It's important that simplecov is "require"d early in the file
 require "simplecov"
