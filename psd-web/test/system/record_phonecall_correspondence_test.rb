@@ -125,7 +125,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Timeline"
-
     within "div.timeline" do
       assert_equal(@correspondence.overview, first('h3').text)
     end
@@ -149,7 +148,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Timeline"
-
     within "div.timeline" do
       assert_equal(@correspondence.overview, first('h3').text)
     end
@@ -168,7 +166,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Timeline"
-
     within "div.timeline" do
       assert_equal(@correspondence.overview, first('h3').text)
     end
