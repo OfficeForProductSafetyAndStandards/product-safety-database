@@ -16,13 +16,11 @@ PATH
       rails (= 5.2.3)
       request_store (= 1.4.1)
       rest-client (= 2.0.2)
-      rspec
       rubocop (= 0.71.0)
       rubocop-performance (= 1.4.0)
       sentry-raven (= 2.9.0)
       sidekiq (= 5.2.7)
       sidekiq-cron (= 1.1.0)
-      webmock
       webpacker (= 4.0.7)
       will_paginate (= 3.1.7)
 
@@ -306,8 +304,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rspec
   sass-rails (~> 5.0)
   shared-web!
+  webmock
 
 BUNDLED WITH
    1.17.3

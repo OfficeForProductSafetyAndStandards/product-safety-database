@@ -144,15 +144,15 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/macos,windows,jetbrains+all,visualstudiocode
 
-.env
-
-psd-web/.ruby-gemset
 
 *.log
 
 # Redis snapshots. See https://redis.io/topics/persistence
 dump.rdb
 
-shared-web/.ruby-gemset
+.env.development
+.env.test
+.env
 
-shared-web/.ruby-version
+.ruby-gemset
+.ruby-version

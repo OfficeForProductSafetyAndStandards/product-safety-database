@@ -1,4 +1,5 @@
 require 'rest_client'
+require_relative '../../spec_helper'
 require_relative '../../../app/clients/shared/web/token'
 
 RSpec.describe Shared::Web::Token do
