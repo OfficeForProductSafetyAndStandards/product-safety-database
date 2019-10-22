@@ -36,7 +36,7 @@ private
 
   def whitelisted_user
     address = Mail::Address.new(@new_user.email_address)
-    if ENV['EMAIL_WHITELIST_ENABLED'] == true
+    if ENV["EMAIL_WHITELIST_ENABLED"] == "true"
       whitelisted_emails.include?(address.domain)
     else
       return true
