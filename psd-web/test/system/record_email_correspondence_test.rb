@@ -143,7 +143,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Timeline"
     within "div.timeline" do
-      assert_equal("Email added", first('h3').text)
+      assert_equal("Email added", first("h3").text)
       assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
     end
   end
@@ -163,7 +163,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Timeline"
     within "div.timeline" do
-      assert_equal(@correspondence.overview, first('h3').text)
+      assert_equal(@correspondence.overview, first("h3").text)
     end
   end
 
@@ -186,7 +186,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Timeline"
     within "div.timeline" do
-      assert_equal(@correspondence.overview, first('h3').text)
+      assert_equal(@correspondence.overview, first("h3").text)
     end
   end
 
@@ -204,7 +204,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Timeline"
     within "div.timeline" do
-      assert_equal(@correspondence.overview, first('h3').text)
+      assert_equal(@correspondence.overview, first("h3").text)
     end
   end
 
