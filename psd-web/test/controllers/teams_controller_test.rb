@@ -1,3 +1,4 @@
+ENV["EMAIL_WHITELIST_ENABLED"] = "true"
 require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
