@@ -39,7 +39,7 @@ private
       address = Mail::Address.new(@new_user.email_address)
       whitelisted_emails.include?(address.domain)
     else
-      return true
+      true
     end
   end
 
