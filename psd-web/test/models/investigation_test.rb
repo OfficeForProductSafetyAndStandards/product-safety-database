@@ -10,20 +10,28 @@ class InvestigationTest < ActiveSupport::TestCase
 
   setup do
     mock_out_keycloak_and_notify
+
     @investigation = load_case(:one)
     @investigation.class.__elasticsearch__.refresh_index!
+
     @investigation_with_product = load_case(:search_related_products)
+    @investigation_with_product.class.__elasticsearch__.refresh_index!
+
     @product = products(:iphone)
 
     @investigation_with_correspondence = load_case(:search_related_correspondence)
     @investigation_with_correspondence.class.__elasticsearch__.refresh_index!
+
     @correspondence = correspondences(:one)
 
     @investigation_with_complainant = load_case(:search_related_complainant)
-    @complainant = complainants(:one)
     @investigation_with_complainant.class.__elasticsearch__.refresh_index!
+
+    @complainant = complainants(:one)
+
     @investigation_with_business = load_case(:search_related_businesses)
     @investigation_with_business.class.__elasticsearch__.refresh_index!
+
     @business = businesses(:biscuit_base)
   end
 
