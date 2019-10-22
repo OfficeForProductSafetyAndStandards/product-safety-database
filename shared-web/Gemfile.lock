@@ -7,17 +7,14 @@ PATH
       elasticsearch (= 6.8.0)
       elasticsearch-model (= 6.0.0)
       elasticsearch-rails (= 6.0.0)
-      govuk-lint (= 3.11.2)
       govuk_notify_rails (= 2.1.0)
-      keycloak (= 3.0.0)
+      keycloak (= 2.4.1)
       lograge (= 0.11.2)
       mini_magick (= 4.9.3)
       okcomputer (= 1.17.4)
       rails (= 5.2.3)
       request_store (= 1.4.1)
       rest-client (= 2.0.2)
-      rubocop (= 0.71.0)
-      rubocop-performance (= 1.4.0)
       sentry-raven (= 2.9.0)
       sidekiq (= 5.2.7)
       sidekiq-cron (= 1.1.0)
@@ -140,7 +137,7 @@ GEM
     jmespath (1.4.0)
     json (2.2.0)
     jwt (2.2.1)
-    keycloak (3.0.0)
+    keycloak (2.4.1)
       json
       jwt
       rest-client
@@ -304,7 +301,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  govuk-lint (= 3.11.2)
   rspec
+  rubocop (= 0.71.0)
+  rubocop-performance
   sass-rails (~> 5.0)
   shared-web!
   webmock
