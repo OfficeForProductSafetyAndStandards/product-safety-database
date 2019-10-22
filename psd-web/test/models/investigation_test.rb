@@ -276,6 +276,6 @@ class InvestigationTest < ActiveSupport::TestCase
   def create_new_private_case
     description = "new_investigation_description"
     @new_investigation = Investigation::Allegation.create(description: description, is_private: true)
-    Investigation::Allegation.class.__elasticsearch__.refresh_index!
+    Investigation::Allegation.__elasticsearch__.refresh_index!
   end
 end
