@@ -15,7 +15,7 @@ class TeamsController < ApplicationController
     existing_user = User.find_by email: @new_user.email_address
     if existing_user
       invite_existing_user_if_able existing_user
-    elsif whitelisted_emails.include?(@new_user.email_address.downcase.strip.scan(/@.+/)[0])
+    elsif whitelisted_user
       User.create_and_send_invite @new_user.email_address, @team, root_url
     else
       @new_user.errors.add(:email_address, :email_not_in_whitelist)
@@ -32,6 +32,15 @@ private
 
   def set_user_teams
     @teams = User.current.teams
+  end
+
+  def whitelisted_user
+    address = Mail::Address.new(@new_user.email_address)
+    if ENV['EMAIL_WHITELIST_ENABLED'] == true
+      whitelisted_emails.include?(address.domain)
+    else
+      return true
+    end
   end
 
   def set_team
