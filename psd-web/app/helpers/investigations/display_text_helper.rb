@@ -3,6 +3,26 @@ module Investigations::DisplayTextHelper
     document.image? ? "image" : "document"
   end
 
+  def investigation_sub_nav(investigation)
+    items = [{ href: investigation_url(investigation), text: "Overview", active: @current == @investigation.pretty_id },
+             { href: investigation_products_url(investigation), text: "Products (#{@investigation.products.count})", active: @current == "products" },
+             { href: investigation_businesses_url(investigation), text: "Businesses (#{@investigation.businesses.count})", active: @current == "businesses" },
+             { href: investigation_documents_url(investigation), text: "Attachments (#{@investigation.documents.count})", active: @current == "documents" },
+             { href: "/cases/#{@investigation.pretty_id}/activities", text: "Timeline", active: @current == "activities" }].compact
+    render "components/hmcts_sub_nav", title: "Summary", items: items
+  end
+
+  def investigation_sub_nav_tabs
+    mapping = {
+      products: :products,
+      businesses: :businesses,
+      documents: :attachments,
+      activities: :activity
+    }
+
+    render "investigations/tabs/" + mapping.fetch(@current.to_sym, :overview).to_s
+  end
+
   def get_displayable_highlights(highlights, investigation)
     highlights.map do |highlight|
       get_best_highlight(highlight, investigation)
@@ -70,7 +90,7 @@ module Investigations::DisplayTextHelper
 
   # rubocop:disable Rails/OutputSafety
   def investigation_assignee(investigation, classes = "")
-    out = [investigation.assignee ? investigation.assignee.name.to_s : "Unassigned"]
+    out = [investigation.assignee ? investigation.assignee.name.to_s : tag.div("Unassigned", class: classes)]
     out << tag.div(investigation.assignee.organisation.name, class: classes) if investigation.assignee&.organisation.present?
     out.join.html_safe
   end

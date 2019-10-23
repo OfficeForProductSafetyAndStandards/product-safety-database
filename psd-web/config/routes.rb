@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   concern :document_attachable do
     resources :documents, controller: "documents" do
       collection do
+        get "" => "investigations#show"
         resources :new, controller: "documents_flow", only: %i[show new create update]
       end
       member do
@@ -66,11 +67,17 @@ Rails.application.routes.draw do
     end
     resources :activities, controller: "investigations/activities", only: %i[create new] do
       collection do
+        get "" => "investigations#show"
+      end
+      collection do
         get :comment
       end
     end
 
     resources :products, only: %i[new create], controller: "investigations/products" do
+      collection do
+        get "" => "investigations#show"
+      end
       member do
         put :link, path: ""
         get :remove
@@ -78,6 +85,9 @@ Rails.application.routes.draw do
       end
     end
     resources :businesses, only: %i[update show new create], controller: "investigations/businesses" do
+      collection do
+        get "" => "investigations#show"
+      end
       member do
         get :remove
         delete :unlink, path: ""
