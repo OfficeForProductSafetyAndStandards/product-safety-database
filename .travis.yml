@@ -24,7 +24,6 @@ cache:
     - ~/coverage-cache
 
 stages:
-  - Build
   - name: Test
     if: type = pull_request # This is designed to cut out unnecessary runs of the test suite. See PSD-821 for details.
   - name: Update code coverage
