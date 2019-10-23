@@ -13,7 +13,7 @@ ls -la  elasticsearch-7.4.1/
 export ES_HOME=$HOME/elasticsearch-7.4.1/
 export DATABASE_URL=postgres://postgres@localhost:5432/psd_test
 export KEYCLOAK_AUTH_URL=http://localhost:8080/auth
-export ELASTICSEARCH_URL=http://localhost:9200
+export ELASTICSEARCH_URL=http://localhost:9250
 
 cd $HOME/build/UKGovernmentBEIS/beis-opss-psd
 
