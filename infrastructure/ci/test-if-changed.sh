@@ -5,10 +5,10 @@ gem install bundler:2.0.2
 
 cd psd-web
 
-cp ../shared-web  vendor/
-ls -la vendor/
-ls -la vendor/shared-web
-pwd
+mkdir -p  vendor/shared-web
+
+cp -R ../shared-web  vendor/shared-web
+
 bundle install --jobs=3  --retry=3
 
 cd ..
