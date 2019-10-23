@@ -33,11 +33,11 @@ services:
   #   ports:
   #     - 9200:9200
 
-  redis:
-    image: redis
-    hostname: redis
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis
+  #   hostname: redis
+  #   ports:
+  #     - 6379:6379
   # psd-web:
   #   build:
   #     context: .

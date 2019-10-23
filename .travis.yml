@@ -3,11 +3,12 @@ sudo: required
 language: ruby
 
 rvm:
- — ruby-2.5.5
+  — ruby-2.5.5
 
 services:
   - docker
   - elasticsearch
+  - redis
 
 addons:
   chrome: stable
