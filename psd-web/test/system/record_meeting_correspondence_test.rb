@@ -36,7 +36,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     assert_text("testImage")
     click_button "Continue"
-    click_on "Timeline"
+    click_on "Activity"
     assert_text("testImage")
   end
 
@@ -48,7 +48,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     assert_text("testImage2")
     click_button "Continue"
-    click_on "Timeline"
+    click_on "Activity"
     assert_text("testImage2")
   end
 
