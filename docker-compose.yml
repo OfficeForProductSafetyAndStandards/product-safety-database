@@ -23,53 +23,53 @@ services:
       - "8080:8080"
       - "9990:9990"
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3
-    environment:
-      - "discovery.type=single-node"
-      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
-    volumes:
-      - elasticsearch-volume:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.3
+  #   environment:
+  #     - "discovery.type=single-node"
+  #     - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+  #   volumes:
+  #     - elasticsearch-volume:/usr/share/elasticsearch/data
+  #   ports:
+  #     - 9200:9200
 
   redis:
     image: redis
     hostname: redis
     ports:
       - 6379:6379
-  psd-web:
-    build:
-      context: .
-      dockerfile: ./psd-web/Dockerfile
-    volumes:
-      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/psd-web:/psd-web
-      - ${PWD-.}/shared-web:/psd-web/vendor/shared-web
-      - bundle-cache:/usr/local/bundle
-    depends_on:
-      - db
-      - elasticsearch
-      - redis
-      - psd-worker
-      - keycloak
-    env_file:
-      - .env.keycloak.psd
+  # psd-web:
+  #   build:
+  #     context: .
+  #     dockerfile: ./psd-web/Dockerfile
+  #   volumes:
+  #     # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
+  #     - ${PWD-.}/psd-web:/psd-web
+  #     - ${PWD-.}/shared-web:/psd-web/vendor/shared-web
+  #     - bundle-cache:/usr/local/bundle
+  #   depends_on:
+  #     - db
+  #     - elasticsearch
+  #     - redis
+  #     - psd-worker
+  #     - keycloak
+  #   env_file:
+  #     - .env.keycloak.psd
 
-  psd-worker:
-    build:
-      context: .
-      dockerfile: ./psd-worker/Dockerfile
-    command: bin/sidekiq -C config/sidekiq.yml
-    volumes:
-      # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/psd-web:/psd-web
-      - ${PWD-.}/shared-web:/psd-web/vendor/shared-web
-      - bundle-cache:/usr/local/bundle
-    depends_on:
-      - db
-      - elasticsearch
-      - redis
+  # psd-worker:
+  #   build:
+  #     context: .
+  #     dockerfile: ./psd-worker/Dockerfile
+  #   command: bin/sidekiq -C config/sidekiq.yml
+  #   volumes:
+  #     # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
+  #     - ${PWD-.}/psd-web:/psd-web
+  #     - ${PWD-.}/shared-web:/psd-web/vendor/shared-web
+  #     - bundle-cache:/usr/local/bundle
+  #   depends_on:
+  #     - db
+  #     - elasticsearch
+  #     - redis
 
 volumes:
   postgres-volume:

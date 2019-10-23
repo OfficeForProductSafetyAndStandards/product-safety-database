@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
 set -ex
 
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml pull
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm --no-deps $COMPONENT echo 'Gems pre-installed'
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d $COMPONENT
+docker-compose -f docker-compose.yml up db keycloak redis
 
-if [[ $(./infrastructure/ci/get-changed-components.sh) =~ ((^| )$COMPONENT($| )) ]]; then
-    echo "Testing component $COMPONENT"
-    docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm start_dependencies
-    docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec $COMPONENT bin/rails db:create db:schema:load test BACKTRACE=1
-else
-    echo 'Testing not required.'
-fi
+bundle install — jobs=3 — retry=3
 
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec $COMPONENT bin/rake submit_coverage
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml down
+gem install bundler:2.0.2
+
+bin/rails db:create db:schema:load test BACKTRACE=1
+
+
+bin/rails submit_coverage
