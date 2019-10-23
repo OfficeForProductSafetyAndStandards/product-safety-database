@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -ex
 
-docker-compose -f docker-compose.yml up --build -d db keycloak redis
+docker-compose -f docker-compose.yml up --build -d db keycloak
+
+cd psd-web
 
 bundle install --jobs 3  --retry 3 --path ~/bundle-cache
 
