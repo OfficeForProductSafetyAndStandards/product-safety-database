@@ -140,9 +140,7 @@ class ActiveSupport::TestCase
 
   def load_case(key)
     investigation = investigations(key)
-
-    investigation.class.__elasticsearch__.refresh_index!
-
+    investigation.class.import refresh: true, force: true
     investigation.assignee = User.current
     investigation.save
     investigation
