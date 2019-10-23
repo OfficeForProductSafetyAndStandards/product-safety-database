@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -ex
 
+DATABASE_URL=postgres://postgres@localhost:5432/psd_test
+KEYCLOAK_AUTH_URL=http://localhost:8080/auth
+ELASTICSEARCH_URL=http://localhost:9200
 
 docker-compose -f docker-compose.yml up --build -d db keycloak
 
