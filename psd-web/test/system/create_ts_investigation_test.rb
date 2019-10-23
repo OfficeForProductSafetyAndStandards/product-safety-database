@@ -118,13 +118,13 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     click_on "View case"
 
     # assert that corrective actions saved
-    click_on "Timeline"
+    click_on "Activity"
     assert_text @corrective_action_one.summary
     assert_text @corrective_action_two.summary
 
     # assert that product saved
     print page.html
-    click_on "Products (#{@investigation.products.count})"
+    click_on "Products (1)"
     assert_text @product.name
     assert_text @product.product_code
     assert_text @product.product_type
@@ -134,7 +134,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @product.country_of_origin
 
     # assert that business has saved
-    click_link "Businesses (#{@investigation.businesses.count})"
+    click_on "Businesses (2)"
     assert_text "Advertiser"
     assert_text "Retailer"
     assert_text @business_one.trading_name
@@ -143,7 +143,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @business_one.locations.first.address_line_1
 
     # assert attachments saved
-    click_link "Attachments (#{@investigation.documents.count})"
+    click_link "Attachments (5)"
     assert_text "Passed test: #{@product.name}"
     assert_text test_result_description
     assert_text risk_assessment_title
