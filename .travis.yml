@@ -7,7 +7,6 @@ rvm:
 
 services:
   - docker
-  - elasticsearch
   - redis
 
 addons:
