@@ -39,7 +39,7 @@ class ActiveSupport::TestCase
 
   setup do
     unless Elasticsearch::Extensions::Test::Cluster.running?
-      Elasticsearch::Extensions::Test::Cluster.start
+      Elasticsearch::Extensions::Test::Cluster.start command: "#{ENV.fetch('ES_HOME')}/bin/elasticsearch"
     end
     self.class.import_into_elasticsearch
   end
