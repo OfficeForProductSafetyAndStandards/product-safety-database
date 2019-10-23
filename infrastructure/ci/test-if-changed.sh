@@ -5,7 +5,7 @@ gem install bundler:2.0.2
 
 cd psd-web
 
-cp -r ../shared-web  vendor/
+cp ../shared-web  vendor/
 ls -la vendor/
 ls -la vendor/shared-web
 pwd
