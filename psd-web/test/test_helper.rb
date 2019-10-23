@@ -12,6 +12,7 @@ SimpleCov.start
 
 require "rails/test_help"
 require "rspec/mocks/standalone"
+require 'elasticsearch/extensions/test/cluster'
 
 class ActiveSupport::TestCase
   include ::RSpec::Mocks::ExampleMethods
@@ -37,9 +38,17 @@ class ActiveSupport::TestCase
   end
 
   setup do
+    unless Elasticsearch::Extensions::Test::Cluster.running?
+      Elasticsearch::Extensions::Test::Cluster.start
+    end
     self.class.import_into_elasticsearch
   end
 
+  teardown do
+    unless Elasticsearch::Extensions::Test::Cluster.running?
+      Elasticsearch::Extensions::Test::Cluster.stop
+    end
+  end
   # On top of mocking out external services, this method also sets the user to an initial,
   # sensible value, but it should only be run once per test.
   # To change currently logged in user afterwards call `sign_in_as(...)`
@@ -146,7 +155,7 @@ class ActiveSupport::TestCase
     investigation
   end
 
-private
+  private
 
   def test_user(name: "User_one", ts_user: false)
     id = SecureRandom.uuid
