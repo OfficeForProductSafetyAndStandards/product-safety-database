@@ -4,13 +4,11 @@ set -ex
 
 cd $HOME
 
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.1-linux-x86_64.tar.gz
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.1-linux-x86_64.tar.gz.sha512
-shasum -a 512 -c elasticsearch-7.4.1-linux-x86_64.tar.gz.sha512
-tar -xzf elasticsearch-7.4.1-linux-x86_64.tar.gz
-ls -la  elasticsearch-7.4.1/
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.4.tar.gz
+tar -xzf elasticsearch-6.8.4-linux-x86_64.tar.gz
+ls -la  elasticsearch-6.8.4/
 
-export ES_HOME=$HOME/elasticsearch-7.4.1/
+export ES_HOME=$HOME/elasticsearch-6.8.4/
 export DATABASE_URL=postgres://postgres@localhost:5432/psd_test
 export KEYCLOAK_AUTH_URL=http://localhost:8080/auth
 export ELASTICSEARCH_URL=http://localhost:9250
