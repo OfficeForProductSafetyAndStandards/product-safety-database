@@ -43,7 +43,8 @@ Rails.application.routes.draw do
       patch :edit_summary
       get :created
     end
-    resources :activities, controller: "investigations/activities", only: %i[create new] do
+    get "/attachments", :to => "investigations#show"
+    resources :activity, controller: "investigations/activities", only: %i[create new] do
       collection do
         get "" => "investigations#show"
       end

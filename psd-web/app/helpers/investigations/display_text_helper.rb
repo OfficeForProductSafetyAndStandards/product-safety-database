@@ -7,8 +7,8 @@ module Investigations::DisplayTextHelper
     items = [{ href: investigation_url(investigation), text: "Overview", active: @current == @investigation.pretty_id },
              { href: investigation_products_url(investigation), text: "Products (#{@investigation.products.count})", active: @current == "products" },
              { href: investigation_businesses_url(investigation), text: "Businesses (#{@investigation.businesses.count})", active: @current == "businesses" },
-             { href: investigation_documents_url(investigation), text: "Attachments (#{@investigation.documents.count})", active: @current == "documents" },
-             { href: "/cases/#{@investigation.pretty_id}/activities", text: "Timeline", active: @current == "activities" }].compact
+             { href: investigation_attachments_path(investigation), text: "Attachments (#{@investigation.documents.count})", active: @current == "attachments" },
+             { href: "/cases/#{@investigation.pretty_id}/activity", text: "Activity", active: @current == "activity" }].compact
     render "components/hmcts_sub_nav", title: "Summary", items: items
   end
 
@@ -16,8 +16,8 @@ module Investigations::DisplayTextHelper
     mapping = {
       products: :products,
       businesses: :businesses,
-      documents: :attachments,
-      activities: :activity
+      attachments: :attachments,
+      activity: :activity
     }
 
     render "investigations/tabs/" + mapping.fetch(@current.to_sym, :overview).to_s
