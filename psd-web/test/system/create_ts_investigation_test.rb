@@ -142,7 +142,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @business_one.locations.first.address_line_1
 
     # assert attachments saved
-    click_on "Attachments"
+    click_on "Attachments_id"
     assert_text "Passed test: #{@product.name}"
     assert_text test_result_description
     assert_text risk_assessment_title
