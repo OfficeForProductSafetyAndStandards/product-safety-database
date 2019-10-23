@@ -3,7 +3,7 @@ set -ex
 
 docker-compose -f docker-compose.yml up --build -d db keycloak
 
-cd psd-web
+ln -s shared-web  psd-web/vendor/
 
 gem install bundler:2.0.2
 
