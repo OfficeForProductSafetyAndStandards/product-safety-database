@@ -123,7 +123,6 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @corrective_action_two.summary
 
     # assert that product saved
-    print page.html
     click_on "Products_id"
     assert_text @product.name
     assert_text @product.product_code

@@ -49,7 +49,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     assert_text(attachment_filename)
     click_button "Continue"
-    click_on "Activity"
+    click_on "Timeline"
     assert_text("Email: #{attachment_filename}")
     assert_text("View email file")
 
@@ -69,7 +69,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     assert_text(attachment_filename)
     click_button "Continue"
-    click_on "Activity"
+    click_on "Timeline"
     assert_text("Attached: #{attachment_filename}")
     assert_text("View email attachment")
 
