@@ -3,7 +3,7 @@ sudo: required
 language: ruby
 
 rvm:
- — 2.5.5
+ — ruby-2.5.5
 
 services:
   - docker
