@@ -4,6 +4,7 @@ language: generic
 
 services:
   - docker
+  - elasticsearch
 
 branches:
   only:
