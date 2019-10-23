@@ -180,7 +180,11 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     sign_in_as same_team_user
     visit investigation_path(@investigation)
 
+<<<<<<< HEAD
     click_on "Activity"
+=======
+    click_on "Timeline"
+>>>>>>> Update tests to match new timeline page:
     assert_equal(@correspondence.overview, first("h3").text)
   end
 
@@ -196,7 +200,11 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     sign_in_as same_org_user
     visit investigation_path(@investigation)
 
+<<<<<<< HEAD
     click_on "Activity"
+=======
+    click_on "Timeline"
+>>>>>>> Update tests to match new timeline page:
     assert_equal(@correspondence.overview, first("h3").text)
   end
 

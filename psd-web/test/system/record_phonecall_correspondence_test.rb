@@ -104,7 +104,11 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     sign_in_as other_org_user
     visit investigation_path(@investigation)
 
+<<<<<<< HEAD
     click_on "Activity"
+=======
+    click_on "Timeline"
+>>>>>>> Update tests to match new timeline page:
     assert_equal("Phone call added", first("h3").text)
     assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
   end
@@ -122,7 +126,11 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     sign_in_as other_org_user
     visit investigation_path(@investigation)
 
+<<<<<<< HEAD
     click_on "Activity"
+=======
+    click_on "Timeline"
+>>>>>>> Update tests to match new timeline page:
     assert_equal(@correspondence.overview, first("h3").text)
   end
 
