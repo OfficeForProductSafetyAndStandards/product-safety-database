@@ -19,7 +19,7 @@ gem "sprockets", "= 4.0.0.beta10"
 gem "strong_migrations"
 gem "wicked"
 
-gem "shared-web", path: "./vendor/shared-web"
+gem "shared-web", path: "vendor/shared-web"
 
 group :development, :test do
   gem "brakeman"
