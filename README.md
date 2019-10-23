@@ -109,11 +109,7 @@ and cause deployments of the various components to the int space on GOV.UK PaaS.
 Deployment to research environment does not currently happen automatically, for details see section "Research" in
 [prototypes](https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/452689949/Prototypes)
 
-Anything merged into the branch `staging` (only via a Pull Request) will cause Travis CI to instead build to the staging
-space.
-Please only do this if you are confident that this is a stable commit.
-
-Anything merged into the branch `prod` (only via a Pull Request) will cause Travis CI to instead build to the prod
+Anything merged into the branch `master` (only via a Pull Request) will cause Travis CI to instead build to the prod
 space.
 Please only do this if you are confident that this is a stable commit.
 

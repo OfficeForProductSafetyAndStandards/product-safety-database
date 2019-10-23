@@ -102,7 +102,7 @@ You can run the security vulnerability static analysis with `bin/brakeman --no-p
 
 ## Deployment
 
-The website code is automatically deployed to the relevant environment by Travis
+The website code is automatically deployed to the production environment by Travis
 CI as described in [the root README](../README.md#deployment).
 
 
