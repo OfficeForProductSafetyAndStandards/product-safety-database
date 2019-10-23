@@ -4,8 +4,8 @@ set -ex
 
 cd $HOME
 
-wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.4.tar.gz
-tar -xzf elasticsearch-6.8.4-linux-x86_64.tar.gz
+wget --quiet https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.4.tar.gz
+tar -xzf elasticsearch-6.8.4.tar.gz
 ls -la  elasticsearch-6.8.4/
 
 export ES_HOME=$HOME/elasticsearch-6.8.4/
