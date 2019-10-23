@@ -3,7 +3,7 @@ set -ex
 
 docker-compose -f docker-compose.yml up -d db keycloak redis
 
-bundle install — jobs=3 — retry=3
+bundle install --jobs 3  --retry 3 --path ~/bundle-cache
 
 gem install bundler:2.0.2
 
