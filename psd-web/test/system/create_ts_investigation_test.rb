@@ -123,6 +123,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @corrective_action_two.summary
 
     # assert that product saved
+    print page.html
     click_on "Products (#{@investigation.products.count})"
     assert_text @product.name
     assert_text @product.product_code
@@ -142,7 +143,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @business_one.locations.first.address_line_1
 
     # assert attachments saved
-    click_link "Attachements (#{@investigation.documents.count})"
+    click_link "Attachments (#{@investigation.documents.count})"
     assert_text "Passed test: #{@product.name}"
     assert_text test_result_description
     assert_text risk_assessment_title
