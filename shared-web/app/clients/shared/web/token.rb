@@ -36,9 +36,11 @@ module Shared
       end
 
       def payload
-        { 'client_id' => client_id,
-        'client_secret' => secret,
-        'grant_type' => 'client_credentials' }
+        {
+          'client_id' => client_id,
+          'client_secret' => secret,
+          'grant_type' => 'client_credentials'
+        }
       end
 
       def client_id

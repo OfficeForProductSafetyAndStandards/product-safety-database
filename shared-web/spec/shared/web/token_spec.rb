@@ -4,8 +4,8 @@ require_relative '../../../app/clients/shared/web/token'
 
 RSpec.describe Shared::Web::Token do
   before do
-    ENV['KEYCLOAK_CLIENT_ID'] = client_id
-    ENV['KEYCLOAK_CLIENT_SECRET'] = client_secret
+    allow(ENV).to receive(:fetch).with('KEYCLOAK_CLIENT_ID').and_return(client_id)
+    allow(ENV).to receive(:fetch).with('KEYCLOAK_CLIENT_SECRET').and_return(client_secret)
   end
 
   let!(:request_for_token) do

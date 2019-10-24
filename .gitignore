@@ -153,6 +153,3 @@ dump.rdb
 .env.development
 .env.test
 .env
-
-.ruby-gemset
-.ruby-version
