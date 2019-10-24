@@ -1,6 +1,7 @@
 # rubocop:disable Metrics/BlockLength
 module InvestigationElasticsearch
   require_dependency 'shared/web/concerns/searchable'
+
   extend ActiveSupport::Concern
 
   included do

@@ -1,4 +1,7 @@
 class Investigation < ApplicationRecord
+  require_dependency 'investigation/allegation'
+  require_dependency 'investigation/enquiry'
+  require_dependency 'investigation/project'
 
   include Documentable
   include AttachmentConcern
@@ -51,6 +54,12 @@ class Investigation < ApplicationRecord
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
 
   after_create :create_audit_activity_for_case, :send_confirmation_email
+
+  class << self
+    def inherited(base)
+      base.include InvestigationElasticsearch
+    end
+  end
 
   def assignee
     begin
