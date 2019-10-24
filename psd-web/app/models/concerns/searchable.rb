@@ -10,6 +10,7 @@ module Searchable
     # Same issue is pointed out in the following link. We can remove it once that PR is merged.
     # https://github.com/elastic/elasticsearch-rails/pull/703
     after_update do |document|
+      __elasticsearch__.refresh_index! if Rails.env.development? || Rails.env.test?
       document.__elasticsearch__.update_document_attributes updated_at: document.updated_at
     end
 
