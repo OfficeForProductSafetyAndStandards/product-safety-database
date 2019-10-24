@@ -1,7 +1,8 @@
 class Investigation::Project < Investigation
-  include Indexable
 
   validates :user_title, :description, presence: true
+
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
   def self.model_name
     self.superclass.model_name

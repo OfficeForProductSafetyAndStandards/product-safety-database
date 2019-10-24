@@ -1,9 +1,10 @@
 class Business < ApplicationRecord
   include BusinessesHelper
   include Searchable
-  include Indexable
   include Documentable
   include AttachmentConcern
+
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "business"].join("_")
 
   settings do
     mappings do
