@@ -13,6 +13,7 @@ AllCops:
     - './../../node_modules/**/*'
     - './../../tmp/**/*'
     - 'bin/**/*'
+    - './node_modules/**/*'
 
 Rails:
   Enabled: true
