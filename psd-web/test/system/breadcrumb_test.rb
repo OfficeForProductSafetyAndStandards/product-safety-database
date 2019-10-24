@@ -4,11 +4,13 @@ class BreadcrumbTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
     @investigation_products = load_case(:search_related_products)
+    @investigation_products.class.__elasticsearch__.refresh_index!
+
     @product = @investigation_products.products.first
     @investigation_businesses = load_case(:search_related_businesses)
+    @investigation_businesses.class.__elasticsearch__.refresh_index!
+
     @business = @investigation_businesses.businesses.first
-    @investigation_products.class.__elasticsearch__.refresh_index!
-    @investigation_businessesclass.__elasticsearch__.refresh_index!
   end
 
   teardown do

@@ -1,5 +1,5 @@
 class Investigation < ApplicationRecord
-  require_dependency 'shared/web/concerns/searchable'
+
   include Documentable
   include AttachmentConcern
   include SanitizationHelper
