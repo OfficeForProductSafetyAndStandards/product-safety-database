@@ -5,9 +5,9 @@ module Investigations::DisplayTextHelper
 
   def investigation_sub_nav(investigation)
     items = [{ href: investigation_url(investigation), text: "Overview", active: @current == @investigation.pretty_id },
-             { href: investigation_products_url(investigation), text: "Products (#{@investigation.products.count})", active: @current == "products" },
-             { href: investigation_businesses_url(investigation), text: "Businesses (#{@investigation.businesses.count})", active: @current == "businesses" },
-             { href: investigation_attachments_path(investigation), text: "Attachments (#{@investigation.documents.count})", active: @current == "attachments" },
+             { href: investigation_products_url(investigation), text: "Products", count: " (#{@investigation.products.count})", active: @current == "products" },
+             { href: investigation_businesses_url(investigation), text: "Businesses", count: " (#{@investigation.businesses.count})", active: @current == "businesses" },
+             { href: investigation_attachments_path(investigation), text: "Attachments", count: " (#{@investigation.documents.count})", active: @current == "attachments" },
              { href: "/cases/#{@investigation.pretty_id}/activity", text: "Activity", active: @current == "activity" }].compact
     render "components/hmcts_sub_nav", title: "Summary", items: items
   end
