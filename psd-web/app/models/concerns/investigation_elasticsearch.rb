@@ -5,7 +5,7 @@ module InvestigationElasticsearch
   included do
     include Searchable
 
-    index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, 'investigations'].join("_")
+    index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
     settings do
       mappings do
