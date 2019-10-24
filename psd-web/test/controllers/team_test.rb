@@ -152,6 +152,7 @@ class TeamTest < ActionDispatch::IntegrationTest
 
     investigation = Investigation.find_by(description: "Investigation two description")
     investigation.update(assignee: @user_four)
+    pp investigation.class.__elasticsearch__.index_name
     investigation.class.__elasticsearch__.refresh_index!
 
     @investigation_user_four = Investigation.find_by(description: "Investigation two description")
@@ -159,6 +160,7 @@ class TeamTest < ActionDispatch::IntegrationTest
 
     investigation = Investigation.find_by(description: "Investigation for search by correspondence")
     investigation.update(assignee: @user_three)
+    pp investigation.class.__elasticsearch__.index_name
     investigation.class.__elasticsearch__.refresh_index!
 
     @investigation_user_three = Investigation.find_by(description: "Investigation for search by correspondence")
@@ -167,6 +169,7 @@ class TeamTest < ActionDispatch::IntegrationTest
     team1 = Team.find_by(name: "Team 1")
     investigation = Investigation.find_by(description: "Investigation with no product")
     investigation.update(assignee: team1)
+    pp investigation.class.__elasticsearch__.index_name
     investigation.class.__elasticsearch__.refresh_index!
 
     @investigation_team_one = Investigation.find_by(description: "Investigation with no product")
@@ -175,6 +178,7 @@ class TeamTest < ActionDispatch::IntegrationTest
     team2 = Team.find_by(name: "Team 3")
     investigation = Investigation.find_by(description: "Investigation for search by product")
     investigation.update(assignee: team2)
+    pp investigation.class.__elasticsearch__.index_name
     investigation.class.__elasticsearch__.refresh_index!
 
     @investigation_team_three = Investigation.find_by(description: "Investigation for search by product")
