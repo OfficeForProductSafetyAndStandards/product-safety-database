@@ -28,6 +28,8 @@ gem install bundler:2.0.2
 
 bundle install --path ~/bundle-cache --jobs=3  --retry=3
 
+yarn
+
 bin/rails db:create db:schema:load test BACKTRACE=1
 
 bin/rails submit_coverage
