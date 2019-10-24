@@ -145,31 +145,39 @@ class TeamTest < ActionDispatch::IntegrationTest
   def prepare_assigned_cases
     investigation = Investigation.find_by(description: "Investigation one description")
     investigation.update(assignee: @user_one)
+    investigation.class.__elasticsearch__.refresh_index!
+
     @investigation_user_one = Investigation.find_by(description: "Investigation one description")
     assert_equal @investigation_user_one.assignee, @user_one
 
     investigation = Investigation.find_by(description: "Investigation two description")
     investigation.update(assignee: @user_four)
+    investigation.class.__elasticsearch__.refresh_index!
+
     @investigation_user_four = Investigation.find_by(description: "Investigation two description")
     assert_equal @investigation_user_four.assignee, @user_four
 
     investigation = Investigation.find_by(description: "Investigation for search by correspondence")
     investigation.update(assignee: @user_three)
+    investigation.class.__elasticsearch__.refresh_index!
+
     @investigation_user_three = Investigation.find_by(description: "Investigation for search by correspondence")
     assert_equal @investigation_user_three.assignee, @user_three
 
     team1 = Team.find_by(name: "Team 1")
     investigation = Investigation.find_by(description: "Investigation with no product")
     investigation.update(assignee: team1)
+    investigation.class.__elasticsearch__.refresh_index!
+
     @investigation_team_one = Investigation.find_by(description: "Investigation with no product")
     assert_equal @investigation_team_one.assignee, team1
 
     team2 = Team.find_by(name: "Team 3")
     investigation = Investigation.find_by(description: "Investigation for search by product")
     investigation.update(assignee: team2)
+    investigation.class.__elasticsearch__.refresh_index!
+
     @investigation_team_three = Investigation.find_by(description: "Investigation for search by product")
     assert_equal @investigation_team_three.assignee, team2
-
-    Investigation.__elasticsearch__.refresh_index!
   end
 end
