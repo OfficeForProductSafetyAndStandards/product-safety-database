@@ -4,7 +4,6 @@ module InvestigationElasticsearch
 
   included do
     include Searchable
-    include Indexable
 
     settings do
       mappings do

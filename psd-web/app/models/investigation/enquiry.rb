@@ -1,10 +1,10 @@
 class Investigation::Enquiry < Investigation
   include Shared::Web::Concerns::DateConcern
-  include Indexable
 
   validates :user_title, :description, presence: true, on: :enquiry_details
   validates :date_received, presence: true, on: :about_enquiry, unless: :partially_filled_date?
   validate :date_cannot_be_in_the_future, on: :about_enquiry
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, self.class.to_s.gsub("::", "").downcase].join("_")
 
   date_attribute :date_received, required: false
 
