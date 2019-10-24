@@ -29,7 +29,6 @@ class ActiveSupport::TestCase
   def self.import_into_elasticsearch
     unless @models_imported
       ActiveRecord::Base.descendants.each do |model|
-        pp [model, "model.respond_to?(:__elasticsearch__)" => model.respond_to?(:__elasticsearch__), "!model.superclass.respond_to?(:__elasticsearch__)" => !model.superclass.respond_to?(:__elasticsearch__)]
         if model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__)
           model.import force: true, refresh: true
         end
@@ -150,7 +149,7 @@ class ActiveSupport::TestCase
 
   def load_case(key)
     investigation = investigations(key)
-    investigation.assignee = User.current
+    investigation.assignable = User.current
     investigation.save
     investigation
   end
