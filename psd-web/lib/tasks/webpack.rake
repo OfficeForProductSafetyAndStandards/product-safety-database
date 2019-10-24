@@ -7,7 +7,7 @@ ensure
 end
 
 
-namespace :my_engine do
+namespace :shared_web do
   namespace :webpacker do
     desc "Install deps with yarn"
     task :yarn_install do
@@ -20,7 +20,7 @@ namespace :my_engine do
     task compile: [:yarn_install, :environment] do
       Webpacker.with_node_env("production") do
         ensure_log_goes_to_stdout do
-          if MyEngine.webpacker.commands.compile
+          if Shared::Web.webpacker.commands.compile
             # Successful compilation!
           else
             # Failed compilation
@@ -41,9 +41,9 @@ end
 
 def enhance_assets_precompile
   # yarn:install was added in Rails 5.1
-  deps = yarn_install_available? ? [] : ["my_engine:webpacker:yarn_install"]
+  deps = yarn_install_available? ? [] : ["shared_web:webpacker:yarn_install"]
   Rake::Task["assets:precompile"].enhance(deps) do
-    Rake::Task["my_engine:webpacker:compile"].invoke
+    Rake::Task["shared_web:webpacker:compile"].invoke
   end
 end
 
@@ -54,6 +54,6 @@ unless skip_webpacker_precompile
   if Rake::Task.task_defined?("assets:precompile")
     enhance_assets_precompile
   else
-    Rake::Task.define_task("assets:precompile" => "my_engine:webpacker:compile")
+    Rake::Task.define_task("xsassets:precompile" => "shared_web:webpacker:compile")
   end
 end
