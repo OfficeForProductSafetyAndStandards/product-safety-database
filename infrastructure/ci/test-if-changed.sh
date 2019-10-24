@@ -12,6 +12,7 @@ export ES_HOME=$HOME/elasticsearch-6.8.4/
 export DATABASE_URL=postgres://postgres@localhost:5432/psd_test
 export KEYCLOAK_AUTH_URL=http://localhost:8080/auth
 export ELASTICSEARCH_URL=http://localhost:9250
+export REDIS_URL=redis://localhost:6379/0
 
 cd $HOME/build/UKGovernmentBEIS/beis-opss-psd
 
