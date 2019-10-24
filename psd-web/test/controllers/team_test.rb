@@ -169,5 +169,7 @@ class TeamTest < ActionDispatch::IntegrationTest
     investigation.update(assignee: team2)
     @investigation_team_three = Investigation.find_by(description: "Investigation for search by product")
     assert_equal @investigation_team_three.assignee, team2
+
+    Investigation.__elasticsearch__.refresh_index!
   end
 end
