@@ -11,7 +11,7 @@ class Product < ApplicationRecord
   validates :category, presence: true
   validates_length_of :description, maximum: 10000
 
-  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, self.class.to_s.gsub("::", "").downcase].join("_")
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, 'product'].join("_")
 
   has_many_attached :documents
 
