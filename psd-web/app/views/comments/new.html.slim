@@ -9,7 +9,9 @@
     h1.govuk-heading-l
       span.govuk-caption-l = @investigation.pretty_description
       | Add comment
-    = form_with(model: CommentActivity.new, url: investigation_activities_path(@investigation)) do |form|
-      = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 },
+    = form_with(model: @investigation.activities.new, url: investigation_activity_comment_path(@investigation)) do |form|
+      = pp form.object
+      = form.fields_for form.object do |ca_form|
+        = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 },
               label: { text: "Comment text", classes: "govuk-visually-hidden" }
       = form.submit "Continue", class: "govuk-button"

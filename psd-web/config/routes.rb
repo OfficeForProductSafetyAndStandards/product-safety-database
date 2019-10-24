@@ -66,12 +66,15 @@ Rails.application.routes.draw do
       get :created
     end
     get "/attachments", to: "investigations#show"
+
+    resource :activity, only: [] do
+      resource :comment, only: %i[ create new ]
+    end
+
+
     resources :activity, controller: "investigations/activities", only: %i[create new] do
       collection do
         get "" => "investigations#show"
-      end
-      collection do
-        get :comment
       end
     end
 
