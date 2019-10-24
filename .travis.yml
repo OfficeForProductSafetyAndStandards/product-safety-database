@@ -1,9 +1,13 @@
 sudo: required
 
 language: ruby
-
+cache:
+  directories:
+    - ~/bundle-cache
+    - ~/coverage-cache
+    - /home/travis/.rvm/
 rvm:
-  — ruby-2.5.5
+  — 2.5.5
 
 services:
   - docker
@@ -17,11 +21,6 @@ branches:
     - master
     - staging
     - prod
-
-cache:
-  directories:
-    - ~/bundle-cache
-    - ~/coverage-cache
 
 stages:
   - name: Test
@@ -40,13 +39,13 @@ stages:
 jobs:
   include:
     - stage: Build
-      before_install:
-        - mkdir -p ~/bundle-cache
-        - mkdir -p ~/coverage-cache/psd
       install:
         - DOCKER_ORG=${DOCKER_ORG} BRANCH=${TRAVIS_BRANCH} BUILD_ID=${TRAVIS_BUILD_NUMBER} ./infrastructure/ci/build-docker-images.sh
 
     - stage: Test
+      install:
+        - gem install bundler:2.0.2
+        - bundle install --path ~/bundle-cache --jobs=3  --retry=3
       name: PSD Tests
       script: COMPONENT=psd-web ./infrastructure/ci/test-if-changed.sh
       env: &test_env

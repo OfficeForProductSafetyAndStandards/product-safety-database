@@ -24,10 +24,6 @@ mkdir -p  vendor/shared-web
 
 cp -R ../shared-web  vendor/shared-web
 
-gem install bundler:2.0.2
-
-bundle install --jobs=3  --retry=3
-
 bin/rails db:create db:schema:load test BACKTRACE=1
 
 bin/rails submit_coverage
