@@ -124,7 +124,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
 
     # assert that product saved
     print page.html
-    click_on "Products"
+    click_on "Products_id"
     assert_text @product.name
     assert_text @product.product_code
     assert_text @product.product_type
@@ -134,7 +134,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @product.country_of_origin
 
     # assert that business has saved
-    click_on "Businesses"
+    click_on "Businesses_id"
     assert_text "Advertiser"
     assert_text "Retailer"
     assert_text @business_one.trading_name
