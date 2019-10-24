@@ -1,6 +1,4 @@
-require 'rest_client'
-require_relative '../../spec_helper'
-require_relative '../../../app/clients/shared/web/token'
+require 'spec_helper'
 
 RSpec.describe Shared::Web::Token do
   before do
