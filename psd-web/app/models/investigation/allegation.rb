@@ -4,7 +4,7 @@ class Investigation::Allegation < Investigation
   validates :hazard_description, :hazard_type, presence: true, on: :unsafe
   validates :non_compliant_reason, presence: true, on: :non_compliant
 
-  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, 'allegation'].join("_")
+  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, 'investigations'].join("_")
 
   # Elasticsearch index name must be declared in children and parent
 
