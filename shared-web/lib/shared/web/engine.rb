@@ -5,7 +5,7 @@ module Shared
 
       initializer "webpacker.proxy" do |app|
         insert_middleware = begin
-                              MyEngine.webpacker.config.dev_server.present?
+                              Shared::Web.webpacker.config.dev_server.present?
                             rescue
                               nil
                             end

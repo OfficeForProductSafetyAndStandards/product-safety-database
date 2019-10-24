@@ -11,7 +11,7 @@ require "shared/web/engine"
 
 module Shared
   module Web
-    ROOT_PATH = Pathname.new(File.join(__dir__, ".."))
+    ROOT_PATH = Pathname.new(File.join(__dir__, "..", ".."))
 
     class << self
       def webpacker
