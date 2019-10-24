@@ -1,37 +1,59 @@
-require "webpacker/configuration"
+def ensure_log_goes_to_stdout
+  old_logger = Webpacker.logger
+  Webpacker.logger = ActiveSupport::Logger.new(STDOUT)
+  yield
+ensure
+  Webpacker.logger = old_logger
+end
 
-# TODO: Remove this once https://github.com/rails/webpacker/pull/1744 is merged / deployed
-module Webpacker
-  def clean(count_to_keep = 2)
-    if config.public_output_path.exist? && config.public_manifest_path.exist?
-      files_in_manifest = manifest.refresh.values.reject { |f| f.is_a?(Hash) }.map { |f| File.join config.root_path, "public", f }
-      file_versions = files_in_manifest.flat_map do |file_in_manifest|
-        file_prefix, file_ext = file_in_manifest.scan(/(.*)[0-9a-f]{20}(.*)/).first
-        versions_of_file = Dir.glob("#{file_prefix}*#{file_ext}").grep(/#{file_prefix}[0-9a-f]{20}#{file_ext}/)
-        versions_of_file.map do |version_of_file|
-          next if version_of_file == file_in_manifest
 
-          [version_of_file, File.mtime(version_of_file).utc.to_i]
+namespace :my_engine do
+  namespace :webpacker do
+    desc "Install deps with yarn"
+    task :yarn_install do
+      Dir.chdir(File.join(__dir__, "../..")) do
+        system "yarn install --no-progress --production"
+      end
+    end
+
+    desc "Compile JavaScript packs using webpack for production with digests"
+    task compile: [:yarn_install, :environment] do
+      Webpacker.with_node_env("production") do
+        ensure_log_goes_to_stdout do
+          if MyEngine.webpacker.commands.compile
+            # Successful compilation!
+          else
+            # Failed compilation
+            exit!
+          end
         end
       end
-      files_to_be_removed = file_versions.compact.sort_by(&:last).reverse.drop(count_to_keep).map(&:first)
-      files_to_be_removed.each { |f| File.delete f }
     end
   end
 end
 
-namespace :webpacker do
-  desc "Remove old compiled webpacks"
-  task :clean, [:keep] => ["webpacker:verify_install", :environment] do |_, args|
-    Webpacker.clean(Integer(args.keep || 2))
+def yarn_install_available?
+  rails_major = Rails::VERSION::MAJOR
+  rails_minor = Rails::VERSION::MINOR
+
+  rails_major > 5 || (rails_major == 5 && rails_minor >= 1)
+end
+
+def enhance_assets_precompile
+  # yarn:install was added in Rails 5.1
+  deps = yarn_install_available? ? [] : ["my_engine:webpacker:yarn_install"]
+  Rake::Task["assets:precompile"].enhance(deps) do
+    Rake::Task["my_engine:webpacker:compile"].invoke
   end
 end
 
-# Run clean if the assets:clean is run
-if Rake::Task.task_defined?("assets:clean")
-  Rake::Task["assets:clean"].enhance do
-    Rake::Task["webpacker:clean"].invoke
+# Compile packs after we've compiled all other assets during precompilation
+skip_webpacker_precompile = %w(no false n f).include?(ENV["WEBPACKER_PRECOMPILE"])
+
+unless skip_webpacker_precompile
+  if Rake::Task.task_defined?("assets:precompile")
+    enhance_assets_precompile
+  else
+    Rake::Task.define_task("assets:precompile" => "my_engine:webpacker:compile")
   end
-else
-  task "assets:clean": "webpacker:clean"
 end

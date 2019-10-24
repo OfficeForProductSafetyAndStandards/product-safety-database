@@ -1,0 +1,40 @@
+{
+  "manifest": {
+    "name": "shared-web",
+    "version": "1.0.0",
+    "license": "MIT",
+    "dependencies": {
+      "@rails/webpacker": "4.0.7",
+      "accessible-autocomplete": "1.6.2",
+      "copy-webpack-plugin": "5.0.3",
+      "eslint": "5.16.0",
+      "eslint-config-airbnb-base": "13.1.0",
+      "eslint-plugin-import": "2.17.3",
+      "govuk-country-and-territory-autocomplete": "0.5.2",
+      "govuk-frontend": "2.13.0",
+      "html5shiv": "3.7.3",
+      "jquery": "3.4.1",
+      "oldie": "1.3.0",
+      "rails-ujs": "5.2.3",
+      "resolve-url-loader": "3.1.0",
+      "sass-lint": "1.13.1",
+      "webpack": "4.35.0",
+      "webpack-cli": "3.3.5",
+      "webpack-dev-server": "3.7.2"
+    },
+    "_registry": "npm",
+    "_loc": "/Users/yann/Library/Caches/Yarn/v4/npm-shared-web-1.0.0-93f44d56-4b6c-4731-b782-24389010e410-1571930425432/node_modules/shared-web/package.json",
+    "readmeFilename": "README.md",
+    "readme": "# Shared Web\n\nThis folder contains a [Rails engine](https://guides.rubyonrails.org/engines.html) containing common code for OPSS web applications.\n\nFeatures of this engine include:\n- The [GOV.UK Design System](https://design-system.service.gov.uk/)\n- Support for [GOV.UK Notify](https://www.notifications.service.gov.uk/)\n- Various linting tools (e.g. rubocop, slim-lint)\n\n# Installation\n\nAdd the following to your project's Gemfile:\n\n```ruby\ngem 'shared-web', path: '<path to shared web>'\n```\nand run `bundle install`\n\nTo add the shared NPM packages, run\n```bash\nyarn add <path to shared web>\n```\n\n# Design System Components\nThe [GOV.UK design system](https://design-system.service.gov.uk) provides a reference implementation of its components\nin nunjucks, which are unfortunately not supported on ruby. In lieu of that, we are implementing \nslim versions of the components that can be used throughout the applications.\nIn the future, this could be split off as its own gem.\n\n## Component implementations\nComponent implementations can be found in the [components directory](app/views/components). They try to follow the \nnunjucks implementations as close as possible. In particular, we are keeping the interface the same (param names etc.) \nto make translating code between the macros usage and our implementation as close as possible.\nThis means that we can use the documentation provided by design system for macro options,\ne.g. see [macro options for radios](https://design-system.service.gov.uk/components/radios/#options-example-default) \n\nNotable differences from nunjucks:\n- we are not allowing unescaped html in `html` attributes. Instead, the expected use-case is to build the required html\n     in slim and `capture` it, e.g.:\n    ```slim\n    - html = capture do\n      h3 Custom html content\n    = render \"components/govuk_label\", html: html, for: \"someId\"\n    ```\n    This renders most `text` and `html` attributes functionally identical, but we are choosing to keep both for consistency\n    with nunjucks templates\n- We extended govuk_select component to streamline using it as accessible autocomplete component.\n    Our version accepts extra options:\n    - is_autocomplete, when true, makes the select an\n    [accessible autocomplete](https://github.com/alphagov/accessible-autocomplete)\n    - show_all_values, when true and is_autocomplete true, makes the autocomplete show all values,\n    as well as adds an 'x' to remove currently selected value.\n- hidden fields in checkboxes, to account for rails checkboxes \"gotcha\". The default value is 0 but can be set through the 'unchecked_value' attribute.\n  https://apidock.com/rails/ActionView/Helpers/FormHelper/check_box\n\n## Rails integration\nTo simplify working with rails form helpers, we are also providing a bit of \"glue\" which infers the values that it\ncan from the form object and converts them into appropriate params for the view components. Those can be found\nin the [form_components directory](app/views/form_components).\nThe intent of keeping this \"glue\" separate from the component implementations is to make keeping the components up to\ndate with the corresponding macros as simple as possible.\n\n## Gallery\nAs a way to showcase the possible use cases, we are providing \"gallery\" pages. They are based on examples provided\nin the govuk-frontend repo, e.g. [radios examples]( \nhttps://github.com/alphagov/govuk-frontend/blob/943ff14752f0a8a765ee3f90bc3e1ecd9205e36c/src/components/radios/radios.yaml).\n\nThe gallery pages area available at `/components/<component_name>`, and only get mounted in dev mode.\n\n",
+    "description": "This folder contains a [Rails engine](https://guides.rubyonrails.org/engines.html) containing common code for OPSS web applications."
+  },
+  "artifacts": [],
+  "remote": {
+    "type": "copy",
+    "registry": "npm",
+    "hash": "2de22ede-be46-43ff-95b3-86387405ce88-1571930448312",
+    "reference": "/Users/yann/Documents/code/beis/beis-opss-psd/psd-web/vendor/shared-web"
+  },
+  "registry": "npm",
+  "hash": "2de22ede-be46-43ff-95b3-86387405ce88-1571930448312"
+}

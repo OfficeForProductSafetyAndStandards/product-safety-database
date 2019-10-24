@@ -1,0 +1,43 @@
+@import "stylesheets/shared/web/main";
+
+@import "stylesheets/shared/web/autocomplete";
+@import "stylesheets/block-link";
+@import "stylesheets/buttons";
+@import "stylesheets/case-card";
+@import "stylesheets/documents";
+@import "stylesheets/email_display";
+@import "stylesheets/flashcard";
+@import "stylesheets/footer";
+@import "stylesheets/form";
+@import "stylesheets/images";
+@import "stylesheets/teams";
+@import "stylesheets/pagination";
+@import "stylesheets/shared";
+@import "stylesheets/sortable_columns";
+@import "stylesheets/summary_table";
+@import "stylesheets/timeline";
+@import "stylesheets/psd_header";
+
+* {
+  box-sizing: border-box;
+}
+
+@media print {
+  .no-print {
+    display: none !important; // sass-lint:disable-line no-important
+  }
+}
+
+.search-background {
+  background-color: govuk-colour("grey-3");
+}
+
+.right {
+  float: right;
+  margin-left: 2em;
+}
+
+.row-border-top {
+  padding-top: 2em;
+  border-top: 1px solid govuk-colour("grey-3");
+}

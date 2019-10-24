@@ -3,15 +3,15 @@
 default: &default
   source_path: app/javascript
   source_entry_path: packs
-  public_root_path: public
-  public_output_path: packs
+  public_root_path: ../public
+  public_output_path: shared-web-packs
   cache_path: tmp/cache/webpacker
   check_yarn_integrity: false
   webpack_compile_output: false
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
-  resolved_paths: ['vendor', 'app/assets', 'vendor/shared-web/app/assets']
+  resolved_paths: ['vendor', 'app/assets']
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false

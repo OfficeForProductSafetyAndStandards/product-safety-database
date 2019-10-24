@@ -4,5 +4,9 @@
   "license": "MIT",
   "dependencies": {
     "shared-web": "./vendor/shared-web"
+  },
+  "devDependencies": {
+    "postcss-loader": "^3.0.0",
+    "semver": "^6.3.0"
   }
 }
