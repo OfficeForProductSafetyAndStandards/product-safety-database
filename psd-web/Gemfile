@@ -34,7 +34,7 @@ group :development, :test do
   gem "pry"
   gem "roo"
   gem "rspec-mocks"
-  gem 'rspec-rails'
+  gem "rspec-rails"
   gem "rubocop"
   gem "rubocop-performance"
   gem "ruby-debug-ide"

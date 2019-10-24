@@ -1,9 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Shared::Web::User do
   before do
-    allow(ENV).to receive(:fetch).with('KEYCLOAK_CLIENT_ID').and_return(client_id)
-    allow(ENV).to receive(:fetch).with('KEYCLOAK_CLIENT_SECRET').and_return(client_secret)
+    allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
+    allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
     allow(Keycloak::Internal).to receive(:token).and_return(token_stub)
   end
 
@@ -15,9 +15,9 @@ RSpec.describe Shared::Web::User do
   subject(:user) { described_class.new(id: id) }
 
   describe "#roles" do
-    let(:keycloak_roles) { ["keycloak_role"] }
-    let(:cache_roles) { ["cached_role"] }
-    let(:instance_roles) { ["instance_role"] }
+    let(:keycloak_roles) { %w[keycloak_role] }
+    let(:cache_roles) { %w[cached_role] }
+    let(:instance_roles) { %w[instance_role] }
 
     let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
 
