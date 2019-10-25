@@ -492,7 +492,7 @@ DEPENDENCIES
   sprockets (= 3.7.2)
   strong_migrations (= 0.4.0)
   webmock
-  webpacker (= 4.0.7)
+  webpacker (= 4.0.0.beta10)
   wicked
   will_paginate (= 3.1.7)
 

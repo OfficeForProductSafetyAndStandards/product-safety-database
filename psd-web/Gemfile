@@ -62,6 +62,5 @@ group :development, :test do
   gem "simplecov-console"
   gem "slim_lint"
   gem "solargraph"
-  gem "sprockets", "3.7.2"
   gem "webmock"
 end
