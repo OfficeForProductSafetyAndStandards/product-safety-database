@@ -58,6 +58,7 @@ class ActiveSupport::TestCase
     allow(@keycloak_client_instance).to receive(:all_teams) { @teams.deep_dup }
     allow(@keycloak_client_instance).to receive(:all_team_users) { @team_users.deep_dup }
     allow(@keycloak_client_instance).to receive(:all_users) { @users.deep_dup }
+    allow(@keycloak_client_instance).to receive(:get_user_roles) { [:psd_user] }
 
     stub_user_management
     set_default_group_memberships
@@ -77,7 +78,7 @@ class ActiveSupport::TestCase
   end
 
   def reset_keycloak_and_notify_mocks
-    allow(@keycloak_client_instance).to receive(:has_role?).and_call_original
+    allow(@keycloak_client_instance).to receive(:get_user_roles).and_call_original
     allow(@keycloak_client_instance).to receive(:user_signed_in?).and_call_original
     allow(@keycloak_client_instance).to receive(:user_info).and_call_original
     allow(@keycloak_client_instance).to receive(:all_users).and_call_original
@@ -115,11 +116,11 @@ class ActiveSupport::TestCase
   end
 
   def set_user_as_team_admin(user = User.current)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(user.id, :team_admin, anything).and_return(true)
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(user.id) { %i[psd_user team_admin] }
   end
 
   def set_user_as_not_team_admin(user = User.current)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(user.id, :team_admin, anything).and_return(false)
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(user.id) { [:psd_user] }
   end
 
   def add_user_to_opss_team(user_id:, team_id:)
@@ -150,19 +151,18 @@ private
 
   def test_user(name: "User_one", ts_user: false)
     id = SecureRandom.uuid
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :team_admin, anything).and_return(false)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :psd_user, anything).and_return(true)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :opss_user, anything).and_return(true) unless ts_user
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :psd_admin, anything).and_return(false)
+
+    roles = [:psd_user]
+    roles << :opss_user if ts_user
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(id) { roles }
+
     { id: id, email: "#{name}@example.com", name: "Test #{name}" }
   end
 
   def non_psd_user(name:)
     id = SecureRandom.uuid
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :team_admin, anything).and_return(false)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :psd_user, anything).and_return(false)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :opss_user, anything).and_return(false)
-    allow(@keycloak_client_instance).to receive(:has_role?).with(id, :psd_admin, anything).and_return(false)
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(id) { [] }
+
     { id: id, email: "#{name}@example.com", name: "Test #{name}" }
   end
 
@@ -193,7 +193,9 @@ private
   def set_kc_user_as_opss(user_id)
     # Keycloak bases this role on the group membership
     set_kc_user_group(user_id, opss_organisation[:id])
-    allow(@keycloak_client_instance).to receive(:has_role?).with(user_id, :opss_user, anything).and_return(true)
+    roles = @keycloak_client_instance.get_user_roles(user_id)
+    roles << :opss_user
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(user_id).and_return(roles)
   end
 
   # This is a private method which updates the KC mocking without modifying the User collection directly
@@ -201,7 +203,10 @@ private
     # Keycloak bases this role on the group membership
     clear_kc_user_groups(user_id)
     set_kc_user_group(user_id, non_opss_organisation[:id])
-    allow(@keycloak_client_instance).to receive(:has_role?).with(user_id, :opss_user, anything).and_return(false)
+
+    roles = @keycloak_client_instance.get_user_roles(user_id)
+    roles.delete(:opss_user)
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(user_id).and_return(roles)
   end
 
   def add_user_to_team(user_id, team_id)

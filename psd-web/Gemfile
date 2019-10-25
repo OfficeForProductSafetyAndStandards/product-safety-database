@@ -34,6 +34,7 @@ group :development, :test do
   gem "pry"
   gem "roo"
   gem "rspec-mocks"
+  gem "rspec-rails"
   gem "rubocop"
   gem "rubocop-performance"
   gem "ruby-debug-ide"
@@ -42,4 +43,5 @@ group :development, :test do
   gem "simplecov-console"
   gem "slim_lint"
   gem "solargraph"
+  gem "webmock"
 end

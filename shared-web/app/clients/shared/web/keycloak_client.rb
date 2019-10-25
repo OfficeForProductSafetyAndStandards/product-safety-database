@@ -41,6 +41,12 @@ module Keycloak
       query_params = { client_id: client_id, redirect_uri: redirect_uri }
       Keycloak.generic_request(token.access_token, request_uri, query_params, actions, "PUT")
     end
+
+    def self.get_user_roles(user_id)
+      client = JSON Keycloak::Admin.get_clients({ clientId: ENV.fetch("KEYCLOAK_CLIENT_ID") }, token.access_token)
+      request_uri = Keycloak::Admin.full_url("users/#{user_id}/role-mappings/clients/#{client[0]['id']}/composite")
+      Keycloak.generic_request(token.access_token, request_uri, nil, nil, "GET")
+    end
   end
 end
 
@@ -152,12 +158,9 @@ module Shared
         { id: user["sub"], email: user["email"], groups: user["groups"], name: user["given_name"] }
       end
 
-      def has_role?(user_id, role, access_token)
-        if access_token.present?
-          @client.has_role?(role, access_token)
-        else
-          @internal.has_role?(user_id, role)
-        end
+      def get_user_roles(user_id)
+        roles = JSON.parse(@internal.get_user_roles(user_id))
+        roles.map { |role| role['name'].to_sym }
       end
 
       def add_user_to_team(user_id, group_id)

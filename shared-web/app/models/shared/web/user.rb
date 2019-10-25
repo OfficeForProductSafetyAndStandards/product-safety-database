@@ -9,6 +9,8 @@ module Shared
       field :email
       field :access_token
 
+      attr_writer :roles
+
       def self.find_or_create(user)
         User.find_by(id: user[:id]) || User.create(user.except(:groups))
       end
@@ -41,8 +43,13 @@ module Shared
       end
 
       def has_role?(role)
-        access_token = User.current.access_token if current_user?
-        KeycloakClient.instance.has_role?(id, role, access_token)
+        roles.include?(role)
+      end
+
+      def roles
+        @roles ||= Rails.cache.fetch("user_roles_#{id}", expires_in: 30.minutes) do
+          KeycloakClient.instance.get_user_roles(id)
+        end
       end
 
     private
