@@ -1,10 +1,11 @@
-require "spec_helper"
+require "rails_helper"
+require "shared/web/token"
 
 RSpec.describe Shared::Web::User do
   before do
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
-    allow(Keycloak::Internal).to receive(:token).and_return(token_stub)
+    allow(Shared::Web::Token).to receive(:new).and_return(token_stub)
   end
 
   let(:client_id) { "123" }
