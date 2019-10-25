@@ -1,13 +1,17 @@
-h2.govuk-heading-m Summary
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-two-thirds
-    p = @investigation.description
+
+    h3.govuk-heading-l Overview
+    p = @investigation.user_title
+
+    h3.govuk-heading-m Summary
+    p[class="govuk-body-s"] = @investigation.description
     p = link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link--no-visited-state"
 
-    hr
-    h3.govuk-heading-s
-      | Products
+    h3.govuk-heading-m About the Case
+    = render "investigations/current_status", investigation: @investigation
 
+    h3.govuk-heading-m Product
     = render 'components/govuk_summary_list',
         borders: false,
         rows: [ { key: { text: 'Product category' },
@@ -23,10 +27,7 @@ h2.govuk-heading-m Summary
                   value: { text: "#{@investigation.products.count} product(s)" },
                   actions: [ { href: '#', text: 'View', visually_hidden_text: 'product details' } ] } ]
 
-    hr
-    h3.govuk-heading-s
-      | Businesses
-
+    h3.govuk-heading-m Businesses
     = render 'components/govuk_summary_list',
         borders: false,
         rows: @investigation.investigation_businesses.map { |investigation_business| \
@@ -34,79 +35,48 @@ h2.govuk-heading-m Summary
             value: { text: investigation_business.business.trading_name },
             actions: [ { href: business_path(investigation_business.business), text: 'View', visually_hidden_text: investigation_business.relationship } ] } }
 
-    hr
-    h3.govuk-heading-s
-      | Test results
 
+    h3.govuk-heading-m Test results
     = render 'components/govuk_summary_list',
         borders: false,
         rows: @investigation.tests.map { |test| \
-          { key: { text: test.type.capitalize },
+          { key: { text: test.product.name },
             value: { text: test.result },
             actions: [ { href: investigation_test_path(@investigation, test), text: 'View', visually_hidden_text: test.type } ] } }
 
-    hr
-    h3.govuk-heading-s
-      | Files and attachments
+    / hr
+    / h3.govuk-heading-s
+    /   | Files and attachments
 
+    / = render 'components/govuk_summary_list',
+    /     borders: false,
+    /     rows: [ { key: { text: 'Images' },
+    /               value: { text: image_attachment_count(@product_image_attachment_count, @other_image_attachment_count) },
+    /               actions: [ { href: '#', text: 'View', visually_hidden_text: 'images' } ] },
+    /             { key: { text: 'Other attachments' },
+    /               value: { text: I18n.t('investigations.other_attachment_count', count: @other_attachment_count) },
+    /               actions: [ { href: '#', text: 'View', visually_hidden_text: 'other attachments' } ] } ]
+
+
+    h3.govuk-heading-m Actions and correspondence
     = render 'components/govuk_summary_list',
         borders: false,
-        rows: [ { key: { text: 'Images' },
-                  value: { text: image_attachment_count(@product_image_attachment_count, @other_image_attachment_count) },
-                  actions: [ { href: '#', text: 'View', visually_hidden_text: 'images' } ] },
-                { key: { text: 'Other attachments' },
-                  value: { text: I18n.t('investigations.other_attachment_count', count: @other_attachment_count) },
-                  actions: [ { href: '#', text: 'View', visually_hidden_text: 'other attachments' } ] } ]
+        rows: @investigation.corrective_actions.map { |corrective_action| \
+          { key: { text: corrective_action.product.name },
+            value: { text: corrective_action.summary },
+            actions: [ { href: product_path(corrective_action.product), text: 'View Product', visually_hidden_text: corrective_action.product.name } ] } }
 
-    hr
-    h3.govuk-heading-s
-      | Actions and correspondence
 
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: [ { key: { text: 'Corrective actions' },
-                  value: { text: 'ccc' },
-                  actions: [ { href: '#', text: 'View', visually_hidden_text: 'corrective actions' } ] },
-                { key: { text: 'Correspondence' },
-                  value: { text: 'ccc' },
-                  actions: [ { href: '#', text: 'View', visually_hidden_text: 'correspondence' } ] },
-                { key: { text: 'Comments' },
-                  value: { text: 'ccc' },
-                  actions: [ { href: '#', text: 'View', visually_hidden_text: 'comments' } ] } ]
+    - if @investigation.complainant
+      h3.govuk-heading-s Reporter
+      - if @investigation.complainant.can_be_displayed?
+        = complainant_summary_list(@investigation.complainant)
+      - else
+        p GDPR protected details hidden
+          = render 'components/govuk_summary_list',
+              borders: false,
+              rows: [ { key: { text: @investigation.source.name } , value: { text: 'asdasd'} , actions: [] }]
 
-    hr
-    h3.govuk-heading-s
-      | About the case
 
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: [ ]
-
-    hr
-    h3.govuk-heading-s
-      | Reporter
-
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: [ ]
-
-.govuk-grid-row[class="govuk-!-padding-bottom-6"]
-  hr.govuk-section-break.govuk-section-break--s
-    = render "investigations/current_status", investigation: @investigation
-  hr.govuk-section-break.govuk-section-break--s
-h2.govuk-heading-m[class="govuk-!-margin-bottom-6"]
-  | Report details
-h3.govuk-heading-s
-  = @investigation.case_type.titleize
-
-= report_summary_list(@investigation)
-
-- if @investigation.complainant
-  hr.govuk-section-break.govuk-section-break--m
-  h3.govuk-heading-s
-    | Complainant
-
-  - if @investigation.complainant.can_be_displayed?
-    = complainant_summary_list(@investigation.complainant)
-  - else
-    p GDPR protected details hidden
+    h3.govuk-heading-m = "#{@investigation.case_type.titleize} details"
+    = report_summary_list(@investigation)
