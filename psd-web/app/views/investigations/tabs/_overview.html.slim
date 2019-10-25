@@ -80,3 +80,10 @@
 
     h3.govuk-heading-m = "#{@investigation.case_type.titleize} details"
     = report_summary_list(@investigation)
+
+  .govuk-grid-column-one-third
+    hr
+    h3.govuk-heading-m Products
+    - @investigation.products.each do |product|
+      - next unless product.images.any?
+      = render "documents/document_preview", document: product.images.first, dimensions: "300x200"
