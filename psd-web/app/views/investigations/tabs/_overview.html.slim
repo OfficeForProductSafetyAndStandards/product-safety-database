@@ -44,20 +44,6 @@
             value: { text: test.result },
             actions: [ { href: investigation_test_path(@investigation, test), text: 'View', visually_hidden_text: test.type } ] } }
 
-    / hr
-    / h3.govuk-heading-s
-    /   | Files and attachments
-
-    / = render 'components/govuk_summary_list',
-    /     borders: false,
-    /     rows: [ { key: { text: 'Images' },
-    /               value: { text: image_attachment_count(@product_image_attachment_count, @other_image_attachment_count) },
-    /               actions: [ { href: '#', text: 'View', visually_hidden_text: 'images' } ] },
-    /             { key: { text: 'Other attachments' },
-    /               value: { text: I18n.t('investigations.other_attachment_count', count: @other_attachment_count) },
-    /               actions: [ { href: '#', text: 'View', visually_hidden_text: 'other attachments' } ] } ]
-
-
     h3.govuk-heading-m Actions and correspondence
     = render 'components/govuk_summary_list',
         borders: false,
@@ -75,7 +61,7 @@
         p GDPR protected details hidden
           = render 'components/govuk_summary_list',
               borders: false,
-              rows: [ { key: { text: @investigation.source.name } , value: { text: 'asdasd'} , actions: [] }]
+              rows: [ { key: { text: @investigation.source.name } , value: { text: ''} , actions: [] }]
 
 
     h3.govuk-heading-m = "#{@investigation.case_type.titleize} details"
@@ -85,5 +71,8 @@
     hr
     h3.govuk-heading-m Products
     - @investigation.products.each do |product|
-      - next unless product.images.any?
-      = render "documents/document_preview", document: product.images.first, dimensions: "300x200"
+      .govuk-body
+        h4.govuk-heading-s = product.name.capitalize
+        - if product.images.any?
+          = render "documents/document_preview", document: product.images.first, dimensions: "300x200"
+        = link_to product.name, product_path(product), class: "govuk-link"
