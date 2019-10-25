@@ -124,7 +124,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
 
     # assert that product saved
     print page.html
-    click_on "Products (#{@investigation.products.count})"
+    click_on "Products_id"
     assert_text @product.name
     assert_text @product.product_code
     assert_text @product.product_type
