@@ -4,23 +4,16 @@ module Investigations::DisplayTextHelper
   end
 
   def investigation_sub_nav(investigation)
-    items = [{ href: investigation_url(investigation), text: "Overview", active: @current == @investigation.pretty_id },
-             { href: investigation_products_url(investigation), text: "Products", count: " (#{@investigation.products.count})", active: @current == "products" },
-             { href: investigation_businesses_url(investigation), text: "Businesses", count: " (#{@investigation.businesses.count})", active: @current == "businesses" },
-             { href: investigation_attachments_path(investigation), text: "Attachments", count: " (#{@investigation.documents.count})", active: @current == "attachments" },
-             { href: "/cases/#{@investigation.pretty_id}/activity", text: "Activity", active: @current == "activity" }].compact
+    items = [{ href: investigation_url(investigation), text: "Overview", active: @current_tab == @investigation.pretty_id },
+             { href: investigation_products_url(investigation), text: "Products", count: " (#{@investigation.products.count})", active: @current_tab == "products" },
+             { href: investigation_businesses_url(investigation), text: "Businesses", count: " (#{@investigation.businesses.count})", active: @current_tab == "businesses" },
+             { href: investigation_attachments_path(investigation), text: "Attachments", count: " (#{@investigation.documents.count})", active: @current_tab == "attachments" },
+             { href: "/cases/#{@investigation.pretty_id}/activity", text: "Activity", active: @current_tab == "activity" }].compact
     render "components/hmcts_sub_nav", title: "Summary", items: items
   end
 
   def investigation_sub_nav_tabs
-    mapping = {
-      products: :products,
-      businesses: :businesses,
-      attachments: :attachments,
-      activity: :activity
-    }
-
-    render "investigations/tabs/" + mapping.fetch(@current.to_sym, :overview).to_s
+    render "investigations/tabs/" + @current_tab || :overview
   end
 
   def get_displayable_highlights(highlights, investigation)

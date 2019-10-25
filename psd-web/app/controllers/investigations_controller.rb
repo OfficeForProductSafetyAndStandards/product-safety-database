@@ -35,7 +35,7 @@ class InvestigationsController < ApplicationController
   # GET /cases/1
   # GET /cases/1.json
   def show
-    @current = request.fullpath.split("/").last
+    @current_tab = request.fullpath.split("/").last
     respond_to do |format|
       format.html
     end
