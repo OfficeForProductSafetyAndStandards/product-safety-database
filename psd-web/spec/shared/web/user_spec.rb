@@ -34,8 +34,7 @@ RSpec.describe Shared::Web::User do
       end
 
       it "caches the roles" do
-        user.roles
-        expect(Rails.cache.read("user_roles_#{id}")).to eq(keycloak_roles)
+        expect { user.roles }.to change { Rails.cache.read("user_roles_#{id}") }.from(nil).to(keycloak_roles)
       end
     end
 
