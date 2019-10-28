@@ -1,5 +1,4 @@
 class Investigation::Allegation < Investigation
-  include Indexable
   validates :description, :hazard_type, :product_category, presence: true, on: :allegation_details
   validates :hazard_description, :hazard_type, presence: true, on: :unsafe
   validates :non_compliant_reason, presence: true, on: :non_compliant
