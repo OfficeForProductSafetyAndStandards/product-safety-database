@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-
   before_action :set_investigation
 
   def create
@@ -21,7 +20,7 @@ class CommentsController < ApplicationController
     end
   end
 
-  private
+private
 
   def set_investigation
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
@@ -33,5 +32,4 @@ class CommentsController < ApplicationController
       p[:body] = ActionController::Base.helpers.sanitize(p[:body])
     end
   end
-
 end
