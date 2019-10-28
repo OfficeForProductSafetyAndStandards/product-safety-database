@@ -1,7 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 
-if ENV['CI']
+if ENV["CI"]
   # It's important that simplecov is "require"d early in the file
   require "simplecov"
   require "simplecov-console"
