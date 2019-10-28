@@ -9,11 +9,11 @@ module Investigations::DisplayTextHelper
              { href: investigation_businesses_url(investigation), text: "Businesses", count: " (#{@investigation.businesses.count})", active: @current_tab == "businesses" },
              { href: investigation_attachments_path(investigation), text: "Attachments", count: " (#{@investigation.documents.count})", active: @current_tab == "attachments" },
              { href: "/cases/#{@investigation.pretty_id}/activity", text: "Activity", active: @current_tab == "activity" }].compact
-    render "components/hmcts_sub_nav", title: "Summary", items: items
+    render "investigations/sub_nav", title: "Summary", items: items
   end
 
   def investigation_sub_nav_tabs
-    render "investigations/tabs/" + @current_tab || :overview
+    render "investigations/tabs/" + (@current_tab == @investigation.pretty_id ? "overview" : @current_tab)
   end
 
   def get_displayable_highlights(highlights, investigation)

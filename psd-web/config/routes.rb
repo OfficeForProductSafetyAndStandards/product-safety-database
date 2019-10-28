@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     get "/attachments", to: "investigations#show"
 
     resource :activity, only: [] do
-      resource :comment, only: %i[ create new ]
+      resource :comment, only: %i[create new]
     end
 
 
