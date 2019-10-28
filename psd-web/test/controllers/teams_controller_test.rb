@@ -1,3 +1,4 @@
+ENV["EMAIL_WHITELIST_ENABLED"] = "true"
 require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
@@ -76,9 +77,16 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     kc = Shared::Web::KeycloakClient.instance
 
     assert_difference "@my_team.users.count" => 1, "User.all(include_incomplete: true).size" => 1 do
-      put invite_to_team_url(@my_team), params: { new_user: { email_address: "new_user@example.com" } }
+      put invite_to_team_url(@my_team), params: { new_user: { email_address: "new_user@northamptonshire.gov.uk" } }
       assert_response :see_other
       expect(kc).to have_received(:send_required_actions_welcome_email)
+    end
+  end
+
+  test "Inviting user with email not on the whitelist returns an error" do
+    assert_difference "@my_team.users.count" => 0, "User.count" => 0 do
+      put invite_to_team_url(@my_team), params: { new_user: { email_address: "not_whitelisted@gmail.com" } }
+      assert_response :bad_request
     end
   end
 end

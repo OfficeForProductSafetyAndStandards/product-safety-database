@@ -15,13 +15,14 @@ class TeamsController < ApplicationController
     existing_user = User.find_by email: @new_user.email_address
     if existing_user
       invite_existing_user_if_able existing_user
-    else
+    elsif whitelisted_user
       User.create_and_send_invite @new_user.email_address, @team, root_url
+    else
+      @new_user.errors.add(:email_address, :email_not_in_whitelist)
     end
 
     if @new_user.errors.empty?
-      flash[:notice] = "Invite sent to #{@new_user.email_address}"
-      redirect_to @team, status: :see_other
+      redirect_to @team, status: :see_other, flash: { success: "Invite sent to #{@new_user.email_address}" }
     else
       render :invite_to, status: :bad_request
     end
@@ -31,6 +32,15 @@ private
 
   def set_user_teams
     @teams = User.current.teams
+  end
+
+  def whitelisted_user
+    if ENV["EMAIL_WHITELIST_ENABLED"] == "true"
+      address = Mail::Address.new(@new_user.email_address)
+      whitelisted_emails.include?(address.domain)
+    else
+      true
+    end
   end
 
   def set_team
@@ -63,5 +73,9 @@ private
                                             team_name: @team.name,
                                             inviting_team_member_name: User.current.name
     email.deliver_later
+  end
+
+  def whitelisted_emails
+    Rails.application.config.whitelisted_emails["email_domains"]
   end
 end
