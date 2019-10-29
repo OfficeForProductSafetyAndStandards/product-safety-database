@@ -5,13 +5,17 @@ class Investigations::BusinessesController < ApplicationController
   skip_before_action :setup_wizard, only: %i[remove unlink]
   steps :type, :details
 
-  before_action :set_investigation, only: %i[update new show remove unlink]
+  before_action :set_investigation, only: %i[index update new show remove unlink]
   before_action :set_business, only: %i[remove unlink]
   before_action :set_countries, only: %i[update show]
   before_action :set_business_location_and_contact, only: %i[update new show]
   before_action :store_business, only: %i[update]
   before_action :set_investigation_business
   before_action :business_request_params, only: %i[new]
+
+  def index
+    @breadcrumbs = build_breadcrumb_structure
+  end
 
   def new
     clear_session

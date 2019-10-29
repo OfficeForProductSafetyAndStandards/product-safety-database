@@ -63,4 +63,5 @@ group :development, :test do
   gem "slim_lint"
   gem "solargraph"
   gem "webmock"
+  gem "spring"
 end

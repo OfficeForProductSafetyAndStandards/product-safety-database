@@ -71,27 +71,16 @@ Rails.application.routes.draw do
       resource :comment, only: %i[create new]
     end
 
+    resource :activity, controller: "investigations/activities", only: %i[show create new]
 
-    resources :activity, controller: "investigations/activities", only: %i[create new] do
-      collection do
-        get "" => "investigations#show"
-      end
-    end
-
-    resources :products, only: %i[new create], controller: "investigations/products" do
-      collection do
-        get "" => "investigations#show"
-      end
+    resources :products, only: %i[new create index], controller: "investigations/products" do
       member do
         put :link, path: ""
         get :remove
         delete :unlink, path: ""
       end
     end
-    resources :businesses, only: %i[update show new create], controller: "investigations/businesses" do
-      collection do
-        get "" => "investigations#show"
-      end
+    resources :businesses, only: %i[index update show new create], controller: "investigations/businesses" do
       member do
         get :remove
         delete :unlink, path: ""

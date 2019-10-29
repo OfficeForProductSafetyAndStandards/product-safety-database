@@ -1,0 +1,11 @@
+- content_for :page_title, "View case"
+- content_for :after_header do
+  = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
+
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
+    = render "investigation_heading", investigation: @investigation
+
+hr.govuk-section-break.govuk-section-break--m
+
+= investigation_sub_nav(@investigation)
