@@ -31,8 +31,15 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
 
     click_link products_link
     assert_css "h2.govuk-heading-m", text: "Products"
-    byebug
+
     click_link businesses_link
     assert_css "h2.govuk-heading-m", text: "Businesses"
+
+    click_link attachments_link
+    assert_css "h2.govuk-heading-m", text: "Attachments"
+
+    click_link activity_link
+    assert_css "h2.govuk-heading-m", text: "Activity"
+
   end
 end

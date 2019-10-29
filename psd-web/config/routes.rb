@@ -65,13 +65,13 @@ Rails.application.routes.draw do
       patch :edit_summary
       get :created
     end
-    get "/attachments", to: "investigations#show"
 
-    resource :activity, only: [] do
+
+    resources :attachments, controller: "investigations/attachments", only: %i[index]
+
+    resource :activity, controller: "investigations/activities", only: %i[show create new] do
       resource :comment, only: %i[create new]
     end
-
-    resource :activity, controller: "investigations/activities", only: %i[show create new]
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
       member do

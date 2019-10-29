@@ -14,7 +14,13 @@ class Investigations::BusinessesController < ApplicationController
   before_action :business_request_params, only: %i[new]
 
   def index
-    @breadcrumbs = build_breadcrumb_structure
+    @breadcrumbs = {
+      items: [
+        { text: "Cases", href: investigations_path(previous_search_params) },
+        { text: @investigation.pretty_description }
+      ]
+    }
+
   end
 
   def new
@@ -61,7 +67,7 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
-private
+  private
 
   def set_investigation_business
     @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)

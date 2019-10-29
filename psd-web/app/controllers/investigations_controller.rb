@@ -1,10 +1,8 @@
 class InvestigationsController < ApplicationController
   include InvestigationsHelper
-  include LoadHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[status visibility edit_summary created]
-  before_action :set_investigation_with_associations, only: %i[show]
+  before_action :set_investigation, only: %i[show status visibility edit_summary created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -99,16 +97,6 @@ class InvestigationsController < ApplicationController
     end
   end
 
-  def set_investigation_with_associations
-    id = params[:pretty_id] || params[:investigation_pretty_id]
-    @investigation = Investigation.eager_load(:source,
-                                              products: { documents_attachments: :blob },
-                                              investigation_businesses: { business: :locations },
-                                              documents_attachments: :blob).find_by!(pretty_id: id)
-    authorize @investigation, :show?
-    preload_activities
-  end
-
   def set_investigation
     @investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
     authorize @investigation
@@ -122,18 +110,6 @@ class InvestigationsController < ApplicationController
 
   def editable_keys
     %i[description is_closed status_rationale is_private visibility_rationale]
-  end
-
-  def preload_activities
-    @activities = @investigation.activities.eager_load(:source)
-    preload_manually(@activities.select { |a| a.respond_to?("attachment") },
-                     [{ attachment_attachment: :blob }])
-    preload_manually(@activities.select { |a| a.respond_to?("email_file") },
-                     [{ email_file_attachment: :blob }, { email_attachment_attachment: :blob }])
-    preload_manually(@activities.select { |a| a.respond_to?("transcript") },
-                     [{ transcript_attachment: :blob }, { related_attachment_attachment: :blob }])
-    preload_manually(@activities.select { |a| a.respond_to?("correspondence") },
-                     [:correspondence])
   end
 
   def build_breadcrumbs
