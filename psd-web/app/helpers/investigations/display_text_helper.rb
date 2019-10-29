@@ -126,11 +126,21 @@ module Investigations::DisplayTextHelper
 
   def complainant_summary_list(complainant)
     rows = [
-      { key: { text: "Name" }, value: { text: complainant.name } },
       { key: { text: "Type" }, value: { text: complainant.complainant_type } },
-      { key: { text: "Phone" }, value: { text: complainant.phone_number } },
-      { key: { text: "Email" }, value: { text: complainant.email_address } },
-      { key: { text: "Other details" }, value: { text: complainant.other_details } }
+      # { key: { text: "Name" },          value: { text: complainant.name } },
+      # { key: { text: "Phone" },         value: { text: complainant.phone_number } },
+      # { key: { text: "Email" },         value: { text: complainant.email_address } },
+      # { key: { text: "Other details" }, value: { text: complainant.other_details } }
+
+
+      # This should be collapsed and into one row *Contact details*
+      # and remove empty ones
+      # - Name
+      # - email
+      # - phone
+      # - other details
+
+      # if none exist, show default content "No contact details provided"
     ]
 
     render "components/govuk_summary_list", rows: rows
@@ -160,6 +170,20 @@ module Investigations::DisplayTextHelper
         value: { text: investigation_assignee(investigation, classes) }
       },
       {
+        key: { text: "Created", classes: classes },
+        value: { text: investigation.created_at.beginning_of_month.strftime("%e %B %Y"), classes: classes },
+        actions: []
+      },
+
+      {
+        key: { text: "Created by", classes: classes },
+        value: { text: investigation.source.name, classes: classes },
+        actions: []
+      },
+      # TODO: Created by should contain the creator's organisation a bit like in
+      # def investigation_assignee(investigation, classes = "")
+      # TODO: Make this a Date time format to_s(:govuk) =>  strftime("%e %B %Y")
+      {
         key: { text: "Last updated", classes: classes },
         value: { text: "#{time_ago_in_words(investigation.updated_at)} ago", classes: classes }
       }
@@ -172,8 +196,8 @@ module Investigations::DisplayTextHelper
       rows[1][:actions] = [
         { href: new_investigation_assign_path(investigation), text: "Change", classes: classes, visually_hidden_text: "assigned to" }
       ]
-      rows[2][:actions] = [
-        { href: new_investigation_activity_path(investigation), text: "Add activity", classes: classes, visually_hidden_text: "last updated" }
+      rows[4][:actions] = [
+        { href: new_investigation_activity_path(investigation), text: "Add activity", classes: classes }
       ]
     end
 
@@ -201,7 +225,7 @@ module Investigations::DisplayTextHelper
     ]
     if investigation.enquiry?
       rows << { key: { text: "Date received" }, value: { text: investigation.date_received? ? investigation.date_received.strftime("%d/%m/%Y") : "Not provided" } }
-      rows << { key: { text: "Received by" }, value: { text: investigation.received_type? ? investigation.received_type.capitalize : "Not provided" } }
+      rows << { key: { text: "Received by" }, value: { text: investigation.received_type? ? investigation.received_type.upcase_first : "Not provided" } }
     end
 
     if investigation.allegation?

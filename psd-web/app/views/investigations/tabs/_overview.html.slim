@@ -1,17 +1,17 @@
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-two-thirds
 
-    h3.govuk-heading-l Overview
-    p = @investigation.user_title
+    h1.govuk-heading-l Overview
+    p.govuk-body-l = @investigation.title
 
-    h3.govuk-heading-m Summary
-    p[class="govuk-body-s"] = @investigation.description
-    p = link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link--no-visited-state"
+    h2.govuk-heading-m Summary
+    p[class="govuk-body"] = @investigation.description
+    p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link"
 
-    h3.govuk-heading-m About the Case
+    h2.govuk-heading-m About the Case
     = render "investigations/current_status", investigation: @investigation
 
-    h3.govuk-heading-m Product
+    h2.govuk-heading-m Product
     = render 'components/govuk_summary_list',
         borders: false,
         rows: [ { key: { text: 'Product category' },
@@ -27,52 +27,22 @@
                   value: { text: "#{@investigation.products.count} product(s)" },
                   actions: [ { href: '#', text: 'View', visually_hidden_text: 'product details' } ] } ]
 
-    h3.govuk-heading-m Businesses
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: @investigation.investigation_businesses.map { |investigation_business| \
-          { key: { text: investigation_business.relationship.capitalize },
-            value: { text: investigation_business.business.trading_name },
-            actions: [ { href: business_path(investigation_business.business), text: 'View', visually_hidden_text: investigation_business.relationship } ] } }
-
-
-    h3.govuk-heading-m Test results
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: @investigation.tests.map { |test| \
-          { key: { text: test.product.name },
-            value: { text: test.result },
-            actions: [ { href: investigation_test_path(@investigation, test), text: 'View', visually_hidden_text: test.type } ] } }
-
-    h3.govuk-heading-m Actions and correspondence
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: @investigation.corrective_actions.map { |corrective_action| \
-          { key: { text: corrective_action.product.name },
-            value: { text: corrective_action.summary },
-            actions: [ { href: product_path(corrective_action.product), text: 'View Product', visually_hidden_text: corrective_action.product.name } ] } }
-
+    h2.govuk-heading-m = "#{@investigation.case_type.titleize} details"
+    = report_summary_list(@investigation)
 
     - if @investigation.complainant
-      h3.govuk-heading-s Reporter
+      h2.govuk-heading-m Reporter
       - if @investigation.complainant.can_be_displayed?
         = complainant_summary_list(@investigation.complainant)
       - else
-        p GDPR protected details hidden
-          = render 'components/govuk_summary_list',
-              borders: false,
-              rows: [ { key: { text: @investigation.source.name } , value: { text: ''} , actions: [] }]
+        p.govuk-body Reporter details are restricted because they contain GDPR protected data.
 
-
-    h3.govuk-heading-m = "#{@investigation.case_type.titleize} details"
-    = report_summary_list(@investigation)
-
-  .govuk-grid-column-one-third
+  .govuk-grid-column-one-third.product-summary
     hr
-    h3.govuk-heading-m Products
+    h2.govuk-heading-m Products
     - @investigation.products.each do |product|
-      .govuk-body
-        h4.govuk-heading-s = product.name.capitalize
-        - if product.images.any?
-          = render "documents/document_preview", document: product.images.first, dimensions: "300x200"
-        = link_to product.name, product_path(product), class: "govuk-link"
+      h3.govuk-heading-s = product.name.capitalize
+      - if product.images.any?
+        = render "documents/image_tag", image: product.images.first, dimensions: "500x300", class_name: 'product-image'
+      p.govuk-body
+        = link_to "View product", product_path(product), class: "govuk-link"
