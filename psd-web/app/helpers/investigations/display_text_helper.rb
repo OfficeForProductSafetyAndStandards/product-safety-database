@@ -3,17 +3,37 @@ module Investigations::DisplayTextHelper
     document.image? ? "image" : "document"
   end
 
-  def investigation_sub_nav(investigation)
-    items = [{ href: investigation_url(investigation), text: "Overview", active: @current_tab == @investigation.pretty_id },
-             { href: investigation_products_url(investigation), text: "Products", count: " (#{@investigation.products.size})", active: @current_tab == "products" },
-             { href: investigation_businesses_url(investigation), text: "Businesses", count: " (#{@investigation.businesses.size})", active: @current_tab == "businesses" },
-             { href: investigation_attachments_url(investigation), text: "Attachments", count: " (#{@investigation.documents.size})", active: @current_tab == "attachments" },
-             { href: investigation_activity_url(@investigation), text: "Activity", active: @current_tab == "activity" }].compact
+  def investigation_sub_nav(investigation, current_tab: 'overview')
+    is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
+    items = [
+      {
+        href: investigation_url(investigation),
+        text: "Overview",
+        active: is_current_tab.overview?
+      },
+      {
+        href: investigation_products_url(investigation),
+        text: "Products",
+        count: " (#{@investigation.products.size})", active: is_current_tab.products?
+      },
+      {
+        href: investigation_businesses_url(investigation),
+        text: "Businesses",
+        count: " (#{@investigation.businesses.size})",
+        active: is_current_tab.businesses?
+      },
+      {
+        href: investigation_attachments_url(investigation),
+        text: "Attachments",
+        count: " (#{@investigation.documents.size})",
+        active: is_current_tab.attachments? },
+      {
+        href: investigation_activity_url(@investigation),
+        text: "Activity",
+        active: is_current_tab.activity?
+      }
+    ]
     render "investigations/sub_nav", items: items
-  end
-
-  def investigation_sub_nav_tabs
-    render "investigations/tabs/" + (@current_tab == @investigation.pretty_id ? "overview" : @current_tab)
   end
 
   def get_displayable_highlights(highlights, investigation)
