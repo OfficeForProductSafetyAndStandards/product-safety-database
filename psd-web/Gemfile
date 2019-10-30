@@ -65,4 +65,5 @@ group :development, :test do
   gem "solargraph"
   gem "webmock"
   gem "spring"
+  gem "spring-commands-rspec"
 end
