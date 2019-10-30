@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Team do
-  subject { described_class }
-
   describe ".get_visible_teams" do
     before do
       allow(Rails.application.config).to receive(:team_names).and_return(
@@ -24,7 +22,7 @@ RSpec.describe Team do
       let(:user) { double("User", is_opss?: true) }
 
       it "returns all important teams" do
-        expect(subject.get_visible_teams(user).map(&:name)).to eq(important_team_names)
+        expect(described_class.get_visible_teams(user).map(&:name)).to eq(important_team_names)
       end
     end
 
@@ -32,7 +30,7 @@ RSpec.describe Team do
       let(:user) { double("User", is_opss?: false) }
 
       it "returns first important team" do
-        expect(subject.get_visible_teams(user).map(&:name)).to eq([important_team_names.first])
+        expect(described_class.get_visible_teams(user).map(&:name)).to eq([important_team_names.first])
       end
     end
   end
