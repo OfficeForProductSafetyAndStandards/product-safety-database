@@ -49,6 +49,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.2.3)
       activesupport (= 5.2.3)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (5.2.3)
       activemodel (= 5.2.3)
       activesupport (= 5.2.3)
@@ -128,6 +132,12 @@ GEM
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
+    draper (3.1.0)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
+      activemodel-serializers-xml (>= 1.0)
+      activesupport (>= 5.0)
+      request_store (>= 1.0)
     elasticsearch (6.8.0)
       elasticsearch-api (= 6.8.0)
       elasticsearch-transport (= 6.8.0)
@@ -453,6 +463,7 @@ DEPENDENCIES
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
   govuk-design-system-rails!
+  draper
   govuk-lint
   govuk_notify_rails (= 2.1.0)
   jbuilder
