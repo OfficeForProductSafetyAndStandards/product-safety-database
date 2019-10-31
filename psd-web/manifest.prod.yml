@@ -24,3 +24,23 @@ applications:
     - psd-sentry-env
     - psd-sidekiq-env
     - psd-web-scout-env
+- name: psd-worker
+  memory: 1G
+  buildpacks:
+    - ruby_buildpack
+  instances: 2
+  path: .
+  command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
+  no-route: true
+  health-check-type: process
+  stack: cflinuxfs3
+  services:
+    - psd-database
+    - psd-elasticsearch
+    - psd-queue
+    - opss-log-drain
+    - antivirus-auth-env
+    - psd-aws-env
+    - psd-notify-env
+    - psd-rails-env
+    - psd-sentry-env
