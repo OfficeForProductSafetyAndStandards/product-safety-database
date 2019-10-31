@@ -32,8 +32,8 @@
 
     - if @investigation.complainant
       h2.govuk-heading-m Reporter
-      - if @investigation.complainant.can_be_displayed?
-        = complainant_summary_list(@investigation.complainant)
+      - if @complainant.can_be_displayed?
+        = @complainant.summary_list
       - else
         p.govuk-body Reporter details are restricted because they contain GDPR protected data.
 

@@ -124,28 +124,6 @@ module Investigations::DisplayTextHelper
     render "components/govuk_summary_list", rows: rows
   end
 
-  def complainant_summary_list(complainant)
-    rows = [
-      { key: { text: "Type" }, value: { text: complainant.complainant_type } },
-      # { key: { text: "Name" },          value: { text: complainant.name } },
-      # { key: { text: "Phone" },         value: { text: complainant.phone_number } },
-      # { key: { text: "Email" },         value: { text: complainant.email_address } },
-      # { key: { text: "Other details" }, value: { text: complainant.other_details } }
-
-
-      # This should be collapsed and into one row *Contact details*
-      # and remove empty ones
-      # - Name
-      # - email
-      # - phone
-      # - other details
-
-      # if none exist, show default content "No contact details provided"
-    ]
-
-    render "components/govuk_summary_list", rows: rows
-  end
-
   def correspondence_summary_list(correspondence, attachments: nil)
     rows = [
       { key: { text: "Call with" }, value: { text: get_call_with_field(correspondence) } },
