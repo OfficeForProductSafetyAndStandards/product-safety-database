@@ -8,9 +8,18 @@ set -ex
 # SPACE: the space to which you want to deploy
 
 ./infrastructure/ci/install-cf.sh
+
 cf login -a api.london.cloud.service.gov.uk -u $CF_USERNAME -p $CF_PASSWORD -o 'beis-opss' -s $SPACE
-export DB_VERSION=`cat psd-web/db/schema.rb | grep 'ActiveRecord::Schema.define' | grep -o '[0-9_]\+'`
-export REVIEW_INSTANCE_NAME=pr-$TRAVIS_PULL_REQUEST
-export DB_NAME=psd-db-$DB_VERSION
-./psd-web/deploy-review.sh
+
+if [[ $COMPONENT == "psd-web" ]]; then
+  ./psd-web/deploy.sh
+else
+  ./psd-web/deploy-worker.sh
+fi
+
 cf logout
+
+docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+docker pull $DOCKER_ORG/$COMPONENT:$BUILD_ID
+docker tag $DOCKER_ORG/$COMPONENT:$BUILD_ID $DOCKER_ORG/$COMPONENT:$BRANCH
+docker push $DOCKER_ORG/$COMPONENT:$BRANCH
