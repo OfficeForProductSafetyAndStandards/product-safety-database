@@ -21,6 +21,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "Test User_four (Office of Product Safety and Standards)", @user_four.display_name
   end
 
+  test "display name includes team names" do
+    allow(@user).to receive(:teams).and_return([double(name: 'a team'), nil])
+
+    sign_in_as @user
+    assert_equal "Test User_one (a team)", @user.display_name
+  end
+
   test "assignee short name is full name when user's organisation is same as that of current user" do
     sign_in_as @user
     assert_equal "Test User_one", @user.assignee_short_name

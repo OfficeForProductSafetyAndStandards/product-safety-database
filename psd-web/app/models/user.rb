@@ -85,7 +85,7 @@ class User < Shared::Web::User
   end
 
   def team_names
-    teams.map(&:name).join(", ")
+    teams.compact.map(&:name).join(", ")
   end
 
   def assignee_short_name
