@@ -41,7 +41,7 @@ services:
   psd-web:
     build:
       context: .
-      dockerfile: ./psd-web/Dockerfile
+      dockerfile: ./docker/web/Dockerfile
     volumes:
       # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
       - ${PWD-.}/psd-web:/psd-web
@@ -58,11 +58,11 @@ services:
   psd-worker:
     build:
       context: .
-      dockerfile: ./psd-worker/Dockerfile
+      dockerfile: ./docker/worker/Dockerfile
     command: bin/sidekiq -C config/sidekiq.yml
     volumes:
       # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/psd-web:/psd-web
+      - ${PWD-.}/psd:/psd
       - bundle-cache:/usr/local/bundle
     depends_on:
       - db
