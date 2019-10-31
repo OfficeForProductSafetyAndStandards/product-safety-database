@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Shared::Web::Token do
+RSpec.describe KeycloakToken do
   before do
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
