@@ -7,9 +7,9 @@ COMMITS=$TRAVIS_COMMIT_RANGE
 TOP_LEVEL_CHANGES=$(git diff --name-only $COMMITS | awk -F'/' '{ print $1 }' | sort -u)
 
 COMPONENTS=''
-if [[ "$TOP_LEVEL_CHANGES" =~ shared-web ]] || [[ "$TOP_LEVEL_CHANGES" =~ psd-web ]]; then
+if [[ "$TOP_LEVEL_CHANGES" =~ psd-web ]]; then
     COMPONENTS="$COMPONENTS psd-web psd-worker"
-elif [[ "$TOP_LEVEL_CHANGES" =~ shared-worker ]] || [[ "$TOP_LEVEL_CHANGES" =~ psd-worker ]]; then
+elif [[ "$TOP_LEVEL_CHANGES" =~ psd-worker ]]; then
     COMPONENTS="$COMPONENTS psd-worker"
 fi
 

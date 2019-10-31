@@ -1,5 +1,8 @@
-class User < Shared::Web::User
+class User < ActiveHash::Base
+  include ActiveHash::Associations
   include ActiveHashSafeLoadable
+
+  belongs_to :organisation
 
   has_many :activities, dependent: :nullify
   has_many :investigations, dependent: :nullify, as: :assignable
@@ -10,11 +13,17 @@ class User < Shared::Web::User
 
   has_one :user_attributes, dependent: :destroy
 
+  field :name
+  field :email
+  field :access_token
+
   # Getters and setters for each UserAttributes column should be added here so they can be accessed directly
   # from the User object via delegation.
   delegate :has_viewed_introduction, :has_viewed_introduction!, to: :get_user_attributes
   delegate :has_accepted_declaration, :has_accepted_declaration!, to: :get_user_attributes
   delegate :has_been_sent_welcome_email, :has_been_sent_welcome_email!, to: :get_user_attributes
+
+  attr_writer :roles
 
   def teams
     # Ensure we're serving up-to-date relations (modulo caching)
@@ -25,14 +34,14 @@ class User < Shared::Web::User
   end
 
   def self.create_and_send_invite(email_address, team, redirect_url)
-    Shared::Web::KeycloakClient.instance.create_user email_address
+    KeycloakClient.instance.create_user email_address
     # We can't use User.load here to load the new user
     # - they're not part of any organisation yet, so aren't considered a psd user
-    user_id = Shared::Web::KeycloakClient.instance.get_user(email_address)[:id]
+    user_id = KeycloakClient.instance.get_user(email_address)[:id]
     team.add_user user_id
     # Now that user exists in a team, we can trigger a reload of users entities
     User.load(force: true)
-    Shared::Web::KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
+    KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
   end
 
   def self.find_or_create(attributes)
@@ -44,7 +53,7 @@ class User < Shared::Web::User
 
   def self.load(force: false)
     begin
-      all_users = Shared::Web::KeycloakClient.instance.all_users(force: force)
+      all_users = KeycloakClient.instance.all_users(force: force)
       # We're not interested in users not belonging to an organisation, as that means they are not PSD users
       # - however, checking this based on permissions would require a request per user
       # Some user object are missing their name when they have not finished their registration yet.
@@ -58,6 +67,34 @@ class User < Shared::Web::User
     rescue StandardError => e
       Rails.logger.error "Failed to fetch users from Keycloak: #{e.message}"
       self.data = nil
+    end
+  end
+
+  def self.all(options = {})
+    self.load
+
+    if options.has_key?(:conditions)
+      where(options[:conditions])
+    else
+      @records ||= []
+    end
+  end
+
+  def self.current
+    RequestStore.store[:current_user]
+  end
+
+  def self.current=(user)
+    RequestStore.store[:current_user] = user
+  end
+
+  def has_role?(role)
+    roles.include?(role)
+  end
+
+  def roles
+    @roles ||= Rails.cache.fetch("user_roles_#{id}", expires_in: 30.minutes) do
+      KeycloakClient.instance.get_user_roles(id)
     end
   end
 
@@ -129,6 +166,13 @@ class User < Shared::Web::User
 
   def get_user_attributes
     UserAttributes.find_or_create_by(user_id: id)
+  end
+
+
+private
+
+  def current_user?
+    User.current&.id == id
   end
 end
 

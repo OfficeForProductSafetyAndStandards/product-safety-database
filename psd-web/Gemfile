@@ -2,6 +2,8 @@ source "https://rubygems.org"
 
 ruby File.read(".ruby-version").strip
 
+gem "will_paginate", "3.1.7" # Must be laoded before elasticsearch gems
+
 gem "active_hash", "2.2.1"
 gem "aws-sdk-s3", "1.43.0"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
@@ -31,13 +33,11 @@ gem "sentry-raven", "2.9.0"
 gem "sidekiq", "5.2.7"
 gem "sidekiq-cron", "1.1.0"
 gem "slim-rails"
-gem "sprockets", "= 4.0.0.beta10"
 gem "strong_migrations", "0.4.0"
 gem "webpacker", "4.0.7"
 gem "wicked"
-gem "will_paginate", "3.1.7"
 
-gem "shared-web", path: "./vendor/shared-web"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.0.1", require: "govuk_design_system"
 
 group :development, :test do
   gem "brakeman"
@@ -62,5 +62,6 @@ group :development, :test do
   gem "simplecov-console"
   gem "slim_lint"
   gem "solargraph"
+  gem "sprockets", "3.7.2"
   gem "webmock"
 end

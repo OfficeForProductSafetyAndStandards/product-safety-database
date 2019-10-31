@@ -1,5 +1,5 @@
-require 'sidekiq/web'
-require 'sidekiq/cron/web'
+require "sidekiq/web"
+require "sidekiq/cron/web"
 
 if Rails.env.production?
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
@@ -10,7 +10,7 @@ end
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  mount Shared::Web::Engine => "/", as: "shared_engine"
+  mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
   resource :session, only: %i[new] do
     member do

@@ -1,11 +1,10 @@
 require "rails_helper"
-require "shared/web/token"
 
-RSpec.describe Shared::Web::User do
+RSpec.describe User do
   before do
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
-    allow(Shared::Web::Token).to receive(:new).and_return(token_stub)
+    allow(KeycloakToken).to receive(:new).and_return(token_stub)
   end
 
   let(:client_id) { "123" }
@@ -28,7 +27,7 @@ RSpec.describe Shared::Web::User do
     end
 
     context "when the user's roles are not cached" do
-      before { expect(Shared::Web::KeycloakClient.instance).to receive(:get_user_roles).and_return(keycloak_roles) }
+      before { expect(KeycloakClient.instance).to receive(:get_user_roles).and_return(keycloak_roles) }
 
       it "returns the roles from Keycloak" do
         expect(user.roles).to eq(keycloak_roles)
@@ -47,7 +46,7 @@ RSpec.describe Shared::Web::User do
       end
 
       it "does not query Keycloak" do
-        expect(Shared::Web::KeycloakClient.instance).not_to receive(:get_user_roles)
+        expect(KeycloakClient.instance).not_to receive(:get_user_roles)
         user.roles
       end
     end
@@ -65,7 +64,7 @@ RSpec.describe Shared::Web::User do
       end
 
       it "does not query Keycloak" do
-        expect(Shared::Web::KeycloakClient.instance).not_to receive(:get_user_roles)
+        expect(KeycloakClient.instance).not_to receive(:get_user_roles)
         user.roles
       end
     end

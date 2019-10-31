@@ -6,6 +6,4 @@ options:
 syncs:
   psd-web-sync:
     src: './psd-web'
-    sync_excludes: ['node_modules', 'tmp', 'vendor/shared-web']
-  shared-web-sync:
-    src: './shared-web'
+    sync_excludes: ['node_modules', 'tmp']

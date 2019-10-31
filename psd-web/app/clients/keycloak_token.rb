@@ -1,5 +1,5 @@
 class KeycloakToken
-  REQUEST_HEADER = { 'Content-Type' => 'application/x-www-form-urlencoded' }.freeze
+  REQUEST_HEADER = { "Content-Type" => "application/x-www-form-urlencoded" }.freeze
 
   def initialize(token_endpoint)
     self.token_endpoint = token_endpoint
@@ -24,8 +24,8 @@ private
       case response.code
       when 200..399
         json_response = JSON response.body
-        self.expires_at = Time.now.to_i + json_response['expires_in']
-        self.token = json_response['access_token']
+        self.expires_at = Time.now.to_i + json_response["expires_in"]
+        self.token = json_response["access_token"]
       else
         response.return!
       end
@@ -35,9 +35,9 @@ private
 
   def payload
     {
-      'client_id' => client_id,
-      'client_secret' => secret,
-      'grant_type' => 'client_credentials'
+      "client_id" => client_id,
+      "client_secret" => secret,
+      "grant_type" => "client_credentials"
     }
   end
 

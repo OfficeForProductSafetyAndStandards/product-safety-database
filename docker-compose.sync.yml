@@ -17,18 +17,14 @@ services:
       - .env
     volumes:
       - psd-web-sync:/psd-web:nocopy
-      - shared-web-sync:/psd-web/vendor/shared-web:nocopy
       - bundle-cache:/usr/local/bundle
   psd-worker:
     env_file:
       - .env
     volumes:
       - psd-web-sync:/psd-web:nocopy
-      - shared-web-sync:/psd-web/vendor/shared-web:nocopy
       - bundle-cache:/usr/local/bundle
 
 volumes:
   psd-web-sync:
-    external: true
-  shared-web-sync:
     external: true

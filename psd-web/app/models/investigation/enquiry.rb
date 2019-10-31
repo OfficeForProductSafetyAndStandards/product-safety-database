@@ -1,5 +1,5 @@
 class Investigation::Enquiry < Investigation
-  include Shared::Web::Concerns::DateConcern
+  include DateConcern
 
   validates :user_title, :description, presence: true, on: :enquiry_details
   validates :date_received, presence: true, on: :about_enquiry, unless: :partially_filled_date?

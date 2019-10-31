@@ -7,7 +7,7 @@ class TeamUser < ActiveHash::Base
 
   def self.load(force: false)
     begin
-      team_users = Shared::Web::KeycloakClient.instance.all_team_users(
+      team_users = KeycloakClient.instance.all_team_users(
         User.all.map(&:id), Team.all.map(&:id), force: force
       )
 

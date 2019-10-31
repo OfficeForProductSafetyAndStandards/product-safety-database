@@ -11,7 +11,7 @@ module Keycloak
 
   module Internal
     def self.token
-      @token ||= KeycloakToken.new(Keycloak::Client.configuration['token_endpoint'])
+      @token ||= KeycloakToken.new(Keycloak::Client.configuration["token_endpoint"])
     end
 
     def self.get_group(group_id)
@@ -156,7 +156,7 @@ class KeycloakClient
 
   def get_user_roles(user_id)
     roles = JSON.parse(@internal.get_user_roles(user_id))
-    roles.map { |role| role['name'].to_sym }
+    roles.map { |role| role["name"].to_sym }
   end
 
   def add_user_to_team(user_id, group_id)

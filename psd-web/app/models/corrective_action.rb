@@ -1,5 +1,5 @@
 class CorrectiveAction < ApplicationRecord
-  include Shared::Web::Concerns::DateConcern
+  include DateConcern
   include SanitizationHelper
 
   attribute :related_file

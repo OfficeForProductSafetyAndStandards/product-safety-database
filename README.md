@@ -39,9 +39,7 @@ if there are changes to the Docker config:
 
 
 ### Design system
-Projects in this repository use the [GOV.UK design system](https://design-system.service.gov.uk).
-To aid it, the shared-web gem provides an implementation of some of the components - see
-the [README](shared-web/README.md#design-system-components) for more details.
+This project uses the [GOV.UK design system](https://design-system.service.gov.uk).
 
 ### Mac tips
 

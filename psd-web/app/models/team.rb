@@ -23,7 +23,7 @@ class Team < ActiveHash::Base
   end
 
   def add_user(user_id)
-    Shared::Web::KeycloakClient.instance.add_user_to_team user_id, id
+    KeycloakClient.instance.add_user_to_team user_id, id
     # Trigger reload of team-users relations from KC
     TeamUser.load(force: true)
   end
@@ -31,7 +31,7 @@ class Team < ActiveHash::Base
   def self.load(force: false)
     Organisation.load(force: force)
     begin
-      teams = Shared::Web::KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
+      teams = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
       self.safe_load(teams, data_name: "teams")
       self.ensure_names_up_to_date
     rescue StandardError => e

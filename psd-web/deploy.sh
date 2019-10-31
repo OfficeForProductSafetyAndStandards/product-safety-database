@@ -42,10 +42,6 @@ fi
 # Copy the environment helper script
 cp -a ./infrastructure/env/. ./psd-web/env/
 
-# Copy in the shared dependencies
-rm -rf ./psd-web/vendor/shared-web/
-cp -a ./shared-web/. ./psd-web/vendor/shared-web/
-
 # Deploy the new app and set the hostname
 cf push $NEW_APP -f $MANIFEST_FILE -d $DOMAIN --hostname $NEW_HOSTNAME --no-start
 cf set-env $NEW_APP PSD_HOST "$NEW_HOSTNAME.$DOMAIN"

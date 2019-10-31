@@ -23,8 +23,4 @@ cp -a ./infrastructure/env/. ./psd-web/env/
 mkdir -p ./psd-web/public/assets
 touch ./psd-web/public/assets/.sprockets-manifest-qq.json
 
-# Copy in the shared web dependencies
-rm -rf ./psd-web/vendor/shared-web/
-cp -a ./shared-web/. ./psd-web/vendor/shared-web/
-
 cf push -f ./psd-worker/manifest.yml $( [[ ! ${APP_PREEXISTS} ]] && printf %s '--no-start' )
