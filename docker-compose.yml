@@ -12,9 +12,9 @@ services:
       - 5432:5432
 
   keycloak:
-    image: beisopss/keycloak:prod
+    image: beisopss/keycloak:master
     env_file:
-      - .docker/env.keycloak
+      - ./docker/env.keycloak
     environment:
       - NOTIFY_API_KEY
     depends_on:

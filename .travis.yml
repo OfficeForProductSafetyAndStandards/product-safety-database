@@ -8,8 +8,6 @@ services:
 branches:
   only:
     - master
-    - staging
-    - prod
 
 cache:
   directories:
