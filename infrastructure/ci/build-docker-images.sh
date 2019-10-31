@@ -3,10 +3,6 @@
 # tagged with the build ID to DockerHub.
 set -ex
 
-function docker_tag_exists {
-    curl --silent -f -lSL https://index.docker.io/v1/repositories/$1/tags/$2 > /dev/null
-}
-
 echo "Logging into DockerHub"
 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
