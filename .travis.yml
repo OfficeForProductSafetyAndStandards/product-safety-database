@@ -1,6 +1,8 @@
 sudo: required
 
-language: generic
+language: ruby
+rvm:
+  - 2.5.5
 
 services:
   - docker
@@ -41,13 +43,14 @@ jobs:
         - DOCKER_ORG=${DOCKER_ORG} BRANCH=${TRAVIS_BRANCH} BUILD_ID=${TRAVIS_BUILD_NUMBER} ./infrastructure/ci/build-docker-images.sh
 
     - stage: Test and deploy review
-      name: PSD Tests
+      name: Tests
       script: COMPONENT=psd-web ./infrastructure/ci/test-if-changed.sh
       env: &test_env
         - COVERALLS_PARALLEL=true
-    - name: PSD Static Analysis
-      script: COMPONENT=psd-web ./infrastructure/ci/static-analysis-if-changed.sh
-    - name: Deploy PSD review app
+    - name: Static Analysis
+      install: cd psd-web && bundle install && yarn install && cd ..
+      script: ./infrastructure/ci/static-analysis.sh
+    - name: Deploy review app
       script: COMPONENT=psd-web ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
       env: &deploy_int_env
         - SPACE=int
