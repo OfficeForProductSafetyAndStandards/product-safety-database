@@ -1,12 +1,20 @@
 inherit_gem:
-  shared-web: .rubocop.yml
+  govuk-lint: configs/rubocop/all.yml
+
+require: rubocop-performance
+
+Rails:
+  Enabled: true
 
 AllCops:
   Exclude:
+    - 'app/**/*.axlsx'
     - 'bin/**/*'
+    - 'coverage/**/*'
     - 'db/schema.rb'
+    - 'log/**/*'
     - 'node_modules/**/*'
-    - 'vendor/shared-web/**/*'
+    - 'tmp/**/*'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
