@@ -2,10 +2,3 @@ source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gemspec
-
-gem "govuk-lint", "3.11.2"
-gem 'rspec'
-gem "rubocop", "0.71.0"
-gem "rubocop-performance"
-gem "sass-rails", "~> 5.0"
-gem "webmock"
