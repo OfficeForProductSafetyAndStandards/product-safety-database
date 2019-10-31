@@ -67,7 +67,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
           }
       }
     end
-    assert_redirected_to investigation_url(investigation)
+    assert_redirected_to investigation_path(investigation)
   end
 
   test "should set description" do
@@ -82,7 +82,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    assert_redirected_to investigation_url(investigation)
+    assert_redirected_to investigation_path(investigation)
   end
 
   test "should require description to not be empty" do

@@ -42,7 +42,7 @@ class InvestigationsController < ApplicationController
 
   # GET /cases/new
   def new
-    return redirect_to new_ts_investigation_path unless User.current.is_opss?
+    return redirect_to new_investigation_ts_investigation_path unless User.current.is_opss?
 
     case params[:type]
     when "allegation"
@@ -84,7 +84,7 @@ private
     respond_to do |format|
       if @investigation.update(update_params)
         format.html {
-          redirect_to @investigation, flash: {
+          redirect_to investigation_path(@investigation), flash: {
             success: "#{@investigation.case_type.titleize} was successfully updated."
           }
         }

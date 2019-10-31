@@ -26,10 +26,13 @@ Rails.application.routes.draw do
     get :skip
   end
 
-  resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
-  resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
-  resources :project, controller: "investigations/project", only: %i[new create]
-  resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
+  namespace :investigation, path: "" do
+    resources :enquiry,          controller: "investigations/enquiries", only: %i[show new create update], concerns: %i[document_attachable]
+    resources :allegation,       controller: "investigations/allegations", only: %i[show new create update], concerns: %i[document_attachable]
+    resources :project,          controller: "investigations/projects", only: %i[new show create], concerns: %i[document_attachable]
+    resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update], concerns: %i[document_attachable]
+  end
+
 
   resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
             concerns: %i[document_attachable] do

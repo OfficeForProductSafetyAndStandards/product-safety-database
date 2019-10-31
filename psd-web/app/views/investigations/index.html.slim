@@ -10,7 +10,7 @@
       - else
         | Cases
   .govuk-grid-column-one-third[style="text-align:right"]
-    = link_to "Create new", User.current.is_opss? ? new_investigation_path : new_ts_investigation_path,
+    = link_to "Create new", User.current.is_opss? ? new_investigation_path : new_investigation_ts_investigation_path,
             class: "govuk-button govuk-!-margin-bottom-3", role: "button"
 
 .govuk-grid-row

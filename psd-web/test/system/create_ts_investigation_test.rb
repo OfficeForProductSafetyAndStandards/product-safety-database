@@ -17,7 +17,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     @corrective_action_two = corrective_actions :two
     @test = tests :two
 
-    visit new_ts_investigation_path
+    visit new_investigation_ts_investigation_path
   end
 
   teardown do

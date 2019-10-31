@@ -5,12 +5,6 @@ class Investigation::Allegation < Investigation
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
-  # Elasticsearch index name must be declared in children and parent
-
-  def self.model_name
-    self.superclass.model_name
-  end
-
   def title
     case_title
   end

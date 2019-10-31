@@ -8,10 +8,6 @@ class Investigation::Enquiry < Investigation
 
   date_attribute :date_received, required: false
 
-  def self.model_name
-    self.superclass.model_name
-  end
-
   def title
     user_title
   end
