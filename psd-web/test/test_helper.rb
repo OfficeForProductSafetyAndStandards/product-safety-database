@@ -18,7 +18,7 @@ class ActiveSupport::TestCase
   include ::RSpec::Mocks::ExampleMethods
 
   def initialize *args
-    @keycloak_client_instance = Shared::Web::KeycloakClient.instance
+    @keycloak_client_instance = KeycloakClient.instance
     super(*args)
   end
 

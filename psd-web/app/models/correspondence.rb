@@ -1,5 +1,5 @@
 class Correspondence < ApplicationRecord
-  include Shared::Web::Concerns::DateConcern
+  include DateConcern
   include SanitizationHelper
   belongs_to :investigation, optional: true
   has_one :activity, dependent: :destroy

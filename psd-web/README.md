@@ -91,11 +91,11 @@ You can run the tests with `docker-compose exec psd-web bin/rake test`.
 You can run the ruby linting with `docker-compose exec psd-web bin/rubocop`.
 Running this with the `--auto-correct` flag set will cause rubocop to attempt to fix as many of the issues as it can.
 
-You can run the Slim linting with `docker-compose exec psd-web bin/slim-lint -c vendor/shared-web/.slim-lint.yml app vendor`.
+You can run the Slim linting with `docker-compose exec psd-web bin/slim-lint app`.
 
-You can run the Sass linting with `docker-compose exec psd-web yarn sass-lint -vq -c vendor/shared-web/.sasslint.yml 'app/**/*.scss' 'vendor/**/*.scss'`.
+You can run the Sass linting with `docker-compose exec psd-web yarn sass-lint -vq 'app/**/*.scss'`.
 
-You can run the JavaScript linting with `docker-compose exec psd-web yarn eslint -c vendor/shared-web/.eslintrc.yml app config vendor`.
+You can run the JavaScript linting with `docker-compose exec psd-web yarn eslint app config`.
 
 You can run the security vulnerability static analysis with `bin/brakeman --no-pager`.
 

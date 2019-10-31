@@ -9,14 +9,6 @@ update_configs:
     directory: "/psd-web"
     update_schedule: "live"
 
-  - package_manager: "javascript"
-    directory: "/shared-web"
-    update_schedule: "live"
-    default_labels:
-    - dependencies
-    - javascript
-    - fixme
-
   - package_manager: "ruby:bundler"
     directory: "/infrastructure/fluentd"
     update_schedule: "live"
@@ -24,11 +16,3 @@ update_configs:
   - package_manager: "ruby:bundler"
     directory: "/psd-web"
     update_schedule: "live"
-
-  - package_manager: "ruby:bundler"
-    directory: "/shared-web"
-    update_schedule: "live"
-    default_labels:
-    - dependencies
-    - ruby
-    - fixme

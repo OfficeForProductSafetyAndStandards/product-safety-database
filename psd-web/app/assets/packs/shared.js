@@ -2,9 +2,9 @@
 import Rails from 'rails-ujs';
 import GOVUKFrontend from 'govuk-frontend';
 
-import 'shared-web/assets/javascripts/location_picker';
-import 'shared-web/assets/javascripts/autocomplete';
-import 'shared-web/assets/javascripts/cookie_banner';
+import '../application/javascripts/location_picker';
+import '../application/javascripts/autocomplete';
+import '../application/javascripts/cookie_banner';
 
 import '../application/javascripts/investigations/attachment_description';
 import '../application/javascripts/investigations/ts_investigations/which_businesses';

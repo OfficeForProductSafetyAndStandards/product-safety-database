@@ -1,10 +1,8 @@
 class ApplicationController < ActionController::Base
-  include Shared::Web::Concerns::AuthenticationConcern
-  include Shared::Web::Concerns::CacheConcern
-  include Shared::Web::Concerns::HttpAuthConcern
-  include Shared::Web::Concerns::RavenConfigurationConcern
-
-  helper Shared::Web::Engine.helpers
+  include AuthenticationConcern
+  include CacheConcern
+  include HttpAuthConcern
+  include RavenConfigurationConcern
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!
@@ -14,7 +12,7 @@ class ApplicationController < ActionController::Base
   before_action :has_accepted_declaration
   before_action :set_cache_headers
 
-  helper_method :nav_items, :secondary_nav_items, :previous_search_params
+  helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
 
   def authorize_user
     raise Pundit::NotAuthorizedError unless User.current&.is_psd_user?
@@ -76,9 +74,9 @@ class ApplicationController < ActionController::Base
 
   def secondary_nav_items
     items = []
-    items.push text: "Your account", href: Shared::Web::KeycloakClient.instance.user_account_url if User.current
+    items.push text: "Your account", href: KeycloakClient.instance.user_account_url if User.current
     if User.current
-      items.push text: "Sign out", href: shared_engine.logout_session_path
+      items.push text: "Sign out", href: logout_session_path
     else
       items.push text: "Sign in", href: keycloak_login_url
     end

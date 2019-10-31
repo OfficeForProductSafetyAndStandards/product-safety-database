@@ -25,10 +25,6 @@ cf create-service postgres small-10 $DB_NAME
 until cf service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
 cp -a ./infrastructure/env/. ./psd-web/env/
 
-# Copy in the shared dependencies
-rm -rf ./psd-web/vendor/shared-web/
-cp -a ./shared-web/. ./psd-web/vendor/shared-web/
-
 # Deploy the app and set the hostname
 cf push $APP -f $MANIFEST_FILE -d $DOMAIN --hostname $HOSTNAME --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
 
