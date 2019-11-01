@@ -28,7 +28,18 @@ class TeamsController < ApplicationController
     end
   end
 
+  def resend_invitation
+    team = Team.find_by!(id: params[:id])
+    email_address = params[:email_address]
+    resend_invitation_to_user(email_address)
+    redirect_to team, status: :see_other, flash: { success: "Invite sent to #{email_address}" }
+  end
+
 private
+
+  def resend_invitation_to_user(email_address)
+    User.resend_invite email_address, @team, root_url
+  end
 
   def set_user_teams
     @teams = User.current.teams
@@ -57,12 +68,17 @@ private
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return
     end
-    if @team.users.include? user
-      @new_user.errors.add(:email_address,
-                           "#{@new_user.email_address} is already a member of #{@team.display_name}")
+    if (@team.users.include? user)
+      if user.name.present?
+        @new_user.errors.add(:email_address,
+                            "#{@new_user.email_address} is already a member of #{@team.display_name}")
       return
+      else
+        resend_invitation_to_user(user.email)
+      end
+    else
+      invite_user user
     end
-    invite_user user
   end
 
   def invite_user(user)
