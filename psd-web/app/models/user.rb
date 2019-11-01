@@ -44,7 +44,7 @@ class User < ActiveHash::Base
     KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
   end
 
-  def self.resend_invite(email_address, team, redirect_url)
+  def self.resend_invite(email_address, _team, redirect_url)
     user_id = Shared::Web::KeycloakClient.instance.get_user(email_address)[:id]
     Shared::Web::KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
   end

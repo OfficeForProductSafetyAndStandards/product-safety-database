@@ -68,11 +68,11 @@ private
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return
     end
-    if (@team.users.include? user)
+    if @team.users.include? user
       if user.name.present?
         @new_user.errors.add(:email_address,
-                            "#{@new_user.email_address} is already a member of #{@team.display_name}")
-      return
+                             "#{@new_user.email_address} is already a member of #{@team.display_name}")
+        return
       else
         resend_invitation_to_user(user.email)
       end
