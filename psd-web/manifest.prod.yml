@@ -37,6 +37,7 @@ applications:
   services:
     - psd-database
     - psd-elasticsearch
+    - psd-session
     - psd-queue
     - opss-log-drain
     - antivirus-auth-env

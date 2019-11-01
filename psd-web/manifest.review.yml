@@ -34,8 +34,9 @@ applications:
   health-check-type: process
   stack: cflinuxfs3
   services:
-    - psd-database
+    - ((psd-db-name))
     - psd-elasticsearch
+    - psd-session
     - psd-queue
     - opss-log-drain
     - antivirus-auth-env
