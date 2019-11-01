@@ -4,5 +4,4 @@ class InvestigationDecorator < ApplicationDecorator
   def title
     user_title
   end
-
 end

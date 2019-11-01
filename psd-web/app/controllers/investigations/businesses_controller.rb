@@ -20,7 +20,6 @@ class Investigations::BusinessesController < ApplicationController
         { text: @investigation.pretty_description }
       ]
     }
-
   end
 
   def new
@@ -67,7 +66,7 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
-  private
+private
 
   def set_investigation_business
     @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)

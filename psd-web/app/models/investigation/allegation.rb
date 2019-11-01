@@ -1,4 +1,5 @@
 # coding: utf-8
+
 class Investigation < ApplicationRecord
   class Allegation < Investigation
     validates :description, :hazard_type, :product_category, presence: true, on: :allegation_details
@@ -11,11 +12,10 @@ class Investigation < ApplicationRecord
       "allegation"
     end
 
-    private
+  private
 
     def create_audit_activity_for_case
       AuditActivity::Investigation::AddAllegation.from(self)
     end
-
   end
 end

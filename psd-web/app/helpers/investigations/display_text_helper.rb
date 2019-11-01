@@ -3,7 +3,7 @@ module Investigations::DisplayTextHelper
     document.image? ? "image" : "document"
   end
 
-  def investigation_sub_nav(investigation, current_tab: 'overview')
+  def investigation_sub_nav(investigation, current_tab: "overview")
     is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
     items = [
       {
@@ -26,7 +26,8 @@ module Investigations::DisplayTextHelper
         href: investigation_attachments_url(investigation),
         text: "Attachments",
         count: " (#{@investigation.documents.size})",
-        active: is_current_tab.attachments? },
+        active: is_current_tab.attachments?
+},
       {
         href: investigation_activity_url(@investigation),
         text: "Activity",
@@ -214,8 +215,8 @@ module Investigations::DisplayTextHelper
     render "components/govuk_summary_list", rows: rows
   end
 
-  def image_attachment_count(product_count, other_count)
-    [ t('investigations.product_image_attachment_count', count: @product_image_attachment_count),
-      t('investigations.other_image_attachment_count', count: @other_image_attachment_count) ].join(' ')
+  def image_attachment_count(_product_count, _other_count)
+    [t("investigations.product_image_attachment_count", count: @product_image_attachment_count),
+     t("investigations.other_image_attachment_count", count: @other_image_attachment_count)].join(" ")
   end
 end

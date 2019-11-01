@@ -13,7 +13,7 @@ class ComplainantDecorator < ApplicationDecorator
     if contact_details.any?
       rows << {
         key: { text: "Contact details" },
-        value: { text: contact_details.join(h.tag.br).html_safe }
+        value: { text: contact_details.join(h.tag.br) }
       }
     end
 

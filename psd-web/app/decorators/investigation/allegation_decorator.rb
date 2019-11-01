@@ -1,6 +1,5 @@
 class Investigation < ApplicationRecord
   class AllegationDecorator < InvestigationDecorator
-
     def title
       title = build_title_from_products || ""
       title << " – #{object.hazard_type}" if object.hazard_type.present?
@@ -8,7 +7,7 @@ class Investigation < ApplicationRecord
       title.presence || "Untitled case"
     end
 
-    private
+  private
 
     def build_title_from_products
       return object.product_category.dup if object.products.empty?
@@ -24,6 +23,5 @@ class Investigation < ApplicationRecord
       first_product = object.products.first
       first_product[property_name] if object.products.drop(1).all? { |product| product[property_name] == first_product[property_name] }
     end
-
   end
 end

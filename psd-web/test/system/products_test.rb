@@ -16,7 +16,7 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
     attachments_link = "Attachments (#{@investigation.documents.count})"
     activity_link    = "Activity"
 
-    with_options class: 'hmcts-sub-navigation__link' do |p|
+    with_options class: "hmcts-sub-navigation__link" do |p|
       p.assert_link "Overview",
                     href: investigation_url(@investigation)
       p.assert_link products_link,
@@ -40,6 +40,5 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
 
     click_link activity_link
     assert_css "h2.govuk-heading-m", text: "Activity"
-
   end
 end

@@ -12,8 +12,6 @@ module Investigations
           { text: @investigation.pretty_description }
         ]
       }
-
-
     end
   end
 end

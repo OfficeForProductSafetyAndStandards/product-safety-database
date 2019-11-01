@@ -46,7 +46,7 @@ module Investigations
       end
     end
 
-    private
+  private
 
     def set_investigation
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
