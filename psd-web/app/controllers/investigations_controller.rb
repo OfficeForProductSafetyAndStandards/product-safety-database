@@ -35,7 +35,7 @@ class InvestigationsController < ApplicationController
   def show
     @current_tab = request.fullpath.split("/").last
     get_attachment_counts
-    @complainant = @investigation.complainant.decorate
+    @complainant = @investigation.complainant&.decorate
     respond_to do |format|
       format.html
     end
