@@ -27,7 +27,7 @@ module Investigations::DisplayTextHelper
         text: "Attachments",
         count: " (#{@investigation.documents.size})",
         active: is_current_tab.attachments?
-},
+      },
       {
         href: investigation_activity_url(@investigation),
         text: "Activity",
