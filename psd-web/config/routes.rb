@@ -54,6 +54,13 @@ Rails.application.routes.draw do
   resources :project, controller: "investigations/project", only: %i[new create]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
+  scope :investigation, path: "", module: "investigations", as: :investigation do
+    resources :enquiry, controller: "enquiry", only: %i[show new create update]
+    resources :allegation, controller: "allegation", only: %i[show new create update]
+    resources :project, controller: "project", only: %i[show new create]
+    resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
+  end
+
   resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
             concerns: %i[document_attachable] do
     member do

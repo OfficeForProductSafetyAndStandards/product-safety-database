@@ -461,11 +461,11 @@ DEPENDENCIES
   coveralls
   debase
   dotenv-rails
+  draper
   elasticsearch (= 6.8.0)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
   govuk-design-system-rails!
-  draper
   govuk-lint
   govuk_notify_rails (= 2.1.0)
   jbuilder
@@ -505,10 +505,10 @@ DEPENDENCIES
   solargraph
   spring
   spring-commands-rspec
-  sprockets (= 4.0.0.beta10)
+  sprockets-rails
   strong_migrations (= 0.4.0)
   webmock
-  webpacker (= 4.0.0.beta10)
+  webpacker (= 4.0.7)
   wicked
   will_paginate (= 3.1.7)
 
