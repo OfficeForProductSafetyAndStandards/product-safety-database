@@ -85,7 +85,7 @@ class InvestigationsController < ApplicationController
     respond_to do |format|
       if @investigation.update(update_params)
         format.html {
-          redirect_to @investigation, flash: {
+          redirect_to investigation_path(@investigation), flash: {
             success: "#{@investigation.case_type.titleize} was successfully updated."
           }
         }
@@ -98,8 +98,9 @@ class InvestigationsController < ApplicationController
   end
 
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
-    authorize @investigation
+    investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
+    authorize investigation
+    @investigation = investigation.decorate
   end
 
   def update_params

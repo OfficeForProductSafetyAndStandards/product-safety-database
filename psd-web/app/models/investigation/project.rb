@@ -4,10 +4,6 @@ class Investigation < ApplicationRecord
 
     index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
-    def title
-      user_title
-    end
-
     def case_type
       "project"
     end

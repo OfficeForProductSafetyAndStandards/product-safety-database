@@ -1,5 +1,5 @@
 class Investigation < ApplicationRecord
-  class AllegationDecorator < ApplicationDecorator
+  class AllegationDecorator < InvestigationDecorator
 
     def title
       title = build_title_from_products || ""

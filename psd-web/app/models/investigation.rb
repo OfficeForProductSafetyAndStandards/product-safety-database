@@ -48,7 +48,6 @@ class Investigation < ApplicationRecord
   has_one :complainant, dependent: :destroy
 
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
-
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
   def assignee

@@ -9,10 +9,6 @@ class Investigation < ApplicationRecord
 
     date_attribute :date_received, required: false
 
-    def title
-      user_title
-    end
-
     def case_type
       "enquiry"
     end
