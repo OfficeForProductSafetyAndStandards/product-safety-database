@@ -4,7 +4,7 @@
 set -ex
 
 echo "Logging into DockerHub"
-docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
 COMPONENTS=(
     'psd-web'
