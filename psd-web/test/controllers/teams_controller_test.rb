@@ -91,11 +91,9 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Resend invite when user is invited but not signed up" do
-    user_in_my_org_not_team = User.current.organisation.users
-                                  .find { |u| (u.teams & User.current.teams).empty? }
-    email_address = user_in_my_org_not_team.email
+    email_address = "new_user@northamptonshire.gov.uk"
     put invite_to_team_url(@my_team), params: { new_user: { email_address: email_address } }
     put resend_invitation_team_path(email_address: email_address)
-    expect(NotifyMailer).to have_received(:user_added_to_team).with(email_address, any_args)
+    expect(NotifyMailer).not_to have_received(:user_added_to_team).with(email_address, any_args)
   end
 end
