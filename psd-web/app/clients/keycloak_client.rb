@@ -72,16 +72,9 @@ class KeycloakClient
     end
   end
 
-  def all_organisations(force: false)
-    Rails.cache.delete(:keycloak_organisations) if force
-    Rails.cache.fetch(:keycloak_organisations, expires_in: cache_period) do
-      groups = all_groups
-      organisations = groups.find { |group| group["name"] == "Organisations" }
-
-      organisations["subGroups"].reject(&:blank?).map do |organisation|
-        { id: organisation["id"], name: organisation["name"], path: organisation["path"] }
-      end
-    end
+  def all_organisations
+    organisations = all_groups.find { |group| group["name"] == "Organisations" }
+    organisations["subGroups"].reject(&:blank?).map { |h| h.slice("id", "name", "path").symbolize_keys }
   end
 
   # @param org_ids specifies teams for which organisations should be returned. This allows us to avoid creating

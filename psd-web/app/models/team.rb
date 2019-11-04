@@ -6,7 +6,7 @@ class Team < ActiveHash::Base
   field :path
   field :team_recipient_email
 
-  belongs_to :organisation
+  belongs_to :organisation, primary_key: :keycloak_id
 
   has_many :team_users, dependent: :nullify
   has_many :users, through: :team_users
@@ -28,9 +28,8 @@ class Team < ActiveHash::Base
   end
 
   def self.load(force: false)
-    Organisation.load(force: force)
     begin
-      self.data = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
+      self.data = KeycloakClient.instance.all_teams(Organisation.all.map(&:keycloak_id), force: force)
       self.ensure_names_up_to_date
     rescue StandardError => e
       Rails.logger.error "Failed to fetch teams from Keycloak: #{e.message}"
@@ -50,7 +49,6 @@ class Team < ActiveHash::Base
 
   def display_name(ignore_visibility_restrictions: false)
     return name if (User.current.organisation == organisation) || ignore_visibility_restrictions
-
     organisation.name
   end
 

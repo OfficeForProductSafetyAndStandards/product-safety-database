@@ -1,31 +1,11 @@
-class Organisation < ActiveHash::Base
-  include ActiveHash::Associations
+class Organisation < ApplicationRecord
+  has_many :users, dependent: :nullify, primary_key: :keycloak_id
+  has_many :teams, dependent: :nullify, primary_key: :keycloak_id
 
-  field :id
-  field :name
-  field :path
-
-  has_many :users, dependent: :nullify
-  has_many :teams, dependent: :nullify
-
-  def self.load(force: false)
-    begin
-      self.data = KeycloakClient.instance.all_organisations(force: force)
-    rescue StandardError => e
-      Rails.logger.error "Failed to fetch organisations from Keycloak: #{e.message}"
-      self.data = nil
-    end
-  end
-
-  def self.all(options = {})
-    self.load
-
-    if options.has_key?(:conditions)
-      where(options[:conditions])
-    else
-      @records ||= []
+  def self.load_from_keycloak
+    KeycloakClient.instance.all_organisations.each do |org|
+      record = find_or_create_by(keycloak_id: org[:id])
+      record.update_attributes(org.slice(:name, :path))
     end
   end
 end
-
-Organisation.load if Rails.env.development?
