@@ -22,4 +22,4 @@ cp -a ./infrastructure/env/. ./psd-web/env/
 mkdir -p ./psd-web/public/assets
 touch ./psd-web/public/assets/.sprockets-manifest-qq.json
 
-cf push -f ./psd-worker/manifest.yml psd-worker $( [[ ! ${APP_PREEXISTS} ]] && printf %s '--no-start' )
+cf push -f ./psd-web/manifest.yml psd-worker $( [[ ! ${APP_PREEXISTS} ]] && printf %s '--no-start' )
