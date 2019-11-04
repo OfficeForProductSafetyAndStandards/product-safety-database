@@ -1,6 +1,5 @@
 class User < ActiveHash::Base
   include ActiveHash::Associations
-  include ActiveHashSafeLoadable
 
   belongs_to :organisation
 
@@ -63,12 +62,10 @@ class User < ActiveHash::Base
       # - however, checking this based on permissions would require a request per user
       # Some user object are missing their name when they have not finished their registration yet.
       # But we need to be able to show them on the teams page for example, so we ensure that the attribute is not nil
-      users = all_users.deep_dup # We want a copy of the data to modify freely, not mutating the cached version
+      self.data = all_users.deep_dup # We want a copy of the data to modify freely, not mutating the cached version
                       .map(&method(:populate_organisation))
                       .map(&method(:populate_name))
                       .reject { |user| user[:organisation_id].blank? }
-
-      self.safe_load(users, data_name: "users")
     rescue StandardError => e
       Rails.logger.error "Failed to fetch users from Keycloak: #{e.message}"
       self.data = nil
