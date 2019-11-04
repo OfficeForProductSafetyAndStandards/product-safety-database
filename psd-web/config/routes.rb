@@ -122,6 +122,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :teams, only: %i[index show] do
+    member do
+      get :invite_to, path: "invite"
+      put :invite_to, path: "invite"
+      put :resend_invitation
+    end
+  end
+
   namespace :help do
     get :terms_and_conditions, path: "terms-and-conditions"
     get :privacy_notice, path: "privacy-notice"
