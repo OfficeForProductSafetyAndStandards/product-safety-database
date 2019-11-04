@@ -1,7 +1,7 @@
 class User < ActiveHash::Base
   include ActiveHash::Associations
 
-  belongs_to :organisation
+  belongs_to :organisation, primary_key: :keycloak_id
 
   has_many :activities, dependent: :nullify
   has_many :investigations, dependent: :nullify, as: :assignable
@@ -51,7 +51,7 @@ class User < ActiveHash::Base
   def self.find_or_create(attributes)
     groups = attributes.delete(:groups)
     organisation = Organisation.find_by(path: groups)
-    user = User.find_by(id: attributes[:id]) || User.create(attributes.merge(organisation_id: organisation&.id))
+    user = User.find_by(id: attributes[:id]) || User.create(attributes.merge(organisation_id: organisation&.keycloak_id))
     user
   end
 
@@ -103,8 +103,8 @@ class User < ActiveHash::Base
   def self.populate_organisation(attributes)
     groups = attributes.delete(:groups)
     teams = Team.where(id: groups)
-    organisation = Organisation.find_by(id: groups) || Organisation.find_by(id: teams.first&.organisation_id)
-    attributes.merge(organisation_id: organisation&.id)
+    organisation = Organisation.find_by(keycloak_id: groups) || Organisation.find_by(keycloak_id: teams.first&.organisation_id)
+    attributes.merge(organisation_id: organisation&.keycloak_id)
   end
 
   def self.populate_name(attributes)
@@ -116,7 +116,7 @@ class User < ActiveHash::Base
 
   def display_name(ignore_visibility_restrictions: false)
     display_name = name
-    can_display_teams = ignore_visibility_restrictions || (organisation.present? && organisation.id == User.current.organisation&.id)
+    can_display_teams = ignore_visibility_restrictions || (organisation.present? && organisation.keycloak_id == User.current.organisation&.keycloak_id)
     can_display_teams = can_display_teams && teams.any?
     membership_display = can_display_teams ? team_names : organisation&.name
     display_name += " (#{membership_display})" if membership_display.present?
@@ -128,7 +128,7 @@ class User < ActiveHash::Base
   end
 
   def assignee_short_name
-    if organisation.present? && organisation.id != User.current.organisation&.id
+    if organisation.present? && organisation.keycloak_id != User.current.organisation&.keycloak_id
       organisation.name
     else
       name
