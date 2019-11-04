@@ -1,6 +1,5 @@
 class Organisation < ActiveHash::Base
   include ActiveHash::Associations
-  include ActiveHashSafeLoadable
 
   field :id
   field :name
@@ -11,7 +10,7 @@ class Organisation < ActiveHash::Base
 
   def self.load(force: false)
     begin
-      self.safe_load(KeycloakClient.instance.all_organisations(force: force), data_name: "organisations")
+      self.data = KeycloakClient.instance.all_organisations(force: force)
     rescue StandardError => e
       Rails.logger.error "Failed to fetch organisations from Keycloak: #{e.message}"
       self.data = nil

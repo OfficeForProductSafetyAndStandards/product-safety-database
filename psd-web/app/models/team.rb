@@ -1,6 +1,5 @@
 class Team < ActiveHash::Base
   include ActiveHash::Associations
-  include ActiveHashSafeLoadable
 
   field :id
   field :name
@@ -31,8 +30,7 @@ class Team < ActiveHash::Base
   def self.load(force: false)
     Organisation.load(force: force)
     begin
-      teams = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
-      self.safe_load(teams, data_name: "teams")
+      self.data = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
       self.ensure_names_up_to_date
     rescue StandardError => e
       Rails.logger.error "Failed to fetch teams from Keycloak: #{e.message}"
