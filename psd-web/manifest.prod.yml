@@ -34,6 +34,7 @@ applications:
   <<: *defaults
   <<: *web_defaults
 - name: psd-worker
+  <<: *defaults
   memory: 1G
   instances: 2
   command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
