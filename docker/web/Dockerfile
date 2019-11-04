@@ -26,10 +26,10 @@ RUN curl -o /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$CH
 
 RUN gem install bundler:2.0.2
 
-WORKDIR /psd-web
+WORKDIR /psd
 
 COPY ./psd-web .
 
-COPY ./psd-web/docker-entrypoint.sh /
+COPY ./docker/web/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
