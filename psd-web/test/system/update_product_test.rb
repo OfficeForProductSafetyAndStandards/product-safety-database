@@ -40,7 +40,7 @@ class UpdateProductTest < ApplicationSystemTestCase
     assert_text updated_product.description
     assert_text updated_product.product_type
     assert_text updated_product.category
-    assert_text updated_product.country_of_origin_for_display
+    assert_text updated_product.country_of_origin
   end
 
   def fill_in_product_details(product)
