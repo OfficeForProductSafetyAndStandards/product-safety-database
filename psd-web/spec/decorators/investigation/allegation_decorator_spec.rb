@@ -4,9 +4,7 @@ RSpec.describe Investigation::AllegationDecorator do
   fixtures(:investigations)
   let!(:allegation) { investigations(:one) }
 
-  subject {
-    allegation.decorate
-  }
+  subject { allegation.decorate }
 
   describe "#title" do
     context "when products are present" do
