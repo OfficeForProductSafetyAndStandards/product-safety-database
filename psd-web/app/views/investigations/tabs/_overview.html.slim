@@ -1,41 +1,32 @@
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-two-thirds
 
-    h1.govuk-heading-l Overview
+    / TODO: Make this a partial abnd inlude it in all the subnav tabs
+    h1.govuk-heading-l
+      span.govuk-caption-l = @investigation.pretty_description
+      | Overview
+
     p.govuk-body-l = @investigation.title
 
     h2.govuk-heading-m Summary
-    p[class="govuk-body"] = @investigation.description
+    p[class="govuk-body"] = simple_format(@investigation.description)
     p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link"
 
-    h2.govuk-heading-m About the Case
-    = render "investigations/current_status", investigation: @investigation
+    = govuk_hr
 
-    h2.govuk-heading-m Product
-    = render 'components/govuk_summary_list',
-        borders: false,
-        rows: [ { key: { text: 'Product category' },
-                  value: { text: @investigation.product_category }, # TODO: include from products if blank \
-                  actions: [ { href: '#', text: 'Change', visually_hidden_text: 'product category' } ] },
-                { key: { text: 'Hazards' },
-                  value: { text: "#{@investigation.hazard_type}: #{@investigation.hazard_description}" },
-                  actions: [ { href: '#', text: 'Change', visually_hidden_text: 'hazards' } ] },
-                { key: { text: 'Compliance' },
-                  value: { text: @investigation.non_compliant_reason || 'No non-compliance reason given' },
-                  actions: [ { href: '#', text: 'Change', visually_hidden_text: 'compliance' } ] },
-                { key: { text: 'Product details' },
-                  value: { text: "#{@investigation.products.count} product(s)" },
-                  actions: [ { href: '#', text: 'View', visually_hidden_text: 'product details' } ] } ]
-
-    h2.govuk-heading-m = "#{@investigation.case_type.titleize} details"
-    = report_summary_list(@investigation)
+    h2.govuk-heading-m = "product".pluralize(@investigation.products.count).titleize
+    = @investigation.product_summary_list
 
     - if @investigation.complainant
-      h2.govuk-heading-m Reporter
-      - if @complainant.can_be_displayed?
-        = @complainant.summary_list
-      - else
-        p.govuk-body Reporter details are restricted because they contain GDPR protected data.
+      = govuk_hr
+      h2.govuk-heading-m = @investigation.type.demodulize.titleize
+      = @investigation.source_details_summary_list
+
+    = govuk_hr
+
+    h2.govuk-heading-m About the case
+    = @investigation.investigation_summary_list
+
 
   .govuk-grid-column-one-third.product-summary
     hr

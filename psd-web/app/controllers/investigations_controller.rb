@@ -12,7 +12,7 @@ class InvestigationsController < ApplicationController
     respond_to do |format|
       format.html do
         @answer = search_for_investigations(20)
-        records = Investigation.eager_load(:products, :source).where(id: @answer.results.map(&:_id))
+        records = Investigation.eager_load(:products, :source).where(id: @answer.results.map(&:_id)).decorate
         @results = @answer.results.map { |r| r.merge(record: records.detect { |rec| rec.id.to_s == r._id }) }
         @investigations = @answer.records
       end

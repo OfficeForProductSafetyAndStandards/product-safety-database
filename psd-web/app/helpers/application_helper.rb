@@ -1,4 +1,9 @@
 module ApplicationHelper
+
+  def govuk_hr
+    tag(:hr, class: 'govuk-section-break govuk-section-break--m govuk-section-break--visible')
+  end
+
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : "unselected"
