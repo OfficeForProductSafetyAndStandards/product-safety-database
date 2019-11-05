@@ -24,7 +24,7 @@ class DocumentsController < ApplicationController
 
     @file.blob.save
     AuditActivity::Document::Update.from(@file.blob, @parent, previous_data) if @parent.is_a? Investigation
-    redirect_to @parent
+    redirect_to investigation_path(@parent)
   end
 
   def remove; end

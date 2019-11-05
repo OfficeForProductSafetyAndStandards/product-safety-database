@@ -27,7 +27,6 @@ Rails.application.routes.draw do
   concern :document_attachable do
     resources :documents, controller: "documents" do
       collection do
-        get "" => "investigations#show"
         resources :new, controller: "documents_flow", only: %i[show new create update]
       end
       member do
