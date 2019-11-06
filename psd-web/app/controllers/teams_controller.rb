@@ -13,6 +13,7 @@ class TeamsController < ApplicationController
     return unless request.put? && @new_user.valid?
 
     existing_user = User.find_by email: @new_user.email_address
+
     if existing_user
       invite_existing_user_if_able existing_user
     elsif whitelisted_user
@@ -68,6 +69,7 @@ private
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return
     end
+
     if @team.users.include? user
       if user.name.present?
         @new_user.errors.add(:email_address,
@@ -77,7 +79,7 @@ private
         resend_invitation_to_user(user.email)
       end
     else
-      invite_user user
+      invite_user(user)
     end
   end
 

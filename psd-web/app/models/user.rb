@@ -5,21 +5,12 @@ class User < ApplicationRecord
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :user_sources, dependent: :destroy
 
-  has_many :team_users, dependent: :nullify
-  has_many :teams, through: :team_users
+  has_and_belongs_to_many :teams
 
   validates :id, presence: true, uuid: true
 
-  attr_accessor :access_token
+  attr_accessor :access_token # Used only in User.current thread context
   attr_writer :roles
-
-  def teams
-    # Ensure we're serving up-to-date relations (modulo caching)
-    TeamUser.load
-    # has_many through seems not to work with ActiveHash
-    # It's not well documented but the same fix has been suggested here: https://github.com/zilkey/active_hash/issues/25
-    team_users.map(&:team)
-  end
 
   def self.create_and_send_invite(email_address, team, redirect_url)
     KeycloakClient.instance.create_user(email_address)
@@ -27,7 +18,7 @@ class User < ApplicationRecord
     keycloak_user = KeycloakClient.instance.get_user(email_address)
 
     # Create the user in the local cache database so that we don't have to wait until the next sync
-    user = create(id: keycloak_user[:id], email: email_address)
+    user = create(id: keycloak_user[:id], email: email_address, organisation: team.organisation)
     team.add_user(user)
 
     KeycloakClient.instance.send_required_actions_welcome_email keycloak_user[:id], redirect_url
@@ -38,22 +29,14 @@ class User < ApplicationRecord
     KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
   end
 
-  def self.find_or_create(attributes)
-    find_or_create_by(id: attributes[:id]) do |user|
-      groups = attributes.delete(:groups)
-      organisation = Organisation.find_by(path: groups)
-      create(attributes.merge(organisation_id: organisation&.id))
-    end
-  end
-
   def self.load_from_keycloak(users = KeycloakClient.instance.all_users)
     # We're not interested in users not belonging to an organisation, as that means they are not PSD users
     # - however, checking this based on permissions would require a request per user
     users.map do |user|
-      teams = Team.where(id: user[:groups])
+      user[:teams] = Team.where(id: user[:groups])
 
       # Filters out user groups which aren't related to PSD. User may belong directly to an Organisation, or indirectly via a Team
-      organisation = Organisation.find_by(id: user[:groups]) || Organisation.find_by(id: teams.first&.organisation_id)
+      organisation = Organisation.find_by(id: user[:groups]) || Organisation.find_by(id: user[:teams].first&.organisation_id)
       user[:organisation] = organisation
 
       user
@@ -62,6 +45,7 @@ class User < ApplicationRecord
     users.each do |user|
       record = find_or_create_by(id: user[:id])
       record.update(user.slice(:name, :email, :organisation))
+      record.teams = user[:teams]
     end
   end
 

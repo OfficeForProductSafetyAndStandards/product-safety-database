@@ -5,6 +5,7 @@ class UserTest < ActiveSupport::TestCase
     mock_out_keycloak_and_notify
     @user = User.find_by(name: "Test User_one")
     @user_four = User.find_by(name: "Test User_four")
+
     mock_user_as_non_opss(@user)
     mock_user_as_opss(@user_four)
   end
@@ -45,7 +46,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "don't load non-psd users" do
-    User.load_from_keycloak
     assert_not User.find_by(name: "Test Non_psd_user")
   end
 end

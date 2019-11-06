@@ -84,28 +84,6 @@ class KeycloakClient
       .flat_map(&method(:extract_teams_from_organisation))
   end
 
-  # @param team_ids specifies teams we know about. This allows us to avoid linking to ghost team entities
-  def all_team_users(user_ids, team_ids, force: false)
-    user_ids_set = user_ids.to_set
-    team_ids_set = team_ids.to_set
-    Rails.cache.delete(:keycloak_team_users) if force
-    Rails.cache.fetch(:keycloak_team_users, expires_in: cache_period) do
-      user_groups = all_user_groups
-
-      # We set ids manually because if we don't ActiveHash will use 'next_id' method when computing @records,
-      # which calls TeamUser.all, and gets into an infinite loop
-      team_users = []
-      id = 1
-      user_ids_set.reject(&:blank?).each do |user_id|
-        user_groups[user_id].reject(&:blank?).each do |group|
-          team_users << { team_id: group, user_id: user_id, id: id } if team_ids_set.include? group
-          id += 1
-        end
-      end
-      team_users
-    end
-  end
-
   def registration_url(redirect_uri)
     params = URI.encode_www_form(client_id: Keycloak::Client.client_id, response_type: "code", redirect_uri: redirect_uri)
     Keycloak::Client.auth_server_url + "/realms/#{Keycloak::Client.realm}/protocol/openid-connect/registrations?#{params}"

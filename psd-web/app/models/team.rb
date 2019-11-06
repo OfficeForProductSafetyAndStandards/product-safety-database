@@ -1,25 +1,17 @@
 class Team < ApplicationRecord
   belongs_to :organisation
 
-  has_many :team_users, dependent: :nullify
-  has_many :users, through: :team_users
+  has_and_belongs_to_many :users
 
   has_many :investigations, dependent: :nullify, as: :assignable
 
   validates :id, presence: true, uuid: true
 
-  def users
-    # Ensure we're serving up-to-date relations (modulo caching)
-    TeamUser.load
-    # has_many through seems not to work with ActiveHash
-    # It's not well documented but the same fix has been suggested here: https://github.com/zilkey/active_hash/issues/25
-    team_users.map(&:user)
-  end
-
   def add_user(user)
+    # Update the local cached team membership so the change appears immediately
+    users << user
+
     KeycloakClient.instance.add_user_to_team(user.id, id)
-    # Trigger reload of team-users relations from KC
-    TeamUser.load(force: true)
   end
 
   def self.load_from_keycloak(teams = KeycloakClient.instance.all_teams(Organisation.ids))
