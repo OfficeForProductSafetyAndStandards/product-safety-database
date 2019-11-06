@@ -23,7 +23,7 @@ class OrganisationTest < ActiveSupport::TestCase
 
   test "all Keycloak organisations are added" do
     all_organisations = Organisation.all
-    assert_same_elements @organisations.map { |org| org[:id] }, all_organisations.pluck(:keycloak_id)
+    assert_same_elements @organisations.map { |org| org[:id] }, all_organisations.pluck(:id)
   end
 
   test "all organisation properties are populated" do

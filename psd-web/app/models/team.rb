@@ -6,7 +6,7 @@ class Team < ActiveHash::Base
   field :path
   field :team_recipient_email
 
-  belongs_to :organisation, primary_key: :keycloak_id
+  belongs_to :organisation
 
   has_many :team_users, dependent: :nullify
   has_many :users, through: :team_users
@@ -21,15 +21,15 @@ class Team < ActiveHash::Base
     team_users.map(&:user)
   end
 
-  def add_user(user_id)
-    KeycloakClient.instance.add_user_to_team user_id, id
+  def add_user(user)
+    KeycloakClient.instance.add_user_to_team(user.id, id)
     # Trigger reload of team-users relations from KC
     TeamUser.load(force: true)
   end
 
   def self.load(force: false)
     begin
-      self.data = KeycloakClient.instance.all_teams(Organisation.all.map(&:keycloak_id), force: force)
+      self.data = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
       self.ensure_names_up_to_date
     rescue StandardError => e
       Rails.logger.error "Failed to fetch teams from Keycloak: #{e.message}"

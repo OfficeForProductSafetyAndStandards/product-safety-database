@@ -66,7 +66,7 @@ class ActiveSupport::TestCase
     Organisation.load_from_keycloak
     Team.load
     TeamUser.load
-    User.load
+    User.load_from_keycloak
     sign_in_as User.find_by(name: "Test #{name}")
     stub_notify_mailer
   end
@@ -106,13 +106,13 @@ class ActiveSupport::TestCase
 
   # This is a public method that updates both the passed in user object and the KC mocking
   def mock_user_as_opss(user)
-    user.organisation = Organisation.find_by(keycloak_id: opss_organisation[:id])
+    user.organisation = Organisation.find(opss_organisation[:id])
     set_kc_user_as_opss user.id
   end
 
   # This is a public method that updates both the passed in user object and the KC mocking
   def mock_user_as_non_opss(user)
-    user.organisation = Organisation.find_by(keycloak_id: non_opss_organisation[:id])
+    user.organisation = Organisation.find(non_opss_organisation[:id])
     set_kc_user_as_non_opss user.id
   end
 

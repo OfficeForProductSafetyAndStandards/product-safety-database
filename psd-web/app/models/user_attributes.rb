@@ -1,5 +1,5 @@
 class UserAttributes < ApplicationRecord
-  belongs_to_active_hash :user
+  belongs_to :user
 
   def has_viewed_introduction!
     update has_viewed_introduction: true
