@@ -25,6 +25,7 @@ class Team < ApplicationRecord
 
   def display_name(ignore_visibility_restrictions: false)
     return name if (User.current.organisation == organisation) || ignore_visibility_restrictions
+
     organisation.name
   end
 

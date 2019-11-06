@@ -40,9 +40,9 @@ class User < ApplicationRecord
       user[:organisation] = organisation
 
       user
-    end.reject { |user| user[:organisation_id].blank? }
+    end
 
-    users.each do |user|
+    users.reject { |user| user[:organisation].blank? }.each do |user|
       record = find_or_create_by(id: user[:id])
       record.update(user.slice(:name, :email, :organisation))
       record.teams = user[:teams]
