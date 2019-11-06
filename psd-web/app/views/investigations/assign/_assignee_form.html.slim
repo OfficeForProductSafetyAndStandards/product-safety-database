@@ -51,4 +51,4 @@
   = render "form_components/govuk_radios", form: form, key: :assignable_id, items: items
   .govuk-form-group
     = form.submit "Continue", class: "govuk-button"
-    p = link_to "Cancel", investigation, class: "psd-block-link"
+    p = link_to "Cancel", investigation_path(investigation), class: "psd-block-link"
