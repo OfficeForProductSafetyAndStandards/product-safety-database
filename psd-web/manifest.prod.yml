@@ -15,7 +15,6 @@ web_defaults: &web_defaults
     - psd-auth-env
     - psd-database
     - psd-elasticsearch
-    - psd-email-whitelist-env
     - psd-health-env
     - psd-keycloak-env
     - psd-notify-env
@@ -26,7 +25,6 @@ web_defaults: &web_defaults
     - psd-session
     - psd-sidekiq-env
     - psd-web-scout-env
-
 
 applications:
 - name: psd-web
