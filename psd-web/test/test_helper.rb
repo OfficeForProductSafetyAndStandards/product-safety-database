@@ -64,7 +64,7 @@ class ActiveSupport::TestCase
     stub_user_management
     set_default_group_memberships
     Organisation.load_from_keycloak
-    Team.load
+    Team.load_from_keycloak
     TeamUser.load
     User.load_from_keycloak
     sign_in_as User.find_by(name: "Test #{name}")

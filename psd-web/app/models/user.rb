@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :team_users, dependent: :nullify
   has_many :teams, through: :team_users
 
+  validates :id, presence: true, uuid: true
+
   attr_accessor :access_token
   attr_writer :roles
 
