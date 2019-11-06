@@ -274,6 +274,9 @@ ActiveRecord::Schema.define(version: 2019_11_06_154207) do
   create_table "users", id: :uuid, default: nil, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
+    t.boolean "has_accepted_declaration", default: false
+    t.boolean "has_been_sent_welcome_email", default: false
+    t.boolean "has_viewed_introduction", default: false
     t.string "name"
     t.uuid "organisation_id"
     t.datetime "updated_at", null: false
