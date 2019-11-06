@@ -2,9 +2,9 @@ require "test_helper"
 
 class TestsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    mock_out_keycloak_and_notify
     @investigation = load_case(:one)
     @product = products(:one)
-    mock_out_keycloak_and_notify
   end
 
   teardown do
