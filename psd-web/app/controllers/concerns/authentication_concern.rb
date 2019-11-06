@@ -24,7 +24,12 @@ module AuthenticationConcern
     return unless user_signed_in?
 
     user_info = KeycloakClient.instance.user_info(access_token)
-    User.current = ::User.find_or_create(user_info)
+
+    User.current = User.find_or_create_by(id: user_info[:id]) do |user|
+      user.name = user_info[:name]
+      user.email = user_info[:email]
+    end
+
     User.current.access_token = access_token
   end
 
