@@ -1,17 +1,12 @@
-class Team < ActiveHash::Base
-  include ActiveHash::Associations
-
-  field :id
-  field :name
-  field :path
-  field :team_recipient_email
-
+class Team < ApplicationRecord
   belongs_to :organisation
 
   has_many :team_users, dependent: :nullify
   has_many :users, through: :team_users
 
   has_many :investigations, dependent: :nullify, as: :assignable
+
+  validates :id, presence: true, uuid: true
 
   def users
     # Ensure we're serving up-to-date relations (modulo caching)
@@ -27,24 +22,13 @@ class Team < ActiveHash::Base
     TeamUser.load(force: true)
   end
 
-  def self.load(force: false)
-    begin
-      self.data = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
-      self.ensure_names_up_to_date
-    rescue StandardError => e
-      Rails.logger.error "Failed to fetch teams from Keycloak: #{e.message}"
-      self.data = nil
+  def self.load_from_keycloak(teams = KeycloakClient.instance.all_teams(Organisation.ids))
+    teams.each do |team|
+      record = find_or_create_by(id: team[:id])
+      record.update(team.slice(:name, :path, :team_recipient_email, :organisation_id))
     end
-  end
 
-  def self.all(options = {})
-    self.load
-
-    if options.has_key?(:conditions)
-      where(options[:conditions])
-    else
-      @records ||= []
-    end
+    self.ensure_names_up_to_date
   end
 
   def display_name(ignore_visibility_restrictions: false)
@@ -63,21 +47,19 @@ class Team < ActiveHash::Base
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 
-    Rails.cache.fetch(:up_to_date, expires_in: 30.minutes) do
-      Rails.application.config.team_names["organisations"]["opss"].each do |name|
-        found = false
-        self.data.each { |team_data| found = found || team_data[:name] == name }
-        raise "Team name #{name} not found, if recently changed in Keycloak, please update important_team_names.yml" unless found
-      end
-      true
+    Rails.application.config.team_names["organisations"]["opss"].each do |name|
+      found = false
+      self.data.each { |team_data| found = found || team_data[:name] == name }
+      raise "Team name #{name} not found, if recently changed in Keycloak, please update important_team_names.yml" unless found
     end
+
+    true
   end
 
   def self.get_visible_teams(user)
     team_names = Rails.application.config.team_names["organisations"]["opss"]
-    return Team.where(name: team_names) if user.is_opss?
+    return where(name: team_names) if user.is_opss?
 
-    Team.where(name: team_names[0])
+    find_by(name: team_names)
   end
 end
-Team.load if Rails.env.development?

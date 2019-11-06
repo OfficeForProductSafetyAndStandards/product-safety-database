@@ -55,7 +55,7 @@ private
   end
 
   def set_team
-    @team = Team.find_by!(id: params[:id])
+    @team = Team.find(params[:id])
     authorize @team
   end
 
@@ -82,7 +82,7 @@ private
   end
 
   def invite_user(user)
-    @team.add_user user
+    @team.add_user(user)
     email = NotifyMailer.user_added_to_team user.email,
                                             name: user.name,
                                             team_page_url: team_url(@team),

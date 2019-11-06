@@ -77,15 +77,11 @@ class KeycloakClient
 
   # @param org_ids specifies teams for which organisations should be returned. This allows us to avoid creating
   # orphaned team entities
-  def all_teams(org_ids, force: false)
-    org_ids_set = org_ids.to_set
-    Rails.cache.delete(:keycloak_teams) if force
-    Rails.cache.fetch(:keycloak_teams, expires_in: cache_period) do
-      all_groups.find { |group| group["name"] == "Organisations" }["subGroups"]
-          .reject(&:blank?)
-          .select { |organisation| org_ids_set.include? organisation["id"] }
-          .flat_map(&method(:extract_teams_from_organisation))
-    end
+  def all_teams(org_ids)
+    all_groups.find { |group| group["name"] == "Organisations" }["subGroups"]
+      .reject(&:blank?)
+      .select { |organisation| org_ids.include?(organisation["id"]) }
+      .flat_map(&method(:extract_teams_from_organisation))
   end
 
   # @param team_ids specifies teams we know about. This allows us to avoid linking to ghost team entities
