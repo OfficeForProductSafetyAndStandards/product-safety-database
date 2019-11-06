@@ -59,16 +59,14 @@ class KeycloakClient
     super
   end
 
-  def all_users(force: false)
-    Rails.cache.delete(:keycloak_users) if force
-    Rails.cache.fetch(:keycloak_users, expires_in: cache_period) do
-      # KC defaults to max:100, while we need all users. 1000000 seems safe, at least for the time being
-      users = @internal.get_users(max: 1000000)
+  def all_users
+    # KC defaults to max:100, while we need all users. 1000000 seems safe, at least for the time being
+    users = @internal.get_users(max: 1000000)
 
-      user_groups = all_user_groups
-      JSON.parse(users).map do |user|
-        { id: user["id"], email: user["email"], groups: user_groups[user["id"]], name: user["firstName"] }
-      end
+    user_groups = all_user_groups
+
+    JSON.parse(users).map do |user|
+      { id: user["id"], email: user["email"], name: user["firstName"], groups: user_groups[user["id"]] }
     end
   end
 

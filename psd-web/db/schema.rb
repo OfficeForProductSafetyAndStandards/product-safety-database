@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_144011) do
+ActiveRecord::Schema.define(version: 2019_11_04_163921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,13 +184,11 @@ ActiveRecord::Schema.define(version: 2019_11_04_144011) do
     t.index ["business_id"], name: "index_locations_on_business_id"
   end
 
-  create_table "organisations", force: :cascade do |t|
+  create_table "organisations", id: :uuid, default: nil, force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "keycloak_id"
     t.string "name"
     t.string "path"
     t.datetime "updated_at", null: false
-    t.index ["keycloak_id"], name: "index_organisations_on_keycloak_id"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
@@ -238,13 +236,21 @@ ActiveRecord::Schema.define(version: 2019_11_04_144011) do
   end
 
   create_table "user_attributes", primary_key: "user_id", id: :uuid, default: nil, force: :cascade do |t|
-    t.boolean "boolean", default: false, null: false
     t.datetime "created_at", null: false
     t.boolean "has_accepted_declaration"
     t.boolean "has_been_sent_welcome_email"
     t.boolean "has_viewed_introduction", default: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_attributes_on_user_id"
+  end
+
+  create_table "users", id: :uuid, default: nil, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "name"
+    t.uuid "organisation_id"
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_users_on_organisation_id"
   end
 
   add_foreign_key "activities", "businesses"

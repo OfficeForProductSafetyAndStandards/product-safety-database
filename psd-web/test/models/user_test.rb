@@ -45,7 +45,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "don't load non-psd users" do
-    User.load
+    User.load_from_keycloak
     assert_not User.find_by(name: "Test Non_psd_user")
   end
 end

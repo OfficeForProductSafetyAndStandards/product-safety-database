@@ -1,11 +1,11 @@
 class Organisation < ApplicationRecord
-  has_many :users, dependent: :nullify, primary_key: :keycloak_id
-  has_many :teams, dependent: :nullify, primary_key: :keycloak_id
+  has_many :users, dependent: :nullify
+  has_many :teams, dependent: :nullify
 
-  def self.load_from_keycloak
-    KeycloakClient.instance.all_organisations.each do |org|
-      record = find_or_create_by(keycloak_id: org[:id])
-      record.update_attributes(org.slice(:name, :path))
+  def self.load_from_keycloak(orgs = KeycloakClient.instance.all_organisations)
+    orgs.each do |org|
+      record = find_or_create_by(id: org[:id])
+      record.update(org.slice(:name, :path))
     end
   end
 end

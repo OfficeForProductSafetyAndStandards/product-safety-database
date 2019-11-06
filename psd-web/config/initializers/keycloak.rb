@@ -20,7 +20,6 @@ Rails.application.config.after_initialize do
   end
 
   unless Rails.env.test? || Sidekiq.server?
-    User.load
     Team.load
     TeamUser.load
   end
