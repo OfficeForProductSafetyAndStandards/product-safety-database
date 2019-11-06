@@ -235,18 +235,12 @@ ActiveRecord::Schema.define(version: 2019_11_04_163921) do
     t.index ["product_id"], name: "index_tests_on_product_id"
   end
 
-  create_table "user_attributes", primary_key: "user_id", id: :uuid, default: nil, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.boolean "has_accepted_declaration"
-    t.boolean "has_been_sent_welcome_email"
-    t.boolean "has_viewed_introduction", default: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_attributes_on_user_id"
-  end
-
   create_table "users", id: :uuid, default: nil, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
+    t.boolean "has_accepted_declaration", default: false
+    t.boolean "has_been_sent_welcome_email", default: false
+    t.boolean "has_viewed_introduction", default: false
     t.string "name"
     t.uuid "organisation_id"
     t.datetime "updated_at", null: false

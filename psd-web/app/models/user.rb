@@ -8,16 +8,8 @@ class User < ApplicationRecord
   has_many :team_users, dependent: :nullify
   has_many :teams, through: :team_users
 
-  has_one :user_attributes, dependent: :destroy
-
   attr_accessor :access_token
   attr_writer :roles
-
-  # Getters and setters for each UserAttributes column should be added here so they can be accessed directly
-  # from the User object via delegation.
-  delegate :has_viewed_introduction, :has_viewed_introduction!, to: :get_user_attributes
-  delegate :has_accepted_declaration, :has_accepted_declaration!, to: :get_user_attributes
-  delegate :has_been_sent_welcome_email, :has_been_sent_welcome_email!, to: :get_user_attributes
 
   def teams
     # Ensure we're serving up-to-date relations (modulo caching)
@@ -136,10 +128,17 @@ class User < ApplicationRecord
     users
   end
 
-  def get_user_attributes
-    UserAttributes.find_or_create_by(user_id: id)
+  def has_viewed_introduction!
+    update has_viewed_introduction: true
   end
 
+  def has_accepted_declaration!
+    update has_accepted_declaration: true
+  end
+
+  def has_been_sent_welcome_email!
+    update has_been_sent_welcome_email: true
+  end
 
 private
 

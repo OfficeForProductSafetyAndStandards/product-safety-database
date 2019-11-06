@@ -16,5 +16,4 @@
 # end
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.uncountable "user_attributes"
 end
