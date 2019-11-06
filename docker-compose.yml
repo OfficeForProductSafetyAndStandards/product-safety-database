@@ -16,7 +16,7 @@ services:
     env_file:
       - ./docker/env.keycloak
     environment:
-      - NOTIFY_API_KEY
+      - NOTIFY_API_KEY=
     depends_on:
       - db
     ports:
