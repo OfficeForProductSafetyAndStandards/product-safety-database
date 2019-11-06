@@ -14,7 +14,8 @@
             - html = capture do
               | Resend invitation
               span.govuk-visually-hidden
-                |  Resend invitation to #{user.email}
+                '
+                | to #{user.email}
             = link_to html, resend_invitation_team_path(email_address: user.email),
             method: :put, class: "text-align: right"
           h3.teams--user-contact
