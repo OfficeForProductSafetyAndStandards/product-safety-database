@@ -10,6 +10,9 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.boolean :has_viewed_introduction, default: false
       t.belongs_to :organisation, type: :uuid
       t.timestamps
+
+      t.index :email
+      t.index :name
     end
 
     UserAttributes.all.each do |user|
