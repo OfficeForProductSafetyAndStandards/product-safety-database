@@ -18,8 +18,4 @@ Rails.application.config.after_initialize do
     # to fail, and all following ones to work.
     Rails.logger.error "Failed request to Keycloak: #{e.message}"
   end
-
-  unless Rails.env.test? || Sidekiq.server?
-    TeamUser.load
-  end
 end

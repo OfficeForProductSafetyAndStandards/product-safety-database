@@ -57,7 +57,6 @@ class ActiveSupport::TestCase
 
     allow(@keycloak_client_instance).to receive(:all_organisations) { @organisations.deep_dup }
     allow(@keycloak_client_instance).to receive(:all_teams) { @teams.deep_dup }
-    allow(@keycloak_client_instance).to receive(:all_team_users) { @team_users.deep_dup }
     allow(@keycloak_client_instance).to receive(:all_users) { @users.deep_dup }
     allow(@keycloak_client_instance).to receive(:get_user_roles) { [:psd_user] }
 
@@ -65,7 +64,6 @@ class ActiveSupport::TestCase
     set_default_group_memberships
     Organisation.load_from_keycloak
     Team.load_from_keycloak
-    TeamUser.load
     User.load_from_keycloak
     sign_in_as User.find_by(name: "Test #{name}")
     stub_notify_mailer
@@ -74,6 +72,7 @@ class ActiveSupport::TestCase
   def sign_in_as(user)
     allow(@keycloak_client_instance).to receive(:user_signed_in?).and_return(true)
     allow(@keycloak_client_instance).to receive(:user_info).and_return(user.attributes.symbolize_keys.slice(:id, :email, :name))
+    allow(@keycloak_client_instance).to receive(:user_account_url) { "http://test.com/account" }
     User.current = user
     User.current.has_accepted_declaration!
   end
@@ -85,8 +84,6 @@ class ActiveSupport::TestCase
     allow(@keycloak_client_instance).to receive(:all_users).and_call_original
     allow(@keycloak_client_instance).to receive(:all_organisations).and_call_original
     allow(@keycloak_client_instance).to receive(:all_teams).and_call_original
-    allow(@keycloak_client_instance).to receive(:all_team_users).and_call_original
-    Rails.cache.delete(:keycloak_users)
     restore_user_management
 
     allow(NotifyMailer).to receive(:alert).and_call_original
@@ -106,14 +103,16 @@ class ActiveSupport::TestCase
 
   # This is a public method that updates both the passed in user object and the KC mocking
   def mock_user_as_opss(user)
-    user.organisation = Organisation.find(opss_organisation[:id])
     set_kc_user_as_opss user.id
+    user.reload
+    User.current&.reload
   end
 
   # This is a public method that updates both the passed in user object and the KC mocking
   def mock_user_as_non_opss(user)
-    user.organisation = Organisation.find(non_opss_organisation[:id])
     set_kc_user_as_non_opss user.id
+    user.reload
+    User.current&.reload
   end
 
   def set_user_as_team_admin(user = User.current)
@@ -197,6 +196,7 @@ private
     roles = @keycloak_client_instance.get_user_roles(user_id)
     roles << :opss_user
     allow(@keycloak_client_instance).to receive(:get_user_roles).with(user_id).and_return(roles)
+    User.load_from_keycloak
   end
 
   # This is a private method which updates the KC mocking without modifying the User collection directly
@@ -208,6 +208,7 @@ private
     roles = @keycloak_client_instance.get_user_roles(user_id)
     roles.delete(:opss_user)
     allow(@keycloak_client_instance).to receive(:get_user_roles).with(user_id).and_return(roles)
+    User.load_from_keycloak
   end
 
   def add_user_to_team(user_id, team_id)
@@ -221,17 +222,19 @@ private
     mock_user = @users.find { |u| u[:id] == user_id }
     mock_user[:groups] ||= []
     mock_user[:groups].push group_id
+    User.load_from_keycloak
   end
 
   def clear_kc_user_groups(user_id)
     mock_user = @users.find { |u| u[:id] == user_id }
     mock_user[:groups] = []
+    User.load_from_keycloak
   end
 
   def all_teams
     [
       { id: "aaaaeef8-1a33-4322-8b8c-fc7fa95a2e3b", name: "Team 1", path: "/Organisations/Office of Product Safety and Standards/Team 1", organisation_id: "1a612aea-1d3d-47ee-8c3a-76b4448bb97b" },
-      { id: "aaaxzcf8-1a33-4322-8b8c-fc7fa95a2e3b", name: "Team 2", path: "/Organisations/Office of Product Safety and Standards/Team 2", organisation_id: "1a612aea-1d3d-47ee-8c3a-76b4448bb97b" },
+      { id: "eeeeeef8-1a33-4322-8b8c-fc7fa95a2e3b", name: "Team 2", path: "/Organisations/Office of Product Safety and Standards/Team 2", organisation_id: "1a612aea-1d3d-47ee-8c3a-76b4448bb97b" },
       { id: "bbbbeef8-1a33-4322-8b8c-fc7fa95a2e3b", name: "Team 3", path: "/Organisations/Office of Product Safety and Standards/Team 3", organisation_id: "1a612aea-1d3d-47ee-8c3a-76b4448bb97b" },
       { id: "cccceef8-1a33-4322-8b8c-fc7fa95a2e3b", name: "Team 4", path: "/Organisations/Office of Product Safety and Standards/Team 4", organisation_id: "1a612aea-1d3d-47ee-8c3a-76b4448bb97b", team_recipient_email: "team@example.com" },
       { id: "ddddeef8-1a33-4322-8b8c-fc7fa95a2e3b", name: "Organisation 1 team", path: "/Organisations/Organisation 1/Organisation 1 team", organisation_id: "def4eef8-1a33-4322-8b8c-fc7fa95a2e3b" }

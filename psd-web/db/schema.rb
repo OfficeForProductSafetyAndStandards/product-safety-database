@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_06_140241) do
+ActiveRecord::Schema.define(version: 2019_11_06_154207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -231,6 +231,13 @@ ActiveRecord::Schema.define(version: 2019_11_06_140241) do
     t.index ["name"], name: "index_teams_on_name"
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
     t.index ["path"], name: "index_teams_on_path"
+  end
+
+  create_table "teams_users", force: :cascade do |t|
+    t.uuid "team_id"
+    t.uuid "user_id"
+    t.index ["team_id"], name: "index_teams_users_on_team_id"
+    t.index ["user_id"], name: "index_teams_users_on_user_id"
   end
 
   create_table "tests", id: :serial, force: :cascade do |t|

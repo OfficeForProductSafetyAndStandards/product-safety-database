@@ -39,9 +39,9 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Inviting existing user from same org adds them to the team" do
-    user_in_my_org_not_team = User.current.organisation.users
-                                  .find { |u| (u.teams & User.current.teams).empty? }
+    user_in_my_org_not_team = User.current.organisation.users.find { |u| (u.teams & User.current.teams).empty? }
     email_address = user_in_my_org_not_team.email
+
     assert_difference "@my_team.users.count" => 1, "User.count" => 0 do
       put invite_to_team_url(@my_team), params: { new_user: { email_address: email_address } }
       assert_response :see_other
@@ -76,7 +76,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "Inviting new user creates the account and adds them to the team" do
     kc = KeycloakClient.instance
 
-    assert_difference "@my_team.users.count" => 1, "User.all(include_incomplete: true).size" => 1 do
+    assert_difference "@my_team.users.count" => 1, "User.all.size" => 1 do
       put invite_to_team_url(@my_team), params: { new_user: { email_address: "new_user@northamptonshire.gov.uk" } }
       assert_response :see_other
       expect(kc).to have_received(:send_required_actions_welcome_email)

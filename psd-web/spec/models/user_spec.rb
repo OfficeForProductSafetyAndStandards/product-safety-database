@@ -10,7 +10,7 @@ RSpec.describe User do
   let(:client_id) { "123" }
   let(:client_secret) { "secret" }
   let(:token_stub) { OpenStruct.new(access_token: "test") }
-  let(:id) { 123 }
+  let(:id) { SecureRandom.uuid }
 
   subject(:user) { described_class.new(id: id) }
 

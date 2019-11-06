@@ -13,6 +13,7 @@ class TeamsController < ApplicationController
     return unless request.put? && @new_user.valid?
 
     existing_user = User.find_by email: @new_user.email_address
+
     if existing_user
       invite_existing_user_if_able existing_user
     elsif whitelisted_user
@@ -57,12 +58,13 @@ private
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return
     end
+
     if @team.users.include? user
-      @new_user.errors.add(:email_address,
-                           "#{@new_user.email_address} is already a member of #{@team.display_name}")
+      @new_user.errors.add(:email_address, "#{@new_user.email_address} is already a member of #{@team.display_name}")
       return
     end
-    invite_user user
+
+    invite_user(user)
   end
 
   def invite_user(user)
