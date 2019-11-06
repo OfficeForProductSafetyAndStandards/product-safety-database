@@ -17,7 +17,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def title
     # We store assignable_id in title field, this is computing title based on that
-    "Assigned to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name}"
+    "Assigned to #{(User.find(assignable_id) || Team.find_by(id: assignable_id))&.display_name}"
   end
 
   def email_update_text

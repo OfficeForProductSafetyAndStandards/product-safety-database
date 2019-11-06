@@ -271,6 +271,15 @@ ActiveRecord::Schema.define(version: 2019_11_06_154207) do
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
   end
 
+  create_table "users", id: :uuid, default: nil, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "name"
+    t.uuid "organisation_id"
+    t.datetime "updated_at", null: false
+    t.index ["organisation_id"], name: "index_users_on_organisation_id"
+  end
+
   add_foreign_key "activities", "businesses"
   add_foreign_key "activities", "correspondences"
   add_foreign_key "activities", "investigations"

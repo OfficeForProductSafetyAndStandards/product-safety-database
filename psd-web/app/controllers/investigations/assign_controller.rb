@@ -72,6 +72,6 @@ private
   end
 
   def potential_assignee
-    User.find_by(id: session[:assignable_id]) || Team.find_by(id: session[:assignable_id])
+    User.find(session[:assignable_id]) || Team.find_by(id: session[:assignable_id])
   end
 end
