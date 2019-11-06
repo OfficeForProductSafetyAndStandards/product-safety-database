@@ -1,7 +1,7 @@
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-two-thirds
 
-    / TODO: Make this a partial abnd inlude it in all the subnav tabs
+    / TODO: Make this a partial and inlude it in all the subnav tabs
     h1.govuk-heading-l
       span.govuk-caption-l = @investigation.pretty_description
       | Overview
@@ -28,12 +28,13 @@
     = @investigation.investigation_summary_list
 
 
-  .govuk-grid-column-one-third.product-summary
-    hr
-    h2.govuk-heading-m Products
-    - @investigation.products.each do |product|
-      h3.govuk-heading-s = product.name.capitalize
-      - if product.images.any?
-        = render "documents/image_tag", image: product.images.first, dimensions: "500x300", class_name: 'product-image'
-      p.govuk-body
-        = link_to "View product", product_path(product), class: "govuk-link"
+  - if @investigation.products.any?
+    .govuk-grid-column-one-third.product-summary
+      hr
+      h2.govuk-heading-m Products
+      ul.govuk-list
+        - @investigation.products.each do |product|
+          li = link_to product.name.capitalize, product_path(product), class: "govuk-link"
+          - if product.images.any?
+            li
+            = render "documents/image_tag", image: product.images.first, dimensions: "500x300", class_name: 'product-image'

@@ -53,10 +53,17 @@ Rails.application.routes.draw do
   resources :project, controller: "investigations/project", only: %i[new create]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
+  scope :investigation, path: "", as: :investigation do
+    resources :allegation,       only: [], concerns: %i[document_attachable]
+    resources :enquiry,          only: [], concerns: %i[document_attachable]
+    resources :project,          only: [], concerns: %i[document_attachable]
+    resources :ts_investigation, only: [], concerns: %i[document_attachable]
+  end
+
   scope :investigation, path: "", module: "investigations", as: :investigation do
-    resources :enquiry, controller: "enquiry", only: %i[show new create update]
-    resources :allegation, controller: "allegation", only: %i[show new create update]
-    resources :project, controller: "project", only: %i[show new create]
+    resources :enquiry,          controller: "enquiry",           only: %i[show new create update]
+    resources :allegation,       controller: "allegation",        only: %i[show new create update]
+    resources :project,          controller: "project",           only: %i[show new create]
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 

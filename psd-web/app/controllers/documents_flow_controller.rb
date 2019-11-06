@@ -10,7 +10,7 @@ class DocumentsFlowController < ApplicationController
   before_action :set_parent
   before_action :set_file, only: %i[show update]
 
-  def show;
+  def show
     render_wizard
   end
 

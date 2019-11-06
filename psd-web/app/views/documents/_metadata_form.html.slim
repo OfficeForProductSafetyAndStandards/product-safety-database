@@ -21,4 +21,4 @@
               = form.submit "#{edit ? 'Update' : 'Save'} attachment", class: "govuk-button"
             - if edit
               .govuk-grid-column-one-quarter
-                p = link_to "Cancel", investigation_attachments_path(@parent), class: "psd-block-link"
+                p = link_to "Cancel", @parent, class: "psd-block-link"
