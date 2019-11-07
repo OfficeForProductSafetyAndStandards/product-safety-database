@@ -27,7 +27,7 @@ module AuthenticationConcern
 
     User.current = User.find_or_create_by(id: user_info[:id]) do |user|
       user.email = user_info[:email]
-      user.organisation = Organisation.find_by(path: attributes[:groups])
+      user.organisation = Organisation.find_by(path: user_info[:groups])
       user.name = user_info[:name]
     end
 
