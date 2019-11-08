@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe User do
+RSpec.describe User, with_keycloak_config: true do
   before do
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)

@@ -55,6 +55,8 @@ class ActiveSupport::TestCase
     @teams = all_teams
     @team_users = []
 
+    allow(Keycloak::Client).to receive(:openid_configuration) { true }
+
     allow(@keycloak_client_instance).to receive(:all_organisations) { @organisations.deep_dup }
     allow(@keycloak_client_instance).to receive(:all_teams) { @teams.deep_dup }
     allow(@keycloak_client_instance).to receive(:all_users) { @users.deep_dup }
