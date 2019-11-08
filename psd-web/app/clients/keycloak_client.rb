@@ -2,9 +2,9 @@ module Keycloak
   module Client
     def self.get_installation
       @realm = "opss"
-      @auth_server_url = ENV["KEYCLOAK_AUTH_URL"]
-      @client_id = ENV["KEYCLOAK_CLIENT_ID"]
-      @secret = ENV["KEYCLOAK_CLIENT_SECRET"]
+      @auth_server_url = ENV.fetch("KEYCLOAK_AUTH_URL")
+      @client_id = ENV.fetch("KEYCLOAK_CLIENT_ID")
+      @secret = ENV.fetch("KEYCLOAK_CLIENT_SECRET")
       openid_configuration
     end
   end
