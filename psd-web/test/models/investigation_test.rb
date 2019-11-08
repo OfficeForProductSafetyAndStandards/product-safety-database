@@ -18,7 +18,7 @@ class InvestigationTest < ActiveSupport::TestCase
     @correspondence = correspondences(:one)
 
     @investigation_with_complainant = load_case(:search_related_complainant)
-    @complainant = complainants(:one)
+    @complainant = @investigation_with_complainant.complainant
 
     @investigation_with_business = load_case(:search_related_businesses)
     @business = businesses(:biscuit_base)
