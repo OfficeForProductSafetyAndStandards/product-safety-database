@@ -2,7 +2,7 @@ require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    ENV["EMAIL_WHITELIST_ENABLED"] = "true"
+    allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
     mock_out_keycloak_and_notify
     set_user_as_team_admin(User.current)
     @my_team = User.current.teams.first
@@ -11,7 +11,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   teardown do
     reset_keycloak_and_notify_mocks
-    ENV["EMAIL_WHITELIST_ENABLED"] = "false"
   end
 
   test "Team pages are visible to members" do

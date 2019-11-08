@@ -46,7 +46,7 @@ private
   end
 
   def whitelisted_user
-    if ENV["EMAIL_WHITELIST_ENABLED"] == "true"
+    if Rails.application.config.email_whitelist_enabled
       address = Mail::Address.new(@new_user.email_address)
       whitelisted_emails.include?(address.domain.downcase)
     else
