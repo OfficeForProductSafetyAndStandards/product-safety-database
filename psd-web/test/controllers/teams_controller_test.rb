@@ -92,6 +92,8 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Inviting user with email domain in whitelist is compared case-insensitively" do
+    kc = KeycloakClient.instance
+
     expect(kc).to receive(:send_required_actions_welcome_email)
 
     assert_difference "@my_team.users.count" => 1, "User.all.size" => 1 do

@@ -45,6 +45,16 @@ module Keycloak
       request_uri = Keycloak::Admin.full_url("users/#{user_id}/role-mappings/clients/#{client[0]['id']}/composite")
       Keycloak.generic_request(token.access_token, request_uri, nil, nil, "GET")
     end
+
+    def self.get_groups(query_parameters = nil)
+      request_uri = Keycloak::Admin.full_url("groups/")
+      Keycloak.generic_request(token.access_token, request_uri, query_parameters, nil, "GET")
+    end
+
+    def self.get_users(query_parameters = nil)
+      request_uri = Keycloak::Admin.full_url("users/")
+      Keycloak.generic_request(token.access_token, request_uri, query_parameters, nil, "GET")
+    end
   end
 end
 
@@ -56,6 +66,7 @@ class KeycloakClient
     @client = Keycloak::Client
     @admin = Keycloak::Admin
     @internal = Keycloak::Internal
+    @client.get_installation
     super
   end
 
@@ -133,7 +144,7 @@ class KeycloakClient
   end
 
   def get_user(email)
-    @internal.get_user_info(email).first.symbolize_keys
+    @internal.get_users(email: email).first.symbolize_keys
   end
 
   def send_required_actions_welcome_email(user_id, redirect_uri)
