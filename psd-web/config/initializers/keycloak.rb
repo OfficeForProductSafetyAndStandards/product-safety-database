@@ -7,7 +7,7 @@ Keycloak.keycloak_controller = "sessions"
 # Realm name (only used if the installation file is not present)
 Keycloak.realm = "opss"
 # Realm url (only used if the installation file is not present)
-Keycloak.auth_server_url = ""
+Keycloak.auth_server_url = ENV["KEYCLOAK_AUTH_URL"]
 
 Rails.application.config.after_initialize do
   begin
