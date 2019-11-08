@@ -41,7 +41,7 @@ jobs:
         - mkdir -p ~/coverage-cache/psd
       install:
         - DOCKER_ORG=${DOCKER_ORG} BRANCH=${TRAVIS_BRANCH} BUILD_ID=${TRAVIS_BUILD_NUMBER} ./infrastructure/ci/build-docker-images.sh
-
+      script: echo "Built"
     - stage: Test and deploy review
       name: Tests
       script: COMPONENT=psd-web ./infrastructure/ci/test-if-changed.sh
