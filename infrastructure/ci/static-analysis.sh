@@ -3,6 +3,7 @@ set -ex
 
 cd psd-web
 
+bundle install
 bundle exec rubocop
 bundle exec slim-lint app
 
