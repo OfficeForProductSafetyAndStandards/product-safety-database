@@ -1,4 +1,5 @@
 class CreateUsers < ActiveRecord::Migration[5.2]
+  class User < ApplicationRecord; end
   class UserAttributes < ApplicationRecord; end
 
   def up
