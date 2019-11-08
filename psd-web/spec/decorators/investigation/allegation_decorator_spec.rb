@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Investigation::AllegationDecorator do
-  fixtures(:all)
+  fixtures(:investigation_products, :investigations, :products)
 
   subject { allegation.decorate }
 
