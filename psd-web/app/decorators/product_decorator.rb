@@ -15,5 +15,4 @@ class ProductDecorator < ApplicationDecorator
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
   end
-
 end

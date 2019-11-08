@@ -7,16 +7,16 @@ RSpec.describe ProductDecorator do
 
   subject { product.decorate }
 
-  describe '#summary_list' do
+  describe "#summary_list" do
     include CountriesHelper
     let(:summary_list) do
-      Capybara.string(subject.summary_list(include_batch_number: include_batch_number) )
+      Capybara.string(subject.summary_list(include_batch_number: include_batch_number))
     end
 
-    context 'when including the batch number' do
+    context "when including the batch number" do
       let(:include_batch_number) { true }
 
-      it 'displays the product summary list with the batch number' do
+      it "displays the product summary list with the batch number" do
         expect(summary_list).to have_css("dl dt.govuk-summary-list__key",   text: "Product name")
         expect(summary_list).to have_css("dl dd.govuk-summary-list__value", text: product.name)
 

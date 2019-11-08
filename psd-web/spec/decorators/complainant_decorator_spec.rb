@@ -18,7 +18,6 @@ RSpec.describe ComplainantDecorator do
       expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.phone_number}/)
       expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.email_address}/)
       expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.other_details}/)
-
     end
 
     context "when no contact details are provided" do

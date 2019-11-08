@@ -5,22 +5,22 @@ class InvestigationDecorator < ApplicationDecorator
     user_title
   end
 
-  def product_summary_list(include_batch_number: false)
+  def product_summary_list
     #TODO: this whole section is conditional see overview text file
     products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
-    hazards = h.simple_format([ hazard_type, hazard_description ].join("\n\n"))
+    hazards = h.simple_format([hazard_type, hazard_description].join("\n\n"))
     rows = [
 
       { key: { text: "Category" }, value: { text: category } },
       {
         key: { text: "Product details" },
-        value: { text:  products_details},
+        value: { text: products_details },
         actions: [
           { href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View" }
         ]
       },
-      hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards } }  : nil,
-      non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: h.simple_format(non_compliant_reason) } }  : nil,
+      hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards } } : nil,
+      non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: h.simple_format(non_compliant_reason) } } : nil,
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
@@ -73,16 +73,15 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list
-
     contact_details = [complainant.name, complainant.phone_number, complainant.email_address, complainant.other_details]
-    contact_details = ['Not provided'] if contact_details.empty?
+    contact_details = ["Not provided"] if contact_details.empty?
     unless complainant.can_be_displayed?
       contact_details = "Reporter details are restricted because they contain GDPR protected data."
     end
 
     rows = [
       date_received? ? { key: { text: "Received date" }, value: { text: date_received.strftime("%e %B %Y") } } : nil,
-      received_type? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first} } : nil,
+      received_type? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
       { key: { text: "Source type" }, value: { text: complainant.complainant_type } },
       { key: { text: "Contact details" }, value: { text: h.simple_format(contact_details.join("\n\n")) } }
     ]
@@ -94,14 +93,14 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows
   end
 
-  private
+private
 
   def category
     @category ||= begin
       categories = [object.product_category]
       products.each { |product| categories << product.category }
 
-      categories.compact.to_sentence(last_word_connector: ' and ').downcase.upcase_first
+      categories.compact.to_sentence(last_word_connector: " and ").downcase.upcase_first
     end
   end
 end
