@@ -1,5 +1,6 @@
 ---
 email_domains:
+  - "beis.gov.uk"
   - "northamptonshire.gov.uk"
   - "nottscc.gov.uk"
   - "leics.gov.uk"
@@ -173,15 +174,15 @@ email_domains:
   - "newport.gov.uk"
   - "powys.gov.uk"
   - "sandwell.gov.uk"
-  - "solihull.gov.uk "
-  - "walsall.gov.uk "
+  - "solihull.gov.uk"
+  - "walsall.gov.uk"
   - "dudley.gov.uk"
   - "worcestershirets.gov.uk"
   - "staffordshire.gov.uk"
   - "warwickshire.gov.uk"
   - "wolverhampton.gov.uk"
-  - "shropshire.gov.uk "
-  - "telford.gov.uk "
+  - "shropshire.gov.uk"
+  - "telford.gov.uk"
   - "birmingham.gov.uk"
   - "stoke.gov.uk"
   - "coventry.gov.uk"
@@ -204,4 +205,3 @@ email_domains:
   - "dvsa.gov.uk"
   - "hseni.gov.uk"
   - "vca.gov.uk"
-

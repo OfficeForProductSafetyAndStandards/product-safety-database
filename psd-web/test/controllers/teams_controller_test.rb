@@ -1,8 +1,8 @@
-ENV["EMAIL_WHITELIST_ENABLED"] = "true"
 require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
     mock_out_keycloak_and_notify
     set_user_as_team_admin(User.current)
     @my_team = User.current.teams.first
@@ -88,6 +88,13 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_difference "@my_team.users.count" => 0, "User.count" => 0 do
       put invite_to_team_url(@my_team), params: { new_user: { email_address: "not_whitelisted@gmail.com" } }
       assert_response :bad_request
+    end
+  end
+
+  test "Inviting user with email domain in whitelist is compared case-insensitively" do
+    assert_difference "@my_team.users.count" => 1, "User.all(include_incomplete: true).size" => 1 do
+      put invite_to_team_url(@my_team), params: { new_user: { email_address: "new_user@NORTHAMPTONSHIRE.gov.uk" } }
+      assert_response :see_other
     end
   end
 

@@ -34,5 +34,7 @@ module ProductSafetyDatabase
 
     config.exceptions_app = self.routes
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+
+    config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"
   end
 end
