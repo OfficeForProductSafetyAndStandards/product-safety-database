@@ -48,7 +48,7 @@ private
   def whitelisted_user
     if ENV["EMAIL_WHITELIST_ENABLED"] == "true"
       address = Mail::Address.new(@new_user.email_address)
-      whitelisted_emails.include?(address.domain)
+      whitelisted_emails.include?(address.domain.downcase)
     else
       true
     end
@@ -92,6 +92,6 @@ private
   end
 
   def whitelisted_emails
-    Rails.application.config.whitelisted_emails["email_domains"]
+    Rails.application.config.whitelisted_emails["email_domains"].map { |domain| domain.downcase.strip }
   end
 end
