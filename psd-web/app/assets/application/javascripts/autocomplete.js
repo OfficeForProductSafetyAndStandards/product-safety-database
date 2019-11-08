@@ -41,7 +41,6 @@ function simpleAccessibleAutocomplete(id, autocompleteOptions) {
     if (removeButton) {
       const removeValue = () => {
         $enhancedElement.val('');
-        $enhancedElement.click().focus().blur();
         $(element).parent().find('select').val('');
       };
       removeButton.addEventListener('keypress', (e) => {

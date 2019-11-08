@@ -44,6 +44,11 @@ class User < ActiveHash::Base
     KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
   end
 
+  def self.resend_invite(email_address, _team, redirect_url)
+    user_id = KeycloakClient.instance.get_user(email_address)[:id]
+    KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
+  end
+
   def self.find_or_create(attributes)
     groups = attributes.delete(:groups)
     organisation = Organisation.find_by(path: groups)

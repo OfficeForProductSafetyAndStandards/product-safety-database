@@ -3,20 +3,20 @@ version: '3'
 services:
   db:
     build:
-      context: ./db
+      context: ./docker/db
     volumes:
       - postgres-volume:/var/lib/postgresql/data
     env_file:
-      - .env.keycloak
+      - ./docker/env.keycloak
     ports:
       - 5432:5432
 
   keycloak:
-    image: beisopss/keycloak:prod
+    image: beisopss/keycloak:master
     env_file:
-      - .env.keycloak
+      - ./docker/env.keycloak
     environment:
-      - NOTIFY_API_KEY
+      - NOTIFY_API_KEY=
     depends_on:
       - db
     ports:
@@ -41,7 +41,10 @@ services:
   psd-web:
     build:
       context: .
-      dockerfile: ./psd-web/Dockerfile
+      dockerfile: ./docker/web/Dockerfile
+    command: bin/rails s -p 3000 -b 0.0.0.0
+    ports:
+      - "3000:3000"
     volumes:
       # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
       - ${PWD-.}/psd-web:/psd-web
@@ -53,16 +56,18 @@ services:
       - psd-worker
       - keycloak
     env_file:
-      - .env.keycloak.psd
+      - ./docker/env.psd
 
   psd-worker:
     build:
       context: .
-      dockerfile: ./psd-worker/Dockerfile
+      dockerfile: ./docker/worker/Dockerfile
     command: bin/sidekiq -C config/sidekiq.yml
+    env_file:
+      - ./docker/env.psd
     volumes:
       # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/psd-web:/psd-web
+      - ${PWD-.}/psd:/psd
       - bundle-cache:/usr/local/bundle
     depends_on:
       - db

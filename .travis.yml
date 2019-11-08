@@ -10,8 +10,6 @@ services:
 branches:
   only:
     - master
-    - staging
-    - prod
 
 cache:
   directories:
@@ -43,15 +41,14 @@ jobs:
         - DOCKER_ORG=${DOCKER_ORG} BRANCH=${TRAVIS_BRANCH} BUILD_ID=${TRAVIS_BUILD_NUMBER} ./infrastructure/ci/build-docker-images.sh
       script: echo "Built"
     - stage: Test and deploy review
-      name: Tests
-      script: COMPONENT=psd-web ./infrastructure/ci/test-if-changed.sh
+      name: PSD Tests
+      script: ./infrastructure/ci/test.sh
       env: &test_env
         - COVERALLS_PARALLEL=true
-    - name: Static Analysis
-      install: cd psd-web && bundle install && yarn install && cd ..
+    - name: PSD Static Analysis
       script: ./infrastructure/ci/static-analysis.sh
-    - name: Deploy review app
-      script: COMPONENT=psd-web ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
+    - name: Deploy PSD review app
+      script: ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
       env: &deploy_int_env
         - SPACE=int
         - BRANCH=${TRAVIS_BRANCH}
@@ -63,7 +60,7 @@ jobs:
 
     - stage: Deploy to staging
       name: Deploy PSD web
-      script: COMPONENT=psd-web DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-if-changed.sh
+      script: COMPONENT=psd-web DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy.sh
       env: &deploy_staging_env
         - SPACE=staging
         - BRANCH=${TRAVIS_BRANCH}
@@ -72,12 +69,12 @@ jobs:
         - secure: "Y0akVovVveSyq+Ws1ZDAq23wLSf4YSOXZ2wKRdJvn8iK5XX5L/x37pFbK0ZurCwAYoXNLH/KB6aq3buFdoUdVM/bIlyx6bXCkeaLa8qXJBqUGMgFfvC0EoOp1LQxOoEkW1nEAS3DFs9Fhh1MiGh+3qY9bJ59Ed8KG5rG3A8AZzb+s0bBU9MIjr9WOeGSkzP6OlULpclWD3Q+S58lsvK/6IZ6/xwFFISs4L/kDYYkn5HX+gHOz13BM/ztSZBcD2hULUcrKql9355E8Fgbuga3DDFgVv0csRwQKF30g2gp7Ae48agWZQBFAAjjHjLy+Z6ZLejklSPAjx2m7TZV1kaRDvkO1zqzvutQ2iIb2IufLwat65rVPwZKj0sFTBMv7xebBVhDNv661uaBd53yPQ6idLf0mnHvvbAEoUKGb+A/UYmA/I4lEW5ifDtpeG5PYQWtaDuaFZC+QpzwwYUEI6yO4znUDLOFvy+jYOWESTBD/snfmKHhFYE/4GmZZkQdIzhtqkIVcG5kxEYYNqtDF/OaaOHqRLM4Bk5HEsnVO7bFCAuY0/mVAd55Pe3uE/llk4pa0yKO23uUNvyLY+fDW5mWUvyiXdd/FDE9B2JSR/SoS7l86FOmxvcA2Bq8PDBjljd988VYDJ7u89oRc/idwyOJ3Z4JEgqIMykTvJYhgPeNRQw=" # CF_USERNAME
         - secure: "xakLUBW+GLK+Lj5JT51iCa8PPmx6s0aZGlPKHovrbcAZHXbejhRiQiuK6KUv6VC1+ozQtaJOsboTwMz2rY63YMtzZ79wB8I4ZO21+NDfmkk6JTYxAy6+4CilyPgu6EGczRh7VoJ+zcvDBkN/egm0dNvfEyX/5SXtnbgIew1lxkbPYMD1TF5YCV7wUFVDBCIWKG7WMlgqHTUIBQ9FtUpFNq9b55nD61/FqJi/q7dCb//NDoopcQp636t6nJ6OO6vbIPA34jYK2IUjlhpyqaNPFG1agOOQxt738nwxqWvi+zJevGsgU0T26j76+GQxCWz4LAkdjZ4H6DhchasUTGkgdH4f5xSS44BpNChXyaMvaA9E9WewZO2epSQIV3TxWAlNv6cwBnf3O64yiVXd5iPA140nQyF3Q6BSAjQokuBn4dCf1o87wsWPz3t8ehQmtOnJAyvW4SvwluQOVjjT5Cc7nFQpKiy9piizp+J77fGV/X8Y+LwjIeSWoY2fyRY0eWDY6d6jPomSeLWQG1ZNDIC0g5KTBA69o8PB5xNdenXcUb3qnmHKoC7OQ2rurCsf6HDTCUT/5Q4Go984cWkwV8kf8pRDDTNxsD5BuYdULbDoezYwnKB14VlKbTdAhV150NzHR8v8SYWueLQoZFwmMsN8Baxe3ch8xVNudMLcCxkP9To=" # CF_PASSWORD
     - name: Deploy PSD worker
-      script: COMPONENT=psd-worker DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/deploy-if-changed.sh
+      script: COMPONENT=psd-worker DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/deploy.sh
       env: *deploy_staging_env
 
     - stage: Deploy to production
       name: Deploy PSD web
-      script: COMPONENT=psd-web DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-if-changed.sh
+      script: COMPONENT=psd-web DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy.sh
       env: &deploy_prod_env
         - SPACE=prod
         - BRANCH=${TRAVIS_BRANCH}
@@ -86,7 +83,7 @@ jobs:
         - secure: "ws4Yg7RaOigCBEyUQLNCE+K054AT7sIPRVlKTXzKCqIeRht0iQMqaUg/YzzskB7IQDO6TO6utPgO4dufB/4vsHh2LejRtkhFqCjAvD2qZ3rzSZwtArv+gslfzcu3EeftjqcX9zuszhPapneHzPMf3lsmHATjB4S1foNAFlrPFs4ppxGxAHn5SUtuh+PM91LBnvFPibbJ9dK9PONvYmYmrX8VW1bgOrYQUhNd+0gjxWE6w99ijpDA58839qfbwvjXqc0d3Zl7c85h25vTYUuTYINv1/zuxQjlhBNLYvZsQT6kX0RrlKs2uqhYus7jCg7fJnr7yhahVvxQPLH9ngTOQ3bxUIpqOwzwqF1807HoiDmUTp4kTeQnpQSqkswY+CGQtaNXzC7Zg1Y33N6J76KgJjsbkIV+MZg76wtD1tnNhIAtZR5PI7/EHRhicPHVT/KG5Ziu6WNSCidF+ocZhcovnjIB0JUFaiVCdA7/CZ8tD/paoVSGW+xoISkrNgK5+ERDFSPdg2PR3Ms0RS2jNA3QARJ8SPEfizDrCeoth+l/mkw0NoaXQSFQDDoFdengGG9wEGF2xtJ4xmGzc+Vpi9YDJbqHvxM1GOd2JMcfdvi/KlDvbJLU/KNiqQvtqxV+WKuI5hfRyRTOBTn8eZiSB73cbwkEfaCfdh2tFxqaovL/PZw=" # CF_USERNAME
         - secure: "cOZpThcI3ShvLdM3mHQTynMHIOHvTZEJ9ecGOmbc/tTKstsWEVD1TJ8PH4YqPBncyysyK6NHDoUfZE1tTobH+3F2HVAuJnPmgKQ4cN9d9yKxLWnFYNtYWaUS0QXkhuHg6bkFX2NnE2/Wlz3CtqeQ+4z2otSymc/bT9OwWMhsLo/eWP3Nu+++KboIB9v5h9cQWGHLBiNUWdMNlWgzuKLttOIlscKKS6cFY31rAL1C0q9YJi6zkqJ4zZfRn9U4CJmELfNPLdVjwc//Rfj0LnUW0GeKhR6ua2fnwoEmwWsylwqI6nR4SrXKRA+RNoQkdhEOfir4Y6wrlxuNenhDYTi2oJlg795d+FntsN/On82vn3oUvQ2ZY5bcp6955b4px0miUeKo8I7LhRvfsiPWy9n+EvbEN7cTo0eVcqKl7xZeTIOooSAjUWQ+nyt+Y7CgIrzk3RpBPDGS5N6dl+q+weZayo2VJrXUBzxY0cxPmqiRyQXvibAMtQjWROHtV4+t5IvJ7HqpQxswBjxFqTdFNN+dGMqfBkbgHpj61u3K+VLF8hR1eqh6+y9gP/jA5ovG1OmN6VV3XX99xlSeDEn952pn6GA7kdSuW0Y9YYkmW2YSOZlJBVEtdRL35ekKYlcZ9sjvfIlXnWgQPZImK4ZcAhoYxxw4x7kwyXx0UEQr428a2jI=" # CF_PASSWORD
     - name: Deploy PSD worker
-      script: COMPONENT=psd-worker DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/deploy-if-changed.sh
+      script: COMPONENT=psd-worker DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/deploy.sh
       env: *deploy_prod_env
 
     - stage: Remove review app
@@ -100,7 +97,7 @@ jobs:
 
     - stage: Update code coverage
       name: PSD coverage
-      script: COMPONENT=psd-web ./infrastructure/ci/update-code-coverage.sh
+      script: ./infrastructure/ci/update-code-coverage.sh
       env: COVERALLS_PARALLEL=true
 
 notifications:

@@ -1,26 +1,54 @@
 ---
-applications:
-- name: psd-web
-  memory: 2G # Also see deploy.sh
-  instances: 4
+defaults: &defaults
   buildpacks:
     - ruby_buildpack
+  memory: 2G
+  instances: 4
   path: .
-  command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
   stack: cflinuxfs3
+
+web_defaults: &web_defaults
+  command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
   services:
-    - psd-database
-    - psd-elasticsearch
-    - psd-queue
-    - psd-session
     - opss-log-drain
     - psd-aws-env
     - psd-auth-env
+    - psd-database
+    - psd-elasticsearch
+    - psd-email-whitelist-env
     - psd-health-env
     - psd-keycloak-env
     - psd-notify-env
     - psd-pghero-env
+    - psd-queue
     - psd-rails-env
     - psd-sentry-env
+    - psd-session
     - psd-sidekiq-env
     - psd-web-scout-env
+
+applications:
+- name: psd-web
+  <<: *defaults
+  <<: *web_defaults
+- name: psd-web-temp # Used temporarily for blue/green deployments
+  <<: *defaults
+  <<: *web_defaults
+- name: psd-worker
+  <<: *defaults
+  memory: 1G
+  instances: 2
+  command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
+  no-route: true
+  health-check-type: process
+  services:
+    - psd-database
+    - psd-elasticsearch
+    - psd-session
+    - psd-queue
+    - opss-log-drain
+    - antivirus-auth-env
+    - psd-aws-env
+    - psd-notify-env
+    - psd-rails-env
+    - psd-sentry-env
