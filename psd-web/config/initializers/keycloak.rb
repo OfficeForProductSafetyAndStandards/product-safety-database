@@ -7,7 +7,7 @@ Keycloak.keycloak_controller = "sessions"
 # Realm name (only used if the installation file is not present)
 Keycloak.realm = "opss"
 # Realm url (only used if the installation file is not present)
-Keycloak.auth_server_url = ENV["KEYCLOAK_AUTH_URL"]
+Keycloak.auth_server_url = ""
 
 Rails.application.config.after_initialize do
   begin
@@ -17,11 +17,5 @@ Rails.application.config.after_initialize do
     # The gem we are using is importing client_id and secret too late in default_call method, causing first request
     # to fail, and all following ones to work.
     Rails.logger.error "Failed request to Keycloak: #{e.message}"
-  end
-
-  if Rails.env.production?
-    Organisation.load_from_keycloak
-    Team.load_from_keycloak
-    User.load_from_keycloak
   end
 end
