@@ -76,10 +76,11 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "Inviting new user creates the account and adds them to the team" do
     kc = KeycloakClient.instance
 
+    expect(kc).to receive(:send_required_actions_welcome_email)
+
     assert_difference "@my_team.users.count" => 1, "User.all(include_incomplete: true).size" => 1 do
       put invite_to_team_url(@my_team), params: { new_user: { email_address: "new_user@northamptonshire.gov.uk" } }
       assert_response :see_other
-      expect(kc).to have_received(:send_required_actions_welcome_email)
     end
   end
 
@@ -88,5 +89,12 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
       put invite_to_team_url(@my_team), params: { new_user: { email_address: "not_whitelisted@gmail.com" } }
       assert_response :bad_request
     end
+  end
+
+  test "Resend invite when user is invited but not signed up" do
+    email_address = "new_user@northamptonshire.gov.uk"
+    put invite_to_team_url(@my_team), params: { new_user: { email_address: email_address } }
+    put resend_invitation_team_path(email_address: email_address)
+    expect(NotifyMailer).not_to have_received(:user_added_to_team).with(email_address, any_args)
   end
 end

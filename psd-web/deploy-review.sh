@@ -8,12 +8,12 @@ then
   exit
 fi
 
-HOSTNAME=psd-$REVIEW_INSTANCE_NAME-web
+INSTANCE_NAME=psd-$REVIEW_INSTANCE_NAME
+WEB=$INSTANCE_NAME-web
+WORKER=$INSTANCE_NAME-worker
 DOMAIN=london.cloudapps.digital
-APP=$HOSTNAME
 
-# Please note new manifest file
-MANIFEST_FILE=./psd-web/manifest.review.yml
+MANIFEST_FILE=${PWD-.}/psd-web/manifest.review.yml
 
 if [ -z "$DB_NAME" ]
 then
@@ -23,11 +23,16 @@ cf create-service postgres small-10 $DB_NAME
 
 # Wait until db is prepared, might take up to 10 minutes
 until cf service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
-cp -a ./infrastructure/env/. ./psd-web/env/
+
+cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
 # Deploy the app and set the hostname
-cf push $APP -f $MANIFEST_FILE -d $DOMAIN --hostname $HOSTNAME --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
+cf push -f $MANIFEST_FILE $WEB -d $DOMAIN --hostname $WEB --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
+cf push -f $MANIFEST_FILE $WORKER -d $DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
 
-cf set-env $APP PSD_HOST "$HOSTNAME.$DOMAIN"
+cf set-env $WEB PSD_HOST "$WEB.$DOMAIN"
 
-cf start $APP
+rm -fR ${PWD-.}/psd-web/env/
+
+cf start $WEB
+cf start $WORKER
