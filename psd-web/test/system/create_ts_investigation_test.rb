@@ -8,7 +8,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
     mock_user_as_non_opss(User.current)
-
+    @product_name = 'A new product'
     @product = products(:one)
     @investigation = load_case(:one)
     @business_one = businesses :one
@@ -123,9 +123,8 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     assert_text @corrective_action_two.summary
 
     # assert that product saved
-    print page.html
     click_on "Products_id"
-    assert_text @product.name
+    assert_text @product_name
     assert_text @product.product_code
     assert_text @product.product_type
     assert_text @product.category
@@ -142,13 +141,14 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
     # assert business location saved
     assert_text @business_one.locations.first.address_line_1
 
+    attachment_count = Product.find_by!(name: @product_name)
+      .investigations.first.documents.count
     # assert attachments saved
-    click_link "Attachments (#{@investigation.documents.count})"
-    assert_text "Passed test: #{@product.name}"
+    click_link "Attachments (#{attachment_count})"
+    assert_text "Passed test: #{@product_name}"
     assert_text test_result_description
     assert_text risk_assessment_title
     assert_text risk_assessment_description
-
 
     #TODO assert about contact when PSD-869 is finished
   end
@@ -156,7 +156,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
   def fill_in_product_page
     fill_autocomplete "product_category", with: @product.category
     fill_in "Product type", with: @product.product_type
-    fill_in "Product name", with: @product.name
+    fill_in "Product name", with: @product_name
     fill_in "product_product_code", with: @product.product_code
     fill_in "Webpage", with: @product.webpage
     fill_autocomplete "location-autocomplete", with: @product.country_of_origin
