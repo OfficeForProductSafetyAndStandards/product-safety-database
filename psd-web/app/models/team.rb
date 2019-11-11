@@ -40,13 +40,11 @@ class Team < ApplicationRecord
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 
-    Rails.application.config.team_names["organisations"]["opss"].each do |name|
-      found = false
-      self.data.each { |team_data| found = found || team_data[:name] == name }
-      raise "Team name #{name} not found, if recently changed in Keycloak, please update important_team_names.yml" unless found
-    end
+    missing = Rails.application.config.team_names["organisations"]["opss"] - all.collect(&:name)
 
-    true
+    return true if missing.empty?
+
+    raise "Team name #{missing.join(', ')} not found, if recently changed in Keycloak, please update important_team_names.yml"
   end
 
   def self.get_visible_teams(user)
