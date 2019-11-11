@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   belongs_to :organisation
 
-  has_many :activities, dependent: :nullify
   has_many :investigations, dependent: :nullify, as: :assignable
+  has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
 
   has_and_belongs_to_many :teams
@@ -36,8 +36,7 @@ class User < ApplicationRecord
       user[:teams] = Team.where(id: user[:groups])
 
       # Filters out user groups which aren't related to PSD. User may belong directly to an Organisation, or indirectly via a Team
-      organisation = Organisation.find_by(id: user[:groups]) || Organisation.find_by(id: user[:teams].first&.organisation_id)
-      user[:organisation] = organisation
+      user[:organisation] = Organisation.find_by(id: user[:groups]) || user[:teams].first&.organisation
 
       user
     end
