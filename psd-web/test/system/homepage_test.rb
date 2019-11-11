@@ -1,0 +1,29 @@
+require "application_system_test_case"
+
+class HomepageTest < ApplicationSystemTestCase
+  test "not signed in visits / stays on /" do
+    visit "/"
+    assert_current_path "/"
+  end
+
+  test "not signed in visits /cases gets redirected to /" do
+    visit "/cases"
+    assert_current_path "/"
+  end
+
+  test "signed in visits / gets redirected to /cases" do
+    mock_out_keycloak_and_notify
+    sign_in_as(User.find_by(name: "Test User_one"))
+    visit "/"
+    assert_current_path "/cases"
+    reset_keycloak_and_notify_mocks
+  end
+
+  test "signed in visits /cases stays on /cases" do
+    mock_out_keycloak_and_notify
+    sign_in_as(User.find_by(name: "Test User_one"))
+    visit "/cases"
+    assert_current_path "/cases"
+    reset_keycloak_and_notify_mocks
+  end
+end

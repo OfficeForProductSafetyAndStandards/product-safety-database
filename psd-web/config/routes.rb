@@ -162,6 +162,6 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
 
-  root to: "homepage#show"
+  root to: "homepage#landing_page"
 end
 # rubocop:enable Metrics/BlockLength

@@ -13,7 +13,7 @@ module AuthenticationConcern
   end
 
   def authenticate_user!
-    redirect_to helpers.keycloak_login_url(request.original_fullpath) unless user_signed_in? || try_refresh_token
+    redirect_to root_path unless user_signed_in? || try_refresh_token
   end
 
   def user_signed_in?
