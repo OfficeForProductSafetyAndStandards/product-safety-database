@@ -43,8 +43,6 @@ jobs:
       script: ./infrastructure/ci/test.sh
       env: &test_env
         - COVERALLS_PARALLEL=true
-    - name: PSD Static Analysis
-      script: ./infrastructure/ci/static-analysis.sh
     - name: Deploy PSD review app
       script: ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
       env: &deploy_int_env
