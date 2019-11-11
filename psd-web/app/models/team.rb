@@ -51,6 +51,6 @@ class Team < ApplicationRecord
     team_names = Rails.application.config.team_names["organisations"]["opss"]
     return where(name: team_names) if user.is_opss?
 
-    where(name: team_names).limit(1)
+    where(name: team_names.first)
   end
 end
