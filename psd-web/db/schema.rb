@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 2019_11_06_154207) do
     t.string "name"
     t.string "path"
     t.datetime "updated_at", null: false
+    t.index ["path"], name: "index_organisations_on_path"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
@@ -234,7 +235,9 @@ ActiveRecord::Schema.define(version: 2019_11_06_154207) do
   end
 
   create_table "teams_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.uuid "team_id"
+    t.datetime "updated_at", null: false
     t.uuid "user_id"
     t.index ["team_id"], name: "index_teams_users_on_team_id"
     t.index ["user_id"], name: "index_teams_users_on_user_id"
@@ -263,6 +266,8 @@ ActiveRecord::Schema.define(version: 2019_11_06_154207) do
     t.string "name"
     t.uuid "organisation_id"
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
   end
 
