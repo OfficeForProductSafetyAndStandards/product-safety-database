@@ -1,5 +1,5 @@
 ---
 :concurrency: 10
 :queues:
-  - psd
-  - psd-mailers
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
+  - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
