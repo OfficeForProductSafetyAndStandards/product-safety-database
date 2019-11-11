@@ -11,6 +11,7 @@ services:
       - ~/bundle-cache:/usr/local/bundle
       - ~/coverage-cache/psd:/psd-web/coverage
     environment:
+      - RAILS_ENV=test
       - CI
       - TRAVIS
       - TRAVIS_BRANCH
