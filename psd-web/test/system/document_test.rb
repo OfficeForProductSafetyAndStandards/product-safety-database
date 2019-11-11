@@ -5,7 +5,7 @@ class DocumentTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
 
-    visit new_investigation_allegation_new_path(load_case(:no_products))
+    visit new_investigation_new_path(load_case(:no_products))
   end
 
   teardown do
