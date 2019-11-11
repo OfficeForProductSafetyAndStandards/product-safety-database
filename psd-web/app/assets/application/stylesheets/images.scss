@@ -1,12 +1,12 @@
 .image-with-preview {
-  background-color: govuk-colour("grey-1");
+  background-color: govuk-colour("dark-grey");
   display: inline-block;
   vertical-align: top;
   max-width: 100%;
 }
 
 .image-without-preview {
-  background-color: govuk-colour("grey-2");
+  background-color: govuk-colour("mid-grey");
   display: inline-block;
   font-weight: bold;
   text-align: center;
@@ -20,7 +20,7 @@
 }
 
 .image-processing-placeholder {
-  background-color: govuk-colour("grey-1");
+  background-color: govuk-colour("dark-grey");
   color: govuk-colour("white");
   display: inline-block;
   font-weight: bold;

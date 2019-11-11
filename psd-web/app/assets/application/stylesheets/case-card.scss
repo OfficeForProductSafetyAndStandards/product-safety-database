@@ -20,7 +20,7 @@
       left:   0;
       right:  0;
 
-      border:  1px solid govuk-colour("grey-3");
+      border:  1px solid govuk-colour("light-grey");
     }
 
     &:hover::before,
@@ -38,11 +38,11 @@
   }
 
   &--closed {
-    color: govuk-colour("grey-1");
+    color: govuk-colour("dark-grey");
 
     & * {
       @include govuk-typography-weight-regular();
-      color:     govuk-colour("grey-1");
+      color:     govuk-colour("dark-grey");
     }
   }
 
@@ -57,7 +57,7 @@
         left:   0;
         right:  0;
 
-        border:  1px solid govuk-colour("grey-3");
+        border:  1px solid govuk-colour("light-grey");
       }
 
       &:hover::before,
@@ -66,11 +66,11 @@
       }
     }
 
-    color: govuk-colour("grey-1");
+    color: govuk-colour("dark-grey");
 
     & * {
       @include govuk-typography-weight-regular();
-      color:     govuk-colour("grey-1");
+      color:     govuk-colour("dark-grey");
     }
   }
 
@@ -87,7 +87,7 @@
     left: 0;
     bottom: 0;
 
-    background-color:   govuk-colour("grey-1");
+    background-color:   govuk-colour("dark-grey");
     color:              govuk-colour("white");
 
     font-size: 0.75rem;
