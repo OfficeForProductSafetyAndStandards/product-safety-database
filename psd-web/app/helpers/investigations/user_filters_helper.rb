@@ -5,7 +5,6 @@ module Investigations::UserFiltersHelper
 
   def assigned_to(form)
     assigned_to_items = [{ key: "assigned_to_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
-    pp assignee_teams_with_keys
     assignee_teams_with_keys.each do |key, team, name|
       assigned_to_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
     end
