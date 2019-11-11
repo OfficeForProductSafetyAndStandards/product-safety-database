@@ -1,3 +1,3 @@
 class ApplicationJob < ActiveJob::Base
-  queue_as :psd
+  queue_as ENV["SIDEKIQ_QUEUE"] || "psd"
 end
