@@ -32,6 +32,9 @@ cf push -f $MANIFEST_FILE $WORKER -d $DOMAIN --no-start --var psd-instance-name=
 
 cf set-env $WEB PSD_HOST "$WEB.$DOMAIN"
 
+cf set-env $WEB SIDEKIQ_QUEUE "$INSTANCE_NAME"
+cf set-env $WORKER SIDEKIQ_QUEUE "$INSTANCE_NAME"
+
 rm -fR ${PWD-.}/psd-web/env/
 
 cf start $WEB
