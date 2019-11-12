@@ -45,8 +45,8 @@ class CreateProjectTest < ApplicationSystemTestCase
 
     assert_css ".hmcts-banner--success", text: "Project was successfully created"
     assert_css "h1.govuk-heading-l span.govuk-caption-l", text: project.pretty_description
-    assert_css "dt.govuk-summary-list__key", text: "Product category"
-    assert_no_css "h3.govuk-heading-s", text: "Reporter"
+    assert_css "dt.govuk-summary-list__key", text: "Category"
+    assert_no_css "h2.govuk-heading-m", text: project.type.demodulize.titleize
 
     complaint = complainants(:one)
     complaint.complainant_type = "Some Complaint Type"
@@ -55,7 +55,7 @@ class CreateProjectTest < ApplicationSystemTestCase
 
     visit investigation_path(project)
 
-    assert_css "h3.govuk-heading-s", text: "Reporter"
+    assert_css "h2.govuk-heading-m", text: project.type.demodulize.titleize
   end
 
   def fill_project_details_and_continue
