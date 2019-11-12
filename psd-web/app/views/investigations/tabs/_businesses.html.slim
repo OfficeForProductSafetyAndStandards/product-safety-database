@@ -1,5 +1,9 @@
-h2.govuk-heading-m Businesses
-= link_to "Add business", new_investigation_business_url(@investigation)
+h1.govuk-heading-l
+  span.govuk-caption-l = @investigation.pretty_description
+  | Businesses
+
+p.govuk-body
+  = link_to "Add business", new_investigation_business_url(@investigation)
 
 hr.govuk-section-break.govuk-section-break--l
 

@@ -1,5 +1,9 @@
-h2.govuk-heading-m Attachments
-= link_to "Add attachment", new_investigation_new_path(@investigation)
+h1.govuk-heading-l
+  span.govuk-caption-l = @investigation.pretty_description
+  | Attachments
+
+p.govuk-body
+  = link_to "Add attachment", new_investigation_new_path(@investigation)
 
 hr.govuk-section-break.govuk-section-break--l
 
