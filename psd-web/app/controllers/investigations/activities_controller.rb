@@ -5,6 +5,7 @@ module Investigations
 
     def show
       set_investigation_with_associations
+      @investigation = @investigation.decorate
 
       @breadcrumbs = {
         items: [
