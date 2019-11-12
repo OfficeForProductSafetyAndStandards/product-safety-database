@@ -11,7 +11,7 @@ class Investigation < ApplicationRecord
   private
 
     def create_audit_activity_for_case
-      AuditActivity::Investigation::AddProject.from(self)
+      AuditActivity::Investigation::AddProject.from(self.decorate)
     end
   end
 end
