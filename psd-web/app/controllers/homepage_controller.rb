@@ -15,7 +15,7 @@ private
 
   def route_user
     if !User.current.has_accepted_declaration
-      redirect_to declaration_index_path(redirect_path: request.original_fullpath)
+      redirect_to declaration_index_path(redirect_path: params[:request_path])
     elsif User.current.is_opss?
       redirect_to investigations_path
     elsif User.current.has_viewed_introduction
