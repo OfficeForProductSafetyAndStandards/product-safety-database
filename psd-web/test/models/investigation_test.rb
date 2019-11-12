@@ -132,21 +132,25 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant name" do
+    Investigation.refresh_index!
     query = ElasticsearchQuery.new(@complainant.name, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant phone number" do
+    Investigation.import refresh: true
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant email address" do
+    Investigation.import refresh: true
     query = ElasticsearchQuery.new(@complainant.email_address, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant other details" do
+    Investigation.import refresh: true
     query = ElasticsearchQuery.new(@complainant.other_details, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
