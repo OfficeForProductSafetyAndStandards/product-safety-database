@@ -144,7 +144,7 @@ class KeycloakClient
   end
 
   def get_user(email)
-    @internal.get_users(email: email).first.symbolize_keys
+    JSON.parse(@internal.get_users(email: email)).first.symbolize_keys
   end
 
   def send_required_actions_welcome_email(user_id, redirect_uri)
