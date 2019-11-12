@@ -4,9 +4,7 @@ module Searchable
 
   included do
     include Elasticsearch::Model
-
-    # TODO-COSBETA-28 add following line back into shared web for Elasticsearch indexing
-    # include Elasticsearch::Model::Callbacks
+    include Elasticsearch::Model::Callbacks
 
 
     # The following dynamic templates define custom mappings for the major data types
@@ -60,8 +58,6 @@ module Searchable
       ]
     end
 
-    include Elasticsearch::Model::Callbacks
-
     # TODO: These lines fix the issue of not updating the updated_at in Elasticsearch.
     # Same issue is pointed out in the following link. We can remove it once that PR is merged.
     # https://github.com/elastic/elasticsearch-rails/pull/703
@@ -73,7 +69,7 @@ module Searchable
       # This line makes sure elasticsearch index is recreated before we search
       # It fixes the issue of getting no results the first time case list page is loaded
       # It's only used in dev because it lowers performance and the issue it fixes should be an edge case in production
-      # __elasticsearch__.refresh_index! if Rails.env.development? || Rails.env.test?
+      __elasticsearch__.refresh_index! if Rails.env.development? || Rails.env.test?
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 
