@@ -26,9 +26,10 @@ module AuthenticationConcern
     user_info = KeycloakClient.instance.user_info(access_token)
 
     begin
+      # binding.pry
       User.current = User.find_or_create_by(id: user_info[:id]) do |user|
         teams = Team.where(id: user_info[:groups])
-        organisation = Organisation.find_by(id: user_info[:groups]) || teams.first.organisation
+        organisation = Organisation.find_by(id: user_info[:groups]) || teams.first&.organisation
 
         raise "No organisation found" unless organisation
 
