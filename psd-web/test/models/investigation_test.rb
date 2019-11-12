@@ -17,8 +17,9 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation_with_correspondence = load_case(:search_related_correspondence)
     @correspondence = correspondences(:one)
 
-    @investigation_with_complainant = load_case(:search_related_complainant)
-    @complainant = @investigation_with_complainant.complainant
+    @complainant = complainants(:one)
+    @investigation_with_complainant = @complainant.investigation
+    Investigation.__elasticsearch__.refresh_index!
 
     @investigation_with_business = load_case(:search_related_businesses)
     @business = businesses(:biscuit_base)
@@ -132,32 +133,21 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant name" do
-    Investigation.import refresh: true
-    sleep 1
     query = ElasticsearchQuery.new(@complainant.name, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant phone number" do
-    Investigation.import refresh: true
-    sleep 1
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant email address" do
-    Investigation.import refresh: true
-    pp @investigation_with_complainant.complainant
-    pp @investigation_with_complainant.as_indexed_json
-    pp @complainant
-    sleep 1
     query = ElasticsearchQuery.new(@complainant.email_address, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant other details" do
-    Investigation.import refresh: true
-    sleep 1
     query = ElasticsearchQuery.new(@complainant.other_details, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
