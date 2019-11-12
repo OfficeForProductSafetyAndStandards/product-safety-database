@@ -2,7 +2,7 @@
   meta[name="robots" content="noindex,nofollow"]
 
 - content_for :landing_page
-  div.landing-masthead
+  .landing-masthead
     .govuk-width-container
       .govuk-grid-row
         .govuk-grid-column-full
@@ -17,7 +17,8 @@
           p.govuk-body-l class="govuk-!-margin-bottom-2"
             | Report, track and share product safety information with the product safety community.
           .landing-masthead-links
-            = link_to "Sign in to your account", keycloak_login_url(params[:request_path]), class: "govuk-button", role: "button", draggable: false
+            = link_to "Sign in to your account", keycloak_login_url(params[:request_path]),
+                class: "govuk-button", role: "button", draggable: false
             p
               | or&nbsp;
               = mail_to "OPSS.enquiries@beis.gov.uk", "email OPSS"
