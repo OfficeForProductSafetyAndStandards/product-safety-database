@@ -7,10 +7,9 @@ class InvestigationTest < ActiveSupport::TestCase
     User.current
   end
 
-  setup do
-    Elasticsearch::Model.client.logger = Logger.new(STOUDT)
-    Elasticsearch::Model.client.log = true
-    Elasticsearch::Model.client.trace = true
+  def setup
+    @old_client = Elasticsearch::Model.client
+    Elasticsearch::Model.client = Elasticsearch::Client.new logger: Logger.new(STDOUT), log: true, trace: true
     mock_out_keycloak_and_notify
     @investigation = load_case(:one)
 
@@ -20,21 +19,18 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation_with_correspondence = load_case(:search_related_correspondence)
     @correspondence = correspondences(:one)
 
+    @investigation_with_business = load_case(:search_related_businesses)
+    @business = businesses(:biscuit_base)
+
     @complainant = complainants(:one)
     @investigation_with_complainant = @complainant.investigation
     @investigation_with_complainant.assignee = User.current
     @investigation_with_complainant.save
-
-    @investigation_with_business = load_case(:search_related_businesses)
-    @business = businesses(:biscuit_base)
   end
 
   teardown do
     reset_keycloak_and_notify_mocks
-    Elasticsearch::Model.client.logger = nil
-    Elasticsearch::Model.client.log = nil
-    Elasticsearch::Model.client.trace = nil
-
+    Elasticsearch::Model.client = @old_client
   end
 
   test "should create activity when investigation is created" do
