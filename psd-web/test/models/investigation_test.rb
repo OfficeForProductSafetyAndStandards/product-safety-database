@@ -8,6 +8,10 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   setup do
+    Elasticsearch::Model.client = Elasticsearch::Client.new(
+      Rails.application.config_for(:elasticsearch)
+        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
+    )
     mock_out_keycloak_and_notify
     @investigation = load_case(:one)
 
@@ -149,10 +153,6 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant phone number" do
-    Elasticsearch::Model.client = Elasticsearch::Client.new(
-      Rails.application.config_for(:elasticsearch)
-        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
-    )
     Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
     pp Investigation.full_search(query).records.to_a
