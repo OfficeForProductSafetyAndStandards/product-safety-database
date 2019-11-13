@@ -133,32 +133,26 @@ class InvestigationTest < ActiveSupport::TestCase
 
   test "elasticsearch should find correspondence phone number" do
     query = ElasticsearchQuery.new(@correspondence.phone_number, {}, {})
-    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_correspondence.id)
   end
 
   test "elasticsearch should find complainant name" do
     query = ElasticsearchQuery.new(@complainant.name, {}, {})
-    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant phone number" do
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
-    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant email address" do
     query = ElasticsearchQuery.new(@complainant.email_address, {}, {})
-    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant other details" do
-    Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@complainant.other_details, {}, {})
-    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
