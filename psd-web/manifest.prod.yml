@@ -52,3 +52,4 @@ applications:
     - psd-notify-env
     - psd-rails-env
     - psd-sentry-env
+    - psd-keycloak-env
