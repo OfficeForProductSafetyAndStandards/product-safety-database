@@ -1,7 +1,6 @@
 require "application_system_test_case"
 
 class InvestigationSubNavigation < ApplicationSystemTestCase
-  driven_by :selenium
 
   setup do
     mock_out_keycloak_and_notify
@@ -30,15 +29,15 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
     end
 
     click_link products_link
-    assert_css "h2.govuk-heading-m", text: "Products"
+    assert_css "h1.govuk-heading-l", text: "Products"
 
     click_link businesses_link
-    assert_css "h2.govuk-heading-m", text: "Businesses"
+    assert_css "h1.govuk-heading-l", text: "Businesses"
 
     click_link attachments_link
-    assert_css "h2.govuk-heading-m", text: "Attachments"
+    assert_css "h1.govuk-heading-l", text: "Attachments"
 
     click_link activity_link
-    assert_css "h2.govuk-heading-m", text: "Activity"
+    assert_css "h1.govuk-heading-l", text: "Activity"
   end
 end
