@@ -7,7 +7,7 @@ class InvestigationTest < ActiveSupport::TestCase
     User.current
   end
 
-  def setup
+  setup do
     mock_out_keycloak_and_notify
 
     @investigation = load_case(:one)
@@ -28,7 +28,7 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation_with_complainant.__elasticsearch__.index_document
   end
 
-  def teardown
+  teardown do
     reset_keycloak_and_notify_mocks
     Elasticsearch::Model.client = @old_client
   end
