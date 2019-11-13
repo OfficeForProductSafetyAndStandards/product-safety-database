@@ -8,7 +8,7 @@ class CreateTsInvestigationTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
     mock_user_as_non_opss(User.current)
-    @product_name = 'A new product'
+    @product_name = "A new product"
     @product = products(:one)
     @investigation = load_case(:one)
     @business_one = businesses :one

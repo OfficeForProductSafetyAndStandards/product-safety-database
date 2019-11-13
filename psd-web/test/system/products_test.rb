@@ -1,7 +1,6 @@
 require "application_system_test_case"
 
 class InvestigationSubNavigation < ApplicationSystemTestCase
-
   setup do
     mock_out_keycloak_and_notify
     @investigation = load_case(:one)
