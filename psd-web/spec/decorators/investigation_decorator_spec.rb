@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe InvestigationDecorator do
-  fixtures(:investigations)
+  fixtures(:investigations, :investigation_products, :products)
 
   let(:investigation) { investigations(:one) }
 
@@ -9,30 +9,14 @@ RSpec.describe InvestigationDecorator do
 
   describe '#product_summary_list' do
 
-    let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+    let(:product_summary_list) { subject.product_summary_list }
 
     it "has the expected fields" do
-      expect(product_summary_list)
-        .to have_css('dt.govuk-summary-list__key', text: "Product details")
-      expect(product_summary_list)
-        .to have_css('dd.govuk-summary-list__value', text: "2 products added")
-
-      expect(product_summary_list)
-        .to have_css('dt.govuk-summary-list__key', text: "Category")
-      expect(product_summary_list)
-        .to have_css('dd.govuk-summary-list__value', text: investigation.products.first.category)
-
-      expect(product_summary_list)
-        .to have_css('dt.govuk-summary-list__key', text: "Hazards")
-      expect(product_summary_list)
-        .to have_css('dd.govuk-summary-list__value', text: /#{investigation.hazard_type}/)
-      expect(product_summary_list)
-        .to have_css('dd.govuk-summary-list__value', text: /#{investigation.hazard_description}/)
-
-      expect(product_summary_list)
-        .to have_css('dt.govuk-summary-list__key', text: "Compliance")
-      expect(product_summary_list)
-        .to have_css('dd.govuk-summary-list__value', text: /#{investigation.non_compliant_reason}/)
+      expect(product_summary_list).to summarise("Product details", text: "2 products added")
+      expect(product_summary_list).to summarise("Category", text: investigation.products.first.category)
+      expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_type}/)
+      expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_description}/)
+      expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
     end
 
     context 'whithout products' do
@@ -42,12 +26,22 @@ RSpec.describe InvestigationDecorator do
     end
 
     context 'whithout hazard_type' do
-      before { investigation.hazard_type = nil }
+      let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+
+      before do
+        investigation.hazard_type = nil
+        investigation.hazard_description = nil
+      end
 
       it { expect(product_summary_list).not_to have_css('dt.govuk-summary-list__key', text: "Hazards") }
     end
 
     context 'whithout non_compliant_reason' do
+      let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+
+      before { investigation.non_compliant_reason = nil }
+
+      it { expect(product_summary_list).not_to have_css('dt.govuk-summary-list__key', text: "Compliance") }
     end
   end
 end
