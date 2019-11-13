@@ -19,10 +19,16 @@ class InvestigationTest < ActiveSupport::TestCase
 
     @complainant = complainants(:one)
     @investigation_with_complainant = @complainant.investigation
-    Investigation.__elasticsearch__.refresh_index!
-
+    pp [
+      @investigation_with_complainant.complainant,
+      @investigation_with_complainant,
+      @complainant,
+      @investigation_with_complainant.as_indexed_json
+    ]
     @investigation_with_business = load_case(:search_related_businesses)
     @business = businesses(:biscuit_base)
+
+    Investigation.import force: true, refresh: true
   end
 
   teardown do
