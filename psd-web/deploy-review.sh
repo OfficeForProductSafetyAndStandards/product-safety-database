@@ -37,5 +37,8 @@ cf set-env $WORKER SIDEKIQ_QUEUE "$INSTANCE_NAME"
 
 rm -fR ${PWD-.}/psd-web/env/
 
+cf set-env $WEB SENTRY_CURRENT_ENV $REVIEW_INSTANCE_NAME
+cf set-env $WORKER SENTRY_CURRENT_ENV $REVIEW_INSTANCE_NAME
+
 cf start $WEB
 cf start $WORKER
