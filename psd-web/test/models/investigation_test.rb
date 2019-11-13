@@ -127,12 +127,21 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find correspondence phone number" do
+    Elasticsearch::Model.client = Elasticsearch::Client.new(
+      Rails.application.config_for(:elasticsearch)
+        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
+    )
+
     Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@correspondence.phone_number, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_correspondence.id)
   end
 
   test "elasticsearch should find complainant name" do
+    Elasticsearch::Model.client = Elasticsearch::Client.new(
+      Rails.application.config_for(:elasticsearch)
+        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
+    )
     Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@complainant.name, {}, {})
     pp Investigation.full_search(query).records.to_a
@@ -140,6 +149,10 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant phone number" do
+    Elasticsearch::Model.client = Elasticsearch::Client.new(
+      Rails.application.config_for(:elasticsearch)
+        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
+    )
     Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
     pp Investigation.full_search(query).records.to_a
@@ -147,6 +160,10 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant email address" do
+    Elasticsearch::Model.client = Elasticsearch::Client.new(
+      Rails.application.config_for(:elasticsearch)
+        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
+    )
     Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@complainant.email_address, {}, {})
     pp Investigation.full_search(query).records.to_a
