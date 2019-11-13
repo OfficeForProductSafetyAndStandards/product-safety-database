@@ -1,5 +1,5 @@
 class UserSource < Source
-  belongs_to :user
+  belongs_to :user, optional: true
 
   def show
     user.present? ? user.display_name : "anonymous"
