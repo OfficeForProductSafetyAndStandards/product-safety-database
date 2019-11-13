@@ -13,9 +13,10 @@
   }
 
   @media (max-width: 768px) {
-    h1.govuk-heading-xl {
-      margin-top: 0;
+    .govuk-heading-xl {
+      margin-top: 0 !important;
     }
+
     .govuk-phase-banner {
       margin-bottom: 10px;
     }
@@ -41,7 +42,7 @@
     margin-bottom: 30px;
   }
 
-  span.govuk-tag {
+  .govuk-tag {
     background-color: govuk-colour("white");
     color: govuk-colour("blue");
   }
@@ -50,7 +51,7 @@
     color: darken(govuk-colour("white"), 7);
   }
 
-  a.govuk-button {
+  .govuk-button {
     margin-top: 10px;
     margin-bottom: 20px;
   }
@@ -111,4 +112,3 @@
     }
   }
 }
-
