@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe InvestigationDecorator do
+  include ActionView::Helpers::DateHelper
+
   fixtures(:investigations, :investigation_products, :products)
 
   let(:investigation) { investigations(:one) }
@@ -42,6 +44,28 @@ RSpec.describe InvestigationDecorator do
       before { investigation.non_compliant_reason = nil }
 
       it { expect(product_summary_list).not_to have_css('dt.govuk-summary-list__key', text: "Compliance") }
+    end
+  end
+
+  describe '#investigation_summary_list' do
+    let(:investigation_summary_list) { subject.investigation_summary_list }
+
+    it 'has the expected fields' do
+      expect(investigation_summary_list).to summarise("Status", text: investigation.status)
+      expect(investigation_summary_list).to summarise("Created by", text: investigation.source.name)
+      expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
+      expect(investigation_summary_list).
+        to summarise("Date created", text: investigation.created_at.beginning_of_month.strftime("%e %B %Y"))
+      expect(investigation_summary_list).to summarise("Last updated", text: time_ago_in_words(investigation.updated_at))
+      expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
+    end
+
+    context 'whithout complainant reference' do
+      let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
+
+      before { investigation.complainant_reference = nil }
+
+      it { expect(investigation_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Trading Standards reference") }
     end
   end
 end
