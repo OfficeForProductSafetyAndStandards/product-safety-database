@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe InvestigationDecorator do
   include ActionView::Helpers::DateHelper
+  include ActionView::Helpers::TextHelper
 
   fixtures(:investigations, :investigation_products, :products)
 
@@ -66,6 +67,28 @@ RSpec.describe InvestigationDecorator do
       before { investigation.complainant_reference = nil }
 
       it { expect(investigation_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Trading Standards reference") }
+    end
+  end
+
+  describe "#source_details_summary_list" do
+    fixtures(:complainants, :sources, :organisations, :users)
+    let(:investigation) { investigations(:enquiry) }
+    let(:source_details_summary_list) { subject.source_details_summary_list }
+
+    before do
+      User.current = users(:opss)
+      investigation.source = sources(:investigation_one)
+      investigation.complainant = complainants(:one)
+    end
+
+    it 'has the expected fields' do
+      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.strftime("%e %B %Y"))
+      expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
+      expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.name}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.phone_number}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.email_address}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.other_details}/)
     end
   end
 end
