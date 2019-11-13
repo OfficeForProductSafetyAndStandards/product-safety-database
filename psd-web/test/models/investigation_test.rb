@@ -144,17 +144,23 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant phone number" do
+    pp @complainant.phone_number
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
+    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant email address" do
+    pp @complainant.email_address
     query = ElasticsearchQuery.new(@complainant.email_address, {}, {})
+    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
   test "elasticsearch should find complainant other details" do
+    pp @complainant.other_details
     query = ElasticsearchQuery.new(@complainant.other_details, {}, {})
+    pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
 
