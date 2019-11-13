@@ -153,8 +153,9 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant phone number" do
-    Investigation.import refresh: true, force: true
+    # Investigation.import refresh: true, force: true
     query = ElasticsearchQuery.new(@complainant.phone_number, {}, {})
+
     pp Investigation.full_search(query).records.to_a
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end
