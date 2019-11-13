@@ -26,9 +26,10 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation_with_complainant = @complainant.investigation
     @investigation_with_complainant.assignee = User.current
     @investigation_with_complainant.save
+    @investigation_with_complainant.__elasticsearch__.index_document
   end
 
-  teardown do
+  def teardown
     reset_keycloak_and_notify_mocks
     Elasticsearch::Model.client = @old_client
   end
