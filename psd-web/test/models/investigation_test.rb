@@ -10,12 +10,6 @@ class InvestigationTest < ActiveSupport::TestCase
   def setup
     mock_out_keycloak_and_notify
 
-    @complainant = complainants(:one)
-    @investigation_with_complainant = @complainant.investigation
-    @investigation_with_complainant.assignee = User.current
-    @investigation_with_complainant.save
-    @investigation_with_complainant.__elasticsearch__.index_document
-
     @investigation = load_case(:one)
 
     @investigation_with_product = load_case(:search_related_products)
@@ -26,6 +20,12 @@ class InvestigationTest < ActiveSupport::TestCase
 
     @investigation_with_business = load_case(:search_related_businesses)
     @business = businesses(:biscuit_base)
+
+    @complainant = complainants(:one)
+    @investigation_with_complainant = @complainant.investigation
+    @investigation_with_complainant.assignee = User.current
+    @investigation_with_complainant.save
+    @investigation_with_complainant.__elasticsearch__.index_document
   end
 
   def teardown
