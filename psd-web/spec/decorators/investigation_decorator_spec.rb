@@ -49,6 +49,7 @@ RSpec.describe InvestigationDecorator do
   end
 
   describe '#investigation_summary_list' do
+    fixtures(:sources)
     let(:investigation_summary_list) { subject.investigation_summary_list }
 
     it 'has the expected fields' do
