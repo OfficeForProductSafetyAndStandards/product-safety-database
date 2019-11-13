@@ -26,6 +26,7 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation_with_complainant = @complainant.investigation
     @investigation_with_complainant.assignee = User.current
     @investigation_with_complainant.save
+    pp @investigation_with_complainant.as_indexed_json
     @investigation_with_complainant.__elasticsearch__.index_document
   end
 
