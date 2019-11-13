@@ -8,10 +8,9 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   setup do
-    Elasticsearch::Model.client = Elasticsearch::Client.new(
-      Rails.application.config_for(:elasticsearch)
-        .merge(logger: Logger.new(STDOUT), log: true, trace: true)
-    )
+    Elasticsearch::Model.client.logger = Logger.new(STOUDT)
+    Elasticsearch::Model.client.log = true
+    Elasticsearch::Model.client.trace = true
     mock_out_keycloak_and_notify
     @investigation = load_case(:one)
 
@@ -32,6 +31,10 @@ class InvestigationTest < ActiveSupport::TestCase
 
   teardown do
     reset_keycloak_and_notify_mocks
+    Elasticsearch::Model.client.logger = nil
+    Elasticsearch::Model.client.log = nil
+    Elasticsearch::Model.client.trace = nil
+
   end
 
   test "should create activity when investigation is created" do
