@@ -95,7 +95,7 @@ private
       categories = [object.product_category]
       products.each { |product| categories << product.category }
 
-      categories.compact.to_sentence(last_word_connector: " and ").downcase.upcase_first
+      categories.uniq.compact.to_sentence(last_word_connector: " and ").downcase.upcase_first
     end
   end
 end
