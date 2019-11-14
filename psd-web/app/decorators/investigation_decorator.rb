@@ -6,8 +6,6 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def product_summary_list
-    return unless products.any?
-
     products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
     hazards = h.simple_format([hazard_type, hazard_description].join("\n\n"))
     rows = [

@@ -45,7 +45,8 @@ class CreateProjectTest < ApplicationSystemTestCase
 
     assert_css ".hmcts-banner--success", text: "Project was successfully created"
     assert_css "h1.govuk-heading-l span.govuk-caption-l", text: project.pretty_description
-    assert_css "dt.govuk-summary-list__key", text: "Category"
+    assert_css "dt.govuk-summary-list__key", text: "Status"
+    assert_css "dd.govuk-summary-list__value", text: "Open"
     assert_no_css "h2.govuk-heading-m", text: project.type.demodulize.titleize
 
     complaint = complainants(:one)

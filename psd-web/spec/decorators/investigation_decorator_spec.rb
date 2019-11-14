@@ -22,12 +22,6 @@ RSpec.describe InvestigationDecorator do
       expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
     end
 
-    context 'whithout products' do
-      let(:investigation) { investigations(:no_products_case_title) }
-
-      it { expect(subject.product_summary_list).to be_nil }
-    end
-
     context 'whithout hazard_type' do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 

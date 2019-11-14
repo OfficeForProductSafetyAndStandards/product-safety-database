@@ -12,10 +12,10 @@
     p[class="govuk-body"] = simple_format(@investigation.description)
     p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link"
 
-    = govuk_hr
-
-    h2.govuk-heading-m = "product".pluralize(@investigation.products.count).titleize
-    = @investigation.product_summary_list
+    - if @investigation.products.any?
+      = govuk_hr
+      h2.govuk-heading-m = "product".pluralize(@investigation.products.count).titleize
+      = @investigation.product_summary_list
 
     - if @investigation.complainant
       = govuk_hr
@@ -23,7 +23,6 @@
       = @investigation.source_details_summary_list
 
     = govuk_hr
-
     h2.govuk-heading-m About the case
     = @investigation.investigation_summary_list
 
