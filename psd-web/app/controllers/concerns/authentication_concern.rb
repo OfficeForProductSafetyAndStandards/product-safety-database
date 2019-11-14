@@ -26,7 +26,7 @@ module AuthenticationConcern
     user_info = KeycloakClient.instance.user_info(access_token)
 
     begin
-      User.current = User.find_or_create_by(id: user_info[:id]) do |user|
+      User.current = User.find_or_create_by!(id: user_info[:id]) do |user|
         teams = Team.where(path: user_info[:groups])
         organisation = Organisation.find_by(path: user_info[:groups]) || teams.first&.organisation
 

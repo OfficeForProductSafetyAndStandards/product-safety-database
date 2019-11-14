@@ -42,9 +42,22 @@ class User < ApplicationRecord
     end
 
     users.reject { |user| user[:organisation].blank? }.each do |user|
-      record = find_or_create_by(id: user[:id])
-      record.update(user.slice(:name, :email, :organisation))
-      record.teams = user[:teams]
+      begin
+        record = find_or_create_by!(id: user[:id]) do |new_record|
+          new_record.email = user[:email]
+          new_record.name = user[:name]
+          new_record.organisation = user[:organisation]
+        end
+
+        record.update!(user.slice(:name, :email, :organisation))
+        record.teams = user[:teams]
+      rescue ActiveRecord::ActiveRecordError => e
+        if Rails.env.production?
+          Raven.capture_exception(e)
+        else
+          raise(e)
+        end
+      end
     end
   end
 
