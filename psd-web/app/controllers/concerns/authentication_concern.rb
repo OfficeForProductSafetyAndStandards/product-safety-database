@@ -27,8 +27,8 @@ module AuthenticationConcern
 
     begin
       User.current = User.find_or_create_by(id: user_info[:id]) do |user|
-        teams = Team.where(id: user_info[:groups])
-        organisation = Organisation.find_by(id: user_info[:groups]) || teams.first&.organisation
+        teams = Team.where(path: user_info[:groups])
+        organisation = Organisation.find_by(path: user_info[:groups]) || teams.first&.organisation
 
         raise "No organisation found" unless organisation
 
