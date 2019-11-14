@@ -13,7 +13,7 @@ class InvestigationDecorator < ApplicationDecorator
       {
         key: { text: "Product details" },
         value: { text: products_details },
-        actions: [ href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View" ]
+        actions: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"]
       },
       hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
       non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: h.simple_format(non_compliant_reason) }, actions: [] } : nil,

@@ -10,8 +10,7 @@ RSpec.describe InvestigationDecorator do
 
   subject { investigation.decorate }
 
-  describe '#product_summary_list' do
-
+  describe "#product_summary_list" do
     let(:product_summary_list) { subject.product_summary_list }
 
     it "has the expected fields" do
@@ -22,7 +21,7 @@ RSpec.describe InvestigationDecorator do
       expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
     end
 
-    context 'whithout hazard_type' do
+    context "whithout hazard_type" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 
       before do
@@ -30,23 +29,23 @@ RSpec.describe InvestigationDecorator do
         investigation.hazard_description = nil
       end
 
-      it { expect(product_summary_list).not_to have_css('dt.govuk-summary-list__key', text: "Hazards") }
+      it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
     end
 
-    context 'whithout non_compliant_reason' do
+    context "whithout non_compliant_reason" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 
       before { investigation.non_compliant_reason = nil }
 
-      it { expect(product_summary_list).not_to have_css('dt.govuk-summary-list__key', text: "Compliance") }
+      it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
     end
   end
 
-  describe '#investigation_summary_list' do
+  describe "#investigation_summary_list" do
     fixtures(:sources)
     let(:investigation_summary_list) { subject.investigation_summary_list }
 
-    it 'has the expected fields' do
+    it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
       expect(investigation_summary_list).to summarise("Created by", text: investigation.source.name)
       expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
@@ -56,7 +55,7 @@ RSpec.describe InvestigationDecorator do
       expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
     end
 
-    context 'whithout complainant reference' do
+    context "whithout complainant reference" do
       let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
 
       before { investigation.complainant_reference = nil }
@@ -76,7 +75,7 @@ RSpec.describe InvestigationDecorator do
       investigation.complainant = complainants(:one)
     end
 
-    it 'has the expected fields' do
+    it "has the expected fields" do
       expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.strftime("%e %B %Y"))
       expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
       expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
