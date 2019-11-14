@@ -1,53 +1,41 @@
-class Team < ActiveHash::Base
-  include ActiveHash::Associations
-  include ActiveHashSafeLoadable
-
-  field :id
-  field :name
-  field :path
-  field :team_recipient_email
-
+class Team < ApplicationRecord
   belongs_to :organisation
 
-  has_many :team_users, dependent: :nullify
-  has_many :users, through: :team_users
+  has_and_belongs_to_many :users
 
   has_many :investigations, dependent: :nullify, as: :assignable
 
-  def users
-    # Ensure we're serving up-to-date relations (modulo caching)
-    TeamUser.load
-    # has_many through seems not to work with ActiveHash
-    # It's not well documented but the same fix has been suggested here: https://github.com/zilkey/active_hash/issues/25
-    team_users.map(&:user)
+  validates :id, presence: true, uuid: true
+  validates :name, presence: true
+  validates :path, presence: true
+
+  def add_user(user)
+    # Update the local cached team membership so the change appears immediately
+    users << user
+
+    KeycloakClient.instance.add_user_to_team(user.id, id)
   end
 
-  def add_user(user_id)
-    KeycloakClient.instance.add_user_to_team user_id, id
-    # Trigger reload of team-users relations from KC
-    TeamUser.load(force: true)
-  end
+  def self.load_from_keycloak(teams = KeycloakClient.instance.all_teams(Organisation.ids))
+    teams.each do |team|
+      begin
+        record = find_or_create_by!(id: team[:id]) do |new_record|
+          new_record.name = team[:name]
+          new_record.path = team[:path]
+          new_record.organisation_id = team[:organisation_id]
+        end
 
-  def self.load(force: false)
-    Organisation.load(force: force)
-    begin
-      teams = KeycloakClient.instance.all_teams(Organisation.all.map(&:id), force: force)
-      self.safe_load(teams, data_name: "teams")
-      self.ensure_names_up_to_date
-    rescue StandardError => e
-      Rails.logger.error "Failed to fetch teams from Keycloak: #{e.message}"
-      self.data = nil
+        record.update!(team.slice(:name, :path, :team_recipient_email, :organisation_id))
+      rescue ActiveRecord::ActiveRecordError => e
+        if Rails.env.production?
+          Raven.capture_exception(e)
+        else
+          raise(e)
+        end
+      end
     end
-  end
 
-  def self.all(options = {})
-    self.load
-
-    if options.has_key?(:conditions)
-      where(options[:conditions])
-    else
-      @records ||= []
-    end
+    self.ensure_names_up_to_date
   end
 
   def display_name(ignore_visibility_restrictions: false)
@@ -67,21 +55,17 @@ class Team < ActiveHash::Base
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 
-    Rails.cache.fetch(:up_to_date, expires_in: 30.minutes) do
-      Rails.application.config.team_names["organisations"]["opss"].each do |name|
-        found = false
-        self.data.each { |team_data| found = found || team_data[:name] == name }
-        raise "Team name #{name} not found, if recently changed in Keycloak, please update important_team_names.yml" unless found
-      end
-      true
-    end
+    missing = Rails.application.config.team_names["organisations"]["opss"] - all.collect(&:name)
+
+    return true if missing.empty?
+
+    raise "Team name #{missing.join(', ')} not found, if recently changed in Keycloak, please update important_team_names.yml"
   end
 
   def self.get_visible_teams(user)
     team_names = Rails.application.config.team_names["organisations"]["opss"]
-    return Team.where(name: team_names) if user.is_opss?
+    return where(name: team_names) if user.is_opss?
 
-    Team.where(name: team_names[0])
+    where(name: team_names.first)
   end
 end
-Team.load if Rails.env.development?

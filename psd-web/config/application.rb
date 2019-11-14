@@ -36,5 +36,9 @@ module ProductSafetyDatabase
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
 
     config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"
+
+    config.x.keycloak.auth_server_url = ENV.fetch("KEYCLOAK_AUTH_URL")
+    config.x.keycloak.client_id = ENV.fetch("KEYCLOAK_CLIENT_ID")
+    config.x.keycloak.secret = ENV.fetch("KEYCLOAK_CLIENT_SECRET")
   end
 end

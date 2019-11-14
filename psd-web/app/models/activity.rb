@@ -18,7 +18,7 @@ class Activity < ApplicationRecord
   end
 
   def subtitle
-    "#{subtitle_slug} by #{source.show}, #{pretty_date_stamp}"
+    "#{subtitle_slug} by #{source&.show}, #{pretty_date_stamp}"
   end
 
   def subtitle_slug; end
@@ -60,7 +60,7 @@ class Activity < ApplicationRecord
 
   def users_to_notify
     return [] unless investigation.assignee.is_a? User
-    return [] if source.user == investigation.assignee
+    return [] if source&.user == investigation.assignee
 
     [investigation.assignee]
   end

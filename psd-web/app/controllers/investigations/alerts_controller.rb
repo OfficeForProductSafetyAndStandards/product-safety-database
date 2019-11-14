@@ -78,7 +78,7 @@ private
   end
 
   def set_user_count
-    @user_count = number_with_delimiter(User.all.length, delimiter: ",")
+    @user_count = number_with_delimiter(User.count, delimiter: ",")
   end
 
   def get_preview

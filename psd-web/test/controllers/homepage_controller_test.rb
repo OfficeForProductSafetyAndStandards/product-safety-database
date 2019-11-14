@@ -17,7 +17,7 @@ class HomepageControllerTest < ActionDispatch::IntegrationTest
 
   test "displays homepage for non_opss users who have viewed introduction before" do
     mock_user_as_non_opss(User.current)
-    allow(User.current).to receive(:has_viewed_introduction).and_return true
+    User.current.has_viewed_introduction!
 
     get "/"
     assert_response :success

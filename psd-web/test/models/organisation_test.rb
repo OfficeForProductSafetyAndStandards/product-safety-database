@@ -14,6 +14,7 @@ class OrganisationTest < ActiveSupport::TestCase
     ].to_json
 
     allow(Keycloak::Internal).to receive(:get_groups).and_return(groups)
+    Organisation.load_from_keycloak
   end
 
   teardown do
@@ -21,14 +22,11 @@ class OrganisationTest < ActiveSupport::TestCase
   end
 
   test "all Keycloak organisations are added" do
-    Rails.cache.delete(:keycloak_groups)
     all_organisations = Organisation.all
-
     assert_same_elements @organisations.map { |org| org[:id] }, all_organisations.pluck(:id)
   end
 
   test "all organisation properties are populated" do
-    Rails.cache.delete(:keycloak_groups)
     all_organisations = Organisation.all
 
     assert_same_elements @organisations.map { |org| org[:name] }, all_organisations.pluck(:name)
@@ -36,7 +34,6 @@ class OrganisationTest < ActiveSupport::TestCase
   end
 
   test "all non-organisation groups are excluded" do
-    Rails.cache.delete(:keycloak_groups)
     all_organisations = Organisation.all
 
     assert_not_includes all_organisations.pluck(:name), "Group 1"

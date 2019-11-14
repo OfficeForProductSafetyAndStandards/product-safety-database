@@ -13,6 +13,6 @@ class DropRapexImages < ActiveRecord::Migration[5.2]
       t.index %w[product_id], name: "index_rapex_images_on_product_id"
     end
 
-    add_foreign_key "rapex_images", "products"
+    add_foreign_key "rapex_images", "products", validate: false
   end
 end

@@ -1,16 +1,17 @@
 require "rails_helper"
 
-RSpec.describe User do
+RSpec.describe User, with_keycloak_config: true do
   before do
-    allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
-    allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
+    allow(Rails.application.config.x.keycloak).to receive(:auth_server_url).and_return("test")
+    allow(Rails.application.config.x.keycloak).to receive(:client_id).and_return(client_id)
+    allow(Rails.application.config.x.keycloak).to receive(:secret).and_return(client_secret)
     allow(KeycloakToken).to receive(:new).and_return(token_stub)
   end
 
   let(:client_id) { "123" }
   let(:client_secret) { "secret" }
   let(:token_stub) { OpenStruct.new(access_token: "test") }
-  let(:id) { 123 }
+  let(:id) { SecureRandom.uuid }
 
   subject(:user) { described_class.new(id: id) }
 

@@ -127,9 +127,9 @@ class InitSchema < ActiveRecord::Migration[5.0]
       t.string "whodunnit"
       t.index %w[item_type item_id], name: "index_versions_on_item_type_and_item_id"
     end
-    add_foreign_key "activities", "investigations"
-    add_foreign_key "addresses", "businesses"
-    add_foreign_key "rapex_images", "products"
+    add_foreign_key "activities", "investigations", validate: false
+    add_foreign_key "addresses", "businesses", validate: false
+    add_foreign_key "rapex_images", "products", validate: false
   end
 
   def down
