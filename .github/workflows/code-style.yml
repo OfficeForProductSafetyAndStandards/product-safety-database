@@ -35,7 +35,7 @@ jobs:
     - name: Run linter
       run: |
         cd psd-web
-        gem install slim_lint -v 0.17.0
+        gem install slim_lint -v 0.18.0
         slim-lint app
   front_end:
     name: "Sass and Javascript"

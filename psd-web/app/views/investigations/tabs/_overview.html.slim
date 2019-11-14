@@ -10,7 +10,8 @@
 
     h2.govuk-heading-m Summary
     p[class="govuk-body"] = simple_format(@investigation.description)
-    p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link"
+    p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), \
+      class: "govuk-link"
 
     - if @investigation.products.any?
       = govuk_hr
@@ -26,7 +27,6 @@
     h2.govuk-heading-m About the case
     = @investigation.investigation_summary_list
 
-
   - if @investigation.products.any?
     .govuk-grid-column-one-third.product-summary
       hr
@@ -36,4 +36,5 @@
           li = link_to product.name.capitalize, product_path(product), class: "govuk-link"
           - if product.images.any?
             li
-            = render "documents/image_tag", image: product.images.first, dimensions: "500x300", class_name: 'product-image'
+            = render "documents/image_tag", image: product.images.first, dimensions: "500x300", \
+              class_name: 'product-image'

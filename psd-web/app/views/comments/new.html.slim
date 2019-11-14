@@ -2,16 +2,18 @@
 - content_for :after_header do
   .govuk-grid-row
     .govuk-grid-column-one-third
-      = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+      = link_to "Back to #{@investigation.pretty_description}", \
+        investigation_path(@investigation), class: "govuk-back-link"
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds
     h1.govuk-heading-l
       span.govuk-caption-l = @investigation.pretty_description
       | Add comment
-    = form_with(model: @investigation.activities.new, url: investigation_activity_comment_path(@investigation)) do |form|
+    = form_with(model: @investigation.activities.new, \
+      url: investigation_activity_comment_path(@investigation)) do |form|
       = pp form.object
       = form.fields_for form.object do |ca_form|
-        = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 },
+        = render "form_components/govuk_textarea", key: :body, form: ca_form, attributes: { maxlength: 10000 },
               label: { text: "Comment text", classes: "govuk-visually-hidden" }
       = form.submit "Continue", class: "govuk-button"

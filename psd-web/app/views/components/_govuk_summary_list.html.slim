@@ -1,7 +1,8 @@
-- classes ||= ""
-- dl_wrapper_class = ["govuk-summary-list"]
-- dl_wrapper_class << classes
-- dl_wrapper_class
+ruby:
+  classes ||= ""
+  dl_wrapper_class = %w(govuk-summary-list)
+  dl_wrapper_class << classes
+  dl_wrapper_class
 
 dl class=[dl_wrapper_class]
   - rows.each do |row|
