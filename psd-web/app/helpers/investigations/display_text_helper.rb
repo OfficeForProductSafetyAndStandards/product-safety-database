@@ -149,20 +149,6 @@ module Investigations::DisplayTextHelper
         value: { text: investigation_assignee(investigation, classes) }
       },
       {
-        key: { text: "Created", classes: classes },
-        value: { text: investigation.created_at.beginning_of_month.strftime("%e %B %Y"), classes: classes },
-        actions: []
-      },
-
-      {
-        key: { text: "Created by", classes: classes },
-        value: { text: investigation.source.name, classes: classes },
-        actions: []
-      },
-      # TODO: Created by should contain the creator's organisation a bit like in
-      # def investigation_assignee(investigation, classes = "")
-      # TODO: Make this a Date time format to_s(:govuk) =>  strftime("%e %B %Y")
-      {
         key: { text: "Last updated", classes: classes },
         value: { text: "#{time_ago_in_words(investigation.updated_at)} ago", classes: classes }
       }
@@ -175,8 +161,8 @@ module Investigations::DisplayTextHelper
       rows[1][:actions] = [
         { href: new_investigation_assign_path(investigation), text: "Change", classes: classes, visually_hidden_text: "assigned to" }
       ]
-      rows[4][:actions] = [
-        { href: new_investigation_activity_path(investigation), text: "Add activity", classes: classes }
+      rows[2][:actions] = [
+        { href: new_investigation_activity_path(investigation), text: "Add activity", classes: classes, visually_hidden_text: "last updated" }
       ]
     end
 
@@ -198,10 +184,5 @@ module Investigations::DisplayTextHelper
     end
 
     render "components/govuk_summary_list", rows: rows
-  end
-
-  def image_attachment_count(_product_count, _other_count)
-    [t("investigations.product_image_attachment_count", count: @product_image_attachment_count),
-     t("investigations.other_image_attachment_count", count: @other_image_attachment_count)].join(" ")
   end
 end
