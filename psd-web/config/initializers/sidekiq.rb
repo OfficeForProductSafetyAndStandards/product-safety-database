@@ -27,7 +27,7 @@ end
 def schedule_keycloak_sync_job
   keycloak_sync_job = Sidekiq::Cron::Job.new(
     name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: Sync users and teams with Keycloak",
-    cron: "*/1 * * * *",
+    cron: "*/5 * * * *",
     class: "SyncKeycloakTeamsAndUsersJob",
     active_job: true,
     queue: ENV["SIDEKIQ_QUEUE"] || "psd"
