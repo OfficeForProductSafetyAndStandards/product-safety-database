@@ -9,7 +9,6 @@ class InvestigationTest < ActiveSupport::TestCase
 
   setup do
     mock_out_keycloak_and_notify
-
     @investigation = load_case(:one)
 
     @investigation_with_product = load_case(:search_related_products)
@@ -30,7 +29,6 @@ class InvestigationTest < ActiveSupport::TestCase
 
   teardown do
     reset_keycloak_and_notify_mocks
-    Elasticsearch::Model.client = @old_client
   end
 
   test "should create activity when investigation is created" do
