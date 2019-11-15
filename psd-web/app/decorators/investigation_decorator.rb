@@ -74,9 +74,11 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list
-    contact_details = complainant.can_be_displayed? ? complainant.decorate.contact_details \
-      : "Reporter details are restricted because they contain GDPR protected data."
-
+    contact_details = if complainant.can_be_displayed?
+                        complainant.decorate.contact_details
+                      else
+                        "Reporter details are restricted because they contain GDPR protected data."
+                      end
     rows = [
       date_received? ? { key: { text: "Received date" }, value: { text: date_received.strftime("%e %B %Y") } } : nil,
       received_type? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,

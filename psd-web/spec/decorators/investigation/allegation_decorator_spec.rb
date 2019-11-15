@@ -14,7 +14,6 @@ RSpec.describe Investigation::AllegationDecorator do
   describe "#title" do
     context "when products are present" do
       context "with one product" do
-
         it "produces the correct title" do
           expect(allegation.decorate.title).to eq("iPhone XS MAX, phone – Asphyxiation")
         end
