@@ -15,7 +15,7 @@ product_iphone:
 investigation_one:
   type: UserSource
   sourceable: one (Investigation)
-  user: south_hampton
+  user: southampton
 
 investigation_two:
   type: UserSource

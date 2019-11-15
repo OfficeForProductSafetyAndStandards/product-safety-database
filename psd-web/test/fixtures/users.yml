@@ -1,8 +1,8 @@
-south_hampton:
-  email: south_hampton@example.com
+southampton:
+  email: southampton@example.com
   has_accepted_declaration: true
   name: Yann
-  organisation: south_hampton
+  organisation: southampton
 
 opss:
   email: opss@example.com
