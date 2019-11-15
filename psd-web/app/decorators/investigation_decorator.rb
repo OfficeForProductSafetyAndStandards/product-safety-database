@@ -47,7 +47,7 @@ class InvestigationDecorator < ApplicationDecorator
       # TODO: Make this a Date time format to_s(:govuk) =>  strftime("%e %B %Y")
       {
         key: { text: "Date created", classes: classes },
-        value: { text: investigation.created_at.beginning_of_month.strftime("%e %B %Y"), classes: classes },
+        value: { text: investigation.created_at.beginning_of_month.to_s(:govuk), classes: classes },
         actions: []
       },
       {
@@ -80,7 +80,7 @@ class InvestigationDecorator < ApplicationDecorator
                         "Reporter details are restricted because they contain GDPR protected data."
                       end
     rows = [
-      date_received? ? { key: { text: "Received date" }, value: { text: date_received.strftime("%e %B %Y") } } : nil,
+      date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,
       received_type? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
       { key: { text: "Source type" }, value: { text: complainant.complainant_type } },
       { key: { text: "Contact details" }, value: { text: contact_details } }

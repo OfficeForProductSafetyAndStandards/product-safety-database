@@ -1,1 +1,1 @@
-# Time::DATE_FORMATS[:govuk] =
+Time::DATE_FORMATS[:govuk] = "%e %B %Y"
