@@ -10,6 +10,19 @@ RSpec.describe InvestigationDecorator do
 
   subject { investigation.decorate }
 
+  describe "#display_product_summary_list?" do
+    let(:investigation) { investigations(:enquiry) }
+    context "with no product" do
+      it { is_expected.to_not be_display_product_summary_list }
+    end
+
+    context "with products" do
+      before { investigation.products << products(:one) }
+
+      it { is_expected.to be_display_product_summary_list }
+    end
+  end
+
   describe "#product_summary_list" do
     let(:product_summary_list) { subject.product_summary_list }
 

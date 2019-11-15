@@ -7,6 +7,10 @@ class Investigation < ApplicationRecord
       title.presence || "Untitled case"
     end
 
+    def display_product_summary_list?
+      true
+    end
+
   private
 
     def build_title_from_products

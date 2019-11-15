@@ -3,12 +3,17 @@ require "rails_helper"
 RSpec.describe Investigation::AllegationDecorator do
   fixtures(:investigation_products, :investigations, :products)
 
+  let(:allegation) { investigations :one_product }
+
   subject { allegation.decorate }
+
+  describe "#display_product_summary_list?" do
+    it { is_expected.to be_display_product_summary_list }
+  end
 
   describe "#title" do
     context "when products are present" do
       context "with one product" do
-        let!(:allegation) { investigations :one_product }
 
         it "produces the correct title" do
           expect(allegation.decorate.title).to eq("iPhone XS MAX, phone – Asphyxiation")

@@ -5,6 +5,10 @@ class InvestigationDecorator < ApplicationDecorator
     user_title
   end
 
+  def display_product_summary_list?
+    products.any?
+  end
+
   def product_summary_list
     products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
     hazards = h.simple_format([hazard_type, hazard_description].join("\n\n"))

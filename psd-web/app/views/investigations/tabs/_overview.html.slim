@@ -12,7 +12,7 @@
     p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), \
       class: "govuk-link"
 
-    - if @investigation.products.any?
+    - if @investigation.display_product_summary_list?
       = govuk_hr
       h2.govuk-heading-m = "product".pluralize(@investigation.products.count).titleize
       = @investigation.product_summary_list
