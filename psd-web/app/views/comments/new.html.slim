@@ -12,7 +12,6 @@
       | Add comment
     = form_with(model: @investigation.activities.new, \
       url: investigation_activity_comment_path(@investigation)) do |form|
-      = pp form.object
       = form.fields_for form.object do |ca_form|
         = render "form_components/govuk_textarea", key: :body, form: ca_form, attributes: { maxlength: 10000 },
               label: { text: "Comment text", classes: "govuk-visually-hidden" }
