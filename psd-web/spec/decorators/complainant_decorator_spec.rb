@@ -7,27 +7,20 @@ RSpec.describe ComplainantDecorator do
 
   subject { complainant.decorate }
 
-  describe "#summary_list" do
-    let(:summary_list) { Capybara.string(subject.summary_list) }
-
-    it "displays the complainant summary list" do
-      expect(summary_list).to have_css("dl dt.govuk-summary-list__key",   text: "Type")
-      expect(summary_list).to have_css("dl dd.govuk-summary-list__value", text: complainant.complainant_type)
-      expect(summary_list).to have_css("dl dt.govuk-summary-list__key",   text: "Contact details")
-      expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.name}/)
-      expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.phone_number}/)
-      expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.email_address}/)
-      expect(summary_list).to have_css("dl dd.govuk-summary-list__value p", text: /#{complainant.other_details}/)
+  describe "#contact_details" do
+    context "with contact details" do
+      it "displays the contact details" do
+        expect(subject.contact_details).to match(complainant.name)
+        expect(subject.contact_details).to match(complainant.phone_number)
+        expect(subject.contact_details).to match(complainant.email_address)
+        expect(subject.contact_details).to match(complainant.other_details)
+      end
     end
 
-    context "when no contact details are provided" do
-      let(:complainant) { complainants(:two) }
+    context "without contact details" do
+      let(:complainant) { Complainant.new }
 
-      it "displays the complainant summary list" do
-        expect(summary_list).to have_css("dl dt.govuk-summary-list__key",   text: "Type")
-        expect(summary_list).to have_css("dl dd.govuk-summary-list__value", text: complainant.complainant_type)
-        expect(summary_list).not_to have_css("dl dt.govuk-summary-list__key", text: "Contact details")
-      end
+      it { expect(subject.contact_details).to eq("Not provided") }
     end
   end
 end

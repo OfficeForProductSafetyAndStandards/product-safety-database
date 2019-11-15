@@ -74,17 +74,14 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list
-    contact_details = [complainant.name, complainant.phone_number, complainant.email_address, complainant.other_details]
-    contact_details = ["Not provided"] if contact_details.empty?
-    unless complainant.can_be_displayed?
-      contact_details = "Reporter details are restricted because they contain GDPR protected data."
-    end
+    contact_details = complainant.can_be_displayed? ? complainant.decorate.contact_details \
+      : "Reporter details are restricted because they contain GDPR protected data."
 
     rows = [
       date_received? ? { key: { text: "Received date" }, value: { text: date_received.strftime("%e %B %Y") } } : nil,
       received_type? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
       { key: { text: "Source type" }, value: { text: complainant.complainant_type } },
-      { key: { text: "Contact details" }, value: { text: h.simple_format(contact_details.join("\n\n")) } }
+      { key: { text: "Contact details" }, value: { text: contact_details } }
     ]
 
     rows.compact!
