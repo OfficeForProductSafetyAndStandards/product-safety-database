@@ -44,7 +44,6 @@ class InvestigationDecorator < ApplicationDecorator
       },
       # TODO: Created by should contain the creator's organisation a bit like in
       # def investigation_assignee(investigation, classes = "")
-      # TODO: Make this a Date time format to_s(:govuk) =>  strftime("%e %B %Y")
       {
         key: { text: "Date created", classes: classes },
         value: { text: investigation.created_at.beginning_of_month.to_s(:govuk), classes: classes },

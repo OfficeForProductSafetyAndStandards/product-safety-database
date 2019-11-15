@@ -12,14 +12,14 @@ class KeycloakTest < ApplicationSystemTestCase
   test "can login" do
     visit root_url
     sign_in email: "user@example.com", password: "password"
-    assert_text "Sign out"
+    assert_link "Sign out"
   end
 
   test "can logout" do
     visit root_url
     sign_in email: "user@example.com", password: "password"
     click_on "Sign out"
-    assert_selector "h1", text: "Sign in to the Product safety database"
+    assert_css "h1", text: "Sign in to the Product safety database"
   end
 
   test "redirects to previous page after login" do
