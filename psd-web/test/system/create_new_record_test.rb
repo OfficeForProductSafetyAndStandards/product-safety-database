@@ -1,9 +1,12 @@
 require "application_system_test_case"
 
 class CreateNewRecordTest < ApplicationSystemTestCase
+
   setup do
     mock_out_keycloak_and_notify
     visit new_investigation_path
+
+    assert_css "h1", text: "Create new"
   end
 
   teardown do
@@ -14,12 +17,12 @@ class CreateNewRecordTest < ApplicationSystemTestCase
     visit root_path
     click_on "Create new"
 
-    assert_text "Create new"
+    assert_css "h1", text: "Create new"
   end
 
   test "should be prompted to select what to create" do
-    assert_text "Product safety allegation"
-    assert_text "Enquiry"
+    assert_css "label", text: "Product safety allegation"
+    assert_css "label", text:  "Enquiry"
 
     assert_no_text "Please select an option before continuing"
   end
