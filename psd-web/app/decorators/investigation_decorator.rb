@@ -5,6 +5,10 @@ class InvestigationDecorator < ApplicationDecorator
     user_title
   end
 
+  def hazard_description
+    h.simple_format(object.hazard_description)
+  end
+
   def display_product_summary_list?
     products.any?
   end

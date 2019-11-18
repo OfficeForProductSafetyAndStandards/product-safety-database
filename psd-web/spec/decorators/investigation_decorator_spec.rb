@@ -156,4 +156,13 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
         .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
     }
   end
+
+  describe '#hazard_descrition' do
+    let(:hazard_description) { "this is\n\nmulti line\n\nformated" }
+    before { investigation.hazard_description = hazard_description }
+
+    it 'keeps the line breaks' do
+      expect(subject.hazard_description).to eq(simple_format(hazard_description))
+    end
+  end
 end
