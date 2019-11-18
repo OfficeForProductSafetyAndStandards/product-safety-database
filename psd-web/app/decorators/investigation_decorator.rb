@@ -1,5 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
+  decorates_associations :documents_attachments
 
   def title
     user_title
