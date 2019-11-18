@@ -11,8 +11,13 @@
         - user_signed_up = user.name.present?
         li.teams--user class="govuk-!-padding-top-3 govuk-!-padding-bottom-3 govuk-!-margin-0"
           - if !user_signed_up && current_user_is_team_admin
-            = link_to "Resend invitation", resend_invitation_team_path(email_address: user.email),
-            method: :put, class: "text-align: right", aria: { label: "Resend invitation to #{user.email}" }
+            - html = capture do
+              | Resend invitation
+              span.govuk-visually-hidden
+                '
+                | to #{user.email}
+            = link_to html, resend_invitation_team_path(email_address: user.email),
+            method: :put, class: "text-align: right"
           h3.teams--user-contact
             - if user_signed_up
               span.govuk-heading-s.teams--user-name = user.name
