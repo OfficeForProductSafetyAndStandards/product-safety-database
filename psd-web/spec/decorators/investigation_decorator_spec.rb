@@ -1,5 +1,14 @@
 require "rails_helper"
 
+RSpec.shared_examples "a formated text" do |text_attribute|
+  let(:text) { "this is\n\nmulti line\n\nformated" }
+  before { investigation.public_send(:"#{text_attribute}=", text) }
+
+  it 'keeps the line breaks' do
+    expect(subject.public_send(text_attribute)).to eq(simple_format(text))
+  end
+end
+
 RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
@@ -158,20 +167,14 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe '#hazard_descrition' do
-    let(:hazard_description) { "this is\n\nmulti line\n\nformated" }
-    before { investigation.hazard_description = hazard_description }
-
-    it 'keeps the line breaks' do
-      expect(subject.hazard_description).to eq(simple_format(hazard_description))
-    end
+    include_examples "a formated text", :hazard_description
   end
 
   describe '#non_compliant_reason' do
-    let(:non_compliant_reason) { "this is\n\nmulti line\n\nformated" }
-    before { investigation.non_compliant_reason = non_compliant_reason }
+    include_examples "a formated text", :non_compliant_reason
+  end
 
-    it 'keeps the line breaks' do
-      expect(subject.non_compliant_reason).to eq(simple_format(non_compliant_reason))
-    end
+  describe "#description" do
+    include_examples "a formated text", :description
   end
 end

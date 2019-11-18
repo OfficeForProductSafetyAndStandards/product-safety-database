@@ -13,6 +13,10 @@ class InvestigationDecorator < ApplicationDecorator
     h.simple_format(object.non_compliant_reason)
   end
 
+  def description
+    h.simple_format(object.description)
+  end
+
   def display_product_summary_list?
     products.any?
   end
