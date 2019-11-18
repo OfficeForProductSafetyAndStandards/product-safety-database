@@ -35,7 +35,7 @@ class InvestigationDecorator < ApplicationDecorator
       },
       {
         key: { text: "Created by", classes: classes },
-        value: { text: investigation.source.name, classes: classes },
+        value: { text: investigation.source&.name, classes: classes },
         actions: []
       },
       {
