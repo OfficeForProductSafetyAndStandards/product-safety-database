@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def nav_items
-    return nil if hide_nav? # On some pages we don't want to show the main navigation
+    return nil if hide_nav? || !User.current # On some pages we don't want to show the main navigation
 
     items = []
     unless User.current.is_opss?
