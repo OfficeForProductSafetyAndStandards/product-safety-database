@@ -165,4 +165,13 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
       expect(subject.hazard_description).to eq(simple_format(hazard_description))
     end
   end
+
+  describe '#non_compliant_reason' do
+    let(:non_compliant_reason) { "this is\n\nmulti line\n\nformated" }
+    before { investigation.non_compliant_reason = non_compliant_reason }
+
+    it 'keeps the line breaks' do
+      expect(subject.non_compliant_reason).to eq(simple_format(non_compliant_reason))
+    end
+  end
 end
