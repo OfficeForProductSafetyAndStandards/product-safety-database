@@ -1,5 +1,4 @@
 class ErrorsController < ApplicationController
-
   layout "application"
 
   skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration
