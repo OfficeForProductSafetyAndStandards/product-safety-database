@@ -63,7 +63,5 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.before do
-    stub_request(:any, /#{URI(Rails.application.config_for(:elasticsearch)[:url]).host}/)
-  end
+  config.include LoginHelpers
 end

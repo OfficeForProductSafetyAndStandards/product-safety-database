@@ -12,6 +12,7 @@ class DeclarationController < ApplicationController
       return render :index
     end
     User.current.has_accepted_declaration!
+    User.current.activate!
     send_welcome_email unless User.current.has_been_sent_welcome_email
     redirect_to session[:redirect_path] || root_path
   end
