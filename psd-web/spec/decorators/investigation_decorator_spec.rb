@@ -34,6 +34,14 @@ RSpec.describe InvestigationDecorator do
       expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
     end
 
+    context "with two products of the same category" do
+      let(:investigation) { investigations(:allegation_with_two_products_with_same_category) }
+
+      it "displays the only category present a paragraphe" do
+        expect(product_summary_list).to have_css("dd.govuk-summary-list__value p", text: investigation.products.first.category)
+      end
+    end
+
     context "whithout hazard_type" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 

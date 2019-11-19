@@ -41,6 +41,13 @@ iphone_3g:
   product_type: phone
   category: phone
 
+samsung:
+  product_code: 4524
+  name: galaxy
+  product_type: phone
+  description: a phone by samsung
+  country_of_origin: Republic of Korea
+
 pixel:
   product_code: 456
   name: Pixel
