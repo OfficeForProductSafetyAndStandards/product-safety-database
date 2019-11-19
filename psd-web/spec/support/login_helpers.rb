@@ -9,7 +9,7 @@ module LoginHelpers
 
 private
 
-  def format_user_for_get_userinfo(user, groups: [])
+  def format_user_for_get_userinfo(user)
     { id: user.id, email: user.email, name: user.name }
   end
 end

@@ -2,8 +2,7 @@ require "rails_helper"
 
 class DummyElasticSearchResult
   attr_accessor :_id
-  def merge(_)
-  end
+  def merge(_); end
 end
 
 describe "Filtering the investigations list", type: :request, with_keycloak_config: true do
