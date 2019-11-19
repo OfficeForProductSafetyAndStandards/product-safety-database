@@ -22,6 +22,31 @@ RSpec.describe User do
     end
   end
 
+  describe ".get_team_members" do
+    let(:team) { create(:team) }
+    let(:user) { create(:user, :activated, teams: [team]) }
+    let(:investigation) { create(:allegation) }
+    let(:team_members) { described_class.get_team_members(user: user) }
+
+    before do
+      @another_active_user = create(:user, :activated, organisation: user.organisation, teams: [team])
+      @another_inactive_user = create(:user, organisation: user.organisation, teams: [team])
+      @another_user_with_another_team = create(:user, teams: [create(:team)])
+    end
+
+    it "returns other users on the same team" do
+      expect(team_members).to include(@another_active_user)
+    end
+
+    it "does not return other users on the same team who are not activated" do
+      expect(team_members).not_to include(@another_inactive_user)
+    end
+
+    it "does not return other users on other teams" do
+      expect(team_members).not_to include(@another_user_with_another_team)
+    end
+  end
+
   describe "#roles", with_keycloak_config: true do
     let(:id) { SecureRandom.uuid }
     subject(:user) { described_class.new(id: id) }

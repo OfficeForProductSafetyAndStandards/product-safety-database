@@ -13,3 +13,7 @@ private
     { id: user.id, email: user.email, name: user.name }
   end
 end
+
+RSpec.configure do |config|
+  config.include LoginHelpers
+end

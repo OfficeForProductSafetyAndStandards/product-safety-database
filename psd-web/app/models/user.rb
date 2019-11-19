@@ -136,7 +136,7 @@ class User < ApplicationRecord
   def self.get_team_members(user:)
     users = [].to_set
     user.teams.each do |team|
-      team.users.each do |team_member|
+      team.users.where(account_activated: true).each do |team_member|
         users << team_member
       end
     end
