@@ -12,6 +12,14 @@ class User < ApplicationRecord
   attr_accessor :access_token # Used only in User.current thread context
   attr_writer :roles
 
+  def self.activated
+    where(account_activated: true)
+  end
+
+  def activate!
+    update!(account_activated: true)
+  end
+
   def self.create_and_send_invite(email_address, team, redirect_url)
     KeycloakClient.instance.create_user(email_address)
 

@@ -48,6 +48,7 @@ group :development, :test do
   gem "coveralls"
   gem "debase"
   gem "dotenv-rails"
+  gem "factory_bot_rails"
   gem "govuk-lint"
   gem "listen"
   gem "m"

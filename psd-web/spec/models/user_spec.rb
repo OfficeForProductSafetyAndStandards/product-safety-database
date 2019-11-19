@@ -1,21 +1,41 @@
 require "rails_helper"
 
-RSpec.describe User, with_keycloak_config: true do
-  before do
-    allow(ENV).to receive(:fetch).with("KEYCLOAK_AUTH_URL").and_return("test")
-    allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
-    allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
-    allow(KeycloakToken).to receive(:new).and_return(token_stub)
+RSpec.describe User do
+  describe ".activated" do
+    before do
+      @unactivated_user = create(:user)
+      @activated_user = create(:user, :activated)
+    end
+
+    it "returns only users with activated accounts" do
+      expect(User.activated.to_a).to eq [@activated_user]
+    end
   end
 
-  let(:client_id) { "123" }
-  let(:client_secret) { "secret" }
-  let(:token_stub) { OpenStruct.new(access_token: "test") }
-  let(:id) { SecureRandom.uuid }
+  describe "#activate!" do
+    subject(:user) { build(:user) }
 
-  subject(:user) { described_class.new(id: id) }
+    it "sets the activated flag on the user" do
+      expect(user.account_activated?).to be_falsy
+      user.activate!
+      expect(user.account_activated?).to be_truthy
+    end
+  end
 
-  describe "#roles" do
+  describe "#roles", with_keycloak_config: true do
+    let(:id) { SecureRandom.uuid }
+    subject(:user) { described_class.new(id: id) }
+
+    before do
+      allow(ENV).to receive(:fetch).with("KEYCLOAK_AUTH_URL").and_return("test")
+      allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
+      allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
+      allow(KeycloakToken).to receive(:new).and_return(token_stub)
+    end
+
+    let(:client_id) { "123" }
+    let(:client_secret) { "secret" }
+    let(:token_stub) { OpenStruct.new(access_token: "test") }
     let(:keycloak_roles) { %w[keycloak_role] }
     let(:cache_roles) { %w[cached_role] }
     let(:instance_roles) { %w[instance_role] }
