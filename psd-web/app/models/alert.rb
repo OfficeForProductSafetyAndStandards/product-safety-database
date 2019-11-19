@@ -16,7 +16,7 @@ class Alert < ApplicationRecord
   after_save :send_alert_email
 
   def send_alert_email
-    emails = User.all.map(&:email)
+    emails = User.activated.map(&:email)
     SendAlertJob.perform_later(emails, subject_text: summary, body_text: description)
   end
 
