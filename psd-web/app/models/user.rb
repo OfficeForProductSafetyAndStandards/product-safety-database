@@ -84,7 +84,7 @@ class User < ApplicationRecord
   end
 
   def display_name(ignore_visibility_restrictions: false)
-    display_name = name || ""
+    display_name = name
     can_display_teams = ignore_visibility_restrictions || (organisation.present? && organisation.id == User.current.organisation_id)
     can_display_teams = can_display_teams && teams.any?
     membership_display = can_display_teams ? team_names : organisation&.name
