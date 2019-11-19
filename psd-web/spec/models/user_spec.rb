@@ -47,6 +47,27 @@ RSpec.describe User do
     end
   end
 
+  describe ".get_assignees" do
+    before do
+      @active_user = create(:user, :activated)
+      @inactive_user = create(:user)
+    end
+
+    it "returns other users" do
+      expect(described_class.get_assignees).to include(@active_user)
+    end
+
+    it "does not return other users who are not activated" do
+      expect(described_class.get_assignees).not_to include(@inactive_user)
+    end
+
+    context "when a user to except is supplied" do
+      it "does not return the excepted user" do
+        expect(described_class.get_assignees(except: @active_user)).to be_empty
+      end
+    end
+  end
+
   describe "#roles", with_keycloak_config: true do
     let(:id) { SecureRandom.uuid }
     subject(:user) { described_class.new(id: id) }
