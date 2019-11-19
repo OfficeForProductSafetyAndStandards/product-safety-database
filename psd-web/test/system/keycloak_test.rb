@@ -19,7 +19,7 @@ class KeycloakTest < ApplicationSystemTestCase
     visit root_url
     sign_in email: "user@example.com", password: "password"
     click_on "Sign out"
-    assert_selector "h1", text: "Sign in to Product safety database"
+    assert_selector "h1", text: "Sign in to the Product safety database"
   end
 
   test "redirects to previous page after login" do
@@ -29,7 +29,7 @@ class KeycloakTest < ApplicationSystemTestCase
   end
 
   def sign_in(email:, password:)
-    assert_selector "h1", text: "Sign in to Product safety database"
+    assert_selector "h1", text: "Sign in to the Product safety database"
     fill_in "Email address", with: email
     fill_in "Password", with: password
     click_on "Continue"
