@@ -18,6 +18,10 @@ FactoryBot.define do
       account_activated { true }
     end
 
+    trait :inactive do
+      account_activated { false }
+    end
+
     trait :team_admin do
       transient do
         roles { %i[psd_user team_admin] }
@@ -27,6 +31,12 @@ FactoryBot.define do
     trait :psd_user do
       transient do
         roles { [:psd_user] }
+      end
+    end
+
+    trait :opss_user do
+      transient do
+        roles { %i[psd_user opss_user] }
       end
     end
 
