@@ -11,11 +11,11 @@ describe UserDeclarationService do
     end
 
     it "sets the user accepted declaration flag" do
-      expect(user.has_accepted_declaration).to be true
+      expect(user).to be_has_accepted_declaration
     end
 
     it "sets the user account activated flag" do
-      expect(user.account_activated).to be true
+      expect(user).to be_account_activated
     end
 
     context "when the user has already been sent a welcome email" do
@@ -34,7 +34,7 @@ describe UserDeclarationService do
       end
 
       it "sets the has been sent welcome email flag" do
-        expect(user.has_been_sent_welcome_email).to be true
+        expect(user).to be_has_been_sent_welcome_email
       end
     end
   end

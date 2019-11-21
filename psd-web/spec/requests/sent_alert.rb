@@ -16,11 +16,8 @@ describe "Sending a product safety alert", type: :request, with_keycloak_config:
     get "/cases/#{investigation.pretty_id}/alerts/preview", params: { "alert[summary]" => "test", "alert[description]" => "test" }
   end
 
-  it "shows the number of recipients the alert will be sent to" do
+  it "shows the number of recipients the alert will be sent to, including active users only" do
     expect(response.body).to match(/All users \(\d+ people\)/)
-  end
-
-  it "only includes active users" do
     expect(response.body.match(/All users \((\d+) people\)/).captures.first).to eq("2")
   end
 end
