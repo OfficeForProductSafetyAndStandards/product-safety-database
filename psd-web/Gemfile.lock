@@ -1,9 +1,8 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails.git
-  revision: a8f4728d7f11fc5f75dab8bb99de5e7923707e2e
-  tag: 0.3.0
+  revision: 6ad3173f4396ecb838ccc0742718f3b926559358
   specs:
-    govuk-design-system-rails (1.0.0)
+    govuk-design-system-rails (0.3.0)
 
 GIT
   remote: https://github.com/randym/axlsx.git
@@ -465,7 +464,7 @@ DEPENDENCIES
   elasticsearch (= 6.8.0)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
-  govuk-design-system-rails!
+  govuk-design-system-rails (~> 0.3.0)!
   govuk-lint
   govuk_notify_rails (= 2.1.0)
   jbuilder
