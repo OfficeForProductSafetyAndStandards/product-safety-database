@@ -11,18 +11,13 @@ class DeclarationController < ApplicationController
       @error_list << :declaration_not_agreed_to
       return render :index
     end
-    User.current.has_accepted_declaration!
-    User.current.activate!
-    send_welcome_email unless User.current.has_been_sent_welcome_email
+
+    UserDeclarationService.accept_declaration(User.current)
+
     redirect_to session[:redirect_path] || root_path
   end
 
   def set_errors
     @error_list = []
-  end
-
-  def send_welcome_email
-    NotifyMailer.welcome(User.current.name, User.current.email).deliver_later
-    User.current.has_been_sent_welcome_email!
   end
 end

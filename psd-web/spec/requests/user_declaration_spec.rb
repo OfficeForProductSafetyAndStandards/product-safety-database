@@ -5,22 +5,29 @@ describe "User accepting declaration", type: :request, with_keycloak_config: tru
 
   before { sign_in(as_user: user) }
 
-  context "when the user has not already accepted the declaration" do
-    before do
-      expect(user.has_accepted_declaration).to be_falsy
-      expect(user.account_activated).to be_falsy
-      post declaration_accept_path, params: { agree: "checked" }
-      user.reload
+  context "with no parameters" do
+    before { post declaration_accept_path }
+
+    it "renders the index template again" do
+      expect(response).to render_template(:index)
     end
 
-    context "when they accept the declaration" do
-      it "sets the user accepted declaration flag" do
-        expect(user.has_accepted_declaration).to be_truthy
-      end
+    it "renders an error" do
+      expect(response.body).to include("You must agree to the declaration to use this service")
+    end
+  end
 
-      it "sets the user account activated flag" do
-        expect(user.account_activated).to be_truthy
-      end
+  context "with the agree checkbox checked" do
+    let(:params) { { agree: "checked" } }
+
+    it "calls UserDeclarationService.accept_declaration" do
+      expect(UserDeclarationService).to receive(:accept_declaration).with(user)
+      post declaration_accept_path, params: params
+    end
+
+    it "redirects the user to root_path" do
+      post declaration_accept_path, params: params
+      expect(response).to redirect_to(root_path)
     end
   end
 end
