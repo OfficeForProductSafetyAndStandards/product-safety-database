@@ -1,6 +1,6 @@
 module ApplicationHelper
   def govuk_hr
-    render 'components/govuk_hr', classes: ["govuk-section-break--visible", "govuk-section-break--m"]
+    tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
   end
 
   def sortable(column, title = nil)

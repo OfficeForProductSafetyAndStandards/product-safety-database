@@ -19,7 +19,7 @@ class Investigation < ApplicationRecord
   validates_length_of :hazard_description, maximum: 10000
 
   after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
-               :create_audit_activity_for_visibility, :create_audit_activity_for_summary
+    :create_audit_activity_for_visibility, :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
 
@@ -27,13 +27,13 @@ class Investigation < ApplicationRecord
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products,
-           after_add: :create_audit_activity_for_product,
-           after_remove: :create_audit_activity_for_removing_product
+    after_add: :create_audit_activity_for_product,
+    after_remove: :create_audit_activity_for_removing_product
 
   has_many :investigation_businesses, dependent: :destroy
   has_many :businesses, through: :investigation_businesses,
-           after_add: :create_audit_activity_for_business,
-           after_remove: :create_audit_activity_for_removing_business
+    after_add: :create_audit_activity_for_business,
+    after_remove: :create_audit_activity_for_removing_business
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -155,7 +155,7 @@ class Investigation < ApplicationRecord
     "Product reported because it is non-compliant."
   end
 
-private
+  private
 
   def create_audit_activity_for_case
     # To be implemented by children
