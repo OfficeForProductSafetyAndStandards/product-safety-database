@@ -39,7 +39,7 @@ RSpec.describe InvestigationDecorator do
       let(:iphone_3g)     { products(:iphone_3g) }
       let(:iphone)        { products(:iphone)  }
       let(:samsung)       { products(:samsung) }
-      let(:products_list)  { [iphone_3g, samsung] }
+      let(:products_list) { [iphone_3g, samsung] }
 
       before do
         investigation.assign_attributes(

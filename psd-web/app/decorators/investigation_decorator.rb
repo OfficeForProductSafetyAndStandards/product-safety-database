@@ -90,8 +90,9 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  private
+private
 
+  # rubocop:disable Rails/OutputSafety
   def category
     @category ||= \
       begin
@@ -100,14 +101,14 @@ class InvestigationDecorator < ApplicationDecorator
         categories.uniq!
         categories.compact!
         if categories.size == 1
-          h.simple_format(categories.first.downcase.upcase_first, class: 'govuk-body')
+          h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
         else
-          h.tag.ul(class: 'govuk-list') do
-            categories.map do |cat|
-              h.tag.li(h.escape_once(cat.downcase.upcase_first))
-            end.join.html_safe
+          h.tag.ul(class: "govuk-list") do
+            lis = categories.map { |cat| h.tag.li(h.escape_once(cat.downcase.upcase_first)) }
+            lis.join.html_safe
           end
         end
       end
   end
+  # rubocop:enable Rails/OutputSafety
 end
