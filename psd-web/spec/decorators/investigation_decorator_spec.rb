@@ -35,10 +35,34 @@ RSpec.describe InvestigationDecorator do
     end
 
     context "with two products of the same category" do
-      let(:investigation) { investigations(:allegation_with_two_products_with_same_category) }
+      fixtures(:products)
+      let(:iphone_3g)     { products(:iphone_3g) }
+      let(:iphone)        { products(:iphone)  }
+      let(:samsung)       { products(:samsung) }
+      let(:products_list)  { [iphone_3g, samsung] }
+
+      before do
+        investigation.assign_attributes(
+          product_category: iphone_3g.category,
+          products: products_list
+        )
+      end
 
       it "displays the only category present a paragraphe" do
-        expect(product_summary_list).to have_css("dd.govuk-summary-list__value p", text: investigation.products.first.category)
+        random_product_category = investigation.products.sample.category
+        expect(product_summary_list)
+          .to have_css("dd.govuk-summary-list__value p.govuk-body", text: random_product_category.upcase_first)
+      end
+
+      context "with two products on different categories" do
+        let(:products_list) { [iphone, iphone_3g] }
+
+        it "displays a categories as a list" do
+          expect(product_summary_list)
+            .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone_3g.category.upcase_first)
+          expect(product_summary_list)
+            .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
+        end
       end
     end
 

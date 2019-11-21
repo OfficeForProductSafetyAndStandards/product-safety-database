@@ -90,14 +90,24 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-private
+  private
 
   def category
-    @category ||= begin
-      categories = [object.product_category]
-      products.each { |product| categories << product.category }
-
-      categories.uniq.compact.join(", ").downcase.upcase_first
-    end
+    @category ||= \
+      begin
+        categories = [object.product_category]
+        categories += products.map(&:category)
+        categories.uniq!
+        categories.compact!
+        if categories.size == 1
+          h.simple_format(categories.first.downcase.upcase_first, class: 'govuk-body')
+        else
+          h.tag.ul(class: 'govuk-list') do
+            categories.map do |cat|
+              h.tag.li(h.escape_once(cat.downcase.upcase_first))
+            end.join.html_safe
+          end
+        end
+      end
   end
 end

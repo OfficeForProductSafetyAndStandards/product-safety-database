@@ -45,6 +45,7 @@ samsung:
   product_code: 4524
   name: galaxy
   product_type: phone
+  category: phone
   description: a phone by samsung
   country_of_origin: Republic of Korea
 
