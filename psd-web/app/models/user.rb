@@ -16,10 +16,6 @@ class User < ApplicationRecord
     where(account_activated: true)
   end
 
-  def activate!
-    update!(account_activated: true)
-  end
-
   def self.create_and_send_invite(email_address, team, redirect_url)
     KeycloakClient.instance.create_user(email_address)
 
@@ -145,14 +141,6 @@ class User < ApplicationRecord
 
   def has_viewed_introduction!
     update has_viewed_introduction: true
-  end
-
-  def has_accepted_declaration!
-    update has_accepted_declaration: true
-  end
-
-  def has_been_sent_welcome_email!
-    update has_been_sent_welcome_email: true
   end
 
 private

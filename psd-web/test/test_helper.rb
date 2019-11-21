@@ -76,7 +76,7 @@ class ActiveSupport::TestCase
     allow(@keycloak_client_instance).to receive(:user_info).and_return(user.attributes.symbolize_keys.slice(:id, :email, :name))
     allow(@keycloak_client_instance).to receive(:user_account_url) { "http://test.com/account" }
     User.current = user
-    User.current.has_accepted_declaration!
+    User.current.update!(has_accepted_declaration: true)
   end
 
   def reset_keycloak_and_notify_mocks

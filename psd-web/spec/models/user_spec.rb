@@ -12,16 +12,6 @@ RSpec.describe User do
     end
   end
 
-  describe "#activate!" do
-    subject(:user) { build(:user) }
-
-    it "sets the activated flag on the user" do
-      expect(user.account_activated?).to be_falsy
-      user.activate!
-      expect(user.account_activated?).to be_truthy
-    end
-  end
-
   describe ".get_team_members" do
     let(:team) { create(:team) }
     let(:user) { create(:user, :activated, teams: [team]) }
