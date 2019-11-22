@@ -89,7 +89,7 @@ RSpec.describe InvestigationDecorator do
   describe "#investigation_summary_list" do
     fixtures(:sources)
     let(:investigation_summary_list) { subject.investigation_summary_list }
-    let(:expected_creator_name)      { investigation.source.user.name }
+    let(:expected_creator_name)      { investigation.source.show }
 
     it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)

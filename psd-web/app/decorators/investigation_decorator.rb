@@ -35,7 +35,7 @@ class InvestigationDecorator < ApplicationDecorator
       },
       {
         key: { text: "Created by", classes: classes },
-        value: { text: creator, classes: classes },
+        value: { text: source&.show, classes: classes },
         actions: []
       },
       {
@@ -95,10 +95,6 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
 private
-
-  def creator
-    source.user.name.upcase_first if source&.user.present?
-  end
 
   # rubocop:disable Rails/OutputSafety
   def category
