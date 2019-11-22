@@ -73,10 +73,6 @@ class Investigation < ApplicationRecord
     is_private ? ApplicationController.helpers.visibility_options[:private] : ApplicationController.helpers.visibility_options[:public]
   end
 
-  def pretty_description
-    "#{case_type.titleize}: #{pretty_id}"
-  end
-
   def important_assignable_people
     people = [].to_set
     people << assignee if assignee.is_a? User

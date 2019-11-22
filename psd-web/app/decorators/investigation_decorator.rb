@@ -90,6 +90,10 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
+  def pretty_description
+    "#{case_type.titleize}: #{pretty_id}"
+  end
+
 private
 
   def creator

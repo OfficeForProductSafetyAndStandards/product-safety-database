@@ -147,4 +147,9 @@ RSpec.describe InvestigationDecorator do
       expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.other_details}/)
     end
   end
+
+  describe '#pretty_description' do
+    it { expect(subject.pretty_description)
+        .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}") }
+  end
 end
