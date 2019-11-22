@@ -96,7 +96,7 @@ RSpec.describe InvestigationDecorator do
       expect(investigation_summary_list).to summarise("Created by", text: expected_creator_name)
       expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
       expect(investigation_summary_list).
-        to summarise("Date created", text: investigation.created_at.to_(:govuk))
+        to summarise("Date created", text: investigation.created_at.to_s(:govuk))
       expect(investigation_summary_list).to summarise("Last updated", text: time_ago_in_words(investigation.updated_at))
       expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
     end
