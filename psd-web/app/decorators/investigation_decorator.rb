@@ -46,7 +46,7 @@ class InvestigationDecorator < ApplicationDecorator
       # def investigation_assignee(investigation, classes = "")
       {
         key: { text: "Date created", classes: classes },
-        value: { text: investigation.created_at.beginning_of_month.to_s(:govuk), classes: classes },
+        value: { text: investigation.created_at.to_s(:govuk), classes: classes },
         actions: []
       },
       {
