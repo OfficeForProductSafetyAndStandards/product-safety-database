@@ -1,11 +1,11 @@
 module Investigations
   class AttachmentsController < ApplicationController
     def index
-      @investigation = Investigation
+      investigation = Investigation
                          .includes(:products, :businesses, :documents_attachments, :documents_blobs)
                          .find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize @investigation, :show?
-
+      authorize investigation, :show?
+      @investigation = investigation.decorate
       @breadcrumbs = {
         items: [
           { text: "Cases", href: investigations_path(previous_search_params) },
