@@ -89,10 +89,11 @@ RSpec.describe InvestigationDecorator do
   describe "#investigation_summary_list" do
     fixtures(:sources)
     let(:investigation_summary_list) { subject.investigation_summary_list }
+    let(:expected_creator_name)      { investigation.source.user.name }
 
     it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
-      expect(investigation_summary_list).to summarise("Created by", text: investigation.source.name)
+      expect(investigation_summary_list).to summarise("Created by", text: expected_creator_name)
       expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
       expect(investigation_summary_list).
         to summarise("Date created", text: investigation.created_at.beginning_of_month.strftime("%e %B %Y"))
@@ -100,6 +101,14 @@ RSpec.describe InvestigationDecorator do
       expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
     end
 
+    context "when investigation has no source " do
+      before { investigation.source  = nil }
+
+      it "renders nothing as the Created by" do
+        expect(investigation_summary_list).to summarise("Created by", text: "")
+      end
+
+    end
     context "whithout complainant reference" do
       let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
 
