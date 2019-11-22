@@ -148,8 +148,10 @@ RSpec.describe InvestigationDecorator do
     end
   end
 
-  describe '#pretty_description' do
-    it { expect(subject.pretty_description)
-        .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}") }
+  describe "#pretty_description" do
+    it {
+      expect(subject.pretty_description)
+        .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
+    }
   end
 end
