@@ -93,7 +93,7 @@ class InvestigationDecorator < ApplicationDecorator
 private
 
   def creator
-    source.user.name.upcase_first if source.present?
+    source.user.name.upcase_first if source&.user.present?
   end
 
   # rubocop:disable Rails/OutputSafety

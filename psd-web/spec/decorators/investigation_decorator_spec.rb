@@ -101,14 +101,22 @@ RSpec.describe InvestigationDecorator do
       expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
     end
 
-    context "when investigation has no source " do
-      before { investigation.source  = nil }
+    context "when investigation has no source" do
+      before { investigation.source = nil }
 
       it "renders nothing as the Created by" do
         expect(investigation_summary_list).to summarise("Created by", text: "")
       end
-
     end
+
+    context "when the investigation's source no user" do
+      before { investigation.source.user = nil }
+
+      it "renders nothing as the Created by" do
+        expect(investigation_summary_list).to summarise("Created by", text: "")
+      end
+    end
+
     context "whithout complainant reference" do
       let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
 
