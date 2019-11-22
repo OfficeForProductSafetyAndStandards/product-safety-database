@@ -1,6 +1,6 @@
 class ProductDecorator < ApplicationDecorator
   delegate_all
-
+  decorates_association :investigations
   def summary_list(include_batch_number: false)
     rows = [
       { key: { text: "Product name" }, value: { text: product.name } },
