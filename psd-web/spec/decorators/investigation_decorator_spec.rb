@@ -117,7 +117,7 @@ RSpec.describe InvestigationDecorator do
       end
     end
 
-    context "whithout complainant reference" do
+    context "without complainant reference" do
       let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
 
       before { investigation.complainant_reference = nil }

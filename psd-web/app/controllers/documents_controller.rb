@@ -23,12 +23,10 @@ class DocumentsController < ApplicationController
     return render :edit unless file_valid?
 
     @file.blob.save
-    if @parent.is_a? Investigation
-      AuditActivity::Document::Update.from(@file.blob, @parent, previous_data)
-      redirect_to investigation_path(@parent)
-    else
-      redirect_to @parent
-    end
+    return redirect_to @parent unless @parent.is_a? Investigation
+
+    AuditActivity::Document::Update.from(@file.blob, @parent, previous_data)
+    redirect_to investigation_path(@parent)
   end
 
   def remove; end
@@ -36,12 +34,10 @@ class DocumentsController < ApplicationController
   # DELETE /documents/1
   def destroy
     @file.destroy
-    if @parent.is_a? Investigation
-      AuditActivity::Document::Destroy.from(@file.blob, @parent)
-      redirect_to investigation_path(@parent), flash: { success: "File was successfully removed" }
-    else
-      redirect_to @parent, flash: { success: "File was successfully removed" }
-    end
+    redirect_to @parent, flash: { success: "File was successfully removed" } unless @parent.is_a? Investigation
+
+    AuditActivity::Document::Destroy.from(@file.blob, @parent)
+    redirect_to investigation_path(@parent), flash: { success: "File was successfully removed" }
   end
 
 private
