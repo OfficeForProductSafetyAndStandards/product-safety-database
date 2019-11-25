@@ -56,7 +56,7 @@ module Investigations
     end
 
     def set_investigation_with_associations
-      @investigation = Investigation
+      investigation = Investigation
                          .eager_load(:source,
                                      products: { documents_attachments: :blob },
                                      investigation_businesses: { business: :locations },
@@ -64,6 +64,7 @@ module Investigations
                          .find_by!(pretty_id: params[:investigation_pretty_id])
 
       authorize @investigation, :show?
+      @investigation = investigation.decorate
       preload_activities
     end
 
