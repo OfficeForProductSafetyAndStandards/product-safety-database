@@ -62,8 +62,8 @@ jobs:
           ${{ runner.OS }}-node
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
-    - name: Check gems
-      run: ls -a psd-web/vendor/bundle
+          #- name: Check gems
+          #  run: ls -a psd-web/vendor/bundle
     - name: Install ruby gems
       env:
         PGHOST: localhost
