@@ -9,8 +9,8 @@ module BusinessesHelper
 
   def search_for_businesses(page_size)
     Business.full_search(search_query)
-      .paginate(page: params[:page], per_page: page_size)
       .records
+      .paginate(page: params[:page], per_page: page_size)
   end
 
   def sort_column
