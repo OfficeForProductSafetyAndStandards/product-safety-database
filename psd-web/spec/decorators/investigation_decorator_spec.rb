@@ -91,8 +91,9 @@ RSpec.describe InvestigationDecorator do
     let(:investigation_summary_list) { subject.investigation_summary_list }
 
     it "has the expected fields" do
+      print(investigation_summary_list)
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
-      expect(investigation_summary_list).to summarise("Created by", text: subject.created_by)
+      expect(investigation_summary_list).to summarise("Created by", text: /investigation/)
       expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
       expect(investigation_summary_list).
         to summarise("Date created", text: investigation.created_at.to_s(:govuk))
