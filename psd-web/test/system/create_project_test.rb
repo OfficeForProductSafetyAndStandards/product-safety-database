@@ -41,7 +41,7 @@ class CreateProjectTest < ApplicationSystemTestCase
   test "project details should show in overview" do
     fill_project_details_and_continue
 
-    project = Investigation::Project.find_by(user_title: @project.user_title)
+    project = Investigation::Project.find_by(user_title: @project.user_title).decorate
 
     assert_css ".hmcts-banner--success", text: "Project was successfully created"
     assert_css "h1.govuk-heading-l span.govuk-caption-l", text: project.pretty_description
