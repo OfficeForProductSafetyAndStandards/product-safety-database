@@ -9,9 +9,7 @@ RSpec.feature "Your team page", type: :feature, with_keycloak_config: true do
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, teams: [create(:team)]) }
 
   before do
-    stub_user_roles(another_active_user, another_inactive_user)
     sign_in(as_user: user)
-
     visit team_path(team)
   end
 

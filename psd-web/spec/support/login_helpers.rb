@@ -3,13 +3,7 @@ module LoginHelpers
     allow_any_instance_of(ApplicationController).to receive(:access_token).and_return(access_token)
     allow(KeycloakClient.instance).to receive(:user_signed_in?).with(access_token).and_return(true)
     allow(KeycloakClient.instance).to receive(:user_info).and_return(format_user_for_get_userinfo(as_user))
-    stub_user_roles(as_user)
-  end
-
-  def stub_user_roles(*users)
-    users.each do |user|
-      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(user.roles)
-    end
+    allow(KeycloakClient.instance).to receive(:get_user_roles).with(as_user.id).and_return(as_user.roles)
   end
 
 private

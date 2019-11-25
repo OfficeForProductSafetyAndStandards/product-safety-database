@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe UserDeclarationService do
+describe UserDeclarationService, with_keycloak_config: true do
   describe ".accept_declaration" do
     let(:user) { create(:user, has_accepted_declaration: false, account_activated: false) }
     let(:mailer) { double("mailer", deliver_later: true) }

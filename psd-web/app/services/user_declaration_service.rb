@@ -8,7 +8,5 @@ class UserDeclarationService
     end
 
     user.update!(attributes_to_update)
-
-    true
   end
 end

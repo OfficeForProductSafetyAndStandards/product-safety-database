@@ -14,8 +14,10 @@ FactoryBot.define do
     end
 
     trait :activated do
-      has_accepted_declaration { true }
-      account_activated { true }
+      after(:build) do |user|
+        mailer = double("mailer", welcome: double("welcome mailer", deliver_later: true))
+        UserDeclarationService.accept_declaration(user, mailer)
+      end
     end
 
     trait :inactive do
@@ -40,8 +42,9 @@ FactoryBot.define do
       end
     end
 
-    after(:build) do |model, evaluator|
-      model.instance_variable_set(:@roles, evaluator.roles)
+    after(:build) do |user, evaluator|
+      user.instance_variable_set(:@roles, evaluator.roles)
+      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(user.roles)
     end
   end
 end
