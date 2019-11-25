@@ -27,9 +27,8 @@ class DocumentsFlowController < ApplicationController
     return redirect_to next_wizard_path unless step == steps.last
 
     attach_blobs_to_list(@file_blob, file_collection)
-    return redirect_to @parent if @parent.is_a? Investigation
-
     AuditActivity::Document::Add.from(@file_blob, @parent)
+
     redirect_to investigation_path(@parent)
   end
 
