@@ -94,6 +94,7 @@ class InvestigationDecorator < ApplicationDecorator
     "#{case_type.titleize}: #{pretty_id}"
   end
 
+  # rubocop:disable Rails/OutputSafety
   def created_by
     return if source.nil?
 
@@ -101,12 +102,13 @@ class InvestigationDecorator < ApplicationDecorator
     out << if source.user.nil?
              h.tag.div("Unassigned")
            else
-             source.user.name.to_s
+             h.escape_once(source.user.name.to_s)
            end
-    out << source.user&.organisation.name if source&.user&.organisation.present?
+    out << h.escape_once(source.user&.organisation&.name) if source&.user&.organisation.present?
 
     out.join("<br />").html_safe
   end
+  # rubocop:enable Rails/OutputSafety
 
 private
 
