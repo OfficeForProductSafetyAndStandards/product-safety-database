@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "User accepting declaration", type: :request, with_keycloak_config: true do
+RSpec.describe "User accepting declaration", type: :request, with_keycloak_config: true do
   let(:user) { create(:user) }
 
   before { sign_in(as_user: user) }
