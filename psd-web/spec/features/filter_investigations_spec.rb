@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Filtering the investigations list", type: :feature, with_keycloak_config: true do
+RSpec.feature "Filtering the investigations list", type: :feature, with_keycloak_config: true, with_stubbed_elasticsearch: true do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team]) }
   let(:investigation) { create(:allegation) }
