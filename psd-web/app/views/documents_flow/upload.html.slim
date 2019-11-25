@@ -1,3 +1,4 @@
+- @parent = @parent.decorate
 - content_for :page_title, "Add attachment"
 - content_for :after_header do
   = link_to "Back to #{@parent.pretty_description}", @parent, class: "govuk-back-link"
