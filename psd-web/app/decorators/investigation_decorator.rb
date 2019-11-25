@@ -35,7 +35,7 @@ class InvestigationDecorator < ApplicationDecorator
       },
       {
         key: { text: "Created by", classes: classes },
-        value: { text: source&.show, classes: classes },
+        value: { text: created_by, classes: classes },
         actions: []
       },
       {
@@ -92,6 +92,15 @@ class InvestigationDecorator < ApplicationDecorator
 
   def pretty_description
     "#{case_type.titleize}: #{pretty_id}"
+  end
+
+  def created_by
+    return if source.nil?
+
+    out = []
+    out << source.user.nil? ? h.tag.div("Unassigned") : source.user.name.to_s
+    out << source.user&.organisation.name if source&.user&.organisation.present?
+    out.join.html_safe
   end
 
 private
