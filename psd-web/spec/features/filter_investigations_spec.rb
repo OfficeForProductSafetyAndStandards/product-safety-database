@@ -24,5 +24,4 @@ RSpec.feature "Filtering the investigations list", type: :feature, with_keycloak
     expect(page).to have_css("#created_by_someone_else_id option[value=\"#{another_active_user.id}\"]")
     expect(page).not_to have_css("#created_by_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
   end
-
 end
