@@ -98,9 +98,14 @@ class InvestigationDecorator < ApplicationDecorator
     return if source.nil?
 
     out = []
-    out << source.user.nil? ? h.tag.div("Unassigned") : source.user.name.to_s
+    out << if source.user.nil?
+             h.tag.div("Unassigned")
+           else
+             source.user.name.to_s
+           end
     out << source.user&.organisation.name if source&.user&.organisation.present?
-    out.join.html_safe
+
+    out.join("<br />").html_safe
   end
 
 private
