@@ -10,7 +10,7 @@ class Team < ApplicationRecord
   validates :path, presence: true
 
   def add_user(user)
-    # Update local cached team membership so the change appears immediately
+    # Update the local cached team membership so the change appears immediately
     users << user
 
     KeycloakClient.instance.add_user_to_team(user.id, id)
