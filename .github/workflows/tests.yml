@@ -70,8 +70,8 @@ jobs:
           ${{ runner.OS }}-node
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
-    - name: Check gems
-      run: ls -a psd-web/vendor/bundle
+          #    - name: Check gems
+          #      run: ls -a psd-web/vendor/bundle
     - name: Install ruby gems
       env:
         PGHOST: localhost
@@ -101,33 +101,33 @@ jobs:
       run: |
         cd psd-web
         bin/rails db:setup
-    - name: Run Tests
-      env:
-        ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        bundle exec rake test:all
-    - name: Run Specs
-      env:
-        ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        bundle exec rspec spec
+        #    - name: Run Tests
+        #      env:
+        #        ELASTICSEARCH_URL: localhost
+        #        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+        #        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
+        #        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
+        #        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
+        #        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
+        #        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+        #        PGHOST: localhost
+        #        PGUSER: postgres
+        #        RAILS_ENV: test
+        #      run: |
+        #        cd psd-web
+        #        bundle exec rake test:all
+        #    - name: Run Specs
+        #      env:
+        #        ELASTICSEARCH_URL: localhost
+        #        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+        #        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
+        #        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
+        #        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
+        #        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
+        #        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+        #        PGHOST: localhost
+        #        PGUSER: postgres
+        #        RAILS_ENV: test
+        #      run: |
+        #        cd psd-web
+        #        bundle exec rspec spec
