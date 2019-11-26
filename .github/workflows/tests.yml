@@ -9,6 +9,7 @@ env:
   REDIS_HOST: localhost
   PGHOST: localhost
   PGUSER: postgres
+
 jobs:
   ruby:
     name: "Ruby"
@@ -64,12 +65,18 @@ jobs:
           ${{ runner.OS }}-node
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
+          #    - name: Hack ruby version
+          #      run: |
+          #        cd psd-web
+          #        sed -i 's/ruby \"2.5.7\"/ruby \"2.5.5\"/' Gemfile
+          #        sed -i 's/ruby 2.5.7p206/ruby 2.5.5/' Gemfile.lock
+          #        sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
     - name: Install RubyGems
       env:
         RAILS_ENV: test
       run: |
         cd psd-web
-        gem install bundler -v 1.17.3
+        gem install bundler
         bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - name: Install Node.js dependencies
       env:
@@ -95,27 +102,8 @@ jobs:
         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        PGHOST: localhost
-        PGUSER: postgres
+        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
         RAILS_ENV: test
       run: |
         cd psd-web
         bundle exec rake test:all
-    - name: Run Specs
-      env:
-        ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        bundle exec rspec spec
