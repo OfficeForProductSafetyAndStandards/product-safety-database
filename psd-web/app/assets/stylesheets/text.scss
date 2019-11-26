@@ -8,7 +8,7 @@
 
 $max-content-width: 722px; // A bit bigger than prev 2/3 column but not full width.
 
-// A non-exaustive list of elements that contain content
+// A non-exaustive list of govuk elements that contain content
 .govuk-accordion__section-heading,
 .govuk-body,
 .govuk-body-l,
@@ -27,11 +27,11 @@ $max-content-width: 722px; // A bit bigger than prev 2/3 column but not full wid
 .govuk-heading-s,
 .govuk-heading-xl,
 .govuk-hint,
-.govuk-input,
+// .govuk-input, // Can't style govuk-input as date component relies on using max-width
 .govuk-inset-text,
 .govuk-label,
 .govuk-link,
-.govuk-list,
+.govuk-list li,
 .govuk-panel__body,
 .govuk-panel__title,
 .govuk-phase-banner__content,
@@ -44,10 +44,11 @@ $max-content-width: 722px; // A bit bigger than prev 2/3 column but not full wid
 p,
 h1,
 h2,
-h3, 
+h3,
 h4,
 h5,
 h6,
-ul:not(.govuk-tabs__list){
+input,
+{
   max-width: $max-content-width;
 }
