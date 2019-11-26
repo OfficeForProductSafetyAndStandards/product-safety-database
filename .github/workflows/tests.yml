@@ -5,8 +5,8 @@ on: [push]
 env:
   DATABASE_URL: postgres://localhost:5432/psd_test
   ELASTICSEARCH_URL: http://localhost:9200
-  REDIS_URL=redis://localhost:6379
-  REDIS_HOST=localhost
+  REDIS_URL: redis://localhost:6379
+  REDIS_HOST: localhost
 
 jobs:
   ruby:
