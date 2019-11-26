@@ -1,11 +1,12 @@
-h2.govuk-heading-m Attachments
-= link_to "Add attachment", new_document_flow_path(@product)
-
-hr.govuk-section-break.govuk-section-break--l
-
 .govuk-grid-row
-  .govuk-grid-column-full
-    = render "documents_list_summary", parent: @product
+  .govuk-grid-column-two-thirds-from-desktop
 
-- if @product.images.empty? && @product.documents.empty?
-  p No attachments.
+    h2.govuk-heading-m Attachments
+    = link_to "Add attachment", new_document_flow_path(@product)
+
+    hr.govuk-section-break.govuk-section-break--l
+
+    - if @product.images.empty? && @product.documents.empty?
+      p.govuk-body No attachments.
+
+= render "documents_list_summary", parent: @product
