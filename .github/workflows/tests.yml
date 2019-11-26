@@ -40,7 +40,7 @@ jobs:
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.5.7
+        ruby-version: 2.5.x
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
@@ -70,7 +70,7 @@ jobs:
         RAILS_ENV: test
       run: |
         cd psd-web
-        gem install bundler
+        gem install bundler -v 1.17.3
         bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - name: Install Node.js dependencies
       env:
