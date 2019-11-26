@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
         format.json { render :show, status: :created, location: @activity }
       else
         format.html do
-          redirect_to investigation_url(@investigation), flash: { success: "Comment was not successfully added." }
+          redirect_to new_investigation_activity_comment_url(@investigation), flash: { warning: "Comment was not successfully added." }
         end
         format.json { render json: activity.errors, status: :unprocessable_entity }
       end
