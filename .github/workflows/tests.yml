@@ -9,7 +9,6 @@ env:
   REDIS_HOST: localhost
   PGHOST: localhost
   PGUSER: postgres
-
 jobs:
   ruby:
     name: "Ruby"
