@@ -63,7 +63,7 @@ module Investigations
                                      documents_attachments: :blob)
                          .find_by!(pretty_id: params[:investigation_pretty_id])
 
-      authorize @investigation, :show?
+      authorize investigation, :show?
       @investigation = investigation.decorate
       preload_activities
     end

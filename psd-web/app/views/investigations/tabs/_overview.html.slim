@@ -32,8 +32,8 @@
       h2.govuk-heading-m Products
       ul.govuk-list
         - @investigation.products.each do |product|
-          li = link_to product.name.capitalize, product_path(product), class: "govuk-link"
-          - if product.images.any?
-            li
-            = render "documents/image_tag", image: product.images.first, dimensions: "500x300", \
-              class_name: 'product-image'
+          li
+            = link_to product.name.capitalize, product_path(product), class: "govuk-link"
+            - if product.images.any?
+              = render "documents/image_tag", image: product.images.first, dimensions: "500x300", \
+                class_name: 'product-image'
