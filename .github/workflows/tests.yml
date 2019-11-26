@@ -104,7 +104,7 @@ jobs:
     - name: Run Tests
       env:
         ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+        KEYCLOAK_AUTH_URL: http://localhost:8080 # ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: foo #${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: foo #${{ secrets.KeycloakClientSecret }}
         # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
