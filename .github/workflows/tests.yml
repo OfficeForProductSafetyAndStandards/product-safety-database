@@ -4,6 +4,7 @@ on: [push]
 
 env:
   DATABASE_URL: postgres://localhost:5432/psd_test
+  ELASTICSEARCH_URL: http://localhost:9200
 
 jobs:
   ruby:
