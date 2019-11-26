@@ -1,13 +1,5 @@
 require "rails_helper"
 
-RSpec.shared_examples "a formated text" do |text_attribute|
-  let(:text) { "this is\n\nmulti line\n\nformated" }
-  before { investigation.public_send(:"#{text_attribute}=", text) }
-
-  it 'keeps the line breaks' do
-    expect(subject.public_send(text_attribute)).to eq(simple_format(text))
-  end
-end
 
 RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   include ActionView::Helpers::DateHelper
@@ -167,14 +159,14 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe '#hazard_descrition' do
-    include_examples "a formated text", :hazard_description
+    include_examples "a formated text", :investigation, :hazard_description
   end
 
   describe '#non_compliant_reason' do
-    include_examples "a formated text", :non_compliant_reason
+    include_examples "a formated text", :investigation, :non_compliant_reason
   end
 
   describe "#description" do
-    include_examples "a formated text", :description
+    include_examples "a formated text", :investigation, :description
   end
 end
