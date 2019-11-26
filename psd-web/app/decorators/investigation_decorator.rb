@@ -124,7 +124,7 @@ private
           h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
         else
           h.tag.ul(class: "govuk-list") do
-            lis = categories.map { |cat| h.tag.li(h.escape_once(cat.downcase.upcase_first)) }
+            lis = categories.map { |cat| h.tag.li(cat.downcase.upcase_first) }
             lis.join.html_safe
           end
         end
