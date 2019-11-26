@@ -36,7 +36,7 @@ jobs:
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.5.7
+        ruby-version: 2.5.x
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
@@ -71,7 +71,7 @@ jobs:
         RAILS_ENV: test
       run: |
         cd psd-web
-        gem install bundler
+        gem install bundler -v 1.17.3
         bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - name: Check gems 2
       run: ls -a psd-web/vendor/bundle
@@ -99,9 +99,9 @@ jobs:
         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+        KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
+        KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
+        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
         PGHOST: localhost
         PGUSER: postgres
         RAILS_ENV: test
