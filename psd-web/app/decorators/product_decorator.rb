@@ -19,5 +19,4 @@ class ProductDecorator < ApplicationDecorator
   def description
     h.simple_format(object.description)
   end
-
 end

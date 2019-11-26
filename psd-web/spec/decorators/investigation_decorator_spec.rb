@@ -158,11 +158,12 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
     }
   end
 
-  describe '#hazard_descrition' do
+
+  describe "#hazard_descrition" do
     include_examples "a formated text", :investigation, :hazard_description
   end
 
-  describe '#non_compliant_reason' do
+  describe "#non_compliant_reason" do
     include_examples "a formated text", :investigation, :non_compliant_reason
   end
 
