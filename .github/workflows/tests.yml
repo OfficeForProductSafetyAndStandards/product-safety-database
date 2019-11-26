@@ -115,7 +115,7 @@ jobs:
         RAILS_ENV: test
       run: |
         cd psd-web
-        bundle exec bin/rails test test/system/create_project_test.rb
+        bundle exec bin/rails test test/
     - name: Run Specs
       env:
         ELASTICSEARCH_URL: localhost
