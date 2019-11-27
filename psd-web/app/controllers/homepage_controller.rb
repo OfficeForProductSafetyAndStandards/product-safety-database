@@ -1,14 +1,10 @@
 class HomepageController < ApplicationController
-  skip_before_action :authenticate_user!, only: :landing_page
-  skip_before_action :authorize_user, only: :landing_page
+  skip_before_action :authenticate_user!, only: :show
+  skip_before_action :authorize_user, only: :show
   skip_before_action :has_accepted_declaration
 
-  def landing_page
-    route_user if user_signed_in?
-  end
-
   def show
-    route_user
+    route_user if user_signed_in?
   end
 
 private
