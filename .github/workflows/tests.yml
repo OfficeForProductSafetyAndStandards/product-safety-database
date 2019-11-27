@@ -25,7 +25,7 @@ jobs:
           POSTGRES_DB: postgres
         ports: ["5432:5432"]
         # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5 --net keycloak-network
       elasticsearch:
         image: elasticsearch:6.7.2
         ports: ["9200:9200"]
@@ -101,21 +101,21 @@ jobs:
       run: |
         cd psd-web
         bin/rails db:setup
-    - name: Run Tests
-      env:
-        ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        bundle exec rake test:all
+        #    - name: Run Tests
+        #      env:
+        #        ELASTICSEARCH_URL: localhost
+        #        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+        #        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
+        #        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
+        #        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
+        #        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
+        #        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+        #        PGHOST: localhost
+        #        PGUSER: postgres
+        #        RAILS_ENV: test
+        #      run: |
+        #        cd psd-web
+        #        bundle exec rake test:all
     - name: Run Specs
       env:
         ELASTICSEARCH_URL: localhost
