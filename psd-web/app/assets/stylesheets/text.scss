@@ -7,7 +7,7 @@
 // Loosely based on https://github.com/alphagov/govuk-design-system/blob/master/src/stylesheets/main.scss#L69
 
 $max-content-width: 722px; // A bit bigger than prev 2/3 column but not full width.
-
+$max-content-width: 522px;
 // A non-exaustive list of govuk elements that contain content
 .govuk-accordion__section-heading,
 .govuk-body,
@@ -27,7 +27,7 @@ $max-content-width: 722px; // A bit bigger than prev 2/3 column but not full wid
 .govuk-heading-s,
 .govuk-heading-xl,
 .govuk-hint,
-// .govuk-input, // Can't style govuk-input as date component relies on using max-width
+.govuk-input:not([class*="govuk-input--width-"]), // width classes rely on max-width
 .govuk-inset-text,
 .govuk-label,
 .govuk-link,
@@ -47,7 +47,6 @@ h2,
 h3,
 h4,
 h5,
-h6,
-input {
+h6 {
   max-width: $max-content-width;
 }
