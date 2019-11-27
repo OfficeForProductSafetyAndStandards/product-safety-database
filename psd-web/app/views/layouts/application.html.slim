@@ -68,7 +68,7 @@ html.govuk-template.app-html-class[lang="en"]
               = render "components/hmcts_banner", text: flash[key], type: key
           = yield
     - else
-      main
+      main#main-content[role="main"]
         = yield :landing_page
 
     footer.govuk-footer[role="contentinfo"]
