@@ -13,8 +13,7 @@ jobs:
     name: "Ruby"
     runs-on: ubuntu-latest
 
-    # If you need DB like PostgreSQL then define service below.
-    # Example for Redis can be found here:
+    # Example for can be found here:
     # https://github.com/actions/example-services/tree/master/.github/workflows
     services:
       postgres:
@@ -24,7 +23,6 @@ jobs:
           POSTGRES_PASSWORD: ""
           POSTGRES_DB: postgres
         ports: ["5432:5432"]
-        # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       elasticsearch:
         image: elasticsearch:6.7.2
@@ -35,10 +33,6 @@ jobs:
         ports:
         - 6379:6379
         options: --entrypoint redis-server
-
-        # needed because the postgres container does not provide a healthcheck
-        # options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby
@@ -49,10 +43,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.16.x
-    # required to compile pg ruby gem
-    - name: install PostgreSQL client
+    - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
-    - name: install chromedriver
+    - name: Install Chromedriver
       run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
     - uses: actions/cache@v1
       with:
@@ -70,8 +63,11 @@ jobs:
           ${{ runner.OS }}-node
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
-          #    - name: Check gems
-          #      run: ls -a psd-web/vendor/bundle
+    - name: Hack ruby version
+      run: |
+sed -i 's/ruby \"2.5.7\"/ruby \"2.5.5\"/' Gemfile
+sed -i 's/ruby 2.5.7p206/ruby 2.5.5/' Gemfile.lock
+sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
     - name: Install ruby gems
       env:
         PGHOST: localhost
@@ -81,8 +77,6 @@ jobs:
         cd psd-web
         gem install bundler -v 1.17.3
         bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-    - name: Check gems 2
-      run: ls -a psd-web/vendor/bundle
     - name: Install js dependencies
       env:
         PGHOST: localhost
@@ -107,8 +101,6 @@ jobs:
         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
         KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
         PGHOST: localhost
         PGUSER: postgres
@@ -116,18 +108,3 @@ jobs:
       run: |
         cd psd-web
         bundle exec rake test:all
-        #     - name: Run Specs
-        #       env:
-        #         ELASTICSEARCH_URL: localhost
-        #         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        #         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        #         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        #         # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
-        #         # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        #         # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        #         PGHOST: localhost
-        #         PGUSER: postgres
-        #         RAILS_ENV: test
-        #       run: |
-        #         cd psd-web
-        #         bundle exec rspec spec
