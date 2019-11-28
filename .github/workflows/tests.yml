@@ -69,7 +69,7 @@ jobs:
           #        sed -i 's/ruby \"2.5.7\"/ruby \"2.5.5\"/' Gemfile
           #        sed -i 's/ruby 2.5.7p206/ruby 2.5.5/' Gemfile.lock
           #        sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
-    - name: Install ruby gems
+    - name: Install RubyGems
       env:
         PGHOST: localhost
         PGUSER: postgres
@@ -78,7 +78,7 @@ jobs:
         cd psd-web
         gem install bundler -v 1.17.3
         bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-    - name: Install js dependencies
+    - name: Install Node.js dependencies
       env:
         PGHOST: localhost
         PGUSER: postgres
@@ -88,7 +88,7 @@ jobs:
         npm install yarn -g
         yarn install
         bin/webpack
-    - name: Prepare db
+    - name: Prepare database
       env:
         PGHOST: localhost
         PGUSER: postgres
