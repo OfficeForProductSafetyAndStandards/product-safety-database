@@ -1,4 +1,6 @@
 .landing-masthead {
+  @extend %intro-card;
+
   margin-bottom: 30px;
 
   .govuk-tag {
@@ -13,8 +15,6 @@
       margin-top: 9px; // to match button padding
     }
   }
-
-  @extend .flash-card;
 
   margin-top: 0;
   padding: 0;
