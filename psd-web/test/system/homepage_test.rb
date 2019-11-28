@@ -9,7 +9,7 @@ class HomepageTest < ApplicationSystemTestCase
 
   test "not signed in visits /cases gets redirected to /" do
     visit "/cases"
-    assert_text "if you think you should have access"
+    assert_title "Sign in to Product safety database"
     refute_selector "a.psd-header__link", text: "BETA"
   end
 
