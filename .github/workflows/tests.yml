@@ -63,12 +63,12 @@ jobs:
           ${{ runner.OS }}-node
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
-    - name: Hack ruby version
-      run: |
-        cd psd-web
-        sed -i 's/ruby \"2.5.7\"/ruby \"2.5.5\"/' Gemfile
-        sed -i 's/ruby 2.5.7p206/ruby 2.5.5/' Gemfile.lock
-        sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
+          #    - name: Hack ruby version
+          #      run: |
+          #        cd psd-web
+          #        sed -i 's/ruby \"2.5.7\"/ruby \"2.5.5\"/' Gemfile
+          #        sed -i 's/ruby 2.5.7p206/ruby 2.5.5/' Gemfile.lock
+          #        sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
     - name: Install ruby gems
       env:
         PGHOST: localhost
