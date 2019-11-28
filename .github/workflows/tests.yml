@@ -88,7 +88,7 @@ jobs:
         npm install yarn -g
         yarn install
         bin/webpack
-    - name: Prepare db
+    - name: Prepare database
       env:
         PGHOST: localhost
         PGUSER: postgres
