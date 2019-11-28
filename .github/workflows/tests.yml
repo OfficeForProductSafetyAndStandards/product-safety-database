@@ -109,7 +109,7 @@ jobs:
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
         # KEYCLOAK_USER_ID: ${{ secrets.KeycloakUserId }}
         # KEYCLOAK_POISON_CENTER_USER_ID: ${{ secrets.KeycloakPoisonCenterUserId }}
-        # KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
         PGHOST: localhost
         PGUSER: postgres
         RAILS_ENV: test
