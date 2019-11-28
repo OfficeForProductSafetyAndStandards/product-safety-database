@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe User do
+RSpec.describe User, with_keycloak_config: true do
   describe ".activated" do
     it "returns only users with activated accounts" do
       create(:user, :inactive)
