@@ -1,6 +1,6 @@
 - if local_assigns[:restricted]
   .document-without-preview
-    = image_pack_tag "media/application/images/document_placeholder.png"
+    = image_pack_tag "media/images/document_placeholder.png"
     span.document-filetype = document_file_extension(document)
 - elsif document.metadata["safe"]
   - if document.image?
@@ -9,7 +9,7 @@
             document, target: "_blank", rel: 'noopener'
   - else
     .document-without-preview
-      = image_pack_tag "media/application/images/document_placeholder.png"
+      = image_pack_tag "media/images/document_placeholder.png"
       span.document-filetype = document_file_extension(document)
 - else
   .document-processing-placeholder

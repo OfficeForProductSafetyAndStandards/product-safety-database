@@ -27,13 +27,13 @@ class Investigation < ApplicationRecord
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products,
-           after_add: :create_audit_activity_for_product,
-           after_remove: :create_audit_activity_for_removing_product
+    after_add: :create_audit_activity_for_product,
+    after_remove: :create_audit_activity_for_removing_product
 
   has_many :investigation_businesses, dependent: :destroy
   has_many :businesses, through: :investigation_businesses,
-           after_add: :create_audit_activity_for_business,
-           after_remove: :create_audit_activity_for_removing_business
+    after_add: :create_audit_activity_for_business,
+    after_remove: :create_audit_activity_for_removing_business
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -48,7 +48,6 @@ class Investigation < ApplicationRecord
   has_one :complainant, dependent: :destroy
 
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
-
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
   def assignee
@@ -72,10 +71,6 @@ class Investigation < ApplicationRecord
 
   def pretty_visibility
     is_private ? ApplicationController.helpers.visibility_options[:private] : ApplicationController.helpers.visibility_options[:public]
-  end
-
-  def pretty_description
-    "#{case_type.titleize}: #{pretty_id}"
   end
 
   def important_assignable_people
@@ -229,6 +224,11 @@ private
       ).deliver_later
     end
   end
+
+
+  require_dependency "investigation/allegation"
+  require_dependency "investigation/project"
+  require_dependency "investigation/enquiry"
 end
 
 Investigation.import force: true if Rails.env.development? # for auto sync model with elastic search

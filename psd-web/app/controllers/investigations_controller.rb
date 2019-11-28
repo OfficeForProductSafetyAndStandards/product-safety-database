@@ -1,10 +1,8 @@
 class InvestigationsController < ApplicationController
   include InvestigationsHelper
-  include LoadHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[status visibility edit_summary created]
-  before_action :set_investigation_with_associations, only: %i[show]
+  before_action :set_investigation, only: %i[show status visibility edit_summary created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -14,7 +12,7 @@ class InvestigationsController < ApplicationController
     respond_to do |format|
       format.html do
         @answer = search_for_investigations(20)
-        records = Investigation.eager_load(:products, :source).where(id: @answer.results.map(&:_id))
+        records = Investigation.eager_load(:products, :source).where(id: @answer.results.map(&:_id)).decorate
         @results = @answer.results.map { |r| r.merge(record: records.detect { |rec| rec.id.to_s == r._id }) }
         @investigations = @answer.records
       end
@@ -35,6 +33,7 @@ class InvestigationsController < ApplicationController
   # GET /cases/1
   # GET /cases/1.json
   def show
+    @complainant = @investigation.complainant&.decorate
     respond_to do |format|
       format.html
     end
@@ -84,7 +83,7 @@ private
     respond_to do |format|
       if @investigation.update(update_params)
         format.html {
-          redirect_to @investigation, flash: {
+          redirect_to investigation_path(@investigation), flash: {
             success: "#{@investigation.case_type.titleize} was successfully updated."
           }
         }
@@ -96,18 +95,10 @@ private
     end
   end
 
-  def set_investigation_with_associations
-    @investigation = Investigation.eager_load(:source,
-                                              products: { documents_attachments: :blob },
-                                              investigation_businesses: { business: :locations },
-                                              documents_attachments: :blob).find_by!(pretty_id: params[:pretty_id])
-    authorize @investigation, :show?
-    preload_activities
-  end
-
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
-    authorize @investigation
+    investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
+    authorize investigation
+    @investigation = investigation.decorate
   end
 
   def update_params
@@ -118,18 +109,6 @@ private
 
   def editable_keys
     %i[description is_closed status_rationale is_private visibility_rationale]
-  end
-
-  def preload_activities
-    @activities = @investigation.activities.eager_load(:source)
-    preload_manually(@activities.select { |a| a.respond_to?("attachment") },
-                     [{ attachment_attachment: :blob }])
-    preload_manually(@activities.select { |a| a.respond_to?("email_file") },
-                     [{ email_file_attachment: :blob }, { email_attachment_attachment: :blob }])
-    preload_manually(@activities.select { |a| a.respond_to?("transcript") },
-                     [{ transcript_attachment: :blob }, { related_attachment_attachment: :blob }])
-    preload_manually(@activities.select { |a| a.respond_to?("correspondence") },
-                     [:correspondence])
   end
 
   def build_breadcrumbs

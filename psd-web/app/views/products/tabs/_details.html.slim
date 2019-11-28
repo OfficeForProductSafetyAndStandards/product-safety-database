@@ -5,4 +5,4 @@ hr.govuk-section-break.govuk-section-break--l
 
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-full
-    = product_summary_list(@product, include_batch_number: true)
+    = @product.decorate.summary_list(include_batch_number: true)

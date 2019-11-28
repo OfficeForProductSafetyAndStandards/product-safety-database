@@ -3,7 +3,7 @@ require "application_system_test_case"
 class AlertTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
-    @investigation = load_case(:one)
+    @investigation = load_case(:one).decorate
     @alert = alerts :one
     go_to_new_activity_for_investigation @investigation
   end
@@ -47,16 +47,16 @@ class AlertTest < ApplicationSystemTestCase
     go_to_new_activity_for_investigation @private_investigation
     fill_in_activity_selection
 
-    assert_selector "h1", text: "You cannot send an alert about a restricted case"
+    assert_css "h1", text: "You cannot send an alert about a restricted case"
 
     click_on "Change case visibility"
-    assert_selector "h1", text: "Legal privilege"
+    assert_css "h1", text: "Legal privilege"
   end
 
   def go_to_new_activity_for_investigation investigation
     visit investigation_path(investigation)
 
-    first(:link, "Add activity").click
+    click_link "Add activity"
   end
 
   def fill_in_activity_selection

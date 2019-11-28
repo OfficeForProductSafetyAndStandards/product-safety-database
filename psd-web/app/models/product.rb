@@ -23,10 +23,6 @@ class Product < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
-  def country_of_origin_for_display
-    country_from_code(country_of_origin) || country_of_origin
-  end
-
   def pretty_description
     "Product: #{name}"
   end

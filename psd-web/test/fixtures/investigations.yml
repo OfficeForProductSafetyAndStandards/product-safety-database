@@ -116,5 +116,3 @@ enquiry_with_no_date:
   type: Investigation::Enquiry
   pretty_id: 1902-0016
   received_type: Email
-
-

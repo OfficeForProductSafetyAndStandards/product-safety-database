@@ -67,7 +67,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
           }
       }
     end
-    assert_redirected_to investigation_url(investigation)
+    assert_redirected_to investigation_path(investigation)
   end
 
   test "should set description" do
@@ -82,7 +82,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    assert_redirected_to investigation_url(investigation)
+    assert_redirected_to investigation_path(investigation)
   end
 
   test "should require description to not be empty" do
@@ -98,7 +98,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     get investigations_path
     assert_not_includes(response.body, @investigation_three.pretty_id)
     assert_includes(response.body, @investigation_one.pretty_id)
-    # assert_includes(response.body, @investigation_two.pretty_id)
+
     assert_includes(response.body, @investigation_no_products.pretty_id)
   end
 
@@ -108,7 +108,6 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
       status_closed: "checked"
     }
     assert_includes(response.body, @investigation_one.pretty_id)
-    # assert_includes(response.body, @investigation_two.pretty_id)
     assert_includes(response.body, @investigation_three.pretty_id)
     assert_includes(response.body, @investigation_no_products.pretty_id)
   end

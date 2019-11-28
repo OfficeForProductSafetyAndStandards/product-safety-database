@@ -53,6 +53,20 @@ Rails.application.routes.draw do
   resources :project, controller: "investigations/project", only: %i[new create]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
+  scope :investigation, path: "", as: :investigation do
+    resources :allegation,       only: [], concerns: %i[document_attachable]
+    resources :enquiry,          only: [], concerns: %i[document_attachable]
+    resources :project,          only: [], concerns: %i[document_attachable]
+    resources :ts_investigation, only: [], concerns: %i[document_attachable]
+  end
+
+  scope :investigation, path: "", module: "investigations", as: :investigation do
+    resources :enquiry,          controller: "enquiry",           only: %i[show new create update]
+    resources :allegation,       controller: "allegation",        only: %i[show new create update]
+    resources :project,          controller: "project",           only: %i[show new create]
+    resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
+  end
+
   resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
@@ -64,20 +78,22 @@ Rails.application.routes.draw do
       patch :edit_summary
       get :created
     end
-    resources :activities, controller: "investigations/activities", only: %i[create new] do
-      collection do
-        get :comment
-      end
+
+
+    resources :attachments, controller: "investigations/attachments", only: %i[index]
+
+    resource :activity, controller: "investigations/activities", only: %i[show create new] do
+      resource :comment, only: %i[create new]
     end
 
-    resources :products, only: %i[new create], controller: "investigations/products" do
+    resources :products, only: %i[new create index], controller: "investigations/products" do
       member do
         put :link, path: ""
         get :remove
         delete :unlink, path: ""
       end
     end
-    resources :businesses, only: %i[update show new create], controller: "investigations/businesses" do
+    resources :businesses, only: %i[index update show new create], controller: "investigations/businesses" do
       member do
         get :remove
         delete :unlink, path: ""

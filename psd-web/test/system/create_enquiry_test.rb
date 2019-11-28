@@ -14,7 +14,7 @@ class CreateEnquiryTest < ApplicationSystemTestCase
       description: "Enquiry description",
       date_received: "1-1-1",
       received_type: "Email"
-    )
+    ).decorate
 
     mock_out_keycloak_and_notify
     visit new_enquiry_path
