@@ -15,13 +15,8 @@ cache:
     - ~/coverage-cache
 
 stages:
-  - Build
-  - name: Test and deploy review
+  - name: Deploy review app
     if: type = pull_request # This is designed to cut out unnecessary runs of the test suite. See PSD-821 for details.
-  - name: Update code coverage
-    if: branch = master AND type = cron
-  - name: Run regression tests
-    if: branch = master AND type = cron
   - name: Deploy to staging
     if: branch = master AND type = push
   - name: Deploy to production
@@ -31,19 +26,7 @@ stages:
 
 jobs:
   include:
-    - stage: Build
-      before_install:
-        - mkdir -p ~/bundle-cache
-        - mkdir -p ~/coverage-cache/psd
-      install:
-        - DOCKER_ORG=${DOCKER_ORG} BRANCH=${TRAVIS_BRANCH} BUILD_ID=${TRAVIS_BUILD_NUMBER} ./infrastructure/ci/build-docker-images.sh
-
-    - stage: Test and deploy review
-      name: PSD Tests
-      script: ./infrastructure/ci/test.sh
-      env: &test_env
-        - COVERALLS_PARALLEL=true
-    - name: Deploy PSD review app
+    - stage: Deploy review app
       script: ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
       env: &deploy_int_env
         - SPACE=int
