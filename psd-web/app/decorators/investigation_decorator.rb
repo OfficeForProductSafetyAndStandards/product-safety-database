@@ -33,7 +33,7 @@ class InvestigationDecorator < ApplicationDecorator
         actions: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"]
       },
       hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
-      non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: h.simple_format(non_compliant_reason) }, actions: [] } : nil,
+      object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: h.simple_format(non_compliant_reason) }, actions: [] } : nil,
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
