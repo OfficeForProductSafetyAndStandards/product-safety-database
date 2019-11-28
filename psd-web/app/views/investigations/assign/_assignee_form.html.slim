@@ -1,4 +1,4 @@
-= form_with(model: investigation, method: :put, url: wizard_path) do |form|
+= form_with(scope: :investigation, model: investigation, method: :put, url: wizard_path) do |form|
   = render "form_components/govuk_error_summary", form: form
   = yield
 
@@ -51,4 +51,4 @@
   = render "form_components/govuk_radios", form: form, key: :assignable_id, items: items
   .govuk-form-group
     = form.submit "Continue", class: "govuk-button"
-    p = link_to "Cancel", investigation, class: "psd-block-link"
+    p = link_to "Cancel", investigation_path(investigation), class: "psd-block-link"

@@ -6,6 +6,8 @@ ENV["HTTP_PORT"] = "3001"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include SystemTestHelper
+  include Capybara::DSL
+  include Capybara::Minitest::Assertions
 
   Capybara.server_host = ENV["HTTP_HOST"]
   Capybara.server_port = ENV["HTTP_PORT"]

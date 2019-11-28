@@ -1,11 +1,16 @@
 class Investigations::ProductsController < ApplicationController
   include CountriesHelper
   include ProductsHelper
+  include InvestigationsHelper
 
   before_action :set_investigation
   before_action :set_product, only: %i[link remove unlink]
   before_action :create_product, only: %i[new create]
   before_action :set_countries, only: %i[new]
+
+  def index
+    @breadcrumbs = build_breadcrumb_structure
+  end
 
   # GET /cases/1/products/new
   def new
@@ -55,7 +60,8 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :show?
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :show?
+    @investigation = investigation.decorate
   end
 end

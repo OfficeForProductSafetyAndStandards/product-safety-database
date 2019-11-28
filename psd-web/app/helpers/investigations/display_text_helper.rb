@@ -3,6 +3,40 @@ module Investigations::DisplayTextHelper
     document.image? ? "image" : "document"
   end
 
+  def investigation_sub_nav(investigation, current_tab: "overview")
+    is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
+    items = [
+      {
+        href: investigation_url(investigation),
+        text: "Overview",
+        active: is_current_tab.overview?
+      },
+      {
+        href: investigation_products_url(investigation),
+        text: "Products",
+        count: " (#{@investigation.products.size})", active: is_current_tab.products?
+      },
+      {
+        href: investigation_businesses_url(investigation),
+        text: "Businesses",
+        count: " (#{@investigation.businesses.size})",
+        active: is_current_tab.businesses?
+      },
+      {
+        href: investigation_attachments_url(investigation),
+        text: "Attachments",
+        count: " (#{@investigation.documents.size})",
+        active: is_current_tab.attachments?
+      },
+      {
+        href: investigation_activity_url(@investigation),
+        text: "Activity",
+        active: is_current_tab.activity?
+      }
+    ]
+    render "investigations/sub_nav", items: items
+  end
+
   def get_displayable_highlights(highlights, investigation)
     highlights.map do |highlight|
       get_best_highlight(highlight, investigation)
@@ -70,7 +104,7 @@ module Investigations::DisplayTextHelper
 
   # rubocop:disable Rails/OutputSafety
   def investigation_assignee(investigation, classes = "")
-    out = [investigation.assignee ? investigation.assignee.name.to_s : "Unassigned"]
+    out = [investigation.assignee ? investigation.assignee.name.to_s : tag.div("Unassigned", class: classes)]
     out << tag.div(investigation.assignee.organisation.name, class: classes) if investigation.assignee&.organisation.present?
     out.join.html_safe
   end
@@ -87,18 +121,6 @@ module Investigations::DisplayTextHelper
 
     # TODO PSD-693 Add primary authorities to businesses
     # { key: { text: 'Primary authority' }, value: { text: 'Suffolk Trading Standards' } }
-
-    render "components/govuk_summary_list", rows: rows
-  end
-
-  def complainant_summary_list(complainant)
-    rows = [
-      { key: { text: "Name" }, value: { text: complainant.name } },
-      { key: { text: "Type" }, value: { text: complainant.complainant_type } },
-      { key: { text: "Phone" }, value: { text: complainant.phone_number } },
-      { key: { text: "Email" }, value: { text: complainant.email_address } },
-      { key: { text: "Other details" }, value: { text: complainant.other_details } }
-    ]
 
     render "components/govuk_summary_list", rows: rows
   end
@@ -147,28 +169,13 @@ module Investigations::DisplayTextHelper
     render "components/govuk_summary_list", rows: rows
   end
 
-  def product_summary_list(product, include_batch_number: false)
-    rows = [
-      { key: { text: "Product name" }, value: { text: product.name } },
-      { key: { text: "Barcode / serial number" }, value: { text: product.product_code } },
-      { key: { text: "Type" }, value: { text: product.product_type } },
-      include_batch_number ? { key: { text: "Batch number" }, value: { text: @product.batch_number } } : nil,
-      { key: { text: "Category" }, value: { text: product.category } },
-      { key: { text: "Webpage" }, value: { text: product.webpage } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(product.country_of_origin) } },
-      { key: { text: "Description" }, value: { text: product.description } }
-    ].compact
-
-    render "components/govuk_summary_list", rows: rows
-  end
-
   def report_summary_list(investigation)
     rows = [
       { key: { text: "Date recorded" }, value: { text: investigation.created_at.strftime("%d/%m/%Y") } },
     ]
     if investigation.enquiry?
       rows << { key: { text: "Date received" }, value: { text: investigation.date_received? ? investigation.date_received.strftime("%d/%m/%Y") : "Not provided" } }
-      rows << { key: { text: "Received by" }, value: { text: investigation.received_type? ? investigation.received_type.capitalize : "Not provided" } }
+      rows << { key: { text: "Received by" }, value: { text: investigation.received_type? ? investigation.received_type.upcase_first : "Not provided" } }
     end
 
     if investigation.allegation?

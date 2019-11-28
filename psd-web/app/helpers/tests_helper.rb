@@ -1,7 +1,8 @@
 module TestsHelper
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :show?
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :show?
+    @investigation = investigation.decorate
   end
 
   def set_test

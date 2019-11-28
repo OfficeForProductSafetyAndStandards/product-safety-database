@@ -2,7 +2,7 @@
   .govuk-grid-column-one-half
     span.govuk-caption-m[class="govuk-!-font-size-16"]
       = investigation.pretty_description
-    span = link_to investigation.title, investigation
+    span = link_to investigation.title, investigation_path(investigation)
     - if investigation.is_closed
       .psd-case-card class="psd-case-card__status" CLOSED
   .govuk-grid-column-one-quarter

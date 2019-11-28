@@ -14,7 +14,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create activity" do
     assert_difference("Activity.count") do
-      post investigation_activities_url(@activity.investigation), params: {
+      post investigation_activity_comment_path(@activity.investigation), params: {
         comment_activity: {
           body: @activity.body
         }
@@ -30,14 +30,14 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
       activity_type: "comment"
     }
 
-    assert_redirected_to comment_investigation_activities_path(@investigation)
+    assert_redirected_to new_investigation_activity_comment_path(@investigation)
   end
 
   test "adding a comment should trigger one round of notifications" do
     user_two = User.find_by(name: "Test User_two")
     @investigation.update(assignee: user_two)
     mock_investigation_updated(who_will_be_notified: [user_two])
-    post investigation_activities_path(@investigation), params: {
+    post investigation_activity_comment_path(@investigation), params: {
       comment_activity: {
         body: "Generic comment"
       }

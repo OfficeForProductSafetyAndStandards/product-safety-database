@@ -49,6 +49,7 @@ private
   def authorize_investigation
     authorize @investigation, :user_allowed_to_raise_alert?
     authorize @investigation, :investigation_restricted? if %i[compose preview].include? step
+    @investigation = @investigation.decorate
   end
 
   def set_alert

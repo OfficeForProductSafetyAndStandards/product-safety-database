@@ -10,7 +10,7 @@ class DocumentsFlowController < ApplicationController
   before_action :set_parent
   before_action :set_file, only: %i[show update]
 
-  def show;
+  def show
     render_wizard
   end
 
@@ -27,8 +27,11 @@ class DocumentsFlowController < ApplicationController
     return redirect_to next_wizard_path unless step == steps.last
 
     attach_blobs_to_list(@file_blob, file_collection)
-    AuditActivity::Document::Add.from(@file_blob, @parent) if @parent.is_a? Investigation
-    redirect_to @parent
+
+    return redirect_to(@parent) unless @parent.is_a?(Investigation)
+
+    AuditActivity::Document::Add.from(@file_blob, @parent)
+    redirect_to investigation_path(@parent)
   end
 
 private

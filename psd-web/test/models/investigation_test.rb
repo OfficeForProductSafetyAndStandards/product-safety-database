@@ -17,11 +17,14 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation_with_correspondence = load_case(:search_related_correspondence)
     @correspondence = correspondences(:one)
 
-    @investigation_with_complainant = load_case(:search_related_complainant)
-    @complainant = complainants(:one)
-
     @investigation_with_business = load_case(:search_related_businesses)
     @business = businesses(:biscuit_base)
+
+    @complainant = complainants(:one)
+    @investigation_with_complainant = @complainant.investigation
+    @investigation_with_complainant.assignee = User.current
+    @investigation_with_complainant.save
+    @investigation_with_complainant.__elasticsearch__.index_document
   end
 
   teardown do
@@ -74,26 +77,6 @@ class InvestigationTest < ActiveSupport::TestCase
       @investigation.is_closed = !@investigation.is_closed
       @investigation.save
     end
-  end
-
-  test "case title should match when no products are present on the case" do
-    investigation = load_case(:no_products_case_title)
-    assert_equal "Alarms – Asphyxiation (no product specified)", investigation.title
-  end
-
-  test "case title should match when one product is added" do
-    investigation = load_case(:one_product)
-    assert_equal "iPhone XS MAX, phone – Asphyxiation", investigation.title
-  end
-
-  test "case title should match when two products with two common fields are added to the case" do
-    investigation = load_case(:two_products_with_common_values)
-    assert_equal "2 Products, phone – Asphyxiation", investigation.title
-  end
-
-  test "case title should match when two products with no common fields are added to the case" do
-    investigation = load_case(:two_products_with_no_common_values)
-    assert_equal "2 Products – Asphyxiation", investigation.title
   end
 
   test "elasticsearch should find product product_code" do

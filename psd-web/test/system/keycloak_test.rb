@@ -20,7 +20,7 @@ class KeycloakTest < ApplicationSystemTestCase
     visit root_url
     sign_in email: "user@example.com", password: ENV.fetch("KEYCLOAK_USER_PASSWORD", "password")
     click_on "Sign out"
-    assert_selector "h1", text: "Sign in to the Product safety database"
+    assert_css "h1", text: "Sign in to the Product safety database"
   end
 
   test "redirects to previous page after login" do
