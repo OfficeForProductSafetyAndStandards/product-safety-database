@@ -78,7 +78,7 @@ jobs:
         cd psd-web
         gem install bundler -v 1.17.3
         bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-    - name: Install js dependencies
+    - name: Install Node.js dependencies
       env:
         PGHOST: localhost
         PGUSER: postgres
