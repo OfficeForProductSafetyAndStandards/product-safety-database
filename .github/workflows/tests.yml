@@ -7,6 +7,8 @@ env:
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   REDIS_HOST: localhost
+  PGHOST: localhost
+  PGUSER: postgres
 
 jobs:
   ruby:
@@ -71,8 +73,6 @@ jobs:
           #        sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
     - name: Install RubyGems
       env:
-        PGHOST: localhost
-        PGUSER: postgres
         RAILS_ENV: test
       run: |
         cd psd-web
@@ -103,8 +103,6 @@ jobs:
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
         KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        PGHOST: localhost
-        PGUSER: postgres
         RAILS_ENV: test
       run: |
         cd psd-web
