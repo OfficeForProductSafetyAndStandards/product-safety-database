@@ -107,3 +107,14 @@ jobs:
       run: |
         cd psd-web
         bundle exec rake test:without_system_tests
+    - name: Run Specs
+      env:
+        ELASTICSEARCH_URL: localhost
+        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
+        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
+        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+        RAILS_ENV: test
+      run: |
+        cd psd-web
+        bundle exec rspec spec
