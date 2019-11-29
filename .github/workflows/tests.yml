@@ -106,4 +106,4 @@ jobs:
         RAILS_ENV: test
       run: |
         cd psd-web
-        bundle exec rake test:all
+        bundle exec rake test:system
