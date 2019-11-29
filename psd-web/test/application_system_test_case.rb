@@ -18,10 +18,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: { args: %w[headless disable-gpu no-sandbox disable-dev-shm-usage] }
 
-  setup do
-    KeycloakService.sync_orgs_and_users_and_teams
-  end
-
   teardown do
     Organisation.delete_all
     Team.delete_all

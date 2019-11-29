@@ -15,13 +15,8 @@ cache:
     - ~/coverage-cache
 
 stages:
-  - Build
-  - name: Test and deploy review
+  - name: Deploy review app
     if: type = pull_request # This is designed to cut out unnecessary runs of the test suite. See PSD-821 for details.
-  - name: Update code coverage
-    if: branch = master AND type = cron
-  - name: Run regression tests
-    if: branch = master AND type = cron
   - name: Deploy to staging
     if: branch = master AND type = push
   - name: Deploy to production
@@ -31,19 +26,7 @@ stages:
 
 jobs:
   include:
-    - stage: Build
-      before_install:
-        - mkdir -p ~/bundle-cache
-        - mkdir -p ~/coverage-cache/psd
-      install:
-        - DOCKER_ORG=${DOCKER_ORG} BRANCH=${TRAVIS_BRANCH} BUILD_ID=${TRAVIS_BUILD_NUMBER} ./infrastructure/ci/build-docker-images.sh
-
-    - stage: Test and deploy review
-      name: PSD Tests
-      script: ./infrastructure/ci/test.sh
-      env: &test_env
-        - COVERALLS_PARALLEL=true
-    - name: Deploy PSD review app
+    - stage: Deploy review app
       script: ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
       env: &deploy_int_env
         - SPACE=int
@@ -56,7 +39,7 @@ jobs:
 
     - stage: Deploy to staging
       name: Deploy PSD web
-      script: COMPONENT=psd-web DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy.sh
+      script: COMPONENT=psd-web ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy.sh
       env: &deploy_staging_env
         - SPACE=staging
         - BRANCH=${TRAVIS_BRANCH}
@@ -65,12 +48,12 @@ jobs:
         - secure: "Y0akVovVveSyq+Ws1ZDAq23wLSf4YSOXZ2wKRdJvn8iK5XX5L/x37pFbK0ZurCwAYoXNLH/KB6aq3buFdoUdVM/bIlyx6bXCkeaLa8qXJBqUGMgFfvC0EoOp1LQxOoEkW1nEAS3DFs9Fhh1MiGh+3qY9bJ59Ed8KG5rG3A8AZzb+s0bBU9MIjr9WOeGSkzP6OlULpclWD3Q+S58lsvK/6IZ6/xwFFISs4L/kDYYkn5HX+gHOz13BM/ztSZBcD2hULUcrKql9355E8Fgbuga3DDFgVv0csRwQKF30g2gp7Ae48agWZQBFAAjjHjLy+Z6ZLejklSPAjx2m7TZV1kaRDvkO1zqzvutQ2iIb2IufLwat65rVPwZKj0sFTBMv7xebBVhDNv661uaBd53yPQ6idLf0mnHvvbAEoUKGb+A/UYmA/I4lEW5ifDtpeG5PYQWtaDuaFZC+QpzwwYUEI6yO4znUDLOFvy+jYOWESTBD/snfmKHhFYE/4GmZZkQdIzhtqkIVcG5kxEYYNqtDF/OaaOHqRLM4Bk5HEsnVO7bFCAuY0/mVAd55Pe3uE/llk4pa0yKO23uUNvyLY+fDW5mWUvyiXdd/FDE9B2JSR/SoS7l86FOmxvcA2Bq8PDBjljd988VYDJ7u89oRc/idwyOJ3Z4JEgqIMykTvJYhgPeNRQw=" # CF_USERNAME
         - secure: "xakLUBW+GLK+Lj5JT51iCa8PPmx6s0aZGlPKHovrbcAZHXbejhRiQiuK6KUv6VC1+ozQtaJOsboTwMz2rY63YMtzZ79wB8I4ZO21+NDfmkk6JTYxAy6+4CilyPgu6EGczRh7VoJ+zcvDBkN/egm0dNvfEyX/5SXtnbgIew1lxkbPYMD1TF5YCV7wUFVDBCIWKG7WMlgqHTUIBQ9FtUpFNq9b55nD61/FqJi/q7dCb//NDoopcQp636t6nJ6OO6vbIPA34jYK2IUjlhpyqaNPFG1agOOQxt738nwxqWvi+zJevGsgU0T26j76+GQxCWz4LAkdjZ4H6DhchasUTGkgdH4f5xSS44BpNChXyaMvaA9E9WewZO2epSQIV3TxWAlNv6cwBnf3O64yiVXd5iPA140nQyF3Q6BSAjQokuBn4dCf1o87wsWPz3t8ehQmtOnJAyvW4SvwluQOVjjT5Cc7nFQpKiy9piizp+J77fGV/X8Y+LwjIeSWoY2fyRY0eWDY6d6jPomSeLWQG1ZNDIC0g5KTBA69o8PB5xNdenXcUb3qnmHKoC7OQ2rurCsf6HDTCUT/5Q4Go984cWkwV8kf8pRDDTNxsD5BuYdULbDoezYwnKB14VlKbTdAhV150NzHR8v8SYWueLQoZFwmMsN8Baxe3ch8xVNudMLcCxkP9To=" # CF_PASSWORD
     - name: Deploy PSD worker
-      script: COMPONENT=psd-worker DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/deploy.sh
+      script: COMPONENT=psd-worker ./infrastructure/ci/deploy.sh
       env: *deploy_staging_env
 
     - stage: Deploy to production
       name: Deploy PSD web
-      script: COMPONENT=psd-web DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy.sh
+      script: COMPONENT=psd-web ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy.sh
       env: &deploy_prod_env
         - SPACE=prod
         - BRANCH=${TRAVIS_BRANCH}
@@ -79,7 +62,7 @@ jobs:
         - secure: "ws4Yg7RaOigCBEyUQLNCE+K054AT7sIPRVlKTXzKCqIeRht0iQMqaUg/YzzskB7IQDO6TO6utPgO4dufB/4vsHh2LejRtkhFqCjAvD2qZ3rzSZwtArv+gslfzcu3EeftjqcX9zuszhPapneHzPMf3lsmHATjB4S1foNAFlrPFs4ppxGxAHn5SUtuh+PM91LBnvFPibbJ9dK9PONvYmYmrX8VW1bgOrYQUhNd+0gjxWE6w99ijpDA58839qfbwvjXqc0d3Zl7c85h25vTYUuTYINv1/zuxQjlhBNLYvZsQT6kX0RrlKs2uqhYus7jCg7fJnr7yhahVvxQPLH9ngTOQ3bxUIpqOwzwqF1807HoiDmUTp4kTeQnpQSqkswY+CGQtaNXzC7Zg1Y33N6J76KgJjsbkIV+MZg76wtD1tnNhIAtZR5PI7/EHRhicPHVT/KG5Ziu6WNSCidF+ocZhcovnjIB0JUFaiVCdA7/CZ8tD/paoVSGW+xoISkrNgK5+ERDFSPdg2PR3Ms0RS2jNA3QARJ8SPEfizDrCeoth+l/mkw0NoaXQSFQDDoFdengGG9wEGF2xtJ4xmGzc+Vpi9YDJbqHvxM1GOd2JMcfdvi/KlDvbJLU/KNiqQvtqxV+WKuI5hfRyRTOBTn8eZiSB73cbwkEfaCfdh2tFxqaovL/PZw=" # CF_USERNAME
         - secure: "cOZpThcI3ShvLdM3mHQTynMHIOHvTZEJ9ecGOmbc/tTKstsWEVD1TJ8PH4YqPBncyysyK6NHDoUfZE1tTobH+3F2HVAuJnPmgKQ4cN9d9yKxLWnFYNtYWaUS0QXkhuHg6bkFX2NnE2/Wlz3CtqeQ+4z2otSymc/bT9OwWMhsLo/eWP3Nu+++KboIB9v5h9cQWGHLBiNUWdMNlWgzuKLttOIlscKKS6cFY31rAL1C0q9YJi6zkqJ4zZfRn9U4CJmELfNPLdVjwc//Rfj0LnUW0GeKhR6ua2fnwoEmwWsylwqI6nR4SrXKRA+RNoQkdhEOfir4Y6wrlxuNenhDYTi2oJlg795d+FntsN/On82vn3oUvQ2ZY5bcp6955b4px0miUeKo8I7LhRvfsiPWy9n+EvbEN7cTo0eVcqKl7xZeTIOooSAjUWQ+nyt+Y7CgIrzk3RpBPDGS5N6dl+q+weZayo2VJrXUBzxY0cxPmqiRyQXvibAMtQjWROHtV4+t5IvJ7HqpQxswBjxFqTdFNN+dGMqfBkbgHpj61u3K+VLF8hR1eqh6+y9gP/jA5ovG1OmN6VV3XX99xlSeDEn952pn6GA7kdSuW0Y9YYkmW2YSOZlJBVEtdRL35ekKYlcZ9sjvfIlXnWgQPZImK4ZcAhoYxxw4x7kwyXx0UEQr428a2jI=" # CF_PASSWORD
     - name: Deploy PSD worker
-      script: COMPONENT=psd-worker DOCKER_ORG=${DOCKER_ORG} ./infrastructure/ci/deploy.sh
+      script: COMPONENT=psd-worker ./infrastructure/ci/deploy.sh
       env: *deploy_prod_env
 
     - stage: Remove review app
@@ -91,17 +74,9 @@ jobs:
         - secure: "L3YrItbq7NMkzOQUq1wYDskdBnV5R2zjGQ0whwe+3g+a/eUlZX1COZ6fxZkabkPqtbqpPlPhfkbhRKQzWKGrXYmMhk9UDXo1kNrCN1QJWVMfy4WkfC5M9L876oYMweK85i0cCaQHvPhnDVF4uLdSq3Y4nsIjo/0I6iC5h0OmCdT9pOLBJItsLAnlmAM7KcumRYVFdwLHsmnxUg/f6SsEbuA7TrEK21EGQnOyTSys0GongkHSu9j/Xa6MqXuZ3HRHOnLRdfEgfAobRHm5VQqfsyy+sbQCE5yqt8+n6UYIFSnmUja6Dys5jhJK1Mf742gUUhJlXwz+nX0jFoVwN7D9V1To3VV1zaTSzPnD1eh7wOyo39Mu6E1D3SrHE1YL1l4urIixt0FsKEbuue6qAnejtauLH6RKVPJkiU6ZT5o1lj1nkwueghLfQ4ol0XIHOYtSAdhFPHEk1y6ZgmHcLUcioY/raW4Ht0VWI96Yn6RTPPMch4jZYJBvgdgfWHv040N4KmdUVqSfT4MZGKc9iH1dxXM5v9QiKJXtr7Sy6ULAYUttYpWqiedq63JmXZECShD7ptzrec2TejdR1M/yp/G03b7evqo749+23mr8mQ4c7DNeFo4QFNmbrjmMbNGV1nMcX1LqXVZkqunPyiG3oUmqBq2TchhAElBcxsVqoZG6Boo=" # CF_USERNAME
         - secure: "nA9iN+1zxXm1PpcxEBumfgDCJgg9Mrpa0d4kK0a9BxLDrucG0pakPoM7EOP8xzBULdxSfdU8fF1CoSaODqQLl8eB60VW0A+S6S8fk5/cAKszXQuv3yud8n5EL2+QqCexDLuDxDumNWPNpS0mFexSRMpFS90Qx3XXUBHuOFQ2V3AXZaXBJnhCrJqvP7/2Qd9yVHhKA5DBirzDa7LZYHYrWuTxHuqYLdi3f9r4ExpVLeSk3V5UYB73xntEi6p556bb8H6qpgs5P+JX3UntyPCUWVZrIDOjTA3t5AdhPDoQunrHh8ophHjzyiSeoQOxd8MIV1SnX1Gk6hEQrlSuHW+4AzG4xrk8H42Vz7WnpGUEuUc28AZpGZHkQnsAqv07hinGz9nmZPcSWXP6FdLJNKQhBAuo1da6O8+cTv/Hh+a7YCO9q9EhAQi6TIFgqbz8Z3QoWgwIfqlJOHdPcvePV1a8mQ1tYNDQ/V+72iHglNMtsAhG7DsTz2ueTnwvwG+H9bRK2rSNfzSS/2uV/AQLKnM9H3DQaymDFFuxhkitZiI9c7g9nC/8ZOWsK5zaMNODS9CtcRQOw3sWCOre5Id2gy7XWtQcVTVrkw0PeLCtJNBExPSCGD2pd8NCuKxErtjZUhiOpb9hMWyix8IFxpbYRfLWCfz0aeMpWl7lfe4eXuSXCwU=" # CF_PASSWORD
 
-    - stage: Update code coverage
-      name: PSD coverage
-      script: ./infrastructure/ci/update-code-coverage.sh
-      env: COVERALLS_PARALLEL=true
-
 notifications:
   webhooks: https://coveralls.io/webhook
 
 env:
   global:
-    - DOCKER_ORG=beisopss
-    - secure: "YOS5LC36OH28/cR8rTcm6bb5//D/rm65SGQZAIUL/mitJZE/0JzGwKy92Cr9reY3YO2zEV0RBlTjen3EPA4hBsE1mJE1DS8KLCeDYVefGuBIjsEYCp9s7RY85hIG8G81YOwkk/GYIPkd6x3qCVuKuRRdQhtRWn6SSdvEhZSO9lWTcXCvgb+8YeA17QxcXq8J9nDg7piqKDiTegU3wl2EDgpJE1/hurpys2d+ToKq8vzGwTumj0gwLX2j38mRhZgvXbasIZY913xg5SveoGKXvk4ikH/GIOprbww9obQpXoPVS04gR5TLsQuHY0OAKYSYECQxaVCjHfS/J4VrhJ7nzbVY7v+4ERXh6sBPZEN0hfx9K06d9UTYseIVYBrBCTX/MPgRO69wiSM6pSvicxD6UoYbn6QLSaYrKqusRhR8PMK7xo/udRo6NsLADFWDBoOVEWD7wU3eYovRkwXqHqnJ0oQwIoQDR8F4K0rGM4cmhVnuw9E43/N0Ng5uAig/WCIMNhn7DZXDbU+9bflx34eDLWyMKiWxWKD8/fLqYgDO37UZfSTV0XNW7TA5t1+Ah6jhfpGMFBgfrjQFlLXhMxc3utdf2Ijw1DM6QbNl3fIm0HHT71tl/U4KDNnhRjl9jM7wKh4rmXLFHyUy3jphIrFyKAENlmviVgBzfNdK5cAPn/E=" # DOCKER_USERNAME
-    - secure: "ErdNKKHtFTN7gpHdAdU3V7utTeWJ08jgClVQiego0bYi55fSbwKpECGOABRyDIZH79X9r6qdRTHp2tg5Q4hCn1677j/O56XtMWVWaQBZk5vGRVUydbqZhPFgSah6jX6VUGpkxRaLwc+Z+RmpaZLLiXY/6g72UpegM0k2nxvpSeZKhc0sZ2+XO+UR/6LQ+9BZTtUPCbYfzPWyAkXaDZi4mPhQzZVLDpVcWTkHch0K1bBPeCkgDgi6Lm4vqd7uthy1MrczTww0QhZ2lkZEiniePgXkhm/xEBSLRoTXt0bCYEDxGpx5lcJoCQ1h5TOMmrQwNGkqX+aZxvcngC+lrGfFFLYCGHinr6vE3G6fDmXZGdJ+A1Ms8lbIGMG763LUcm9wmqWjDwW+g7KNFgUYyXDOC1sWVLCUkEKelkcpLsaFnA56A+kNC9ozSZJGNoXxS1ZZ9e0ioaRsEOhuIpvKehtt60aO4rtDDJRO2oAa4F3pc+CJHZgpzLnkCsOlDTMSD/XP1CKk/27+Qs402B8SdKy5+qVf9WbrqwJ2/mbw7Xg4CCf977EpY5KDxrGIB7TS99EbbbqNdrvIC+ol3A9pw8wc2G5PAU1OoNriDa8NaL2veW/D3N+sk1O1WFdZtoG6yR5zdt009TTnYOgU2InfSgkhfZlOxLCVuTG7h/UlOWbg5IE=" # DOCKER_PASSWORD
     - secure: "mpUgdDSPTRtgppkrYbcYYuDwRM1eAs1pBtL4PWI3ss3swA4uIGwALUOC+PB2HKqJ28SStTePgSYMpCiZNrV7yLdlPmM2VbTdyD9Fa0lInPeiCjAkvwduVmCft/n6OQKEZKAuCukajVsdVz/7pCwMj/AIJYYd7sYSLcNYrEEVzzgwTe2AfLM28098s5Tczz3Yqbm7WRcDPTJLXh9k0Htj41AzkXNZHGR1yCT8jkVHpbyPM+KXy0Ci71ImcqJ4ksBVy9Lh0HkUYFyaKlUcVh+iLzD8DDkBNuL9E/PMvp1hpl+31ClDgIXNxr17nUf8oO0DNKvX6gMs5KNVCdXtpEkhQoVDpUcBAr9nNHUf+X4vejgHfMcn+0ptdfRDrCsfHe6b1hThdWTZ0SKcX8i2e5RHDlJPYT5JwqPbb1C6v0mWsaQiyLz+rvLz8bH9Cj9Jk/tG/6HyHsVX9MfStpsYQnL6bckY7+GUd786XS1KCOpuXHwMouunJiEhTTHVEQtqEDLSSJgE9iZ+7VcJlVXx9BdCIBawKsT/qqvuSEVOx3CunKCiBsr+M4HMDw3LqDQgdT1pB6QKFtGsZqaIPuE4+tA7GOeJb4SM35UhXOMR9K4GOJAHRmTBahn1+2UPl1hrCoK4JMdHs2Zm84NkE4LRcFTy2crfmLMsa5wMVz1MTdFw6fI=" # NOTIFY_API_KEY
