@@ -36,11 +36,12 @@ gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.4.0"
-gem "webpacker", "4.0.7"
+gem "webpacker", "4.2.0"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.0.1", require: "govuk_design_system"
 
+# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem "brakeman"
   gem "byebug"
@@ -48,10 +49,12 @@ group :development, :test do
   gem "coveralls"
   gem "debase"
   gem "dotenv-rails"
+  gem "factory_bot_rails"
   gem "govuk-lint"
   gem "listen"
   gem "m"
   gem "pry"
+  gem "rails-controller-testing"
   gem "roo"
   gem "rspec-mocks"
   gem "rspec-rails"
@@ -68,3 +71,4 @@ group :development, :test do
   gem "spring-commands-rspec"
   gem "webmock"
 end
+# rubocop:enable Metrics/BlockLength

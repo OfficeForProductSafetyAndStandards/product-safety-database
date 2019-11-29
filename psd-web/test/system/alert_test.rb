@@ -30,7 +30,7 @@ class AlertTest < ApplicationSystemTestCase
     assert_text @alert.summary
     assert_text @alert.description
 
-    expected_number_of_emails_sent = User.count
+    expected_number_of_emails_sent = User.activated.count
 
     click_on "Send to #{expected_number_of_emails_sent} people"
 

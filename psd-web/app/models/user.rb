@@ -12,6 +12,10 @@ class User < ApplicationRecord
   attr_accessor :access_token # Used only in User.current thread context
   attr_writer :roles
 
+  def self.activated
+    where(account_activated: true)
+  end
+
   def self.create_and_send_invite(email_address, team, redirect_url)
     KeycloakClient.instance.create_user(email_address)
 
@@ -122,13 +126,13 @@ class User < ApplicationRecord
 
   def self.get_assignees(except: [])
     users_to_exclude = Array(except)
-    self.all - users_to_exclude
+    self.activated - users_to_exclude
   end
 
   def self.get_team_members(user:)
     users = [].to_set
     user.teams.each do |team|
-      team.users.each do |team_member|
+      team.users.activated.find_each do |team_member|
         users << team_member
       end
     end
@@ -137,14 +141,6 @@ class User < ApplicationRecord
 
   def has_viewed_introduction!
     update has_viewed_introduction: true
-  end
-
-  def has_accepted_declaration!
-    update has_accepted_declaration: true
-  end
-
-  def has_been_sent_welcome_email!
-    update has_been_sent_welcome_email: true
   end
 
 private
