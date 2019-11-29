@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InvestigationDecorator do
+RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
 
