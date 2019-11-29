@@ -4,7 +4,7 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
 
-  fixtures(:investigations, :investigation_products, :products)
+  fixtures(:investigations, :investigation_products, :products, :sources)
 
   let(:investigation) { investigations(:one) }
 
