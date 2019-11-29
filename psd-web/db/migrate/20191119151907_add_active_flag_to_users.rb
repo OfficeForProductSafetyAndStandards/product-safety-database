@@ -2,10 +2,17 @@ class AddActiveFlagToUsers < ActiveRecord::Migration[5.2]
   class User < ApplicationRecord; end
 
   def up
-    add_column :users, :account_activated, :boolean, default: false, index: true
+    # rubocop:disable Rails/BulkChangeTable
+    add_column :users, :account_activated, :boolean, index: true
+    change_column_default :users, :account_activated, false
+    # rubocop:enable Rails/BulkChangeTable
 
-    User.where.not(name: [nil, ""], has_accepted_declaration: false).each do |user|
-      user.update!(account_activated: true)
+    User.all.each do |user|
+      if user.name.present? && user.has_accepted_declaration?
+        user.update!(account_activated: true)
+      else
+        user.update!(account_activated: false)
+      end
     end
   end
 
