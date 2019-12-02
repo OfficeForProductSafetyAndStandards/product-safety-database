@@ -11,8 +11,7 @@
     width: 75px;
     height: 30px;
     color: govuk-colour("white");
-    line-height: 30px;
-    font-weight: bold;
+    @include govuk-font(19, $weight: bold, $line-height: 30px);
     text-align: center;
   }
 }
