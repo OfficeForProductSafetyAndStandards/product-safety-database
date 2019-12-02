@@ -31,20 +31,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "Office of Product Safety and Standards", @user_four.assignee_short_name
   end
 
-  test "get_assignees includes all users by default" do
-    options = User.get_assignees
-
-    assert_includes options, @user
-    assert_includes options, @user_four
-  end
-
-  test "get_assignees exclude specified user" do
-    options = User.get_assignees(except: @user_four)
-
-    assert_includes options, @user
-    assert_not_includes options, @user_four
-  end
-
   test "don't load non-psd users" do
     assert_not User.find_by(name: "Test Non_psd_user")
   end

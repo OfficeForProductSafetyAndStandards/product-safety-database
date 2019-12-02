@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_06_154207) do
+ActiveRecord::Schema.define(version: 2019_11_19_151907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -258,6 +258,7 @@ ActiveRecord::Schema.define(version: 2019_11_06_154207) do
   end
 
   create_table "users", id: :uuid, default: nil, force: :cascade do |t|
+    t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
     t.string "email"
     t.boolean "has_accepted_declaration", default: false

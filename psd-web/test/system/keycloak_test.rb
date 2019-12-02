@@ -3,6 +3,7 @@ require "application_system_test_case"
 class KeycloakTest < ApplicationSystemTestCase
   setup do
     sign_out_if_signed_in
+    KeycloakService.sync_orgs_and_users_and_teams
   end
 
   teardown do
@@ -11,20 +12,20 @@ class KeycloakTest < ApplicationSystemTestCase
 
   test "can login" do
     visit root_url
-    sign_in email: "user@example.com", password: "password"
-    assert_link "Sign out"
+    sign_in email: "user@example.com", password: ENV.fetch("KEYCLOAK_USER_PASSWORD", "password")
+    assert_text "Sign out"
   end
 
   test "can logout" do
     visit root_url
-    sign_in email: "user@example.com", password: "password"
+    sign_in email: "user@example.com", password: ENV.fetch("KEYCLOAK_USER_PASSWORD", "password")
     click_on "Sign out"
     assert_css "h1", text: "Sign in to the Product safety database"
   end
 
   test "redirects to previous page after login" do
     visit products_url
-    sign_in email: "user@example.com", password: "password"
+    sign_in email: "user@example.com", password: ENV.fetch("KEYCLOAK_USER_PASSWORD", "password")
     assert_current_path declaration_index_path(redirect_path: products_path)
   end
 
