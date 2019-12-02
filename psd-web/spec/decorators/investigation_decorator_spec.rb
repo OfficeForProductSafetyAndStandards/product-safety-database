@@ -87,7 +87,7 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe "#investigation_summary_list" do
-    fixtures(:sources)
+    fixtures(:organisations, :users, :sources)
     let(:investigation_summary_list) { subject.investigation_summary_list }
 
     it "has the expected fields" do

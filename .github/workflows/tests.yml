@@ -95,7 +95,7 @@ jobs:
         RAILS_ENV: test
       run: |
         cd psd-web
-        bin/rails db:setup
+        bin/rails db:create db:schema:load
     - name: Run Tests
       env:
         ELASTICSEARCH_URL: localhost

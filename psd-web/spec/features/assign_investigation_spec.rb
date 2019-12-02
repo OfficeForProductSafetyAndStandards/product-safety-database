@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Assigning an investigation", type: :feature, with_keycloak_config: true, with_stubbed_elasticsearch: true do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team]) }
-  let(:investigation) { create(:allegation) }
+  let(:investigation) { create(:allegation, assignee: user) }
 
   let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, teams: [team]) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
