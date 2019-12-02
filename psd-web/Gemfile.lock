@@ -121,6 +121,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.5)
+    database_cleaner (1.7.0)
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.6)
@@ -468,6 +469,7 @@ DEPENDENCIES
   capybara
   cf-app-utils
   coveralls
+  database_cleaner
   debase
   dotenv-rails
   draper
