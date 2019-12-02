@@ -48,7 +48,7 @@ class Investigation < ApplicationRecord
   has_one :complainant, dependent: :destroy
 
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
-  after_create :create_audit_activity_for_case, :send_confirmation_email
+  after_create :create_audit_activity_for_case
 
   accepts_nested_attributes_for :complainant, reject_if: :all_blank
 
@@ -214,19 +214,6 @@ private
   def assign_to_current_user
     self.assignee = User.current if assignee.blank? && User.current
   end
-
-  def send_confirmation_email
-    if User.current
-      NotifyMailer.investigation_created(
-        pretty_id,
-        User.current.name,
-        User.current.email,
-        title,
-        case_type
-      ).deliver_later
-    end
-  end
-
 
   require_dependency "investigation/allegation"
   require_dependency "investigation/project"

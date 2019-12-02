@@ -36,5 +36,6 @@ module ProductSafetyDatabase
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
 
     config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"
+    config.govuk_api_key = ENV.fetch("NOTIFY_API_KEY")
   end
 end

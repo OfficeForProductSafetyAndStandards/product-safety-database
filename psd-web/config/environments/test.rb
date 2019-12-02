@@ -39,14 +39,20 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  config.active_job.queue_adapter = :test
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_controller.default_url_options = {
+  default_url_options = {
     host: ENV["HTTP_HOST"] || "localhost",
     port: ENV["HTTP_PORT"] || 3001
   }
+  config.action_controller.default_url_options = default_url_options
+
+  config.action_mailer.default_url_options = default_url_options
+  config.govuk_api_key = "9b6983ef-15d3-4c3c-a95b-476c71f79b53.9b6983ef-15d3-4c3c-a95b-476c71f79b53"
 end

@@ -1,41 +1,72 @@
 require "rails_helper"
 
-RSpec.describe Investigation::Create, :with_stubbed_elasticsearch do
+RSpec.describe Investigation::Create, :with_stubbed_elasticsearch, :with_stubbed_antivirus do
   let(:complainant_attributes)   { attributes_for(:complainant) }
   let(:investigation_attributes) { attributes_for(:allegation) }
   let(:attachment)               { fixture_file_upload('files/testImage.png') }
-
+  let(:user)                     { build_stubbed(:user) }
   let(:attributes) do
     investigation_attributes.tap do |attrs|
       attrs[:complainant_attributes] = complainant_attributes
     end
   end
 
-  subject { described_class.new(attributes, attachment: attachment) }
+  subject { described_class.new(attributes, user: user, attachment: attachment) }
 
   describe '#call' do
-    let(:investigation) { subject.call }
+    include ActiveJob::TestHelper
+    describe 'saves the investigation, complainant' do
 
-    it "saves the investigation, complainant and attachments" do
-      expect(investigation).to be_persisted
+      before do
+        stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email").and_return(body: '{}')
+      end
 
-      expect(Complainant.find_by(complainant_attributes)).to eq(investigation.complainant)
+      it "saves the investigation, complainant, attachments, and send confirmation email" do
 
-      expect(investigation.documents).to be_attached
+        investigation = subject.call.decorate
 
-      attached_blob = investigation.documents.first.blob
-      expect(attached_blob.filename).to eq(attachment.original_filename)
-    end
+        expect(ActionMailer::DeliveryJob).to have_been_enqueued
+          .on_queue('psd-mailers')
+          .with(
+            'NotifyMailer',
+            "investigation_created",
+            "deliver_now",
+            investigation.pretty_id,
+            user.name,
+            user.email,
+            investigation.title,
+            investigation.case_type
+          )
 
-    context 'without attachment' do
-      let(:attachment) { nil }
-
-      it "saves the investigation and complainant" do
         expect(investigation).to be_persisted
+
         expect(Complainant.find_by(complainant_attributes)).to eq(investigation.complainant)
-        expect(investigation.documents).to_not be_attached
+
+        expect(investigation.documents).to be_attached
+
+        attached_blob = investigation.documents.first.blob
+        expect(attached_blob.filename).to eq(attachment.original_filename)
+      end
+
+      context 'without attachment' do
+        let(:attachment) { nil }
+
+        it "does not try to save an attachment" do
+          investigation = subject.call
+          expect(investigation).to be_persisted
+          expect(investigation.documents).to_not be_attached
+        end
+      end
+
+      context 'without user' do
+        let(:user) { nil }
+
+        it 'does not send an email' do
+          subject.call
+
+          expect(ActionMailer::DeliveryJob).to_not have_been_enqueued
+        end
       end
     end
   end
-
 end
