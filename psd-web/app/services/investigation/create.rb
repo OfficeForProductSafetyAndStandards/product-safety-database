@@ -1,6 +1,5 @@
 class Investigation < ApplicationRecord
   class Create
-
     def initialize(attributes, user: nil)
       self.attributes = attributes
       self.user       = user
@@ -12,7 +11,8 @@ class Investigation < ApplicationRecord
       investigation
     end
 
-    private
+  private
+
     attr_accessor :attributes, :user
 
     def investigation
@@ -31,8 +31,6 @@ class Investigation < ApplicationRecord
         decorated.title,
         decorated.case_type
       ).deliver_later
-  end
-
-
+    end
   end
 end

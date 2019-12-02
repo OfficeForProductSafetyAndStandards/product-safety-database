@@ -14,22 +14,19 @@ RSpec.describe Investigation::Create, :with_stubbed_elasticsearch, :with_stubbed
 
   subject { described_class.new(attributes, user: user) }
 
-  describe '#call' do
-
-    describe 'saves the investigation, complainant' do
-
+  describe "#call" do
+    describe "saves the investigation, complainant" do
       before do
-        stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email").and_return(body: '{}')
+        stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email").and_return(body: "{}")
       end
 
       it "saves the investigation, complainant, attachments, and send confirmation email" do
-
         investigation = subject.call.decorate
 
         expect(ActionMailer::DeliveryJob).to have_been_enqueued
-          .on_queue('psd-mailers')
+          .on_queue("psd-mailers")
           .with(
-            'NotifyMailer',
+            "NotifyMailer",
             "investigation_created",
             "deliver_now",
             investigation.pretty_id,
@@ -50,7 +47,7 @@ RSpec.describe Investigation::Create, :with_stubbed_elasticsearch, :with_stubbed
         expect(attached_blob.filename).to eq(expected_file_name)
       end
 
-      context 'without attachment' do
+      context "without attachment" do
         before { investigation_attributes[:documents] = [] }
 
         it "does not try to save an attachment" do
@@ -61,10 +58,10 @@ RSpec.describe Investigation::Create, :with_stubbed_elasticsearch, :with_stubbed
         end
       end
 
-      context 'without user' do
+      context "without user" do
         let(:user) { nil }
 
-        it 'does not send an email' do
+        it "does not send an email" do
           subject.call
 
           expect(ActionMailer::DeliveryJob).to_not have_been_enqueued

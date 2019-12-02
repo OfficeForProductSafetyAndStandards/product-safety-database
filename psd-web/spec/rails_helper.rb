@@ -64,6 +64,6 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.before(:suite) do
-    Faker::Config.locale = 'en-GB'
+    Faker::Config.locale = "en-GB"
   end
 end

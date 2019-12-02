@@ -6,6 +6,6 @@ FactoryBot.define do
     product_category { Rails.application.config.product_constants["product_category"].sample }
     hazard_type { Rails.application.config.hazard_constants["hazard_type"].sample }
     type { "Investigation::Allegation" }
-    documents { [ Rack::Test::UploadedFile.new("test/fixtures/files/testImage.png", 'image/png')] }
+    documents { [Rack::Test::UploadedFile.new("test/fixtures/files/testImage.png", "image/png")] }
   end
 end

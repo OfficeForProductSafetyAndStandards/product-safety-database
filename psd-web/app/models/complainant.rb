@@ -23,7 +23,7 @@ class Complainant < ApplicationRecord
     can_be_seen_by_current_user? || investigation.child_should_be_displayed?
   end
 
-  private
+private
 
   def can_be_seen_by_current_user?
     return true if investigation.source&.user_has_gdpr_access?
