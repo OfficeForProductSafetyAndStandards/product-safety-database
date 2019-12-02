@@ -11,7 +11,7 @@ private
   end
 
   def model_params
-    %i[user_title description date_received received_type]
+    [:user_title, :description, :date_received, :received_type, documents: []]
   end
 
   def set_investigation

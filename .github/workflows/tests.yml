@@ -9,6 +9,7 @@ env:
   REDIS_HOST: localhost
   PGHOST: localhost
   PGUSER: postgres
+  NOTIFY_API_KEY:
 
 jobs:
   ruby:
