@@ -6,7 +6,10 @@ class Investigation < ApplicationRecord
     end
 
     def call
-      send_confirmation_email if investigation.save
+      if investigation.save
+        send_confirmation_email
+        investigation.create_audit_activity_for_case
+      end
 
       investigation
     end
