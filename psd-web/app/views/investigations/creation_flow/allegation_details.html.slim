@@ -27,8 +27,7 @@
           p#current-attachment-details
             ' Currently selected file:
             = link_to @file_blob.filename, @file_blob, target: "_blank", rel: 'noopener'
-        = form.fields_for :attachment do |subform|
-          = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
+        = form.file_field :documents, multiple: true, class: "govuk-file-upload", id: "attachment-file-input"
 
       .govuk-form-group
         = form.submit "Create allegation", class: "govuk-button"

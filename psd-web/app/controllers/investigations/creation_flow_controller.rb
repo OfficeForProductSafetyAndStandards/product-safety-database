@@ -23,8 +23,15 @@ class Investigations::CreationFlowController < ApplicationController
 
   # POST /xxx
   def create
-    if investigation_saved?
-      redirect_to investigation_path(@investigation), flash: { success: success_message }
+    investigation_params[:complainant_attributes] = complainant_request_params
+
+    investigation = Investigation::Create.new(
+      investigation_params,
+      user: User.current
+    ).call
+
+    if investigation.persisted?
+      redirect_to investigation_path(investigation), flash: { success: success_message }
     else
       render step
     end
@@ -105,14 +112,6 @@ private
       validate_blob_size(@file_blob, @investigation.errors, "File")
     end
     @complainant.errors.empty? && @investigation.errors.empty?
-  end
-
-  def investigation_saved?
-    return false unless investigation_valid?
-
-    attach_blobs_to_list(@file_blob, @investigation.documents)
-    @investigation.complainant = @complainant
-    @investigation.save
   end
 
   def complainant_params

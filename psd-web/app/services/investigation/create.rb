@@ -1,22 +1,19 @@
 class Investigation < ApplicationRecord
   class Create
 
-    def initialize(attributes, user: nil, attachment: nil)
+    def initialize(attributes, user: nil)
       self.attributes = attributes
-      self.attachment = attachment
       self.user       = user
     end
 
     def call
-      investigation.documents.attach(attachment) if attachment
-
       send_confirmation_email if investigation.save
 
       investigation
     end
 
     private
-    attr_accessor :attributes, :user, :attachment
+    attr_accessor :attributes, :user
 
     def investigation
       @investigation ||= Investigation.new(attributes)
