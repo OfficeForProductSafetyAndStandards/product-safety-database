@@ -1,4 +1,9 @@
-h2.govuk-heading-m Full detail
-= link_to "Edit details", edit_business_path(@business)
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
 
-= business_summary_list(@business)
+    h2.govuk-heading-m Full detail
+    = link_to "Edit details", edit_business_path(@business)
+
+    hr.govuk-section-break.govuk-section-break--l
+
+    = business_summary_list(@business)
