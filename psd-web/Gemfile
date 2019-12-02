@@ -41,6 +41,7 @@ gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.0.1", require: "govuk_design_system"
 
+# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem "brakeman"
   gem "byebug"
@@ -69,6 +70,7 @@ group :development, :test do
   gem "spring-commands-rspec"
   gem "webmock"
 end
+# rubocop:enable Metrics/BlockLength
 
 group :test do
   gem "database_cleaner"
