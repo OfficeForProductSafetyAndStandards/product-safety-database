@@ -50,6 +50,8 @@ class Investigation < ApplicationRecord
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
+  accepts_nested_attributes_for :complainant, reject_if: :all_blank
+
   def assignee
     begin
       return User.find(assignable_id) if assignable_type == "User"

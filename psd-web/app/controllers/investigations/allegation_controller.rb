@@ -11,7 +11,7 @@ private
   end
 
   def model_params
-    %i[description hazard_type product_category]
+    [:description, :hazard_type, :product_category, :attachment]
   end
 
   def set_investigation
