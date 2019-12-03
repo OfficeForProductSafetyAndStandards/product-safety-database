@@ -28,7 +28,9 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
 
     it "has the expected fields" do
       expect(product_summary_list).to summarise("Product details", text: "2 products added")
-      expect(product_summary_list).to summarise("Category", text: investigation.products.first.category)
+
+      investigation.products.each { |product| expect(product_summary_list).to summarise("Category", text: product.category) }
+
       expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_type}/)
       expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_description}/)
       expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
