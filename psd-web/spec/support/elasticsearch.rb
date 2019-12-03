@@ -6,8 +6,39 @@ RSpec.shared_context "with stubbed Elasticsearch", shared_context: :metadata do
 end
 
 RSpec.shared_context "with Elasticsearch", shared_context: :metadata do
-  before { WebMock.disable_net_connect!(allow: ENV.fetch("ELASTICSEARCH_URL")) }
-  after { WebMock.disable_net_connect! }
+  # rubocop:disable Lint/HandleExceptions
+  def clean_elasticsearch_indices!
+    elasticsearch_models.each do |model|
+      begin
+        model.__elasticsearch__.delete_index!
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound
+        # Ideally the index should not exist before the test run but this guards against unclean state
+      end
+    end
+  end
+  # rubocop:enable Lint/HandleExceptions
+
+  def create_elasticsearch_indices!
+    elasticsearch_models.each do |model|
+      model.__elasticsearch__.create_index!
+      model.__elasticsearch__.refresh_index!
+    end
+  end
+
+  def elasticsearch_models
+    ActiveRecord::Base.descendants.select { |model| model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__) }
+  end
+
+  before do
+    WebMock.disable_net_connect!(allow: ENV.fetch("ELASTICSEARCH_URL"))
+    clean_elasticsearch_indices!
+    create_elasticsearch_indices!
+  end
+
+  after do
+    clean_elasticsearch_indices!
+    WebMock.disable_net_connect!
+  end
 end
 
 RSpec.configure do |rspec|
