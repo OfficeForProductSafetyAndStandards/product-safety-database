@@ -30,40 +30,40 @@ RSpec.feature "Case filtering", type: :feature, with_keycloak_config: true, with
   end
 
   scenario "no filters applied shows all cases" do
-    expect(page).to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "filtering cases assigned to me" do
     check "Me", id: "assigned_to_me"
     click_button "Apply filters"
 
-    expect(page).to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "filtering cases assigned to my team" do
     check "My team", id: "assigned_to_team_0"
     click_button "Apply filters"
 
-    expect(page).to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "filtering cases assigned to anyone else" do
     check "Other person or team", id: "assigned_to_someone_else"
     click_button "Apply filters"
 
-    expect(page).not_to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "filtering cases assigned to another person or team" do
@@ -71,19 +71,19 @@ RSpec.feature "Case filtering", type: :feature, with_keycloak_config: true, with
     select other_team.name, from: "assigned_to_someone_else_id"
     click_button "Apply filters"
 
-    expect(page).not_to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
 
     check "Other person or team", id: "assigned_to_someone_else"
     select other_user_same_team.name, from: "assigned_to_someone_else_id"
     click_button "Apply filters"
 
-    expect(page).not_to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "combining filters" do
@@ -92,9 +92,9 @@ RSpec.feature "Case filtering", type: :feature, with_keycloak_config: true, with
     select other_user_other_team.name, from: "assigned_to_someone_else_id"
     click_button "Apply filters"
 
-    expect(page).to have_selector ".psd-case-card", text: investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_investigation.pretty_id
-    expect(page).to have_selector ".psd-case-card", text: other_user_other_team_investigation.pretty_id
-    expect(page).not_to have_selector ".psd-case-card", text: other_team_investigation.pretty_id
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 end
