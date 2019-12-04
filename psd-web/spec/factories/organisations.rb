@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :organisation do
     id { SecureRandom.uuid }
-    name { "test" }
+    name { "test organisation" }
     path { "/test/test" }
   end
 end

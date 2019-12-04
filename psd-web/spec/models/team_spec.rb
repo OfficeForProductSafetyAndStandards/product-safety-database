@@ -55,7 +55,7 @@ RSpec.describe Team do
     end
 
     context "with user of another organisation" do
-      let(:viewing_user) { user_same_org }
+      let(:viewing_user) { user_other_org }
 
       context "with ignore_visibility_restrictions: true" do
         let(:ignore_visibility_restrictions) { true }
@@ -67,7 +67,7 @@ RSpec.describe Team do
 
       context "with ignore_visibility_restrictions: false" do
         it "returns the organisation name" do
-          expect(result).to eq(team.name)
+          expect(result).to eq(organisation.name)
         end
       end
     end
