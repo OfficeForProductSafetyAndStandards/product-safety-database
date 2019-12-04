@@ -12,12 +12,14 @@ class KeycloakTest < ApplicationSystemTestCase
 
   test "can login" do
     visit root_url
+    sign_out_if_signed_in
     sign_in email: "user@example.com", password: ENV.fetch("KEYCLOAK_USER_PASSWORD", "password")
     assert_text "Sign out"
   end
 
   test "can logout" do
     visit root_url
+    sign_out_if_signed_in
     sign_in email: "user@example.com", password: ENV.fetch("KEYCLOAK_USER_PASSWORD", "password")
     click_on "Sign out"
     assert_css "h1", text: "Sign in to the Product safety database"

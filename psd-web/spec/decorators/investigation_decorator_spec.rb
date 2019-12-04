@@ -42,9 +42,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
     end
 
     context "with two products of the same category" do
-      let(:iphone_3g)     { build(:iphone_3g) }
-      let(:iphone)        { build(:iphone)  }
-      let(:samsung)       { build(:samsung) }
+      let(:iphone_3g)     { build(:product_iphone_3g) }
+      let(:iphone)        { build(:product_iphone)  }
+      let(:samsung)       { build(:product_samsung) }
       let(:products_list) { [iphone_3g, samsung] }
 
       before do
