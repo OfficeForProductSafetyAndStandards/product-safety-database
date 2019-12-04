@@ -47,6 +47,7 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
+  # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
@@ -213,13 +214,14 @@ private
     self.assignee = User.current if assignee.blank? && User.current
   end
 
+  # TODO: Refactor to remove dependency on User.current
   def send_confirmation_email
     if User.current
       NotifyMailer.investigation_created(
         pretty_id,
         User.current.name,
         User.current.email,
-        title,
+        self.decorate.title,
         case_type
       ).deliver_later
     end
