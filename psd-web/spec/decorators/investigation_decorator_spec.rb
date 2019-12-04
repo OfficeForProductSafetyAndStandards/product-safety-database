@@ -28,10 +28,12 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
 
     it "has the expected fields" do
       expect(product_summary_list).to summarise("Product details", text: "2 products added")
-      expect(product_summary_list).to summarise("Category", text: investigation.products.first.category)
-      expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_type}/)
-      expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_description}/)
-      expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
+
+      investigation.products.each { |product| expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i) }
+
+      expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_type)}/)
+      expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_description)}/)
+      expect(product_summary_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
     end
 
     context "with two products of the same category" do
@@ -92,8 +94,8 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
 
     it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.name}/)
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.organisation.name}/)
+      expect(investigation_summary_list).to summarise("Created by", text: /#{Regexp.escape(investigation.source.user.name)}/)
+      expect(investigation_summary_list).to summarise("Created by", text: /#{Regexp.escape(investigation.source.user.organisation.name)}/)
       expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
       expect(investigation_summary_list).
         to summarise("Date created", text: investigation.created_at.to_s(:govuk))
@@ -141,10 +143,10 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
       expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.strftime("%e %B %Y"))
       expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
       expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.name}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.phone_number}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.email_address}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.other_details}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
     end
   end
 
