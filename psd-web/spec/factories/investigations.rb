@@ -1,5 +1,4 @@
 FactoryBot.define do
-
   factory :investigation do
     user_title { "investigation title" }
     hazard_type { "hazard type" }
@@ -25,5 +24,4 @@ FactoryBot.define do
       user_title { "test project title" }
     end
   end
-
 end

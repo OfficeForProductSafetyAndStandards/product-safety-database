@@ -8,7 +8,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
   let(:user_source)   { build(:user_source) }
   let(:products)      { [] }
   let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
-  let!(:complainant)   { create(:complainant, investigation: investigation) }
+  let!(:complainant) { create(:complainant, investigation: investigation) }
 
   subject { investigation.decorate }
 
