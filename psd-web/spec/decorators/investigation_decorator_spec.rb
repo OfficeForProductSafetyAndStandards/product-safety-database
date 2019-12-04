@@ -3,9 +3,10 @@ require "rails_helper"
 RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keycloak_config do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
-
-  let!(:user)         { create(:user) }
-  let(:user_source)   { build(:user_source) }
+  let(:organisation) { create :organisation }
+  let(:user)         { create(:user, organisation: organisation) }
+  let(:creator)      { create(:user, organisation: organisation) }
+  let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
   let!(:complainant) { create(:complainant, investigation: investigation) }
@@ -266,16 +267,18 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
   describe "#source_details_summary_list" do
     let(:source_details_summary_list) { subject.source_details_summary_list }
 
-    before { allow(User).to receive(:current).and_return(user) }
+    before do
+      allow(User).to receive(:current).and_return(user)
+    end
 
     it "has the expected fields" do
       expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.to_s(:govuk))
       expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
       expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.name}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.phone_number}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.email_address}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.other_details}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
+      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
     end
   end
 
