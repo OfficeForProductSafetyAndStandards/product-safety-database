@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
     id { SecureRandom.uuid }
-    name { "test" }
+    name { "test user" }
     email { "test@example.com" }
     organisation
     has_accepted_declaration { false }
