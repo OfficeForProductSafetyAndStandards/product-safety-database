@@ -1,24 +1,25 @@
 require "rails_helper"
 
-
-RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
+RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keycloak_config do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
 
-  fixtures(:investigations, :investigation_products, :products)
-
-  let(:investigation) { investigations(:one) }
+  let!(:user)         { create(:user) }
+  let(:user_source)   { build(:user_source) }
+  let(:products)      { [] }
+  let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
 
   subject { investigation.decorate }
 
   describe "#display_product_summary_list?" do
-    let(:investigation) { investigations(:enquiry) }
+    let(:investigation) { create(:enquiry) }
+
     context "with no product" do
       it { is_expected.to_not be_display_product_summary_list }
     end
 
     context "with products" do
-      before { investigation.products << products(:one) }
+      before { investigation.products << create(:product) }
 
       it { is_expected.to be_display_product_summary_list }
     end
@@ -26,6 +27,7 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
 
   describe "#product_summary_list" do
     let(:product_summary_list) { subject.product_summary_list }
+    let(:products) { create_list(:product, 2) }
 
     it "has the expected fields" do
       expect(product_summary_list).to summarise("Product details", text: "2 products added")
@@ -38,10 +40,9 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
     end
 
     context "with two products of the same category" do
-      fixtures(:products)
-      let(:iphone_3g)     { products(:iphone_3g) }
-      let(:iphone)        { products(:iphone)  }
-      let(:samsung)       { products(:samsung) }
+      let(:iphone_3g)     { build(:iphone_3g) }
+      let(:iphone)        { build(:iphone)  }
+      let(:samsung)       { build(:samsung) }
       let(:products_list) { [iphone_3g, samsung] }
 
       before do
@@ -90,14 +91,15 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe "#investigation_summary_list" do
-    fixtures(:organisations, :users, :sources)
+    include Investigations::DisplayTextHelper
+
     let(:investigation_summary_list) { subject.investigation_summary_list }
 
     it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
       expect(investigation_summary_list).to summarise("Created by", text: /#{Regexp.escape(investigation.source.user.name)}/)
       expect(investigation_summary_list).to summarise("Created by", text: /#{Regexp.escape(investigation.source.user.organisation.name)}/)
-      expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
+      expect(investigation_summary_list).to summarise("Assigned to", text: /#{Regexp.escape(user.name.to_s)}/)
       expect(investigation_summary_list).
         to summarise("Date created", text: investigation.created_at.to_s(:govuk))
       expect(investigation_summary_list).to summarise("Last updated", text: time_ago_in_words(investigation.updated_at))
@@ -130,18 +132,17 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe "#source_details_summary_list" do
-    fixtures(:complainants, :sources, :organisations, :users)
-    let(:investigation) { investigations(:enquiry) }
+    let(:investigation) { build(:enquiry) }
     let(:source_details_summary_list) { subject.source_details_summary_list }
 
     before do
-      User.current = users(:opss)
-      investigation.source = sources(:investigation_one)
-      investigation.complainant = complainants(:one)
+      User.current = build(:user)
+      investigation.source = build(:user_source)
+      investigation.complainant = build(:complainant)
     end
 
     it "has the expected fields" do
-      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.strftime("%e %B %Y"))
+      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.to_s(:govuk))
       expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
       expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
       expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
@@ -157,7 +158,6 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
         .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
     }
   end
-
 
   describe "#hazard_descrition" do
     include_examples "a formated text", :investigation, :hazard_description
@@ -227,7 +227,6 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe "#investigation_summary_list" do
-    fixtures(:sources)
     let(:investigation_summary_list) { subject.investigation_summary_list }
 
     it "has the expected fields" do
@@ -267,8 +266,7 @@ RSpec.describe InvestigationDecorator, with_stubbed_elasticsearch: true do
   end
 
   describe "#source_details_summary_list" do
-    fixtures(:complainants, :sources, :organisations, :users)
-    let(:investigation) { investigations(:enquiry) }
+    let(:investigation) { create(:enquiry) }
     let(:source_details_summary_list) { subject.source_details_summary_list }
 
     before do
