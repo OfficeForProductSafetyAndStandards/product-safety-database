@@ -38,8 +38,8 @@ class Team < ApplicationRecord
     self.ensure_names_up_to_date
   end
 
-  def display_name(ignore_visibility_restrictions: false)
-    return name if (User.current.organisation == organisation) || ignore_visibility_restrictions
+  def display_name(ignore_visibility_restrictions: false, current_user: User.current)
+    return name if (current_user && (current_user.organisation == organisation)) || ignore_visibility_restrictions
 
     organisation.name
   end
