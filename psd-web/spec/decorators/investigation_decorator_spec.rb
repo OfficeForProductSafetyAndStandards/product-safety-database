@@ -8,6 +8,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
   let(:user_source)   { build(:user_source) }
   let(:products)      { [] }
   let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
+  let!(:complainant)   { create(:complainant, investigation: investigation) }
 
   subject { investigation.decorate }
 
@@ -31,8 +32,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
 
     it "has the expected fields" do
       expect(product_summary_list).to summarise("Product details", text: "2 products added")
-
-      investigation.products.each { |product| expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i) }
+      investigation.products.each do |product|
+        expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i)
+      end
 
       expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_type)}/)
       expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_description)}/)
@@ -132,14 +134,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
   end
 
   describe "#source_details_summary_list" do
-    let(:investigation) { build(:enquiry) }
     let(:source_details_summary_list) { subject.source_details_summary_list }
 
-    before do
-      User.current = build(:user)
-      investigation.source = build(:user_source)
-      investigation.complainant = build(:complainant)
-    end
+    before { allow(User).to receive(:current).and_return(user) }
 
     it "has the expected fields" do
       expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.to_s(:govuk))
@@ -164,6 +161,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
   end
 
   describe "#product_summary_list" do
+    let(:products) { create_list :product, 2 }
     let(:product_summary_list) { subject.product_summary_list }
 
     it "has the expected fields" do
@@ -233,7 +231,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
       expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.name}/)
       expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.organisation.name}/)
-      expect(investigation_summary_list).to summarise("Assigned to", text: /Unassigned/)
+      expect(investigation_summary_list).to summarise("Assigned to", text: /#{Regexp.escape(user.name.to_s)}/)
       expect(investigation_summary_list).
         to summarise("Date created", text: investigation.created_at.to_s(:govuk))
       expect(investigation_summary_list).to summarise("Last updated", text: time_ago_in_words(investigation.updated_at))
@@ -266,17 +264,12 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
   end
 
   describe "#source_details_summary_list" do
-    let(:investigation) { create(:enquiry) }
     let(:source_details_summary_list) { subject.source_details_summary_list }
 
-    before do
-      User.current = users(:opss)
-      investigation.source = sources(:investigation_one)
-      investigation.complainant = complainants(:one)
-    end
+    before { allow(User).to receive(:current).and_return(user) }
 
     it "has the expected fields" do
-      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.strftime("%e %B %Y"))
+      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.to_s(:govuk))
       expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
       expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
       expect(source_details_summary_list).to summarise("Contact details", text: /#{investigation.complainant.name}/)
