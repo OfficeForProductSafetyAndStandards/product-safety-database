@@ -1,5 +1,5 @@
 - if investigation.is_private? || investigation.is_closed?
-  div.psd-case-card__status-area
+  .psd-case-card__status-area
     - if investigation.is_closed?
       = render "components/hmcts_badge", text: "Closed case", classes: "hmcts-badge--grey psd-case-card__badge"
     - if investigation.is_private?
