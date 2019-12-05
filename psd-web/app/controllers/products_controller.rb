@@ -12,7 +12,7 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = search_for_products(20)
+    @products = search_for_products(20).decorate
   end
 
   # GET /products/1

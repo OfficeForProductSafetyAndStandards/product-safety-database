@@ -19,5 +19,5 @@
                   label: { text: "Keywords", classes: "govuk-label--s" }
           = form.submit "Search", name: nil, class: "search-box--submit"
   .govuk-grid-column-three-quarters
-    = render "table", products: @products.decorate
+    = render "table", products: @products
     = will_paginate @products

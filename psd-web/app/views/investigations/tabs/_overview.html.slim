@@ -8,7 +8,7 @@
     p.govuk-body-l = @investigation.title
 
     h2.govuk-heading-m Summary
-    p[class="govuk-body"] = simple_format(@investigation.description)
+    p[class="govuk-body"] = @investigation.description
     p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), \
       class: "govuk-link"
 
