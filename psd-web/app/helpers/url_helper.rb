@@ -32,7 +32,7 @@ module UrlHelper
     {
       is_simple_link: true,
       text: "Back to #{investigation.pretty_description}",
-      href: investigation
+      href: investigation_path(investigation)
     }
   end
 end
