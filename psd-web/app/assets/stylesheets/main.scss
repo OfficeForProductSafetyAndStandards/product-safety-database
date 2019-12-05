@@ -29,6 +29,9 @@ $govuk-assets-path: '~govuk-frontend/assets/';
 @import "stylesheets/psd_header";
 @import "stylesheets/sub_nav";
 
+// Pages
+@import "stylesheets/investigation";
+
 * {
   box-sizing: border-box;
 }
