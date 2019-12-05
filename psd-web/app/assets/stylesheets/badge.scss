@@ -30,6 +30,7 @@ $badge-spacing-width: 5px;
 @mixin _badge--aligned-right {
   margin-right: 0;
   margin-left: $badge-spacing-width;
+
   &:first-of-type {
     margin-left: 0;
   }
