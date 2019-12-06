@@ -1,6 +1,6 @@
 module Investigations::UserFiltersHelper
   def entities
-    User.get_assignees(except: User.current) + Team.all
+    User.get_assignees(except: User.current) + Team.all_with_organisation
   end
 
   def assigned_to(form)
