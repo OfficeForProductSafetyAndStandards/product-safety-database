@@ -8,23 +8,23 @@ RSpec.describe "HomePage", :with_keycloak_config, :with_elasticsearch do
     end
 
     it "not signed in visits / stays on /" do
-      visit "/"
-      expect(page).to have_content "if you think you should have access"
-      expect(page).to_not have_css "a.psd-header__link", text: "BETA"
+      get "/"
+      expect(response).to render_template("homepage/show")
     end
   end
+
   context "when signed in" do
     let(:user) { create(:user, :opss_user, :activated) }
     before { sign_in(as_user: user) }
 
     it "signed in visits / gets redirected to /cases" do
-      visit "/"
-      expect(page).to have_current_path("/cases")
+      get "/"
+      expect(response).to redirect_to("/cases")
     end
 
     it "signed in visits /cases stays on /cases" do
-      visit "/cases"
-      expect(page).to have_current_path("/cases")
+      get "/"
+      expect(response).to redirect_to("/cases")
     end
   end
 end
