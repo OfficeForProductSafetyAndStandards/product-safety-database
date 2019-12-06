@@ -5,6 +5,7 @@ $govuk-assets-path: '~govuk-frontend/assets/';
 
 @import "autocomplete";
 @import "badge";
+@import "stylesheets/intro-card";
 @import "stylesheets/text";
 @import "stylesheets/cookie-banner";
 @import "stylesheets/remove-default-button-styling";
@@ -28,6 +29,7 @@ $govuk-assets-path: '~govuk-frontend/assets/';
 @import "stylesheets/timeline";
 @import "stylesheets/psd_header";
 @import "stylesheets/sub_nav";
+@import "landing_masthead";
 
 * {
   box-sizing: border-box;
