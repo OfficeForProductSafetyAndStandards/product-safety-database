@@ -1,3 +1,4 @@
+$image-border-colour: rgba($govuk-text-colour, .15);
 
 .primary-image {
   max-width: 100%;
@@ -35,8 +36,8 @@
 
   max-width: 200px;
 
-  @include govuk-media-query($from: tablet){
-    max-width: 300px
+  @include govuk-media-query($from: tablet) {
+    max-width: 300px;
   }
 
   img {
@@ -44,7 +45,7 @@
     display: inline-block;
 
     // Subtle border around images
-    outline: 1px solid rgba(0,0,0,0.08);
+    outline: 1px solid $image-border-colour;
     outline-offset: -1px;
 
     // Make sure images don't get bigger than container
@@ -59,8 +60,8 @@
   .app-document-preview__image {
     max-width: 150px;
 
-    @include govuk-media-query($from: tablet){
-      max-width: 200px
+    @include govuk-media-query($from: tablet) {
+      max-width: 200px;
     }
   }
 

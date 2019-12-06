@@ -1,4 +1,6 @@
 
+$secondary-hover-colour: #171819; // same as footer links
+
 %placeholder-content {
   border: 3px dashed govuk-colour("grey-1");
   @include govuk-font($size: 19);
@@ -7,8 +9,9 @@
 
   & > a {
     color: govuk-colour("grey-1");
+
     &:hover {
-      color: #171819; // same as footer links
+      color: $secondary-hover-colour;
     }
   }
 
@@ -16,6 +19,7 @@
   @include govuk-responsive-padding(6, "bottom");
   @include govuk-responsive-padding(4, "left");
   @include govuk-responsive-padding(4, "right");
+
 }
 
 .app-document-preview {
