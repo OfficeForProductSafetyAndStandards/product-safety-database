@@ -45,6 +45,13 @@ RSpec.describe User, with_keycloak_config: true do
       expect(described_class.get_assignees).not_to include(inactive_user)
     end
 
+    it "includes associations needed for display_name" do
+      assignees = described_class.get_assignees
+      expect(-> {
+        assignees.map(&:display_name)
+      }).to not_talk_to_db
+    end
+
     context "when a user to except is supplied" do
       it "does not return the excepted user" do
         expect(described_class.get_assignees(except: active_user)).to be_empty
