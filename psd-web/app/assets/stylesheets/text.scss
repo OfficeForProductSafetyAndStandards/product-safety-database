@@ -50,3 +50,13 @@ h5,
 h6 {
   max-width: $max-content-width;
 }
+
+// For anchors not in a paragraph
+.app-block-link {
+  display: block;
+
+  // As per govuk-body-m except colour
+  @include govuk-font($size: 19);
+  margin-top: 0;
+  @include govuk-responsive-margin(4, "bottom");
+}

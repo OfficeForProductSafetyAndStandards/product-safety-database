@@ -27,13 +27,14 @@
     = @investigation.investigation_summary_list
 
   - if @investigation.products.any?
-    .govuk-grid-column-one-third.product-summary
-      hr
-      h2.govuk-heading-m Products
+    .govuk-grid-column-one-third
+      = tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible app-!-display-mobile--only")
+      h2.govuk-heading-m = "Products (#{@investigation.products.count})"
       ul.govuk-list
         - @investigation.products.each do |product|
-          li
-            = link_to product.name.capitalize, product_path(product), class: "govuk-link"
+          li[class="govuk-!-margin-bottom-3"]
+            = link_to product.name.capitalize, product_path(product),
+            class: "app-block-link govuk-link govuk-!-margin-bottom-2"
             - if product.images.any?
-              = render "documents/image_tag", image: product.images.first, dimensions: "500x300", \
-                class_name: 'product-image'
+              = render "documents/document_preview", document: product.images.first, dimensions: "300x500", hide_link: true, class_name: 'app-document-preview--small'
+
