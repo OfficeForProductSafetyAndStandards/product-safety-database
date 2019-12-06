@@ -38,7 +38,7 @@ class Team < ApplicationRecord
     self.ensure_names_up_to_date
   end
 
-  def self.get_assignees
+  def self.all_with_organisation
     all.includes(:organisation)
   end
 

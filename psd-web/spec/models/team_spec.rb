@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Team do
-  describe ".get_assignees" do
+  describe ".all_with_organisation" do
     before { 3.times { create(:team) } }
 
     it "includes associations needed for display_name" do
-      assignees = described_class.get_assignees
+      assignees = described_class.all_with_organisation
 
       expect(assignees.length).to eq(3)
       expect(-> {
