@@ -35,7 +35,7 @@
       ul.govuk-list
         - @investigation.products.each do |product|
           li[class="govuk-!-margin-bottom-3"]
-            = link_to product.name.capitalize, product_path(product),
+            = link_to product.name, product_path(product),
             class: "app-block-link govuk-link govuk-!-margin-bottom-2"
             - if product.images.any?
               = render "documents/document_preview",
