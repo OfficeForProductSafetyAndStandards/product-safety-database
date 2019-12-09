@@ -14,6 +14,6 @@ class Investigation::Allegation < Investigation
 private
 
   def create_audit_activity_for_case
-    AuditActivity::Investigation::AddAllegation.from(self.decorate)
+    AuditActivity::Investigation::AddAllegation.from(self)
   end
 end
