@@ -4,11 +4,10 @@ RSpec.describe AuditActivity::Investigation::AddProject, :with_stubbed_elasticse
   let(:project) { create(:project) }
 
   subject do
-    project.activities.find_by!(type: "AuditActivity::Investigation::AddProject")
+    project.activities.find_by!(type: described_class.name)
   end
 
-
-  describe '#build_title' do
+  describe "#build_title" do
     it "stores the title" do
       expect(subject.title).to eq("Project logged: #{project.decorate.title}")
     end
@@ -19,5 +18,4 @@ RSpec.describe AuditActivity::Investigation::AddProject, :with_stubbed_elasticse
       expect(subject.body).to eq("**Project details**<br><br>#{project.description}")
     end
   end
-
 end

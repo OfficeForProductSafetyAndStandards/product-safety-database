@@ -4,10 +4,10 @@ RSpec.describe AuditActivity::Investigation::AddEnquiry, :with_stubbed_elasticse
   let(:enquiry) { create(:enquiry) }
 
   subject do
-    enquiry.activities.find_by!(type: "AuditActivity::Investigation::AddEnquiry")
+    enquiry.activities.find_by!(type: described_class.name)
   end
 
-  describe '#build_title' do
+  describe "#build_title" do
     it "stores the title" do
       expect(subject.title).to eq("Enquiry logged: #{enquiry.decorate.title}")
     end
@@ -15,7 +15,7 @@ RSpec.describe AuditActivity::Investigation::AddEnquiry, :with_stubbed_elasticse
 
   describe "#build_body" do
     it "stores the body" do
-      expect(subject.body).to eq("**Enquiry details**<br><br>test enquiry")
+      expect(subject.body).to eq("**Enquiry details**<br><br>#{enquiry.description}")
     end
   end
 end
