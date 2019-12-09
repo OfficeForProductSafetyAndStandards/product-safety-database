@@ -9,8 +9,7 @@ class SessionsController < ActionController::Base
 
   def signin
     request_and_store_token(auth_code, params[:request_path])
-
-    redirect_path = is_relative(params[:request_path]) ? params[:request_path] : investigations_path
+    redirect_path = is_relative(params[:request_path]) ? params[:request_path] : root_path
     redirect_to redirect_path
   rescue RestClient::ExceptionWithResponse => e
     redirect_to keycloak_login_url(params[:request_path]), alert: signin_error_message(e)
