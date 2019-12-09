@@ -1,8 +1,21 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
+  decorates_associations :documents_attachments
 
   def title
     user_title
+  end
+
+  def hazard_description
+    h.simple_format(object.hazard_description)
+  end
+
+  def non_compliant_reason
+    h.simple_format(object.non_compliant_reason)
+  end
+
+  def description
+    h.simple_format(object.description)
   end
 
   def display_product_summary_list?
@@ -11,7 +24,7 @@ class InvestigationDecorator < ApplicationDecorator
 
   def product_summary_list
     products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
-    hazards = h.simple_format([hazard_type, hazard_description].join("\n\n"))
+    hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
     rows = [
       category.present? ? { key: { text: "Category" }, value: { text: category }, actions: [] } : nil,
       {
@@ -19,8 +32,8 @@ class InvestigationDecorator < ApplicationDecorator
         value: { text: products_details },
         actions: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"]
       },
-      hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
-      non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: h.simple_format(non_compliant_reason) }, actions: [] } : nil,
+      object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
+      object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"

@@ -76,10 +76,16 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "should notify previous assignee team if case is assigned to someone by someone outside" do
-    @investigation.update(assignee: @user_one)
-    @investigation.update(assignee: @user_three.teams[0])
-    mock_investigation_updated(who_will_be_notified: [@user_three, @user_one].map(&:email))
-    @investigation.update(assignee: @user_one)
+    @investigation.update!(assignee: @user_one)
+
+    team_with_recipient_email = Team.find_by(name: "Team 4")
+
+    @investigation.update!(assignee: team_with_recipient_email)
+
+    expected_recipients = [@user_three.email, @user_one.email, team_with_recipient_email.team_recipient_email]
+
+    mock_investigation_updated(who_will_be_notified: expected_recipients)
+    @investigation.update!(assignee: @user_one)
     assert_equal @number_of_notifications, 2
   end
 

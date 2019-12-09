@@ -128,8 +128,8 @@ class User < ApplicationRecord
   end
 
   def self.get_assignees(except: [])
-    users_to_exclude = Array(except)
-    self.activated - users_to_exclude
+    user_ids_to_exclude = Array(except).collect(&:id)
+    self.activated.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
   end
 
   def self.get_team_members(user:)

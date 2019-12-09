@@ -145,6 +145,7 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "elasticsearch should find complainant email address" do
+    @investigation_with_complainant.__elasticsearch__.index_document
     query = ElasticsearchQuery.new(@complainant.email_address, {}, {})
     assert_includes(Investigation.full_search(query).records.map(&:id), @investigation_with_complainant.id)
   end

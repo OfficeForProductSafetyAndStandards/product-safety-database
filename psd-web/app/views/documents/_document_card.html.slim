@@ -2,6 +2,7 @@ ruby:
   restricted = !can_be_displayed?(document, parent)
   title = restricted ? document_restricted_title : document.metadata[:title]
   safe = document.metadata["safe"]
+  document = document.decorate
 
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-one-third
@@ -13,7 +14,7 @@ ruby:
       p = render "components/hmcts_badge", text: "Restricted access", classes: "hmcts-badge--grey"
       p = document_restricted_body
     - else
-      p = document.metadata[:description]
+      p = document.description
       p
         - if safe
           = link_to "View #{pretty_type_description(document)}",

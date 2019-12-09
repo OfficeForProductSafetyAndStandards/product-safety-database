@@ -8,7 +8,9 @@ RSpec.shared_examples "an Investigation" do
 
     before do
       User.current = user
-      NotifyMailer.stub(:investigation_created) { double("mailer", deliver_later: true) }
+      allow(NotifyMailer)
+        .to receive(:investigation_created)
+        .and_return(double("mailer", deliver_later: true))
       investigation.save # Need to trigger save after stubbing the mailer due to callback hell
     end
 
