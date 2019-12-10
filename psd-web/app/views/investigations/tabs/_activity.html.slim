@@ -1,12 +1,15 @@
-h1.govuk-heading-l
-  span.govuk-caption-l = @investigation.pretty_description
-  | Activity
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
 
-p.govuk-body
-  = link_to "Add activity", new_investigation_activity_path(@investigation)
+    h1.govuk-heading-l
+      span.govuk-caption-l = @investigation.pretty_description
+      | Activity
 
-hr.govuk-section-break.govuk-section-break--l
+    p.govuk-body
+      = link_to "Add activity", new_investigation_activity_path(@investigation)
+
+    hr.govuk-section-break.govuk-section-break--m
 
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
-  .govuk-grid-column-full
+  .govuk-grid-column-two-thirds-from-desktop
     = render "activities_summary", activities: @activities

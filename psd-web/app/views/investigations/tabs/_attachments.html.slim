@@ -1,15 +1,19 @@
-h1.govuk-heading-l
-  span.govuk-caption-l = @investigation.pretty_description
-  | Attachments
-
-p.govuk-body
-  = link_to "Add attachment", new_investigation_new_path(@investigation)
-
-hr.govuk-section-break.govuk-section-break--l
-
 .govuk-grid-row
-  .govuk-grid-column-full
-    = render "documents_list_summary", parent: @investigation
+  .govuk-grid-column-two-thirds-from-desktop
+
+    h1.govuk-heading-l
+      span.govuk-caption-l = @investigation.pretty_description
+      | Attachments
+
+    p.govuk-body
+      = link_to "Add attachment", new_investigation_new_path(@investigation)
+
+    hr.govuk-section-break.govuk-section-break--l
+
+= render "documents_list_summary", parent: @investigation
 
 - if @investigation.documents.length.zero?
-  p No attachments.
+  .govuk-grid-row
+    .govuk-grid-column-two-thirds-from-desktop
+      p.govuk-body
+        | No attachments

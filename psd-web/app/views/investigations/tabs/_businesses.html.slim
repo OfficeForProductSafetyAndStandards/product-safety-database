@@ -1,21 +1,42 @@
-h1.govuk-heading-l
-  span.govuk-caption-l = @investigation.pretty_description
-  | Businesses
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
 
-p.govuk-body
-  = link_to "Add business", new_investigation_business_url(@investigation)
+    h1.govuk-heading-l
+      span.govuk-caption-l = @investigation.pretty_description
+      | Businesses
 
-hr.govuk-section-break.govuk-section-break--l
+    p.govuk-body
+      = link_to "Add business", new_investigation_business_url(@investigation)
+
+    hr.govuk-section-break.govuk-section-break--l
 
 .govuk-grid-row
-  .govuk-grid-column-two-thirds
+  .govuk-grid-column-two-thirds-from-desktop
     - @investigation.investigation_businesses.each do |ib|
-      h3.govuk-heading-s
+      h2.govuk-heading-m
         = ib.relationship.titleize
+
       = business_summary_list ib.business
-      p
-        = link_to "View business", ib.business, class: "govuk-link psd-block-link"
-        = link_to "Remove business", remove_investigation_business_path(@investigation, ib.business)
+
+      - view_business_link_content = capture do
+        | View business
+        span.govuk-visually-hidden
+          = " (" + ib.business.trading_name + ")"
+
+      = link_to view_business_link_content, ib.business,
+        class: "govuk-link app-block-link govuk-!-margin-right-3"
+
+      - remove_business_link_content = capture do
+        | Remove business
+        span.govuk-visually-hidden
+          = " (" + ib.business.trading_name + ")"
+
+      = link_to remove_business_link_content,
+        remove_investigation_business_path(@investigation, ib.business),
+        class: "govuk-link app-block-link govuk-!-margin-right-3"
+
+      hr.govuk-section-break.govuk-section-break--m
+
     - if @investigation.investigation_businesses.length.zero?
-      p
-        | No businesses.
+      p.govuk-body
+        | No businesses
