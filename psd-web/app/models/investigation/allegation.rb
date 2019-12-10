@@ -7,7 +7,10 @@ class Investigation::Allegation < Investigation
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
-  has_one :add_audit_activity, class_name: 'AuditActivity::Investigation::AddAllegation', foreign_key: :investigation_id
+  has_one :add_audit_activity,
+    class_name: "AuditActivity::Investigation::AddAllegation",
+    foreign_key: :investigation_id,
+    inverse_of: :investigation
 
   def case_type
     "allegation"

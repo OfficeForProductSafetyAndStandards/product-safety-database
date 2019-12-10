@@ -1,5 +1,4 @@
 class FixIncorrectActivities < ActiveRecord::Migration[5.2]
-
   def update_activity(investigation, user)
     activity = investigation.reload.add_audit_activity
     activity.update_column(:created_at, investigation.created_at)
@@ -45,7 +44,5 @@ class FixIncorrectActivities < ActiveRecord::Migration[5.2]
       end
   end
 
-  def down
-  end
-
+  def down; end
 end
