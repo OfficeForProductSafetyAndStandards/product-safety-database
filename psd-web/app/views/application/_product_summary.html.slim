@@ -7,7 +7,7 @@
     .govuk-grid-column-one-third
       - if product.images.any?
         = render "documents/document_preview", document: product.images.first, dimensions: "300x500",
-                class_name: "product-image app-document-preview--medium"
+          class_name: "product-image app-document-preview--medium"
       - else
         p.govuk-body
           | No images
@@ -15,4 +15,3 @@
     .govuk-grid-column-two-thirds
       = product.decorate.summary_list
       = yield
-
