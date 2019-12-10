@@ -16,4 +16,8 @@ private
 
     render "non_opss"
   end
+
+  def secondary_nav_items
+    nil
+  end
 end

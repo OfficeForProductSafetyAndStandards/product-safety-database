@@ -4,7 +4,9 @@ html.govuk-template.app-html-class[lang="en"]
     meta[charset="utf-8"]
     title
       = yield :page_title
-      = yield :page_title_suffix
+      - if content_for?(:page_title)
+        |  -
+      |  Product safety database - GOV.UK
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     meta[name="theme-color" content="blue"]
     link[rel="shortcut icon" type="image/x-icon" href=asset_pack_path("media/images/favicon.ico")]
@@ -44,17 +46,18 @@ html.govuk-template.app-html-class[lang="en"]
       | Skip to main content
 
     = render "components/govuk_cookie_banner", path: help_privacy_notice_path(anchor: "cookies-policy")
-    = content_for :page_title_suffix do
-      |  - Product safety database - GOV.UK
 
     = render "components/psd_header",
             productName: "Product safety database",
             phaseBanner: User.current && "beta",
             navigation: User.current && nav_items,
-            secondary_navigation: User.current && secondary_nav_items,
+            secondary_navigation: secondary_nav_items,
             assetPath: "media/images"
 
-    - if User.current
+    = yield :masthead
+
+    - content = yield
+    - if content.present?
       .govuk-width-container
         = yield :after_header
         - if alert
@@ -67,33 +70,6 @@ html.govuk-template.app-html-class[lang="en"]
             - if flash[key]
               = render "components/hmcts_banner", text: flash[key], type: key
           = yield
-    - else
-      .landing-masthead
-
-        .govuk-width-container
-          .govuk-grid-row
-            .govuk-grid-column-full
-              .govuk-phase-banner
-                p.govuk-phase-banner__content
-                  span.govuk-tag.govuk-phase-banner__content__tag
-                    | Beta
-                  span.govuk-phase-banner__text
-                    | This is a new service – your feedback will help us to improve it.
-
-        .govuk-width-container
-          main#main-content.app-main-class.govuk-main-wrapper[role="main"]
-            .govuk-grid-row
-              .govuk-grid-column-two-thirds-from-desktop
-                h1.govuk-heading-xl Product safety database
-                p.govuk-body-l class="govuk-!-margin-bottom-2"
-                  | Report, track and share product safety information with the product safety community.
-                .landing-masthead-links
-                  = link_to "Sign in to your account", keycloak_login_url(params[:request_path]),
-                      class: "govuk-button", role: "button", draggable: false
-                  p
-                    | or&nbsp;
-                    = mail_to "opss.enquiries@beis.gov.uk", "email OPSS"
-                    | &nbsp;if you think you should have access
 
     footer.govuk-footer[role="contentinfo"]
       .govuk-width-container
