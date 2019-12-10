@@ -69,7 +69,7 @@ html.govuk-template.app-html-class[lang="en"]
           - %i[success information warning].each do |key|
             - if flash[key]
               = render "components/hmcts_banner", text: flash[key], type: key
-          = yield
+          = content
 
     footer.govuk-footer[role="contentinfo"]
       .govuk-width-container
