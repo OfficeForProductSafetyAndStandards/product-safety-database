@@ -23,7 +23,7 @@ $secondary-hover-colour: #171819; // same as footer links
 }
 
 .app-document-preview {
- @include govuk-responsive-margin(6, "bottom");
+  @include govuk-responsive-margin(6, "bottom");
 }
 
 // Generic graphic of a document

@@ -53,7 +53,7 @@ h6 {
 
 // For anchors not in a paragraph
 .app-block-link {
-  display: block;
+  display: inline-block;
 
   // As per govuk-body-m except colour
   @include govuk-font($size: 19);

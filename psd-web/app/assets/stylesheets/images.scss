@@ -67,6 +67,19 @@ $image-border-colour: rgba($govuk-text-colour, .15);
 
 }
 
+
+.app-document-preview--medium {
+
+  .app-document-preview__image {
+    max-width: 200px;
+
+    @include govuk-media-query($from: tablet) {
+      max-width: 250px;
+    }
+  }
+
+}
+
 .app-document-preview__image-without-preview {
   @extend %placeholder-content;
 }
