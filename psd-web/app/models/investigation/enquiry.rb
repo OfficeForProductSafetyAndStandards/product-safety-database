@@ -8,6 +8,8 @@ class Investigation::Enquiry < Investigation
 
   date_attribute :date_received, required: false
 
+  has_one :add_audit_activity, class_name: 'AuditActivity::Investigation::AddEnquiry', foreign_key: :investigation_id
+
   def case_type
     "enquiry"
   end
