@@ -16,8 +16,6 @@ cache:
     - ~/coverage-cache
 
 stages:
-  - name: Deploy review app
-    if: type = pull_request # This is designed to cut out unnecessary runs of the test suite. See PSD-821 for details.
   - name: Deploy to staging
     if: branch = master AND type = push
   - name: Deploy to production
