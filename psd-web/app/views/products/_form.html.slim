@@ -5,17 +5,17 @@ div class=["govuk-!-width-two-thirds", ("govuk-form-group--error" if product.err
   = render "form_components/govuk_select", choices: product_categories, key: :category, form: form,
           show_all_values: true, aria_describedby: "report-product-category-hint", is_autocomplete: true,
           label: { text: "Product category", classes: label_class },
-          hint: { text: "For example, clothing or white goods" }
+          hint: { text: "For example, ‘Furniture’ or ‘Stationary’" }
 
 - hint_html = capture do
-  | For example, t-shirt or dishwasher
+  | For example, ‘Dining chair’ or ‘Ballpoint pen’
 = render "form_components/govuk_input", key: :product_type, form: form,
         classes: "govuk-!-width-one-half",
         label: { text: "Product type", classes: label_class },
         hint: { html: hint_html }
 
 - hint_html = capture do
-  | Include brand, model name and model number – information that will help others identify the product. For example, ‘Bosch GM68520G’
+  | Include brand, model name and model number – information that will help others identify the product. For example, ‘Bic Cristal Medium Point (1.0mm), 895487’.
 
 = render "form_components/govuk_input", key: :name, form: form,
         classes: "govuk-!-width-two-thirds",
