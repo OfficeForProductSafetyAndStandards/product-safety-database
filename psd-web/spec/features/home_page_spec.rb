@@ -34,9 +34,16 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
         let(:has_accepted_declaration) { false }
         let(:user_state) { :inactive }
 
-        scenario "shows the declaration page" do
+        scenario "shows the declaration page before the case list" do
           expect(page).to have_current_path(declaration_index_path)
           expect(page).to have_text("Declaration")
+
+          check "I agree"
+          click_button "Continue"
+
+          expect(page).to have_current_path(investigations_path)
+          expect(page).to have_text("Cases")
+          expect(page).to have_link("Create new")
         end
       end
 
@@ -49,25 +56,45 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
       end
     end
 
-    context "as activated non-OPSS user" do
+    context "as non-OPSS user" do
       let(:role) { :psd_user }
 
-      context "not previously viewed the introduction" do
+      context "not previously accepted the declaration or viewed the introduction" do
+        let(:has_accepted_declaration) { false }
         let(:has_viewed_introduction) { false }
+        let(:user_state) { :inactive }
 
-        scenario "shows the introduction" do
+        scenario "shows the declaration page before the introduction" do
+          expect(page).to have_current_path(declaration_index_path)
+          expect(page).to have_text("Declaration")
+
+          check "I agree"
+          click_button "Continue"
+
           expect(page).to have_current_path(introduction_overview_path)
           expect(page).to have_text("The Product safety database (PSD) has been developed with")
           expect(page).to have_link("Continue")
         end
       end
 
-      context "previously viewed the introduction" do
-        scenario "shows the non-OPSS home page" do
-          expect(page).to have_current_path(root_path)
-          expect(page).to have_link("Your cases")
-          expect(page).to have_link("All cases")
-          expect(page).to have_link("More information")
+      context "previously accepted the declaration" do
+        context "not previously viewed the introduction" do
+          let(:has_viewed_introduction) { false }
+
+          scenario "shows the introduction" do
+            expect(page).to have_current_path(introduction_overview_path)
+            expect(page).to have_text("The Product safety database (PSD) has been developed with")
+            expect(page).to have_link("Continue")
+          end
+        end
+
+        context "previously viewed the introduction" do
+          scenario "shows the non-OPSS home page" do
+            expect(page).to have_current_path(root_path)
+            expect(page).to have_link("Your cases")
+            expect(page).to have_link("All cases")
+            expect(page).to have_link("More information")
+          end
         end
       end
     end
