@@ -20,6 +20,7 @@ private
 
   def secondary_nav_items
     return super if user_signed_in?
+
     nil
   end
 end
