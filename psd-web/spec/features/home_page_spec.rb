@@ -11,6 +11,9 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
       expect(page).to have_link("Sign in to your account")
+
+      expect(page).not_to have_link("Sign out")
+      expect(page).not_to have_link("Your account")
     end
   end
 
@@ -25,6 +28,10 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
 
       expect(page).to have_css(".psd-header .govuk-phase-banner__content__tag")
       expect(page).not_to have_css(".govuk-phase-banner")
+
+      expect(page).to have_link("Sign out")
+      expect(page).to have_link("Your account")
+      expect(page).not_to have_link("Sign in")
     end
 
     context "as OPSS user" do
