@@ -7,7 +7,7 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
       visit "/"
 
       expect(page).not_to have_css(".psd-header .govuk-phase-banner__content__tag")
-      expect(page).to have_text("This is a new service – your feedback will help us to improve it.")
+      expect(page).to have_css(".govuk-phase-banner")
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
       expect(page).to have_link("Sign in to your account")
@@ -24,7 +24,7 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
       visit "/"
 
       expect(page).to have_css(".psd-header .govuk-phase-banner__content__tag")
-      expect(page).not_to have_text("This is a new service – your feedback will help us to improve it.")
+      expect(page).not_to have_css(".govuk-phase-banner")
     end
 
     context "as OPSS user" do
