@@ -1,11 +1,18 @@
 - label_class = "govuk-label--m govuk-!-margin-bottom-2"
 - label_class = "govuk-label--m"
 / Ideally the width class should affect the input only, not the whole form group, but we're limited by MSPSDS-1045
-div class=["govuk-!-width-two-thirds", ("govuk-form-group--error" if product.errors[:category].any?)]
-  = render "form_components/govuk_select", choices: product_categories, key: :category, form: form,
-          show_all_values: true, aria_describedby: "report-product-category-hint", is_autocomplete: true,
-          label: { text: "Product category", classes: label_class },
-          hint: { text: "For example, ‘Furniture’ or ‘Stationary’" }
+- product_category_classes = ["app-!-autocomplete--max-width-three-quarters",
+  ("govuk-form-group--error" if product.errors[:category].any?)]
+= render "form_components/govuk_select",
+      formGroup: { classes: product_category_classes },
+      choices: product_categories,
+      key: :category,
+      form: form,
+      show_all_values: true,
+      aria_describedby: "report-product-category-hint",
+      is_autocomplete: true,
+      label: { text: "Product category", classes: label_class },
+      hint: { text: "For example, ‘Furniture’ or ‘Stationery’" }
 
 - hint_html = capture do
   | For example, ‘Dining chair’ or ‘Ballpoint pen’
@@ -18,7 +25,7 @@ div class=["govuk-!-width-two-thirds", ("govuk-form-group--error" if product.err
   | Include brand, model name and model number – information that will help others identify the product. For example, ‘Bic Cristal Medium Point (1.0mm), 895487’.
 
 = render "form_components/govuk_input", key: :name, form: form,
-        classes: "govuk-!-width-two-thirds",
+        classes: "govuk-!-width-three-quarters",
         label: { text: "Product name", classes: label_class },
         hint: { html: hint_html }
 
@@ -29,13 +36,13 @@ div class=["govuk-!-width-two-thirds", ("govuk-form-group--error" if product.err
 = render "form_components/govuk_input", key: :batch_number, form: form, classes: "govuk-!-width-one-third",
         label: { text: "Batch number", classes: label_class }
 
-= render "form_components/govuk_input", key: :webpage, form: form, classes: "govuk-!-width-two-thirds",
+= render "form_components/govuk_input", key: :webpage, form: form, classes: "govuk-!-width-three-quarters",
         label: { text: "Webpage", classes: label_class },
         hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" }
 
-div class="govuk-!-width-one-half"
-  / Ideally the width class should affect he input only, without a wrapper, but we're limited by PSD-1045
-  = render "form_components/govuk_select", form: form, key: :country_of_origin,
+
+= render "form_components/govuk_select", form: form, key: :country_of_origin,
+          formGroup: { classes: "govuk-!-width-one-half" },
           items: countries.map { |country| { text: country[0], value: country[1] } },
           include_blank: true, id: "location-autocomplete",
           label: { text: "Country of origin", classes: label_class },
