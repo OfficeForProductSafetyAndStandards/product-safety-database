@@ -49,8 +49,8 @@ html.govuk-template.app-html-class[lang="en"]
 
     = render "components/psd_header",
             productName: "Product safety database",
-            phaseBanner: User.current && "beta",
-            navigation: User.current && nav_items,
+            phaseBanner: !@show_full_phase_banner && "beta",
+            navigation: nav_items,
             secondary_navigation: secondary_nav_items,
             assetPath: "media/images"
 
