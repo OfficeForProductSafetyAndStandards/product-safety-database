@@ -1,6 +1,19 @@
 require "rails_helper"
 
 RSpec.describe Team do
+  describe ".all_with_organisation" do
+    before { 3.times { create(:team) } }
+
+    it "includes associations needed for display_name" do
+      assignees = described_class.all_with_organisation
+
+      expect(assignees.length).to eq(3)
+      expect(-> {
+        assignees.map(&:display_name)
+      }).to not_talk_to_db
+    end
+  end
+
   describe ".get_visible_teams" do
     before do
       allow(Rails.application.config).to receive(:team_names).and_return(

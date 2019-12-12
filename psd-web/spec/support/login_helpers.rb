@@ -6,10 +6,14 @@ module LoginHelpers
     allow(KeycloakClient.instance).to receive(:get_user_roles).with(as_user.id).and_return(as_user.roles)
   end
 
+  def sign_out
+    allow(KeycloakClient.instance).to receive(:user_signed_in?).and_return(false)
+  end
+
 private
 
   def format_user_for_get_userinfo(user)
-    { id: user.id, email: user.email, name: user.name }
+    { id: user.id, email: user.email, name: user.name, groups: ([user.organisation&.path] + user.teams.map(&:path)).compact }
   end
 
   def access_token

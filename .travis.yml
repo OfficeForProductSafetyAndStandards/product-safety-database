@@ -16,8 +16,6 @@ cache:
     - ~/coverage-cache
 
 stages:
-  - name: Deploy review app
-    if: type = pull_request # This is designed to cut out unnecessary runs of the test suite. See PSD-821 for details.
   - name: Deploy to staging
     if: branch = master AND type = push
   - name: Deploy to production
@@ -27,8 +25,8 @@ stages:
 
 jobs:
   include:
-    - stage: Deploy review app
-      script: ./infrastructure/ci/travis-wait.sh ./infrastructure/ci/deploy-review-app.sh
+    - stage: Deploy review app # not used anymore, but removing this will cause travis to hung forever
+      script: pwd
       env: &deploy_int_env
         - SPACE=int
         - BRANCH=${TRAVIS_BRANCH}

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.shared_context "with Keycloak configuration", shared_context: :metadata do
-  before { allow(Keycloak::Client).to receive(:openid_configuration) { true } }
+  let(:openid_config) { file_fixture("keycloak_openid_config.json").read }
+  let(:response_double) { double("OpenID response", code: 200, body: openid_config) }
+  before { allow(RestClient).to receive(:get).with("#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/.well-known/openid-configuration") { response_double } }
 end
 
 RSpec.configure do |rspec|

@@ -13,7 +13,9 @@ module AuthenticationConcern
   end
 
   def authenticate_user!
-    redirect_to helpers.keycloak_login_url(request.original_fullpath) unless user_signed_in? || try_refresh_token
+    unless user_signed_in? || try_refresh_token
+      redirect_to helpers.keycloak_login_url(request.original_fullpath)
+    end
   end
 
   def user_signed_in?
@@ -40,7 +42,7 @@ module AuthenticationConcern
 
       User.current.access_token = access_token
     rescue RuntimeError
-      redirect_to "/403"
+      redirect_to "/403" unless request.path == "/403"
     end
   end
 
