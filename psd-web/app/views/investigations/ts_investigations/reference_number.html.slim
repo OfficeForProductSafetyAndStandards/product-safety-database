@@ -1,4 +1,6 @@
-- content_for :page_title, "Report an unsafe or non-compliant product"
+- page_heading = "Add your own reference number"
+
+- content_for :page_title, page_heading
 
 = form_with scope: :investigation, model: @investigation, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
@@ -6,8 +8,8 @@
       = render "form_components/govuk_error_summary", form: form
       h1.govuk-heading-l
         span.govuk-caption-l Reporting an unsafe product
-        | Add your own reference number
-      p
+        = page_heading
+      p.govuk-body
         | The Product safety database assigns each case an ID.
       p.govuk-body
         | However, if you've recorded information about this case in your own system, you may have given it an internal

@@ -1,4 +1,6 @@
-- content_for :page_title, "Report an unsafe or non-compliant product"
+- page_heading = "Why are you reporting this product?"
+
+- content_for :page_title, page_heading
 
 = form_with scope: :investigation, model: @investigation, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
@@ -7,7 +9,7 @@
       - heading_html = capture do
         h1.govuk-heading-l
           span.govuk-caption-l Report an unsafe or non-compliant product
-          | Why are you reporting this product?
+          = page_heading
       - unsafe_details = capture do
         #hazard-type-auto-complete-container
           / Todo: find a better way of setting widths on autocompletes
