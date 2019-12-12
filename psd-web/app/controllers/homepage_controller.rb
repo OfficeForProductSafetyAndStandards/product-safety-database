@@ -5,6 +5,7 @@ class HomepageController < ApplicationController
 
   def show
     route_user if user_signed_in?
+    @show_full_phase_banner = true
   end
 
 private
@@ -18,6 +19,8 @@ private
   end
 
   def secondary_nav_items
+    return super if user_signed_in?
+
     nil
   end
 end

@@ -3,15 +3,16 @@
 
 - content_for :masthead
   .landing-masthead
-    .govuk-width-container
-      .govuk-grid-row
-        .govuk-grid-column-full
-          .govuk-phase-banner
-            p.govuk-phase-banner__content
-              span.govuk-tag.govuk-phase-banner__content__tag
-                | Beta
-              span.govuk-phase-banner__text
-                | This is a new service – your feedback will help us to improve it.
+    - if @show_full_phase_banner
+      .govuk-width-container
+        .govuk-grid-row
+          .govuk-grid-column-full
+            .govuk-phase-banner
+              p.govuk-phase-banner__content
+                span.govuk-tag.govuk-phase-banner__content__tag
+                  | Beta
+                span.govuk-phase-banner__text
+                  | This is a new service – your feedback will help us to improve it.
 
     .govuk-width-container
       main#main-content.app-main-class.govuk-main-wrapper[role="main"]
