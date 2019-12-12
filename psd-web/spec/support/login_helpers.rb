@@ -10,6 +10,15 @@ module LoginHelpers
     allow(KeycloakClient.instance).to receive(:user_signed_in?).and_return(false)
   end
 
+  def keycloak_login_url(additional_params = {})
+    url_params = {
+      response_type: "code",
+      client_id: ENV.fetch("KEYCLOAK_CLIENT_ID")
+    }.merge(additional_params)
+
+    "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth?#{URI.encode_www_form(url_params)}"
+  end
+
 private
 
   def format_user_for_get_userinfo(user)
