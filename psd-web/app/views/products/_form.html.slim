@@ -22,7 +22,9 @@
         hint: { html: hint_html }
 
 - hint_html = capture do
-  | Include brand, model name and model number – information that will help others identify the product. For example, ‘Bic Cristal Medium Point (1.0mm), 895487’.
+  | Include brand, model name and model number – information that will help
+    others identify the product.
+    For example, ‘Bic Cristal Medium Point (1.0mm), 895487’.
 
 = render "form_components/govuk_input", key: :name, form: form,
         classes: "govuk-!-width-three-quarters",
@@ -38,8 +40,8 @@
 
 = render "form_components/govuk_input", key: :webpage, form: form, classes: "govuk-!-width-three-quarters",
         label: { text: "Webpage", classes: label_class },
-        hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" }
-
+        hint: { text: "The manufacturer’s page for the product, \
+          or a link to where it can be bought" }
 
 = render "form_components/govuk_select", form: form, key: :country_of_origin,
           formGroup: { classes: "govuk-!-width-one-half" },
@@ -49,7 +51,9 @@
           hint: { text: "Where the product was manufactured" }
 
 = render "form_components/govuk_textarea", key: :description, form: form, attributes: { maxlength: 10000 },
-        label: { text: "Description of product", classes: label_class },
-        hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents." }
+        label: { text: "Description of product",classes: label_class },
+        hint: { text: "Details about the product you haven’t \
+          included above. For example, colour, size, packaging description. \
+          You don’t need to include details of damage or incidents." }
 
 = form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button"
