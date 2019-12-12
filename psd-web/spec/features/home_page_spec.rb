@@ -4,7 +4,7 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
   context "User signed out" do
     scenario "shows the home page" do
       sign_out
-      visit "/"
+      visit root_path
 
       expect(page).not_to have_css(".psd-header .govuk-phase-banner__content__tag")
       expect(page).to have_css(".govuk-phase-banner")
@@ -24,11 +24,15 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
 
     before do
       sign_in(as_user: create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
-      visit "/"
+      visit root_path
+    end
 
+    def expect_small_beta_phase_banner
       expect(page).to have_css(".psd-header .govuk-phase-banner__content__tag")
       expect(page).not_to have_css(".govuk-phase-banner")
+    end
 
+    def expect_header_to_have_signed_in_links
       expect(page).to have_link("Sign out")
       expect(page).to have_link("Your account")
       expect(page).not_to have_link("Sign in")
@@ -43,12 +47,16 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
 
         scenario "shows the declaration page before the case list" do
           expect(page).to have_current_path(declaration_index_path)
+          expect_small_beta_phase_banner
+          expect_header_to_have_signed_in_links
           expect(page).to have_text("Declaration")
 
           check "I agree"
           click_button "Continue"
 
           expect(page).to have_current_path(investigations_path)
+          expect_small_beta_phase_banner
+          expect_header_to_have_signed_in_links
           expect(page).to have_text("Cases")
           expect(page).to have_link("Create new")
         end
@@ -57,6 +65,8 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
       context "previously accepted the declaration" do
         scenario "shows the case list" do
           expect(page).to have_current_path(investigations_path)
+          expect_small_beta_phase_banner
+          expect_header_to_have_signed_in_links
           expect(page).to have_text("Cases")
           expect(page).to have_link("Create new")
         end
@@ -73,12 +83,16 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
 
         scenario "shows the declaration page before the introduction" do
           expect(page).to have_current_path(declaration_index_path)
+          expect_small_beta_phase_banner
+          expect_header_to_have_signed_in_links
           expect(page).to have_text("Declaration")
 
           check "I agree"
           click_button "Continue"
 
           expect(page).to have_current_path(introduction_overview_path)
+          expect_small_beta_phase_banner
+          expect_header_to_have_signed_in_links
           expect(page).to have_text("The Product safety database (PSD) has been developed with")
           expect(page).to have_link("Continue")
         end
@@ -90,6 +104,8 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
 
           scenario "shows the introduction" do
             expect(page).to have_current_path(introduction_overview_path)
+            expect_small_beta_phase_banner
+            expect_header_to_have_signed_in_links
             expect(page).to have_text("The Product safety database (PSD) has been developed with")
             expect(page).to have_link("Continue")
           end
@@ -98,6 +114,8 @@ RSpec.feature "Home page", :with_keycloak_config, :with_elasticsearch do
         context "previously viewed the introduction" do
           scenario "shows the non-OPSS home page" do
             expect(page).to have_current_path(root_path)
+            expect_small_beta_phase_banner
+            expect_header_to_have_signed_in_links
             expect(page).to have_link("Your cases")
             expect(page).to have_link("All cases")
             expect(page).to have_link("More information")
