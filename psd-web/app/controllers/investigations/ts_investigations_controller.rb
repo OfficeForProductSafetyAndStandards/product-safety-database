@@ -414,7 +414,7 @@ private
 
   def file_valid?
     if @file_blob.nil?
-      @investigation.errors.add(:file, "Upload file")
+      @investigation.errors.add(:file, "You must upload a file")
     end
     metadata = get_attachment_metadata_params(:file)
     if metadata[:title].blank?

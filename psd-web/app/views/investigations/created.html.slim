@@ -9,9 +9,9 @@
     ' A confirmation email has been sent to
     strong = User.current.email
     | .
-= render "components/hmcts_banner", html: banner_content
-.govuk-row
-  .govuk-column-two-thirds-from-desktop
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
+    = render "components/hmcts_banner", html: banner_content
     p.govuk-body
       / TODO: this should be the assignee, shown as 'you' if the assignee
       / is the case creator.
