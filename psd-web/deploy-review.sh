@@ -27,7 +27,7 @@ until cf7 service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_e
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
 # Deploy the app and set the hostname
-cf7 push -f $MANIFEST_FILE $WEB -d $DOMAIN --hostname $WEB --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
+cf7 push -f $MANIFEST_FILE $WEB --var route=$DOMAIN --hostname $WEB --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
 cf7 push -f $MANIFEST_FILE $WORKER -d $DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
 
 cf7 set-env $WEB PSD_HOST "$WEB.$DOMAIN"
