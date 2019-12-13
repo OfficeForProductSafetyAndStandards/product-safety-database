@@ -11,4 +11,4 @@ cp -a ./infrastructure/env/. ./psd-web/env/
 cf7 push -f $MANIFEST_FILE $APP_NAME --var psd-host=$DOMAIN --var memory=$MEMORY --var web-instances=$WEB_INSTANCES --var worker-instances=$WORKER_INSTANCES --strategy rolling
 
 # Remove the copied infrastructure env files to clean up
-rm -R cosmetics-web/env/
+rm -R psd-web/env/
