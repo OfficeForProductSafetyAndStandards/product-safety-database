@@ -1,6 +1,7 @@
 - content_for :page_title, "Access denied"
 
-= link_to "Back to list", investigations_path, class: "govuk-back-link"
+- if User.current
+  = link_to "Back to list", investigations_path, class: "govuk-back-link"
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop

@@ -5,6 +5,7 @@ class HomepageController < ApplicationController
 
   def show
     route_user if user_signed_in?
+    @show_full_phase_banner = true
   end
 
 private
@@ -15,5 +16,11 @@ private
     return redirect_to introduction_overview_path if !User.current.has_viewed_introduction
 
     render "non_opss"
+  end
+
+  def secondary_nav_items
+    return super if user_signed_in?
+
+    nil
   end
 end

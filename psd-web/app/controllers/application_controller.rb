@@ -74,8 +74,8 @@ class ApplicationController < ActionController::Base
 
   def secondary_nav_items
     items = []
-    items.push text: "Your account", href: KeycloakClient.instance.user_account_url if User.current
     if User.current
+      items.push text: "Your account", href: KeycloakClient.instance.user_account_url
       items.push text: "Sign out", href: logout_session_path
     else
       items.push text: "Sign in", href: keycloak_login_url

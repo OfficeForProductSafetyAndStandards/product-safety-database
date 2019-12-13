@@ -42,7 +42,7 @@ module AuthenticationConcern
 
       User.current.access_token = access_token
     rescue RuntimeError
-      redirect_to "/403"
+      redirect_to "/403" unless request.path == "/403"
     end
   end
 

@@ -19,26 +19,18 @@ if [ -z "$DB_NAME" ]
 then
   DB_NAME=psd-review-database
 fi
-cf create-service postgres small-10 $DB_NAME
+cf7 create-service postgres small-10 $DB_NAME
 
 # Wait until db is prepared, might take up to 10 minutes
-until cf service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
+until cf7 service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
-# Deploy the app and set the hostname
-cf push -f $MANIFEST_FILE $WEB -d $DOMAIN --hostname $WEB --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
-cf push -f $MANIFEST_FILE $WORKER -d $DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
+# Deploy the web app
+cf7 push -f $MANIFEST_FILE $WEB --var route=$WEB.$DOMAIN --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME --var psd-host=$WEB.$DOMAIN --var sidekiq-queue=$INSTANCE_NAME --var sentry-current-env=$REVIEW_INSTANCE_NAME --strategy rolling
 
-cf set-env $WEB PSD_HOST "$WEB.$DOMAIN"
+# Deploy the worker app
+cf7 push -f $MANIFEST_FILE $WORKER --var route=$WORKER.$DOMAIN --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME --var psd-host=$WEB.$DOMAIN --var sidekiq-queue=$INSTANCE_NAME --var sentry-current-env=$REVIEW_INSTANCE_NAME --strategy rolling
 
-cf set-env $WEB SIDEKIQ_QUEUE "$INSTANCE_NAME"
-cf set-env $WORKER SIDEKIQ_QUEUE "$INSTANCE_NAME"
-
+# Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/psd-web/env/
-
-cf set-env $WEB SENTRY_CURRENT_ENV $REVIEW_INSTANCE_NAME
-cf set-env $WORKER SENTRY_CURRENT_ENV $REVIEW_INSTANCE_NAME
-
-cf start $WEB
-cf start $WORKER
