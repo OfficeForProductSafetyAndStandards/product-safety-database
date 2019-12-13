@@ -22,7 +22,8 @@ jobs:
         SPACE: staging
         APP_NAME: psd-web
         DOMAIN: staging.product-safety-database.service.gov.uk
-        MEMORY: 1G
+        WEB_MEMORY: 1G
+        WORKER_MEMORY: 1G
         WEB_INSTANCES: 1
         WORKER_INSTANCES: 1
         CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
@@ -39,7 +40,8 @@ jobs:
         SPACE: prod
         APP_NAME: psd-web
         DOMAIN: www.product-safety-database.service.gov.uk
-        MEMORY: 2G
+        WEB_MEMORY: 2G
+        WORKER_MEMORY: 1G
         WEB_INSTANCES: 4
         WORKER_INSTANCES: 2
         CF_USERNAME: ${{ secrets.PaaSUsernameProduction }}
