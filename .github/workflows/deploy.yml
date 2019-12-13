@@ -31,8 +31,8 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        chmod +x ./cosmetics-web/deploy.sh
-        ./cosmetics-web/deploy.sh
+        chmod +x ./psd-web/deploy.sh
+        ./psd-web/deploy.sh
         cf7 logout
     - name: Deploy to production
       env:
@@ -48,5 +48,5 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        ./cosmetics-web/deploy.sh
+        ./psd-web/deploy.sh
         cf7 logout
