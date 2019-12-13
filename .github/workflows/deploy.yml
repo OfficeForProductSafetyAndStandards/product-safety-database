@@ -21,7 +21,7 @@ jobs:
       env:
         SPACE: staging
         APP_NAME: psd-web
-        DOMAIN: www.product-safety-database.service.gov.uk
+        DOMAIN: staging.product-safety-database.service.gov.uk
         MEMORY: 1G
         WEB_INSTANCES: 1
         WORKER_INSTANCES: 1
@@ -38,7 +38,7 @@ jobs:
       env:
         SPACE: prod
         APP_NAME: psd-web
-        DOMAIN: staging.product-safety-database.service.gov.uk
+        DOMAIN: www.product-safety-database.service.gov.uk
         MEMORY: 2G
         WEB_INSTANCES: 4
         WORKER_INSTANCES: 2
