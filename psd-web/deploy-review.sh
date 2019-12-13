@@ -26,19 +26,11 @@ until cf7 service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_e
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
-# Deploy the app and set the hostname
-cf7 push -f $MANIFEST_FILE $WEB --var route=$WEB.$DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
-cf7 push -f $MANIFEST_FILE $WORKER --var route=$WORKER.$DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
+# Deploy the web app
+cf7 push -f $MANIFEST_FILE $WEB --var route=$WEB.$DOMAIN --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME --var psd-host=$WEB.$DOMAIN --var sidekiq-queue=$INSTANCE_NAME --var sentry-current-env=$REVIEW_INSTANCE_NAME --strategy rolling
 
-cf7 set-env $WEB PSD_HOST "$WEB.$DOMAIN"
+# Deploy the worker app
+cf7 push -f $MANIFEST_FILE $WORKER --var route=$WORKER.$DOMAIN --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME --var psd-host=$WEB.$DOMAIN --var sidekiq-queue=$INSTANCE_NAME --var sentry-current-env=$REVIEW_INSTANCE_NAME --strategy rolling
 
-cf7 set-env $WEB SIDEKIQ_QUEUE "$INSTANCE_NAME"
-cf7 set-env $WORKER SIDEKIQ_QUEUE "$INSTANCE_NAME"
-
+# Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/psd-web/env/
-
-cf7 set-env $WEB SENTRY_CURRENT_ENV $REVIEW_INSTANCE_NAME
-cf7 set-env $WORKER SENTRY_CURRENT_ENV $REVIEW_INSTANCE_NAME
-
-cf7 start $WEB
-cf7 start $WORKER
