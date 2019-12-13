@@ -28,7 +28,7 @@ cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
 # Deploy the app and set the hostname
 cf7 push -f $MANIFEST_FILE $WEB --var route=$WEB.$DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
-cf7 push -f $MANIFEST_FILE $WORKER --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
+cf7 push -f $MANIFEST_FILE $WORKER --var route=$WORKER.$DOMAIN --no-start --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME
 
 cf7 set-env $WEB PSD_HOST "$WEB.$DOMAIN"
 
