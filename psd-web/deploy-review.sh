@@ -22,7 +22,7 @@ fi
 cf7 create-service postgres small-10 $DB_NAME
 
 # Wait until db is prepared, might take up to 10 minutes
-until cf service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
+until cf7 service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
