@@ -2,13 +2,15 @@ module CorrectiveActionsConcern
   extend ActiveSupport::Concern
 
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize @investigation, :show?
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :show?
+    @investigation = investigation.decorate
   end
 
   def set_corrective_action
-    @corrective_action = @investigation.corrective_actions.build(corrective_action_params)
-    @corrective_action.set_dates_from_params(params[:corrective_action])
+    corrective_action = @investigation.corrective_actions.build(corrective_action_params)
+    corrective_action.set_dates_from_params(params[:corrective_action])
+    @corrective_action = corrective_action.decorate
   end
 
   def corrective_action_params

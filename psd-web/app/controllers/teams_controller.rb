@@ -13,6 +13,7 @@ class TeamsController < ApplicationController
     return unless request.put? && @new_user.valid?
 
     existing_user = User.find_by email: @new_user.email_address
+
     if existing_user
       invite_existing_user_if_able existing_user
     elsif whitelisted_user
@@ -55,7 +56,7 @@ private
   end
 
   def set_team
-    @team = Team.find_by!(id: params[:id])
+    @team = Team.find(params[:id])
     authorize @team
   end
 
@@ -68,6 +69,7 @@ private
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return
     end
+
     if @team.users.include? user
       if user.name.present?
         @new_user.errors.add(:email_address,
@@ -77,12 +79,12 @@ private
         resend_invitation_to_user(user.email)
       end
     else
-      invite_user user
+      invite_user(user)
     end
   end
 
   def invite_user(user)
-    @team.add_user user.id
+    @team.add_user(user)
     email = NotifyMailer.user_added_to_team user.email,
                                             name: user.name,
                                             team_page_url: team_url(@team),

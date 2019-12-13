@@ -38,23 +38,25 @@ class CreateProjectTest < ApplicationSystemTestCase
     assert_text "User title can't be blank"
   end
 
-  test "case page should be shown when complete" do
-    fill_project_details_and_continue
-
-    assert_current_path(/cases\/\d+/)
-  end
-
-  test "confirmation message should be shown when complete" do
-    fill_project_details_and_continue
-
-    assert_text "Project was successfully created"
-  end
-
   test "project details should show in overview" do
     fill_project_details_and_continue
-    assert_text "Project"
-    assert_no_text "Product category"
-    assert_no_text "Reporter"
+
+    project = Investigation::Project.find_by(user_title: @project.user_title).decorate
+
+    assert_css ".hmcts-banner--success", text: "Project was successfully created"
+    assert_css "h1.govuk-heading-l span.govuk-caption-l", text: project.pretty_description
+    assert_css "dt.govuk-summary-list__key", text: "Status"
+    assert_css "dd.govuk-summary-list__value", text: "Open"
+    assert_no_css "h2.govuk-heading-m", text: project.type.demodulize.titleize
+
+    complaint = complainants(:one)
+    complaint.complainant_type = "Some Complaint Type"
+
+    project.update!(complainant: complaint)
+
+    visit investigation_path(project)
+
+    assert_css "h2.govuk-heading-m", text: project.type.demodulize.titleize
   end
 
   def fill_project_details_and_continue

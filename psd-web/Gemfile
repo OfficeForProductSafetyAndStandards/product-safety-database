@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby File.read(".ruby-version").strip
+ruby "~> 2.5.5"
 
 gem "will_paginate", "3.1.7" # Must be laoded before elasticsearch gems
 
@@ -9,6 +9,7 @@ gem "aws-sdk-s3", "1.43.0"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "axlsx_rails"
 gem "cf-app-utils"
+gem "draper"
 gem "elasticsearch", "6.8.0"
 gem "elasticsearch-model", "6.0.0"
 gem "elasticsearch-rails", "6.0.0"
@@ -30,15 +31,17 @@ gem "rest-client", "2.0.2"
 gem "rubyzip"
 gem "scout_apm"
 gem "sentry-raven", "~> 2.12"
-gem "sidekiq", "5.2.7"
-gem "sidekiq-cron", "1.1.0"
+gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
+gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
+gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.4.0"
-gem "webpacker", "4.0.7"
+gem "webpacker", "4.2.0"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.1.0", require: "govuk_design_system"
 
+# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem "brakeman"
   gem "byebug"
@@ -46,6 +49,7 @@ group :development, :test do
   gem "coveralls"
   gem "debase"
   gem "dotenv-rails"
+  gem "factory_bot_rails"
   gem "govuk-lint"
   gem "listen"
   gem "m"
@@ -62,6 +66,13 @@ group :development, :test do
   gem "simplecov-console"
   gem "slim_lint"
   gem "solargraph"
-  gem "sprockets", "3.7.2"
+  gem "spring"
+  gem "spring-commands-rspec"
   gem "webmock"
+end
+# rubocop:enable Metrics/BlockLength
+
+group :test do
+  gem "database_cleaner"
+  gem "rails-controller-testing"
 end

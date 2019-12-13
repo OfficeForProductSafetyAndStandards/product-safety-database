@@ -2,9 +2,9 @@ module Keycloak
   module Client
     def self.get_installation
       @realm = "opss"
-      @auth_server_url = ENV["KEYCLOAK_AUTH_URL"]
-      @client_id = ENV["KEYCLOAK_CLIENT_ID"]
-      @secret = ENV["KEYCLOAK_CLIENT_SECRET"]
+      @auth_server_url = ENV.fetch("KEYCLOAK_AUTH_URL")
+      @client_id = ENV.fetch("KEYCLOAK_CLIENT_ID")
+      @secret = ENV.fetch("KEYCLOAK_CLIENT_SECRET")
       openid_configuration
     end
   end
@@ -45,6 +45,16 @@ module Keycloak
       request_uri = Keycloak::Admin.full_url("users/#{user_id}/role-mappings/clients/#{client[0]['id']}/composite")
       Keycloak.generic_request(token.access_token, request_uri, nil, nil, "GET")
     end
+
+    def self.get_groups(query_parameters = nil)
+      request_uri = Keycloak::Admin.full_url("groups/")
+      Keycloak.generic_request(token.access_token, request_uri, query_parameters, nil, "GET")
+    end
+
+    def self.get_users(query_parameters = nil)
+      request_uri = Keycloak::Admin.full_url("users/")
+      Keycloak.generic_request(token.access_token, request_uri, query_parameters, nil, "GET")
+    end
   end
 end
 
@@ -56,67 +66,33 @@ class KeycloakClient
     @client = Keycloak::Client
     @admin = Keycloak::Admin
     @internal = Keycloak::Internal
+    @client.get_installation
     super
   end
 
-  def all_users(force: false)
-    Rails.cache.delete(:keycloak_users) if force
-    Rails.cache.fetch(:keycloak_users, expires_in: cache_period) do
-      # KC defaults to max:100, while we need all users. 1000000 seems safe, at least for the time being
-      users = @internal.get_users(max: 1000000)
+  def all_users
+    # KC defaults to max:100, while we need all users. 1000000 seems safe, at least for the time being
+    users = @internal.get_users(max: 1000000)
 
-      user_groups = all_user_groups
-      JSON.parse(users).map do |user|
-        { id: user["id"], email: user["email"], groups: user_groups[user["id"]], name: user["firstName"] }
-      end
+    user_groups = all_user_groups
+
+    JSON.parse(users).map do |user|
+      { id: user["id"], email: user["email"], name: user["firstName"], groups: user_groups[user["id"]] }
     end
   end
 
-  def all_organisations(force: false)
-    Rails.cache.delete(:keycloak_organisations) if force
-    Rails.cache.fetch(:keycloak_organisations, expires_in: cache_period) do
-      groups = all_groups
-      organisations = groups.find { |group| group["name"] == "Organisations" }
-
-      organisations["subGroups"].reject(&:blank?).map do |organisation|
-        { id: organisation["id"], name: organisation["name"], path: organisation["path"] }
-      end
-    end
+  def all_organisations
+    organisations = all_groups.find { |group| group["name"] == "Organisations" }
+    organisations["subGroups"].reject(&:blank?).map { |h| h.slice("id", "name", "path").symbolize_keys }
   end
 
   # @param org_ids specifies teams for which organisations should be returned. This allows us to avoid creating
   # orphaned team entities
-  def all_teams(org_ids, force: false)
-    org_ids_set = org_ids.to_set
-    Rails.cache.delete(:keycloak_teams) if force
-    Rails.cache.fetch(:keycloak_teams, expires_in: cache_period) do
-      all_groups.find { |group| group["name"] == "Organisations" }["subGroups"]
-          .reject(&:blank?)
-          .select { |organisation| org_ids_set.include? organisation["id"] }
-          .flat_map(&method(:extract_teams_from_organisation))
-    end
-  end
-
-  # @param team_ids specifies teams we know about. This allows us to avoid linking to ghost team entities
-  def all_team_users(user_ids, team_ids, force: false)
-    user_ids_set = user_ids.to_set
-    team_ids_set = team_ids.to_set
-    Rails.cache.delete(:keycloak_team_users) if force
-    Rails.cache.fetch(:keycloak_team_users, expires_in: cache_period) do
-      user_groups = all_user_groups
-
-      # We set ids manually because if we don't ActiveHash will use 'next_id' method when computing @records,
-      # which calls TeamUser.all, and gets into an infinite loop
-      team_users = []
-      id = 1
-      user_ids_set.reject(&:blank?).each do |user_id|
-        user_groups[user_id].reject(&:blank?).each do |group|
-          team_users << { team_id: group, user_id: user_id, id: id } if team_ids_set.include? group
-          id += 1
-        end
-      end
-      team_users
-    end
+  def all_teams(org_ids)
+    all_groups.find { |group| group["name"] == "Organisations" }["subGroups"]
+      .reject(&:blank?)
+      .select { |organisation| org_ids.include?(organisation["id"]) }
+      .flat_map(&method(:extract_teams_from_organisation))
   end
 
   def registration_url(redirect_uri)
@@ -168,7 +144,7 @@ class KeycloakClient
   end
 
   def get_user(email)
-    @internal.get_user_info(email).first.symbolize_keys
+    JSON.parse(@internal.get_users(email: email)).first.symbolize_keys
   end
 
   def send_required_actions_welcome_email(user_id, redirect_uri)

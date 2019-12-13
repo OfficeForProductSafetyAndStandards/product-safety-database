@@ -5,6 +5,7 @@ class UserTest < ActiveSupport::TestCase
     mock_out_keycloak_and_notify
     @user = User.find_by(name: "Test User_one")
     @user_four = User.find_by(name: "Test User_four")
+
     mock_user_as_non_opss(@user)
     mock_user_as_opss(@user_four)
   end
@@ -30,22 +31,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "Office of Product Safety and Standards", @user_four.assignee_short_name
   end
 
-  test "get_assignees includes all users by default" do
-    options = User.get_assignees
-
-    assert_includes options, @user
-    assert_includes options, @user_four
-  end
-
-  test "get_assignees exclude specified user" do
-    options = User.get_assignees(except: @user_four)
-
-    assert_includes options, @user
-    assert_not_includes options, @user_four
-  end
-
   test "don't load non-psd users" do
-    User.load
     assert_not User.find_by(name: "Test Non_psd_user")
   end
 end

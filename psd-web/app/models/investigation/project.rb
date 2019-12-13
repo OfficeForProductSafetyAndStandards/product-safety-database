@@ -3,14 +3,6 @@ class Investigation::Project < Investigation
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
-  def self.model_name
-    self.superclass.model_name
-  end
-
-  def title
-    user_title
-  end
-
   def case_type
     "project"
   end
@@ -18,6 +10,6 @@ class Investigation::Project < Investigation
 private
 
   def create_audit_activity_for_case
-    AuditActivity::Investigation::AddProject.from(self)
+    AuditActivity::Investigation::AddProject.from(self.decorate)
   end
 end

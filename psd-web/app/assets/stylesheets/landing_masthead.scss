@@ -1,0 +1,22 @@
+.landing-masthead {
+  @extend %intro-card;
+
+  margin-bottom: 30px;
+
+  .govuk-tag {
+    background-color: govuk-colour("white");
+    color: govuk-colour("blue");
+  }
+
+  .landing-masthead-links {
+    p {
+      display: inline-block;
+      margin-left: 10px;
+      margin-top: 9px; // to match button padding
+    }
+  }
+
+  margin-top: 0;
+  padding: 0;
+
+}

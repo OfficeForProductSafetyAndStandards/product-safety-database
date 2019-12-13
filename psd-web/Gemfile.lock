@@ -49,6 +49,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.2.3)
       activesupport (= 5.2.3)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     activerecord (5.2.3)
       activemodel (= 5.2.3)
       activesupport (= 5.2.3)
@@ -117,6 +121,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.5)
+    database_cleaner (1.7.0)
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.6)
@@ -128,6 +133,12 @@ GEM
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
+    draper (3.1.0)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
+      activemodel-serializers-xml (>= 1.0)
+      activesupport (>= 5.0)
+      request_store (>= 1.0)
     elasticsearch (6.8.0)
       elasticsearch-api (= 6.8.0)
       elasticsearch-transport (= 6.8.0)
@@ -144,16 +155,21 @@ GEM
     erubi (1.9.0)
     et-orbi (1.2.2)
       tzinfo
+    factory_bot (5.1.1)
+      activesupport (>= 4.2.0)
+    factory_bot_rails (5.1.1)
+      factory_bot (~> 5.1.0)
+      railties (>= 4.2.0)
     faraday (0.17.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.11.1)
+    ffi (1.11.2)
     fugit (1.3.3)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    govuk-lint (4.0.1)
-      rubocop (~> 0.72)
+    govuk-lint (4.3.0)
+      rubocop (~> 0.76)
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)
       scss_lint
@@ -167,7 +183,7 @@ GEM
       domain_name (~> 0.5)
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.3)
+    jaro_winkler (1.5.4)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
     jmespath (1.4.0)
@@ -185,7 +201,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.3.1)
+    loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     m (1.5.1)
@@ -203,7 +219,7 @@ GEM
     mini_magick (4.9.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     netrc (0.11.0)
@@ -213,7 +229,7 @@ GEM
     notifications-ruby-client (4.0.0)
       jwt (>= 1.5, < 3)
     okcomputer (1.17.4)
-    parallel (1.18.0)
+    parallel (1.19.0)
     parser (2.6.5.0)
       ast (~> 2.4.0)
     pg (1.1.4)
@@ -248,6 +264,10 @@ GEM
       bundler (>= 1.3.0)
       railties (= 5.2.3)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.4)
+      actionpack (>= 5.0.1.x)
+      actionview (>= 5.0.1.x)
+      activesupport (>= 5.0.1.x)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -260,7 +280,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
-    rake (13.0.0)
+    rake (13.0.1)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
@@ -311,7 +331,7 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
-    rubocop (0.75.1)
+    rubocop (0.76.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
@@ -390,7 +410,10 @@ GEM
       thor (~> 0.19, >= 0.19.4)
       tilt (~> 2.0)
       yard (~> 0.9)
-    sprockets (3.7.2)
+    spring (2.1.0)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
+    sprockets (4.0.0.beta10)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.2.1)
@@ -419,7 +442,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (4.0.7)
+    webpacker (4.2.0)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
       railties (>= 4.2)
@@ -446,11 +469,14 @@ DEPENDENCIES
   capybara
   cf-app-utils
   coveralls
+  database_cleaner
   debase
   dotenv-rails
+  draper
   elasticsearch (= 6.8.0)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
+  factory_bot_rails
   govuk-design-system-rails!
   govuk-lint
   govuk_notify_rails (= 2.1.0)
@@ -467,6 +493,7 @@ DEPENDENCIES
   puma
   pundit
   rails (= 5.2.3)
+  rails-controller-testing
   redcarpet
   redis-rails
   request_store (= 1.4.1)
@@ -483,21 +510,23 @@ DEPENDENCIES
   selenium-webdriver
   sentry-raven (~> 2.12)
   sidekiq (= 5.2.7)
-  sidekiq-cron (= 1.1.0)
+  sidekiq-cron (~> 1.1)
   simplecov
   simplecov-console
   slim-rails
   slim_lint
   solargraph
-  sprockets (= 3.7.2)
+  spring
+  spring-commands-rspec
+  sprockets-rails
   strong_migrations (= 0.4.0)
   webmock
-  webpacker (= 4.0.7)
+  webpacker (= 4.2.0)
   wicked
   will_paginate (= 3.1.7)
 
 RUBY VERSION
-   ruby 2.5.5p157
+   ruby 2.5.7p206
 
 BUNDLED WITH
    2.0.2

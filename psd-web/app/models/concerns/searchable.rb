@@ -4,9 +4,7 @@ module Searchable
 
   included do
     include Elasticsearch::Model
-
-    # TODO-COSBETA-28 add following line back into shared web for Elasticsearch indexing
-    # include Elasticsearch::Model::Callbacks
+    include Elasticsearch::Model::Callbacks
 
 
     # The following dynamic templates define custom mappings for the major data types
@@ -59,8 +57,6 @@ module Searchable
         }
       ]
     end
-
-    include Elasticsearch::Model::Callbacks
 
     # TODO: These lines fix the issue of not updating the updated_at in Elasticsearch.
     # Same issue is pointed out in the following link. We can remove it once that PR is merged.

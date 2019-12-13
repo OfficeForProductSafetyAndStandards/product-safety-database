@@ -1,0 +1,15 @@
+- content_for :page_title, "View case"
+- content_for :after_header do
+  .govuk-grid-row
+    .govuk-grid-column-one-half
+      = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
+    - if @investigation.is_private? || @investigation.is_closed?
+      .govuk-grid-column-one-half.psd-case__status-area[class="govuk-!-margin-bottom-5"]
+        - if @investigation.is_closed?
+          = render "components/hmcts_badge",
+                text: "Closed case",
+                classes: "hmcts-badge--grey hmcts-badge--aligned-right-from-tablet"
+        - if @investigation.is_private?
+          = render "components/hmcts_badge",
+              text: "Restricted case",
+              classes: "hmcts-badge--grey hmcts-badge--aligned-right-from-tablet"

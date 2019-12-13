@@ -1,10 +1,14 @@
-.govuk-grid-row.psd-case-card class=[("psd-case-card--closed" if investigation.is_closed?)]
+ruby:
+  card_classes = []
+  card_classes << "psd-case-card--closed" if investigation.is_closed?
+  card_classes << "psd-case-card--restricted" if investigation.is_private?
+
+.govuk-grid-row.psd-case-card class=card_classes
   .govuk-grid-column-one-half
     span.govuk-caption-m[class="govuk-!-font-size-16"]
       = investigation.pretty_description
-    span = link_to investigation.title, investigation
-    - if investigation.is_closed
-      .psd-case-card class="psd-case-card__status" CLOSED
+    span = link_to investigation.title, investigation_path(investigation)
+    = render "investigations/case_card_status_area", investigation: investigation
   .govuk-grid-column-one-quarter
     span.govuk-caption-m[class="govuk-!-font-size-16"] Assigned to
     span = investigation.assignee ? investigation.assignee.assignee_short_name : "Unassigned"

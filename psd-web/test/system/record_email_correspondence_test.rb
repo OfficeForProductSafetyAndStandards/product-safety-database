@@ -142,10 +142,8 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Activity"
-    within id: "activity" do
-      assert_equal("Email added", first("h3").text)
-      assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
-    end
+    assert_equal("Email added", first("h3").text)
+    assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
   end
 
   test "does not conceal consumer information from assignee" do
@@ -162,9 +160,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Activity"
-    within id: "activity" do
-      assert_equal(@correspondence.overview, first("h3").text)
-    end
+    assert_equal(@correspondence.overview, first("h3").text)
   end
 
   test "does not conceal consumer information from assignee's team" do
@@ -185,9 +181,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Activity"
-    within id: "activity" do
-      assert_equal(@correspondence.overview, first("h3").text)
-    end
+    assert_equal(@correspondence.overview, first("h3").text)
   end
 
   test "does not conceal information from same organisation on emails with customer info" do
@@ -203,9 +197,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     visit investigation_path(@investigation)
 
     click_on "Activity"
-    within id: "activity" do
-      assert_equal(@correspondence.overview, first("h3").text)
-    end
+    assert_equal(@correspondence.overview, first("h3").text)
   end
 
   def fill_in_context_form

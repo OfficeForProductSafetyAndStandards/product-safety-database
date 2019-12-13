@@ -8,14 +8,6 @@ class Investigation::Enquiry < Investigation
 
   date_attribute :date_received, required: false
 
-  def self.model_name
-    self.superclass.model_name
-  end
-
-  def title
-    user_title
-  end
-
   def case_type
     "enquiry"
   end
@@ -37,6 +29,6 @@ class Investigation::Enquiry < Investigation
 private
 
   def create_audit_activity_for_case
-    AuditActivity::Investigation::AddEnquiry.from(self)
+    AuditActivity::Investigation::AddEnquiry.from(self.decorate)
   end
 end

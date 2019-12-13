@@ -1,26 +1,45 @@
-h2.govuk-heading-m Summary
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-two-thirds
-    p = @investigation.description
-    p = link_to "Edit summary", edit_summary_investigation_path(@investigation), class: "govuk-link--no-visited-state"
 
-.govuk-grid-row[class="govuk-!-padding-bottom-6"]
-  hr.govuk-section-break.govuk-section-break--s
-    = render "investigations/current_status", investigation: @investigation
-  hr.govuk-section-break.govuk-section-break--s
-h2.govuk-heading-m[class="govuk-!-margin-bottom-6"]
-  | Report details
-h3.govuk-heading-s
-  = @investigation.case_type.titleize
+    h1.govuk-heading-l
+      span.govuk-caption-l = @investigation.pretty_description
+      | Overview
 
-= report_summary_list(@investigation)
+    p.govuk-body-l = @investigation.title
 
-- if @investigation.complainant
-  hr.govuk-section-break.govuk-section-break--m
-  h3.govuk-heading-s
-    | Complainant
+    h2.govuk-heading-m Summary
+    p[class="govuk-body"] = @investigation.description
+    p.govuk-body = link_to "Change summary", edit_summary_investigation_path(@investigation), \
+      class: "govuk-link"
 
-  - if @investigation.complainant.can_be_displayed?
-    = complainant_summary_list(@investigation.complainant)
-  - else
-    p GDPR protected details hidden
+    - if @investigation.display_product_summary_list?
+      = govuk_hr
+      h2.govuk-heading-m = "product".pluralize(@investigation.products.count).titleize
+      = @investigation.product_summary_list
+
+    - if @investigation.complainant
+      = govuk_hr
+      h2.govuk-heading-m = @investigation.type.demodulize.titleize
+      = @investigation.source_details_summary_list
+
+    = govuk_hr
+    h2.govuk-heading-m About the case
+    = @investigation.investigation_summary_list
+
+  - if @investigation.products.any?
+    .govuk-grid-column-one-third
+      = tag(:hr,
+          class: "govuk-section-break govuk-section-break--m"\
+          " govuk-section-break--visible app-!-display-mobile--only")
+      h2.govuk-heading-m = "Products (#{@investigation.products.count})"
+      ul.govuk-list
+        - @investigation.products.each do |product|
+          li[class="govuk-!-margin-bottom-3"]
+            = link_to product.name, product_path(product),
+            class: "app-block-link govuk-link govuk-!-margin-bottom-2"
+            - if product.images.any?
+              = render "documents/document_preview",
+                  document: product.images.first,
+                  dimensions: "300x500",
+                  hide_link: true,
+                  class_name: 'app-document-preview--small'

@@ -14,7 +14,7 @@ class CreateEnquiryTest < ApplicationSystemTestCase
       description: "Enquiry description",
       date_received: "1-1-1",
       received_type: "Email"
-    )
+    ).decorate
 
     mock_out_keycloak_and_notify
     visit new_enquiry_path
@@ -133,7 +133,7 @@ class CreateEnquiryTest < ApplicationSystemTestCase
     assert_current_path(/cases\/\d+/)
     click_on "Activity"
     assert_text "Enquiry logged: #{@enquiry.title}"
-    assert_text @enquiry.description
+    assert_text @enquiry.object.description
 
     assert_text "Name: #{@complainant.name}"
     assert_text "Type: #{@complainant.complainant_type}"
@@ -209,7 +209,7 @@ class CreateEnquiryTest < ApplicationSystemTestCase
 
   def fill_enquiry_details_and_continue
     fill_in "enquiry[user_title]", with: @enquiry.user_title
-    fill_in "enquiry[description]", with: @enquiry.description
+    fill_in "enquiry[description]", with: @enquiry.object.description
     click_on "Create enquiry"
   end
 end

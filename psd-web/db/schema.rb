@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_13_153818) do
+ActiveRecord::Schema.define(version: 2019_11_19_151907) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,8 +21,8 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "name", null: false
     t.bigint "record_id", null: false
     t.string "record_type", null: false
-    t.index %w[blob_id], name: "index_active_storage_attachments_on_blob_id"
-    t.index %w[record_type record_id name blob_id], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", id: :serial, force: :cascade do |t|
@@ -32,7 +33,7 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "filename", null: false
     t.string "key", null: false
     t.text "metadata"
-    t.index %w[key], name: "index_active_storage_blobs_on_key", unique: true
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "activities", id: :serial, force: :cascade do |t|
@@ -45,10 +46,10 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "title"
     t.string "type", default: "CommentActivity"
     t.datetime "updated_at", null: false
-    t.index %w[business_id], name: "index_activities_on_business_id"
-    t.index %w[correspondence_id], name: "index_activities_on_correspondence_id"
-    t.index %w[investigation_id], name: "index_activities_on_investigation_id"
-    t.index %w[product_id], name: "index_activities_on_product_id"
+    t.index ["business_id"], name: "index_activities_on_business_id"
+    t.index ["correspondence_id"], name: "index_activities_on_correspondence_id"
+    t.index ["investigation_id"], name: "index_activities_on_investigation_id"
+    t.index ["product_id"], name: "index_activities_on_product_id"
   end
 
   create_table "alerts", id: :serial, force: :cascade do |t|
@@ -57,7 +58,7 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.integer "investigation_id"
     t.string "summary"
     t.datetime "updated_at", null: false
-    t.index %w[investigation_id], name: "index_alerts_on_investigation_id"
+    t.index ["investigation_id"], name: "index_alerts_on_investigation_id"
   end
 
   create_table "businesses", id: :serial, force: :cascade do |t|
@@ -77,7 +78,7 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.text "other_details"
     t.string "phone_number"
     t.datetime "updated_at", null: false
-    t.index %w[investigation_id], name: "index_complainants_on_investigation_id"
+    t.index ["investigation_id"], name: "index_complainants_on_investigation_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -88,7 +89,7 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "name"
     t.string "phone_number"
     t.datetime "updated_at", null: false
-    t.index %w[business_id], name: "index_contacts_on_business_id"
+    t.index ["business_id"], name: "index_contacts_on_business_id"
   end
 
   create_table "corrective_actions", id: :serial, force: :cascade do |t|
@@ -101,9 +102,9 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.integer "product_id"
     t.text "summary"
     t.datetime "updated_at", null: false
-    t.index %w[business_id], name: "index_corrective_actions_on_business_id"
-    t.index %w[investigation_id], name: "index_corrective_actions_on_investigation_id"
-    t.index %w[product_id], name: "index_corrective_actions_on_product_id"
+    t.index ["business_id"], name: "index_corrective_actions_on_business_id"
+    t.index ["investigation_id"], name: "index_corrective_actions_on_investigation_id"
+    t.index ["product_id"], name: "index_corrective_actions_on_product_id"
   end
 
   create_table "correspondences", force: :cascade do |t|
@@ -122,7 +123,7 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "phone_number"
     t.string "type"
     t.datetime "updated_at", null: false
-    t.index %w[investigation_id], name: "index_correspondences_on_investigation_id"
+    t.index ["investigation_id"], name: "index_correspondences_on_investigation_id"
   end
 
   create_table "investigation_businesses", id: :serial, force: :cascade do |t|
@@ -131,9 +132,9 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.integer "investigation_id"
     t.string "relationship"
     t.datetime "updated_at", null: false
-    t.index %w[business_id], name: "index_investigation_businesses_on_business_id"
-    t.index %w[investigation_id business_id], name: "index_on_investigation_id_and_business_id", unique: true
-    t.index %w[investigation_id], name: "index_investigation_businesses_on_investigation_id"
+    t.index ["business_id"], name: "index_investigation_businesses_on_business_id"
+    t.index ["investigation_id", "business_id"], name: "index_on_investigation_id_and_business_id", unique: true
+    t.index ["investigation_id"], name: "index_investigation_businesses_on_investigation_id"
   end
 
   create_table "investigation_products", id: :serial, force: :cascade do |t|
@@ -141,9 +142,9 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.integer "investigation_id"
     t.integer "product_id"
     t.datetime "updated_at", null: false
-    t.index %w[investigation_id product_id], name: "index_investigation_products_on_investigation_id_and_product_id", unique: true
-    t.index %w[investigation_id], name: "index_investigation_products_on_investigation_id"
-    t.index %w[product_id], name: "index_investigation_products_on_product_id"
+    t.index ["investigation_id", "product_id"], name: "index_investigation_products_on_investigation_id_and_product_id", unique: true
+    t.index ["investigation_id"], name: "index_investigation_products_on_investigation_id"
+    t.index ["product_id"], name: "index_investigation_products_on_product_id"
   end
 
   create_table "investigations", id: :serial, force: :cascade do |t|
@@ -164,8 +165,8 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"
-    t.index %w[assignable_type assignable_id], name: "index_investigations_on_assignable_type_and_assignable_id"
-    t.index %w[pretty_id], name: "index_investigations_on_pretty_id"
+    t.index ["assignable_type", "assignable_id"], name: "index_investigations_on_assignable_type_and_assignable_id"
+    t.index ["pretty_id"], name: "index_investigations_on_pretty_id"
   end
 
   create_table "locations", id: :serial, force: :cascade do |t|
@@ -180,7 +181,15 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "phone_number"
     t.string "postal_code"
     t.datetime "updated_at", null: false
-    t.index %w[business_id], name: "index_locations_on_business_id"
+    t.index ["business_id"], name: "index_locations_on_business_id"
+  end
+
+  create_table "organisations", id: :uuid, default: nil, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.string "path"
+    t.datetime "updated_at", null: false
+    t.index ["path"], name: "index_organisations_on_path"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
@@ -210,7 +219,28 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "type"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
-    t.index %w[user_id], name: "index_sources_on_user_id"
+    t.index ["user_id"], name: "index_sources_on_user_id"
+  end
+
+  create_table "teams", id: :uuid, default: nil, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.uuid "organisation_id"
+    t.string "path"
+    t.string "team_recipient_email"
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_teams_on_name"
+    t.index ["organisation_id"], name: "index_teams_on_organisation_id"
+    t.index ["path"], name: "index_teams_on_path"
+  end
+
+  create_table "teams_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "team_id"
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["team_id"], name: "index_teams_users_on_team_id"
+    t.index ["user_id"], name: "index_teams_users_on_user_id"
   end
 
   create_table "tests", id: :serial, force: :cascade do |t|
@@ -223,18 +253,23 @@ ActiveRecord::Schema.define(version: 2019_08_13_153818) do
     t.string "result"
     t.string "type"
     t.datetime "updated_at", null: false
-    t.index %w[investigation_id], name: "index_tests_on_investigation_id"
-    t.index %w[product_id], name: "index_tests_on_product_id"
+    t.index ["investigation_id"], name: "index_tests_on_investigation_id"
+    t.index ["product_id"], name: "index_tests_on_product_id"
   end
 
-  create_table "user_attributes", primary_key: "user_id", id: :uuid, default: nil, force: :cascade do |t|
-    t.boolean "boolean", default: false, null: false
+  create_table "users", id: :uuid, default: nil, force: :cascade do |t|
+    t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
-    t.boolean "has_accepted_declaration"
-    t.boolean "has_been_sent_welcome_email"
+    t.string "email"
+    t.boolean "has_accepted_declaration", default: false
+    t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
+    t.string "name"
+    t.uuid "organisation_id"
     t.datetime "updated_at", null: false
-    t.index %w[user_id], name: "index_user_attributes_on_user_id"
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["name"], name: "index_users_on_name"
+    t.index ["organisation_id"], name: "index_users_on_organisation_id"
   end
 
   add_foreign_key "activities", "businesses"

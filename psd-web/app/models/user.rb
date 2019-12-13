@@ -1,47 +1,31 @@
-class User < ActiveHash::Base
-  include ActiveHash::Associations
-  include ActiveHashSafeLoadable
-
+class User < ApplicationRecord
   belongs_to :organisation
 
-  has_many :activities, dependent: :nullify
   has_many :investigations, dependent: :nullify, as: :assignable
-  has_many :user_sources, dependent: :delete
+  has_many :activities, through: :investigations
+  has_many :user_sources, dependent: :destroy
 
-  has_many :team_users, dependent: :nullify
-  has_many :teams, through: :team_users
+  has_and_belongs_to_many :teams
 
-  has_one :user_attributes, dependent: :destroy
+  validates :id, presence: true, uuid: true
 
-  field :name
-  field :email
-  field :access_token
-
-  # Getters and setters for each UserAttributes column should be added here so they can be accessed directly
-  # from the User object via delegation.
-  delegate :has_viewed_introduction, :has_viewed_introduction!, to: :get_user_attributes
-  delegate :has_accepted_declaration, :has_accepted_declaration!, to: :get_user_attributes
-  delegate :has_been_sent_welcome_email, :has_been_sent_welcome_email!, to: :get_user_attributes
-
+  attr_accessor :access_token # Used only in User.current thread context
   attr_writer :roles
 
-  def teams
-    # Ensure we're serving up-to-date relations (modulo caching)
-    TeamUser.load
-    # has_many through seems not to work with ActiveHash
-    # It's not well documented but the same fix has been suggested here: https://github.com/zilkey/active_hash/issues/25
-    team_users.map(&:team)
+  def self.activated
+    where(account_activated: true)
   end
 
   def self.create_and_send_invite(email_address, team, redirect_url)
-    KeycloakClient.instance.create_user email_address
-    # We can't use User.load here to load the new user
-    # - they're not part of any organisation yet, so aren't considered a psd user
-    user_id = KeycloakClient.instance.get_user(email_address)[:id]
-    team.add_user user_id
-    # Now that user exists in a team, we can trigger a reload of users entities
-    User.load(force: true)
-    KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
+    KeycloakClient.instance.create_user(email_address)
+
+    keycloak_user = KeycloakClient.instance.get_user(email_address)
+
+    # Create the user in the local cache database so that we don't have to wait until the next sync
+    user = create(id: keycloak_user[:id], email: email_address, organisation: team.organisation)
+    team.add_user(user)
+
+    KeycloakClient.instance.send_required_actions_welcome_email keycloak_user[:id], redirect_url
   end
 
   def self.resend_invite(email_address, _team, redirect_url)
@@ -49,39 +33,35 @@ class User < ActiveHash::Base
     KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
   end
 
-  def self.find_or_create(attributes)
-    groups = attributes.delete(:groups)
-    organisation = Organisation.find_by(path: groups)
-    user = User.find_by(id: attributes[:id]) || User.create(attributes.merge(organisation_id: organisation&.id))
-    user
-  end
+  def self.load_from_keycloak(users = KeycloakClient.instance.all_users)
+    # We're not interested in users not belonging to an organisation, as that means they are not PSD users
+    # - however, checking this based on permissions would require a request per user
+    users.map do |user|
+      user[:teams] = Team.where(id: user[:groups])
 
-  def self.load(force: false)
-    begin
-      all_users = KeycloakClient.instance.all_users(force: force)
-      # We're not interested in users not belonging to an organisation, as that means they are not PSD users
-      # - however, checking this based on permissions would require a request per user
-      # Some user object are missing their name when they have not finished their registration yet.
-      # But we need to be able to show them on the teams page for example, so we ensure that the attribute is not nil
-      users = all_users.deep_dup # We want a copy of the data to modify freely, not mutating the cached version
-                      .map(&method(:populate_organisation))
-                      .map(&method(:populate_name))
-                      .reject { |user| user[:organisation_id].blank? }
+      # Filters out user groups which aren't related to PSD. User may belong directly to an Organisation, or indirectly via a Team
+      user[:organisation] = Organisation.find_by(id: user[:groups]) || user[:teams].first&.organisation
 
-      self.safe_load(users, data_name: "users")
-    rescue StandardError => e
-      Rails.logger.error "Failed to fetch users from Keycloak: #{e.message}"
-      self.data = nil
+      user
     end
-  end
 
-  def self.all(options = {})
-    self.load
+    users.reject { |user| user[:organisation].blank? }.each do |user|
+      begin
+        record = find_or_create_by!(id: user[:id]) do |new_record|
+          new_record.email = user[:email]
+          new_record.name = user[:name]
+          new_record.organisation = user[:organisation]
+        end
 
-    if options.has_key?(:conditions)
-      where(options[:conditions])
-    else
-      @records ||= []
+        record.update!(user.slice(:name, :email, :organisation))
+        record.teams = user[:teams]
+      rescue ActiveRecord::ActiveRecordError => e
+        if Rails.env.production?
+          Raven.capture_exception(e)
+        else
+          raise(e)
+        end
+      end
     end
   end
 
@@ -103,27 +83,20 @@ class User < ActiveHash::Base
     end
   end
 
-  def self.populate_organisation(attributes)
-    groups = attributes.delete(:groups)
-    teams = Team.where(id: groups)
-    organisation = Organisation.find_by(id: groups) || Organisation.find_by(id: teams.first&.organisation_id)
-    attributes.merge(organisation_id: organisation&.id)
+  def name
+    super.to_s
   end
 
-  def self.populate_name(attributes)
-    attributes[:name] ||= ""
-    attributes
-  end
+  def display_name(ignore_visibility_restrictions: false, other_user: User.current)
+    return @display_name if @display_name
 
-  private_class_method :populate_organisation, :populate_name
+    membership = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && teams.any?
+                   team_names
+                 else
+                   organisation.name
+                 end
 
-  def display_name(ignore_visibility_restrictions: false)
-    display_name = name
-    can_display_teams = ignore_visibility_restrictions || (organisation.present? && organisation.id == User.current.organisation&.id)
-    can_display_teams = can_display_teams && teams.any?
-    membership_display = can_display_teams ? team_names : organisation&.name
-    display_name += " (#{membership_display})" if membership_display.present?
-    display_name
+    @display_name = "#{name} (#{membership})"
   end
 
   def team_names
@@ -131,7 +104,7 @@ class User < ActiveHash::Base
   end
 
   def assignee_short_name
-    if organisation.present? && organisation.id != User.current.organisation&.id
+    if organisation.present? && organisation.id != User.current.organisation_id
       organisation.name
     else
       name
@@ -155,24 +128,23 @@ class User < ActiveHash::Base
   end
 
   def self.get_assignees(except: [])
-    users_to_exclude = Array(except)
-    self.all - users_to_exclude
+    user_ids_to_exclude = Array(except).collect(&:id)
+    self.activated.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
   end
 
   def self.get_team_members(user:)
     users = [].to_set
     user.teams.each do |team|
-      team.users.each do |team_member|
+      team.users.activated.find_each do |team_member|
         users << team_member
       end
     end
     users
   end
 
-  def get_user_attributes
-    UserAttributes.find_or_create_by(user_id: id)
+  def has_viewed_introduction!
+    update has_viewed_introduction: true
   end
-
 
 private
 
@@ -180,5 +152,3 @@ private
     User.current&.id == id
   end
 end
-
-User.load if Rails.env.development?

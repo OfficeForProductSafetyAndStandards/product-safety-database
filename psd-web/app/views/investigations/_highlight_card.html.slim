@@ -4,7 +4,8 @@
   .govuk-grid-column-one-half
     span.govuk-caption-m[class="govuk-!-font-size-16"]
       = investigation.pretty_description
-    span = link_to investigation.title, investigation, class: "govuk-!-font-weight-bold"
+    span = link_to investigation.title, investigation_path(investigation), class: "govuk-!-font-weight-bold"
+    = render "investigations/case_card_status_area", investigation: investigation
   .govuk-grid-column-one-half
     - displayable_highlights.each do |highlight|
       span.govuk-caption-m[class="govuk-!-font-size-16"] = highlight[:label]

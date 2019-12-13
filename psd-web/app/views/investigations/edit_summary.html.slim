@@ -1,7 +1,8 @@
 - content_for :page_title, "Update summary"
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description}", @investigation, class: "govuk-back-link"
-= form_with(model: @investigation, url: edit_summary_investigation_path(@investigation)) do |form|
+  = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+= form_with(scope: :investigation, model: @investigation.object, \
+  url: edit_summary_investigation_path(@investigation)) do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
@@ -12,4 +13,4 @@
               label: { text: "Edit summary", classes: "govuk-visually-hidden" }
       .govuk-form-group
         = form.submit "Update summary", class: "govuk-button"
-        p = link_to "Cancel", @investigation, class: "govuk-link--no-visited-state"
+        p = link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state"

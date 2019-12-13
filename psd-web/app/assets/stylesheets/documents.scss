@@ -1,0 +1,77 @@
+
+$secondary-hover-colour: #171819; // same as footer links
+
+%placeholder-content {
+  border: 3px dashed govuk-colour("grey-1");
+  @include govuk-font($size: 19);
+  text-align: center;
+  color: govuk-colour("grey-1");
+
+  & > a {
+    color: govuk-colour("grey-1");
+
+    &:hover {
+      color: $secondary-hover-colour;
+    }
+  }
+
+  @include govuk-responsive-padding(6, "top");
+  @include govuk-responsive-padding(6, "bottom");
+  @include govuk-responsive-padding(4, "left");
+  @include govuk-responsive-padding(4, "right");
+
+}
+
+.app-document-preview {
+  @include govuk-responsive-margin(6, "bottom");
+}
+
+// Generic graphic of a document
+.app-document-preview__placeholder {
+  position: relative;
+  width: 120px;
+  height: 160px;
+  vertical-align: top;
+}
+
+// Positions the file extension over the placeholder
+.app-document-preview__filetype {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 75px;
+  height: 30px;
+  color: govuk-colour("white");
+  @include govuk-font(19, $weight: bold, $line-height: 30px);
+  text-align: center;
+}
+
+// Shown while images are being processed
+.app-document-preview__processing {
+  @extend %placeholder-content;
+}
+
+.document-list {
+  .document-preview {
+    vertical-align: top;
+  }
+
+  .document-details {
+    vertical-align: top;
+
+    .document-title,
+    .document-updated {
+      display: inline-block;
+      color: inherit;
+    }
+
+    .edit-document-link {
+      display: block;
+    }
+
+    .delete-document-link {
+      margin-bottom: 0.5em;
+      margin-top: 0.5em;
+    }
+  }
+}

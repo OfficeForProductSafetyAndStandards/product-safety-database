@@ -6,15 +6,19 @@
     - if current_user_is_team_admin
       a.govuk-button role="button" href=invite_to_team_url Invite a team member
     h2.govuk-heading-m Team members
-    ul.govuk-list
+    ul.teams--list
       - @team.users.sort_by(&:name).each do |user|
-        - user_signed_up = user.name.present?
         li.teams--user class="govuk-!-padding-top-3 govuk-!-padding-bottom-3 govuk-!-margin-0"
-          - if !user_signed_up && current_user_is_team_admin
-            = link_to "Resend invitation", resend_invitation_team_path(email_address: user.email),
-            method: :put, class: "text-align: right", aria: { label: "Resend invitation to #{user.email}" }
+          - if !user.account_activated? && current_user_is_team_admin
+            - html = capture do
+              | Resend invitation
+              span.govuk-visually-hidden
+                '
+                | to #{user.email}
+            = link_to html, resend_invitation_team_path(email_address: user.email),
+            method: :put, class: "text-align: right"
           h3.teams--user-contact
-            - if user_signed_up
+            - if user.name
               span.govuk-heading-s.teams--user-name = user.name
             '
             span.govuk-caption-m.teams--user-email = user.email

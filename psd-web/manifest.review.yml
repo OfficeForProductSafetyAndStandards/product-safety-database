@@ -6,7 +6,7 @@ applications:
   buildpacks:
     - ruby_buildpack
   path: .
-  command: export $(./env/get-env-from-vcap.sh) && ES_NAMESPACE=((psd-instance-name)) STATEMENT_TIMEOUT=60s SAFETY_ASSURED=1 bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+  command: export $(./env/get-env-from-vcap.sh) && ES_NAMESPACE=((psd-instance-name)) STATEMENT_TIMEOUT=60s SAFETY_ASSURED=1 bin/rake cf:on_first_instance db:migrate db:seed keycloak:sync && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
   stack: cflinuxfs3
   services:
     - ((psd-db-name))
@@ -44,3 +44,4 @@ applications:
     - psd-notify-env
     - psd-rails-env
     - psd-sentry-env
+    - psd-keycloak-env

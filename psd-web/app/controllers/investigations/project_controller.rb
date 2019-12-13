@@ -22,6 +22,6 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Project.new(project_params)
+    @investigation = Investigation::Project.new(project_params).decorate
   end
 end

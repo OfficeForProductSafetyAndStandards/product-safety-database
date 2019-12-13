@@ -1,0 +1,60 @@
+$govuk-page-width: 1200px;
+$govuk-global-styles: true;
+$govuk-assets-path: '~govuk-frontend/assets/';
+@import "~govuk-frontend/all";
+
+@import "autocomplete";
+@import "badge";
+@import "stylesheets/intro-card";
+@import "stylesheets/text";
+@import "stylesheets/cookie-banner";
+@import "stylesheets/remove-default-button-styling";
+@import "stylesheets/banner";
+@import "stylesheets/button";
+@import "stylesheets/block-link";
+@import "stylesheets/case-card";
+@import "stylesheets/documents";
+@import "stylesheets/email_display";
+@import "stylesheets/flashcard";
+@import "stylesheets/footer";
+@import "stylesheets/form";
+@import "stylesheets/header";
+@import "stylesheets/helpers/media-queries";
+@import "stylesheets/images";
+@import "stylesheets/teams";
+@import "stylesheets/pagination";
+@import "stylesheets/search-box";
+@import "stylesheets/shared";
+@import "stylesheets/sortable_columns";
+@import "stylesheets/summary_table";
+@import "stylesheets/timeline";
+@import "stylesheets/psd_header";
+@import "stylesheets/sub_nav";
+@import "landing_masthead";
+
+// Pages
+@import "stylesheets/investigation";
+
+* {
+  box-sizing: border-box;
+}
+
+@media print {
+  .no-print {
+    display: none !important; // sass-lint:disable-line no-important
+  }
+}
+
+.search-background {
+  background-color: govuk-colour("grey-3");
+}
+
+.right {
+  float: right;
+  margin-left: 2em;
+}
+
+.row-border-top {
+  padding-top: 2em;
+  border-top: 1px solid govuk-colour("grey-3");
+}
