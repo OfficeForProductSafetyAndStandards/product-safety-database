@@ -31,5 +31,14 @@ FactoryBot.define do
       description { "a phone by samsung" }
       country_of_origin { "Republic of Korea" }
     end
+
+    factory :product_washing_machine do
+      product_code { Faker::Number.number(digits: 10) }
+      name { Faker::Lorem.sentence }
+      product_type { "Washing machine" }
+      category { "Electrical appliances and equipment" }
+      description { Faker::Lorem.paragraph }
+      country_of_origin { Country.all.sample }
+    end
   end
 end
