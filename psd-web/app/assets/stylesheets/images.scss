@@ -1,5 +1,6 @@
 $image-border-colour: rgba($govuk-text-colour, .15);
 
+// TODO: don't think .image-list is used;
 .image-list {
   .image-preview {
     vertical-align: top;
@@ -50,24 +51,20 @@ $image-border-colour: rgba($govuk-text-colour, .15);
 
 }
 
-
+.app-document-preview__image-without-preview {
+  @extend %placeholder-content;
+}
 
 @mixin preview-image-size ($max-width) {
-
   .app-document-preview__image {
-
     max-width: $max-width;
-
     @if $max-width != inherit {
       max-width: $max-width * 0.75;
     }
-
     @include govuk-media-query($from: tablet) {
       max-width: $max-width;
     }
-
   }
-
 }
 
 // Override default size - fill container or 100% of image size
@@ -85,14 +82,4 @@ $image-border-colour: rgba($govuk-text-colour, .15);
 
 .app-document-preview--large {
   @include preview-image-size(350px);
-}
-
-
-
-.app-document-preview__image-without-preview {
-  @extend %placeholder-content;
-}
-
-.app-document-preview--add-image-prompt {
-  min-height: 300px
 }
