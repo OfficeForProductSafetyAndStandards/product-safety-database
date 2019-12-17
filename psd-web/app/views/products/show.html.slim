@@ -9,9 +9,9 @@
         | Product
       = @product.name
 
-    - if @product.combined_categories.present?
+    - if @product.product_type_and_category_label.present?
       p.govuk-body-l
-        = @product.combined_categories
+        = @product.product_type_and_category_label
 
     p.govuk-caption-m
       = "Created: " + @product.created_at.to_s(:govuk)

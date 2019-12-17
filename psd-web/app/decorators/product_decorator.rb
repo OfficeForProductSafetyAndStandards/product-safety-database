@@ -16,27 +16,17 @@ class ProductDecorator < ApplicationDecorator
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
   end
-
   def description
     h.simple_format(object.description)
   end
-
-  def combined_categories
+  def product_type_and_category_label
     # Combines product type and product category
-    # These *should* exist for all products but might not in the future.
     # "Ballpoint pen (stationery)" (if both exist)
-    # "Ballpoint pen" (if just product type exists)
-    # "Stationery" (if just category exists)
-    # nil if neither exists
-    if product_type.present? && category.present?
-      product_type + " (" + category.downcase + ")"
-    elsif product_type.present?
-      product_type
-    elsif category.present?
-      category
+    product_and_category = [ product_type.presence, category.presence ].compact
+    if product_and_category.length > 1
+      "#{product_and_category.first} (#{product_and_category.last.downcase})"
     else
-      nil
+      product_and_category.first
     end
   end
-
 end
