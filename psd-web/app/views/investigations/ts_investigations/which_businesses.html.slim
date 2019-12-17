@@ -1,4 +1,6 @@
-- content_for :page_title, "Report an unsafe or non-compliant product"
+- page_heading = "Supply chain information"
+
+- content_for :page_title, page_heading
 
 = form_with model: @investigation, scope: :businesses, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row#which-businesses-page
@@ -6,7 +8,7 @@
       = render "form_components/govuk_error_summary", form: form
       h1.govuk-heading-l
         span.govuk-caption-l Report an unsafe or non-compliant product
-        | Supply chain information
+        = page_heading
       - other_business_html = render "form_components/govuk_input",
                key: :other_business_type, form: form,
                value: @other_business_type,

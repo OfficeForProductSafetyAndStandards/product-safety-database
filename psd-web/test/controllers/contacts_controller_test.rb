@@ -38,7 +38,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should update contact" do
     patch business_contact_url(@contact.business, @contact), params: {
       contact: {
-        job_title: "Job title/Description",
+        job_title: "Managing director",
         email: "email@email.com",
         name: "John Smith",
         phone_number: "+4477619345346"
