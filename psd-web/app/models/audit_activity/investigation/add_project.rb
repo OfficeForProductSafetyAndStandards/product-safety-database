@@ -4,7 +4,7 @@ class AuditActivity::Investigation::AddProject < AuditActivity::Investigation::A
   end
 
   def self.build_title(investigation)
-    "Project logged: #{investigation.title}"
+    "Project logged: #{investigation.decorate.title}"
   end
 
   def self.build_body(investigation)

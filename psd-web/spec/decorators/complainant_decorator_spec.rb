@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ComplainantDecorator do
-  fixtures :complainants
-
-  let(:complainant) { complainants(:one) }
+  let(:complainant) { build(:complainant) }
 
   subject { complainant.decorate }
 
@@ -22,5 +20,9 @@ RSpec.describe ComplainantDecorator do
 
       it { expect(subject.contact_details).to eq("Not provided") }
     end
+  end
+
+  describe "#other_details" do
+    include_examples "a formated text", :complainant, :other_details
   end
 end
