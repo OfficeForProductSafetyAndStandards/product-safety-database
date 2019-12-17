@@ -20,4 +20,23 @@ class ProductDecorator < ApplicationDecorator
   def description
     h.simple_format(object.description)
   end
+
+  def all_categories
+    # Combines product type and product category
+    # These *should* exist for all products but might not in the future.
+    # "Ballpoint pen (stationery)" (if both exist)
+    # "Ballpoint pen" (if just product type exists)
+    # "Stationery" (if just category exists)
+    # nil if neither exists
+    if product_type.present? && category.present?
+      product_type + " (" + category.downcase + ")"
+    elsif product_type.present?
+      product_type
+    elsif category.present?
+      category
+    else
+      nil
+    end
+  end
+
 end

@@ -2,8 +2,30 @@
 - content_for :after_header do
   = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
 
-= render "product_heading", product: @product
-= render "product_summary", product: @product
+.govuk-grid-row
+  .govuk-grid-column-two-thirds
+    h1.govuk-heading-l
+      span.govuk-caption-l
+        | Product
+      = @product.name
+
+    - if @product.all_categories.present?
+      p.govuk-body-l
+        = @product.all_categories
+
+    p.govuk-caption-m
+      = "Created: " + @product.created_at.strftime("%d %B %Y")
+      - if @product.updated_at != @product.created_at
+        br
+        = "Updated: " + @product.updated_at.strftime("%d %B %Y")
+
+  .govuk-grid-column-one-third class="govuk-!-margin-top-7"
+    - if @product.images.any?
+      = render "documents/document_preview", document: @product.images.first, dimensions: "400x400",
+        class_name: "product-image app-document-preview--small"
+    - else
+      .app-document-preview__image-without-preview.app-document-preview--add-image-prompt
+        p.govuk-body = link_to "Add an image of this product", new_document_flow_path(@product)
 
 hr.govuk-section-break.govuk-section-break--m
 
