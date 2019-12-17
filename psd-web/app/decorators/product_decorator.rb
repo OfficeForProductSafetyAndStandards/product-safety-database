@@ -16,13 +16,15 @@ class ProductDecorator < ApplicationDecorator
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
   end
+
   def description
     h.simple_format(object.description)
   end
+
   def product_type_and_category_label
     # Combines product type and product category
     # "Ballpoint pen (stationery)" (if both exist)
-    product_and_category = [ product_type.presence, category.presence ].compact
+    product_and_category = [product_type.presence, category.presence].compact
     if product_and_category.length > 1
       "#{product_and_category.first} (#{product_and_category.last.downcase})"
     else
