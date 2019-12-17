@@ -9,6 +9,7 @@ class SessionsController < ActionController::Base
 
   def signin
     request_and_store_token(auth_code, params[:request_path])
+
     redirect_path = is_relative(params[:request_path]) ? params[:request_path] : root_path
     redirect_to redirect_path
   rescue RestClient::ExceptionWithResponse => e

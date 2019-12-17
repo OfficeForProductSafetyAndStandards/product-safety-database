@@ -6,6 +6,11 @@ applications:
   buildpacks:
     - ruby_buildpack
   path: .
+  routes:
+    - route: ((route))
+  env:
+    PSD_HOST: ((psd-host))
+    SIDEKIQ_QUEUE: ((sidekiq-queue))
   command: export $(./env/get-env-from-vcap.sh) && ES_NAMESPACE=((psd-instance-name)) STATEMENT_TIMEOUT=60s SAFETY_ASSURED=1 bin/rake cf:on_first_instance db:migrate db:seed keycloak:sync && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
   stack: cflinuxfs3
   services:

@@ -6,10 +6,23 @@ module LoginHelpers
     allow(KeycloakClient.instance).to receive(:get_user_roles).with(as_user.id).and_return(as_user.roles)
   end
 
+  def sign_out
+    allow(KeycloakClient.instance).to receive(:user_signed_in?).and_return(false)
+  end
+
+  def keycloak_login_url(additional_params = {})
+    url_params = {
+      response_type: "code",
+      client_id: ENV.fetch("KEYCLOAK_CLIENT_ID")
+    }.merge(additional_params)
+
+    "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth?#{URI.encode_www_form(url_params)}"
+  end
+
 private
 
   def format_user_for_get_userinfo(user)
-    { id: user.id, email: user.email, name: user.name }
+    { id: user.id, email: user.email, name: user.name, groups: ([user.organisation&.path] + user.teams.map(&:path)).compact }
   end
 
   def access_token

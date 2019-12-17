@@ -173,7 +173,6 @@
   }
 
   .psd-header__navigation {
-    @include govuk-responsive-margin(2, "bottom");
     display: block;
     margin: 0;
     padding: 0;

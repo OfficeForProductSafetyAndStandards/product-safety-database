@@ -1,0 +1,30 @@
+- content_for :other_head_tags
+  meta[name="robots" content="noindex,nofollow"]
+
+- content_for :masthead
+  .landing-masthead
+    - if @show_full_phase_banner
+      .govuk-width-container
+        .govuk-grid-row
+          .govuk-grid-column-full
+            .govuk-phase-banner
+              p.govuk-phase-banner__content
+                span.govuk-tag.govuk-phase-banner__content__tag
+                  | Beta
+                span.govuk-phase-banner__text
+                  | This is a new service – your feedback will help us to improve it.
+
+    .govuk-width-container
+      main#main-content.app-main-class.govuk-main-wrapper[role="main"]
+        .govuk-grid-row
+          .govuk-grid-column-two-thirds-from-desktop
+            h1.govuk-heading-xl Product safety database
+            p.govuk-body-l class="govuk-!-margin-bottom-2"
+              | Report, track and share product safety information with the product safety community.
+            .landing-masthead-links
+              = link_to "Sign in to your account", keycloak_login_url(params[:request_path]),
+                  class: "govuk-button", role: "button", draggable: false
+              p
+                | or&nbsp;
+                = mail_to "opss.enquiries@beis.gov.uk", "email OPSS"
+                | &nbsp;if you think you should have access
