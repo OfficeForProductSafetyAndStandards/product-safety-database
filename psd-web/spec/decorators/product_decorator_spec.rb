@@ -14,7 +14,6 @@ RSpec.describe ProductDecorator do
     }
 
     context "when displaying the product summary" do
-
       it "displays the product summary list with the batch number" do
         expect(summary_list).to summarise("Product name",            text: product.name)
         expect(summary_list).to summarise("Category",                text: product.category)
@@ -25,7 +24,6 @@ RSpec.describe ProductDecorator do
         expect(summary_list).to summarise("Description", text: product.description)
       end
     end
-
   end
 
   describe "#description" do
