@@ -27,7 +27,7 @@ li
 
   - else
     - if activity.body
-      = markdown activity.body
+      = markdown simple_format(activity.body)
 
     - if activity.product_id
       = link_to "View product details", product_url(activity.product_id), class: "psd-block-link"

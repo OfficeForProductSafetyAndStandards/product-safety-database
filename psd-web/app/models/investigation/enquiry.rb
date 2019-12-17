@@ -8,6 +8,12 @@ class Investigation::Enquiry < Investigation
 
   date_attribute :date_received, required: false
 
+  has_one :add_audit_activity,
+          class_name: "AuditActivity::Investigation::AddEnquiry",
+          foreign_key: :investigation_id,
+          inverse_of: :investigation,
+          dependent: :destroy
+
   def case_type
     "enquiry"
   end
@@ -29,6 +35,6 @@ class Investigation::Enquiry < Investigation
 private
 
   def create_audit_activity_for_case
-    AuditActivity::Investigation::AddEnquiry.from(self.decorate)
+    AuditActivity::Investigation::AddEnquiry.from(self)
   end
 end
