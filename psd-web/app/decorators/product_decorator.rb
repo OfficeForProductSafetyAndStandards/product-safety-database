@@ -21,7 +21,7 @@ class ProductDecorator < ApplicationDecorator
     h.simple_format(object.description)
   end
 
-  def all_categories
+  def combined_categories
     # Combines product type and product category
     # These *should* exist for all products but might not in the future.
     # "Ballpoint pen (stationery)" (if both exist)
