@@ -246,8 +246,8 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
 
     expect(page).to have_selector("h2", text: info[:name])
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
-    expect(page.find("dt", text: "Barcode / serial number")).to have_sibling("dd", text: info[:barcode])
-    expect(page.find("dt", text: "Type")).to have_sibling("dd", text: info[:type])
+    expect(page.find("dt", text: "Barcode or serial number")).to have_sibling("dd", text: info[:barcode])
+    expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: info[:type])
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage])
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin])
@@ -262,7 +262,7 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
 
     section = page.find("h3", text: label).find("+dl")
     expect(section.find("dt", text: "Trading name")).to have_sibling("dd", text: business[:trading_name])
-    expect(section.find("dt", text: "Legal name")).to have_sibling("dd", text: business[:legal_name])
+    expect(section.find("dt", text: "Registered or legal name")).to have_sibling("dd", text: business[:legal_name])
     expect(section.find("dt", text: "Company number")).to have_sibling("dd", text: business[:company_number])
     expect(section.find("dt", text: "Main address")).to have_sibling("dd", text: expected_address)
     expect(section.find("dt", text: "Main contact")).to have_sibling("dd", text: expected_contact)
@@ -300,18 +300,18 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     select with[:country_of_origin], from: "Country of origin"
     fill_in "Product type",               with: with[:type]
     fill_in "Product name",               with: with[:name]
-    fill_in "Barcode (or serial number)", with: with[:barcode]
+    fill_in "Barcode or serial number",   with: with[:barcode]
     fill_in "Webpage",                    with: with[:webpage]
-    fill_in "Description",                with: with[:description]
+    fill_in "Description of product",     with: with[:description]
     click_button "Continue"
   end
 
   def fill_in_why_reporting_page
-    check "It's unsafe"
-    select hazard_type, from: "Hazard type"
-    fill_in "Hazard details", with: hazard_description
-    check "It's non-compliant"
-    fill_in "Details of non-compliance", with: non_compliance_details
+    check "It’s unsafe (or suspected to be)"
+    select hazard_type, from: "What is the primary hazard?"
+    fill_in "Why is the product unsafe?", with: hazard_description
+    check "It’s non-compliant (or suspected to be)"
+    fill_in "Why is the product non-compliant?", with: non_compliance_details
     click_button "Continue"
   end
 
@@ -324,18 +324,18 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
   end
 
   def fill_in_business_details_page(with:)
-    fill_in "Trading name",            with: with[:trading_name]
-    fill_in "Legal name",              with: with[:legal_name]
-    fill_in "Company number",          with: with[:company_number]
-    fill_in "Address line one",        with: with[:address_1]
-    fill_in "Address line two",        with: with[:address_2]
-    fill_in "Town or city",            with: with[:town]
-    fill_in "County",                  with: with[:county]
-    fill_in "Postcode",                with: with[:postcode]
-    fill_in "Name",                    with: with[:contact_name]
-    fill_in "Email",                   with: with[:contact_email]
-    fill_in "Phone number",            with: with[:contact_phone]
-    fill_in "Job title / description", with: with[:contact_job_title]
+    fill_in "Trading name",                  with: with[:trading_name]
+    fill_in "Registered or legal name",      with: with[:legal_name]
+    fill_in "Company number",                with: with[:company_number]
+    fill_in "Address line one",              with: with[:address_1]
+    fill_in "Address line two",              with: with[:address_2]
+    fill_in "Town or city",                  with: with[:town]
+    fill_in "County",                        with: with[:county]
+    fill_in "Postcode",                      with: with[:postcode]
+    fill_in "Name",                          with: with[:contact_name]
+    fill_in "Email",                         with: with[:contact_email]
+    fill_in "Phone number",                  with: with[:contact_phone]
+    fill_in "Job title or role description", with: with[:contact_job_title]
     select with[:country], from: "Country"
     click_button "Continue"
   end
