@@ -8,7 +8,6 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product type" }, value: { text: product_type } },
       { key: { text: "Barcode or serial number" }, value: { text: product_code } },
-      include_batch_number ? { key: { text: "Batch number" }, value: { text: batch_number } } : nil,
       { key: { text: "Webpage" }, value: { text: object.webpage } },
       { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
       { key: { text: "Description" }, value: { text: description } }
@@ -22,9 +21,8 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def product_type_and_category_label
-    # Combines product type and product category
-    # "Ballpoint pen (stationery)" (if both exist)
     product_and_category = [product_type.presence, category.presence].compact
+
     if product_and_category.length > 1
       "#{product_and_category.first} (#{product_and_category.last.downcase})"
     else
