@@ -15,6 +15,8 @@ fieldset.govuk-fieldset
       = render "form_components/govuk_input", key: :title, form: subform, value: @file_title,
               classes: "govuk-!-width-two-thirds",
               label: { text: "Title" }
+      - file_description_hint = file_description_hint.presence ||\
+          "For example, ‘Orange, 4 socket extension lead'’"
       = render "form_components/govuk_textarea", key: :description, form: subform, value: @file_description,
               attributes: { maxlength: 10000 }, label: { text: "Description" },
-              hint: { text: "For example, 'Orange, 4 socket extension lead'" }
+              hint: { text: file_description_hint }

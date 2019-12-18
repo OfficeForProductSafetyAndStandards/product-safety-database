@@ -414,7 +414,7 @@ private
 
   def file_valid?
     if @file_blob.nil?
-      @investigation.errors.add(:file, "Upload file")
+      @investigation.errors.add(:file, "You must upload a file")
     end
     metadata = get_attachment_metadata_params(:file)
     if metadata[:title].blank?
@@ -455,7 +455,7 @@ private
     when :product
       @product.validate
     when :why_reporting
-      @investigation.errors.add(:why_reporting, "Indicate whether the product is unsafe or non-compliant") if !product_unsafe && !product_non_compliant
+      @investigation.errors.add(:why_reporting, "Choose at least one option") if !product_unsafe && !product_non_compliant
       @investigation.validate :unsafe if product_unsafe
       @investigation.validate :non_compliant if product_non_compliant
     when :which_businesses

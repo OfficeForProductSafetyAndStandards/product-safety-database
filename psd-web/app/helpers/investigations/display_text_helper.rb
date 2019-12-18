@@ -113,7 +113,7 @@ module Investigations::DisplayTextHelper
   def business_summary_list(business)
     rows = [
       { key: { text: "Trading name" }, value: { text: business.trading_name } },
-      { key: { text: "Legal name" }, value: { text: business.legal_name } },
+      { key: { text: "Registered or legal name" }, value: { text: business.legal_name } },
       { key: { text: "Company number" }, value: { text: business.company_number } },
       { key: { text: "Main address" }, value: { text: business.primary_location&.summary } },
       { key: { text: "Main contact" }, value: { text: business.primary_contact&.summary } }

@@ -16,17 +16,17 @@
             = @contact.name
         tr.govuk-table__row
           th.govuk-table__header[scope="row"]
-            | contact
+            | Email
           td.govuk-table__cell
             = @contact.email
         tr.govuk-table__row
           th.govuk-table__header[scope="row"]
-            | Phone
+            | Phone number
           td.govuk-table__cell
             = @contact.phone_number
         tr.govuk-table__row
           th.govuk-table__header[scope="row"]
-            | Title / Description
+            | Job title or role description
           td.govuk-table__cell
             = @contact.job_title
 = form_with url: business_contact_path(@business, @contact), method: :delete do |form|
