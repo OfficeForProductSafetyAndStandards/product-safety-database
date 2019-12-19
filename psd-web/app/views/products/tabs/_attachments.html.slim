@@ -7,6 +7,6 @@
     hr.govuk-section-break.govuk-section-break--l
 
     - if @product.images.empty? && @product.documents.empty?
-      p.govuk-body No attachments.
+      p.govuk-body No attachments
 
 = render "documents_list_summary", parent: @product
