@@ -10,7 +10,7 @@ FactoryBot.define do
       name { "iPhone XS MAX" }
       webpage { "https://www.iphone.webpage" }
       product_type { "phone" }
-      category { "phone category" }
+      category { "Communication and media equipment" }
       description { "iphone description" }
       country_of_origin { "United States" }
       batch_number { "1234" }
@@ -20,16 +20,25 @@ FactoryBot.define do
       product_code { 345 }
       name { "iPhone" }
       product_type { "phone" }
-      category { "phone" }
+      category { "Communication and media equipment" }
     end
 
     factory :product_samsung do
       product_code { 4524 }
       name { "galaxy" }
       product_type { "phone" }
-      category { "phone" }
+      category { "Communication and media equipment" }
       description { "a phone by samsung" }
       country_of_origin { "Republic of Korea" }
+    end
+
+    factory :product_washing_machine do
+      product_code { Faker::Number.number(digits: 10) }
+      name { Faker::Lorem.sentence }
+      product_type { "Washing machine" }
+      category { "Electrical appliances and equipment" }
+      description { Faker::Lorem.paragraph }
+      country_of_origin { Country.all.sample }
     end
   end
 end
