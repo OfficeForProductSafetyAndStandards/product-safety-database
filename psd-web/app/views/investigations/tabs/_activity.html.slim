@@ -1,9 +1,12 @@
+- page_heading = "Activity"
+- content_for :page_title, "#{page_heading} - #{@investigation.pretty_id}"
+
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop
 
     h1.govuk-heading-l
       span.govuk-caption-l = @investigation.pretty_description
-      | Activity
+      = page_heading
 
     p.govuk-body
       = link_to "Add activity", new_investigation_activity_path(@investigation)
