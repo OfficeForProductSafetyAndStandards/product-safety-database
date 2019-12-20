@@ -1,7 +1,7 @@
 $govuk-page-width: 1200px;
 $govuk-global-styles: true;
-$govuk-assets-path: '~govuk-frontend/assets/';
-@import "~govuk-frontend/all";
+$govuk-assets-path: '~govuk-frontend/govuk/assets/';
+@import "~govuk-frontend/govuk/all";
 
 @import "autocomplete";
 @import "badge";
