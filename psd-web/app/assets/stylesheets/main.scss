@@ -46,7 +46,7 @@ $govuk-assets-path: '~govuk-frontend/assets/';
 }
 
 .search-background {
-  background-color: govuk-colour("grey-3");
+  background-color: govuk-colour("light-grey");
 }
 
 .right {
@@ -56,5 +56,5 @@ $govuk-assets-path: '~govuk-frontend/assets/';
 
 .row-border-top {
   padding-top: 2em;
-  border-top: 1px solid govuk-colour("grey-3");
+  border-top: 1px solid govuk-colour("light-grey");
 }
