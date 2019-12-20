@@ -260,7 +260,7 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     expected_address = business.slice(:address_1, :address_2, :postcode, :country).values.join(", ")
     expected_contact = business.slice(:contact_name, :contact_job_title, :contact_phone, :contact_email).values.join(", ")
 
-    section = page.find("h3", text: label).find("+dl")
+    section = page.find("h2", text: label).find("+dl")
     expect(section.find("dt", text: "Trading name")).to have_sibling("dd", text: business[:trading_name])
     expect(section.find("dt", text: "Registered or legal name")).to have_sibling("dd", text: business[:legal_name])
     expect(section.find("dt", text: "Company number")).to have_sibling("dd", text: business[:company_number])
