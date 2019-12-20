@@ -1,4 +1,6 @@
-- content_for :page_title, "Report an unsafe or non-compliant product"
+- page_heading = "Has any corrective action been agreed or taken?"
+
+- content_for :page_title, page_heading
 
 = form_with scope: :investigation, model: @investigation, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
@@ -7,7 +9,7 @@
       - heading = capture do
         h1.govuk-heading-l
           span.govuk-caption-l Report an unsafe or non-compliant product
-          | Has any corrective action been agreed or taken?
+          = page_heading
       = render "form_components/govuk_radios", form: form, key: :further_corrective_action,
               fieldset: { legend: { html: heading } },
               items: [{ text: "Yes", value: "Yes" }, { text: "No", value: "No" }]

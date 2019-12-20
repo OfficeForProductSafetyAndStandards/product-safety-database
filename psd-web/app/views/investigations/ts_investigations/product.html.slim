@@ -1,4 +1,6 @@
-- content_for :page_title, "Report an unsafe or non-compliant product"
+- page_heading = "What product are you reporting?"
+
+- content_for :page_title, page_heading
 
 = form_with model: @product, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
@@ -6,5 +8,5 @@
       = render "form_components/govuk_error_summary", form: form
       h1.govuk-heading-l
         span.govuk-caption-l Report an unsafe or non-compliant product
-        | What product are you reporting?
+        = page_heading
       = render "products/form", form: form, product: @product, countries: @countries, submit_text: "Continue"

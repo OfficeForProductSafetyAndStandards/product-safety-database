@@ -7,7 +7,8 @@ $secondary-hover-colour: #171819; // same as footer links
   text-align: center;
   color: govuk-colour("grey-1");
 
-  & > a {
+  & a,
+  & a:visited {
     color: govuk-colour("grey-1");
 
     &:hover {
