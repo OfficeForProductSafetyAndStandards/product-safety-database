@@ -12,7 +12,7 @@
 
 // Larger buttons like govuk-start buttons, but without the chevron
 .app-button--l {
-  // Below styles from gouuk-button--start
+  // Below styles from govuk-button--start
   @include govuk-typography-weight-bold;
   @include govuk-typography-responsive($size: 24, $override-line-height: 1);
   display: inline-flex;

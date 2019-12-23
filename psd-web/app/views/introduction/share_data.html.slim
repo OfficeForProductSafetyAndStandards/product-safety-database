@@ -5,16 +5,17 @@
 .app-inverted.app-inverted--card
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
-      h1.govuk-heading-l Share national data to improve product safety in the UK
-      p.govuk-body-l
+      h1.govuk-heading-l.app-heading-l--inverted
+        | Share national data to improve product safety in the UK
+      p.govuk-body-l.app-body-l--inverted
         | The information shared in the Product safety database can only be
           seen by other market surveillance authorities (MSAs).
 
-      p.govuk-body-l class="govuk-!-margin-bottom-3"
+      p.govuk-body-l.app-body-l--inverted class="govuk-!-margin-bottom-3"
         | Collaborating and sharing data in this way means you can see when
           other MSAs have:
 
-      ul.govuk-list.govuk-list--bullet.govuk-body-l
+      ul.govuk-list.govuk-list--bullet.govuk-body-l.app-body-l--inverted
         li raised concerns about the safety of a product
         li tested a product and shared the results
 
@@ -22,7 +23,7 @@
         class: "govuk-button app-button--inverted app-button--l \
         govuk-!-margin-right-3 govuk-!-margin-bottom-3",
         role: "button", draggable: false
-      p class="govuk-body-l app-body--adjacent-to-button app-body--adjacent-to-button--l govuk-!-margin-bottom-0"
+      p class="govuk-body-l app-body-l--inverted app-body--adjacent-to-button app-body--adjacent-to-button--l govuk-!-margin-bottom-0"
         ' or
         = link_to "read more information", help_about_path,
           class: "govuk-link app-link--inverted"

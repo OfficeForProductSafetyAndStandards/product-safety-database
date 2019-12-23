@@ -8,7 +8,7 @@
         .govuk-grid-row
           .govuk-grid-column-full
             .govuk-phase-banner
-              p.govuk-phase-banner__content
+              p.govuk-phase-banner__content.app-body--inverted
                 span.govuk-tag.govuk-phase-banner__content__tag.app-tag--inverted
                   | Beta
                 span.govuk-phase-banner__text
@@ -18,15 +18,16 @@
       main#main-content.app-main-class.govuk-main-wrapper[role="main"]
         .govuk-grid-row
           .govuk-grid-column-two-thirds-from-desktop
-            h1.govuk-heading-xl Product safety database
-            p.govuk-body-l
+            h1.govuk-heading-xl.app-heading-xl--inverted
+              | Product safety database
+            p.govuk-body-l.app-body-l--inverted
               | Report, track and share product safety information with the product safety community.
 
             = link_to "Sign in to your account",
                 keycloak_login_url(params[:request_path]),
                 class: "govuk-button govuk-button--start app-button--inverted",
                 role: "button", draggable: false
-            p.govuk-body
+            p.govuk-body.app-body--inverted
               | or&nbsp;
               = mail_to "opss.enquiries@beis.gov.uk", "email OPSS",
                 class: "govuk-link app-link--inverted"

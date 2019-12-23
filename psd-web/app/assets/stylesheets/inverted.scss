@@ -1,13 +1,13 @@
 // Blue card styles - used by masthead and intro slides
 
-.app-inverted {
+.app-inverted,
+.app-body--inverted,
+.app-body-l--inverted,
+.app-heading-m--inverted,
+.app-heading-l--inverted,
+.app-heading-xl--inverted {
   color: govuk-colour("white");
   background-color: govuk-colour("blue");
-
-  * {
-    color: govuk-colour("white");
-  }
-
 }
 
 // Inverted button styles from
