@@ -17,7 +17,7 @@ $timeline-item-margin-bottom: 20px;
       top: 0;
       left: 0;
       bottom: -$timeline-item-margin-bottom;
-      border-left: 4px solid govuk-colour("grey-1");
+      border-left: 4px solid govuk-colour("dark-grey");
       height: calc(100% + #{$timeline-item-margin-bottom});
     }
 
@@ -25,7 +25,7 @@ $timeline-item-margin-bottom: 20px;
       margin: 4px 0 $timeline-item-margin-bottom 25px;
       position: relative;
       display: block;
-      border-bottom: 1px solid govuk-colour("grey-3");
+      border-bottom: 1px solid govuk-colour("light-grey");
 
       &:not(:last-child) {
         @include govuk-responsive-padding(4, "bottom");
@@ -36,7 +36,7 @@ $timeline-item-margin-bottom: 20px;
         border: none;
 
         &:before {
-          background-color: govuk-colour("grey-2");
+          background-color: govuk-colour("mid-grey");
         }
       }
 
@@ -47,7 +47,7 @@ $timeline-item-margin-bottom: 20px;
         height: 10px;
         border-radius: 50%;
         background-color: govuk-colour("white");
-        border: 4px solid govuk-colour("grey-1");
+        border: 4px solid govuk-colour("dark-grey");
         position: absolute;
         z-index: 2;
         left: -32px;

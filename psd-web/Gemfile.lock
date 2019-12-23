@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: 24cc0682ebd5c0e9dd003c830b099315f9b9c332
-  tag: 0.0.1
+  revision: 30fb7f9262de7ba965e2533a48ce85082a01503c
+  tag: 0.5.0
   specs:
-    govuk-design-system-rails (1.0.0)
+    govuk-design-system-rails (0.5.0)
 
 GIT
   remote: https://github.com/randym/axlsx.git
