@@ -2,6 +2,9 @@ class CorrectiveAction < ApplicationRecord
   include DateConcern
   include SanitizationHelper
 
+  MEASURE_TYPES = %w[mandatory voluntary].freeze
+  DURATION_TYPES = %w[permanent temporary unknown].freeze
+
   attribute :related_file
 
   belongs_to :investigation
@@ -19,10 +22,17 @@ class CorrectiveAction < ApplicationRecord
   validates :related_file, presence: { message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
 
+  validates :measure_type, presence: true, inclusion: { in: MEASURE_TYPES }
+  validates :duration, presence: true, inclusion: { in: DURATION_TYPES }
+  validates :geographic_scope, presence: true, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }
+
   validates_length_of :summary, maximum: 10000
   validates_length_of :details, maximum: 50000
 
   after_create :create_audit_activity
+
+
+private
 
   def date_decided_cannot_be_in_the_future
     if date_decided.present? && date_decided > Time.zone.today
