@@ -9,6 +9,5 @@ module ActiveStorage
     def title
       object.metadata[:title] || object.filename.to_s
     end
-
   end
 end
