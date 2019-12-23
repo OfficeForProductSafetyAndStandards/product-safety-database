@@ -1,6 +1,6 @@
 ruby:
   restricted = !can_be_displayed?(document, parent)
-  title = restricted ? document_restricted_title : document.metadata[:title]
+  title = restricted ? document_restricted_title : document.title
   safe = document.metadata["safe"]
   document = document.decorate
 
@@ -20,12 +20,12 @@ ruby:
 
     - if safe
       = link_with_hidden_text_to "View #{pretty_type_description(document)}",
-          "#{document.metadata[:title]}, opens in a new window", document,
+          "#{title}, opens in a new window", document,
           class: "govuk-link app-block-link govuk-!-margin-right-3",
             target: '_blank', rel: 'noopener'
       = link_with_hidden_text_to "Edit #{image_document_text(document)}",
-          document.metadata[:title], edit_associated_document_path(parent, document),
+          title, edit_associated_document_path(parent, document),
           class: "govuk-link app-block-link govuk-!-margin-right-3"
       = link_with_hidden_text_to "Remove #{image_document_text(document)}",
-          document.metadata[:title], remove_associated_document_path(parent, document),
+          title, remove_associated_document_path(parent, document),
           class: "govuk-link app-block-link"

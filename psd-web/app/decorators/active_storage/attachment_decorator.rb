@@ -5,5 +5,10 @@ module ActiveStorage
     def description
       h.simple_format(object.description)
     end
+
+    def title
+      object.metadata[:title] || object.filename.to_s
+    end
+
   end
 end
