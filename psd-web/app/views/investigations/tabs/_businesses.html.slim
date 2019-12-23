@@ -18,23 +18,10 @@
     - @investigation.investigation_businesses.each do |ib|
       h2.govuk-heading-m
         = ib.relationship.titleize
-
       = business_summary_list ib.business
-
-      - view_business_link_content = capture do
-        | View business
-        span.govuk-visually-hidden
-          = " (" + ib.business.trading_name + ")"
-
-      = link_to view_business_link_content, ib.business,
-        class: "govuk-link app-block-link govuk-!-margin-right-3"
-
-      - remove_business_link_content = capture do
-        | Remove business
-        span.govuk-visually-hidden
-          = " (" + ib.business.trading_name + ")"
-
-      = link_to remove_business_link_content,
+      = link_with_hidden_text_to "View business", ib.business.trading_name,
+        ib.business, class: "govuk-link app-block-link govuk-!-margin-right-3"
+      = link_with_hidden_text_to "Remove business", ib.business.trading_name,
         remove_investigation_business_path(@investigation, ib.business),
         class: "govuk-link app-block-link govuk-!-margin-right-3"
 
