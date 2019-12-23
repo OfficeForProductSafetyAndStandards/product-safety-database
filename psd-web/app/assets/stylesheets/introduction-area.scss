@@ -1,0 +1,94 @@
+// Blue card styles - used by masthead and intro slides
+
+// Inverted button styles from
+// https://github.com/alphagov/govuk-design-system/blob/master/src/stylesheets/components/_inverted-button.scss
+$button-shadow-size: $govuk-border-width-form-element;
+$app-button-inverted-background-colour: govuk-colour("white");
+$app-button-inverted-foreground-colour: govuk-colour("blue");
+$app-button-inverted-shadow-colour: govuk-shade($app-button-inverted-foreground-colour, 30%);
+$app-button-inverted-hover-background-colour: govuk-tint($app-button-inverted-foreground-colour, 90%);
+
+.app-button--inverted,
+.app-button--inverted:link,
+.app-button--inverted:visited {
+  color: $app-button-inverted-foreground-colour;
+  background-color: $app-button-inverted-background-colour;
+  box-shadow: 0 $button-shadow-size 0 $app-button-inverted-shadow-colour;
+}
+
+.app-button--inverted:hover {
+  color: $app-button-inverted-foreground-colour;
+  background-color: $app-button-inverted-hover-background-colour;
+}
+
+.app-button--inverted:focus:not(:hover) {
+  color: $govuk-focus-text-colour;
+  background-color: $govuk-focus-colour;
+}
+
+.app-button--inverted:active,
+.app-button--inverted:focus {
+  border-color: $govuk-focus-colour;
+  color: $app-button-inverted-foreground-colour;
+  background-color: $app-button-inverted-hover-background-colour;
+  box-shadow: inset 0 0 0 2px $govuk-focus-colour;
+}
+
+// Blue styles adapted from
+// https://github.com/alphagov/govuk-design-system/blob/master/src/stylesheets/components/_masthead.scss
+
+// Unlike the design system, we're restyling govuk components so they should "just work"
+// in the view.
+.app-introduction-area {
+  color: govuk-colour("white");
+  background-color: govuk-colour("blue");
+
+  * {
+    color: govuk-colour("white");
+  }
+
+  .govuk-button {
+    @extend .app-button--inverted;
+
+    // Bigger, bolder buttons no intro slides
+    // Below styles from gouuk-button--start
+    @include govuk-typography-weight-bold;
+    @include govuk-typography-responsive($size: 24, $override-line-height: 1);
+    display: inline-flex;
+    min-height: auto;
+    justify-content: center;
+  }
+
+  .govuk-link {
+    color: govuk-colour("white");
+
+    &:visited,
+    &:active {
+      color: govuk-colour("white");
+    }
+
+    &:hover {
+      color: $app-button-inverted-hover-background-colour;
+    }
+
+  }
+
+  .govuk-tag {
+    background-color: govuk-colour("white");
+    color: govuk-colour("blue");
+  }
+
+}
+
+// PSD homepage (not signed-in)
+.app-masthead {
+  @extend .app-introduction-area;
+  @include govuk-responsive-padding(6, "bottom");
+}
+
+// Introduction slides
+.app-introduction-card {
+  @extend .app-introduction-area;
+  margin-top: -15px; //override govuk-main-wrapper
+  @include govuk-responsive-padding(9);
+}

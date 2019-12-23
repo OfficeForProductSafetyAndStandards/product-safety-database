@@ -5,7 +5,6 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 
 @import "autocomplete";
 @import "badge";
-@import "stylesheets/intro-card";
 @import "stylesheets/text";
 @import "stylesheets/cookie-banner";
 @import "stylesheets/remove-default-button-styling";
@@ -15,12 +14,12 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/case-card";
 @import "stylesheets/documents";
 @import "stylesheets/email_display";
-@import "stylesheets/flashcard";
 @import "stylesheets/footer";
 @import "stylesheets/form";
 @import "stylesheets/header";
 @import "stylesheets/helpers/media-queries";
 @import "stylesheets/images";
+@import "stylesheets/introduction-area";
 @import "stylesheets/teams";
 @import "stylesheets/pagination";
 @import "stylesheets/search-box";
@@ -30,7 +29,6 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/timeline";
 @import "stylesheets/psd_header";
 @import "stylesheets/sub_nav";
-@import "landing_masthead";
 
 // Pages
 @import "stylesheets/investigation";
