@@ -2,14 +2,14 @@
   meta[name="robots" content="noindex,nofollow"]
 
 - content_for :masthead
-  .app-masthead
+  .app-masthead.app-inverted.app-inverted--masthead
     - if @show_full_phase_banner
       .govuk-width-container
         .govuk-grid-row
           .govuk-grid-column-full
             .govuk-phase-banner
               p.govuk-phase-banner__content
-                span.govuk-tag.govuk-phase-banner__content__tag
+                span.govuk-tag.govuk-phase-banner__content__tag.app-tag--inverted
                   | Beta
                 span.govuk-phase-banner__text
                   | This is a new service – your feedback will help us to improve it.
@@ -22,9 +22,12 @@
             p.govuk-body-l
               | Report, track and share product safety information with the product safety community.
 
-            = link_to "Sign in to your account", keycloak_login_url(params[:request_path]),
-                class: "govuk-button govuk-button--start", role: "button", draggable: false
+            = link_to "Sign in to your account",
+                keycloak_login_url(params[:request_path]),
+                class: "govuk-button govuk-button--start app-button--inverted",
+                role: "button", draggable: false
             p.govuk-body
               | or&nbsp;
-              = mail_to "opss.enquiries@beis.gov.uk", "email OPSS", class: "govuk-link"
+              = mail_to "opss.enquiries@beis.gov.uk", "email OPSS",
+                class: "govuk-link app-link--inverted"
               | &nbsp;if you think you should have access

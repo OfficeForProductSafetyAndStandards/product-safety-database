@@ -2,7 +2,7 @@
 - content_for :after_header do
   = render "skip_introduction"
 
-.app-introduction-card
+.app-inverted.app-inverted--card
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       h1.govuk-heading-l The Product safety database replaces the EU’s RAPEX and ICSMS systems
@@ -19,4 +19,5 @@
           relevant product safety legislation as soon as possible.
 
       = link_to "Continue", introduction_track_investigations_path,
-              class: "govuk-button app-button--l", role: "button", draggable: false
+              class: "govuk-button app-button--inverted app-button--l \
+              govuk-!-margin-bottom-0", role: "button", draggable: false

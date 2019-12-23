@@ -2,7 +2,7 @@
 - content_for :after_header do
   = render "skip_introduction"
 
-.app-introduction-card
+.app-inverted.app-inverted--card
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       h1.govuk-heading-l Report, track and share product safety information
@@ -11,4 +11,5 @@
           Standards, the Office for Product Safety and Standards (OPSS), and
           other market surveillance authorities (MSAs).
       = link_to "Continue", introduction_report_products_path,
-      class: "govuk-button app-button--l", role: "button", draggable: false
+          class: "govuk-button app-button--inverted app-button--l \
+          govuk-!-margin-bottom-0", role: "button", draggable: false

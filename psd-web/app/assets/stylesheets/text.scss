@@ -67,7 +67,7 @@ h6 {
   }
 }
 
-.app-body--adjacent-to-button-l {
+.app-body--adjacent-to-button--l {
   @include govuk-media-query( $from: tablet ) {
     margin-top: 8px; // to match padding on large buttons
   }
