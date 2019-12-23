@@ -62,6 +62,13 @@ h6 {
 }
 
 .app-body--adjacent-to-button {
-  display: inline-block;
-  margin-top: 8px; // to match padding on large buttons
+  @include govuk-media-query( $from: tablet ) {
+    display: inline-block;
+  }
+}
+
+.app-body--adjacent-to-button-l {
+  @include govuk-media-query( $from: tablet ) {
+    margin-top: 8px; // to match padding on large buttons
+  }
 }

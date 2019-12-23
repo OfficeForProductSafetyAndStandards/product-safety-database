@@ -49,22 +49,18 @@ $app-button-inverted-hover-background-colour: govuk-tint($app-button-inverted-fo
 
   .govuk-button {
     @extend %app-button--inverted;
-
-    // Bigger, bolder buttons no intro slides
-    // Below styles from gouuk-button--start
-    @include govuk-typography-weight-bold;
-    @include govuk-typography-responsive($size: 24, $override-line-height: 1);
-    display: inline-flex;
-    min-height: auto;
-    justify-content: center;
   }
 
   .govuk-link {
     color: govuk-colour("white");
 
-    &:visited,
-    &:active {
+    &:active,
+    &:visited, {
       color: govuk-colour("white");
+    }
+
+    &:focus, &:hover:focus {
+      color: $govuk-text-colour;
     }
 
     &:hover {
@@ -82,13 +78,13 @@ $app-button-inverted-hover-background-colour: govuk-tint($app-button-inverted-fo
 
 // PSD homepage (not signed-in)
 .app-masthead {
-  @extend .app-introduction-area;
+  @extend %app-introduction-area;
   @include govuk-responsive-padding(6, "bottom");
 }
 
 // Introduction slides
 .app-introduction-card {
-  @extend .app-introduction-area;
+  @extend %app-introduction-area;
   margin-top: -15px; //override govuk-main-wrapper
   @include govuk-responsive-padding(9);
 }
