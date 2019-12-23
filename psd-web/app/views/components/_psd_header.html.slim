@@ -9,7 +9,7 @@
   enough real estate, but are always semantically presented as part of the nav
 
 - attributes = (local_assigns[:attributes] || {})
-header.psd-header *attributes class=local_assigns[:classes] role="banner" data-module="header"
+header.psd-header *attributes class=local_assigns[:classes] role="banner" data-module="govuk-header"
   .psd-header__container class=(local_assigns[:containerClasses] || "govuk-width-container")
     .psd-header__logo
       a.psd-header__link.psd-header__link--homepage href=(local_assigns[:containerClasses] || "/")
@@ -74,7 +74,7 @@ header.psd-header *attributes class=local_assigns[:classes] role="banner" data-m
           a.psd-header__link.psd-header__link--service-name href=local_assigns[:serviceUrl]
             = local_assigns[:serviceName]
         - if has_nav
-          button.psd-header__menu-button.js-header-toggle [
+          button.psd-header__menu-button.govuk-js-header-toggle [
             aria-controls="navigation"
             aria-label="Show or hide Top Level Navigation"
             role="button"
