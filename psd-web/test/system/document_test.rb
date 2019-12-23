@@ -72,7 +72,7 @@ class DocumentTest < ApplicationSystemTestCase
 
   test "should allow to delete a document" do
     get_to_attachments
-    click_on "Remove document"
+    find("a", text: "Remove document").click
     click_on "Delete attachment"
     click_on "Attachments"
     assert_no_text "long document"
@@ -97,7 +97,7 @@ class DocumentTest < ApplicationSystemTestCase
 
   test "should create activity when removing a document" do
     get_to_attachments
-    click_on "Remove document"
+    find("a", text: "Remove document").click
     click_on "Delete attachment"
     click_on "Activity"
     assert_text "Document deleted"
@@ -105,7 +105,7 @@ class DocumentTest < ApplicationSystemTestCase
 
   def get_to_edit
     get_to_attachments
-    click_on "Edit document"
+    find("a", text: "Edit document").click
     assert_text "Edit document details"
   end
 
