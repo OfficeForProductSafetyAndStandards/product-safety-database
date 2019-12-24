@@ -22,9 +22,12 @@ class CorrectiveAction < ApplicationRecord
   validates :related_file, presence: { message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
 
-  validates :measure_type, presence: true, inclusion: { in: MEASURE_TYPES }
-  validates :duration, presence: true, inclusion: { in: DURATION_TYPES }
-  validates :geographic_scope, presence: true, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }
+  validates :measure_type, presence: true
+  validates :measure_type, inclusion: { in: MEASURE_TYPES }, if: -> { measure_type.present? }
+  validates :duration, presence: true
+  validates :duration, inclusion: { in: DURATION_TYPES }, if: -> { duration.present? }
+  validates :geographic_scope, presence: true
+  validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
 
   validates_length_of :summary, maximum: 10000
   validates_length_of :details, maximum: 50000
