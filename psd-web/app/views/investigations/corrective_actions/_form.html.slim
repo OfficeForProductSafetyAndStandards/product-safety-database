@@ -64,6 +64,7 @@
          form: form,
          is_autocomplete: true,
          show_all_values: true,
+         formGroup: { classes: "govuk-!-width-one-half" },
          label: { text: "What is the geographic scope of the action?", classes: "govuk-label--m" }
 
 = render "form_components/govuk_textarea", key: :details, form: form, attributes: { maxlength: 50000 },
