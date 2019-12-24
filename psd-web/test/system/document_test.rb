@@ -105,7 +105,7 @@ class DocumentTest < ApplicationSystemTestCase
 
   def get_to_edit
     get_to_attachments
-    find_link(text: /^Edit document/).click
+    find_link(text: "Edit document").click
     assert_text "Edit document details"
   end
 
