@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "~> 2.5.5"
 
-gem "will_paginate", "3.2.1" # Must be laoded before elasticsearch gems
+gem "will_paginate", "~> 3.2" # Must be laoded before elasticsearch gems
 
 gem "active_hash", "2.2.1"
 gem "aws-sdk-s3", "1.43.0"
@@ -43,6 +43,7 @@ gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk
 
 # rubocop:disable Metrics/BlockLength
 group :development, :test do
+  gem "awesome_print", require: "ap"
   gem "brakeman"
   gem "byebug"
   gem "capybara"

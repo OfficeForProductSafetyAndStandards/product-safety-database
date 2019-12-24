@@ -16,7 +16,7 @@ ruby:
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Date created
       span = "#{time_ago_in_words(investigation.created_at)} ago"
-  - elsif sorted_by == "recent" || sorted_by == "oldest"
+  - elsif sorted_by == "recent" || sorted_by == "oldest" || sorted_by == "relevance"
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Last updated
       span = "#{time_ago_in_words(investigation.updated_at)} ago"

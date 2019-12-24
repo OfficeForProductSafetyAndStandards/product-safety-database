@@ -37,7 +37,7 @@ module InvestigationElasticsearch
             only: %i[legal_name trading_name company_number]
           },
           products: {
-            only: %i[category description name product_code product_type]
+            only: %i[category description name product_code product_type batch_number]
           },
           complainant: {
             only: %i[name phone_number email_address other_details]

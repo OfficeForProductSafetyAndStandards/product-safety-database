@@ -226,11 +226,4 @@ private
       ).deliver_later
     end
   end
-
-
-  require_dependency "investigation/allegation"
-  require_dependency "investigation/project"
-  require_dependency "investigation/enquiry"
 end
-
-Investigation.import force: true if Rails.env.development? # for auto sync model with elastic search

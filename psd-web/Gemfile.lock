@@ -71,6 +71,7 @@ GEM
     ansi (1.5.0)
     arel (9.0.0)
     ast (2.4.0)
+    awesome_print (1.8.0)
     aws-eventstream (1.0.3)
     aws-partitions (1.228.0)
     aws-sdk-core (3.72.0)
@@ -467,6 +468,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_hash (= 2.2.1)
+  awesome_print
   aws-sdk-s3 (= 1.43.0)
   axlsx!
   axlsx_rails
@@ -531,7 +533,7 @@ DEPENDENCIES
   webmock
   webpacker (= 4.2.2)
   wicked
-  will_paginate (= 3.2.1)
+  will_paginate (~> 3.2)
 
 RUBY VERSION
    ruby 2.5.7p206

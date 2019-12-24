@@ -17,6 +17,8 @@ module InvestigationsHelper
       { created_at: "desc" }
     when "oldest"
       { updated_at: "asc" }
+    when "relevance"
+      {}
     else
       { updated_at: "desc" }
     end
