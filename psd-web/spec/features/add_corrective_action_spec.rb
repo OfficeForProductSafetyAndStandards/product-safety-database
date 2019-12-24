@@ -116,7 +116,7 @@ RSpec.feature "Adding a correcting action to a case", :with_keycloak_config, :wi
     expect(item).to have_text("Legislation: #{legislation}")
     expect(item).to have_text("Date came into effect: #{date.strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
-    expect(item).to have_text("Action in place: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
+    expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")

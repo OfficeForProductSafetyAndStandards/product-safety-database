@@ -297,7 +297,7 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
-    expect(item).to have_text("Action in place: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
+    expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
     expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
     expect(item).to have_text("Attached: #{File.basename(action[:file])}")
     expect(item).to have_text(action[:details])
