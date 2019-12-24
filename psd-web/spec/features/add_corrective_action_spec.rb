@@ -93,7 +93,7 @@ RSpec.feature "Adding a correcting action to a case", :with_keycloak_config, :wi
     expect(page.find("th", text: "Attachment", match: :prefer_exact)).to have_sibling("td", text: File.basename(file))
     expect(page.find("th", text: "Attachment description")).to have_sibling("td", text: file_description)
     expect(page.find("th", text: "Type of measure")).to have_sibling("td", text: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
-    expect(page.find("th", text: "Corrective action in place")).to have_sibling("td", text: CorrectiveAction.human_attribute_name("duration.#{duration}"))
+    expect(page.find("th", text: "Duration of action")).to have_sibling("td", text: CorrectiveAction.human_attribute_name("duration.#{duration}"))
     expect(page.find("th", text: "Geographic scope")).to have_sibling("td", text: geographic_scope)
   end
 

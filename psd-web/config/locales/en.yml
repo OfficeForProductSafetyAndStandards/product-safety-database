@@ -141,7 +141,7 @@ en:
           mandatory: "Mandatory"
           voluntary: "Voluntary"
         duration:
-          one: "Corrective action in place"
+          one: "Duration of action"
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"

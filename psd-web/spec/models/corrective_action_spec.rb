@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
-  let(:corrective_action) {
+  subject {
     build(:corrective_action,
           summary: summary,
           date_decided_day: date_decided ? date_decided.day : nil,
@@ -25,11 +25,9 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
   let(:related_file) { "No" }
 
   describe "#valid?" do
-    subject { corrective_action.valid? }
-
     context "with valid input" do
       it "returns true" do
-        expect(subject).to be true
+        expect(subject).to be_valid
       end
     end
 
@@ -37,7 +35,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:summary) { nil }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -45,7 +43,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:summary) { Faker::Lorem.characters(number: 10001) }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -53,7 +51,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:details) { nil }
 
       it "returns true" do
-        expect(subject).to be true
+        expect(subject).to be_valid
       end
     end
 
@@ -61,7 +59,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:details) { Faker::Lorem.characters(number: 50001) }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -69,7 +67,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:date_decided) { nil }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -77,7 +75,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:date_decided) { Faker::Date.forward(days: 14) }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -85,7 +83,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:date_decided) { nil }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -93,7 +91,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:measure_type) { nil }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -101,7 +99,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:measure_type) { "test" }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -109,7 +107,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:duration) { nil }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -117,7 +115,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:duration) { "test" }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -125,7 +123,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:geographic_scope) { nil }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -133,7 +131,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       let(:geographic_scope) { "test" }
 
       it "returns false" do
-        expect(subject).to be false
+        expect(subject).not_to be_valid
       end
     end
 
@@ -142,16 +140,16 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
 
       context "without an attached file" do
         it "returns false" do
-          expect(subject).to be false
+          expect(subject).not_to be_valid
         end
       end
 
       context "with an attached file" do
         let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
-        before { corrective_action.documents.attach(io: File.open(file), filename: "test.txt") }
+        before { subject.documents.attach(io: File.open(file), filename: "test.txt") }
 
         it "returns true" do
-          expect(subject).to be true
+          expect(subject).to be_valid
         end
       end
     end
@@ -159,7 +157,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
 
   describe "#create_audit_activity" do
     it "creates an activity" do
-      expect { corrective_action.save }.to change { AuditActivity::CorrectiveAction::Add.count }.by(1)
+      expect { subject.save }.to change { AuditActivity::CorrectiveAction::Add.count }.by(1)
     end
   end
 end
