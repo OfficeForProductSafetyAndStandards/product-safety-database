@@ -11,6 +11,15 @@ services:
     ports:
       - 5432:5432
 
+  antivirus:
+    image: beisopss/antivirus:master
+    env_file:
+      - ./docker/env.antivirus
+    environment:
+      - PORT=3006
+    ports:
+      - "3006:3006"
+
   keycloak:
     image: beisopss/keycloak:master
     env_file:

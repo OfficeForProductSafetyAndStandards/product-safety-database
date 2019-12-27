@@ -17,6 +17,7 @@ class CreateEnquiryTest < ApplicationSystemTestCase
     ).decorate
 
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     visit new_enquiry_path
   end
 

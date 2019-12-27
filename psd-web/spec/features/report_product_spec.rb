@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch do
+RSpec.feature "Reporting a product", :with_keycloak_config, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   before { sign_in as_user: create(:user, :activated, :opss_user, has_viewed_introduction: true) }
 
   let(:reference_number) { Faker::Number.number(digits: 10) }

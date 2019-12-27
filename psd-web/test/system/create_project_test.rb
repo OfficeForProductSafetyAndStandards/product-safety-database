@@ -4,6 +4,7 @@ class CreateProjectTest < ApplicationSystemTestCase
   setup do
     @project = Investigation::Project.new(description: "new project description", user_title: "project title")
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     visit new_project_path
   end
 
