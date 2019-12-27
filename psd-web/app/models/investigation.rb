@@ -234,4 +234,4 @@ private
   require_dependency "investigation/enquiry"
 end
 
-# Investigation.import force: true if Rails.env.development? # for auto sync model with elastic search
+Investigation.import force: true if Rails.env.development? # for auto sync model with elastic search

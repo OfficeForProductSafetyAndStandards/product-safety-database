@@ -31,5 +31,5 @@
 
       = render "components/govuk_date_input", form: form, key: :correspondence_date, id: 'asdas',
               fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date sent" } },
-              items: itens_for_govuk_date_input(form, :correspondence_date)
+              items: items_for_govuk_date_input(form, :correspondence_date)
       = form.submit "Continue", class: "govuk-button"

@@ -16,7 +16,7 @@ module ApplicationHelper
     rc.render(sanitized_input).html_safe # rubocop:disable Rails/OutputSafety
   end
 
-  def itens_for_govuk_date_input(form, attribute)
+  def items_for_govuk_date_input(form, attribute)
     dom_class = dom_class(form.object)
     name = ->(i) { "#{dom_class}[#{attribute}](#{i}i))" }
     id = ->(i) { "#{dom_class}_#{attribute}_#{i}i" }
