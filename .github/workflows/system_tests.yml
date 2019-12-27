@@ -93,6 +93,9 @@ jobs:
         PGHOST: localhost
         PGUSER: postgres
         RAILS_ENV: test
+        ANTIVIRUS_URL: ${{ secrets.AntivirusUrl }}
+        ANTIVIRUS_USERNAME: ${{ secrets.AntivirusUsername }}
+        ANTIVIRUS_PASSWORD: ${{ secrets.AntivirusPassword }}
       run: |
         cd psd-web
         bin/rails db:setup
