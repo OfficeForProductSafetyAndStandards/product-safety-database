@@ -12,6 +12,8 @@
               classes: "govuk-!-width-two-thirds",
               hint: { text: "Name" },
               label: { text: "Who was the meeting with?", classes: "govuk-label--m" }
-      = render "form_components/govuk_date_input", form: form, key: :correspondence_date,
+      = render "components/govuk_date_input", form: form, key: :correspondence_date,
+              id: dom_id(form.object),
               fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date of meeting" } }
+              items: items_for_govuk_date_input(form, :correspondence_date)
       = form.submit "Continue", class: "govuk-button"

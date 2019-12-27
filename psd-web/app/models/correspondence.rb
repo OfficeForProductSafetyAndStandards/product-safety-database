@@ -9,7 +9,8 @@ class Correspondence < ApplicationRecord
   validates :email_address, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }, on: :context
   validates_length_of :details, maximum: 50000
   validate :date_cannot_be_in_the_future
-
+  validates_presence_of :correspondence_date
+  validate :check_correspondance_date
   has_many_attached :documents
 
   enum contact_method: {
@@ -36,6 +37,15 @@ class Correspondence < ApplicationRecord
   end
 
 private
+
+  def check_correspondance_date
+    date = read_attribute_before_type_cast(:correspondence_date)
+    return unless date
+
+    Date.parse(read_attribute_before_type_cast(:correspondence_date))
+  rescue ArgumentError
+    errors.add(:correspondence_date, :invalid)
+  end
 
   def can_be_seen_by_current_user?
     return true if activity&.source&.user_has_gdpr_access?
