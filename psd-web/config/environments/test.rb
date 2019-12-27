@@ -51,4 +51,6 @@ Rails.application.configure do
   }
 
   config.action_mailer.default_url_options = { host: "test" }
+
+  config.active_job.queue_adapter = :inline
 end
