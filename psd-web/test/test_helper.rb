@@ -15,7 +15,7 @@ require "rails/test_help"
 require "rspec/mocks/standalone"
 
 # Added Webmock only to allow use of stub_request - Minitest suite is deprecated
-require 'webmock/minitest'
+require "webmock/minitest"
 WebMock.allow_net_connect!
 
 class ActiveSupport::TestCase
