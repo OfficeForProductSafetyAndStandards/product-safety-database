@@ -1,6 +1,6 @@
 RSpec.shared_context "with stubbed Antivirus API", shared_context: :metadata do
   before do
-    antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://antivirus")
+    antivirus_url = Rails.application.config.antivirus_url
     stubbed_response = JSON.generate(safe: true)
     stub_request(:any, /#{Regexp.quote(antivirus_url)}/).to_return(body: stubbed_response, status: 200)
   end
