@@ -37,6 +37,6 @@ module ProductSafetyDatabase
 
     config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"
 
-    config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://antivirus")
+    config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
   end
 end
