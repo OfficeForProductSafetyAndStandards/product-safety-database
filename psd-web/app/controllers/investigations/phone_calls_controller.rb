@@ -4,6 +4,10 @@ class Investigations::PhoneCallsController < Investigations::CorrespondenceContr
 
 private
 
+  def set_correspondence
+    @correspondence = @investigation.correspondence_phone_calls.build(correspondence_params)
+  end
+
   def audit_class
     AuditActivity::Correspondence::AddPhoneCall
   end

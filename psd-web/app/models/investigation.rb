@@ -40,6 +40,9 @@ class Investigation < ApplicationRecord
   has_many :corrective_actions, dependent: :destroy
   has_many :correspondences, dependent: :destroy
   has_many :correspondence_emails, dependent: :destroy, class_name: "Correspondence::Email"
+  has_many :correspondence_phone_calls, dependent: :destroy, class_name: "Correspondence::PhoneCall"
+  has_many :correspondence_meetings, dependent: :destroy, class_name: "Correspondence::Meeting"
+
   has_many :tests, dependent: :destroy
   has_many :alerts, dependent: :destroy
 

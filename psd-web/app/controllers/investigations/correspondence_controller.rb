@@ -54,10 +54,6 @@ private
     @investigation = investigation.decorate
   end
 
-  def set_correspondence
-    @correspondence = @investigation.correspondences.build(correspondence_params)
-  end
-
   def store_correspondence
     session[correspondence_params_key] = @correspondence.attributes if @correspondence.valid?(step)
   end

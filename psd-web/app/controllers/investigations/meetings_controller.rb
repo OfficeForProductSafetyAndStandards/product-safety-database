@@ -4,6 +4,10 @@ class Investigations::MeetingsController < Investigations::CorrespondenceControl
 
 private
 
+  def set_correspondence
+    @correspondence = @investigation.correspondence_meetings.build(correspondence_params)
+  end
+
   def audit_class
     AuditActivity::Correspondence::AddMeeting
   end
