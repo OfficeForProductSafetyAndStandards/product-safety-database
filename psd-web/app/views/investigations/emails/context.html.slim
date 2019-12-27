@@ -30,7 +30,7 @@
               items: [{ text: "No", value: "false" }, { text: "Yes", value: "true" }]
 
       = render "components/govuk_date_input", form: form, key: :correspondence_date,
-              id: dom_id(form.object),
+              id: dom_id(form.object, :correspondence_date),
               fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date sent" } },
               items: items_for_govuk_date_input(form, :correspondence_date)
       = form.submit "Continue", class: "govuk-button"

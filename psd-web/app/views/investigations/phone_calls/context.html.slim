@@ -24,7 +24,7 @@
               items: [{ text: "No", value: "false" }, { text: "Yes", value: "true" }]
 
       = render "form_components/govuk_date_input", form: form, key: :correspondence_date,
-              id: dom_id(form.object),
+              id: dom_id(form.object, :correspondence_date),
               fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date of call" } }
               items: items_for_govuk_date_input(form, :correspondence_date)
       .govuk-form-group
