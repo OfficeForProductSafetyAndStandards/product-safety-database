@@ -16,6 +16,7 @@ class CreateAllegationTest < ApplicationSystemTestCase
     )
 
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     visit new_allegation_path
   end
 

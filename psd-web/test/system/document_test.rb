@@ -4,6 +4,7 @@ class DocumentTest < ApplicationSystemTestCase
   include UrlHelper
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
 
     visit new_investigation_new_path(load_case(:no_products))
   end
