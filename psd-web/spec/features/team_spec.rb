@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Your team page", type: :feature, with_keycloak_config: true do
+RSpec.feature "Your team page", :with_keycloak_config do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team]) }
 

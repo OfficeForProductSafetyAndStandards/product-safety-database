@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Sending a product safety alert", type: :feature, with_keycloak_config: true, with_stubbed_elasticsearch: true do
+RSpec.feature "Sending a product safety alert", :with_keycloak_config, :with_stubbed_elasticsearch do
   let(:user) { create(:user, :activated, :opss_user) }
   let(:investigation) { create(:allegation) }
 

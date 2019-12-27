@@ -3,6 +3,7 @@ require "application_system_test_case"
 class InvestigationBusinessTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     @investigation = load_case(:one)
     @business = businesses(:three)
     @business.source = sources(:business_three)
