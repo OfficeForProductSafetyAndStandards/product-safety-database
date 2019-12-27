@@ -37,14 +37,20 @@ private
 
     params.require(correspondence_params_key).permit(
       :correspondent_name,
+      :correspondent_date,
       :email_address,
       :email_direction,
       :overview,
       :details,
       :email_subject,
       :attachment_description,
-      :has_consumer_info
+      :has_consumer_info,
+      :type
     )
+  end
+
+  def set_correspondence
+    @correspondence = @investigation.correspondence_emails.build(correspondence_params)
   end
 
   def set_attachments

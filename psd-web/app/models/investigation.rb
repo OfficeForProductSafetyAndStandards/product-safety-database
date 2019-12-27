@@ -39,6 +39,7 @@ class Investigation < ApplicationRecord
 
   has_many :corrective_actions, dependent: :destroy
   has_many :correspondences, dependent: :destroy
+  has_many :correspondence_emails, dependent: :destroy, class_name: "Correspondence::Email"
   has_many :tests, dependent: :destroy
   has_many :alerts, dependent: :destroy
 
@@ -233,4 +234,4 @@ private
   require_dependency "investigation/enquiry"
 end
 
-Investigation.import force: true if Rails.env.development? # for auto sync model with elastic search
+# Investigation.import force: true if Rails.env.development? # for auto sync model with elastic search

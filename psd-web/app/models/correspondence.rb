@@ -1,5 +1,4 @@
 class Correspondence < ApplicationRecord
-  include DateConcern
   include SanitizationHelper
   belongs_to :investigation, optional: true
   has_one :activity, dependent: :destroy
@@ -10,8 +9,6 @@ class Correspondence < ApplicationRecord
   validates :email_address, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }, on: :context
   validates_length_of :details, maximum: 50000
   validate :date_cannot_be_in_the_future
-
-  date_attribute :correspondence_date
 
   has_many_attached :documents
 
