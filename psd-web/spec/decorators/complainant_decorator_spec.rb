@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe ComplainantDecorator, :with_keycloak_config do
-  let(:complainant) { build(:complainant) }
+RSpec.describe ComplainantDecorator do
+  let(:complainant) { build(:complainant, investigation: nil) }
 
   subject { complainant.decorate }
 
