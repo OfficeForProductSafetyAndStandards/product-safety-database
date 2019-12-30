@@ -64,8 +64,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     fill_in_context_form
     click_button "Continue"
-    attach_file("correspondence_email[email_attachment][file]", Rails.root + "test/fixtures/files/#{attachment_filename}")
+    attach_file("correspondence_email[email_attachment]", Rails.root + "test/fixtures/files/#{attachment_filename}")
     fill_in_content_form
+
     click_button "Continue"
 
     assert_text(attachment_filename)

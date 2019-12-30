@@ -30,7 +30,7 @@
         = render "form_components/govuk_textarea", key: :details, form: form, attributes: { maxlength: 50000 },
                 label: { text: "Body" }
 
-      = render "related_attachment_fields", form: form,
+      = render "attachment_fields", form: form,
               file_blob: @email_attachment_blob, attachment_name: :email_attachment, title: "Attachments"
 
       = form.submit "Continue", class: "govuk-button"

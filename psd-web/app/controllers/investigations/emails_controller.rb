@@ -1,8 +1,37 @@
 class Investigations::EmailsController < Investigations::CorrespondenceController
   set_file_params_key :correspondence_email
   set_attachment_names :email_file, :email_attachment
+  skip_before_action :set_correspondence, only: [:show, :create]
+  skip_before_action :store_correspondence, only: :create
+
+  def show
+    @correspondence = @investigation.correspondence_emails.build(session_params)
+    render_wizard
+  end
+
+  def update
+    @correspondence = @investigation.correspondence_emails.find_or_initialize_by(session_params)
+    pp correspondence_email_params
+    @correspondence.assign_attributes(correspondence_email_params)
+    @correspondence.save!
+    byebug
+    if @correspondence.email_file.attached?
+
+    end
+    pp @correspondence
+    super
+  end
+
+  def create
+    @correspondence = @investigation.correspondence_emails.build(session_params)
+    super
+  end
 
 private
+
+  def session_params
+    session[:correspondence_email] || {}
+  end
 
   def audit_class
     AuditActivity::Correspondence::AddEmail
@@ -14,8 +43,8 @@ private
 
   def common_file_metadata
     {
-        title: correspondence_params["overview"],
-        has_consumer_info: correspondence_params["has_consumer_info"]
+        title: session_params["overview"],
+        has_consumer_info: session_params["has_consumer_info"]
     }
   end
 
@@ -32,13 +61,12 @@ private
         .merge(common_file_metadata)
   end
 
-  def request_params
-    return {} if params[correspondence_params_key].blank?
-
-    params.require(correspondence_params_key).permit(
+  def correspondence_email_params
+    params.require(:correspondence_email).permit(
+      :correspondence_date,
       :correspondent_name,
-      :correspondent_date,
       :email_address,
+      :email_attachment,
       :email_direction,
       :overview,
       :details,
@@ -50,16 +78,16 @@ private
   end
 
   def set_correspondence
-    @correspondence = @investigation.correspondence_emails.build(correspondence_params)
+    @correspondence = @investigation.correspondence_emails.build(session_params)
   end
 
   def set_attachments
-    @email_file_blob, @email_attachment_blob = load_file_attachments
+    # @email_file_blob, @email_attachment_blob = load_file_attachments
   end
 
   def update_attachments
-    update_blob_metadata @email_file_blob, email_file_metadata
-    update_blob_metadata @email_attachment_blob, email_attachment_metadata
+    # update_blob_metadata @email_file_blob, email_file_metadata
+    # update_blob_metadata @email_attachment_blob, email_attachment_metadata
   end
 
   def correspondence_valid?
