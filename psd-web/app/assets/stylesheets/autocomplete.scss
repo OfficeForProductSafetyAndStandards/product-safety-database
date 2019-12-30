@@ -135,7 +135,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.autocomplete-select-with-clear {
+// Don't apply to select
+.js-enabled .autocomplete-select-with-clear {
   width: calc(100% - 44px);
   display: inline-block;
 }
