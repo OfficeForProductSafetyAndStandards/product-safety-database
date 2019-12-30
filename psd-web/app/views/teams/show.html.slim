@@ -18,7 +18,7 @@
             = link_to html, resend_invitation_team_path(email_address: user.email),
             method: :put, class: "text-align: right"
           h3.teams--user-contact
-            - if user.name
+            - if user.name.present?
               span.govuk-heading-s.teams--user-name = user.name
             '
             span.govuk-caption-m.teams--user-email = user.email
