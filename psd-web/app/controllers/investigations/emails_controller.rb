@@ -2,7 +2,6 @@ class Investigations::EmailsController < Investigations::CorrespondenceControlle
   set_file_params_key :correspondence_email
   set_attachment_names :email_file, :email_attachment
   skip_before_action :set_correspondence, only: [:show, :create]
-  skip_before_action :store_correspondence, only: :create
 
   def show
     @correspondence = @investigation.correspondence_emails.build(session_params)
@@ -10,15 +9,9 @@ class Investigations::EmailsController < Investigations::CorrespondenceControlle
   end
 
   def update
-    @correspondence = @investigation.correspondence_emails.find_or_initialize_by(session_params)
-    pp correspondence_email_params
-    @correspondence.assign_attributes(correspondence_email_params)
-    @correspondence.save!
-    byebug
-    if @correspondence.email_file.attached?
-
-    end
-    pp @correspondence
+    @correspondence = @investigation.correspondence_emails.build(session_params)
+    @correspondence.assign_attributes(request_params)
+    store_correspondence
     super
   end
 
@@ -61,7 +54,7 @@ private
         .merge(common_file_metadata)
   end
 
-  def correspondence_email_params
+  def request_params
     params.require(:correspondence_email).permit(
       :correspondence_date,
       :correspondent_name,
@@ -82,12 +75,12 @@ private
   end
 
   def set_attachments
-    # @email_file_blob, @email_attachment_blob = load_file_attachments
+    @email_file_blob, @email_attachment_blob = load_file_attachments
   end
 
   def update_attachments
-    # update_blob_metadata @email_file_blob, email_file_metadata
-    # update_blob_metadata @email_attachment_blob, email_attachment_metadata
+    update_blob_metadata @email_file_blob, email_file_metadata
+    update_blob_metadata @email_attachment_blob, email_attachment_metadata
   end
 
   def correspondence_valid?
