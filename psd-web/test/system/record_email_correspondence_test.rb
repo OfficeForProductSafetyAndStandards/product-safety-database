@@ -28,7 +28,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "validates date format" do
-    fill_in "correspondence_email[correspondence_date][day]", with: "333"
+    fill_in "correspondence_email[correspondence_date(3i)]", with: "333"
     click_on "Continue"
     assert_text "must include a month and year"
   end
