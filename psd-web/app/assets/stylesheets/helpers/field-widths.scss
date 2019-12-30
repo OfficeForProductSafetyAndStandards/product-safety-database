@@ -13,10 +13,9 @@
   // Assumes all autocompletes are default size.
   @include govuk-font(19);
 
-  // Make sure
   & .govuk-select,
-    .autocomplete__wrapper,
-    .autocomplete-select-with-clear {
+  .autocomplete__wrapper,
+  .autocomplete-select-with-clear {
     max-width: $max-width !important;
   }
 
