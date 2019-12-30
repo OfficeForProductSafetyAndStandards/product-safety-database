@@ -29,7 +29,7 @@
 
   // Widths chosen by eye to correspond to govuk widths at desktop 960px.
 
-  .app-\!-input--max-width-three-quarters {
+  .app-\!-max-width-three-quarters {
     max-width: 50ex !important;
   }
 
@@ -37,7 +37,7 @@
     @include autocomplete-set-width(50ex);
   }
 
-  .app-\!-input--max-width-two-thirds {
+  .app-\!-max-width-two-thirds {
     max-width: 44ex !important;
   }
 
@@ -45,7 +45,7 @@
     @include autocomplete-set-width(44ex);
   }
 
-  .app-\!-input--max-width-one-half {
+  .app-\!-max-width-one-half {
     max-width: 33ex !important;
   }
 
@@ -53,7 +53,7 @@
     @include autocomplete-set-width(33ex);
   }
 
-  .app-\!-input--max-width-one-third {
+  .app-\!-max-width-one-third {
     max-width: 22ex !important;
   }
 
@@ -61,7 +61,7 @@
     @include autocomplete-set-width(22ex);
   }
 
-  .app-\!-input--max-width-one-quarter {
+  .app-\!-max-width-one-quarter {
     max-width: 17ex !important;
   }
 
