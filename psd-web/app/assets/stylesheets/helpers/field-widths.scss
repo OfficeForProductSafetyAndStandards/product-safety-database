@@ -14,9 +14,12 @@
   @include govuk-font(19);
 
   // Make sure
-  & .govuk-select, .autocomplete__wrapper, .autocomplete-select-with-clear {
+  & .govuk-select,
+    .autocomplete__wrapper,
+    .autocomplete-select-with-clear {
     max-width: $max-width !important;
   }
+
   // Unset where clear button is used
   & .autocomplete-select-with-clear .autocomplete__wrapper {
     max-width: inherit !important;
