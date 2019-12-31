@@ -42,7 +42,10 @@ module CorrectiveActionsConcern
                                               :legislation,
                                               :summary,
                                               :details,
-                                              :related_file)
+                                              :related_file,
+                                              :measure_type,
+                                              :duration,
+                                              :geographic_scope)
   end
 
   def corrective_action_file_metadata

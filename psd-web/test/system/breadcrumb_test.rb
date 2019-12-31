@@ -3,6 +3,7 @@ require "application_system_test_case"
 class BreadcrumbTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     @investigation_products = load_case(:search_related_products).decorate
     @product = @investigation_products.products.first
     @investigation_businesses = load_case(:search_related_businesses).decorate

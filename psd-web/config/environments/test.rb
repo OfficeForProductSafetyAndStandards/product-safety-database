@@ -49,4 +49,8 @@ Rails.application.configure do
     host: ENV["HTTP_HOST"] || "localhost",
     port: ENV["HTTP_PORT"] || 3001
   }
+
+  config.action_mailer.default_url_options = { host: "test" }
+
+  config.active_job.queue_adapter = :inline
 end

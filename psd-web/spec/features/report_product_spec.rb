@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch do
+RSpec.feature "Reporting a product", :with_keycloak_config, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   before { sign_in as_user: create(:user, :activated, :opss_user, has_viewed_introduction: true) }
 
   let(:reference_number) { Faker::Number.number(digits: 10) }
@@ -51,7 +51,10 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
         legislation: Rails.application.config.legislation_constants["legislation"].sample,
         details: Faker::Lorem.sentence,
         file: Rails.root + "test/fixtures/files/old_risk_assessment.txt",
-        file_description: Faker::Lorem.paragraph
+        file_description: Faker::Lorem.paragraph,
+        measure_type: CorrectiveAction::MEASURE_TYPES.sample,
+        duration: CorrectiveAction::DURATION_TYPES.sample,
+        geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"].sample,
       }
     }
 
@@ -172,59 +175,74 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     risk_assessments.each { |assessment| expect_case_activity_page_to_show_risk_assessment(assessment) }
   end
 
+  def expect_no_error_messages
+    expect(page).not_to have_error_messages
+  end
+
   def expect_to_be_on_product_page
     expect(page).to have_current_path("/ts_investigation/product")
     expect(page).to have_selector("h1", text: "What product are you reporting?")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_why_reporting_page
     expect(page).to have_current_path("/ts_investigation/why_reporting")
     expect(page).to have_selector("h1", text: "Why are you reporting this product?")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_supply_chain_page
     expect(page).to have_current_path("/ts_investigation/which_businesses")
     expect(page).to have_selector("h1", text: "Supply chain information")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_business_details_page(title)
     expect(page).to have_current_path("/ts_investigation/business")
     expect(page).to have_selector("h1", text: "#{title} details")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_corrective_action_taken_page
     expect(page).to have_current_path("/ts_investigation/has_corrective_action")
     expect(page).to have_selector("h1", text: "Has any corrective action been agreed or taken?")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_record_corrective_action_page
     expect(page).to have_current_path("/ts_investigation/corrective_action")
     expect(page).to have_selector("h1", text: "Record corrective action")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_other_information_page
     expect(page).to have_current_path("/ts_investigation/other_information")
     expect(page).to have_selector("h1", text: "Other information and files")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_test_result_details_page
     expect(page).to have_current_path("/ts_investigation/test_results")
     expect(page).to have_selector("h1", text: "Test result details")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_risk_assessment_details_page
     expect(page).to have_current_path("/ts_investigation/risk_assessments")
     expect(page).to have_selector("h1", text: "Risk assessment details")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_reference_number_page
     expect(page).to have_current_path("/ts_investigation/reference_number")
     expect(page).to have_selector("h1", text: "Add your own reference number")
+    expect_no_error_messages
   end
 
   def expect_to_be_on_case_created_page
     expect(page).to have_current_path(/\/cases\/([\d-]+)\/created/)
     expect(page).to have_selector("h1", text: "Case created")
+    expect_no_error_messages
     expect(page).to have_text(/Case ID: ([\d-]+)/)
     expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type} has now been assigned to you")
   end
@@ -260,7 +278,7 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     expected_address = business.slice(:address_1, :address_2, :postcode, :country).values.join(", ")
     expected_contact = business.slice(:contact_name, :contact_job_title, :contact_phone, :contact_email).values.join(", ")
 
-    section = page.find("h3", text: label).find("+dl")
+    section = page.find("h2", text: label).find("+dl")
     expect(section.find("dt", text: "Trading name")).to have_sibling("dd", text: business[:trading_name])
     expect(section.find("dt", text: "Registered or legal name")).to have_sibling("dd", text: business[:legal_name])
     expect(section.find("dt", text: "Company number")).to have_sibling("dd", text: business[:company_number])
@@ -277,7 +295,11 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: action[:summary]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
-    expect(item).to have_text("Date decided: #{action[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
+    expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
+    expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
+    expect(item).to have_text("Attached: #{File.basename(action[:file])}")
     expect(item).to have_text(action[:details])
   end
 
@@ -351,10 +373,14 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     select with[:legislation], from: "Under which legislation?"
-    fill_in "Further details", with: with[:details]
+    fill_in "Further details (optional)", with: with[:details]
     choose "corrective_action_related_file_yes"
     attach_file "corrective_action[file][file]", with[:file]
     fill_in "Attachment description", with: with[:file_description]
+    choose "corrective_action_measure_type_#{with[:measure_type]}"
+    choose "corrective_action_duration_#{with[:duration]}"
+    select with[:geographic_scope], from: "What is the geographic scope of the action?"
+
     choose "corrective_action_further_corrective_action_yes"
     click_button "Continue"
   end
