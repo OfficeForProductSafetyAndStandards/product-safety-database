@@ -69,11 +69,13 @@ RSpec.feature "Adding an attachment to a case", :with_keycloak_config, :with_stu
   def expect_to_be_on_add_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
   end
 
   def expect_to_be_on_enter_attachment_details_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
     expect(page).to have_selector("h3", text: "Document details")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
   end
 
   def expect_to_be_on_case_overview_page

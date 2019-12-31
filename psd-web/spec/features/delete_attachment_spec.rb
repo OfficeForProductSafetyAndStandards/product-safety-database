@@ -38,8 +38,9 @@ RSpec.feature "Deleting an attachment from a case", :with_keycloak_config, :with
   end
 
   def expect_to_be_on_remove_attachment_confirmation_page
-    expect(page).to have_current_path("/investigation/allegation/#{investigation.pretty_id}/documents/#{document.id}/remove")
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
   end
 
   def expect_to_be_on_case_overview_page

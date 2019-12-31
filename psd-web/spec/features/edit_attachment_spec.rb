@@ -30,6 +30,7 @@ RSpec.feature "Editing an attachment on a case", :with_keycloak_config, :with_st
   def expect_to_be_on_edit_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.to_param}/edit")
     expect(page).to have_selector("h2", text: "Edit document details")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
   end
 
   def expect_case_attachments_page_to_show_entered_information
