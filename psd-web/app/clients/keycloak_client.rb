@@ -61,18 +61,29 @@ end
 class KeycloakClient
   include Singleton
 
-  def initialize
-    # The gem we're using has its api split across these three classes
+  def client
+    return @client if @client
+
     @client = Keycloak::Client
-    @admin = Keycloak::Admin
-    @internal = Keycloak::Internal
     @client.get_installation
-    super
+    @client
+  end
+
+  def admin
+    @admin ||= Keycloak::Admin
+  end
+
+  def internal
+    @internal ||= Keycloak::Internal
+  end
+
+  def reset
+    @client = @admin = @internal = nil
   end
 
   def all_users
     # KC defaults to max:100, while we need all users. 1000000 seems safe, at least for the time being
-    users = @internal.get_users(max: 1000000)
+    users = internal.get_users(max: 1000000)
 
     user_groups = all_user_groups
 
@@ -101,55 +112,55 @@ class KeycloakClient
   end
 
   def login_url(redirect_uri)
-    @client.url_login_redirect(redirect_uri)
+    client.url_login_redirect(redirect_uri)
   end
 
   def user_account_url
-    @client.url_user_account
+    client.url_user_account
   end
 
   def exchange_code_for_token(code, redirect_uri)
-    @client.get_token_by_code(code, redirect_uri)
+    client.get_token_by_code(code, redirect_uri)
   end
 
   def exchange_refresh_token_for_token(refresh_token)
-    @client.get_token_by_refresh_token(refresh_token)
+    client.get_token_by_refresh_token(refresh_token)
   end
 
   def logout(refresh_token)
-    @client.logout("", refresh_token)
+    client.logout("", refresh_token)
   end
 
   def user_signed_in?(access_token)
-    @client.user_signed_in?(access_token)
+    client.user_signed_in?(access_token)
   end
 
   def user_info(access_token)
-    response = @client.get_userinfo(access_token)
+    response = client.get_userinfo(access_token)
     user = JSON.parse(response)
     { id: user["sub"], email: user["email"], groups: user["groups"], name: user["given_name"] }
   end
 
   def get_user_roles(user_id)
-    roles = JSON.parse(@internal.get_user_roles(user_id))
+    roles = JSON.parse(internal.get_user_roles(user_id))
     roles.map { |role| role["name"].to_sym }
   end
 
   def add_user_to_team(user_id, group_id)
-    @internal.add_user_group user_id, group_id
+    internal.add_user_group user_id, group_id
   end
 
   def create_user(email)
-    @internal.create_user email: email, username: email, enabled: true
+    internal.create_user email: email, username: email, enabled: true
   end
 
   def get_user(email)
-    JSON.parse(@internal.get_users(email: email)).first.symbolize_keys
+    JSON.parse(internal.get_users(email: email)).first.symbolize_keys
   end
 
   def send_required_actions_welcome_email(user_id, redirect_uri)
     required_actions = %w(sms_auth_check_mobile UPDATE_PASSWORD UPDATE_PROFILE VERIFY_EMAIL)
-    @internal.execute_actions_email user_id, required_actions, "psd-app", redirect_uri
+    internal.execute_actions_email user_id, required_actions, "psd-app", redirect_uri
   end
 
 private

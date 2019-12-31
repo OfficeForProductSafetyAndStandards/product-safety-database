@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Alert, with_keycloak_config: true do
+RSpec.describe Alert do
   describe "#send_alert_email" do
     subject(:alert) { described_class.new(summary: "test", description: "test") }
 

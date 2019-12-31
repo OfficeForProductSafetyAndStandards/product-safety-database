@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Assigning an investigation", :with_keycloak_config, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team]) }
   let(:investigation) { create(:allegation, assignee: user) }
