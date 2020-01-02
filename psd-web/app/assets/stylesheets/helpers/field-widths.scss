@@ -1,74 +1,32 @@
-// Widths are contstant rather than being % of column so that
-// they relate to the size of the content they contain. Not set
-// on mobile breakpoint so they go full width there to match
-// other GOV.UK services.
-
-// Autocompletes need a wrapper width to be set rather than on
-// input directly
-// In the future it would be better to add a specific wrapper on
-// autocompletes instead.
-@mixin autocomplete-set-width($max-width) {
-
-  // Explicitly set size so ex units work
-  // Assumes all autocompletes are default size.
-  @include govuk-font(19);
-
-  & .govuk-select,
-  .autocomplete__wrapper,
-  .autocomplete-select-with-clear {
-    max-width: $max-width !important;
-  }
-
-  // Unset where clear button is used
-  & .autocomplete-select-with-clear .autocomplete__wrapper {
-    max-width: inherit !important;
-  }
-
-}
-
 // Custom width overrides so inputs can be fixed width regardless of resolution.
+
+// Widths are constant rather than being % of column so that
+// they relate to the size of the content they contain. Applies from tablet
+// breakpoint only so they go full width on mobile to match other GOV.UK
+// services.
 @include govuk-media-query($from: tablet) {
 
   // Widths chosen by eye to correspond to govuk widths at desktop 960px.
-
+  // Using ex to match govuk fixed width inputs, so they will scale acording
+  // to font size.
   .app-\!-max-width-three-quarters {
     max-width: 50ex !important;
-  }
-
-  .app-\!-autocomplete--max-width-three-quarters {
-    @include autocomplete-set-width(50ex);
   }
 
   .app-\!-max-width-two-thirds {
     max-width: 44ex !important;
   }
 
-  .app-\!-autocomplete--max-width-two-thirds {
-    @include autocomplete-set-width(44ex);
-  }
-
   .app-\!-max-width-one-half {
     max-width: 33ex !important;
-  }
-
-  .app-\!-autocomplete--max-width-one-half {
-    @include autocomplete-set-width(33ex);
   }
 
   .app-\!-max-width-one-third {
     max-width: 22ex !important;
   }
 
-  .app-\!-autocomplete--max-width-one-third {
-    @include autocomplete-set-width(22ex);
-  }
-
   .app-\!-max-width-one-quarter {
     max-width: 17ex !important;
-  }
-
-  .app-\!-autocomplete--max-width-one-quarter {
-    @include autocomplete-set-width(17ex);
   }
 
 }
