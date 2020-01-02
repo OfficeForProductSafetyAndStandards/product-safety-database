@@ -17,6 +17,7 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/footer";
 @import "stylesheets/form";
 @import "stylesheets/header";
+@import "stylesheets/helpers/field-widths";
 @import "stylesheets/helpers/media-queries";
 @import "stylesheets/images";
 @import "stylesheets/inverted";
