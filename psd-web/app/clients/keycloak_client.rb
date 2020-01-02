@@ -62,19 +62,24 @@ class KeycloakClient
   include Singleton
 
   def client
-    return @client if @client
-
-    @client = Keycloak::Client
-    @client.get_installation
-    @client
+    @client ||= begin
+      init_clients
+      @client
+    end
   end
 
   def admin
-    @admin ||= Keycloak::Admin
+    @admin ||= begin
+      init_clients
+      @admin
+    end
   end
 
   def internal
-    @internal ||= Keycloak::Internal
+    @internal ||= begin
+      init_clients
+      @internal
+    end
   end
 
   def reset
@@ -107,8 +112,8 @@ class KeycloakClient
   end
 
   def registration_url(redirect_uri)
-    params = URI.encode_www_form(client_id: Keycloak::Client.client_id, response_type: "code", redirect_uri: redirect_uri)
-    Keycloak::Client.auth_server_url + "/realms/#{Keycloak::Client.realm}/protocol/openid-connect/registrations?#{params}"
+    params = URI.encode_www_form(client_id: client.client_id, response_type: "code", redirect_uri: redirect_uri)
+    client.auth_server_url + "/realms/#{client.realm}/protocol/openid-connect/registrations?#{params}"
   end
 
   def login_url(redirect_uri)
@@ -165,23 +170,34 @@ class KeycloakClient
 
 private
 
+  # Keycloak::Admin depends on state in Keycloak::Client, so these cannot be
+  # defined independently.
+  #
+  def init_clients
+    @client = Keycloak::Client
+    @client.get_installation
+
+    @internal = Keycloak::Internal
+    @admin = Keycloak::Admin
+  end
+
   def group_attributes(group_id)
     cache_key = "keycloak_group_#{group_id}".to_sym
     response = Rails.cache.fetch(cache_key, expires_in: cache_period) do
-      Keycloak::Internal.get_group(group_id)
+      internal.get_group(group_id)
     end
     JSON.parse(response)["attributes"] || {}
   end
 
   def all_user_groups
-    response = Keycloak::Internal.get_user_groups(max: 1000000)
+    response = internal.get_user_groups(max: 1000000)
     JSON.parse(response).collect { |user| [user["id"], user["groups"]] }.to_h
   end
 
   def all_groups
     # KC has a default max for users of 100. The docs don't mention a default for groups, but for prudence
     # and ease of mind, we're ensuring a high-enough cap here, too
-    response = Keycloak::Internal.get_groups(max: 1000000)
+    response = internal.get_groups(max: 1000000)
     JSON.parse(response)
   end
 
