@@ -106,6 +106,8 @@ class ActiveSupport::TestCase
     allow(NotifyMailer).to receive(:investigation_updated).and_call_original
     allow(NotifyMailer).to receive(:investigation_created).and_call_original
     allow(NotifyMailer).to receive(:user_added_to_team).and_call_original
+
+    @keycloak_client_instance.reset
   end
 
   def stub_notify_mailer

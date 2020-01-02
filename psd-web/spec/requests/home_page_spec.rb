@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "HomePage", :with_keycloak_config, :with_elasticsearch do
+RSpec.describe "HomePage", :with_elasticsearch do
   context "when not signed in" do
     before do
       allow(KeycloakClient.instance).to receive(:user_signed_in?).and_return(false)

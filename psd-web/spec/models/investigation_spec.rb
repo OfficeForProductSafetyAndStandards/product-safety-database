@@ -2,7 +2,7 @@ require "rails_helper"
 
 # TODO: Refactor Investigation model to remove callback hell and dependency on User.current
 RSpec.shared_examples "an Investigation" do
-  describe "record creation", :with_stubbed_elasticsearch, :with_keycloak_config do
+  describe "record creation", :with_stubbed_elasticsearch do
     let(:user) { create(:user) }
     let(:investigation) { build(factory) }
 
@@ -28,7 +28,7 @@ RSpec.shared_examples "an Investigation" do
   # needed to improve the relevance of the results. We should then add
   # assertions that irrelevant records are *not* returned here.
   #
-  describe ".full_search", :with_elasticsearch, :with_keycloak_config, :with_stubbed_mailer do
+  describe ".full_search", :with_elasticsearch, :with_stubbed_mailer do
     let(:product) { create(:product_iphone) }
     let(:correspondence) { create(:correspondence) }
     let(:business) { create(:business) }
