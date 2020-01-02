@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Deleting an attachment from a case", :with_keycloak_config, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:user) { create(:user, :activated) }
   let(:investigation) { create(:allegation, :with_document, assignee: user) }
   let(:document) { investigation.documents.first }
