@@ -39,9 +39,9 @@
                  { key: "status_closed", value: "checked", unchecked_value: "unchecked", text: "Closed" }]
         = render "form_components/govuk_radios", form: form, key: :sort_by,
                 fieldset: { legend: { text: "Sort by", classes: "govuk-fieldset__legend--s" } },
-                items: [{ text: "Updated: recent", value: "recent", unchecked_value: "unchecked" },
-                        { text: "Updated: oldest", value: "oldest", unchecked_value: "unchecked" },
-                        { text: "Created: newest", value: "newest", unchecked_value: "unchecked" }]
+                items: [{ text: "Most recently updated", value: "recent", unchecked_value: "unchecked" },
+                        { text: "Least recently updated", value: "oldest", unchecked_value: "unchecked" },
+                        { text: "Most recently created", value: "newest", unchecked_value: "unchecked" }]
         = form.submit "Apply filters", name: nil, class: "govuk-button"
   .govuk-grid-column-three-quarters
     - if @results.any?
