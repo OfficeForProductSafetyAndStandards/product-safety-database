@@ -1,7 +1,7 @@
 - @parent = @parent.decorate
 - content_for :page_title, "Add attachment"
 - content_for :after_header do
-  = link_to "Back to #{@parent.pretty_description}", @parent, class: "govuk-back-link"
+  = link_to "Back to #{@parent.pretty_description}", path_for_model(@parent), class: "govuk-back-link"
 
 = form_with scope: :document, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
