@@ -1,4 +1,4 @@
-- content_for :page_title, "My teams"
+- content_for :page_title, "Invite a team member to #{@team.display_name}"
 - content_for :after_header do
   = link_to "Back", team_path(@team), class: "govuk-back-link"
 

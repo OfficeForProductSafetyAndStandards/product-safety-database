@@ -4,7 +4,7 @@
     h2.govuk-heading-m Contacts
     = link_to "Add contact", new_business_contact_path(@business)
 
-    hr.govuk-section-break.govuk-section-break--l
+    hr.govuk-section-break.govuk-section-break--m
 
     - if @business.contacts.any?
       - @business.contacts.each do |contact|
@@ -18,6 +18,6 @@
         class: "govuk-link psd-block-link"
         = link_to "Remove contact", remove_business_contact_path(@business, contact),
         class: "govuk-link psd-block-link"
-        p
+
     - else
-      p No contacts.
+      p.govuk-body No contacts

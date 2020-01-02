@@ -1,4 +1,5 @@
-- content_for :page_title, "View business"
+- content_for :page_title, "Business - #{@business.trading_name}"
+
 - content_for :after_header do
   = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
 
