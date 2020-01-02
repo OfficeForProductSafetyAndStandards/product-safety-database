@@ -48,7 +48,7 @@ RSpec.describe Team do
     end
   end
 
-  describe "#display_name", with_keycloak_config: true do
+  describe "#display_name" do
     subject(:team) { create(:team, organisation: organisation) }
 
     let(:organisation) { create(:organisation) }
