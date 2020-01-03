@@ -244,13 +244,13 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h1", text: "Case created")
     expect_no_error_messages
     expect(page).to have_text(/Case ID: ([\d-]+)/)
-    expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type} has now been assigned to you")
+    expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard has now been assigned to you")
   end
 
   def expect_case_details_page_to_show_entered_information
     expect(page).to have_selector("h1", text: "Overview")
 
-    expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type}")
+    expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard")
     expect(page).to have_text("Product reported because it is unsafe and non-compliant.")
 
     expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: reference_number)
