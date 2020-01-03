@@ -1,8 +1,8 @@
 class Investigation < ApplicationRecord
   class AllegationDecorator < InvestigationDecorator
     def title
-      title = build_title_from_products || ""
-      title << " – #{object.hazard_type}" if object.hazard_type.present?
+      title = build_title_from_products || "Allegation"
+      title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?
       title << " (no product specified)" if object.products.empty?
       title.presence || "Untitled case"
     end
@@ -17,7 +17,7 @@ class Investigation < ApplicationRecord
       return object.product_category.dup if object.products.empty?
 
       title_components = []
-      title_components << "#{object.products.length} Products" if object.products.length > 1
+      title_components << "#{object.products.length} products" if object.products.length > 1
       title_components << get_product_property_value_if_shared(:name)
       title_components << get_product_property_value_if_shared(:product_type)
       title_components.reject(&:blank?).join(", ")
