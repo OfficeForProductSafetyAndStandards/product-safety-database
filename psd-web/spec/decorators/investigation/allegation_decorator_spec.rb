@@ -18,7 +18,7 @@ RSpec.describe Investigation::AllegationDecorator do
           expect(allegation.decorate.title).to eq("iPhone XS MAX, phone – asphyxiation hazard")
         end
       end
-      context "with two produtcs" do
+      context "with two products" do
         context "with two common values" do
           let!(:allegation) { investigations :two_products_with_common_values }
 
@@ -40,7 +40,7 @@ RSpec.describe Investigation::AllegationDecorator do
     context "when no products are present on the case" do
       let(:allegation) { investigations :no_products_case_title }
 
-      it "has the corect title" do
+      it "has the correct title" do
         expect(subject.title).to eq("Alarms – asphyxiation hazard (no product specified)")
       end
     end
