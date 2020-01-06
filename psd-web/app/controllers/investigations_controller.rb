@@ -19,13 +19,14 @@ class InvestigationsController < ApplicationController
       format.xlsx do
         @answer = search_for_investigations
         @investigations = Investigation.eager_load(:complainant,
-                                                   :source,
-                                                   { products: :source },
-                                                   { activities: :source },
-                                                   { businesses: %i[locations source] },
-                                                   :corrective_actions,
-                                                   :correspondences,
-                                                   :tests).where(id: @answer.results.map(&:_id))
+                                                   :source).where(id: @answer.results.map(&:_id))
+
+        @activity_counts = Activity.group(:investigation_id).count
+        @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
+        @product_counts = InvestigationProduct.unscoped.group(:investigation_id).count
+        @corrective_action_counts = CorrectiveAction.group(:investigation_id).count
+        @correspondence_counts = Correspondence.group(:investigation_id).count
+        @test_counts = Test.group(:investigation_id).count
       end
     end
   end
