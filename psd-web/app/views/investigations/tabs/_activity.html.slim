@@ -1,12 +1,18 @@
-h1.govuk-heading-l
-  span.govuk-caption-l = @investigation.pretty_description
-  | Activity
+- page_heading = "Activity"
+- content_for :page_title, "#{page_heading} - #{@investigation.pretty_id}"
 
-p.govuk-body
-  = link_to "Add activity", new_investigation_activity_path(@investigation)
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
 
-hr.govuk-section-break.govuk-section-break--l
+    h1.govuk-heading-l
+      span.govuk-caption-l = @investigation.pretty_description
+      = page_heading
+
+    p.govuk-body
+      = link_to "Add activity", new_investigation_activity_path(@investigation)
+
+    hr.govuk-section-break.govuk-section-break--m
 
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
-  .govuk-grid-column-full
+  .govuk-grid-column-two-thirds-from-desktop
     = render "activities_summary", activities: @activities

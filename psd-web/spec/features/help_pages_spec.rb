@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Help pages", :with_keycloak_config do
+RSpec.feature "Help pages", :with_stubbed_keycloak_config do
   scenario "User signed out" do
     sign_out
 

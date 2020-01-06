@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   before { sign_in as_user: create(:user, :activated, :opss_user, has_viewed_introduction: true) }
 
   let(:reference_number) { Faker::Number.number(digits: 10) }
@@ -278,7 +278,7 @@ RSpec.feature "Reporting a product", :with_keycloak_config, :with_elasticsearch 
     expected_address = business.slice(:address_1, :address_2, :postcode, :country).values.join(", ")
     expected_contact = business.slice(:contact_name, :contact_job_title, :contact_phone, :contact_email).values.join(", ")
 
-    section = page.find("h3", text: label).find("+dl")
+    section = page.find("h2", text: label).find("+dl")
     expect(section.find("dt", text: "Trading name")).to have_sibling("dd", text: business[:trading_name])
     expect(section.find("dt", text: "Registered or legal name")).to have_sibling("dd", text: business[:legal_name])
     expect(section.find("dt", text: "Company number")).to have_sibling("dd", text: business[:company_number])

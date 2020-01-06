@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a correcting action to a case", :with_keycloak_config, :with_elasticsearch do
+RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:user) { create(:user, :activated) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignee: user) }
 

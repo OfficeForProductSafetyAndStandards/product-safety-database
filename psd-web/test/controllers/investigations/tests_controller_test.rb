@@ -3,6 +3,7 @@ require "test_helper"
 class TestsControllerTest < ActionDispatch::IntegrationTest
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     @investigation = load_case(:one)
     @product = products(:one)
   end

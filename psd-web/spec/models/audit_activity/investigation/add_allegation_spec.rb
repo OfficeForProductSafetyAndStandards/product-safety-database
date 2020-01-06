@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::AddAllegation, :with_stubbed_elasticsearch do
+RSpec.describe AuditActivity::Investigation::AddAllegation, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   let(:allegation) { create(:allegation) }
 
   subject do
@@ -15,7 +15,7 @@ RSpec.describe AuditActivity::Investigation::AddAllegation, :with_stubbed_elasti
 
   describe "#build_body" do
     it "stores the body" do
-      expect(subject.body).to eq("**Allegation details**<br><br>Hazard type: **#{allegation.hazard_type}**<br><br>#{allegation.description}")
+      expect(subject.body).to eq("**Allegation details**<br><br>Hazard type: **#{allegation.hazard_type}**<br><br>#{allegation.description}<br><br>Assigned to #{allegation.assignee.display_name}.")
     end
   end
 end

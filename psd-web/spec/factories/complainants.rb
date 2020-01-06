@@ -1,10 +1,11 @@
 FactoryBot.define do
   factory :complainant do
-    email_address { "test@example.com" }
-    name { "complainant name" }
-    other_details { "some details" }
-    phone_number { "1234567890" }
+    email_address { Faker::Internet.email(domain: "example") }
+    name { Faker::Name.name }
+    other_details { Faker::Lorem.paragraph }
+    phone_number { Faker::PhoneNumber.phone_number }
     complainant_type { Complainant::TYPES.keys.sample }
+    investigation
   end
 
   Complainant::TYPES.keys.each do |type|
