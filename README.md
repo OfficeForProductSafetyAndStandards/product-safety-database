@@ -43,7 +43,7 @@ if there are changes to the Docker config:
 
 
 ### Design system
-This project uses the [GOV.UK design system](https://design-system.service.gov.uk). The css and javascript are imported directly, and the macros have been ported as [rails compatible versions](https://github.com/UKGovernmentBEIS/govuk-design-system-rails).
+This project uses the [GOV.UK design system](https://design-system.service.gov.uk). The CSS and JavaScript assets are imported directly, and the macros have been ported as [Rails compatible components](https://github.com/UKGovernmentBEIS/govuk-design-system-rails).
 
 ### Mac tips
 
