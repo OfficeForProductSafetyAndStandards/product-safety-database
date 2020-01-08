@@ -60,12 +60,12 @@ html.govuk-template.app-html-class[lang="en"]
     - if content.present?
       .govuk-width-container
         = yield :after_header
-        - if alert
-          .govuk-error-summary[aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary"]
-            h2#error-summary-title.govuk-error-summary__title
-              = alert
-
         main#main-content.govuk-main-wrapper.app-main-class[role="main"]
+          - if alert
+            .govuk-error-summary[aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary"]
+              h2#error-summary-title.govuk-error-summary__title [
+              class="govuk-!-margin-bottom-1"]
+                = alert
           - %i[success information warning].each do |key|
             - if flash[key]
               = render "components/hmcts_banner", text: flash[key], type: key

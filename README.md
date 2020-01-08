@@ -1,11 +1,15 @@
-# Office for Product Safety & Standards Services
+# Product safety database
+
+Built by the [Office for Product Safety and Standards](https://www.gov.uk/government/organisations/office-for-product-safety-and-standards)
+
+For enquiries, contact [OPSS.enquiries@beis.gov.uk](OPSS.enquiries@beis.gov.uk)
 
 [![Build Status](https://travis-ci.org/UKGovernmentBEIS/beis-opss.svg?branch=master)](https://travis-ci.org/UKGovernmentBEIS/beis-opss)
 [![Coverage Status](https://coveralls.io/repos/github/UKGovernmentBEIS/beis-opss/badge.svg?branch=master)](https://coveralls.io/github/UKGovernmentBEIS/beis-opss?branch=master)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=UKGovernmentBEIS/beis-opss)](https://dependabot.com)
 
 
-## Getting Setup
+## Getting set up
 
 This project includes [git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules), so when running `git clone` you need to add the `--recurse-submodules` option.
 If you have already pulled, you can run `git submodule init` and then `git submodule update --recursive` instead.
@@ -39,7 +43,7 @@ if there are changes to the Docker config:
 
 
 ### Design system
-This project uses the [GOV.UK design system](https://design-system.service.gov.uk).
+This project uses the [GOV.UK design system](https://design-system.service.gov.uk). The CSS and JavaScript assets are imported directly, and the macros have been ported as [Rails compatible components](https://github.com/UKGovernmentBEIS/govuk-design-system-rails).
 
 ### Mac tips
 
