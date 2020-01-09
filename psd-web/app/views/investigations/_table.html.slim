@@ -2,7 +2,8 @@
   - if search_result[:record].present?
     - if policy(search_result[:record]).show?
       - if search_result.respond_to?("highlight")
-        = render "investigations/highlight_card", investigation: search_result[:record], highlights: search_result.highlight
+        = render "investigations/highlight_card", investigation: search_result[:record],\
+          highlights: search_result.highlight
       - else
         = render "investigations/case_card", investigation: search_result[:record], sorted_by: sorted_by
     - else
