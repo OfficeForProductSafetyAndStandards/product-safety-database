@@ -51,7 +51,6 @@ class ApplicationController < ActionController::Base
     if session[:previous_search_params].present?
       s = session[:previous_search_params]
       {
-        q: s[:q],
         assigned_to_me: s[:assigned_to_me],
         assigned_to_someone_else: s[:assigned_to_someone_else],
         assigned_to_someone_else_id: s[:assigned_to_someone_else_id],
@@ -64,8 +63,7 @@ class ApplicationController < ActionController::Base
         enquiry: s[:enquiry],
         project: s[:project],
         status_open: s[:status_open],
-        status_closed: s[:status_closed],
-        sort_by: s[:sort_by]
+        status_closed: s[:status_closed]
       }
     else
       {}

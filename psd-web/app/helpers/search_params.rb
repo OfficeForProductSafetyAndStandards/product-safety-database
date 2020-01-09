@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# This model is just a convenience wrapper for the relevant search query params, for use with FormHelper in the view.
 class SearchParams
   include ActiveModel::Model
 
@@ -39,14 +38,14 @@ class SearchParams
     end
   end
 
-  def sort_by_items
+  def sort_by_items(with_relevant_option: false)
     items = [
       { text: "Most recently updated",  value: RECENT, unchecked_value: "unchecked" },
       { text: "Least recently updated", value: OLDEST, unchecked_value: "unchecked" },
       { text: "Most recently created",  value: NEWEST, unchecked_value: "unchecked" }
     ]
 
-    if sort_by == RELEVANT
+    if with_relevant_option
       items.unshift(text: "Relevance", value: RELEVANT, unchecked_value: "unchecked")
     end
 

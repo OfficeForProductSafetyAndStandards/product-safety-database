@@ -12,7 +12,6 @@ module InvestigationsHelper
     @search = SearchParams.new(query_params)
   end
 
-
   def filter_params
     filters = {}
     filters.merge!(get_type_filter)
