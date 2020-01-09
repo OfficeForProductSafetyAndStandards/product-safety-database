@@ -22,6 +22,7 @@ applications:
     - opss-log-drain
     - psd-aws-env
     - psd-auth-env
+    - psd-email-whitelist-env
     - psd-health-env
     - psd-keycloak-env
     - psd-notify-env
