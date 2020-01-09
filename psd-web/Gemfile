@@ -55,6 +55,7 @@ group :development, :test do
   gem "listen"
   gem "m"
   gem "pry"
+  gem "pry-doc"
   gem "roo"
   gem "rspec-mocks"
   gem "rspec-rails"
