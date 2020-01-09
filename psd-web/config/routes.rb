@@ -68,8 +68,8 @@ Rails.application.routes.draw do
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 
-  resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
-            concerns: %i[document_attachable] do
+  resource :investigations, only: [] do
+    resource :search, only: :show
     member do
       get :status
       patch :status

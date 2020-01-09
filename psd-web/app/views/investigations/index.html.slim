@@ -16,7 +16,7 @@
 .govuk-grid-row
   .govuk-grid-column-one-quarter class="govuk-!-margin-bottom-2"
     div class="govuk-!-margin-bottom-0"
-      = form_with(model: @search, scope: "", url: investigations_path, method: :get) do |form|
+      = form_with(model: @search, scope: "", url: investigations_search_path, method: :get) do |form|
         .search-box
           = render "form_components/govuk_input", key: :q, form: form,
                   label: { text: "Keywords", classes: "govuk-label--s" }
@@ -41,17 +41,16 @@
                  fieldset: { legend: { text: "Status", classes: "govuk-fieldset__legend--s" } },
                  items: [{ key: "status_open", value: "checked", unchecked_value: "unchecked", text: "Open" },
                  { key: "status_closed", value: "checked", unchecked_value: "unchecked", text: "Closed" }]
+
         = render "form_components/govuk_radios", form: form, key: :sort_by,
                 classes: "govuk-radios--small",
                 fieldset: { legend: { text: "Sort by", classes: "govuk-fieldset__legend--s" } },
-                items: [{ text: "Relevance", value: "relevance", unchecked_value: "unchecked" },
-                        { text: "Most recently updated", value: "recent", unchecked_value: "unchecked" },
-                        { text: "Least recently updated", value: "oldest", unchecked_value: "unchecked" },
-                        { text: "Most recently created", value: "newest", unchecked_value: "unchecked" }]
+                items: @search.sort_by_items
+
         = form.submit "Apply filters", name: nil, class: "govuk-button"
   .govuk-grid-column-three-quarters
     - if @results.any?
-      = render "table", search_results: @results, sorted_by: query_params[:sort_by]
+      = render "investigations/table", search_results: @results, sorted_by: query_params[:sort_by]
       = will_paginate @investigations
 
       - if User.current.is_psd_admin?
