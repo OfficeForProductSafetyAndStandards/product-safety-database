@@ -9,6 +9,7 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, :wi
   before { create_list(:product, 18, created_at: 4.days.ago) }
 
   scenario "lists products according to search relevance" do
+    Product.import refresh: :wait_for
     sign_in(as_user: user)
     visit products_path
 
