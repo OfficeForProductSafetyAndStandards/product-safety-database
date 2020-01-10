@@ -9,7 +9,6 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, :wi
   before { create_list :business, 18, created_at: 4.days.ago }
 
   scenario "lists products according to search relevance" do
-    Business.import(refresh: :wait_for)
     sign_in(as_user: user)
     visit businesses_path
 
