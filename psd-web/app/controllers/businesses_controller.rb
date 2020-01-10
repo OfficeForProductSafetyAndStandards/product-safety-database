@@ -13,7 +13,7 @@ class BusinessesController < ApplicationController
   # GET /businesses
   # GET /businesses.json
   def index
-    @businesses = search_for_businesses(20).decorate
+    @businesses = search_for_businesses(20)
   end
 
   # GET /businesses/1
