@@ -36,10 +36,13 @@
 
   // will_paginate shows unnecessary text 'previous' and 'next'
   // even if you're on the first or last page.
+
+  // sass-lint:disable class-name-format
   .previous_page.disabled,
   .next_page.disabled {
     display: none;
   }
+  // sass-lint:enable class-name-format
 
 }
 
