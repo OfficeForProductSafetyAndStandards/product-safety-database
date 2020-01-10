@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Busisnesses listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config  do
+RSpec.describe "Busisnesses listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:user) { create :user, :activated }
 
   before { create_list :product, 21, created_at: 4.days.ago }
