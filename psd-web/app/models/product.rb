@@ -27,5 +27,3 @@ class Product < ApplicationRecord
     "Product: #{name}"
   end
 end
-
-Product.import force: true if Rails.env.development? # for auto sync model with elastic search

@@ -12,11 +12,11 @@ ruby:
   .govuk-grid-column-one-quarter
     span.govuk-caption-m[class="govuk-!-font-size-16"] Assigned to
     span = investigation.assignee ? investigation.assignee.assignee_short_name : "Unassigned"
-  - if sorted_by == SearcParams::NEWEST
+  - if sorted_by == SearchParams::NEWEST
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Date created
       span = "#{time_ago_in_words(investigation.created_at)} ago"
-  - elsif sorted_by == SearcParams::RECENT || SearcParams::OLDEST || sorted_by == SearcParams::RELEVANT
+  - elsif sorted_by == SearchParams::RECENT || SearchParams::OLDEST || sorted_by == SearchParams::RELEVANT
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Last updated
       span = "#{time_ago_in_words(investigation.updated_at)} ago"
