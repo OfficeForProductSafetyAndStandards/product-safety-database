@@ -145,7 +145,6 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
       context "searching by business number" do
         let(:query) { business.company_number }
 
-
         it_behaves_like "finds the relevant investigation"
       end
     end
