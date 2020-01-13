@@ -68,7 +68,7 @@ Rails.application.routes.draw do
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 
-  resource :investigations, only: [] do
+  resource :investigations, only: [], path: "cases" do
     resource :search, only: :show
   end
 
