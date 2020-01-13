@@ -58,13 +58,6 @@ module Searchable
       ]
     end
 
-    # TODO: These lines fix the issue of not updating the updated_at in Elasticsearch.
-    # Same issue is pointed out in the following link. We can remove it once that PR is merged.
-    # https://github.com/elastic/elasticsearch-rails/pull/703
-    after_update do |document|
-      document.__elasticsearch__.update_document_attributes updated_at: document.updated_at
-    end
-
     def self.full_search(query)
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
