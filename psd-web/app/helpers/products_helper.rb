@@ -11,17 +11,16 @@ module ProductsHelper
   end
 
   def search_for_products(page_size)
-    Product.full_search(search_query)
-      .records
-      .paginate(page: params[:page], per_page: page_size)
+    ProductDecorator.decorate_collection(
+      Product.full_search(search_query)
+        .page(params[:page]).per_page(page_size).records
+    )
   end
 
-  def sort_column
-    Product.column_names.include?(params[:sort]) ? params[:sort] : "name"
-  end
+  def sorting_params
+    return {} if params[:sort] == "relevance"
 
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    { created_at: :desc }
   end
 
   # If the user supplies a barcode then just return that.
