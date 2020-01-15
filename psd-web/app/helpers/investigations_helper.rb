@@ -8,8 +8,10 @@ module InvestigationsHelper
   end
 
   def set_search_params
+    params_to_save = params
+    params.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
     @search = SearchParams.new(query_params)
-    session[:previous_search_params] = query_params
+    session[:previous_search_params] = params_to_save
   end
 
   def filter_params
