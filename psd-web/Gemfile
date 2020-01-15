@@ -4,7 +4,7 @@ ruby "~> 2.5.5"
 
 gem "will_paginate", "3.2.1" # Must be laoded before elasticsearch gems
 
-gem "active_hash", "2.2.1"
+gem "active_hash", "3.1.0"
 gem "aws-sdk-s3", "1.43.0"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "axlsx_rails"
