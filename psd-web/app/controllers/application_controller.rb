@@ -63,6 +63,7 @@ class ApplicationController < ActionController::Base
         enquiry: s[:enquiry],
         project: s[:project],
         status_open: s[:status_open],
+        sort_by: s[:sort_by],
         status_closed: s[:status_closed]
       }
     else

@@ -10,9 +10,21 @@ class SearchParams
     RELEVANT = "relevant"
   ].freeze
 
-  attr_accessor :q, :sort, :direction, :status_open, :status_closed, :allegation, :enquiry, :project,
-                :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :created_by_me, :created_by_someone_else, :created_by_someone_else_id
-  attr_writer :sort_by
+  attr_accessor :allegation,
+                :assigned_to_me,
+                :assigned_to_someone_else,
+                :assigned_to_someone_else_id,
+                :created_by_me,
+                :created_by_someone_else,
+                :created_by_someone_else_id,
+                :direction,
+                :enquiry,
+                :project,
+                :q,
+                :sort,
+                :status_open,
+                :status_closed,
+                :sort_by
 
   def initialize(attributes = {})
     attributes.keys.each { |name| class_eval { attr_accessor name } } # Add any additional query attributes to the model

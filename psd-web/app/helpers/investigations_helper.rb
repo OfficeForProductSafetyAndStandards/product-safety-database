@@ -8,8 +8,8 @@ module InvestigationsHelper
   end
 
   def set_search_params
-    session[:previous_search_params] = params
     @search = SearchParams.new(query_params)
+    session[:previous_search_params] = @search.as_json
   end
 
   def filter_params
