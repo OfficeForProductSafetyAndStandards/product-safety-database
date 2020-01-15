@@ -48,5 +48,19 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     expect(page).
       to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
     expect(page.find("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")).to be_checked
+
+    expect(page.current_path).to eq(investigations_search_path)
+
+    fill_in "Keywords", with: ""
+    click_on "Apply filters"
+
+    expect(page).
+      to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_1_days_ago.pretty_description)
+    expect(page).
+      to have_css(".govuk-grid-row.psd-case-card:nth-child(2) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_2_days_ago.pretty_description)
+    expect(page).
+      to have_css(".govuk-grid-row.psd-case-card:nth-child(3) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
+
+    expect(page.current_path).to eq(investigations_path)
   end
 end

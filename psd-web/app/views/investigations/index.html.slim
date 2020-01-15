@@ -6,7 +6,8 @@
 
   .govuk-grid-column-three-quarters
     - if @investigations.any?
-      = render "investigations/table", investigations: @investigations, sorted_by: query_params[:sort_by]
+      = render partial: "investigations/table", collection: @investigations, as: :investigation,\
+         locals: { sorted_by: query_params[:sort_by] }
       = will_paginate @investigations
 
       - if User.current.is_psd_admin?

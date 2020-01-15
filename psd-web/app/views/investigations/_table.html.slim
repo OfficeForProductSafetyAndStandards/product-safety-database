@@ -1,5 +1,4 @@
-- investigations.each do |investigation|
-  - if policy(investigation).show?
-    = render "investigations/case_card", investigation: investigation.decorate, sorted_by: sorted_by
-  - else
-    = render "investigations/restricted_card", investigation: investigation.decorate
+- if policy(investigation).show?
+  = render "investigations/case_card", investigation: investigation.decorate, sorted_by: sorted_by
+- else
+  = render "investigations/restricted_card", investigation: investigation.decorate
