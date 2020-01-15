@@ -1,10 +1,10 @@
-.app-pagination {
+.pagination {
 
   @include govuk-responsive-margin(6, "bottom");
   @include govuk-responsive-margin(6, "top");
 
   // Direct children of pagination only
-  .pagination >* {
+  & > * {
     @include govuk-font(19);
     font-style: normal; //override emphasis styling
     display: inline-block;

@@ -19,7 +19,4 @@
           = form.submit "Search", name: nil, class: "search-box--submit"
   .govuk-grid-column-three-quarters
     = render "table", businesses: @businesses
-    - pagination = will_paginate @businesses
-    - if pagination.present?
-      nav.app-pagination aria-label="Pagination"
-        = pagination
+    = will_paginate @businesses
