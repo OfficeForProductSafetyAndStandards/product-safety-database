@@ -12,7 +12,6 @@ web_defaults: &web_defaults
   services:
     - opss-log-drain
     - psd-aws-env
-    - psd-auth-env
     - psd-database
     - psd-elasticsearch
     - psd-email-whitelist-env
