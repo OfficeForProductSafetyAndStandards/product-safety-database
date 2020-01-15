@@ -31,10 +31,6 @@ class SearchParams
     super(attributes)
   end
 
-  def sort_by
-    @sort_by || RECENT
-  end
-
   def sorting_params
     case sort_by
     when NEWEST
