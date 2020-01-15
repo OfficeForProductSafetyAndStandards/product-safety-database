@@ -54,6 +54,8 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     fill_in "Keywords", with: ""
     click_on "Apply filters"
 
+    expect(page).not_to have_css("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")
+
     expect(page).
       to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_1_days_ago.pretty_description)
     expect(page).
