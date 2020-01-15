@@ -42,8 +42,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active_hash (2.2.1)
-      activesupport (>= 5.0.0)
     activejob (5.2.3)
       activesupport (= 5.2.3)
       globalid (>= 0.3.6)
@@ -464,7 +462,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_hash (= 2.2.1)
   aws-sdk-s3 (= 1.43.0)
   axlsx!
   axlsx_rails
