@@ -1,4 +1,2 @@
-class Investigation < ApplicationRecord
-  class EnquiryDecorator < InvestigationDecorator
-  end
+class Investigation::EnquiryDecorator < InvestigationDecorator
 end

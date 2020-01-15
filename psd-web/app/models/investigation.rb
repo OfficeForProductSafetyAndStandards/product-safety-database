@@ -227,3 +227,7 @@ private
     end
   end
 end
+
+require_dependency "investigation/allegation"
+require_dependency "investigation/project"
+require_dependency "investigation/enquiry"
