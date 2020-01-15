@@ -3,7 +3,7 @@ class SearchesController < ApplicationController
 
   def show
     set_search_params
-    if @search.q.empty?
+    if @search.q.blank?
       redirect_to investigations_path(previous_search_params)
     else
       @answer = search_for_investigations(20)
