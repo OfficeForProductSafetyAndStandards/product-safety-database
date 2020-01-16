@@ -5,7 +5,7 @@ RSpec.feature "Help pages", :with_stubbed_keycloak_config do
     sign_out
 
     visit "/help/about"
-    expect(page).to have_text("Product safety database about page and guidance")
+    expect(page).to have_text("How to use the Product safety database")
     expect(page).to have_link("Sign in")
 
     visit "/help/privacy-notice"
