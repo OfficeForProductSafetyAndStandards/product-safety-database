@@ -66,11 +66,6 @@ fi
 # Unmap the temporary hostname from the new app
 cf unmap-route $NEW_APP $DOMAIN --hostname $NEW_HOSTNAME
 
-# Remove basic auth if we're deploying to production
-if [[ $SPACE == "prod" ]]; then
-    cf unbind-service $NEW_APP psd-auth-env
-fi
-
 # Map the live hostname to the new app
 cf set-env $NEW_APP PSD_HOST "$HOSTNAME.$DOMAIN"
 cf restart $NEW_APP

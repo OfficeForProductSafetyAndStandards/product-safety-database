@@ -36,7 +36,7 @@ gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.4.0"
-gem "webpacker", "4.2.0"
+gem "webpacker", "4.2.2"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.5.0", require: "govuk_design_system"
