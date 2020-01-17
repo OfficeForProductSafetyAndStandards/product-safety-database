@@ -16,7 +16,7 @@ We're using [Slim](http://slim-lang.com/) as our HTML templating language, ES6 J
 
 We're using [Sidekiq](https://github.com/mperham/sidekiq) as our background processor to do things like send emails and handle attachments.
 
-We're processing attachments using our [antivirus API](../antivirus) for antivirus checking and [Imagemagick](http://imagemagick.org) for thumbnailing.
+We're processing attachments using our [antivirus API](https://github.com/UKGovernmentBEIS/beis-opss-antivirus) for antivirus checking and [Imagemagick](http://imagemagick.org) for thumbnailing.
 
 
 ## Getting set up
