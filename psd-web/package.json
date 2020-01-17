@@ -9,7 +9,7 @@
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-plugin-import": "2.20.0",
-    "govuk-country-and-territory-autocomplete": "0.5.2",
+    "govuk-country-and-territory-autocomplete": "1.0.1",
     "govuk-frontend": "3.4.0",
     "html5shiv": "3.7.3",
     "jquery": "3.4.1",
