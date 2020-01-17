@@ -43,7 +43,8 @@ FactoryBot.define do
 
     trait :with_images do
       after(:create) do |product, evaluator|
-        product.
+        ap evaluator
+        product.attach(io: fixture_file_upload('testImage.png'))
       end
     end
   end

@@ -42,7 +42,7 @@
         - products_limit += 1
       - products_remaining = products_count - products_limit
 
-      = render @investigation.product_image_list
+      / = render @investigation.product_image_list
 
       ul.govuk-list
         - @investigation.products.limit(products_limit).each do |product|
