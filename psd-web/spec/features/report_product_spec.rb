@@ -414,7 +414,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_reference_number_page(reference_number)
     choose "Yes"
     fill_in "Existing reference number", with: reference_number
-    click_button "Create case"
+    click_button "Open a new case"
   end
 
   def skip_page

@@ -58,7 +58,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("Cases")
-          expect(page).to have_link("Create new")
+          expect(page).to have_link("Open a new case")
         end
       end
 
@@ -68,7 +68,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("Cases")
-          expect(page).to have_link("Create new")
+          expect(page).to have_link("Open a new case")
         end
       end
     end
