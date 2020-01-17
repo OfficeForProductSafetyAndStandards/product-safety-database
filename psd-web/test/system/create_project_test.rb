@@ -14,7 +14,7 @@ class CreateProjectTest < ApplicationSystemTestCase
 
   test "can be reached via create page" do
     visit root_path
-    click_on "Create new"
+    click_on "Open a new case"
     assert_text "Create new"
 
     choose "type_project", visible: false
