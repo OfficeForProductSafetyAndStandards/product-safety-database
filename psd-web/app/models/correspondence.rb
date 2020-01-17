@@ -1,7 +1,7 @@
 class Correspondence < ApplicationRecord
   include DateConcern
   include SanitizationHelper
-  belongs_to :investigation, optional: true
+  belongs_to :investigation, optional: true, inverse_of: :correspondences
   has_one :activity, dependent: :destroy
 
   before_validation :strip_whitespace

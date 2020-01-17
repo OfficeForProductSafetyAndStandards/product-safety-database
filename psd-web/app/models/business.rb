@@ -50,5 +50,3 @@ class Business < ApplicationRecord
     locations&.any? { |location| location.errors.any? } || false
   end
 end
-
-Business.import force: true if Rails.env.development? # for auto sync model with elastic search

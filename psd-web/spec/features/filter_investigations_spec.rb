@@ -17,6 +17,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
 
   before do
+    Investigation.import refresh: :wait_for
     sign_in(as_user: user)
     visit "/cases"
   end
