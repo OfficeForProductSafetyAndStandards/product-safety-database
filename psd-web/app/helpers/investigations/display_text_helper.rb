@@ -115,8 +115,8 @@ module Investigations::DisplayTextHelper
       { key: { text: "Trading name" }, value: { text: business.trading_name } },
       { key: { text: "Registered or legal name" }, value: { text: business.legal_name } },
       { key: { text: "Company number" }, value: { text: business.company_number } },
-      { key: { text: "Main address" }, value: { text: business.primary_location&.summary } },
-      { key: { text: "Main contact" }, value: { text: business.primary_contact&.summary } }
+      { key: { text: "Address" }, value: { text: business.primary_location&.summary } },
+      { key: { text: "Contact" }, value: { text: business.primary_contact&.summary } }
     ]
 
     # TODO PSD-693 Add primary authorities to businesses
