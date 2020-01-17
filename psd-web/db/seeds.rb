@@ -206,7 +206,7 @@ if run_seeds
     description: "White Christmas tree shaped candle, 4 inches high, unstable base.",
     product_code: "8719202753615",
     name: "H&S Collection: Let it snow",
-    category: "Other Product Type",
+    category: Rails.application.config.product_constants["product_category"].sample,
     product_type: "Tree shaped candle",
     webpage: "https://www2.hm.com/en_gb/index.html"
   )
@@ -221,7 +221,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Asphyxiation",
-    product_category: "Toys",
+    product_category: Rails.application.config.product_constants["product_category"].sample,
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -244,7 +244,7 @@ if run_seeds
     description: "",
     product_code: "",
     name: "Funny Musical Instrument Set",
-    category: "Toys",
+    category: Rails.application.config.product_constants["product_category"].sample,
     product_type: "Musical toy",
     webpage: ""
   )
@@ -309,7 +309,7 @@ if run_seeds
     description: "",
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
     name: "Lynx Shower speaker with USB charger",
-    category: "Low voltage equipment (including plugs and sockets)",
+    category:     Rails.application.config.product_constants["product_category"].sample,
     product_type: "Shower speaker with USB charger",
     webpage: ""
   )
@@ -407,4 +407,15 @@ if run_seeds
   product.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
   investigation.products << product
+
+  KeycloakService.sync_orgs_and_users_and_teams
+
+  Investigation.__elasticsearch__.create_index! force: true
+  Investigation.import
+
+  Product.__elasticsearch__.create_index! force: true
+  Product.import
+
+  Business.__elasticsearch__.create_index! force: true
+  Business.import
 end

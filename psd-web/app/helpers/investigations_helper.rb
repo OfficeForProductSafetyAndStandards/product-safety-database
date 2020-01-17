@@ -2,24 +2,16 @@ module InvestigationsHelper
   include SearchHelper
 
   def search_for_investigations(page_size = Investigation.count)
-    result = Investigation.full_search(search_query)
+    query = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
+    result = Investigation.full_search(query)
     result.paginate(page: params[:page], per_page: page_size)
   end
 
   def set_search_params
-    session[:previous_search_params] = params
+    params_to_save = params.dup
+    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
     @search = SearchParams.new(query_params)
-  end
-
-  def sorting_params
-    case params[:sort_by]
-    when "newest"
-      { created_at: "desc" }
-    when "oldest"
-      { updated_at: "asc" }
-    else
-      { updated_at: "desc" }
-    end
+    session[:previous_search_params] = params_to_save
   end
 
   def filter_params
@@ -175,11 +167,9 @@ module InvestigationsHelper
   def query_params
     set_default_status_filter
     set_default_type_filter
-    set_default_sort_by_filter
     set_default_assignee_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project,
-                  :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id,
+    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id,
                   assignee_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
   end
 
@@ -189,10 +179,6 @@ module InvestigationsHelper
 
   def set_default_status_filter
     params[:status_open] = "checked" if params[:status_open].blank?
-  end
-
-  def set_default_sort_by_filter
-    params[:sort_by] = "recent" if params[:sort_by].blank?
   end
 
   def set_default_assignee_filter
