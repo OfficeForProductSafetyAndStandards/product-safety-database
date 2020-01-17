@@ -15,7 +15,7 @@ class CreateNewRecordTest < ApplicationSystemTestCase
 
   test "can be reached via home page" do
     visit root_path
-    click_on "Create new"
+    click_on "Open a new case"
 
     assert_css "h1", text: "Create new"
   end
