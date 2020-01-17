@@ -11,7 +11,7 @@ import 'javascripts/investigations/ts_investigations/which_businesses';
 import 'javascripts/close_page_button';
 import 'javascripts/date_input';
 
-// CS
+// CSS
 import 'accessible-autocomplete/src/autocomplete.css';
 
 // Images
