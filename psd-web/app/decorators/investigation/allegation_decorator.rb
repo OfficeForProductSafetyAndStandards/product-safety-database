@@ -1,4 +1,5 @@
 class Investigation < ApplicationRecord
+  require_dependency "investigation"
   class AllegationDecorator < InvestigationDecorator
     def title
       title = build_title_from_products || "Allegation"

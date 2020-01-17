@@ -31,7 +31,6 @@ RSpec.shared_context "with Elasticsearch", shared_context: :metadata do
 
   before do
     WebMock.disable_net_connect!(allow: ENV.fetch("ELASTICSEARCH_URL"))
-    clean_elasticsearch_indices!
     create_elasticsearch_indices!
   end
 

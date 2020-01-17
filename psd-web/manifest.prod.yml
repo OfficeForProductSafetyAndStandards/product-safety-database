@@ -9,6 +9,7 @@ defaults: &defaults
 
 web_defaults: &web_defaults
   command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate keycloak:sync && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+  timeout: 180
   services:
     - opss-log-drain
     - psd-aws-env

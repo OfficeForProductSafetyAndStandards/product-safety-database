@@ -58,18 +58,7 @@ module Searchable
       ]
     end
 
-    # TODO: These lines fix the issue of not updating the updated_at in Elasticsearch.
-    # Same issue is pointed out in the following link. We can remove it once that PR is merged.
-    # https://github.com/elastic/elasticsearch-rails/pull/703
-    after_update do |document|
-      document.__elasticsearch__.update_document_attributes updated_at: document.updated_at
-    end
-
     def self.full_search(query)
-      # This line makes sure elasticsearch index is recreated before we search
-      # It fixes the issue of getting no results the first time case list page is loaded
-      # It's only used in dev because it lowers performance and the issue it fixes should be an edge case in production
-      __elasticsearch__.refresh_index! if Rails.env.development? || Rails.env.test?
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 

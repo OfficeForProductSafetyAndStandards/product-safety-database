@@ -23,11 +23,11 @@ module BusinessesHelper
   end
 
   def sort_column
-    Business.column_names.include?(params[:sort]) ? params[:sort] : "created_at"
+    Business.column_names.include?(params[:sort]) ? params[:sort] : :created_at
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : :desc
   end
 
   def set_countries
@@ -67,15 +67,15 @@ private
 
   def build_breadcrumb_structure
     {
-        items: [
-            {
-                text: "Businesses",
-                href: businesses_path
-            },
-            {
-                text: @business.trading_name
-            }
-        ]
+      items: [
+        {
+          text: "Businesses",
+          href: businesses_path
+        },
+        {
+          text: @business.trading_name
+        }
+      ]
     }
   end
 end
