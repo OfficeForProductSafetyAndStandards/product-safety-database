@@ -4,7 +4,7 @@ ruby:
 .app-document-preview class=[class_name]
   - if local_assigns[:restricted]
     .app-document-preview__placeholder aria-hidden="true"
-      = image_pack_tag "media/images/document_placeholder.png", alt:""
+      = image_tag "document_placeholder.png", alt: ""
       span.app-document-preview__filetype = document_file_extension(document)
   - elsif document.metadata["safe"]
     - if document.image?
@@ -21,7 +21,7 @@ ruby:
           = link_to link_content, document, target: "_blank", rel: 'noopener'
     - else
       .app-document-preview__placeholder aria-hidden="true"
-        = image_pack_tag "media/images/document_placeholder.png", alt: ""
+        = image_tag "document_placeholder.png", alt: ""
         span.app-document-preview__filetype = document_file_extension(document)
   - else
     .app-document-preview__processing

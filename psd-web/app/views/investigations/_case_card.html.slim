@@ -11,12 +11,12 @@ ruby:
     = render "investigations/case_card_status_area", investigation: investigation
   .govuk-grid-column-one-quarter
     span.govuk-caption-m[class="govuk-!-font-size-16"] Assigned to
-    span = investigation.assignee ? investigation.assignee.assignee_short_name : "Unassigned"
-  - if sorted_by == "newest"
+    span = investigation.assignable ? investigation.assignable.assignee_short_name : "Unassigned"
+  - if sorted_by == SearchParams::NEWEST
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Date created
       span = "#{time_ago_in_words(investigation.created_at)} ago"
-  - elsif sorted_by == "recent" || sorted_by == "oldest"
+  - elsif sorted_by == SearchParams::RECENT || SearchParams::OLDEST || sorted_by == SearchParams::RELEVANT
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Last updated
       span = "#{time_ago_in_words(investigation.updated_at)} ago"
