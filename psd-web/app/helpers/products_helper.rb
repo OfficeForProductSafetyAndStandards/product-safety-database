@@ -18,7 +18,7 @@ module ProductsHelper
   end
 
   def sorting_params
-    return {} if params[:sort] == "relevance"
+    return {} if params[:sort] == SearchParams::RELEVANT
 
     { created_at: :desc }
   end
