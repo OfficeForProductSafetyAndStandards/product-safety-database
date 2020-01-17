@@ -144,7 +144,7 @@ GEM
       elasticsearch-transport (= 6.8.0)
     elasticsearch-api (6.8.0)
       multi_json
-    elasticsearch-model (6.0.0)
+    elasticsearch-model (7.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
@@ -162,7 +162,7 @@ GEM
       railties (>= 4.2.0)
     faker (2.10.1)
       i18n (>= 1.6, < 2)
-    faraday (0.17.0)
+    faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.2)
     fugit (1.3.3)
@@ -179,7 +179,7 @@ GEM
       notifications-ruby-client (>= 2.9.0)
       rails (>= 4.1.0)
     hashdiff (1.0.0)
-    hashie (3.6.0)
+    hashie (4.0.0)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -480,7 +480,7 @@ DEPENDENCIES
   dotenv-rails
   draper
   elasticsearch (= 6.8.0)
-  elasticsearch-model (= 6.0.0)
+  elasticsearch-model (= 7.0.0)
   elasticsearch-rails (= 6.0.0)
   factory_bot_rails
   faker
