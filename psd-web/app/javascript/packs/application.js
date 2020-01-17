@@ -8,4 +8,3 @@
 
 import './shared';
 import 'stylesheets/main';
-

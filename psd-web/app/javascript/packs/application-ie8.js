@@ -9,4 +9,3 @@
 import 'html5shiv';
 import './shared';
 import 'stylesheets/ie8/main.scss';
-
