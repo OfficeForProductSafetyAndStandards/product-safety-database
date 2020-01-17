@@ -40,5 +40,11 @@ FactoryBot.define do
       description { Faker::Lorem.paragraph }
       country_of_origin { Country.all.sample }
     end
+
+    trait :with_images do
+      after(:create) do |product, evaluator|
+        product.
+      end
+    end
   end
 end

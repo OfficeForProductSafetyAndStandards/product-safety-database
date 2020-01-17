@@ -297,4 +297,5 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#description" do
     include_examples "a formated text", :investigation, :description
   end
+
 end

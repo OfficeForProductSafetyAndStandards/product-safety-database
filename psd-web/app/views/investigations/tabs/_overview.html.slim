@@ -41,6 +41,9 @@
       - if ( products_count - products_limit == 1 )
         - products_limit += 1
       - products_remaining = products_count - products_limit
+
+      = render @investigation.product_image_list
+
       ul.govuk-list
         - @investigation.products.limit(products_limit).each do |product|
           li[class="govuk-!-margin-bottom-3"]
