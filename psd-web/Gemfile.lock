@@ -90,7 +90,7 @@ GEM
       actionpack (>= 3.1)
       caxlsx (>= 3.0)
     backport (1.1.2)
-    brakeman (4.7.1)
+    brakeman (4.7.2)
     builder (3.2.4)
     byebug (11.0.1)
     capybara (3.30.0)
