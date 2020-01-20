@@ -40,6 +40,7 @@ Refer to the `docker-compose.yml` file for a list of available services.
 You will need to have Redis, PostgreSQL and Elasticsearch running, either locally or via Docker as detailed above.
 
 Copy the file in the `psd-web` directory called `.env.development.example` to `.env.development`, and modify as appropriate.
+You will need to set `KEYCLOAK_CLIENT_SECRET` value corresponding to `KEYCLOAK_CLIENT_ID` value. The client secret is accessible through the Keycloak admin console.
 
 See the [accounts section](#accounts) below for information on how to obtain some of the optional variables.
 
@@ -60,6 +61,7 @@ Start the services:
 
 
 ### Tests
+Copy the file in the `psd-web` directory called `.env.test.example` to `.env.test`, and modify as appropriate.
 
 New tests are written in RSpec. There should be a feature spec covering new user journeys, and unit testing of all code components.
 
@@ -96,7 +98,7 @@ The development instance of Keycloak is configured with the following default us
 * Trading Standards user: `msa@example.com` / `password`
 * Admin Console: `admin` / `admin`
 
-Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add or edit users.
+Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add/edit users or to obtain client credentials.
 
 Ask someone on the team to create an account for you on the Int and Staging environments.
 
