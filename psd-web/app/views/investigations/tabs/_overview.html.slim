@@ -46,15 +46,7 @@
 
       ul.govuk-list
         - @investigation.products.limit(products_limit).each do |product|
-          li[class="govuk-!-margin-bottom-3"]
-            = link_to product.name, product_path(product),
-            class: "app-block-link govuk-link govuk-!-margin-bottom-2"
-            - if product.images.any?
-              = render "documents/document_preview",
-                  document: product.images.first,
-                  dimensions: "300x500",
-                  hide_link: true,
-                  class_name: 'app-document-preview--small'
+          = render product
         - if products_count > products_limit
           li
             = link_to "View #{products_remaining} more products...", investigation_products_path(@investigation)

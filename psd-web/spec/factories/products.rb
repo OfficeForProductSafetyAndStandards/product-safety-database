@@ -49,11 +49,9 @@ FactoryBot.define do
     trait :with_images do
       after(:create) do |product, evaluator|
         evaluator.image_count.times do |i|
-          f = Rails.root.join("test", "fixtures", "files", "testImage.png")
-          ap f
-          ap product.documents.attach(
-            io: f,
-            filename: "test image #{i}"
+          product.documents.attach(
+            io: fixture_file_upload(Rails.root.join("test", "fixtures", "files", "testImage.png")),
+            filename: "test"
           )
         end
       end
