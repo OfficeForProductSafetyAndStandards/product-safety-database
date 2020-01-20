@@ -270,7 +270,55 @@ Once all the credentials are created, the app can be deployed using:
 
 ### Other infrastructure
 
-See [infrastructure/README.md](infrastructure/README.md).
+#### Environment variables
+
+We're using [user-provided services](https://docs.cloudfoundry.org/devguide/services/user-provided.html#deliver-service-credentials-to-an-app) to load environment variables into our applications.
+
+Running [get-env-from-vcap.sh](./infrastructure/env/get-env-from-vcap.sh) as part of the application startup will add credentials from any service named `*-env` to the current environment.
+
+#### Domains
+
+We've setup our domains based on [the instructions provided by PaaS](https://docs.cloud.service.gov.uk/deploying_services/use_a_custom_domain).
+This also enables a CDN for the URL so it's important that the `Cache-Control` header is being set correctly.
+
+For each domain, we define a `<<SPACE>>` and `<<SPACE>>-temp` subdomain for hosting and blue-green deployments.
+
+It's important that we also allow the `Authorization` header through the CDN for the basic auth on non-production environments.
+The following command can be used to create the `cdn-route` service:
+
+    cf create-service cdn-route cdn-route opss-cdn-route -c '{"domain": "<<domain1>>,<<domain2>>", "headers": ["Authorization"]}'
+
+
+#### Logging
+
+##### Fluentd
+
+We're using [fluentd](https://www.fluentd.org/) to aggregate the logs and send them to both an [ELK stack](https://www.elastic.co/elk-stack) and S3 bucket for long term storage.
+
+#### Logit
+
+We're using [Logit](https://logit.io) as a hosted ELK stack.
+If you want to view the logs, you'll need an account - ask someone on the team to invite you.
+You should sign up using GitHub OAuth to ensure MFA.
+
+[logstash-filters.conf](./logstash-filters.conf) provides a set of rules which logstash can use to parse logs.
+
+
+#### S3
+
+We're using AWS S3 as a long term storage for logs.
+See [the root README](../README.md#amazon-web-services) for more details about setting up an account.
+
+
+### Monitoring
+
+#### Metrics
+
+Our metrics are sent to an ELK stack and S3 using [the paas-metric-exporter app](./paas-metric-exporter).
+
+We have set up a regular job to query the database and to print certain metrics into the logs. This was all done in [PR #962](https://github.com/UKGovernmentBEIS/beis-opss/pull/962).
+The metrics are sent in JSON format and logstash is clever enough to split these out into separate logs for each key-value pair.
+However, you will need to add an extra filter in [logstash-filters.conf](./logstash-filters.conf), in order to create new fields on the logs instead of the data all being captured in the `message` field.
 
 
 ## BrowserStack
