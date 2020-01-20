@@ -282,8 +282,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(section.find("dt", text: "Trading name")).to have_sibling("dd", text: business[:trading_name])
     expect(section.find("dt", text: "Registered or legal name")).to have_sibling("dd", text: business[:legal_name])
     expect(section.find("dt", text: "Company number")).to have_sibling("dd", text: business[:company_number])
-    expect(section.find("dt", text: "Main address")).to have_sibling("dd", text: expected_address)
-    expect(section.find("dt", text: "Main contact")).to have_sibling("dd", text: expected_contact)
+    expect(section.find("dt", text: "Address")).to have_sibling("dd", text: expected_address)
+    expect(section.find("dt", text: "Contact")).to have_sibling("dd", text: expected_contact)
   end
 
   def expect_case_attachments_page_to_show(file_description:)

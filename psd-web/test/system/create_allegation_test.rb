@@ -26,7 +26,7 @@ class CreateAllegationTest < ApplicationSystemTestCase
 
   test "can be reached via create page" do
     visit root_path
-    click_on "Create new"
+    click_on "Open a new case"
     assert_text "Create new"
 
     choose "type_allegation", visible: false
@@ -92,7 +92,7 @@ class CreateAllegationTest < ApplicationSystemTestCase
     fill_complainant_details_and_continue
     click_on "Create allegation"
 
-    assert_text "Description can’t be blank"
+    assert_text "Description cannot be blank"
   end
 
   test "third step should require a product type and hazard type to be selected" do

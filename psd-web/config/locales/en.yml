@@ -41,8 +41,8 @@ en:
       taken: "%{attribute} has already been taken"
       confirmation: "%{attribute} doesn’t match %{attribute}"
       accepted: "%{attribute} must be accepted"
-      empty: "%{attribute} can’t be empty"
-      blank: "%{attribute} can’t be blank"
+      empty: "%{attribute} cannot be empty"
+      blank: "%{attribute} cannot be blank"
       present: "%{attribute} must be blank"
       too_long:
         one: "%{attribute} is too long (maximum is 1 character)"
