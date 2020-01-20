@@ -6,5 +6,4 @@ RSpec.describe ProductsDecorator, :with_stubbed_mailer, :with_stubbed_elasticsea
   let(:products_remaining) { image_count - described_class::PRODUCT_IMAGE_DISPLAY_LIMIT }
 
   subject { described_class.decorate(products) }
-
 end

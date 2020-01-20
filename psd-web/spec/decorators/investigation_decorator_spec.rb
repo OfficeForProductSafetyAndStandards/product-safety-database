@@ -349,5 +349,4 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
     end
   end
-
 end

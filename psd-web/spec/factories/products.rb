@@ -1,10 +1,5 @@
 FactoryBot.define do
   factory :product do
-
-    transient do
-      image_count { 1 }
-    end
-
     name { "product name" }
     description { "product description" }
     category { Rails.application.config.product_constants["product_category"].sample }
@@ -44,17 +39,6 @@ FactoryBot.define do
       category { "Electrical appliances and equipment" }
       description { Faker::Lorem.paragraph }
       country_of_origin { Country.all.sample }
-    end
-
-    trait :with_images do
-      after(:create) do |product, evaluator|
-        evaluator.image_count.times do |i|
-          product.documents.attach(
-            io: fixture_file_upload(Rails.root.join("test", "fixtures", "files", "testImage.png")),
-            filename: "test"
-          )
-        end
-      end
     end
   end
 end
