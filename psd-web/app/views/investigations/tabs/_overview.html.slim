@@ -36,17 +36,4 @@
           class: "govuk-section-break govuk-section-break--m"\
           " govuk-section-break--visible app-!-display-mobile--only")
       h2.govuk-heading-m = "Products (#{products_count})"
-      - products_limit = 6
-      / Increase limit if we're within 1 product
-      - if ( products_count - products_limit == 1 )
-        - products_limit += 1
-      - products_remaining = products_count - products_limit
-
-      / = render @investigation.product_image_list
-
-      ul.govuk-list
-        - @investigation.products.limit(products_limit).each do |product|
-          = render product
-        - if products_count > products_limit
-          li
-            = link_to "View #{products_remaining} more products...", investigation_products_path(@investigation)
+      = @investigation.products_list
