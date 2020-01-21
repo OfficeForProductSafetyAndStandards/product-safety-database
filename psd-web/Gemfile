@@ -66,7 +66,6 @@ group :development, :test do
   gem "simplecov"
   gem "simplecov-console"
   gem "slim_lint"
-  gem "solargraph"
   gem "spring"
   gem "spring-commands-rspec"
   gem "webmock"
