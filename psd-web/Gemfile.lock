@@ -86,7 +86,7 @@ GEM
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
-    axlsx_rails (0.6.0)
+    axlsx_rails (0.6.1)
       actionpack (>= 3.1)
       caxlsx (>= 3.0)
     backport (1.1.2)
