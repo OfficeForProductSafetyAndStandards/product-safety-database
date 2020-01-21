@@ -2,7 +2,7 @@ module InvestigationsHelper
   include SearchHelper
 
   def search_for_investigations(page_size = Investigation.count)
-    query = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
+    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
     result = Investigation.full_search(query)
     result.paginate(page: params[:page], per_page: page_size)
   end
@@ -169,7 +169,7 @@ module InvestigationsHelper
     set_default_type_filter
     set_default_assignee_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id,
+    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :submitted_from,
                   assignee_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
   end
 

@@ -3,7 +3,7 @@
 = render 'investigations/heading', answer: @answer
 .govuk-grid-row
   = render 'investigations/filters', search: @search,\
-      show_relevancy_radion_option: true
+      show_relevancy_radion_option: true, submitted_from: "investigation_search"
 
   .govuk-grid-column-three-quarters
     - @investigations.each do |investigation|
