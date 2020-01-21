@@ -997,17 +997,12 @@ accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.7:
     mime-types "~2.1.24"
     negotiator "0.6.2"
 
-accessible-autocomplete@^2.0.1:
+accessible-autocomplete@2.0.1, accessible-autocomplete@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-2.0.1.tgz#dbbe703d0b48cd37ec0fea97fe46f066528e8098"
   integrity sha512-2Cq8uI+deZNGMS38MmzE+40yT1A2ZC+aRC80l4zazQeh9TrhTn7Ho1fZ0Den1F+WQBe8RNLZtufzGFrMVU8K8w==
   dependencies:
     preact "^8.3.1"
-
-acorn-dynamic-import@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/acorn-dynamic-import/-/acorn-dynamic-import-4.0.0.tgz#482210140582a36b83c3e342e1cfebcaa9240948"
-  integrity sha512-d3OEjQV4ROpoflsnUA8HozoIR504TFxNivYEUi6uwz0IYhBkTDXGuWlNdMtybRt3nqVx/L6XqMt0FxkXuWKZhw==
 
 acorn-jsx@^3.0.0:
   version "3.0.1"
@@ -2173,11 +2168,6 @@ core-js@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.2.1.tgz#cd41f38534da6cc59f7db050fe67307de9868b09"
   integrity sha512-Qa5XSVefSVPRxy2XfUC13WbvqkxhkwB3ve+pgCQveNgYzbM/UxZeu1dcOX/xr4UmfUd+muuvsaxilQzCyUurMw==
-
-core-js@^3.1.3:
-  version "3.3.5"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.3.5.tgz#58d20f48a95a07304b62ff752742b82b56431ed8"
-  integrity sha512-0J3K+Par/ZydhKg8pEiTcK/9d65/nqJOzY62uMkjeBmt05fDOt/khUVjDdh8TpeIuGQDy1yLDDCjiWN/8pFIuw==
 
 core-js@^3.4.0:
   version "3.6.4"
@@ -3868,10 +3858,10 @@ govuk-country-and-territory-autocomplete@1.0.1:
     openregister-picker-engine "^1.2.1"
     webpack-sources "^1.3.0"
 
-govuk-frontend@3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.4.0.tgz#f6694245fbec2dd476d8e161c36be2a4ea785ce3"
-  integrity sha512-rmYPtcCtWgz92QBejYwOnfSxbPGYfvSruLwB4CBk/yJtySHRY0whG1e2/iFRRSj0pMx1Bu+zh/IqCTo+84hbFw==
+govuk-frontend@3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.5.0.tgz#040e6fd0227f65d3e5820f8a05a9932ffdfb2a9e"
+  integrity sha512-4tNKgcChO1bMNsrTz2UsK4fDMmU9R87UDxy/KhKIMbnhsuJLVuArDveYLkZuUsZ6B3eaCbl5gmI8i/Q/Mi680A==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.2:
   version "4.2.3"
