@@ -300,7 +300,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   describe "#products_list" do
     let(:products)           { create_list :product, product_count }
-    let(:products_remaining) { investigation.products.count - described_class::PRODUCT_IMAGE_DISPLAY_LIMIT }
+    let(:products_remaining) { investigation.products.count - described_class::PRODUCT_DISPLAY_LIMIT }
     let(:products_list)      { Capybara.string(subject.products_list) }
 
     context "with 6 images or less" do
@@ -312,7 +312,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
         end
       end
 
-      it "does not displays a link to see all attached images" do
+      it "does not display a link to see all attached images" do
         expect(products_list).to_not have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
       end
     end
@@ -326,7 +326,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
         end
       end
 
-      it "does not displays a link to see all the products" do
+      it "does not display a link to see all the products" do
         expect(products_list).to_not have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
       end
     end

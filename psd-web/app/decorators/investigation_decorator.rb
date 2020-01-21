@@ -2,7 +2,7 @@ class InvestigationDecorator < ApplicationDecorator
   delegate_all
   decorates_associations :documents_attachments
 
-  PRODUCT_IMAGE_DISPLAY_LIMIT = 6
+  PRODUCT_DISPLAY_LIMIT = 6
 
   def title
     user_title
@@ -127,9 +127,9 @@ class InvestigationDecorator < ApplicationDecorator
 
   def products_list
     product_count = products.count
-    limit         = PRODUCT_IMAGE_DISPLAY_LIMIT
+    limit         = PRODUCT_DISPLAY_LIMIT
 
-    limit += 1 if product_count - PRODUCT_IMAGE_DISPLAY_LIMIT == 1
+    limit += 1 if product_count - PRODUCT_DISPLAY_LIMIT == 1
 
     products_remaining_count = products.offset(limit).count
 
