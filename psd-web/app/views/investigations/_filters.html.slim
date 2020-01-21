@@ -36,5 +36,4 @@
               fieldset: { legend: { text: "Sort by", classes: "govuk-fieldset__legend--s" } },
               items: search.sort_by_items(with_relevant_option: show_relevancy_radion_option)
 
-      = form.hidden_field :submitted_from, value: submitted_from
       = form.submit "Apply filters", name: nil, class: "govuk-button"
