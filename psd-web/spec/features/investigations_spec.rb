@@ -64,5 +64,10 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
       to have_css(".govuk-grid-row.psd-case-card:nth-child(3) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
 
     expect(page.current_path).to eq(investigations_path)
+
+    choose "Least recently updated"
+    click_on "Apply filters"
+
+    expect(page.find("input[name='sort_by'][value='#{SearchParams::OLDEST}']")).to be_checked
   end
 end

@@ -2,7 +2,16 @@ class SearchesController < ApplicationController
   include InvestigationsHelper
 
   def show
-    set_search_params
+    params_to_save = params.dup
+    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
+
+    if params[:override_sort_by]
+      params[:sort_by] = params[:override_sort_by]
+    end
+
+    @search = SearchParams.new(query_params)
+    session[:previous_search_params] = params_to_save
+
     if @search.q.blank?
       redirect_to investigations_path(previous_search_params)
     else
