@@ -56,7 +56,7 @@ class Investigation < ApplicationRecord
       return User.find(assignable_id) if assignable_type == "User"
       return Team.find(assignable_id) if assignable_type == "Team"
     rescue StandardError
-      return nil
+      nil
     end
   end
 

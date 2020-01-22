@@ -6,7 +6,6 @@ RSpec.shared_context "with stubbed Elasticsearch", shared_context: :metadata do
 end
 
 RSpec.shared_context "with Elasticsearch", shared_context: :metadata do
-  # rubocop:disable Lint/HandleExceptions
   def clean_elasticsearch_indices!
     elasticsearch_models.each do |model|
       begin
@@ -16,7 +15,6 @@ RSpec.shared_context "with Elasticsearch", shared_context: :metadata do
       end
     end
   end
-  # rubocop:enable Lint/HandleExceptions
 
   def create_elasticsearch_indices!
     elasticsearch_models.each do |model|
