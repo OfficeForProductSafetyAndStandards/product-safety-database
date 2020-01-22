@@ -53,14 +53,6 @@ jobs:
     - name: Install Chromedriver
       run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
 
-    - name: Install RubyGems
-      working-directory: psd-web
-      env:
-        RAILS_ENV: test
-      run: |
-        gem install bundler --no-doc
-        bundle config path vendor/bundle
-        bundle check  || bundle install --jobs=4 --retry=3
 
     - uses: actions/cache@v1
       with:
@@ -69,12 +61,27 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gems-
 
+    - name: Install RubyGems
+      working-directory: psd-web
+      env:
+        RAILS_ENV: test
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check  || bundle install --jobs=4 --retry=3
     - name: Install yarn
       run: npm install yarn -g
 
     - name: Get yarn cache
       id: yarn-cache
       run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: Install Node.js dependencies
       working-directory: psd-web
@@ -83,13 +90,6 @@ jobs:
         PGUSER: postgres
         RAILS_ENV: test
       run: yarn install
-
-    - uses: actions/cache@v1
-      with:
-        path: ${{ steps.yarn-cache.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
 
     - name: Prepare database
       working-directory: psd-web
