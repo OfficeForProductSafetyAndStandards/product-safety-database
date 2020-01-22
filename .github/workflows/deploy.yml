@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install cf client
       env:
-        CF_CLI_VERSION: 7.0.0-beta.25
+        CF_CLI_VERSION: 7.0.0-beta.28
       run: |
         curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C /tmp
         sudo cp /tmp/cf7 /usr/local/bin/cf7
