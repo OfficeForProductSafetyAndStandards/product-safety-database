@@ -6,6 +6,13 @@ GIT
     govuk-design-system-rails (0.5.0)
 
 GIT
+  remote: https://github.com/rack/rack.git
+  revision: 8659d9f073c79dac9ddd7ab84b8e647a1ad4d34e
+  ref: 8659d9f073c79dac9ddd7ab84b8e647a1ad4d34e
+  specs:
+    rack (2.2.0)
+
+GIT
   remote: https://github.com/randym/axlsx.git
   revision: c593a08b2a929dac7aa8dc418b55e26b4c49dc34
   ref: c593a08
@@ -251,7 +258,6 @@ GEM
     pundit (2.1.0)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
-    rack (2.1.1)
     rack-protection (2.0.7)
       rack
     rack-proxy (0.6.5)
@@ -507,6 +513,7 @@ DEPENDENCIES
   pry-doc
   puma
   pundit
+  rack!
   rails (= 5.2.3)
   rails-controller-testing
   redcarpet
