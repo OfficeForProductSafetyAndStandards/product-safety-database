@@ -297,4 +297,56 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#description" do
     include_examples "a formated text", :investigation, :description
   end
+
+  describe "#products_list" do
+    let(:products)           { create_list :product, product_count }
+    let(:products_remaining) { investigation.products.count - described_class::PRODUCT_DISPLAY_LIMIT }
+    let(:products_list)      { Capybara.string(subject.products_list) }
+
+    context "with 6 images or less" do
+      let(:product_count) { 6 }
+
+      it "lists all the images" do
+        products.each do |product|
+          expect(products_list).to have_link(product.name, href: product_path(product))
+        end
+      end
+
+      it "does not display a link to see all attached images" do
+        expect(products_list).to_not have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
+      end
+    end
+
+    context "with 7 images" do
+      let(:product_count) { 7 }
+
+      it "list all the products" do
+        products.each do |product|
+          expect(products_list).to have_link(product.name, href: product_path(product))
+        end
+      end
+
+      it "does not display a link to see all the products" do
+        expect(products_list).to_not have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
+      end
+    end
+
+    context "with more than 8 products" do
+      let(:product_count) { 6 }
+      let!(:products_not_to_display) { create_list :product, 2, investigations: [investigation] }
+
+      it "lists the first 6 products" do
+        products.each do |product|
+          expect(products_list).to have_link(product.name, href: product_path(product))
+        end
+        products_not_to_display.each do |product|
+          expect(products_list).to_not have_link(product.name, href: product_path(product))
+        end
+      end
+
+      it "displays a link to see all the products" do
+        expect(products_list).to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
+      end
+    end
+  end
 end
