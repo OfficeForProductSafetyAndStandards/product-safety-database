@@ -19,7 +19,7 @@ jobs:
         path: psd-web/vendor/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
+          ${{ runner.os }}-build-${{ env.cache-name }}-
 
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
