@@ -1,4 +1,3 @@
-
 // Hide or show based on breakpoint
 
 // Mixins - use these for custom components
@@ -29,6 +28,7 @@
   @include govuk-media-query($from: desktop) {
     display: none;
   }
+
   @include govuk-media-query($until: tablet) {
     display: none;
   }
@@ -76,6 +76,7 @@
   @include govuk-media-query($from: desktop) {
     display: none !important;
   }
+
   @include govuk-media-query($until: tablet) {
     display: none !important;
   }
@@ -94,4 +95,3 @@
     display: none !important;
   }
 }
-
