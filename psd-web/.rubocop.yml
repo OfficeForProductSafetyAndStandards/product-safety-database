@@ -17,7 +17,7 @@ AllCops:
     - 'log/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'
-    - 'vendor/bundle'
+    - 'vendor/bundle/**/*'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
