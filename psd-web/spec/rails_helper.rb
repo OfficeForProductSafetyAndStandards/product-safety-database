@@ -10,7 +10,6 @@ require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
-
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -37,7 +36,7 @@ end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/test/fixtures"
-
+  config.include Rails.application.routes.url_helpers
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
