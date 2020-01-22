@@ -3,3 +3,4 @@ scss_files: 'app/assets/stylesheets/**/*.css.scss'
 exclude:
   - 'node_modules/*'
   - 'coverage/*'
+  - 'vendor/bundle/**/*'
