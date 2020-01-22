@@ -28,12 +28,12 @@
                items: [{ key: "status_open", value: "checked", unchecked_value: "unchecked", text: "Open" },
                { key: "status_closed", value: "checked", unchecked_value: "unchecked", text: "Closed" }]
 
+      - if submitted_from == "investigation_listing"
+        = form.hidden_field :override_sort_by, value: SearchParams::RELEVANT
+
       = render "form_components/govuk_radios", form: form, key: :sort_by,
               classes: "govuk-radios--small",
               fieldset: { legend: { text: "Sort by", classes: "govuk-fieldset__legend--s" } },
               items: search.sort_by_items(with_relevant_option: show_relevancy_radion_option)
-
-      - unless show_relevancy_radion_option
-        = form.hidden_field :sort_by, value: SearchParams::RELEVANT
 
       = form.submit "Apply filters", name: nil, class: "govuk-button"

@@ -2,7 +2,7 @@ module InvestigationsHelper
   include SearchHelper
 
   def search_for_investigations(page_size = Investigation.count)
-    query = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
+    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
     result = Investigation.full_search(query)
     result.paginate(page: params[:page], per_page: page_size)
   end
