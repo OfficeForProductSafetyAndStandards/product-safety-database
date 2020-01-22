@@ -33,11 +33,11 @@ jobs:
         bundle install --jobs 4 --retry 3
 
     - name: Run code style checks
-      run:  rubocop
+      run:  bundle exec rubocop
       working-directory: psd-web
     - name: Run SCSS linter
-      run: scss-lint .
+      run: bundle exec  scss-lint .
       working-directory: psd-web
     - name: Run Slim Lint
-      run: slim-lint app
+      run: bundle exec slim-lint app
       working-directory: psd-web
