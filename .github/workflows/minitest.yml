@@ -1,14 +1,11 @@
-name: RSpec test suite
+name: Minitest test suit
 
 on: [push]
 
 env:
-  DATABASE_URL: postgres://localhost:5432/psd_test
-  ELASTICSEARCH_URL: http://localhost:9200
+  DATABASE_URL: postgres://postgres:5432/psd_test
+  ELASTICSEARCH_URL: http://elasticsearch:9200
   REDIS_URL: redis://localhost:6379
-  REDIS_HOST: localhost
-  PGHOST: localhost
-  PGUSER: postgres
 
 jobs:
   ruby:
@@ -54,7 +51,6 @@ jobs:
     - name: Install Chromedriver
       run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
 
-
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
@@ -99,7 +95,7 @@ jobs:
         RAILS_ENV: test
       run: |
         bin/rails db:create db:schema:load
-    - name: Run Tests
+    - name: Run Minitest test suite without system tests
       working-directory: psd-web
       env:
         ELASTICSEARCH_URL: localhost
@@ -111,15 +107,3 @@ jobs:
         RAILS_ENV: test
       run: |
         bundle exec rake test:without_system_tests
-    - name: Run Specs
-      working-directory: psd-web
-      env:
-        ELASTICSEARCH_URL: http://localhost:9200
-        DATABASE_URL: postgres://postgres@localhost:5432/test
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        RAILS_ENV: test
-      run: |
-        bundle exec rspec spec

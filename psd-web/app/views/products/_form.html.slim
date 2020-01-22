@@ -1,4 +1,3 @@
-- label_class = "govuk-label--m govuk-!-margin-bottom-2"
 - label_class = "govuk-label--m"
 / Ideally the width class should affect the input only, not the whole form group, but we're limited by MSPSDS-1045
 - product_category_classes = ["app-!-autocomplete--max-width-three-quarters",
@@ -53,7 +52,7 @@
 = render "form_components/govuk_textarea", key: :description, form: form,
         attributes: { maxlength: 10000 },
         classes: "app-!-max-width-three-quarters",
-        label: { text: "Description of product",classes: label_class },
+        label: { text: "Description of product", classes: label_class },
         hint: { text: "Details about the product you haven’t \
           included above. For example, colour, size, packaging description. \
           You don’t need to include details of damage or incidents." }
