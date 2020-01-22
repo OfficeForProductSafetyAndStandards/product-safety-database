@@ -7,7 +7,7 @@ $secondary-hover-colour: #171819; // same as footer links
   color: govuk-colour("dark-grey");
 
   a,
-  & a:visited {
+  a:visited {
     color: govuk-colour("dark-grey");
 
     &:hover {
