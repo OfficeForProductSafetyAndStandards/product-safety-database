@@ -1,4 +1,3 @@
-
 $secondary-hover-colour: #171819; // same as footer links
 
 %placeholder-content {
@@ -7,7 +6,7 @@ $secondary-hover-colour: #171819; // same as footer links
   text-align: center;
   color: govuk-colour("dark-grey");
 
-  & a,
+  a,
   & a:visited {
     color: govuk-colour("dark-grey");
 

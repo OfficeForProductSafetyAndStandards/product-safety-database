@@ -6,6 +6,7 @@ jobs:
   ruby:
     name: "Ruby"
     runs-on: ubuntu-latest
+    working-directory: psd-web
 
     steps:
     - uses: actions/checkout@v1
@@ -13,47 +14,16 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5.x
+    - name: Cache Gems
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
     - name: Run code style checks
-      run: |
-        cd psd-web
-        gem install rubocop -v 0.75.1 --no-doc
-        gem install rubocop-performance -v 1.5.0 --no-doc
-        gem install rubocop-rails -v 2.3.2 --no-doc
-        gem install rubocop-rspec -v 1.36.0 --no-doc
-        gem install govuk-lint -v 4.0.1 --no-doc
-        rubocop
-  slim:
-    name: "Slim templates"
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Ruby
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 2.5.x
-    - name: Run linter
-      run: |
-        cd psd-web
-        gem install rubocop-performance --no-doc
-        gem install govuk-lint -v 4.0.1 --no-doc
-        gem install slim_lint -v 0.18.0 --no-doc
-        gem install govuk-lint -v 4.0.1 --no-doc
-        slim-lint app
-  front_end:
-    name: "Sass and Javascript"
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v1
-    - name: Set up Nodejs
-      uses: actions/setup-node@v1
-      with:
-        node-version: 10.16.3
-    - name: Run SASS and javascript linters
-      run: |
-        cd psd-web
-        npm install yarn
-        yarn install
-        yarn eslint app config
-        yarn sass-lint -c .sasslint.yml -vq 'app/**/*.scss'
+      run:  bundle exec rubocop
+    - name: Run SCSS linter
+      run: bindle exec scss-lint .
+    - name: Run Slim
+      run: slim-lint app
