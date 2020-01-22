@@ -6,7 +6,6 @@ jobs:
   ruby:
     name: "Ruby"
     runs-on: ubuntu-latest
-    working-directory: psd-web
 
     steps:
     - uses: actions/checkout@v1
@@ -16,6 +15,7 @@ jobs:
         ruby-version: 2.5.x
     - name: Cache Gems
       uses: actions/cache@v1
+      working-directory: psd-web
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -23,7 +23,10 @@ jobs:
           ${{ runner.os }}-gems-
     - name: Run code style checks
       run:  bundle exec rubocop
+      working-directory: psd-web
     - name: Run SCSS linter
       run: bindle exec scss-lint .
-    - name: Run Slim
+      working-directory: psd-web
+    - name: Run Slim Lint
       run: slim-lint app
+      working-directory: psd-web
