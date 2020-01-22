@@ -3,6 +3,7 @@ require "application_system_test_case"
 class InvestigationBusinessTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     @investigation = load_case(:one)
     @business = businesses(:three)
     @business.source = sources(:business_three)
@@ -31,7 +32,7 @@ class InvestigationBusinessTest < ApplicationSystemTestCase
     fill_in "business[trading_name]", with: ""
     fill_in "business[company_number]", with: @business.company_number
     click_on "Save business"
-    assert_text "Trading name can't be blank"
+    assert_text "Trading name cannot be blank"
   end
 
   test "cannot allow business type to be empty" do

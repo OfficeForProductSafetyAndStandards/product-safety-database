@@ -20,12 +20,12 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       complainant.present? ? complainant&.email_address : "",
       complainant.present? ? complainant&.phone_number : "",
       complainant&.complainant_type,
-      investigation.products.length,
-      investigation.businesses.length,
-      investigation.activities.length,
-      investigation.correspondences.length,
-      investigation.corrective_actions.length,
-      investigation.tests.length
+      @product_counts[investigation.id] || 0,
+      @business_counts[investigation.id] || 0,
+      @activity_counts[investigation.id] || 0,
+      @correspondence_counts[investigation.id] || 0,
+      @corrective_action_counts[investigation.id] || 0,
+      @test_counts[investigation.id] || 0
     ], types: :text
   end
 end

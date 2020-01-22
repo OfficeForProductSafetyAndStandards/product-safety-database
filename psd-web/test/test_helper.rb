@@ -14,6 +14,10 @@ end
 require "rails/test_help"
 require "rspec/mocks/standalone"
 
+# Added Webmock only to allow use of stub_request - Minitest suite is deprecated
+require "webmock/minitest"
+WebMock.allow_net_connect!
+
 class ActiveSupport::TestCase
   include ::RSpec::Mocks::ExampleMethods
 
@@ -39,6 +43,10 @@ class ActiveSupport::TestCase
 
   def setup
     self.class.import_into_elasticsearch
+  end
+
+  def teardown
+    WebMock.reset!
   end
 
   # On top of mocking out external services, this method also sets the user to an initial,
@@ -71,6 +79,12 @@ class ActiveSupport::TestCase
     stub_notify_mailer
   end
 
+  def stub_antivirus_api
+    antivirus_url = Rails.application.config.antivirus_url
+    stubbed_response = JSON.generate(safe: true)
+    stub_request(:any, /#{Regexp.quote(antivirus_url)}/).to_return(body: stubbed_response, status: 200)
+  end
+
   def sign_in_as(user)
     allow(@keycloak_client_instance).to receive(:user_signed_in?).and_return(true)
     allow(@keycloak_client_instance).to receive(:user_info).and_return(user.attributes.symbolize_keys.slice(:id, :email, :name))
@@ -92,6 +106,8 @@ class ActiveSupport::TestCase
     allow(NotifyMailer).to receive(:investigation_updated).and_call_original
     allow(NotifyMailer).to receive(:investigation_created).and_call_original
     allow(NotifyMailer).to receive(:user_added_to_team).and_call_original
+
+    @keycloak_client_instance.reset
   end
 
   def stub_notify_mailer

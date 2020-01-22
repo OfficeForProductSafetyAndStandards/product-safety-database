@@ -60,3 +60,15 @@ h6 {
   margin-top: 0;
   @include govuk-responsive-margin(4, "bottom");
 }
+
+.app-body--adjacent-to-button {
+  @include govuk-media-query( $from: tablet ) {
+    display: inline-block;
+  }
+}
+
+.app-body--adjacent-to-button--l {
+  @include govuk-media-query( $from: tablet ) {
+    margin-top: 8px; // to match padding on large buttons
+  }
+}

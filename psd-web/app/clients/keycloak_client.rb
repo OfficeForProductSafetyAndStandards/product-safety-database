@@ -61,18 +61,34 @@ end
 class KeycloakClient
   include Singleton
 
-  def initialize
-    # The gem we're using has its api split across these three classes
-    @client = Keycloak::Client
-    @admin = Keycloak::Admin
-    @internal = Keycloak::Internal
-    @client.get_installation
-    super
+  def client
+    @client ||= begin
+      init_clients
+      @client
+    end
+  end
+
+  def admin
+    @admin ||= begin
+      init_clients
+      @admin
+    end
+  end
+
+  def internal
+    @internal ||= begin
+      init_clients
+      @internal
+    end
+  end
+
+  def reset
+    @client = @admin = @internal = nil
   end
 
   def all_users
     # KC defaults to max:100, while we need all users. 1000000 seems safe, at least for the time being
-    users = @internal.get_users(max: 1000000)
+    users = internal.get_users(max: 1000000)
 
     user_groups = all_user_groups
 
@@ -96,81 +112,92 @@ class KeycloakClient
   end
 
   def registration_url(redirect_uri)
-    params = URI.encode_www_form(client_id: Keycloak::Client.client_id, response_type: "code", redirect_uri: redirect_uri)
-    Keycloak::Client.auth_server_url + "/realms/#{Keycloak::Client.realm}/protocol/openid-connect/registrations?#{params}"
+    params = URI.encode_www_form(client_id: client.client_id, response_type: "code", redirect_uri: redirect_uri)
+    client.auth_server_url + "/realms/#{client.realm}/protocol/openid-connect/registrations?#{params}"
   end
 
   def login_url(redirect_uri)
-    @client.url_login_redirect(redirect_uri)
+    client.url_login_redirect(redirect_uri)
   end
 
   def user_account_url
-    @client.url_user_account
+    client.url_user_account
   end
 
   def exchange_code_for_token(code, redirect_uri)
-    @client.get_token_by_code(code, redirect_uri)
+    client.get_token_by_code(code, redirect_uri)
   end
 
   def exchange_refresh_token_for_token(refresh_token)
-    @client.get_token_by_refresh_token(refresh_token)
+    client.get_token_by_refresh_token(refresh_token)
   end
 
   def logout(refresh_token)
-    @client.logout("", refresh_token)
+    client.logout("", refresh_token)
   end
 
   def user_signed_in?(access_token)
-    @client.user_signed_in?(access_token)
+    client.user_signed_in?(access_token)
   end
 
   def user_info(access_token)
-    response = @client.get_userinfo(access_token)
+    response = client.get_userinfo(access_token)
     user = JSON.parse(response)
     { id: user["sub"], email: user["email"], groups: user["groups"], name: user["given_name"] }
   end
 
   def get_user_roles(user_id)
-    roles = JSON.parse(@internal.get_user_roles(user_id))
+    roles = JSON.parse(internal.get_user_roles(user_id))
     roles.map { |role| role["name"].to_sym }
   end
 
   def add_user_to_team(user_id, group_id)
-    @internal.add_user_group user_id, group_id
+    internal.add_user_group user_id, group_id
   end
 
   def create_user(email)
-    @internal.create_user email: email, username: email, enabled: true
+    internal.create_user email: email, username: email, enabled: true
   end
 
   def get_user(email)
-    JSON.parse(@internal.get_users(email: email)).first.symbolize_keys
+    JSON.parse(internal.get_users(email: email)).first.symbolize_keys
   end
 
   def send_required_actions_welcome_email(user_id, redirect_uri)
     required_actions = %w(sms_auth_check_mobile UPDATE_PASSWORD UPDATE_PROFILE VERIFY_EMAIL)
-    @internal.execute_actions_email user_id, required_actions, "psd-app", redirect_uri
+    internal.execute_actions_email user_id, required_actions, "psd-app", redirect_uri
   end
 
 private
 
+  # Keycloak::Admin depends on state in Keycloak::Client, so these cannot be
+  # defined independently.
+  #
+  def init_clients
+    @client = Keycloak::Client
+    @client.get_installation
+
+    @internal = Keycloak::Internal
+    @admin = Keycloak::Admin
+  end
+
   def group_attributes(group_id)
     cache_key = "keycloak_group_#{group_id}".to_sym
     response = Rails.cache.fetch(cache_key, expires_in: cache_period) do
-      Keycloak::Internal.get_group(group_id)
+      internal.get_group(group_id)
     end
     JSON.parse(response)["attributes"] || {}
   end
 
   def all_user_groups
-    response = Keycloak::Internal.get_user_groups(max: 1000000)
+    response = internal.get_user_groups(max: 1000000)
     JSON.parse(response).collect { |user| [user["id"], user["groups"]] }.to_h
   end
 
   def all_groups
     # KC has a default max for users of 100. The docs don't mention a default for groups, but for prudence
     # and ease of mind, we're ensuring a high-enough cap here, too
-    response = Keycloak::Internal.get_groups(max: 1000000)
+    response = internal.get_groups(max: 1000000)
     JSON.parse(response)
   end
 

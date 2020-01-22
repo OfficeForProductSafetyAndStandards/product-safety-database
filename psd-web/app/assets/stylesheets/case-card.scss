@@ -28,7 +28,7 @@
       left:   0;
       right:  0;
 
-      border:  1px solid govuk-colour("grey-3");
+      border:  1px solid govuk-colour("light-grey");
     }
 
     &:hover::before {
@@ -76,10 +76,10 @@
 .psd-case-card--restricted-access {
 
   // Make everything grey
-  color: govuk-colour("grey-1");
+  color: govuk-colour("dark-grey");
 
   & * {
-    color: govuk-colour("grey-1");
+    color: govuk-colour("dark-grey");
   }
 
   // Restricted cases use different markup
@@ -92,7 +92,7 @@
       left:   0;
       right:  0;
 
-      border:  1px solid govuk-colour("grey-3");
+      border:  1px solid govuk-colour("light-grey");
     }
   }
 }

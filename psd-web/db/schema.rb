@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_19_151907) do
+ActiveRecord::Schema.define(version: 2020_01_03_185949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,8 +97,11 @@ ActiveRecord::Schema.define(version: 2019_11_19_151907) do
     t.datetime "created_at", null: false
     t.date "date_decided"
     t.text "details"
+    t.string "duration"
+    t.string "geographic_scope"
     t.integer "investigation_id"
     t.string "legislation"
+    t.string "measure_type"
     t.integer "product_id"
     t.text "summary"
     t.datetime "updated_at", null: false
@@ -167,6 +170,7 @@ ActiveRecord::Schema.define(version: 2019_11_19_151907) do
     t.string "user_title"
     t.index ["assignable_type", "assignable_id"], name: "index_investigations_on_assignable_type_and_assignable_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id"
+    t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
 
   create_table "locations", id: :serial, force: :cascade do |t|
@@ -219,6 +223,7 @@ ActiveRecord::Schema.define(version: 2019_11_19_151907) do
     t.string "type"
     t.datetime "updated_at", null: false
     t.uuid "user_id"
+    t.index ["sourceable_id", "sourceable_type"], name: "index_sources_on_sourceable_id_and_sourceable_type"
     t.index ["user_id"], name: "index_sources_on_user_id"
   end
 

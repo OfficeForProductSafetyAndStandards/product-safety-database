@@ -21,7 +21,7 @@
   }
 
   &:not(:last-of-type) {
-    border-bottom: 1px solid govuk-colour("grey-2");
+    border-bottom: 1px solid govuk-colour("mid-grey");
   }
 }
 
@@ -38,9 +38,4 @@
       padding-right: 5px;
     }
   }
-}
-
-.full-width {
-  width: 100%;
-  float: left;
 }

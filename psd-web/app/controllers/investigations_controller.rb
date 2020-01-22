@@ -11,21 +11,21 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @answer = search_for_investigations(20)
-        records = Investigation.eager_load(:products, :source).where(id: @answer.results.map(&:_id)).decorate
-        @results = @answer.results.map { |r| r.merge(record: records.detect { |rec| rec.id.to_s == r._id }) }
-        @investigations = @answer.records
+        @answer         = search_for_investigations(20)
+        @investigations = InvestigationDecorator
+                            .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
       end
       format.xlsx do
         @answer = search_for_investigations
         @investigations = Investigation.eager_load(:complainant,
-                                                   :source,
-                                                   { products: :source },
-                                                   { activities: :source },
-                                                   { businesses: %i[locations source] },
-                                                   :corrective_actions,
-                                                   :correspondences,
-                                                   :tests).where(id: @answer.results.map(&:_id))
+                                                   :source).where(id: @answer.results.map(&:_id))
+
+        @activity_counts = Activity.group(:investigation_id).count
+        @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
+        @product_counts = InvestigationProduct.unscoped.group(:investigation_id).count
+        @corrective_action_counts = CorrectiveAction.group(:investigation_id).count
+        @correspondence_counts = Correspondence.group(:investigation_id).count
+        @test_counts = Test.group(:investigation_id).count
       end
     end
   end

@@ -3,6 +3,7 @@ require "application_system_test_case"
 class InvestigationAssigneeTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify(name: "Ts_user") # non-OPSS
+    stub_antivirus_api
     @user = User.current
     @team = @user.teams.first
     Rails.application.config.team_names = {

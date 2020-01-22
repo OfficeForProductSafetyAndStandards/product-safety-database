@@ -2,13 +2,14 @@
 $secondary-hover-colour: #171819; // same as footer links
 
 %placeholder-content {
-  border: 3px dashed govuk-colour("grey-1");
+  border: 3px dashed govuk-colour("dark-grey");
   @include govuk-font($size: 19);
   text-align: center;
-  color: govuk-colour("grey-1");
+  color: govuk-colour("dark-grey");
 
-  & > a {
-    color: govuk-colour("grey-1");
+  & a,
+  & a:visited {
+    color: govuk-colour("dark-grey");
 
     &:hover {
       color: $secondary-hover-colour;

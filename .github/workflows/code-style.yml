@@ -35,6 +35,7 @@ jobs:
     - name: Run linter
       run: |
         cd psd-web
+        gem install rubocop-performance
         gem install slim_lint -v 0.18.0
         slim-lint app
   front_end:

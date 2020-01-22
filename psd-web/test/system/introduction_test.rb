@@ -3,6 +3,7 @@ require "application_system_test_case"
 class IntroductionTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     mock_user_as_non_opss User.current
 
     visit "/"

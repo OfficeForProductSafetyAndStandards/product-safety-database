@@ -8,17 +8,26 @@ module BusinessesHelper
   end
 
   def search_for_businesses(page_size)
-    Business.full_search(search_query)
-      .records
-      .paginate(page: params[:page], per_page: page_size)
+    BusinessDecorator.decorate_collection(
+      Business.full_search(search_query)
+        .page(params[:page])
+        .per_page(page_size)
+        .records
+    )
+  end
+
+  def sorting_params
+    return {} if params[:sort] == "relevance"
+
+    { created_at: :desc }
   end
 
   def sort_column
-    Business.column_names.include?(params[:sort]) ? params[:sort] : "legal_name"
+    Business.column_names.include?(params[:sort]) ? params[:sort] : :created_at
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : :desc
   end
 
   def set_countries
@@ -58,15 +67,15 @@ private
 
   def build_breadcrumb_structure
     {
-        items: [
-            {
-                text: "Businesses",
-                href: businesses_path
-            },
-            {
-                text: @business.trading_name
-            }
-        ]
+      items: [
+        {
+          text: "Businesses",
+          href: businesses_path
+        },
+        {
+          text: @business.trading_name
+        }
+      ]
     }
   end
 end

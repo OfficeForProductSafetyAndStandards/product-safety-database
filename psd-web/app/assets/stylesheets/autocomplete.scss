@@ -1,145 +1,19 @@
-// Taken from https://github.com/alphagov/accessible-autocomplete/issues/285
 
-.autocomplete__wrapper {
-  position: relative;
+// Apply GOVUK typography
+// See https://github.com/alphagov/accessible-autocomplete/issues/285
+.autocomplete__wrapper * {
+  @include govuk-typography-common();
 }
 
-.autocomplete__hint,
-.autocomplete__input {
-  -webkit-appearance: none;
-  border: 2px solid;
-  border-radius: 0;
-  // Safari 10 on iOS adds implicit border rounding.
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  margin-bottom: 0;
-  // BUG: Safari 10 on macOS seems to add an implicit margin.
-  height: 40px;
-  width: 100%;
-}
-
-.autocomplete__input {
-  background-color: transparent;
-  position: relative;
-}
-
-.autocomplete__hint {
-  color: $govuk-border-colour;
-  position: absolute;
-}
-
-.autocomplete__input--default {
-  padding: 5px;
-}
-
-.autocomplete__input--focused {
-  outline-offset: 0;
-  outline: 3px solid $govuk-focus-colour;
-}
-
+// Override source to fix a bug
+// See https://github.com/alphagov/accessible-autocomplete/issues/405
 .autocomplete__input--show-all-values {
-  padding: 5px 35px 5px 5px;
-  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
 }
 
-.autocomplete__dropdown-arrow-down {
-  z-index: auto;
-  display: inline-block;
-  position: absolute;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  top: 10px;
-}
-
-.autocomplete__menu {
-  background-color: govuk-colour("white");
-  border: 2px solid govuk-colour("black");
-  border-top: 0;
-  color: $govuk-text-colour;
-  margin: 0;
-  max-height: 332px;
-  overflow-x: hidden;
-  padding: 0;
-  width: 100%;
-}
-
-.autocomplete__menu--visible {
-  display: block;
-}
-
-.autocomplete__menu--hidden {
-  display: none;
-}
-
-.autocomplete__menu--overlay {
-  box-shadow: rgba(0, 0, 0, 0.256863) 0 2px 6px; // sass-lint:disable-line no-color-literals
-  left: 0;
-  position: absolute;
-  top: 100%;
-  z-index: 100;
-}
-
-.autocomplete__menu--inline {
-  position: relative;
-}
-
-.autocomplete__option {
-  border-bottom: solid $govuk-border-colour;
-  border-width: 1px 0;
-  cursor: pointer;
-  display: block;
-  height: auto;
-  min-height: 36px;
-  line-height: 26px;
-  position: relative;
-}
-
-.autocomplete__option>* {
-  pointer-events: none;
-}
-
-.autocomplete__option:first-of-type {
-  border-top-width: 0;
-}
-
-.autocomplete__option:last-of-type {
-  border-bottom-width: 0;
-}
-
-.autocomplete__option--odd {
-  background-color: govuk-colour("grey-4");
-}
-
-.autocomplete__option--focused,
-.autocomplete__option:hover {
-  background-color: $govuk-link-colour;
-  border-color: $govuk-link-colour;
-  color: govuk-colour("white");
-  outline: none;
-}
-
-.autocomplete__option--no-results {
-  background-color: govuk-colour("grey-4");
-  color: govuk-colour("grey-1");
-  cursor: not-allowed;
-}
-
-.autocomplete__hint,
-.autocomplete__option {
-  padding: 5px;
-}
-
-.autocomplete__wrapper input,
-.autocomplete__wrapper li {
-  font-family: 'nta', Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
+// Add a clear button.
 .autocomplete-select-with-clear {
   width: calc(100% - 48px);
   display: inline-block;
@@ -156,8 +30,7 @@
 }
 
 .autocomplete__clear-button:focus {
-  outline: 3px solid $govuk-focus-colour;
-  outline-offset: 0;
+  @include govuk-focused-text;
 }
 
 .autocomplete__clear-viewbox {
@@ -171,6 +44,7 @@
   stroke-linecap: round;
   stroke-width: 5;
 }
+
 
 @include govuk-media-query($from: tablet) {
 
@@ -189,4 +63,60 @@
   .autocomplete__wrapper li {
     font-size: 19px;
   }
+}
+
+// Set autocomplete widths
+
+// TODO: It would be better to add a wrapper to autocompletes instead.
+// Autocompletes need a wrapper width to be set rather than on
+// input directly because of our 'clear' button
+@mixin autocomplete-set-width($max-width) {
+
+  // Explicitly set font size on container so ex units work
+  // Assumes all autocompletes are default size.
+  // This matches govuk fixed width inputs which scale with
+  // font size.
+  @include govuk-font(19);
+
+  // Set on govuk-selects and autocompletes (clear and non-clear)
+  // There is no one selector currently we can target, so we target
+  // both, then unset where we don't need.
+  & .govuk-select,
+  .autocomplete__wrapper,
+  .autocomplete-select-with-clear {
+    max-width: $max-width !important;
+  }
+
+  // Unset on autocompletes clear button is used
+  // Easier to unset than to have more complex selector above
+  & .autocomplete-select-with-clear .autocomplete__wrapper {
+    max-width: inherit !important;
+  }
+
+}
+
+// Custom width overrides so inputs can be fixed width regardless of resolution.
+@include govuk-media-query($from: tablet) {
+
+  // These widths should match those set in helpers/field-widths.scss
+  .app-\!-autocomplete--max-width-three-quarters {
+    @include autocomplete-set-width(50ex);
+  }
+
+  .app-\!-autocomplete--max-width-two-thirds {
+    @include autocomplete-set-width(44ex);
+  }
+
+  .app-\!-autocomplete--max-width-one-half {
+    @include autocomplete-set-width(33ex);
+  }
+
+  .app-\!-autocomplete--max-width-one-third {
+    @include autocomplete-set-width(22ex);
+  }
+
+  .app-\!-autocomplete--max-width-one-quarter {
+    @include autocomplete-set-width(17ex);
+  }
+
 }

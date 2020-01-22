@@ -3,6 +3,7 @@ require "application_system_test_case"
 class CreateNewRecordTest < ApplicationSystemTestCase
   setup do
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     visit new_investigation_path
 
     assert_css "h1", text: "Create new"
@@ -14,7 +15,7 @@ class CreateNewRecordTest < ApplicationSystemTestCase
 
   test "can be reached via home page" do
     visit root_path
-    click_on "Create new"
+    click_on "Open a new case"
 
     assert_css "h1", text: "Create new"
   end

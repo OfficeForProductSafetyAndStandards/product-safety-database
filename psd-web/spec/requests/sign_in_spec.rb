@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "sign in callback route", :with_keycloak_config do
+RSpec.describe "sign in callback route" do
   let(:auth_code) { "test" }
   let(:request_path) { "" }
 
@@ -8,7 +8,7 @@ RSpec.describe "sign in callback route", :with_keycloak_config do
 
   subject { get(signin_session_path, params: { code: auth_code, request_path: request_path }) }
 
-  context "when an error occurs exchanging the authorization code for a token with Keycloak" do
+  context "when an error occurs exchanging the authorization code for a token with Keycloak", :with_stubbed_keycloak_config do
     let(:redirect_uri) { keycloak_login_url(redirect_uri: signin_session_url(params: { request_path: request_path })) }
 
     before { allow(KeycloakClient.instance).to receive(:exchange_code_for_token).with(auth_code, kind_of(String)).and_raise(exception) }

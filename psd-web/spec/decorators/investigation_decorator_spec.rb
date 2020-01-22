@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keycloak_config do
+RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
   let(:organisation) { create :organisation }
@@ -43,10 +43,11 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
     end
 
     context "with two products of the same category" do
-      let(:iphone_3g)     { build(:product_iphone_3g) }
-      let(:iphone)        { build(:product_iphone)  }
-      let(:samsung)       { build(:product_samsung) }
-      let(:products_list) { [iphone_3g, samsung] }
+      let(:washing_machine) { build(:product_washing_machine) }
+      let(:iphone_3g)       { build(:product_iphone_3g) }
+      let(:iphone)          { build(:product_iphone)  }
+      let(:samsung)         { build(:product_samsung) }
+      let(:products_list)   { [iphone_3g, samsung] }
 
       before do
         investigation.assign_attributes(
@@ -62,7 +63,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_keyclo
       end
 
       context "with two products on different categories" do
-        let(:products_list) { [iphone, iphone_3g] }
+        let(:products_list) { [iphone, washing_machine] }
 
         it "displays a categories as a list" do
           expect(product_summary_list)

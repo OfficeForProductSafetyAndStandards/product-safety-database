@@ -9,7 +9,7 @@
   enough real estate, but are always semantically presented as part of the nav
 
 - attributes = (local_assigns[:attributes] || {})
-header.psd-header *attributes class=local_assigns[:classes] role="banner" data-module="header"
+header.psd-header *attributes class=local_assigns[:classes] role="banner" data-module="govuk-header"
   .psd-header__container class=(local_assigns[:containerClasses] || "govuk-width-container")
     .psd-header__logo
       a.psd-header__link.psd-header__link--homepage href=(local_assigns[:containerClasses] || "/")
@@ -74,16 +74,16 @@ header.psd-header *attributes class=local_assigns[:classes] role="banner" data-m
           a.psd-header__link.psd-header__link--service-name href=local_assigns[:serviceUrl]
             = local_assigns[:serviceName]
         - if has_nav
-          button.psd-header__menu-button.js-header-toggle [
+          button.psd-header__menu-button.govuk-js-header-toggle [
             aria-controls="navigation"
-            aria-label="Show or hide Top Level Navigation"
+            aria-label="Show or hide top level navigation"
             role="button"
             type="button"]
             | Menu
           nav
             - if local_assigns[:secondary_navigation]
               / These are only visible here in non-collapsed view
-              ul.psd-header__secondary-navigation aria-label="Secondary Navigation"
+              ul.psd-header__secondary-navigation aria-label="Secondary navigation"
                 - secondary_navigation.each do |item|
                   - if item[:href] && item[:text]
                     li.psd-header__navigation-item class=("psd-header__navigation-item--active" if item[:active])
@@ -91,7 +91,7 @@ header.psd-header *attributes class=local_assigns[:classes] role="banner" data-m
                       a.psd-header__link *item_attributes href=item[:href]
                         = item[:text]
             ul#navigation.psd-header__navigation [class=local_assigns[:navigationClasses]
-              aria-label="Top Level Navigation"]
+              aria-label="Top level navigation"]
               - if local_assigns[:secondary_navigation]
                 / These are only visible here in collapsed view
                 - secondary_navigation.each do |item|

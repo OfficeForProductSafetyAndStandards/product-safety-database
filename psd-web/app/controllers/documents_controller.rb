@@ -50,10 +50,10 @@ private
 
   def file_valid?
     if @file.blank? || @file.blob.blank?
-      @errors.add(:base, :file_not_implemented, message: "File can't be blank")
+      @errors.add(:base, :file_not_implemented, message: "File cannot be blank")
     end
     if @file.metadata[:title].blank?
-      @errors.add(:base, :title_not_implemented, message: "Title can't be blank")
+      @errors.add(:base, :title_not_implemented, message: "Title cannot be blank")
     end
     validate_blob_size(@file, @errors, "file")
     @errors.empty?

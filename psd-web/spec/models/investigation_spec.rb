@@ -2,7 +2,7 @@ require "rails_helper"
 
 # TODO: Refactor Investigation model to remove callback hell and dependency on User.current
 RSpec.shared_examples "an Investigation" do
-  describe "record creation", with_stubbed_elasticsearch: true, with_keycloak_config: true do
+  describe "record creation", :with_stubbed_elasticsearch do
     let(:user) { create(:user) }
     let(:investigation) { build(factory) }
 

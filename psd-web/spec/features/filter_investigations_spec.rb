@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case filtering", type: :feature, with_keycloak_config: true, with_elasticsearch: true do
+RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:other_team) { create(:team, organisation: organisation, name: "other team") }
@@ -17,6 +17,7 @@ RSpec.feature "Case filtering", type: :feature, with_keycloak_config: true, with
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
 
   before do
+    Investigation.import refresh: :wait_for
     sign_in(as_user: user)
     visit "/cases"
   end

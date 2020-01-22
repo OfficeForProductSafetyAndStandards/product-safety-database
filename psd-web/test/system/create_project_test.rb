@@ -4,6 +4,7 @@ class CreateProjectTest < ApplicationSystemTestCase
   setup do
     @project = Investigation::Project.new(description: "new project description", user_title: "project title")
     mock_out_keycloak_and_notify
+    stub_antivirus_api
     visit new_project_path
   end
 
@@ -13,7 +14,7 @@ class CreateProjectTest < ApplicationSystemTestCase
 
   test "can be reached via create page" do
     visit root_path
-    click_on "Create new"
+    click_on "Open a new case"
     assert_text "Create new"
 
     choose "type_project", visible: false
@@ -30,12 +31,12 @@ class CreateProjectTest < ApplicationSystemTestCase
 
   test "first step should require a description" do
     click_on "Create project"
-    assert_text "Description can't be blank"
+    assert_text "Description cannot be blank"
   end
 
   test "third step should require title" do
     click_on "Create project"
-    assert_text "User title can't be blank"
+    assert_text "User title cannot be blank"
   end
 
   test "project details should show in overview" do
