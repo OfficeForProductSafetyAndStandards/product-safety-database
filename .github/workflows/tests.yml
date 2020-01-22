@@ -69,19 +69,20 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gems-
 
+    - name: Install yarn
+      run: npm install yarn -g
+
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
     - name: Install Node.js dependencies
       working-directory: psd-web
       env:
         PGHOST: localhost
         PGUSER: postgres
         RAILS_ENV: test
-      run: |
-        npm install yarn -g
-        yarn install
-
-    - name: Get yarn cache
-      id: yarn-cache
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      run: yarn install
 
     - uses: actions/cache@v1
       with:
