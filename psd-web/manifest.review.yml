@@ -1,6 +1,6 @@
 ---
 applications:
-- name: psd-((psd-instance-name))-web
+- name: ((app-name))
   buildpacks:
     - ruby_buildpack
   path: .
