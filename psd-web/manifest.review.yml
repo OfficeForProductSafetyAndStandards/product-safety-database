@@ -27,28 +27,7 @@ applications:
     - psd-rails-env
     - psd-sentry-env
     - psd-sidekiq-env
-- name: psd-((psd-instance-name))-worker
-  memory: 1G
-  buildpacks:
-    - ruby_buildpack
-  path: .
-  env:
-    PSD_HOST: ((psd-host))
-    SIDEKIQ_QUEUE: ((sidekiq-queue))
-    SENTRY_CURRENT_ENV: ((sentry-current-env))
-  stack: cflinuxfs3
-  services:
-    - ((psd-db-name))
-    - psd-elasticsearch
-    - psd-session
-    - psd-queue
-    - opss-log-drain
     - antivirus-auth-env
-    - psd-aws-env
-    - psd-notify-env
-    - psd-rails-env
-    - psd-sentry-env
-    - psd-keycloak-env
   processes:
     - type: web
       command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate keycloak:sync && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
