@@ -1,4 +1,4 @@
-name: Minitest test suit
+name: Minitest test suite
 
 on: [push]
 
