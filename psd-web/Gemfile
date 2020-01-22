@@ -62,7 +62,7 @@ group :development, :test do
   gem "rubocop"
   gem "rubocop-performance"
   gem "ruby-debug-ide"
-  gem "sass-rails", "~> 5.0"
+  gem "sass-rails", "~> 6.0"
   gem "selenium-webdriver"
   gem "simplecov"
   gem "simplecov-console"
