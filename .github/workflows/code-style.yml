@@ -17,6 +17,13 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5.x
+    - name: install dependencies
+      working-directory: psd-web
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+
     - name: Cache Gems
       uses: actions/cache@v1
       with:
@@ -24,12 +31,7 @@ jobs:
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-gems-
-    - name: install dependencies
-      working-directory: psd-web
-      run: |
-        gem install bundler --no-doc
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
+
     - name: Run code style checks
       run:  bundle exec rubocop
       working-directory: psd-web
