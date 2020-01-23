@@ -11,7 +11,8 @@ class MigrateToNewLegislation < ActiveRecord::Migration[5.2]
     "Plugs and Sockets (Safety) Regulations 1994" => "Plugs and Sockets etc. (Safety) Regulations 1994",
     "Pressure Equipment Regulations 2016" => "Pressure Equipment (Safety) Regulations 2016",
     "Toys Safety Regulations 2011" => "Toys (Safety) Regulations 2011 (Consumer Protection Act 1987)"
-  }
+  }.freeze
+
   def up
     NEW_LEGISTLATION_MAPPING.each do |old_legislation_name, new_legislation_name|
       CorrectiveAction.where(legislation: old_legislation_name).update_all(legislation: new_legislation_name)
