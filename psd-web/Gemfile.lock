@@ -244,7 +244,7 @@ GEM
     parser (2.7.0.2)
       ast (~> 2.4.0)
     pg (1.2.2)
-    pghero (2.3.0)
+    pghero (2.4.1)
       activerecord (>= 5)
     pry (0.12.2)
       coderay (~> 1.1.0)
