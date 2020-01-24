@@ -14,7 +14,8 @@ module AuthenticationConcern
 
   def authenticate_user!
     unless user_signed_in? || try_refresh_token
-      redirect_to helpers.keycloak_login_url(request.original_fullpath)
+      redirect_to user_openid_connect_omniauth_authorize_path
+      # redirect_to helpers.keycloak_login_url(request.original_fullpath)
     end
   end
 

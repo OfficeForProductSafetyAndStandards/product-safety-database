@@ -14,15 +14,7 @@ end
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
-  match "/sign-in", to: "sessions#sign_in", via: :get
-  match "/two-factor", to: "sessions#two_factor", via: :get
-  match "/reset-password", to: "sessions#reset_password", via: :get
-  match "/text-not-received", to: "sessions#text_not_received", via: :get
-  match "/check-your-email", to: "sessions#check_your_email", via: :get
-  match "/new-password", to: "sessions#new_password", via: :get
-  match "/link-expired", to: "sessions#link_expired", via: :get
-  match "/create-account", to: "sessions#create_account", via: :get
-
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
   resource :session, only: %i[new] do
     member do
