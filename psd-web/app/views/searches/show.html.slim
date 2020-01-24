@@ -14,7 +14,7 @@
         = render "investigations/case_card", investigation: investigation.decorate, sorted_by: @search.sort_by
     = will_paginate @answer.results
     br
-    - if User.current.is_psd_admin?
+    - if current_user.is_psd_admin?
       = link_to "Export as spreadsheet", investigations_path(format: :xlsx, params: export_params)
 
     - unless @investigations.any?

@@ -7,6 +7,11 @@ env:
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
+  KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+  KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
+  KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
+  KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+
 jobs:
   ruby:
     name: "Ruby"
@@ -85,9 +90,4 @@ jobs:
 
     - name: Run Minitest test suite without system tests
       working-directory: psd-web
-      env:
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
       run: bundle exec rake test:without_system_tests

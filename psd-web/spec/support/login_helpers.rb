@@ -1,8 +1,22 @@
 module LoginHelpers
   def sign_in(as_user: build(:user))
-    allow_any_instance_of(ApplicationController).to receive(:access_token).and_return(access_token)
-    allow(KeycloakClient.instance).to receive(:user_signed_in?).with(access_token).and_return(true)
-    allow(KeycloakClient.instance).to receive(:user_info).and_return(format_user_for_get_userinfo(as_user))
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.mock_auth[:openid_connect] = {
+      "provider" => :openid_connect,
+      "uid"  => as_user.id,
+      "info" => {
+        "email" => as_user.email,
+        "name" => as_user.name,
+      },
+      "extra" => {
+        "raw_info" => {
+          "groups" => [as_user.teams.first.path]
+        }
+      }
+    }
+
+    visit user_openid_connect_omniauth_authorize_path
+    as_user
   end
 
   def sign_out
