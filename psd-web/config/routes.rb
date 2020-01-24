@@ -1,6 +1,8 @@
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
+Sidekiq::Web.set :session_secret, Rails.application.credentials[:secret_key_base]
+
 if Rails.env.production?
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     ActiveSupport::SecurityUtils.secure_compare(username, ENV["SIDEKIQ_USERNAME"]) &&
