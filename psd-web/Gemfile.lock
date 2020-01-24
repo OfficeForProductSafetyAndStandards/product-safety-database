@@ -78,17 +78,17 @@ GEM
     ast (2.4.0)
     awesome_print (1.8.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.228.0)
-    aws-sdk-core (3.72.0)
+    aws-partitions (1.268.0)
+    aws-sdk-core (3.89.1)
       aws-eventstream (~> 1.0, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.228.0)
+      aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.25.0)
+    aws-sdk-kms (1.28.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.43.0)
-      aws-sdk-core (~> 3, >= 3.56.0)
+    aws-sdk-s3 (1.60.1)
+      aws-sdk-core (~> 3, >= 3.83.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.0)
@@ -477,7 +477,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  aws-sdk-s3 (= 1.43.0)
+  aws-sdk-s3 (= 1.60.1)
   axlsx!
   axlsx_rails
   brakeman
