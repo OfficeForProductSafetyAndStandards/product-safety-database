@@ -28,8 +28,8 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        cf7 delete -f -r psd-web-$PR_NUMBER-web
-        cf7 delete -f -r psd-web-$PR_NUMBER-worker
+        cf7 delete -f -r psd-pr-$PR_NUMBER-web
+        cf7 delete -f -r psd-pr-$PR_NUMBER-worker
         cf7 logout
     - name: Get Pull Request ID from GITHUB_REF
       if: github.event.pull_request.merged != true
@@ -38,7 +38,7 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        cf7 delete -f -r psd-web-$PR_NUMBER-web
-        cf7 delete -f -r psd-web-$PR_NUMBER-worker
+        cf7 delete -f -r psd-pr-$PR_NUMBER-web
+        cf7 delete -f -r psd-pr-$PR_NUMBER-worker
         cf7 logout
 
