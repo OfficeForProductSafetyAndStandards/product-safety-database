@@ -3,7 +3,7 @@ name: Minitest test suite
 on: [push]
 
 env:
-  DATABASE_URL: postgres://postgres@localhost:5432/psd_test
+  DATABASE_URL: postgres://postgres@localhost:5432
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
@@ -78,6 +78,10 @@ jobs:
     - name: Install Node.js dependencies
       working-directory: psd-web
       run: yarn install
+
+    - name: Prepare database
+      working-directory: psd-web
+      run: bin/rails db:create db:schema:load
 
     - name: Run Minitest test suite without system tests
       working-directory: psd-web

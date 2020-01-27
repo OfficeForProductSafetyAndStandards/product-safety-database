@@ -3,7 +3,7 @@ name: System Tests
 on: [push]
 
 env:
-  DATABASE_URL: postgres://postgres@localhost:5432/psd_test
+  DATABASE_URL: postgres://postgres@localhost:5432
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   REDIS_HOST: localhost
@@ -81,6 +81,10 @@ jobs:
       run: |
         npm install yarn -g
         yarn install
+
+    - name: Prepare database
+      working-directory: psd-web
+      run: bin/rails db:create db:schema:load
 
     - name: Run Tests
       working-directory: psd-web
