@@ -2,6 +2,8 @@ class InvestigationDecorator < ApplicationDecorator
   delegate_all
   decorates_associations :documents_attachments
 
+  PRODUCT_DISPLAY_LIMIT = 6
+
   def title
     user_title
   end
@@ -122,6 +124,22 @@ class InvestigationDecorator < ApplicationDecorator
     out.join("<br />").html_safe
   end
   # rubocop:enable Rails/OutputSafety
+
+  def products_list
+    product_count = products.count
+    limit         = PRODUCT_DISPLAY_LIMIT
+
+    limit += 1 if product_count - PRODUCT_DISPLAY_LIMIT == 1
+
+    products_remaining_count = products.offset(limit).count
+
+    h.tag.ul(class: "govuk-list") do
+      h.concat(h.render(products.limit(limit)))
+      if product_count > limit
+        h.concat(h.link_to("View #{products_remaining_count} more products...", h.investigation_products_path(object)))
+      end
+    end
+  end
 
 private
 

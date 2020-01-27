@@ -1,19 +1,18 @@
 ---
-defaults: &defaults
+applications:
+- name: ((app-name))
   buildpacks:
     - ruby_buildpack
-  memory: 1G
-  instances: 1
   path: .
   stack: cflinuxfs3
-
-web_defaults: &web_defaults
-  command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate keycloak:sync && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
-  timeout: 180
+  routes:
+    - route: ((psd-host))
+  env:
+    PSD_HOST: ((psd-host))
   services:
     - opss-log-drain
-    - psd-aws-env
     - psd-auth-env
+    - psd-aws-env
     - psd-database
     - psd-elasticsearch
     - psd-email-whitelist-env
@@ -26,28 +25,15 @@ web_defaults: &web_defaults
     - psd-sentry-env
     - psd-session
     - psd-sidekiq-env
-
-applications:
-- name: psd-web
-  <<: *defaults
-  <<: *web_defaults
-- name: psd-web-temp # Used temporarily for blue/green deployments
-  <<: *defaults
-  <<: *web_defaults
-- name: psd-worker
-  <<: *defaults
-  no-route: true
-  health-check-type: process
-  command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
-  services:
-    - psd-database
-    - psd-elasticsearch
-    - psd-session
-    - psd-queue
-    - opss-log-drain
+    - psd-web-scout-env
     - antivirus-auth-env
-    - psd-aws-env
-    - psd-notify-env
-    - psd-rails-env
-    - psd-sentry-env
-    - psd-keycloak-env
+  processes:
+    - type: web
+      command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate keycloak:sync && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+      instances: ((web-instances))
+      memory: ((web-memory))
+    - type: worker
+      command: export $(./env/get-env-from-vcap.sh) && bin/sidekiq -C config/sidekiq.yml
+      health-check-type: process
+      instances: ((worker-instances))
+      memory: ((worker-memory))

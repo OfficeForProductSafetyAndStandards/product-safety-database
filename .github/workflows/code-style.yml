@@ -16,11 +16,11 @@ jobs:
     - name: Run code style checks
       run: |
         cd psd-web
-        gem install rubocop -v 0.75.1
-        gem install rubocop-performance -v 1.5.0
-        gem install rubocop-rails -v 2.3.2
-        gem install rubocop-rspec -v 1.36.0
-        gem install govuk-lint -v 4.0.1
+        gem install rubocop -v 0.75.1 --no-doc
+        gem install rubocop-performance -v 1.5.0 --no-doc
+        gem install rubocop-rails -v 2.3.2 --no-doc
+        gem install rubocop-rspec -v 1.36.0 --no-doc
+        gem install govuk-lint -v 4.0.1 --no-doc
         rubocop
   slim:
     name: "Slim templates"
@@ -35,8 +35,10 @@ jobs:
     - name: Run linter
       run: |
         cd psd-web
-        gem install rubocop-performance
-        gem install slim_lint -v 0.18.0
+        gem install rubocop-performance --no-doc
+        gem install govuk-lint -v 4.0.1 --no-doc
+        gem install slim_lint -v 0.18.0 --no-doc
+        gem install govuk-lint -v 4.0.1 --no-doc
         slim-lint app
   front_end:
     name: "Sass and Javascript"
