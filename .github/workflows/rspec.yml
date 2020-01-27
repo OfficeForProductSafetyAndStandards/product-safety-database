@@ -55,9 +55,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ runner.os }}-gems-rspec-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
+          ${{ runner.os }}-gems-rspec-
 
     - name: Install RubyGems
       working-directory: psd-web
