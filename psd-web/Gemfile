@@ -4,7 +4,7 @@ ruby "~> 2.5.5"
 
 gem "will_paginate", "~> 3.2" # Must be laoded before elasticsearch gems
 
-gem "aws-sdk-s3", "1.43.0"
+gem "aws-sdk-s3", "1.60.1"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "axlsx_rails"
 gem "cf-app-utils"
@@ -12,7 +12,7 @@ gem "draper"
 gem "elasticsearch", "6.8.0"
 gem "elasticsearch-model", "6.0.0"
 gem "elasticsearch-rails", "6.0.0"
-gem "govuk_notify_rails", "2.1.1"
+gem "govuk_notify_rails", "2.1.2"
 gem "jbuilder"
 gem "keycloak", "2.4.1"
 gem "lograge", "0.11.2"
@@ -35,7 +35,7 @@ gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.
 gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "0.5.1"
+gem "strong_migrations", "0.6.0"
 gem "webpacker", "4.2.2"
 gem "wicked"
 

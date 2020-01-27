@@ -78,17 +78,17 @@ GEM
     ast (2.4.0)
     awesome_print (1.8.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.228.0)
-    aws-sdk-core (3.72.0)
+    aws-partitions (1.268.0)
+    aws-sdk-core (3.89.1)
       aws-eventstream (~> 1.0, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.228.0)
+      aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.25.0)
+    aws-sdk-kms (1.28.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.43.0)
-      aws-sdk-core (~> 3, >= 3.56.0)
+    aws-sdk-s3 (1.60.1)
+      aws-sdk-core (~> 3, >= 3.83.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.0)
@@ -99,7 +99,7 @@ GEM
     backport (1.1.2)
     brakeman (4.7.2)
     builder (3.2.4)
-    byebug (11.1.0)
+    byebug (11.1.1)
     capybara (3.30.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -181,8 +181,8 @@ GEM
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)
       scss_lint
-    govuk_notify_rails (2.1.1)
-      notifications-ruby-client (>= 2.9.0)
+    govuk_notify_rails (2.1.2)
+      notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
     hashdiff (1.0.0)
     hashie (3.6.0)
@@ -412,10 +412,9 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 5.0)
-    slim_lint (0.18.0)
-      rubocop (>= 0.50.0)
+    slim_lint (0.20.0)
+      rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-      sysexits (~> 1.1)
     solargraph (0.37.2)
       backport (~> 1.1)
       bundler (>= 1.17.2)
@@ -438,9 +437,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strong_migrations (0.5.1)
+    strong_migrations (0.6.0)
       activerecord (>= 5)
-    sysexits (1.2.0)
     temple (0.8.2)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
@@ -479,7 +477,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  aws-sdk-s3 (= 1.43.0)
+  aws-sdk-s3 (= 1.60.1)
   axlsx!
   axlsx_rails
   brakeman
@@ -498,7 +496,7 @@ DEPENDENCIES
   faker
   govuk-design-system-rails!
   govuk-lint
-  govuk_notify_rails (= 2.1.1)
+  govuk_notify_rails (= 2.1.2)
   jbuilder
   keycloak (= 2.4.1)
   launchy
@@ -541,7 +539,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
-  strong_migrations (= 0.5.1)
+  strong_migrations (= 0.6.0)
   webmock
   webpacker (= 4.2.2)
   wicked

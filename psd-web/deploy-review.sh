@@ -2,18 +2,15 @@
 set -ex
 
 # Name of review app, will be defined outside
-if [ -z "$REVIEW_INSTANCE_NAME" ]
+if [ -z "$APP_NAME" ]
 then
-  echo "Please set your application name, eg REVIEW_INSTANCE_NAME=ticket-123"
+  echo "Please set your application name, eg APP_NAME=ticket-123"
   exit
 fi
 
-INSTANCE_NAME=psd-$REVIEW_INSTANCE_NAME
-WEB=$INSTANCE_NAME-web
-WORKER=$INSTANCE_NAME-worker
 DOMAIN=london.cloudapps.digital
 
-MANIFEST_FILE=${PWD-.}/psd-web/manifest.review.yml
+MANIFEST_FILE=./psd-web/manifest.review.yml
 
 if [ -z "$DB_NAME" ]
 then
@@ -26,11 +23,9 @@ until cf7 service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_e
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
-# Deploy the web app
-cf7 push -f $MANIFEST_FILE $WEB --var route=$WEB.$DOMAIN --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME --var psd-host=$WEB.$DOMAIN --var sidekiq-queue=$INSTANCE_NAME --var sentry-current-env=$REVIEW_INSTANCE_NAME --strategy rolling
+# Deploy the app
+cf7 push $APP_NAME -f $MANIFEST_FILE --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --strategy rolling
 
-# Deploy the worker app
-cf7 push -f $MANIFEST_FILE $WORKER --var route=$WORKER.$DOMAIN --var psd-instance-name=$REVIEW_INSTANCE_NAME --var psd-db-name=$DB_NAME --var psd-host=$WEB.$DOMAIN --var sidekiq-queue=$INSTANCE_NAME --var sentry-current-env=$REVIEW_INSTANCE_NAME --strategy rolling
 
 # Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/psd-web/env/
