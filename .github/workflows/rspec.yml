@@ -64,7 +64,7 @@ jobs:
       run: |
         gem install bundler --no-doc
         bundle config path vendor/bundle
-        bundle install --force --jobs=4 --retry=3
+        bundle check || bundle install --jobs=4 --retry=3
     - name: Install yarn
       run: npm install yarn -g
 
