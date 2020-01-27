@@ -262,10 +262,11 @@ Devise.setup do |config|
   keycloak_url = URI(ENV.fetch("KEYCLOAK_AUTH_URL"))
 
   config.omniauth :openid_connect,
-                  name: "keycloack",
-                  scope: "user,email",
+                  name: :openid_connect,
                   discovery:  true,
                   log: :debug,
+                  scope: [:openid, :email, :profile, :address],
+                  response_type: :code,
                   issuer: "#{ENV.fetch("KEYCLOAK_AUTH_URL")}/realms/opss",
                   client_options: {
                     authorization_endpoint: "#{ENV.fetch("KEYCLOAK_AUTH_URL")}/realms/opss/protocol/openid-connect/auth",
