@@ -79,10 +79,6 @@ jobs:
       working-directory: psd-web
       run: yarn install
 
-    - name: Prepare database
-      working-directory: psd-web
-      run: bin/rails db:create db:schema:load
-
     - name: Run Minitest test suite without system tests
       working-directory: psd-web
       env:

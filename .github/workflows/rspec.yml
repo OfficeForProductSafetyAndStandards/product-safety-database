@@ -3,12 +3,10 @@ name: RSpec test suite
 on: [push]
 
 env:
-  DATABASE_URL: postgres://localhost:5432/psd_test
+  DATABASE_URL: postgres://postgres@localhost:5432/psd_test
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
-  REDIS_HOST: localhost
-  PGHOST: localhost
-  PGUSER: postgres
+  RAILS_ENV: test
 
 jobs:
   ruby:
@@ -54,7 +52,6 @@ jobs:
     - name: Install Chromedriver
       run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
 
-
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
@@ -64,8 +61,6 @@ jobs:
 
     - name: Install RubyGems
       working-directory: psd-web
-      env:
-        RAILS_ENV: test
       run: |
         gem install bundler --no-doc
         bundle config path vendor/bundle
@@ -86,40 +81,20 @@ jobs:
 
     - name: Install Node.js dependencies
       working-directory: psd-web
-      env:
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
       run: yarn install
 
     - name: Prepare database
       working-directory: psd-web
-      env:
-        DATABASE_URL: postgres://postgres@localhost:5432/test
-        RAILS_ENV: test
       run: |
         bin/rails db:create db:schema:load
-    - name: Run Tests
-      working-directory: psd-web
-      env:
-        ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        DATABASE_URL: postgres://postgres@localhost:5432/test
-        RAILS_ENV: test
-      run: |
-        bundle exec rake test:without_system_tests
+
     - name: Run Specs
       working-directory: psd-web
       env:
-        ELASTICSEARCH_URL: http://localhost:9200
         DATABASE_URL: postgres://postgres@localhost:5432/test
         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
         KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        RAILS_ENV: test
       run: |
         bundle exec rspec spec
