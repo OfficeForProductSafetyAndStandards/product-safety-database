@@ -90,7 +90,6 @@ jobs:
     - name: Run Specs
       working-directory: psd-web
       env:
-        DATABASE_URL: postgres://postgres@localhost:5432/test
         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
