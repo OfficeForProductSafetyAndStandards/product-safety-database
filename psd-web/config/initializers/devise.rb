@@ -261,6 +261,9 @@ Devise.setup do |config|
   # up on your models and hooks.
   keycloak_url = URI(ENV.fetch("KEYCLOAK_AUTH_URL"))
 
+  # This is used under the hood by omniauth_openid_connect
+  SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
+
   config.omniauth :openid_connect,
                   name: :openid_connect,
                   discovery:  true,
@@ -274,7 +277,8 @@ Devise.setup do |config|
                     scheme:     keycloak_url.scheme,
                     host:       keycloak_url.host,
                     identifier: ENV.fetch("KEYCLOAK_CLIENT_ID"),
-                    secret:     ENV.fetch("KEYCLOAK_CLIENT_SECRET")
+                    secret:     ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
+                    redirect_uri: "#{ENV.fetch("HTTP_DOMAIN")}/users/auth/openid_connect/callback"
                   }
 
   # ==> Warden configuration
