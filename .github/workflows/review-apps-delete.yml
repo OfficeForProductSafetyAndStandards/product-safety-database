@@ -24,7 +24,7 @@ jobs:
     - name: Get Pull Request ID using GitHub API
       if: github.event.pull_request.merged == true
       run: |
-        export PR_NUMBER=`curl -H "Accept: application/vnd.github.groot-preview+json" https://api.github.com/repos/UKGovernmentBEIS/beis-opss/commits/$GITHUB_SHA/pulls | ./infrastructure/env/jq '.[0] | .number'`
+        export PR_NUMBER=`curl -H "Accept: application/vnd.github.groot-preview+json" https://api.github.com/repos/UKGovernmentBEIS/beis-opss-psd/commits/$GITHUB_SHA/pulls | ./infrastructure/env/jq '.[0] | .number'`
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
