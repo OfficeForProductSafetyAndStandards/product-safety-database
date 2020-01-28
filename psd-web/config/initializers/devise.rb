@@ -268,17 +268,16 @@ Devise.setup do |config|
                   name: :openid_connect,
                   discovery:  true,
                   log: :debug,
-                  scope: [:openid, :email, :profile, :address],
-                  response_type: :code,
-                  issuer: "#{ENV.fetch("KEYCLOAK_AUTH_URL")}/realms/opss",
+                  scope: %w[openid email profile address roles],
+                  issuer: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss",
                   client_options: {
-                    authorization_endpoint: "#{ENV.fetch("KEYCLOAK_AUTH_URL")}/realms/opss/protocol/openid-connect/auth",
+                    authorization_endpoint: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth",
                     port:       keycloak_url.port,
                     scheme:     keycloak_url.scheme,
                     host:       keycloak_url.host,
                     identifier: ENV.fetch("KEYCLOAK_CLIENT_ID"),
                     secret:     ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
-                    redirect_uri: "#{ENV.fetch("HTTP_DOMAIN")}/users/auth/openid_connect/callback"
+                    redirect_uri: "#{ENV.fetch('HTTP_DOMAIN')}/users/auth/openid_connect/callback"
                   }
 
   # ==> Warden configuration

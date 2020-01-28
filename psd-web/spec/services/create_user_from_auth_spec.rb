@@ -6,7 +6,7 @@ RSpec.shared_examples "user creator" do
       subject.user
     }.to change {
       User.where(
-        id:    omniauth_response["uuid"],
+        id:    omniauth_response["uid"],
         email: omniauth_response["info"]["email"],
         name:  omniauth_response["info"]["name"]
       ).count
@@ -17,11 +17,12 @@ end
 RSpec.describe CreateUserFromAuth do
   let!(:organisation) { create :organisation }
   let!(:team)         { create :team, organisation: organisation }
-
+  let(:uid) { SecureRandom.uuid }
+  let(:group) { team.path }
   let(:omniauth_response) do
     {
       "provider" => :openid_connect,
-      "uuid" => SecureRandom.uuid,
+      "uid" => uid,
       "info" => {
         "name" => Faker::Name.name,
         "email" => "user@example.com"
@@ -39,8 +40,6 @@ RSpec.describe CreateUserFromAuth do
   describe "#user" do
     context "when the user does not exists" do
       context "when belonging to an existing team" do
-        let(:group) { team.path }
-
         it_behaves_like "user creator"
       end
 
@@ -52,18 +51,21 @@ RSpec.describe CreateUserFromAuth do
         end
 
         context "when not belonging to an existing organisation" do
+          let(:group) { Faker::Hipster.word }
+
           it "raises a RuntimeError" do
+            expect { subject.user }.to raise_error(RuntimeError, "No organisation found")
           end
         end
       end
     end
 
     context "when the user exists" do
-      context "when belonging to another organistion" do
-        it "updates the organisation" do
-        end
+      before { create(:user, id: uid) }
+
+      it "updates the organisation" do
+        expect { subject.user }.to_not change(User, :count)
       end
     end
-
   end
 end

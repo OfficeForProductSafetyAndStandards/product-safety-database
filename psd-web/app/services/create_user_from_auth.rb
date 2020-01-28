@@ -5,7 +5,9 @@ class CreateUserFromAuth
 
   def user
     @user ||= begin
-      User.find_or_create_by!(id: uuid) do |user|
+      raise "No organisation found" unless organisation
+
+      User.find_or_create_by!(id: uid) do |user|
         user.email        = email
         user.name         = name
         user.organisation = organisation
@@ -38,7 +40,7 @@ private
     omniauth_response.dig("info", "name")
   end
 
-  def uuid
-    omniauth_response["uuid"]
+  def uid
+    omniauth_response["uid"]
   end
 end
