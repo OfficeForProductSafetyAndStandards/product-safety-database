@@ -12,8 +12,7 @@
         | Add attachment
       = form.fields_for :file do |subform|
         .govuk-form-group
-          = subform.label :file, "Browse for file", class: "govuk-label--m"
-          br
+          = subform.label :file, "Upload a file", class: "govuk-label"
           = subform.file_field :file, class: "govuk-file-upload"
       .govuk-form-group
         = form.submit "Upload", class: "govuk-button"

@@ -11,7 +11,11 @@
       = render "form_components/govuk_input", key: :overview, form: form, classes: "govuk-!-width-two-thirds",
               label: { text: "Summary", classes: "govuk-label--m" },
               hint: { text: "Give an overview of the phone call" }
-      = render "components/govuk_fieldset", legend: { text: "Details", classes: "govuk-fieldset__legend--m" } do
+      = render "components/govuk_fieldset",
+               legend: { text: "Details", classes: "govuk-fieldset__legend--m" },
+               describedBy: "details-hint" do
+        span#details-hint.govuk-hint class="govuk-!-width-full"
+          | Upload the transcript if you have one, or enter notes below
         = form.fields_for :transcript do |subform|
           .govuk-form-group
             - if @transcript_blob
@@ -20,8 +24,7 @@
                 = link_to @transcript_blob.filename, @transcript_blob, target: "_blank", rel: 'noopener'
                 br
                 | Selecting a different one will replace it.
-            span.govuk-hint class="govuk-!-width-full"
-              | Upload the transcript if you have one, or enter notes below
+            = subform.label :file, "Upload a file", class: "govuk-label"
             = subform.file_field :file, class: "govuk-file-upload"
         = render "form_components/govuk_textarea", key: :details, form: form,
                   attributes: { maxlength: 50000 },
