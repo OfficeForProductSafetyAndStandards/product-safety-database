@@ -194,6 +194,10 @@ GEM
     httpclient (2.8.3)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
+    interactor (3.1.2)
+    interactor-rails (2.2.1)
+      interactor (~> 3.0)
+      rails (>= 4.2)
     jaro_winkler (1.5.4)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
@@ -552,6 +556,7 @@ DEPENDENCIES
   faker
   govuk-design-system-rails!
   govuk_notify_rails (= 2.1.2)
+  interactor-rails
   jbuilder
   keycloak (= 3.0.0)
   launchy
