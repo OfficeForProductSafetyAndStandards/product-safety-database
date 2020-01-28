@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe CreateUserFromAuth do
+
+  let(:organisation) { create :organisation }
+  let(:team)         { create :team, organisation: organisation }
+
   let(:omniauth_response) do
     {
       "provider" => :openid_connect,
@@ -20,11 +24,17 @@ RSpec.describe CreateUserFromAuth do
   subject { described_class.new(omniauth_response) }
 
   describe "#user" do
-
     context "when the user does not exists" do
       context "when belonging to an existing team" do
         it "creates the user" do
-
+          expect {
+            subject.user
+          }.to change {
+            User.where(
+              email: omniauth_response["email"],
+              name: omniauth_response["name"]
+            ).count
+          }.from(0).to(1)
         end
       end
 
