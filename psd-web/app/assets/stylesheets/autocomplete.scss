@@ -1,4 +1,3 @@
-
 // Apply GOVUK typography
 // See https://github.com/alphagov/accessible-autocomplete/issues/285
 .autocomplete__wrapper * {
@@ -81,7 +80,7 @@
   // Set on govuk-selects and autocompletes (clear and non-clear)
   // There is no one selector currently we can target, so we target
   // both, then unset where we don't need.
-  & .govuk-select,
+  .govuk-select,
   .autocomplete__wrapper,
   .autocomplete-select-with-clear {
     max-width: $max-width !important;
@@ -89,7 +88,7 @@
 
   // Unset on autocompletes clear button is used
   // Easier to unset than to have more complex selector above
-  & .autocomplete-select-with-clear .autocomplete__wrapper {
+  .autocomplete-select-with-clear .autocomplete__wrapper {
     max-width: inherit !important;
   }
 

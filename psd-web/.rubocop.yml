@@ -1,5 +1,7 @@
 inherit_gem:
-  govuk-lint: configs/rubocop/all.yml
+  rubocop-govuk:
+    - config/default.yml
+    - config/rails.yml
 
 require: rubocop-performance
 
@@ -15,6 +17,7 @@ AllCops:
     - 'log/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'
+    - 'vendor/bundle/**/*'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false

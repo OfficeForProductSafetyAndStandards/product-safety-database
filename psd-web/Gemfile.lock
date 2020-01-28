@@ -176,11 +176,6 @@ GEM
       raabro (~> 1.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    govuk-lint (4.3.0)
-      rubocop (~> 0.76)
-      rubocop-rails (~> 2)
-      rubocop-rspec (~> 1.28)
-      scss_lint
     govuk_notify_rails (2.1.2)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
@@ -345,19 +340,23 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
-    rubocop (0.79.0)
+    rubocop (0.77.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.7.0.1)
+      parser (>= 2.6)
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-govuk (2.0.0)
+      rubocop (= 0.77)
+      rubocop-rails (~> 2)
+      rubocop-rspec (~> 1.28)
     rubocop-performance (1.5.2)
       rubocop (>= 0.71.0)
-    rubocop-rails (2.3.2)
+    rubocop-rails (2.4.1)
       rack (>= 1.1)
       rubocop (>= 0.72.0)
-    rubocop-rspec (1.36.0)
+    rubocop-rspec (1.37.1)
       rubocop (>= 0.68.1)
     ruby-debug-ide (0.7.0)
       rake (>= 0.8.1)
@@ -383,6 +382,8 @@ GEM
       parser
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
+    scss_lint-govuk (0.2.0)
+      scss_lint
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -495,7 +496,6 @@ DEPENDENCIES
   factory_bot_rails
   faker
   govuk-design-system-rails!
-  govuk-lint
   govuk_notify_rails (= 2.1.2)
   jbuilder
   keycloak (= 3.0.0)
@@ -522,11 +522,13 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   rubocop
+  rubocop-govuk
   rubocop-performance
   ruby-debug-ide
   rubyzip
   sass-rails (~> 6.0)
   scout_apm
+  scss_lint-govuk
   selenium-webdriver
   sentry-raven (~> 2.13)
   sidekiq (= 5.2.7)

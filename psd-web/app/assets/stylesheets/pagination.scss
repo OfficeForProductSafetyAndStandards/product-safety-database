@@ -4,7 +4,7 @@
   @include govuk-responsive-margin(6, "top");
 
   // Direct children of pagination only
-  & > * {
+  > * {
     @include govuk-font(19);
     font-style: normal; //override emphasis styling
     display: inline-block;
@@ -37,12 +37,11 @@
   // will_paginate shows unnecessary text 'previous' and 'next'
   // even if you're on the first or last page.
 
-  // sass-lint:disable class-name-format
+  // scss-lint:disable SelectorFormat
   .previous_page.disabled,
   .next_page.disabled {
     display: none;
   }
-  // sass-lint:enable class-name-format
+  // sass-lint:enable SelectorFormat
 
 }
-

@@ -1,4 +1,4 @@
-class SessionsController < ActionController::Base
+class SessionsController < ActionController::Base # rubocop:disable Rails/ApplicationController
   include AuthenticationConcern
 
   protect_from_forgery with: :exception

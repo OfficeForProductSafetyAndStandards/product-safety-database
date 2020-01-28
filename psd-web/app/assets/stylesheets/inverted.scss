@@ -64,7 +64,7 @@ $app-button-inverted-hover-background-colour: govuk-tint($app-button-inverted-fo
   background-color: govuk-colour("white");
   color: govuk-colour("blue");
 
-  & > :last-child { margin-bottom: 0 !important; margin-right: 0 !important; }
+  > :last-child { margin-bottom: 0 !important; margin-right: 0 !important; }
 }
 
 // PSD homepage (not signed-in)

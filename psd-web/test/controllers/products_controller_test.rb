@@ -9,8 +9,8 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     @product_iphone = products(:iphone)
     @product_iphone.source = sources(:product_iphone)
 
-    test_image1 = Rails.root.join("test", "fixtures", "files", "testImage.png")
-    test_image2 = Rails.root.join("test", "fixtures", "files", "testImage2.png")
+    test_image1 = Rails.root.join("test/fixtures/files/testImage.png")
+    test_image2 = Rails.root.join("test/fixtures/files/testImage2.png")
     @product_one.documents.attach(io: File.open(test_image1), filename: "testImage.png")
     @product_one.documents.attach(io: File.open(test_image2), filename: "testImage2.png")
   end

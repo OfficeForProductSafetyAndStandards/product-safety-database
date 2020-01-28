@@ -1,14 +1,12 @@
-name: Tests
+name: RSpec test suite
 
 on: [push]
 
 env:
-  DATABASE_URL: postgres://localhost:5432/psd_test
+  DATABASE_URL: postgres://postgres@localhost:5432
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
-  REDIS_HOST: localhost
-  PGHOST: localhost
-  PGUSER: postgres
+  RAILS_ENV: test
 
 jobs:
   ruby:
@@ -37,84 +35,64 @@ jobs:
         options: --entrypoint redis-server
     steps:
     - uses: actions/checkout@v1
+
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5.x
+
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
         node-version: 10.16.x
+
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
+
     - name: Install Chromedriver
       run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
+
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
-        key: ${{ runner.OS }}-gems
+        key: ${{ runner.os }}-gems-rspec-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.OS }}-gems
-          ${{ runner.OS }}-gems-
-          ${{ runner.OS }}-
+          ${{ runner.os }}-gems-rspec-
+
+    - name: Install RubyGems
+      working-directory: psd-web
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --jobs=4 --retry=3
+    - name: Install yarn
+      run: npm install yarn -g
+
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
     - uses: actions/cache@v1
       with:
-        path: psd-web/node_modules
-        key: ${{ runner.OS }}-node
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
-          ${{ runner.OS }}-node
-          ${{ runner.OS }}-node-
-          ${{ runner.OS }}-
-          #    - name: Hack ruby version
-          #      run: |
-          #        cd psd-web
-          #        sed -i 's/ruby \"2.5.7\"/ruby \"2.5.5\"/' Gemfile
-          #        sed -i 's/ruby 2.5.7p206/ruby 2.5.5/' Gemfile.lock
-          #        sed -i 's/   2.0.2/   1.17.3/' Gemfile.lock
-    - name: Install RubyGems
-      env:
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        gem install bundler
-        bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+          ${{ runner.os }}-yarn-
+
     - name: Install Node.js dependencies
-      env:
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        npm install yarn -g
-        yarn install
-        bin/webpack
+      working-directory: psd-web
+      run: yarn install
+
     - name: Prepare database
-      env:
-        PGHOST: localhost
-        PGUSER: postgres
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        bin/rails db:create db:schema:load
-    - name: Run Tests
-      env:
-        ELASTICSEARCH_URL: localhost
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        RAILS_ENV: test
-      run: |
-        cd psd-web
-        bundle exec rake test:without_system_tests
+      working-directory: psd-web
+      run: bin/rails db:create db:schema:load
+
     - name: Run Specs
+      working-directory: psd-web
       env:
-        ELASTICSEARCH_URL: localhost
         KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
         KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
         KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
         KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-        RAILS_ENV: test
       run: |
-        cd psd-web
         bundle exec rspec spec
