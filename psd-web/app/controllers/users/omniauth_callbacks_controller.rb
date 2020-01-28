@@ -16,7 +16,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # redirect_to keycloak_login_url(params[:request_path]), alert: signin_error_message(e)
   end
 
-  private
+private
 
   def signin_error_message(error)
     error.is_a?(RestClient::Unauthorized) ? "Invalid email or password." : JSON(error.response)["error_description"]
@@ -33,5 +33,4 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def is_relative(url)
     url =~ /^\/[^\/\\]/
   end
-
 end
