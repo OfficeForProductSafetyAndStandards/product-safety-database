@@ -97,9 +97,8 @@ jobs:
       run: |
         bundle exec rspec spec
 
-    - name: Archive Capybara screenshots
-      working-directory: psd-web
-      uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v1
+      if: failure()
       with:
         name: capybara screenshots
         path: tmp/capybara
