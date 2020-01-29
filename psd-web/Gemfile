@@ -59,7 +59,7 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk"
+  gem "rubocop-govuk", "~> 2.0.0"
   gem "rubocop-performance"
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
@@ -76,6 +76,7 @@ end
 # rubocop:enable Metrics/BlockLength
 
 group :test do
+  gem "capybara-screenshot"
   gem "database_cleaner"
   gem "faker"
   gem "launchy"
