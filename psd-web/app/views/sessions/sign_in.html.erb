@@ -1,0 +1,18 @@
+<% content_for :page_title, "Sign in" %>
+
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h1 class="govuk-heading-l">Sign in</h1>
+
+    <p class="govuk-body">If you do not have an account, you will need to be invited by OPSS Processing Team before you can use the service.</p>
+
+    <%= render "components/govuk_input", id: "email", name: "email", type: "email", classes: "app-!-max-width-two-thirds", label: { text: "Email address" } %>
+
+    <%= render "components/govuk_input", id: "password", name: "password", type: "password", classes: "app-!-max-width-two-thirds", label: { text: "Password" } %>
+
+    <%= govukButton(text: "Continue") %>
+
+  </div>
+</div>

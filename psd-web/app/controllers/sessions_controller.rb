@@ -1,7 +1,10 @@
-class SessionsController < ActionController::Base # rubocop:disable Rails/ApplicationController
+class SessionsController < ApplicationController # rubocop:disable Rails/ApplicationController
   include AuthenticationConcern
 
   protect_from_forgery with: :exception
+
+  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, only: [:sign_in, :two_factor]
+
 
   def new
     redirect_to keycloak_login_url(request.original_fullpath)
@@ -21,7 +24,17 @@ class SessionsController < ActionController::Base # rubocop:disable Rails/Applic
     redirect_to root_path
   end
 
+  def sign_in
+  end
+
+  def two_factor
+  end
+
 private
+
+  def secondary_nav_items
+    nil
+  end
 
   def request_and_store_token(auth_code, redirect_url)
     self.keycloak_token = ::KeycloakClient.instance.exchange_code_for_token(auth_code, session_url_with_redirect(redirect_url))
