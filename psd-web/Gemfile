@@ -76,9 +76,9 @@ end
 # rubocop:enable Metrics/BlockLength
 
 group :test do
+  gem "capybara-screenshot"
   gem "database_cleaner"
   gem "faker"
   gem "launchy"
   gem "rails-controller-testing"
-  gem "capybara-screenshot"
 end
