@@ -14,6 +14,10 @@ end
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
+  match "/sign-in", to: "sessions#sign_in", via: :get
+  match "/two-factor", to: "sessions#two_factor", via: :get
+
+
   resource :session, only: %i[new] do
     member do
       get :new
