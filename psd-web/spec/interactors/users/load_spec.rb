@@ -4,7 +4,17 @@ require "shared_contexts/load_user"
 RSpec.describe Users::Load, type: :interactor do
   include_context "load user"
 
-  subject { described_class.call(omniauth_response: omniauth_response) }
+  before do
+    allow(CreateUserFromAuth)
+      .to receive(:new).with(omniauth_response).and_return(user_service)
+  end
+
+  subject do
+    described_class.call(
+      omniauth_response: omniauth_response,
+      user_service: user_service
+    )
+  end
 
   describe ".call" do
     context "when successfully loading the user" do

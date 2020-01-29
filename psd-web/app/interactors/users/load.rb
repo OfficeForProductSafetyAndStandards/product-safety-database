@@ -4,7 +4,7 @@ module Users
     include Interactor
 
     def call
-      context.user = user_service.user
+      context.user = context.user_service.user
     rescue RuntimeError => e
       Raven.capture_exception(e)
       errors.add(:base, e.message)
@@ -12,10 +12,6 @@ module Users
     end
 
   private
-
-    def user_service
-      CreateUserFromAuth.new(context.omniauth_response)
-    end
 
     def errors
       @errors ||= ActiveModel::Errors.new(self)
