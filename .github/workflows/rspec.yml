@@ -96,3 +96,10 @@ jobs:
         KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
       run: |
         bundle exec rspec spec
+
+    - name: Archive Capybara screenshots
+      working-directory: psd-web
+      uses: actions/upload-artifact@v1
+      with:
+        name: capybara screenshots
+        path: tmp/capybara

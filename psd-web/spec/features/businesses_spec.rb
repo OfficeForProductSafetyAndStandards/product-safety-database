@@ -25,7 +25,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, :wi
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
 
-    expect(page).to have_css(".pagination em.current", text: 1)
+    expect(page).to have_css(".paginations em.current", text: 1)
     expect(page).to have_link("2", href: businesses_path(page: 2))
     expect(page).to have_link("Next →", href: businesses_path(page: 2))
 
