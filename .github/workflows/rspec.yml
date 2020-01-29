@@ -98,6 +98,7 @@ jobs:
         bundle exec rspec spec
 
     - uses: actions/upload-artifact@v1
+      working-directory: psd-web
       if: failure()
       with:
         name: capybara screenshots
