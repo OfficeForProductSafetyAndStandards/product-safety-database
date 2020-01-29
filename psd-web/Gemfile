@@ -59,7 +59,7 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk"
+  gem "rubocop-govuk", "~> 2.0.0"
   gem "rubocop-performance"
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
@@ -80,4 +80,5 @@ group :test do
   gem "faker"
   gem "launchy"
   gem "rails-controller-testing"
+  gem "capybara-screenshot"
 end
