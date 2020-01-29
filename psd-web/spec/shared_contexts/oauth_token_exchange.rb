@@ -4,4 +4,5 @@ RSpec.shared_context "oauth token exchange" do
   let(:omniauth_response) do
     Hashie::Mash.new("credentials" => { "refresh_token" => refresh_token })
   end
+  let(:cookies) { ActionDispatch::Cookies::ChainedCookieJars.new() }
 end

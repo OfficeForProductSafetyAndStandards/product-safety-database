@@ -4,7 +4,9 @@ module Users
     include Interactor
 
     def call
-      context.access_token = api_client.exchange_refresh_token_for_token(refresh_token)
+      unless user_signed_in?
+        context.access_token = api_client.exchange_refresh_token_for_token(refresh_token)
+      end
     rescue Keycloak::KeycloakException
       raise
     rescue StandardError => e
@@ -14,6 +16,10 @@ module Users
     end
 
   private
+
+    def user_signed_in?
+      KeycloakClient.instance.user_signed_in?(access_token)
+    end
 
     def api_client
       KeycloakClient.instance

@@ -2,6 +2,7 @@ module Users
   class CreateSession
     include Interactor::Organizer
 
-    organize Load
+    organize Load,
+             ExchangeToken
   end
 end
