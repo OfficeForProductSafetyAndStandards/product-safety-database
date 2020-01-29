@@ -1,23 +1,13 @@
 require "rails_helper"
+require "shared_contexts/oauth_token_exchange"
 
 RSpec.describe Users::ExchangeToken do
-  let(:refresh_token)   { SecureRandom.hex }
-  let(:exchanged_token) { SecureRandom.hex }
-  let(:omniauth_response) do
-    Hashie::Mash.new("credentials" => { "refresh_token" => refresh_token })
-  end
-
-  # Ensure that we have a new instance to prevent other specs interfering
-  around do |ex|
-    Singleton.__init__(described_class)
-    ex.run
-    Singleton.__init__(described_class)
-  end
+  include_context "oauth token exchange"
 
   subject { described_class.call(omniauth_response: omniauth_response) }
 
-  describe ".call" do
-    context "when successfully exchanging the token with keycoak" do
+  describe ".call", :reset_keycloak_client do
+    context "when successfully exchanging the token with keycloak" do
       before do
         allow(KeycloakClient.instance)
           .to receive(:exchange_refresh_token_for_token)

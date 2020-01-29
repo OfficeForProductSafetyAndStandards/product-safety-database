@@ -6,7 +6,7 @@ RSpec.describe Users::CreateSession do
 
   subject { described_class.call(user_service: user_service) }
 
-  describe ".call" do
+  describe ".call", :reset_keycloak_client do
     it { expect(subject.user).to be user }
   end
 end
