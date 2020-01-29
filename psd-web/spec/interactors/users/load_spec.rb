@@ -1,16 +1,10 @@
 require "rails_helper"
+require "shared_contexts/load_user"
 
 RSpec.describe Users::Load, type: :interactor do
-  let(:user)              { double(User) }
-  let(:user_service)      { instance_double(CreateUserFromAuth, user: user) }
-  let(:omniauth_response) { double }
+  include_context "load user"
 
   subject { described_class.call(omniauth_response: omniauth_response) }
-
-  before do
-    allow(CreateUserFromAuth)
-      .to receive(:new).with(omniauth_response).and_return(user_service)
-  end
 
   describe ".call" do
     context "when successfully loading the user" do
@@ -27,7 +21,7 @@ RSpec.describe Users::Load, type: :interactor do
       end
       it { is_expected.to be_a_failure }
       it { expect(subject.user).to be nil }
-      it { expect(subject.errors.full_messages).to eq(["RuntimeError"]) }
+      it { expect(subject.errors.full_messages).to eq(%w[RuntimeError]) }
     end
   end
 end
