@@ -13,19 +13,16 @@ end
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
-#
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks",  sessions: "sessions"}
-
-  resource :session, only: %i[new] do
-    member do
-      get :new
-      get :signin
-      get :logout
-    end
-  end
 
   unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
     mount Sidekiq::Web => "/sidekiq"
+  end
+
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_scope :user do
+    resource :session, only: [] do
+      get :logout, to: "sessions#destroy"
+    end
   end
 
   concern :document_attachable do
