@@ -4,7 +4,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <h1 class="govuk-heading-l">Two Factor</h1>
+    <h1 class="govuk-heading-l">Check your phone</h1>
+
+    <p class="govuk-body">We have sent you a security code by text message.</p>
+
+    <%= render "components/govuk_input", id: "two-factor", name: "two_factor", type: "text", classes: "govuk-input--width-5", label: { text: "Text message code" } %>
 
     <%= govukButton(text: "Continue") %>
 
