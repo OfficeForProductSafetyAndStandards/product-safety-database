@@ -43,7 +43,7 @@ private
   end
 
   def set_user_teams
-    @teams = User.current.teams
+    @teams = current_user.teams
   end
 
   def whitelisted_user
@@ -89,7 +89,7 @@ private
                                             name: user.name,
                                             team_page_url: team_url(@team),
                                             team_name: @team.name,
-                                            inviting_team_member_name: User.current.name
+                                            inviting_team_member_name: current_user.name
     email.deliver_later
   end
 

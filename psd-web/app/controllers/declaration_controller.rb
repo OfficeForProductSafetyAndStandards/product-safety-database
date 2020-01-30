@@ -12,7 +12,7 @@ class DeclarationController < ApplicationController
       return render :index
     end
 
-    UserDeclarationService.accept_declaration(User.current)
+    UserDeclarationService.accept_declaration(current_user)
 
     redirect_to session[:redirect_path] || root_path
   end

@@ -69,7 +69,7 @@ module FileConcern
     attachment_params
         .except(:file)
         .to_h
-        .merge(created_by: User.current.id)
+        .merge(created_by: current_user.id)
   end
 
   def check_correct_usage
