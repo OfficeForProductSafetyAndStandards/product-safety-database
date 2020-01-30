@@ -4,7 +4,9 @@ Built by the [Office for Product Safety and Standards](https://www.gov.uk/govern
 
 For enquiries, contact [OPSS.enquiries@beis.gov.uk](OPSS.enquiries@beis.gov.uk)
 
-[![Build Status](https://travis-ci.org/UKGovernmentBEIS/beis-opss-psd.svg?branch=master)](https://travis-ci.org/UKGovernmentBEIS/beis-opss-psd)
+![](https://github.com/UKGovernmentBEIS/beis-opss-psd/workflows/RSpec%20test%20suite/badge.svg?branch=master)
+![](https://github.com/UKGovernmentBEIS/beis-opss-psd/workflows/Minitest%20test%20suite/badge.svg?branch=master)
+![](https://github.com/UKGovernmentBEIS/beis-opss-psd/workflows/System%20Tests/badge.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/UKGovernmentBEIS/beis-opss-psd/badge.svg?branch=master)](https://coveralls.io/github/UKGovernmentBEIS/beis-opss-psd?branch=master)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=UKGovernmentBEIS/beis-opss-psd)](https://dependabot.com)
 
