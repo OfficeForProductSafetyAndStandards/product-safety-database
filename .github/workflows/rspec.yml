@@ -96,3 +96,9 @@ jobs:
         KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
       run: |
         bundle exec rspec spec
+
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: capybara screenshots
+        path: psd-web/tmp/capybara
