@@ -7,7 +7,7 @@
 
     <p class="govuk-body">We have sent you a security code by text message.</p>
 
-    <%= render "components/govuk_input", id: "two-factor", name: "two_factor", type: "text", classes: "govuk-input--width-5", label: { text: "Text message code" } %>
+    <%= render "components/govuk_input", id: "two-factor", name: "two_factor", type: "text", classes: "govuk-input--width-5", label: { text: "Text message code" }, attributes: { pattern: "[0-9]*", inputmode: "numeric" } %>
 
     <%= govukButton(text: "Continue") %>
 
