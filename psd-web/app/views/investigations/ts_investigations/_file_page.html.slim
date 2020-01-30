@@ -10,7 +10,8 @@ fieldset.govuk-fieldset
     = form.fields_for :file do |subform|
       - if @file_blob.blank?
         .govuk-form-group class=("govuk-form-group--error" if form.object.errors[:file].any?)
-          = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
+          = subform.label :file, "Upload a file", class: "govuk-label"
+          = subform.file_field :file, class: "govuk-file-upload"
       hr.govuk-section-break.govuk-section-break--m.govuk-section-break--visible
       = render "form_components/govuk_input", key: :title, form: subform, value: @file_title,
               classes: "govuk-!-width-two-thirds",
