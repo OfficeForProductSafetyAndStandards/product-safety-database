@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   include RavenConfigurationConcern
 
   protect_from_forgery with: :exception
+  before_action :authenticate_user!
   before_action :set_current_user
   before_action :authorize_user
   before_action :set_raven_context
