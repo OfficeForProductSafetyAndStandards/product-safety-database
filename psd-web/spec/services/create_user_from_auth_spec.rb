@@ -1,6 +1,6 @@
 require "rails_helper"
-require "omniauth_response"
-require "create_user"
+require "shared_contexts/omniauth_response"
+require "shared_examples/create_user"
 
 RSpec.describe CreateUserFromAuth do
   include_context "omniauth response"

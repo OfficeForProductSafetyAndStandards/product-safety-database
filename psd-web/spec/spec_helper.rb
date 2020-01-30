@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-$:.unshift(Rails.root.join("spec"))
-
 require "webmock/rspec"
 
 RSpec.configure do |config|

@@ -1,7 +1,21 @@
 RSpec.shared_context "with stubbed Elasticsearch", shared_context: :metadata do
   before do
     elasticsearch_url = ENV.fetch("ELASTICSEARCH_URL", "http://elasticsearch:9200")
-    stub_request(:any, /#{Regexp.quote(elasticsearch_url)}/).to_return(body: "Elasticsearch disabled in Rspec", status: 200)
+    empty_elasticsearch_response = {
+      took: 0,
+      timed_out: false,
+      _shards: { total: 0, successful: 1, skipped: 0, failed: 0 },
+      hits: {
+        total: 0,
+        max_score: 0.0,
+        hits: []
+      }
+    }
+    stub_request(:any, /#{Regexp.quote(elasticsearch_url)}/).to_return(
+      body: empty_elasticsearch_response.to_json,
+      status: 200,
+      headers: { "Content-Type" => "application/json" }
+    )
   end
 end
 
