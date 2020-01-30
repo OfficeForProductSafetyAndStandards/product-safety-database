@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
 
   protect_from_forgery with: :exception
 
-  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, only: %i[sign_in two_factor]
+  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, :set_current_user, :set_raven_context
 
 
   def new
