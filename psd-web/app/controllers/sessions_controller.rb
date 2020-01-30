@@ -1,9 +1,9 @@
-class SessionsController < ApplicationController # rubocop:disable Rails/ApplicationController
+class SessionsController < ApplicationController
   include AuthenticationConcern
 
   protect_from_forgery with: :exception
 
-  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, only: [:sign_in, :two_factor]
+  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, only: %i[sign_in two_factor]
 
 
   def new
@@ -24,11 +24,9 @@ class SessionsController < ApplicationController # rubocop:disable Rails/Applica
     redirect_to root_path
   end
 
-  def sign_in
-  end
+  def sign_in; end
 
-  def two_factor
-  end
+  def two_factor; end
 
 private
 
