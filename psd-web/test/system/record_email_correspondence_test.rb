@@ -5,17 +5,24 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
+    mock_keycloak_user_roles([:psd_user])
+
+    users(:southampton).teams << teams(:southampton)
+    users(:southampton_steve).teams << teams(:southampton)
+    users(:southampton_bob).teams << teams(:southampton)
+
+    User.current = sign_in users(:southampton)
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
-    set_investigation_source! @investigation, User.current
+    set_investigation_source! @investigation, users(:southampton)
     @correspondence = correspondences(:email)
-    visit new_investigation_email_url(@investigation)
+    visit new_investigation_email_path(@investigation)
   end
 
   teardown do
-    reset_keycloak_and_notify_mocks
+    User.current = nil
   end
 
   test "first step should be context" do
@@ -108,7 +115,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "confirmation continue should go to case page" do
-    visit new_investigation_email_url(load_case(:no_products))
+    visit new_investigation_email_path(load_case(:no_products))
     fill_in_context_form
     click_button "Continue"
     fill_in_content_form
@@ -138,8 +145,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    other_org_user = User.find_by name: "Test Ts_user"
-    sign_in_as other_org_user
+    sign_out
+    sign_in users(:luton)
+    User.current = users(:luton)
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -148,8 +156,6 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee" do
-    other_org_user = User.find_by name: "Test Ts_user"
-    set_investigation_assignee! @investigation, other_org_user
     fill_in_context_form
     choose :correspondence_email_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -157,7 +163,6 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_in_as other_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -165,12 +170,16 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee's team" do
-    other_org_user = User.find_by name: "Test Ts_user"
-    sign_in_as other_org_user
-    assignee = User.find_by name: "Test User_one"
-    same_team_user = User.find_by name: "Test User_four"
+    sign_out
+    other_org_user = users(:luton)
+    sign_in other_org_user
+    User.current = other_org_user
+    assignee = users(:southampton_bob)
+    same_team_user = users(:southampton_steve)
 
     set_investigation_assignee! @investigation, assignee
+
+    visit new_investigation_email_path(@investigation)
     fill_in_context_form
     choose :correspondence_email_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -178,7 +187,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_in_as same_team_user
+    sign_out
+    sign_in same_team_user
+    User.current = same_team_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -193,8 +204,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    same_org_user = User.find_by name: "Test User_three"
-    sign_in_as same_org_user
+    same_org_user = users(:southampton_steve)
+    sign_out
+    sign_in same_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"

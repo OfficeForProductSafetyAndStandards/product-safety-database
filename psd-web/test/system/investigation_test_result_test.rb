@@ -2,18 +2,15 @@ require "application_system_test_case"
 
 class InvestigationTestResultTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
 
     @investigation = load_case(:one)
     @test = tests(:one)
 
     visit new_result_investigation_tests_path(@investigation)
     assert_selector "h1", text: "Record test result"
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "cannot add test result without a date or result" do

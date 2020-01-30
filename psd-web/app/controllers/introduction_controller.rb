@@ -1,4 +1,5 @@
 class IntroductionController < ApplicationController
+  skip_before_action :has_viewed_introduction
   def overview; end
 
   def report_products; end

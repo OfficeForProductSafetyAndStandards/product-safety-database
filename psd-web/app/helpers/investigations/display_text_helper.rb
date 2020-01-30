@@ -7,29 +7,29 @@ module Investigations::DisplayTextHelper
     is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
     items = [
       {
-        href: investigation_url(investigation),
+        href: investigation_path(investigation),
         text: "Overview",
         active: is_current_tab.overview?
       },
       {
-        href: investigation_products_url(investigation),
+        href: investigation_products_path(investigation),
         text: "Products",
         count: " (#{@investigation.products.size})", active: is_current_tab.products?
       },
       {
-        href: investigation_businesses_url(investigation),
+        href: investigation_businesses_path(investigation),
         text: "Businesses",
         count: " (#{@investigation.businesses.size})",
         active: is_current_tab.businesses?
       },
       {
-        href: investigation_attachments_url(investigation),
+        href: investigation_attachments_path(investigation),
         text: "Attachments",
         count: " (#{@investigation.documents.size})",
         active: is_current_tab.attachments?
       },
       {
-        href: investigation_activity_url(@investigation),
+        href: investigation_activity_path(@investigation),
         text: "Activity",
         active: is_current_tab.activity?
       }

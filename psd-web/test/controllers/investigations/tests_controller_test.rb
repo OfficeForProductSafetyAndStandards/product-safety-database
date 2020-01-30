@@ -2,14 +2,11 @@ require "test_helper"
 
 class TestsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_out_keycloak_and_notify
+    sign_in users(:southampton)
+    mock_keycloak_user_roles([:psd_user])
     stub_antivirus_api
     @investigation = load_case(:one)
     @product = products(:one)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "should redirect new test request action to first wizard step" do
@@ -41,7 +38,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
     assert Test.last.is_a?(Test::Request)
 
-    assert_redirected_to investigation_url(@investigation)
+    assert_redirected_to investigation_path(@investigation)
   end
 
   test "should create test result" do
@@ -67,7 +64,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
     assert Test.last.is_a?(Test::Result)
 
-    assert_redirected_to investigation_url(@investigation)
+    assert_redirected_to investigation_path(@investigation)
   end
 
   test "should add test record to investigation" do

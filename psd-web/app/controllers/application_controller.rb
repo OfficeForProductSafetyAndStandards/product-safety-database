@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-
   include Pundit
   include CacheConcern
   include HttpAuthConcern
@@ -8,8 +7,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :set_current_user
-  before_action :authorize_user
   before_action :set_raven_context
+  before_action :authorize_user
+  before_action :has_accepted_declaration
+  before_action :has_viewed_introduction
   before_action :set_cache_headers
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
@@ -21,11 +22,18 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize_user
-    raise Pundit::NotAuthorizedError unless current_user&.is_psd_user?
+    return unless user_signed_in?
+
+    raise Pundit::NotAuthorizedError unless current_user.is_psd_user?
   end
 
   def has_accepted_declaration
-    redirect_to declaration_index_path(redirect_path: request.original_fullpath) unless current_user.has_accepted_declaration
+    return unless user_signed_in?
+
+    unless current_user.has_accepted_declaration?
+      stored_location_for(current_user)
+      redirect_to declaration_index_path
+    end
   end
 
   def hide_nav?
@@ -88,8 +96,18 @@ class ApplicationController < ActionController::Base
     items
   end
 
+  def has_viewed_introduction
+    return unless user_signed_in?
+    return if current_user.is_opss?
+
+    unless current_user.has_viewed_introduction
+      stored_location_for(current_user)
+      redirect_to introduction_overview_path
+    end
+  end
+
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || investigations_path
+    stored_location_for(resource) || root_path
   end
 
   def after_sign_out_path_for(*)

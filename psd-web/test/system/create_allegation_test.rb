@@ -15,17 +15,16 @@ class CreateAllegationTest < ApplicationSystemTestCase
       description: "Allegation description"
     )
 
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+
+    sign_in(users(:opss), roles: %i[psd_user opss_user])
     visit new_allegation_path
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "can be reached via create page" do
-    visit root_path
+    visit investigations_path
+
     click_on "Open a new case"
     assert_text "Create new"
 

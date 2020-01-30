@@ -4,7 +4,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:other_team) { create(:team, organisation: organisation, name: "other team") }
-  let(:user) { create(:user, :activated, organisation: organisation, teams: [team]) }
+  let(:user) { create(:user, :activated, organisation: organisation, teams: [team], has_viewed_introduction: true) }
   let(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, teams: [team]) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, teams: [other_team]) }
 

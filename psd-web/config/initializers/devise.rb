@@ -176,7 +176,7 @@ Devise.setup do |config|
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  # config.timeout_in = 30.minutes
+  config.timeout_in = 1.minute
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
@@ -254,30 +254,30 @@ Devise.setup do |config|
   # config.navigational_formats = ['*/*', :html]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
-  config.sign_out_via = :delete
+  config.sign_out_via = :get
 
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  keycloak_url = URI(ENV.fetch("KEYCLOAK_AUTH_URL"))
 
   # This is used under the hood by omniauth_openid_connect
+  keycloak_url = URI(ENV.fetch("KEYCLOAK_AUTH_URL"))
   SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
 
   config.omniauth :openid_connect,
                   name: :openid_connect,
                   discovery:  true,
                   log: :debug,
-                  scope: %w[openid email profile address roles],
+                  scope: "openid,email,profile,address,roles",
                   issuer: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss",
                   client_options: {
                     authorization_endpoint: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth",
-                    port:       keycloak_url.port,
-                    scheme:     keycloak_url.scheme,
-                    host:       keycloak_url.host,
-                    identifier: ENV.fetch("KEYCLOAK_CLIENT_ID"),
-                    secret:     ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
-                    redirect_uri: "#{ENV.fetch('HTTP_DOMAIN')}/users/auth/openid_connect/callback"
+                    port:         keycloak_url.port,
+                    scheme:       keycloak_url.scheme,
+                    host:         keycloak_url.host,
+                    identifier:   ENV.fetch("KEYCLOAK_CLIENT_ID"),
+                    secret:       ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
+                    redirect_uri: ENV.fetch("KEYCLOAK_REDIRECT_URI")
                   }
 
   # ==> Warden configuration

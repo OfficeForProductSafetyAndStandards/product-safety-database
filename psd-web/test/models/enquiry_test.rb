@@ -8,11 +8,8 @@ class EnquiryTest < ActiveSupport::TestCase
   end
 
   setup do
-    mock_out_keycloak_and_notify
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
+    stub_notify_mailer
+    User.current = users(:opss)
   end
 
   test "Enquiry with valid date received" do

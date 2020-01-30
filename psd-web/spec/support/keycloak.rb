@@ -16,7 +16,7 @@ RSpec.shared_context "reset keycloak client", shared_context: :metadata do
   end
 end
 
-RSpec.configure do |rspec|
-  rspec.include_context "with stubbed Keycloak configuration", with_stubbed_keycloak_config: true
-  rspec.include_context "reset keycloak client", :reset_keycloak_client
+RSpec.configure do |config|
+  config.include_context "with stubbed Keycloak configuration", with_stubbed_keycloak_config: true
+  config.include_context "reset keycloak client"
 end

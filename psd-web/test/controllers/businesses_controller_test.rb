@@ -2,16 +2,13 @@ require "test_helper"
 
 class BusinessesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_out_keycloak_and_notify
+    mock_keycloak_user_roles([:psd_user])
+    sign_in users(:southampton)
     @business_one = businesses(:one)
     @business_two = businesses(:two)
     @business_one.source = sources(:business_one)
     @business_two.source = sources(:business_two)
     Business.import refresh: true, force: true
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "should get index" do
