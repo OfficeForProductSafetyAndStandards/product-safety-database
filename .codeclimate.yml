@@ -1,0 +1,2 @@
+exclude_patterns:
+- "psd-web/db/"
