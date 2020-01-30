@@ -1,14 +1,23 @@
 class ApplicationController < ActionController::Base
 
+  include Pundit
   include CacheConcern
   include HttpAuthConcern
   include RavenConfigurationConcern
 
   protect_from_forgery with: :exception
+  before_action :set_current_user
+  before_action :authorize_user
   before_action :set_raven_context
   before_action :set_cache_headers
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
+
+  def set_current_user
+    return unless user_signed_in?
+
+    User.current = current_user
+  end
 
   def authorize_user
     raise Pundit::NotAuthorizedError unless current_user&.is_psd_user?
@@ -73,7 +82,7 @@ class ApplicationController < ActionController::Base
       items.push text: "Your account", href: KeycloakClient.instance.user_account_url
       items.push text: "Sign out", href: logout_session_path
     else
-      items.push text: "Sign in", href: keycloak_login_url
+      items.push text: "Sign in", href: user_openid_connect_omniauth_authorize_path
     end
     items
   end
