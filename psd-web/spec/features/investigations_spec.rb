@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:user)                                   { create :user, :activated }
   let!(:projects)                              { create_list :project, 18, updated_at: 4.days.ago }
-  let!(:investigation_last_updated_3_days_ago) { create(:allegation, updated_at: 3.days.ago, description: Faker::Hipster.paragraph).decorate }
-  let!(:investigation_last_updated_2_days_ago) { create(:allegation, updated_at: 2.days.ago, description: Faker::Hipster.paragraph).decorate }
-  let!(:investigation_last_updated_1_days_ago) { create(:allegation, updated_at: 1.day.ago,  description: Faker::Hipster.paragraph).decorate }
+  let!(:investigation_last_updated_3_days_ago) { create(:allegation, updated_at: 3.days.ago, description: "Electric skateboard investigation").decorate }
+  let!(:investigation_last_updated_2_days_ago) { create(:allegation, updated_at: 2.days.ago, description: "FastToast toaster investigation").decorate }
+  let!(:investigation_last_updated_1_days_ago) { create(:allegation, updated_at: 1.day.ago,  description: "Counterfeit chargers investigation").decorate }
 
   before { allow(AuditActivity::Investigation::Base).to receive(:from) }
 
@@ -31,6 +31,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     sign_in(as_user: user)
     visit investigations_path
 
+    # Expect investigations to be in reverse chronological order
     expect(page).
       to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_1_days_ago.pretty_description)
     expect(page).
@@ -42,11 +43,14 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     expect(page).to have_link("2",      href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
     expect(page).to have_link("Next →", href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
 
-    fill_in "Keywords", with: investigation_last_updated_3_days_ago.object.description.split(" ")[0..2].join(" ")
+    fill_in "Keywords", with: "electric skateboard"
     click_on "Apply filters"
 
+    # Expect only the single relevant investigation to be returned
     expect(page).
       to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
+
+
     expect(page.find("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")).to be_checked
 
     expect(page.current_path).to eq(investigations_search_path)
@@ -56,6 +60,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
 
     expect(page).not_to have_css("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")
 
+    # Expect investigations to be back in reverse chronological order again
     expect(page).
       to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_1_days_ago.pretty_description)
     expect(page).
