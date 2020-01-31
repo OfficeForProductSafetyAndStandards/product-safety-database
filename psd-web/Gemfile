@@ -22,7 +22,7 @@ gem "pg"
 gem "pghero"
 gem "puma"
 gem "pundit"
-gem "rack", github: "rack/rack", ref: "8659d9f073c79dac9ddd7ab84b8e647a1ad4d34e" # Until https://github.com/rack/rack/pull/1428 is released
+gem "rack", "~> 2.1.2"
 gem "rails", "5.2.3"
 gem "redcarpet"
 gem "redis-rails"
