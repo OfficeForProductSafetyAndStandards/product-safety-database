@@ -6,7 +6,7 @@ gem "will_paginate", "~> 3.2" # Must be laoded before elasticsearch gems
 
 gem "aws-sdk-s3", "1.60.1"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
-gem "axlsx_rails"
+gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils"
 gem "draper"
 gem "elasticsearch", "6.8.0"
