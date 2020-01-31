@@ -6,7 +6,7 @@ gem "will_paginate", "~> 3.2" # Must be laoded before elasticsearch gems
 
 gem "aws-sdk-s3", "1.60.1"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
-gem "axlsx_rails"
+gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils"
 gem "draper"
 gem "elasticsearch", "6.8.0"
@@ -22,7 +22,7 @@ gem "pg"
 gem "pghero"
 gem "puma"
 gem "pundit"
-gem "rack", github: "rack/rack", ref: "8659d9f073c79dac9ddd7ab84b8e647a1ad4d34e" # Until https://github.com/rack/rack/pull/1428 is released
+gem "rack", "~> 2.1.2"
 gem "rails", "5.2.3"
 gem "redcarpet"
 gem "redis-rails"
@@ -35,7 +35,7 @@ gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.
 gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "0.6.0"
+gem "strong_migrations", "0.6.1"
 gem "webpacker", "4.2.2"
 gem "wicked"
 
@@ -63,6 +63,7 @@ group :development, :test do
   gem "rubocop-performance"
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
+  gem "sassc", "~> 2.1.0" # Unable to upgrade until https://github.com/sass/sassc-ruby/issues/146 is resolved
   gem "scss_lint-govuk"
   gem "selenium-webdriver"
   gem "simplecov"
