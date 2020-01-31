@@ -7,6 +7,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       sign_in_and_redirect(create_user_command.user)
       set_flash_message(:notice, :success, kind: "Facebook")
       User.current = current_user
+    elsif create_user_command.user.nil?
+      redirect_to forbidden_path
     else
       session["devise.openid_connect_data"] = request.env["omniauth.auth"]
       redirect_to user_openid_connect_omniauth_authorize_path

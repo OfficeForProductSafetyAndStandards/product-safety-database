@@ -1,7 +1,7 @@
 module LoginHelpers
   module Features
     def sign_in(as_user: build(:user))
-      groups = as_user.teams.flat_map(&:path) << as_user.organisation.path
+      groups = as_user.teams.flat_map(&:path) << as_user.organisation&.path
 
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:openid_connect] = {
