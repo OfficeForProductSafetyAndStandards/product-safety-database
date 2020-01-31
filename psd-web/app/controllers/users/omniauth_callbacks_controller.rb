@@ -1,12 +1,8 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  # skip_before_action :set_raven_context
-  # skip_before_action :has_accepted_declaration
+  skip_before_action :has_accepted_declaration
   skip_before_action :authorize_user
 
   def openid_connect
-    create_user_command = Users::CreateSession.call(
-      user_service: CreateUserFromAuth.new(omniauth_response),
-      omniauth_response: omniauth_response)
     if create_user_command.success?
       sign_in_and_redirect(create_user_command.user)
       set_flash_message(:notice, :success, kind: "Facebook")
@@ -17,7 +13,14 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
-  private
+private
+
+  def create_user_command
+    @create_user_command = Users::CreateSession.call(
+      user_service: CreateUserFromAuth.new(omniauth_response),
+      omniauth_response: omniauth_response
+    )
+  end
 
   def omniauth_response
     request.env["omniauth.auth"]

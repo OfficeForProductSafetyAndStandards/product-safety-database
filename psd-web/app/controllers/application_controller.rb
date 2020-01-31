@@ -8,8 +8,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :set_current_user
-  before_action :authorize_user
   before_action :set_raven_context
+  before_action :authorize_user
+  before_action :has_accepted_declaration
   before_action :set_cache_headers
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user

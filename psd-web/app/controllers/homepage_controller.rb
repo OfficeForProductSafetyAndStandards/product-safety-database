@@ -1,6 +1,7 @@
 class HomepageController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :authorize_user
+  skip_before_action :has_accepted_declaration
 
   def show
     route_user if user_signed_in?
