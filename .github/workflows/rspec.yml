@@ -11,6 +11,7 @@ env:
   KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
   KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
   KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+  DOMAIN: example.com
 
 jobs:
   ruby:
