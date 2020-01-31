@@ -2,27 +2,31 @@ import $ from 'jquery';
 
 function dateInput(idPrefix) {
   $(document).ready(() => {
-    const dateObj = new Date();
-    const currentDay = dateObj.getUTCDate();
-    const currentMonth = dateObj.getUTCMonth() + 1;
-    const currentYear = dateObj.getUTCFullYear();
+    const currentDate = new Date();
+    var dateYesterday = new Date(currentDate.getTime())
+
+    // This sets the date to the previous day, since setting
+    // the date to 0 sets the date to the last day of the
+    // previous month.
+    dateYesterday.setDate(dateYesterday.getDate() - 1)
+
     const today = document.getElementById('today');
     const yesterday = document.getElementById('yesterday');
     today.onclick = function setDateToToday() {
       const day = document.getElementById(`${idPrefix}[day]`);
-      day.value = currentDay;
+      day.value = currentDate.getDate();
       const month = document.getElementById(`${idPrefix}[month]`);
-      month.value = currentMonth;
+      month.value = currentDate.getMonth() + 1;
       const year = document.getElementById(`${idPrefix}[year]`);
-      year.value = currentYear;
+      year.value = currentDate.getFullYear();
     };
     yesterday.onclick = function setDateToYesterday() {
       const day = document.getElementById(`${idPrefix}[day]`);
-      day.value = currentDay - 1;
+      day.value = dateYesterday.getDate();
       const month = document.getElementById(`${idPrefix}[month]`);
-      month.value = currentMonth;
+      month.value = dateYesterday.getMonth() + 1;
       const year = document.getElementById(`${idPrefix}[year]`);
-      year.value = currentYear;
+      year.value = dateYesterday.getFullYear();
     };
   });
 }
