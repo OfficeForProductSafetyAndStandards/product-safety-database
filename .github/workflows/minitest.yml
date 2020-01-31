@@ -38,7 +38,7 @@ jobs:
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.5.x
+        ruby-version: 2.5.7
 
     - name: Set up Node
       uses: actions/setup-node@v1
@@ -51,9 +51,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ runner.os }}-ruby-2.5.7-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
+          ${{ runner.os }}-ruby-2.5.7-gems-
 
     - name: Install RubyGems
       working-directory: psd-web
