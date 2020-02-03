@@ -2,11 +2,8 @@ require "test_helper"
 
 class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_out_keycloak_and_notify(name: "User_four")
-
-    @assignee = User.find_by(name: "Test User_one")
-    @non_opss_user = User.find_by(name: "Test User_two")
-    mock_user_as_non_opss(@non_opss_user)
+    mock_keycloak_user_roles([:psd_user])
+    sign_in users(:southampton)
 
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")

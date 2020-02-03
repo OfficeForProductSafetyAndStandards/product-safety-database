@@ -2,7 +2,8 @@ require "test_helper"
 
 class ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_out_keycloak_and_notify
+    mock_keycloak_user_roles([:psd_user])
+    sign_in users(:southampton)
     stub_antivirus_api
     @product_one = products(:one)
     @product_one.source = sources(:product_one)

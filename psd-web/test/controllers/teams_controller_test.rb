@@ -2,11 +2,13 @@ require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    stub_notify_mailer
     allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
-    mock_out_keycloak_and_notify
-    set_user_as_team_admin(User.current)
-    @my_team = User.current.teams.first
-    @another_team = Team.all.find { |t| !User.current.teams.include?(t) }
+    mock_keycloak_user_roles([:psd_user, :team_admin])
+    sign_in users(:southampton)
+    users(:southampton).teams << teams(:southampton)
+    @my_team = teams(:southampton)
+    @another_team = Team.all.find { |t| !users(:southampton).teams.include?(t) }
   end
 
   teardown do
@@ -39,7 +41,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Inviting existing user from same org adds them to the team" do
-    user_in_my_org_not_team = User.current.organisation.users.find { |u| (u.teams & User.current.teams).empty? }
+    user_in_my_org_not_team = users(:southampton).organisation.users.find { |u| (u.teams & users(:southampton).teams).empty? }
     email_address = user_in_my_org_not_team.email
 
     assert_difference "@my_team.users.count" => 1, "User.count" => 0 do
@@ -50,7 +52,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Inviting existing user from same team returns error" do
-    email_address = @my_team.users.find { |u| u != User.current }.email
+    email_address = @my_team.users.find { |u| u != users(:southampton) }.email
     assert_difference "@my_team.users.count" => 0, "User.count" => 0 do
       put invite_to_team_url(@my_team), params: { new_user: { email_address: email_address } }
       assert_response :bad_request
@@ -65,7 +67,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Inviting existing user from different org doesn't add and shows error" do
-    email_address = Organisation.find_by(name: "Organisation 1").users.first.email
+    email_address = users(:luton).email
     assert_difference "@my_team.users.count" => 0, "User.count" => 0 do
       put invite_to_team_url(@my_team), params: { new_user: { email_address: email_address } }
       assert_response :bad_request
