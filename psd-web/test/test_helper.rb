@@ -91,7 +91,6 @@ class ActiveSupport::TestCase
     investigation.save
     investigation
   end
-
 end
 
 ActionDispatch::IntegrationTest.include Devise::Test::IntegrationHelpers

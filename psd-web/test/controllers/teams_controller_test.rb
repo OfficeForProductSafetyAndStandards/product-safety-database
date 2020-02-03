@@ -4,7 +4,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notify_mailer
     allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
-    mock_keycloak_user_roles([:psd_user, :team_admin])
+    mock_keycloak_user_roles(%i[psd_user team_admin])
     sign_in users(:southampton)
     users(:southampton).teams << teams(:southampton)
     @my_team = teams(:southampton)
