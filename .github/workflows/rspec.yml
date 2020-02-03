@@ -15,6 +15,8 @@ env:
   ANTIVIRUS_URL: http://localhost:3006/safe
   ANTIVIRUS_USERNAME: av
   ANTIVIRUS_PASSWORD: password
+  HTTP_HOST: localhost
+  HTTP_POST: 3000
 
 jobs:
   ruby:

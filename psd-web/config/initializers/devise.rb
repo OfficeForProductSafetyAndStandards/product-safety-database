@@ -272,11 +272,11 @@ Devise.setup do |config|
                   issuer: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss",
                   client_options: {
                     authorization_endpoint: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth",
-                    port:       keycloak_url.port,
-                    scheme:     keycloak_url.scheme,
-                    host:       keycloak_url.host,
-                    identifier: ENV.fetch("KEYCLOAK_CLIENT_ID"),
-                    secret:     ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
+                    port:         keycloak_url.port,
+                    scheme:       keycloak_url.scheme,
+                    host:         keycloak_url.host,
+                    identifier:   ENV.fetch("KEYCLOAK_CLIENT_ID"),
+                    secret:       ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
                     redirect_uri: ENV.fetch("KEYCLOACK_REDIRECT_URI")
                   }
 
