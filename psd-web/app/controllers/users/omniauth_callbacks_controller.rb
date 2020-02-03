@@ -3,11 +3,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :authorize_user
 
   def openid_connect
-    if create_user_command.success?
+    if create_user.success?
       sign_in_and_redirect(create_user_command.user)
       set_flash_message(:notice, :success, kind: "Facebook")
       User.current = current_user
-    elsif create_user_command.user.nil?
+    elsif create_user.user.nil?
       redirect_to forbidden_path
     else
       session["devise.openid_connect_data"] = request.env["omniauth.auth"]
