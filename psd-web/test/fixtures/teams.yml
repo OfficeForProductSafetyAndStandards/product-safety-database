@@ -1,0 +1,17 @@
+southampton:
+  id: ddddeef8-1a33-4322-8b8c-fc7fa95a2e3b
+  name: Southampton Council Trading Stanards
+  path: /Organisations/Southampton Council/Southampton Council
+  organisation: southampton
+
+opss_enforcement:
+  id: cccceef8-1a33-4322-8b8c-fc7fa95a2e3b
+  name: OPSS Enforcement
+  path: /Organisations/OPSS/Enforcement
+  organisation: opss
+
+luton:
+  id: edddeef8-1a33-4322-8b8c-fc7fa95a2e3b
+  name: Luton Council Trading Stanards
+  path: /Organisations/Southampton Council/Luton Council
+  organisation: luton

@@ -9,3 +9,9 @@ opss:
   has_accepted_declaration: true
   name: Slavosh
   organisation: opss
+
+luton:
+  email: luton@example.com
+  has_accepted_declaration: true
+  name: Luton User
+  organisation: luton
