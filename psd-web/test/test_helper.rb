@@ -21,11 +21,6 @@ WebMock.allow_net_connect!
 class ActiveSupport::TestCase
   include ::RSpec::Mocks::ExampleMethods
 
-  def initialize *args
-    @keycloak_client_instance = KeycloakClient.instance
-    super(*args)
-  end
-
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
@@ -53,30 +48,10 @@ class ActiveSupport::TestCase
   # sensible value, but it should only be run once per test.
   # To change currently logged in user afterwards call `sign_in_as(...)`
   def mock_out_keycloak_and_notify(name: "User_one")
-    @users = [test_user(name: "User_four"),
-              test_user(name: "User_one"),
-              test_user(name: "User_two"),
-              test_user(name: "User_three"),
-              test_user(name: "Ts_user", ts_user: true),
-              non_psd_user(name: "Non_psd_user")]
-    @organisations = organisations
-    @teams = all_teams
-    @team_users = []
-
-    allow(Keycloak::Client).to receive(:openid_configuration) { true }
-
-    allow(@keycloak_client_instance).to receive(:all_organisations) { @organisations.deep_dup }
-    allow(@keycloak_client_instance).to receive(:all_teams) { @teams.deep_dup }
-    allow(@keycloak_client_instance).to receive(:all_users) { @users.deep_dup }
-    allow(@keycloak_client_instance).to receive(:get_user_roles) { [:psd_user] }
-
-    stub_user_management
-    set_default_group_memberships
-    Organisation.load_from_keycloak
-    Team.load_from_keycloak
-    User.load_from_keycloak
-    sign_in_as User.find_by(name: "Test #{name}")
-    stub_notify_mailer
+    as_user = users(:southampton)
+    allow(KeycloakClient.instance).to receive(:get_user_roles) { [:psd_user] }
+    allow(KeycloakClient.instance).to receive(:user_account_url) { "http://test.com/account" }
+    sign_in as_user
   end
 
   def stub_antivirus_api
@@ -85,29 +60,8 @@ class ActiveSupport::TestCase
     stub_request(:any, /#{Regexp.quote(antivirus_url)}/).to_return(body: stubbed_response, status: 200)
   end
 
-  def sign_in_as(user)
-    allow(@keycloak_client_instance).to receive(:user_signed_in?).and_return(true)
-    allow(@keycloak_client_instance).to receive(:user_info).and_return(user.attributes.symbolize_keys.slice(:id, :email, :name))
-    allow(@keycloak_client_instance).to receive(:user_account_url) { "http://test.com/account" }
-    User.current = user
-    User.current.update!(has_accepted_declaration: true)
-  end
-
   def reset_keycloak_and_notify_mocks
-    allow(@keycloak_client_instance).to receive(:get_user_roles).and_call_original
-    allow(@keycloak_client_instance).to receive(:user_signed_in?).and_call_original
-    allow(@keycloak_client_instance).to receive(:user_info).and_call_original
-    allow(@keycloak_client_instance).to receive(:all_users).and_call_original
-    allow(@keycloak_client_instance).to receive(:all_organisations).and_call_original
-    allow(@keycloak_client_instance).to receive(:all_teams).and_call_original
-    restore_user_management
-
-    allow(NotifyMailer).to receive(:alert).and_call_original
-    allow(NotifyMailer).to receive(:investigation_updated).and_call_original
-    allow(NotifyMailer).to receive(:investigation_created).and_call_original
-    allow(NotifyMailer).to receive(:user_added_to_team).and_call_original
-
-    @keycloak_client_instance.reset
+    allow(KeycloakClient.instance).to receive(:get_user_roles).and_call_original
   end
 
   def stub_notify_mailer
@@ -282,3 +236,5 @@ private
     allow(@keycloak_client_instance).to receive(:get_user).and_call_original
   end
 end
+
+ActionDispatch::IntegrationTest.include Devise::Test::IntegrationHelpers
