@@ -35,7 +35,7 @@ gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.
 gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "0.6.1"
+gem "strong_migrations", "0.6.2"
 gem "webpacker", "4.2.2"
 gem "wicked"
 
