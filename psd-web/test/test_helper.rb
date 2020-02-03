@@ -82,7 +82,8 @@ class ActiveSupport::TestCase
 
   # This is a public method that updates both the passed in user object and the KC mocking
   def mock_user_as_non_opss(user)
-    set_kc_user_as_non_opss user.id
+    allow(KeycloakClient.instance).to receive(:get_user_roles).with(user_id).and_return([])
+
     user.reload
     User.current&.reload
   end
@@ -93,8 +94,7 @@ class ActiveSupport::TestCase
   end
 
   def set_user_as_not_team_admin(user = User.current)
-    allow(@keycloak_client_instance).to receive(:get_user_roles).with(user.id) { [:psd_user] }
-    user.load_roles_from_keycloak
+    allow(@keycloak_client_instance).to receive(:get_user_roles).with(user.id) { [:psdg_user] }
   end
 
   def add_user_to_opss_team(user_id:, team_id:)
