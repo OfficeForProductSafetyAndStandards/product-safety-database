@@ -1,9 +1,6 @@
 module LoginHelper
-  def keycloak_login_url(request_path = nil)
-    KeycloakClient.instance.login_url(session_url_with_redirect(request_path))
-  end
 
-  def keycloak_registration_url(request_path = nil)
+  def keycloak_registration_urla(request_path = nil)
     KeycloakClient.instance.registration_url(session_url_with_redirect(request_path))
   end
 
