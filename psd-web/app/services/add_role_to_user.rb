@@ -1,3 +1,2 @@
 class ExchangeUserToken
-
 end

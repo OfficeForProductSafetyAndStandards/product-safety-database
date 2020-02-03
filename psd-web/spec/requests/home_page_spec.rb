@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "HomePage", :with_elasticsearch do
   context "when not signed in" do
-
     it "not signed in visits / stays on /" do
       get "/"
       expect(response).to render_template("homepage/show")
