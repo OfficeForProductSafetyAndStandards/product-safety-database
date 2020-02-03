@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Your team page", :with_stubbed_elasticsearch do
+RSpec.feature "Your team page", :with_stubbed_elasticsearch, :with_stubbed_keycloak_config do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team]) }
 
