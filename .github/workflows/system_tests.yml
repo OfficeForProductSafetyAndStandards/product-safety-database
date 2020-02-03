@@ -10,7 +10,7 @@ env:
   RAILS_ENV: test
   PGHOST: localhost
   PGUSER: postgres
-  DOMAIN: example.com
+
 jobs:
   ruby:
     name: "Ruby"

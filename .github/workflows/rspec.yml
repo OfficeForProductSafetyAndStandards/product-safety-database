@@ -11,7 +11,7 @@ env:
   KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
   KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
   KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-  KEYCLOACK_REDIRECT_URI: http://example.com/users/auth/openid_connect/callback
+  KEYCLOACK_REDIRECT_URI: http://localhost:3000/users/auth/openid_connect/callback
 
 jobs:
   ruby:
