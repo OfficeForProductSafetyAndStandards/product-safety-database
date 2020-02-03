@@ -17,8 +17,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
 private
 
-  def create_user_command
-    @create_user_command = Users::CreateSession.call(
+  def create_user
+    @create_user ||= Users::CreateSession.call(
       user_service: CreateUserFromAuth.new(omniauth_response),
       omniauth_response: omniauth_response
     )
