@@ -10,18 +10,14 @@ RSpec.describe CreateUserFromAuth do
   describe "#user" do
     context "when the user does not exists" do
       context "when belonging to an existing team" do
-        it_behaves_like "creates a user for" do
-          let(:interactor) { omniauth_response }
-        end
+        it_behaves_like "creates a user for"
       end
 
       context "when not belonging to an existing team" do
         context "when belonging to an existing organisation" do
           let(:group) { organisation.path }
 
-          it_behaves_like "creates a user for" do
-            let(:interactor) { omniauth_response }
-          end
+          it_behaves_like "creates a user for"
         end
 
         context "when not belonging to an existing organisation" do

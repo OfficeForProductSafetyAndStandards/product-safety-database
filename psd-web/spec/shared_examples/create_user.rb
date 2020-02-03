@@ -1,7 +1,7 @@
-RSpec.shared_examples "creates a user for" do |omniauth_response, interactor|
+RSpec.shared_examples "creates a user for" do
   it "creates the user" do
     expect {
-      interactor.user
+      subject.user
     }.to change {
       User.where(
         id:    omniauth_response["uid"],
