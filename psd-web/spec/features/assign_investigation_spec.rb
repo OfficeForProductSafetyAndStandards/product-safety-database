@@ -44,4 +44,14 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
      expect(page).to have_content(another_active_user_another_team.name)
    end
 
+  scenario "once case assigened to other team- cannot re-assign" do
+     visit "/cases/#{investigation.pretty_id}/assign/choose"
+     choose('Someone else')
+     select another_active_user_another_team.name, from: "investigation_select_someone_else"
+     click_button "Continue"
+     fill_in "investigation_assignee_rationale",with: "Test assign"
+     click_button "Confirm change"
+     visit "/cases/#{investigation.pretty_id}/assign/choose"
+     expect(page).to have_content("You do not have permission to assign this allegation.")
+  end
 end
