@@ -37,6 +37,7 @@ class ActiveSupport::TestCase
   end
 
   def setup
+    allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
     self.class.import_into_elasticsearch
   end
 
@@ -44,39 +45,24 @@ class ActiveSupport::TestCase
     WebMock.reset!
   end
 
+  def mock_user_as_opss(assignee)
+    expect(KeycloakClient.instance).
+      to receive(:get_user_roles).with(assignee.id)
+       .and_return([:psd_user, :opss_user])
+  end
+
+  def mock_user_as_non_opss(ass)
+  end
+
   # TODO: these roles will soon get moved to the database, allowing this to be removed.
   def mock_keycloak_user_roles(roles)
     allow(KeycloakClient.instance).to receive(:get_user_roles) { roles }
-  end
-
-  # TODO: this URL will soon move to within the app, allowing this to be removed.
-  def mock_keycloak_account_url
-    allow(KeycloakClient.instance).to receive(:user_account_url) { "http://test.com/account" }
   end
 
   def stub_antivirus_api
     antivirus_url = Rails.application.config.antivirus_url
     stubbed_response = JSON.generate(safe: true)
     stub_request(:any, /#{Regexp.quote(antivirus_url)}/).to_return(body: stubbed_response, status: 200)
-  end
-
-  def reset_keycloak_and_notify_mocks
-    allow(KeycloakClient.instance).to receive(:get_user_roles).and_call_original
-  end
-
-  def stub_notify_mailer
-    result = ""
-    allow(result).to receive(:deliver_later)
-    allow(NotifyMailer).to receive(:alert) { result }
-    allow(NotifyMailer).to receive(:investigation_updated) { result }
-    allow(NotifyMailer).to receive(:investigation_created) { result }
-    allow(NotifyMailer).to receive(:user_added_to_team) { result }
-  end
-
-  def assert_same_elements(expected, actual, msg = nil)
-    full_message = message(msg, "") { diff(expected, actual) }
-    condition = (expected.size == actual.size) && (expected - actual == [])
-    assert(condition, full_message)
   end
 
   def create_new_case

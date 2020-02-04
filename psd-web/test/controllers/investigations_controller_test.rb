@@ -3,7 +3,10 @@ require "test_helper"
 class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     mock_keycloak_user_roles([:psd_user])
-    sign_in users(:southampton)
+    user = users(:southampton)
+    sign_in user
+    User.current = user
+    allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
 
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
@@ -35,6 +38,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   teardown do
     reset_keycloak_and_notify_mocks
+    User.current = nil
   end
 
   test "should get index" do

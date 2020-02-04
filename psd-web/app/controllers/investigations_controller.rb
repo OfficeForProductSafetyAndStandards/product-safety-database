@@ -78,8 +78,6 @@ class InvestigationsController < ApplicationController
 private
 
   def update
-    return if request.get?
-
     respond_to do |format|
       if @investigation.update(update_params)
         format.html {

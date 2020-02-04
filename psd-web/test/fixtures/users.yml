@@ -10,6 +10,12 @@ opss:
   name: Slavosh
   organisation: opss
 
+opss_yann:
+  email: opss.yann@example.com
+  has_accepted_declaration: true
+  name: Yann
+  organisation: opss
+
 luton:
   email: luton@example.com
   has_accepted_declaration: true

@@ -8,13 +8,13 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   setup do
-    mock_out_keycloak_and_notify
+    mock_keycloak_user_roles([:psd_user])
+    user = users(:southampton)
+    User.current = user
+    allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
+
     @investigation = load_case(:one)
     @business = businesses(:biscuit_base)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "should create activity when investigation is created" do
@@ -77,7 +77,12 @@ class InvestigationTest < ActiveSupport::TestCase
   test "visible to assignee organisation" do
     create_new_private_case
     assignee = User.find_by(name: "Test User_two")
+
     mock_user_as_opss(assignee)
+
+    expect(KeycloakClient.instance).
+      to receive(:get_user_roles).with(assigne.id).and_return(%i[psd_user opss_user])
+
     user = User.find_by(name: "Test User_three")
     mock_user_as_opss(user)
     @new_investigation.assignee = assignee
@@ -85,14 +90,13 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "not visible to no-source, no-assignee organisation" do
+    user = users(:luton)
     create_new_private_case
-    sign_in_as User.find_by(name: "Test User_two")
-    mock_user_as_non_opss(User.current)
-    assert_not(policy(@new_investigation).show?(user: User.current))
+    assert_not(policy(@new_investigation).show?(user: user))
   end
 
   test "past assignees should be computed" do
-    user = User.find_by(name: "Test User_one")
+    user = users(:southampton)
     @investigation.update(assignee: user)
     assert_includes @investigation.past_assignees, user
   end
