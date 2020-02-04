@@ -66,27 +66,19 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "visible to creator organisation" do
+    User.current = users(:southampton)
     create_new_private_case
-    creator = User.find_by(name: "Test User_one")
-    mock_user_as_non_opss(creator)
-    user = User.find_by(name: "Test User_two")
-    mock_user_as_non_opss(user)
+    user = users(:southampton_steve)
     assert_equal(policy(@new_investigation).show?(user: user), true)
   end
 
   test "visible to assignee organisation" do
+    User.current = users(:southampton)
     create_new_private_case
-    assignee = User.find_by(name: "Test User_two")
+    assignee = users(:southampton_steve)
+    @new_investigation.assignable = assignee
 
-    mock_user_as_opss(assignee)
-
-    expect(KeycloakClient.instance).
-      to receive(:get_user_roles).with(assigne.id).and_return(%i[psd_user opss_user])
-
-    user = User.find_by(name: "Test User_three")
-    mock_user_as_opss(user)
-    @new_investigation.assignee = assignee
-    assert(policy(@new_investigation).show?(user: user))
+    assert(policy(@new_investigation).show?(user: assignee))
   end
 
   test "not visible to no-source, no-assignee organisation" do
@@ -108,9 +100,9 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "people out of current assignee's team should not be able to re-assign case" do
+    User.current = users(:southampton)
     investigation = create_new_case
-    investigation.assignee = User.find_by(name: "Test User_one")
-    assert_not policy(investigation).assign?(user: User.find_by(name: "Test User_three"))
+    assert_not policy(investigation).assign?(user: users(:luton))
   end
 
   test "people in current assignee's team should be able to re-assign case" do

@@ -4,6 +4,12 @@ southampton:
   name: Yann
   organisation: southampton
 
+southampton_steve:
+  email: southampton.steve@example.com
+  has_accepted_declaration: true
+  name: Steve
+  organisation: southampton
+
 opss:
   email: opss@example.com
   has_accepted_declaration: true
