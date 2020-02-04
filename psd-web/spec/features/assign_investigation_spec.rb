@@ -24,9 +24,9 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     expect(page).not_to have_css("#investigation_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
   end
 
-  scenario " assign case to other user in same team" do
+  scenario "assign case to other user in same team" do
     visit "/cases/#{investigation.pretty_id}/assign/choose"
-    choose('Someone in your team')
+    choose("Someone in your team")
     select another_active_user.name, from: "investigation_select_team_member"
     click_button "Continue"
     fill_in "investigation_assignee_rationale",with: "Test assign"
@@ -36,7 +36,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
 
    scenario  "assign case to someone else in another team" do
      visit "/cases/#{investigation.pretty_id}/assign/choose"
-     choose('Someone else')
+     choose("Someone else")
      select another_active_user_another_team.name, from: "investigation_select_someone_else"
      click_button "Continue"
      fill_in "investigation_assignee_rationale",with: "Test assign"
@@ -44,9 +44,9 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
      expect(page).to have_content(another_active_user_another_team.name)
    end
 
-  scenario "once case assigened to other team- cannot re-assign" do
+  scenario "once case assigned to other team- cannot re-assign" do
      visit "/cases/#{investigation.pretty_id}/assign/choose"
-     choose('Someone else')
+     choose("Someone else")
      select another_active_user_another_team.name, from: "investigation_select_someone_else"
      click_button "Continue"
      fill_in "investigation_assignee_rationale",with: "Test assign"
