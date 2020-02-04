@@ -112,9 +112,10 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "people out of currently assigned team should not be able to re-assign case" do
+    User.current = users(:southampton)
     investigation = create_new_case
-    investigation.assignee = Team.find_by(name: "Team 1")
-    assert_not policy(investigation).assign?(user: User.find_by(name: "Test User_three"))
+    investigation.assignablex = User.current.teams.first
+    assert_not policy(investigation).assign?(user: users(:luton))
   end
 
   test "people in currently assigned team should be able to re-assign case" do
