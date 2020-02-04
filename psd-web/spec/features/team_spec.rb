@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Your team page", :with_stubbed_keycloak_config,:with_stubbed_mailer,:with_stubbed_elasticsearch do
+RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team]) }
 
@@ -36,21 +36,20 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config,:with_stubbed_mail
   end
 
 
-  context "As a team admin user" do 
+  context "As a team admin user" do
     let(:email_whitelist_enabled) { false }
     context "when I invite a new user" do
       let(:user) { create(:user, :activated, :team_admin, teams: [team]) }
       let(:invite_email) { Faker::Internet.safe_email }
       let(:keycloak_get_user_response) { { id: SecureRandom.uuid } }
-    
+
       before do
         allow(KeycloakClient.instance).to receive(:create_user).with(invite_email)
         allow(KeycloakClient.instance).to receive(:get_user).with(invite_email).and_return(keycloak_get_user_response)
         allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(email_whitelist_enabled)
-      
-              end
+      end
       #Need to cover this scenario later when we integrate new auth devise
-      
+
       # scenario "I should be able to invite a team member" do
       #   click_link "Invite a team member"
       #   fill_in "new_user_email_address", with: invite_email
@@ -65,7 +64,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config,:with_stubbed_mail
 
       scenario ",I should see error message" do
         click_link "Invite a team member"
-        fill_in "new_user_email_address", with: "#{user.email}"
+        fill_in "new_user_email_address", with: user.email.to_s
         expect(page).to have_css(".govuk-error-summary__list", text: "You cannot invite this person to join your team because they are already a member of another team from a different organisation.")
       end
     end
@@ -79,8 +78,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config,:with_stubbed_mail
     end
 
     scenario "does not display the invite a team member link" do
-     expect(page).not_to have_css("govuk-button", text: "Invite a team member")
+      expect(page).not_to have_css("govuk-button", text: "Invite a team member")
     end
-
   end
 end
