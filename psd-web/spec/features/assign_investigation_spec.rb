@@ -5,6 +5,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
   let(:user) { create(:user, :activated, teams: [team]) }
   let(:investigation) { create(:allegation, assignee: user) }
 
+
   let!(:another_active_user) { create(:user, :activated, name: "other user same team", organisation: user.organisation, teams: [team]) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
   let!(:another_active_user_another_team) { create(:user, :activated, name: "another user in another team", organisation: user.organisation, teams: [create(:team)]) }
@@ -26,7 +27,6 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
 
   scenario "assign case to other user in same team" do
     visit new_investigation_assign_path(investigation)
-    # visit "/cases/#{investigation.pretty_id}/assign/choose"
     choose("Someone in your team")
     select another_active_user.name, from: "investigation_select_team_member"
     click_button "Continue"
