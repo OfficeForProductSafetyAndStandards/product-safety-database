@@ -7,7 +7,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
 
   let!(:another_active_user) { create(:user, :activated,name: "other user same team", organisation: user.organisation, teams: [team]) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
-  let!(:another_active_user_another_team) { create(:user, :activated,name: "another other user in another team", organisation: user.organisation, teams: [create(:team)]) }
+  let!(:another_active_user_another_team) { create(:user, :activated,name: "another user in another team", organisation: user.organisation, teams: [create(:team)]) }
   let!(:another_inactive_user_another_team) { create(:user, :inactive,organisation: user.organisation, teams: [create(:team)]) }
 
   before { 
