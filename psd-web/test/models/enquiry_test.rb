@@ -11,10 +11,6 @@ class EnquiryTest < ActiveSupport::TestCase
     User.current = users(:opss)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "Enquiry with valid date received" do
     investigation = Investigation::Enquiry.new("date_received_day" => 1, "date_received_month" => 1, "date_received_year" => 1)
     assert(investigation.valid?)

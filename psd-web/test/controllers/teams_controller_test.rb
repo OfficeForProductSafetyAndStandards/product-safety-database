@@ -11,10 +11,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     @another_team = Team.all.find { |t| !users(:southampton).teams.include?(t) }
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "Team pages are visible to members" do
     get team_url(@my_team)
     assert_response :success

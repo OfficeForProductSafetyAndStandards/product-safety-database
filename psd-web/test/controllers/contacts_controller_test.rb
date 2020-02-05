@@ -7,10 +7,6 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     @contact = contacts(:one)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should get new" do
     get new_business_contact_url(@contact.business)
     assert_response :success

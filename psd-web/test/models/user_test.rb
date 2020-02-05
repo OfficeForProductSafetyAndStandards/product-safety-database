@@ -10,10 +10,6 @@ class UserTest < ActiveSupport::TestCase
     mock_user_as_opss(@user_four)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "display name includes user's organisation for non-org-member viewers" do
     sign_in_as @user_four
     assert_equal "Test User_one (Organisation 1)", @user.display_name

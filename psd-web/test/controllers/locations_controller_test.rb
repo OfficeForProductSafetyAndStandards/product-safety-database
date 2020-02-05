@@ -8,10 +8,6 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
     @location.source = sources(:location_one)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should get new" do
     get new_business_location_url(@location.business)
     assert_response :success

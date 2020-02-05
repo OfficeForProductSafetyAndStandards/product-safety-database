@@ -36,11 +36,6 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     Investigation.import refresh: true, force: true
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-    User.current = nil
-  end
-
   test "should get index" do
     get investigations_url
     assert_response :success

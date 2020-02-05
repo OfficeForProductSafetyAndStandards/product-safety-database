@@ -11,10 +11,6 @@ class BusinessesControllerTest < ActionDispatch::IntegrationTest
     Business.import refresh: true, force: true
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should get index" do
     get businesses_url
     assert_response :success

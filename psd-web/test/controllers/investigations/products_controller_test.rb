@@ -9,10 +9,6 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
     @product.source = sources(:product_iphone)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should get new" do
     get new_investigation_product_url(@investigation)
     assert_response :success

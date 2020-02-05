@@ -6,10 +6,6 @@ class InvestigationsXlsExportTest < ActionDispatch::IntegrationTest
     sign_in users(:southampton)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "exports all investigations" do
     path = Rails.root + "test/fixtures/files/cases1.xlsx"
     create_stub_investigations(50)

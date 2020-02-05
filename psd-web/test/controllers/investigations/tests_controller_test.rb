@@ -8,10 +8,6 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
     @product = products(:one)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should redirect new test request action to first wizard step" do
     get new_request_investigation_tests_path(@investigation)
     assert_redirected_to investigation_tests_path(@investigation) + "/details"

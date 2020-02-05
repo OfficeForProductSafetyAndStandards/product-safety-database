@@ -9,10 +9,6 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     @activity.source = sources(:activity_one)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should create activity" do
     assert_difference("Activity.count") do
       post investigation_activity_comment_path(@activity.investigation), params: {

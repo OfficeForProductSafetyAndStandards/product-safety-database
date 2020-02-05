@@ -23,10 +23,6 @@ class CreateEnquiryTest < ApplicationSystemTestCase
     visit new_enquiry_path
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "can be reached via create page" do
     visit root_path
     click_on "Open a new case"

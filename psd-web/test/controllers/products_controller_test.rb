@@ -16,10 +16,6 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     @product_one.documents.attach(io: File.open(test_image2), filename: "testImage2.png")
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should get index" do
     get products_url
     assert_response :success

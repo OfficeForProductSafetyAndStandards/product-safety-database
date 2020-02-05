@@ -11,10 +11,6 @@ class NotificationTest < ActiveSupport::TestCase
     @team_one = Team.find_by(name: "Team 1")
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should notify current assignee when the assignee is a person and there is any change" do
     @investigation.update(assignee: @user_two)
     mock_investigation_updated(who_will_be_notified: [@user_two.email])
