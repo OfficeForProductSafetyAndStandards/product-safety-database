@@ -8,11 +8,11 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     mock_keycloak_user_roles([:psd_user])
-    sign_in
+    user = sign_in
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
-    set_investigation_source! @investigation, User.current
+    set_investigation_source! @investigation, user
     @correspondence = correspondences(:email)
     visit new_investigation_email_url(@investigation)
   end

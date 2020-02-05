@@ -4,9 +4,8 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    sign_in
 
-    @user = User.current
+    @user = sign_in
     @team = @user.teams.first
     visit new_investigation_assign_path(load_case(:one))
   end

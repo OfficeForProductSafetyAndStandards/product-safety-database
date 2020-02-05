@@ -8,12 +8,12 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    sign_in
+    user = sign_in
 
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
-    set_investigation_source! @investigation, User.current
+    set_investigation_source! @investigation, user
     @correspondence = correspondences(:phone_call)
     visit new_investigation_phone_call_url(@investigation)
   end
