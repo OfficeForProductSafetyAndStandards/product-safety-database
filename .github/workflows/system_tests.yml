@@ -3,6 +3,10 @@ name: System Tests
 on: [push]
 
 env:
+  KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
+  KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
+  KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
+  KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
   DATABASE_URL: postgres://postgres@localhost:5432
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
@@ -10,6 +14,8 @@ env:
   RAILS_ENV: test
   PGHOST: localhost
   PGUSER: postgres
+  HTTP_HOST: localhost
+  HTTP_POST: 3000
 
 jobs:
   ruby:
