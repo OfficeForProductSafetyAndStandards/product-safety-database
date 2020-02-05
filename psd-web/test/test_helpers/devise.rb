@@ -1,24 +1,5 @@
 module TestHelpers
-  module Devise
-
-    def sign_out
-      click_on 'Sign out'
-    end
-
-    def sign_in(user = users(:opss), roles: %i[psd_user opss_user])
-      allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
-
-      allow(KeycloakClient.instance)
-        .to receive(:get_user_roles)
-              .with(user.id)
-              .and_return(roles)
-
-      stub_omniauth(user)
-      visit root_path
-      click_on "Sign in to your account"
-      user
-    end
-
+  module OmniAuthHelper
     def stub_omniauth(user)
       OmniAuth.config.test_mode = true
       groups = user.teams.flat_map(&:path) << user.organisation&.path
@@ -37,6 +18,28 @@ module TestHelpers
         }
       )
       Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:openid_connect]
+    end
+  end
+
+  module Devise
+    include TestHelpers::OmniAuthHelper
+
+    def sign_out
+      click_on "Sign out"
+    end
+
+    def sign_in(user = users(:opss), roles: %i[psd_user opss_user])
+      allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
+
+      allow(KeycloakClient.instance)
+        .to receive(:get_user_roles)
+              .with(user.id)
+              .and_return(roles)
+
+      stub_omniauth(user)
+      visit root_path
+      click_on "Sign in to your account"
+      user
     end
   end
 end

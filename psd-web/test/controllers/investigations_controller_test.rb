@@ -2,8 +2,19 @@ require "test_helper"
 
 class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_keycloak_user_roles([:psd_user])
-    user = users(:southampton)
+    allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
+
+    user           = users(:opss)
+    @non_opss_user = users(:southampton)
+
+    allow(KeycloakClient.instance).
+      to receive(:get_user_roles).with(@non_opss_user.id)
+           .and_return([:psd_user])
+
+    allow(KeycloakClient.instance).
+      to receive(:get_user_roles).with(user.id)
+           .and_return([:psd_user, :opss_user])
+    stub_omniauth(user)
     sign_in user
     User.current = user
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
@@ -16,7 +27,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
     @investigation_two = load_case(:two)
     @investigation_two.created_at = Time.zone.parse("2015-07-11 21:00")
-    @investigation_two.assignee = @assignee
+    @investigation_two.assignee = user
     @investigation_two.save
 
     @investigation_three = load_case(:three)
@@ -57,11 +68,11 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     investigation_status = lambda { Investigation.find(investigation.id).is_closed }
     assert_changes investigation_status, from: false, to: is_closed do
       patch status_investigation_url(investigation), params: {
-          investigation: {
-              is_closed: is_closed,
-              status_rationale: "some rationale"
-          }
-      }
+              investigation: {
+                is_closed: is_closed,
+                status_rationale: "some rationale"
+              }
+            }
     end
     assert_redirected_to investigation_path(investigation)
   end
@@ -73,20 +84,20 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     investigation_status = lambda { Investigation.find(investigation.id).description }
     assert_changes investigation_status, from: old_description, to: new_description do
       patch edit_summary_investigation_url(investigation), params: {
-        investigation: {
-          description: new_description
-        }
-      }
+              investigation: {
+                description: new_description
+              }
+            }
     end
     assert_redirected_to investigation_path(investigation)
   end
 
   test "should require description to not be empty" do
     patch edit_summary_investigation_url(@investigation_one), params: {
-      investigation: {
-        description: ""
-      }
-    }, headers: { "HTTP_REFERER": "/cases/1111-1111/edit_summary" }
+            investigation: {
+              description: ""
+            }
+          }, headers: { "HTTP_REFERER": "/cases/1111-1111/edit_summary" }
     assert_includes(CGI.unescapeHTML(response.body), "Description cannot be blank")
   end
 
@@ -100,9 +111,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "status filter for both open and closed checked" do
     get investigations_path, params: {
-      status_open: "checked",
-      status_closed: "checked"
-    }
+          status_open: "checked",
+          status_closed: "checked"
+        }
     assert_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_three.pretty_id)
     assert_includes(response.body, @investigation_no_products.pretty_id)
@@ -110,9 +121,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "status filter for both open and closed unchecked" do
     get investigations_path, params: {
-      status_open: "unchecked",
-      status_closed: "unchecked"
-    }
+          status_open: "unchecked",
+          status_closed: "unchecked"
+        }
     assert_includes(response.body, @investigation_one.pretty_id)
     # assert_includes(response.body, @investigation_two.pretty_id)
     assert_includes(response.body, @investigation_three.pretty_id)
@@ -121,9 +132,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "status filter for only open checked" do
     get investigations_path, params: {
-      status_open: "checked",
-      status_closed: "unchecked"
-    }
+          status_open: "checked",
+          status_closed: "unchecked"
+        }
     assert_not_includes(response.body, @investigation_three.pretty_id)
     assert_includes(response.body, @investigation_one.pretty_id)
     # assert_includes(response.body, @investigation_two.pretty_id)
@@ -295,6 +306,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not show private investigations to everyone" do
     create_new_private_case
+    sign_out(:user)
     sign_in_as @non_opss_user
 
     get investigations_path
@@ -303,7 +315,8 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not show case to someone without access" do
     create_new_private_case
-    sign_in_as @non_opss_user
+    sign_out :user
+    sign_in @non_opss_user
 
     assert_raise(Pundit::NotAuthorizedError) {
       get investigation_path(@new_investigation)

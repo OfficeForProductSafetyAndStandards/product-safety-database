@@ -16,6 +16,8 @@ require "rspec/mocks/standalone"
 
 # Added Webmock only to allow use of stub_request - Minitest suite is deprecated
 require "webmock/minitest"
+require_relative  "test_helpers/devise"
+
 WebMock.allow_net_connect!
 
 class ActiveSupport::TestCase
@@ -81,3 +83,4 @@ class ActiveSupport::TestCase
 end
 
 ActionDispatch::IntegrationTest.include Devise::Test::IntegrationHelpers
+ActionDispatch::IntegrationTest.include TestHelpers::OmniAuthHelper
