@@ -7,6 +7,7 @@ env:
   KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
   KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
   KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
+  KEYCLOACK_REDIRECT_URI: http://localhost:3000/users/auth/openid_connect/callback
   DATABASE_URL: postgres://postgres@localhost:5432
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
