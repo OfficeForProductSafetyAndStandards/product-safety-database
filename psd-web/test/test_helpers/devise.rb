@@ -1,5 +1,10 @@
 module TestHelpers
   module Devise
+
+    def sign_out
+      click_on 'Sign out'
+    end
+
     def sign_in(user = users(:opss), roles: %i[psd_user opss_user])
       allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
 

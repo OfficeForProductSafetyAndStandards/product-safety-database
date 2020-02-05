@@ -1,7 +1,6 @@
 require "application_system_test_case"
 require_relative "../test_helpers/investigation_test_helper"
 
-
 class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
@@ -100,6 +99,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
+    sign_out
     sign_in users(:southampton)
     visit investigation_path(@investigation)
 
@@ -117,6 +117,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
+    sign_out
     sign_in other_org_user
     visit investigation_path(@investigation)
 
@@ -125,6 +126,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee's team" do
+    sign_out
     sign_in users(:southampton)
     assignee = users(:southampton_steve)
     same_team_user = users(:southampton_steve)
@@ -137,6 +139,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
+    sign_out
     sign_in same_team_user
     visit investigation_path(@investigation)
 
@@ -152,6 +155,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
+    sign_out
     sign_in users(:southampton)
     visit investigation_path(@investigation)
 
