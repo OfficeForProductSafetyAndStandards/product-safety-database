@@ -118,7 +118,7 @@ class CreateAllegationTest < ApplicationSystemTestCase
 
     assert_text "Allegation was successfully created"
   end
-  driven_by :selenium
+
   test "allegation and complainant details should be logged as case activity" do
     select_complainant_type_and_continue
     fill_all_complainant_details_and_continue

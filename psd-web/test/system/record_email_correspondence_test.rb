@@ -4,7 +4,6 @@ require_relative "../test_helpers/investigation_test_helper"
 class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
-  driven_by :selenium
   setup do
     stub_notify_mailer
     mock_keycloak_user_roles([:psd_user])
