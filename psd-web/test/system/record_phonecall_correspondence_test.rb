@@ -118,7 +118,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
 
     sign_out
-    sign_in other_org_user
+    sign_in users(:southampton_steve)
     visit investigation_path(@investigation)
 
     click_on "Activity"
