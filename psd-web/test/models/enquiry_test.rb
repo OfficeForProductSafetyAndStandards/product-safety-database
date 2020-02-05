@@ -8,7 +8,7 @@ class EnquiryTest < ActiveSupport::TestCase
   end
 
   setup do
-    mock_out_keycloak_and_notify
+    User.current = users(:opss)
   end
 
   teardown do

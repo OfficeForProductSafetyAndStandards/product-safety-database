@@ -4,18 +4,17 @@ require_relative "../test_helpers/investigation_test_helper"
 class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
+  driven_by :selenium
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
+    mock_keycloak_user_roles([:psd_user])
+    sign_in
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     set_investigation_source! @investigation, User.current
     @correspondence = correspondences(:email)
     visit new_investigation_email_url(@investigation)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "first step should be context" do
@@ -148,7 +147,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee" do
-    other_org_user = User.find_by name: "Test Ts_user"
+    other_org_user = users(:opss)
     set_investigation_assignee! @investigation, other_org_user
     fill_in_context_form
     choose :correspondence_email_has_consumer_info_true, visible: false

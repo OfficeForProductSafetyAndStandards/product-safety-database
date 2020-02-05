@@ -48,15 +48,16 @@ class ActiveSupport::TestCase
   def mock_user_as_opss(assignee)
     expect(KeycloakClient.instance).
       to receive(:get_user_roles).with(assignee.id)
-       .and_return([:psd_user, :opss_user])
-  end
-
-  def mock_user_as_non_opss(ass)
+           .and_return([:psd_user, :opss_user])
   end
 
   # TODO: these roles will soon get moved to the database, allowing this to be removed.
   def mock_keycloak_user_roles(roles)
     allow(KeycloakClient.instance).to receive(:get_user_roles) { roles }
+  end
+
+  def stub_notify_mailer
+    allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
   end
 
   def stub_antivirus_api

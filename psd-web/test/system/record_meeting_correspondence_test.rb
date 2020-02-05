@@ -2,16 +2,13 @@ require "application_system_test_case"
 
 class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     @correspondence = correspondences(:meeting)
     visit new_investigation_meeting_url(@investigation)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "first step is context" do

@@ -2,8 +2,10 @@ require "application_system_test_case"
 
 class InvestigationSubNavigation < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
+
     @investigation = load_case(:one)
   end
 

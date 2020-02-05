@@ -2,9 +2,10 @@ require "application_system_test_case"
 
 class InvestigationAssigneeTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify(name: "Ts_user") # non-OPSS
+    stub_notify_mailer
     stub_antivirus_api
-    @user = User.current
+
+    @user = sign_in(users(:southampton), roles: %i[psd_user])
     @team = @user.teams.first
     Rails.application.config.team_names = {
       "organisations" => {
@@ -16,10 +17,6 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
       }
     }
     visit new_investigation_assign_path(load_case(:one))
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "non-OPSS assigns to OPSS, on re-assign sees the OPSS assign and no permission to reassign again" do

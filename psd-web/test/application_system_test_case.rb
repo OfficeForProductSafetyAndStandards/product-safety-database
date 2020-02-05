@@ -1,5 +1,6 @@
 require "test_helper"
 require "system_test_helper"
+require_relative "test_helpers/devise"
 
 ENV["HTTP_HOST"] = "localhost"
 ENV["HTTP_PORT"] = "3001"
@@ -8,6 +9,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include SystemTestHelper
   include Capybara::DSL
   include Capybara::Minitest::Assertions
+  include TestHelpers::Devise
 
   Capybara.server_host = ENV["HTTP_HOST"]
   Capybara.server_port = ENV["HTTP_PORT"]

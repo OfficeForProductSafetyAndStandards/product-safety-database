@@ -6,17 +6,16 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
+    stub_antivirus_api
+    sign_in
+
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     set_investigation_source! @investigation, User.current
     @correspondence = correspondences(:phone_call)
     visit new_investigation_phone_call_url(@investigation)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "first step should be context" do
