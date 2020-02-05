@@ -7,10 +7,6 @@ class TestTest < ActiveSupport::TestCase
     @product = products(:one)
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "requires an associated investigation and product" do
     test_request = create_valid_test_request
     test_request.investigation = nil
