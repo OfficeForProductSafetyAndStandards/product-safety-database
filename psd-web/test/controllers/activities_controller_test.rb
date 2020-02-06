@@ -31,9 +31,8 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "adding a comment should trigger one round of notifications" do
-    user_two = User.find_by(name: "Test User_two")
-    @investigation.update(assignee: user_two)
-    mock_investigation_updated(who_will_be_notified: [user_two])
+    @investigation.update(assignee: users(:southampton_bob))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob)])
     post investigation_activity_comment_path(@investigation), params: {
       comment_activity: {
         body: "Generic comment"
