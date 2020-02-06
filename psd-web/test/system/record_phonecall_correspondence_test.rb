@@ -108,7 +108,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee" do
-    set_investigation_assignee! @investigation, users(:southampton)
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -116,8 +115,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_out
-    sign_in users(:southampton_steve)
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -125,12 +122,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee's team" do
-    sign_out
-    sign_in users(:southampton)
-    assignee = users(:southampton_steve)
-    same_team_user = users(:southampton_steve)
-
-    set_investigation_assignee! @investigation, assignee
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -139,7 +130,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
 
     sign_out
-    sign_in same_team_user
+    sign_in users(:opss_yann)
     visit investigation_path(@investigation)
 
     click_on "Activity"
