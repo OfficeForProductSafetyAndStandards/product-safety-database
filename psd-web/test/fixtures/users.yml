@@ -10,6 +10,18 @@ southampton_steve:
   name: Steve
   organisation: southampton
 
+southampton_bob:
+  email: southampton.bob@example.com
+  has_accepted_declaration: true
+  name: Bob
+  organisation: southampton
+
+southampton_frankie:
+  email: southampton.frankie@example.com
+  has_accepted_declaration: true
+  name: Frankie
+  organisation: southampton
+
 opss:
   email: opss@example.com
   has_accepted_declaration: true

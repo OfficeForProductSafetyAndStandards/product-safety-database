@@ -15,3 +15,4 @@ luton:
   name: Luton Council Trading Stanards
   path: /Organisations/Southampton Council/Luton Council
   organisation: luton
+  team_recipient_email: luton@example.com

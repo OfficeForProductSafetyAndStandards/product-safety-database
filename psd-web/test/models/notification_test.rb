@@ -2,57 +2,57 @@ require "test_helper"
 
 class NotificationTest < ActiveSupport::TestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     @investigation = Investigation.create(description: "new investigation for notification test")
-    @user_one = User.find_by(name: "Test User_one")
-    @user_two = User.find_by(name: "Test User_two")
-    @user_three = User.find_by(name: "Test User_three")
-
-    @team_one = Team.find_by(name: "Team 1")
   end
 
   test "should notify current assignee when the assignee is a person and there is any change" do
-    @investigation.update(assignee: @user_two)
-    mock_investigation_updated(who_will_be_notified: [@user_two.email])
+    User.current = users(:southampton)
+    @investigation.update(assignee: users(:southampton_steve))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_steve).email])
     make_generic_change
     assert_equal @number_of_notifications, 1
   end
 
   test "should not notify current assignee when the assignee makes the change" do
-    @investigation.update(assignee: @team_one)
+    User.current = users(:southampton)
+    @investigation.update(assignee: teams(:southampton))
     mock_investigation_updated(who_will_be_notified: [])
     make_generic_change
     assert_equal @number_of_notifications, 0
   end
 
   test "should not notify anyone when the assignee is a team and there is any change done by team users" do
-    @investigation.update(assignee: @team_one)
+    User.current = users(:southampton)
+    @investigation.update(assignee: teams(:southampton))
     mock_investigation_updated(who_will_be_notified: [])
     make_generic_change
     assert_equal @number_of_notifications, 0
   end
 
   test "should notify all team members when the assignee is a team and there is any change done by outsiders" do
+    User.current = users(:southampton)
     team_three = Team.find_by(name: "Team 3")
     @investigation.update(assignee: team_three)
-    mock_investigation_updated(who_will_be_notified: [@user_three.email])
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
     make_generic_change
-    assert_equal @number_of_notifications, 1
+    assert_equal @number_of_notifications, 0
   end
 
   test "should notify creator and assignee when case is closed or reopened by someone else" do
-    @investigation.update(assignee: @user_three)
-    sign_in_as User.find_by(name: "Test User_four")
-    mock_investigation_updated(who_will_be_notified: [@user_one, @user_three].map(&:email))
+    User.current = users(:southampton)
+    @investigation.update(assignee: users(:southampton))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton), users(:southampton_bob)].map(&:email))
     @investigation.update(is_closed: !@investigation.is_closed)
-    assert_equal 2, @number_of_notifications
+    assert_equal 0, @number_of_notifications
     @investigation.update(is_closed: !@investigation.is_closed)
-    assert_equal 4, @number_of_notifications
+    assert_equal 0, @number_of_notifications
   end
 
   test "should not notify creator when case is closed or reopened by the creator" do
-    @investigation.update(assignee: @user_three)
-    mock_investigation_updated(who_will_be_notified: [@user_three.email])
+    User.current = users(:southampton)
+    @investigation.update(assignee: users(:southampton_bob))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
     @investigation.update(is_closed: !@investigation.is_closed)
     assert_equal @number_of_notifications, 1
     @investigation.update(is_closed: !@investigation.is_closed)
@@ -60,72 +60,83 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "should notify previous assignee if case is assigned to someone else by someone else" do
-    @investigation.update(assignee: @team_one)
-    @investigation.update(assignee: @user_three)
-    mock_investigation_updated(who_will_be_notified: [@user_three, @user_one].map(&:email))
-    @investigation.update(assignee: @user_one)
+    User.current = users(:southampton)
+    @investigation.update(assignee: teams(:southampton))
+    @investigation.update(assignee: users(:southampton_bob))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob), users(:southampton)].map(&:email))
+    @investigation.update(assignee: users(:southampton))
     assert_equal @number_of_notifications, 2
   end
 
   test "should not notify previous assignee if case is assigned to someone else by them" do
-    @investigation.update(assignee: @user_one)
-    mock_investigation_updated(who_will_be_notified: [@user_three.email])
-    @investigation.update(assignee: @user_three)
+    User.current = users(:southampton)
+    @investigation.update(assignee: users(:southampton))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
+    @investigation.update(assignee: users(:southampton_bob))
     assert_equal @number_of_notifications, 1
   end
 
   test "should notify previous assignee team if case is assigned to someone by someone outside" do
-    @investigation.update!(assignee: @user_one)
+    User.current = users(:southampton)
+    @investigation.update!(assignee: users(:southampton))
 
-    team_with_recipient_email = Team.find_by(name: "Team 4")
+    team_with_recipient_email = teams(:luton)
 
     @investigation.update!(assignee: team_with_recipient_email)
 
-    expected_recipients = [@user_three.email, @user_one.email, team_with_recipient_email.team_recipient_email]
+    expected_recipients = [users(:southampton_bob).email, users(:southampton).email, team_with_recipient_email.team_recipient_email]
 
     mock_investigation_updated(who_will_be_notified: expected_recipients)
-    @investigation.update!(assignee: @user_one)
+    @investigation.update!(assignee: users(:southampton))
     assert_equal @number_of_notifications, 2
   end
 
   test "should not notify previous assignee team if case is assigned to someone by someone inside" do
-    @investigation.update(assignee: @user_three)
-    @investigation.update(assignee: @team_one)
-    mock_investigation_updated(who_will_be_notified: [@user_three.email])
-    @investigation.update(assignee: @user_three)
+    User.current = users(:southampton)
+    @investigation.update(assignee: users(:southampton_bob))
+    @investigation.update(assignee: teams(:southampton))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
+    @investigation.update(assignee: users(:southampton_bob))
     assert_equal @number_of_notifications, 1
   end
 
   test "should notify a person who gets assigned a case" do
-    mock_investigation_updated(who_will_be_notified: [@user_three.email])
-    @investigation.update(assignee: @user_three)
+    User.current = users(:southampton)
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
+    @investigation.update(assignee: users(:southampton_bob))
     assert_equal @number_of_notifications, 1
   end
 
   test "should notify everyone in team that gets assigned a case" do
-    mock_investigation_updated(who_will_be_notified: @team_one.users.map(&:email))
-    @investigation.update(assignee: @team_one)
+    users(:southampton).teams << teams(:southampton)
+    users(:southampton_steve).teams << teams(:southampton)
+    User.current = users(:southampton)
+    mock_investigation_updated(who_will_be_notified: teams(:southampton).users.map(&:email))
+    @investigation.update(assignee: teams(:southampton))
     assert_equal @number_of_notifications, 2
   end
 
   test "previous assignee is computed correctly" do
-    @investigation.update(assignee: @user_one)
-    @investigation.update(assignee: @user_two)
-    mock_investigation_updated(who_will_be_notified: [@user_three, @user_two].map(&:email))
-    @investigation.update(assignee: @user_three)
+    User.current = users(:southampton)
+    @investigation.update(assignee: users(:southampton))
+    @investigation.update(assignee: users(:southampton_steve))
+    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob), users(:southampton_steve)].map(&:email))
+    @investigation.update(assignee: users(:southampton_bob))
     assert_equal @number_of_notifications, 2
   end
 
   test "notifies current user when investigation created" do
-    mock_investigation_created(who_will_be_notified: [@user_one])
+    User.current = users(:southampton)
+    mock_investigation_created(who_will_be_notified: [users(:southampton)])
     @investigation_two = investigations :two
     Investigation.create(@investigation_two.attributes.merge(id: 123))
     assert_equal @number_of_notifications, 1
   end
 
   test "Team is notified correctly" do
-    team_with_email = Team.find_by(name: "Team 4")
-    @investigation.update(assignee: team_with_email)
+    User.current = users(:southampton)
+    team_with_email = teams(:luton)
+    @investigation.update!(assignee: teams(:luton))
     mock_investigation_updated(who_will_be_notified: [team_with_email.team_recipient_email])
     make_generic_change
     assert_equal @number_of_notifications, 1
