@@ -8,6 +8,7 @@ class EnquiryTest < ActiveSupport::TestCase
   end
 
   setup do
+    stub_notify_mailer
     User.current = users(:opss)
   end
 
