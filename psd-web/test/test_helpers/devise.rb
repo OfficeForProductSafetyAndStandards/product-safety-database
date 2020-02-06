@@ -25,7 +25,7 @@ module TestHelpers
     include TestHelpers::OmniAuthHelper
 
     def sign_out
-      click_on "Sign out"
+      click_on "Sign out", match: :first
     end
 
     def sign_in(user = users(:opss), roles: %i[psd_user opss_user])

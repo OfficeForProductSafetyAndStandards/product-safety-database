@@ -104,7 +104,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
 
     click_on "Activity"
     assert_equal("Phone call added", first("h3").text)
-    assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
+    assert_equal("Restricted access", first(".hmcts-badge").text)
   end
 
   test "does not conceal consumer information from assignee" do

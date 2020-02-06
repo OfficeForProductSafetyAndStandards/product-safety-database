@@ -268,7 +268,7 @@ Devise.setup do |config|
                   name: :openid_connect,
                   discovery:  true,
                   log: :debug,
-                  scope: %w[openid email profile address roles],
+                  scope: "openid,email,profile,address,roles",
                   issuer: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss",
                   client_options: {
                     authorization_endpoint: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth",
