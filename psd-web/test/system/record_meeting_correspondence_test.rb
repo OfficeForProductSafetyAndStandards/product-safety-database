@@ -8,7 +8,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     @correspondence = correspondences(:meeting)
-    visit new_investigation_meeting_url(@investigation)
+    visit new_investigation_meeting_path(@investigation)
   end
 
   test "first step is context" do
