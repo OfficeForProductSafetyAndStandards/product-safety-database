@@ -2,7 +2,8 @@ require "test_helper"
 
 class Investigations::AlertsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_out_keycloak_and_notify
+    sign_in users(:southampton)
+    mock_keycloak_user_roles([:psd_user])
     @investigation = load_case(:private)
     @investigation.source = sources(:investigation_private)
   end
