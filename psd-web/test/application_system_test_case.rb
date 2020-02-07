@@ -40,5 +40,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     Organisation.delete_all
     Team.delete_all
     User.delete_all
+    User.current = nil
   end
 end
