@@ -8,12 +8,17 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     stub_notify_mailer
     mock_keycloak_user_roles([:psd_user])
     sign_in users(:southampton)
+    User.current = users(:southampton)
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     set_investigation_source! @investigation, users(:southampton)
     @correspondence = correspondences(:email)
     visit new_investigation_email_path(@investigation)
+  end
+
+  teardown do
+    User.current = nil
   end
 
   test "first step should be context" do
@@ -138,6 +143,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     sign_out
     sign_in users(:luton)
+    User.current = users(:luton)
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -157,6 +163,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
     sign_out
     sign_in other_org_user
+    User.current = other_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -167,10 +174,13 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     sign_out
     other_org_user = users(:luton)
     sign_in other_org_user
+    User.current = other_org_user
     assignee = users(:southampton_bob)
     same_team_user = users(:southampton_steve)
 
     set_investigation_assignee! @investigation, assignee
+
+    visit new_investigation_email_path(@investigation)
     fill_in_context_form
     choose :correspondence_email_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -178,7 +188,9 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
+    sign_out
     sign_in same_team_user
+    User.current = same_team_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
