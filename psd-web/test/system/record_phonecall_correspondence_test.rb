@@ -149,7 +149,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     sign_out
     sign_in users(:southampton)
     visit investigation_path(@investigation)
-    byebug
+
     click_on "Activity"
     assert_equal(@correspondence.overview, first("h3").text)
   end
