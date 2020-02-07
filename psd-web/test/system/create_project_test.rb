@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class CreateProjectTest < ApplicationSystemTestCase
   setup do
+    Investigation.import force: true, refresh: :wait_for
     @project = Investigation::Project.new(description: "new project description", user_title: "project title")
     stub_notify_mailer
     stub_antivirus_api
