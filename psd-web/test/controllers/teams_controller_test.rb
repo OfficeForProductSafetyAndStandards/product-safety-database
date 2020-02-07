@@ -124,5 +124,4 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     allow(KeycloakClient.instance).to receive(:create_user).and_call_original
     allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_call_original
   end
-
 end

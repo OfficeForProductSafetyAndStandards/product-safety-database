@@ -16,7 +16,7 @@ require "rspec/mocks/standalone"
 
 # Added Webmock only to allow use of stub_request - Minitest suite is deprecated
 require "webmock/minitest"
-require_relative  "test_helpers/devise"
+require_relative "test_helpers/devise"
 
 WebMock.allow_net_connect!
 
@@ -50,7 +50,7 @@ class ActiveSupport::TestCase
   def mock_user_as_opss(assignee)
     expect(KeycloakClient.instance).
       to receive(:get_user_roles).with(assignee.id)
-           .and_return([:psd_user, :opss_user])
+           .and_return(%i[psd_user opss_user])
   end
 
   # TODO: these roles will soon get moved to the database, allowing this to be removed.
