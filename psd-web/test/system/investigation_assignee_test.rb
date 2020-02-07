@@ -11,6 +11,8 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     visit new_investigation_assign_path(load_case(:one))
   end
 
+  teardown { User.current = nil }
+
   test "should show current user as a radio, and to assign user to case" do
     assert_text @user.display_name
     choose @user.display_name, visible: false
