@@ -2,6 +2,7 @@ require "application_system_test_case"
 
 class InvestigationSubNavigation < ApplicationSystemTestCase
   setup do
+    Investigation.import force: true, refresh: :wait_for
     stub_notify_mailer
     stub_antivirus_api
     sign_in
