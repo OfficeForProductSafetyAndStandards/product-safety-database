@@ -9,6 +9,7 @@ class NotificationTest < ActiveSupport::TestCase
   teardown do
     allow(NotifyMailer).to receive(:investigation_updated).and_call_original
     allow(NotifyMailer).to receive(:investigation_created).and_call_original
+    User.current = nil
   end
 
   test "should notify current assignee when the assignee is a person and there is any change" do
