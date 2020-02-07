@@ -5,7 +5,7 @@ class UpdateProductTest < ApplicationSystemTestCase
     @product = products(:one)
     stub_notify_mailer
     stub_antivirus_api
-    User.current = sign_in
+    sign_in
   end
 
   test "edit page fields should be populated with product attributes" do
