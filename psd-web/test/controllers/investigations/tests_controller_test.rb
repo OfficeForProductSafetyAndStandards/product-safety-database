@@ -38,7 +38,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
     assert Test.last.is_a?(Test::Request)
 
-    assert_redirected_to investigation_url(@investigation)
+    assert_redirected_to investigation_path(@investigation)
   end
 
   test "should create test result" do
@@ -64,7 +64,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
     assert Test.last.is_a?(Test::Result)
 
-    assert_redirected_to investigation_url(@investigation)
+    assert_redirected_to investigation_path(@investigation)
   end
 
   test "should add test record to investigation" do
