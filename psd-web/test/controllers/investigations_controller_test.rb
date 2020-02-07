@@ -21,7 +21,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
-    @investigation_one.assignee = User.find_by(name: "Test User_four")
+    @investigation_one.assignee = users(:southampton_bob)
     @investigation_one.source = sources(:investigation_one)
     @investigation_one.save
 
@@ -219,8 +219,8 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
         status_open: "unchecked",
         status_closed: "unchecked"
     }
-    assert_includes(response.body, @investigation_one.pretty_id)
-    assert_not_includes(response.body, @investigation_two.pretty_id)
+    assert_not_includes(response.body, @investigation_one.pretty_id)
+    assert_includes(response.body, @investigation_two.pretty_id)
     assert_not_includes(response.body, @investigation_three.pretty_id)
   end
 
@@ -233,7 +233,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
         status_open: "unchecked",
         status_closed: "unchecked"
     }
-    assert_includes(response.body, @investigation_one.pretty_id)
+    assert_not_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_two.pretty_id)
     assert_not_includes(response.body, @investigation_three.pretty_id)
   end
@@ -262,8 +262,8 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
         status_open: "unchecked",
         status_closed: "unchecked"
     }
-    assert_not_includes(response.body, @investigation_one.pretty_id)
-    assert_includes(response.body, @investigation_two.pretty_id)
+    assert_includes(response.body, @investigation_one.pretty_id)
+    assert_not_includes(response.body, @investigation_two.pretty_id)
     assert_includes(response.body, @investigation_three.pretty_id)
   end
 
