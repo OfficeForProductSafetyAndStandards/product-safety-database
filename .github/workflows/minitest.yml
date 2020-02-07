@@ -92,3 +92,9 @@ jobs:
     - name: Run Minitest test suite without system tests
       working-directory: psd-web
       run: bundle exec rake test:without_system_tests
+
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: capybara screenshots
+        path: psd-web/screenshots
