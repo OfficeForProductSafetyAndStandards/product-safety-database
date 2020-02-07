@@ -12,8 +12,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     users(:southampton_steve).teams << teams(:southampton)
     users(:southampton_bob).teams << teams(:southampton)
 
-    sign_in users(:southampton)
-    User.current = users(:southampton)
+    User.current = sign_in users(:southampton)
     stub_antivirus_api
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
@@ -157,8 +156,6 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee" do
-    other_org_user = users(:opss)
-    set_investigation_assignee! @investigation, other_org_user
     fill_in_context_form
     choose :correspondence_email_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -166,9 +163,6 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_out
-    sign_in other_org_user
-    User.current = other_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
