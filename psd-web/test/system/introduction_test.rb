@@ -4,15 +4,15 @@ class IntroductionTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    mock_user_as_non_opss User.current
 
     visit "/"
   end
 
   test "shows steps in order then redirects to homepage" do
     sign_in(users(:southampton))
+    mock_keycloak_user_roles([:psd_user])
 
-    assert_current_path "/introduction/overview"
+    visit "/introduction/overview"
     assert_selector "h1", text: "Report, track and share product safety information"
     click_on "Continue"
 
@@ -31,6 +31,9 @@ class IntroductionTest < ApplicationSystemTestCase
 
   test "clicking skip introduction skips introduction" do
     sign_in(users(:southampton))
+    mock_keycloak_user_roles([:psd_user])
+
+    visit "/introduction/overview"
     click_on "Skip introduction"
 
     assert_current_path "/"
@@ -38,20 +41,14 @@ class IntroductionTest < ApplicationSystemTestCase
 
   test "users will not be shown the introduction twice" do
     sign_in(users(:southampton))
-    assert_current_path "/introduction/overview"
+    mock_keycloak_user_roles([:psd_user])
+
+    visit "/introduction/overview"
     click_on "Continue"
     click_on "Continue"
     click_on "Continue"
     click_on "Get started"
     visit "/"
     assert_current_path "/"
-  end
-
-  test "does not show introduction to opss users" do
-    sign_in
-
-    visit "/"
-
-    assert_current_path "/cases"
   end
 end
