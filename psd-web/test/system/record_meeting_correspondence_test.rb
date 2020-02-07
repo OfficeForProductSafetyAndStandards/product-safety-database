@@ -28,6 +28,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the transcript file" do
+    @investigation.update!(assignable: users(:opss))
     fill_in_context_form
     click_button "Continue"
     attach_file("correspondence_meeting[transcript][file]", file_fixture("testImage.png"))
@@ -39,6 +40,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the related attachment" do
+    @investigation.update!(assignable: users(:opss))
     fill_in_context_form
     click_button "Continue"
     fill_in_content_form
