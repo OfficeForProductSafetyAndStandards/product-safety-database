@@ -25,6 +25,8 @@ module TestHelpers
     include TestHelpers::OmniAuthHelper
 
     def sign_out
+      return if page.has_css?("a", text: "Sign in to your account")
+
       click_on "Sign out", match: :first
     end
 
