@@ -137,6 +137,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     assert_equal(@correspondence.overview, first("h3").text)
   end
 
+  driven_by :selenium
   test "does not conceal from other organisations information on phonecalls with customer info" do
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
@@ -148,7 +149,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     sign_out
     sign_in users(:southampton)
     visit investigation_path(@investigation)
-
+    byebug
     click_on "Activity"
     assert_equal(@correspondence.overview, first("h3").text)
   end
