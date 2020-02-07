@@ -2,6 +2,8 @@ require "application_system_test_case"
 
 class InvestigationAssigneeTest < ApplicationSystemTestCase
   setup do
+    visit root_path
+    sign_out
     stub_notify_mailer
     stub_antivirus_api
     @user = User.current = sign_in(users(:southampton), roles: %i[psd_user])
