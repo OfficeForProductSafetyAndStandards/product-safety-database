@@ -18,6 +18,10 @@ require "rspec/mocks/standalone"
 require "webmock/minitest"
 require_relative "test_helpers/devise"
 
+if ENV['CHROMEDRIVER_PATH']
+  Selenium::WebDriver::Chrome::Service.driver_path = ENV.fetch('CHROMEDRIVER_PATH')
+end
+
 WebMock.allow_net_connect!
 
 class ActiveSupport::TestCase
