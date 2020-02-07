@@ -4,6 +4,12 @@
   @include govuk-typography-common();
 }
 
+// Fix invisible arrow when used as dropdown
+// See https://github.com/alphagov/accessible-autocomplete/issues/351
+.autocomplete__wrapper {
+  z-index: 0;
+}
+
 // Add a clear button.
 .autocomplete-select-with-clear {
   width: calc(100% - 48px);
