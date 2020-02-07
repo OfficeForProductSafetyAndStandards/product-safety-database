@@ -32,7 +32,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       if @product.update(product_params)
         format.html {
-          redirect_to @product, flash: { success: "Product was successfully updated." }
+          redirect_to product_path(@product), flash: { success: "Product was successfully updated." }
         }
         format.json { render :show, status: :ok, location: @product }
       else
