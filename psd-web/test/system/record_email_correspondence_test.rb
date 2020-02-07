@@ -7,6 +7,11 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     mock_keycloak_user_roles([:psd_user])
+
+    users(:southampton).teams << teams(:southampton)
+    users(:southampton_steve).teams << teams(:southampton)
+    users(:southampton_bob).teams << teams(:southampton)
+
     sign_in users(:southampton)
     User.current = users(:southampton)
     stub_antivirus_api
@@ -111,7 +116,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "confirmation continue should go to case page" do
-    visit new_investigation_email_url(load_case(:no_products))
+    visit new_investigation_email_path(load_case(:no_products))
     fill_in_context_form
     click_button "Continue"
     fill_in_content_form
