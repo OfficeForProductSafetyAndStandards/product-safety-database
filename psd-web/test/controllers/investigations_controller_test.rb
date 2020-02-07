@@ -307,7 +307,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should not show private investigations to everyone" do
     create_new_private_case
     sign_out(:user)
-    sign_in_as @non_opss_user
+    sign_in @non_opss_user
 
     get investigations_path
     assert_includes(response.body, "restricted")
