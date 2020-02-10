@@ -20,7 +20,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   driven_by :selenium, using: :chrome, screen_size: [1400, 1400], options: { args: %w[headless disable-gpu no-sandbox disable-dev-shm-usage] }
 
-    # Import all relevant models into Elasticsearch
+  # Import all relevant models into Elasticsearch
   def self.import_into_elasticsearch
     unless @models_imported
       ActiveRecord::Base.descendants.each do |model|
