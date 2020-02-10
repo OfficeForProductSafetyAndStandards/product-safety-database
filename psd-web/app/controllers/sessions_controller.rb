@@ -32,6 +32,8 @@ class SessionsController < ApplicationController
 
   def text_not_received; end
 
+  def check_your_email; end
+
 private
 
   def secondary_nav_items
