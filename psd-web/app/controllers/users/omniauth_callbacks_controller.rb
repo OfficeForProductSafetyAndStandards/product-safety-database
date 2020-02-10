@@ -5,7 +5,6 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def openid_connect
     if create_user.success?
       sign_in_and_redirect(create_user.user)
-      set_flash_message(:notice, :success, kind: "Facebook")
       User.current = current_user
     elsif create_user.user.nil?
       redirect_to forbidden_path
