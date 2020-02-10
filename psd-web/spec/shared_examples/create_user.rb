@@ -1,4 +1,4 @@
-RSpec.shared_examples "creates a user for" do
+RSpec.shared_examples "creates a user" do
   it "creates the user" do
     expect {
       subject.user
