@@ -1,10 +1,10 @@
-<% content_for :page_title, "Sign in" %>
-
+<% title = "Sign in" %>
+<% content_for :page_title, title %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <h1 class="govuk-heading-l">Sign in</h1>
+    <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">If you do not have an account, you will need to be invited by OPSS Processing Team before you can use the service.</p>
 
@@ -12,7 +12,12 @@
 
     <%= render "components/govuk_input", id: "password", name: "password", type: "password", classes: "app-!-max-width-two-thirds", label: { text: "Password" } %>
 
+
     <%= govukButton(text: "Continue") %>
+
+    <div class="govuk-body">
+      <%= link_to "Forgot your password?", reset_password_path, class: "govuk-link" %>
+    </div>
 
   </div>
 </div>
