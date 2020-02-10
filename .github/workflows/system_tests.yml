@@ -15,8 +15,6 @@ env:
   RAILS_ENV: test
   PGHOST: localhost
   PGUSER: postgres
-  HTTP_HOST: localhost
-  HTTP_POST: 3000
 
 jobs:
   ruby:
