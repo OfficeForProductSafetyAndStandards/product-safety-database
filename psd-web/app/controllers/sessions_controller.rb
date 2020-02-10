@@ -30,6 +30,8 @@ class SessionsController < ApplicationController
 
   def reset_password; end
 
+  def text_not_received; end
+
 private
 
   def secondary_nav_items
