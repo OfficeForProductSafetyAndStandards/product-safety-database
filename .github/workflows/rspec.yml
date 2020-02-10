@@ -16,7 +16,7 @@ env:
   ANTIVIRUS_USERNAME: av
   ANTIVIRUS_PASSWORD: password
   HTTP_HOST: localhost
-  HTTP_POST: 3000
+  HTTP_PORT: 3000
 
 jobs:
   ruby:
