@@ -31,7 +31,8 @@
               ' Currently selected file:
               = link_to @file_blob.filename, @file_blob, target: "_blank", rel: 'noopener'
           = form.fields_for :attachment do |subform|
-            = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
+            = subform.label :file, "Upload a file", class: "govuk-label"
+            = subform.file_field :file, class: "govuk-file-upload"
 
       .govuk-form-group
         = form.submit "Create enquiry", class: "govuk-button"
