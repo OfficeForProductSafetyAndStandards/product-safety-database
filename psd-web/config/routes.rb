@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   match "/reset-password", to: "sessions#reset_password", via: :get
   match "/text-not-received", to: "sessions#text_not_received", via: :get
 
+  match "/check-your-email", to: "sessions#check_your_email", via: :get
+
 
   resource :session, only: %i[new] do
     member do
