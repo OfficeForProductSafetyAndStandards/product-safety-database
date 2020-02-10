@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_raven_context
   before_action :authorize_user
   before_action :has_accepted_declaration
+  before_action :has_not_view_introduction
   before_action :set_cache_headers
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
@@ -27,7 +28,12 @@ class ApplicationController < ActionController::Base
   end
 
   def has_accepted_declaration
-    redirect_to declaration_index_path(redirect_path: request.original_fullpath) unless current_user.has_accepted_declaration
+    return unless user_signed_in?
+
+    unless current_user.has_accepted_declaration?
+      stored_location_for(current_user)
+      redirect_to declaration_index_path
+    end
   end
 
   def hide_nav?
@@ -90,8 +96,17 @@ class ApplicationController < ActionController::Base
     items
   end
 
+  def has_not_view_introduction
+    return unless user_signed_in?
+
+    unless current_user.has_viewed_introduction
+      stored_location_for(current_user)
+      redirect_to introduction_overview_path
+    end
+  end
+
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || investigations_path
+    stored_location_for(resource) || root_path
   end
 
   def after_sign_out_path_for(*)

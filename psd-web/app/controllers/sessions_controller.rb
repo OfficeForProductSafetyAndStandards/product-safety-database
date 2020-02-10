@@ -1,6 +1,5 @@
 class SessionsController < Devise::SessionsController
-  def destroy
-    ::KeycloakClient.instance.logout(refresh_token)
-   super
-  end
+  skip_before_action :has_accepted_declaration
+  skip_before_action :has_not_view_introduction
+
 end

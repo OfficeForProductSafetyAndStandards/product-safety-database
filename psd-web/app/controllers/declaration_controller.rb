@@ -1,5 +1,6 @@
 class DeclarationController < ApplicationController
   skip_before_action :has_accepted_declaration
+  skip_before_action :has_not_view_introduction
   before_action :set_errors
 
   def index
@@ -13,8 +14,7 @@ class DeclarationController < ApplicationController
     end
 
     UserDeclarationService.accept_declaration(current_user)
-
-    redirect_to session[:redirect_path] || root_path
+    redirect_to after_sign_in_path_for(current_user)
   end
 
   def set_errors

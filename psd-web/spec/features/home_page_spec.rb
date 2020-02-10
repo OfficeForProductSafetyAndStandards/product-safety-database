@@ -24,7 +24,6 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
 
     before do
       sign_in(as_user: create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
-      visit root_path
     end
 
     def expect_small_beta_phase_banner

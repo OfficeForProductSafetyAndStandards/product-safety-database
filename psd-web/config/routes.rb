@@ -167,7 +167,16 @@ Rails.application.routes.draw do
   match "/503", to: "errors#timeout", via: :all
 
   mount PgHero::Engine, at: "pghero"
+  authenticated :user, ->(user) { user.is_opss? } do
+    root to: redirect('/cases')
+  end
 
-  root to: "homepage#show"
+  authenticated :user, ->(user) { !user.is_opss? } do
+    root to: "homepage#non_opss"
+  end
+
+  unauthenticated do
+    root to: "homepage#show"
+  end
 end
 # rubocop:enable Metrics/BlockLength
