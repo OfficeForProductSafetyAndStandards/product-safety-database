@@ -1,41 +1,48 @@
 southampton:
   email: southampton@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Yann
   organisation: southampton
 
 southampton_steve:
   email: southampton.steve@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Steve
   organisation: southampton
 
 southampton_bob:
   email: southampton.bob@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Bob
   organisation: southampton
 
 southampton_frankie:
   email: southampton.frankie@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Frankie
   organisation: southampton
 
 opss:
   email: opss@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Slavosh
   organisation: opss
 
 opss_yann:
   email: opss.yann@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Yann
   organisation: opss
 
 luton:
   email: luton@example.com
   has_accepted_declaration: true
+  has_viewed_introduction: true
   name: Luton User
   organisation: luton
