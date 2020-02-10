@@ -34,6 +34,11 @@ class SessionsController < ApplicationController
 
   def check_your_email; end
 
+  def new_password; end
+
+  def link_expired; end
+
+
 private
 
   def secondary_nav_items
