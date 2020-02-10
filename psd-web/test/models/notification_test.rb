@@ -47,7 +47,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "should notify creator and assignee when case is closed or reopened by someone else" do
     User.current = users(:southampton)
-    @investigation.update(assignee: users(:southampton))
+    @investigation.update!(assignee: users(:southampton), source: UserSource.new(user: users(:southampton)))
     mock_investigation_updated(who_will_be_notified: [users(:southampton), users(:southampton_bob)].map(&:email))
     @investigation.update(is_closed: !@investigation.is_closed)
     assert_equal 0, @number_of_notifications
@@ -57,12 +57,12 @@ class NotificationTest < ActiveSupport::TestCase
 
   test "should not notify creator when case is closed or reopened by the creator" do
     User.current = users(:southampton)
-    @investigation.update(assignee: users(:southampton_bob))
+    @investigation.update!(source: UserSource.new(user: users(:southampton)), assignable: users(:southampton_bob))
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
     @investigation.update(is_closed: !@investigation.is_closed)
-    assert_equal @number_of_notifications, 1
+    assert_equal 1, @number_of_notifications
     @investigation.update(is_closed: !@investigation.is_closed)
-    assert_equal @number_of_notifications, 2
+    assert_equal 2, @number_of_notifications
   end
 
   test "should notify previous assignee if case is assigned to someone else by someone else" do
