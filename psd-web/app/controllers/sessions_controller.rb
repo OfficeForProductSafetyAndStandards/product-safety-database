@@ -28,6 +28,8 @@ class SessionsController < ApplicationController
 
   def two_factor; end
 
+  def reset_password; end
+
 private
 
   def secondary_nav_items

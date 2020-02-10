@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   match "/sign-in", to: "sessions#sign_in", via: :get
   match "/two-factor", to: "sessions#two_factor", via: :get
+  match "/reset-password", to: "sessions#reset_password", via: :get
 
 
   resource :session, only: %i[new] do
