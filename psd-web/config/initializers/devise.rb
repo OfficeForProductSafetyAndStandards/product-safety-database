@@ -277,7 +277,7 @@ Devise.setup do |config|
                     host:         keycloak_url.host,
                     identifier:   ENV.fetch("KEYCLOAK_CLIENT_ID"),
                     secret:       ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
-                    redirect_uri: ENV.fetch("KEYCLOACK_REDIRECT_URI")
+                    redirect_uri: ENV.fetch("KEYCLOAK_REDIRECT_URI")
                   }
 
   # ==> Warden configuration
