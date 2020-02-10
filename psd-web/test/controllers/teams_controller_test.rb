@@ -80,7 +80,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "Inviting new user creates the account and adds them to the team" do
     kc = KeycloakClient.instance
     new_email_address = "new_user@northamptonshire.gov.uk"
-    expect(kc).to receive(:get_user).with(new_email_address).and_return({id: SecureRandom.uuid})
+    expect(kc).to receive(:get_user).with(new_email_address).and_return(id: SecureRandom.uuid)
     expect(kc).to receive(:send_required_actions_welcome_email)
 
     assert_difference "teams(:southampton).users.count" => 1, "User.all.size" => 1 do
