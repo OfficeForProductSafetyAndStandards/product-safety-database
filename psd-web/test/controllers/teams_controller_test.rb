@@ -79,19 +79,22 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   test "Inviting new user creates the account and adds them to the team" do
     kc = KeycloakClient.instance
-
+    new_email_address = "new_user@northamptonshire.gov.uk"
+    expect(kc).to receive(:get_user).with(new_email_address).and_return({id: SecureRandom.uuid})
     expect(kc).to receive(:send_required_actions_welcome_email)
 
     assert_difference "teams(:southampton).users.count" => 1, "User.all.size" => 1 do
-      put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: "new_user@northamptonshire.gov.uk" } }
+      put invite_to_team_path(teams(:southampton)), params: { new_user: { email_address: new_email_address } }
       assert_response :see_other
     end
   end
 
   test "Inviting user with email not on the whitelist returns an error" do
     allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
+    not_whitelisted_address = "not_whitelisted@gmail.com"
+    expect(KeycloakClient.instance).to receive(:get_user).with(not_whitelisted_address).and_return({})
     assert_difference "teams(:southampton).users.count" => 0, "User.count" => 0 do
-      put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: "not_whitelisted@gmail.com" } }
+      put invite_to_team_path(teams(:southampton)), params: { new_user: { email_address: not_whitelisted_address } }
       assert_response :bad_request
     end
   end
@@ -100,6 +103,8 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     kc = KeycloakClient.instance
 
     expect(kc).to receive(:send_required_actions_welcome_email)
+    new_whitelisted_address = "new_user@NORTHAMPTONSHIRE.gov.uk"
+    expect(kc).to receive(:get_user).with(new_whitelisted_address).and_return(id: SecureRandom.uuid)
 
     assert_difference "teams(:southampton).users.count" => 1, "User.all.size" => 1 do
       put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: "new_user@NORTHAMPTONSHIRE.gov.uk" } }
