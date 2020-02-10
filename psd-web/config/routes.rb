@@ -18,8 +18,9 @@ Rails.application.routes.draw do
   match "/two-factor", to: "sessions#two_factor", via: :get
   match "/reset-password", to: "sessions#reset_password", via: :get
   match "/text-not-received", to: "sessions#text_not_received", via: :get
-
   match "/check-your-email", to: "sessions#check_your_email", via: :get
+  match "/new-password", to: "sessions#new_password", via: :get
+  match "/link-expired", to: "sessions#link_expired", via: :get
 
 
   resource :session, only: %i[new] do
