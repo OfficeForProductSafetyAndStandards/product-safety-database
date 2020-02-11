@@ -140,7 +140,7 @@ By default, the database is shared, but it can be overriden by setting the `DB_N
 
 #### Debuging review application
 
-Please run debug app deployment locally. See `.github/workflows/review-apps.yml` for details.
+Please run debug app deployment locally. See [".github/workflows/review-apps.yml"](https://github.com/UKGovernmentBEIS/beis-opss-psd/blob/master/.github/workflows/review-apps.yml) for details.
 
 
 ### Deployment from scratch
