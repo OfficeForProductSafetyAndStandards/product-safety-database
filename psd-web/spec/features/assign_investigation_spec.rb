@@ -11,9 +11,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
   let!(:another_active_user_another_team) { create(:user, :activated, name: "another user in another team", organisation: user.organisation, teams: [create(:team)]) }
   let!(:another_inactive_user_another_team) { create(:user, :inactive, organisation: user.organisation, teams: [create(:team)]) }
 
-  before {
-    sign_in(as_user: user)
-  }
+  before { sign_in(as_user: user) }
 
   scenario "only shows other active users" do
     visit "/cases/#{investigation.pretty_id}/assign/choose"
@@ -32,7 +30,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     click_button "Continue"
     fill_in "investigation_assignee_rationale", with: "Test assign"
     click_button "Confirm change"
-    expect(page).to have_css(".govuk-summary-list__value", text: another_active_user.name.to_s)
+    expect(page.find("dt", text: "Assigned to")).to have_sibling("dd", text: another_active_user.name.to_s)
   end
 
   scenario "assign case to someone else in another team" do
@@ -42,7 +40,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     click_button "Continue"
     fill_in "investigation_assignee_rationale", with: "Test assign"
     click_button "Confirm change"
-    expect(page).to have_css(".govuk-summary-list__value", text: another_active_user_another_team.name.to_s)
+    expect(page.find("dt", text: "Assigned to")).to have_sibling("dd", text: another_active_user_another_team.name.to_s)
   end
 
   scenario "once case assigned to other team- cannot re-assign" do
