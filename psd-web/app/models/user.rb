@@ -103,14 +103,6 @@ class User < ApplicationRecord
     teams.map(&:name).join(", ")
   end
 
-  def assignee_short_name
-    if organisation.present? && organisation.id != User.current.organisation_id
-      organisation.name
-    else
-      name
-    end
-  end
-
   def is_psd_user?
     has_role? :psd_user
   end
