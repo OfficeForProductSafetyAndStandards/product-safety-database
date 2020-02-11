@@ -58,7 +58,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
       it "displays the only category present a paragraphe" do
         random_product_category = investigation.products.sample.category
-        expect(product_summary_list)
+        expect(Capybara.string(product_summary_list))
           .to have_css("dd.govuk-summary-list__value p.govuk-body", text: random_product_category.upcase_first)
       end
 
@@ -66,9 +66,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
         let(:products_list) { [iphone, washing_machine] }
 
         it "displays a categories as a list" do
-          expect(product_summary_list)
+          expect(Capybara.string(product_summary_list))
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone_3g.category.upcase_first)
-          expect(product_summary_list)
+          expect(Capybara.string(product_summary_list))
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
         end
       end
@@ -190,7 +190,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
       it "displays the only category present a paragraphe" do
         random_product_category = investigation.products.sample.category
-        expect(product_summary_list)
+        expect(Capybara.string(product_summary_list))
           .to have_css("dd.govuk-summary-list__value p.govuk-body", text: random_product_category.upcase_first)
       end
 
@@ -198,9 +198,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
         let(:products_list) { [iphone, iphone_3g] }
 
         it "displays a categories as a list" do
-          expect(product_summary_list)
+          expect(Capybara.string(product_summary_list))
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone_3g.category.upcase_first)
-          expect(product_summary_list)
+          expect(Capybara.string(product_summary_list))
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
         end
       end
@@ -347,6 +347,23 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       it "displays a link to see all the products" do
         expect(products_list).to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
       end
+    end
+  end
+
+  describe "#assignable_display_name_for" do
+    let(:viewing_user) { build(:user) }
+
+    context "when the investigation is assigned" do
+      it "displays the assignee assignable name" do
+        expect(subject.assignable_display_name_for(viewing_user: viewing_user))
+          .to eq(user.decorate.assignee_short_name(viewing_user: viewing_user))
+      end
+    end
+
+    context "when the investigation is not assigned" do
+      before { investigation.assignee = nil }
+
+      it { expect(subject.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
     end
   end
 end
