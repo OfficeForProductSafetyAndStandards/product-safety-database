@@ -37,8 +37,9 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
     context "when I invite an existing user" do
       let(:user) { create(:user, :activated, :team_admin, teams: [team]) }
 
-      scenario ",I should see an error message" do
+      scenario "I should see an error message" do
         click_link "Invite a team member"
+        expect(page).to have_selector("h1", text: "Invite a team member")
         fill_in "new_user_email_address", with: user.email.to_s
         click_button "Send invitation email"
         expect(page).to have_css(".govuk-error-summary__list", text: "You cannot invite this person to join your team because they are already a member of another team from a different organisation.")
@@ -49,12 +50,14 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
   context "as a normal user" do
     let(:user) { create(:user, :activated, :psd_user, teams: [team]) }
 
-    scenario "does not display the link for any users" do
-      expect(page).not_to have_css("a[href*=\"#{resend_invitation_team_path(team)}\"]")
+    scenario "does not display the resend invite link for any users" do
+      expect(page).to have_selector("h1", text: "test organisation")
+      expect(page).not_to have_link("Your team", href: resend_invitation_team_path(team))
     end
 
     scenario "does not display the invite a team member link" do
-      expect(page).not_to have_css("govuk-button", text: "Invite a team member")
+      expect(page).to have_selector("h1", text: "test organisation")
+      expect(page).not_to have_button("Invite a team member")
     end
   end
 end
