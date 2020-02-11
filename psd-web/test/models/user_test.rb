@@ -21,17 +21,4 @@ class UserTest < ActiveSupport::TestCase
     sign_in_as @user
     assert_equal "Test User_four (Office of Product Safety and Standards)", @user_four.display_name
   end
-
-  test "assignee short name is full name when user's organisation is same as that of current user" do
-    sign_in_as @user
-    assert_equal "Test User_one", @user.assignee_short_name
-  end
-
-  test "assignee short name is organisation when user's organisation is different to that of current user" do
-    assert_equal "Office of Product Safety and Standards", @user_four.assignee_short_name
-  end
-
-  test "don't load non-psd users" do
-    assert_not User.find_by(name: "Test Non_psd_user")
-  end
 end
