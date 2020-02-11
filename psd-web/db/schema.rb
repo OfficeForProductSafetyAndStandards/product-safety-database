@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_07_112514) do
+ActiveRecord::Schema.define(version: 2020_02_11_150409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,16 +274,26 @@ ActiveRecord::Schema.define(version: 2020_02_07_112514) do
   create_table "users", id: :uuid, default: nil, force: :cascade do |t|
     t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
+    t.datetime "current_sign_in_at"
+    t.inet "current_sign_in_ip"
     t.string "email"
+    t.string "encrypted_password", default: "", null: false
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
+    t.datetime "last_sign_in_at"
+    t.inet "last_sign_in_ip"
     t.string "name"
     t.uuid "organisation_id"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email"
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "activities", "businesses"

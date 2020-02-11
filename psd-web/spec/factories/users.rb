@@ -4,6 +4,8 @@ FactoryBot.define do
     name { "test user" }
     email { "test@example.com" }
     organisation
+    password { "password" }
+    password_confirmation { |u| u.password }
     has_accepted_declaration { false }
     has_been_sent_welcome_email { true }
     has_viewed_introduction { false }

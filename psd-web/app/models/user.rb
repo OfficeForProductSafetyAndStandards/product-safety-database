@@ -1,5 +1,8 @@
 class User < ApplicationRecord
-  devise :omniauthable, omniauth_providers: %i[openid_connect]
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
+  devise :database_authenticatable, :rememberable, :validatable, :recoverable, :recoverable
+
   belongs_to :organisation
 
   has_many :investigations, dependent: :nullify, as: :assignable

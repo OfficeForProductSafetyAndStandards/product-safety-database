@@ -88,10 +88,10 @@ class ApplicationController < ActionController::Base
   def secondary_nav_items
     items = []
     if user_signed_in?
-      items.push text: "Your account", href: KeycloakClient.instance.user_account_url
-      items.push text: "Sign out", href: logout_session_path
+      # items.push text: "Your account", href: KeycloakClient.instance.user_account_url
+      items.push text: "Sign out", href: destroy_user_session_path
     else
-      items.push text: "Sign in", href: user_openid_connect_omniauth_authorize_path
+      items.push text: "Sign in", href: new_user_session_path
     end
     items
   end
@@ -103,6 +103,10 @@ class ApplicationController < ActionController::Base
       stored_location_for(current_user)
       redirect_to introduction_overview_path
     end
+  end
+
+  def after_resetting_password_path_for(*)
+    check_email_path
   end
 
   def after_sign_in_path_for(resource)
