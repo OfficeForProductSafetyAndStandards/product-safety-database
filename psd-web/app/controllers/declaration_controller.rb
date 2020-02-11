@@ -1,6 +1,6 @@
 class DeclarationController < ApplicationController
   skip_before_action :has_accepted_declaration
-  skip_before_action :has_not_view_introduction
+  skip_before_action :has_view_introduction
   before_action :set_errors
 
   def index

@@ -1,6 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :has_accepted_declaration
-  skip_before_action :has_not_view_introduction
+  skip_before_action :has_view_introduction
   skip_before_action :authorize_user
 
   def openid_connect

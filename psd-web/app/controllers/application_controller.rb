@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
     items
   end
 
-  def has_not_view_introduction
+  def has_view_introduction
     return unless user_signed_in?
 
     unless current_user.has_viewed_introduction
