@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_raven_context
   before_action :authorize_user
   before_action :has_accepted_declaration
-  before_action :has_not_view_introduction
+  before_action :has_viewed_introduction
   before_action :set_cache_headers
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
     items
   end
 
-  def has_view_introduction
+  def has_viewed_introduction
     return unless user_signed_in?
 
     unless current_user.has_viewed_introduction
