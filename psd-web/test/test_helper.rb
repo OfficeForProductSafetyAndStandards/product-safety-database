@@ -135,10 +135,12 @@ class ActiveSupport::TestCase
 
   def set_user_as_team_admin(user = User.current)
     allow(@keycloak_client_instance).to receive(:get_user_roles).with(user.id) { %i[psd_user team_admin] }
+    user.load_roles_from_keycloak
   end
 
   def set_user_as_not_team_admin(user = User.current)
     allow(@keycloak_client_instance).to receive(:get_user_roles).with(user.id) { [:psd_user] }
+    user.load_roles_from_keycloak
   end
 
   def add_user_to_opss_team(user_id:, team_id:)

@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
+  has_many :user_roles, dependent: :destroy
 
   has_and_belongs_to_many :teams
 
@@ -55,6 +56,8 @@ class User < ApplicationRecord
 
         record.update!(user.slice(:name, :email, :organisation))
         record.teams = user[:teams]
+
+        SyncKeycloakUserRolesJob.perform_later(record.id)
       rescue ActiveRecord::ActiveRecordError => e
         if Rails.env.production?
           Raven.capture_exception(e)
@@ -65,22 +68,23 @@ class User < ApplicationRecord
     end
   end
 
+  def load_roles_from_keycloak
+    roles = KeycloakClient.instance.get_user_roles(id).uniq
+
+    return if roles == user_roles.pluck(:name).map(&:to_sym)
+
+    transaction do
+      user_roles.delete_all
+      roles.each { |role| user_roles.create!(name: role) }
+    end
+  end
+
   def self.current
     RequestStore.store[:current_user]
   end
 
   def self.current=(user)
     RequestStore.store[:current_user] = user
-  end
-
-  def has_role?(role)
-    roles.include?(role)
-  end
-
-  def roles
-    @roles ||= Rails.cache.fetch("user_roles_#{id}", expires_in: 30.minutes) do
-      KeycloakClient.instance.get_user_roles(id)
-    end
   end
 
   def name
@@ -138,9 +142,25 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
+  # TODO: Remove these when switching over roles resolution to #user_roles
+  def has_role?(role)
+    roles.include?(role)
+  end
+
+  def roles
+    @roles ||= Rails.cache.fetch("user_roles_#{id}", expires_in: 30.minutes) do
+      KeycloakClient.instance.get_user_roles(id)
+    end
+  end
+
 private
 
   def current_user?
     User.current&.id == id
   end
+
+  # TODO: Enable this when switching over roles resolution to #user_roles
+  # def has_role?(role)
+  #   user_roles.exists?(name: role)
+  # end
 end
