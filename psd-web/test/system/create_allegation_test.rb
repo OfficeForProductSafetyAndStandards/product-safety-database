@@ -18,7 +18,7 @@ class CreateAllegationTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
 
-    sign_in(users(:opss), roles: %i[psd_user opss_user])
+    sign_in(users(:opss))
     visit new_allegation_path
   end
 
