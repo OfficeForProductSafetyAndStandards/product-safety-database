@@ -47,17 +47,6 @@ class ActiveSupport::TestCase
     WebMock.reset!
   end
 
-  def mock_user_as_opss(assignee)
-    expect(KeycloakClient.instance).
-      to receive(:get_user_roles).with(assignee.id)
-           .and_return(%i[psd_user opss_user])
-  end
-
-  # TODO: these roles will soon get moved to the database, allowing this to be removed.
-  def mock_keycloak_user_roles(roles)
-    allow(KeycloakClient.instance).to receive(:get_user_roles) { roles }
-  end
-
   def stub_notify_mailer
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
   end

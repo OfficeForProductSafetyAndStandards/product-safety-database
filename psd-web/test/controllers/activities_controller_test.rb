@@ -2,7 +2,6 @@ require "test_helper"
 
 class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_keycloak_user_roles([:psd_user])
     sign_in users(:southampton)
     @investigation = load_case(:one)
     @activity = activities(:one)

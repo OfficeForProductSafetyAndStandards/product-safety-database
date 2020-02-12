@@ -3,7 +3,6 @@ require "test_helper"
 class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:southampton)
-    mock_keycloak_user_roles([:psd_user])
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     @product = products(:iphone)
