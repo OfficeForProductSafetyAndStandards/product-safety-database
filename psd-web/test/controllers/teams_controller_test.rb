@@ -4,7 +4,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notify_mailer
     stub_user_management
-    mock_keycloak_user_roles(%i[psd_user team_admin])
     sign_in users(:southampton)
     users(:southampton).teams << teams(:southampton)
     users(:southampton_bob).teams << teams(:southampton)
@@ -33,13 +32,17 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Team pages don’t include invite links for non-team-admins" do
-    mock_keycloak_user_roles(%i[psd_user])
+    sign_out(:user)
+    sign_in(:southampton_bob)
+
     get team_url(teams(:southampton))
     assert_not_includes(response.body, "Invite a team member")
   end
 
   test "Team invite pages are visible to users with team_admin role only" do
-    mock_keycloak_user_roles(%i[psd_user])
+    sign_out(:user)
+    sign_in(users(:southampton_bob))
+
     assert_raises Pundit::NotAuthorizedError do
       get invite_to_team_url(teams(:southampton))
     end
