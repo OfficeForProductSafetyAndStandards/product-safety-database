@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   match "/create-account", to: "sessions#create_account", via: :get
   match "/invite-expired", to: "sessions#invite_expired", via: :get
 
+  match "/text-not-received-account-creation", to: "sessions#text_not_received_account_creation", via: :get
+
 
   resource :session, only: %i[new] do
     member do

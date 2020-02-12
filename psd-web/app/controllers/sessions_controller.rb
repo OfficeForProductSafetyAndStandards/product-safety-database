@@ -32,6 +32,8 @@ class SessionsController < ApplicationController
 
   def text_not_received; end
 
+  def text_not_received_account_creation; end
+
   def check_your_email; end
 
   def new_password; end
@@ -39,7 +41,6 @@ class SessionsController < ApplicationController
   def link_expired; end
 
   def invite_expired; end
-
 
   def create_account; end
 

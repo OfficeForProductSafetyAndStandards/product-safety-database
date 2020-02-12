@@ -1,0 +1,41 @@
+<% title = "Resend security code" %>
+<% content_for :page_title, title %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(text: "Back", href: two_factor_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can resend it.</p>
+
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          Need to change mobile number?
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+
+
+      <%= telephoneNumber({
+        id: "mobile-number",
+        name: "mobile-number",
+        label: {
+          text: "Mobile number"
+        },
+        value: "07777 111111",
+        classes: "app-!-max-width-two-thirds"
+      }) %>
+
+
+      </div>
+    </details>
+
+    <%= govukButton(text: "Resend security code") %>
+
+  </div>
+</div>
