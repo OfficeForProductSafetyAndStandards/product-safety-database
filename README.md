@@ -138,6 +138,10 @@ In order to make the PR review process fast and independent, it is possible to c
 
 By default, the database is shared, but it can be overriden by setting the `DB_NAME` env variable. This will create a new database instance, however this can take several minutes.
 
+#### Debuging review application
+
+Please run debug app deployment locally. See [".github/workflows/review-apps.yml"](https://github.com/UKGovernmentBEIS/beis-opss-psd/blob/master/.github/workflows/review-apps.yml) for details.
+
 
 ### Deployment from scratch
 
@@ -325,6 +329,53 @@ We have set up a regular job to query the database and to print certain metrics 
 The metrics are sent in JSON format and logstash is clever enough to split these out into separate logs for each key-value pair.
 However, you will need to add an extra filter in [logstash-filters.conf](./logstash-filters.conf), in order to create new fields on the logs instead of the data all being captured in the `message` field.
 
+### Clound Foundry reference
+
+#### Useful examples
+
+Please take a look into github actions in `.github/workflows` to see how deployments are done.
+
+#### Proper executable
+
+If `cf` is not working, try `cf7`
+
+#### Login to CF Api
+
+```
+cf login -a api.london.cloud.service.gov.uk -u some@email.com
+```
+
+#### SSH to service and run rails console
+
+```
+cf ssh APP-NAME
+
+cd app && export $(./env/get-env-from-vcap.sh) && /tmp/lifecycle/launcher /home/vcap/app 'rails c' ''
+```
+
+#### List apps
+
+```
+cf apps
+```
+
+#### Show app details
+
+```
+cf app APP-NAME
+```
+
+#### Show app env
+
+```
+cf env APP-NAME
+```
+
+#### List services
+
+```
+cf apps
+```
 
 ## BrowserStack
 
@@ -332,6 +383,23 @@ However, you will need to add an extra filter in [logstash-filters.conf](./logst
 
 We use [BrowserStack](https://www.browserstack.com) to test our service from a variety of different browsers and systems.
 
+## Related projects
+
+### Antivirus API
+
+See [antivirus repo](https://github.com/UKGovernmentBEIS/beis-opss-antivirus).
+
+### Maintenance page
+
+See [maintenance in infrastructure repo](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure/blob/master/maintenance/README.md).
+
+### Keycloak
+
+See [keycloak repository](https://github.com/UKGovernmentBEIS/beis-opss-keycloak).
+
+### Other infrastructure
+
+See [infrastructure repository](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure).
 
 ## Licence
 

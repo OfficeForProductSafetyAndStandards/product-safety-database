@@ -43,8 +43,9 @@ FactoryBot.define do
     end
 
     after(:build) do |user, evaluator|
-      user.instance_variable_set(:@roles, evaluator.roles)
-      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(user.roles)
+      user.instance_variable_set(:@roles, evaluator.roles) # TODO: Remove this when switching over roles resolution to #user_roles
+      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(evaluator.roles)
+      # user.load_roles_from_keycloak # TODO: Enable this when switching over roles resolution to #user_roles
     end
   end
 end
