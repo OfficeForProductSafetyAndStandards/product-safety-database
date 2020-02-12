@@ -165,19 +165,15 @@ Rails.application.routes.draw do
   authenticated :user, ->(user) { user.is_opss? } do
     root to: redirect("/cases")
   end
-<<<<<<< HEAD
 
   authenticated :user, ->(user) { !user.is_opss? } do
     root to: "homepage#non_opss"
   end
 
-=======
-
   authenticated :user, ->(user) { !user.is_opss? } do
     root to: "homepage#non_opss"
   end
 
->>>>>>> add-devise-and-integrate-roles
   unauthenticated do
     root to: "homepage#show"
   end
