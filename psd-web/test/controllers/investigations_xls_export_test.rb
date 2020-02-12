@@ -2,7 +2,6 @@ require "test_helper"
 
 class InvestigationsXlsExportTest < ActionDispatch::IntegrationTest
   setup do
-    mock_keycloak_user_roles([:psd_user])
     sign_in users(:southampton)
   end
 

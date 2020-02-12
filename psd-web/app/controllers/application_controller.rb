@@ -98,15 +98,12 @@ class ApplicationController < ActionController::Base
 
   def has_viewed_introduction
     return unless user_signed_in?
+    return if current_user.is_opss?
 
     unless current_user.has_viewed_introduction
       stored_location_for(current_user)
       redirect_to introduction_overview_path
     end
-  end
-
-  def after_resetting_password_path_for(*)
-    check_email_path
   end
 
   def after_sign_in_path_for(resource)

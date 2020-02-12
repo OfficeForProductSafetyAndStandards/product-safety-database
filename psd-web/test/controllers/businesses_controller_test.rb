@@ -2,7 +2,6 @@ require "test_helper"
 
 class BusinessesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_keycloak_user_roles([:psd_user])
     sign_in users(:southampton)
     @business_one = businesses(:one)
     @business_two = businesses(:two)

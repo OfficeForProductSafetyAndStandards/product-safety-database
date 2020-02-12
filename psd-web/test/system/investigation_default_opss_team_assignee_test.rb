@@ -6,7 +6,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     sign_out
     stub_notify_mailer
     stub_antivirus_api
-    @user = User.current = sign_in(users(:southampton), roles: %i[psd_user])
+    @user = User.current = sign_in(users(:southampton))
     @user.teams << teams(:southampton)
     @team = @user.teams.first
     visit new_investigation_assign_path(load_case(:one))

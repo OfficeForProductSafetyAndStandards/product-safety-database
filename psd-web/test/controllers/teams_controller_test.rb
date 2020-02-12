@@ -4,7 +4,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notify_mailer
     stub_user_management
-    mock_keycloak_user_roles(%i[psd_user team_admin])
     sign_in users(:southampton)
     users(:southampton).teams << teams(:southampton)
     users(:southampton_bob).teams << teams(:southampton)
@@ -12,7 +11,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   teardown do
-    restore_user_management
+    User.current = nil
   end
 
   test "Team pages are visible to members" do
@@ -33,10 +32,16 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "Team pages don’t include invite links for non-team-admins" do
-    mock_keycloak_user_roles(%i[psd_user])
+    sign_out(:user)
+    sign_in(:southampton_bob)
+
     get team_url(teams(:southampton))
     assert_not_includes(response.body, "Invite a team member")
   end
+
+  test "Team invite pages are visible to users with team_admin role only" do
+    sign_out(:user)
+    sign_in(users(:southampton_bob))
 
   test "Team invite pages are visible to users with team_admin role only" do
     mock_keycloak_user_roles(%i[psd_user])
@@ -122,11 +127,5 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     allow(KeycloakClient.instance).to receive(:add_user_to_team)
     allow(KeycloakClient.instance).to receive(:create_user)
     allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_return(true)
-  end
-
-  def restore_user_management
-    allow(KeycloakClient.instance).to receive(:add_user_to_team).and_call_original
-    allow(KeycloakClient.instance).to receive(:create_user).and_call_original
-    allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_call_original
   end
 end

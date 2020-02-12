@@ -8,7 +8,6 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   setup do
-    mock_keycloak_user_roles([:psd_user])
     user = users(:southampton)
     User.current = user
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }

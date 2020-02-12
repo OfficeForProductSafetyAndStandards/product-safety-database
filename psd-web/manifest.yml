@@ -9,6 +9,7 @@ applications:
     - route: ((psd-host))
   env:
     PSD_HOST: ((psd-host))
+  timeout: 180
   services:
     - opss-log-drain
     - psd-auth-env

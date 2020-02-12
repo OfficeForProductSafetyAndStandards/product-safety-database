@@ -1,6 +1,6 @@
 module LoginHelpers
   module Features
-    def sign_in(as_user: create(:user, :activated))
+    def sign_in(as_user: create(:user, :activated, has_viewed_introduction: true))
       groups = as_user.teams.flat_map(&:path) << as_user.organisation&.path
       groups.compact!
 

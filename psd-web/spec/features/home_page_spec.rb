@@ -42,6 +42,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
 
       context "not previously accepted the declaration" do
         let(:has_accepted_declaration) { false }
+        let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
 
         scenario "shows the declaration page before the case list" do

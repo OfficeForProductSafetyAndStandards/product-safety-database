@@ -10,7 +10,6 @@ class IntroductionTest < ApplicationSystemTestCase
 
   test "shows steps in order then redirects to homepage" do
     sign_in(users(:southampton))
-    mock_keycloak_user_roles([:psd_user])
 
     visit "/introduction/overview"
     assert_selector "h1", text: "Report, track and share product safety information"
@@ -31,7 +30,6 @@ class IntroductionTest < ApplicationSystemTestCase
 
   test "clicking skip introduction skips introduction" do
     sign_in(users(:southampton))
-    mock_keycloak_user_roles([:psd_user])
 
     visit "/introduction/overview"
     click_on "Skip introduction"
@@ -41,7 +39,6 @@ class IntroductionTest < ApplicationSystemTestCase
 
   test "users will not be shown the introduction twice" do
     sign_in(users(:southampton))
-    mock_keycloak_user_roles([:psd_user])
 
     visit "/introduction/overview"
     click_on "Continue"

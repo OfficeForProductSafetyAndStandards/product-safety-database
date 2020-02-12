@@ -6,7 +6,6 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
 
   setup do
     stub_notify_mailer
-    mock_keycloak_user_roles([:psd_user])
 
     users(:southampton).teams << teams(:southampton)
     users(:southampton_steve).teams << teams(:southampton)
