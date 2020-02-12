@@ -37,7 +37,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
     context "as a team admin" do
       let(:user) { create(:user, :activated, :team_admin, teams: [team]) }
 
-      scenario "inviting an existing user should show an error message" do
+      scenario "inviting an existing user shows an error message" do
         click_link "Invite a team member"
         expect(page).to have_selector("h1", text: "Invite a team member")
         fill_in "new_user_email_address", with: user.email.to_s
