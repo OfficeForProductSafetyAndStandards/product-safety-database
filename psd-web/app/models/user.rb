@@ -11,7 +11,6 @@ class User < ApplicationRecord
   validates :id, presence: true, uuid: true
 
   attr_accessor :access_token # Used only in User.current thread context
-  attr_writer :roles
 
   def self.activated
     where(account_activated: true)
@@ -142,25 +141,13 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
-  # TODO: Remove these when switching over roles resolution to #user_roles
-  def has_role?(role)
-    roles.include?(role)
-  end
-
-  def roles
-    @roles ||= Rails.cache.fetch("user_roles_#{id}", expires_in: 30.minutes) do
-      KeycloakClient.instance.get_user_roles(id)
-    end
-  end
-
 private
 
   def current_user?
     User.current&.id == id
   end
 
-  # TODO: Enable this when switching over roles resolution to #user_roles
-  # def has_role?(role)
-  #   user_roles.exists?(name: role)
-  # end
+  def has_role?(role)
+    user_roles.exists?(name: role)
+  end
 end
