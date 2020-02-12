@@ -11,6 +11,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
   before do
     sign_in(as_user: user)
     visit team_path(team)
+    expect(page).to have_css("h1", text: "test organisation")
   end
 
   scenario "only shows team members, including the current user" do
@@ -20,13 +21,15 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
     expect(page).not_to have_css(".teams--user .teams--user-email:contains(\"#{another_user_another_team.email}\")")
   end
 
+  def resend_link_selector(email)
+    "a[href=\"#{resend_invitation_team_path(team)}?email_address=#{CGI.escape(email)}\"]"
+  end
+
   context "re-sending invitation email" do
     context "as a team admin user" do
       let(:user) { create(:user, :activated, :team_admin, teams: [team]) }
 
-      def resend_link_selector(email)
-        "a[href=\"#{resend_invitation_team_path(team)}?email_address=#{CGI.escape(email)}\"]"
-      end
+
 
       scenario "only displays the link for inactive users" do
         expect(page).to have_css(resend_link_selector(another_inactive_user.email))
@@ -51,12 +54,10 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
     let(:user) { create(:user, :activated, :psd_user, teams: [team]) }
 
     scenario "does not display the resend invite link for any users" do
-      expect(page).to have_selector("h1", text: "test organisation")
-      expect(page).not_to have_link("Your team", href: resend_invitation_team_path(team))
+      expect(page).not_to have_link(resend_link_selector(another_inactive_user.email))
     end
 
     scenario "does not display the invite a team member link" do
-      expect(page).to have_selector("h1", text: "test organisation")
       expect(page).not_to have_button("Invite a team member")
     end
   end
