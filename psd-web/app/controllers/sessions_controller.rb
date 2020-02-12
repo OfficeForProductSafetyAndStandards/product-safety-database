@@ -38,6 +38,9 @@ class SessionsController < ApplicationController
 
   def link_expired; end
 
+  def invite_expired; end
+
+
   def create_account; end
 
 

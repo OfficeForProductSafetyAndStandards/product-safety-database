@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   match "/new-password", to: "sessions#new_password", via: :get
   match "/link-expired", to: "sessions#link_expired", via: :get
   match "/create-account", to: "sessions#create_account", via: :get
+  match "/invite-expired", to: "sessions#invite_expired", via: :get
 
 
   resource :session, only: %i[new] do

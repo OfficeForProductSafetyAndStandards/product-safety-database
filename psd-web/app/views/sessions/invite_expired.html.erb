@@ -1,0 +1,13 @@
+<% title = "This invitation has expired" %>
+<% content_for :page_title, title %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <p class="govuk-body">Contact the person who invited you to have them resend the invite.</p>
+
+    <%= govukButton(text: "Sign in", href: sign_in_path) %>
+  </div>
+</div>
