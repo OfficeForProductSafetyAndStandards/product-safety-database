@@ -42,7 +42,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
       scenario "inviting an existing user shows an error message" do
         click_link "Invite a team member"
         expect(page).to have_css("h1", text: "Invite a team member")
-        fill_in "new_user_email_address", with: user.email.to_s
+        fill_in "new_user_email_address", with: user.email
         click_button "Send invitation email"
         expect(page).to have_css(".govuk-error-summary__list", text: "You cannot invite this person to join your team because they are already a member of another team from a different organisation.")
       end
