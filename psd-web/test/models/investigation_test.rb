@@ -8,12 +8,13 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   setup do
-    user = users(:southampton)
-    User.current = user
-    allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
-
+    mock_out_keycloak_and_notify
     @investigation = load_case(:one)
     @business = businesses(:biscuit_base)
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "should create activity when investigation is created" do
@@ -65,29 +66,33 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "visible to creator organisation" do
-    User.current = users(:southampton)
     create_new_private_case
-    user = users(:southampton_steve)
+    creator = User.find_by(name: "Test User_one")
+    mock_user_as_non_opss(creator)
+    user = User.find_by(name: "Test User_two")
+    mock_user_as_non_opss(user)
     assert_equal(policy(@new_investigation).show?(user: user), true)
   end
 
   test "visible to assignee organisation" do
-    User.current = users(:southampton)
     create_new_private_case
-    assignee = users(:southampton_steve)
-    @new_investigation.assignable = assignee
-
-    assert(policy(@new_investigation).show?(user: assignee))
+    assignee = User.find_by(name: "Test User_two")
+    mock_user_as_opss(assignee)
+    user = User.find_by(name: "Test User_three")
+    mock_user_as_opss(user)
+    @new_investigation.assignee = assignee
+    assert(policy(@new_investigation).show?(user: user))
   end
 
   test "not visible to no-source, no-assignee organisation" do
-    user = users(:luton)
     create_new_private_case
-    assert_not(policy(@new_investigation).show?(user: user))
+    sign_in_as User.find_by(name: "Test User_two")
+    mock_user_as_non_opss(User.current)
+    assert_not(policy(@new_investigation).show?(user: User.current))
   end
 
   test "past assignees should be computed" do
-    user = users(:southampton)
+    user = User.find_by(name: "Test User_one")
     @investigation.update(assignee: user)
     assert_includes @investigation.past_assignees, user
   end
@@ -99,9 +104,9 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "people out of current assignee's team should not be able to re-assign case" do
-    User.current = users(:southampton)
     investigation = create_new_case
-    assert_not policy(investigation).assign?(user: users(:luton))
+    investigation.assignee = User.find_by(name: "Test User_one")
+    assert_not policy(investigation).assign?(user: User.find_by(name: "Test User_three"))
   end
 
   test "people in current assignee's team should be able to re-assign case" do
@@ -111,10 +116,9 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "people out of currently assigned team should not be able to re-assign case" do
-    users(:southampton).teams << teams(:southampton)
     investigation = create_new_case
-    investigation.assignable = User.current.teams.first
-    assert_not policy(investigation).assign?(user: users(:luton))
+    investigation.assignee = Team.find_by(name: "Team 1")
+    assert_not policy(investigation).assign?(user: User.find_by(name: "Test User_three"))
   end
 
   test "people in currently assigned team should be able to re-assign case" do

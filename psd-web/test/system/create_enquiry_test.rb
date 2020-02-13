@@ -16,11 +16,13 @@ class CreateEnquiryTest < ApplicationSystemTestCase
       received_type: "Email"
     ).decorate
 
-    stub_notify_mailer
+    mock_out_keycloak_and_notify
     stub_antivirus_api
-    sign_in
-
     visit new_enquiry_path
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "can be reached via create page" do

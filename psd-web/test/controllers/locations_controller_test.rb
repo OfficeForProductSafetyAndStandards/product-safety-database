@@ -2,9 +2,13 @@ require "test_helper"
 
 class LocationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:southampton)
+    mock_out_keycloak_and_notify
     @location = locations(:one)
     @location.source = sources(:location_one)
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "should get new" do

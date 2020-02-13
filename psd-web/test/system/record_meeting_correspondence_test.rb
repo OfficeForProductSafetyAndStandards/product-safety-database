@@ -2,13 +2,16 @@ require "application_system_test_case"
 
 class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   setup do
-    stub_notify_mailer
+    mock_out_keycloak_and_notify
     stub_antivirus_api
-    sign_in
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     @correspondence = correspondences(:meeting)
-    visit new_investigation_meeting_path(@investigation)
+    visit new_investigation_meeting_url(@investigation)
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "first step is context" do
@@ -28,7 +31,6 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the transcript file" do
-    @investigation.update!(assignable: users(:opss))
     fill_in_context_form
     click_button "Continue"
     attach_file("correspondence_meeting[transcript][file]", file_fixture("testImage.png"))
@@ -40,7 +42,6 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the related attachment" do
-    @investigation.update!(assignable: users(:opss))
     fill_in_context_form
     click_button "Continue"
     fill_in_content_form

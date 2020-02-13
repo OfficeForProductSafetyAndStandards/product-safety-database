@@ -1,19 +1,22 @@
 require "application_system_test_case"
 require_relative "../test_helpers/investigation_test_helper"
 
+
 class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
   setup do
-    stub_notify_mailer
-    stub_antivirus_api
-    user = sign_in
-
+    mock_out_keycloak_and_notify
     stub_antivirus_api
     @investigation = load_case(:one)
-    @investigation.update!(source: UserSource.new(sourceable: user), assignable: user)
+    @investigation.source = sources(:investigation_one)
+    set_investigation_source! @investigation, User.current
     @correspondence = correspondences(:phone_call)
-    visit new_investigation_phone_call_path(@investigation)
+    visit new_investigation_phone_call_url(@investigation)
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "first step should be context" do
@@ -98,8 +101,8 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_out
-    sign_in users(:southampton)
+    other_org_user = User.find_by name: "Test Ts_user"
+    sign_in_as other_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -108,6 +111,8 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee" do
+    other_org_user = User.find_by name: "Test Ts_user"
+    set_investigation_assignee! @investigation, other_org_user
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -115,6 +120,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
+    sign_in_as other_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -122,6 +128,12 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal consumer information from assignee's team" do
+    other_org_user = User.find_by name: "Test Ts_user"
+    sign_in_as other_org_user
+    assignee = User.find_by name: "Test User_one"
+    same_team_user = User.find_by name: "Test User_four"
+
+    set_investigation_assignee! @investigation, assignee
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -129,8 +141,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_out
-    sign_in users(:opss_yann)
+    sign_in_as same_team_user
     visit investigation_path(@investigation)
 
     click_on "Activity"
@@ -138,7 +149,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "does not conceal from other organisations information on phonecalls with customer info" do
-    skip
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -146,8 +156,8 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Continue"
 
-    sign_out
-    sign_in users(:southampton)
+    same_org_user = User.find_by name: "Test User_three"
+    sign_in_as same_org_user
     visit investigation_path(@investigation)
 
     click_on "Activity"

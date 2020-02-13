@@ -14,17 +14,16 @@ end
 Rails.application.routes.draw do
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
-  unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
-    mount Sidekiq::Web => "/sidekiq"
+  resource :session, only: %i[new] do
+    member do
+      get :new
+      get :signin
+      get :logout
+    end
   end
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
-  devise_scope :user do
-    get "users/sign_in", to: "sessions#new", as: :new_user_session
-
-    resource :session, only: [] do
-      get :logout, to: "sessions#destroy"
-    end
+  unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
+    mount Sidekiq::Web => "/sidekiq"
   end
 
   concern :document_attachable do
@@ -163,22 +162,13 @@ Rails.application.routes.draw do
 
 
   match "/404", to: "errors#not_found", via: :all
-  match "/403", to: "errors#forbidden", via: :all, as: :forbidden
+  match "/403", to: "errors#forbidden", via: :all
   match "/500", to: "errors#internal_server_error", via: :all
   # This is the page that will show for timeouts, currently showing the same as an internal error
   match "/503", to: "errors#timeout", via: :all
 
   mount PgHero::Engine, at: "pghero"
-  authenticated :user, ->(user) { user.is_opss? } do
-    root to: redirect("/cases")
-  end
 
-  authenticated :user, ->(user) { !user.is_opss? } do
-    root to: "homepage#non_opss"
-  end
-
-  unauthenticated do
-    root to: "homepage#show"
-  end
+  root to: "homepage#show"
 end
 # rubocop:enable Metrics/BlockLength

@@ -2,16 +2,19 @@ require "application_system_test_case"
 
 class IntroductionTest < ApplicationSystemTestCase
   setup do
-    stub_notify_mailer
+    mock_out_keycloak_and_notify
     stub_antivirus_api
+    mock_user_as_non_opss User.current
 
     visit "/"
   end
 
-  test "shows steps in order then redirects to homepage" do
-    sign_in(users(:southampton))
+  teardown do
+    reset_keycloak_and_notify_mocks
+  end
 
-    visit "/introduction/overview"
+  test "shows steps in order then redirects to homepage" do
+    assert_current_path "/introduction/overview"
     assert_selector "h1", text: "Report, track and share product safety information"
     click_on "Continue"
 
@@ -29,23 +32,26 @@ class IntroductionTest < ApplicationSystemTestCase
   end
 
   test "clicking skip introduction skips introduction" do
-    sign_in(users(:southampton))
-
-    visit "/introduction/overview"
     click_on "Skip introduction"
 
     assert_current_path "/"
   end
 
   test "users will not be shown the introduction twice" do
-    sign_in(users(:southampton))
-
-    visit "/introduction/overview"
+    assert_current_path "/introduction/overview"
     click_on "Continue"
     click_on "Continue"
     click_on "Continue"
     click_on "Get started"
     visit "/"
     assert_current_path "/"
+  end
+
+  test "does not show introduction to opss users" do
+    mock_user_as_opss User.current
+
+    visit "/"
+
+    assert_current_path "/cases"
   end
 end

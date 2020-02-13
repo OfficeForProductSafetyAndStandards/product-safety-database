@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
 
   def create
     activity = @investigation.activities.new(comment_activity_params.merge(investigation: @investigation))
-    activity.source = UserSource.new(user: current_user)
+    activity.source = UserSource.new(user: User.current)
 
     respond_to do |format|
       if activity.save

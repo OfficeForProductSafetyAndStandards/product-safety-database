@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-  let(:user)                                   { create :user, :activated, has_viewed_introduction: true }
+  let(:user)                                   { create :user, :activated }
   let!(:projects)                              { create_list :project, 18, updated_at: 4.days.ago }
   let!(:investigation_last_updated_3_days_ago) { create(:allegation, updated_at: 3.days.ago, description: "Electric skateboard investigation").decorate }
   let!(:investigation_last_updated_2_days_ago) { create(:allegation, updated_at: 2.days.ago, description: "FastToast toaster investigation").decorate }

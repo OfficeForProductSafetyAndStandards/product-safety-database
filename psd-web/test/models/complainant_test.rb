@@ -3,6 +3,11 @@ require "test_helper"
 class ComplainantTest < ActiveSupport::TestCase
   setup do
     @complainant = Complainant.new(complainant_type: "Business")
+    mock_out_keycloak_and_notify
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "should not allow complainant without an investigation" do

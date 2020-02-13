@@ -2,13 +2,14 @@ require "application_system_test_case"
 
 class CreateProjectTest < ApplicationSystemTestCase
   setup do
-    Investigation.import force: true, refresh: :wait_for
     @project = Investigation::Project.new(description: "new project description", user_title: "project title")
-    stub_notify_mailer
+    mock_out_keycloak_and_notify
     stub_antivirus_api
-    sign_in
-
     visit new_project_path
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "can be reached via create page" do

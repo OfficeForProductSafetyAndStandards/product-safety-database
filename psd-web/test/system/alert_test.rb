@@ -2,12 +2,15 @@ require "application_system_test_case"
 
 class AlertTest < ApplicationSystemTestCase
   setup do
-    stub_notify_mailer
+    mock_out_keycloak_and_notify
     stub_antivirus_api
-    sign_in
     @investigation = load_case(:one).decorate
     @alert = alerts :one
     go_to_new_activity_for_investigation @investigation
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "prepopulates email content with link to case" do

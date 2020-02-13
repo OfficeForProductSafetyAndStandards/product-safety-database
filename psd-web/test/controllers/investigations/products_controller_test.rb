@@ -2,11 +2,15 @@ require "test_helper"
 
 class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:southampton)
+    mock_out_keycloak_and_notify
     @investigation = load_case(:one)
     @investigation.source = sources(:investigation_one)
     @product = products(:iphone)
     @product.source = sources(:product_iphone)
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "should get new" do

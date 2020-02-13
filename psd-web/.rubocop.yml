@@ -18,7 +18,6 @@ AllCops:
     - 'node_modules/**/*'
     - 'tmp/**/*'
     - 'vendor/bundle/**/*'
-    - 'config/initializers/devise.rb'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false

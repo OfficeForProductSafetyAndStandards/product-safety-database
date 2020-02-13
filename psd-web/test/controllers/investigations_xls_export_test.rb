@@ -2,7 +2,11 @@ require "test_helper"
 
 class InvestigationsXlsExportTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:southampton)
+    mock_out_keycloak_and_notify
+  end
+
+  teardown do
+    reset_keycloak_and_notify_mocks
   end
 
   test "exports all investigations" do

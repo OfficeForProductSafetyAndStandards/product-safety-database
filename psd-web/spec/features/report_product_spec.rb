@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-  before { sign_in as_user: create(:user, :activated, :opss_user) }
+  before { sign_in as_user: create(:user, :activated, :opss_user, has_viewed_introduction: true) }
 
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }

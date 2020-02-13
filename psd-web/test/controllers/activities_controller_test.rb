@@ -2,17 +2,15 @@ require "test_helper"
 
 class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in users(:southampton)
+    mock_out_keycloak_and_notify
     @investigation = load_case(:one)
     @activity = activities(:one)
     @activity.source = sources(:activity_one)
   end
 
   teardown do
-    allow(NotifyMailer).to receive(:investigation_updated).and_call_original
-    allow(NotifyMailer).to receive(:investigation_created).and_call_original
+    reset_keycloak_and_notify_mocks
   end
-
 
   test "should create activity" do
     assert_difference("Activity.count") do
@@ -36,8 +34,9 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "adding a comment should trigger one round of notifications" do
-    @investigation.update(assignee: users(:southampton_bob))
-    mock_investigation_updated(who_will_be_notified: [users(:southampton_bob)])
+    user_two = User.find_by(name: "Test User_two")
+    @investigation.update(assignee: user_two)
+    mock_investigation_updated(who_will_be_notified: [user_two])
     post investigation_activity_comment_path(@investigation), params: {
       comment_activity: {
         body: "Generic comment"
