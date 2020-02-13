@@ -13,8 +13,8 @@ en:
       locked: "Your account is locked."
       last_attempt: "You have one more attempt before your account is locked."
       not_found_in_database: "Invalid %{authentication_keys} or password."
-      timeout:
-      unauthenticated:
+      timeout: ""
+      unauthenticated: ""
       unconfirmed: "You have to confirm your email address before continuing."
     mailer:
       confirmation_instructions:

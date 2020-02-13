@@ -19,7 +19,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
   before do
     Investigation.import refresh: :wait_for
     sign_in(as_user: user)
-    visit "/cases"
+    visit investigations_path
   end
 
   scenario "selecting filters only shows other active users in the assigned to and created by filters" do

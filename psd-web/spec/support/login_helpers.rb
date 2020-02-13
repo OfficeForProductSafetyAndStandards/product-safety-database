@@ -18,7 +18,8 @@ module LoginHelpers
         }
       }
 
-      visit user_openid_connect_omniauth_authorize_path
+      visit root_path
+      click_on "Sign in to your account"
       as_user
     end
   end
