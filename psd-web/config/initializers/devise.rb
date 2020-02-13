@@ -261,25 +261,26 @@ Devise.setup do |config|
   # up on your models and hooks.
 
   # This is used under the hood by omniauth_openid_connect
-  keycloak_url = URI(ENV["KEYCLOAK_AUTH_URL"])
-  SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
+  if ENV["KEYCLOAK_AUTH_URL"].present?
+    keycloak_url = URI(ENV["KEYCLOAK_AUTH_URL"])
+    SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
 
-  config.omniauth :openid_connect,
-                  name: :openid_connect,
-                  discovery:  true,
-                  log: :debug,
-                  scope: "openid,email,profile,address,roles",
-                  issuer: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss",
-                  client_options: {
-                    authorization_endpoint: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss/protocol/openid-connect/auth",
-                    port:         keycloak_url.port,
-                    scheme:       keycloak_url.scheme,
-                    host:         keycloak_url.host,
-                    identifier:   ENV["KEYCLOAK_CLIENT_ID"],
-                    secret:       ENV["KEYCLOAK_CLIENT_SECRET"],
-                    redirect_uri: ENV["KEYCLOAK_REDIRECT_URI"]
-                  }
-
+    config.omniauth :openid_connect,
+                    name: :openid_connect,
+                    discovery:  true,
+                    log: :debug,
+                    scope: "openid,email,profile,address,roles",
+                    issuer: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss",
+                    client_options: {
+                      authorization_endpoint: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss/protocol/openid-connect/auth",
+                      port:         keycloak_url.port,
+                      scheme:       keycloak_url.scheme,
+                      host:         keycloak_url.host,
+                      identifier:   ENV["KEYCLOAK_CLIENT_ID"],
+                      secret:       ENV["KEYCLOAK_CLIENT_SECRET"],
+                      redirect_uri: ENV["KEYCLOAK_REDIRECT_URI"]
+                    }
+  end
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
