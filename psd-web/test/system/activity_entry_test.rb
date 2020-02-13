@@ -2,15 +2,13 @@ require "application_system_test_case"
 
 class ActivityEntryTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
     stub_antivirus_api
+    stub_notify_mailer
+
+    sign_in
     @investigation = load_case(:one)
     visit investigation_path(@investigation)
     click_on "Add activity"
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "Should go to an activity selection page" do

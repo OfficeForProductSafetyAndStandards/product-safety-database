@@ -2,12 +2,8 @@ require "test_helper"
 
 class ContactsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    mock_out_keycloak_and_notify
+    sign_in users(:southampton)
     @contact = contacts(:one)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "should get new" do

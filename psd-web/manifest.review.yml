@@ -11,6 +11,8 @@ applications:
     PSD_HOST: ((psd-host))
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
+    KEYCLOAK_REDIRECT_URI: https://((psd-host))/users/auth/openid_connect/callback
+  timeout: 180
   services:
     - ((psd-db-name))
     - psd-elasticsearch

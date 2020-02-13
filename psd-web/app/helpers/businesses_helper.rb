@@ -3,7 +3,7 @@ module BusinessesHelper
 
   def defaults_on_primary_location(business)
     business.primary_location.name ||= "Registered office address"
-    business.primary_location.source ||= UserSource.new(user: User.current)
+    business.primary_location.source ||= UserSource.new(user: current_user)
     business
   end
 
@@ -51,7 +51,7 @@ module BusinessesHelper
       @business.locations.build unless @business.locations.any?
       defaults_on_primary_location(@business)
       @business.contacts.build unless @business.contacts.any?
-      @business.source = UserSource.new(user: User.current)
+      @business.source = UserSource.new(user: current_user)
     else
       @business = Business.new
       @business.locations.build

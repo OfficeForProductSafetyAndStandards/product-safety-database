@@ -1,10 +1,12 @@
 require "rails_helper"
 
-RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mailer, :with_stubbed_elasticsearch do
-  let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, teams: [team]) }
 
-  let!(:another_active_user) { create(:user, :activated, email: "active.sameteam@example.com", organisation: user.organisation, teams: [team]) }
+RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+
+  let(:team) { create(:team) }
+  let(:user) { create(:user, :activated, teams: [team], has_viewed_introduction: true) }
+
+  let!(:another_active_user) { create(:user, :activated, email: "active.sameteam@example.com", organisation: user.organisation, teams: [team], has_viewed_introduction: true) }
   let!(:another_inactive_user) { create(:user, email: "inactive.sameteam@example.com", organisation: user.organisation, teams: [team]) }
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, teams: [create(:team)]) }
 
@@ -26,7 +28,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
 
   context "re-sending invitation email" do
     context "as a team admin user" do
-      let(:user) { create(:user, :activated, :team_admin, teams: [team]) }
+      let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
 
 
 

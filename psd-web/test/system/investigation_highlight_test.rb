@@ -3,12 +3,10 @@ require "application_system_test_case"
 class InvestigationHighlightTest < ApplicationSystemTestCase
   setup do
     Investigation.import refresh: :wait_for, force: true
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
+    stub_antivirus_api
+    sign_in
     visit root_path
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "should display highlight title" do
