@@ -11,7 +11,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
   let!(:another_active_user_another_team) { create(:user, :activated, name: "another user in another team", organisation: user.organisation, teams: [create(:team)]) }
   let!(:another_inactive_user_another_team) { create(:user, :inactive, organisation: user.organisation, teams: [create(:team)]) }
 
-  before { sign_in(as_user: user) }
+  before { sign_in(user) }
 
   scenario "only shows other active users" do
     visit "/cases/#{investigation.pretty_id}/assign/choose"

@@ -5,7 +5,7 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
   let(:investigation) { create(:allegation, :with_document, assignee: user) }
   let(:document) { investigation.documents.first }
 
-  before { sign_in(as_user: user) }
+  before { sign_in(user) }
 
   scenario "deletes the attachment and creates activity" do
     visit investigation_attachments_path(investigation)

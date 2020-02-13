@@ -28,7 +28,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     # it is necessary to re-import and wait for the indexing to be done.
     Investigation.import refresh: :wait_for
 
-    sign_in(as_user: user)
+    sign_in(user)
     visit investigations_path
 
     # Expect investigations to be in reverse chronological order

@@ -9,7 +9,7 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :w
   let(:new_description) { Faker::Lorem.paragraph }
 
   before do
-    sign_in(as_user: user)
+    sign_in(user)
     visit edit_investigation_document_path(investigation, document)
   end
 

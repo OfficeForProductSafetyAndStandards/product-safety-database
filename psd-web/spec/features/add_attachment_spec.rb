@@ -8,7 +8,7 @@ RSpec.feature "Adding an attachment to a case", :with_stubbed_elasticsearch, :wi
   let(:description) { Faker::Lorem.paragraph }
 
   before do
-    sign_in(as_user: user)
+    sign_in(user)
     visit new_investigation_new_path(investigation) # TODO: rename this route
   end
 
