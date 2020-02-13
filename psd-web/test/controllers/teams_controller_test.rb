@@ -119,6 +119,9 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   test "Resend invite when user is invited but not signed up" do
     email_address = "new_user@northamptonshire.gov.uk"
+
+    expect(KeycloakClient.instance).to receive(:get_user).with(email_address).and_return(id: SecureRandom.uuid).twice
+
     put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: email_address } }
     put resend_invitation_team_path(email_address: email_address)
   end

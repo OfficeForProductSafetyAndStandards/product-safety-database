@@ -176,7 +176,7 @@ Devise.setup do |config|
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  config.timeout_in = 30.minutes
+  config.timeout_in = 24.hours
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
@@ -261,25 +261,26 @@ Devise.setup do |config|
   # up on your models and hooks.
 
   # This is used under the hood by omniauth_openid_connect
-  keycloak_url = URI(ENV.fetch("KEYCLOAK_AUTH_URL"))
-  SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
+  if ENV["KEYCLOAK_AUTH_URL"].present?
+    keycloak_url = URI(ENV["KEYCLOAK_AUTH_URL"])
+    SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
 
-  config.omniauth :openid_connect,
-                  name: :openid_connect,
-                  discovery:  true,
-                  log: :debug,
-                  scope: "openid,email,profile,address,roles",
-                  issuer: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss",
-                  client_options: {
-                    authorization_endpoint: "#{ENV.fetch('KEYCLOAK_AUTH_URL')}/realms/opss/protocol/openid-connect/auth",
-                    port:         keycloak_url.port,
-                    scheme:       keycloak_url.scheme,
-                    host:         keycloak_url.host,
-                    identifier:   ENV.fetch("KEYCLOAK_CLIENT_ID"),
-                    secret:       ENV.fetch("KEYCLOAK_CLIENT_SECRET"),
-                    redirect_uri: ENV.fetch("KEYCLOAK_REDIRECT_URI")
-                  }
-
+    config.omniauth :openid_connect,
+                    name: :openid_connect,
+                    discovery:  true,
+                    log: :debug,
+                    scope: "openid,email,profile,address,roles",
+                    issuer: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss",
+                    client_options: {
+                      authorization_endpoint: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss/protocol/openid-connect/auth",
+                      port:         keycloak_url.port,
+                      scheme:       keycloak_url.scheme,
+                      host:         keycloak_url.host,
+                      identifier:   ENV["KEYCLOAK_CLIENT_ID"],
+                      secret:       ENV["KEYCLOAK_CLIENT_SECRET"],
+                      redirect_uri: ENV["KEYCLOAK_REDIRECT_URI"]
+                    }
+  end
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

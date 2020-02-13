@@ -30,14 +30,7 @@ module TestHelpers
       click_on "Sign out", match: :first
     end
 
-    def sign_in(user = users(:opss), roles: %i[psd_user opss_user])
-      allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
-
-      allow(KeycloakClient.instance)
-        .to receive(:get_user_roles)
-              .with(user.id)
-              .and_return(roles)
-
+    def sign_in(user = users(:opss))
       stub_omniauth(user)
       visit root_path
       click_on "Sign in to your account"

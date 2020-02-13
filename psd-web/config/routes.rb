@@ -170,10 +170,6 @@ Rails.application.routes.draw do
     root to: "homepage#non_opss"
   end
 
-  authenticated :user, ->(user) { !user.is_opss? } do
-    root to: "homepage#non_opss"
-  end
-
   unauthenticated do
     root to: "homepage#show"
   end
