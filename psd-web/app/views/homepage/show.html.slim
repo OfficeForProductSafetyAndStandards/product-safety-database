@@ -23,10 +23,10 @@
             p.govuk-body-l.app-body-l--inverted
               | Report, track and share product safety information with the product safety community.
 
-            = link_to "Sign in to your account",
+            = button_to "Sign in to your account",
                 user_openid_connect_omniauth_authorize_path,
                 class: "govuk-button govuk-button--start app-button--inverted",
-                role: "button", draggable: false, method: :post
+                role: "button", draggable: false
             p.govuk-body.app-body--inverted
               | or&nbsp;
               = mail_to "opss.enquiries@beis.gov.uk", "email OPSS",
