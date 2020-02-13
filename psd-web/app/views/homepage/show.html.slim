@@ -26,7 +26,7 @@
             = link_to "Sign in to your account",
                 user_openid_connect_omniauth_authorize_path,
                 class: "govuk-button govuk-button--start app-button--inverted",
-                role: "button", draggable: false
+                role: "button", draggable: false, method: :post
             p.govuk-body.app-body--inverted
               | or&nbsp;
               = mail_to "opss.enquiries@beis.gov.uk", "email OPSS",

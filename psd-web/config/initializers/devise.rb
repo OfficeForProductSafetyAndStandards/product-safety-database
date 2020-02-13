@@ -265,6 +265,7 @@ Devise.setup do |config|
     keycloak_url = URI(ENV["KEYCLOAK_AUTH_URL"])
     SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
 
+    OmniAuth.config.allowed_request_methods = [:post, :get]
     config.omniauth :openid_connect,
                     name: :openid_connect,
                     discovery:  true,
