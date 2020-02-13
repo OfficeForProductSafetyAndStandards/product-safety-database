@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  devise :omniauthable, omniauth_providers: %i[openid_connect]
+  devise :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
   belongs_to :organisation
 
   has_many :investigations, dependent: :nullify, as: :assignable

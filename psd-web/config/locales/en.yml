@@ -30,9 +30,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  devise:
-    failure:
-      unauthenticated: ""
   errors:
     format: "%{message}"
     messages:
