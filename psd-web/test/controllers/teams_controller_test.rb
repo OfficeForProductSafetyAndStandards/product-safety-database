@@ -12,6 +12,10 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   teardown do
     User.current = nil
+    allow(KeycloakClient.instance).to receive(:add_user_to_team).and_call_original
+    allow(KeycloakClient.instance).to receive(:create_user).and_call_original
+    allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_call_original
+    allow(KeycloakClient.instance).to receive(:get_user).and_call_original
   end
 
   test "Team pages are visible to members" do
