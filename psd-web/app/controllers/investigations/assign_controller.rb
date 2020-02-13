@@ -28,7 +28,7 @@ class Investigations::AssignController < ApplicationController
     @investigation.assignee = potential_assignee
     @investigation.assignee_rationale = params[:investigation][:assignee_rationale]
     @investigation.save
-    redirect_to investigation_url(@investigation), notice: "#{@investigation.case_type.titleize} was successfully updated."
+    redirect_to investigation_path(@investigation), notice: "#{@investigation.case_type.titleize} was successfully updated."
   end
 
 private

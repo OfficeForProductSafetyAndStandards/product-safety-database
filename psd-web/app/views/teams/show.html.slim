@@ -1,5 +1,5 @@
 - content_for :page_title, @team.display_name
-- current_user_is_team_admin = User.current.is_team_admin?
+- current_user_is_team_admin = current_user.is_team_admin?
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop
     h1.govuk-heading-l = @team.display_name

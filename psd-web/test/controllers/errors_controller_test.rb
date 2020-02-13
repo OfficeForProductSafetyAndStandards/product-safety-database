@@ -1,14 +1,6 @@
 require "test_helper"
 
 class ErrorsControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    mock_out_keycloak_and_notify
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
-
   test "should get not_found" do
     get "/404"
     assert_response :not_found
