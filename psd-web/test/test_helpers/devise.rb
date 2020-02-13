@@ -1,29 +1,5 @@
 module TestHelpers
-  module OmniAuthHelper
-    def stub_omniauth(user)
-      OmniAuth.config.test_mode = true
-      groups = user.teams.flat_map(&:path) << user.organisation&.path
-      groups.compact!
-      OmniAuth.config.mock_auth[:openid_connect] = OmniAuth::AuthHash.new(
-        "provider" => :openid_connect,
-        "uid"  => user.id,
-        "info" => {
-          "email" => user.email,
-          "name" => user.name,
-        },
-        "extra" => {
-          "raw_info" => {
-            "groups" => groups
-          }
-        }
-      )
-      Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:openid_connect]
-    end
-  end
-
   module Devise
-    include TestHelpers::OmniAuthHelper
-
     def sign_out
       return if page.has_css?("a", text: "Sign in to your account")
 
@@ -31,9 +7,13 @@ module TestHelpers
     end
 
     def sign_in(user = users(:opss))
-      stub_omniauth(user)
       visit root_path
       click_on "Sign in to your account"
+
+      fill_in "user[email]", with: user.email
+      fill_in "user[password]", with: "password"
+      click_on "Continue"
+
       user
     end
   end

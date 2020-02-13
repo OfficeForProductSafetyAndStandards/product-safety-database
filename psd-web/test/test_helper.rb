@@ -72,4 +72,3 @@ class ActiveSupport::TestCase
 end
 
 ActionDispatch::IntegrationTest.include Devise::Test::IntegrationHelpers
-ActionDispatch::IntegrationTest.include TestHelpers::OmniAuthHelper
