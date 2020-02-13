@@ -7,10 +7,10 @@
       { text: user.display_name, value: user.id, checked: investigation.assignee == user }
     end
 
-    if User.current.teams.any?
+    if current_user.teams.any?
       someone_in_your_team = capture do
         render "investigations/assign/assignee_selection", form: form, key: :select_team_member,
-                 items: User.get_team_members(user: User.current), label: "Select team member", show_all_values: true
+                 items: User.get_team_members(user: current_user), label: "Select team member", show_all_values: true
       end
       items.push text: "Someone in your team",
                value: "someone_in_your_team",

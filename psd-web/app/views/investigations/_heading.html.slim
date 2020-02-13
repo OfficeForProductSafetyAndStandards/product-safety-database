@@ -8,5 +8,5 @@
       - else
         | Cases
   .govuk-grid-column-one-third[style="text-align:right"]
-    = link_to "Open a new case", User.current.is_opss? ? new_investigation_path : new_ts_investigation_path,
+    = link_to "Open a new case", current_user.is_opss? ? new_investigation_path : new_ts_investigation_path,
             class: "govuk-button govuk-!-margin-bottom-3", role: "button"

@@ -2,16 +2,18 @@ require "application_system_test_case"
 
 class InvestigationAssigneeTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
-    @user = User.current
+
+    @user = users(:opss)
+    User.current = @user
+    sign_in @user
+    @user.teams << teams(:opss_enforcement)
     @team = @user.teams.first
     visit new_investigation_assign_path(load_case(:one))
   end
 
-  teardown do
-    reset_keycloak_and_notify_mocks
-  end
+  teardown { User.current = nil }
 
   test "should show current user as a radio, and to assign user to case" do
     assert_text @user.display_name

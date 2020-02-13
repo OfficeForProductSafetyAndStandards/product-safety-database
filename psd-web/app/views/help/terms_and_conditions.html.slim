@@ -84,7 +84,7 @@
     p
       ' The Service has been designed for use by Trading Standards officers and people from other market surveillance
         authorities (MSAs). You need to belong to one of those organisations and be a registered user to
-      = link_to "log in", keycloak_login_url
+      = link_to "log in", user_openid_connect_omniauth_authorize_path
       |  and access the Service.
 
     h2.govuk-heading-m id="by-using-you-accept-terms" By using the Service you accept these Terms

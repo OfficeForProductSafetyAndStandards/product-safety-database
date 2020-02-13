@@ -2,18 +2,15 @@ require "application_system_test_case"
 
 class InvestigationBusinessTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
     @investigation = load_case(:one)
     @business = businesses(:three)
     @business.source = sources(:business_three)
     @location = locations(:one)
     @contact = contacts(:one)
     visit new_investigation_business_path(@investigation)
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "create a business on investigation" do

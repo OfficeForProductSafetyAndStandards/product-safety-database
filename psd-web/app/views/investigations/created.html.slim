@@ -7,7 +7,7 @@
   p.govuk-body = "Case ID: #{@investigation&.pretty_id}"
   p.govuk-body
     ' A confirmation email has been sent to
-    strong = User.current.email
+    strong = current_user.email
     | .
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop
