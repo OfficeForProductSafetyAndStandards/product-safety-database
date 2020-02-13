@@ -2,7 +2,6 @@ require "rails_helper"
 
 
 RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mailer, :with_stubbed_elasticsearch do
-
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team], has_viewed_introduction: true) }
 
@@ -39,7 +38,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
     end
 
     context "as a team admin" do
-      let(:user) { create(:user, :activated, :team_admin, teams: [team]) }
+      let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
 
       scenario "inviting an existing user shows an error message" do
         click_link "Invite a team member"
@@ -52,7 +51,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
   end
 
   context "as a normal user" do
-    let(:user) { create(:user, :activated, :psd_user, teams: [team]) }
+    let(:user) { create(:user, :activated, :psd_user, teams: [team], has_viewed_introduction: true) }
 
     scenario "does not display the resend invite link for any users" do
       expect(page).to have_css("h1", text: "test organisation")
