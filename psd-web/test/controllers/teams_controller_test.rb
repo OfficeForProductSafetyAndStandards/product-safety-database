@@ -42,9 +42,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "Team invite pages are visible to users with team_admin role only" do
     sign_out(:user)
     sign_in(users(:southampton_bob))
-  end
 
-  test "Team invite pages are visible to users with team_admin role only" do
     assert_raises Pundit::NotAuthorizedError do
       get invite_to_team_url(teams(:southampton))
     end

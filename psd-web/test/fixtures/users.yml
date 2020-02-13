@@ -4,6 +4,7 @@ southampton:
   has_viewed_introduction: true
   name: Yann
   organisation: southampton
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
 
 southampton_steve:
   email: southampton.steve@example.com
@@ -11,6 +12,7 @@ southampton_steve:
   has_viewed_introduction: true
   name: Steve
   organisation: southampton
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
 
 southampton_bob:
   email: southampton.bob@example.com
@@ -18,6 +20,7 @@ southampton_bob:
   has_viewed_introduction: true
   name: Bob
   organisation: southampton
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
 
 southampton_frankie:
   email: southampton.frankie@example.com
@@ -25,6 +28,7 @@ southampton_frankie:
   has_viewed_introduction: true
   name: Frankie
   organisation: southampton
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
 
 opss:
   email: opss@example.com
@@ -32,6 +36,7 @@ opss:
   has_viewed_introduction: true
   name: Slavosh
   organisation: opss
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
 
 opss_yann:
   email: opss.yann@example.com
@@ -39,6 +44,7 @@ opss_yann:
   has_viewed_introduction: true
   name: Yann
   organisation: opss
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
 
 luton:
   email: luton@example.com
@@ -46,3 +52,4 @@ luton:
   has_viewed_introduction: true
   name: Luton User
   organisation: luton
+  encrypted_password: <%= User.new.send(:password_digest, "password") %>
