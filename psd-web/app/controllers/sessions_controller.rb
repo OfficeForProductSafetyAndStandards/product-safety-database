@@ -1,13 +1,12 @@
-class SessionsController < ApplicationController
-  include AuthenticationConcern
-
-  protect_from_forgery with: :exception
+class SessionsController < Devise::SessionsController
+  skip_before_action :has_accepted_declaration
+  skip_before_action :has_viewed_introduction
 
   skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, :set_current_user, :set_raven_context
 
 
   def new
-    redirect_to keycloak_login_url(request.original_fullpath)
+    redirect_to user_openid_connect_omniauth_authorize_path
   end
 
   def signin

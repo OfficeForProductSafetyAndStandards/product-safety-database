@@ -2,16 +2,14 @@ require "application_system_test_case"
 
 class BreadcrumbTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
+
     @investigation_products = load_case(:search_related_products).decorate
     @product = @investigation_products.products.first
     @investigation_businesses = load_case(:search_related_businesses).decorate
     @business = @investigation_businesses.businesses.first
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "when accessing product page from case page navigation should let you go back to the case" do
