@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_120801) do
+ActiveRecord::Schema.define(version: 2020_02_14_155213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,6 +278,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_120801) do
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
+    t.text "invitation_token"
+    t.datetime "invited_at"
     t.string "name"
     t.uuid "organisation_id"
     t.datetime "updated_at", null: false

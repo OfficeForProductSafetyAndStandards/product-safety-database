@@ -25,6 +25,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: [] do
+    member do
+      get :create_account
+    end
+  end
+
   concern :document_attachable do
     resources :documents, controller: "documents" do
       collection do

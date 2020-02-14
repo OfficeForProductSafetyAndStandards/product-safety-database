@@ -29,6 +29,16 @@ RSpec.describe User do
         expect(User.find_by(email: email)).not_to be_nil
       end
 
+      it "adds a invitation token to the created user" do
+        subject
+        expect(User.find_by(email: email).invitation_token).not_to be_nil
+      end
+
+      it "adds the time that the user was invited" do
+        subject
+        expect(User.find_by(email: email).invited_at).to be_within(2.seconds).of(Time.now)
+      end
+
       it "associates the created user with the given team's organisation" do
         subject
         expect(User.find_by(email: email).organisation).to eq team.organisation

@@ -1,11 +1,16 @@
 require 'notifications/client'
 
 class SendUserInvitationJob < ApplicationJob
+  include Rails.application.routes.url_helpers
   GOV_UK_NOTIFY_TEMPLATE_ID = "22b3799c-aa3d-43e8-899d-3f30307a488f"
 
-  def perform(user_id)
+  def perform(user_id, user_inviting_id)
     user = User.find(user_id)
-    NotifyMailer.invitation_email(email: user.email).deliver_now
+    user_inviting = User.find(user_inviting_id)
+
+    invitation_url = create_account_user_url(user.id, invitation: user.invitation_token, host: ENV.fetch("HOST"))
+
+    NotifyMailer.invitation_email(user.email, invitation_url, user_inviting.name).deliver_now
     user.update(has_been_sent_welcome_email: true)
   end
 end

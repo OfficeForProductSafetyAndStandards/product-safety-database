@@ -18,7 +18,14 @@ class User < ApplicationRecord
   end
 
   def self.create_and_send_invite(email_address, team, redirect_url)
-    user = create(id: SecureRandom.uuid, email: email_address, organisation: team.organisation)
+    user = create(
+      id: SecureRandom.uuid,
+      email: email_address,
+      organisation: team.organisation,
+      invited_at: Time.now,
+      invitation_token: SecureRandom.hex(15)
+
+    )
     team.add_user(user)
 
     SendUserInvitationJob.perform_later(user.id)
