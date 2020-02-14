@@ -169,7 +169,7 @@ build-iPhoneSimulator/
 /_yardoc/
 /doc/
 /rdoc/
-
+*examples.txt
 ## Environment normalization:
 /.bundle/
 /lib/bundler/man/
