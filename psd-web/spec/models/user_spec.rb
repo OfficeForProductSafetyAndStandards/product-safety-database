@@ -10,6 +10,38 @@ RSpec.describe User do
     end
   end
 
+  describe ".create_and_send_invite" do
+    context "with valid email and team" do
+      let(:email) { "testuser@southampton.gov.uk" }
+      let(:team) { create(:team) }
+      let(:redirect_url) { "random-uri.gov.uk" }
+      subject do
+        described_class.create_and_send_invite(email, team, redirect_url)
+      end
+
+      it "creates an user with the given email address" do
+        subject
+        expect(User.find_by(email: email)).not_to be_nil
+      end
+
+      it "associates the created user with the given team's organisation" do
+        subject
+        expect(User.find_by(email: email).organisation).to eq team.organisation
+      end
+
+      it "associates the created user with the given team" do
+        subject
+        expect(User.find_by(email: email).teams).to eq [team]
+      end
+
+      it "sends an invitation to the user" do
+        # TODO: Add expectation over user id
+        expect(SendUserInvitationJob).to receive(:perform_later) 
+        subject
+      end
+    end
+  end
+
   describe ".get_team_members" do
     let(:team) { create(:team) }
     let(:user) { create(:user, :activated, teams: [team]) }

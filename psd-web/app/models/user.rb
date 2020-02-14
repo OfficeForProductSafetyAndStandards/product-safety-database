@@ -18,15 +18,10 @@ class User < ApplicationRecord
   end
 
   def self.create_and_send_invite(email_address, team, redirect_url)
-    KeycloakClient.instance.create_user(email_address)
-
-    keycloak_user = KeycloakClient.instance.get_user(email_address)
-
-    # Create the user in the local cache database so that we don't have to wait until the next sync
-    user = create(id: keycloak_user[:id], email: email_address, organisation: team.organisation)
+    user = create(id: SecureRandom.uuid, email: email_address, organisation: team.organisation)
     team.add_user(user)
 
-    KeycloakClient.instance.send_required_actions_welcome_email keycloak_user[:id], redirect_url
+    SendUserInvitationJob.perform_later(user.id)
   end
 
   def self.resend_invite(email_address, _team, redirect_url)
