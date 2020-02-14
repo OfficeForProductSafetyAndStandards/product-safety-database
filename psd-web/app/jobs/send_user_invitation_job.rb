@@ -5,10 +5,7 @@ class SendUserInvitationJob < ApplicationJob
 
   def perform(user_id)
     user = User.find(user_id)
-    client = Notifications::Client.new(ENV.fetch('NOTIFY_API_KEY'))
-    client.send_email(
-      email_address: user.email,
-      template_id: GOV_UK_NOTIFY_TEMPLATE_ID,
-    )
+    NotifyMailer.invitation_email(email: user.email).deliver_now
+    user.update(has_been_sent_welcome_email: true)
   end
 end

@@ -5,19 +5,15 @@ RSpec.describe SendUserInvitationJob do
 
   context "with a valid user id" do
     let(:user_id) { SecureRandom.uuid }
-    let(:notifications_client) { instance_double(Notifications::Client) }
+    let(:message_delivery_instance) { instance_double(ActionMailer::MessageDelivery, deliver_now: true) }
     let!(:user) { create(:user, id: user_id) }
 
     before do
-      allow(Notifications::Client).to receive(:new).and_return(notifications_client)
-      allow(notifications_client).to receive(:send_email)
+      allow(NotifyMailer).to receive(:invitation_email).and_return(message_delivery_instance)
     end
 
-    it "sends an invitation through Gov UK Notify" do
-      expect(notifications_client).to receive(:send_email).with(
-        email_address: user.email,
-        template_id: "22b3799c-aa3d-43e8-899d-3f30307a488f"
-      )
+    it "sends an email via the NotifyMailer" do
+      expect(message_delivery_instance).to receive(:deliver_now)
       perform
     end
 
