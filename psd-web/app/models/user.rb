@@ -17,7 +17,7 @@ class User < ApplicationRecord
     where(account_activated: true)
   end
 
-  def self.create_and_send_invite(email_address, team, redirect_url)
+  def self.create_and_send_invite(email_address, team, redirect_url, inviting_user)
     user = create(
       id: SecureRandom.uuid,
       email: email_address,
@@ -28,12 +28,12 @@ class User < ApplicationRecord
     )
     team.add_user(user)
 
-    SendUserInvitationJob.perform_later(user.id)
+    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
-  def self.resend_invite(email_address, _team, redirect_url)
+  def self.resend_invite(email_address, _team, redirect_url, inviting_user)
     user = User.find_by!(email: email_address)
-    SendUserInvitationJob.perform_later(user.id)
+    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
   def self.load_from_keycloak(users = KeycloakClient.instance.all_users)
