@@ -15,6 +15,11 @@ RSpec.describe User do
       let(:email) { "testuser@southampton.gov.uk" }
       let(:team) { create(:team) }
       let(:redirect_url) { "random-uri.gov.uk" }
+
+      before do
+        allow(SendUserInvitationJob).to receive(:perform_later)
+      end
+
       subject do
         described_class.create_and_send_invite(email, team, redirect_url)
       end
@@ -36,7 +41,29 @@ RSpec.describe User do
 
       it "sends an invitation to the user" do
         # TODO: Add expectation over user id
-        expect(SendUserInvitationJob).to receive(:perform_later) 
+        expect(SendUserInvitationJob).to receive(:perform_later)
+        subject
+      end
+    end
+  end
+
+  describe ".resend_invite" do
+    context "with an email address of an existing user" do
+      let(:user) { create(:user) }
+      let(:team) { "" }
+      let(:redirect_url) { "random-uri.gov.uk" }
+
+      before do
+        allow(SendUserInvitationJob).to receive(:perform_later)
+      end
+
+      subject do
+        described_class.resend_invite(user.email, team, redirect_url)
+      end
+
+      it "resends an invitation to the user" do
+        # TODO: Add expectation over user id
+        expect(SendUserInvitationJob).to receive(:perform_later)
         subject
       end
     end

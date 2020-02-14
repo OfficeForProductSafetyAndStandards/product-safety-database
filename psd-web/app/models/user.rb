@@ -25,8 +25,8 @@ class User < ApplicationRecord
   end
 
   def self.resend_invite(email_address, _team, redirect_url)
-    user_id = KeycloakClient.instance.get_user(email_address)[:id]
-    KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
+    user = User.find_by!(email: email_address)
+    SendUserInvitationJob.perform_later(user.id)
   end
 
   def self.load_from_keycloak(users = KeycloakClient.instance.all_users)
