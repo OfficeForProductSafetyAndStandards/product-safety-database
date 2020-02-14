@@ -1,0 +1,53 @@
+<% title = "Create an account" %>
+<% content_for :page_title, title %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Enter your full name", href: "#name"}]) %>
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Enter your mobile number", href: "#mobile-number"}]) %>
+
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Enter your mobile number", href: "#mobile-number"}]) %>
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Enter your mobile number in the correct format, like 07700 900 982", href: "#mobile-number"}]) %>
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Password is too short", href: "#password"}]) %>
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Choose a less frequently used password", href: "#password"}]) %>
+
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= render "components/govuk_input", id: "name", name: "user[name]", type: "text", classes: "app-!-max-width-two-thirds", label: { text: "Full name" } %>
+
+      <%= telephoneNumber({
+        id: "mobile-number",
+        name: "user[mobile_number]",
+        label: {
+          text: "Mobile number"
+        },
+        hint: {
+          text: "We’ll send you a security code by text message"
+        },
+        classes: "app-!-max-width-two-thirds"
+      }) %>
+
+      <%= password({
+        id: "password",
+        name: "user[password]",
+        label: {
+          text: "Password"
+        },
+        hint: {
+          text: "At least 8 characters"
+        },
+        classes: "app-!-max-width-two-thirds"
+      }) %>
+
+      <%= govukButton(text: "Continue") %>
+
+    <% end %>
+  </div>
+</div>
