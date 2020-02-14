@@ -14,7 +14,6 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     allow(KeycloakClient.instance).
       to receive(:get_user_roles).with(user.id)
            .and_return(%i[psd_user opss_user])
-    stub_omniauth(user)
     sign_in user
     User.current = user
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
