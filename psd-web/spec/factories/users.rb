@@ -5,7 +5,7 @@ FactoryBot.define do
     email { Faker::Internet.safe_email }
     organisation
     password { "password" }
-    password_confirmation { |u| u.password }
+    password_confirmation(&:password)
     has_accepted_declaration { false }
     has_been_sent_welcome_email { true }
     has_viewed_introduction { false }
