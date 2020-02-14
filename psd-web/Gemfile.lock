@@ -289,7 +289,7 @@ GEM
     pundit (2.1.0)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
-    rack (2.2.1)
+    rack (2.2.2)
     rack-oauth2 (1.10.1)
       activesupport
       attr_required
@@ -576,7 +576,7 @@ DEPENDENCIES
   pry-doc
   puma
   pundit
-  rack (~> 2.2.1)
+  rack (~> 2.2.2)
   rails (= 5.2.3)
   rails-controller-testing
   redcarpet
