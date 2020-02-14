@@ -10,8 +10,8 @@ module TestHelpers
       visit root_path
       click_on "Sign in to your account"
 
-      fill_in "user[email]", with: user.email
-      fill_in "user[password]", with: "password"
+      fill_in "Email address", with: user.email
+      fill_in "Lassword", with: "password"
       click_on "Continue"
 
       user
