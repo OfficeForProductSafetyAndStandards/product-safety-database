@@ -567,6 +567,7 @@ DEPENDENCIES
   lograge (= 0.11.2)
   m
   mini_magick (= 4.10.1)
+  notifications-ruby-client (~> 5.1)
   okcomputer (= 1.18.1)
   omniauth-rails_csrf_protection (~> 0.1)
   omniauth_openid_connect
@@ -617,4 +618,4 @@ RUBY VERSION
    ruby 2.5.7p206
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
