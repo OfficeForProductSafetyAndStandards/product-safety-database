@@ -17,7 +17,7 @@ class User < ApplicationRecord
     where(account_activated: true)
   end
 
-  def self.create_and_send_invite(email_address, team, redirect_url, inviting_user)
+  def self.create_and_send_invite(email_address, team, _redirect_url, inviting_user)
     user = create(
       id: SecureRandom.uuid,
       email: email_address,
@@ -31,7 +31,7 @@ class User < ApplicationRecord
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
-  def self.resend_invite(email_address, _team, redirect_url, inviting_user)
+  def self.resend_invite(email_address, _team, _redirect_url, inviting_user)
     user = User.find_by!(email: email_address)
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
