@@ -8,6 +8,7 @@ class CreateKeycloakCredentials < ActiveRecord::Migration[5.2]
       t.string :credential_type
 
       t.index :email
+      t.timestamps
     end
   end
 end
