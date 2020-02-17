@@ -24,7 +24,7 @@ class User < ApplicationRecord
       organisation: team.organisation,
       invitation_token: SecureRandom.hex(15)
     )
-    team.add_user(user)
+    team.users << user
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end

@@ -9,10 +9,6 @@ class Team < ApplicationRecord
   validates :name, presence: true
   validates :path, presence: true
 
-  def add_user(user)
-    users << user
-  end
-
   def self.load_from_keycloak(teams = KeycloakClient.instance.all_teams(Organisation.ids))
     teams.each do |team|
       begin
