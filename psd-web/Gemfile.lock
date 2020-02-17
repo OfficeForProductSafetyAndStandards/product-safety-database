@@ -164,6 +164,8 @@ GEM
     elasticsearch-transport (6.8.0)
       faraday
       multi_json
+    email_validator (2.0.1)
+      activemodel
     erubi (1.9.0)
     et-orbi (1.2.2)
       tzinfo
@@ -555,6 +557,7 @@ DEPENDENCIES
   elasticsearch (= 6.8.0)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
+  email_validator
   factory_bot_rails
   faker
   govuk-design-system-rails!

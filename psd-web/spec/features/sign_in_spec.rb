@@ -28,4 +28,13 @@ RSpec.feature "Signin in", :with_elasticsearch, :with_stubbed_mailer do
     expect(page).to have_link("All cases")
     expect(page).to have_link("More information")
   end
+
+  context "wrong credentials" do
+    it "with the wrong email" do
+      visit root_path
+      click_on "Sign in to your account"
+
+
+    end
+  end
 end

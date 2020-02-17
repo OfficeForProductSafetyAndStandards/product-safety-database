@@ -7,11 +7,4 @@ class UserDecorator < Draper::Decorator
 
     name
   end
-
-  def errors
-    h.govukErrorSummary(
-      titleText: "There is a problem",
-      errorList: object.errors.full_messages.map { |error| { text: error, href: "#new_user" } }
-    ) if object.errors.any?
-  end
 end

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users
+  devise_for :users, controllers: { sessions: "users/sessions" }
 
   concern :document_attachable do
     resources :documents, controller: "documents" do
