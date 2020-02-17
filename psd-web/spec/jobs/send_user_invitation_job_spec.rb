@@ -6,7 +6,7 @@ RSpec.describe SendUserInvitationJob do
   context "with a valid user id" do
     let(:user_id) { SecureRandom.uuid }
     let(:message_delivery_instance) { instance_double(ActionMailer::MessageDelivery, deliver_now: true) }
-    let!(:user) { create(:user, id: user_id, invitation_token: SecureRandom.hex(10)) }
+    let!(:user) { create(:user, id: user_id, invitation_token: SecureRandom.hex(10), invited_at: nil, has_been_sent_welcome_email: false) }
     let!(:user_inviting) { create(:user) }
 
     before do
@@ -21,9 +21,14 @@ RSpec.describe SendUserInvitationJob do
       perform
     end
 
+    it "adds the time that the user was invited" do
+      perform
+      expect(user.reload.invited_at).to be_within(2.seconds).of(Time.zone.now)
+    end
+
     it "sets the user flag for having been sent the welcome email" do
       perform
-      expect(user.has_been_sent_welcome_email).to be true
+      expect(user.reload.has_been_sent_welcome_email).to be true
     end
   end
 
