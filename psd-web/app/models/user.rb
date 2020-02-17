@@ -17,6 +17,7 @@ class User < ApplicationRecord
     where(account_activated: true)
   end
 
+  # TODO: remove `_redirect_url` argument, as this is no longer used.
   def self.create_and_send_invite(email_address, team, _redirect_url, inviting_user)
     user = create(
       id: SecureRandom.uuid,
@@ -30,6 +31,8 @@ class User < ApplicationRecord
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
+  # TODO: remove `_team` and `_redirect_url` arguments, as these are no
+  # longer used.
   def self.resend_invite(email_address, _team, _redirect_url, inviting_user)
     user = User.find_by!(email: email_address)
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
