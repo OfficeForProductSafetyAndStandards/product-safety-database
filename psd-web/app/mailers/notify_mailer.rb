@@ -15,7 +15,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     invitation_url = create_account_user_url(user.id, invitation: user.invitation_token)
 
-    set_personalisation(invitation_url: invitation_url, inviting_team_member_name: inviting_team_member_name)
+    set_personalisation(invitation_url: invitation_url, inviting_team_member_name: inviting_user.name)
     mail(to: user.email)
   end
 
