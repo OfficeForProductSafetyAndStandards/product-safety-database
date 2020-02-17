@@ -11,6 +11,6 @@ class SendUserInvitationJob < ApplicationJob
     invitation_url = create_account_user_url(user.id, invitation: user.invitation_token, host: ENV.fetch("PSD_HOST"))
 
     NotifyMailer.invitation_email(user.email, invitation_url, user_inviting.name).deliver_now
-    user.update(has_been_sent_welcome_email: true, invited_at: DateTime.now)
+    user.update!(has_been_sent_welcome_email: true, invited_at: Time.current)
   end
 end
