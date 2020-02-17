@@ -14,9 +14,7 @@ RSpec.describe SendUserInvitationJob do
     end
 
     it "sends an email via the NotifyMailer" do
-      expected_invitation_path = create_account_user_url(user, invitation: user.invitation_token, host: ENV.fetch("PSD_HOST"))
-
-      expect(NotifyMailer).to receive(:invitation_email).with(user.email, expected_invitation_path, user_inviting.name).and_return(message_delivery_instance)
+      expect(NotifyMailer).to receive(:invitation_email).with(user, user_inviting).and_return(message_delivery_instance)
       expect(message_delivery_instance).to receive(:deliver_now)
       perform
     end

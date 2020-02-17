@@ -14,7 +14,6 @@ RSpec.describe User do
     context "with valid email and team" do
       let(:email) { "testuser@southampton.gov.uk" }
       let(:team) { create(:team) }
-      let(:redirect_url) { "random-uri.gov.uk" }
       let(:inviting_user) { create(:user) }
 
       before do
@@ -22,7 +21,7 @@ RSpec.describe User do
       end
 
       subject do
-        described_class.create_and_send_invite(email, team, redirect_url, inviting_user)
+        described_class.create_and_send_invite(email, team, inviting_user)
       end
 
       it "creates an user with the given email address" do
@@ -56,15 +55,13 @@ RSpec.describe User do
     context "with an email address of an existing user" do
       let(:user) { create(:user) }
       let(:inviting_user) { create(:user) }
-      let(:team) { "" }
-      let(:redirect_url) { "random-uri.gov.uk" }
 
       before do
         allow(SendUserInvitationJob).to receive(:perform_later)
       end
 
       subject do
-        described_class.resend_invite(user.email, team, redirect_url, inviting_user)
+        described_class.resend_invite(user.email, inviting_user)
       end
 
       it "resends an invitation to the user" do
