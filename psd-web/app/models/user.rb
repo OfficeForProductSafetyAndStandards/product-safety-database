@@ -22,9 +22,8 @@ class User < ApplicationRecord
       id: SecureRandom.uuid,
       email: email_address,
       organisation: team.organisation,
-      invited_at: Time.now,
+      invited_at: Time.zone.now,
       invitation_token: SecureRandom.hex(15)
-
     )
     team.add_user(user)
 

@@ -1,6 +1,10 @@
 class AddInvitationTokenToUsers < ActiveRecord::Migration[5.2]
   def change
-    add_column :users, :invitation_token, :text
-    add_column :users, :invited_at, :datetime
+    safety_assured do
+      change_table :users, bulk: true do |t|
+        t.text :invitation_token
+        t.datetime :invited_at
+      end
+    end
   end
 end
