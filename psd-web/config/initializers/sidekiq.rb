@@ -47,7 +47,7 @@ def schedule_keycloak_passwords_sync_job
     queue: ENV["SIDEKIQ_QUEUE"] || "psd"
   )
   unless keycloak_sync_job.save
-    Rails.logger.error "***** WARNING - Sync Keycloak Passwordsu job was not saved! *****"
+    Rails.logger.error "***** WARNING - Sync Keycloak Password job was not saved! *****"
     Rails.logger.error keycloak_sync_job.errors.join("; ")
   end
 end
