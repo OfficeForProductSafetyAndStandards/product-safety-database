@@ -15,38 +15,31 @@ RSpec.describe User do
       let(:email) { "testuser@southampton.gov.uk" }
       let(:team) { create(:team) }
       let(:inviting_user) { create(:user) }
+      let(:created_user) { User.find_by(email: email) }
 
       before do
         allow(SendUserInvitationJob).to receive(:perform_later)
-      end
-
-      subject do
         described_class.create_and_send_invite(email, team, inviting_user)
       end
 
       it "creates an user with the given email address" do
-        subject
-        expect(User.find_by(email: email)).not_to be_nil
+        expect(created_user).not_to be_nil
       end
 
       it "adds a invitation token to the created user" do
-        subject
-        expect(User.find_by(email: email).invitation_token).not_to be_nil
+        expect(created_user.invitation_token).not_to be_nil
       end
 
       it "associates the created user with the given team's organisation" do
-        subject
-        expect(User.find_by(email: email).organisation).to eq team.organisation
+        expect(created_user.organisation).to eq team.organisation
       end
 
       it "associates the created user with the given team" do
-        subject
-        expect(User.find_by(email: email).teams).to eq [team]
+        expect(created_user.teams).to eq [team]
       end
 
       it "sends an invitation to the user" do
-        expect(SendUserInvitationJob).to receive(:perform_later).with(anything, inviting_user.id)
-        subject
+        expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
     end
   end
