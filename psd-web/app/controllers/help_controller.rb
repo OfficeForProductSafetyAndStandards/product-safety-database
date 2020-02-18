@@ -8,6 +8,6 @@ class HelpController < ApplicationController
   def about; end
 
   def hide_nav?
-    !(User.current.present? && User.current.has_accepted_declaration)
+    !(current_user.present? && current_user.has_accepted_declaration)
   end
 end

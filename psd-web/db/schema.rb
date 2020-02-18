@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_21_154252) do
+ActiveRecord::Schema.define(version: 2020_02_12_120801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,15 @@ ActiveRecord::Schema.define(version: 2020_01_21_154252) do
     t.index ["product_id"], name: "index_tests_on_product_id"
   end
 
+  create_table "user_roles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "user_id"
+    t.index ["user_id", "name"], name: "index_user_roles_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: nil, force: :cascade do |t|
     t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
@@ -272,6 +281,7 @@ ActiveRecord::Schema.define(version: 2020_01_21_154252) do
     t.string "name"
     t.uuid "organisation_id"
     t.datetime "updated_at", null: false
+    t.index ["account_activated"], name: "index_users_on_account_activated"
     t.index ["email"], name: "index_users_on_email"
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"

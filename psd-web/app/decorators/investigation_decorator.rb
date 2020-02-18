@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :documents_attachments
+  decorates_associations :documents_attachments, :assignable
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -139,6 +139,12 @@ class InvestigationDecorator < ApplicationDecorator
         h.concat(h.link_to("View #{products_remaining_count} more products...", h.investigation_products_path(object)))
       end
     end
+  end
+
+  def assignable_display_name_for(viewing_user:)
+    return "Unassigned" unless investigation.assignable
+
+    assignable.assignee_short_name(viewing_user: viewing_user)
   end
 
 private

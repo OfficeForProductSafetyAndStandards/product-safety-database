@@ -66,7 +66,7 @@ module InvestigationsHelper
   def compute_excluded_terms
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
     excluded_assignees = []
-    excluded_assignees << User.current.id if params[:assigned_to_me] == "unchecked"
+    excluded_assignees << current_user.id if params[:assigned_to_me] == "unchecked"
     format_assignee_terms(excluded_assignees)
   end
 
@@ -74,7 +74,7 @@ module InvestigationsHelper
     # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
     assignees = checked_team_assignees
     assignees.concat(someone_else_assignees)
-    assignees << User.current.id if params[:assigned_to_me] == "checked"
+    assignees << current_user.id if params[:assigned_to_me] == "checked"
     format_assignee_terms(assignees.uniq)
   end
 
@@ -120,7 +120,7 @@ module InvestigationsHelper
   def compute_excluded_created_by_terms
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
     excluded_creators = []
-    excluded_creators << User.current.id if params[:created_by_me] == "unchecked"
+    excluded_creators << current_user.id if params[:created_by_me] == "unchecked"
     format_creator_terms(excluded_creators)
   end
 
@@ -128,7 +128,7 @@ module InvestigationsHelper
     # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
     creators = checked_team_creators
     creators.concat(someone_else_creators)
-    creators << User.current.id if params[:created_by_me] == "checked"
+    creators << current_user.id if params[:created_by_me] == "checked"
     format_creator_terms(creators.uniq)
   end
 
@@ -154,12 +154,12 @@ module InvestigationsHelper
   end
 
   def creator_teams_with_keys
-    User.current.teams.map.with_index do |team, index|
+    current_user.teams.map.with_index do |team, index|
       # key, team, name
       [
         "created_by_team_#{index}".to_sym,
         team,
-        User.current.teams.count > 1 ? team.name : "My team"
+        current_user.teams.count > 1 ? team.name : "My team"
       ]
     end
   end
@@ -212,12 +212,12 @@ module InvestigationsHelper
   end
 
   def assignee_teams_with_keys
-    User.current.teams.map.with_index do |team, index|
+    current_user.teams.map.with_index do |team, index|
       # key, team, name
       [
         "assigned_to_team_#{index}".to_sym,
         team,
-        User.current.teams.count > 1 ? team.name : "My team"
+        current_user.teams.count > 1 ? team.name : "My team"
       ]
     end
   end
@@ -228,7 +228,7 @@ module InvestigationsHelper
 
   def suggested_previous_assignees
     all_past_assignees = @investigation.past_assignees + @investigation.past_teams
-    return [] if all_past_assignees.empty? || all_past_assignees == [User.current]
+    return [] if all_past_assignees.empty? || all_past_assignees == [current_user]
 
     all_past_assignees || []
   end

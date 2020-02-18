@@ -52,10 +52,6 @@ class Team < ApplicationRecord
     display_name
   end
 
-  def assignee_short_name
-    display_name
-  end
-
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 

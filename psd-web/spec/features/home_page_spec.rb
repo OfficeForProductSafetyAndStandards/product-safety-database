@@ -3,14 +3,14 @@ require "rails_helper"
 RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
   context "User signed out" do
     scenario "shows the home page" do
-      sign_out
+      sign_out(:user)
       visit root_path
 
       expect(page).not_to have_css(".psd-header .govuk-phase-banner__content__tag")
       expect(page).to have_css(".govuk-phase-banner")
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
-      expect(page).to have_link("Sign in to your account")
+      expect(page).to have_button("Sign in to your account")
 
       expect(page).not_to have_link("Sign out")
       expect(page).not_to have_link("Your account")
@@ -24,7 +24,6 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
 
     before do
       sign_in(as_user: create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
-      visit root_path
     end
 
     def expect_small_beta_phase_banner
@@ -43,6 +42,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
 
       context "not previously accepted the declaration" do
         let(:has_accepted_declaration) { false }
+        let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
 
         scenario "shows the declaration page before the case list" do

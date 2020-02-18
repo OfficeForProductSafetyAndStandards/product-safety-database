@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-  let(:user)            { create :user, :activated }
-  let!(:business_one)   { create(:business, created_at: 1.day.ago) }
-  let!(:business_two)   { create(:business, created_at: 2.days.ago) }
-  let!(:business_three) { create(:business, created_at: 3.days.ago) }
+  let(:user)            { create :user, :activated, has_viewed_introduction: true }
+  let!(:business_one)   { create(:business, trading_name: "great value",    created_at: 1.day.ago) }
+  let!(:business_two)   { create(:business, trading_name: "mediocre stuff", created_at: 2.days.ago) }
+  let!(:business_three) { create(:business, trading_name: "pretty bad",     created_at: 3.days.ago) }
 
   before { create_list :business, 18, created_at: 4.days.ago }
 

@@ -2,8 +2,11 @@ require "application_system_test_case"
 
 class InvestigationSubNavigation < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    Investigation.import force: true, refresh: :wait_for
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
+
     @investigation = load_case(:one)
   end
 
@@ -17,15 +20,15 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
 
     with_options class: "hmcts-sub-navigation__link" do |p|
       p.assert_link "Overview",
-                    href: investigation_url(@investigation)
+                    href: investigation_path(@investigation)
       p.assert_link products_link,
-                    href: investigation_products_url(@investigation)
+                    href: investigation_products_path(@investigation)
       p.assert_link businesses_link,
-                    href: investigation_businesses_url(@investigation)
+                    href: investigation_businesses_path(@investigation)
       p.assert_link attachments_link,
-                    href: investigation_attachments_url(@investigation)
+                    href: investigation_attachments_path(@investigation)
       p.assert_link activity_link,
-                    href: investigation_activity_url(@investigation)
+                    href: investigation_activity_path(@investigation)
     end
 
     click_link products_link

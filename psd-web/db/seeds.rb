@@ -410,6 +410,8 @@ if run_seeds
 
   KeycloakService.sync_orgs_and_users_and_teams
 
+  User.load_from_keycloak
+
   Investigation.__elasticsearch__.create_index! force: true
   Investigation.import
 

@@ -59,72 +59,28 @@ RSpec.describe User do
     end
   end
 
-  describe "#roles" do
-    subject(:user) { build(:user) }
+  describe "#load_roles_from_keycloak", :with_stubbed_keycloak_config do
+    let(:user) { create(:user, :psd_user) }
+    let(:roles) { %i[test_role another_test_role] }
 
     before do
-      user.instance_variable_set(:@roles, nil)
-
-      allow(ENV).to receive(:fetch).with("KEYCLOAK_AUTH_URL").and_return("test")
-      allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
-      allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
-      allow(KeycloakToken).to receive(:new).and_return(token_stub)
+      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(roles)
+      user.load_roles_from_keycloak
     end
 
-    let(:client_id) { "123" }
-    let(:client_secret) { "secret" }
-    let(:token_stub) { OpenStruct.new(access_token: "test") }
-    let(:keycloak_roles) { %w[keycloak_role] }
-    let(:cache_roles) { %w[cached_role] }
-    let(:instance_roles) { %w[instance_role] }
-
-    let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
-
-    before do
-      allow(Rails).to receive(:cache).and_return(memory_store)
-      Rails.cache.clear
+    it "populates the user roles" do
+      expect(user.user_roles.where(name: roles).count).to eq(2)
     end
 
-    context "when the user's roles are not cached" do
-      before { expect(KeycloakClient.instance).to receive(:get_user_roles).and_return(keycloak_roles) }
-
-      it "returns the roles from Keycloak" do
-        expect(user.roles).to eq(keycloak_roles)
-      end
-
-      it "caches the roles" do
-        expect { user.roles }.to change { Rails.cache.read("user_roles_#{user.id}") }.from(nil).to(keycloak_roles)
-      end
+    it "deletes roles no longer assigned to the user" do
+      expect(user.user_roles.where(name: :psd_user)).to be_empty
     end
 
-    context "when the user's roles are cached" do
-      before { Rails.cache.write("user_roles_#{user.id}", cache_roles) }
+    context "when the user already has the same roles" do
+      let(:roles) { %i[test_role test_role another_test_role] }
 
-      it "returns the cached roles" do
-        expect(user.roles).to eq(cache_roles)
-      end
-
-      it "does not query Keycloak" do
-        expect(KeycloakClient.instance).not_to receive(:get_user_roles)
-        user.roles
-      end
-    end
-
-    context "when the roles have already been instantiated" do
-      before { user.roles = instance_roles }
-
-      it "returns the already instantiated roles" do
-        expect(user.roles).to eq(instance_roles)
-      end
-
-      it "does not query the cache" do
-        expect(Rails).not_to receive(:cache)
-        user.roles
-      end
-
-      it "does not query Keycloak" do
-        expect(KeycloakClient.instance).not_to receive(:get_user_roles)
-        user.roles
+      it "does not duplicate roles" do
+        expect(user.user_roles.count).to eq(2)
       end
     end
   end

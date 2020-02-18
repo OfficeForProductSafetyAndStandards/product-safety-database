@@ -2,15 +2,13 @@ require "application_system_test_case"
 
 class CreateNewRecordTest < ApplicationSystemTestCase
   setup do
-    mock_out_keycloak_and_notify
+    stub_notify_mailer
     stub_antivirus_api
+    sign_in
+
     visit new_investigation_path
 
     assert_css "h1", text: "Create new"
-  end
-
-  teardown do
-    reset_keycloak_and_notify_mocks
   end
 
   test "can be reached via home page" do
