@@ -1,7 +1,6 @@
 require "notifications/client"
 
 class SendUserInvitationJob < ApplicationJob
-  include Rails.application.routes.url_helpers
   GOV_UK_NOTIFY_TEMPLATE_ID = "22b3799c-aa3d-43e8-899d-3f30307a488f".freeze
 
   def perform(user_id, user_inviting_id)
