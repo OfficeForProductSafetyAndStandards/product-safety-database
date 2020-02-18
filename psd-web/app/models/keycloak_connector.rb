@@ -1,5 +1,4 @@
 class KeycloakConnector < ApplicationRecord
-  KEY_LEN = 64
   CREDENTIALS_QUERY = <<~SQL.freeze
     SELECT c.salt, c.value, c.hash_iterations, u.email, c.type FROM credential c INNER JOIN user_entity u ON c.user_id = u.id
   SQL
