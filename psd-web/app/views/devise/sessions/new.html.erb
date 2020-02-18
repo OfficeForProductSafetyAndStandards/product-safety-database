@@ -4,14 +4,15 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
+    <%= resource.decorate.error_summary %>
+
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">If you do not have an account, you will need to be invited by OPSS Processing Team before you can use the service.</p>
     <%= form_for(resource, as: resource_name, url: user_session_path) do |f| %>
-      <%= resource.decorate.errors %>
-      <%= render "components/govuk_input", id: "email", name: "user[email]", type: "email", classes: "app-!-max-width-two-thirds", label: { text: "Email address" } %>
+      <%= resource.email_input(f) %>
 
-      <%= render "components/govuk_input", id: "password", name: "user[password]", type: "password", classes: "app-!-max-width-two-thirds", label: { text: "Password" } %>
+      <%= resource.password_input(f) %>
 
 
       <%= govukButton(text: "Continue") %>

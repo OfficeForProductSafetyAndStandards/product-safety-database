@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe SignUserIn do
+RSpec.describe SignInForm do
   let(:password) { "password" }
   let(:email)    { "test@example.com" }
 
@@ -26,6 +26,7 @@ RSpec.describe SignUserIn do
         end
       end
     end
+
     describe "when the password is blank" do
       let(:password) { "" }
 

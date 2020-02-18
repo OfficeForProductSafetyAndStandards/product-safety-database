@@ -1,11 +1,12 @@
-class SignUserIn
+class SignInForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
   attribute :email
   attribute :password
 
-  validates :email, email: {
+  validates :email,
+            email: {
               message: "Enter your email address in the correct format, like name@example.com",
               if: ->(sign_in_form) { sign_in_form.email.present? }
             }
