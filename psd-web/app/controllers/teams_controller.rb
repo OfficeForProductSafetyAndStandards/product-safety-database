@@ -17,7 +17,7 @@ class TeamsController < ApplicationController
     if existing_user
       invite_existing_user_if_able existing_user
     elsif whitelisted_user
-      User.create_and_send_invite @new_user.email_address, @team, current_user
+      User.create_and_send_invite! @new_user.email_address, @team, current_user
     else
       @new_user.errors.add(:email_address, :email_not_in_whitelist)
     end

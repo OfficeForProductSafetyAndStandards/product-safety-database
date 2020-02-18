@@ -10,7 +10,7 @@ RSpec.describe User do
     end
   end
 
-  describe ".create_and_send_invite" do
+  describe ".create_and_send_invite!" do
     context "with valid email and team" do
       let(:email) { "testuser@southampton.gov.uk" }
       let(:team) { create(:team) }
@@ -19,7 +19,7 @@ RSpec.describe User do
 
       before do
         allow(SendUserInvitationJob).to receive(:perform_later)
-        described_class.create_and_send_invite(email, team, inviting_user)
+        described_class.create_and_send_invite!(email, team, inviting_user)
       end
 
       it "creates an user with the given email address" do
@@ -41,6 +41,16 @@ RSpec.describe User do
       it "sends an invitation to the user" do
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
+    end
+
+    it "raises an error when missing information" do
+      email = nil
+      team = build_stubbed(:team, organisation: nil)
+      inviting_user = build_stubbed(:user)
+
+      expect(SendUserInvitationJob).not_to receive(:perform_later)
+      expect { described_class.create_and_send_invite!(email, team, inviting_user) }
+        .to raise_exception(ActiveRecord::RecordInvalid)
     end
   end
 
