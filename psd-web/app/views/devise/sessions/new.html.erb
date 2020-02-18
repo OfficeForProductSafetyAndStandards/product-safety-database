@@ -8,12 +8,13 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <p class="govuk-body">If you do not have an account, you will need to be invited by OPSS Processing Team before you can use the service.</p>
+    <p class="govuk-body">
+      If you do not have an account, you will need to be invited by OPSS Processing Team before you can use the service.
+    </p>
+
     <%= form_for(resource, as: resource_name, url: user_session_path) do |f| %>
-      <%= resource.email_input(f) %>
-
-      <%= resource.password_input(f) %>
-
+      <%= resource.email_input %>
+      <%= resource.password_input %>
 
       <%= govukButton(text: "Continue") %>
 

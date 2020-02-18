@@ -10,7 +10,8 @@ class SignUserIn
       if authenticated_resource
         context.resource = authenticated_resource
       else
-        resource.errors.add(:email, "Enter correct email address and password")
+        resource.errors.clear
+        resource.errors.add(:base, "Enter correct email address and password")
         context.fail!
       end
     end

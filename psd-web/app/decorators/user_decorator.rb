@@ -9,43 +9,48 @@ class UserDecorator < Draper::Decorator
   end
 
   def error_summary
-    return unless object.errors.any?
+    return unless errors.any?
 
-    error_list = object.errors.map { |attribute, errors| { text: errors, href: "##{attribute}" } }
+    error_list = errors.map { |attribute, error| { text: error, href: "##{attribute}" } }
     h.govukErrorSummary(titleText: "There is a problem", errorList: error_list)
   end
 
-  def email_input(f)
+  def email_input
     options = {
       id: "email",
       name: "user[email]",
       type: "email",
       classes: "app-!-max-width-two-thirds",
-      label: { text: "Email address" }
+      label: { text: "Email address" },
+      errorMessage: format_errors_for(errors.full_messages_for(:email))
     }
-
-    options[:errorMessage] = format_errors_for(f.object.errors.full_messages_for(:email)) if f.object.errors.any?
 
     h.render "components/govuk_input", options
   end
 
-  def password_input(f)
+  def password_input
     options = {
       id: "password",
       name: "user[password]",
       type: "password",
       classes: "app-!-max-width-two-thirds",
-      label: { text: "Password" }
+      label: { text: "Password" },
+      errorMessage: format_errors_for(errors.full_messages_for(:password))
     }
-
-    options[:errorMessage] = format_errors_for(f.object.errors.full_messages_for(:passwor)) if f.object.errors.any?
 
     h.render "components/govuk_input", options
   end
 
 private
 
-  def format_errors_for(errors)
-    { text: errors.to_sentence(last_word_connector: " and ") }
+  def format_errors_for(errors_for_field)
+    return base_errors if object.errors.include?(:base)
+    return             if errors_for_field.empty?
+
+    { text: errors_for_field.to_sentence(last_word_connector: " and ") }
+  end
+
+  def base_errors
+    { text: errors.full_messages_for(:base).to_sentence(last_word_connector: " and ") }
   end
 end
