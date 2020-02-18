@@ -7,7 +7,5 @@ end
 
 
 def validate_confirmation_banner(msg)
-	expect(page).to have_css(".hmcts-banner__message", text: msg)
-end	
-
-
+  expect(page).to have_css(".hmcts-banner__message", text: msg)
+end
