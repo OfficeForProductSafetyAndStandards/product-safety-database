@@ -13,6 +13,16 @@ FactoryBot.define do
       roles { [:psd_user] }
     end
 
+    factory :user_with_teams do
+      transient do
+        teams_count { 1 }
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:team, evaluator.teams_count, users: [user], organisation_id: user.organisation.id)
+      end
+    end
+
     trait :activated do
       after(:build) do |user|
         mailer = double("mailer", welcome: double("welcome mailer", deliver_later: true))

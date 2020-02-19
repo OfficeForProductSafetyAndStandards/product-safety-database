@@ -30,7 +30,11 @@ class User < ApplicationRecord
   end
 
   def self.resend_invite(email_address, inviting_user)
-    user = User.find_by!(email: email_address)
+    # Only want to allow resending invites to users that share a team with the inviting user.
+    user = User.joins(:teams)
+               .where(teams: { id: inviting_user.teams.pluck(:id) })
+               .find_by!(email: email_address)
+
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
