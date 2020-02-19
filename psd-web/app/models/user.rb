@@ -17,21 +17,25 @@ class User < ApplicationRecord
     where(account_activated: true)
   end
 
-  def self.create_and_send_invite(email_address, team, redirect_url)
-    KeycloakClient.instance.create_user(email_address)
+  def self.create_and_send_invite!(email_address, team, inviting_user)
+    user = create!(
+      id: SecureRandom.uuid,
+      email: email_address,
+      organisation: team.organisation,
+      invitation_token: SecureRandom.hex(15)
+    )
+    team.users << user
 
-    keycloak_user = KeycloakClient.instance.get_user(email_address)
-
-    # Create the user in the local cache database so that we don't have to wait until the next sync
-    user = create(id: keycloak_user[:id], email: email_address, organisation: team.organisation)
-    team.add_user(user)
-
-    KeycloakClient.instance.send_required_actions_welcome_email keycloak_user[:id], redirect_url
+    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
-  def self.resend_invite(email_address, _team, redirect_url)
-    user_id = KeycloakClient.instance.get_user(email_address)[:id]
-    KeycloakClient.instance.send_required_actions_welcome_email user_id, redirect_url
+  def self.resend_invite(email_address, inviting_user)
+    # Only want to allow resending invites to users that share a team with the inviting user.
+    user = User.joins(:teams)
+               .where(teams: { id: inviting_user.teams.pluck(:id) })
+               .find_by!(email: email_address)
+
+    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
   def self.load_from_keycloak(users = KeycloakClient.instance.all_users)

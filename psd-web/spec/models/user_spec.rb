@@ -10,6 +10,76 @@ RSpec.describe User do
     end
   end
 
+  describe ".create_and_send_invite!" do
+    context "with valid email and team" do
+      let(:email) { "testuser@southampton.gov.uk" }
+      let(:team) { create(:team) }
+      let(:inviting_user) { create(:user) }
+      let(:created_user) { User.find_by(email: email) }
+
+      before do
+        allow(SendUserInvitationJob).to receive(:perform_later)
+        described_class.create_and_send_invite!(email, team, inviting_user)
+      end
+
+      it "creates an user with the given email address" do
+        expect(created_user).not_to be_nil
+      end
+
+      it "adds a invitation token to the created user" do
+        expect(created_user.invitation_token).not_to be_nil
+      end
+
+      it "associates the created user with the given team's organisation" do
+        expect(created_user.organisation).to eq team.organisation
+      end
+
+      it "associates the created user with the given team" do
+        expect(created_user.teams).to eq [team]
+      end
+
+      it "sends an invitation to the user" do
+        expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
+      end
+    end
+
+    it "raises an error when missing information" do
+      email = nil
+      team = build_stubbed(:team, organisation: nil)
+      inviting_user = build_stubbed(:user)
+
+      expect(SendUserInvitationJob).not_to receive(:perform_later)
+      expect { described_class.create_and_send_invite!(email, team, inviting_user) }
+        .to raise_exception(ActiveRecord::RecordInvalid)
+    end
+  end
+
+  describe ".resend_invite" do
+    let(:inviting_user) { create(:user_with_teams) }
+
+    it "resends an invitation to the user when both users belong to same team" do
+      invited_user = create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation)
+
+      expect(SendUserInvitationJob).to receive(:perform_later).with(anything, inviting_user.id)
+
+      described_class.resend_invite(invited_user.email, inviting_user)
+    end
+
+    it "raises an exception when the given email does not match any user" do
+      expect(SendUserInvitationJob).not_to receive(:perform_later)
+      expect { described_class.resend_invite("inexistent@southampton.gov.uk", inviting_user) }
+        .to raise_exception(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises an exception when inviting and invited users belong to different teams" do
+      invited_user = create(:user_with_teams)
+
+      expect(SendUserInvitationJob).not_to receive(:perform_later)
+      expect { described_class.resend_invite(invited_user.email, inviting_user) }
+        .to raise_exception(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe ".get_team_members" do
     let(:team) { create(:team) }
     let(:user) { create(:user, :activated, teams: [team]) }
