@@ -1,5 +1,5 @@
 require "rails_helper"
-RSpec.feature "Adding a test results", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignee: user) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
@@ -7,7 +7,7 @@ RSpec.feature "Adding a test results", :with_stubbed_elasticsearch, :with_stubbe
   let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
 
   before { sign_in(as_user: user) }
-  context "leaving the date and legistation field empty" do
+  context "leaving the form fields field empty" do
     scenario "shows error messages" do
       visit new_investigation_activity_path(investigation)
       choose "activity_type_testing_result"
@@ -66,6 +66,7 @@ RSpec.feature "Adding a test results", :with_stubbed_elasticsearch, :with_stubbe
   end
 
   def expect_confirmation_page_to_show_entered_data
+    expect(page).to have_css("h1", text: "Confirm test result details")
     expect(page).to have_summary_item(key: "Legislation", value: legislation)
     expect(page).to have_summary_item(key: "Test date", value: date.strftime("%d/%m/%Y"))
     expect(page).to have_summary_item(key: "Test result", value: "Passed")
