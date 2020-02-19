@@ -12,8 +12,8 @@ end
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
-  get 'verify_keycloak/index'
-  post 'verify_keycloak', to: 'verify_keycloak#index'
+  get "verify_keycloak/index"
+  post "verify_keycloak", to: "verify_keycloak#index"
 
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 

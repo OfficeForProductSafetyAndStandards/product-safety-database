@@ -1,5 +1,5 @@
-class VerifyKeycloakController < ActionController::Base
-  layout 'application'
+class VerifyKeycloakController < ApplicationController
+  layout "application"
 
   class CredentialVerification
     include ActiveModel::Model
@@ -22,7 +22,7 @@ class VerifyKeycloakController < ActionController::Base
     end
   end
 
-  private
+private
 
   def nav_items
     []

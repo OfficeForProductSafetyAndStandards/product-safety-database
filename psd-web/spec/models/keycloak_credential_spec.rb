@@ -9,7 +9,7 @@ RSpec.describe KeycloakCredential, type: :model do
     let(:password) do
       "passwordpasswordpasswordpassword"
     end
-    let(:email)       { "test@example.org" }
+    let(:email) { "test@example.org" }
 
     it "returns true when password matches" do
       expect(KeycloakCredential.authenticate(email, password)).to be_truthy
