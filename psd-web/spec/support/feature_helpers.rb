@@ -20,7 +20,7 @@ def fill_in_test_result_submit_form(legislation, date, test_result, file)
   fill_in "test_file_description", with: "test result file"
   click_button "Continue"
   expect(page).to have_css("h1", text: "Confirm test result details")
-  end
+end
 
 def expect_test_result_form_to_show_input_data(legislation, date)
   expect(page).to have_field("test_legislation", with: legislation)
