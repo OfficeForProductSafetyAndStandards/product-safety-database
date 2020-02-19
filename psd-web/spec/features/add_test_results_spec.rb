@@ -4,7 +4,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignee: user) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:date) { Faker::Date.backward(days: 14) }
-  let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
+  let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
 
   before { sign_in(as_user: user) }
   context "leaving the form fields field empty" do
