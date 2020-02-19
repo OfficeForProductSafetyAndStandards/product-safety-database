@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :user do
     id { SecureRandom.uuid }
-    name { "test user" }
-    email { "test@example.com" }
+    name { Faker::Name.name }
+    email { Faker::Internet.safe_email }
     organisation
     has_accepted_declaration { false }
     has_been_sent_welcome_email { true }
