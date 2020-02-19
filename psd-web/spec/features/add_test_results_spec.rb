@@ -72,5 +72,5 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     expect(page).to have_summary_item(key: "Test result", value: "Passed")
     expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
     expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
-    end
+  end
 end
