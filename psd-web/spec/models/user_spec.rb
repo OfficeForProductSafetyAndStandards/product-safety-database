@@ -233,4 +233,26 @@ RSpec.describe User do
       end
     end
   end
+
+  describe "#invitation_expired?" do
+    it "returns false when the user has not been invited" do
+      user = build_stubbed(:user, invited_at: nil)
+      expect(user.invitation_expired?).to be_falsey
+    end
+
+    it "returns false when user was invited less than 14 days ago" do
+      user = build_stubbed(:user, invited_at: 13.days.ago)
+      expect(user.invitation_expired?).to be_falsey
+    end
+
+    it "returns true when user was invited exactly 14 days ago" do
+      user = build_stubbed(:user, invited_at: 14.days.ago)
+      expect(user.invitation_expired?).to be true
+    end
+
+    it "returns true when user was invited more than 14 days ago" do
+      user = build_stubbed(:user, invited_at: 15.days.ago)
+      expect(user.invitation_expired?).to be true
+    end
+  end
 end

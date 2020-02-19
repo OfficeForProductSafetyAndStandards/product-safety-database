@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  INVITATION_EXPIRATION_DAYS=14
+
   devise :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
   belongs_to :organisation
 
@@ -144,6 +146,10 @@ class User < ApplicationRecord
 
   def has_viewed_introduction!
     update has_viewed_introduction: true
+  end
+
+  def invitation_expired?
+    invited_at && invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
 private
