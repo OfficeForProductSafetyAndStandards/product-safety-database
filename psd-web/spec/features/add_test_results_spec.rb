@@ -26,14 +26,25 @@ RSpec.feature "Adding a test results", :with_stubbed_elasticsearch, :with_stubbe
       choose "activity_type_testing_result"
       click_button "Continue"
       expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
-      fill_in_submit_form
+      fill_in_test_result_submit_form
       expect_confirmation_page_to_show_entered_data
       click_button "Continue"
       validate_confirmation_banner("Test result was successfully recorded.")
     end
+    scenario "to able to see edit form" do
+      visit new_investigation_activity_path(investigation)
+      choose "activity_type_testing_result"
+      click_button "Continue"
+      expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
+      fill_in_test_result_submit_form
+      expect_confirmation_page_to_show_entered_data
+      click_on "Edit details"
+      expect_test_result_form_to_show_input_data
+    end
   end
 
-  def fill_in_submit_form
+
+  def fill_in_test_result_submit_form
     select legislation, from: "test_legislation"
     fill_in "Day", with: date.day if date
     fill_in "Month",   with: date.month if date
@@ -45,17 +56,20 @@ RSpec.feature "Adding a test results", :with_stubbed_elasticsearch, :with_stubbe
     expect(page).to have_css("h1", text: "Confirm test result details")
   end
 
+  def expect_test_result_form_to_show_input_data
+    expect(page).to have_field("test_legislation", with: legislation)
+    expect(page).to have_field("Day", with: date.day)
+    expect(page).to have_field("Month", with: date.month)
+    expect(page).to have_field("Year", with: date.year)
+    expect(page).to have_field("test_result_passed", with: "passed")
+    expect(page).to have_field("test_file_description", with: "\r\ntest result file")
+  end
+
   def expect_confirmation_page_to_show_entered_data
     expect(page).to have_summary_item(key: "Legislation", value: legislation)
     expect(page).to have_summary_item(key: "Test date", value: date.strftime("%d/%m/%Y"))
     expect(page).to have_summary_item(key: "Test result", value: "Passed")
     expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
     expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
-
-      # expect(page.find("th", text: "Legislation")).to have_sibling("td", text: legislation)
-      # expect(page.find("th", text: "Test date")).to have_sibling("td", text: date.strftime("%d/%m/%Y"))
-      # expect(page.find("th", text: "Test result")).to have_sibling("td", text: "Passed")
-      # expect(page.find("th", text: "Attachment", match: :prefer_exact)).to have_sibling("td", text: File.basename(file))
-      # expect(page.find("th", text: "Attachment description")).to have_sibling("td", text: "test result file")
     end
 end
