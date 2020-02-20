@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: [] do
+  resources :users, only: [:update] do
     member do
       get :create_account
     end

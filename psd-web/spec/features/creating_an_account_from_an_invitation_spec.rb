@@ -1,0 +1,34 @@
+require "rails_helper"
+require "support/feature_helpers"
+
+RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+
+  let(:invited_user) { create(:user, :invited) }
+
+  scenario "Creating an account from an invitation" do
+
+    visit "/users/#{invited_user.id}/create_account?invitation=#{invited_user.invitation_token}"
+
+    expect_to_be_on_create_account_page
+
+    fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
+
+    click_button "Continue"
+
+    expect_to_be_on_homepage
+    expect_to_be_signed_in
+  end
+
+  def expect_to_be_on_create_account_page
+    expect(page.current_path).to end_with("/create_account")
+
+    expect(page).to have_h1("Create an account")
+  end
+
+  def fill_in_account_details_with(full_name:, mobile_number:, password:)
+    fill_in "Full name", with: full_name
+    fill_in "Mobile number", with: mobile_number
+    fill_in "Password", with: password
+  end
+
+end

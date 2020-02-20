@@ -7,3 +7,4 @@ Rails.application.config.action_view.field_error_proc = Proc.new { |html_tag, _|
 Rails.application.config.action_view.form_with_generates_ids = true
 
 ActionView::Base.include GovukDesignSystem::ComponentsHelper
+ActionView::Base.include GovukDesignSystem::ButtonHelper
