@@ -5,7 +5,7 @@ RSpec.describe SignUserIn::FormValidator do
   let(:invalid)      { false }
   let(:sign_in_form) { double(SignInForm, "invalid?": invalid) }
 
-  subject { described_class.call(resource: default_user, sign_in_form: sign_in_form)}
+  subject { described_class.call(resource: default_user, sign_in_form: sign_in_form) }
 
   describe "#call" do
     context "when the form is valid" do

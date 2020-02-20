@@ -281,10 +281,10 @@ ActiveRecord::Schema.define(version: 2020_02_14_155213) do
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
-    t.datetime "last_sign_in_at"
-    t.inet "last_sign_in_ip"
     t.text "invitation_token"
     t.datetime "invited_at"
+    t.datetime "last_sign_in_at"
+    t.inet "last_sign_in_ip"
     t.string "name"
     t.uuid "organisation_id"
     t.datetime "remember_created_at"

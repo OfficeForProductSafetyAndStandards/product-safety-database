@@ -1,6 +1,5 @@
 module Users
   class SessionsController < Devise::SessionsController
-
     def new
       super { self.resource = resource.decorate }
     end
