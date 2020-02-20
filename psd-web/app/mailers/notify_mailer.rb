@@ -5,8 +5,19 @@ class NotifyMailer < GovukNotifyRails::Mailer
         investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
         alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
         user_added_to_team: "e3b2bbf5-3002-49fb-adb5-ad18e483c7e4",
-        welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85"
+        welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
+        invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a"
     }.freeze
+
+
+  def invitation_email(user, inviting_user)
+    set_template(TEMPLATES[:invitation])
+
+    invitation_url = create_account_user_url(user.id, invitation: user.invitation_token)
+
+    set_personalisation(invitation_url: invitation_url, inviting_team_member_name: inviting_user.name)
+    mail(to: user.email)
+  end
 
   def welcome(name, email)
     set_template(TEMPLATES[:welcome])

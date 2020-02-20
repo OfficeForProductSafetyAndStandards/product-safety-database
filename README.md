@@ -34,7 +34,7 @@ Install Docker: https://docs.docker.com/install/.
 
 Build and start-up the project, _optionally_ specifying only the services you require, for example:
 
-    docker-compose up keycloak antivirus elasticsearch
+    docker-compose up antivirus elasticsearch
 
 Refer to the `docker-compose.yml` file for a list of available services.
 

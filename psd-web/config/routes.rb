@@ -20,6 +20,12 @@ Rails.application.routes.draw do
 
   devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions" }
 
+  resources :users, only: [] do
+    member do
+      get :create_account
+    end
+  end
+
   concern :document_attachable do
     resources :documents, controller: "documents" do
       collection do

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
     id { SecureRandom.uuid }
-    name { "test user" }
+    name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
     password { "password" }
@@ -13,6 +13,16 @@ FactoryBot.define do
 
     transient do
       roles { [:psd_user] }
+    end
+
+    factory :user_with_teams do
+      transient do
+        teams_count { 1 }
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:team, evaluator.teams_count, users: [user], organisation_id: user.organisation.id)
+      end
     end
 
     trait :activated do
