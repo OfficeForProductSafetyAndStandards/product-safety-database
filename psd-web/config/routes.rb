@@ -179,5 +179,6 @@ Rails.application.routes.draw do
   unauthenticated do
     root to: "homepage#show"
   end
+  match "/sessions/signin", to: redirect("/"), via: [:get, :post]
 end
 # rubocop:enable Metrics/BlockLength
