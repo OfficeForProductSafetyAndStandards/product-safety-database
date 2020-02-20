@@ -22,7 +22,8 @@ class UserDecorator < Draper::Decorator
       type: "email",
       classes: "app-!-max-width-two-thirds",
       label: { text: "Email address" },
-      errorMessage: format_errors_for(errors.full_messages_for(:email))
+      errorMessage: format_errors_for(errors.full_messages_for(:email)),
+      value: object.email
     }
 
     h.render "components/govuk_input", options

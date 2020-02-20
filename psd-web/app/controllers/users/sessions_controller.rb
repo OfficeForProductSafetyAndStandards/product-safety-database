@@ -26,7 +26,7 @@ module Users
   private
 
     def sign_in_form
-      @sign_in_form ||= SignInForm.new(params.require(:user).permit(:email, :password))
+      @sign_in_form ||= SignInForm.new(sign_in_params)
     end
   end
 end
