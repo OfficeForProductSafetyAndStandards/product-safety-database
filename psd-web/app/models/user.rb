@@ -162,6 +162,7 @@ private
 
   def password_required?
     return false if skip_password_validation
+
     super
   end
 end
