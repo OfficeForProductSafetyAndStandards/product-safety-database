@@ -5,16 +5,19 @@ class UsersController < ApplicationController
 
   def create_account
     user = User.find(params[:id])
-    return redirect_to("/403") unless user.invitation_token == params[:invitation]
+
+    return render :signed_in_as_another_user if user_signed_in? && current_user != user
+
+    return redirect_to(root_path) if current_user == user
 
     if user.invitation_expired?
       render(:expired_token)
     elsif user.account_activated?
-      render(:already_setup)
+      redirect_to("/sign-in")
+    elsif user.invitation_token != params[:invitation]
+      render "errors/not_found", status: :not_found
     else
-      sign_in(:user, user)
+      render :create_account
     end
-  rescue ActiveRecord::RecordNotFound
-    redirect_to("/404")
   end
 end
