@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   skip_before_action :has_accepted_declaration
   skip_before_action :has_viewed_introduction
 
-  def create_account
+  def complete_registration
     @user = User.find(params[:id])
 
     return render :signed_in_as_another_user if user_signed_in? && current_user != @user
@@ -17,18 +17,17 @@ class UsersController < ApplicationController
     elsif @user.invitation_token != params[:invitation]
       render "errors/not_found", status: :not_found
     else
-      render :create_account
+      render :complete_registration
     end
   end
 
   def update
     @user = User.find(params[:id])
 
-    if @user.update_attributes(new_user_attributes)
+    if @user.update(new_user_attributes)
       sign_in :user, @user
       redirect_to root_path
     end
-
   end
 
   private

@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [:update] do
     member do
-      get :create_account
+      get :complete_registration
     end
   end
 
