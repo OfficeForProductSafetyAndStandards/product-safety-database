@@ -9,7 +9,7 @@ class Pbkdf2Encryption
   end
 
   def generate_hash
-    @hash ||= begin
+    @generate_hash ||= begin
       hashed_password = OpenSSL::KDF.pbkdf2_hmac(@plain_password, salt: salt, iterations: @iterations,
                                       length: KEY_LEN, hash: HASH_FUNCTION)
       Base64.strict_encode64(hashed_password).strip
@@ -20,4 +20,3 @@ class Pbkdf2Encryption
     @salt ||= OpenSSL::Random.random_bytes(16)
   end
 end
-

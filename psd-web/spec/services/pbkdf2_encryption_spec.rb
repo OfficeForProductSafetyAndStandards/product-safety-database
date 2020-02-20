@@ -20,7 +20,7 @@ RSpec.describe Pbkdf2Encryption do
     context "when salt is provided" do
       let(:salt) { binary_salt }
 
-      specify  do
+      specify do
         expect(OpenSSL::Random).not_to receive(:random_bytes)
 
         expect(encryption.generate_hash).to eq(encrypted_password)

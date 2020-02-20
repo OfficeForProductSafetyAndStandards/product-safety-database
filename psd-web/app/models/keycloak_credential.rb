@@ -1,5 +1,4 @@
 class KeycloakCredential < ApplicationRecord
-
   def self.authenticate(email, plain_password)
     kc = self.find_by!(email: email)
 
