@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   validates :id, presence: true, uuid: true
 
-  attr_accessor :access_token # Used only in User.current thread context
+  attribute :skip_password_validation, :boolean, default: false
 
   def self.activated
     where(account_activated: true)
@@ -22,6 +22,7 @@ class User < ApplicationRecord
 
   def self.create_and_send_invite!(email_address, team, inviting_user)
     user = create!(
+      skip_password_validation: true,
       id: SecureRandom.uuid,
       email: email_address,
       organisation: team.organisation,
@@ -157,5 +158,10 @@ private
 
   def has_role?(role)
     user_roles.exists?(name: role)
+  end
+
+  def password_required?
+    return false if skip_password_validation
+    super
   end
 end
