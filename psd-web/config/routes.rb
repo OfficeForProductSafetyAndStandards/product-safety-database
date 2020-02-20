@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [:update] do
     member do
-      get :complete_registration
+      get "complete-registration", action: :complete_registration
     end
   end
 

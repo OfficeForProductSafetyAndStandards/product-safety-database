@@ -7,9 +7,9 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
   scenario "Creating an account from an invitation" do
 
-    visit "/users/#{invited_user.id}/create_account?invitation=#{invited_user.invitation_token}"
+    visit "/users/#{invited_user.id}/complete-registration?invitation=#{invited_user.invitation_token}"
 
-    expect_to_be_on_create_account_page
+    expect_to_be_on_complete_registration_page
 
     fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
 
@@ -19,8 +19,8 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     expect_to_be_signed_in
   end
 
-  def expect_to_be_on_create_account_page
-    expect(page.current_path).to end_with("/create_account")
+  def expect_to_be_on_complete_registration_page
+    expect(page.current_path).to end_with("/complete-registration")
 
     expect(page).to have_h1("Create an account")
   end
@@ -38,5 +38,4 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     fill_in "Mobile number", with: mobile_number
     fill_in "Password", with: password
   end
-
 end
