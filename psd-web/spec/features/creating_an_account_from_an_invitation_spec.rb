@@ -15,7 +15,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     click_button "Continue"
 
-    expect_to_be_on_homepage
+    expect_to_be_on_declaration_page
     expect_to_be_signed_in
   end
 
@@ -23,6 +23,14 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     expect(page.current_path).to end_with("/create_account")
 
     expect(page).to have_h1("Create an account")
+  end
+
+  def expect_to_be_on_declaration_page
+    expect(page.current_path).to eql("/declaration")
+  end
+
+  def expect_to_be_signed_in
+    expect(page).to have_content("Sign out")
   end
 
   def fill_in_account_details_with(full_name:, mobile_number:, password:)

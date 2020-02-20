@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   INVITATION_EXPIRATION_DAYS=14
 
-  devise :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
+  devise :database_authenticatable, :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
   belongs_to :organisation
 
   has_many :investigations, dependent: :nullify, as: :assignable

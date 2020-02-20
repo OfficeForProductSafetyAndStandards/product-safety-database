@@ -20,4 +20,20 @@ class UsersController < ApplicationController
       render :create_account
     end
   end
+
+  def update
+    @user = User.find(params[:id])
+
+    if @user.update_attributes(new_user_attributes)
+      sign_in :user, @user
+      redirect_to root_path
+    end
+
+  end
+
+  private
+
+  def new_user_attributes
+    params.require(:user).permit(:name, :password, :mobile_number)
+  end
 end
