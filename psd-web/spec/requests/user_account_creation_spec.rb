@@ -44,7 +44,14 @@ RSpec.describe "User account creation", type: :request, with_stubbed_keycloak_co
   end
 
   context "when the user already created an account with the invitation token" do
+    let(:user) { create(:user, :invited, :activated) }
+
     it "does not sign the user in"
-    it "shows a message alerting about the account being already setup"
+
+    it "shows a message alerting about the account being already setup" do
+      get create_account_user_path(user.id, invitation: user.invitation_token)
+      expect(response).to render_template(:already_setup)
+      expect(response.body).to include("has already been set up")
+    end
   end
 end

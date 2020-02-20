@@ -9,6 +9,8 @@ class UsersController < ApplicationController
 
     if user.invitation_expired?
       render(:expired_token)
+    elsif user.account_activated?
+      render(:already_setup)
     else
       sign_in(:user, user)
     end
