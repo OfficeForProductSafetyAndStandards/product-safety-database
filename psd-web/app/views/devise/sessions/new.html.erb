@@ -9,7 +9,7 @@
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">
-      If you don't have an account, ask someone in your team to send you an invite or [email OPSS](opss email)
+      If you don’t have an account, ask someone in your team to send you an invite or <%= mail_to("OPSS.enquiries@beis.gov.uk", "email OPSS") %>.
     </p>
 
     <%= form_for(resource, as: resource_name, url: user_session_path, html: { novalidate: true }) do |f| %>

@@ -11,7 +11,7 @@ class SignUserIn
         context.resource = authenticated_resource
       else
         resource.errors.clear
-        resource.errors.add(:base, "Enter correct email address and password")
+        resource.errors.add(:base, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
         context.fail!
       end
     end

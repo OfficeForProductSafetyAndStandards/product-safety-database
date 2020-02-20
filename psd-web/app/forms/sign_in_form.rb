@@ -7,7 +7,7 @@ class SignInForm
 
   validates :email,
             email: {
-              message: "Enter your email address in the correct format, like name@example.com",
+              message: I18n.t(:wrong_email_or_password, scope: "sign_in_form.email"),
               if: ->(sign_in_form) { sign_in_form.email.present? }
             }
   validates_presence_of :email, message: "Enter your email address"
