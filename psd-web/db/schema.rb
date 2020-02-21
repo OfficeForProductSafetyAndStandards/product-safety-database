@@ -300,10 +300,10 @@ ActiveRecord::Schema.define(version: 2020_02_21_134756) do
     t.inet "last_sign_in_ip"
     t.string "name"
     t.uuid "organisation_id"
+    t.binary "password_salt"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
-    t.binary "salt"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"

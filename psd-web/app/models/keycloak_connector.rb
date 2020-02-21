@@ -11,7 +11,7 @@ class KeycloakConnector < ApplicationRecord
       user = User.find_by(email: email)
       next unless user
 
-      user.salt = salt
+      user.password_salt = salt
       user.encrypted_password = encrypted_password
       user.hash_iterations = iterations
       user.email = email
