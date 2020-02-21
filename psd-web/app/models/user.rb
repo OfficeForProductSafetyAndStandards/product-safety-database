@@ -38,6 +38,11 @@ class User < ApplicationRecord
       organisation: team.organisation,
       invitation_token: SecureRandom.hex(15)
     )
+
+    # TODO: remove this once we’ve updated the application to no
+    # longer depend upon this role.
+    user.user_roles.create!(name: "psd_user")
+
     team.users << user
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)

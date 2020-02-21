@@ -83,6 +83,10 @@ RSpec.describe User do
       it "sends an invitation to the user" do
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
+
+      it "adds a psd_user role" do
+        expect(created_user.user_roles.pluck(:name)).to eq ["psd_user"]
+      end
     end
 
     it "raises an error when missing information" do
