@@ -3,8 +3,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
   devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
 
-  include EncryptionConcern
-
   belongs_to :organisation
 
   has_many :investigations, dependent: :nullify, as: :assignable
