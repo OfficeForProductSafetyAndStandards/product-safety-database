@@ -21,7 +21,7 @@ services:
       - "3006:3006"
 
   keycloak:
-    image: beisopss/keycloak:latest
+    image: beisopss/keycloak:master
     env_file:
       - ./docker/env.keycloak
     environment:
