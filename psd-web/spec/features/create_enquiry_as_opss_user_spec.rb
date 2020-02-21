@@ -62,14 +62,12 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
 
-def validate_input_details_on_summary_page
-   # expect(page.find("dt", text: "Received date")).to have_sibling("dd", text: date.strftime("%d/%m/%Y"))
-   expect(page.find("dt", text: "Received by")).to have_sibling("dd", text: received_type)
-   expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
-   expect(page).to have_css("p",text: contact_details[:contact_name])
-   expect(page).to have_css("p", text: contact_details[:contact_email])
-   expect(page).to have_css("p", text: contact_details[:contact_phone])
-end
+  def validate_input_details_on_summary_page
+    expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
+    expect(page).to have_css("p", text: contact_details[:contact_name])
+    expect(page).to have_css("p", text: contact_details[:contact_email])
+    expect(page).to have_css("p", text: contact_details[:contact_phone])
+  end
 
   def fill_in_when_was_it_received
     fill_in "Day", with: date.day if date
