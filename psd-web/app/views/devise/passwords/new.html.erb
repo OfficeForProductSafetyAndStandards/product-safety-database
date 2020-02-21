@@ -17,7 +17,7 @@
 
     <p class="govuk-body">Enter the email address that you used to register. We will send you an email with a link to reset your password.</p>
 
-    <%= render "components/govuk_input", id: "email", name: "email", type: "email", classes: "app-!-max-width-two-thirds", label: { text: "Email address" } %>
+    <%= render "components/govuk_input", id: "email", name: "user[email]", type: "email", classes: "app-!-max-width-two-thirds", label: { text: "Email address" } %>
 
     <%= govukButton(text: "Send email") %>
 
