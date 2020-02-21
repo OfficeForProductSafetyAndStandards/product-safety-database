@@ -85,7 +85,7 @@ RSpec.describe User do
       end
 
       it "adds a psd_user role" do
-        expect(created_user.user_roles.pluck(:name)).to eq ["psd_user"]
+        expect(created_user.user_roles.pluck(:name)).to eq %w[psd_user]
       end
     end
 
