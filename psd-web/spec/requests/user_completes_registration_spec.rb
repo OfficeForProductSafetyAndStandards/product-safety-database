@@ -138,6 +138,12 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       it "re-renders the form" do
         expect(response).to render_template("complete_registration")
       end
+
+      it "doesn’t update the user model" do
+        expect(user.name).to be_blank
+        expect(user.mobile_number).to be_blank
+        expect(user.encrypted_password).to be_blank
+      end
     end
   end
 end
