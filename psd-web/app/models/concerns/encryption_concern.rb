@@ -1,16 +1,21 @@
 module EncryptionConcern
   extend ActiveSupport::Concern
-  included do
-    has_one :keycloak_credential, foreign_key: :email, inverse_of: :user
+
+  def password=(password)
+    return unless password
+
+    @password = password
+    e = Pbkdf2Encryption.new(password, iterations: self.hash_iterations)
+    self.salt               = e.salt
+    self.encrypted_password = e.generate_hash
   end
 
   def valid_password?(password)
-    password_digest(password) == keycloak_credential.encrypted_password
+    password_digest(password) == encrypted_password
   end
 
   def password_digest(password)
-    salt = keycloak_credential.salt
-    e = Pbkdf2Encryption.new(password, salt: salt)
+    e = Pbkdf2Encryption.new(password, salt: self.salt)
     e.generate_hash
   end
 end

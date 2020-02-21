@@ -4,13 +4,13 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
-    keycloak_credential { create(:keycloak_credential) }
     password { "password" }
     password_confirmation(&:password)
     has_accepted_declaration { false }
     has_been_sent_welcome_email { true }
     has_viewed_introduction { false }
     account_activated { false }
+    hash_iterations  { 27_500 }
 
     transient do
       roles { [:psd_user] }
