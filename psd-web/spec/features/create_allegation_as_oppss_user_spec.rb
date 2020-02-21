@@ -57,7 +57,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   end
 
   def enter_contact_details(with:)
-    expect(page).to have_css("h1", text: "New enquiry")
+    expect(page).to have_css("h1", text: "New allegation")
     fill_in "complainant[name]", with: with[:contact_name]
     fill_in "complainant_email_address", with: with[:contact_email]
     fill_in "complainant_phone_number", with: with[:contact_phone]
