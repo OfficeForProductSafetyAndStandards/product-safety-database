@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  INVITATION_EXPIRATION_DAYS=14
+  INVITATION_EXPIRATION_DAYS = 14
 
   devise :database_authenticatable, :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
   belongs_to :organisation
@@ -19,10 +19,10 @@ class User < ApplicationRecord
             allow_blank: true,
             on: :registration_completion
   validates :name, presence: true, on: :registration_completion
-  validates :encrypted_password, presence: true, on: :registration_completion
+  validates :password, presence: true, on: :registration_completion
   # TODO: Get proper list of excluded words
   validates :password, exclusion: { in: %w(password) }, on: :registration_completion
-  validates :password, length: { minimum: 8}, on: :registration_completion
+  validates :password, length: { minimum: 8 }, allow_blank: true, on: :registration_completion
 
 
   attr_accessor :access_token # Used only in User.current thread context

@@ -35,9 +35,9 @@ class UsersController < ApplicationController
     end
   end
 
-  private
+private
 
   def new_user_attributes
-    params.permit(:name, :password, :mobile_number)
+    params.require(:user).permit(:name, :password, :mobile_number)
   end
 end

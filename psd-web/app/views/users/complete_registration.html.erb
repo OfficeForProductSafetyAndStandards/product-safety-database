@@ -2,18 +2,25 @@
 <% content_for :page_title, title %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= govukErrorSummary(titleText: "There is a problem", errorList: @user.errors.messages.map { |key, value|
+      { text: value.first, href: "#user_#{key}" }
+    }) %>
+
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <%= form_for @user, url: { action: :update } do |form| %>
 
       <%= render "form_components/govuk_input", key: :name, form: form,
         classes: "app-!-max-width-two-thirds",
-        label: { text: "Full name" }
+        label: { text: "Full name" },
+        value: @user.name
         %>
 
       <%= render "form_components/govuk_input", key: :mobile_number, form: form,
         classes: "app-!-max-width-two-thirds",
-        label: { text: "Mobile number" }
+        label: { text: "Mobile number" },
+        value: @user.mobile_number
         %>
 
       <%= render "form_components/govuk_input", key: :password, form: form,
@@ -21,6 +28,8 @@
         classes: "app-!-max-width-two-thirds",
         label: { text: "Password" }
         %>
+
+      <%= hidden_field_tag :invitation, params[:invitation] %>
 
       <%= govukButton(text: "Continue") %>
 

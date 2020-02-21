@@ -80,10 +80,14 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
     context "with a matching invitation token and all fields filled in" do
       before do
         patch user_path(user.id),
-              params: { invitation: user.invitation_token,
-                        name: "Foo Bar",
-                        password: "foobarnoteasyatall1234!",
-                        mobile_number: "07235671232" }
+              params: {
+                        invitation: user.invitation_token,
+                        user: {
+                          name: "Foo Bar",
+                          password: "foobarnoteasyatall1234!",
+                          mobile_number: "07235671232"
+                        }
+                      }
         user.reload
       end
 
@@ -107,10 +111,14 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
     context "with a mismatched invitation token" do
       before do
         patch user_path(user.id),
-              params: { invitation: "wrongInvitationToken",
-                        name: "Foo Bar",
-                        password: "foobarnoteasyatall1234!",
-                        mobile_number: "07235671232" }
+              params: {
+                        invitation: "wrongInvitationToken",
+                        user: {
+                          name: "Foo Bar",
+                          password: "foobarnoteasyatall1234!",
+                          mobile_number: "07235671232"
+                        }
+                      }
         user.reload
       end
 
@@ -129,10 +137,14 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
     context "with missing fields" do
       before do
         patch user_path(user.id),
-              params: { invitation: user.invitation_token,
-                        name: "",
-                        password: "",
-                        mobile_number: "" }
+              params: {
+                        invitation: user.invitation_token,
+                        user: {
+                          name: "",
+                          password: "",
+                          mobile_number: ""
+                        }
+                      }
       end
 
       it "re-renders the form" do

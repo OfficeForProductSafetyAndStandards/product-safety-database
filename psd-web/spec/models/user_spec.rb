@@ -23,9 +23,9 @@ RSpec.describe User do
       end
 
       it "validates the presence of password" do
-        user = build(:user, encrypted_password: "")
+        user = build(:user, password: "")
         expect(user.valid?(:registration_completion)).to eq false
-        expect(user.errors.messages[:encrypted_password]).to eq ["Enter a password"]
+        expect(user.errors.messages[:password]).to eq ["Enter a password"]
       end
 
       it "validates password is not too short" do
