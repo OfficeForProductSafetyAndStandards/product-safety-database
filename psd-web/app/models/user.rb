@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   INVITATION_EXPIRATION_DAYS = 14
+  COMMON_PASSWORDS_FILE_PATH = "lib/10-million-password-list-top-1000000.txt".freeze
 
   devise :database_authenticatable, :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
   belongs_to :organisation
@@ -12,17 +13,26 @@ class User < ApplicationRecord
   has_and_belongs_to_many :teams
 
   validates :id, presence: true, uuid: true
-  validates :mobile_number, presence: true, on: :registration_completion
-  # TODO: Figure out a better regexp
-  validates :mobile_number,
-            format: { with: /\d[\d\s]{4,}/ },
-            allow_blank: true,
-            on: :registration_completion
-  validates :name, presence: true, on: :registration_completion
-  validates :password, presence: true, on: :registration_completion
-  # TODO: Get proper list of excluded words
-  validates :password, exclusion: { in: %w(password) }, on: :registration_completion
-  validates :password, length: { minimum: 8 }, allow_blank: true, on: :registration_completion
+
+
+  with_options on: :registration_completion do |registration_completion|
+    registration_completion.validates :mobile_number, presence: true
+
+    # TODO: Figure out a better regexp
+    registration_completion.validates :mobile_number,
+              format: { with: /\d[\d\s]{4,}/ },
+              allow_blank: true
+
+    registration_completion.validates :name, presence: true
+    registration_completion.validates :password, presence: true
+    registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
+
+    registration_completion.validate :validate_password_not_common,
+             unless: Proc.new { |user| user.errors.messages[:password].any? }
+
+  end
+
+
 
 
   attr_accessor :access_token # Used only in User.current thread context
@@ -170,6 +180,15 @@ class User < ApplicationRecord
   end
 
 private
+
+  def validate_password_not_common
+    File.foreach(COMMON_PASSWORDS_FILE_PATH, chomp: true) do |common_password|
+      if common_password == password
+        errors.add(:password, I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]))
+        break
+      end
+    end
+  end
 
   def current_user?
     User.current&.id == id
