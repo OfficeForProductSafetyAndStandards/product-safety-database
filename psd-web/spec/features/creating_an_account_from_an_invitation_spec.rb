@@ -2,11 +2,9 @@ require "rails_helper"
 require "support/feature_helpers"
 
 RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-
   let(:invited_user) { create(:user, :invited) }
 
   scenario "Creating an account from an invitation" do
-
     visit "/users/#{invited_user.id}/complete-registration?invitation=#{invited_user.invitation_token}"
 
     expect_to_be_on_complete_registration_page
