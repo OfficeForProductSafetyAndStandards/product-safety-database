@@ -4,6 +4,7 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
+    keycloak_credential { create(:keycloak_credential) }
     password { "password" }
     password_confirmation(&:password)
     has_accepted_declaration { false }

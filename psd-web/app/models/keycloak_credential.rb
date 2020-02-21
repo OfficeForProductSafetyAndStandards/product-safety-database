@@ -1,4 +1,6 @@
 class KeycloakCredential < ApplicationRecord
+  belongs_to :user, foreign_key: :email, inverse_of: :keycloak_credential, optional: true
+
   def self.authenticate(email, plain_password)
     kc = self.find_by!(email: email)
 
