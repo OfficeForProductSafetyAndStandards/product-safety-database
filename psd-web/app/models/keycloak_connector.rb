@@ -8,13 +8,15 @@ class KeycloakConnector < ApplicationRecord
   def self.copy_keycloak_credentials
     rows = KeycloakConnector.connection.query(CREDENTIALS_QUERY)
     rows.each do |salt, encrypted_password, iterations, email, credential_type|
-      KeycloakCredential.create! do |kc|
-        kc.salt = salt
-        kc.encrypted_password = encrypted_password
-        kc.hash_iterations = iterations
-        kc.email = email
-        kc.credential_type = credential_type
-      end
+      user = User.find_by(email: email)
+      next unless user
+
+      user.salt = salt
+      user.encrypted_password = encrypted_password
+      user.hash_iterations = iterations
+      user.email = email
+      user.credential_type = credential_type
+      user.save!
     end
   end
 end
