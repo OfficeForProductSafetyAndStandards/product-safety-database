@@ -12,6 +12,18 @@ class User < ApplicationRecord
   has_and_belongs_to_many :teams
 
   validates :id, presence: true, uuid: true
+  validates :mobile_number, presence: true, on: :registration_completion
+  # TODO: Figure out a better regexp
+  validates :mobile_number,
+            format: { with: /\d[\d\s]{4,}/ },
+            allow_blank: true,
+            on: :registration_completion
+  validates :name, presence: true, on: :registration_completion
+  validates :encrypted_password, presence: true, on: :registration_completion
+  # TODO: Get proper list of excluded words
+  validates :password, exclusion: { in: %w(password) }, on: :registration_completion
+  validates :password, length: { minimum: 8}, on: :registration_completion
+
 
   attr_accessor :access_token # Used only in User.current thread context
 

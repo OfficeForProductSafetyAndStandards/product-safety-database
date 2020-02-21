@@ -134,6 +134,18 @@ en:
           attributes:
             product_category:
               blank: "Enter a valid product category"
+        user:
+          attributes:
+            mobile_number:
+              blank: "Enter your mobile number"
+              invalid: "Enter your mobile number in the correct format, like 07700 900 982"
+            name:
+              blank: "Enter your full name"
+            encrypted_password:
+              blank: "Enter a password"
+            password:
+              exclusion: "Choose a less frequently used password"
+              too_short: "Password is too short"
     attributes:
       corrective_action:
         measure_type:

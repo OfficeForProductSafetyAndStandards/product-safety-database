@@ -1,6 +1,48 @@
 require "rails_helper"
 
 RSpec.describe User do
+  describe "validations" do
+    context "on registration completion" do
+      it "validates the presence of the mobile number" do
+        user = build(:user, mobile_number: "")
+        expect(user.valid?(:registration_completion)).to eq false
+        expect(user.errors.messages[:mobile_number]).to eq ["Enter your mobile number"]
+      end
+
+      it "validates the presence of name" do
+        user = build(:user, name: "")
+        expect(user.valid?(:registration_completion)).to eq false
+        expect(user.errors.messages[:name]).to eq ["Enter your full name"]
+      end
+
+      it "validates the format of the mobile number" do
+        user = build(:user, mobile_number: "1234")
+        expect(user.valid?(:registration_completion)).to eq false
+        expect(user.errors.messages[:mobile_number])
+          .to eq ["Enter your mobile number in the correct format, like 07700 900 982"]
+      end
+
+      it "validates the presence of password" do
+        user = build(:user, encrypted_password: "")
+        expect(user.valid?(:registration_completion)).to eq false
+        expect(user.errors.messages[:encrypted_password]).to eq ["Enter a password"]
+      end
+
+      it "validates password is not too short" do
+        user = build(:user, password: "123456")
+        expect(user.valid?(:registration_completion)).to eq false
+        expect(user.errors.messages[:password])
+          .to eq ["Password is too short"]
+      end
+
+      it "validates password is not too common" do
+        user = build(:user, password: "password")
+        expect(user.valid?(:registration_completion)).to eq false
+        expect(user.errors.messages[:password])
+          .to eq ["Choose a less frequently used password"]
+      end
+    end
+  end
   describe ".activated" do
     it "returns only users with activated accounts" do
       create(:user, :inactive)
