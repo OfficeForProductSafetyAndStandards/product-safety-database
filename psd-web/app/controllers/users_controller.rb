@@ -25,9 +25,13 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return render("errors/forbidden", status: :forbidden) unless params[:invitation] == @user.invitation_token
 
-    if @user.update(new_user_attributes.merge(account_activated: true))
+    @user.assign_attributes(new_user_attributes.merge(account_activated: true))
+
+    if @user.save(context: :registration_completion)
       sign_in :user, @user
       redirect_to root_path
+    else
+      render :complete_registration
     end
   end
 
