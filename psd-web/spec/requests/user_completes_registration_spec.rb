@@ -73,24 +73,71 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
   end
 
   describe "submitting the form" do
-    context "with a matching invitation token and all fields filled in" do
-      it "sets the activated flag on the user"
+    let(:user) do
+      create(:user, :invited, name: nil, encrypted_password: "", mobile_number: nil)
+    end
 
-      it "redirects to the root path"
+    context "with a matching invitation token and all fields filled in" do
+      before do
+        patch user_path(user.id),
+              params: { invitation: user.invitation_token,
+                        name: "Foo Bar",
+                        password: "foobarnoteasyatall1234!",
+                        mobile_number: "07235671232" }
+        user.reload
+      end
+
+      it "sets the activated flag on the user" do
+        expect(user.account_activated?).to be true
+      end
+
+      it "redirects to the root path" do
+        expect(response).to redirect_to(root_path)
+      end
 
       it "sets the current user"
 
-      it "updates the user model"
+      it "updates the user model" do
+        expect(user.name).to eq("Foo Bar")
+        expect(user.mobile_number).to eq("07235671232")
+        expect(user.encrypted_password).not_to be_blank
+      end
     end
 
     context "with a mismatched invitation token" do
-      it "renders a 403 forbidden error"
+      before do
+        patch user_path(user.id),
+              params: { invitation: "wrongInvitationToken",
+                        name: "Foo Bar",
+                        password: "foobarnoteasyatall1234!",
+                        mobile_number: "07235671232" }
+        user.reload
+      end
 
-      it "doesn’t update the user model"
+      it "renders a 403 forbidden error", with_errors_rendered: true do
+        expect(response).to have_http_status :forbidden
+        expect(response).to render_template("errors/forbidden")
+      end
+
+      it "doesn’t update the user model" do
+        expect(user.name).to be_blank
+        expect(user.mobile_number).to be_blank
+        expect(user.encrypted_password).to be_blank
+      end
     end
 
     context "with missing fields" do
-      it "re-renders the form"
+      before do
+        patch user_path(user.id),
+              params: { invitation: user.invitation_token,
+                        name: "",
+                        password: "",
+                        mobile_number: "" }
+      end
+
+      it "re-renders the form" do
+        expect(response).to render_template("complete_registration")
+      end
     end
   end
 end

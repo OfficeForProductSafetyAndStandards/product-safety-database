@@ -37,6 +37,7 @@ FactoryBot.define do
     trait :invited do
       invitation_token { SecureRandom.hex(15) }
       invited_at { Time.zone.now }
+      account_activated { false }
     end
 
     trait :team_admin do
