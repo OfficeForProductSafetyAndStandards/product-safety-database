@@ -62,6 +62,7 @@ class User < ApplicationRecord
           new_record.email = user[:email]
           new_record.name = user[:name]
           new_record.organisation = user[:organisation]
+          new_record.skip_password_validation = true
         end
 
         record.update!(user.slice(:name, :email, :organisation))
