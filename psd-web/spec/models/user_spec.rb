@@ -82,6 +82,7 @@ RSpec.describe User do
       let(:team) { create(:team) }
       let(:inviting_user) { create(:user) }
       let(:created_user) { User.find_by(email: email) }
+      let(:created_user_roles) { created_user.user_roles.pluck(:name) }
 
       before do
         allow(SendUserInvitationJob).to receive(:perform_later)
@@ -108,8 +109,32 @@ RSpec.describe User do
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
 
-      it "adds a psd_user role" do
-        expect(created_user.user_roles.pluck(:name)).to eq %w[psd_user]
+      it "adds the psd_user role" do
+        expect(created_user_roles).to eq %w[psd_user]
+      end
+
+      context "when the inviting user is an OPSS user" do
+        let(:inviting_user) { create(:user, :opss_user) }
+
+        it "invited user gets the opss role" do
+          expect(created_user_roles).to include("opss_user")
+        end
+      end
+
+      context "when the inviting user is a team admin" do
+        let(:inviting_user) { create(:user, :team_admin) }
+
+        it "invited user does not get the team admin role" do
+          expect(created_user_roles).not_to include("team_admin")
+        end
+      end
+
+      context "when the inviting user is a PSD admin" do
+        let(:inviting_user) { create(:user, :psd_admin) }
+
+        it "invited user does not get the psd admin role" do
+          expect(created_user_roles).not_to include("psd_admin")
+        end
       end
     end
 

@@ -46,6 +46,12 @@ FactoryBot.define do
       end
     end
 
+    trait :psd_admin do
+      transient do
+        roles { %i[psd_user psd_admin] }
+      end
+    end
+
     trait :psd_user do
       transient do
         roles { [:psd_user] }
