@@ -170,7 +170,9 @@ class User < ApplicationRecord
   end
 
   def invitation_expired?
-    invited_at && invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
+    return false unless invited_at
+
+    invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
 private
