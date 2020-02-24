@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
       items.push text: "Your account", href: KeycloakClient.instance.user_account_url
       items.push text: "Sign out", href: logout_session_path
     else
-      items.push text: "Sign in", href: user_openid_connect_omniauth_authorize_path
+      items.push text: "Sign in", href: root_path
     end
     items
   end
