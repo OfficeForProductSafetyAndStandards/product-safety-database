@@ -156,3 +156,9 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  sign_in_form:
+    email:
+      wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"
+  sign_user_in:
+    email:
+      wrong_email_or_password: "Enter correct email address and password"

@@ -10,7 +10,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
       expect(page).to have_css(".govuk-phase-banner")
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
-      expect(page).to have_button("Sign in to your account")
+      expect(page).to have_link("Sign in to your account")
 
       expect(page).not_to have_link("Sign out")
       expect(page).not_to have_link("Your account")
@@ -23,7 +23,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
     let(:user_state) { :activated }
 
     before do
-      sign_in(as_user: create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
+      sign_in(create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
     end
 
     def expect_small_beta_phase_banner
@@ -33,7 +33,8 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
 
     def expect_header_to_have_signed_in_links
       expect(page).to have_link("Sign out")
-      expect(page).to have_link("Your account")
+      # TODO: Remove comment when account page is re-implemented in app
+      # expect(page).to have_link("Your account")
       expect(page).not_to have_link("Sign in")
     end
 

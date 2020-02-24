@@ -7,7 +7,7 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
   before do
     create(:user, :activated)
     create(:user, :inactive)
-    sign_in(as_user: user)
+    sign_in(user)
 
     # Don't need to generate preview for these tests. govuk_notify_rails throws an exception of no valid Notify key provided
     allow(Notifications::Client).to receive(:new).and_return(nil)

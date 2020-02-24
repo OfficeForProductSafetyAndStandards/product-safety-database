@@ -39,7 +39,6 @@ class ActiveSupport::TestCase
   end
 
   def setup
-    allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
     self.class.import_into_elasticsearch
   end
 
@@ -72,4 +71,3 @@ class ActiveSupport::TestCase
 end
 
 ActionDispatch::IntegrationTest.include Devise::Test::IntegrationHelpers
-ActionDispatch::IntegrationTest.include TestHelpers::OmniAuthHelper

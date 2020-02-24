@@ -12,7 +12,7 @@ test:
   database: psd_test
 
 production:
-  url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_label("postgres")["uri"] %>
+  url: <%= ENV.fetch('DATABASE_URL') %>
   connect_timeout: 2
   variables:
     statement_timeout: <%= ENV["STATEMENT_TIMEOUT"] || "500ms" %>
@@ -20,7 +20,7 @@ production:
 keycloak:
   adapter: postgresql
   encoding: unicode
-  url: <%= ENV.fetch('KEYCLOAK_DATABASE_URI', 'postgres://localhost/keycloak?user=postgres') %>
+  url: <%= ENV.fetch('KEYCLOAK_DATABASE_URI', 'postgres://postgres@localhost:5432/keycloak') %>
   pool: 5
   connect_timeout: 2
   variables:

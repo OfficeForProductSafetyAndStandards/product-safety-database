@@ -2,7 +2,9 @@ class User < ApplicationRecord
   INVITATION_EXPIRATION_DAYS = 14
   COMMON_PASSWORDS_FILE_PATH = "lib/10-million-password-list-top-1000000.txt".freeze
 
-  devise :database_authenticatable, :omniauthable, :timeoutable, omniauth_providers: %i[openid_connect]
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
+  devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
   belongs_to :organisation
 
   has_many :investigations, dependent: :nullify, as: :assignable
@@ -13,7 +15,6 @@ class User < ApplicationRecord
   has_and_belongs_to_many :teams
 
   validates :id, presence: true, uuid: true
-
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
@@ -26,10 +27,7 @@ class User < ApplicationRecord
                                      unless: Proc.new { |user| user.errors.messages[:password].any? }
   end
 
-
-
-
-  attr_accessor :access_token # Used only in User.current thread context
+  attribute :skip_password_validation, :boolean, default: false
 
   def self.activated
     where(account_activated: true)
@@ -37,6 +35,7 @@ class User < ApplicationRecord
 
   def self.create_and_send_invite!(email_address, team, inviting_user)
     user = create!(
+      skip_password_validation: true,
       id: SecureRandom.uuid,
       email: email_address,
       organisation: team.organisation,
@@ -80,6 +79,7 @@ class User < ApplicationRecord
           new_record.email = user[:email]
           new_record.name = user[:name]
           new_record.organisation = user[:organisation]
+          new_record.skip_password_validation = true
         end
 
         record.update!(user.slice(:name, :email, :organisation))
@@ -199,5 +199,11 @@ private
 
   def has_role?(role)
     user_roles.exists?(name: role)
+  end
+
+  def password_required?
+    return false if skip_password_validation
+
+    super
   end
 end

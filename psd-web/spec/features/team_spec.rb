@@ -10,7 +10,7 @@ RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mai
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, teams: [create(:team)]) }
 
   before do
-    sign_in(as_user: user)
+    sign_in(user)
     visit team_path(team)
   end
 

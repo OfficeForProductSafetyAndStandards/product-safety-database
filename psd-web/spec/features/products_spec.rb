@@ -10,7 +10,7 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, :wi
 
   scenario "lists products according to search relevance" do
     Product.import refresh: :wait_for
-    sign_in(as_user: user)
+    sign_in(user)
     visit products_path
 
     within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(1) > span:nth-child(2)" do

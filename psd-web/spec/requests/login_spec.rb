@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.describe "Login" do
   context "When not logged in" do
-    # TODO: update once merged with the sign in branch
-    it "redirects to the login page"
+    it "redirects to the login page" do
+      expect(get(investigations_path))
+        .to redirect_to(new_user_session_path)
+    end
   end
 end
