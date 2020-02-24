@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_14_155213) do
+ActiveRecord::Schema.define(version: 2020_02_21_134756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -174,11 +174,13 @@ ActiveRecord::Schema.define(version: 2020_02_14_155213) do
   end
 
   create_table "keycloak_credentials", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "credential_type"
     t.string "email"
     t.string "encrypted_password"
     t.integer "hash_iterations"
     t.binary "salt"
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_keycloak_credentials_on_email"
   end
 
@@ -283,6 +285,7 @@ ActiveRecord::Schema.define(version: 2020_02_14_155213) do
   create_table "users", id: :uuid, default: nil, force: :cascade do |t|
     t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
+    t.string "credential_type"
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
     t.string "email"
@@ -290,12 +293,14 @@ ActiveRecord::Schema.define(version: 2020_02_14_155213) do
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
+    t.integer "hash_iterations", default: 27500
     t.text "invitation_token"
     t.datetime "invited_at"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.string "name"
     t.uuid "organisation_id"
+    t.binary "password_salt"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"

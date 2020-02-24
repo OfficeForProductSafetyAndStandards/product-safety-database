@@ -5,21 +5,24 @@ module Users
     end
 
     def create
-      command = SignUserIn.call(
-        resource:     resource_class.new(sign_in_params),
-        sign_in_form: sign_in_form,
-        warden:       warden,
-        auth_options: auth_options
-      )
+      self.resource = resource_class.new(sign_in_params)
 
-      self.resource = command.resource.decorate
+      if sign_in_form.invalid?
+        resource.errors.merge!(sign_in_form.errors)
 
-      if command.success?
-        sign_in(resource_name, resource)
-        respond_with resource, location: after_sign_in_path_for(resource)
-      else
-        render :new
+        return render :new
       end
+
+      self.resource = warden.authenticate(auth_options)
+
+      if resource
+        sign_in(resource_name, resource)
+        return respond_with resource, location: after_sign_in_path_for(resource)
+      end
+
+      self.resource = resource_class.new(sign_in_params).decorate
+      resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+      render :new
     end
 
   private

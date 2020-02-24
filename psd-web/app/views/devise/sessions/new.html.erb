@@ -1,10 +1,10 @@
 <% title = "Sign in" %>
-<% content_for :page_title, title %>
+<% title_for(resource, title) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= resource.decorate.error_summary %>
+    <%= error_summary resource.errors %>
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
@@ -13,8 +13,8 @@
     </p>
 
     <%= form_for(resource, as: resource_name, url: user_session_path, html: { novalidate: true }) do |f| %>
-      <%= resource.email_input %>
-      <%= resource.password_input %>
+      <%= email_input resource %>
+      <%= password_input resource %>
 
       <%= govukButton(text: "Continue") %>
 

@@ -10,6 +10,7 @@ FactoryBot.define do
     has_been_sent_welcome_email { true }
     has_viewed_introduction { false }
     account_activated { false }
+    hash_iterations { 27_500 }
 
     transient do
       roles { [:psd_user] }
