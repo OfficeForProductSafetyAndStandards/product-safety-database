@@ -1,4 +1,11 @@
 module ApplicationHelper
+
+  def title_for(any_active_record, title)
+    return title unless any_active_record.errors.any?
+
+    "Error: #{title}"
+  end
+
   def govuk_hr
     tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
   end
