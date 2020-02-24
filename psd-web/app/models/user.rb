@@ -153,6 +153,10 @@ class User < ApplicationRecord
 
 private
 
+  def send_reset_password_instructions_notification(token)
+    SendResetPasswordInstructions.perform_later(token)
+  end
+
   def current_user?
     User.current&.id == id
   end

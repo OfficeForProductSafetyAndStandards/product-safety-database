@@ -1,0 +1,3 @@
+class SendResetPasswordInstructions < ApplicationJob
+
+end
