@@ -30,7 +30,8 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       fill_in_when_how_was_it_received
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
-      enter_contact_details(with: contact_details)
+      expect(page).to have_css("h1", text: "New enquiry")
+      enter_contact_details(contact_name: contact_details[:contact_name], contact_email: contact_details[:contact_email], contact_phone: contact_details[:contact_phone])
       fill_in_new_enquiry_details(with: enquiry_details)
       click_button "Create enquiry"
       expect_confirmation_banner("Enquiry was successfully created.")
@@ -90,11 +91,11 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     attach_file "enquiry_attachment_file", with[:file]
   end
 
-  def enter_contact_details(with:)
-    expect(page).to have_css("h1", text: "New enquiry")
-    fill_in "complainant[name]", with: with[:contact_name]
-    fill_in "complainant_email_address", with: with[:contact_email]
-    fill_in "complainant_phone_number", with: with[:contact_phone]
-    click_button "Continue"
-  end
+  # def enter_contact_details(with:)
+  #   expect(page).to have_css("h1", text: "New enquiry")
+  #   fill_in "complainant[name]", with: with[:contact_name]
+  #   fill_in "complainant_email_address", with: with[:contact_email]
+  #   fill_in "complainant_phone_number", with: with[:contact_phone]
+  #   click_button "Continue"
+  # end
 end

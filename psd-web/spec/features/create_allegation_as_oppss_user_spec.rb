@@ -38,48 +38,25 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       visit new_allegation_path
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
-      enter_contact_details(with: contact_details)
-      enter_allegation_details(with: allegation_details)
+      expect(page).to have_css("h1", text: "New allegation")
+      enter_contact_details(contact_name: contact_details[:contact_name], contact_email: contact_details[:contact_email], contact_phone: contact_details[:contact_phone])
+      enter_allegation_details(allegation_description: allegation_details[:allegation_description], allegation_product_category: allegation_details[:category], allegation_hazard_type: allegation_details[:allegation_hazard_type])
       expect_confirmation_banner("Allegation was successfully created")
     end
     scenario "able to add a product" do
       visit new_allegation_path
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
-      enter_contact_details(with: contact_details)
-      enter_allegation_details(with: allegation_details)
+      expect(page).to have_css("h1", text: "New allegation")
+      enter_contact_details(contact_name: contact_details[:contact_name], contact_email: contact_details[:contact_email], contact_phone: contact_details[:contact_phone])
+      enter_allegation_details(allegation_description: allegation_details[:allegation_description], allegation_product_category: allegation_details[:category], allegation_hazard_type: allegation_details[:allegation_hazard_type])
       expect_confirmation_banner("Allegation was successfully created")
       click_link "Products (0)"
       click_link "Add product"
-      enter_product_details(with: product_details)
+      enter_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
       expect_confirmation_banner("Product was successfully created.")
+      click_link "Products (1)"
+      expected_entered_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
     end
-  end
-
-  def enter_contact_details(with:)
-    expect(page).to have_css("h1", text: "New allegation")
-    fill_in "complainant[name]", with: with[:contact_name]
-    fill_in "complainant_email_address", with: with[:contact_email]
-    fill_in "complainant_phone_number", with: with[:contact_phone]
-    click_button "Continue"
-  end
-
-  def enter_allegation_details(with:)
-    expect(page).to have_css("h1", text: "New allegation")
-    fill_in "allegation_description", with: with[:allegation_description]
-    select with[:category], from: "allegation_product_category"
-    select with[:allegation_hazard_type], from: "allegation_hazard_type"
-    click_button "Create allegation"
-  end
-
-  def enter_product_details(with:)
-    select with[:category], from: "Product category"
-    select with[:country_of_origin], from: "Country of origin"
-    fill_in "Product type",               with: with[:type]
-    fill_in "Product name",               with: with[:name]
-    fill_in "Barcode or serial number",   with: with[:barcode]
-    fill_in "Webpage",                    with: with[:webpage]
-    fill_in "Description of product",     with: with[:description]
-    click_button "Save product"
   end
 end
