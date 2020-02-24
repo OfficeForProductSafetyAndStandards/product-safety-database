@@ -4,6 +4,7 @@ southampton:
   has_viewed_introduction: true
   name: Yann
   organisation: southampton
+  password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 southampton_steve:
