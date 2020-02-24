@@ -17,7 +17,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
   end
 
   context "when failing to sign in" do
-
     it "allows to sign in and times you out in due time" do
       visit investigation_path(investigation)
       expect(page).to_not have_css("h2#error-summary-title", text: "You need to sign in or sign up before continuing.")

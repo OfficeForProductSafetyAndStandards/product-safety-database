@@ -8,7 +8,8 @@ RSpec.describe ApplicationHelper do
     context "without errors" do
       it {
         expect { helper.title_for(user, title) }
-          .to change { helper.content_for(:page_title) }.from(nil).to(title) }
+          .to change { helper.content_for(:page_title) }.from(nil).to(title)
+      }
     end
 
     context "with errors" do
