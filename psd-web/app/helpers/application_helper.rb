@@ -5,6 +5,13 @@ module ApplicationHelper
     content_for(:page_title, "Error: #{title}")
   end
 
+  def error_summary(errors)
+    return unless errors.any?
+
+    error_list = errors.map { |attribute, error| { text: error, href: "##{attribute}" } }
+    govukErrorSummary(titleText: "There is a problem", errorList: error_list)
+  end
+
   def govuk_hr
     tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
   end

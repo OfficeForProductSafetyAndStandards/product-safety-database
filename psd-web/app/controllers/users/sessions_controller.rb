@@ -5,6 +5,8 @@ module Users
     end
 
     def create
+      self.resource = resource_class.new(sign_in_params)
+
       if sign_in_form.invalid?
         resource.errors.merge!(sign_in_form.errors)
 

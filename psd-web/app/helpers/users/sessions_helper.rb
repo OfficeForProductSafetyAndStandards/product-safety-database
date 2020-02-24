@@ -26,13 +26,6 @@ module Users::SessionsHelper
     render "components/govuk_input", options
   end
 
-  def error_summary(errors)
-    return unless errors.any?
-
-    error_list = errors.map { |attribute, error| { text: error, href: "##{attribute}" } }
-    govukErrorSummary(titleText: "There is a problem", errorList: error_list)
-  end
-
 private
 
   def format_errors_for(user, errors_for_field)
