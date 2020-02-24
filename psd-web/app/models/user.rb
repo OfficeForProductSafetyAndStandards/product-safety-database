@@ -188,7 +188,6 @@ private
   end
 
   def validate_mobile_number
-
     if mobile_number.count("0-9") < 10
       errors.add(:mobile_number, I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]))
     end
