@@ -5,13 +5,13 @@ RSpec.describe User do
     context "on registration completion" do
       it "validates the presence of the mobile number" do
         user = build(:user, mobile_number: "")
-        expect(user.valid?(:registration_completion)).to eq false
+        expect(user).not_to be_valid(:registration_completion)
         expect(user.errors.messages[:mobile_number]).to eq ["Enter your mobile number"]
       end
 
       it "validates the presence of name" do
         user = build(:user, name: "")
-        expect(user.valid?(:registration_completion)).to eq false
+        expect(user).not_to be_valid(:registration_completion)
         expect(user.errors.messages[:name]).to eq ["Enter your full name"]
       end
 
@@ -39,7 +39,7 @@ RSpec.describe User do
 
         it "rejects numbers with less than 10 digits" do
           user = build(:user, mobile_number: "123456789")
-          expect(user.valid?(:registration_completion)).to eq false
+          expect(user).not_to be_valid(:registration_completion)
           expect(user.errors.messages[:mobile_number])
           .to eq ["Enter your mobile number in the correct format, like 07700 900 982"]
         end
@@ -47,25 +47,26 @@ RSpec.describe User do
 
       it "validates the presence of password" do
         user = build(:user, password: "")
-        expect(user.valid?(:registration_completion)).to eq false
+        expect(user).not_to be_valid(:registration_completion)
         expect(user.errors.messages[:password]).to eq ["Enter a password"]
       end
 
       it "validates password is not too short" do
         user = build(:user, password: "123456")
-        expect(user.valid?(:registration_completion)).to eq false
+        expect(user).not_to be_valid(:registration_completion)
         expect(user.errors.messages[:password])
           .to eq ["Password is too short"]
       end
 
       it "validates password is not too common" do
         user = build(:user, password: "password")
-        expect(user.valid?(:registration_completion)).to eq false
+        expect(user).not_to be_valid(:registration_completion)
         expect(user.errors.messages[:password])
           .to eq ["Choose a less frequently used password"]
       end
     end
   end
+
   describe ".activated" do
     it "returns only users with activated accounts" do
       create(:user, :inactive)
