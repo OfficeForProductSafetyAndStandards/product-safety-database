@@ -25,7 +25,7 @@ module Users
 
       self.resource = resource_class.new(sign_in_params).decorate
       resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
-      resource.errors.add(:password, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+      resource.errors.add(:password, nil)
       render :new
     end
 
