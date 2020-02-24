@@ -22,13 +22,13 @@ def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)
   expect(page).to have_css("h1", text: "Confirm test result details")
 end
 
-def expect_test_result_form_to_show_input_data(legislation:, date:)
+def expect_test_result_form_to_show_input_data(legislation:, date:, test_result:, file_description:)
   expect(page).to have_field("test_legislation", with: legislation)
   expect(page).to have_field("Day", with: date.day)
   expect(page).to have_field("Month", with: date.month)
   expect(page).to have_field("Year", with: date.year)
-  expect(page).to have_field("test_result_passed", with: "passed")
-  expect(page).to have_field("test_file_description", with: "\r\ntest result file")
+  expect(page).to have_field("test_result_passed", with: test_result)
+  expect(page).to have_field("test_file_description", with: file_description)
 end
 
 def expect_confirmation_page_to_show_entered_data(legislation:, date:, test_result:)

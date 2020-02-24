@@ -41,7 +41,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
       expect_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
       click_on "Edit details"
-      expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
+      expect_test_result_form_to_show_input_data(legislation: legislation, date: date, test_result: "passed", file_description: "\r\ntest result file")
     end
   end
 end
