@@ -13,8 +13,8 @@
     </p>
 
     <%= form_for(resource, as: resource_name, url: user_session_path, html: { novalidate: true }) do |f| %>
-      <%= resource.email_input %>
-      <%= resource.password_input %>
+      <%= email_input resource %>
+      <%= password_input resource %>
 
       <%= govukButton(text: "Continue") %>
 
