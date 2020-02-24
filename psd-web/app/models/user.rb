@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
-    registration_completion.validate :validate_mobile_number
+    registration_completion.validate :validate_mobile_number, unless: -> { mobile_number.blank? }
     registration_completion.validates :name, presence: true
     registration_completion.validates :password, presence: true
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
@@ -188,7 +188,6 @@ private
   end
 
   def validate_mobile_number
-    return if mobile_number.blank?
 
     if mobile_number.count("0-9") < 10
       errors.add(:mobile_number, I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]))
