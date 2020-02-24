@@ -8,7 +8,7 @@ module ApplicationHelper
   def error_summary(errors)
     return unless errors.any?
 
-    error_list = errors.map { |attribute, error| { text: error, href: "##{attribute}" } }
+    error_list = errors.map { |attribute, error| error ? { text: error, href: "##{attribute}" } : nil }.compact
     govukErrorSummary(titleText: "There is a problem", errorList: error_list)
   end
 

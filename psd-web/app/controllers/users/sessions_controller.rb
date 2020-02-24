@@ -1,5 +1,8 @@
 module Users
   class SessionsController < Devise::SessionsController
+    skip_before_action :has_accepted_declaration
+    skip_before_action :has_viewed_introduction
+
     def new
       super { self.resource = resource.decorate }
     end
@@ -22,6 +25,7 @@ module Users
 
       self.resource = resource_class.new(sign_in_params).decorate
       resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+      resource.errors.add(:password, nil)
       render :new
     end
 
