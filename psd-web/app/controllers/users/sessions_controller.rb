@@ -11,19 +11,19 @@ module Users
         return render :new
       end
 
-      self.resource = warden.authenticate(context.auth_options)
+      self.resource = warden.authenticate(auth_options)
 
       if resource
         sign_in(resource_name, resource)
         respond_with resource, location: after_sign_in_path_for(resource)
       else
-        self.resource = resource_class.new(sign_in_params)
-        resource.add(:base, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+        self.resource = resource_class.new(sign_in_params).decorate
+        resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
         render :new
       end
     end
 
-    private
+  private
 
     def sign_in_form
       @sign_in_form ||= SignInForm.new(sign_in_params)
