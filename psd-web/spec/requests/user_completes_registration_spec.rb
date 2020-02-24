@@ -99,8 +99,6 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(response).to redirect_to(root_path)
       end
 
-      it "sets the current user"
-
       it "updates the user model" do
         expect(user.name).to eq("Foo Bar")
         expect(user.mobile_number).to eq("07235671232")

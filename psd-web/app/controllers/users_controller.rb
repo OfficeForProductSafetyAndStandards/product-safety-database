@@ -6,19 +6,13 @@ class UsersController < ApplicationController
   def complete_registration
     @user = User.find(params[:id])
 
-    return render :signed_in_as_another_user if user_signed_in? && current_user != @user
+    return render :signed_in_as_another_user if user_signed_in? && !signed_in_as?(@user)
+    return redirect_to(root_path) if signed_in_as?(@user)
+    return render(:expired_token) if @user.invitation_expired?
+    return redirect_to("/sign-in") if @user.account_activated?
+    return (render "errors/not_found", status: :not_found) if @user.invitation_token != params[:invitation]
 
-    return redirect_to(root_path) if current_user == @user
-
-    if @user.invitation_expired?
-      render(:expired_token)
-    elsif @user.account_activated?
-      redirect_to("/sign-in")
-    elsif @user.invitation_token != params[:invitation]
-      render "errors/not_found", status: :not_found
-    else
-      render :complete_registration
-    end
+    render :complete_registration
   end
 
   def update
@@ -39,5 +33,9 @@ private
 
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)
+  end
+
+  def signed_in_as?(user)
+    current_user == user
   end
 end
