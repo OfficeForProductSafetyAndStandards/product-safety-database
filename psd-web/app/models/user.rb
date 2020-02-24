@@ -17,19 +17,13 @@ class User < ApplicationRecord
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
-
-    # TODO: Figure out a better regexp
-    registration_completion.validates :mobile_number,
-              format: { with: /\d[\d\s]{4,}/ },
-              allow_blank: true
-
+    registration_completion.validate :validate_mobile_number
     registration_completion.validates :name, presence: true
     registration_completion.validates :password, presence: true
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
 
     registration_completion.validate :validate_password_not_common,
-             unless: Proc.new { |user| user.errors.messages[:password].any? }
-
+                                     unless: Proc.new { |user| user.errors.messages[:password].any? }
   end
 
 
@@ -187,6 +181,14 @@ private
         errors.add(:password, I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]))
         break
       end
+    end
+  end
+
+  def validate_mobile_number
+    return if mobile_number.blank?
+
+    if mobile_number.count("0-9") < 10
+      errors.add(:mobile_number, I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]))
     end
   end
 
