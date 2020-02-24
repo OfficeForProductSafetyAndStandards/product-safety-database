@@ -1,9 +1,8 @@
 module ApplicationHelper
-
   def title_for(any_active_record, title)
-    return title unless any_active_record.errors.any?
+    return content_for(:page_title, title) unless any_active_record.errors.any?
 
-    "Error: #{title}"
+    content_for(:page_title, "Error: #{title}")
   end
 
   def govuk_hr
