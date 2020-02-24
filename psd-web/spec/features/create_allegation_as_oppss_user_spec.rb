@@ -56,7 +56,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       enter_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
       expect_confirmation_banner("Product was successfully created.")
       click_link "Products (1)"
-      expected_entered_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
+      expect_entered_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
     end
   end
 end

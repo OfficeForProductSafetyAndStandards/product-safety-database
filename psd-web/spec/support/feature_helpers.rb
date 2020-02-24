@@ -65,7 +65,7 @@ def enter_product_details(product_category:, product_origin:, product_type:, pro
   click_button "Save product"
 end
 
-def expected_entered_product_details(product_category:, product_origin:, product_type:, product_name:, barcode:, webpage:, product_description:)
+def expect_entered_product_details(product_category:, product_origin:, product_type:, product_name:, barcode:, webpage:, product_description:)
   expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: product_name)
   expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: product_type)
   expect(page.find("dt", text: "Category")).to have_sibling("dd", text: product_category)
