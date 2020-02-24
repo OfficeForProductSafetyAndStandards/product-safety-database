@@ -15,6 +15,11 @@ class UsersController < ApplicationController
     render :complete_registration
   end
 
+  def sign_out_before_accepting_invitation
+    sign_out
+    redirect_to complete_registration_user_path(params[:id], invitation: params[:invitation])
+  end
+
   def update
     @user = User.find(params[:id])
     return render("errors/forbidden", status: :forbidden) unless params[:invitation] == @user.invitation_token

@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resources :users, only: [:update] do
     member do
       get "complete-registration", action: :complete_registration
+      post "sign-out-before-accepting-invitation", action: :sign_out_before_accepting_invitation
     end
   end
 
