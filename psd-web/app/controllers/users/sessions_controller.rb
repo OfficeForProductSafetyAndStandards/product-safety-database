@@ -1,5 +1,8 @@
 module Users
   class SessionsController < Devise::SessionsController
+    skip_before_action :has_accepted_declaration
+    skip_before_action :has_viewed_introduction
+
     def new
       super { self.resource = resource.decorate }
     end
