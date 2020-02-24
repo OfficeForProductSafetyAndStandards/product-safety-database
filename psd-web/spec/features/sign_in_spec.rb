@@ -38,6 +38,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
 
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_link("Enter correct email address and password", href: "#email")
+        expect(page).to have_link("Enter correct email address and password", href: "#password")
         expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
       end
     end
