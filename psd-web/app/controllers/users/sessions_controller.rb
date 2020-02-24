@@ -6,7 +6,7 @@ module Users
 
     def create
       if sign_in_form.invalid?
-        user.errors.merge!(sign_in_form.errors)
+        resource.errors.merge!(sign_in_form.errors)
 
         return render :new
       end
