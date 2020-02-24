@@ -10,7 +10,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, :wi
 
   scenario "lists products according to search relevance" do
     Business.import refresh: :wait_for
-    sign_in(as_user: user)
+    sign_in(user)
     visit businesses_path
 
     within ".govuk-grid-row.psd-case-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(1) span:nth-child(2)" do

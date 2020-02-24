@@ -4,6 +4,8 @@ southampton:
   has_viewed_introduction: true
   name: Yann
   organisation: southampton
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 southampton_steve:
   email: southampton.steve@example.com
@@ -11,6 +13,8 @@ southampton_steve:
   has_viewed_introduction: true
   name: Steve
   organisation: southampton
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 southampton_bob:
   email: southampton.bob@example.com
@@ -18,6 +22,8 @@ southampton_bob:
   has_viewed_introduction: true
   name: Bob
   organisation: southampton
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 southampton_frankie:
   email: southampton.frankie@example.com
@@ -25,6 +31,8 @@ southampton_frankie:
   has_viewed_introduction: true
   name: Frankie
   organisation: southampton
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 opss:
   email: opss@example.com
@@ -32,6 +40,8 @@ opss:
   has_viewed_introduction: true
   name: Slavosh
   organisation: opss
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 opss_yann:
   email: opss.yann@example.com
@@ -39,6 +49,8 @@ opss_yann:
   has_viewed_introduction: true
   name: Yann
   organisation: opss
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>
 
 luton:
   email: luton@example.com
@@ -46,3 +58,5 @@ luton:
   has_viewed_introduction: true
   name: Luton User
   organisation: luton
+  password_salt: 123
+  encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("password", 27500, "123", nil) %>

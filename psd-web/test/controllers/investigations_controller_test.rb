@@ -2,22 +2,12 @@ require "test_helper"
 
 class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    allow(KeycloakClient.instance).to receive(:user_account_url).and_return("/account")
-
+    stub_notify_mailer
     user           = users(:opss)
     @non_opss_user = users(:southampton)
 
-    allow(KeycloakClient.instance).
-      to receive(:get_user_roles).with(@non_opss_user.id)
-           .and_return([:psd_user])
-
-    allow(KeycloakClient.instance).
-      to receive(:get_user_roles).with(user.id)
-           .and_return(%i[psd_user opss_user])
-    stub_omniauth(user)
-    sign_in user
+    sign_in(user)
     User.current = user
-    allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
 
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")

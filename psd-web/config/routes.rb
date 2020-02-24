@@ -18,13 +18,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
-  devise_scope :user do
-    resource :home_page, only: :show, as: :new_session
-    resource :session do
-      get :logout, to: "devise/sessions#destroy"
-    end
-  end
+  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions" }
 
   resources :users, only: [] do
     member do
