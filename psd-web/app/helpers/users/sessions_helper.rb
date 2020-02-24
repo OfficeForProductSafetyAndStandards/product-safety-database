@@ -30,7 +30,7 @@ module Users::SessionsHelper
     return unless errors.any?
 
     error_list = errors.map { |attribute, error| { text: error, href: "##{attribute}" } }
-    h.govukErrorSummary(titleText: "There is a problem", errorList: error_list)
+    govukErrorSummary(titleText: "There is a problem", errorList: error_list)
   end
 
 private

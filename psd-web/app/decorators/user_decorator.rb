@@ -6,5 +6,5 @@ class UserDecorator < Draper::Decorator
     return organisation.name if organisation != viewing_user.organisation
 
     name
-  end
+    end
 end
