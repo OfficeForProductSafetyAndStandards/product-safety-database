@@ -81,13 +81,13 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       before do
         patch user_path(user.id),
               params: {
-                        invitation: user.invitation_token,
-                        user: {
-                          name: "Foo Bar",
-                          password: "foobarnoteasyatall1234!",
-                          mobile_number: "07235671232"
-                        }
-                      }
+                invitation: user.invitation_token,
+                user: {
+                  name: "Foo Bar",
+                  password: "foobarnoteasyatall1234!",
+                  mobile_number: "07235671232"
+                }
+              }
         user.reload
       end
 
@@ -110,13 +110,13 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       before do
         patch user_path(user.id),
               params: {
-                        invitation: "wrongInvitationToken",
-                        user: {
-                          name: "Foo Bar",
-                          password: "foobarnoteasyatall1234!",
-                          mobile_number: "07235671232"
-                        }
-                      }
+                invitation: "wrongInvitationToken",
+                user: {
+                  name: "Foo Bar",
+                  password: "foobarnoteasyatall1234!",
+                  mobile_number: "07235671232"
+                }
+              }
         user.reload
       end
 
@@ -136,13 +136,13 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       before do
         patch user_path(user.id),
               params: {
-                        invitation: user.invitation_token,
-                        user: {
-                          name: "",
-                          password: "",
-                          mobile_number: ""
-                        }
-                      }
+                invitation: user.invitation_token,
+                user: {
+                  name: "",
+                  password: "",
+                  mobile_number: ""
+                }
+              }
       end
 
       it "re-renders the form" do
