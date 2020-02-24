@@ -19,7 +19,6 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
   end
 
   scenario "Creating an account from an invitation when signed in as another user", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-
     sign_in existing_user
 
     visit "/users/#{invited_user.id}/complete-registration?invitation=#{invited_user.invitation_token}"
