@@ -15,12 +15,12 @@ module Users
 
       if resource
         sign_in(resource_name, resource)
-        respond_with resource, location: after_sign_in_path_for(resource)
-      else
-        self.resource = resource_class.new(sign_in_params).decorate
-        resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
-        render :new
+        return respond_with resource, location: after_sign_in_path_for(resource)
       end
+
+      self.resource = resource_class.new(sign_in_params).decorate
+      resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+      render :new
     end
 
   private
