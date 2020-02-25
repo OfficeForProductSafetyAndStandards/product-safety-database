@@ -233,4 +233,20 @@ RSpec.describe User do
       end
     end
   end
+
+  describe "#send_reset_password_instructions" do
+    subject { create(:user) }
+
+    it "enqueues a job posting email to notify", :with_test_queue_adpater do
+      expect {
+        subject.send_reset_password_instructions
+      }.to enqueue_job
+             .on_queue("psd")
+             .at(:no_wait)
+             .with do |user, token|
+        expect(user).to be user
+        expect(token).to be token
+      end
+    end
+  end
 end
