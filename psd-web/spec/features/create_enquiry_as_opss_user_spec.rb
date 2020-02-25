@@ -77,7 +77,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     click_button "Continue"
   end
 
-  def fill_in_when_how_was_it_received
+  def fill_in_when__and_how_was_it_received
     fill_in "Day", with: date.day if date
     fill_in "Month",   with: date.month if date
     fill_in "Year",    with: date.year  if date
@@ -90,12 +90,4 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "enquiry_user_title", with: with[:enquiry_title]
     attach_file "enquiry_attachment_file", with[:file]
   end
-
-  # def enter_contact_details(with:)
-  #   expect(page).to have_css("h1", text: "New enquiry")
-  #   fill_in "complainant[name]", with: with[:contact_name]
-  #   fill_in "complainant_email_address", with: with[:contact_email]
-  #   fill_in "complainant_phone_number", with: with[:contact_phone]
-  #   click_button "Continue"
-  # end
 end

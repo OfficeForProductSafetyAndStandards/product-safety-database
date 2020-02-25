@@ -7,7 +7,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
 
   before { sign_in(as_user: user) }
-  context "leaving the form fields field empty" do
+  context "leaving the form fields empty" do
     scenario "shows error messages" do
       visit new_investigation_activity_path(investigation)
       choose "activity_type_testing_result"
@@ -20,13 +20,12 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(page).to have_css(".govuk-error-summary__list", text: "Provide the test results file")
     end
   end
-  context"with valid input data" do
-    scenario "to be able to submit test results" do
+  context "with valid input data" do
+    scenario "saves the test result" do
       visit new_investigation_activity_path(investigation)
       within_fieldset "New activity" do
         page.choose "Record test result"
       end
-      # choose "activity_type_testing_result"
       click_button "Continue"
       expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
       fill_in_test_result_submit_form(legislation, date, "test_result_passed", file)
