@@ -4,8 +4,8 @@ ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapte
 def create_blob(filename, title: nil, description: nil)
   ActiveStorage::Blob.create_after_upload!(io: File.open("./db/seed_files/#{filename}"), filename: filename, content_type: "image/jpeg", metadata: {
     title: title || filename,
-      description: description,
-      updated: Time.now.iso8601
+    description: description,
+    updated: Time.now.iso8601
   })
 end
 
@@ -412,19 +412,15 @@ if run_seeds
 
   investigation.products << product
 
-  # KeycloakService.sync_orgs_and_users_and_teams
+  organisation = Organisation.create!(name: "Office for Product Safety and Standards")
 
-  organisation = Organisation.create!(name: "Office for Product Safety and Standards", path: "/Organisations/Office for Product Safety and Standards")
+  enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+  processing  = Team.create!(name: "OPSS Processing", team_recipient_email: nil, "organisation": organisation)
 
-  enforcement = Team.create!(name: "OPSS Enforcement", path: "/Organisations/Office for Product Safety and Standards/OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
-
-  Team.create!(name: "OPSS Science and Tech", path: "/Organisations/Office for Product Safety and Standards/OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
-  Team.create!(name: "OPSS Trading Standards Co-ordination", path: "/Organisations/Office for Product Safety and Standards/OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
-  Team.create!(name: "OPSS Incident Management", path: "/Organisations/Office for Product Safety and Standards/OPSS Incident Management", team_recipient_email: nil, "organisation": organisation)
-
-  processing = Team.create!(name: "OPSS Processing", path: "/Organisations/Office for Product Safety and Standards/OPSS Processing", team_recipient_email: nil, "organisation": organisation)
-
-  Team.create!(name: "OPSS Testing", path: "/Organisations/Office for Product Safety and Standards/OPSS Testing", team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
   user1 = User.create!(name: "Test User", email: "user@example.com", password: "password", password_confirmation: "password", organisation: organisation, teams: [enforcement])
   user2 = User.create!(name: "Team Admin", email: "admin@example.com", password: "password", password_confirmation: "password", organisation: organisation, teams: [processing])
@@ -435,8 +431,6 @@ if run_seeds
   %i[team_admin opss_user psd_user user].each do |role|
     UserRole.create!(user: user2, name: role)
   end
-
-  # User.load_from_keycloak
 
   Investigation.__elasticsearch__.create_index! force: true
   Investigation.import
