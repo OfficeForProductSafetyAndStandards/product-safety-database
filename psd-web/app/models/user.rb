@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   INVITATION_EXPIRATION_DAYS = 14
-  COMMON_PASSWORDS_FILE_PATH = "lib/10-million-password-list-top-1000000.txt".freeze
+  COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
