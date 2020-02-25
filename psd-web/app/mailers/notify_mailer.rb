@@ -12,15 +12,12 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def reset_password_instruction(user, token)
     set_template(TEMPLATES[:reset_password_instruction])
-    reset_url = edit_password_url(user, reset_password_token: token)
-    expiry_in_minutes = time_ago_in_words(Time.zone.now = user.expiry_in_minutes)
-    ap expiry_in_minutes
+    set_reference("Password reset")
     set_personalisation(
-      reference: "Password reset",
       name: user.name,
-      reset_url: reset_url,
-      expiry_in_minutes: expiry_in_minutes
+      reset_url: edit_user_password_url(reset_password_token: token)
     )
+
     mail(to: user.email)
   end
 
