@@ -3,22 +3,24 @@ require "rails_helper"
 RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
 
-  before { sign_in as_user: create(:user, :activated, :opss_user) }
+  before do
+    sign_in as_user: create(:user, :activated, :opss_user)
+    visit new_allegation_path
+  end
 
   let(:contact_details) do
     {
-    contact_name: Faker::Name.name,
-        contact_email: Faker::Internet.safe_email,
-        contact_phone: Faker::PhoneNumber.phone_number,
+      contact_name: Faker::Name.name,
+      contact_email: Faker::Internet.safe_email,
+      contact_phone: Faker::PhoneNumber.phone_number,
     }
   end
 
   let(:allegation_details) do
     {
-      allegation_description: Faker::Lorem.paragraph,
-      allegation_hazard_type: hazard_type,
+      description: Faker::Lorem.paragraph,
+      hazard_type: hazard_type,
       category: Rails.application.config.product_constants["product_category"].sample,
-      file: Rails.root + "test/fixtures/files/testImage.png",
     }
   end
 
@@ -34,41 +36,43 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     }
   end
 
-  context "opss user" do
-    scenario "able to create safety allegation as consumer" do
-      visit new_allegation_path
+  context "as an OPSS user" do
+    scenario "able to create safety allegation from a consumer" do
+      expect(page).to have_css("h1", text: "New allegation")
+
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
       expect(page).to have_css("h1", text: "New allegation")
 
-      enter_contact_details(contact_name: contact_details[:contact_name], contact_email: contact_details[:contact_email], contact_phone: contact_details[:contact_phone])
-      enter_allegation_details(allegation_description: allegation_details[:allegation_description], allegation_product_category: allegation_details[:category], allegation_hazard_type: allegation_details[:allegation_hazard_type])
+      enter_contact_details(contact_details)
+      enter_allegation_details(allegation_details)
 
       expect_confirmation_banner("Allegation was successfully created")
     end
 
     scenario "able to add a product" do
-      visit new_allegation_path
+      expect(page).to have_css("h1", text: "New allegation")
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
       expect(page).to have_css("h1", text: "New allegation")
 
-      enter_contact_details(contact_name: contact_details[:contact_name], contact_email: contact_details[:contact_email], contact_phone: contact_details[:contact_phone])
-      enter_allegation_details(allegation_description: allegation_details[:allegation_description], allegation_product_category: allegation_details[:category], allegation_hazard_type: allegation_details[:allegation_hazard_type])
+      enter_contact_details(contact_details)
+      enter_allegation_details(allegation_details)
 
       expect_confirmation_banner("Allegation was successfully created")
 
       click_link "Products (0)"
       click_link "Add product"
-      enter_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
+      enter_product_details(product_details)
+
 
       expect_confirmation_banner("Product was successfully created.")
 
       click_link "Products (1)"
 
-      expect_entered_product_details(product_category: product_details[:category], product_origin: product_details[:country_of_origin], product_type: product_details[:type], product_name: product_details[:name], barcode: product_details[:barcode], webpage: product_details[:webpage], product_description: product_details[:description])
+      expect_entered_product_details(product_details)
     end
   end
 end

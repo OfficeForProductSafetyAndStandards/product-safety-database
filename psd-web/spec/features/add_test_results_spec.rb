@@ -6,7 +6,10 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:date) { Faker::Date.backward(days: 14) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
 
-  before { sign_in(as_user: user) }
+  before do
+    sign_in(as_user: user)
+    visit new_investigation_activity_path(investigation)
+  end
 
   context "leaving the form fields empty" do
     scenario "shows error messages" do
@@ -26,7 +29,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
   context "with valid input data" do
     scenario "saves the test result" do
-      visit new_investigation_activity_path(investigation)
+      expect(page).to have_css("h1", text: "New activity")
 
       within_fieldset "New activity" do
         page.choose "Record test result"
@@ -45,8 +48,11 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     end
 
     scenario "to able to see edit form" do
-      visit new_investigation_activity_path(investigation)
-      choose "activity_type_testing_result"
+      expect(page).to have_css("h1", text: "New activity")
+
+      within_fieldset "New activity" do
+        page.choose "Record test result"
+      end
       click_button "Continue"
 
       expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
