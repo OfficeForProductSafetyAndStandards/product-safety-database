@@ -18,7 +18,9 @@ class User < ApplicationRecord
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
-    registration_completion.validate :validate_mobile_number, unless: -> { mobile_number.blank? }
+    registration_completion.validates :mobile_number,
+                                      phone: { message: I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]) },
+                                      unless: -> { mobile_number.blank? }
     registration_completion.validates :name, presence: true
     registration_completion.validates :password, presence: true
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
@@ -187,14 +189,6 @@ private
         errors.add(:password, I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]))
         break
       end
-    end
-  end
-
-  def validate_mobile_number
-    digits = mobile_number.delete("^0-9")
-    accepted_prefixes = %w[7 07 447 4407 00447]
-    if digits.length < 10 || !digits.start_with?(*accepted_prefixes)
-      errors.add(:mobile_number, I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]))
     end
   end
 

@@ -15,45 +15,6 @@ RSpec.describe User do
         expect(user.errors.messages[:name]).to eq ["Enter your full name"]
       end
 
-      describe "mobile number validation" do
-        valid_uk_phone_numbers = [
-          "7123456789",
-          "07123456789",
-          "07123 456789",
-          "07123-456-789",
-          "00447123456789",
-          "00 44 7123456789",
-          "+447123456789",
-          "+44 7123 456 789",
-          "+44 (0)7123 456 789",
-          "\u200B\t\t+44 (0)7123 \uFEFF 456 789 \r\n",
-        ]
-
-        valid_uk_phone_numbers.each do |phone_number|
-          it "accepts #{phone_number} as a valid phone number" do
-            user = build(:user, mobile_number: phone_number)
-            user.valid?(:registration_completion)
-            expect(user.errors.messages[:mobile_number]).to eq []
-          end
-        end
-
-        invalid_phone_numbers = [
-          "712345671",
-          "00123456789",
-          "+111123 456789",
-          "564544554455544"
-        ]
-
-        invalid_phone_numbers.each do |phone_number|
-          it "rejects #{phone_number} as an invalid phone number" do
-            user = build(:user, mobile_number: phone_number)
-            expect(user).not_to be_valid(:registration_completion)
-            expect(user.errors.messages[:mobile_number])
-              .to eq ["Enter your mobile number in the correct format, like 07700 900 982"]
-          end
-        end
-      end
-
       it "validates the presence of password" do
         user = build(:user, password: "")
         expect(user).not_to be_valid(:registration_completion)
