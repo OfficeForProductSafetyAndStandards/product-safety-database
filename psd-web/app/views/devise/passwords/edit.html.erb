@@ -4,10 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%#= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Password is too short", href: "#password"}]) %>
-
-    <%#= govukErrorSummary(titleText: "There is a problem", errorList: [{text: "Choose a more secure password", href: "#password"}]) %>
-
+    <%= error_summary resource.errors %>
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
@@ -15,7 +12,7 @@
 
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
       <%= f.hidden_field :reset_password_token %>
-      <%= password_input(resource, hint: {text: "At least 8 characters"}) %>
+      <%= password_input(resource, hint: { text: "At least 8 characters" }) %>
 
       <%= govukButton(text: "Continue") %>
     <% end %>

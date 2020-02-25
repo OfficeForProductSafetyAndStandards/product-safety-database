@@ -15,7 +15,7 @@ module Users
     end
 
     def password_input(user, options = {})
-      options.merge!(
+      options.reverse_merge!(
         id: "password",
         name: "user[password]",
         type: "password",
