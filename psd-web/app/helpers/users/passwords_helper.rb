@@ -1,5 +1,5 @@
 module Users
-  module SessionsHelper
+  module PasswordsHelper
     include FormHelper
   end
 end

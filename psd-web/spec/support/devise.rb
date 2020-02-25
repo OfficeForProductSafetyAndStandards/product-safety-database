@@ -5,6 +5,12 @@ module LoginHelpers
     fill_in "user[password]", with: "password"
     click_on "Continue"
   end
+
+  def sign_out
+    return if page.has_css?("a", text: "Sign in to your account")
+
+    click_on "Sign out", match: :first
+  end
 end
 
 RSpec.configure do |config|
