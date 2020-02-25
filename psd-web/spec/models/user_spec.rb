@@ -37,11 +37,20 @@ RSpec.describe User do
           end
         end
 
-        it "rejects numbers with less than 10 digits" do
-          user = build(:user, mobile_number: "123456789")
-          expect(user).not_to be_valid(:registration_completion)
-          expect(user.errors.messages[:mobile_number])
-          .to eq ["Enter your mobile number in the correct format, like 07700 900 982"]
+        invalid_phone_numbers = [
+          "712345671",
+          "00123456789",
+          "+111123 456789",
+          "564544554455544"
+        ]
+
+        invalid_phone_numbers.each do |phone_number|
+          it "rejects #{phone_number} as an invalid phone number" do
+            user = build(:user, mobile_number: phone_number)
+            expect(user).not_to be_valid(:registration_completion)
+            expect(user.errors.messages[:mobile_number])
+              .to eq ["Enter your mobile number in the correct format, like 07700 900 982"]
+          end
         end
       end
 

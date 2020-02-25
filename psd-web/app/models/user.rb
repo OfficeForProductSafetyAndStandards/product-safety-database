@@ -191,7 +191,9 @@ private
   end
 
   def validate_mobile_number
-    if mobile_number.count("0-9") < 10
+    digits = mobile_number.delete("^0-9")
+    accepted_prefixes = %w[7 07 447 4407 00447]
+    if digits.length < 10 || !digits.start_with?(*accepted_prefixes)
       errors.add(:mobile_number, I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]))
     end
   end
