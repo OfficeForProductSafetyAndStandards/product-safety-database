@@ -9,7 +9,7 @@ def expect_confirmation_banner(msg)
   expect(page).to have_css(".hmcts-banner__message", text: msg)
 end
 
-def fill_in_test_result_submit_form(legislation, date, test_result, file)
+def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)
   select legislation, from: "test_legislation"
   fill_in "Day", with: date.day if date
   fill_in "Month",   with: date.month if date

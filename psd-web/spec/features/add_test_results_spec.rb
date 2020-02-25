@@ -28,7 +28,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       end
       click_button "Continue"
       expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
-      fill_in_test_result_submit_form(legislation, date, "test_result_passed", file)
+      fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
       expect_confirmation_page_to_show_entered_data(legislation, date, "Passed")
       click_button "Continue"
       expect_confirmation_banner("Test result was successfully recorded.")
@@ -38,7 +38,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       choose "activity_type_testing_result"
       click_button "Continue"
       expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
-      fill_in_test_result_submit_form(legislation, date, "test_result_passed", file)
+      fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
       expect_confirmation_page_to_show_entered_data(legislation, date, "Passed")
       click_on "Edit details"
       expect_test_result_form_to_show_input_data(legislation, date)
