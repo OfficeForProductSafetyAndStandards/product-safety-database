@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe NotifyMailer do
-  describe ".reset_password_instruction" do
+  describe "#reset_password_instruction" do
     let(:user)  { build(:user) }
     let(:token) { SecureRandom.hex }
     let(:mail)  { described_class.reset_password_instruction(user, token) }

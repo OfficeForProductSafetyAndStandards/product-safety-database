@@ -1,7 +1,7 @@
 class NotifyMailer < GovukNotifyRails::Mailer
   TEMPLATES =
     {
-      reset_password_instruction: "e85c3c6c-272d-4c43-b8fb-e7d266bc2bd9",
+      reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
       investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
       investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
       alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
