@@ -26,12 +26,12 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       end
     end
 
-    context "when the user invitation token has expired" do
+    context "when the user invitation has expired" do
       let(:user) { create(:user, :invited, account_activated: false, invited_at: 15.days.ago) }
 
       it "shows a message alerting about the expiration" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
-        expect(response).to render_template(:expired_token)
+        expect(response).to render_template(:expired_invitation)
       end
     end
 
