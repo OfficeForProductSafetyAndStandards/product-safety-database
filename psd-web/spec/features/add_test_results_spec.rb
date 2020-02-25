@@ -48,6 +48,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect_confirmation_banner("Test result was successfully recorded.")
     end
 
+
     scenario "to able to see edit form" do
       expect(page).to have_css("h1", text: "New activity")
 
