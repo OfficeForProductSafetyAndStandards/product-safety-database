@@ -335,17 +335,28 @@ RSpec.describe User do
       expect(user.invitation_expired?).to be false
     end
 
-    it "returns false when user was invited less than 14 days ago" do
+    # Temporally for testing purposes. Switch back before merging
+    it "returns true when user was invited  10 minutes ago" do
+      user = build_stubbed(:user, invited_at: 10.minutes.ago)
+      expect(user.invitation_expired?).to be true
+    end
+
+    it "returns false when user was invited  10 minutes ago" do
+      user = build_stubbed(:user, invited_at: 9.minutes.ago)
+      expect(user.invitation_expired?).to be false
+    end
+
+    xit "returns false when user was invited less than 14 days ago" do
       user = build_stubbed(:user, invited_at: 13.days.ago)
       expect(user.invitation_expired?).to be false
     end
 
-    it "returns true when user was invited exactly 14 days ago" do
+    xit "returns true when user was invited exactly 14 days ago" do
       user = build_stubbed(:user, invited_at: 14.days.ago)
       expect(user.invitation_expired?).to be true
     end
 
-    it "returns true when user was invited more than 14 days ago" do
+    xit "returns true when user was invited more than 14 days ago" do
       user = build_stubbed(:user, invited_at: 15.days.ago)
       expect(user.invitation_expired?).to be true
     end
