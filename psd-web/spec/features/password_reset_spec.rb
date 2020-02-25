@@ -36,47 +36,89 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
     end
   end
 
-  it "allows you to reset your password" do
-    send_reset_password
-    expect(page).to have_css("p.govuk-body", text: "Click the link in the email to reset your password.")
+  context "when entering an invalid email" do
+    it "does not allow you to reset you pasword" do
+      visit new_user_session_path
 
-    visit edit_user_password_url_token
+      click_link "Forgot your password?"
+      fill_in "Email address", with: "not_an_email"
+      click_on "Send email"
 
-    fill_in "Password", with: "a_new_password"
-    click_on "Continue"
+      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+      expect(page).to have_link("Enter your email address in the correct format, like name@example.com", href: "#email")
+    end
+  end
 
-    expect(page).to have_css("h1", text: "Declaration")
+  context "with a valid token" do
+    it "does not allow you to reset you pasword" do
+      send_reset_password
+      expect(page).to have_css("p.govuk-body", text: "Click the link in the email to reset your password.")
 
-    sign_out
-
-    click_on "Sign in to your account"
-
-    fill_in "Email address", with: user.email
-    fill_in "Password", with: "a_new_password"
-    click_on "Continue"
-
-    expect(page).to have_css("h1", text: "Declaration")
-
-    sign_out
-
-    send_reset_password
-
-    travel_to 66.minutes.from_now do
       visit edit_user_password_url_token
 
-      fill_in "Password", with: "password"
+      fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
-      expect(page).to have_css("h1", text: "This link has expired")
-      expect(page).to have_link("sign in page", href: new_user_session_path)
+      expect(page).to have_css("h1", text: "Declaration")
+
+      sign_out
+
+      click_on "Sign in to your account"
+
+      fill_in "Email address", with: user.email
+      fill_in "Password", with: "a_new_password"
+      click_on "Continue"
+
+      expect(page).to have_css("h1", text: "Declaration")
     end
 
-    visit edit_user_password_url_token
+    context "when the password does not fit the critiera" do
+      context "when the password is too short" do
+        let(:password) { "as" }
+        it "does not allow you to reset you pasword" do
+          send_reset_password
 
-    fill_in "Password", with: "as"
-    click_on "Continue"
+          visit edit_user_password_url_token
 
-    expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-    expect(page).to have_link("Password is too short (minimum is 8 characters)", href: "#password")
+          fill_in "Password", with: password
+          click_on "Continue"
+
+          expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+          expect(page).to have_link("Password is too short (minimum is 8 characters)", href: "#password")
+        end
+      end
+
+      context "when the password is too short" do
+        let(:password) { "" }
+
+        it "does not allow you to reset you pasword" do
+          send_reset_password
+
+          visit edit_user_password_url_token
+
+          fill_in "Password", with: password
+          click_on "Continue"
+
+          expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+          expect(page).to have_link("Password cannot be blank", href: "#password")
+        end
+      end
+    end
+  end
+
+  context "with and invalid token" do
+    it "does not allow you to reset you pasword" do
+      send_reset_password
+
+      travel_to 66.minutes.from_now do
+        visit edit_user_password_url_token
+
+        fill_in "Password", with: "password"
+        click_on "Continue"
+
+        expect(page).to have_css("h1", text: "This link has expired")
+        expect(page).to have_link("sign in page", href: new_user_session_path)
+      end
+    end
   end
 end
