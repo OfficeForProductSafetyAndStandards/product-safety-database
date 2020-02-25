@@ -24,9 +24,9 @@ class User < ApplicationRecord
     registration_completion.validates :name, presence: true
     registration_completion.validates :password, presence: true
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
-
-    registration_completion.validate :validate_password_not_common,
-                                     unless: Proc.new { |user| user.errors.messages[:password].any? }
+    registration_completion.validates :password,
+                                      common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
+                                      unless: Proc.new { |user| user.errors.messages[:password].any? }
   end
 
   attribute :skip_password_validation, :boolean, default: false
@@ -182,15 +182,6 @@ class User < ApplicationRecord
   end
 
 private
-
-  def validate_password_not_common
-    File.foreach(COMMON_PASSWORDS_FILE_PATH, chomp: true) do |common_password|
-      if common_password == password
-        errors.add(:password, I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]))
-        break
-      end
-    end
-  end
 
   def current_user?
     User.current&.id == id

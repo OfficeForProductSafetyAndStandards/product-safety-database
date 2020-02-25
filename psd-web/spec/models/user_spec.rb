@@ -27,13 +27,6 @@ RSpec.describe User do
         expect(user.errors.messages[:password])
           .to eq ["Password is too short"]
       end
-
-      it "validates password is not too common" do
-        user = build(:user, password: "password")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:password])
-          .to eq ["Choose a less frequently used password"]
-      end
     end
   end
 
