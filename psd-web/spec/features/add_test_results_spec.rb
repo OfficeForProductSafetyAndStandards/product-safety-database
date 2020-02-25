@@ -21,23 +21,23 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
       click_button "Continue"
 
-      expect(page).to have_css(".govuk-error-summary__list", text: "Enter date of the test")
-      expect(page).to have_css(".govuk-error-summary__list", text: "Select the legislation that relates to this test")
-      expect(page).to have_css(".govuk-error-summary__list", text: "Select result of the test")
-      expect(page).to have_css(".govuk-error-summary__list", text: "Provide the test results file")
+      expect(page).to have_summary_error("Enter date of the test")
+      expect(page).to have_summary_error("Select the legislation that relates to this test")
+      expect(page).to have_summary_error("Select result of the test")
+      expect(page).to have_summary_error("Provide the test results file")
     end
   end
 
   context "with valid input data" do
     scenario "saves the test result" do
-      expect(page).to have_css("h1", text: "New activity")
+      expect(page).to have_h1("New activity")
 
       within_fieldset "New activity" do
         page.choose "Record test result"
       end
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
+      expect(page).to have_h1("Record test result")
 
       fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
 
@@ -50,14 +50,14 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
 
     scenario "to able to see edit form" do
-      expect(page).to have_css("h1", text: "New activity")
+      expect(page).to have_h1("New activity")
 
       within_fieldset "New activity" do
         page.choose "Record test result"
       end
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
+      expect(page).to have_h1("Record test result")
 
       fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
 

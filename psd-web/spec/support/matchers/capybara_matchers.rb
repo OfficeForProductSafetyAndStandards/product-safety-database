@@ -1,8 +1,11 @@
 module PageMatchers
   def have_h1(text)
-    have_selector("h1", text: text)
+    have_css("h1", text: text)
   end
 
+  def have_summary_error(text)
+    have_css(".govuk-error-summary__list", text: text)
+  end
 
   # Matcher for items within the [Summary list](https://design-system.service.gov.uk/components/summary-list/) component.
   #

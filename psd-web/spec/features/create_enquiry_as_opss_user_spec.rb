@@ -1,4 +1,5 @@
 require "rails_helper"
+
 RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:date) { Faker::Date.backward(days: 14) }
   let(:received_type) { "enquiry_received_type_email" }
@@ -21,7 +22,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
-  context "as opss user" do
+  context "as an OPSS user" do
     scenario "able to report an enquiry"do
       click_link "Open a new case"
       choose "type_enquiry"
@@ -32,7 +33,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "New enquiry")
+      expect(page).to have_h1("New enquiry")
 
       enter_contact_details(contact_details)
 
@@ -53,7 +54,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       fill_in_when__and_how_was_it_received
 
-      expect(page).to have_css(".govuk-error-summary__list", text: "Date received must be today or in the past")
+      expect(page).to have_summary_error("Date received must be today or in the past")
     end
   end
 
@@ -63,7 +64,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       fill_in_when_was_it_received
 
-      expect(page).to have_css(".govuk-error-summary__list", text: "Select a type")
+      expect(page).to have_summary_error("Select a type")
     end
   end
 
@@ -74,7 +75,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       visit new_investigation_enquiry_path
       fill_in_when__and_how_was_it_received
 
-      expect(page).to have_css(".govuk-error-summary__list", text: "Enter a received type \"Other\"")
+      expect(page).to have_summary_error("Enter a received type \"Other\"")
     end
   end
 
@@ -87,7 +88,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_when_was_it_received
-    expect(page).to have_css("h1", text: "New enquiry")
+    expect(page).to have_h1("New enquiry")
 
     fill_in "Day", with: date.day if date
     fill_in "Month",   with: date.month if date
@@ -96,7 +97,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_when__and_how_was_it_received
-    expect(page).to have_css("h1", text: "New enquiry")
+    expect(page).to have_h1("New enquiry")
 
     fill_in "Day", with: date.day if date
     fill_in "Month",   with: date.month if date
