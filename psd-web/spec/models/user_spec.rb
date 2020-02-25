@@ -118,8 +118,8 @@ RSpec.describe User do
     it "includes associations needed for display_name" do
       assignees = described_class.get_assignees.to_a # to_a forces the query execution and load immediately
       expect(-> {
-               assignees.map(&:display_name)
-             }).to not_talk_to_db
+        assignees.map(&:display_name)
+      }).to not_talk_to_db
     end
 
     context "when a user to except is supplied" do
