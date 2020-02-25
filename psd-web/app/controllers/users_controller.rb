@@ -7,9 +7,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     return render :signed_in_as_another_user if user_signed_in? && !signed_in_as?(@user)
-    return redirect_to(root_path) if signed_in_as?(@user)
+    # Some users will bookmark the invitation URL received on the email and will
+    # become their link to "PSD". Hence redirecting them to the root page.
+    return redirect_to(root_path) if signed_in_as?(@user) || @user.account_activated?
     return render(:expired_token) if @user.invitation_expired?
-    return redirect_to("/sign-in") if @user.account_activated?
     return (render "errors/not_found", status: :not_found) if @user.invitation_token != params[:invitation]
 
     render :complete_registration

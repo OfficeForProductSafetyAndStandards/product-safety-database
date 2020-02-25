@@ -40,7 +40,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
 
       it "shows a message alerting about the account being already setup" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
-        expect(response).to redirect_to("/sign-in")
+        expect(response).to redirect_to(root_path)
       end
     end
 
