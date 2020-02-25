@@ -46,7 +46,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
       scenario "shows an error message" do
         visit root_path
         click_on "Sign in to your account"
-        
+
         fill_in "Email address", with: "test.email"
         fill_in "Password", with: "password"
         click_on "Continue"
@@ -73,7 +73,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
     context "when password field is left empty" do
       scenario "shows an error messages" do
         visit root_path
-        click_on "Sign in to your account" 
+        click_on "Sign in to your account"
 
         fill_in "Email address", with: user.email
         fill_in "Password", with: " "
