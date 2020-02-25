@@ -15,7 +15,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Password reset")
     set_personalisation(
       name: user.name,
-      reset_url: edit_user_password_url(reset_password_token: token)
+      edit_user_password_url_token: edit_user_password_url(reset_password_token: token)
     )
 
     mail(to: user.email)

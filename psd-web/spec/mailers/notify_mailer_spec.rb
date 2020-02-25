@@ -11,7 +11,7 @@ RSpec.describe NotifyMailer do
       expect(mail.govuk_notify_template).to eq(described_class::TEMPLATES[:reset_password_instruction])
       expect(mail.govuk_notify_reference).to eq("Password reset")
       expect(mail.govuk_notify_personalisation)
-        .to eq(name: user.name, reset_url: edit_user_password_url(reset_password_token: token))
+        .to eq(name: user.name, edit_user_password_url_token: edit_user_password_url(reset_password_token: token))
     end
   end
 end
