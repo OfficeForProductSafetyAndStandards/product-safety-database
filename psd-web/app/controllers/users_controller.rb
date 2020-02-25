@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     # Some users will bookmark the invitation URL received on the email and will
     # become their link to "PSD". Hence redirecting them to the root page.
     return redirect_to(root_path) if signed_in_as?(@user) || @user.account_activated?
-    return render(:expired_token) if @user.invitation_expired?
+    return render(:expired_invitation) if @user.invitation_expired?
     return (render "errors/not_found", status: :not_found) if @user.invitation_token != params[:invitation]
 
     render :complete_registration
