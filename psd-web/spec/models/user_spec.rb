@@ -118,8 +118,8 @@ RSpec.describe User do
     it "includes associations needed for display_name" do
       assignees = described_class.get_assignees.to_a # to_a forces the query execution and load immediately
       expect(-> {
-        assignees.map(&:display_name)
-      }).to not_talk_to_db
+               assignees.map(&:display_name)
+             }).to not_talk_to_db
     end
 
     context "when a user to except is supplied" do
@@ -238,12 +238,10 @@ RSpec.describe User do
     subject { create(:user) }
 
     it "enqueues a job posting email to notify", :with_test_queue_adpater do
-      expect {
-        subject.send_reset_password_instructions
-      }.to enqueue_job
-             .on_queue("psd")
-             .at(:no_wait)
-             .with do |user, token|
+      expect { subject.send_reset_password_instructions }.to enqueue_job
+                                                               .on_queue("psd")
+                                                               .at(:no_wait)
+                                                               .with do |user, token|
         expect(user).to be user
         expect(token).to be token
       end

@@ -7,6 +7,12 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
 
 
   def send_reset_password
+    allow(Devise.token_generator)
+      .to receive(:generate)
+            .with(User, :reset_password_token).and_return(reset_token)
+    _raw, enc = reset_token
+    user.update!(reset_password_token: enc)
+
     visit new_user_session_path
 
     click_link "Forgot your password?"
@@ -31,12 +37,6 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
   end
 
   it "allows you to reset your password" do
-    allow(Devise.token_generator)
-      .to receive(:generate)
-            .with(User, :reset_password_token).and_return(reset_token)
-    raw, enc = reset_token
-    user.update!(reset_password_token: enc)
-
     send_reset_password
     expect(page).to have_css("p.govuk-body", text: "Click the link in the email to reset your password.")
 
