@@ -8,6 +8,8 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
     visit root_path
     click_on "Sign in to your account"
 
+    stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/sms").and_return(body: {}.to_json)
+
     fill_in "Email address", with: user.email
     fill_in "Password", with: "password"
     click_on "Continue"

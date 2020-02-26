@@ -17,7 +17,6 @@ module LoginHelpers
 
     click_on "Sign out", match: :first
   end
-
 end
 
 RSpec.configure do |config|
