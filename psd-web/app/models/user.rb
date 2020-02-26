@@ -3,6 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
   devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable, :two_factor_authenticatable
 
+  include DeviseHooks
+
   belongs_to :organisation
 
   has_one_time_password(encrypted: true)
@@ -156,15 +158,7 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
-  def send_two_factor_authentication_code(code)
-    SendTwoFactorAuthenticationJob.perform_later(self, code)
-  end
-
 private
-
-  def send_reset_password_instructions_notification(token)
-    SendResetPasswordInstructions.perform_later(self, token)
-  end
 
   def current_user?
     User.current&.id == id
