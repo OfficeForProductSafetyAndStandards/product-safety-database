@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions", passwords: "users/passwords" }
+  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions", passwords: "users/passwords", two_factor_authentication: "users/two_factor_authentication" }
 
   resources :users, only: [] do
     member do

@@ -145,6 +145,8 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  otp_code:
+    blank: "Can not be blank."
   sign_in_form:
     email:
       wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"

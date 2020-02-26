@@ -233,18 +233,29 @@ RSpec.describe User do
       end
     end
   end
-
-  describe "#send_reset_password_instructions" do
+  describe "devise gems echosystem" do
     subject { create(:user) }
 
-    it "enqueues a job posting email to notify", :with_test_queue_adpater do
-      expect { subject.send_reset_password_instructions }
-        .to enqueue_job
-              .on_queue("psd")
-              .at(:no_wait)
-              .with do |user, token|
-        expect(user).to be user
-        expect(token).to be token
+    describe "#send_reset_password_instructions" do
+      it "enqueues a job posting email to notify", :with_test_queue_adpater do
+        expect { subject.send_reset_password_instructions }
+          .to enqueue_job
+                .on_queue("psd")
+                .at(:no_wait)
+                .with(subject, token)
+      end
+    end
+
+    describe "#send_two_factor_authentication_code", :with_test_queue_adpater do
+      it "enqueues a SendTwoFactorAuthenticationJob" do
+        expect { subject.send_new_otp }
+          .to enqueue_job(SendTwoFactorAuthenticationJob)
+                .at(:no_wait)
+                .on_queue("psd")
+                .with do |user, code|
+          expect(user).to be user
+          expect(subject.direct_otp).to eq(code)
+        end
       end
     end
   end

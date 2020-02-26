@@ -1,1 +1,1 @@
-ActionMailer::Base.add_delivery_method :govuk_notify, GovukNotifyRails::Delivery, api_key: ENV["NOTIFY_API_KEY"] || "#{SecureRandom.uuid}.#{SecureRandom.uuid}"
+ActionMailer::Base.add_delivery_method :govuk_notify, GovukNotifyRails::Delivery, api_key: Rails.configuration.notify_api_key
