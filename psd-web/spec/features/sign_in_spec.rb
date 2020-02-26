@@ -67,6 +67,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
         fill_in "Password", with: " "
         click_on "Continue"
 
+
         expect(page).to have_css(".govuk-error-message", text: "Enter your email address")
         expect(page).to have_css(".govuk-error-message", text: "Enter your password")
       end
