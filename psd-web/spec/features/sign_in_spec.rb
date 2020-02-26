@@ -74,6 +74,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
       end
     end
 
+
     context "when password field is left empty" do
       scenario "shows an error messages" do
         visit root_path
