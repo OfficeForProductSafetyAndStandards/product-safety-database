@@ -46,6 +46,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
       scenario "shows an error message" do
         visit root_path
         click_on "Sign in to your account"
+        
 
         fill_in "Email address", with: "test.email"
         fill_in "Password", with: "password "
