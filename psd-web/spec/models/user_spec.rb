@@ -9,6 +9,14 @@ RSpec.describe User do
         expect(user.errors.messages[:mobile_number]).to eq ["Enter your mobile number"]
       end
 
+      it "validates the format of the mobile number" do
+        user = build(:user, mobile_number: "01111111111")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:mobile_number]).to eq [
+          "Enter your mobile number in the correct format, like 07700 900 982"
+        ]
+      end
+
       it "validates the presence of name" do
         user = build(:user, name: "")
         expect(user).not_to be_valid(:registration_completion)
@@ -26,6 +34,13 @@ RSpec.describe User do
         expect(user).not_to be_valid(:registration_completion)
         expect(user.errors.messages[:password])
           .to eq ["Password is too short"]
+      end
+
+      it "validates password is not too common" do
+        user = build(:user, password: "password")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:password])
+          .to eq ["Choose a less frequently used password"]
       end
     end
   end
