@@ -1,6 +1,5 @@
 module Users
   class PasswordsController < Devise::PasswordsController
-
     def create
       super do |resource|
         if reset_password_form.invalid?
@@ -19,7 +18,7 @@ module Users
       end
     end
 
-    private
+  private
 
     def reset_password_form
       @reset_password_form ||= ResetPasswordForm.new(resource_params.permit(:email))
