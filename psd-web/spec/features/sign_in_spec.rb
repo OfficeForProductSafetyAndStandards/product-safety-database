@@ -48,7 +48,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
         click_on "Sign in to your account"
 
         fill_in "Email address", with: "test.email"
-        fill_in "Password", with: "password"
+        fill_in "Password", with: "password "
         click_on "Continue"
 
         expect(page).to have_css(".govuk-error-summary__list", text: "Enter your email address in the correct format, like name@example.com")
