@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Home page", :with_elasticsearch, type: :request do
+RSpec.describe "HomePage", :with_elasticsearch, :with_stubbed_2fa, type: :request do
   context "when not signed in" do
     it "not signed in visits / stays on /" do
       get "/"
@@ -11,7 +11,9 @@ RSpec.describe "Home page", :with_elasticsearch, type: :request do
   context "when signed in" do
     let(:user) { create(:user, :opss_user, :activated) }
 
-    before { sign_in(user) }
+    before do
+      sign_in(user)
+    end
 
     it "signed in visits / gets redirected to /cases" do
       get "/"

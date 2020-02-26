@@ -417,4 +417,24 @@ RSpec.describe User do
       end
     end
   end
+
+  describe "devise gems echosystem" do
+    subject(:user) { create(:user) }
+
+    describe "#send_two_factor_authentication_code", :with_test_queue_adpater do
+      # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
+      it "enqueues a SendTwoFactorAuthenticationJob" do
+        ActiveJob::Base.queue_adapter = :test
+        expect { user.send_new_otp }
+          .to enqueue_job(SendTwoFactorAuthenticationJob)
+                .at(:no_wait)
+                .on_queue("psd")
+                .with do |user_param, code_param|
+          expect(user_param).to be user
+          expect(user.direct_otp).to eq(code_param)
+        end
+      end
+      # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
+    end
+  end
 end

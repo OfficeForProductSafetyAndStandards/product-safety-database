@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions", passwords: "users/passwords" } do
+  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions", passwords: "users/passwords", two_factor_authentication: "users/two_factor_authentication" } do
     get "reset-password", to: "users/passwords#new", as: :new_user_password
   end
 

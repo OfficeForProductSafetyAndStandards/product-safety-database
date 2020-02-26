@@ -1,0 +1,23 @@
+<% title = "Check your phone" %>
+<% content_for :page_title, title_for(resource, title) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= error_summary resource.errors %>
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <p class="govuk-body">We have sent you a security code by text message.</p>
+    <%= form_tag([resource_name, :two_factor_authentication], :method => :put) do %>
+      <%= render "components/govuk_input", id: "direct_otp", name: "user[direct_otp]", type: "text", classes: "govuk-input--width-5", label: { text: "Enter security code" }, attributes: { pattern: "[0-9]*", inputmode: "numeric" } %>
+
+      <%= govukButton(text: "Continue") %>
+    <% end %>
+
+    <div class="govuk-body">
+      <%= link_to "Not received a text message?", resend_code_user_two_factor_authentication_path, class: "govuk-link" %>
+    </div>
+
+  </div>
+</div>

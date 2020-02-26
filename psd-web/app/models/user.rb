@@ -4,8 +4,11 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
-  devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
+  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
+
   belongs_to :organisation
+
+  has_one_time_password(encrypted: true)
 
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations
@@ -29,6 +32,9 @@ class User < ApplicationRecord
   end
 
   attribute :skip_password_validation, :boolean, default: false
+
+  # TODO: remove when registration is merged
+  attribute :mobile_number
 
   def self.activated
     where(account_activated: true)
@@ -179,6 +185,10 @@ class User < ApplicationRecord
     return false unless invited_at
 
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
+  end
+
+  def send_two_factor_authentication_code(code)
+    SendTwoFactorAuthenticationJob.perform_later(self, code)
   end
 
 private

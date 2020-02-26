@@ -11,6 +11,8 @@ FactoryBot.define do
     account_activated { false }
     hash_iterations { 27_500 }
     mobile_number { "07700 900 982" }
+    direct_otp_sent_at { Time.current }
+    direct_otp { 123123 }
 
     transient do
       roles { [:psd_user] }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User accepting declaration", type: :request, with_stubbed_keycloak_config: true do
+RSpec.describe "User accepting declaration", :with_stubbed_keycloak_config, :with_stubbed_2fa, type: :request do
   let(:user) { create(:user) }
 
   before { sign_in(user) }
