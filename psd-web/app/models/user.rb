@@ -12,8 +12,6 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :teams
 
-  validates :id, presence: true, uuid: true
-
   attribute :skip_password_validation, :boolean, default: false
 
   def self.activated
