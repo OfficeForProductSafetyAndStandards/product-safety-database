@@ -2,7 +2,6 @@ RSpec.shared_context "omniauth response" do
   let!(:organisation) { create :organisation }
   let!(:team)         { create :team, organisation: organisation }
   let(:uid) { SecureRandom.uuid }
-  let(:group) { team.path }
   let(:omniauth_response) do
     {
       "provider" => :openid_connect,

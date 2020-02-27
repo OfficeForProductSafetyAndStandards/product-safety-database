@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :user do
-    id { SecureRandom.uuid }
     name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
@@ -57,8 +56,9 @@ FactoryBot.define do
     end
 
     after(:create) do |user, evaluator|
-      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(evaluator.roles)
-      user.load_roles_from_keycloak
+      evaluator.roles.each do |role|
+        create(:user_role, name: role, user: user)
+      end
     end
   end
 end
