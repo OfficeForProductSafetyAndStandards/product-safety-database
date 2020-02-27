@@ -55,7 +55,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
 
   context "with a valid token" do
     it "does not allow you to reset you pasword" do
-      send_reset_password
+      request_password_reset
       expect(page).to have_css("p.govuk-body", text: "Click the link in the email to reset your password.")
 
       visit edit_user_password_url_token
@@ -80,7 +80,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
       context "when the password is too short" do
         let(:password) { "as" }
         it "does not allow you to reset your password" do
-          send_reset_password
+          request_password_reset
 
           visit edit_user_password_url_token
 
@@ -96,7 +96,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
         let(:password) { "" }
 
         it "does not allow you to reset your password" do
-          send_reset_password
+          request_password_reset
 
           visit edit_user_password_url_token
 
@@ -112,7 +112,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
 
   context "with and invalid token" do
     it "does not allow you to reset your password" do
-      send_reset_password
+      request_password_reset
 
       travel_to 66.minutes.from_now do
         visit edit_user_password_url_token
