@@ -180,5 +180,7 @@ Rails.application.routes.draw do
   unauthenticated do
     root to: "homepage#show"
   end
+  # Handle old post-login redirect URIs from previous implementation which are still bookmarked
+  match "/sessions/signin", to: redirect("/"), via: %i[get post]
 end
 # rubocop:enable Metrics/BlockLength
