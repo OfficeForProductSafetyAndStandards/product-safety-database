@@ -184,8 +184,3 @@ build-iPhoneSimulator/
 
 
 # End of https://www.gitignore.io/api/ruby,node,rails
-# Ignore vim temp files:
-*.swp
-*.swo
-*.swn
-*.swm
