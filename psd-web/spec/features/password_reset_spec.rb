@@ -75,7 +75,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
     context "when the password does not fit the critiera" do
       context "when the password is too short" do
         let(:password) { "as" }
-        it "does not allow you to reset you pasword" do
+        it "does not allow you to reset your password" do
           send_reset_password
 
           visit edit_user_password_url_token
