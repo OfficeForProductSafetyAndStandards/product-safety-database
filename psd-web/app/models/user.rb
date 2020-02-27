@@ -153,9 +153,11 @@ class User < ApplicationRecord
 
 private
 
+  # BEGIN: place devise overriden method calls bellow
   def send_reset_password_instructions_notification(token)
     SendResetPasswordInstructions.perform_later(self, token)
   end
+  # END: Devise methods
 
   def current_user?
     User.current&.id == id
