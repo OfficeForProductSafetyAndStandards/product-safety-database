@@ -27,8 +27,29 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
         .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
 
       expect(page).to have_css("h1", text: "Reset your password")
+
       fill_in "Email address", with: user.email
       click_on "Send email"
+
+      expect(page).to have_css("h1", text: "Check your email")
+    end
+  end
+
+  context "when not entering a valid email" do
+    it "does not send you a notification" do
+      user.update!(reset_password_token: reset_token)
+
+      visit "/sign-in"
+
+      click_link "Forgot your password?"
+
+      perform_enqueued_jobs do
+        assert_not_requested(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
+
+        expect(page).to have_css("h1", text: "Reset your password")
+        fill_in "Email address", with: Faker::Internet.safe_email
+        click_on "Send email"
+      end
     end
   end
 
@@ -49,26 +70,28 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
   end
 
   context "with a valid token" do
-    it "allows you to reset your password" do
-      request_password_reset
-      expect(page).to have_css("p.govuk-body", text: "Click the link in the email to reset your password.")
+    context "when entering a valid email" do
+      it "allows you to reset your password" do
+        request_password_reset
+        expect(page).to have_css("h1", text: "Check your email")
 
-      visit edit_user_password_url_token
+        visit edit_user_password_url_token
 
-      fill_in "Password", with: "a_new_password"
-      click_on "Continue"
+        fill_in "Password", with: "a_new_password"
+        click_on "Continue"
 
-      expect(page).to have_css("h1", text: "Declaration")
+        expect(page).to have_css("h1", text: "Declaration")
 
-      sign_out
+        sign_out
 
-      click_on "Sign in to your account"
+        click_on "Sign in to your account"
 
-      fill_in "Email address", with: user.email
-      fill_in "Password", with: "a_new_password"
-      click_on "Continue"
+        fill_in "Email address", with: user.email
+        fill_in "Password", with: "a_new_password"
+        click_on "Continue"
 
-      expect(page).to have_css("h1", text: "Declaration")
+        expect(page).to have_css("h1", text: "Declaration")
+      end
     end
 
     context "when the password does not fit the criteria" do

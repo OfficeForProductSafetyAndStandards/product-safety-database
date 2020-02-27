@@ -2,6 +2,8 @@ module Users
   class PasswordsController < Devise::PasswordsController
     def create
       super do |resource|
+        suppress_email_not_found_error
+
         if reset_password_form.invalid?
           resource.errors.clear
           resource.errors.merge!(reset_password_form.errors)
@@ -19,6 +21,16 @@ module Users
     end
 
   private
+
+    def suppress_email_not_found_error
+      return unless email_not_found_first_error?
+
+      resource.errors.delete(:email)
+    end
+
+    def email_not_found_first_error?
+      resource.errors.details.dig(:email).include?(error: :not_found)
+    end
 
     def reset_password_form
       @reset_password_form ||= ResetPasswordForm.new(resource_params.permit(:email))
