@@ -10,7 +10,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a"
     }.freeze
 
-  def reset_password_instruction(user, token)
+  def reset_password_instructions(user, token)
     set_template(TEMPLATES[:reset_password_instruction])
     set_reference("Password reset")
     set_personalisation(

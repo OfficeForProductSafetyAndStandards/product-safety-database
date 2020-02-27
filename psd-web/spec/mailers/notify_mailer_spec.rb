@@ -4,7 +4,7 @@ RSpec.describe NotifyMailer do
   describe "#reset_password_instruction" do
     let(:user)  { build(:user) }
     let(:token) { SecureRandom.hex }
-    let(:mail)  { described_class.reset_password_instruction(user, token) }
+    let(:mail)  { described_class.reset_password_instructions(user, token) }
 
     it "configures and send the email with the correct personalisation" do
       expect(mail.to).to eq([user.email])
