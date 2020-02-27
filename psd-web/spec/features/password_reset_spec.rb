@@ -109,7 +109,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
     end
   end
 
-  context "with and invalid token" do
+  context "with an expired token" do
     it "does not allow you to reset your password" do
       request_password_reset
 
