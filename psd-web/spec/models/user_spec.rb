@@ -129,32 +129,6 @@ RSpec.describe User do
     end
   end
 
-  describe "#load_roles_from_keycloak", :with_stubbed_keycloak_config do
-    let(:user) { create(:user, :psd_user) }
-    let(:roles) { %i[test_role another_test_role] }
-
-    before do
-      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(roles)
-      user.load_roles_from_keycloak
-    end
-
-    it "populates the user roles" do
-      expect(user.user_roles.where(name: roles).count).to eq(2)
-    end
-
-    it "deletes roles no longer assigned to the user" do
-      expect(user.user_roles.where(name: :psd_user)).to be_empty
-    end
-
-    context "when the user already has the same roles" do
-      let(:roles) { %i[test_role test_role another_test_role] }
-
-      it "does not duplicate roles" do
-        expect(user.user_roles.count).to eq(2)
-      end
-    end
-  end
-
   describe "#display_name" do
     let(:organisation_name) { "test org" }
     let(:other_organisation_name) { "other org" }
