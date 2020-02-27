@@ -8,7 +8,7 @@ RSpec.describe SendResetPasswordInstructions do
   describe "#perform" do
     it "sends the email" do
       expect(NotifyMailer)
-        .to receive(:reset_password_instruction)
+        .to receive(:reset_password_instructions)
               .with(user, token).and_return(mailer)
 
       described_class.perform_now(user, token)
