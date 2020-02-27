@@ -53,7 +53,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
   end
 
   context "with a valid token" do
-    it "does not allow you to reset you pasword" do
+    it "allows you to reset your password" do
       request_password_reset
       expect(page).to have_css("p.govuk-body", text: "Click the link in the email to reset your password.")
 
