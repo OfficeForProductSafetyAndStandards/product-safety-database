@@ -13,7 +13,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
     _raw, enc = reset_token
     user.update!(reset_password_token: enc)
 
-    visit new_user_session_path
+    visit "/sign-in"
 
     click_link "Forgot your password?"
 
@@ -38,7 +38,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
 
   context "when entering an invalid email" do
     it "does not allow you to reset you pasword" do
-      visit new_user_session_path
+      visit "/sign-in"
 
       click_link "Forgot your password?"
       fill_in "Email address", with: "not_an_email"

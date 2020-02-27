@@ -18,9 +18,15 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions", passwords: "users/passwords" }
+  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions", passwords: "users/passwords" } do
+    get "reset-password", to: "users/passwords#new", as: :new_user_password
+  end
 
-  resources :users, only: [] do
+  devise_scope :user do
+    resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
+  end
+
+  resources :users, only: [:show] do
     member do
       get :create_account
     end

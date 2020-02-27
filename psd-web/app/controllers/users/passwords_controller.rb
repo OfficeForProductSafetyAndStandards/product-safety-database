@@ -27,5 +27,9 @@ module Users
     def reset_password_token_just_expired?
       resource.errors.full_messages_for(:reset_password_token).any?
     end
+
+    def after_sending_reset_password_instructions_path_for(_resource_name)
+      check_your_email_path
+    end
   end
 end
