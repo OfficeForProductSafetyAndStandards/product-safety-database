@@ -72,7 +72,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
       expect(page).to have_css("h1", text: "Declaration")
     end
 
-    context "when the password does not fit the critiera" do
+    context "when the password does not fit the criteria" do
       context "when the password is too short" do
         let(:password) { "as" }
         it "does not allow you to reset your password" do
