@@ -14,8 +14,6 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :teams
 
-  validates :id, presence: true, uuid: true
-
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
     registration_completion.validates :mobile_number,
