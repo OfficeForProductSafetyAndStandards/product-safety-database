@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Password reset management", :with_test_queue_adpater do
+RSpec.describe "Resetting your password", :with_test_queue_adpater do
   let(:user)                         { create(:user) }
   let!(:reset_token)                 { Devise.token_generator.generate(User, :reset_password_token) }
   let(:edit_user_password_url_token) { edit_user_password_url(reset_password_token: reset_token.first) }
@@ -72,10 +72,10 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
       expect(page).to have_css("h1", text: "Declaration")
     end
 
-    context "when the password does not fit the critiera" do
+    context "when the password does not fit the criteria" do
       context "when the password is too short" do
         let(:password) { "as" }
-        it "does not allow you to reset you pasword" do
+        it "does not allow you to reset your password" do
           send_reset_password
 
           visit edit_user_password_url_token
@@ -91,7 +91,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
       context "when the password is too short" do
         let(:password) { "" }
 
-        it "does not allow you to reset you pasword" do
+        it "does not allow you to reset your password" do
           send_reset_password
 
           visit edit_user_password_url_token
@@ -107,7 +107,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
   end
 
   context "with and invalid token" do
-    it "does not allow you to reset you pasword" do
+    it "does not allow you to reset your password" do
       send_reset_password
 
       travel_to 66.minutes.from_now do
