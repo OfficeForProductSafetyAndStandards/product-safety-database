@@ -1,16 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Resetting your password", :with_test_queue_adapter do
-  let(:user)                         { create(:user) }
-  let!(:reset_token)                 { Devise.token_generator.generate(User, :reset_password_token) }
+  let(:user)         { create(:user) }
+  let!(:reset_token) { stubbed_devise_generated_token }
+
   let(:edit_user_password_url_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
 
   def request_password_reset
-    allow(Devise.token_generator)
-      .to receive(:generate)
-            .with(User, :reset_password_token).and_return(reset_token)
-    _raw, enc = reset_token
-    user.update!(reset_password_token: enc)
+    user.update!(reset_password_token: reset_token)
 
     visit "/sign-in"
 

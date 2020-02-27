@@ -13,7 +13,18 @@ module LoginHelpers
   end
 end
 
+module Devise::Test::TokenGenerator
+  def stubbed_devise_generated_token(reset_token = Devise.token_generator.generate(User, :reset_password_token))
+    allow(Devise.token_generator)
+      .to receive(:generate)
+      .with(User, :reset_password_token).and_return(reset_token)
+
+    reset_token
+  end
+end
+
 RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers
   config.include LoginHelpers, type: :feature
+  config.include Devise::Test::TokenGenerator
 end

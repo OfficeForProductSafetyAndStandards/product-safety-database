@@ -236,6 +236,7 @@ RSpec.describe User do
 
   describe "#send_reset_password_instructions" do
     subject { create(:user) }
+    let!(:reset_token) { stubbed_devise_generated_token }
 
     it "enqueues a job posting email to notify", :with_test_queue_adapter do
       expect { subject.send_reset_password_instructions }
