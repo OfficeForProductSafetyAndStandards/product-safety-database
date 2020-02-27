@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
   end
 
-  resources :users, only: [:show] do
+  resources :users, only: [] do
     member do
       get :create_account
     end
