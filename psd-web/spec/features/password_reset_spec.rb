@@ -37,7 +37,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
   end
 
   context "when entering an invalid email" do
-    it "does not allow you to reset you pasword" do
+    it "does not allow you to reset your password" do
       visit new_user_session_path
 
       click_link "Forgot your password?"
