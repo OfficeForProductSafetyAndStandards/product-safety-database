@@ -31,6 +31,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
       stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
         .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
 
+      expect(page).to have_css("h1", text: "Reset your password")
       fill_in "Email address", with: user.email
       click_on "Send email"
     end
@@ -41,6 +42,9 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
       visit "/sign-in"
 
       click_link "Forgot your password?"
+
+      expect(page).to have_css("h1", text: "Reset your password")
+
       fill_in "Email address", with: "not_an_email"
       click_on "Send email"
 
