@@ -107,7 +107,7 @@ RSpec.describe "Password reset management", :with_test_queue_adpater do
   end
 
   context "with and invalid token" do
-    it "does not allow you to reset you pasword" do
+    it "does not allow you to reset your password" do
       send_reset_password
 
       travel_to 66.minutes.from_now do
