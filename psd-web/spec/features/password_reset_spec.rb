@@ -6,7 +6,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adpater do
   let(:edit_user_password_url_token) { edit_user_password_url(reset_password_token: reset_token.first) }
 
 
-  def send_reset_password
+  def request_password_reset
     allow(Devise.token_generator)
       .to receive(:generate)
             .with(User, :reset_password_token).and_return(reset_token)
