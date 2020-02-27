@@ -262,8 +262,8 @@ if run_seeds
   )
 
   # migrations are causing model having wrong attributes,
-  # we need to reset them, it happens only when db:migrate and db:seed are being run
-  # by the same process
+  # we need to reset them, it happens only when db:migrate and db:seed are being
+  # run by the same process
   Location.reset_column_information
   business.locations << Location.new(
     name: "Registered office address",
