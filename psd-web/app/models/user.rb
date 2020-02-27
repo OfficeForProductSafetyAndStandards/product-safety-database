@@ -175,10 +175,7 @@ class User < ApplicationRecord
   def invitation_expired?
     return false unless invited_at
 
-    # Changed temporally for testing purposes.
-    # Will be reverted before merging.
-    # invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
-    invited_at <= 10.minutes.ago # hardcoded for testing
+    invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
 private
