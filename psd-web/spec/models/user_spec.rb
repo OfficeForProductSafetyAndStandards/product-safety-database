@@ -238,15 +238,12 @@ RSpec.describe User do
     subject { create(:user) }
     let!(:reset_token) { stubbed_devise_generated_token }
 
-    it "enqueues a job posting email to notify", :with_test_queue_adapter do
+    it "enqueues a job posting email to notify with the none encrypted token", :with_test_queue_adapter do
       expect { subject.send_reset_password_instructions }
         .to enqueue_job
               .on_queue("psd")
               .at(:no_wait)
-              .with do |user, token|
-        expect(user).to be user
-        expect(token).to be token
-      end
+              .with(subject, reset_token.first)
     end
   end
 end
