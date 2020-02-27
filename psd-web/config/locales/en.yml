@@ -145,6 +145,7 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  enter_email_address: "Enter your email address"
   sign_in_form:
     email:
       wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"
