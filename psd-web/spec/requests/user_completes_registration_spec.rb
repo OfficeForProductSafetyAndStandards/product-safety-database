@@ -35,30 +35,30 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       end
     end
 
-    context "when the user already created an account with the invitation token" do
-      let(:user) { create(:user, :invited, :activated) }
+    context "when the user has already completed their registration" do
+      let(:user) { create(:user, invitation_token: "abc123", invited_at: Time.zone.now, account_activated: false) }
 
-      it "shows a message alerting about the account being already setup" do
+      it "redirects to the homepage" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
         expect(response).to redirect_to(root_path)
       end
     end
 
     context "when the user is already signed in" do
-      let(:user) { create(:user, :invited, :activated) }
+      let(:user) { create(:user, :invited, account_activated: true) }
 
       before do
         sign_in user
       end
 
-      it "shows a message alerting about the account being already setup" do
+      it "redirects to the homepage" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
         expect(response).to redirect_to(root_path)
       end
     end
 
     context "when a different user is already signed in" do
-      let(:other_user) { create(:user, :invited, :activated) }
+      let(:other_user) { create(:user, :activated) }
       let(:invited_user) { create(:user, :invited) }
 
       before do
@@ -91,8 +91,8 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         user.reload
       end
 
-      it "sets the activated flag on the user" do
-        expect(user).to be_account_activated
+      it "does not set the activated flag on the user" do
+        expect(user).not_to be_account_activated
       end
 
       it "redirects to the root path" do
