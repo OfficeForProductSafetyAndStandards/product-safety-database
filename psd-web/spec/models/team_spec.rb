@@ -31,7 +31,7 @@ RSpec.describe Team do
       %w{bish bosh bash}
     end
 
-    context "OPSS user" do
+    context "with an OPSS user" do
       let(:user) { double("User", is_opss?: true) }
 
       it "returns all important teams" do
@@ -39,7 +39,7 @@ RSpec.describe Team do
       end
     end
 
-    context "Non-OPSS user" do
+    context "with a non-OPSS user" do
       let(:user) { double("User", is_opss?: false) }
 
       it "returns first important team" do

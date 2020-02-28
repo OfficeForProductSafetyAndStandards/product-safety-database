@@ -75,7 +75,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
     end
 
-    context "whithout hazard_type" do
+    context "without hazard_type" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 
       before do
@@ -86,7 +86,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
     end
 
-    context "whithout non_compliant_reason" do
+    context "without non_compliant_reason" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 
       before { investigation.non_compliant_reason = nil }
@@ -207,7 +207,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
     end
 
-    context "whithout hazard_type" do
+    context "without hazard_type" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 
       before do
@@ -218,7 +218,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
     end
 
-    context "whithout non_compliant_reason" do
+    context "without non_compliant_reason" do
       let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
 
       before { investigation.non_compliant_reason = nil }

@@ -2,7 +2,7 @@ require "rails_helper"
 require "shared_contexts/load_user"
 
 RSpec.describe Users::CreateSession do
-  include_context "load user"
+  include_context "with mock user"
 
   subject do
     described_class.call(

@@ -25,20 +25,14 @@ RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_ma
     "a[href=\"#{resend_invitation_team_path(team)}?email_address=#{CGI.escape(email)}\"]"
   end
 
-  context "re-sending invitation email" do
-    context "as a team admin user" do
+  context "when re-sending invitation email" do
+    context "when the user is a team admin" do
       let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
-
-
 
       it "only displays the link for inactive users" do
         expect(page).to have_css(resend_link_selector(another_inactive_user.email))
         expect(page).not_to have_css(resend_link_selector(another_active_user.email))
       end
-    end
-
-    context "as a team admin" do
-      let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
 
       it "inviting an existing user shows an error message" do
         click_link "Invite a team member"
@@ -50,7 +44,7 @@ RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_ma
     end
   end
 
-  context "as a normal user" do
+  context "when the user is not a team admin" do
     let(:user) { create(:user, :activated, :psd_user, teams: [team], has_viewed_introduction: true) }
 
     it "does not display the resend invite link for any users" do

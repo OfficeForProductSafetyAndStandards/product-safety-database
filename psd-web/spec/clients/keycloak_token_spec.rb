@@ -33,15 +33,15 @@ RSpec.describe KeycloakToken do
   let(:new_token) { "new-token-123" }
 
   describe "#access_token" do
-    context "no existing access token" do
-      context "request successful" do
+    context "with no existing access token" do
+      context "when request successful" do
         it "gets a new token from Keycloak and returns it" do
           expect(subject.access_token).to eq(new_token)
           expect(request_for_token).to have_been_requested
         end
       end
 
-      context "request unsuccessful" do
+      context "when request unsuccessful" do
         let(:returned_status) { 400 }
 
         it "raises exception" do
@@ -50,14 +50,14 @@ RSpec.describe KeycloakToken do
       end
     end
 
-    context "existing access token" do
+    context "with existing access token" do
       before do
         subject.send(:token=, existing_token)
       end
 
       let(:existing_token) { "existing-token-123" }
 
-      context "which is not expired" do
+      context "when it is not expired" do
         before do
           subject.send(:expires_at=, Time.now.to_i + 10)
         end
@@ -68,7 +68,7 @@ RSpec.describe KeycloakToken do
         end
       end
 
-      context "which is expired" do
+      context "when it is expired" do
         before do
           subject.send(:expires_at=, Time.now.to_i - 10)
         end

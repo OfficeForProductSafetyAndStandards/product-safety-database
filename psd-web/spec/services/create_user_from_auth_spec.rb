@@ -3,7 +3,7 @@ require "shared_contexts/omniauth_response"
 require "shared_examples/create_user"
 
 RSpec.describe CreateUserFromAuth do
-  include_context "omniauth response"
+  include_context "with omniauth response"
 
   subject { described_class.new(omniauth_response) }
 
