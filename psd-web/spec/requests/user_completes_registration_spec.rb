@@ -45,7 +45,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
     end
 
     context "when the user is already signed in" do
-      let(:user) { create(:user, :invited, :activated) }
+      let(:user) { create(:user, :invited, account_activated: true) }
 
       before do
         sign_in user
@@ -58,7 +58,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
     end
 
     context "when a different user is already signed in" do
-      let(:other_user) { create(:user, :invited, :activated) }
+      let(:other_user) { create(:user, :activated) }
       let(:invited_user) { create(:user, :invited) }
 
       before do
