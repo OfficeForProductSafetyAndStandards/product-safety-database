@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Home page", :with_elasticsearch do
+RSpec.describe HomepageController, :with_elasticsearch do
   context "when not signed in" do
     it "not signed in visits / stays on /" do
       get "/"

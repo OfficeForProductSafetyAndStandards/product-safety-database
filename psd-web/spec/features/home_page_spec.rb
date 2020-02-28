@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
+RSpec.describe "Home page", :with_elasticsearch, :with_stubbed_keycloak_config, type: :feature do
   context "when user is signed out" do
     it "shows the home page" do
       sign_out(:user)

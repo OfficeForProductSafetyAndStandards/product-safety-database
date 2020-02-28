@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Signing in", :with_stubbed_mailer, :with_stubbed_keycloak_config, :with_elasticsearch do
+RSpec.describe "Signing in", :with_stubbed_mailer, :with_stubbed_keycloak_config, :with_elasticsearch, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }

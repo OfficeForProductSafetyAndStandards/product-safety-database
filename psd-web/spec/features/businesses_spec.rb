@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Business listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Business listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user)            { create :user, :activated, has_viewed_introduction: true }
   let!(:business_one)   { create(:business, trading_name: "great value",    created_at: 1.day.ago) }
   let!(:business_two)   { create(:business, trading_name: "mediocre stuff", created_at: 2.days.ago) }

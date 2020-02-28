@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:other_team) { create(:team, organisation: organisation, name: "other team") }
