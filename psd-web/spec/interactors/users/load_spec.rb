@@ -24,11 +24,14 @@ RSpec.describe Users::Load, type: :interactor do
     end
 
     context "when no user is loaded" do
-      before { allow(user_service).to receive(:user).and_raise(RuntimeError) }
+      before do
+        allow(user_service).to receive(:user).and_raise(RuntimeError)
+        allow(Raven).to receive(:capture_exception)
+      end
 
       it do
-        expect(Raven).to receive(:capture_exception).with(instance_of(RuntimeError))
         load_service.user
+        expect(Raven).to have_received(:capture_exception).with(instance_of(RuntimeError))
       end
 
       it { is_expected.to be_a_failure }

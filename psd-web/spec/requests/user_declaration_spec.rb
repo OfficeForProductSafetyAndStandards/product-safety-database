@@ -20,9 +20,11 @@ RSpec.describe "User accepting declaration", type: :request, with_stubbed_keyclo
   context "with the agree checkbox checked" do
     let(:params) { { agree: "checked" } }
 
+    before { allow(UserDeclarationService).to receive(:accept_declaration) }
+
     it "calls UserDeclarationService.accept_declaration" do
-      expect(UserDeclarationService).to receive(:accept_declaration).with(user)
       post declaration_accept_path, params: params
+      expect(UserDeclarationService).to have_received(:accept_declaration).with(user)
     end
 
     it "redirects the user to root_path" do
