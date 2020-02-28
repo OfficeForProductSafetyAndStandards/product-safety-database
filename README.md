@@ -93,19 +93,6 @@ macros have been ported as [Rails compatible components](https://github.com/UKGo
 
 ## Accounts
 
-### Keycloak
-
-The development instance of Keycloak is configured with the following default user accounts:
-
-* Internal user: `user@example.com` / `password`
-* Trading Standards user: `msa@example.com` / `password`
-* Admin Console: `admin` / `admin`
-
-Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add/edit users or to obtain client credentials.
-
-Ask someone on the team to create an account for you on the Int and Staging environments.
-
-
 ## GOV.UK Notify
 
 If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk) - ask someone on the team to invite you.
@@ -192,8 +179,6 @@ Create an S3 bucket named `psd-<<SPACE>>`.
 
 #### PSD Website
 
-This assumes that you've run [the deployment from scratch steps for Keycloak](https://github.com/UKGovernmentBEIS/beis-opss-keycloak#deployment-from-scratch)
-
 Start by setting up the following credentials:
 
 * To configure rails to use the production database amongst other things and set the server's encryption key (generate a new value by running `rake secret`):
@@ -268,8 +253,6 @@ Start by setting up the following credentials:
         "SIDEKIQ_PASSWORD": "XXX"
     }'
 ```
-
-* `psd-keycloak-env` should already be setup from [the keycloak steps](https://github.com/UKGovernmentBEIS/beis-opss/blob/master/keycloak/README.md#setup-clients).
 
 Once all the credentials are created, the app can be deployed using:
 
@@ -392,10 +375,6 @@ See [antivirus repo](https://github.com/UKGovernmentBEIS/beis-opss-antivirus).
 ### Maintenance page
 
 See [maintenance in infrastructure repo](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure/blob/master/maintenance/README.md).
-
-### Keycloak
-
-See [keycloak repository](https://github.com/UKGovernmentBEIS/beis-opss-keycloak).
 
 ### Other infrastructure
 
