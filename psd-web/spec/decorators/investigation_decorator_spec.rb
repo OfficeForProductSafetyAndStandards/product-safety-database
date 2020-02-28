@@ -11,7 +11,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
-  let!(:complainant) { create(:complainant, investigation: investigation) }
+
+  before { create(:complainant, investigation: investigation) }
 
 
   describe "#display_product_summary_list?" do
