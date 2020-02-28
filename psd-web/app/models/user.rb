@@ -151,7 +151,7 @@ class User < ApplicationRecord
     has_role? :team_admin
   end
 
-  def has_setup_account?
+  def has_completed_registration?
     encrypted_password.presence && name.presence && mobile_number.presence?
   end
 
