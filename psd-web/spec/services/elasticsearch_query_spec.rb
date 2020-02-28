@@ -35,7 +35,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
     before do
       allow(NotifyMailer)
         .to receive(:investigation_updated)
-        .and_return(double(NotifyMailer, deliver_later: nil))
+        .and_return(instance_double("ActionMailer::MessageDelivery", deliver_later: nil))
     end
 
     context "when searching on an investigation's product" do
