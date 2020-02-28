@@ -91,8 +91,8 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         user.reload
       end
 
-      it "sets the activated flag on the user" do
-        expect(user).to be_account_activated
+      it "does not set the activated flag on the user" do
+        expect(user).not_to be_account_activated
       end
 
       it "redirects to the root path" do
