@@ -17,7 +17,6 @@ RSpec.describe KeycloakClient, :with_stubbed_keycloak_config do
 
     before do
       allow(RestClient).to receive(:get).and_return(response_double)
-      expect(client.instance_variable_get(:@client)).to be_nil
       client.client
     end
 
@@ -31,23 +30,15 @@ RSpec.describe KeycloakClient, :with_stubbed_keycloak_config do
   end
 
   describe "#admin" do
-    before do
-      expect(client.instance_variable_get(:@admin)).to be_nil
-      client.admin
-    end
-
     it "sets instance variable lazily" do
+      client.admin
       expect(client.instance_variable_get(:@admin)).to be(Keycloak::Admin)
     end
   end
 
   describe "#internal" do
-    before do
-      expect(client.instance_variable_get(:@internal)).to be_nil
-      client.internal
-    end
-
     it "sets instance variable lazily" do
+      client.internal
       expect(client.instance_variable_get(:@internal)).to be(Keycloak::Internal)
     end
   end
