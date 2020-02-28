@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe ProductDecorator do
-  subject { product.decorate }
+  subject(:decorated_product) { product.decorate }
 
   let(:product) { build(:product) }
 
 
   describe "#summary_list" do
     include CountriesHelper
-    let(:summary_list) { subject.summary_list }
+    let(:summary_list) { decorated_product.summary_list }
 
     context "when displaying the product summary" do
       it "displays the product summary list with the batch number" do
@@ -30,7 +30,7 @@ RSpec.describe ProductDecorator do
   describe "#product_type_and_category_label" do
     context "when both the product type and and category are present" do
       it "combines product type and product category" do
-        expect(subject.product_type_and_category_label)
+        expect(decorated_product.product_type_and_category_label)
           .to eq("#{product.product_type} (#{product.category.downcase})")
       end
     end
@@ -39,7 +39,7 @@ RSpec.describe ProductDecorator do
       before { product.product_type = nil }
 
       it "returns only the product category" do
-        expect(subject.product_type_and_category_label)
+        expect(decorated_product.product_type_and_category_label)
           .to eq(product.category)
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe ProductDecorator do
       before { product.category = nil }
 
       it "returns only the product type" do
-        expect(subject.product_type_and_category_label)
+        expect(decorated_product.product_type_and_category_label)
           .to eq(product.product_type)
       end
     end

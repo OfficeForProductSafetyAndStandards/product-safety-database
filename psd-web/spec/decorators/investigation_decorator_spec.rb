@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
-  subject { investigation.decorate }
+  subject(:decorated_investigation) { investigation.decorate }
 
   let(:organisation) { create :organisation }
   let(:user)         { create(:user, organisation: organisation) }
@@ -29,7 +29,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   end
 
   describe "#product_summary_list" do
-    let(:product_summary_list) { subject.product_summary_list }
+    let(:product_summary_list) { decorated_investigation.product_summary_list }
     let(:products) { create_list(:product, 2) }
 
     it "has the expected fields" do
@@ -76,7 +76,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "without hazard_type" do
-      let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
 
       before do
         investigation.hazard_type = nil
@@ -87,7 +87,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "without non_compliant_reason" do
-      let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
 
       before { investigation.non_compliant_reason = nil }
 
@@ -98,7 +98,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#investigation_summary_list" do
     include Investigations::DisplayTextHelper
 
-    let(:investigation_summary_list) { subject.investigation_summary_list }
+    let(:investigation_summary_list) { decorated_investigation.investigation_summary_list }
 
     it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
@@ -128,7 +128,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "without complainant reference" do
-      let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
+      let(:investigation_summary_list) { Capybara.string(decorated_investigation.investigation_summary_list) }
 
       before { investigation.complainant_reference = nil }
 
@@ -137,7 +137,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   end
 
   describe "#source_details_summary_list" do
-    let(:source_details_summary_list) { subject.source_details_summary_list }
+    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list }
 
     before { allow(User).to receive(:current).and_return(user) }
 
@@ -154,7 +154,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   describe "#pretty_description" do
     it {
-      expect(subject.pretty_description)
+      expect(decorated_investigation.pretty_description)
         .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
     }
   end
@@ -165,7 +165,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   describe "#product_summary_list" do
     let(:products) { create_list :product, 2 }
-    let(:product_summary_list) { subject.product_summary_list }
+    let(:product_summary_list) { decorated_investigation.product_summary_list }
 
     it "has the expected fields" do
       expect(product_summary_list).to summarise("Product details", text: "2 products added")
@@ -208,7 +208,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "without hazard_type" do
-      let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
 
       before do
         investigation.hazard_type = nil
@@ -219,7 +219,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "without non_compliant_reason" do
-      let(:product_summary_list) { Capybara.string(subject.product_summary_list) }
+      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
 
       before { investigation.non_compliant_reason = nil }
 
@@ -228,7 +228,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   end
 
   describe "#investigation_summary_list" do
-    let(:investigation_summary_list) { subject.investigation_summary_list }
+    let(:investigation_summary_list) { decorated_investigation.investigation_summary_list }
 
     it "has the expected fields" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
@@ -258,7 +258,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "without complainant reference" do
-      let(:investigation_summary_list) { Capybara.string(subject.investigation_summary_list) }
+      let(:investigation_summary_list) { Capybara.string(decorated_investigation.investigation_summary_list) }
 
       before { investigation.complainant_reference = nil }
 
@@ -267,7 +267,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   end
 
   describe "#source_details_summary_list" do
-    let(:source_details_summary_list) { subject.source_details_summary_list }
+    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list }
 
     before do
       allow(User).to receive(:current).and_return(user)
@@ -290,7 +290,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   describe "#pretty_description" do
     it {
-      expect(subject.pretty_description)
+      expect(decorated_investigation.pretty_description)
         .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
     }
   end
@@ -302,7 +302,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#products_list" do
     let(:products)           { create_list :product, product_count }
     let(:products_remaining) { investigation.products.count - described_class::PRODUCT_DISPLAY_LIMIT }
-    let(:products_list)      { Capybara.string(subject.products_list) }
+    let(:products_list)      { Capybara.string(decorated_investigation.products_list) }
 
     context "with 6 images or less" do
       let(:product_count) { 6 }
@@ -356,7 +356,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
     context "when the investigation is assigned" do
       it "displays the assignee assignable name" do
-        expect(subject.assignable_display_name_for(viewing_user: viewing_user))
+        expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user))
           .to eq(user.decorate.assignee_short_name(viewing_user: viewing_user))
       end
     end
@@ -364,7 +364,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when the investigation is not assigned" do
       before { investigation.assignee = nil }
 
-      it { expect(subject.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
+      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
     end
   end
 end

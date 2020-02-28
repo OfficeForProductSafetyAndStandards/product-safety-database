@@ -5,10 +5,10 @@ require "shared_examples/create_user"
 RSpec.describe CreateUserFromAuth do
   include_context "with omniauth response"
 
-  subject { described_class.new(omniauth_response) }
+  subject(:create_user_service) { described_class.new(omniauth_response) }
 
   describe "#user" do
-    context "when the user does not exists" do
+    context "when the user does not exist" do
       context "when belonging to an existing team" do
         it_behaves_like "creates a user"
       end
@@ -24,7 +24,7 @@ RSpec.describe CreateUserFromAuth do
           let(:group) { Faker::Hipster.word }
 
           it "raises a RuntimeError" do
-            expect { subject.user }.to raise_error(RuntimeError, "No organisation found")
+            expect { create_user_service.user }.to raise_error(RuntimeError, "No organisation found")
           end
         end
       end
@@ -34,7 +34,7 @@ RSpec.describe CreateUserFromAuth do
       before { create(:user, id: uid) }
 
       it "updates the organisation" do
-        expect { subject.user }.not_to change(User, :count)
+        expect { create_user_service.user }.not_to change(User, :count)
       end
     end
   end

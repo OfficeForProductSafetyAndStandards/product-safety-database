@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Investigation::AllegationDecorator do
   fixtures(:investigation_products, :investigations, :products)
 
-  subject { allegation.decorate }
+  subject(:decorated_allegation) { allegation.decorate }
 
   let(:allegation) { investigations :one_product }
 
@@ -43,7 +43,7 @@ RSpec.describe Investigation::AllegationDecorator do
       let(:allegation) { investigations :no_products_case_title }
 
       it "has the correct title" do
-        expect(subject.title).to eq("Alarms – asphyxiation hazard (no product specified)")
+        expect(decorated_allegation.title).to eq("Alarms – asphyxiation hazard (no product specified)")
       end
     end
   end

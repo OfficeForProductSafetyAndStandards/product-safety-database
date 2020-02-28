@@ -4,7 +4,7 @@ require "shared_contexts/load_user"
 RSpec.describe Users::Load, type: :interactor do
   include_context "with mock user"
 
-  subject do
+  subject(:load_service) do
     described_class.call(
       omniauth_response: omniauth_response,
       user_service: user_service
@@ -20,7 +20,7 @@ RSpec.describe Users::Load, type: :interactor do
   describe ".call" do
     context "when successfully loading the user" do
       it { is_expected.to be_a_success }
-      it { expect(subject.user).to eq(user) }
+      it { expect(load_service.user).to eq(user) }
     end
 
     context "when no user is loaded" do
@@ -28,12 +28,12 @@ RSpec.describe Users::Load, type: :interactor do
 
       it do
         expect(Raven).to receive(:capture_exception).with(instance_of(RuntimeError))
-        subject.user
+        load_service.user
       end
 
       it { is_expected.to be_a_failure }
-      it { expect(subject.user).to be nil }
-      it { expect(subject.errors.full_messages).to eq(%w[RuntimeError]) }
+      it { expect(load_service.user).to be nil }
+      it { expect(load_service.errors.full_messages).to eq(%w[RuntimeError]) }
     end
   end
 end

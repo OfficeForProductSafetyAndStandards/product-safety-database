@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ActiveStorage::AttachmentDecorator do
   include ActionView::Helpers::TextHelper
 
-  subject { attachment.decorate }
+  subject(:decorated_attachment) { attachment.decorate }
 
   let(:attachment) { ActiveStorage::Attachment.new.tap(&:build_blob) }
 
@@ -16,7 +16,7 @@ RSpec.describe ActiveStorage::AttachmentDecorator do
     end
 
     it "formats the metadata description" do
-      expect(subject.description).to eq(simple_format(description))
+      expect(decorated_attachment.description).to eq(simple_format(description))
     end
   end
 end
