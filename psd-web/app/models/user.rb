@@ -151,6 +151,10 @@ class User < ApplicationRecord
     has_role? :team_admin
   end
 
+  def has_setup_account?
+    encrypted_password.presence && name.presence && mobile_number.presence?
+  end
+
   def self.get_assignees(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
     self.activated.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
