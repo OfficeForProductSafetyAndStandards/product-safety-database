@@ -2,9 +2,10 @@ require "rails_helper"
 
 RSpec.describe UrlHelper do
   describe "#path_for_model", :with_stubbed_elasticsearch do
+    subject { helper.path_for_model(object, slug) }
+
     let(:slug) { nil }
 
-    subject { helper.path_for_model(object, slug) }
 
     context "with an instance of Investigation" do
       let(:object) { create(:allegation, assignee: nil) }
@@ -64,9 +65,10 @@ RSpec.describe UrlHelper do
   end
 
   describe "#associated_document_path", :with_stubbed_elasticsearch, :with_stubbed_antivirus do
+    subject { helper.associated_document_path(object, document) }
+
     let(:document) { object.documents.first }
 
-    subject { helper.associated_document_path(object, document) }
 
     context "with an instance of Investigation" do
       let(:object) { create(:allegation, :with_document, assignee: nil) }

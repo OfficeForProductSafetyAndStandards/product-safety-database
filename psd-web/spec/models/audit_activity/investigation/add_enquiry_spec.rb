@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::AddEnquiry, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  let(:enquiry) { create(:enquiry) }
-
   subject do
     enquiry.activities.find_by!(type: described_class.name)
   end
+
+  let(:enquiry) { create(:enquiry) }
+
 
   describe "#build_title" do
     it "stores the title" do

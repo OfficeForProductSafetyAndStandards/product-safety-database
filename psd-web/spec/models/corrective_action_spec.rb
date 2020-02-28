@@ -146,6 +146,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
 
       context "with an attached file" do
         let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
+
         before { subject.documents.attach(io: File.open(file), filename: "test.txt") }
 
         it "returns true" do

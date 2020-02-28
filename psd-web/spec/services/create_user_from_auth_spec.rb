@@ -34,7 +34,7 @@ RSpec.describe CreateUserFromAuth do
       before { create(:user, id: uid) }
 
       it "updates the organisation" do
-        expect { subject.user }.to_not change(User, :count)
+        expect { subject.user }.not_to change(User, :count)
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_context "with stubbed mailer", shared_context: :metadata do
-  before { allow_any_instance_of(NotifyMailer).to receive(:mail) { true } }
+  before { allow_any_instance_of(NotifyMailer).to receive(:mail).and_return(true) }
 end
 
 RSpec.configure do |rspec|

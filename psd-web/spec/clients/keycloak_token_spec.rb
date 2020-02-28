@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe KeycloakToken do
+  subject do
+    described_class.new(token_endpoint)
+  end
+
   before do
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
@@ -15,9 +19,6 @@ RSpec.describe KeycloakToken do
       to_return(status: returned_status, body: json_body, headers: {})
   end
 
-  subject do
-    described_class.new(token_endpoint)
-  end
 
   let(:token_endpoint) { "example.com" }
   let(:client_id) { "123" }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Assigning an investigation", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team], has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, assignee: user) }
@@ -13,7 +13,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
 
   before { sign_in(as_user: user) }
 
-  scenario "only shows other active users" do
+  it "only shows other active users" do
     visit "/cases/#{investigation.pretty_id}/assign/choose"
 
     expect(page).to have_css("#investigation_select_team_member option[value=\"#{another_active_user.id}\"]")
@@ -23,7 +23,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     expect(page).not_to have_css("#investigation_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
   end
 
-  scenario "assign case to other user in same team" do
+  it "assign case to other user in same team" do
     visit new_investigation_assign_path(investigation)
     choose("Someone in your team")
     select another_active_user.name, from: "investigation_select_team_member"
@@ -33,7 +33,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     expect(page.find("dt", text: "Assigned to")).to have_sibling("dd", text: another_active_user.name.to_s)
   end
 
-  scenario "assign case to someone else in another team" do
+  it "assign case to someone else in another team" do
     visit new_investigation_assign_path(investigation)
     choose("Someone else")
     select another_active_user_another_team.name, from: "investigation_select_someone_else"
@@ -43,7 +43,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     expect(page.find("dt", text: "Assigned to")).to have_sibling("dd", text: another_active_user_another_team.name.to_s)
   end
 
-  scenario "once case assigned to other team- cannot re-assign" do
+  it "once case assigned to other team- cannot re-assign" do
     visit new_investigation_assign_path(investigation)
     choose("Someone else")
     select another_active_user_another_team.name, from: "investigation_select_someone_else"

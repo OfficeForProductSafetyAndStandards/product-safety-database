@@ -26,15 +26,18 @@ end
 
 RSpec.describe Investigation::Allegation do
   let(:factory) { :allegation }
+
   it_behaves_like "an Investigation"
 end
 
 RSpec.describe Investigation::Enquiry do
   let(:factory) { :enquiry }
+
   it_behaves_like "an Investigation"
 end
 
 RSpec.describe Investigation::Project do
   let(:factory) { :project }
+
   it_behaves_like "an Investigation"
 end

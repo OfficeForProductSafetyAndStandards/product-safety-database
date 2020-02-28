@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Team do
   describe ".all_with_organisation" do
-    before { 3.times { create(:team) } }
+    before { create_list(:team, 3) }
 
     it "includes associations needed for display_name" do
       assignees = described_class.all_with_organisation
@@ -23,7 +23,7 @@ RSpec.describe Team do
       org = Organisation.create!(id: SecureRandom.uuid, name: "test", path: "/test")
 
       (important_team_names + %w{bobbins cribbins}).map do |name|
-        Team.create!(id: SecureRandom.uuid, name: name, organisation: org, path: "/test")
+        described_class.create!(id: SecureRandom.uuid, name: name, organisation: org, path: "/test")
       end
     end
 

@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe UserDecorator do
+  subject { user.decorate }
+
   let(:user) { build(:user) }
 
-  subject { user.decorate }
 
   describe "#assignee_short_name" do
     let(:viewing_user) { build(:user, organisation: organisation) }

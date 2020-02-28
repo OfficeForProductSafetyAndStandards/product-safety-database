@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:other_team) { create(:team, organisation: organisation, name: "other team") }
@@ -22,7 +22,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
     visit investigations_path
   end
 
-  scenario "selecting filters only shows other active users in the assigned to and created by filters" do
+  it "selecting filters only shows other active users in the assigned to and created by filters" do
     expect(page).to have_css("#assigned_to_someone_else_id option[value=\"#{another_active_user.id}\"]")
     expect(page).not_to have_css("#assigned_to_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
 
@@ -30,14 +30,14 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
     expect(page).not_to have_css("#created_by_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
   end
 
-  scenario "no filters applied shows all cases" do
+  it "no filters applied shows all cases" do
     expect(page).to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to me" do
+  it "filtering cases assigned to me" do
     check "Me", id: "assigned_to_me"
     click_button "Apply filters"
 
@@ -47,7 +47,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to my team" do
+  it "filtering cases assigned to my team" do
     check "My team", id: "assigned_to_team_0"
     click_button "Apply filters"
 
@@ -57,7 +57,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to anyone else" do
+  it "filtering cases assigned to anyone else" do
     check "Other person or team", id: "assigned_to_someone_else"
     click_button "Apply filters"
 
@@ -67,7 +67,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to another person or team" do
+  it "filtering cases assigned to another person or team" do
     check "Other person or team", id: "assigned_to_someone_else"
     select other_team.name, from: "assigned_to_someone_else_id"
     click_button "Apply filters"
@@ -87,7 +87,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, :with
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "combining filters" do
+  it "combining filters" do
     check "My team", id: "assigned_to_team_0"
     check "Other person or team", id: "assigned_to_someone_else"
     select other_user_other_team.name, from: "assigned_to_someone_else_id"

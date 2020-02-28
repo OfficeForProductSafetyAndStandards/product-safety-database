@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Deleting an attachment from a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, :with_document, assignee: user) }
   let(:document) { investigation.documents.first }
 
   before { sign_in(as_user: user) }
 
-  scenario "deletes the attachment and creates activity" do
+  it "deletes the attachment and creates activity" do
     visit investigation_attachments_path(investigation)
 
     expect_to_be_on_attachments_page

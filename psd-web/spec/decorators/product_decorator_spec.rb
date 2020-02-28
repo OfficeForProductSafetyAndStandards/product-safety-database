@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe ProductDecorator do
+  subject { product.decorate }
+
   let(:product) { build(:product) }
 
-  subject { product.decorate }
 
   describe "#summary_list" do
     include CountriesHelper

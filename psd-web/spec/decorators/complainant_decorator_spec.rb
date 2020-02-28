@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe ComplainantDecorator do
+  subject { complainant.decorate }
+
   let(:complainant) { build(:complainant, investigation: nil) }
 
-  subject { complainant.decorate }
 
   describe "#contact_details" do
     context "with contact details" do

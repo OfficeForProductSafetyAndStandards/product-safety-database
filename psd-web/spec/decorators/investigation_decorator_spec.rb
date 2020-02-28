@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   include ActionView::Helpers::DateHelper
   include ActionView::Helpers::TextHelper
+  subject { investigation.decorate }
+
   let(:organisation) { create :organisation }
   let(:user)         { create(:user, organisation: organisation) }
   let(:creator)      { create(:user, organisation: organisation) }
@@ -11,13 +13,12 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
   let!(:complainant) { create(:complainant, investigation: investigation) }
 
-  subject { investigation.decorate }
 
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }
 
     context "with no product" do
-      it { is_expected.to_not be_display_product_summary_list }
+      it { is_expected.not_to be_display_product_summary_list }
     end
 
     context "with products" do
@@ -313,7 +314,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
 
       it "does not display a link to see all attached images" do
-        expect(products_list).to_not have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
+        expect(products_list).not_to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
       end
     end
 
@@ -327,7 +328,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
 
       it "does not display a link to see all the products" do
-        expect(products_list).to_not have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
+        expect(products_list).not_to have_link("View #{products_remaining} more products...", href: investigation_products_path(investigation))
       end
     end
 
@@ -340,7 +341,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
           expect(products_list).to have_link(product.name, href: product_path(product))
         end
         products_not_to_display.each do |product|
-          expect(products_list).to_not have_link(product.name, href: product_path(product))
+          expect(products_list).not_to have_link(product.name, href: product_path(product))
         end
       end
 

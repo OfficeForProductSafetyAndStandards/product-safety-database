@@ -11,11 +11,12 @@ RSpec.shared_examples "finds the relevant investigation" do
 end
 
 RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
+  subject { described_class.new(query, filter_params, sorting_params) }
+
   let(:user)           { create(:user) }
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
-  subject { described_class.new(query, filter_params, sorting_params) }
 
   def perform_search
     Investigation.full_search(subject)
@@ -66,7 +67,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
         let(:query) { product.country_of_origin }
 
         it "does not find the investigation" do
-          expect(perform_search.records).to_not include(investigation)
+          expect(perform_search.records).not_to include(investigation)
         end
       end
     end

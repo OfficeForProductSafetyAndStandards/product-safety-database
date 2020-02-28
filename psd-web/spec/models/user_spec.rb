@@ -6,7 +6,7 @@ RSpec.describe User do
       create(:user, :inactive)
       activated_user = create(:user, :activated)
 
-      expect(User.activated.to_a).to eq [activated_user]
+      expect(described_class.activated.to_a).to eq [activated_user]
     end
   end
 

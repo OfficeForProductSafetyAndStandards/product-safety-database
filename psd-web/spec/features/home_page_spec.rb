@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
+RSpec.describe "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
   context "User signed out" do
-    scenario "shows the home page" do
+    it "shows the home page" do
       sign_out(:user)
       visit root_path
 
@@ -45,7 +45,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
         let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
 
-        scenario "shows the declaration page before the case list" do
+        it "shows the declaration page before the case list" do
           expect(page).to have_current_path(declaration_index_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
@@ -63,7 +63,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
       end
 
       context "previously accepted the declaration" do
-        scenario "shows the case list" do
+        it "shows the case list" do
           expect(page).to have_current_path(investigations_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
@@ -81,7 +81,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
         let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
 
-        scenario "shows the declaration page before the introduction" do
+        it "shows the declaration page before the introduction" do
           expect(page).to have_current_path(declaration_index_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
@@ -102,7 +102,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
         context "not previously viewed the introduction" do
           let(:has_viewed_introduction) { false }
 
-          scenario "shows the introduction" do
+          it "shows the introduction" do
             expect(page).to have_current_path(introduction_overview_path)
             expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
@@ -112,7 +112,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
         end
 
         context "previously viewed the introduction" do
-          scenario "shows the non-OPSS home page" do
+          it "shows the non-OPSS home page" do
             expect(page).to have_current_path(root_path)
             expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
