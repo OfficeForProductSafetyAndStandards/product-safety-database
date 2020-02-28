@@ -35,8 +35,8 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       end
     end
 
-    context "when the user already created an account with the invitation token" do
-      let(:user) { create(:user, :invited, :activated) }
+    context "when the user has already completed their registration" do
+      let(:user) { create(:user, invitation_token: "abc123", invited_at: Time.zone.now, account_activated: false) }
 
       it "redirects to the homepage" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
