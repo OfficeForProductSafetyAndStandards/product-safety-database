@@ -14,7 +14,7 @@ RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_ma
     visit team_path(team)
   end
 
-  it "only shows team members, including the current user" do
+  it "shows the current user" do
     expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{user.email}\")")
     expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{another_active_user.email}\")")
     expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{another_inactive_user.email}\")")

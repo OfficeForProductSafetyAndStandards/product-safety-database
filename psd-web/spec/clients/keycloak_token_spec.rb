@@ -35,9 +35,13 @@ RSpec.describe KeycloakToken do
   describe "#access_token" do
     context "with no existing access token" do
       context "when request successful" do
-        it "gets a new token from Keycloak and returns it" do
-          expect(token.access_token).to eq(new_token)
+        it "gets a new token from Keycloak" do
+          token.access_token
           expect(request_for_token).to have_been_requested
+        end
+
+        it "returns the new token" do
+          expect(token.access_token).to eq(new_token)
         end
       end
 
@@ -62,9 +66,12 @@ RSpec.describe KeycloakToken do
           token.send(:expires_at=, Time.now.to_i + 10)
         end
 
-        it "returns the existing token without requesting from Keycloak" do
-          expect(token.access_token).to eq(existing_token)
+        it "does not request a new token from Keycloak" do
           expect(request_for_token).not_to have_been_requested
+        end
+
+        it "returns the existing token" do
+          expect(token.access_token).to eq(existing_token)
         end
       end
 
@@ -74,8 +81,12 @@ RSpec.describe KeycloakToken do
         end
 
         it "gets a new token from Keycloak and returns it" do
-          expect(token.access_token).to eq(new_token)
+          token.access_token
           expect(request_for_token).to have_been_requested
+        end
+
+        it "returns the new token" do
+          expect(token.access_token).to eq(new_token)
         end
       end
     end

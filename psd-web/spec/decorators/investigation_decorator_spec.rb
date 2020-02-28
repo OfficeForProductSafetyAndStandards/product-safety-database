@@ -32,14 +32,25 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     let(:product_summary_list) { decorated_investigation.product_summary_list }
     let(:products) { create_list(:product, 2) }
 
-    it "has the expected fields" do
+    it "displays the product details" do
       expect(product_summary_list).to summarise("Product details", text: "2 products added")
+    end
+
+    it "displays the categories" do
       investigation.products.each do |product|
         expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i)
       end
+    end
 
+    it "displays the hazard type" do
       expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_type)}/)
+    end
+
+    it "displays the hazard description" do
       expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_description)}/)
+    end
+
+    it "displays the compliance reason" do
       expect(product_summary_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
     end
 
@@ -66,9 +77,12 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       context "with two products on different categories" do
         let(:products_list) { [iphone, washing_machine] }
 
-        it "displays a categories as a list" do
+        it "displays the first product category" do
           expect(Capybara.string(product_summary_list))
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone_3g.category.upcase_first)
+        end
+
+        it "displays the second product category" do
           expect(Capybara.string(product_summary_list))
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
         end
@@ -92,63 +106,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       before { investigation.non_compliant_reason = nil }
 
       it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
-    end
-  end
-
-  describe "#investigation_summary_list" do
-    include Investigations::DisplayTextHelper
-
-    let(:investigation_summary_list) { decorated_investigation.investigation_summary_list }
-
-    it "has the expected fields" do
-      expect(investigation_summary_list).to summarise("Status", text: investigation.status)
-      expect(investigation_summary_list).to summarise("Created by", text: /#{Regexp.escape(investigation.source.user.name)}/)
-      expect(investigation_summary_list).to summarise("Created by", text: /#{Regexp.escape(investigation.source.user.organisation.name)}/)
-      expect(investigation_summary_list).to summarise("Assigned to", text: /#{Regexp.escape(user.name.to_s)}/)
-      expect(investigation_summary_list).
-        to summarise("Date created", text: investigation.created_at.to_s(:govuk))
-      expect(investigation_summary_list).to summarise("Last updated", text: time_ago_in_words(investigation.updated_at))
-      expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
-    end
-
-    context "when investigation has no source" do
-      before { investigation.source = nil }
-
-      it "renders nothing as the Created by" do
-        expect(investigation_summary_list).to summarise("Created by", text: "")
-      end
-    end
-
-    context "when the investigation's source no user" do
-      before { investigation.source.user = nil }
-
-      it "renders nothing as the Created by" do
-        expect(investigation_summary_list).to summarise("Created by", text: "")
-      end
-    end
-
-    context "without complainant reference" do
-      let(:investigation_summary_list) { Capybara.string(decorated_investigation.investigation_summary_list) }
-
-      before { investigation.complainant_reference = nil }
-
-      it { expect(investigation_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Trading Standards reference") }
-    end
-  end
-
-  describe "#source_details_summary_list" do
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list }
-
-    before { allow(User).to receive(:current).and_return(user) }
-
-    it "has the expected fields" do
-      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.to_s(:govuk))
-      expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
-      expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
     end
   end
 
@@ -159,85 +116,39 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     }
   end
 
-  describe "#hazard_descrition" do
+  describe "#hazard_description" do
     include_examples "a formated text", :investigation, :hazard_description
-  end
-
-  describe "#product_summary_list" do
-    let(:products) { create_list :product, 2 }
-    let(:product_summary_list) { decorated_investigation.product_summary_list }
-
-    it "has the expected fields" do
-      expect(product_summary_list).to summarise("Product details", text: "2 products added")
-      expect(product_summary_list).to summarise("Category", text: investigation.products.first.category)
-      expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_type}/)
-      expect(product_summary_list).to summarise("Hazards", text: /#{investigation.hazard_description}/)
-      expect(product_summary_list).to summarise("Compliance", text: /#{investigation.non_compliant_reason}/)
-    end
-
-    context "with two products of the same category" do
-      fixtures(:products)
-      let(:iphone_3g)     { products(:iphone_3g) }
-      let(:iphone)        { products(:iphone)  }
-      let(:samsung)       { products(:samsung) }
-      let(:products_list) { [iphone_3g, samsung] }
-
-      before do
-        investigation.assign_attributes(
-          product_category: iphone_3g.category,
-          products: products_list
-        )
-      end
-
-      it "displays the only category present a paragraphe" do
-        random_product_category = investigation.products.sample.category
-        expect(Capybara.string(product_summary_list))
-          .to have_css("dd.govuk-summary-list__value p.govuk-body", text: random_product_category.upcase_first)
-      end
-
-      context "with two products on different categories" do
-        let(:products_list) { [iphone, iphone_3g] }
-
-        it "displays a categories as a list" do
-          expect(Capybara.string(product_summary_list))
-            .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone_3g.category.upcase_first)
-          expect(Capybara.string(product_summary_list))
-            .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
-        end
-      end
-    end
-
-    context "without hazard_type" do
-      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
-
-      before do
-        investigation.hazard_type = nil
-        investigation.hazard_description = nil
-      end
-
-      it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
-    end
-
-    context "without non_compliant_reason" do
-      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
-
-      before { investigation.non_compliant_reason = nil }
-
-      it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
-    end
   end
 
   describe "#investigation_summary_list" do
     let(:investigation_summary_list) { decorated_investigation.investigation_summary_list }
 
-    it "has the expected fields" do
+    it "displays the Status" do
       expect(investigation_summary_list).to summarise("Status", text: investigation.status)
+    end
+
+    it "displays the User name" do
       expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.name}/)
+    end
+
+    it "displays the organisation name" do
       expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.organisation.name}/)
+    end
+
+    it "displays the assignee" do
       expect(investigation_summary_list).to summarise("Assigned to", text: /#{Regexp.escape(user.name.to_s)}/)
+    end
+
+    it "displays the Date created" do
       expect(investigation_summary_list).
         to summarise("Date created", text: investigation.created_at.to_s(:govuk))
+    end
+
+    it "displays the Last updated" do
       expect(investigation_summary_list).to summarise("Last updated", text: time_ago_in_words(investigation.updated_at))
+    end
+
+    it "displays the Trading Standards reference" do
       expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
     end
 
@@ -273,13 +184,31 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       allow(User).to receive(:current).and_return(user)
     end
 
-    it "has the expected fields" do
-      expect(source_details_summary_list).to summarise("Received date",   text: investigation.date_received.to_s(:govuk))
-      expect(source_details_summary_list).to summarise("Received by",     text: investigation.received_type.upcase_first)
-      expect(source_details_summary_list).to summarise("Source type",     text: investigation.complainant.complainant_type)
+    it "has displays the Received date" do
+      expect(source_details_summary_list).to summarise("Received date", text: investigation.date_received.to_s(:govuk))
+    end
+
+    it "has displays the Received by" do
+      expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
+    end
+
+    it "has displays the Source type" do
+      expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
+    end
+
+    it "has displays the Complainant name" do
       expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
+    end
+
+    it "has displays the Complainant phone number" do
       expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
+    end
+
+    it "has displays the Complainant email address" do
       expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
+    end
+
+    it "has displays the Complainant other details" do
       expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
     end
   end
@@ -336,10 +265,13 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       let(:product_count) { 6 }
       let!(:products_not_to_display) { create_list :product, 2, investigations: [investigation] }
 
-      it "lists the first 6 products" do
+      it "lists the first page of products" do
         products.each do |product|
           expect(products_list).to have_link(product.name, href: product_path(product))
         end
+      end
+
+      it "does not display the products beyond the first page" do
         products_not_to_display.each do |product|
           expect(products_list).not_to have_link(product.name, href: product_path(product))
         end

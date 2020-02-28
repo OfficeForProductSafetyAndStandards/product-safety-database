@@ -36,3 +36,8 @@ Rails/HelperInstanceVariable:
 
 RSpec/NestedGroups:
   Max: 5
+
+RSpec/MultipleExpectations:
+  Enabled: true
+  Exclude:
+    - spec/features/**/* # Multiple expectations are useful in feature spec scenarios and would otherwise be very inefficient and difficult to read

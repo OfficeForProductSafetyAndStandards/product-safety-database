@@ -8,10 +8,19 @@ RSpec.describe ComplainantDecorator do
 
   describe "#contact_details" do
     context "with contact details" do
-      it "displays the contact details" do
+      it "displays the complainant name" do
         expect(decorated_complainant.contact_details).to match(Regexp.escape(complainant.name))
+      end
+
+      it "displays the complainant phone number" do
         expect(decorated_complainant.contact_details).to match(Regexp.escape(complainant.phone_number))
+      end
+
+      it "displays the complainant email address" do
         expect(decorated_complainant.contact_details).to match(Regexp.escape(complainant.email_address))
+      end
+
+      it "displays the complainant other details" do
         expect(decorated_complainant.contact_details).to match(Regexp.escape(complainant.other_details))
       end
     end
