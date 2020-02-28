@@ -37,9 +37,21 @@ FactoryBot.define do
       account_activated { false }
     end
 
+    trait :invited do
+      invitation_token { SecureRandom.hex(15) }
+      invited_at { Time.zone.now }
+      account_activated { false }
+    end
+
     trait :team_admin do
       transient do
         roles { %i[psd_user team_admin] }
+      end
+    end
+
+    trait :psd_admin do
+      transient do
+        roles { %i[psd_user psd_admin] }
       end
     end
 

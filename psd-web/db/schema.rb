@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.datetime "invited_at"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
+    t.text "mobile_number"
     t.string "name"
     t.uuid "organisation_id"
     t.binary "password_salt"

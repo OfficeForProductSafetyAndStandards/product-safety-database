@@ -1,0 +1,32 @@
+<% title = "Create an account" %>
+<% content_for :page_title, page_title(title, error_prefix: @user.errors.any?) %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= error_summary @user.errors %>
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <%= form_for @user, url: { action: :update } do |form| %>
+
+      <%= render "form_components/govuk_input", key: :name, form: form,
+        classes: "app-!-max-width-two-thirds",
+        label: { text: "Full name" },
+        value: @user.name
+        %>
+
+      <%= render "form_components/govuk_input", key: :mobile_number, form: form,
+        classes: "app-!-max-width-two-thirds",
+        label: { text: "Mobile number" },
+        value: @user.mobile_number
+        %>
+
+      <%= password_input @user %>
+
+      <%= hidden_field_tag :invitation, params[:invitation] %>
+
+      <%= govukButton(text: "Continue") %>
+
+    <% end %>
+  </div>
+</div>
