@@ -7,7 +7,7 @@ RSpec::Matchers.define :not_talk_to_db do |_expected|
 
     block_to_test.call
 
-    stub_methods.each {|meth| expect(connection_double).not_to have_received(meth) }
+    stub_methods.each { |meth| expect(connection_double).not_to have_received(meth) }
   end
   supports_block_expectations
 end

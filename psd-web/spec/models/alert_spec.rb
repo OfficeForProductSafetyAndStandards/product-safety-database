@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Alert do
   describe "#send_alert_email" do
     subject(:alert) { described_class.new(summary: "test", description: "test") }
+
     before { allow(SendAlertJob).to receive(:perform_later) }
 
     it "sends an email to activated users only" do
