@@ -2,15 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user)                                   { create :user, :activated, has_viewed_introduction: true }
-  let!(:investigation_last_updated_3_days_ago) { create(:allegation, updated_at: 3.days.ago, description: "Electric skateboard investigation").decorate }
-  let!(:investigation_last_updated_2_days_ago) { create(:allegation, updated_at: 2.days.ago, description: "FastToast toaster investigation").decorate }
-  let!(:investigation_last_updated_1_days_ago) { create(:allegation, updated_at: 1.day.ago,  description: "Counterfeit chargers investigation").decorate }
-
-  before do
-    allow(AuditActivity::Investigation::Base).to receive(:from)
-    create_list :project, 18, updated_at: 4.days.ago
-  end
-
   let(:pagination_link_params) do
     {
       allegation: :unchecked,
@@ -25,6 +16,14 @@ RSpec.describe "Investigation listing", :with_elasticsearch, :with_stubbed_maile
     }
   end
 
+  let!(:investigation_last_updated_3_days_ago) { create(:allegation, updated_at: 3.days.ago, description: "Electric skateboard investigation").decorate }
+  let!(:investigation_last_updated_2_days_ago) { create(:allegation, updated_at: 2.days.ago, description: "FastToast toaster investigation").decorate }
+  let!(:investigation_last_updated_1_days_ago) { create(:allegation, updated_at: 1.day.ago,  description: "Counterfeit chargers investigation").decorate }
+
+  before do
+    allow(AuditActivity::Investigation::Base).to receive(:from)
+    create_list :project, 18, updated_at: 4.days.ago
+  end
 
   it "lists cases correctly sorted" do
     # it is necessary to re-import and wait for the indexing to be done.
