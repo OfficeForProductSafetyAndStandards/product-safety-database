@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return render("errors/forbidden", status: :forbidden) if params[:invitation] != @user.invitation_token
 
-    @user.assign_attributes(new_user_attributes.merge(account_activated: true))
+    @user.assign_attributes(new_user_attributes)
 
     if @user.save(context: :registration_completion)
       sign_in :user, @user
