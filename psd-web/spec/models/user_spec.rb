@@ -328,4 +328,22 @@ RSpec.describe User do
       expect(user.invitation_expired?).to be true
     end
   end
+
+  describe "#has_completed_registration?" do
+    context "when the password, name and mobile number are missing" do
+      let(:user) { build_stubbed(:user, password: nil, name: nil, mobile_number: nil) }
+
+      it "is false" do
+        expect(user.has_completed_registration?).to be false
+      end
+    end
+
+    context "when the password, name and mobile number have all been set" do
+      let(:user) { build_stubbed(:user) }
+
+      it "is true" do
+        expect(user.has_completed_registration?).to be true
+      end
+    end
+  end
 end

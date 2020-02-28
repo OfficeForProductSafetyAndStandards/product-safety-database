@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
     # Some users will bookmark the invitation URL received on the email and may re-use
     # this even once their account has been created. Hence redirecting them to the root page.
-    return redirect_to(root_path) if signed_in_as?(@user) || @user.account_activated?
+    return redirect_to(root_path) if signed_in_as?(@user) || @user.has_completed_registration?
     return render(:expired_invitation) if @user.invitation_expired?
     return (render "errors/not_found", status: :not_found) if @user.invitation_token != params[:invitation]
 
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     return render("errors/forbidden", status: :forbidden) if params[:invitation] != @user.invitation_token
 
-    @user.assign_attributes(new_user_attributes.merge(account_activated: true))
+    @user.assign_attributes(new_user_attributes)
 
     if @user.save(context: :registration_completion)
       sign_in :user, @user
