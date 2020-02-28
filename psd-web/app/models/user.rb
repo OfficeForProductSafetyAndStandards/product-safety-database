@@ -152,7 +152,7 @@ class User < ApplicationRecord
   end
 
   def has_completed_registration?
-    encrypted_password.presence && name.presence && mobile_number.presence?
+    encrypted_password.present? && name.present? && mobile_number.present?
   end
 
   def self.get_assignees(except: [])
