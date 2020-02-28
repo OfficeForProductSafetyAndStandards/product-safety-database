@@ -24,7 +24,7 @@ until cf7 service $DB_NAME > /tmp/db_exists && grep "create succeeded" /tmp/db_e
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
 # Deploy the app
-cf7 push $APP_NAME -f $MANIFEST_FILE --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --strategy rolling
+cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --strategy rolling
 
 
 # Remove the copied infrastructure env files to clean up
