@@ -13,7 +13,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
   def invitation_email(user, inviting_user)
     set_template(TEMPLATES[:invitation])
 
-    invitation_url = create_account_user_url(user.id, invitation: user.invitation_token)
+    invitation_url = complete_registration_user_url(user.id, invitation: user.invitation_token)
 
     set_personalisation(invitation_url: invitation_url, inviting_team_member_name: inviting_user.name)
     mail(to: user.email)

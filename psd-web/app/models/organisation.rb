@@ -2,9 +2,7 @@ class Organisation < ApplicationRecord
   has_many :users, dependent: :nullify
   has_many :teams, dependent: :nullify
 
-  validates :id, presence: true, uuid: true
   validates :name, presence: true
-  validates :path, presence: true
 
   def self.load_from_keycloak(orgs = KeycloakClient.instance.all_organisations)
     orgs.each do |org|

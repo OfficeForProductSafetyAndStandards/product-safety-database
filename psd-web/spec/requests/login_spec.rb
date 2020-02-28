@@ -7,4 +7,8 @@ RSpec.describe "Login" do
         .to redirect_to(new_user_session_path)
     end
   end
+
+  context "old bookmarked url" do
+    it { expect(get("/sessions/signin")).to redirect_to(root_path) }
+  end
 end

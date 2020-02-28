@@ -1,6 +1,50 @@
 require "rails_helper"
 
 RSpec.describe User do
+  describe "validations" do
+    context "on registration completion" do
+      it "validates the presence of the mobile number" do
+        user = build(:user, mobile_number: "")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:mobile_number]).to eq ["Enter your mobile number"]
+      end
+
+      it "validates the format of the mobile number" do
+        user = build(:user, mobile_number: "01111111111")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:mobile_number]).to eq [
+          "Enter your mobile number in the correct format, like 07700 900 982"
+        ]
+      end
+
+      it "validates the presence of name" do
+        user = build(:user, name: "")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:name]).to eq ["Enter your full name"]
+      end
+
+      it "validates the presence of password" do
+        user = build(:user, password: "")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:password]).to eq ["Enter a password"]
+      end
+
+      it "validates password is not too short" do
+        user = build(:user, password: "123456")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:password])
+          .to eq ["Password is too short"]
+      end
+
+      it "validates password is not too common" do
+        user = build(:user, password: "password")
+        expect(user).not_to be_valid(:registration_completion)
+        expect(user.errors.messages[:password])
+          .to eq ["Choose a less frequently used password"]
+      end
+    end
+  end
+
   describe ".activated" do
     it "returns only users with activated accounts" do
       create(:user, :inactive)
@@ -16,6 +60,7 @@ RSpec.describe User do
       let(:team) { create(:team) }
       let(:inviting_user) { create(:user) }
       let(:created_user) { User.find_by(email: email) }
+      let(:created_user_roles) { created_user.user_roles.pluck(:name) }
 
       before do
         allow(SendUserInvitationJob).to receive(:perform_later)
@@ -40,6 +85,34 @@ RSpec.describe User do
 
       it "sends an invitation to the user" do
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
+      end
+
+      it "adds the psd_user role" do
+        expect(created_user_roles).to eq %w[psd_user]
+      end
+
+      context "when the inviting user is an OPSS user" do
+        let(:inviting_user) { create(:user, :opss_user) }
+
+        it "invited user gets the opss role" do
+          expect(created_user_roles).to include("opss_user")
+        end
+      end
+
+      context "when the inviting user is a team admin" do
+        let(:inviting_user) { create(:user, :team_admin) }
+
+        it "invited user does not get the team admin role" do
+          expect(created_user_roles).not_to include("team_admin")
+        end
+      end
+
+      context "when the inviting user is a PSD admin" do
+        let(:inviting_user) { create(:user, :psd_admin) }
+
+        it "invited user does not get the psd admin role" do
+          expect(created_user_roles).not_to include("psd_admin")
+        end
       end
     end
 
@@ -231,6 +304,28 @@ RSpec.describe User do
       it "returns their name and organisation name" do
         expect(result).to eq("#{user_name} (#{organisation_name})")
       end
+    end
+  end
+
+  describe "#invitation_expired?" do
+    it "returns false when the user has not been invited" do
+      user = build_stubbed(:user, invited_at: nil)
+      expect(user.invitation_expired?).to be false
+    end
+
+    it "returns false when user was invited less than 14 days ago" do
+      user = build_stubbed(:user, invited_at: 13.days.ago)
+      expect(user.invitation_expired?).to be false
+    end
+
+    it "returns true when user was invited exactly 14 days ago" do
+      user = build_stubbed(:user, invited_at: 14.days.ago)
+      expect(user.invitation_expired?).to be true
+    end
+
+    it "returns true when user was invited more than 14 days ago" do
+      user = build_stubbed(:user, invited_at: 15.days.ago)
+      expect(user.invitation_expired?).to be true
     end
   end
 end

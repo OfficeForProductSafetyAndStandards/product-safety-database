@@ -5,9 +5,7 @@ class Team < ApplicationRecord
 
   has_many :investigations, dependent: :nullify, as: :assignable
 
-  validates :id, presence: true, uuid: true
   validates :name, presence: true
-  validates :path, presence: true
 
   def self.load_from_keycloak(teams = KeycloakClient.instance.all_teams(Organisation.ids))
     teams.each do |team|

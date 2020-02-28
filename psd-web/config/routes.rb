@@ -20,9 +20,10 @@ Rails.application.routes.draw do
 
   devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions" }
 
-  resources :users, only: [] do
+  resources :users, only: [:update] do
     member do
-      get :create_account
+      get "complete-registration", action: :complete_registration
+      post "sign-out-before-accepting-invitation", action: :sign_out_before_accepting_invitation
     end
   end
 
@@ -179,5 +180,7 @@ Rails.application.routes.draw do
   unauthenticated do
     root to: "homepage#show"
   end
+  # Handle old post-login redirect URIs from previous implementation which are still bookmarked
+  match "/sessions/signin", to: redirect("/"), via: %i[get post]
 end
 # rubocop:enable Metrics/BlockLength

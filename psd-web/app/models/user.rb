@@ -1,8 +1,10 @@
 class User < ApplicationRecord
+  INVITATION_EXPIRATION_DAYS = 14
+  COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
   devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
-
   belongs_to :organisation
 
   has_many :investigations, dependent: :nullify, as: :assignable
@@ -12,7 +14,18 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :teams
 
-  validates :id, presence: true, uuid: true
+  with_options on: :registration_completion do |registration_completion|
+    registration_completion.validates :mobile_number, presence: true
+    registration_completion.validates :mobile_number,
+                                      phone: { message: I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]) },
+                                      unless: -> { mobile_number.blank? }
+    registration_completion.validates :name, presence: true
+    registration_completion.validates :password, presence: true
+    registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
+    registration_completion.validates :password,
+                                      common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
+                                      unless: Proc.new { |user| user.errors.messages[:password].any? }
+  end
 
   attribute :skip_password_validation, :boolean, default: false
 
@@ -28,6 +41,12 @@ class User < ApplicationRecord
       organisation: team.organisation,
       invitation_token: SecureRandom.hex(15)
     )
+
+    # TODO: remove this once we’ve updated the application to no
+    # longer depend upon this role.
+    user.user_roles.create!(name: "psd_user")
+    user.user_roles.create!(name: "opss_user") if inviting_user.is_opss?
+
     team.users << user
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
@@ -149,6 +168,12 @@ class User < ApplicationRecord
 
   def has_viewed_introduction!
     update has_viewed_introduction: true
+  end
+
+  def invitation_expired?
+    return false unless invited_at
+
+    invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
 private

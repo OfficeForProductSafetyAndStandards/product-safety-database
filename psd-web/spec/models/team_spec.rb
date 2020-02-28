@@ -20,10 +20,10 @@ RSpec.describe Team do
         "organisations" => { "opss" => important_team_names }
       )
 
-      org = Organisation.create!(id: SecureRandom.uuid, name: "test", path: "/test")
+      org = Organisation.create!(name: "test")
 
       (important_team_names + %w{bobbins cribbins}).map do |name|
-        Team.create!(id: SecureRandom.uuid, name: name, organisation: org, path: "/test")
+        Team.create!(id: SecureRandom.uuid, name: name, organisation: org)
       end
     end
 
