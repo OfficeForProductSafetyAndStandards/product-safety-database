@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ApplicationController do
+RSpec.describe "Login", type: :request do
   context "when not logged in" do
     it "redirects to the login page" do
       expect(get(investigations_path))

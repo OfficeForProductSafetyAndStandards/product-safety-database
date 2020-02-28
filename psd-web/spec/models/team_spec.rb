@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe Team do
   describe ".all_with_organisation" do
     before { create_list(:team, 3) }
+
     let(:assignees) { described_class.all_with_organisation }
 
     it "retrieves all teams" do
