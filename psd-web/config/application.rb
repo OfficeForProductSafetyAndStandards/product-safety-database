@@ -40,5 +40,7 @@ module ProductSafetyDatabase
     config.notify_api_key = ENV.fetch("NOTIFY_API_KEY", "#{SecureRandom.uuid}.#{SecureRandom.uuid}")
 
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
+
+    config.two_factor_authentication_enabled = ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
   end
 end

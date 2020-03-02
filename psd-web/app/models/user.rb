@@ -187,6 +187,10 @@ class User < ApplicationRecord
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
+  def need_two_factor_authentication?(_request)
+    Rails.application.config.two_factor_authentication_enabled
+  end
+
   def send_two_factor_authentication_code(code)
     SendTwoFactorAuthenticationJob.perform_later(self, code)
   end

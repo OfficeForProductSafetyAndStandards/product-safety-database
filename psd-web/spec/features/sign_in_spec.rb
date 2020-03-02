@@ -17,7 +17,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
     click_on "Continue"
   end
 
-  context "when succeeeding signin in" do
+  context "when succeeeding signin in", :with_2fa do
     context "when succeeding two factor authentication" do
       it "allows user to sign in" do
         fill_in_credentials
