@@ -5,36 +5,6 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
   let!(:reset_token)                 { stubbed_devise_generated_token }
   let(:edit_user_password_url_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
 
-  def request_password_reset
-    user.update!(reset_password_token: reset_token)
-
-    visit "/sign-in"
-
-    click_link "Forgot your password?"
-
-    perform_enqueued_jobs do
-      body = {
-        email_address: user.email,
-        template_id: NotifyMailer::TEMPLATES[:reset_password_instruction],
-        reference: "Password reset",
-        personalisation: {
-          name: user.name,
-          edit_user_password_url_token: edit_user_password_url_token
-        }
-      }
-
-      stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
-        .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
-
-      expect(page).to have_css("h1", text: "Reset your password")
-
-      fill_in "Email address", with: user.email
-      click_on "Send email"
-
-      expect(page).to have_css("h1", text: "Check your email")
-    end
-  end
-
   context "when not entering a valid email" do
     it "does not send you a notification" do
       user.update!(reset_password_token: reset_token)
@@ -140,4 +110,35 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
       end
     end
   end
+
+  def request_password_reset
+    user.update!(reset_password_token: reset_token)
+
+    visit "/sign-in"
+
+    click_link "Forgot your password?"
+
+    perform_enqueued_jobs do
+      body = {
+        email_address: user.email,
+        template_id: NotifyMailer::TEMPLATES[:reset_password_instruction],
+        reference: "Password reset",
+        personalisation: {
+          name: user.name,
+          edit_user_password_url_token: edit_user_password_url_token
+        }
+      }
+
+      stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
+        .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
+
+      expect(page).to have_css("h1", text: "Reset your password")
+
+      fill_in "Email address", with: user.email
+      click_on "Send email"
+
+      expect(page).to have_css("h1", text: "Check your email")
+    end
+  end
+
 end
