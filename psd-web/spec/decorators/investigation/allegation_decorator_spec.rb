@@ -3,9 +3,10 @@ require "rails_helper"
 RSpec.describe Investigation::AllegationDecorator do
   fixtures(:investigation_products, :investigations, :products)
 
+  subject(:decorated_allegation) { allegation.decorate }
+
   let(:allegation) { investigations :one_product }
 
-  subject { allegation.decorate }
 
   describe "#display_product_summary_list?" do
     it { is_expected.to be_display_product_summary_list }
@@ -18,6 +19,7 @@ RSpec.describe Investigation::AllegationDecorator do
           expect(allegation.decorate.title).to eq("iPhone XS MAX, phone – asphyxiation hazard")
         end
       end
+
       context "with two products" do
         context "with two common values" do
           let!(:allegation) { investigations :two_products_with_common_values }
@@ -41,7 +43,7 @@ RSpec.describe Investigation::AllegationDecorator do
       let(:allegation) { investigations :no_products_case_title }
 
       it "has the correct title" do
-        expect(subject.title).to eq("Alarms – asphyxiation hazard (no product specified)")
+        expect(decorated_allegation.title).to eq("Alarms – asphyxiation hazard (no product specified)")
       end
     end
   end

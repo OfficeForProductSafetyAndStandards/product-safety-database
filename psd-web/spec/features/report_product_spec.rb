@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   before { sign_in as_user: create(:user, :activated, :opss_user) }
 
   let(:reference_number) { Faker::Number.number(digits: 10) }
@@ -91,7 +91,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     ]
   }
 
-  scenario "as a non-OPSS user" do
+  it "as a non-OPSS user" do
     visit new_ts_investigation_path
 
     expect_to_be_on_product_page

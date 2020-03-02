@@ -4,7 +4,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation, except: %w(ar_internal_metadata))
   end
 
-  config.around(:each) do |example|
+  config.around do |example|
     DatabaseCleaner.cleaning do
       example.run
     end
