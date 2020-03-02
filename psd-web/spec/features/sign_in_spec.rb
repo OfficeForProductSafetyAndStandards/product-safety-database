@@ -42,6 +42,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
       expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
       expect(page).to have_css("span#password-error", text: "")
     end
+
     context "when email address is not in correct format" do
       scenario "shows an error message" do
         visit root_path
