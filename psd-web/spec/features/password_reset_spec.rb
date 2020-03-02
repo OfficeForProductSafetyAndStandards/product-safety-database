@@ -132,6 +132,8 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
       stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
         .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
 
+      expect_to_be_on_reset_password_page
+
       expect(page).to have_css("h1", text: "Reset your password")
 
       fill_in "Email address", with: user.email
@@ -139,6 +141,10 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
 
       expect(page).to have_css("h1", text: "Check your email")
     end
+  end
+
+  def expect_to_be_on_reset_password_page
+    expect(page.current_path).to eql("/password/new")
   end
 
 end
