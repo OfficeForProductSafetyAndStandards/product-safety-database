@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe SignInForm do
+  subject { described_class.new(email: email, password: password) }
+
   let(:password) { "password" }
   let(:email)    { "test@example.com" }
 
-  subject { described_class.new(email: email, password: password) }
 
   describe "#valid?" do
     describe "when the email is blank" do

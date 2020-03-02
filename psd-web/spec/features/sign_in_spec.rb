@@ -19,11 +19,11 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
   context "when signed in" do
     it "times you out in due time" do
       visit investigation_path(investigation)
-      expect(page).to_not have_css("h2#error-summary-title", text: "You need to sign in or sign up before continuing.")
+      expect(page).not_to have_css("h2#error-summary-title", text: "You need to sign in or sign up before continuing.")
 
       travel_to 24.hours.from_now do
         visit investigation_path(investigation)
-        expect(page).to_not have_css("h2#error-summary-title", text: "Your session expired. Please sign in again to continue.")
+        expect(page).not_to have_css("h2#error-summary-title", text: "Your session expired. Please sign in again to continue.")
       end
     end
   end

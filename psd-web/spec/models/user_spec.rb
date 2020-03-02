@@ -59,7 +59,7 @@ RSpec.describe User do
       let(:email) { "testuser@southampton.gov.uk" }
       let(:team) { create(:team) }
       let(:inviting_user) { create(:user) }
-      let(:created_user) { User.find_by(email: email) }
+      let(:created_user) { described_class.find_by(email: email) }
       let(:created_user_roles) { created_user.user_roles.pluck(:name) }
 
       before do
