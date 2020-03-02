@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Products listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user)             { create :user, :activated, has_viewed_introduction: true }
   let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago) }
   let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago) }
@@ -8,7 +8,7 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, :wi
 
   before { create_list(:product, 18, created_at: 4.days.ago) }
 
-  scenario "lists products according to search relevance" do
+  it "lists products according to search relevance" do
     Product.import refresh: :wait_for
     sign_in(as_user: user)
     visit products_path

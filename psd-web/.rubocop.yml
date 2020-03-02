@@ -3,7 +3,9 @@ inherit_gem:
     - config/default.yml
     - config/rails.yml
 
-require: rubocop-performance
+require:
+  - rubocop-performance
+  - rubocop-rspec
 
 Rails:
   Enabled: true
@@ -31,3 +33,6 @@ Style/TrailingCommaInArguments:
 
 Rails/HelperInstanceVariable:
   Enabled: false
+
+RSpec/NestedGroups:
+  Max: 5

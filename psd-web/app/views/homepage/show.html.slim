@@ -23,7 +23,7 @@
             p.govuk-body-l.app-body-l--inverted
               | Report, track and share product safety information with the product safety community.
 
-            = link_to "Sign in to your account",
+            = button_to "Sign in to your account",
                 user_openid_connect_omniauth_authorize_path,
                 class: "govuk-button govuk-button--start app-button--inverted",
                 role: "button", draggable: false

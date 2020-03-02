@@ -15,7 +15,7 @@ For enquiries, contact [OPSS.enquiries@beis.gov.uk](OPSS.enquiries@beis.gov.uk)
 
 The application is written in [Ruby on Rails](https://rubyonrails.org/).
 
-We're using [Slim](http://slim-lang.com/) as our HTML templating language, ES6 JavaScript and [Sass](https://sass-lang.com/) for styling compiled with webpacker.
+We're using ERB ~~[Slim](http://slim-lang.com/)~~(moving away from it) as our HTML templating language, ES6 JavaScript and [Sass](https://sass-lang.com/) for styling compiled with webpacker.
 
 We're using [Sidekiq](https://github.com/mperham/sidekiq) as our background processor to do things like send emails and handle attachments.
 
@@ -192,7 +192,7 @@ Create an S3 bucket named `psd-<<SPACE>>`.
 
 #### PSD Website
 
-This assumes that you've run [the deployment from scratch steps for Keycloak](https://github.com/UKGovernmentBEIS/beis-opss/blob/master/keycloak/README.md#deployment-from-scratch)
+This assumes that you've run [the deployment from scratch steps for Keycloak](https://github.com/UKGovernmentBEIS/beis-opss-keycloak#deployment-from-scratch)
 
 Start by setting up the following credentials:
 
@@ -310,13 +310,13 @@ We're using [Logit](https://logit.io) as a hosted ELK stack.
 If you want to view the logs, you'll need an account - ask someone on the team to invite you.
 You should sign up using GitHub OAuth to ensure MFA.
 
-[logstash-filters.conf](./logstash-filters.conf) provides a set of rules which logstash can use to parse logs.
+[logstash-filters.conf](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure/blob/master/logstash-filters.conf) provides a set of rules which logstash can use to parse logs.
 
 
 #### S3
 
 We're using AWS S3 as a long term storage for logs.
-See [the root README](../README.md#amazon-web-services) for more details about setting up an account.
+See [AWS section](#amazon-web-services) for more details about setting up an account.
 
 
 ### Monitoring
@@ -327,7 +327,7 @@ Our metrics are sent to an ELK stack and S3 using [the paas-metric-exporter app]
 
 We have set up a regular job to query the database and to print certain metrics into the logs. This was all done in [PR #962](https://github.com/UKGovernmentBEIS/beis-opss/pull/962).
 The metrics are sent in JSON format and logstash is clever enough to split these out into separate logs for each key-value pair.
-However, you will need to add an extra filter in [logstash-filters.conf](./logstash-filters.conf), in order to create new fields on the logs instead of the data all being captured in the `message` field.
+However, you will need to add an extra filter in [logstash-filters.conf](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure/blob/master/logstash-filters.conf), in order to create new fields on the logs instead of the data all being captured in the `message` field.
 
 ### Clound Foundry reference
 
