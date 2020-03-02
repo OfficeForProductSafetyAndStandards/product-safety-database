@@ -1,4 +1,4 @@
-RSpec.shared_context "omniauth response" do
+RSpec.shared_context "with omniauth response" do
   let!(:organisation) { create :organisation }
   let!(:team)         { create :team, organisation: organisation }
   let(:uid) { SecureRandom.uuid }
