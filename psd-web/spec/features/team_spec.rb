@@ -1,7 +1,6 @@
 require "rails_helper"
 
-
-RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mailer, :with_stubbed_elasticsearch, type: :feature do
+RSpec.feature "Your team page", :with_stubbed_keycloak_config, :with_stubbed_mailer, :with_stubbed_elasticsearch, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team], has_viewed_introduction: true) }
 
@@ -14,7 +13,7 @@ RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_ma
     visit team_path(team)
   end
 
-  it "shows the current user" do
+  scenario "shows the current user" do
     expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{user.email}\")")
     expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{another_active_user.email}\")")
     expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{another_inactive_user.email}\")")
@@ -29,12 +28,12 @@ RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_ma
     context "when the user is a team admin" do
       let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
 
-      it "only displays the link for inactive users" do
+      scenario "only displays the link for inactive users" do
         expect(page).to have_css(resend_link_selector(another_inactive_user.email))
         expect(page).not_to have_css(resend_link_selector(another_active_user.email))
       end
 
-      it "inviting an existing user shows an error message" do
+      scenario "inviting an existing user shows an error message" do
         click_link "Invite a team member"
         expect(page).to have_css("h1", text: "Invite a team member")
         fill_in "new_user_email_address", with: user.email
@@ -47,12 +46,12 @@ RSpec.describe "Your team page", :with_stubbed_keycloak_config, :with_stubbed_ma
   context "when the user is not a team admin" do
     let(:user) { create(:user, :activated, :psd_user, teams: [team], has_viewed_introduction: true) }
 
-    it "does not display the resend invite link for any users" do
+    scenario "does not display the resend invite link for any users" do
       expect(page).to have_css("h1", text: "test organisation")
       expect(page).not_to have_link(resend_link_selector(another_inactive_user.email))
     end
 
-    it "does not display the invite a team member link" do
+    scenario "does not display the invite a team member link" do
       expect(page).to have_css("h1", text: "test organisation")
       expect(page).not_to have_button("Invite a team member")
     end

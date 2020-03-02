@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignee: user) }
 
@@ -17,7 +17,7 @@ RSpec.describe "Adding a correcting action to a case", :with_stubbed_elasticsear
   before { sign_in(as_user: user) }
 
   context "with valid input" do
-    it "shows inputted data on the confirmation page and on the case attachments and activity pages" do
+    scenario "shows inputted data on the confirmation page and on the case attachments and activity pages" do
       visit new_investigation_corrective_action_path(investigation)
 
       expect_to_be_on_record_corrective_action_page
@@ -39,7 +39,7 @@ RSpec.describe "Adding a correcting action to a case", :with_stubbed_elasticsear
       expect_case_attachments_page_to_show_file
     end
 
-    it "going back to the form from the confirmation page shows inputted data" do
+    scenario "going back to the form from the confirmation page shows inputted data" do
       visit new_investigation_corrective_action_path(investigation)
 
       expect_to_be_on_record_corrective_action_page
@@ -57,7 +57,7 @@ RSpec.describe "Adding a correcting action to a case", :with_stubbed_elasticsear
   context "with invalid input" do
     let(:date) { nil }
 
-    it "shows an error message" do
+    scenario "shows an error message" do
       visit new_investigation_corrective_action_path(investigation)
 
       expect_to_be_on_record_corrective_action_page

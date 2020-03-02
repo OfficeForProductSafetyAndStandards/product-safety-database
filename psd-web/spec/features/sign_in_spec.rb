@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Signing in", :with_stubbed_mailer, :with_stubbed_keycloak_config, :with_elasticsearch, type: :feature do
+RSpec.feature "Signing in", :with_stubbed_mailer, :with_stubbed_keycloak_config, :with_elasticsearch, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
@@ -22,7 +22,7 @@ RSpec.describe "Signing in", :with_stubbed_mailer, :with_stubbed_keycloak_config
     }
   end
 
-  it "allows to sign in and times you out in due time" do
+  scenario "allows to sign in and times you out in due time" do
     visit investigation_path(investigation)
     expect(page).not_to have_css("h2#error-summary-title", text: "You need to sign in or sign up before continuing.")
 

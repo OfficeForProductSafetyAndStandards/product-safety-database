@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user) { create :user, :activated, has_viewed_introduction: true }
   let(:pagination_link_params) do
     {
@@ -25,7 +25,7 @@ RSpec.describe "Investigation listing", :with_elasticsearch, :with_stubbed_maile
     create_list :project, 18, updated_at: 4.days.ago
   end
 
-  it "lists cases correctly sorted" do
+  scenario "lists cases correctly sorted" do
     # it is necessary to re-import and wait for the indexing to be done.
     Investigation.import refresh: :wait_for
 

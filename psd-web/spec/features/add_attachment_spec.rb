@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding an attachment to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Adding an attachment to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, assignee: user) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
@@ -12,7 +12,7 @@ RSpec.describe "Adding an attachment to a case", :with_stubbed_elasticsearch, :w
     visit new_investigation_new_path(investigation) # TODO: rename this route
   end
 
-  it "requires a file" do
+  scenario "requires a file" do
     expect_to_be_on_add_attachment_page
 
     click_button "Upload"
@@ -21,7 +21,7 @@ RSpec.describe "Adding an attachment to a case", :with_stubbed_elasticsearch, :w
     expect(page).to have_error_summary("Enter file")
   end
 
-  it "requires a title for the document" do
+  scenario "requires a title for the document" do
     expect_to_be_on_add_attachment_page
 
     attach_and_submit_file
@@ -34,7 +34,7 @@ RSpec.describe "Adding an attachment to a case", :with_stubbed_elasticsearch, :w
     expect(page).to have_error_summary("Enter title")
   end
 
-  it "uploading a file without completing the add attachment flow does not save the attachment" do
+  scenario "uploading a file without completing the add attachment flow does not save the attachment" do
     expect_to_be_on_add_attachment_page
 
     attach_and_submit_file
@@ -46,7 +46,7 @@ RSpec.describe "Adding an attachment to a case", :with_stubbed_elasticsearch, :w
     expect(page).not_to have_selector("h2")
   end
 
-  it "completing the add attachment flow saves the attachment" do
+  scenario "completing the add attachment flow saves the attachment" do
     expect_to_be_on_add_attachment_page
 
     attach_and_submit_file
