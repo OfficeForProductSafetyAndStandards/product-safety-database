@@ -151,18 +151,18 @@ GEM
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    elasticsearch (6.8.0)
-      elasticsearch-api (= 6.8.0)
-      elasticsearch-transport (= 6.8.0)
-    elasticsearch-api (6.8.0)
+    elasticsearch (6.8.1)
+      elasticsearch-api (= 6.8.1)
+      elasticsearch-transport (= 6.8.1)
+    elasticsearch-api (6.8.1)
       multi_json
     elasticsearch-model (6.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
     elasticsearch-rails (6.0.0)
-    elasticsearch-transport (6.8.0)
-      faraday
+    elasticsearch-transport (6.8.1)
+      faraday (>= 0.14, < 1)
       multi_json
     erubi (1.9.0)
     et-orbi (1.2.2)
@@ -552,7 +552,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   draper
-  elasticsearch (= 6.8.0)
+  elasticsearch (= 6.8.1)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
   factory_bot_rails
