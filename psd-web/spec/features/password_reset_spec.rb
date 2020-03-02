@@ -106,7 +106,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
         visit edit_user_password_url_token
 
         expect(page).to have_css("h1", text: "This link has expired")
-        expect(page).to have_link("sign in page", href: new_user_session_path)
+        expect(page).to have_link("sign in page", href: "/sign-in")
       end
     end
   end
