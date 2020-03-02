@@ -4,7 +4,7 @@ RSpec.describe User do
   describe "validations" do
     before { user.validate(:registration_completion) }
 
-    context "on registration completion" do
+    context "with registration_completion context" do
       context "with blank mobile number" do
         let(:user) { build(:user, mobile_number: "") }
 

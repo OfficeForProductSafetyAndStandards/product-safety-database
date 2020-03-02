@@ -28,7 +28,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
     end
   end
 
-  context "credentials entered incorrectly" do
+  context "with credentials entered incorrectly" do
     it "highlights email field" do
       visit root_path
       click_on "Sign in to your account"
