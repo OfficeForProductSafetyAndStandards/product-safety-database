@@ -2,6 +2,9 @@ name: Review application
 
 on: [pull_request]
 
+env:
+  PR_NUMBER: ${{ github.event.number }}
+
 jobs:
   reviewapp:
     name: Deploy
@@ -9,11 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-
-    - name: Get GitHub Pull Request number
-      run: |
-        PR_NUMBER=${{ github.event.number }}
-        echo "::set-env name=PR_NUMBER::$PR_NUMBER"
 
     - name: Create GitHub deployment
       env:
@@ -27,7 +25,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
-        PR_NUMBER: ${{ env.PR_NUMBER }}
       run: |
         source psd-web/deploy-github-functions.sh
 
@@ -65,7 +62,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
-        PR_NUMBER: ${{ env.PR_NUMBER }}
       run: |
         source psd-web/deploy-github-functions.sh
 
@@ -79,7 +75,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
-        PR_NUMBER: ${{ env.PR_NUMBER }}
       run: |
         source psd-web/deploy-github-functions.sh
         gh_deploy_failure review-app-${PR_NUMBER} $LOG_URL
