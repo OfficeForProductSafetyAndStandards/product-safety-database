@@ -16,7 +16,6 @@ env:
   ANTIVIRUS_USERNAME: av
   ANTIVIRUS_PASSWORD: password
   PSD_HOST: example.com
-  NOTIFY_API_KEY: 6eb625ef-7df2-45d7-ab42-1bc528823f55.6d0fc2cf-633f-42ba-97eb-63c96d254aca
 jobs:
   ruby:
     name: "Ruby"
