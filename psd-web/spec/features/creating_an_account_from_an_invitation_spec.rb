@@ -38,19 +38,19 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
   end
 
   def expect_to_be_on_complete_registration_page
-    expect(page.current_path).to end_with("/complete-registration")
+    expect(page).to have_current_path(/\/complete-registration?.+$/)
 
     expect(page).to have_h1("Create an account")
   end
 
   def expect_to_be_on_signed_in_as_another_user_page
-    expect(page.current_path).to end_with("/complete-registration")
+    expect(page).to have_current_path(/\/complete-registration?.+$/)
 
     expect(page).to have_h1("You are already signed in to the Product safety database")
   end
 
   def expect_to_be_on_declaration_page
-    expect(page.current_path).to eql("/declaration")
+    expect(page).to have_current_path(/^\/declaration$/)
   end
 
   def expect_to_be_signed_in
