@@ -2,36 +2,41 @@ require "rails_helper"
 require "shared_contexts/load_user"
 
 RSpec.describe Users::Load, type: :interactor do
-  include_context "load user"
+  include_context "with mock user"
 
-  before do
-    allow(CreateUserFromAuth)
-      .to receive(:new).with(omniauth_response).and_return(user_service)
-  end
-
-  subject do
+  subject(:load_service) do
     described_class.call(
       omniauth_response: omniauth_response,
       user_service: user_service
     )
   end
 
+  before do
+    allow(CreateUserFromAuth)
+      .to receive(:new).with(omniauth_response).and_return(user_service)
+  end
+
+
   describe ".call" do
     context "when successfully loading the user" do
       it { is_expected.to be_a_success }
-      it { expect(subject.user).to eq(user) }
+      it { expect(load_service.user).to eq(user) }
     end
 
     context "when no user is loaded" do
-      before { allow(user_service).to receive(:user).and_raise(RuntimeError) }
+      before do
+        allow(user_service).to receive(:user).and_raise(RuntimeError)
+        allow(Raven).to receive(:capture_exception)
+      end
 
       it do
-        expect(Raven).to receive(:capture_exception).with(instance_of(RuntimeError))
-        subject.user
+        load_service.user
+        expect(Raven).to have_received(:capture_exception).with(instance_of(RuntimeError))
       end
+
       it { is_expected.to be_a_failure }
-      it { expect(subject.user).to be nil }
-      it { expect(subject.errors.full_messages).to eq(%w[RuntimeError]) }
+      it { expect(load_service.user).to be nil }
+      it { expect(load_service.errors.full_messages).to eq(%w[RuntimeError]) }
     end
   end
 end

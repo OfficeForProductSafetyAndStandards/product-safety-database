@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "~> 2.5.5"
 
-gem "will_paginate", "~> 3.2" # Must be laoded before elasticsearch gems
+gem "will_paginate", "~> 3.3" # Must be laoded before elasticsearch gems
 
 gem "aws-sdk-s3", "1.60.2"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
@@ -65,6 +65,7 @@ group :development, :test do
   gem "rubocop"
   gem "rubocop-govuk", "~> 2.0.0"
   gem "rubocop-performance"
+  gem "rubocop-rspec", "~> 1.37", require: false
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
   gem "sassc", "~> 2.1.0" # Unable to upgrade until https://github.com/sass/sassc-ruby/issues/146 is resolved
