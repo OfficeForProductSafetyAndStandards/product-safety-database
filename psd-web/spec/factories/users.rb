@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :user do
-    id { SecureRandom.uuid }
     name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
@@ -11,6 +10,7 @@ FactoryBot.define do
     has_viewed_introduction { false }
     account_activated { false }
     hash_iterations { 27_500 }
+    mobile_number { "07700 900 982" }
 
     transient do
       roles { [:psd_user] }
@@ -38,9 +38,26 @@ FactoryBot.define do
       account_activated { false }
     end
 
+    trait :invited do
+      skip_password_validation { true }
+      invitation_token { SecureRandom.hex(15) }
+      invited_at { Time.zone.now }
+      account_activated { false }
+      password { nil }
+      password_confirmation { nil }
+      mobile_number { nil }
+      name { nil }
+    end
+
     trait :team_admin do
       transient do
         roles { %i[psd_user team_admin] }
+      end
+    end
+
+    trait :psd_admin do
+      transient do
+        roles { %i[psd_user psd_admin] }
       end
     end
 
@@ -57,8 +74,9 @@ FactoryBot.define do
     end
 
     after(:create) do |user, evaluator|
-      allow(KeycloakClient.instance).to receive(:get_user_roles).with(user.id).and_return(evaluator.roles)
-      user.load_roles_from_keycloak
+      evaluator.roles.each do |role|
+        create(:user_role, name: role, user: user)
+      end
     end
   end
 end
