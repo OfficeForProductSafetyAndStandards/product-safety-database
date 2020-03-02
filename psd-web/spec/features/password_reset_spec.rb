@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Resetting your password", :with_test_queue_adapter do
+RSpec.describe "Resetting your password", :with_test_queue_adapter, type: :feature do
   let(:user)                         { create(:user) }
   let!(:reset_token)                 { stubbed_devise_generated_token }
   let(:edit_user_password_url_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
@@ -67,6 +67,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
     context "when the password does not fit the criteria" do
       context "when the password is too short" do
         let(:password) { "as" }
+
         it "does not allow you to reset your password" do
           request_password_reset
 
@@ -144,7 +145,6 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
   end
 
   def expect_to_be_on_reset_password_page
-    expect(page.current_path).to eql("/password/new")
+    expect(page).to have_current_path("/password/new")
   end
-
 end

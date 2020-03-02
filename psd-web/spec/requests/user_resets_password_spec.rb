@@ -10,19 +10,27 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
+
+        get(edit_user_password_path(reset_password_token: reset_token))
+      end
+
+      it "return a 200 status code" do
+        expect(response).to have_http_status(:ok)
       end
 
       it "displays a reset password form" do
-        get(edit_user_password_path(reset_password_token: reset_token))
-        expect(response).to have_http_status(:ok)
         expect(response).to render_template("passwords/edit")
       end
     end
 
     context "with no reset token" do
-      it "displays an 'invalid link' error message" do
-        get edit_user_password_path
+      before { get edit_user_password_path }
+
+      it "returns a 404 status code" do
         expect(response).to have_http_status(:not_found)
+      end
+
+      it "displays an 'invalid link' error message" do
         expect(response).to render_template("passwords/invalid_link")
       end
     end
@@ -30,9 +38,15 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
     context "with an invalid reset token" do
       let(:user) { create(:user, reset_password_token: SecureRandom.hex(20), reset_password_sent_at: 1.hour.ago) }
 
-      it "displays an 'invalid link' error message" do
+      before do
         get(edit_user_password_path(reset_password_token: "invalid-token-abc123"))
+      end
+
+      it "returns a 404 status code" do
         expect(response).to have_http_status(:not_found)
+      end
+
+      it "displays an 'invalid link' error message" do
         expect(response).to render_template("passwords/invalid_link")
       end
     end
@@ -45,11 +59,15 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 100.days.ago)
+
+        get(edit_user_password_path(reset_password_token: reset_token))
+      end
+
+      it "returns a 410 Gone status code" do
+        expect(response).to have_http_status(:gone)
       end
 
       it "displays an 'expired link' error message" do
-        get(edit_user_password_path(reset_password_token: reset_token))
-        expect(response).to have_http_status(:gone)
         expect(response).to render_template("passwords/expired")
       end
     end
@@ -64,16 +82,16 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
-      end
 
-      it "redirects to the homepage" do
         patch user_password_path, params: {
           user: {
             reset_password_token: reset_token,
             password: "7rjfy38f74hf937"
           }
         }
+      end
 
+      it "redirects to the homepage" do
         expect(response).to redirect_to(root_path)
       end
     end
@@ -86,16 +104,16 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
-      end
 
-      it "re-renders the new password form" do
         patch user_password_path, params: {
           user: {
             reset_password_token: reset_token,
             password: ""
           }
         }
+      end
 
+      it "re-renders the new password form" do
         expect(response).to render_template("passwords/edit")
       end
     end
@@ -108,16 +126,16 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
-      end
 
-      it "re-renders the new password form" do
         patch user_password_path, params: {
           user: {
             reset_password_token: reset_token,
             password: "abc"
           }
         }
+      end
 
+      it "re-renders the new password form" do
         expect(response).to render_template("passwords/edit")
       end
     end
@@ -130,16 +148,16 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
-      end
 
-      it "re-renders the new password form" do
         patch user_password_path, params: {
           user: {
             reset_password_token: reset_token,
             password: "Password123"
           }
         }
+      end
 
+      it "re-renders the new password form" do
         expect(response).to render_template("passwords/edit")
       end
     end
