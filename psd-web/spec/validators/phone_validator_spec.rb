@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PhoneValidator do
-  subject do
+  subject(:validator) do
     Class.new {
       include ActiveModel::Validations
       attr_accessor :phone
@@ -26,9 +26,9 @@ RSpec.describe PhoneValidator do
 
   valid_uk_phone_numbers.each do |phone_number|
     it "accepts #{phone_number} as a valid phone number" do
-      subject.phone = phone_number
-      expect(subject).to be_valid
-      expect(subject.errors.messages[:phone]).to be_empty
+      validator.phone = phone_number
+      expect(validator).to be_valid
+      expect(validator.errors.messages[:phone]).to be_empty
     end
   end
 
@@ -41,9 +41,9 @@ RSpec.describe PhoneValidator do
 
   invalid_phone_numbers.each do |phone_number|
     it "rejects #{phone_number} as an invalid phone number" do
-      subject.phone = phone_number
-      expect(subject).not_to be_valid
-      expect(subject.errors.messages[:phone]).to eq [
+      validator.phone = phone_number
+      expect(validator).not_to be_valid
+      expect(validator.errors.messages[:phone]).to eq [
         "Enter your mobile number in the correct format, like 07700 900 982"
       ]
     end
