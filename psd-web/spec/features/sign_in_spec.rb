@@ -9,7 +9,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer do
     click_on "Sign in to your account"
 
     fill_in "Email address", with: user.email
-    fill_in "Password", with: "password"
+    fill_in "Password", with: "2538fhdkvuULE36f"
     click_on "Continue"
 
     expect(page).to have_link("Sign out", href: destroy_user_session_path)
