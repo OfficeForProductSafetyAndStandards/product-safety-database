@@ -15,9 +15,9 @@ RSpec.describe SendUserInvitationJob do
       end
 
       it "sends an email via the NotifyMailer" do
-        expect(NotifyMailer).to receive(:invitation_email).with(user, user_inviting).and_return(message_delivery_instance)
-        expect(message_delivery_instance).to receive(:deliver_now)
+        allow(NotifyMailer).to receive(:invitation_email).with(user, user_inviting).and_return(message_delivery_instance)
         job.perform(user_id, user_inviting.id)
+        expect(message_delivery_instance).to have_received(:deliver_now)
       end
 
       it "adds the time that the user was invited" do
@@ -33,7 +33,6 @@ RSpec.describe SendUserInvitationJob do
 
     context "with an invalid user id" do
       let(:user_id) { SecureRandom.uuid }
-      let!(:user) { create(:user, id: SecureRandom.uuid) }
       let!(:user_inviting) { create(:user) }
 
       it "raises an error" do
