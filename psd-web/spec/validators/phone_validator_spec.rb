@@ -25,10 +25,19 @@ RSpec.describe PhoneValidator do
   ]
 
   valid_uk_phone_numbers.each do |phone_number|
-    it "accepts #{phone_number} as a valid phone number" do
-      validator.phone = phone_number
-      expect(validator).to be_valid
-      expect(validator.errors.messages[:phone]).to be_empty
+    context "with valid phone number #{phone_number}" do
+      before do
+        validator.phone = phone_number
+        validator.validate
+      end
+
+      it "is valid" do
+        expect(validator).to be_valid
+      end
+
+      it "does not populate an error message" do
+        expect(validator.errors.messages[:phone]).to be_empty
+      end
     end
   end
 
@@ -40,12 +49,21 @@ RSpec.describe PhoneValidator do
   ]
 
   invalid_phone_numbers.each do |phone_number|
-    it "rejects #{phone_number} as an invalid phone number" do
-      validator.phone = phone_number
-      expect(validator).not_to be_valid
-      expect(validator.errors.messages[:phone]).to eq [
-        "Enter your mobile number in the correct format, like 07700 900 982"
-      ]
+    context "with invalid phone number #{phone_number}" do
+      before do
+        validator.phone = phone_number
+        validator.validate
+      end
+
+      it "is not valid" do
+        expect(validator).not_to be_valid
+      end
+
+      it "populates an error message" do
+        expect(validator.errors.messages[:phone]).to eq [
+          "Enter your mobile number in the correct format, like 07700 900 982"
+        ]
+      end
     end
   end
 end

@@ -2,45 +2,83 @@ require "rails_helper"
 
 RSpec.describe User do
   describe "validations" do
+    before { user.validate(:registration_completion) }
+
     context "on registration completion" do
-      it "validates the presence of the mobile number" do
-        user = build(:user, mobile_number: "")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:mobile_number]).to eq ["Enter your mobile number"]
+      context "with blank mobile number" do
+        let(:user) { build(:user, mobile_number: "") }
+
+        it "is not valid" do
+          expect(user).not_to be_valid(:registration_completion)
+        end
+
+        it "populates an error message" do
+          expect(user.errors.messages[:mobile_number]).to eq ["Enter your mobile number"]
+        end
       end
 
-      it "validates the format of the mobile number" do
-        user = build(:user, mobile_number: "01111111111")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:mobile_number]).to eq [
-          "Enter your mobile number in the correct format, like 07700 900 982"
-        ]
+      context "with invalid mobile number format" do
+        let(:user) { build(:user, mobile_number: "01111111111") }
+
+        it "is not valid" do
+          expect(user).not_to be_valid(:registration_completion)
+        end
+
+        it "populates an error message" do
+          expect(user.errors.messages[:mobile_number]).to eq [
+            "Enter your mobile number in the correct format, like 07700 900 982"
+          ]
+        end
       end
 
-      it "validates the presence of name" do
-        user = build(:user, name: "")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:name]).to eq ["Enter your full name"]
+      context "with blank name" do
+        let(:user) { build(:user, name: "") }
+
+        it "is not valid" do
+          expect(user).not_to be_valid(:registration_completion)
+        end
+
+        it "populates an error message" do
+          expect(user.errors.messages[:name]).to eq ["Enter your full name"]
+        end
       end
 
-      it "validates the presence of password" do
-        user = build(:user, password: "")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:password]).to eq ["Enter a password"]
+      context "with blank password" do
+        let(:user) { build(:user, password: "") }
+
+        it "is not valid" do
+          expect(user).not_to be_valid(:registration_completion)
+        end
+
+        it "populates an error message" do
+          expect(user.errors.messages[:password]).to eq ["Enter a password"]
+        end
       end
 
-      it "validates password is not too short" do
-        user = build(:user, password: "123456")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:password])
-          .to eq ["Password is too short"]
+      context "with a password that is too short" do
+        let(:user) { build(:user, password: "123456") }
+
+        it "is not valid" do
+          expect(user).not_to be_valid(:registration_completion)
+        end
+
+        it "populates an error message" do
+          expect(user.errors.messages[:password])
+            .to eq ["Password is too short"]
+        end
       end
 
-      it "validates password is not too common" do
-        user = build(:user, password: "password")
-        expect(user).not_to be_valid(:registration_completion)
-        expect(user.errors.messages[:password])
-          .to eq ["Choose a less frequently used password"]
+      context "with a commonly-used password" do
+        let(:user) { build(:user, password: "password") }
+
+        it "is not valid" do
+          expect(user).not_to be_valid(:registration_completion)
+        end
+
+        it "populates an error message" do
+          expect(user.errors.messages[:password])
+            .to eq ["Choose a less frequently used password"]
+        end
       end
     end
   end
@@ -116,40 +154,59 @@ RSpec.describe User do
       end
     end
 
-    it "raises an error when missing information" do
-      email = nil
-      team = build_stubbed(:team, organisation: nil)
-      inviting_user = build_stubbed(:user)
+    context "when missing information" do
+      let(:email) { nil }
+      let(:team) { build_stubbed(:team, organisation: nil) }
+      let(:inviting_user) { build_stubbed(:user) }
 
-      expect(SendUserInvitationJob).not_to receive(:perform_later)
-      expect { described_class.create_and_send_invite!(email, team, inviting_user) }
-        .to raise_exception(ActiveRecord::RecordInvalid)
+      before { allow(SendUserInvitationJob).to receive(:perform_later) }
+
+      # rubocop:disable RSpec/MultipleExpectations
+      it "raises an exception and does not send the invitation" do
+        expect { described_class.create_and_send_invite!(email, team, inviting_user) }
+          .to raise_exception(ActiveRecord::RecordInvalid)
+        expect(SendUserInvitationJob).not_to have_received(:perform_later)
+      end
+      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 
   describe ".resend_invite" do
     let(:inviting_user) { create(:user_with_teams) }
 
-    it "resends an invitation to the user when both users belong to same team" do
-      invited_user = create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation)
+    before { allow(SendUserInvitationJob).to receive(:perform_later) }
 
-      expect(SendUserInvitationJob).to receive(:perform_later).with(anything, inviting_user.id)
+    context "when both users belong to same team" do
+      let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation) }
 
-      described_class.resend_invite(invited_user.email, inviting_user)
+      it "resends an invitation to the user" do
+        described_class.resend_invite(invited_user.email, inviting_user)
+        expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
+      end
     end
 
-    it "raises an exception when the given email does not match any user" do
-      expect(SendUserInvitationJob).not_to receive(:perform_later)
-      expect { described_class.resend_invite("inexistent@southampton.gov.uk", inviting_user) }
-        .to raise_exception(ActiveRecord::RecordNotFound)
+    context "when the given email does not match any user" do
+      let(:email) { "inexistent@southampton.gov.uk" }
+
+      # rubocop:disable RSpec/MultipleExpectations
+      it "raises an exception and does not send the invitation" do
+        expect { described_class.resend_invite(email, inviting_user) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect(SendUserInvitationJob).not_to have_received(:perform_later)
+      end
+      # rubocop:enable RSpec/MultipleExpectations
     end
 
-    it "raises an exception when inviting and invited users belong to different teams" do
-      invited_user = create(:user_with_teams)
+    context "when inviting and invited users belong to different teams" do
+      let(:invited_user) { create(:user_with_teams) }
 
-      expect(SendUserInvitationJob).not_to receive(:perform_later)
-      expect { described_class.resend_invite(invited_user.email, inviting_user) }
-        .to raise_exception(ActiveRecord::RecordNotFound)
+      # rubocop:disable RSpec/MultipleExpectations
+      it "raises an exception and does not send the invitation" do
+        expect { described_class.resend_invite(invited_user.email, inviting_user) }
+          .to raise_exception(ActiveRecord::RecordNotFound)
+        expect(SendUserInvitationJob).not_to have_received(:perform_later)
+      end
+      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 

@@ -16,16 +16,34 @@ RSpec.describe CommonPasswordValidator do
     allow(File).to receive(:foreach).and_yield("password").and_yield("testpassword")
   end
 
-  it "rejects passwords listed in the common passwords file" do
-    validator.password = "testpassword"
-    expect(validator).not_to be_valid
-    expect(validator.errors.messages[:password])
-      .to eq ["Choose a less frequently used password"]
+  context "with passwords listed in the common passwords file" do
+    before do
+      validator.password = "testpassword"
+      validator.validate
+    end
+
+    it "is not valid" do
+      expect(validator).not_to be_valid
+    end
+
+    it "populates an error message" do
+      expect(validator.errors.messages[:password])
+        .to eq ["Choose a less frequently used password"]
+    end
   end
 
-  it "accepts passwords not listed in the common passwords file" do
-    validator.password = "notCommonPassword123"
-    expect(validator).to be_valid
-    expect(validator.errors.messages[:password]).to be_empty
+  context "with passwords not listed in the common passwords file" do
+    before do
+      validator.password = "notCommonPassword123"
+      validator.validate
+    end
+
+    it "is valid" do
+      expect(validator).to be_valid
+    end
+
+    it "does not populate an error message" do
+      expect(validator.errors.messages[:password]).to be_empty
+    end
   end
 end
