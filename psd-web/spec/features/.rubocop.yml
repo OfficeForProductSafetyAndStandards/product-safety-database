@@ -1,0 +1,7 @@
+inherit_from: ../../.rubocop.yml
+
+RSpec/MultipleExpectations:
+   Max: 20
+
+RSpec/ExampleLength:
+   Enabled: false

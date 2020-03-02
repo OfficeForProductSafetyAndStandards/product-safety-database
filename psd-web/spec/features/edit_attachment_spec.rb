@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.describe "Editing an attachment on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, :with_document, assignee: user) }
   let(:document) { investigation.documents.first }
@@ -13,7 +13,7 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :w
     visit edit_investigation_document_path(investigation, document)
   end
 
-  scenario "saves changes and creates activity" do
+  it "saves changes and creates activity" do
     expect_to_be_on_edit_attachment_page
 
     fill_and_submit_attachment_details_page
