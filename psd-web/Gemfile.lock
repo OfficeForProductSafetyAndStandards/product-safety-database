@@ -590,6 +590,7 @@ DEPENDENCIES
   rubocop
   rubocop-govuk (~> 2.0.0)
   rubocop-performance
+  rubocop-rspec (~> 1.37)
   ruby-debug-ide
   rubyzip
   sass-rails (~> 6.0)

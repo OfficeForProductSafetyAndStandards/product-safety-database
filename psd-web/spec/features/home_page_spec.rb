@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
-  context "User signed out" do
+RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config, type: :feature do
+  context "when user is signed out" do
     scenario "shows the home page" do
       visit root_path
 
@@ -16,7 +16,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
     end
   end
 
-  context "Signed in" do
+  context "when user is signed in" do
     let(:has_accepted_declaration) { true }
     let(:has_viewed_introduction) { true }
     let(:user_state) { :activated }
@@ -37,10 +37,10 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
       expect(page).not_to have_link("Sign in")
     end
 
-    context "as OPSS user" do
+    context "with OPSS user role" do
       let(:role) { :opss_user }
 
-      context "not previously accepted the declaration" do
+      context "when the user has not previously accepted the declaration" do
         let(:has_accepted_declaration) { false }
         let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
@@ -62,7 +62,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
         end
       end
 
-      context "previously accepted the declaration" do
+      context "when the user has previously accepted the declaration" do
         scenario "shows the case list" do
           expect(page).to have_current_path(investigations_path)
           expect_small_beta_phase_banner
@@ -73,10 +73,10 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
       end
     end
 
-    context "as non-OPSS user" do
+    context "without OPSS user role" do
       let(:role) { :psd_user }
 
-      context "not previously accepted the declaration or viewed the introduction" do
+      context "when the user has not previously accepted the declaration or viewed the introduction" do
         let(:has_accepted_declaration) { false }
         let(:has_viewed_introduction) { false }
         let(:user_state) { :inactive }
@@ -98,8 +98,8 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
         end
       end
 
-      context "previously accepted the declaration" do
-        context "not previously viewed the introduction" do
+      context "when the user has previously accepted the declaration" do
+        context "when the user has not previously viewed the introduction" do
           let(:has_viewed_introduction) { false }
 
           scenario "shows the introduction" do
@@ -111,7 +111,7 @@ RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config do
           end
         end
 
-        context "previously viewed the introduction" do
+        context "when the user has previously viewed the introduction" do
           scenario "shows the non-OPSS home page" do
             expect(page).to have_current_path(root_path)
             expect_small_beta_phase_banner

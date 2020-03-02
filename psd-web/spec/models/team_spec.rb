@@ -2,12 +2,16 @@ require "rails_helper"
 
 RSpec.describe Team do
   describe ".all_with_organisation" do
-    before { 3.times { create(:team) } }
+    before { create_list(:team, 3) }
+
+    let(:assignees) { described_class.all_with_organisation }
+
+    it "retrieves all teams" do
+      expect(assignees.length).to eq(3)
+    end
 
     it "includes associations needed for display_name" do
-      assignees = described_class.all_with_organisation
-
-      expect(assignees.length).to eq(3)
+      assignees.length
       expect(-> {
         assignees.map(&:display_name)
       }).to not_talk_to_db
@@ -23,7 +27,7 @@ RSpec.describe Team do
       org = Organisation.create!(name: "test")
 
       (important_team_names + %w{bobbins cribbins}).map do |name|
-        Team.create!(id: SecureRandom.uuid, name: name, organisation: org)
+        described_class.create!(id: SecureRandom.uuid, name: name, organisation: org)
       end
     end
 
@@ -31,16 +35,16 @@ RSpec.describe Team do
       %w{bish bosh bash}
     end
 
-    context "OPSS user" do
-      let(:user) { double("User", is_opss?: true) }
+    context "with an OPSS user" do
+      let(:user) { instance_double("User", is_opss?: true) }
 
       it "returns all important teams" do
         expect(described_class.get_visible_teams(user).map(&:name).to_set).to eq(important_team_names.to_set)
       end
     end
 
-    context "Non-OPSS user" do
-      let(:user) { double("User", is_opss?: false) }
+    context "with a non-OPSS user" do
+      let(:user) { instance_double("User", is_opss?: false) }
 
       it "returns first important team" do
         expect(described_class.get_visible_teams(user).map(&:name)).to eq([important_team_names.first])

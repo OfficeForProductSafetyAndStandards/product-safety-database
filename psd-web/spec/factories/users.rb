@@ -29,7 +29,7 @@ FactoryBot.define do
     trait :activated do
       has_viewed_introduction { true }
       after(:build) do |user|
-        mailer = double("mailer", welcome: double("welcome mailer", deliver_later: true))
+        mailer = instance_double("NotifyMailer", welcome: instance_double("ActionMailer::MessageDelivery", deliver_later: true))
         UserDeclarationService.accept_declaration(user, mailer)
       end
     end
