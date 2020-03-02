@@ -1,11 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-  let(:date) { Faker::Date.backward(days: 14) }
-  let(:received_type) { "enquiry_received_type_email" }
-
   before { sign_in as_user: create(:user, :activated, :opss_user) }
 
+  let(:date) { Faker::Date.backward(days: 14) }
+  let(:received_type) { "enquiry_received_type_email" }
   let(:contact_details) do
     {
         contact_name: Faker::Name.name,
@@ -13,7 +12,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
         contact_phone: Faker::PhoneNumber.phone_number,
     }
   end
-
   let(:enquiry_details) do
     {
       enquiry_description: Faker::Lorem.paragraph,
@@ -22,7 +20,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
-  context "as an OPSS user" do
+  context "when login as an OPSS user" do
     scenario "able to report an enquiry"do
       click_link "Open a new case"
       choose "type_enquiry"

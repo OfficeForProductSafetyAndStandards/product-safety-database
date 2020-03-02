@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-  let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
-
   before do
     sign_in as_user: create(:user, :activated, :opss_user)
     visit new_allegation_path
   end
 
+  let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:contact_details) do
     {
       contact_name: Faker::Name.name,
@@ -15,7 +14,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       contact_phone: Faker::PhoneNumber.phone_number,
     }
   end
-
   let(:allegation_details) do
     {
       description: Faker::Lorem.paragraph,
@@ -23,7 +21,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       category: Rails.application.config.product_constants["product_category"].sample,
     }
   end
-
   let(:product_details) do
     {
       name: Faker::Lorem.sentence,
@@ -36,7 +33,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     }
   end
 
-  context "as an OPSS user" do
+  context "when login as an OPSS user" do
     scenario "able to create safety allegation from a consumer" do
       expect(page).to have_css("h1", text: "New allegation")
 
