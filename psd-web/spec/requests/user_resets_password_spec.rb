@@ -54,4 +54,96 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
       end
     end
   end
+
+  describe "submitting a new password" do
+    context "with a valid reset token and new password" do
+      let(:reset_token) { SecureRandom.hex(20) }
+      let(:user) { create(:user) }
+
+      before do
+        reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
+
+        user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
+      end
+
+      it "redirects to the homepage" do
+        patch user_password_path, params: {
+          user: {
+            reset_password_token: reset_token,
+            password: "7rjfy38f74hf937"
+          }
+        }
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context "with a valid reset token but a missing password" do
+      let(:reset_token) { SecureRandom.hex(20) }
+      let(:user) { create(:user) }
+
+      before do
+        reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
+
+        user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
+      end
+
+      it "re-renders the new password form" do
+        patch user_password_path, params: {
+          user: {
+            reset_password_token: reset_token,
+            password: ""
+          }
+        }
+
+        expect(response).to render_template("passwords/edit")
+      end
+    end
+
+    context "with a valid reset token but a password that is too short" do
+      let(:reset_token) { SecureRandom.hex(20) }
+      let(:user) { create(:user) }
+
+      before do
+        reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
+
+        user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
+      end
+
+      it "re-renders the new password form" do
+        patch user_password_path, params: {
+          user: {
+            reset_password_token: reset_token,
+            password: "abc"
+          }
+        }
+
+        expect(response).to render_template("passwords/edit")
+      end
+    end
+
+    context "with a valid reset token but a password that is too common" do
+      let(:reset_token) { SecureRandom.hex(20) }
+      let(:user) { create(:user) }
+
+      before do
+        reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
+
+        user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
+      end
+
+      it "re-renders the new password form" do
+        patch user_password_path, params: {
+          user: {
+            reset_password_token: reset_token,
+            password: "Password123"
+          }
+        }
+
+        expect(response).to render_template("passwords/edit")
+      end
+    end
+
+    context "with an invalid reset token"
+  end
 end

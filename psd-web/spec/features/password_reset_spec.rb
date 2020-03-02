@@ -106,11 +106,11 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
           click_on "Continue"
 
           expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-          expect(page).to have_link("Password is too short (minimum is 8 characters)", href: "#password")
+          expect(page).to have_link("Password is too short", href: "#password")
         end
       end
 
-      context "when the password is too short" do
+      context "when the password is empty" do
         let(:password) { "" }
 
         it "does not allow you to reset your password" do
@@ -122,7 +122,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
           click_on "Continue"
 
           expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-          expect(page).to have_link("Password cannot be blank", href: "#password")
+          expect(page).to have_link("Enter a password", href: "#password")
         end
       end
     end
@@ -134,9 +134,6 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter do
 
       travel_to 66.minutes.from_now do
         visit edit_user_password_url_token
-
-        fill_in "Password", with: "password"
-        click_on "Continue"
 
         expect(page).to have_css("h1", text: "This link has expired")
         expect(page).to have_link("sign in page", href: new_user_session_path)

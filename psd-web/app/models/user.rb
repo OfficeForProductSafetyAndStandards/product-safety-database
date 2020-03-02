@@ -14,6 +14,10 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :teams
 
+  validates :password,
+            common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
+            unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
+
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
     registration_completion.validates :mobile_number,
@@ -22,9 +26,6 @@ class User < ApplicationRecord
     registration_completion.validates :name, presence: true
     registration_completion.validates :password, presence: true
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
-    registration_completion.validates :password,
-                                      common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
-                                      unless: Proc.new { |user| user.errors.messages[:password].any? }
   end
 
   attribute :skip_password_validation, :boolean, default: false
