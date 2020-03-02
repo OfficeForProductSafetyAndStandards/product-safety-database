@@ -18,7 +18,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       choose "activity_type_testing_result"
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "Allegation: 2002-0001Record test result")
+      expect(page).to have_h1("Record test result")
       click_button "Continue"
 
       expect(page).to have_summary_error("Enter date of the test")
