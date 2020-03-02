@@ -5,9 +5,13 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
 
   describe "viewing the form" do
     context "when the url token matches user invitation token" do
-      it "renders the complete registration page" do
-        get complete_registration_user_path(user.id, invitation: user.invitation_token)
+      before { get complete_registration_user_path(user.id, invitation: user.invitation_token) }
+
+      it "returns 200 status code" do
         expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the complete registration page" do
         expect(response).to render_template(:complete_registration)
       end
     end
@@ -99,9 +103,15 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(response).to redirect_to(root_path)
       end
 
-      it "updates the user model" do
+      it "updates the user name" do
         expect(user.name).to eq("Foo Bar")
+      end
+
+      it "updates the user mobile number" do
         expect(user.mobile_number).to eq("07235671232")
+      end
+
+      it "updates the user password" do
         expect(user.encrypted_password).not_to be_blank
       end
     end
@@ -120,14 +130,23 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         user.reload
       end
 
-      it "renders a 403 forbidden error", with_errors_rendered: true do
+      it "returns a 403 status code" do
         expect(response).to have_http_status :forbidden
+      end
+
+      it "renders the forbidden error page", with_errors_rendered: true do
         expect(response).to render_template("errors/forbidden")
       end
 
-      it "doesn’t update the user model" do
+      it "doesn’t update the user name" do
         expect(user.name).to be_blank
+      end
+
+      it "doesn’t update the user mobile number" do
         expect(user.mobile_number).to be_blank
+      end
+
+      it "doesn’t update the user password" do
         expect(user.encrypted_password).to be_blank
       end
     end
@@ -149,9 +168,15 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(response).to render_template("complete_registration")
       end
 
-      it "doesn’t update the user model" do
+      it "doesn’t update the user name" do
         expect(user.name).to be_blank
+      end
+
+      it "doesn’t update the user mobile number" do
         expect(user.mobile_number).to be_blank
+      end
+
+      it "doesn’t update the user password" do
         expect(user.encrypted_password).to be_blank
       end
     end

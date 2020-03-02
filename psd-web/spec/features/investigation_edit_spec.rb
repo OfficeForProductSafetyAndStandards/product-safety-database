@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "Abilitiy edit an investigation", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   let(:investigation) { create(:project) }
 
   before do
     sign_in
   end
 
-  it "allows to edit the summary" do
+  scenario "allows to edit the summary" do
     visit investigation_path(investigation)
 
     click_link "Change summary"

@@ -11,11 +11,12 @@ RSpec.shared_examples "finds the relevant investigation" do
 end
 
 RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
+  subject { described_class.new(query, filter_params, sorting_params) }
+
   let(:user)           { create(:user) }
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
-  subject { described_class.new(query, filter_params, sorting_params) }
 
   def perform_search
     Investigation.full_search(subject)
@@ -34,77 +35,77 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
     before do
       allow(NotifyMailer)
         .to receive(:investigation_updated)
-        .and_return(double(NotifyMailer, deliver_later: nil))
+        .and_return(instance_double("ActionMailer::MessageDelivery", deliver_later: nil))
     end
 
     context "when searching on an investigation's product" do
-      context "search for product_code" do
+      context "when searching for product_code" do
         let(:query) { product.product_code }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for name" do
+      context "when searching for name" do
         let(:query) { product.name }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for batch_number" do
+      context "when searching for batch_number" do
         let(:query) { product.batch_number }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for description" do
+      context "when searching for description" do
         let(:query) { product.description }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for country of origin" do
+      context "when searching for country of origin" do
         let(:query) { product.country_of_origin }
 
         it "does not find the investigation" do
-          expect(perform_search.records).to_not include(investigation)
+          expect(perform_search.records).not_to include(investigation)
         end
       end
     end
 
-    context "when searching  on an investigation's correspondence" do
+    context "when searching on an investigation's correspondence" do
       let!(:correspondence) { create(:correspondence, investigation: investigation) }
 
-      context "search for the overview" do
+      context "when searching for the overview" do
         let(:query) { correspondence.overview }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for the email address" do
+      context "when searching for the email address" do
         let(:query) { correspondence.email_address }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for the name" do
+      context "when searching for the name" do
         let(:query) { correspondence.correspondent_name }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for the email_subject" do
+      context "when searching for the email_subject" do
         let(:query) { correspondence.email_subject }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for the details" do
+      context "when searching for the details" do
         let(:query) { correspondence.details }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "search for the phone_number" do
+      context "when searching for the phone_number" do
         let(:query) { correspondence.phone_number }
 
         it_behaves_like "finds the relevant investigation"
@@ -114,19 +115,19 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
     context "when searching on the complainant fields" do
       let!(:complainant) { create(:complainant, investigation: investigation) }
 
-      context "searching by complainant name" do
+      context "when searching by complainant name" do
         let(:query) { complainant.name }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "searching by complainant phone number" do
+      context "when searching by complainant phone number" do
         let(:query) { complainant.phone_number }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "searching by complainant email address" do
+      context "when searching by complainant email address" do
         let(:query) { complainant.email_address }
 
         it_behaves_like "finds the relevant investigation"
@@ -136,13 +137,13 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
     context "when searcing on a business" do
       let!(:business) { create(:business, investigations: [investigation]) }
 
-      context "searching by business trading name" do
+      context "when searching by business trading name" do
         let(:query) { business.trading_name }
 
         it_behaves_like "finds the relevant investigation"
       end
 
-      context "searching by business number" do
+      context "when searching by business number" do
         let(:query) { business.company_number }
 
         it_behaves_like "finds the relevant investigation"
