@@ -11,17 +11,17 @@ FactoryBot.define do
 
     association :assignee, factory: :user
 
-    factory :allegation, class: Investigation::Allegation do
+    factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }
       user_title { "test allegation title" }
     end
 
-    factory :enquiry, class: Investigation::Enquiry do
+    factory :enquiry, class: "Investigation::Enquiry" do
       description { "test enquiry" }
       user_title { "test enquiry title" }
     end
 
-    factory :project, class: Investigation::Project do
+    factory :project, class: "Investigation::Project" do
       description { "test project" }
       user_title { "test project title" }
     end

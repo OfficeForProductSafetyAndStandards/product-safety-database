@@ -6,7 +6,7 @@ RSpec.describe User do
       create(:user, :inactive)
       activated_user = create(:user, :activated)
 
-      expect(User.activated.to_a).to eq [activated_user]
+      expect(described_class.activated.to_a).to eq [activated_user]
     end
   end
 
@@ -109,47 +109,45 @@ RSpec.describe User do
 
     let(:result) { user.display_name(other_user: other_user, ignore_visibility_restrictions: ignore_visibility_restrictions) }
 
-    context "with other_user" do
-      context "when the user is a member of the same organisation" do
-        context "when the user has no teams" do
-          it "returns their name and organisation name" do
-            expect(result).to eq("#{user_name} (#{organisation_name})")
-          end
-        end
-
-        context "when the user has teams" do
-          let(:user_teams) { [team, other_team] }
-
-          it "returns their name and team names" do
-            expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name})")
-          end
+    context "when the user is a member of the same organisation" do
+      context "when the user has no teams" do
+        it "returns their name and organisation name" do
+          expect(result).to eq("#{user_name} (#{organisation_name})")
         end
       end
 
-      context "when the user is a member of a different organisation" do
-        let(:user_organisation) { other_organisation }
+      context "when the user has teams" do
+        let(:user_teams) { [team, other_team] }
 
-        context "when the user has no teams" do
+        it "returns their name and team names" do
+          expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name})")
+        end
+      end
+    end
+
+    context "when the user is a member of a different organisation" do
+      let(:user_organisation) { other_organisation }
+
+      context "when the user has no teams" do
+        it "returns their name and organisation name" do
+          expect(result).to eq("#{user_name} (#{other_organisation_name})")
+        end
+      end
+
+      context "when the user has teams" do
+        let(:user_teams) { [other_organisation_team] }
+
+        context "with ignore_visibility_restrictions: false" do
           it "returns their name and organisation name" do
             expect(result).to eq("#{user_name} (#{other_organisation_name})")
           end
         end
 
-        context "when the user has teams" do
-          let(:user_teams) { [other_organisation_team] }
+        context "with ignore_visibility_restrictions: true" do
+          let(:ignore_visibility_restrictions) { true }
 
-          context "with ignore_visibility_restrictions: false" do
-            it "returns their name and organisation name" do
-              expect(result).to eq("#{user_name} (#{other_organisation_name})")
-            end
-          end
-
-          context "with ignore_visibility_restrictions: true" do
-            let(:ignore_visibility_restrictions) { true }
-
-            it "returns their name and team names" do
-              expect(result).to eq("#{user_name} (#{other_org_team_name})")
-            end
+          it "returns their name and team names" do
+            expect(result).to eq("#{user_name} (#{other_org_team_name})")
           end
         end
       end
