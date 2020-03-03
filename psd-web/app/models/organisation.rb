@@ -11,7 +11,7 @@ class Organisation < ApplicationRecord
           new_record.name = org[:name]
         end
 
-        record.update!(org.slice(:name, :path))
+        record.update!(org.slice(:name))
       rescue ActiveRecord::ActiveRecordError => e
         if Rails.env.production?
           Raven.capture_exception(e)
