@@ -9,10 +9,9 @@ class Organisation < ApplicationRecord
       begin
         record = find_or_create_by!(id: org[:id]) do |new_record|
           new_record.name = org[:name]
-          new_record.path = org[:path]
         end
 
-        record.update!(org.slice(:name, :path))
+        record.update!(org.slice(:name))
       rescue ActiveRecord::ActiveRecordError => e
         if Rails.env.production?
           Raven.capture_exception(e)
