@@ -218,13 +218,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     include_examples "a formated text", :investigation, :non_compliant_reason
   end
 
-  describe "#pretty_description" do
-    it {
-      expect(decorated_investigation.pretty_description)
-        .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
-    }
-  end
-
   describe "#description" do
     include_examples "a formated text", :investigation, :description
   end

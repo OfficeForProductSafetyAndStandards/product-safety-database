@@ -63,14 +63,6 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       end
     end
 
-    context "with blank date_decided" do
-      let(:date_decided) { nil }
-
-      it "returns false" do
-        expect(corrective_action).not_to be_valid
-      end
-    end
-
     context "with future date_decided" do
       let(:date_decided) { Faker::Date.forward(days: 14) }
 
