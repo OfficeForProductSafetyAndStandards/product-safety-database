@@ -9,7 +9,6 @@ class Organisation < ApplicationRecord
       begin
         record = find_or_create_by!(id: org[:id]) do |new_record|
           new_record.name = org[:name]
-          new_record.path = org[:path]
         end
 
         record.update!(org.slice(:name, :path))
