@@ -14,7 +14,6 @@ class KeycloakConnector < ApplicationRecord
       user.password_salt = salt
       user.encrypted_password = encrypted_password
       user.hash_iterations = iterations
-      user.email = email
       user.credential_type = credential_type
       user.save!
     end
