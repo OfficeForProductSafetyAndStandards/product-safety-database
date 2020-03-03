@@ -1,110 +1,97 @@
 require "rails_helper"
 
-RSpec.describe "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, type: :feature do
-  let(:user)                         { create(:user) }
-  let!(:reset_token)                 { stubbed_devise_generated_token }
-  let(:edit_user_password_url_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
+RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, type: :feature do
+  let(:user)                              { create(:user) }
+  let!(:reset_token)                      { stubbed_devise_generated_token }
+  let(:edit_user_password_url_with_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
 
-  context "when not entering a valid email" do
-    it "does not send you a notification" do
-      user.update!(reset_password_token: reset_token)
+  scenario "entering an email which does not match an account does not send a notification but shows the confirmation page" do
+    user.update!(reset_password_token: reset_token)
 
-      visit "/sign-in"
+    visit "/sign-in"
 
-      click_link "Forgot your password?"
+    click_link "Forgot your password?"
 
-      perform_enqueued_jobs do
-        assert_not_requested(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
+    perform_enqueued_jobs do
+      assert_not_requested(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
 
-        expect(page).to have_css("h1", text: "Reset your password")
-        fill_in "Email address", with: Faker::Internet.safe_email
-        click_on "Send email"
-      end
+      expect(page).to have_css("h1", text: "Reset your password")
+      fill_in "Email address", with: Faker::Internet.safe_email
+      click_on "Send email"
+
+      expect_to_be_on_check_your_email_page
     end
   end
 
-  context "when entering an invalid email" do
-    it "does not allow you to reset you pasword" do
-      visit "/sign-in"
+  scenario "entering an invalid email shows an error" do
+    visit "/sign-in"
 
-      click_link "Forgot your password?"
+    click_link "Forgot your password?"
 
-      expect(page).to have_css("h1", text: "Reset your password")
+    expect(page).to have_css("h1", text: "Reset your password")
 
-      fill_in "Email address", with: "not_an_email"
-      click_on "Send email"
+    fill_in "Email address", with: "not_an_email"
+    click_on "Send email"
 
-      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-      expect(page).to have_link("Enter your email address in the correct format, like name@example.com", href: "#email")
-    end
+    expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+    expect(page).to have_link("Enter your email address in the correct format, like name@example.com", href: "#email")
   end
 
   context "with a valid token" do
-    context "when entering a valid email" do
-      it "allows you to reset your password" do
-        request_password_reset
-        expect(page).to have_css("h1", text: "Check your email")
+    scenario "entering a valid password resets your password" do
+      request_password_reset
 
-        visit edit_user_password_url_token
+      visit edit_user_password_url_with_token
 
-        fill_in "Password", with: "a_new_password"
-        click_on "Continue"
+      fill_in "Password", with: "a_new_password"
+      click_on "Continue"
 
-        expect(page).to have_css("h1", text: "Declaration")
+      expect(page).to have_css("h1", text: "Declaration")
 
-        sign_out
+      sign_out
 
-        click_on "Sign in to your account"
+      click_on "Sign in to your account"
 
-        fill_in "Email address", with: user.email
-        fill_in "Password", with: "a_new_password"
-        click_on "Continue"
+      fill_in "Email address", with: user.email
+      fill_in "Password", with: "a_new_password"
+      click_on "Continue"
 
-        expect(page).to have_css("h1", text: "Declaration")
-      end
+      expect(page).to have_css("h1", text: "Declaration")
     end
 
     context "when the password does not fit the criteria" do
-      context "when the password is too short" do
-        let(:password) { "as" }
+      scenario "when the password is too short it shows an error" do
+        request_password_reset
 
-        it "does not allow you to reset your password" do
-          request_password_reset
+        visit edit_user_password_url_with_token
 
-          visit edit_user_password_url_token
+        fill_in "Password", with: "as"
+        click_on "Continue"
 
-          fill_in "Password", with: password
-          click_on "Continue"
-
-          expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-          expect(page).to have_link("Password is too short", href: "#password")
-        end
+        expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+        expect(page).to have_link("Password is too short", href: "#password")
       end
 
-      context "when the password is empty" do
-        let(:password) { "" }
+      scenario "when the password is empty it shows an error" do
+        request_password_reset
 
-        it "does not allow you to reset your password" do
-          request_password_reset
+        visit edit_user_password_url_with_token
 
-          visit edit_user_password_url_token
+        fill_in "Password", with: ""
+        click_on "Continue"
 
-          fill_in "Password", with: password
-          click_on "Continue"
-
-          expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-          expect(page).to have_link("Enter a password", href: "#password")
-        end
+        expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+        expect(page).to have_link("Enter a password", href: "#password")
       end
     end
   end
 
   context "with an expired token" do
-    it "does not allow you to reset your password" do
+    scenario "does not allow you to reset your password" do
       request_password_reset
 
       travel_to 66.minutes.from_now do
-        visit edit_user_password_url_token
+        visit edit_user_password_url_with_token
 
         expect(page).to have_css("h1", text: "This link has expired")
         expect(page).to have_link("sign in page", href: "/sign-in")
@@ -126,7 +113,7 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter, :with_stubbe
         reference: "Password reset",
         personalisation: {
           name: user.name,
-          edit_user_password_url_token: edit_user_password_url_token
+          edit_user_password_url_with_token: edit_user_password_url_with_token
         }
       }
 
@@ -140,11 +127,15 @@ RSpec.describe "Resetting your password", :with_test_queue_adapter, :with_stubbe
       fill_in "Email address", with: user.email
       click_on "Send email"
 
-      expect(page).to have_css("h1", text: "Check your email")
+      expect_to_be_on_check_your_email_page
     end
   end
 
   def expect_to_be_on_reset_password_page
     expect(page).to have_current_path("/password/new")
+  end
+
+  def expect_to_be_on_check_your_email_page
+    expect(page).to have_css("h1", text: "Check your email")
   end
 end
