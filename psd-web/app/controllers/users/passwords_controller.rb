@@ -3,8 +3,7 @@ module Users
     skip_before_action :assert_reset_token_passed, only: :edit
 
     def edit
-      return render :invalid_link, status: :not_found if params[:reset_password_token].blank?
-      return render :invalid_link, status: :not_found if reset_token_invalid?
+      return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
 
       super
