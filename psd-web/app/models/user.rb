@@ -185,7 +185,7 @@ private
 
   # BEGIN: place devise overriden method calls bellow
   def send_reset_password_instructions_notification(token)
-    SendResetPasswordInstructions.perform_later(self, token)
+    NotifyMailer.reset_password_instructions(self, token).deliver_later
   end
   # END: Devise methods
 
