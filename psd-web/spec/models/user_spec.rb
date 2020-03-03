@@ -362,6 +362,22 @@ RSpec.describe User do
     end
   end
 
+
+  describe "#send_reset_password_instructions" do
+    subject(:user) { create(:user) }
+
+    let!(:reset_token) { stubbed_devise_generated_token }
+
+    it "enqueues a job posting email to notify with the none encrypted token", :with_test_queue_adapter do
+      message_delivery = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      allow(NotifyMailer).to receive(:reset_password_instructions).with(user, reset_token.first).and_return(message_delivery)
+
+      user.send_reset_password_instructions
+
+      expect(message_delivery).to have_received(:deliver_later)
+    end
+  end
+
   describe "#invitation_expired?" do
     it "returns false when the user has not been invited" do
       user = build_stubbed(:user, invited_at: nil)

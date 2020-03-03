@@ -11,7 +11,7 @@ module TestHelpers
       click_on "Sign in to your account"
 
       fill_in "Email address", with: user.email
-      fill_in "Password", with: "password"
+      fill_in "Password", with: "2538fhdkvuULE36f"
       click_on "Continue"
 
       user

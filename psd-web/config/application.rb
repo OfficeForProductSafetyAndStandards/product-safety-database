@@ -21,6 +21,7 @@ module ProductSafetyDatabase
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     config.eager_load_paths << Rails.root.join("presenters")
+    config.autoload_paths << Rails.root.join("app/forms/concerns")
 
     config.active_job.queue_adapter = :sidekiq
     config.action_mailer.deliver_later_queue_name = "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}-mailers"

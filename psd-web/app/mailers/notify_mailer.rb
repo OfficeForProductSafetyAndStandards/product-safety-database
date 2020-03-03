@@ -1,14 +1,25 @@
 class NotifyMailer < GovukNotifyRails::Mailer
   TEMPLATES =
     {
-        investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
-        investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
-        alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
-        user_added_to_team: "e3b2bbf5-3002-49fb-adb5-ad18e483c7e4",
-        welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
-        invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a"
+      reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
+      investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
+      investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
+      alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
+      user_added_to_team: "e3b2bbf5-3002-49fb-adb5-ad18e483c7e4",
+      welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
+      invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a"
     }.freeze
 
+  def reset_password_instructions(user, token)
+    set_template(TEMPLATES[:reset_password_instruction])
+    set_reference("Password reset")
+    set_personalisation(
+      name: user.name,
+      edit_user_password_url_token: edit_user_password_url(reset_password_token: token)
+    )
+
+    mail(to: user.email)
+  end
 
   def invitation_email(user, inviting_user)
     set_template(TEMPLATES[:invitation])

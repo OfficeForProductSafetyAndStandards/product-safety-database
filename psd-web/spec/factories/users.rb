@@ -3,7 +3,7 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
-    password { "password" }
+    password { "2538fhdkvuULE36f" }
     password_confirmation(&:password)
     has_accepted_declaration { false }
     has_been_sent_welcome_email { true }
