@@ -6,10 +6,10 @@ RSpec.describe GovukNotify do
     let(:code) { 123 }
     let(:expected_payload) do
       {
-        mobile_number: mobile_number,
+        phone_number: mobile_number,
         template_id: described_class::TEMPLATES[:send_otp_code],
         personalisation: {
-          code: code,
+          message: code,
         }
       }
     end

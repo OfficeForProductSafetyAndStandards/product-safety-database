@@ -2,7 +2,7 @@ class GovukNotify
   include Singleton
 
   TEMPLATES = {
-    send_otp_code: "33517ff-2a88-4f6e-b855-c550268ce08a"
+    send_otp_code: "8b758d39-29ad-4f02-bb52-a68cfac007b6"
   }.freeze
 
   attr_reader :pool
@@ -16,9 +16,9 @@ class GovukNotify
   def self.send_otp_code(mobile_number:, code:)
     instance.pool.with do |client|
       client.send_sms(
-        mobile_number: mobile_number,
+        phone_number: mobile_number,
         template_id: TEMPLATES[:send_otp_code],
-        personalisation: { code: code }
+        personalisation: { message: code }
       )
     end
   end
