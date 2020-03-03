@@ -12,11 +12,10 @@ class Team < ApplicationRecord
       begin
         record = find_or_create_by!(id: team[:id]) do |new_record|
           new_record.name = team[:name]
-          new_record.path = team[:path]
           new_record.organisation_id = team[:organisation_id]
         end
 
-        record.update!(team.slice(:name, :path, :team_recipient_email, :organisation_id))
+        record.update!(team.slice(:name, :team_recipient_email, :organisation_id))
       rescue ActiveRecord::ActiveRecordError => e
         if Rails.env.production?
           Raven.capture_exception(e)
