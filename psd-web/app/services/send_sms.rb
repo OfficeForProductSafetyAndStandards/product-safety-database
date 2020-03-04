@@ -1,4 +1,4 @@
-class GovukNotify
+class SendSMS
   include Singleton
 
   TEMPLATES = {
@@ -13,7 +13,7 @@ class GovukNotify
     end
   end
 
-  def self.send_otp_code(mobile_number: , code:)
+  def self.send_otp_code(mobile_number:, code:)
     instance.pool.with do |client|
       client.send_sms(
         mobile_number: mobile_number,
@@ -23,7 +23,7 @@ class GovukNotify
     end
   end
 
-  private
+private
 
   attr_writer :pool
 end
