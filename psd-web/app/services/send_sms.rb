@@ -18,7 +18,7 @@ class SendSMS
       client.send_sms(
         phone_number: mobile_number,
         template_id: TEMPLATES[:send_otp_code],
-        personalisation: { message: code }
+        personalisation: { code: code }
       )
     end
   end

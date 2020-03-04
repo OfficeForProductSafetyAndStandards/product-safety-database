@@ -53,6 +53,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
 
       before do
         sign_in user
+        allow(user).to receive(:send_new_otp)
       end
 
       it "redirects to the homepage" do
@@ -67,6 +68,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
 
       before do
         sign_in other_user
+        allow(other_user).to receive(:send_new_otp)
       end
 
       it "shows a message telling the user they’re already signed in as someone else" do
