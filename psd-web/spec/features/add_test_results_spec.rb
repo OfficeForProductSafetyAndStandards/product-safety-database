@@ -20,7 +20,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(page).to have_css(".govuk-error-summary__list", text: "Provide the test results file")
     end
   end
-  context"with valid input data" do
+  context "with valid input data" do
     scenario "to be able to submit test results" do
       visit new_investigation_activity_path(investigation)
       within_fieldset "New activity" do
