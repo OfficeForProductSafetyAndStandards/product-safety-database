@@ -6,7 +6,7 @@ RSpec.describe SendTwoFactorAuthenticationJob do
 
   it "send the otp code" do
     expect(SendSMS)
-      .to recieve(:send_otp_code)
+      .to receive(:send_otp_code)
       .with(mobile_number: user.mobile_number, code: code)
 
     described_class.perform_now(user, code)

@@ -184,17 +184,17 @@ class User < ApplicationRecord
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
-  def need_two_factor_authentication?(_request)
-    Rails.application.config.two_factor_authentication_enabled
-  end
-
+  # BEGIN: place devise overriden method calls bellow
   def send_two_factor_authentication_code(code)
     SendTwoFactorAuthenticationJob.perform_later(self, code)
   end
 
+  def need_two_factor_authentication?(_request)
+    Rails.configuration.two_factor_authentication_enabled
+  end
+
 private
 
-  # BEGIN: place devise overriden method calls bellow
   def send_reset_password_instructions_notification(token)
     NotifyMailer.reset_password_instructions(self, token).deliver_later
   end
