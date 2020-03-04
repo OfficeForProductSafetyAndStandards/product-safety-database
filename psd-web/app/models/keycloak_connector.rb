@@ -5,8 +5,29 @@ class KeycloakConnector < ApplicationRecord
   # last accessed date
   # password update date - credential.created_date
   # username?
+
+  EMAIL = 1
+  FIRST_NAME = 2
+  LAST_NAME = 2
+  USERNAME = 3
+  USER_CREATED_TIMESTAMP = 4
+  SALT = 4
+  CRYPTED_PASSWORD = 4
+  HASH_ITERATIONS = 4
+  MOBILE_NUMBER = 4
+
+  FIELDS = <<~SQL.freeze
+    ue.id, ue.email, ue.first_name, ue.last_name, ue.username, ue.created_timestamp,
+    c.salt, c.value, c.hash_iterations, c.user_id,
+    ua.user_id, ua.name, ua.value
+  SQL
+
   CREDENTIALS_QUERY = <<~SQL.freeze
-    SELECT c.salt, c.value, c.hash_iterations, u.email, c.type FROM credential c INNER JOIN user_entity u ON c.user_id = u.id
+    SELECT
+    #{FIELDS}
+    FROM user_entity ue
+    LEFT JOIN credential c ON ue.id = c.user_id AND c.type = 'password'
+    LEFT JOIN user_attribute ua ON ue.id = ua.user_id AND ua.name = 'mobile_number';
   SQL
 
   establish_connection :keycloak
