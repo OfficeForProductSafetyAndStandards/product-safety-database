@@ -6,8 +6,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
 
   it "allows user to sign in" do
-    visit root_path
-    click_on "Sign in to your account"
+    visit "/sign-in"
 
     fill_in "Email address", with: user.email
     fill_in "Password", with: "password"
@@ -30,8 +29,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
 
   context "with credentials entered incorrectly" do
     it "highlights email field" do
-      visit root_path
-      click_on "Sign in to your account"
+      visit "/sign-in"
 
       fill_in "Email address", with: user.email
       fill_in "Password", with: "passworD"
@@ -45,9 +43,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
 
     context "when email address is not in correct format" do
       scenario "shows an error message" do
-        visit root_path
-        click_on "Sign in to your account"
-
+        visit "/sign-in"
 
         fill_in "Email address", with: "test.email"
         fill_in "Password", with: "password "
@@ -61,9 +57,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
 
     context "when email and password fields left empty" do
       scenario "shows error messages" do
-        visit root_path
-
-        click_on "Sign in to your account"
+        visit "/sign-in"
 
         fill_in "Email address", with: " "
         fill_in "Password", with: " "
@@ -77,8 +71,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
 
     context "when password field is left empty" do
       scenario "shows an error messages" do
-        visit root_path
-        click_on "Sign in to your account"
+        visit "/sign-in"
 
 
         fill_in "Email address", with: user.email
