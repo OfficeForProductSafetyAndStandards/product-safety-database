@@ -9,9 +9,7 @@ RSpec.describe SendSMS do
       expected_payload = {
         mobile_number: mobile_number,
         template_id: described_class::TEMPLATES[:send_otp_code],
-        personalisation: {
-          code: code,
-        }
+        personalisation: { code: code }
       }
       stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/sms")
         .with(body: expected_payload.to_json).and_return(body: {}.to_json)

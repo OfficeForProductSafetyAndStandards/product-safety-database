@@ -7,5 +7,5 @@ module ActiveSupportHelper
       metadata: metadata
     )
   end
-  module_funtion :create_file
+  module_function :create_file
 end
