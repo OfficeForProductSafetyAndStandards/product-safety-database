@@ -11,9 +11,7 @@ RSpec.describe "HomePage", :with_elasticsearch, type: :request do
   context "when signed in" do
     let(:user) { create(:user, :opss_user, :activated) }
 
-    before do
-      sign_in(user)
-    end
+    before { sign_in(user) }
 
     it "signed in visits / gets redirected to /cases" do
       get "/"
