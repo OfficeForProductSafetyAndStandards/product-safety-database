@@ -158,7 +158,7 @@ en:
           unknown: "Unknown"
   enter_email_address: "Enter your email address"
   otp_code:
-    blank: "Can not be blank."
+    blank: "Enter the security code"
   sign_in_form:
     email:
       wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"
