@@ -1,5 +1,10 @@
-# Trigger
 class KeycloakConnector < ApplicationRecord
+  # To add
+  # mobile number - user_attribute.value
+  # account create date - user_entity.created_timestamp
+  # last accessed date
+  # password update date - credential.created_date
+  # username?
   CREDENTIALS_QUERY = <<~SQL.freeze
     SELECT c.salt, c.value, c.hash_iterations, u.email, c.type FROM credential c INNER JOIN user_entity u ON c.user_id = u.id
   SQL
