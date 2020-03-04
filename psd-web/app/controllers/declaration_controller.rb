@@ -1,8 +1,6 @@
 class DeclarationController < ApplicationController
   skip_before_action :has_accepted_declaration
   skip_before_action :has_viewed_introduction
-  # TODO: this is odd ??
-  skip_before_action :handle_two_factor_authentication
 
   before_action :set_errors
 
