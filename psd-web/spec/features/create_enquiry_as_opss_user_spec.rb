@@ -77,9 +77,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_when_how_was_it_received
-    fill_in "Day", with: date.day if date
-    fill_in "Month",   with: date.month if date
-    fill_in "Year",    with: date.year  if date
+    fill_in "Day",   with: date.day if date
+    fill_in "Month", with: date.month if date
+    fill_in "Year",  with: date.year  if date
     choose received_type
     click_button "Continue"
   end
