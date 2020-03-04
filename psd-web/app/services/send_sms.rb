@@ -2,7 +2,7 @@ class SendSMS
   include Singleton
 
   TEMPLATES = {
-    send_otp_code: "8b758d39-29ad-4f02-bb52-a68cfac007b6"
+    otp_code: "8b758d39-29ad-4f02-bb52-a68cfac007b6"
   }.freeze
 
   attr_reader :pool
@@ -13,11 +13,11 @@ class SendSMS
     end
   end
 
-  def self.send_otp_code(mobile_number:, code:)
+  def self.otp_code(mobile_number:, code:)
     instance.pool.with do |client|
       client.send_sms(
         phone_number: mobile_number,
-        template_id: TEMPLATES[:send_otp_code],
+        template_id: TEMPLATES[:otp_code],
         personalisation: { code: code }
       )
     end
