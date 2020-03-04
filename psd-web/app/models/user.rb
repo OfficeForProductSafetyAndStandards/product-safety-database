@@ -33,9 +33,6 @@ class User < ApplicationRecord
 
   attribute :skip_password_validation, :boolean, default: false
 
-  # TODO: remove when registration is merged
-  attribute :mobile_number
-
   def self.activated
     where(account_activated: true)
   end

@@ -37,7 +37,7 @@ module ProductSafetyDatabase
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
 
     config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"
-    config.notify_api_key = ENV.fetch("NOTIFY_API_KEY", "#{SecureRandom.uuid}.#{SecureRandom.uuid}")
+    config.notify_api_key = ENV.fetch("NOTIFY_API_KEY")
 
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
 

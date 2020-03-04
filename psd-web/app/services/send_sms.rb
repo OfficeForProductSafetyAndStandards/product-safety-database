@@ -1,4 +1,4 @@
-class GovukNotify
+class SendSMS
   include Singleton
 
   TEMPLATES = {

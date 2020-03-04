@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe GovukNotify do
+RSpec.describe SendSMS do
   describe ".send_otp_code" do
     let(:mobile_number) { "123234234" }
     let(:code) { 123 }
