@@ -63,9 +63,9 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk", "~> 2.0.0"
+  gem "rubocop-govuk", "~> 3.0.0"
   gem "rubocop-performance"
-  gem "rubocop-rspec", "~> 1.37", require: false
+  gem "rubocop-rspec", "~> 1.38", require: false
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
   gem "sassc", "~> 2.1.0" # Unable to upgrade until https://github.com/sass/sassc-ruby/issues/146 is resolved
