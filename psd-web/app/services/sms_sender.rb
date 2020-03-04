@@ -1,4 +1,4 @@
-class GovukNotify
+class SMSSender
   include Singleton
 
   TEMPLATES = {
