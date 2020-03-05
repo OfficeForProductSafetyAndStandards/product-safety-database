@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, :with_2fa, type: :feature do
   let(:user)                              { create(:user) }
   let!(:reset_token)                      { stubbed_devise_generated_token }
   let(:edit_user_password_url_with_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
