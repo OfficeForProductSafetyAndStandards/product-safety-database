@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "User requests password reset", type: :request, with_stubbed_keycloak_config: true, with_stubbed_mailer: true do
-    let(:user) { create(:user, :invited, invited_at: 1.hour.ago) }
-    let(:message_delivery) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
+  let(:user) { create(:user, :invited, invited_at: 1.hour.ago) }
+  let(:message_delivery) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
 
   context "when the user hasn’t previously set up an account, but the invite is still valid" do
     subject(:request_password_reset) do
@@ -35,9 +35,6 @@ RSpec.describe "User requests password reset", type: :request, with_stubbed_keyc
 
 
   context "when the user hasn’t previously set up an account, and the invite has expired" do
-    let(:user) { create(:user, :invited, invited_at: 30.days.ago) }
-    let(:message_delivery) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
-
     subject(:request_password_reset) do
       post user_password_path, params: {
         user: {
@@ -45,6 +42,10 @@ RSpec.describe "User requests password reset", type: :request, with_stubbed_keyc
         }
       }
     end
+
+    let(:user) { create(:user, :invited, invited_at: 30.days.ago) }
+    let(:message_delivery) { instance_double(ActionMailer::MessageDelivery, deliver_later: true) }
+
 
     before do
       allow(NotifyMailer).to receive(:expired_invitation_email).with(user).and_return(message_delivery)
