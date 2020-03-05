@@ -14,7 +14,6 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
   context "when leaving the form fields empty" do
     scenario "shows error messages" do
-      visit new_investigation_activity_path(investigation)
       choose "activity_type_testing_result"
       click_button "Continue"
 
