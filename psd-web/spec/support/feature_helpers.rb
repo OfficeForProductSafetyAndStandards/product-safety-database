@@ -11,9 +11,9 @@ end
 
 def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)
   select legislation, from: "test_legislation"
-  fill_in "Day", with: date.day if date
-  fill_in "Month",   with: date.month if date
-  fill_in "Year",    with: date.year  if date
+  fill_in "Day",   with: date.day if date
+  fill_in "Month", with: date.month if date
+  fill_in "Year",  with: date.year  if date
   choose test_result
   attach_file "test[file][file]", file
   fill_in "test_file_description", with: "test result file"
@@ -65,7 +65,7 @@ def enter_product_details(name:, barcode:, category:, type:, webpage:, country_o
   click_button "Save product"
 end
 
-def expect_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
+def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
   expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
   expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: type)
   expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
