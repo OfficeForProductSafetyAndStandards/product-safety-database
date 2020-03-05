@@ -2,7 +2,7 @@ class SendSMS
   include Singleton
 
   TEMPLATES = {
-    otp_code: "8b758d39-29ad-4f02-bb52-a68cfac007b6"
+    otp_code: "091c8861-8532-4907-abc0-f89632c34f09"
   }.freeze
 
   attr_reader :pool
