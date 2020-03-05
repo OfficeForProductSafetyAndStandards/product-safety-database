@@ -1,4 +1,6 @@
 module ActiveSupportHelper
+module_function
+
   def create_file(_model, evaluator, metadata: {})
     ActiveStorage::Blob.create_after_upload!(
       io: File.open(evaluator.document_file),
@@ -7,5 +9,4 @@ module ActiveSupportHelper
       metadata: metadata
     )
   end
-  module_function :create_file
 end

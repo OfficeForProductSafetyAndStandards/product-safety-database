@@ -5,10 +5,10 @@ RSpec.describe SendTwoFactorAuthenticationJob do
   let(:code) { 123 }
 
   it "send the otp code" do
-    expect(SendSMS)
-      .to receive(:otp_code)
-      .with(mobile_number: user.mobile_number, code: code)
-
+    allow(SendSMS).to receive(:otp_code)
     described_class.perform_now(user, code)
+    expect(SendSMS)
+      .to have_received(:otp_code)
+      .with(mobile_number: user.mobile_number, code: code)
   end
 end
