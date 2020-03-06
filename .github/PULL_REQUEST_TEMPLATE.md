@@ -5,7 +5,7 @@
 
 <!--- Put an `x` in all the boxes that apply. Delete items which are not relevant. -->
 ## Checklist:
-- [ ] Have you documented your changes in the description?
+- [ ] Have you documented your changes in the pull request description?
 - [ ] Does the change present any security considerations?
 - [ ] Is any gem functionality overloaded?
 - [ ] Has acceptance criteria been tested by a peer?

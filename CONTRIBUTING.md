@@ -1,11 +1,11 @@
 # Contributing
 This project is made available as open source, and we welcome contributions from the public. The Department also employs a team dedicated to improving the product. The product team are the maintainers of the codebase and responsible for reviewing and merging contributions.
 
-In order to propose a change to the codebase, you must open a Pull Request using the GitHub Pull Request feature.
+In order to propose a change to the codebase, you can open a pull request on GitHub.
 
 ## Opening Pull Requests
 1. Try to only open one pull request at a time. Address feedback on your pull request before working on other changes.
-1. If you are a member of the product team, add a link to the relevant team Trello card at the top of the description, if applicable, to give the reader context of the change.
+1. If you are a member of the product team, add a link to the relevant team Trello card at the top of the description, if applicable, to give the reader the context of the change.
 1. Otherwise, detail the nature of the change in the description.
 1. In order to help the reader understand your intent, write a paragraph explaining your approach, and any key choices you made.
 1. Include screenshots in your description where there are visual changes.
@@ -35,4 +35,4 @@ In order to propose a change to the codebase, you must open a Pull Request using
 1. All new code must be supported by a feature spec and relevant unit specs. Write a new feature spec if one does not already exist.
 1. Feature specs should only cover "happy path" scenarios and some basic error states. Edge cases and exhaustive error testing should be performed in the relevant unit tests.
 1. Use full paths in feature specs - not Rails URL helpers - in order to test the full stack from the user's perspective.
-1. Use services to encapsulate business processes, and models for data integrity. Controllers should deal with interactions between the user and services. We use the interactor gem for composing services. Avoid using organizers to reduce complexity.
+1. Use services to encapsulate business processes, and models for data integrity. Controllers should deal with interactions between the user and services. We use the [interactor](https://github.com/collectiveidea/interactor) gem for composing services. Avoid using organizers to reduce complexity.
