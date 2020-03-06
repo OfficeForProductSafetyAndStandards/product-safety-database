@@ -16,7 +16,7 @@ class HealthController < ApplicationController
     raise "No Keycloak organisation data found" if KeycloakClient.instance.all_organisations.count < 1
 
     # Check Elasticsearch cluster health
-    raise "Elastic search is down" if Elasticsearch::Client.new(Rails.application.config_for(:elasticsearch)).cluster.health[:status] == "red"
+    raise "Elasticsearch is down" if Elasticsearch::Client.new(Rails.application.config_for(:elasticsearch)).cluster.health[:status] == "red"
 
     # Check Sidekiq queue length (in time) is within an acceptable limit
     raise "Sidekiq queue latency is above 30 seconds" if Sidekiq::Queue.new(ENV["SIDEKIQ_QUEUE"] || "psd").latency > 30
