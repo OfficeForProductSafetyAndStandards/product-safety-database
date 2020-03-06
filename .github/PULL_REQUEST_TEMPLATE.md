@@ -7,7 +7,7 @@
 ## Checklist:
 - [ ] Have you documented your changes in the pull request description?
 - [ ] Does the change present any security considerations?
-- [ ] Is any gem functionality overloaded?
+- [ ] Is any gem functionality overloaded? Eg: Devise controller methods being overloaded.
 - [ ] Has acceptance criteria been tested by a peer?
 - [ ] Has the CHANGELOG been updated? (If change is worth telling users about.)
 
