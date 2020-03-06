@@ -3,16 +3,20 @@
 ## Description
 <!--- Describe your changes in detail -->
 
+<!--- Put an `x` in all the boxes that apply. Delete items which are not relevant. -->
 ## Checklist:
-<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
-- [ ] Automated checks are passing locally.
-- [ ] CHANGELOG updated if change is worth telling users about.
-### General testing
-- [ ] Test without javascript
+- [ ] Have you documented your changes in the description?
+- [ ] Does the change present any security considerations?
+- [ ] Is any gem functionality overloaded?
+- [ ] Has acceptance criteria been tested by a peer?
+- [ ] Has the CHANGELOG been updated? (If change is worth telling users about.)
+
+### General testing (author)
+- [ ] Test without JavaScript
 - [ ] Test on small screen
-### Accessibility testing
+
+### Accessibility testing (author)
 - [ ] Works keyboard only
 - [ ] Tested with one screen reader
 - [ ] Zoom page to 400% - content still visible
-- [ ] Disable css - does content make sense and appear in a logical order?
-- [ ] Passes automated checker (automated in build or manual)
+- [ ] Disable CSS - does content make sense and appear in a logical order?
