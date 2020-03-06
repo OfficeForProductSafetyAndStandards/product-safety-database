@@ -36,3 +36,4 @@ In order to propose a change to the codebase, you can open a pull request on Git
 1. Feature specs should only cover "happy path" scenarios and some basic error states. Edge cases and exhaustive error testing should be performed in the relevant unit tests.
 1. Use full paths in feature specs - not Rails URL helpers - in order to test the full stack from the user's perspective.
 1. Use services to encapsulate business processes, and models for data integrity. Controllers should deal with interactions between the user and services. We use the [interactor](https://github.com/collectiveidea/interactor) gem for composing services. Avoid using organizers to reduce complexity.
+1. Use the ERb templating language for view templates. Slim templates are deprecated and should be converted to ERb when possible.
