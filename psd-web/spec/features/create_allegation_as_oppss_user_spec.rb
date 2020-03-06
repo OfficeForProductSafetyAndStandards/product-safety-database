@@ -69,7 +69,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       click_link "Products (1)"
 
-      expect_entered_product_details(product_details)
+      expect_page_to_show_entered_product_details(product_details)
     end
   end
 end
