@@ -7,7 +7,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
       user_added_to_team: "e3b2bbf5-3002-49fb-adb5-ad18e483c7e4",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
-      invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a"
+      invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
+      expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -21,12 +22,19 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: user.email)
   end
 
-  def invitation_email(user, inviting_user)
+  def invitation_email(user, inviting_user = nil)
     set_template(TEMPLATES[:invitation])
 
     invitation_url = complete_registration_user_url(user.id, invitation: user.invitation_token)
 
-    set_personalisation(invitation_url: invitation_url, inviting_team_member_name: inviting_user.name)
+    invited_by = inviting_user.try(&:name) || "a colleague"
+
+    set_personalisation(invitation_url: invitation_url, inviting_team_member_name: invited_by)
+    mail(to: user.email)
+  end
+
+  def expired_invitation_email(user)
+    set_template(TEMPLATES[:expired_invitation])
     mail(to: user.email)
   end
 
