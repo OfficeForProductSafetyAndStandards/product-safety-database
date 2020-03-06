@@ -9,7 +9,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
   before do
     sign_in(as_user: user)
-    visit new_investigation_activity_path(investigation)
+    visit "/cases/#{investigation.pretty_id}/activity/new"
   end
 
   context "when leaving the form fields empty" do
