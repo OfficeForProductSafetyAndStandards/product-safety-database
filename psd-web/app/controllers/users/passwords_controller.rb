@@ -35,11 +35,7 @@ module Users
   private
 
     def resend_invitation_link_for(user)
-      if user.invitation_expired?
-        NotifyMailer.expired_invitation_email(user).deliver_later
-      else
-        NotifyMailer.invitation_email(user, nil).deliver_later
-      end
+      SendUserInvitationJob.perform_later(user.id, nil)
       redirect_to check_your_email_path
     end
 
