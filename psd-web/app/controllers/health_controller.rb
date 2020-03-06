@@ -1,6 +1,8 @@
 class HealthController < ApplicationController
   skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, :has_viewed_introduction
 
+  http_basic_authenticate_with name: ENV.fetch("HEALTH_CHECK_USERNAME", 'health'), password: ENV.fetch("HEALTH_CHECK_PASSWORD", 'check')
+
   def show
     # Check redis services
     Redis.new(Rails.application.config_for(:redis_session)).info
