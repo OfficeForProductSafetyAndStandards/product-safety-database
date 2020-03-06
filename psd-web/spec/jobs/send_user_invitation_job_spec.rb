@@ -57,7 +57,7 @@ RSpec.describe SendUserInvitationJob do
 
       it "does not change the the time that the user was invited at" do
         job.perform(user.id)
-        expect(user.reload.invited_at).to eql(invited_at)
+        expect(user.reload.invited_at).to be_within(1.second).of(invited_at)
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe SendUserInvitationJob do
 
       it "does not change the the time that the user was invited at" do
         job.perform(user.id)
-        expect(user.reload.invited_at).to eql(invited_at)
+        expect(user.reload.invited_at).to be_within(1.second).of(invited_at)
       end
     end
   end
