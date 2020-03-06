@@ -34,7 +34,7 @@ class DocumentsController < ApplicationController
   # DELETE /documents/1
   def destroy
     @file.destroy
-    redirect_to @parent, flash: { success: "File was successfully removed" } unless @parent.is_a? Investigation
+    return redirect_to @parent, flash: { success: "File was successfully removed" } unless @parent.is_a? Investigation
 
     AuditActivity::Document::Destroy.from(@file.blob, @parent)
     redirect_to investigation_path(@parent), flash: { success: "File was successfully removed" }
