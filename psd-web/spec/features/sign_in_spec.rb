@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
+
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
 
@@ -9,7 +10,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
     visit "/sign-in"
 
     fill_in "Email address", with: user.email
-    fill_in "Password", with: "password"
+    fill_in "Password", with: "2538fhdkvuULE36f"
     click_on "Continue"
 
     expect(page).to have_link("Sign out", href: destroy_user_session_path)

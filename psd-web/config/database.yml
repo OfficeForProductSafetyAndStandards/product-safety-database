@@ -16,3 +16,12 @@ production:
   connect_timeout: 2
   variables:
     statement_timeout: <%= ENV["STATEMENT_TIMEOUT"] || "500ms" %>
+
+keycloak:
+  adapter: postgresql
+  encoding: unicode
+  url: <%= ENV.fetch('KEYCLOAK_DATABASE_URI', 'postgres://localhost/keycloak?user=postgres') %>
+  pool: 5
+  connect_timeout: 2
+  variables:
+    statement_timeout: <%= ENV["STATEMENT_TIMEOUT"] || "500ms" %>

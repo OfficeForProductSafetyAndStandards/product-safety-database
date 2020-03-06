@@ -153,18 +153,18 @@ GEM
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    elasticsearch (6.8.0)
-      elasticsearch-api (= 6.8.0)
-      elasticsearch-transport (= 6.8.0)
-    elasticsearch-api (6.8.0)
+    elasticsearch (6.8.1)
+      elasticsearch-api (= 6.8.1)
+      elasticsearch-transport (= 6.8.1)
+    elasticsearch-api (6.8.1)
       multi_json
     elasticsearch-model (6.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
     elasticsearch-rails (6.0.0)
-    elasticsearch-transport (6.8.0)
-      faraday
+    elasticsearch-transport (6.8.1)
+      faraday (>= 0.14, < 1)
       multi_json
     email_validator (2.0.1)
       activemodel
@@ -190,7 +190,7 @@ GEM
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
     hashdiff (1.0.0)
-    hashie (3.6.0)
+    hashie (4.1.0)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -250,8 +250,8 @@ GEM
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
     okcomputer (1.18.1)
-    omniauth (1.9.0)
-      hashie (>= 3.4.6, < 3.7.0)
+    omniauth (1.9.1)
+      hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
     omniauth-rails_csrf_protection (0.1.2)
       actionpack (>= 4.2)
@@ -272,7 +272,7 @@ GEM
       webfinger (>= 1.0.1)
     orm_adapter (0.5.0)
     parallel (1.19.1)
-    parser (2.7.0.2)
+    parser (2.7.0.4)
       ast (~> 2.4.0)
     pg (1.2.2)
     pghero (2.4.1)
@@ -284,7 +284,7 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (4.0.3)
-    puma (4.3.2)
+    puma (4.3.3)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -366,6 +366,7 @@ GEM
       netrc (~> 0.8)
     reverse_markdown (1.3.0)
       nokogiri
+    rexml (3.2.4)
     roo (2.8.3)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
@@ -386,15 +387,16 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
-    rubocop (0.77.0)
+    rubocop (0.80.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.6)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    rubocop-govuk (2.0.0)
-      rubocop (= 0.77)
+    rubocop-govuk (3.0.0)
+      rubocop (= 0.80.1)
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)
     rubocop-performance (1.5.2)
@@ -402,7 +404,7 @@ GEM
     rubocop-rails (2.4.2)
       rack (>= 1.1)
       rubocop (>= 0.72.0)
-    rubocop-rspec (1.37.1)
+    rubocop-rspec (1.38.1)
       rubocop (>= 0.68.1)
     ruby-debug-ide (0.7.0)
       rake (>= 0.8.1)
@@ -553,7 +555,7 @@ DEPENDENCIES
   devise-encryptable
   dotenv-rails
   draper
-  elasticsearch (= 6.8.0)
+  elasticsearch (= 6.8.1)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
   email_validator
@@ -588,9 +590,9 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   rubocop
-  rubocop-govuk (~> 2.0.0)
+  rubocop-govuk (~> 3.0.0)
   rubocop-performance
-  rubocop-rspec (~> 1.37)
+  rubocop-rspec (~> 1.38)
   ruby-debug-ide
   rubyzip
   sass-rails (~> 6.0)

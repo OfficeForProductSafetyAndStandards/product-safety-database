@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.feature "Home page", :with_elasticsearch, :with_stubbed_keycloak_config, type: :feature do
   context "when user is signed out" do
     scenario "shows the home page" do
-      sign_out(:user)
       visit root_path
 
       expect(page).not_to have_css(".psd-header .govuk-phase-banner__content__tag")
