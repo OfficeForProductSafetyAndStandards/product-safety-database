@@ -13,7 +13,7 @@ class HealthController < ApplicationController
 
     # Check Keycloak service is available
     # TODO: remove once Keycloak is no longer required.
-    KeycloakClient.instance.all_organisations
+    raise "No Keycloak organisation data found" if KeycloakClient.instance.all_organisations.count < 1
 
     # Check Elasticsearch cluster health
     raise "Elastic search is down" if Elasticsearch::Client.new(Rails.application.config_for(:elasticsearch)).cluster.health[:status] == "red"
