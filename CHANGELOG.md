@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 2020-03-09
-- City or town not being displayed when adding a an address to a business.
+- Fixed City or town not being displayed when adding an address to a business.
 
 ## 2020-03-06
 - Fixed an error which was displayed when deleting an attachment from a product.
