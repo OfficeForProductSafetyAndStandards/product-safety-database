@@ -1,10 +1,21 @@
 class KeycloakConnector < ApplicationRecord
 
   FIELDS = <<~SQL.freeze
-    ue.id, ue.email, ue.first_name,
-    ue.last_name, ue.username, ue.created_timestamp,
-    c.salt, c.value as crypted_password, c.hash_iterations, c.user_id, c.type,
-    ua.user_id, ua.name, ua.value as mobile_number
+    ue.email,
+
+    ue.first_name,
+    ue.last_name,
+    ue.username,
+    ue.created_timestamp,
+
+    c.salt,
+    c.value as crypted_password,
+    c.hash_iterations,
+    c.type,
+
+    ua.value as mobile_number,
+
+    ue.id, ua.user_id, c.user_id, ua.name
   SQL
 
   CREDENTIALS_QUERY = <<~SQL.freeze
@@ -20,25 +31,22 @@ class KeycloakConnector < ApplicationRecord
   def self.copy_keycloak_credentials
     rows = KeycloakConnector.connection.query(CREDENTIALS_QUERY)
     rows.each do |row|
-      user = User.find_by(email: row[1])
-      #user = User.find_by(email: row["email"])
+      user = User.find_by(email: row[0])
       next unless user
 
-      # user.password_salt = salt
-      # user.encrypted_password = encrypted_password
-      # user.hash_iterations = iterations
-      # user.credential_type = credential_type
-      #user.password_salt = row["salt"]
-      user.password_salt = row[6]
-      # user.encrypted_password = row["crypted_password"]
-      # user.hash_iterations = row["hash_iterations"]
-      # user.credential_type = row["type"]
-      # user.keycloak_first_name = row["first_name"]
-      # user.keycloak_last_name = row["last_name"]
-      # user.keycloak_username = row["username"]
-      # user.keycloak_created_at = Time.at(row["created_timestamp"])
-      # user.mobile_number = row["mobile_number"]
-      # user.save!
+       user.keycloak_first_name = row[1]
+       user.keycloak_last_name = row[2]
+       user.keycloak_username = row[3]
+       user.keycloak_created_at = Time.at(row[4])
+
+       user.password_salt = row[5]
+       user.encrypted_password = row[6]
+       user.hash_iterations = row[7]
+       user.credential_type = row[8]
+
+       user.mobile_number = row[9]
+
+       user.save!
     end
   end
 end
