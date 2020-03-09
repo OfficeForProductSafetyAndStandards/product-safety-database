@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   INVITATION_EXPIRATION_DAYS = 14
   COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
+  TWO_FACTOR_LOCK_TIME = 1.hour
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
@@ -182,6 +183,18 @@ class User < ApplicationRecord
     return false unless invited_at
 
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
+  end
+
+  def two_factor_lock_expired?
+    second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME < Time.current
+  end
+
+  def lock_two_factor
+    self.update_column(:second_factor_attempts_locked_at, Time.current)
+  end
+
+  def unlock_two_factor
+    self.update_columns(second_factor_attempts_locked_at: nil)
   end
 
   # BEGIN: place devise overriden method calls bellow

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:investigation) { create(:project) }
@@ -9,8 +9,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
   def fill_in_credentials
     visit root_path
     click_on "Sign in to your account"
-
-    stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/sms").and_return(body: {}.to_json)
 
     fill_in "Email address", with: user.email
     fill_in "Password", with: "2538fhdkvuULE36f"
@@ -29,27 +27,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :fe
 
         expect(page).to have_css("h2", text: "Your cases")
         expect(page).to have_link("Sign out", href: destroy_user_session_path)
-      end
-    end
-
-    context "when failing two factor authentication" do
-      it "one can not fail more than 3 times" do
-        fill_in_credentials
-
-        expect(page).to have_css("h1", text: "Check your phone")
-
-        2.times do
-          fill_in "Enter security code", with: user.reload.direct_otp.chars.shuffle.join
-          click_on "Continue"
-
-          expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-          expect(page).to have_link("Attempt failed.", href: "#direct_otp")
-        end
-
-        fill_in "Enter security code", with: user.reload.direct_otp.chars.shuffle.join
-        click_on "Continue"
-
-        expect(page).to have_css("h2", text: "Access completely denied as you have reached your attempts limit = 3")
       end
     end
   end

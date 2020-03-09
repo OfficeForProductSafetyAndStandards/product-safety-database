@@ -12,7 +12,7 @@ FactoryBot.define do
     hash_iterations { 27_500 }
     mobile_number { "07700 900 982" }
     direct_otp_sent_at { Time.current }
-    direct_otp { 123123 }
+    direct_otp { "12345" }
 
     transient do
       roles { [:psd_user] }

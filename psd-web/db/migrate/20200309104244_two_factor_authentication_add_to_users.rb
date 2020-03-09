@@ -3,6 +3,7 @@ class TwoFactorAuthenticationAddToUsers < ActiveRecord::Migration[5.2]
     safety_assured do
       change_table :users, bulk: true do
         add_column :users, :second_factor_attempts_count, :integer, default: 0
+        add_column :users, :second_factor_attempts_locked_at, :datetime
         add_column :users, :encrypted_otp_secret_key, :string
         add_column :users, :encrypted_otp_secret_key_iv, :string
         add_column :users, :encrypted_otp_secret_key_salt, :string

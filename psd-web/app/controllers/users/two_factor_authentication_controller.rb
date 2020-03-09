@@ -9,6 +9,11 @@ module Users
         return render :show
       end
 
+      if resource.max_login_attempts? && !resource.two_factor_lock_expired?
+        resource.errors.add(:direct_otp, find_message(:attempt_failed))
+        return render :show
+      end
+
       if resource.authenticate_otp(otp_code_param)
         after_two_factor_success_for(resource)
       else
@@ -34,29 +39,36 @@ module Users
       end
     end
 
+    # BEGIN: Houdini/two_factor_authentication Devise extension overriden
+    # methods controllers bellow:
     def after_two_factor_success_for(resource)
       set_remember_two_factor_cookie(resource)
 
       warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
       bypass_sign_in(resource, scope: resource_name)
 
+      resource.unlock_two_factor if resource.max_login_attempts?
       resource.update_column(:second_factor_attempts_count, 0)
 
       redirect_to after_two_factor_success_path_for(resource)
     end
 
     def after_two_factor_fail_for(resource)
-      resource.second_factor_attempts_count += 1
-      resource.save
+      if !resource.max_login_attempts?
+        resource.second_factor_attempts_count += 1
+        resource.lock_two_factor if resource.max_login_attempts?
+        resource.save
+      end
 
-      if resource.max_login_attempts?
-        sign_out(resource)
-        resource.errors.add(:direct_otp, find_message(:max_login_attempts_reached))
-        render :max_login_attempts_reached
-      else
-        resource.errors.add(:direct_otp, find_message(:attempt_failed))
-        render :show
+      resource.errors.add(:direct_otp, find_message(:attempt_failed))
+      render :show
+    end
+
+    def prepare_and_validate
+      if !resource
+        redirect_to :root
       end
     end
+    # END of Devise overriding.
   end
 end
