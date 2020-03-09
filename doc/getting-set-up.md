@@ -53,8 +53,6 @@ The development instance of Keycloak is configured with the following default us
 
 Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add/edit users or to obtain client credentials.
 
-Ask someone on the team to create an account for you on the Int and Staging environments.
-
 
 ## Tests
 Copy the file in the `psd-web` directory called `.env.test.example` to `.env.test`, and modify as appropriate.
