@@ -9,8 +9,6 @@ We're using [fluentd](https://www.fluentd.org/) to aggregate the logs and send t
 #### Logit
 
 We're using [Logit](https://logit.io) as a hosted ELK stack.
-If you want to view the logs, you'll need an account - ask someone on the team to invite you.
-You should sign up using GitHub OAuth to ensure MFA.
 
 [logstash-filters.conf](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure/blob/master/logstash-filters.conf) provides a set of rules which logstash can use to parse logs.
 
