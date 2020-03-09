@@ -1,11 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
-  before do
-    sign_in as_user: create(:user, :activated, :opss_user)
-    visit new_allegation_path
-  end
-
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:contact_details) do
     {
@@ -34,13 +29,18 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   end
 
   context "when login as an OPSS user" do
+    before do
+      sign_in as_user: create(:user, :activated, :opss_user)
+      visit "/allegation/complainant"
+    end
+
     scenario "able to create safety allegation from a consumer" do
-      expect_h1_on_the_page("New allegation")
+      expect_page_to_have_h1("New allegation")
 
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect_h1_on_the_page("New allegation")
+      expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
 
       enter_contact_details(contact_details)
       enter_allegation_details(allegation_details)
@@ -49,11 +49,11 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     end
 
     scenario "able to add a product" do
-      expect_h1_on_the_page("New allegation")
+      expect_page_to_have_h1("New allegation")
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect_h1_on_the_page("New allegation")
+      expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
 
       enter_contact_details(contact_details)
       enter_allegation_details(allegation_details)
@@ -71,5 +71,13 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_page_to_show_entered_product_details(product_details)
     end
+  end
+
+  def enter_allegation_details(description:, hazard_type:, category:)
+    expect(page).to have_css("h1", text: "New allegation")
+    fill_in "allegation_description", with: description
+    select category, from: "allegation_product_category"
+    select hazard_type, from: "allegation_hazard_type"
+    click_button "Create allegation"
   end
 end

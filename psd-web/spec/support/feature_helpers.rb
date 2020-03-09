@@ -24,14 +24,6 @@ def enter_contact_details(contact_name:, contact_email:, contact_phone:)
   click_button "Continue"
 end
 
-def enter_allegation_details(description:, hazard_type:, category:)
-  expect(page).to have_css("h1", text: "New allegation")
-  fill_in "allegation_description", with: description
-  select category, from: "allegation_product_category"
-  select hazard_type, from: "allegation_hazard_type"
-  click_button "Create allegation"
-end
-
 def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
   select category, from: "Product category"
   select country_of_origin, from: "Country of origin"
