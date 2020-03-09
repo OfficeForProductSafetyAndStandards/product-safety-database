@@ -13,8 +13,8 @@ class Location < ApplicationRecord
     [
       address_line_1,
       address_line_2,
-      postal_code,
       city,
+      postal_code,
       country_from_code(country)
     ].reject(&:blank?).join(", ")
   end

@@ -275,7 +275,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_case_businesses_page_to_show(label:, business:)
     expect(page).to have_selector("h1", text: "Businesses")
 
-    expected_address = business.slice(:address_1, :address_2, :postcode, :country).values.join(", ")
+    expected_address = business.slice(:address_1, :address_2, :town, :postcode, :country).values.join(", ")
     expected_contact = business.slice(:contact_name, :contact_job_title, :contact_phone, :contact_email).values.join(", ")
 
     section = page.find("h2", text: label).find("+dl")
