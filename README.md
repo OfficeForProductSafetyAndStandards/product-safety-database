@@ -30,20 +30,6 @@ See [getting set up](doc/getting-set-up.md).
 
 See [contributing](CONTRIBUSING.md).
 
-## Accounts
-
-### Keycloak
-
-The development instance of Keycloak is configured with the following default user accounts:
-
-* Internal user: `user@example.com` / `password`
-* Trading Standards user: `msa@example.com` / `password`
-* Admin Console: `admin` / `admin`
-
-Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add/edit users or to obtain client credentials.
-
-Ask someone on the team to create an account for you on the Int and Staging environments.
-
 
 ## GOV.UK Notify
 
