@@ -38,6 +38,11 @@ Start the services:
     bin/rails s
     bin/sidekiq -C config/sidekiq.yml
 
+## GOV.UK Notify
+
+If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk) - ask someone on the team to invite you.
+
+
 ## Keycloak
 
 The development instance of Keycloak is configured with the following default user accounts:

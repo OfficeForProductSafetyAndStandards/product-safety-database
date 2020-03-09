@@ -152,6 +152,9 @@ Once all the credentials are created, the app can be deployed using:
 
     SPACE=<<space>> ./psd-web/deploy.sh
 
+### GOV.UK Platform as a Service
+
+If you want to update any of the deployed instances, you'll need an account for [GOV.UK PaaS](https://admin.london.cloud.service.gov.uk/) - ask someone on the team to invite you.
 
 
 ### Other infrastructure

@@ -30,17 +30,6 @@ See [getting set up](doc/getting-set-up.md).
 
 See [contributing](CONTRIBUTING.md).
 
-
-## GOV.UK Notify
-
-If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk) - ask someone on the team to invite you.
-
-
-## GOV.UK Platform as a Service
-
-If you want to update any of the deployed instances, you'll need an account for [GOV.UK PaaS](https://admin.london.cloud.service.gov.uk/) - ask someone on the team to invite you.
-
-
 ## Amazon Web Services
 
 We're using AWS for file storage on the S3 service. You'll need an account - ask someone on the team to invite you. If you get an error saying you don't have permission to set something, make sure you have MFA set up.
