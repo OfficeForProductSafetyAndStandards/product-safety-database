@@ -30,6 +30,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  enquiries_email: "opss.enquiries@beis.gov.uk"
   errors:
     format: "%{message}"
     messages:
