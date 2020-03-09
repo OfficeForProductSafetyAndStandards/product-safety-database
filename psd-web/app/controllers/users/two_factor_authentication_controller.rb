@@ -4,12 +4,12 @@ module Users
     skip_before_action :has_viewed_introduction
 
     def update
-      if otp_code_params.empty?
-        resource.errors.add(:otp_code, I18n.t(".otp_code.blank"))
+      if otp_code_length_error
+        resource.errors.add(:otp_code, otp_code_length_error)
         return render :show
       end
 
-      if resource.authenticate_otp(otp_code_params)
+      if resource.authenticate_otp(otp_code_param)
         after_two_factor_success_for(resource)
       else
         after_two_factor_fail_for(resource)
@@ -18,8 +18,18 @@ module Users
 
   private
 
-    def otp_code_params
-      @otp_code_params ||= resource_params.permit(:direct_otp)[:direct_otp]
+    def otp_code_param
+      @otp_code_param ||= resource_params.permit(:direct_otp)[:direct_otp]
+    end
+
+    def otp_code_length_error
+      if otp_code_param.empty?
+        I18n.t(".otp_code.blank")
+      elsif otp_code_param.length < resource.direct_otp.length
+        I18n.t(".otp_code.too_short")
+      elsif otp_code_param.length > resource.direct_otp.length
+        I18n.t(".otp_code.too_long")
+      end
     end
 
     def after_two_factor_success_for(resource)
