@@ -1,12 +1,4 @@
 module PageMatchers
-  def have_h1(text)
-    have_css("h1", text: text)
-  end
-
-  def have_summary_error(text)
-    have_css(".govuk-error-summary__list", text: text)
-  end
-
   # Matcher for items within the [Summary list](https://design-system.service.gov.uk/components/summary-list/) component.
   #
   # Note: currently this expects table markup. However this should be updated to use
@@ -22,19 +14,8 @@ module PageMatchers
       begin
         @key_element = @page.find("th", text: @key, exact_text: true)
         @sibling_element = @key_element.sibling("td", text: @value, exact_text: true)
-      rescue StandardError
-        Capybara::ElementNotFound
       end
-
       @sibling_element
-    end
-
-    def failure_message
-      if !@key_element
-        "Could not find <th> containing ‘#{@key}’ within #{@page.html}"
-      elsif !@sibling_element
-        "Could not find sibling <td> containing ‘#{@value}’ within #{@key_element.find(:xpath, '..').native}"
-      end
     end
   end
 

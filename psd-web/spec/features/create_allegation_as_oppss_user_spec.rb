@@ -40,7 +40,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "New allegation")
+      expect_h1_on_the_page("New allegation")
 
       enter_contact_details(contact_details)
       enter_allegation_details(allegation_details)
@@ -53,7 +53,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect(page).to have_css("h1", text: "New allegation")
+      expect_h1_on_the_page("New allegation")
 
       enter_contact_details(contact_details)
       enter_allegation_details(allegation_details)

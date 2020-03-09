@@ -69,7 +69,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   end
 
   def expect_to_be_on_new_activity_page
-    expect(page).to have_h1("New activity")
+    expect_h1_on_the_page("New activity")
   end
 
   def expect_to_be_on_record_test_result_page

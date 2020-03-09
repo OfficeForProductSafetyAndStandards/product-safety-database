@@ -5,12 +5,16 @@ RSpec.configure do |config|
   config.include PageMatchers
 end
 
+def have_summary_error(text)
+  have_css(".govuk-error-summary__list", text: text)
+end
+
 def expect_confirmation_banner(msg)
   expect(page).to have_css(".hmcts-banner__message", text: msg)
 end
 
 def expect_h1_on_the_page(header)
-  expect(page).to have_h1(header)
+  expect(page).to have_css("h1", text: header)
 end
 
 def enter_contact_details(contact_name:, contact_email:, contact_phone:)

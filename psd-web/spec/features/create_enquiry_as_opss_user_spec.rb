@@ -31,7 +31,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect(page).to have_h1("New enquiry")
+      expect_h1_on_the_page("New enquiry")
 
       enter_contact_details(contact_details)
 
@@ -86,7 +86,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_when_was_it_received
-    expect(page).to have_h1("New enquiry")
+    expect_h1_on_the_page("New enquiry")
 
     fill_in "Day", with: date.day if date
     fill_in "Month",   with: date.month if date
@@ -95,7 +95,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_when__and_how_was_it_received
-    expect(page).to have_h1("New enquiry")
+    expect_h1_on_the_page("New enquiry")
 
     fill_in "Day", with: date.day if date
     fill_in "Month",   with: date.month if date
