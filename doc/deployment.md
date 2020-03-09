@@ -2,7 +2,7 @@
 
 Create your changes in a new branch and open a pull request.
 
-Pull requests trigger a deployment to the `int` space on GOV.UK PaaS of a temporary review application, which is then deleted when the PR is merged. The review application can be viewed at https://psd-pr-<PR NUMBER>-web.london.cloudapps.digital/. Ask someone on the team for the authentication credentials to access this.
+Pull requests trigger a deployment to the `int` space on GOV.UK PaaS of a temporary review application, which is then deleted when the PR is merged. The review application can be viewed at https://psd-pr-XXXX-web.london.cloudapps.digital/ (where XXXX is the PR number).
 
 Merging requires passing tests, code style checks and at least one approving review.
 
