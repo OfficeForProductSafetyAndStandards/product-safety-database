@@ -57,12 +57,6 @@ See [deployment](doc/logging-and-monitoring.md).
 
 See [Cloud Foundry reference](doc/using-cloud-foundry.md).
 
-## BrowserStack
-
-[![BrowserStack](https://user-images.githubusercontent.com/7760/34738829-7327ddc4-f561-11e7-97e2-2fe0474eaf05.png)](https://www.browserstack.com)
-
-We use [BrowserStack](https://www.browserstack.com) to test our service from a variety of different browsers and systems.
-
 ## Related projects
 
 ### Antivirus API
