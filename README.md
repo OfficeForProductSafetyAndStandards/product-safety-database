@@ -32,7 +32,7 @@ See [contributing](CONTRIBUTING.md).
 
 ## Amazon Web Services
 
-We're using AWS for file storage on the S3 service. You'll need an account - ask someone on the team to invite you. If you get an error saying you don't have permission to set something, make sure you have MFA set up.
+We're using AWS for file storage on the S3 service. You'll need AWS account credentials.
 
 ## Deployment
 
