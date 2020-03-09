@@ -40,7 +40,7 @@ See [deployment](doc/deployment.md).
 
 ## Logging and monitoring
 
-See [deployment](doc/logging-and-monitoring.md).
+See [logging and monitoring](doc/logging-and-monitoring.md).
 
 ## Using Cloud Foundry
 
