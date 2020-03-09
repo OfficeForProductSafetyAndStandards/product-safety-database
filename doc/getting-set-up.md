@@ -40,7 +40,7 @@ Start the services:
 
 ## GOV.UK Notify
 
-If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk) - ask someone on the team to invite you.
+If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk).
 
 
 ## Keycloak
