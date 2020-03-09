@@ -10,6 +10,9 @@ module Users
     end
 
     def create
+      user = User.find_by(email: params[:user][:email])
+      return resend_invitation_link_for(user) if user && !user.has_completed_registration?
+
       super do |resource|
         suppress_email_not_found_error
 
@@ -30,6 +33,11 @@ module Users
     end
 
   private
+
+    def resend_invitation_link_for(user)
+      SendUserInvitationJob.perform_later(user.id, nil)
+      redirect_to check_your_email_path
+    end
 
     def reset_token_invalid?
       user_with_reset_token.blank?
