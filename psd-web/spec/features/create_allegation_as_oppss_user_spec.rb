@@ -63,8 +63,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       click_link "Products (0)"
       click_link "Add product"
       enter_product_details(product_details)
-
-
       expect_confirmation_banner("Product was successfully created.")
 
       click_link "Products (1)"
