@@ -35,7 +35,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
   context "when login as an OPSS user" do
     scenario "able to create safety allegation from a consumer" do
-      expect(page).to have_css("h1", text: "New allegation")
+      expect_h1_on_the_page("New allegation")
 
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
