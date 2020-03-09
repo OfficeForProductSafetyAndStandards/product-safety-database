@@ -23,6 +23,8 @@ module Users
     end
 
     def otp_code_length_error
+      return if otp_code_param.nil?
+
       if otp_code_param.empty?
         I18n.t(".otp_code.blank")
       elsif otp_code_param.length < resource.direct_otp.length
