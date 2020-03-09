@@ -15,7 +15,7 @@ cp -a ./infrastructure/env/. ./psd-web/env/
 export CF_STARTUP_TIMEOUT=15
 
 # Deploy the app
- cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var app-name=$APP_NAME --var psd-host=$DOMAIN --var web-memory=$WEB_MEMORY --var worker-memory=$WORKER_MEMORY --var web-instances=$WEB_INSTANCES --var worker-instances=$WORKER_INSTANCES --strategy rolling
+cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var app-name=$APP_NAME --var psd-host=$DOMAIN --var web-memory=$WEB_MEMORY --var worker-memory=$WORKER_MEMORY --var web-instances=$WEB_INSTANCES --var worker-instances=$WORKER_INSTANCES --strategy rolling
 
 # Remove the copied infrastructure env files to clean up
 rm -R psd-web/env/
