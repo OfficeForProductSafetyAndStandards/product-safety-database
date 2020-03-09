@@ -174,17 +174,6 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
 
-  create_table "keycloak_credentials", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "credential_type"
-    t.string "email"
-    t.string "encrypted_password"
-    t.integer "hash_iterations"
-    t.binary "salt"
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_keycloak_credentials_on_email"
-  end
-
   create_table "locations", id: :serial, force: :cascade do |t|
     t.string "address_line_1"
     t.string "address_line_2"
