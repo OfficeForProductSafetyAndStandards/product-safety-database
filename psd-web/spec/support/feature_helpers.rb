@@ -13,7 +13,7 @@ def expect_confirmation_banner(msg)
   expect(page).to have_css(".hmcts-banner__message", text: msg)
 end
 
-def expect_h1_on_the_page(header)
+def expect_page_to_have_h1(header)
   expect(page).to have_css("h1", text: header)
 end
 
