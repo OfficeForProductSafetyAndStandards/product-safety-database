@@ -30,12 +30,6 @@ See [getting set up](doc/getting-set-up.md).
 
 See [contributing](CONTRIBUSING.md).
 
-## Design system
-
-This project uses the [GOV.UK design system](https://design-system.service.gov.uk). The CSS and JavaScript assets are imported directly, and the
-macros have been ported as [Rails compatible components](https://github.com/UKGovernmentBEIS/govuk-design-system-rails).
-
-
 ## Accounts
 
 ### Keycloak
