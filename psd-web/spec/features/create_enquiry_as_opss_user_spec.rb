@@ -26,7 +26,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       choose "type_enquiry"
       click_button "Continue"
 
-      fill_in_when__and_how_was_it_received
+      fill_in_when__and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
@@ -40,7 +40,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       expect_confirmation_banner("Enquiry was successfully created.")
 
-      validate_input_details_on_summary_page
+      validate_input_details_on_summary_page(contact_details)
     end
 
 
@@ -50,7 +50,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       scenario "shows an error message" do
         visit new_investigation_enquiry_path
 
-        fill_in_when__and_how_was_it_received
+        fill_in_when__and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
         expect(page).to have_summary_error("Date received must be today or in the past")
       end
@@ -60,7 +60,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       scenario "shows an error message" do
         visit new_investigation_enquiry_path
 
-        fill_in_when_was_it_received
+        fill_in_when_was_it_received(day: date.day, month: date.month, year: date.year)
 
         expect(page).to have_summary_error("Select a type")
       end
@@ -71,35 +71,35 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       scenario "shows an error message" do
         visit new_investigation_enquiry_path
-        fill_in_when__and_how_was_it_received
+        fill_in_when__and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
         expect(page).to have_summary_error("Enter a received type \"Other\"")
       end
     end
   end
 
-  def validate_input_details_on_summary_page
+  def validate_input_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
-    expect(page).to have_css("p", text: contact_details[:contact_name])
-    expect(page).to have_css("p", text: contact_details[:contact_email])
-    expect(page).to have_css("p", text: contact_details[:contact_phone])
+    expect(page).to have_css("p", text: contact_name)
+    expect(page).to have_css("p", text: contact_email)
+    expect(page).to have_css("p", text: contact_phone)
   end
 
-  def fill_in_when_was_it_received
+  def fill_in_when_was_it_received(day:, month:, year:)
     expect_page_to_have_h1("New enquiry")
 
-    fill_in "Day", with: date.day if date
-    fill_in "Month",   with: date.month if date
-    fill_in "Year",    with: date.year  if date
+    fill_in "Day", with: day
+    fill_in "Month",   with: month
+    fill_in "Year",    with: year
     click_button "Continue"
   end
 
-  def fill_in_when__and_how_was_it_received
+  def fill_in_when__and_how_was_it_received(received_type:, day:, month:, year:)
     expect_page_to_have_h1("New enquiry")
 
-    fill_in "Day", with: date.day if date
-    fill_in "Month",   with: date.month if date
-    fill_in "Year",    with: date.year  if date
+    fill_in "Day", with: day
+    fill_in "Month",   with: month
+    fill_in "Year",    with: year
     choose received_type
     click_button "Continue"
   end
