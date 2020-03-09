@@ -10,12 +10,7 @@ module PageMatchers
     end
 
     def matches?(page)
-      @page = page
-      begin
-        @key_element = @page.find("th", text: @key, exact_text: true)
-        @sibling_element = @key_element.sibling("td", text: @value, exact_text: true)
-      end
-      @sibling_element
+      page.find("th", text: @key, exact_text: true).sibling("td", text: @value, exact_text: true)
     end
   end
 
