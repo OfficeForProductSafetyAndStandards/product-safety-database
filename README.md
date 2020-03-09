@@ -26,6 +26,10 @@ We're processing attachments using our [antivirus API](https://github.com/UKGove
 
 See [getting set up](doc/getting-set-up.md).
 
+## Contributing
+
+See [contributing](CONTRIBUSING.md).
+
 ## Design system
 
 This project uses the [GOV.UK design system](https://design-system.service.gov.uk). The CSS and JavaScript assets are imported directly, and the
