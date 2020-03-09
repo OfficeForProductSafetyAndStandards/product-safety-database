@@ -1,5 +1,4 @@
 class KeycloakConnector < ApplicationRecord
-
   FIELDS = <<~SQL.freeze
     ue.email,
 
@@ -34,19 +33,19 @@ class KeycloakConnector < ApplicationRecord
       user = User.find_by(email: row[0])
       next unless user
 
-       user.keycloak_first_name = row[1]
-       user.keycloak_last_name = row[2]
-       user.keycloak_username = row[3]
-       user.keycloak_created_at = Time.at(row[4])
+      user.keycloak_first_name = row[1]
+      user.keycloak_last_name = row[2]
+      user.keycloak_username = row[3]
+      user.keycloak_created_at = Time.zone.at(row[4])
 
-       user.password_salt = row[5]
-       user.encrypted_password = row[6]
-       user.hash_iterations = row[7]
-       user.credential_type = row[8]
+      user.password_salt = row[5]
+      user.encrypted_password = row[6]
+      user.hash_iterations = row[7]
+      user.credential_type = row[8]
 
-       user.mobile_number = row[9]
+      user.mobile_number = row[9]
 
-       user.save!
+      user.save!
     end
   end
 end
