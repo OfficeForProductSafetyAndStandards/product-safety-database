@@ -154,7 +154,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
         let(:previous_attempts_count) { User.max_login_attempts }
         let(:submitted_code) { user.direct_otp }
 
-        before { user.lock_two_factor }
+        before { user.lock_two_factor! }
 
         it "does not leave the two factor form page" do
           submit_2fa
@@ -180,7 +180,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         before do
           travel_to(Time.current - User::TWO_FACTOR_LOCK_TIME) do
-            user.lock_two_factor
+            user.lock_two_factor!
           end
         end
 

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe User do
+  include ActiveSupport::Testing::TimeHelpers
+
   describe "validations" do
     before { user.validate(:registration_completion) }
 
@@ -419,9 +421,9 @@ RSpec.describe User do
   end
 
   describe "devise gems echosystem" do
-    subject(:user) { create(:user) }
-
     describe "#send_two_factor_authentication_code", :with_test_queue_adpater do
+      subject(:user) { create(:user) }
+
       # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
       it "enqueues a SendTwoFactorAuthenticationJob" do
         ActiveJob::Base.queue_adapter = :test
@@ -435,6 +437,44 @@ RSpec.describe User do
         end
       end
       # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
+    end
+
+    describe "#two_factor_lock_expired?" do
+      it "defaults to true when there was no two factor lock for the user" do
+        user = build_stubbed(:user, second_factor_attempts_locked_at: nil)
+        expect(user.two_factor_lock_expired?).to eq true
+      end
+
+      it "returns true when the lock time expired for the user" do
+        expired_lock_time = Time.current - (User::TWO_FACTOR_LOCK_TIME + 10)
+        user = build_stubbed(:user, second_factor_attempts_locked_at: expired_lock_time)
+        expect(user.two_factor_lock_expired?).to eq true
+      end
+
+      it "returns false when the lock time didn't expire for the user" do
+        lock_time = Time.current - (User::TWO_FACTOR_LOCK_TIME - 10)
+        user = build_stubbed(:user, second_factor_attempts_locked_at: lock_time)
+        expect(user.two_factor_lock_expired?).to eq false
+      end
+    end
+
+    describe "#lock_two_factor!" do
+      subject(:user) { create(:user, second_factor_attempts_locked_at: nil) }
+
+      it "sets the user 2fa lock to the current timestamp" do
+        freeze_time do
+          expect { user.lock_two_factor! }
+            .to change(user, :second_factor_attempts_locked_at).from(nil).to(Time.current)
+        end
+      end
+    end
+
+    describe "#unlock_two_factor!" do
+      subject(:user) { create(:user, second_factor_attempts_locked_at: Time.current) }
+
+      it "sets the user 2fa lock to nil" do
+        expect { user.unlock_two_factor! }.to change(user, :second_factor_attempts_locked_at).to(nil)
+      end
     end
   end
 end

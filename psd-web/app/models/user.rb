@@ -186,14 +186,16 @@ class User < ApplicationRecord
   end
 
   def two_factor_lock_expired?
+    return true if !second_factor_attempts_locked_at
+
     second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME < Time.current
   end
 
-  def lock_two_factor
+  def lock_two_factor!
     self.update_column(:second_factor_attempts_locked_at, Time.current)
   end
 
-  def unlock_two_factor
+  def unlock_two_factor!
     self.update_columns(second_factor_attempts_locked_at: nil)
   end
 

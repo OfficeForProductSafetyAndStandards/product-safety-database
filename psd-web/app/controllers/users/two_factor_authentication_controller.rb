@@ -47,7 +47,7 @@ module Users
       warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
       bypass_sign_in(resource, scope: resource_name)
 
-      resource.unlock_two_factor if resource.max_login_attempts?
+      resource.unlock_two_factor! if resource.max_login_attempts?
       resource.update_column(:second_factor_attempts_count, 0)
 
       redirect_to after_two_factor_success_path_for(resource)
@@ -56,7 +56,7 @@ module Users
     def after_two_factor_fail_for(resource)
       if !resource.max_login_attempts?
         resource.second_factor_attempts_count += 1
-        resource.lock_two_factor if resource.max_login_attempts?
+        resource.lock_two_factor! if resource.max_login_attempts?
         resource.save
       end
 
