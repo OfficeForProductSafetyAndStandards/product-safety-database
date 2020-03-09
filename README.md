@@ -28,7 +28,7 @@ See [getting set up](doc/getting-set-up.md).
 
 ## Contributing
 
-See [contributing](CONTRIBUSING.md).
+See [contributing](CONTRIBUTING.md).
 
 
 ## GOV.UK Notify
