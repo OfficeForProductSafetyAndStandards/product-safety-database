@@ -161,6 +161,7 @@ en:
     blank: "Enter the security code"
     too_short: "You haven't entered enough numbers"
     too_long: "You've entered too many numbers"
+    incorrect: "Incorrect security code"
   sign_in_form:
     email:
       wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"

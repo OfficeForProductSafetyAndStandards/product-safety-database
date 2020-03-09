@@ -10,7 +10,7 @@ module Users
       end
 
       if resource.max_login_attempts? && !resource.two_factor_lock_expired?
-        resource.errors.add(:direct_otp, find_message(:attempt_failed))
+        resource.errors.add(:direct_otp, I18n.t(".otp_code.incorrect"))
         return render :show
       end
 
@@ -60,7 +60,7 @@ module Users
         resource.save
       end
 
-      resource.errors.add(:direct_otp, find_message(:attempt_failed))
+      resource.errors.add(:direct_otp, I18n.t(".otp_code.incorrect"))
       render :show
     end
 

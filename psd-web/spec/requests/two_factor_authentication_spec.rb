@@ -106,7 +106,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         it "displays an error to the user" do
           submit_2fa
-          expect(response.body).to include("Attempt failed")
+          expect(response.body).to include("Incorrect security code")
         end
 
         it "increases the user counter for failed two factor attempts" do
@@ -146,7 +146,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         it "displays a default error to the user" do
           submit_2fa
-          expect(response.body).to include("Attempt failed")
+          expect(response.body).to include("Incorrect security code")
         end
       end
 
@@ -163,7 +163,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         it "displays a default error to the user" do
           submit_2fa
-          expect(response.body).to include("Attempt failed")
+          expect(response.body).to include("Incorrect security code")
         end
 
         it "does not increase the user counter for failed two factor attempts" do
