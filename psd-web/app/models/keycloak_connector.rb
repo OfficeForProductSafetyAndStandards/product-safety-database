@@ -1,31 +1,10 @@
 class KeycloakConnector < ApplicationRecord
-  # To add
-  # mobile number - user_attribute.value
-  # account create date - user_entity.created_timestamp
-  # last accessed date
-  # password update date - credential.created_date
-  # username?
-
-  EMAIL = 1
-  FIRST_NAME = 2
-
-  LAST_NAME = 3
-  USERNAME = 4
-  USER_CREATED_TIMESTAMP = 5
-
-  SALT = 6
-  CRYPTED_PASSWORD = 7
-  HASH_ITERATIONS = 8
-  TYPE = 9
-
-  MOBILE_NUMBER = 4
-
 
   FIELDS = <<~SQL.freeze
     ue.id, ue.email, ue.first_name,
     ue.last_name, ue.username, ue.created_timestamp,
-    c.salt, c.value, c.hash_iterations, c.user_id, c.type
-    ua.user_id, ua.name, ua.value
+    c.salt, c.value as crypted_password, c.hash_iterations, c.user_id, c.type,
+    ua.user_id, ua.name, ua.value as mobile_number
   SQL
 
   CREDENTIALS_QUERY = <<~SQL.freeze
@@ -40,24 +19,26 @@ class KeycloakConnector < ApplicationRecord
 
   def self.copy_keycloak_credentials
     rows = KeycloakConnector.connection.query(CREDENTIALS_QUERY)
-    rows.each do |salt, encrypted_password, iterations, email, credential_type|
-      user = User.find_by(email: row[EMAIL])
+    rows.each do |row|
+      user = User.find_by(email: row[1])
+      #user = User.find_by(email: row["email"])
       next unless user
 
       # user.password_salt = salt
       # user.encrypted_password = encrypted_password
       # user.hash_iterations = iterations
       # user.credential_type = credential_type
-      user.password_salt = row[SALT]
-      user.encrypted_password = row[CRYPTED_PASSWORD]
-      user.hash_iterations = row[HASH_ITERATIONS]
-      user.credential_type = row[TYPE]
-      user.keycloak_first_name = row[FIRST_NAME]
-      user.keycloak_last_name = row[LAST_NAME]
-      user.keycloak_username = row[USERNAME]
-      user.keycloak_created_at = Time.at(row[USER_CREATED_TIMESTAMP])
-      user.mobile_number = Time.at(row[MOBILE_NUMBER])
-      user.save!
+      #user.password_salt = row["salt"]
+      user.password_salt = row[6]
+      # user.encrypted_password = row["crypted_password"]
+      # user.hash_iterations = row["hash_iterations"]
+      # user.credential_type = row["type"]
+      # user.keycloak_first_name = row["first_name"]
+      # user.keycloak_last_name = row["last_name"]
+      # user.keycloak_username = row["username"]
+      # user.keycloak_created_at = Time.at(row["created_timestamp"])
+      # user.mobile_number = row["mobile_number"]
+      # user.save!
     end
   end
 end

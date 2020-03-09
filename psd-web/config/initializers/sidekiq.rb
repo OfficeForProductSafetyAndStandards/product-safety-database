@@ -41,7 +41,7 @@ end
 def schedule_keycloak_password_job
   keycloak_sync_job = Sidekiq::Cron::Job.new(
     name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: Sync user passwords with Keycloak",
-    cron: "*/5 * * * *",
+    cron: "*/1 * * * *",
     class: "SyncKeycloakPasswordsJob",
     active_job: true,
     queue: ENV["SIDEKIQ_QUEUE"] || "psd"

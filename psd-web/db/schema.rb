@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_25_163932) do
+ActiveRecord::Schema.define(version: 2020_03_09_120706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -200,10 +200,12 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.index ["business_id"], name: "index_locations_on_business_id"
   end
 
-  create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "organisations", id: :uuid, default: nil, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.string "path"
     t.datetime "updated_at", null: false
+    t.index ["path"], name: "index_organisations_on_path"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
@@ -237,14 +239,16 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.index ["user_id"], name: "index_sources_on_user_id"
   end
 
-  create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "teams", id: :uuid, default: nil, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
     t.uuid "organisation_id"
+    t.string "path"
     t.string "team_recipient_email"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_teams_on_name"
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
+    t.index ["path"], name: "index_teams_on_path"
   end
 
   create_table "teams_users", force: :cascade do |t|
@@ -279,7 +283,7 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", id: :uuid, default: nil, force: :cascade do |t|
     t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
     t.string "credential_type"
@@ -293,6 +297,10 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.integer "hash_iterations", default: 27500
     t.text "invitation_token"
     t.datetime "invited_at"
+    t.datetime "keycloak_created_at"
+    t.string "keycloak_first_name"
+    t.string "keycloak_last_name"
+    t.string "keycloak_username"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.text "mobile_number"
