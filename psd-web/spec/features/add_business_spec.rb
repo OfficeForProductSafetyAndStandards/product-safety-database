@@ -7,7 +7,7 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
 
   before { sign_in }
 
-  it "allows the relevent params to be posted" do
+  scenario "Adding a business" do
     visit "/cases/#{investigation.pretty_id}/businesses/new"
 
     choose "Manufacturer"
