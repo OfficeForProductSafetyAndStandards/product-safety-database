@@ -476,5 +476,24 @@ RSpec.describe User do
         expect { user.unlock_two_factor! }.to change(user, :second_factor_attempts_locked_at).to(nil)
       end
     end
+
+    describe "#two_factor_authentication_code_expired?" do
+      it "defaults to false when the 2FA code has not been sent" do
+        user = build_stubbed(:user, direct_otp_sent_at: nil)
+        expect(user.two_factor_authentication_code_expired?).to eq false
+      end
+
+      it "returns true when the 2FA code expired for the user" do
+        expired_time = Time.current - (described_class.direct_otp_valid_for + 3)
+        user = build_stubbed(:user, direct_otp_sent_at: expired_time)
+        expect(user.two_factor_authentication_code_expired?).to eq true
+      end
+
+      it "returns false when the 2FA code didn't expire for the user" do
+        sent_time = Time.current - (described_class.direct_otp_valid_for - 3)
+        user = build_stubbed(:user, direct_otp_sent_at: sent_time)
+        expect(user.two_factor_authentication_code_expired?).to eq false
+      end
+    end
   end
 end

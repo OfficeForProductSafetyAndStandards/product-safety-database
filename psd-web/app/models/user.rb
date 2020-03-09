@@ -185,10 +185,16 @@ class User < ApplicationRecord
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
+  def two_factor_authentication_code_expired?
+    return false if !direct_otp_sent_at
+
+    (direct_otp_sent_at + User.direct_otp_valid_for) < Time.current
+  end
+
   def two_factor_lock_expired?
     return true if !second_factor_attempts_locked_at
 
-    second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME < Time.current
+    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
   end
 
   def lock_two_factor!

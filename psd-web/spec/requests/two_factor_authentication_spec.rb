@@ -117,6 +117,26 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
         end
       end
 
+      context "when code expired before being used" do
+        let(:submitted_code) { user.direct_otp }
+
+        before do
+          user.direct_otp_sent_at = Time.current - (User.direct_otp_valid_for + 10)
+          user.save
+        end
+
+        it "user gets redirected to sign in page" do
+          submit_2fa
+          expect(response).to redirect_to(new_user_session_path)
+        end
+
+        it "displays an alert about expired session" do
+          submit_2fa
+          follow_redirect!
+          expect(response.body).to include("You took too long to login")
+        end
+      end
+
       context "when reaching the maximum number of failing attempts" do
         let(:previous_attempts_count) { User.max_login_attempts - 1 }
         let(:submitted_code) { user.direct_otp.reverse }
