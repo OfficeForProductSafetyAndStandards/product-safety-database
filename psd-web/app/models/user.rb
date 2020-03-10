@@ -202,7 +202,7 @@ class User < ApplicationRecord
   end
 
   def unlock_two_factor!
-    self.update_column(second_factor_attempts_locked_at: nil)
+    self.update_column(:second_factor_attempts_locked_at, nil)
   end
 
   # BEGIN: place devise overriden method calls bellow
