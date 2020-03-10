@@ -2,6 +2,10 @@
   "name": "psd-web",
   "version": "1.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "10.19.x",
+    "yarn": "1.22.x"
+  },
   "dependencies": {
     "@rails/webpacker": "4.2.2",
     "accessible-autocomplete": "2.0.2",
