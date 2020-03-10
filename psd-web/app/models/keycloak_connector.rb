@@ -1,5 +1,5 @@
 class KeycloakConnector < ApplicationRecord
-  FIELDS = <<~SQL.freeze
+  COLUMNS = <<~SQL.freeze
     ue.email,
 
     ue.first_name,
@@ -19,7 +19,7 @@ class KeycloakConnector < ApplicationRecord
 
   CREDENTIALS_QUERY = <<~SQL.freeze
     SELECT
-    #{FIELDS}
+    #{COLUMNS}
     FROM user_entity ue
     LEFT JOIN credential c ON ue.id = c.user_id AND c.type = 'password'
     LEFT JOIN user_attribute ua ON ue.id = ua.user_id AND ua.name = 'mobile_number';
@@ -39,13 +39,15 @@ class KeycloakConnector < ApplicationRecord
       user.keycloak_created_at = Time.zone.at(row[4])
 
       user.password_salt = row[5]
-      user.encrypted_password = row[6]
+      user.encrypted_password = row[6] if row[6] # don't copy over nil password
       user.hash_iterations = row[7]
       user.credential_type = row[8]
 
       user.mobile_number = row[9]
 
-      user.save!
+      unless user.save
+        Rails.logger.info("[KeycloakConnector] User with id #{user.id} failed with errors: #{user.errors.try(:full_messages)}")
+      end
     end
   end
 end
