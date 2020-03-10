@@ -33,9 +33,6 @@ class KeycloakConnector < ApplicationRecord
       user = User.find_by(email: row[0])
       next unless user
 
-      user.keycloak_first_name = row[1]
-      user.keycloak_last_name = row[2]
-      user.keycloak_username = row[3]
       user.keycloak_created_at = Time.zone.at(row[4])
 
       user.password_salt = row[5]
