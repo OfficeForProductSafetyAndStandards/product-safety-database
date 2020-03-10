@@ -121,9 +121,14 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
         let(:submitted_code) { user.direct_otp }
 
         before do
-          user.direct_otp_sent_at = Time.current - (User.direct_otp_valid_for + 10)
+          user.direct_otp_sent_at = Time.current
           user.save
+
+          expired_code_time = Time.current + User.direct_otp_valid_for + 10.seconds
+          travel_to expired_code_time
         end
+
+        after { travel_back }
 
         it "user gets redirected to sign in page" do
           submit_2fa
