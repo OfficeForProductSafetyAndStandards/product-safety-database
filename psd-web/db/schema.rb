@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_25_163932) do
+ActiveRecord::Schema.define(version: 2020_03_09_120706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -282,6 +282,10 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.integer "hash_iterations", default: 27500
     t.text "invitation_token"
     t.datetime "invited_at"
+    t.datetime "keycloak_created_at"
+    t.string "keycloak_first_name"
+    t.string "keycloak_last_name"
+    t.string "keycloak_username"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.text "mobile_number"
