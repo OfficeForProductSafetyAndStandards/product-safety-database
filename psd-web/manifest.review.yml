@@ -12,6 +12,8 @@ applications:
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
     KEYCLOAK_REDIRECT_URI: https://((psd-host))/users/auth/openid_connect/callback
+    TWO_FACTOR_AUTHENTICATION_ENABLED: ((two-factor-authentication-enabled))
+    NOTIFY_API_KEY: ((notify-api-key))
   timeout: 180
   services:
     - ((psd-db-name))
