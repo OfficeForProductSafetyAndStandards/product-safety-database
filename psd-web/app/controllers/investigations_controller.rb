@@ -12,7 +12,7 @@ class InvestigationsController < ApplicationController
     respond_to do |format|
       format.html do
         @answer         = search_for_investigations(20)
-        byebug
+
         ap @answer.results.to_a
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
