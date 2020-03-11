@@ -15,9 +15,10 @@
       <%= govukButton(text: "Continue") %>
     <% end %>
 
-    <div class="govuk-body">
-      <%= link_to "Not received a text message?", resend_code_user_two_factor_authentication_path, class: "govuk-link" %>
-    </div>
-
+    <%if false # Following block is a placeholder. Hiding it pending future implementation %>
+      <div class="govuk-body">
+        <%= link_to "Not received a text message?", resend_code_user_two_factor_authentication_path, class: "govuk-link" %>
+      </div>
+    <% end %>
   </div>
 </div>
