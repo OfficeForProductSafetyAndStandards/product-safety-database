@@ -9,8 +9,6 @@ applications:
     - route: ((psd-host))
   env:
     PSD_HOST: ((psd-host))
-    TWO_FACTOR_AUTHENTICATION_ENABLED: ((two-factor-authentication-enabled))
-    NOTIFY_API_KEY: ((notify-api-key))
   timeout: 180
   services:
     - opss-log-drain
@@ -28,6 +26,7 @@ applications:
     - psd-sentry-env
     - psd-session
     - psd-sidekiq-env
+    - psd-two-factor-auth-env
     - psd-web-scout-env
     - antivirus-auth-env
     - keycloak-database
