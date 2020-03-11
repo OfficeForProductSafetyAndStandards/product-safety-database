@@ -420,7 +420,7 @@ RSpec.describe User do
     end
   end
 
-  describe "devise gems echosystem" do
+  describe "Devise gem related methods" do
     describe "#send_two_factor_authentication_code", :with_test_queue_adapter do
       subject(:user) { create(:user) }
 
