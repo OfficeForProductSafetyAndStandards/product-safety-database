@@ -139,6 +139,6 @@ jobs:
       if: failure()
       env:
         LOG_URL: ${{ env.LOG_URL }}
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
       run: |
         curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"Deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK
