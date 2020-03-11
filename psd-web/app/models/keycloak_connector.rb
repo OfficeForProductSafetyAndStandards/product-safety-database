@@ -28,6 +28,7 @@ class KeycloakConnector < ApplicationRecord
   establish_connection :keycloak
 
   def self.copy_keycloak_data
+    return
     rows = KeycloakConnector.connection.query(CREDENTIALS_QUERY)
     rows.each do |row|
       user = User.find_by(email: row[0])
