@@ -57,7 +57,7 @@ Sidekiq.configure_server do |config|
   remove_files_without_attachments_job
   create_log_db_metrics_job
   schedule_keycloak_sync_job
-#  schedule_keycloak_db_job
+  schedule_keycloak_db_job
 end
 
 Sidekiq.configure_client do |config|
