@@ -38,16 +38,16 @@ def schedule_keycloak_sync_job
   end
 end
 
-def schedule_keycloak_password_job
+def schedule_keycloak_db_job
   keycloak_sync_job = Sidekiq::Cron::Job.new(
-    name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: Sync user passwords with Keycloak",
+    name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: Sync user db data from Keycloak",
     cron: "*/5 * * * *",
-    class: "SyncKeycloakPasswordsJob",
+    class: "SyncKeycloakDbJob",
     active_job: true,
     queue: ENV["SIDEKIQ_QUEUE"] || "psd"
   )
   unless keycloak_sync_job.save
-    Rails.logger.error "***** WARNING - Sync Keycloak user passwords job was not saved! *****"
+    Rails.logger.error "***** WARNING - Sync Keycloak user db data job was not saved! *****"
     Rails.logger.error keycloak_sync_job.errors.join("; ")
   end
 end
@@ -57,7 +57,7 @@ Sidekiq.configure_server do |config|
   remove_files_without_attachments_job
   create_log_db_metrics_job
   schedule_keycloak_sync_job
-  schedule_keycloak_password_job
+  schedule_keycloak_db_job
 end
 
 Sidekiq.configure_client do |config|
