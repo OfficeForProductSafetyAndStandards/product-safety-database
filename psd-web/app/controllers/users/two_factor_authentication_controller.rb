@@ -30,6 +30,10 @@ module Users
       true
     end
 
+    def secondary_nav_items
+      [text: "Sign out", href: destroy_user_session_path]
+    end
+
   private
 
     def otp_code_param

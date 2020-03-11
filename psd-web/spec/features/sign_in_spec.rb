@@ -15,8 +15,8 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "when succeeeding signin in", :with_2fa do
-    context "when succeeding two factor authentication" do
-      it "allows user to sign in" do
+    context "when in two factor authentication page" do
+      it "allows user to sign in with correct two factor authentication code" do
         fill_in_credentials
 
         expect(page).to have_css("h1", text: "Check your phone")
@@ -26,6 +26,19 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
         expect(page).to have_css("h2", text: "Your cases")
         expect(page).to have_link("Sign out", href: destroy_user_session_path)
+      end
+
+      it "allows user to sign out and be sent to the homepage" do
+        fill_in_credentials
+
+        expect(page).to have_css("h1", text: "Check your phone")
+
+        within(".psd-header__secondary-navigation") do
+          click_link("Sign out")
+        end
+
+        expect(page).to have_css("h1", text: "Product safety database")
+        expect(page).to have_link("Sign in to your account")
       end
     end
   end
