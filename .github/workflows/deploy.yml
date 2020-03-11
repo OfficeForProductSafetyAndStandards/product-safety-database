@@ -134,3 +134,11 @@ jobs:
       run: |
         source psd-web/deploy-github-functions.sh
         gh_deploy_failure production $LOG_URL
+
+    - name: Alert team via Slack of deployment failure
+      if: failure()
+      env:
+        LOG_URL: ${{ env.LOG_URL }}
+        SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
+      run: |
+        curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"Deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK
