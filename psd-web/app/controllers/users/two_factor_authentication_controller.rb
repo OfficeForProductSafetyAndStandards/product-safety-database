@@ -26,6 +26,10 @@ module Users
       end
     end
 
+    def hide_nav?
+      true
+    end
+
   private
 
     def otp_code_param
