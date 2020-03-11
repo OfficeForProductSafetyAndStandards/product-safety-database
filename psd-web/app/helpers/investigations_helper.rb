@@ -18,6 +18,7 @@ module InvestigationsHelper
     filters = {}
     filters.merge!(get_type_filter)
     filters.merge!(merged_must_filters) { |_key, current_filters, new_filters| current_filters + new_filters }
+    filters
   end
 
   def merged_must_filters
