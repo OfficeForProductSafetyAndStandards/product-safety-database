@@ -34,21 +34,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       visit "/allegation/complainant"
     end
 
-    scenario "able to create safety allegation from a consumer" do
-      expect_page_to_have_h1("New allegation")
-
-      choose "complainant_complainant_type_consumer"
-      click_button "Continue"
-
-      expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
-
-      enter_contact_details(contact_details)
-      enter_allegation_details(allegation_details)
-
-      expect_confirmation_banner("Allegation was successfully created")
-    end
-
-    scenario "able to add a product" do
+    scenario "able to create safety allegation from a consumer and optionally add a product" do
       expect_page_to_have_h1("New allegation")
       choose "complainant_complainant_type_consumer"
       click_button "Continue"

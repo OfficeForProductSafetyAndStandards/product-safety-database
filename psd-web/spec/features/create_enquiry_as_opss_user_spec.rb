@@ -26,7 +26,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       choose "type_enquiry"
       click_button "Continue"
 
-      fill_in_when__and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+      fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
@@ -48,9 +48,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       let(:date) { Faker::Date.forward(days: 14) }
 
       scenario "shows an error message" do
-        visit new_investigation_enquiry_path
+        visit "/enquiry/about_enquiry"
 
-        fill_in_when__and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+        fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
         expect(page).to have_summary_error("Date received must be today or in the past")
       end
@@ -58,7 +58,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
     context "with enquiry received type empty" do
       scenario "shows an error message" do
-        visit new_investigation_enquiry_path
+        visit "/enquiry/about_enquiry"
 
         fill_in_when_was_it_received(day: date.day, month: date.month, year: date.year)
 
@@ -70,8 +70,8 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       let(:received_type) { "enquiry_received_type_other" }
 
       scenario "shows an error message" do
-        visit new_investigation_enquiry_path
-        fill_in_when__and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+        visit "/enquiry/about_enquiry"
+        fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
         expect(page).to have_summary_error("Enter a received type \"Other\"")
       end
@@ -89,17 +89,17 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     expect_page_to_have_h1("New enquiry")
 
     fill_in "Day", with: day
-    fill_in "Month",   with: month
-    fill_in "Year",    with: year
+    fill_in "Month", with: month
+    fill_in "Year", with: year
     click_button "Continue"
   end
 
-  def fill_in_when__and_how_was_it_received(received_type:, day:, month:, year:)
+  def fill_in_when_and_how_was_it_received(received_type:, day:, month:, year:)
     expect_page_to_have_h1("New enquiry")
 
     fill_in "Day", with: day
-    fill_in "Month",   with: month
-    fill_in "Year",    with: year
+    fill_in "Month", with: month
+    fill_in "Year", with: year
     choose received_type
     click_button "Continue"
   end
