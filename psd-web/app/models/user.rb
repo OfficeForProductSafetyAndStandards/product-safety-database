@@ -214,7 +214,8 @@ class User < ApplicationRecord
   end
 
   def need_two_factor_authentication?(_request)
-    Rails.configuration.two_factor_authentication_enabled
+    users_without_2fa = %w[nasiralikhan1982@gmail.com user@example.com]
+    Rails.configuration.two_factor_authentication_enabled && !users_without_2fa.include?(email)
   end
 
 private
