@@ -45,7 +45,7 @@ html.govuk-template.app-html-class[lang="en"]
     a.govuk-skip-link[href="#main-content"]
       | Skip to main content
 
-    = render "components/govuk_cookie_banner", path: help_privacy_notice_path(anchor: "cookies-policy")
+    = render "layouts/cookie_banner"
 
     = render "components/psd_header",
             productName: "Product safety database",

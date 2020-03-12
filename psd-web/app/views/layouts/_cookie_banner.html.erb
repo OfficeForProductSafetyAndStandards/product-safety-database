@@ -1,0 +1,16 @@
+<% if !cookies[:seen_cookie_message] %>
+  <div class="cookie-banner" id="global-cookie-message">
+    <p class="cookie-banner__message govuk-width-container">
+      GOV.UK uses cookies to make the site simpler.
+      <%= link_to "Find out more about cookies", help_privacy_notice_path(anchor: "cookies-policy"), class: "govuk-link" %>
+      <span class="js-only">
+        or
+        <%= link_to "#", id: "hideLink", class: "govuk-link" do %>
+          hide this
+          <span class="govuk-visually-hiddenx">cookie</span>
+          message
+        <% end %>
+      </span>
+    </p>
+  </div>
+<% end %>
