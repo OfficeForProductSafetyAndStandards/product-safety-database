@@ -325,7 +325,7 @@ Devise.setup do |config|
     config.otp_length = 5  # TOTP code length
     config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
     config.direct_otp_length = 5  # Direct OTP code length
-    config.remember_otp_session_for_seconds = 7.days  # Time before browser has to perform 2fA again. Default is 0.
+    config.remember_otp_session_for_seconds = 10.minutes  # Time before browser has to perform 2fA again. Default is 0.
     # Only needed for encrypting TOTP:
     # config.otp_secret_encryption_key = ENV.fetch("OTP_SECRET_ENCRYPTION_KEY")
     config.second_factor_resource_id = 'id' # Field or method name used to set value for 2fA remember cookie
