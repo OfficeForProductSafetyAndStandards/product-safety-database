@@ -30,8 +30,8 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
     end
 
     within_fieldset "Address" do
-      fill_in "Address line one",    with: address_line_one
-      fill_in "Address line two",    with: address_line_two
+      fill_in "Building and street line 1 of 2",    with: address_line_one
+      fill_in "Building and street line 2 of 2",    with: address_line_two
       fill_in "Town or city",        with: city
       fill_in "Postcode",            with: postcode
       select country,                from: "Country"
