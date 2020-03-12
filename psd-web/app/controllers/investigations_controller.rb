@@ -13,7 +13,7 @@ class InvestigationsController < ApplicationController
       format.html do
         @answer         = search_for_investigations(20)
 
-        ap @answer.results.to_a
+        # ap @answer.results.to_a
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
       end

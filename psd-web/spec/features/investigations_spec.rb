@@ -100,12 +100,27 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
       sign_in(as_user: me)
 
       click_link "Your cases"
+      q = {
+        query: {
+          bool: {
+            must: [
+              { match_all: {} }
+            ],
+            filter: [
+              { term: { is_closed: false } },
+              { term: { assignable_id: me.id } }
+            ]
+          }
+        }
+      }
+      byebug
+      pp Investigation.__elasticsearch__.search(q).to_a
 
-      save_and_open_page
-
-      expect(page).to     show_case_card_with(text: assigned_to_me.pretty_description)
-      expect(page).not_to show_case_card_with(text: assigned_to_teamate.pretty_description)
-      expect(page).not_to show_case_card_with(text: assigned_to_opss_user.pretty_description)
+      # save_and_open_page
+      # byebug
+      # expect(page).to     show_case_card_with(text: assigned_to_me.pretty_description)
+      # expect(page).not_to show_case_card_with(text: assigned_to_teamate.pretty_description)
+      # expect(page).not_to show_case_card_with(text: assigned_to_opss_user.pretty_description)
 
 
       # expect(page).
