@@ -10,7 +10,13 @@
 
     <p class="govuk-body">We have sent you a security code by text message.</p>
     <%= form_tag([resource_name, :two_factor_authentication], :method => :put) do %>
-      <%= render "components/govuk_input", id: "direct_otp", name: "user[direct_otp]", type: "text", classes: "govuk-input--width-5", label: { text: "Enter security code" }, attributes: { pattern: "[0-9]*", inputmode: "numeric" } %>
+      <%= render "components/govuk_input",
+          id: "otp_code", name: "user[otp_code]",
+          type: "text",
+          classes: "govuk-input--width-5",
+          label: { text: "Enter security code" },
+          attributes: { pattern: "[0-9]*", inputmode: "numeric" },
+          errorMessage: format_errors_for(resource, resource.errors.full_messages_for(:otp_code)) %>
 
       <%= govukButton(text: "Continue") %>
     <% end %>
