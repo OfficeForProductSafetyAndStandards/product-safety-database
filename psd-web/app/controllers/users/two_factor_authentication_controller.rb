@@ -4,8 +4,8 @@ module Users
     skip_before_action :has_viewed_introduction
 
     def update
-      if otp_code_length_error
-        resource.errors.add(:otp_code, otp_code_length_error)
+      if two_factor_authentication_form.invalid?
+        resource.errors.merge!(two_factor_authentication_form.errors)
         return render :show
       end
 
@@ -36,20 +36,12 @@ module Users
 
   private
 
-    def otp_code_param
-      @otp_code_param ||= resource_params.permit(:direct_otp)[:direct_otp]
+    def two_factor_authentication_form
+      @two_factor_authentication_form ||= TwoFactorAuthenticationForm.new(otp_code: otp_code_param)
     end
 
-    def otp_code_length_error
-      return if otp_code_param.nil?
-
-      if otp_code_param.empty?
-        I18n.t(".otp_code.blank")
-      elsif otp_code_param.length < resource.direct_otp.length
-        I18n.t(".otp_code.too_short")
-      elsif otp_code_param.length > resource.direct_otp.length
-        I18n.t(".otp_code.too_long")
-      end
+    def otp_code_param
+      @otp_code_param ||= resource_params.permit(:otp_code)[:otp_code]
     end
 
     # BEGIN: Houdini/two_factor_authentication Devise extension overriden

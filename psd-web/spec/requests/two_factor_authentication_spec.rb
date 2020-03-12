@@ -8,7 +8,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
       patch user_two_factor_authentication_path,
             params: {
               user: {
-                direct_otp: submitted_code
+                otp_code: submitted_code
               }
             }
     end
@@ -37,7 +37,9 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
     context "when successfully completed the sign in step" do
       before { sign_in(user) }
 
-      shared_examples_for "wrongly formatted two factor code" do |error_message|
+      context "when the submitted code is invalid" do
+        let(:submitted_code) { "" }
+
         it "does not leave the two factor form page" do
           submit_2fa
           expect(response).to render_template(:show)
@@ -45,7 +47,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         it "displays an error to the user" do
           submit_2fa
-          expect(response.body).to include(error_message)
+          expect(response.body).to include("Enter the security code")
         end
 
         it "does not increase the user counter for failed two factor attempts" do
@@ -54,24 +56,6 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
             user.reload
           }.not_to change(user, :second_factor_attempts_count).from(previous_attempts_count)
         end
-      end
-
-      context "when the code is too short" do
-        let(:submitted_code) { "123" }
-
-        include_examples "wrongly formatted two factor code", "entered enough numbers"
-      end
-
-      context "when the code is too long" do
-        let(:submitted_code) { "123456789" }
-
-        include_examples "wrongly formatted two factor code", "entered too many numbers"
-      end
-
-      context "when the code is empty" do
-        let(:submitted_code) { "" }
-
-        include_examples "wrongly formatted two factor code", "Enter the security code"
       end
 
       context "with a matching one time password code" do
