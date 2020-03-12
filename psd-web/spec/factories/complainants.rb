@@ -8,7 +8,7 @@ FactoryBot.define do
     investigation
   end
 
-  Complainant::TYPES.keys.each do |type|
+  Complainant::TYPES.each_key do |type|
     factory :"complainant_#{type}", parent: :complainant do
       complainant_type { type }
     end
