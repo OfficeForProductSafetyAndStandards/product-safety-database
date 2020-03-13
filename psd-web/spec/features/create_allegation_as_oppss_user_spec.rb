@@ -64,4 +64,25 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     select hazard_type, from: "allegation_hazard_type"
     click_button "Create allegation"
   end
+
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
+    select category, from: "Product category"
+    select country_of_origin, from: "Country of origin"
+    fill_in "Product type",               with: type
+    fill_in "Product name",               with: name
+    fill_in "Barcode or serial number",   with: barcode
+    fill_in "Webpage",                    with: webpage
+    fill_in "Description of product",     with: description
+    click_button "Save product"
+  end
+
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
+    expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
+    expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: type)
+    expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
+    expect(page.find("dt", text: "Barcode or serial number")).to have_sibling("dd", text: barcode)
+    expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
+    expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
+    expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
+  end
 end
