@@ -47,9 +47,6 @@ class ActiveSupport::TestCase
   end
 
   def stub_notify_mailer
-    allow(Rails.application.config)
-      .to receive(:notify_api_key)
-      .and_return("fake_test_key-b1dbb0f5-4651-4af8-9f15-fa8123ff138d-3df264a8-ed9e-381f-b1f3-c3278411adbc")
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
   end
 

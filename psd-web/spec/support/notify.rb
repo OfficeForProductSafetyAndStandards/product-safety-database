@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 RSpec.shared_context "with stubbed notify" do
+  let(:notify_stub) do
+    instance_double(Notifications::Client,
+                  send_sms: instance_double(Notifications::Client::ResponseNotification))
+  end
+
   before do
-    allow(Rails.application.config)
-      .to receive(:notify_api_key)
-      .and_return("fake_test_key-b1dbb0f5-4651-4af8-9f15-fa8123ff138d-3df264a8-ed9e-381f-b1f3-c3278411adbc")
-    stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/sms").
-      and_return(body: {}.to_json)
+    allow(Notifications::Client).to receive(:new).and_return(notify_stub)
   end
 end
 
