@@ -27,8 +27,8 @@ module Users
       end
 
       if resource.two_factor_authentication_code_expired?
-        sign_out(resource)
-        return redirect_to(new_user_session_path, alert: I18n.t(".otp_code.expired"))
+        resource.errors.add(:otp_code, I18n.t(".otp_code.expired"))
+        return render :show
       end
 
       if resource.authenticate_otp(otp_code_param)

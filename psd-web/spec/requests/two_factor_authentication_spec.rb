@@ -36,18 +36,22 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
     context "when successfully completed the sign in step" do
       before { sign_in(user) }
 
-      context "when the submitted code is invalid" do
-        let(:submitted_code) { "" }
-
-        it "does not leave the two factor form page" do
+      shared_examples_for "code not accepted" do |error|
+        it "does not leave the two factor form page" do 
           submit_2fa
           expect(response).to render_template(:show)
         end
 
         it "displays an error to the user" do
           submit_2fa
-          expect(response.body).to include("Enter the security code")
+          expect(response.body).to include(error)
         end
+      end
+
+      context "when the submitted code is invalid" do
+        let(:submitted_code) { "" }
+
+        include_examples "code not accepted", "Enter the security code"
       end
 
       context "with a matching one time password code" do
@@ -68,15 +72,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
       context "with a missmatched one time password code" do
         let(:submitted_code) { user.direct_otp.reverse }
 
-        it "does not leave the two factor form page" do
-          submit_2fa
-          expect(response).to render_template(:show)
-        end
-
-        it "displays an error to the user" do
-          submit_2fa
-          expect(response.body).to include("Incorrect security code")
-        end
+        include_examples "code not accepted", "Incorrect security code"
       end
 
       context "when code expired before being used" do
@@ -92,31 +88,14 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         after { travel_back }
 
-        it "user gets redirected to sign in page" do
-          submit_2fa
-          expect(response).to redirect_to(new_user_session_path)
-        end
-
-        it "displays an alert about expired session" do
-          submit_2fa
-          follow_redirect!
-          expect(response.body).to include("The security code has expired")
-        end
+        include_examples "code not accepted", "The security code has expired"
       end
 
       context "when reaching the maximum number of failing attempts" do
         let(:previous_attempts_count) { User.max_login_attempts - 1 }
         let(:submitted_code) { user.direct_otp.reverse }
 
-        it "does not leave the two factor form page" do
-          submit_2fa
-          expect(response).to render_template(:show)
-        end
-
-        it "displays a default error to the user" do
-          submit_2fa
-          expect(response.body).to include("Incorrect security code")
-        end
+        include_examples "code not accepted", "Incorrect security code"
       end
 
       context "when the user 2fa is locked and submits the correct one time password code" do
@@ -125,15 +104,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
         before { user.update_column(:second_factor_attempts_locked_at, Time.zone.now) }
 
-        it "does not leave the two factor form page" do
-          submit_2fa
-          expect(response).to render_template(:show)
-        end
-
-        it "displays a default error to the user" do
-          submit_2fa
-          expect(response.body).to include("Incorrect security code")
-        end
+        include_examples "code not accepted", "Incorrect security code"
       end
 
       context "when the user 2fa lock is expired and submits the correct one time password code" do
