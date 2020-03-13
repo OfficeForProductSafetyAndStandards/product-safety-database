@@ -303,7 +303,6 @@ ActiveRecord::Schema.define(version: 2020_03_09_120706) do
     t.integer "second_factor_attempts_count", default: 0
     t.datetime "second_factor_attempts_locked_at"
     t.integer "sign_in_count", default: 0, null: false
-    t.datetime "totp_timestamp"
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
     t.index ["email"], name: "index_users_on_email"

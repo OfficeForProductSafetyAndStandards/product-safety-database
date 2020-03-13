@@ -26,7 +26,7 @@ RSpec.describe TwoFactorAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["You haven't entered enough numbers"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["You haven’t entered enough numbers"])
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe TwoFactorAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["You've entered too many numbers"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["You’ve entered too many numbers"])
       end
     end
 

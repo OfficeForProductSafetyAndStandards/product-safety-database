@@ -9,7 +9,6 @@ class TwoFactorAuthenticationAddToUsers < ActiveRecord::Migration[5.2]
         add_column :users, :encrypted_otp_secret_key_salt, :string
         add_column :users, :direct_otp, :string
         add_column :users, :direct_otp_sent_at, :datetime
-        add_column :users, :totp_timestamp, :timestamp
 
         add_index :users, :encrypted_otp_secret_key, unique: true
       end
