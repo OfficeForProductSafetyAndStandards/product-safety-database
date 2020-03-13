@@ -5,8 +5,8 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
+      span.govuk-caption-l = @investigation.pretty_description
       h1.govuk-heading-l
-        span.govuk-caption-l = @investigation.pretty_description
         | Record phone call
       = render "components/govuk_fieldset",
               legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" } do

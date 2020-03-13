@@ -1,9 +1,10 @@
 - content_for :page_title, "Businesses"
 .govuk-grid-row
   .govuk-grid-column-two-thirds
+    - if params[:q].present?
+      span.govuk-caption-l Business search results
     h1.govuk-heading-l
       - if params[:q].present?
-        span.govuk-caption-l Business search results
         = params[:q]
         span.govuk-caption-m = "#{@businesses.count} #{'result'.pluralize(@businesses.count)}"
       - else
