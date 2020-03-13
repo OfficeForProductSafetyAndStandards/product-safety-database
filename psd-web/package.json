@@ -11,7 +11,7 @@
     "accessible-autocomplete": "2.0.2",
     "copy-webpack-plugin": "5.1.1",
     "eslint": "6.8.0",
-    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.20.1",
     "govuk-country-and-territory-autocomplete": "1.0.1",
     "govuk-frontend": "3.6.0",
