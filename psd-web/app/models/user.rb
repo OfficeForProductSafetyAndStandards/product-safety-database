@@ -228,7 +228,7 @@ private
   end
 
   def two_factor_lock_expired?
-    return true if !second_factor_attempts_locked_at
+    return true if second_factor_attempts_locked_at.nil?
 
     (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
   end
