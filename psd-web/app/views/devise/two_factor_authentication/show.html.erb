@@ -9,7 +9,7 @@
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">We have sent you a security code by text message.</p>
-    <%= form_tag([resource_name, :two_factor_authentication], :method => :put) do %>
+    <%= form_tag([resource_name, :two_factor_authentication], :method => :put, novalidate: true) do %>
       <%= render "components/govuk_input",
           id: "otp_code", name: "user[otp_code]",
           type: "text",
