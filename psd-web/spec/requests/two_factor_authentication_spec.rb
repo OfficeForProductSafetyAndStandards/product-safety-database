@@ -100,7 +100,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
         it "displays an alert about expired session" do
           submit_2fa
           follow_redirect!
-          expect(response.body).to include("You took too long to login")
+          expect(response.body).to include("The security code has expired")
         end
       end
 
