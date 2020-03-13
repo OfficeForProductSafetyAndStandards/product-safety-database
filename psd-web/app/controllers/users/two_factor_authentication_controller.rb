@@ -1,7 +1,7 @@
 module Users
   class TwoFactorAuthenticationController < Devise::TwoFactorAuthenticationController
-    skip_before_action :has_accepted_declaration
-    skip_before_action :has_viewed_introduction
+    skip_before_action :has_accepted_declaration,
+                       :has_viewed_introduction
 
     def update
       if two_factor_authentication_form.invalid?
