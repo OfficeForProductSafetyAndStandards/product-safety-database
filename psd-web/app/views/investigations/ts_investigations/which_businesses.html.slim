@@ -6,8 +6,8 @@
   .govuk-grid-row#which-businesses-page
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
+      span.govuk-caption-l Report an unsafe or non-compliant product
       h1.govuk-heading-l
-        span.govuk-caption-l Report an unsafe or non-compliant product
         = page_heading
       - other_business_html = render "form_components/govuk_input",
                key: :other_business_type, form: form,
