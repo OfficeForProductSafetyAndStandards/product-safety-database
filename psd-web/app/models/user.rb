@@ -198,8 +198,7 @@ class User < ApplicationRecord
   def fail_two_factor_authentication!
     return if max_login_attempts?
 
-    self.second_factor_attempts_count += 1
-    self.save
+    self.increment!(:second_factor_attempts_count, 1)
     lock_two_factor! if max_login_attempts?
   end
 
