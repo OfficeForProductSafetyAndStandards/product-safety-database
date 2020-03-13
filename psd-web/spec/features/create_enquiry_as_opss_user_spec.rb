@@ -18,7 +18,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
-  context "when login as an OPSS user" do
+  context "when logged in as an OPSS user" do
     before { sign_in as_user: create(:user, :activated, :opss_user) }
 
     scenario "able to report an enquiry" do
