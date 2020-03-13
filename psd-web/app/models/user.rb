@@ -191,18 +191,21 @@ class User < ApplicationRecord
     (direct_otp_sent_at + User.direct_otp_valid_for) < Time.current
   end
 
-  def two_factor_lock_expired?
-    return true if !second_factor_attempts_locked_at
-
-    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
+  def two_factor_locked?
+    second_factor_attempts_locked_at && !two_factor_lock_expired?
   end
 
-  def lock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, Time.current)
+  def fail_two_factor_authentication!
+    return if max_login_attempts?
+
+    self.second_factor_attempts_count += 1
+    self.save
+    lock_two_factor! if max_login_attempts?
   end
 
-  def unlock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, nil)
+  def pass_two_factor_authentication!
+    unlock_two_factor! if max_login_attempts?
+    update_column(:second_factor_attempts_count, 0)
   end
 
   # BEGIN: place devise overriden method calls bellow
@@ -215,6 +218,20 @@ class User < ApplicationRecord
   end
 
 private
+
+  def lock_two_factor!
+    self.update_column(:second_factor_attempts_locked_at, Time.current)
+  end
+
+  def unlock_two_factor!
+    self.update_column(:second_factor_attempts_locked_at, nil)
+  end
+
+  def two_factor_lock_expired?
+    return true if !second_factor_attempts_locked_at
+
+    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
+  end
 
   def send_reset_password_instructions_notification(token)
     NotifyMailer.reset_password_instructions(self, token).deliver_later

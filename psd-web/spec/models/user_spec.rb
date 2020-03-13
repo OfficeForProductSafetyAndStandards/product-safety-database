@@ -442,71 +442,120 @@ RSpec.describe User do
       # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
     end
 
-    describe "#two_factor_lock_expired?" do
-      it "defaults to true when there was no two factor lock for the user" do
-        user = build_stubbed(:user, second_factor_attempts_locked_at: nil)
-        expect(user).to be_two_factor_lock_expired
+    describe "#fail_two_factor_authentication!" do
+      subject(:user) do
+        create(:user,
+               second_factor_attempts_count: previous_attempts,
+               second_factor_attempts_locked_at: lock_time)
       end
 
-      it "returns true when the lock time expired for the user" do
+      context "when the user is not reaching the maximum number of failed attempts" do
+        let(:previous_attempts) { 0 }
+        let(:lock_time) { nil }
+
+        it "increases the number of user failed attempts" do
+          expect { user.fail_two_factor_authentication! }
+            .to change(user, :second_factor_attempts_count).by(1)
+        end
+
+        it "the user stays unlocked" do
+          expect { user.fail_two_factor_authentication! }
+            .not_to change(user, :second_factor_attempts_locked_at)
+        end
+      end
+
+      context "when the user already reached the maximum number of failed attempts" do
+        let(:previous_attempts) { described_class.max_login_attempts }
+        let(:lock_time) { Time.zone.now }
+
+        it "does not increase the number of user failed attempts" do
+          expect { user.fail_two_factor_authentication! }
+            .not_to change(user, :second_factor_attempts_count)
+        end
+
+        it "the user stays locked" do
+          expect { user.fail_two_factor_authentication! }
+            .not_to change(user, :second_factor_attempts_locked_at)
+        end
+      end
+
+      context "when the user was in the last allowed attempt" do
+        let(:previous_attempts) { described_class.max_login_attempts - 1 }
+        let(:lock_time) { nil }
+
+        it "increases the number of user failed attempts" do
+          expect { user.fail_two_factor_authentication! }
+            .to change(user, :second_factor_attempts_count).by(1)
+        end
+
+        it "sets the user 2fa lock to the current timestamp" do
+          freeze_time do
+            expect { user.fail_two_factor_authentication! }
+              .to change(user, :second_factor_attempts_locked_at).from(nil).to(Time.current)
+          end
+        end
+      end
+    end
+
+    describe "#pass_two_factor_authentication!" do
+      subject(:user) do
+        create(:user,
+               second_factor_attempts_count: previous_attempts,
+               second_factor_attempts_locked_at: lock_time)
+      end
+
+      context "when the user hasn't previously reached the maximum number of attempts" do
+        let(:previous_attempts) { described_class.max_login_attempts - 1 }
+        let(:lock_time) { nil }
+
+        it "restarts the user attempts counter" do
+          expect { user.pass_two_factor_authentication! }
+            .to change(user, :second_factor_attempts_count).from(previous_attempts).to(0)
+        end
+
+        it "the user stays unlocked" do
+          expect { user.pass_two_factor_authentication! }
+            .not_to change(user, :second_factor_attempts_locked_at)
+        end
+      end
+
+      context "when the user has previously reached the maximum number of failed attempts" do
+        let(:previous_attempts) { described_class.max_login_attempts }
+        let(:lock_time) { Time.zone.now }
+
+        it "restarts the user attempts counter" do
+          expect { user.pass_two_factor_authentication! }
+            .to change(user, :second_factor_attempts_count).from(previous_attempts).to(0)
+        end
+
+        it "removes user 2fa lock" do
+          expect { user.pass_two_factor_authentication! }
+            .to change(user, :second_factor_attempts_locked_at).from(lock_time).to(nil)
+        end
+      end
+    end
+
+    describe "#two_factor_locked?" do
+      it "returns false when there is no two factor lock for the user" do
+        user = build_stubbed(:user, second_factor_attempts_locked_at: nil)
+        expect(user).not_to be_two_factor_locked
+      end
+
+      it "returns false when the lock time has expired for the user" do
         user = build_stubbed(:user, second_factor_attempts_locked_at: Time.current)
         expired_lock_time = user.second_factor_attempts_locked_at + User::TWO_FACTOR_LOCK_TIME + 10.seconds
 
         travel_to expired_lock_time do
-          expect(user).to be_two_factor_lock_expired
+          expect(user).not_to be_two_factor_locked
         end
       end
 
-      it "returns false when the lock time didn't expire for the user" do
+      it "returns true when the lock time hasn't expired for the user" do
         user = build_stubbed(:user, second_factor_attempts_locked_at: Time.current)
         locked_time = user.second_factor_attempts_locked_at + User::TWO_FACTOR_LOCK_TIME - 10.seconds
 
         travel_to locked_time do
-          expect(user).not_to be_two_factor_lock_expired
-        end
-      end
-    end
-
-    describe "#lock_two_factor!" do
-      subject(:user) { create(:user, second_factor_attempts_locked_at: nil) }
-
-      it "sets the user 2fa lock to the current timestamp" do
-        freeze_time do
-          expect { user.lock_two_factor! }
-            .to change(user, :second_factor_attempts_locked_at).from(nil).to(Time.current)
-        end
-      end
-    end
-
-    describe "#unlock_two_factor!" do
-      subject(:user) { create(:user, second_factor_attempts_locked_at: Time.current) }
-
-      it "sets the user 2fa lock to nil" do
-        expect { user.unlock_two_factor! }.to change(user, :second_factor_attempts_locked_at).to(nil)
-      end
-    end
-
-    describe "#two_factor_authentication_code_expired?" do
-      it "defaults to false when the 2FA code has not been sent" do
-        user = build_stubbed(:user, direct_otp_sent_at: nil)
-        expect(user).not_to be_two_factor_authentication_code_expired
-      end
-
-      it "returns true when the 2FA code expired for the user" do
-        user = build_stubbed(:user, direct_otp_sent_at: Time.current)
-        expired_time = Time.current + described_class.direct_otp_valid_for + 3.seconds
-
-        travel_to expired_time do
-          expect(user).to be_two_factor_authentication_code_expired
-        end
-      end
-
-      it "returns false when the 2FA code didn't expire for the user" do
-        user = build_stubbed(:user, direct_otp_sent_at: Time.current)
-        valid_time = Time.current + described_class.direct_otp_valid_for - 3.seconds
-
-        travel_to valid_time do
-          expect(user).not_to be_two_factor_authentication_code_expired
+          expect(user).to be_two_factor_locked
         end
       end
     end

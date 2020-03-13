@@ -9,7 +9,7 @@ module Users
         return render :show
       end
 
-      if resource.max_login_attempts? && !resource.two_factor_lock_expired?
+      if resource.two_factor_locked?
         resource.errors.add(:direct_otp, I18n.t(".otp_code.incorrect"))
         return render :show
       end
@@ -52,19 +52,13 @@ module Users
       warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
       bypass_sign_in(resource, scope: resource_name)
 
-      resource.unlock_two_factor! if resource.max_login_attempts?
-      resource.update_column(:second_factor_attempts_count, 0)
+      resource.pass_two_factor_authentication!
 
       redirect_to after_two_factor_success_path_for(resource)
     end
 
     def after_two_factor_fail_for(resource)
-      if !resource.max_login_attempts?
-        resource.second_factor_attempts_count += 1
-        resource.lock_two_factor! if resource.max_login_attempts?
-        resource.save
-      end
-
+      resource.fail_two_factor_authentication!
       resource.errors.add(:direct_otp, I18n.t(".otp_code.incorrect"))
       render :show
     end
