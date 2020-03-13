@@ -1,5 +1,5 @@
 - page_title = "Add comment"
-- content_for :page_title, title_for(@activity, page_title)
+- content_for :page_title, title_for(@comment, page_title)
 - content_for :after_header do
   .govuk-grid-row
     .govuk-grid-column-one-third
@@ -8,13 +8,13 @@
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds
-    = error_summary(@activity.errors)
+    = error_summary(@comment.errors)
 
     h1.govuk-heading-l
       span.govuk-caption-l = @investigation.pretty_description
       = page_title
 
-    = form_with(model: @activity, \
+    = form_with(model: @comment, \
       url: investigation_activity_comment_path(@investigation)) do |form|
       = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 }, id: "body",
               label: { text: "Comment text", classes: "govuk-visually-hidden" }
