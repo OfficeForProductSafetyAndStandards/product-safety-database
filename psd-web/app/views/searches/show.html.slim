@@ -5,7 +5,7 @@
   = render 'investigations/filters', search: @search,\
       show_relevancy_radion_option: true, submitted_from: "investigation_search"
 
-  .govuk-grid-column-three-quarters
+  #results.govuk-grid-column-three-quarters
     - @investigations.each do |investigation|
       - result = @answer.results.find { |rs| rs.id.to_i == investigation.id }
       - if result.respond_to?(:highlight)
