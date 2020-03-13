@@ -160,7 +160,7 @@ en:
   otp_code:
     blank: "Enter the security code"
     too_short: "You haven’t entered enough numbers"
-    too_long: "You've entered too many numbers"
+    too_long: "You’ve entered too many numbers"
     incorrect: "Incorrect security code"
     expired: "The security code has expired"
   sign_in_form:
