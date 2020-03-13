@@ -10,7 +10,7 @@ module Users
       end
 
       if resource.two_factor_locked?
-        resource.errors.add(:direct_otp, I18n.t(".otp_code.incorrect"))
+        resource.errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
         return render :show
       end
 
@@ -59,7 +59,7 @@ module Users
 
     def after_two_factor_fail_for(resource)
       resource.fail_two_factor_authentication!
-      resource.errors.add(:direct_otp, I18n.t(".otp_code.incorrect"))
+      resource.errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
       render :show
     end
 
