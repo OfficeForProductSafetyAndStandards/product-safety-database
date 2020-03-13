@@ -37,7 +37,7 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
       before { sign_in(user) }
 
       shared_examples_for "code not accepted" do |error|
-        it "does not leave the two factor form page" do 
+        it "does not leave the two factor form page" do
           submit_2fa
           expect(response).to render_template(:show)
         end

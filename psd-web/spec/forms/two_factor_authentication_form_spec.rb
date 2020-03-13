@@ -18,6 +18,18 @@ RSpec.describe TwoFactorAuthenticationForm do
       end
     end
 
+    context "when the two factor code contains letters" do
+      let(:otp_code) { "123a5" }
+
+      it "is not valid" do
+        expect(form).to be_invalid
+      end
+
+      it "populates an error message" do
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["The code must be 5 numbers"])
+      end
+    end
+
     context "when the two factor code has less digits than the required ones" do
       let(:otp_code) { rand.to_s[2..Devise.direct_otp_length] }
 
@@ -27,6 +39,19 @@ RSpec.describe TwoFactorAuthenticationForm do
 
       it "populates an error message" do
         expect(form.errors.full_messages_for(:otp_code)).to eq(["You haven’t entered enough numbers"])
+      end
+    end
+
+
+    context "when the two factor code has less digits than the required and contains letters" do
+      let(:otp_code) { "1a" }
+
+      it "is not valid" do
+        expect(form).to be_invalid
+      end
+
+      it "populates an error message" do
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["The code must be 5 numbers"])
       end
     end
 
