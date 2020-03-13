@@ -4,8 +4,10 @@ module Users
                        :has_viewed_introduction
 
     def update
-      if two_factor_authentication_form.invalid?
-        resource.errors.merge!(two_factor_authentication_form.errors)
+      form = TwoFactorAuthenticationForm.new(otp_code: otp_code_param)
+
+      if form.invalid?
+        resource.errors.merge!(form.errors)
         return render :show
       end
 
@@ -35,10 +37,6 @@ module Users
     end
 
   private
-
-    def two_factor_authentication_form
-      @two_factor_authentication_form ||= TwoFactorAuthenticationForm.new(otp_code: otp_code_param)
-    end
 
     def otp_code_param
       @otp_code_param ||= resource_params.permit(:otp_code)[:otp_code]
