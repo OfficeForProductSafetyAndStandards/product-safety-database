@@ -1,4 +1,5 @@
-- content_for :page_title, "Add activity"
+- page_title = "Add comment"
+- content_for :page_title, title_for(@activity, page_title)
 - content_for :after_header do
   .govuk-grid-row
     .govuk-grid-column-one-third
