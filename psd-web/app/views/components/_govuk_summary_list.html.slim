@@ -16,5 +16,6 @@ dl class=[dl_wrapper_class]
           - row[:actions].each do |action|
             a.govuk-link href="#{action[:href]}" class="#{action[:classes]}"
               = action[:text]
+              = " "
               span.govuk-visually-hidden
                 = action[:visually_hidden_text]
