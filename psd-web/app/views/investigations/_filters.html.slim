@@ -7,6 +7,8 @@
                 label: { text: "Keywords", classes: "govuk-label--s" }
         = form.submit "Search", name: nil, class: "search-box--submit"
 
+      = govukSkipLink(text: "Skip to results", href: "#results")
+
       hr.govuk-section-break.govuk-section-break--m.govuk-section-break--visible
       = render "form_components/govuk_checkboxes", form: form, key: :assigned_to,
         classes: "govuk-checkboxes--small",
