@@ -6,8 +6,8 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
+      span.govuk-caption-l = @investigation.pretty_description
       h1.govuk-heading-l
-        span.govuk-caption-l = @investigation.pretty_description
         | Record email
       = render "form_components/govuk_input", key: :overview, form: form, classes: "govuk-!-width-two-thirds",
               label: { text: "Summary", classes: "govuk-label--m" },

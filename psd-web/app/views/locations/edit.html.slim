@@ -6,8 +6,8 @@
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
+      span.govuk-caption-l
+        = @business.pretty_description
       h1.govuk-heading-l
-        span.govuk-caption-l
-          = @business.pretty_description
         | Edit location
       = render "form", form: form

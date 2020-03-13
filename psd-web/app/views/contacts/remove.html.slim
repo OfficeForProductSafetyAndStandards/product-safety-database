@@ -3,9 +3,9 @@
   = link_to "Back to business", @business, class: "govuk-back-link"
 .govuk-grid-row class="govuk-!-padding-bottom-6"
   .govuk-grid-column-two-thirds
+    span.govuk-caption-l
+      = "Business: #{@business.trading_name}"
     h1.govuk-heading-l
-      span.govuk-caption-l
-        = "Business: #{@business.trading_name}"
       | Remove contact
     table.govuk-table
       tbody.govuk-table__body
