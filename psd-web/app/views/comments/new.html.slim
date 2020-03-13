@@ -14,7 +14,7 @@
       span.govuk-caption-l = @investigation.pretty_description
       = page_title
 
-    = form_with(model: @investigation.activities.new, \
+    = form_with(model: @activity, \
       url: investigation_activity_comment_path(@investigation)) do |form|
       = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 }, id: "body",
               label: { text: "Comment text", classes: "govuk-visually-hidden" }
