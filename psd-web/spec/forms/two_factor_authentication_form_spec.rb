@@ -19,7 +19,7 @@ RSpec.describe TwoFactorAuthenticationForm do
     end
 
     context "when the two factor code has less digits than the required ones" do
-      let(:otp_code) { rand.to_s[2..Devise.otp_length] }
+      let(:otp_code) { rand.to_s[2..Devise.direct_otp_length] }
 
       it "is not valid" do
         expect(form).to be_invalid
@@ -31,7 +31,7 @@ RSpec.describe TwoFactorAuthenticationForm do
     end
 
     context "when the two factor code has more digits than the required ones" do
-      let(:otp_code) { rand.to_s[2..Devise.otp_length + 2] }
+      let(:otp_code) { rand.to_s[2..Devise.direct_otp_length + 2] }
 
       it "is not valid" do
         expect(form).to be_invalid
@@ -43,7 +43,7 @@ RSpec.describe TwoFactorAuthenticationForm do
     end
 
     context "when the two factor code has the right number of digits" do
-      let(:otp_code) { rand.to_s[2..Devise.otp_length + 1] }
+      let(:otp_code) { rand.to_s[2..Devise.direct_otp_length + 1] }
 
       it "is valid" do
         expect(form).to be_valid
