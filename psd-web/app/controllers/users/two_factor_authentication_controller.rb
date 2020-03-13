@@ -3,6 +3,13 @@ module Users
     skip_before_action :has_accepted_declaration,
                        :has_viewed_introduction
 
+    def show
+      # Supress unwanted Devise alerts.
+      # eg: when you try to navigate back to sign-in it alerts about you already being signed in.
+      # We only want to show submission errors.
+      flash.delete(:alert)
+    end
+
     def update
       form = TwoFactorAuthenticationForm.new(otp_code: otp_code_param)
 
