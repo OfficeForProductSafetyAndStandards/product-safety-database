@@ -21,7 +21,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   context "when login as an OPSS user" do
     before { sign_in as_user: create(:user, :activated, :opss_user) }
 
-    scenario "able to report an enquiry"do
+    scenario "able to report an enquiry" do
       click_link "Open a new case"
       choose "type_enquiry"
       click_button "Continue"
