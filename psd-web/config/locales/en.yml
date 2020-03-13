@@ -159,7 +159,7 @@ en:
   enter_email_address: "Enter your email address"
   otp_code:
     blank: "Enter the security code"
-    too_short: "You haven't entered enough numbers"
+    too_short: "You haven’t entered enough numbers"
     too_long: "You've entered too many numbers"
     incorrect: "Incorrect security code"
     expired: "The security code has expired"
