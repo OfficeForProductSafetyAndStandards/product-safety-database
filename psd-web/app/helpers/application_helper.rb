@@ -1,4 +1,11 @@
 module ApplicationHelper
+  def error_summary(errors)
+    return unless errors.any?
+
+    error_list = errors.map { |attribute, error| error ? { text: error, href: "##{attribute}" } : nil }.compact
+    govukErrorSummary(titleText: "There is a problem", errorList: error_list)
+  end
+
   def govuk_hr
     tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
   end
