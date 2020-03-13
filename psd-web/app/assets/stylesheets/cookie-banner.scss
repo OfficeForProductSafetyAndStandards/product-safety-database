@@ -1,4 +1,5 @@
 $govuk-cookie-banner-background: #d5e8f3;
+$cookie-banner-link-colour: #005EA5;
 
 .cookie-banner {
   @include govuk-font($size: 16);
@@ -9,4 +10,10 @@ $govuk-cookie-banner-background: #d5e8f3;
 .cookie-banner__message {
   margin-top: 0;
   margin-bottom: 0;
+}
+
+// Make the links a slightly darker blue for increased contrast
+// against the light-blue background.
+.cookie-banner .govuk-link {
+  color: $cookie-banner-link-colour;
 }
