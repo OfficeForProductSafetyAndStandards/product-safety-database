@@ -11,6 +11,9 @@ module Users
         return render :show
       end
 
+      # "resource" is a Devise abstraction over "User" to decouple Devise from
+      # how the users are actually called in the application.
+      # https://stackoverflow.com/a/48697776/1115009
       if resource.two_factor_locked?
         resource.errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
         return render :show
