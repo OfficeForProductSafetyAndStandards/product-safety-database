@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.describe TwoFactorAuthenticationForm do
   subject(:form) { described_class.new(otp_code: otp_code) }
 
-  let(:otp_code) { "test@example.com" }
-
   describe "#valid?" do
     before { form.validate }
 
