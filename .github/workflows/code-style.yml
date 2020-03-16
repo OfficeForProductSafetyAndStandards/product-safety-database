@@ -43,3 +43,30 @@ jobs:
     - name: Run Slim Lint
       working-directory: psd-web
       run: bundle exec slim-lint app
+  front_end:
+    name: "Javascript"
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Nodejs
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.19.x
+    - uses: actions/cache@v1
+      with:
+        path: psd-web/node_modules
+        key: ${{ runner.OS }}-build-${{ hashFiles('psd-web/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.OS }}-build-${{ env.cache-name }}-
+          ${{ runner.OS }}-build-
+          ${{ runner.OS }}-
+    - name: Install npm dependencies
+      run: |
+        cd psd-web
+        npm install yarn
+        yarn install
+    - name: Check javascript for code style
+      run: |
+        cd psd-web
+        yarn standard
