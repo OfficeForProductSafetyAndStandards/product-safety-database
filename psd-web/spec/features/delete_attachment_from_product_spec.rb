@@ -5,7 +5,7 @@ RSpec.feature "Deleting an attachment from a product", :with_stubbed_elasticsear
   let(:product) { create(:product, :with_document) }
   let(:document) { product.documents.first }
 
-  before { sign_in(as_user: user) }
+  before { sign_in(user) }
 
   scenario "deletes the attachment" do
     visit "/products/#{product.id}"
