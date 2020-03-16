@@ -12,21 +12,13 @@
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <%= form_with scope: :document, url: wizard_path, method: :put, local: true, multipart: true do |form| %>
-
-      <% if @errors.any?
-        errorMessage = {
-          text: @errors.full_messages.to_sentence
-        }
-        end
-      %>
-
       <%= govukFileUpload(
         id: "base",
         name: "document[file][file]",
         label: {
           text: "Upload a file"
         },
-        errorMessage: errorMessage
+        errorMessage: (@errors.any? ? { text: @errors.full_messages.to_sentence } : nil)
       ) %>
 
       <%= govukButton(text: "Upload") %>
