@@ -13,6 +13,7 @@ env:
   KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
   KEYCLOAK_REDIRECT_URI: http://example.com/users/auth/openid_connect/callback
   PSD_HOST: example.com
+  TWO_FACTOR_AUTHENTICATION_ENABLED: false
 
 jobs:
   ruby:

@@ -317,6 +317,20 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # Devise two_factor_authentication gem
+  if ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"]
+    config.max_login_attempts = 10  # Maximum second factor attempts count.
+    config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
+    config.direct_otp_length = 5  # Direct OTP code length
+    config.remember_otp_session_for_seconds = 7.days  # Time before browser has to perform 2fA again. Default is 0.
+    config.second_factor_resource_id = 'id' # Field or method name used to set value for 2fA remember cookie
+    config.delete_cookie_on_logout = false # Delete cookie when user signs out, to force 2fA again on login
+    # Only needed for TOTP:
+    # config.otp_secret_encryption_key = ENV.fetch("OTP_SECRET_ENCRYPTION_KEY")
+    # config.allowed_otp_drift_seconds = 30  # Allowed TOTP time drift between client and server.
+    # config.otp_length = 5  # TOTP code length
+  end
 end
 
 DeviseController.include NoSecondaryNav

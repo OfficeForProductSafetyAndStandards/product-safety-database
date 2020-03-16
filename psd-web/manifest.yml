@@ -26,6 +26,7 @@ applications:
     - psd-sentry-env
     - psd-session
     - psd-sidekiq-env
+    - psd-two-factor-auth-env
     - psd-web-scout-env
     - antivirus-auth-env
     - keycloak-database

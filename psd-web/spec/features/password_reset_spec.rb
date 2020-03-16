@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed_mailer, :with_2fa, type: :feature do
   let(:user)                              { create(:user) }
   let!(:reset_token)                      { stubbed_devise_generated_token }
   let(:edit_user_password_url_with_token) { "http://www.example.com/password/edit?reset_password_token=#{reset_token.first}" }
@@ -38,7 +38,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   context "with a valid token" do
-    scenario "entering a valid password resets your password" do
+    scenario "entering a valid password resets your password", :with_stubbed_notify do
       request_password_reset
 
       visit edit_user_password_url_with_token
@@ -54,6 +54,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       fill_in "Email address", with: user.email
       fill_in "Password", with: "a_new_password"
+      click_on "Continue"
+
+      fill_in "Enter security code", with: user.reload.direct_otp
       click_on "Continue"
 
       expect(page).to have_css("h1", text: "Declaration")

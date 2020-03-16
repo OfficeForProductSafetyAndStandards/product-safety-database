@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :has_accepted_declaration
   skip_before_action :has_viewed_introduction
+  skip_before_action :handle_two_factor_authentication
 
   def complete_registration
     @user = User.find(params[:id])

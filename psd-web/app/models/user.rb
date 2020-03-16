@@ -1,11 +1,15 @@
 class User < ApplicationRecord
   INVITATION_EXPIRATION_DAYS = 14
   COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
+  TWO_FACTOR_LOCK_TIME = 1.hour
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
-  devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
+  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
+
   belongs_to :organisation
+
+  has_one_time_password(encrypted: true)
 
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations
@@ -181,9 +185,53 @@ class User < ApplicationRecord
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
-private
+  def two_factor_authentication_code_expired?
+    return false if !direct_otp_sent_at
+
+    (direct_otp_sent_at + User.direct_otp_valid_for) < Time.current
+  end
+
+  def two_factor_locked?
+    second_factor_attempts_locked_at && !two_factor_lock_expired?
+  end
+
+  def fail_two_factor_authentication!
+    return if max_login_attempts?
+
+    self.increment!(:second_factor_attempts_count, 1)
+    lock_two_factor! if max_login_attempts?
+  end
+
+  def pass_two_factor_authentication!
+    unlock_two_factor! if max_login_attempts?
+    update_column(:second_factor_attempts_count, 0)
+  end
 
   # BEGIN: place devise overriden method calls bellow
+  def send_two_factor_authentication_code(code)
+    SendTwoFactorAuthenticationJob.perform_later(self, code)
+  end
+
+  def need_two_factor_authentication?(_request)
+    Rails.configuration.two_factor_authentication_enabled
+  end
+
+private
+
+  def lock_two_factor!
+    self.update_column(:second_factor_attempts_locked_at, Time.current)
+  end
+
+  def unlock_two_factor!
+    self.update_column(:second_factor_attempts_locked_at, nil)
+  end
+
+  def two_factor_lock_expired?
+    return true if second_factor_attempts_locked_at.nil?
+
+    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
+  end
+
   def send_reset_password_instructions_notification(token)
     NotifyMailer.reset_password_instructions(self, token).deliver_later
   end

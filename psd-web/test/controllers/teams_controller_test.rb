@@ -33,7 +33,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   test "Team pages don’t include invite links for non-team-admins" do
     sign_out(:user)
-    sign_in(:southampton_bob)
+    sign_in users(:southampton_bob)
 
     get team_url(teams(:southampton))
     assert_not_includes(response.body, "Invite a team member")

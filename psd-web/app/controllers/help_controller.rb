@@ -1,5 +1,9 @@
 class HelpController < ApplicationController
-  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, :has_viewed_introduction
+  skip_before_action :authenticate_user!,
+                     :authorize_user,
+                     :has_accepted_declaration,
+                     :has_viewed_introduction,
+                     :handle_two_factor_authentication
 
   def terms_and_conditions; end
 

@@ -1,19 +1,59 @@
 require "rails_helper"
 
-RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
 
-  it "allows user to sign in" do
+  def fill_in_credentials
     visit "/sign-in"
 
     fill_in "Email address", with: user.email
     fill_in "Password", with: "2538fhdkvuULE36f"
     click_on "Continue"
+  end
 
-    expect(page).to have_link("Sign out", href: destroy_user_session_path)
+  context "when succeeeding signin in", :with_2fa do
+    context "when in two factor authentication page" do
+      it "allows user to sign in with correct two factor authentication code" do
+        fill_in_credentials
+
+        expect(page).to have_css("h1", text: "Check your phone")
+
+        fill_in "Enter security code", with: user.reload.direct_otp
+        click_on "Continue"
+
+        expect(page).to have_css("h2", text: "Your cases")
+        expect(page).to have_link("Sign out", href: destroy_user_session_path)
+      end
+
+      it "allows user to sign out and be sent to the homepage" do
+        fill_in_credentials
+
+        expect(page).to have_css("h1", text: "Check your phone")
+
+        within(".psd-header__secondary-navigation") do
+          click_link("Sign out")
+        end
+
+        expect(page).to have_css("h1", text: "Product safety database")
+        expect(page).to have_link("Sign in to your account")
+      end
+
+      it "don't allow the user to sign in with a wrong two factor authentication code" do
+        fill_in_credentials
+
+        expect(page).to have_css("h1", text: "Check your phone")
+
+        fill_in "Enter security code", with: user.reload.direct_otp.reverse
+        click_on "Continue"
+
+        expect(page).to have_css("h1", text: "Check your phone")
+        expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+        expect(page).to have_css("#otp_code-error", text: "Error: Incorrect security code")
+      end
+    end
   end
 
   context "when signed in" do
