@@ -4,10 +4,7 @@ module Users
                        :has_viewed_introduction
 
     def show
-      # Supress unwanted Devise alerts.
-      # eg: when you try to navigate back to sign-in it alerts about you already being signed in.
-      # We only want to show submission errors.
-      flash.delete(:alert)
+      suppress_devise_session_alert
     end
 
     def update
@@ -50,6 +47,15 @@ module Users
 
     def otp_code_param
       @otp_code_param ||= resource_params.permit(:otp_code)[:otp_code]
+    end
+
+    # Suppress unwanted Devise alert.
+    # eg: when you try to navigate back to sign-in it alerts about you already being signed in.
+    # We only want to show submission errors.
+    def suppress_devise_session_alert
+      if flash[:alert] == I18n.t(".devise.failure.already_authenticated")
+        flash.delete(:alert)
+      end
     end
 
     # BEGIN: Houdini/two_factor_authentication Devise extension overriden
