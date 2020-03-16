@@ -1,23 +1,23 @@
-import $ from 'jquery';
+import $ from 'jquery'
 
 $(document).ready(() => {
-  const attachmentFileInput = $('input.govuk-file-upload');
-  const attachmentDescription = document.getElementById('attachment-description');
-  const currentAttachmentDetails = document.getElementById('current-attachment-details');
+  const attachmentFileInput = $('input.govuk-file-upload')
+  const attachmentDescription = document.getElementById('attachment-description')
+  const currentAttachmentDetails = document.getElementById('current-attachment-details')
 
-  attachmentFileInput.change(function() {
+  attachmentFileInput.change(function () {
     if (this.value) {
-      $(attachmentDescription).show();
+      $(attachmentDescription).show()
     } else {
-      $(attachmentDescription).hide();
+      $(attachmentDescription).hide()
     }
-  });
+  })
 
   if (attachmentDescription) {
     if (currentAttachmentDetails) {
-      $(attachmentDescription).show();
+      $(attachmentDescription).show()
     } else {
-      $(attachmentDescription).hide();
+      $(attachmentDescription).hide()
     }
   }
-});
+})
