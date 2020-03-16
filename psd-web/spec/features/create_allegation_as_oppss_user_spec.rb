@@ -52,7 +52,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       click_link "Products (0)"
       click_link "Add product"
 
-      expect(page).to have_css(".govuk-heading-m",text: "Add product")
+      expect(page).to have_css(".govuk-heading-m", text: "Add product")
 
       enter_product_details(product_details)
 
