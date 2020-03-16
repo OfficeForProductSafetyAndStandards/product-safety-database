@@ -42,13 +42,20 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
 
       enter_contact_details(contact_details)
+
+      expect(page).to have_css(".govuk-label--m", text: "What is being alleged?")
+
       enter_allegation_details(allegation_details)
 
       expect_confirmation_banner("Allegation was successfully created")
 
       click_link "Products (0)"
       click_link "Add product"
+
+      expect(page).to have_css(".govuk-heading-m",text: "Add product")
+
       enter_product_details(product_details)
+
       expect_confirmation_banner("Product was successfully created.")
 
       click_link "Products (1)"
@@ -58,7 +65,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   end
 
   def enter_allegation_details(description:, hazard_type:, category:)
-    expect(page).to have_css("h1", text: "New allegation")
     fill_in "allegation_description", with: description
     select category, from: "allegation_product_category"
     select hazard_type, from: "allegation_hazard_type"

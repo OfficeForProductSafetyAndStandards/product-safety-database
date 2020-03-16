@@ -28,27 +28,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   end
 
   context "with valid input data" do
-    scenario "saves the test result" do
-      expect_to_be_on_new_activity_page
-
-      within_fieldset "New activity" do
-        page.choose "Record test result"
-      end
-      click_button "Continue"
-
-      expect_to_be_on_record_test_result_page
-
-      fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
-
-      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
-
-      click_button "Continue"
-
-      expect_confirmation_banner("Test result was successfully recorded.")
-    end
-
-
-    scenario "to able to see edit form" do
+    scenario "edit and saves the test result" do
       expect_to_be_on_new_activity_page
 
       within_fieldset "New activity" do
@@ -64,7 +44,17 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
       click_on "Edit details"
 
+      expect_to_be_on_record_test_result_page
+
       expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
+
+      click_button "Continue"
+
+      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+
+      click_button "Continue"
+
+      expect_confirmation_banner("Test result was successfully recorded.")
     end
   end
 
