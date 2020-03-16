@@ -15,7 +15,7 @@
 
       <% if @errors.any?
         errorMessage = {
-          text: @errors.full_messages.join(", ")
+          text: @errors.full_messages.to_sentence
         }
         end
       %>
