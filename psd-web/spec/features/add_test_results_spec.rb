@@ -55,6 +55,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       click_button "Continue"
 
       expect_confirmation_banner("Test result was successfully recorded.")
+      expect_page_to_have_h1("Overview")
     end
   end
 
