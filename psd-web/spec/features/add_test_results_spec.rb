@@ -16,6 +16,8 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     scenario "shows error messages" do
       expect_to_be_on_new_activity_page
       
+      expect_to_be_on_new_activity_page
+      
       choose "activity_type_testing_result"
       click_button "Continue"
 
