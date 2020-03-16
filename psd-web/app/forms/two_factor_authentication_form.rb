@@ -12,11 +12,12 @@ class TwoFactorAuthenticationForm
             numericality: { only_integer: true, message: I18n.t(".otp_code.numericality") },
             allow_blank: true
   validates :otp_code,
-            length: { maximum: Devise.direct_otp_length, too_long: I18n.t(".otp_code.too_long") },
-            allow_blank: true,
-            if: -> { NUMERICALITY_REGEX === otp_code }
-  validates :otp_code,
-            length: { minimum: Devise.direct_otp_length, too_short: I18n.t(".otp_code.too_short") },
+            length: { 
+              maximum: Devise.direct_otp_length, 
+              too_long: I18n.t(".otp_code.too_long"),
+              minimum: Devise.direct_otp_length,
+              too_short: I18n.t(".otp_code.too_short")
+            },
             allow_blank: true,
             if: -> { NUMERICALITY_REGEX === otp_code }
 end
