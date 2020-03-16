@@ -1,4 +1,5 @@
-- content_for :page_title, "Add activity"
+- page_title = "Add comment"
+- content_for :page_title, title_for(@comment, page_title)
 - content_for :after_header do
   .govuk-grid-row
     .govuk-grid-column-one-third
@@ -7,11 +8,12 @@
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds
-    h1.govuk-heading-l
-      span.govuk-caption-l = @investigation.pretty_description
-      | Add comment
-    = form_with(model: @investigation.activities.new, \
+    = error_summary(@comment.errors)
+
+    span.govuk-caption-l = @investigation.pretty_description
+
+    = form_with(model: @comment, \
       url: investigation_activity_comment_path(@investigation)) do |form|
-      = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 },
-              label: { text: "Comment text", classes: "govuk-visually-hidden" }
+      = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 }, id: "body",
+              label: { text: page_title, classes: "govuk-label--l", isPageHeading: true }
       = form.submit "Continue", class: "govuk-button"

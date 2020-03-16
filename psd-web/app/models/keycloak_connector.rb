@@ -33,7 +33,7 @@ class KeycloakConnector < ApplicationRecord
       user = User.find_by(email: row[0])
       next unless user
 
-      user.keycloak_created_at = Time.zone.at(row[4])
+      user.keycloak_created_at = Time.zone.at(row[4].to_f / 1000)
 
       user.password_salt = row[5]
       user.encrypted_password = row[6] if row[6] # don't copy over nil password

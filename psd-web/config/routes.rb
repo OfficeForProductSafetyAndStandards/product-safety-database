@@ -188,5 +188,7 @@ Rails.application.routes.draw do
   end
   # Handle old post-login redirect URIs from previous implementation which are still bookmarked
   match "/sessions/signin", to: redirect("/"), via: %i[get post]
+
+  get "/health/all", to: "health#show"
 end
 # rubocop:enable Metrics/BlockLength
