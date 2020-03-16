@@ -1,4 +1,17 @@
 module ApplicationHelper
+  def title_for(any_active_record, title)
+    return content_for(:page_title, title) unless any_active_record.errors.any?
+
+    content_for(:page_title, "Error: #{title}")
+  end
+
+  def error_summary(errors)
+    return unless errors.any?
+
+    error_list = errors.map { |attribute, error| error ? { text: error, href: "##{attribute}" } : nil }.compact
+    govukErrorSummary(titleText: "There is a problem", errorList: error_list)
+  end
+
   def govuk_hr
     tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
   end
