@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User completes registration", type: :request, with_stubbed_keycloak_config: true do
+RSpec.describe "User completes registration", type: :request, with_stubbed_keycloak_config: true, with_stubbed_notify: true do
   let(:user) { create(:user, :invited) }
 
   describe "viewing the form" do
@@ -101,8 +101,8 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(user).not_to be_account_activated
       end
 
-      it "redirects to the root path" do
-        expect(response).to redirect_to(root_path)
+      it "redirects to the two factor authentication path" do
+        expect(response).to redirect_to(user_two_factor_authentication_path)
       end
 
       it "updates the user name" do
