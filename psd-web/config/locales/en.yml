@@ -175,3 +175,7 @@ en:
   sign_user_in:
     email:
       wrong_email_or_password: "Enter correct email address and password"
+  support:
+    array:
+      two_words_connector: " and "
+      last_word_connector: " and "

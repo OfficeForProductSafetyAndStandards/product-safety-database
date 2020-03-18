@@ -1,8 +1,7 @@
 module ApplicationHelper
-  def title_for(any_active_record, title)
-    return content_for(:page_title, title) unless any_active_record.errors.any?
-
-    content_for(:page_title, "Error: #{title}")
+  def page_title(title, errors: false)
+    title = "Error: #{title}" if errors
+    content_for(:page_title, title)
   end
 
   def error_summary(errors)

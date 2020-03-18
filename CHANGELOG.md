@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-03-17
+- Only enquiries will now display Received by and Received date in the source summary list.
+
 ## 2020-03-09
 - Fixed City or town not being displayed when adding an address to a business.
 

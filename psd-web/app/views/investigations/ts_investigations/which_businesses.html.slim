@@ -1,6 +1,6 @@
 - page_heading = "Supply chain information"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @investigation.errors.any?
 
 = form_with model: @investigation, scope: :businesses, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row#which-businesses-page

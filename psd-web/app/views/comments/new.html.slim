@@ -1,5 +1,5 @@
 - page_title = "Add comment"
-- content_for :page_title, title_for(@comment, page_title)
+- page_title page_title, errors: @comment.errors.any?
 - content_for :after_header do
   .govuk-grid-row
     .govuk-grid-column-one-third

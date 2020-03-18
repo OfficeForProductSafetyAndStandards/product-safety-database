@@ -1,5 +1,5 @@
 - page_heading = "Overview"
-- content_for :page_title, "#{page_heading} - #{@investigation.pretty_id}"
+= page_title "#{page_heading} - #{@investigation.pretty_id}"
 - products_count = @investigation.products.count
 
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]

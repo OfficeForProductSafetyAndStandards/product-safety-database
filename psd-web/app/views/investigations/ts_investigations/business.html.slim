@@ -1,6 +1,6 @@
 - page_heading = "#{@business_type.capitalize} details"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @business.errors.any?
 
 = form_with model: @business, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
