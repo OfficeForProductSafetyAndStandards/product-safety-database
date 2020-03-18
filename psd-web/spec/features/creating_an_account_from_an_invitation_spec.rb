@@ -1,7 +1,7 @@
 require "rails_helper"
 require "support/feature_helpers"
 
-RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, :with_stubbed_notify do
   let(:invited_user) { create(:user, :invited) }
   let(:existing_user) { create(:user) }
 
@@ -37,6 +37,11 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
 
     click_button "Continue"
+
+    expect_to_be_on_two_factor_authentication_page
+
+    fill_in "Enter security code", with: invited_user.reload.direct_otp
+    click_on "Continue"
 
     expect_to_be_on_declaration_page
     expect_to_be_signed_in
