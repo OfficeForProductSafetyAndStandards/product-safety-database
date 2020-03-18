@@ -56,7 +56,7 @@ class Investigations::ProductsController < ApplicationController
 private
 
   def redirect_to_investigation_products_tab(flash)
-    redirect_to investigation_path(@investigation, anchor: "products"), flash: flash
+    redirect_to investigation_products_path(@investigation), flash: flash
   end
 
   def set_investigation
