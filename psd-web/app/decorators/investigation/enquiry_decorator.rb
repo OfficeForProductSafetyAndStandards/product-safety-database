@@ -7,7 +7,7 @@ class Investigation < ApplicationRecord
       date_received?
     end
 
-    def should_display_receive_by?
+    def should_display_received_by?
       received_type?
     end
   end
