@@ -28,7 +28,7 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    assert_redirected_to investigation_path(@investigation, anchor: "products")
+    assert_redirected_to investigation_products_path(@investigation)
   end
 
   test "should not create product if name is missing" do
@@ -51,7 +51,7 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_difference "InvestigationProduct.count" do
       put link_investigation_product_url(@investigation, @product)
     end
-    assert_redirected_to investigation_path(@investigation, anchor: "products")
+    assert_redirected_to investigation_products_path(@investigation)
   end
 
   test "should unlink product and investigation" do
@@ -60,6 +60,6 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
       delete unlink_investigation_product_url(@investigation, @product)
     end
 
-    assert_redirected_to investigation_path(@investigation, anchor: "products")
+    assert_redirected_to investigation_products_path(@investigation)
   end
 end
