@@ -150,3 +150,7 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  support:
+    array:
+      two_words_connector: " and "
+      last_word_connector: " and "
