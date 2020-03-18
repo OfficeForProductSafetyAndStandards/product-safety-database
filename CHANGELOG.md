@@ -1,11 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
-- Fix bug when updating cases
+## 2020-03-17
+- Only enquiries will now display Received by and Received date in the source summary list.
 
-### Next release checklist
-- [ ] Add `HEALTH_USERNAME` and `HEALTH_PASSWORD` environment variables to the antivirus server
+## 2020-03-09
+- Fixed City or town not being displayed when adding an address to a business.
+
+## 2020-03-06
+- Fixed an error which was displayed when deleting an attachment from a product.
 
 ## 2019-08-05
 ### Product safety database

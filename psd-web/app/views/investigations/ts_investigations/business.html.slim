@@ -1,13 +1,13 @@
 - page_heading = "#{@business_type.capitalize} details"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @business.errors.any?
 
 = form_with model: @business, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
+      span.govuk-caption-l Report an unsafe or non-compliant product
       h1.govuk-heading-l
-        span.govuk-caption-l Report an unsafe or non-compliant product
         = page_heading
 
       = form.hidden_field :business_type, value: @business_type

@@ -1,10 +1,11 @@
-- content_for :page_title, "Products"
+= page_title "Products"
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds
+    - if params[:q].present?
+      span.govuk-caption-l Product search results
     h1.govuk-heading-l
       - if params[:q].present?
-        span.govuk-caption-xl Product search results
         = params[:q]
         span.govuk-caption-m = "#{@products.count} #{'result'.pluralize(@products.count)}"
       - else

@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_120801) do
+ActiveRecord::Schema.define(version: 2020_03_10_170356) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
@@ -188,7 +189,7 @@ ActiveRecord::Schema.define(version: 2020_02_12_120801) do
     t.index ["business_id"], name: "index_locations_on_business_id"
   end
 
-  create_table "organisations", id: :uuid, default: nil, force: :cascade do |t|
+  create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
     t.string "path"
@@ -227,7 +228,7 @@ ActiveRecord::Schema.define(version: 2020_02_12_120801) do
     t.index ["user_id"], name: "index_sources_on_user_id"
   end
 
-  create_table "teams", id: :uuid, default: nil, force: :cascade do |t|
+  create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
     t.uuid "organisation_id"
@@ -271,20 +272,45 @@ ActiveRecord::Schema.define(version: 2020_02_12_120801) do
     t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
-  create_table "users", id: :uuid, default: nil, force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "account_activated", default: false
     t.datetime "created_at", null: false
+    t.string "credential_type"
+    t.datetime "current_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.string "direct_otp"
+    t.datetime "direct_otp_sent_at"
     t.string "email"
+    t.string "encrypted_otp_secret_key"
+    t.string "encrypted_otp_secret_key_iv"
+    t.string "encrypted_otp_secret_key_salt"
+    t.string "encrypted_password", default: "", null: false
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
+    t.integer "hash_iterations", default: 27500
+    t.text "invitation_token"
+    t.datetime "invited_at"
+    t.datetime "keycloak_created_at"
+    t.datetime "last_sign_in_at"
+    t.inet "last_sign_in_ip"
+    t.text "mobile_number"
     t.string "name"
     t.uuid "organisation_id"
+    t.binary "password_salt"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.integer "second_factor_attempts_count", default: 0
+    t.datetime "second_factor_attempts_locked_at"
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
     t.index ["email"], name: "index_users_on_email"
+    t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "activities", "businesses"

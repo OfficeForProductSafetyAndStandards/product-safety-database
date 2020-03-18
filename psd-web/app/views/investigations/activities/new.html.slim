@@ -1,4 +1,4 @@
-- content_for :page_title, "Add activity"
+= page_title "Add activity", errors: @activity_type_empty.present?
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
 
@@ -9,8 +9,8 @@
       - if error_message
         = render "components/govuk_error_summary", titleText: "There is a problem", errorList: [error_message]
       - header = capture do
+        span.govuk-caption-l = @investigation.pretty_description
         h1.govuk-heading-l
-          span.govuk-caption-l = @investigation.pretty_description
           | New activity
       = render "form_components/govuk_radios", form: form, key: :activity_type,
               errorMessage: error_message,

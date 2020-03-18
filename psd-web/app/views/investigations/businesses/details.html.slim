@@ -1,4 +1,4 @@
-- content_for :page_title, "Add business to case"
+= page_title "Add business to case", errors: @business.errors.any?
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
 = form_with(model: @business, url: wizard_path, method: :put,

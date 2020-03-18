@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: 23cecd7a133b6f26d1924cddf9f39b29330e91a3
-  tag: 0.6.2
+  revision: b44505ea1abf3d5fdaffd722fdd1c24583f414cc
+  tag: 0.6.4
   specs:
-    govuk-design-system-rails (0.6.2)
+    govuk-design-system-rails (0.6.4)
 
 GIT
   remote: https://github.com/randym/axlsx.git
@@ -19,47 +19,47 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (5.2.3)
-      actionpack (= 5.2.3)
+    actioncable (5.2.4.1)
+      actionpack (= 5.2.4.1)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
-    actionmailer (5.2.3)
-      actionpack (= 5.2.3)
-      actionview (= 5.2.3)
-      activejob (= 5.2.3)
+    actionmailer (5.2.4.1)
+      actionpack (= 5.2.4.1)
+      actionview (= 5.2.4.1)
+      activejob (= 5.2.4.1)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 2.0)
-    actionpack (5.2.3)
-      actionview (= 5.2.3)
-      activesupport (= 5.2.3)
-      rack (~> 2.0)
+    actionpack (5.2.4.1)
+      actionview (= 5.2.4.1)
+      activesupport (= 5.2.4.1)
+      rack (~> 2.0, >= 2.0.8)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (5.2.3)
-      activesupport (= 5.2.3)
+    actionview (5.2.4.1)
+      activesupport (= 5.2.4.1)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    activejob (5.2.3)
-      activesupport (= 5.2.3)
+    activejob (5.2.4.1)
+      activesupport (= 5.2.4.1)
       globalid (>= 0.3.6)
-    activemodel (5.2.3)
-      activesupport (= 5.2.3)
+    activemodel (5.2.4.1)
+      activesupport (= 5.2.4.1)
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (5.2.3)
-      activemodel (= 5.2.3)
-      activesupport (= 5.2.3)
+    activerecord (5.2.4.1)
+      activemodel (= 5.2.4.1)
+      activesupport (= 5.2.4.1)
       arel (>= 9.0)
-    activestorage (5.2.3)
-      actionpack (= 5.2.3)
-      activerecord (= 5.2.3)
+    activestorage (5.2.4.1)
+      actionpack (= 5.2.4.1)
+      activerecord (= 5.2.4.1)
       marcel (~> 0.3.1)
-    activesupport (5.2.3)
+    activesupport (5.2.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -73,20 +73,20 @@ GEM
     attr_required (1.0.1)
     awesome_print (1.8.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.270.0)
-    aws-sdk-core (3.89.1)
+    aws-partitions (1.284.0)
+    aws-sdk-core (3.91.1)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.28.0)
+    aws-sdk-kms (1.30.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.60.2)
+    aws-sdk-s3 (1.61.1)
       aws-sdk-core (~> 3, >= 3.83.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
-    aws-sigv4 (1.1.0)
+    aws-sigv4 (1.1.1)
       aws-eventstream (~> 1.0, >= 1.0.2)
     backport (1.1.2)
     bcrypt (3.1.13)
@@ -185,7 +185,7 @@ GEM
     govuk_notify_rails (2.1.2)
       notifications-ruby-client (~> 5.1)
       rails (>= 4.1.0)
-    hashdiff (1.0.0)
+    hashdiff (1.0.1)
     hashie (4.1.0)
     htmlentities (4.3.4)
     http-accept (1.7.0)
@@ -236,7 +236,7 @@ GEM
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.1009)
-    mimemagic (0.3.3)
+    mimemagic (0.3.4)
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
@@ -245,11 +245,10 @@ GEM
     multipart-post (2.1.1)
     netrc (0.11.0)
     nio4r (2.5.2)
-    nokogiri (1.10.8)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
-    okcomputer (1.18.1)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -302,18 +301,18 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rails (5.2.3)
-      actioncable (= 5.2.3)
-      actionmailer (= 5.2.3)
-      actionpack (= 5.2.3)
-      actionview (= 5.2.3)
-      activejob (= 5.2.3)
-      activemodel (= 5.2.3)
-      activerecord (= 5.2.3)
-      activestorage (= 5.2.3)
-      activesupport (= 5.2.3)
+    rails (5.2.4.1)
+      actioncable (= 5.2.4.1)
+      actionmailer (= 5.2.4.1)
+      actionpack (= 5.2.4.1)
+      actionview (= 5.2.4.1)
+      activejob (= 5.2.4.1)
+      activemodel (= 5.2.4.1)
+      activerecord (= 5.2.4.1)
+      activestorage (= 5.2.4.1)
+      activesupport (= 5.2.4.1)
       bundler (>= 1.3.0)
-      railties (= 5.2.3)
+      railties (= 5.2.4.1)
       sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.4)
       actionpack (>= 5.0.1.x)
@@ -324,9 +323,9 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
-    railties (5.2.3)
-      actionpack (= 5.2.3)
-      activesupport (= 5.2.3)
+    railties (5.2.4.1)
+      actionpack (= 5.2.4.1)
+      activesupport (= 5.2.4.1)
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
@@ -370,15 +369,15 @@ GEM
     roo (2.8.3)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
-    rspec-core (3.9.0)
-      rspec-support (~> 3.9.0)
+    rspec-core (3.9.1)
+      rspec-support (~> 3.9.1)
     rspec-expectations (3.9.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-mocks (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
-    rspec-rails (3.9.0)
+    rspec-rails (3.9.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
@@ -395,7 +394,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    rubocop-govuk (3.0.0)
+    rubocop-govuk (3.3.1)
       rubocop (= 0.80.1)
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)
@@ -426,7 +425,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scout_apm (2.6.6)
+    scout_apm (2.6.7)
       parser
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
@@ -448,11 +447,11 @@ GEM
     simplecov (0.18.5)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
-    simplecov-console (0.6.0)
+    simplecov-console (0.7.2)
       ansi
       simplecov
       terminal-table
-    simplecov-html (0.12.1)
+    simplecov-html (0.12.2)
     slim (4.0.1)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -460,8 +459,8 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 5.0)
-    slim_lint (0.19.0)
-      rubocop (>= 0.77.0)
+    slim_lint (0.20.0)
+      rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
     solargraph (0.37.2)
       backport (~> 1.1)
@@ -517,7 +516,7 @@ GEM
     webfinger (1.1.0)
       activesupport
       httpclient (>= 2.4)
-    webmock (3.8.2)
+    webmock (3.8.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -540,7 +539,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  aws-sdk-s3 (= 1.60.2)
+  aws-sdk-s3 (= 1.61.1)
   axlsx!
   brakeman
   byebug
@@ -569,7 +568,6 @@ DEPENDENCIES
   lograge (= 0.11.2)
   m
   mini_magick (= 4.10.1)
-  okcomputer (= 1.18.1)
   omniauth-rails_csrf_protection (~> 0.1)
   omniauth_openid_connect
   pg
@@ -579,7 +577,7 @@ DEPENDENCIES
   puma
   pundit
   rack (~> 2.2.2)
-  rails (= 5.2.3)
+  rails (~> 5.2.3)
   rails-controller-testing
   redcarpet
   redis-rails
@@ -589,7 +587,7 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   rubocop
-  rubocop-govuk (~> 3.0.0)
+  rubocop-govuk (~> 3.3.1)
   rubocop-performance
   rubocop-rspec (~> 1.38)
   ruby-debug-ide
@@ -605,7 +603,7 @@ DEPENDENCIES
   simplecov
   simplecov-console
   slim-rails
-  slim_lint (= 0.19.0)
+  slim_lint (= 0.20.0)
   solargraph
   spring
   spring-commands-rspec
@@ -617,7 +615,7 @@ DEPENDENCIES
   will_paginate (~> 3.3)
 
 RUBY VERSION
-   ruby 2.5.7p206
+   ruby 2.6.5p114
 
 BUNDLED WITH
-   2.0.2
+   2.1.4

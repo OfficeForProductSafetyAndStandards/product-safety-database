@@ -1,11 +1,11 @@
-- content_for :page_title, "Cases"
+= page_title "Cases"
 
 = render 'investigations/heading', answer: @answer
 .govuk-grid-row
   = render 'investigations/filters', search: @search,\
       show_relevancy_radion_option: false, submitted_from: "investigation_listing"
 
-  .govuk-grid-column-three-quarters
+  #results.govuk-grid-column-three-quarters
     - if @investigations.any?
       = render partial: "investigations/table", collection: @investigations, as: :investigation,\
          locals: { sorted_by: query_params[:sort_by] }

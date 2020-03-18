@@ -1,4 +1,4 @@
-- content_for :page_title, "New project"
+= page_title "New project", errors: @investigation.object.errors.any?
 - content_for :after_header do
   = link_to "Back to Cases", investigations_path(previous_search_params), class: "govuk-back-link"
 = form_with(model: @investigation.object, scope: :investigation, url: project_index_path, method: :post) do |form|

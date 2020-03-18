@@ -1,4 +1,4 @@
-- content_for :page_title, "Add contact"
+= page_title "Add contact", errors: @contact.errors.any?
 - content_for :after_header do
   = link_to "Back to business", @business, class: "govuk-back-link"
 
@@ -7,8 +7,8 @@
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
       - heading_html = capture do
+        span.govuk-caption-l = "Business: #{@business.trading_name}"
         h1.govuk-heading-l
-          span.govuk-caption-l = "Business: #{@business.trading_name}"
           | Add contact
       = render "form", form: form, label_classes: "govuk-label--m", legend: { html: heading_html }
       = form.submit "Save", class: "govuk-button"
