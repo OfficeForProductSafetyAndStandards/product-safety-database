@@ -1,4 +1,4 @@
-- content_for :page_title, "Product - #{@product.name}"
+= page_title "Product - #{@product.name}"
 
 - content_for :after_header do
   = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs

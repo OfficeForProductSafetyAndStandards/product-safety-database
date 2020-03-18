@@ -1,6 +1,6 @@
 - page_heading = title
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: model.errors.any?
 
 - scope ||= nil
 = form_with model: model, scope: scope, url: wizard_path, method: :put, local: true do |form|

@@ -1,4 +1,4 @@
-- content_for :page_title, "Declaration"
+= page_title "Declaration", errors: @error_list.include?(:declaration_not_agreed_to)
 
 = form_with(url: declaration_accept_path, local: true) do |form|
   - if @error_list.include?(:declaration_not_agreed_to)

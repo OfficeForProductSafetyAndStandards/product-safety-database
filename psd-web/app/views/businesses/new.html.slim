@@ -1,4 +1,4 @@
-- content_for :page_title, "New business"
+= page_title "New business", errors: @business.errors.any?
 - content_for :after_header do
   = link_to "Back to list", businesses_path, class: "govuk-back-link"
 
