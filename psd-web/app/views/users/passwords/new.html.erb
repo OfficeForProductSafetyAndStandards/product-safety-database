@@ -1,5 +1,5 @@
 <% title = "Reset your password" %>
-<% content_for :page_title, title_for(resource, title) %>
+<% page_title(title, errors: resource.errors.any?) %>
 
 <% content_for :after_header do %>
   <%= govukBackLink(text: "Back", href: new_user_session_path) %>
