@@ -27,16 +27,4 @@ module ApplicationHelper
     sanitized_input = sanitize(text, tags: %w(br))
     rc.render(sanitized_input).html_safe # rubocop:disable Rails/OutputSafety
   end
-
-  # The error prefix is added so that screen readers announce that the page
-  # contains errors as soon as possible.
-  #
-  # See https://design-system.service.gov.uk/components/error-summary/#how-it-works
-  def page_title(heading, error_prefix: false)
-    if error_prefix
-      "Error: #{heading}"
-    else
-      heading
-    end
-  end
 end
