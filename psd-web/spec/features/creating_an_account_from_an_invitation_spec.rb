@@ -14,6 +14,11 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     click_button "Continue"
 
+    expect_to_be_on_two_factor_authentication_page
+
+    fill_in "Enter security code", with: invited_user.reload.direct_otp
+    click_on "Continue"
+
     expect_to_be_on_declaration_page
     expect_to_be_signed_in
   end
@@ -35,6 +40,12 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     expect_to_be_on_declaration_page
     expect_to_be_signed_in
+  end
+
+  def expect_to_be_on_two_factor_authentication_page
+    expect(page).to have_current_path(/^\/two-factor$/)
+
+    expect(page).to have_h1("Check your phone")
   end
 
   def expect_to_be_on_complete_registration_page
