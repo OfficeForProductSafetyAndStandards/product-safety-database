@@ -1,4 +1,4 @@
-- content_for :page_title, "Record email"
+= page_title "Record email", errors: @correspondence.errors.any?
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
 

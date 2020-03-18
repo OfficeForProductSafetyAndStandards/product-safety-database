@@ -1,5 +1,5 @@
 - @parent = @parent.decorate
-- content_for :page_title, "New document"
+= page_title "New document", errors: @file_blob.errors.any?
 - content_for :after_header do
   = link_to "Back to #{@parent.pretty_description}", path_for_model(@parent), class: "govuk-back-link"
 

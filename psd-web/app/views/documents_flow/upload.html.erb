@@ -1,6 +1,6 @@
 <% @parent = @parent.decorate %>
 <% title = "Add attachment" %>
-<% page_title("Add attachment", errors: @errors.any?) %>
+<% page_title title, errors: @errors.any? %>
 <% content_for :after_header do %>
   <%= link_to "Back to #{@parent.pretty_description}", path_for_model(@parent), class: "govuk-back-link" %>
 <% end %>

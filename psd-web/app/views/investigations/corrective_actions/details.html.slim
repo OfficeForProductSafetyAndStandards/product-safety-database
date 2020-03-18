@@ -1,5 +1,5 @@
 - page_title = "Record corrective action"
-- content_for :page_title, page_title
+= page_title page_title, errors: @corrective_action.object.errors.any?
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
 

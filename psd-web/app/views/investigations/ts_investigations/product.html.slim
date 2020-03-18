@@ -1,6 +1,6 @@
 - page_heading = "What product are you reporting?"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @product.errors.any?
 
 = form_with model: @product, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row

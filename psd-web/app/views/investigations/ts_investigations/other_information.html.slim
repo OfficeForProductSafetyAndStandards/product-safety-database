@@ -1,6 +1,6 @@
 - page_heading = "Other information and files"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @investigation.errors.any?
 
 = form_with model: @investigation, scope: :information, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
