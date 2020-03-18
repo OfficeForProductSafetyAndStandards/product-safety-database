@@ -20,11 +20,7 @@ class Investigation < ApplicationRecord
     end
 
     def partially_filled_date?
-      if errors.messages[:date_received_year].any? || errors.messages[:date_received_day].any? || errors.messages[:date_received_month].any?
-        true
-      else
-        false
-      end
+      errors.messages[:date_received_year].any? || errors.messages[:date_received_day].any? || errors.messages[:date_received_month].any?
     end
 
     def date_cannot_be_in_the_future

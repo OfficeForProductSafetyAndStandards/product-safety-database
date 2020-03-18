@@ -1,16 +1,16 @@
-import $ from 'jquery';
+import $ from 'jquery'
 
-function closePageOnClick(id) {
+function closePageOnClick (id) {
   $(document).ready(() => {
-    const element = document.getElementById(id);
-    const isJSWindow = window.opener;
+    const element = document.getElementById(id)
+    const isJSWindow = window.opener
     if (isJSWindow && element) {
-      element.style.display = 'block';
+      element.style.display = 'block'
       element.addEventListener('click', () => {
-        window.close();
-      });
+        window.close()
+      })
     }
-  });
+  })
 }
 
-window.closePageOnClick = closePageOnClick;
+window.closePageOnClick = closePageOnClick

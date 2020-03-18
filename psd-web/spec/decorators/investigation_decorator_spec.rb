@@ -185,12 +185,12 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       allow(User).to receive(:current).and_return(user)
     end
 
-    it "has displays the Received date" do
-      expect(source_details_summary_list).to summarise("Received date", text: investigation.date_received.to_s(:govuk))
+    it "does not display the Received date" do
+      expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_s(:govuk))
     end
 
-    it "has displays the Received by" do
-      expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
+    it "does not display the Received by" do
+      expect(source_details_summary_list).not_to summarise("Received by", text: investigation.received_type.upcase_first)
     end
 
     it "has displays the Source type" do
