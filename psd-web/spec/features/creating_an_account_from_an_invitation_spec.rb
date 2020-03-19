@@ -23,7 +23,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     expect_to_be_signed_in
 
     # Now sign out and use those credentials to sign back in
-    find_link("Sign out", match: :first).click()
+    find_link("Sign out", match: :first).click
 
     expect_to_be_on_the_homepage
 
