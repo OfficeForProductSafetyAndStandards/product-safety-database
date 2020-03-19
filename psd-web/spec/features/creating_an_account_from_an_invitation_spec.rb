@@ -33,11 +33,8 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     fill_in "Password", with: "testpassword123@"
     click_on "Continue"
 
-    expect(page).to have_current_path("/two-factor")
-    expect(page).to have_css("h1", text: "Check your phone")
-
-    fill_in "Enter security code", with: invited_user.reload.direct_otp
-    click_on "Continue"
+    # Skips 2FA as cookie was set to not require
+    # 2FA for 7 days.
 
     expect_to_be_on_declaration_page
     expect_to_be_signed_in
