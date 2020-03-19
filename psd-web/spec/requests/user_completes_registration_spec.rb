@@ -105,16 +105,16 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(response).to redirect_to(user_two_factor_authentication_path)
       end
 
-      it "updates the user name" do
-        expect(user.name).to eq("Foo Bar")
+      it "doesn’t update the user name" do
+        expect(user.read_attribute(:name)).to be_nil
       end
 
-      it "updates the user mobile number" do
-        expect(user.mobile_number).to eq("07235671232")
+      it "doesn’t update the user mobile number" do
+        expect(user.mobile_number).to be_nil
       end
 
-      it "updates the user password" do
-        expect(user.encrypted_password).not_to be_blank
+      it "doesn’t update the user password" do
+        expect(user.encrypted_password).to be_blank
       end
     end
 
