@@ -49,6 +49,10 @@ module Users
       @otp_code_param ||= resource_params.permit(:otp_code)[:otp_code]
     end
 
+    def referrer
+      warden.session(:user)["two_factor_authentication_referrer"]
+    end
+
     # Suppress unwanted Devise alert.
     # eg: when you try to navigate back to sign-in it alerts about you already being signed in.
     # We only want to show submission errors.
@@ -68,7 +72,11 @@ module Users
 
       resource.pass_two_factor_authentication!
 
-      redirect_to after_two_factor_success_path_for(resource)
+      if referrer
+        redirect_to referrer
+      else
+        redirect_to after_two_factor_success_path_for(resource)
+      end
     end
 
     def after_two_factor_fail_for(resource)

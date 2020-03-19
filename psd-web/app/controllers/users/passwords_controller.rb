@@ -1,10 +1,29 @@
 module Users
   class PasswordsController < Devise::PasswordsController
-    skip_before_action :assert_reset_token_passed, only: :edit
+    skip_before_action :assert_reset_token_passed,
+                       :require_no_authentication,
+                       :has_accepted_declaration,
+                       :has_viewed_introduction,
+                       only: :edit
 
+
+    # TO DO: Hide user navigation header?
+    # TO DO: Do we really want to skip declaration/introduction? Done for tests. Need to figure out desired behaviour.
+    # TO DO: Is this safe to do?
+    # TO DO: Refactor/Extract 2FA logic bit
     def edit
-      return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
-      return render :expired, status: :gone if reset_token_expired?
+      # TO DO: Check if this conditional is correct
+      if !current_user || (current_user && !is_fully_authenticated?)
+        return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
+        return render :expired, status: :gone if reset_token_expired?
+
+        sign_in(user_with_reset_token)
+        warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
+        warden.session(:user)["two_factor_authentication_referrer"] = request.path
+        user_with_reset_token.send_new_otp
+
+        return redirect_to user_two_factor_authentication_path
+      end
 
       super
     end
