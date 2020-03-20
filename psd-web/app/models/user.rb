@@ -32,15 +32,12 @@ class User < ApplicationRecord
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
   end
 
-  attribute :skip_password_validation, :boolean, default: false
-
   def self.activated
     where(account_activated: true)
   end
 
   def self.create_and_send_invite!(email_address, team, inviting_user)
     user = create!(
-      skip_password_validation: true,
       id: SecureRandom.uuid,
       email: email_address,
       organisation: team.organisation,
@@ -84,7 +81,6 @@ class User < ApplicationRecord
           new_record.email = user[:email]
           new_record.name = user[:name]
           new_record.organisation = user[:organisation]
-          new_record.skip_password_validation = true
         end
 
         record.update!(user.slice(:name, :email, :organisation))
@@ -243,11 +239,5 @@ private
 
   def has_role?(role)
     user_roles.exists?(name: role)
-  end
-
-  def password_required?
-    return false if skip_password_validation
-
-    super
   end
 end
