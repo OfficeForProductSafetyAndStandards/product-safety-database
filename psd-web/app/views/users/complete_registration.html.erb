@@ -9,6 +9,14 @@
 
     <%= form_for @user, url: { action: :update } do |form| %>
 
+      <%= render "form_components/govuk_input", key: :email, form: form,
+        formGroup: {
+          classes: "govuk-visually-hidden"
+        },
+        label: { text: "Email address" },
+        value: @user.email
+        %>
+
       <%= render "form_components/govuk_input", key: :name, form: form,
         classes: "app-!-max-width-two-thirds",
         label: { text: "Full name" },
