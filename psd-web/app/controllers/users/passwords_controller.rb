@@ -6,8 +6,6 @@ module Users
                        :has_viewed_introduction,
                        only: :edit
 
-
-    # TO DO: Hide user navigation header?
     # TO DO: Do we really want to skip declaration/introduction? Done for tests. Need to figure out desired behaviour.
     # TO DO: Is this safe to do?
     # TO DO: Refactor/Extract 2FA logic bit
@@ -49,6 +47,10 @@ module Users
           return render :expired
         end
       end
+    end
+
+    def hide_nav?
+      true
     end
 
   private
