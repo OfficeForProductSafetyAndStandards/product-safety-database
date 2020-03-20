@@ -23,14 +23,9 @@
         autocomplete: "tel-national"
         %>
 
-      <%= render "form_components/govuk_input", key: :email, form: form,
-        formGroup: {
-          classes: "govuk-visually-hidden"
-        },
-        label: { text: "Email address" },
-        value: @user.email,
-        autocomplete: "off"
-        %>
+      <%= content_tag :div do -%>
+        <%= form.text_field :email, "disabled" => true, "tabindex" => "-1", "aria-hidden" => true %>
+      <% end -%>
 
       <%= password_input @user, autocomplete: "new-password" %>
 
