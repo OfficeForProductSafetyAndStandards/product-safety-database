@@ -23,10 +23,18 @@ class NewUser
   end
 
   # TODO: set key expiry to the invitation expiry time
-  def save
+  def save(expires_in:)
     # TODO: handle not saved
-    Rails.cache.set(id, to_json.except(:password))
+    if expires_in
+      Rails.cache.write(id, to_json)
+    else
+      Rails.cache.write(id, to_json, expires_in: time.to_i)
+    end
     true
+  end
+
+  def as_json
+    attributes.except(:password)
   end
 
   def delete

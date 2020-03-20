@@ -18,6 +18,9 @@ class SendUserInvitationJob < ApplicationJob
       user_inviting = User.find(user_inviting_id)
 
       NotifyMailer.invitation_email(user, user_inviting).deliver_now
+
+      NewUser.find(id).save(expires_in: Time.current + INVITATION_EXPIRATION_DAYS.days)
+
       user.update!(has_been_sent_welcome_email: true, invited_at: Time.current)
 
     elsif user.invitation_expired?
