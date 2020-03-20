@@ -64,12 +64,7 @@ module Users
       set_remember_two_factor_cookie(resource)
 
       if (new_user = NewUser.find(resource.id).delete)
-
-        resource.update(
-          name: new_user.name,
-          mobile_number: new_user.mobile_number,
-          password: new_usersession[:password]
-        )
+        resource.update(new_user.as_json)
         new_user.delete
       end
 

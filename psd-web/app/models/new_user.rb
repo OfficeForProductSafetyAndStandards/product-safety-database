@@ -3,7 +3,10 @@ class NewUser
   include ActiveModel::Attributes
   include GlobalID::Identification
 
-  attributes :email, :name, :mobile_number, :password
+  attribute :email
+  attribute :name
+  attribute :mobile_number
+  attribute :password
   attribute :encrypted_password, default: ""
 
   with_options on: :registration_completion do |registration_completion|
@@ -32,7 +35,7 @@ class NewUser
   end
 
   def as_json
-    attributes.except(:password)
+    attributes.except("password")
   end
 
   def delete
