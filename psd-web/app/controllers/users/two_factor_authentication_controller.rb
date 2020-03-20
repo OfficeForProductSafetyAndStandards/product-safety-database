@@ -72,11 +72,7 @@ module Users
 
       resource.pass_two_factor_authentication!
 
-      if referrer
-        redirect_to referrer
-      else
-        redirect_to after_two_factor_success_path_for(resource)
-      end
+      redirect_to after_two_factor_success_path_for(resource)
     end
 
     def after_two_factor_fail_for(resource)

@@ -20,6 +20,7 @@ module Users
         sign_in(user_with_reset_token)
         warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
         warden.session(:user)["two_factor_authentication_referrer"] = request.path
+        store_location_for(:user, edit_user_password_path)
         user_with_reset_token.send_new_otp
 
         return redirect_to user_two_factor_authentication_path
