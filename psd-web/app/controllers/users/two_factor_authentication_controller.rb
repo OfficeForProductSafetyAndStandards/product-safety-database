@@ -66,6 +66,8 @@ module Users
       warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
       bypass_sign_in(resource, scope: resource_name)
 
+      resource.update(mobile_number_verified: true)
+
       resource.pass_two_factor_authentication!
 
       redirect_to after_two_factor_success_path_for(resource)
