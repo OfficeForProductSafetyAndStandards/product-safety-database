@@ -23,8 +23,8 @@
         autocomplete: "tel-national"
         %>
 
-      <%= content_tag :div do -%>
-        <%= form.text_field :email, "disabled" => true, "tabindex" => "-1", "aria-hidden" => true %>
+      <%= content_tag :div, style: "opacity: 0; height: 0px" do -%>
+        <%= text_field_tag :username, @user.email, "disabled" => true, "tabindex" => "-1", "aria-hidden" => true, autocomplete: "username"  %>
       <% end -%>
 
       <%= password_input @user, autocomplete: "new-password" %>
