@@ -18,6 +18,14 @@ module Users
 
       self.resource = warden.authenticate(auth_options)
 
+
+      # Stop users from signing in if they’ve not completed 2FA verification
+      # of their mobile number during account set up process.
+      if resource && !resource.mobile_number_verified
+        resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+        return render :new
+      end
+
       if resource
         sign_in(resource_name, resource)
         return respond_with resource, location: after_sign_in_path_for(resource)
