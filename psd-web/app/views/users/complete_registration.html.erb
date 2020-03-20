@@ -28,7 +28,8 @@
           classes: "govuk-visually-hidden"
         },
         label: { text: "Email address" },
-        value: @user.email
+        value: @user.email,
+        autocomplete: "off"
         %>
 
       <%= password_input @user, autocomplete: "new-password" %>
