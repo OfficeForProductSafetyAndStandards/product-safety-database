@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_10_170356) do
+ActiveRecord::Schema.define(version: 2020_03_20_144542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_170356) do
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.text "mobile_number"
+    t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"
     t.uuid "organisation_id"
     t.binary "password_salt"
