@@ -28,25 +28,22 @@ class UsersController < ApplicationController
     return render("errors/forbidden", status: :forbidden) if params[:invitation] != @user.invitation_token
 
     @user.assign_attributes(new_user_attributes)
+    new_user = NewUser.new(
+      id: @user.id,
+      email_address: @user.email,
+      name: @user.name,
+      mobile_number: @user.mobile_number,
+      user_encrypted_password: @user.encrypted_password)
 
-    if @user.valid?(context: :registration_completion)
+    if new_user.valid?(context: :registration_completion)
 
       # Copy these attributes to the session, as we don’t want to
       # persist them until the user completes 2FA.
-      session[:name] = @user.name
-      session[:mobile_number] = @user.mobile_number
-      session[:password] = @user.password
+      new_user.save
 
       sign_in :user, @user
       warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
       @user.send_new_otp
-
-      # Reset these as @user.send_new_otp saves the record
-      @user.update_columns(
-        name: nil,
-        mobile_number: nil,
-        encrypted_password: ""
-      )
 
       redirect_to user_two_factor_authentication_path
     else

@@ -22,16 +22,6 @@ class User < ApplicationRecord
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
             unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
 
-  with_options on: :registration_completion do |registration_completion|
-    registration_completion.validates :mobile_number, presence: true
-    registration_completion.validates :mobile_number,
-                                      phone: { message: I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]) },
-                                      unless: -> { mobile_number.blank? }
-    registration_completion.validates :name, presence: true
-    registration_completion.validates :password, presence: true
-    registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
-  end
-
   attribute :skip_password_validation, :boolean, default: false
 
   def self.activated

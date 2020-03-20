@@ -63,17 +63,15 @@ module Users
     def after_two_factor_success_for(resource)
       set_remember_two_factor_cookie(resource)
 
-      if session[:name] && session[:mobile_number] && session[:password]
+
+      if new_user = NewUser.find(resource.email).delete
 
         resource.update(
-          name: session[:name],
-          mobile_number: session[:mobile_number],
-          password: session[:password]
+          name: new_user.name,
+          mobile_number: new_user.mobile_number,
+          password: new_usersession[:password]
         )
-
-        session.delete(:name)
-        session.delete(:mobile_number)
-        session.delete(:password)
+        new_user.delete
       end
 
       warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
