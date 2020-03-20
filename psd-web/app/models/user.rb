@@ -5,7 +5,7 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
-  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
+  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :recoverable, :encryptable
 
   belongs_to :organisation
 
@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
-            unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
+            unless: Proc.new { |user| user.errors.messages[:password].any? }
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
