@@ -9,15 +9,6 @@
 
     <%= form_for @user, url: { action: :update } do |form| %>
 
-      <%= render "form_components/govuk_input", key: :email, form: form,
-        formGroup: {
-          classes: "govuk-visually-hidden"
-        },
-        label: { text: "Email address" },
-        value: @user.email,
-        autocomplete: "off"
-        %>
-
       <%= render "form_components/govuk_input", key: :name, form: form,
         classes: "app-!-max-width-two-thirds",
         label: { text: "Full name" },
@@ -30,6 +21,14 @@
         label: { text: "Mobile number" },
         value: @user.mobile_number,
         autocomplete: "tel-national"
+        %>
+
+      <%= render "form_components/govuk_input", key: :email, form: form,
+        formGroup: {
+          classes: "govuk-visually-hidden"
+        },
+        label: { text: "Email address" },
+        value: @user.email
         %>
 
       <%= password_input @user, autocomplete: "new-password" %>
