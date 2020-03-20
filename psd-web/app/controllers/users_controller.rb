@@ -29,16 +29,14 @@ class UsersController < ApplicationController
 
     @user.assign_attributes(new_user_attributes)
     new_user = NewUser.new(
-      id: @user.id,
-      email_address: @user.email,
-      name: @user.name,
-      mobile_number: @user.mobile_number,
-      user_encrypted_password: @user.encrypted_password)
+      id:                      @user.id,
+      email_address:           @user.email,
+      name:                    @user.name,
+      mobile_number:           @user.mobile_number,
+      user_encrypted_password: @user.encrypted_password
+    )
 
     if new_user.valid?(context: :registration_completion)
-
-      # Copy these attributes to the session, as we don’t want to
-      # persist them until the user completes 2FA.
       new_user.save
 
       sign_in :user, @user
