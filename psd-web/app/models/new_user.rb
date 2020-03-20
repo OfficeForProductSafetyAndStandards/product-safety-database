@@ -19,22 +19,19 @@ class NewUser
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def self.find(id)
-    new(JSON.parse(redis.get(id)))
+    new(JSON.parse(Rails.cache.get(id)))
   end
 
   # TODO: set key expiry to the invitation expiry time
   def save
     # TODO: handle not saved
-    redis.set(id, to_json.except(:password))
+    Rails.cache.set(id, to_json.except(:password))
     true
   end
 
   def delete
     # TODO: handle not found because exipired?
-    redis.delete(email_address)
-  end
-
-  def redis
-    @redis ||= Redis.new(url: ENV["REDIS_URL"])
+    Rails.cache.delete(email_address)
+    self.freeze
   end
 end
