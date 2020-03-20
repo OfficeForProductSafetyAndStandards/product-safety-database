@@ -1,7 +1,6 @@
 class NewUser
   include ActiveModel::Model
   include ActiveModel::Attributes
-  include GlobalID::Identification
 
   attribute :email
   attribute :name
