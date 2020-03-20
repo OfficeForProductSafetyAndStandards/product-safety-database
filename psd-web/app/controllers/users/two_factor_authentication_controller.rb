@@ -63,19 +63,6 @@ module Users
     def after_two_factor_success_for(resource)
       set_remember_two_factor_cookie(resource)
 
-      if session[:name] && session[:mobile_number] && session[:password]
-
-        resource.update(
-          name: session[:name],
-          mobile_number: session[:mobile_number],
-          password: session[:password]
-        )
-
-        session.delete(:name)
-        session.delete(:mobile_number)
-        session.delete(:password)
-      end
-
       warden.session(resource_name)[TwoFactorAuthentication::NEED_AUTHENTICATION] = false
       bypass_sign_in(resource, scope: resource_name)
 

@@ -29,24 +29,11 @@ class UsersController < ApplicationController
 
     @user.assign_attributes(new_user_attributes)
 
-    if @user.valid?(context: :registration_completion)
-
-      # Copy these attributes to the session, as we don’t want to
-      # persist them until the user completes 2FA.
-      session[:name] = @user.name
-      session[:mobile_number] = @user.mobile_number
-      session[:password] = @user.password
+    if @user.save(context: :registration_completion)
 
       sign_in :user, @user
       warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
       @user.send_new_otp
-
-      # Reset these as @user.send_new_otp saves the record
-      @user.update_columns(
-        name: nil,
-        mobile_number: nil,
-        encrypted_password: ""
-      )
 
       redirect_to user_two_factor_authentication_path
     else
