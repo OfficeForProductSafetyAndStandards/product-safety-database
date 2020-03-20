@@ -10,6 +10,5 @@ class AddMobileNumberVerifiedToUsers < ActiveRecord::Migration[5.2]
         end
       end
     end
-
   end
 end
