@@ -11,6 +11,7 @@ FactoryBot.define do
     account_activated { false }
     hash_iterations { 27_500 }
     mobile_number { "07700 900 982" }
+    mobile_number_verified { true }
     direct_otp_sent_at { Time.current }
     direct_otp { "12345" }
 
@@ -48,6 +49,7 @@ FactoryBot.define do
       password { nil }
       password_confirmation { nil }
       mobile_number { nil }
+      mobile_number_verified { false }
       name { nil }
     end
 
