@@ -39,6 +39,18 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       end
     end
 
+    context "when the user has set a name, password and mobile number but hasn’t yet verified their mobile number via 2FA" do
+      let(:user) { create(:user, invitation_token: "abc123", invited_at: Time.zone.now, account_activated: false, mobile_number_verified: false) }
+
+      before do
+        get complete_registration_user_path(user.id, invitation: user.invitation_token)
+      end
+
+      it "renders the complete registration page" do
+        expect(response).to render_template(:complete_registration)
+      end
+    end
+
     context "when the user has already completed their registration" do
       let(:user) { create(:user, invitation_token: "abc123", invited_at: Time.zone.now, account_activated: false) }
 
@@ -99,6 +111,10 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
 
       it "does not set the activated flag on the user" do
         expect(user).not_to be_account_activated
+      end
+
+      it "does not set the mobile number as verified" do
+        expect(user.mobile_number_verified).to be false
       end
 
       it "redirects to the two factor authentication path" do
