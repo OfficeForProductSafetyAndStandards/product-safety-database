@@ -63,8 +63,7 @@ module Users
     def after_two_factor_success_for(resource)
       set_remember_two_factor_cookie(resource)
 
-
-      if new_user = NewUser.find(resource.email).delete
+      if (new_user = NewUser.find(resource.id).delete)
 
         resource.update(
           name: new_user.name,

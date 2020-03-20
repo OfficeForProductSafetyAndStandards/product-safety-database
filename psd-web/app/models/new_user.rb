@@ -22,9 +22,7 @@ class NewUser
     new(JSON.parse(Rails.cache.get(id)))
   end
 
-  # TODO: set key expiry to the invitation expiry time
   def save(expires_in:)
-    # TODO: handle not saved
     if expires_in
       Rails.cache.write(id, to_json)
     else
@@ -38,7 +36,6 @@ class NewUser
   end
 
   def delete
-    # TODO: handle not found because exipired?
     Rails.cache.delete(email_address)
     self.freeze
   end
