@@ -68,6 +68,22 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     end
   end
 
+  context "when the user hasn’t verified their mobile number" do
+    let(:user) { create(:user, mobile_number_verified: false) }
+
+    it "doesn’t let them sign in" do
+      visit "/sign-in"
+
+      fill_in "Email address", with: user.email
+      fill_in "Password", with: "2538fhdkvuULE36f"
+      click_on "Continue"
+
+      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+      expect(page).to have_link("Enter correct email address and password", href: "#email")
+      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+    end
+  end
+
   context "with credentials entered incorrectly" do
     it "highlights email field" do
       visit "/sign-in"

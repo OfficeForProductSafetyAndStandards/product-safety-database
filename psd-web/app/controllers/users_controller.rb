@@ -30,8 +30,12 @@ class UsersController < ApplicationController
     @user.assign_attributes(new_user_attributes)
 
     if @user.save(context: :registration_completion)
+
       sign_in :user, @user
-      redirect_to root_path
+      warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
+      @user.send_new_otp
+
+      redirect_to user_two_factor_authentication_path
     else
       render :complete_registration
     end

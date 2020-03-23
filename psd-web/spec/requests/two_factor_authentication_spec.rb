@@ -15,7 +15,9 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
 
     let(:previous_attempts_count) { 1 }
     let(:user) do
-      create(:user, :activated, direct_otp: "12345", second_factor_attempts_count: previous_attempts_count)
+      create(:user, :activated, direct_otp: "12345",
+        mobile_number_verified: false,
+        second_factor_attempts_count: previous_attempts_count)
     end
 
     context "when not signed in prior to submit the 2FA page" do
@@ -66,6 +68,11 @@ RSpec.describe "User submits two factor authentication code", :with_stubbed_noti
           submit_2fa
           follow_redirect!
           expect(response.body).to include("Sign out")
+        end
+
+        it "marks the mobile number as verified" do
+          submit_2fa
+          expect(user.reload.mobile_number_verified).to be true
         end
       end
 

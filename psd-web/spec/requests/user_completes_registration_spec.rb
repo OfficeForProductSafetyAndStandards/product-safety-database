@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User completes registration", type: :request, with_stubbed_keycloak_config: true do
+RSpec.describe "User completes registration", type: :request, with_stubbed_keycloak_config: true, with_stubbed_notify: true do
   let(:user) { create(:user, :invited) }
 
   describe "viewing the form" do
@@ -36,6 +36,18 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       it "shows a message alerting about the expiration" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
         expect(response).to render_template(:expired_invitation)
+      end
+    end
+
+    context "when the user has set a name, password and mobile number but hasn’t yet verified their mobile number via 2FA" do
+      let(:user) { create(:user, invitation_token: "abc123", invited_at: Time.zone.now, account_activated: false, mobile_number_verified: false) }
+
+      before do
+        get complete_registration_user_path(user.id, invitation: user.invitation_token)
+      end
+
+      it "renders the complete registration page" do
+        expect(response).to render_template(:complete_registration)
       end
     end
 
@@ -101,19 +113,23 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(user).not_to be_account_activated
       end
 
-      it "redirects to the root path" do
-        expect(response).to redirect_to(root_path)
+      it "does not set the mobile number as verified" do
+        expect(user.mobile_number_verified).to be false
       end
 
-      it "updates the user name" do
-        expect(user.name).to eq("Foo Bar")
+      it "redirects to the two factor authentication path" do
+        expect(response).to redirect_to(user_two_factor_authentication_path)
       end
 
-      it "updates the user mobile number" do
-        expect(user.mobile_number).to eq("07235671232")
+      it "updates the user’s name" do
+        expect(user.name).to eql("Foo Bar")
       end
 
-      it "updates the user password" do
+      it "updates the user’s mobile number" do
+        expect(user.mobile_number).to eql("07235671232")
+      end
+
+      it "updates the user’s password" do
         expect(user.encrypted_password).not_to be_blank
       end
     end
