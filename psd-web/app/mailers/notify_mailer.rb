@@ -104,10 +104,16 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-  def account_locked(user)
+  def account_locked(user, raw_token)
     set_template(TEMPLATES[:account_locked])
 
-    set_personalisation({foo: :bar})
+    personalization = {
+      name: user.name,
+      edit_user_password_url_token: edit_user_password_url(reset_password_token: user.reset_password_token),
+      unlock_user_url_token: user_unlock_url(unlock_token: raw_token)
+    }
+    set_personalisation(personalization)
+    binding.pry
     mail(to: user.email)
   end
 end

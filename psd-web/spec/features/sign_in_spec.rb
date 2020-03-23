@@ -57,16 +57,23 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     end
   end
 
-  context "when using wrong credentials over and over again" do
-    let(:password) { "XXX" }
+  describe "account locking" do
+    context "when using wrong credentials over and over again" do
+      let(:password) { "XXX" }
 
-    it "locks user account" do
-      fill_in_credentials
-      fill_in_credentials
+      it "locks user account" do
+        fill_in_credentials
+        fill_in_credentials
 
-      binding.pry
+        expect(page).to have_css("h1", text: "Your account is locked")
+      end
 
-      expect(page).to have_css("h1", text: "Your account is locked")
+      it "sends email with that allow account unlocking" do
+        fill_in_credentials
+        fill_in_credentials
+
+        expect(page).to have_css("h1", text: "Your account is locked")
+      end
     end
   end
 
@@ -104,6 +111,19 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       visit "/sign-in"
 
       fill_in "Email address", with: user.email
+      fill_in "Password", with: "passworD"
+      click_on "Continue"
+
+      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+      expect(page).to have_link("Enter correct email address and password", href: "#email")
+      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+      expect(page).to have_css("span#password-error", text: "")
+    end
+
+    it "does not work with email no in database" do
+      visit "/sign-in"
+
+      fill_in "Email address", with: "user.email@foo.bar"
       fill_in "Password", with: "passworD"
       click_on "Continue"
 
