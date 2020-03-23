@@ -1,49 +1,99 @@
 # Getting set up
 
-The application and all of its dependencies can be run with Docker Compose. Alternatively, you can run the application and most dependencies locally.
+## Installing the application
 
-During development it can be more convenient to run the application locally. In this instance you might find it most convenient to run some of the dependencies, such as Keycloak and Antivirus via Docker, and others, such as Redis and PostgreSQL, locally. This will depend on your own preferences.
+First, clone the Git repository and `cd` into it within a terminal prompt.
 
-## Docker
+### 1. Install prequisites
 
-Install Docker: https://docs.docker.com/install/.
+The application requires several things to run. Install these:
 
-Build and start-up the project, _optionally_ specifying only the services you require, for example:
+* [Redis](https://redis.io/download)
+* [PostgreSQL](https://www.postgresql.org/download/)
+* [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/install-elasticsearch.html) - version 6 (you can also install this via Docker, see below)
 
-    docker-compose up keycloak antivirus elasticsearch
+### 1.1 Install prerequsites via Docker
 
-Refer to the `docker-compose.yml` file for a list of available services.
+Some of the dependencies are easier to install via [Docker](https://docs.docker.com/install/):
 
-## Running the application locally
+* Keycloak
+* Antivirus (optional)
 
-You will need to have Redis, PostgreSQL and Elasticsearch running, either locally or via Docker as detailed above.
+To install these, run this command from the root folder:
 
-Copy the file in the `psd-web` directory called `.env.development.example` to `.env.development`, and modify as appropriate.
-You will need to set `KEYCLOAK_CLIENT_SECRET` value corresponding to `KEYCLOAK_CLIENT_ID` value. The client secret is accessible through the Keycloak admin console.
+```bash
+   docker-compose build keycloak
+```
 
-See the [accounts section](#accounts) below for information on how to obtain some of the optional variables.
+and
 
-Within the `psd-web` directory:
+```bash
+   docker-compose build antivirus
+```
 
-Install the dependencies:
+### 2. Install Ruby and gem dependencies
 
-    bundle install
+The application is written in Ruby using the Rails framework.
+
+You need to install the right version of Ruby - see [Gemfile](./psd-web/Gemfile). To do this, you could use either [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv) – these allow you to have multiple different versions of Ruby installed at the same time.
+
+Once you’ve installed the right version of Ruby, you can install the Ruby gem dependencies by running this command from `psd-web`:
+
+```bash
+   bundle install
+```
+
+
+### 3. Install Node and npm dependencies
+
+Node modules are used for front-end dependencies (CSS, javascript and images).
+
+First install the right version of node using [node version manager](https://github.com/nvm-sh/nvm#installing-and-updating) (nvm). The current version used is specified in the [package.json](./psd-web/package.json) file.
+
+Then install [yarn](https://classic.yarnpkg.com/en/docs/install)
+
+Once these are both installed, run this command from within `psd-web`:
+
+```bash
+   yarn install
+```
+
+to install npm dependencies.
+
+### 4. Configure your local environment
+
+Some settings are configured within a hidden file called `.env.development` (within the `psd-web` folder). You will need to create this - you can copy the example in [`.env.development.example`](./psd-web/.env.development.example).
+
+You will need to edit this file to add:
+
+* [GOV.UK Notify](https://www.notifications.service.gov.uk) API key
+* Keycloak client secret
+
+
+### 5. Setup the database
 
 Create and populate the database:
 
-    bin/rake db:setup
+```bash
+    bundle exec bin/rake db:setup
+```
 
-Start the services:
+## Running the application
 
-    bin/rails s
-    bin/sidekiq -C config/sidekiq.yml
+To compile the front-end assets (and have them re-compile as you make changes), run:
 
-## GOV.UK Notify
+```bash
+    bundle exec bin/webpack-dev-server
+```
 
-If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk).
+Start the application (from `psd-web`):
 
+```bash
+    bundle exec bin/rails server
+    bundle exec bin/sidekiq
+```
 
-## Keycloak
+### Keycloak
 
 The development instance of Keycloak is configured with the following default user accounts:
 
@@ -54,7 +104,8 @@ The development instance of Keycloak is configured with the following default us
 Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add/edit users or to obtain client credentials.
 
 
-## Tests
+## Running the tests
+
 Copy the file in the `psd-web` directory called `.env.test.example` to `.env.test`, and modify as appropriate.
 
 New tests are written in RSpec. There should be a feature spec covering new user journeys, and unit testing of all code components.
