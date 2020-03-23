@@ -68,7 +68,7 @@ module Users
 
       request.referer &&
         URI(request.referer).path == user_two_factor_authentication_path &&
-        current_user &&
+        user_signed_in? &&
         is_fully_authenticated?
     end
 
