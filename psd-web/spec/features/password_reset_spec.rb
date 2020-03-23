@@ -43,7 +43,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       visit edit_user_password_url_with_token
 
-      complete_two_factor_authentication
+      expect_to_be_on_two_factor_authentication_page
+
+      complete_two_factor_authentication_with(user.reload.direct_otp)
 
       expect_to_be_on_edit_user_password_page
 
@@ -69,7 +71,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         visit edit_user_password_url_with_token
 
-        complete_two_factor_authentication
+        expect_to_be_on_two_factor_authentication_page
+
+        complete_two_factor_authentication_with(user.reload.direct_otp)
 
         expect_to_be_on_edit_user_password_page
 
@@ -85,7 +89,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         visit edit_user_password_url_with_token
 
-        complete_two_factor_authentication
+        expect_to_be_on_two_factor_authentication_page
+
+        complete_two_factor_authentication_with(user.reload.direct_otp)
 
         expect_to_be_on_edit_user_password_page
 
@@ -143,10 +149,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
-  def complete_two_factor_authentication
-    expect_to_be_on_two_factor_authentication_page
-
-    fill_in "Enter security code", with: user.reload.direct_otp
+  def complete_two_factor_authentication_with(security_code)
+    fill_in "Enter security code", with: security_code
     click_on "Continue"
   end
 
