@@ -7,7 +7,7 @@ module Users
                        only: :edit
 
     def edit
-      return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
+      return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
 
       if passed_two_factor_authentication?
@@ -67,7 +67,7 @@ module Users
     end
 
     def reset_token_invalid?
-      user_with_reset_token.blank?
+      params[:reset_password_token].blank? || user_with_reset_token.blank?
     end
 
     def reset_token_expired?
