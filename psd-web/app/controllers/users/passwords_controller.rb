@@ -11,7 +11,13 @@ module Users
       return render :expired, status: :gone if reset_token_expired?
 
       if passed_two_factor_authentication?
-        # Password update is based on the "reset_password_token", not in the user session.
+        # Devise password update requires the user to be signed out, as it relies on the "reset password token"
+        # parameter and an user attempting to reset its password because does not remember it is not supposed to be
+        # already signed in.
+        # In order to be able to enforce 2FA, we need to to sign the user in.
+        # Given this contradiction between needing it for 2FA but needing the opposite for the password update,
+        # when the user gets redirected back after 2FA, we have to sign out the users before allowing them to
+        # update their password.
         sign_out(:user)
         super
       else
