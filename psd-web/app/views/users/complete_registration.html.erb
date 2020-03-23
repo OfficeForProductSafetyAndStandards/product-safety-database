@@ -29,7 +29,7 @@
         well as the password, but should not be visible to users, nor should
         the controller process the input.
       %>
-      <%= content_tag :div, class: "app-!-password-manager-hidden" do -%>
+      <%= content_tag :div, class: "app-password-manager-hidden" do -%>
         <%= email_field_tag :username, @user.email, "disabled" => true, "tabindex" => "-1", "aria-hidden" => true, autocomplete: "username"  %>
       <% end -%>
 
