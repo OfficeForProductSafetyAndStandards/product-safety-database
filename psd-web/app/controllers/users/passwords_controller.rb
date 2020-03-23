@@ -6,24 +6,24 @@ module Users
                        :has_viewed_introduction,
                        only: :edit
 
-    # TO DO: Do we really want to skip declaration/introduction? Done for tests. Need to figure out desired behaviour.
-    # TO DO: Is this safe to do?
-    # TO DO: Refactor/Extract 2FA logic bit
     def edit
-      # TO DO: Check if this conditional is correct
-      if !current_user || (current_user && !is_fully_authenticated?)
-        return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
-        return render :expired, status: :gone if reset_token_expired?
+      return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
+      return render :expired, status: :gone if reset_token_expired?
 
+      if passed_two_factor_authentication?
+        # Password update is based on the "reset_password_token", not in the user session.
+        sign_out(:user)
+        super
+      else
         sign_in(user_with_reset_token)
         warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-        store_location_for(:user, edit_user_password_path)
+        # Will redirect back to #edit after passing 2FA.
+        # fullpath contains "reset_password_token", necessary for the further update.
+        store_location_for(:user, request.fullpath)
         user_with_reset_token.send_new_otp
 
-        return redirect_to user_two_factor_authentication_path
+        redirect_to user_two_factor_authentication_path
       end
-
-      super
     end
 
     def create
@@ -54,6 +54,12 @@ module Users
     end
 
   private
+
+    def passed_two_factor_authentication?
+      return true if !Rails.configuration.two_factor_authentication_enabled
+
+      current_user && is_fully_authenticated?
+    end
 
     def resend_invitation_link_for(user)
       SendUserInvitationJob.perform_later(user.id, nil)

@@ -38,27 +38,14 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   context "with a valid token" do
-    scenario "requests a 2 factor authentication" do
-      request_password_reset_with_2fa
-
-      visit edit_user_password_url_with_token
-      expect_to_be_on_two_factor_authentication_page
-
-      fill_in "Enter security code", with: user.reload.direct_otp
-      click_on "Continue"
-
-      expect_to_be_on_edit_user_password_page
-
-      fill_in "Password", with: "a_new_password"
-      click_on "Continue"
-
-      expect(page).to have_css("h1", text: "Declaration")
-    end
-
     scenario "entering a valid password resets your password", :with_stubbed_notify do
       request_password_reset
 
       visit edit_user_password_url_with_token
+
+      complete_two_factor_authentication
+
+      expect_to_be_on_edit_user_password_page
 
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
@@ -73,9 +60,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
-      fill_in "Enter security code", with: user.reload.direct_otp
-      click_on "Continue"
-
       expect(page).to have_css("h1", text: "Declaration")
     end
 
@@ -84,6 +68,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         request_password_reset
 
         visit edit_user_password_url_with_token
+
+        complete_two_factor_authentication
+
+        expect_to_be_on_edit_user_password_page
 
         fill_in "Password", with: "as"
         click_on "Continue"
@@ -96,6 +84,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         request_password_reset
 
         visit edit_user_password_url_with_token
+
+        complete_two_factor_authentication
+
+        expect_to_be_on_edit_user_password_page
 
         fill_in "Password", with: ""
         click_on "Continue"
@@ -151,35 +143,11 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
-  # TO DO: Resolve this awful lazy duplication
-  def request_password_reset_with_2fa
-    user.update!(reset_password_token: reset_token)
+  def complete_two_factor_authentication
+    expect_to_be_on_two_factor_authentication_page
 
-    visit "/sign-in"
-
-    click_link "Forgot your password?"
-
-    perform_enqueued_jobs do
-      body = {
-        email_address: user.email,
-        template_id: NotifyMailer::TEMPLATES[:reset_password_instruction],
-        reference: "Password reset",
-        personalisation: {
-          name: user.name,
-          edit_user_password_url_with_token: edit_user_password_url_with_token
-        }
-      }
-
-      stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
-        .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
-
-      expect_to_be_on_reset_password_page
-
-      expect(page).to have_css("h1", text: "Reset your password")
-
-      fill_in "Email address", with: user.email
-      click_on "Send email"
-    end
+    fill_in "Enter security code", with: user.reload.direct_otp
+    click_on "Continue"
   end
 
   def expect_to_be_on_two_factor_authentication_page
@@ -191,7 +159,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   def expect_to_be_on_edit_user_password_page
-    expect(page).to have_current_path("/password/edit")
+    expect(page).to have_current_path("/password/edit", ignore_query: true)
   end
 
   def expect_to_be_on_check_your_email_page
