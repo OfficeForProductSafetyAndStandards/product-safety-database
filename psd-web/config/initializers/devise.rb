@@ -306,6 +306,10 @@ Devise.setup do |config|
     # config.allowed_otp_drift_seconds = 30  # Allowed TOTP time drift between client and server.
     # config.otp_length = 5  # TOTP code length
   end
+
+  config.lock_strategy = :failed_attempts
+  config.unlock_strategy = :email
+  config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
 end
 
 DeviseController.include NoSecondaryNav

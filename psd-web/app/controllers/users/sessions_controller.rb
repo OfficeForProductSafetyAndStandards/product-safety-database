@@ -16,6 +16,11 @@ module Users
         return render :new
       end
 
+      user = User.find_by_email(sign_in_form.email)
+      if user.access_locked?
+        return redirect_to account_locked_path
+      end
+
       self.resource = warden.authenticate(auth_options)
 
       # Stop users from signing in if they’ve not completed 2FA verification
@@ -40,6 +45,9 @@ module Users
       resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
       resource.errors.add(:password, nil)
       render :new
+    end
+
+    def account_locked
     end
 
   private

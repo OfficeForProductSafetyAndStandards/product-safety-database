@@ -17,6 +17,7 @@ env:
   ANTIVIRUS_PASSWORD: password
   PSD_HOST: example.com
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
+  LOCK_MAXIMUM_ATTEMPTS: 2
 
 jobs:
   ruby:
