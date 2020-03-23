@@ -18,7 +18,6 @@ module Users
 
       self.resource = warden.authenticate(auth_options)
 
-
       # Stop users from signing in if they’ve not completed 2FA verification
       # of their mobile number during account set up process.
       if resource && !resource.mobile_number_verified
