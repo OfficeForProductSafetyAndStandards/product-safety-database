@@ -11,29 +11,9 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
       end
 
-      # rubocop:disable RSpec/AnyInstance
-      context "when user already passed two factor authentication" do
-        before do
-          allow_any_instance_of(Users::PasswordsController).to receive(:current_user).and_return(user)
-          allow_any_instance_of(Users::PasswordsController).to receive(:is_fully_authenticated?).and_return(true)
-          get(edit_user_password_path(reset_password_token: reset_token))
-        end
-
-        it "returns a 200 status code" do
-          expect(response).to have_http_status(:ok)
-        end
-
-        it "displays a reset password form" do
-          expect(response).to render_template("passwords/edit")
-        end
-      end
-      # rubocop:enable RSpec/AnyInstance
-
-      context "when user needs to pass two factor authentication" do
-        it "redirects the user to the two factor authentication page" do
-          get(edit_user_password_path(reset_password_token: reset_token))
-          expect(response).to redirect_to(user_two_factor_authentication_path)
-        end
+      it "redirects the user to the two factor authentication page" do
+        get(edit_user_password_path(reset_password_token: reset_token))
+        expect(response).to redirect_to(user_two_factor_authentication_path)
       end
     end
 
