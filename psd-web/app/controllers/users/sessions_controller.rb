@@ -25,13 +25,15 @@ module Users
         return render :new
       end
 
-      if resource
+      if resource && resource.mobile_number?
         sign_in(resource_name, resource)
         return respond_with resource, location: after_sign_in_path_for(resource)
+      elsif resource
+        resource.errors.add(:email, I18n.t(:missing, scope: "sign_user_in.mobile_number"))
+        return redirect_to missing_mobile_number_path
       end
 
-      self.resource ||= resource_class.new(sign_in_params)
-      resource.decorate
+      self.resource = resource_class.new(sign_in_params).decorate
       resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
       resource.errors.add(:password, nil)
       render :new

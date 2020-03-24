@@ -173,6 +173,8 @@ en:
     email:
       wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"
   sign_user_in:
+    mobile_number:
+      missing: "This account does not have a mobile number set up. Mobile numbers are required for account security. Speak to your PSD team admin or email [OPSS](opss email) to add it."
     email:
       wrong_email_or_password: "Enter correct email address and password"
   support:

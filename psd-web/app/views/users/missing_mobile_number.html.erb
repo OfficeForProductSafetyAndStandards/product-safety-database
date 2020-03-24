@@ -1,0 +1,11 @@
+<% title = "No mobile number for this account" %>
+<% content_for :page_title, title %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <p class="govuk-body">This account does not have a mobile number set up. Mobile numbers are required for account security. Speak to your PSD team admin or <%= mail_to t(:enquiries_email), "email OPSS", class: "govu-link" %> to add it.</p>
+  </div>
+</div>
