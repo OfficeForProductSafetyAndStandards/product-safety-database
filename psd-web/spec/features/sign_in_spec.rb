@@ -62,50 +62,48 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     end
   end
 
-  describe "account locking" do
-    context "when using wrong credentials over and over again" do
-      scenario "locks user account" do
-        visit "/sign-in"
-        fill_in_credentials(password_override: "XXX")
-        fill_in_credentials(password_override: "XXX")
+  context "when using wrong credentials over and over again", :with_2fa do
+    scenario "locks user account" do
+      visit "/sign-in"
+      fill_in_credentials(password_override: "XXX")
+      fill_in_credentials(password_override: "XXX")
 
-        expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
-      end
+      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+    end
 
-      scenario "sends email with unlock link" do
-        visit "/sign-in"
-        fill_in_credentials(password_override: "XXX")
-        visit "/sign-in"
-        fill_in_credentials(password_override: "XXX")
+    scenario "sends email with unlock link" do
+      visit "/sign-in"
+      fill_in_credentials(password_override: "XXX")
+      visit "/sign-in"
+      fill_in_credentials(password_override: "XXX")
 
-        expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
 
-        unlock_email = delivered_emails.last
-        visit unlock_email.personalization_path(:unlock_user_url_token)
-        fill_in_credentials
+      unlock_email = delivered_emails.last
+      visit unlock_email.personalization_path(:unlock_user_url_token)
+      fill_in_credentials
 
-        expect(page).to have_css("h1", text: "Check your phone")
+      expect(page).to have_css("h1", text: "Check your phone")
 
-        fill_in "Enter security code", with: user.reload.direct_otp
-        click_on "Continue"
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_on "Continue"
 
-        expect(page).to have_css("h2", text: "Your cases")
-        expect(page).to have_link("Sign out", href: destroy_user_session_path)
-      end
+      expect(page).to have_css("h2", text: "Your cases")
+      expect(page).to have_link("Sign out", href: destroy_user_session_path)
+    end
 
-      scenario "sends email with reset password link" do
-        visit "/sign-in"
-        fill_in_credentials(password_override: "XXX")
-        visit "/sign-in"
-        fill_in_credentials(password_override: "XXX")
+    scenario "sends email with reset password link" do
+      visit "/sign-in"
+      fill_in_credentials(password_override: "XXX")
+      visit "/sign-in"
+      fill_in_credentials(password_override: "XXX")
 
-        expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
 
-        unlock_email = delivered_emails.last
-        visit unlock_email.personalization_path(:edit_user_password_url_token)
+      unlock_email = delivered_emails.last
+      visit unlock_email.personalization_path(:edit_user_password_url_token)
 
-        expect(page).to have_css("h1", text: "Create a new password")
-      end
+      expect(page).to have_css("h1", text: "Create a new password")
     end
   end
 
