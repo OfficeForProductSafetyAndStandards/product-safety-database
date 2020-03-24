@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
-TestNotifyEmail = Struct.new(:recipient, :personalization)
+class TestNotifyEmail
+  def initialize(recipient, personalization)
+    @recipient = recipient
+    @personalization = personalization
+  end
+
+  def recipient
+    @recipient.second
+  end
+
+  def personalization_path(param)
+    uri = URI(@personalization[param])
+    [uri.path, uri.query].join("?")
+  end
+end
 
 RSpec.shared_context "with stubbed mailer", shared_context: :metadata do
   let!(:delivered_emails) { [] }

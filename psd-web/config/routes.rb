@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
     get "missing-mobile-number", to: "users#missing_mobile_number"
-    get "users/account_locked", to: "users/sessions#account_locked", as: :account_locked
+    get "account-locked", to: "users/sessions#account_locked", as: :account_locked
   end
 
   resources :users, only: [:update] do

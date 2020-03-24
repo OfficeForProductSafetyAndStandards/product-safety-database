@@ -16,7 +16,7 @@ module Users
         return render :new
       end
 
-      user = User.find_by_email(sign_in_form.email)
+      user = User.find_by(email: sign_in_form.email)
       if user && user.access_locked?
         return redirect_to account_locked_path
       end
@@ -47,8 +47,7 @@ module Users
       render :new
     end
 
-    def account_locked
-    end
+    def account_locked; end
 
   private
 

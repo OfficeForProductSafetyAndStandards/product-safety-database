@@ -179,17 +179,14 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
-  def lock_access
-    set_reset_password_token
-
-    super
-  end
-
   def send_unlock_instructions
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
     self.unlock_token = enc
     save(validate: false)
-    NotifyMailer.account_locked(self, raw).deliver_later
+    reset_password_token = set_reset_password_token
+    NotifyMailer.account_locked(self,
+                                unlock_token: raw,
+                                reset_password_token: reset_password_token).deliver_later
     raw
   end
 
