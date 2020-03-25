@@ -63,15 +63,16 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "when using wrong credentials over and over again", :with_2fa do
-    scenario "locks user account" do
+    scenario "locks and sends email with unlock link" do
       visit "/sign-in"
-      fill_in_credentials(password_override: "XXX")
-      fill_in_credentials(password_override: "XXX")
+      fill_in_credentials
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_on "Continue"
+      expect(page).to have_link("Sign out", href: destroy_user_session_path)
+      within(".psd-header__secondary-navigation") do
+        click_link("Sign out")
+      end
 
-      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
-    end
-
-    scenario "sends email with unlock link" do
       visit "/sign-in"
       fill_in_credentials(password_override: "XXX")
       visit "/sign-in"

@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   def set_current_user
     return unless user_signed_in?
 
+    # cookies.signed[TwoFactorAuthentication::REMEMBER_TFA_COOKIE_NAME] = nil
     User.current = current_user
   end
 
