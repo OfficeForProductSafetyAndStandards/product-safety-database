@@ -11,13 +11,13 @@ cd beis-opss-psd
 
 ### 1. Install prequisites
 
-The application requires several things to run. Install these:
+The application requires several backing services to run. Install these:
 
 * [Redis](https://redis.io/download)
 * [PostgreSQL](https://www.postgresql.org/download/)
 * [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/install-elasticsearch.html) - version 6 (you can also install this via Docker, see below)
 
-### 1.1 Install prerequsites via Docker
+### 1.1 Install supporting services via Docker
 
 Some of the dependencies are easier to install via Docker:
 
