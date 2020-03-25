@@ -25,9 +25,11 @@ module Users
         return render :new
       end
 
-      if resource
+      if resource&.mobile_number?
         sign_in(resource_name, resource)
         return respond_with resource, location: after_sign_in_path_for(resource)
+      elsif resource
+        return redirect_to missing_mobile_number_path
       end
 
       self.resource = resource_class.new(sign_in_params).decorate
