@@ -25,7 +25,7 @@ module Users
         return render :new
       end
 
-      if resource && resource.mobile_number?
+      if resource&.mobile_number?
         sign_in(resource_name, resource)
         return respond_with resource, location: after_sign_in_path_for(resource)
       elsif resource
