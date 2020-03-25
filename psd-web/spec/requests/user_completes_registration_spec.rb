@@ -103,7 +103,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
                 user: {
                   name: "Foo Bar",
                   password: "foobarnoteasyatall1234!",
-                  mobile_number: "07235671232"
+                  mobile_number: "07700900000"
                 }
               }
         user.reload
@@ -126,7 +126,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       end
 
       it "updates the user’s mobile number" do
-        expect(user.mobile_number).to eql("07235671232")
+        expect(user.mobile_number).to eql("07700900000")
       end
 
       it "updates the user’s password" do
@@ -142,7 +142,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
                 user: {
                   name: "Foo Bar",
                   password: "foobarnoteasyatall1234!",
-                  mobile_number: "07235671232"
+                  mobile_number: "07700900000"
                 }
               }
         user.reload
