@@ -29,7 +29,6 @@ module Users
         sign_in(resource_name, resource)
         return respond_with resource, location: after_sign_in_path_for(resource)
       elsif resource
-        resource.errors.add(:email, I18n.t(:missing, scope: "sign_user_in.mobile_number"))
         return redirect_to missing_mobile_number_path
       end
 
