@@ -66,10 +66,7 @@ module Users
     def passed_two_factor_authentication?
       return true if !Rails.configuration.two_factor_authentication_enabled
 
-      request.referer &&
-        URI(request.referer).path == user_two_factor_authentication_path &&
-        user_signed_in? &&
-        is_fully_authenticated?
+      user_signed_in? && is_fully_authenticated?
     end
 
     def resend_invitation_link_for(user)

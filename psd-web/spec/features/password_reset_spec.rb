@@ -65,20 +65,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       expect(page).to have_css("h1", text: "Declaration")
     end
 
-    scenario "a signed user coming from an URL other than 2FA gets forced to go through 2FA before being able to edit their password" do
-      request_password_reset
-
-      sign_in(user)
-
-      visit edit_user_password_url_with_token
-
-      expect_to_be_on_two_factor_authentication_page
-
-      complete_two_factor_authentication_with(user.reload.direct_otp)
-
-      expect_to_be_on_edit_user_password_page
-    end
-
     context "when the password does not fit the criteria" do
       scenario "when the password is too short it shows an error" do
         request_password_reset
