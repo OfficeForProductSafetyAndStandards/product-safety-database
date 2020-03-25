@@ -2,7 +2,11 @@
 
 ## Installing the application
 
-First, clone the Git repository and `cd` into it within a terminal prompt.
+First, clone the Git repository and `cd` into it within a terminal prompt:
+
+```bash
+git clone https://github.com/UKGovernmentBEIS/beis-opss-psd.git
+cd beis-opss-psd
 
 ### 1. Install prequisites
 
