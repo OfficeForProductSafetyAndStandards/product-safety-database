@@ -423,8 +423,22 @@ if run_seeds
   Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
   Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-  user1 = User.create!(name: "Test User", email: "user@example.com", password: "testpassword", password_confirmation: "testpassword", organisation: organisation, teams: [enforcement])
-  user2 = User.create!(name: "Team Admin", email: "admin@example.com", password: "testpassword", password_confirmation: "testpassword", organisation: organisation, teams: [processing])
+  user1 = User.create!(
+    name: "Test User",
+    email: "user@example.com",
+    password: "testpassword",
+    password_confirmation: "testpassword",
+    mobile_number_verified: true,
+    organisation: organisation, teams: [enforcement]
+  )
+  user2 = User.create!(
+    name: "Team Admin",
+    email: "admin@example.com",
+    password: "testpassword",
+    password_confirmation: "testpassword",
+    mobile_number_verified: true,
+    organisation: organisation, teams: [processing]
+  )
 
   %i[opss_user psd_user user].each do |role|
     UserRole.create!(user: user1, name: role)
