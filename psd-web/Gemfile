@@ -40,7 +40,7 @@ gem "sidekiq-cron", "~> 1.1"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.6.2"
-gem "two_factor_authentication"
+gem "two_factor_authentication", "~> 2.2"
 gem "webpacker", "5.0.1"
 gem "wicked"
 
