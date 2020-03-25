@@ -27,13 +27,13 @@ Some of the dependencies are easier to install via Docker:
 [Install Docker](https://docs.docker.com/install/) if you have not already done so, and then run:
 
 ```bash
-   docker-compose build keycloak
+docker-compose build keycloak
 ```
 
 and
 
 ```bash
-   docker-compose build antivirus
+docker-compose build antivirus
 ```
 
 ### 2. Install Ruby and gem dependencies
@@ -45,7 +45,7 @@ You need to install the right version of Ruby - see [Gemfile](./psd-web/Gemfile)
 Once you’ve installed the right version of Ruby, you can install the Ruby gem dependencies by running this command from `psd-web`:
 
 ```bash
-   bundle install
+bundle install
 ```
 
 
@@ -60,7 +60,7 @@ Then install [yarn](https://classic.yarnpkg.com/en/docs/install)
 Once these are both installed, run this command from within `psd-web`:
 
 ```bash
-   yarn install
+yarn install
 ```
 
 to install npm dependencies.
@@ -70,7 +70,7 @@ to install npm dependencies.
 Some settings are configured within a hidden file called `.env.development` (within the `psd-web` folder). You will need to create this - you can copy the example in [`.env.development.example`](./psd-web/.env.development.example):
 
 ```bash
-   cp .env.development.example .env.development
+cp .env.development.example .env.development
 ```
 
 You will need to edit this file to add:
@@ -84,7 +84,7 @@ You will need to edit this file to add:
 Create and populate the database:
 
 ```bash
-    bundle exec bin/rake db:setup
+bundle exec bin/rake db:setup
 ```
 
 ## Running the application
@@ -92,14 +92,14 @@ Create and populate the database:
 To compile the front-end assets (and have them re-compile as you make changes), run:
 
 ```bash
-    bundle exec bin/webpack-dev-server
+bundle exec bin/webpack-dev-server
 ```
 
 Start the application (from `psd-web`):
 
 ```bash
-    bundle exec bin/rails server
-    bundle exec bin/sidekiq
+bundle exec bin/rails server
+bundle exec bin/sidekiq
 ```
 
 ### Keycloak
@@ -119,11 +119,15 @@ Copy the file in the `psd-web` directory called `.env.test.example` to `.env.tes
 
 New tests are written in RSpec. There should be a feature spec covering new user journeys, and unit testing of all code components.
 
-    bundle exec rspec
+```bash
+bundle exec rspec
+```
 
 There is also a legacy test suite written with Minitest. This is deprecated and tests are being gradually moved over to RSpec. To run it:
 
-    bin/rails test
+```bash
+bin/rails test
+```
 
 You can run the Ruby linting with `bin/rubocop`. Running this with the `-a` flag set will cause Rubocop to attempt to fix as many of the issues as it can.
 
