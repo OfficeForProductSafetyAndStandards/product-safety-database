@@ -67,7 +67,11 @@ to install npm dependencies.
 
 ### 4. Configure your local environment
 
-Some settings are configured within a hidden file called `.env.development` (within the `psd-web` folder). You will need to create this - you can copy the example in [`.env.development.example`](./psd-web/.env.development.example).
+Some settings are configured within a hidden file called `.env.development` (within the `psd-web` folder). You will need to create this - you can copy the example in [`.env.development.example`](./psd-web/.env.development.example):
+
+```bash
+   cp .env.development.example .env.development
+```
 
 You will need to edit this file to add:
 
