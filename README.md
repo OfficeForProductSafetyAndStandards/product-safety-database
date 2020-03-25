@@ -21,22 +21,10 @@ We're using [Sidekiq](https://github.com/mperham/sidekiq) as our background proc
 
 We're processing attachments using our [antivirus API](https://github.com/UKGovernmentBEIS/beis-opss-antivirus) for antivirus checking and [Imagemagick](http://imagemagick.org) for thumbnailing.
 
-## Design system
 
-This project uses the [GOV.UK design system](https://design-system.service.gov.uk). The CSS and JavaScript assets are imported directly, and the
-macros have been ported as [Rails compatible components](https://github.com/UKGovernmentBEIS/govuk-design-system-rails).
+## Getting set up
 
-
-## Accounts
-
-## GOV.UK Notify
-
-If you want to send emails from your development instance, or update any API keys for the deployed instances, you'll need an account for [GOV.UK Notify](https://www.notifications.service.gov.uk) - ask someone on the team to invite you.
-
-
-## GOV.UK Platform as a Service
-
-If you want to update any of the deployed instances, you'll need an account for [GOV.UK PaaS](https://admin.london.cloud.service.gov.uk/) - ask someone on the team to invite you.
+See [getting set up](doc/getting-set-up.md).
 
 ## Contributing
 
