@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_config: true do
+RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_config: true, with_stubbed_notify: true, with_2fa: true do
   describe "viewing the form" do
     context "with a valid reset token" do
       let(:reset_token) { SecureRandom.hex(20) }
@@ -8,18 +8,12 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
 
       before do
         reset_password_digest = Devise.token_generator.digest(user, :reset_password_token, reset_token)
-
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
+      end
 
+      it "redirects the user to the two factor authentication page" do
         get(edit_user_password_path(reset_password_token: reset_token))
-      end
-
-      it "return a 200 status code" do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it "displays a reset password form" do
-        expect(response).to render_template("passwords/edit")
+        expect(response).to redirect_to(user_two_factor_authentication_path)
       end
     end
 

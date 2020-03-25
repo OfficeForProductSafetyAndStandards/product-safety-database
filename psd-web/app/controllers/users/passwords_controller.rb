@@ -1,12 +1,35 @@
 module Users
   class PasswordsController < Devise::PasswordsController
-    skip_before_action :assert_reset_token_passed, only: :edit
+    skip_before_action :assert_reset_token_passed,
+                       :require_no_authentication,
+                       :has_accepted_declaration,
+                       :has_viewed_introduction,
+                       only: :edit
 
     def edit
-      return render :invalid_link, status: :not_found if params[:reset_password_token].blank? || reset_token_invalid?
+      return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
 
-      super
+      if passed_two_factor_authentication?
+        # Devise password update requires the user to be signed out, as it relies on the "reset password token"
+        # parameter and an user attempting to reset its password because does not remember it is not supposed to be
+        # already signed in.
+        # In order to be able to enforce 2FA, we need to to sign the user in.
+        # Given this contradiction between needing it for 2FA but needing the opposite for the password update,
+        # when the user gets redirected back after 2FA, we have to sign out the users before allowing them to
+        # update their password.
+        sign_out(:user)
+        super
+      else
+        sign_in(user_with_reset_token)
+        warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
+        # Will redirect back to #edit after passing 2FA.
+        # fullpath contains "reset_password_token", necessary for the further update.
+        store_location_for(:user, request.fullpath)
+        user_with_reset_token.send_new_otp
+
+        redirect_to user_two_factor_authentication_path
+      end
     end
 
     def create
@@ -32,7 +55,19 @@ module Users
       end
     end
 
+    # Overrides from ApplicationController in order to hide the the main navigation links
+    # when the user lands at the password edition page after being signed in by 2FA.
+    def hide_nav?
+      true
+    end
+
   private
+
+    def passed_two_factor_authentication?
+      return true if !Rails.configuration.two_factor_authentication_enabled
+
+      user_signed_in? && is_fully_authenticated?
+    end
 
     def resend_invitation_link_for(user)
       SendUserInvitationJob.perform_later(user.id, nil)
@@ -40,7 +75,7 @@ module Users
     end
 
     def reset_token_invalid?
-      user_with_reset_token.blank?
+      params[:reset_password_token].blank? || user_with_reset_token.blank?
     end
 
     def reset_token_expired?

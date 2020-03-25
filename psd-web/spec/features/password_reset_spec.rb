@@ -43,6 +43,12 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       visit edit_user_password_url_with_token
 
+      expect_to_be_on_two_factor_authentication_page
+
+      complete_two_factor_authentication_with(user.reload.direct_otp)
+
+      expect_to_be_on_edit_user_password_page
+
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
@@ -56,9 +62,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
-      fill_in "Enter security code", with: user.reload.direct_otp
-      click_on "Continue"
-
       expect(page).to have_css("h1", text: "Declaration")
     end
 
@@ -67,6 +70,12 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         request_password_reset
 
         visit edit_user_password_url_with_token
+
+        expect_to_be_on_two_factor_authentication_page
+
+        complete_two_factor_authentication_with(user.reload.direct_otp)
+
+        expect_to_be_on_edit_user_password_page
 
         fill_in "Password", with: "as"
         click_on "Continue"
@@ -79,6 +88,12 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         request_password_reset
 
         visit edit_user_password_url_with_token
+
+        expect_to_be_on_two_factor_authentication_page
+
+        complete_two_factor_authentication_with(user.reload.direct_otp)
+
+        expect_to_be_on_edit_user_password_page
 
         fill_in "Password", with: ""
         click_on "Continue"
@@ -134,8 +149,21 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
+  def complete_two_factor_authentication_with(security_code)
+    fill_in "Enter security code", with: security_code
+    click_on "Continue"
+  end
+
+  def expect_to_be_on_two_factor_authentication_page
+    expect(page).to have_current_path("/two-factor")
+  end
+
   def expect_to_be_on_reset_password_page
     expect(page).to have_current_path("/password/new")
+  end
+
+  def expect_to_be_on_edit_user_password_page
+    expect(page).to have_current_path("/password/edit", ignore_query: true)
   end
 
   def expect_to_be_on_check_your_email_page
