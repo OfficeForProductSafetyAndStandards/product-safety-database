@@ -19,12 +19,12 @@ The application requires several things to run. Install these:
 
 ### 1.1 Install prerequsites via Docker
 
-Some of the dependencies are easier to install via [Docker](https://docs.docker.com/install/):
+Some of the dependencies are easier to install via Docker:
 
 * Keycloak
 * Antivirus (optional)
 
-To install these, run this command from the root folder:
+[Install Docker](https://docs.docker.com/install/) if you have not already done so, and then run:
 
 ```bash
    docker-compose build keycloak
