@@ -78,8 +78,8 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
       expect_to_be_on_complete_registration_page
 
       # Form should NOT contain values from previous abandoned registration
-      expect(find_field("Full name").value).to eql("")
-      expect(find_field("Mobile number").value).to eql("")
+      expect(find_field("Full name").value).to eq ""
+      expect(find_field("Mobile number").value).to eq ""
 
       # Deliberately leave password blank
       fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: ""
@@ -87,8 +87,8 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
       click_button "Continue"
 
       # Form SHOULD now contain pre-filled values from previous submission
-      expect(find_field("Full name").value).to eql("Bob Jones")
-      expect(find_field("Mobile number").value).to eql("07731123345")
+      expect(find_field("Full name").value).to eq("Bob Jones")
+      expect(find_field("Mobile number").value).to eq("07731123345")
 
       # Now add a password
       fill_in "Password", with: "testpassword123@"
