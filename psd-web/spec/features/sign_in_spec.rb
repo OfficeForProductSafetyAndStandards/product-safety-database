@@ -82,7 +82,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       expect(page).to have_link("Enter correct email address and password", href: "#email")
       expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
       expect(page).not_to have_link("Cases")
-
     end
   end
 
