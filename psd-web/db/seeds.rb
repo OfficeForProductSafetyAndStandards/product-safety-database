@@ -428,16 +428,20 @@ if run_seeds
     email: "user@example.com",
     password: "testpassword",
     password_confirmation: "testpassword",
+    organisation: organisation,
     mobile_number_verified: true,
-    organisation: organisation, teams: [enforcement]
+    teams: [enforcement],
+    mobile_number: ENV.fetch("DEVELOPMENT_TWO_FACTOR_AUTH_MOBILE_NUMBER")
   )
   user2 = User.create!(
     name: "Team Admin",
     email: "admin@example.com",
     password: "testpassword",
     password_confirmation: "testpassword",
+    organisation: organisation,
     mobile_number_verified: true,
-    organisation: organisation, teams: [processing]
+    teams: [processing],
+    mobile_number: ENV.fetch("DEVELOPMENT_TWO_FACTOR_AUTH_MOBILE_NUMBER"),
   )
 
   %i[opss_user psd_user user].each do |role|

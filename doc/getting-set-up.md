@@ -77,6 +77,7 @@ You will need to edit this file to add:
 
 * [GOV.UK Notify](https://www.notifications.service.gov.uk) API key
 * Keycloak client secret
+* Your mobile number to `DEVELOPMENT\_TWO\_FACTOR\_AUTH\_MOBILE\_NUMBER` to receive two factor authentication code or set `TWO_\FACTOR\_AUTHENTICATION\_ENABLED=false` to bypass two factor authentication in development mode.
 
 
 ### 5. Setup the database
