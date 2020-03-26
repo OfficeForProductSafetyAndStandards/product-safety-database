@@ -13,13 +13,15 @@
         classes: "app-!-max-width-two-thirds",
         label: { text: "Full name" },
         value: @user.name,
-        autocomplete: "name"
+        autocomplete: "name",
+        id: "name"
         %>
 
       <%= render "form_components/govuk_input", key: :mobile_number, form: form,
         classes: "app-!-max-width-two-thirds",
         label: { text: "Mobile number" },
         value: @user.mobile_number,
+        id: "mobile_number",
         autocomplete: "tel",
         type: "tel"
         %>
