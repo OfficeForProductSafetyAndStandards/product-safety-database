@@ -7,6 +7,12 @@ class UsersController < ApplicationController
   def complete_registration
     @user = User.find(params[:id])
 
+    # Reset name and mobile number in case they’ve been remembered
+    # from a previous registration that was abandoned before the mobile number
+    # was verified via two-factor authentication.
+    @user.name = ""
+    @user.mobile_number = ""
+
     return render :signed_in_as_another_user if user_signed_in? && !signed_in_as?(@user)
 
     # Some users will bookmark the invitation URL received on the email and may re-use
