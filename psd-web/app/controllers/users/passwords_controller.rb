@@ -50,8 +50,9 @@ module Users
     end
 
     def update
-      super do |_resource|
-        @email = _resource.email
+      super do |resource|
+        @email = resource.email
+
         if reset_password_token_just_expired?
           return render :expired
         end
