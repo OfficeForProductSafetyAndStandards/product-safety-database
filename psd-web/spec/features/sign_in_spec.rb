@@ -73,10 +73,10 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
         click_link("Sign out")
       end
 
-      visit "/sign-in"
-      fill_in_credentials(password_override: "XXX")
-      visit "/sign-in"
-      fill_in_credentials(password_override: "XXX")
+      Devise.maximum_attempts.times do
+        visit "/sign-in"
+        fill_in_credentials(password_override: "XXX")
+      end
 
       expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
 
@@ -94,10 +94,10 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     end
 
     scenario "sends email with reset password link" do
-      visit "/sign-in"
-      fill_in_credentials(password_override: "XXX")
-      visit "/sign-in"
-      fill_in_credentials(password_override: "XXX")
+      Devise.maximum_attempts.times do
+        visit "/sign-in"
+        fill_in_credentials(password_override: "XXX")
+      end
 
       expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
 

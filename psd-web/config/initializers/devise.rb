@@ -309,7 +309,11 @@ Devise.setup do |config|
 
   config.lock_strategy = :failed_attempts
   config.unlock_strategy = :email
-  config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
+  if Rails.env.test?
+    config.maximum_attempts = 2
+  else
+    config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
+  end
 end
 
 DeviseController.include NoSecondaryNav
