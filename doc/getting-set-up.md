@@ -77,6 +77,8 @@ You will need to edit this file to add:
 
 * [GOV.UK Notify](https://www.notifications.service.gov.uk) API key
 * Keycloak client secret
+* Your mobile number to `TWO_FACTOR_AUTH_MOBILE_NUMBER` so that when using the seeded user you will receive the two factor authentication code. Alternatively you cab set `TWO_FACTOR_AUTHENTICATION_ENABLED=false` to bypass two factor authentication in development mode.
+  
 
 
 ### 5. Setup the database
