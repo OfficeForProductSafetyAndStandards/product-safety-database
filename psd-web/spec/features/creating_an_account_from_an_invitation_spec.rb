@@ -74,6 +74,8 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     expect(page).to have_current_path(/\/complete-registration?.+$/)
 
     expect(page).to have_h1("Create an account")
+
+    expect(page).to have_field("username", type: "email", with: invited_user.email, disabled: true)
   end
 
   def expect_to_be_on_signed_in_as_another_user_page
