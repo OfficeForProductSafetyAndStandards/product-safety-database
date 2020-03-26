@@ -10,6 +10,8 @@ module Users
       return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
 
+      @email = user_with_reset_token.email
+
       if passed_two_factor_authentication?
         # Devise password update requires the user to be signed out, as it relies on the "reset password token"
         # parameter and an user attempting to reset its password because does not remember it is not supposed to be
@@ -49,6 +51,7 @@ module Users
 
     def update
       super do |_resource|
+        @email = _resource.email
         if reset_password_token_just_expired?
           return render :expired
         end
