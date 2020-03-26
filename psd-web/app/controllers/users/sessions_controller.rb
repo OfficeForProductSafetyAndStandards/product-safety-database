@@ -17,7 +17,7 @@ module Users
       end
 
       user = User.find_by(email: sign_in_form.email)
-      if user && user.access_locked?
+      if user&.access_locked?
         return redirect_to account_locked_path
       end
 

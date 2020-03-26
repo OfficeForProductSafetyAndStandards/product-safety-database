@@ -190,6 +190,13 @@ class User < ApplicationRecord
     raw
   end
 
+  # Don't reset password attempts yet, it will happen on next successful login
+  def unlock_access!
+    self.locked_at = nil
+    self.unlock_token = nil  if respond_to?(:unlock_token=)
+    save(validate: false)
+  end
+
   def invitation_expired?
     return false unless invited_at
 
