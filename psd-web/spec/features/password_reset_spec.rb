@@ -65,6 +65,19 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       expect(page).to have_css("h1", text: "Declaration")
     end
 
+    scenario "only the user that requested the password reset can access its reset password page" do
+      # Original user requests password reset
+      request_password_reset
+
+      # Second user attempts to use original user reset password link
+      other_user = create(:user)
+      sign_in(other_user)
+      visit edit_user_password_url_with_token
+
+      expect_not_to_be_on_reset_password_page
+      expect(page).to have_css("h1", text: "Invalid link")
+    end
+
     context "when the password does not fit the criteria" do
       scenario "when the password is too short it shows an error" do
         request_password_reset
@@ -160,6 +173,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
   def expect_to_be_on_reset_password_page
     expect(page).to have_current_path("/password/new")
+  end
+
+  def expect_not_to_be_on_reset_password_page
+    expect(page).not_to have_current_path("/password/new")
   end
 
   def expect_to_be_on_edit_user_password_page

@@ -7,7 +7,7 @@ module Users
                        only: :edit
 
     def edit
-      return render :invalid_link, status: :not_found if reset_token_invalid?
+      return render :invalid_link, status: :not_found if reset_token_invalid? || wrong_user?
       return render :expired, status: :gone if reset_token_expired?
 
       if passed_two_factor_authentication?
@@ -62,6 +62,10 @@ module Users
     end
 
   private
+
+    def wrong_user?
+      user_signed_in? && current_user != user_with_reset_token
+    end
 
     def passed_two_factor_authentication?
       return true if !Rails.configuration.two_factor_authentication_enabled
