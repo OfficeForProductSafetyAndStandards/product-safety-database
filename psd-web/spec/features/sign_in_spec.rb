@@ -68,7 +68,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     end
   end
 
-  context "when the user hasn’t verified their mobile number" do
+  context "when the user hasn’t verified their mobile number", :with_2fa do
     let(:user) { create(:user, mobile_number_verified: false) }
 
     it "doesn’t let them sign in" do
@@ -81,6 +81,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
       expect(page).to have_link("Enter correct email address and password", href: "#email")
       expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+      expect(page).not_to have_link("Cases")
     end
   end
 
