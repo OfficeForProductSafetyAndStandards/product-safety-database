@@ -4,5 +4,9 @@ module Users
                        :has_viewed_introduction
 
     def show; end
+
+    def hide_nav?
+      true
+    end
   end
 end
