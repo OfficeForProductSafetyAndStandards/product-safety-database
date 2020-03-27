@@ -179,24 +179,6 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
-  def send_unlock_instructions
-    raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
-    self.unlock_token = enc
-    save(validate: false)
-    reset_password_token = set_reset_password_token
-    NotifyMailer.account_locked(self,
-                                unlock_token: raw,
-                                reset_password_token: reset_password_token).deliver_later
-    raw
-  end
-
-  # Don't reset password attempts yet, it will happen on next successful login
-  def unlock_access!
-    self.locked_at = nil
-    self.unlock_token = nil if respond_to?(:unlock_token=)
-    save(validate: false)
-  end
-
   def invitation_expired?
     return false unless invited_at
 
@@ -232,6 +214,28 @@ class User < ApplicationRecord
 
   def need_two_factor_authentication?(_request)
     Rails.configuration.two_factor_authentication_enabled
+  end
+
+  def send_unlock_instructions
+    raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
+    self.unlock_token = enc
+    save(validate: false)
+    reset_password_token = set_reset_password_token
+    NotifyMailer.account_locked(self,
+                                unlock_token: raw,
+                                reset_password_token: reset_password_token).deliver_later
+    raw
+  end
+
+  # Don't reset password attempts yet, it will happen on next successful login
+  def unlock_access!
+    self.locked_at = nil
+    self.unlock_token = nil if respond_to?(:unlock_token=)
+    save(validate: false)
+  end
+
+  def active_for_authentication?
+    true
   end
 
 private

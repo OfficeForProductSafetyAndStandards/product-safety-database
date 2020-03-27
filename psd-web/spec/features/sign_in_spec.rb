@@ -93,7 +93,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       expect(page).to have_link("Sign out", href: destroy_user_session_path)
     end
 
-    scenario "sends email with reset password link" do
+    scenario "sends email with reset password link", :with_2fa do
       Devise.maximum_attempts.times do
         visit "/sign-in"
         fill_in_credentials(password_override: "XXX")
@@ -103,6 +103,11 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
       unlock_email = delivered_emails.last
       visit unlock_email.personalization_path(:edit_user_password_url_token)
+
+      expect(page).to have_css("h1", text: "Check your phone")
+
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_on "Continue"
 
       expect(page).to have_css("h1", text: "Create a new password")
     end
