@@ -115,5 +115,9 @@ module Users
     def after_sending_reset_password_instructions_path_for(_resource_name)
       check_your_email_path
     end
+
+    def after_resetting_password_path_for(_resource)
+      password_changed_path
+    end
   end
 end

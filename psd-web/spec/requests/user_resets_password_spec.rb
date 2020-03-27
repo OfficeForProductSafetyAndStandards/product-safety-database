@@ -85,8 +85,8 @@ RSpec.describe "User resets password", type: :request, with_stubbed_notify: true
         }
       end
 
-      it "redirects to the homepage" do
-        expect(response).to redirect_to(root_path)
+      it "redirects to the password changed page" do
+        expect(response).to redirect_to(password_changed_path)
       end
     end
 
