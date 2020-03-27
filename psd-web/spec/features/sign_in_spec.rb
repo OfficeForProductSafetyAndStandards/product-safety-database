@@ -165,6 +165,21 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     end
   end
 
+  context "when email address does not belong to any user", :with_2fa do
+    it "shows a generic error message" do
+      visit "/sign-in"
+
+      fill_in "Email address", with: "notarealuser@example.com"
+      fill_in "Password", with: "notarealpassword"
+      click_on "Continue"
+
+      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+      expect(page).to have_link("Enter correct email address and password", href: "#email")
+      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+      expect(page).to have_css("span#password-error", text: "")
+    end
+  end
+
   context "with credentials entered incorrectly" do
     it "highlights email field" do
       visit "/sign-in"

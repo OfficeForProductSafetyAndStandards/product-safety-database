@@ -49,6 +49,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       expect_to_be_on_edit_user_password_page
 
+      expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
+
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
@@ -82,6 +84,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_link("Password is too short", href: "#password")
+
+        expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
       end
 
       scenario "when the password is empty it shows an error" do
@@ -100,6 +104,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_link("Enter a password", href: "#password")
+
+        expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
       end
     end
   end

@@ -66,52 +66,6 @@ class User < ApplicationRecord
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
 
-  def self.load_from_keycloak(users = KeycloakClient.instance.all_users)
-    # We're not interested in users not belonging to an organisation, as that means they are not PSD users
-    # - however, checking this based on permissions would require a request per user
-    users.map do |user|
-      user[:teams] = Team.where(id: user[:groups])
-
-      # Filters out user groups which aren't related to PSD. User may belong directly to an Organisation, or indirectly via a Team
-      user[:organisation] = Organisation.find_by(id: user[:groups]) || user[:teams].first&.organisation
-
-      user
-    end
-
-    users.reject { |user| user[:organisation].blank? }.each do |user|
-      begin
-        record = find_or_create_by!(id: user[:id]) do |new_record|
-          new_record.email = user[:email]
-          new_record.name = user[:name]
-          new_record.organisation = user[:organisation]
-          new_record.skip_password_validation = true
-        end
-
-        record.update!(user.slice(:name, :email, :organisation))
-        record.teams = user[:teams]
-
-        SyncKeycloakUserRolesJob.perform_later(record.id)
-      rescue ActiveRecord::ActiveRecordError => e
-        if Rails.env.production?
-          Raven.capture_exception(e)
-        else
-          raise(e)
-        end
-      end
-    end
-  end
-
-  def load_roles_from_keycloak
-    roles = KeycloakClient.instance.get_user_roles(id).uniq
-
-    return if roles == user_roles.pluck(:name).map(&:to_sym)
-
-    transaction do
-      user_roles.delete_all
-      roles.each { |role| user_roles.create!(name: role) }
-    end
-  end
-
   def self.current
     RequestStore.store[:current_user]
   end
