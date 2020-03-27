@@ -65,19 +65,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       expect(page).to have_css("h1", text: "Declaration")
     end
 
-    scenario "only the user that requested the password reset can access its reset password page" do
-      # Original user requests password reset
-      request_password_reset
-
-      # Second user attempts to use original user reset password link
-      other_user = create(:user)
-      sign_in(other_user)
-      visit edit_user_password_url_with_token
-
-      expect_not_to_be_on_reset_password_page
-      expect(page).to have_css("h1", text: "Invalid link")
-    end
-
     context "when the password does not fit the criteria" do
       scenario "when the password is too short it shows an error" do
         request_password_reset
@@ -113,6 +100,36 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_link("Enter a password", href: "#password")
+      end
+    end
+
+    context "when signed in as a different user than the one that requested the password reset" do
+      scenario "needs to sign out before being able to reset the password for the original user" do
+        # Original user requests password reset
+        request_password_reset
+
+        # Second user attempts to use original user reset password link
+        other_user = create(:user)
+        sign_in(other_user)
+        visit edit_user_password_url_with_token
+
+        expect_to_be_on_signed_in_as_another_user_page
+
+        # Second user decides to continue resetting the password for the original user
+        click_link "Reset password for #{user.name}"
+
+        expect_to_be_on_two_factor_authentication_page
+
+        # Need to pass 2FA authentication for original user
+        complete_two_factor_authentication_with(user.reload.direct_otp)
+
+        # Finally can reset the original user password
+        expect_to_be_on_edit_user_password_page
+
+        fill_in "Password", with: "a_new_password"
+        click_on "Continue"
+
+        expect(page).to have_css("h1", text: "Declaration")
       end
     end
   end
@@ -175,8 +192,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     expect(page).to have_current_path("/password/new")
   end
 
-  def expect_not_to_be_on_reset_password_page
-    expect(page).not_to have_current_path("/password/new")
+  def expect_to_be_on_signed_in_as_another_user_page
+    expect(page).to have_css("h1", text: "You are already signed in to the Product safety database")
   end
 
   def expect_to_be_on_edit_user_password_page
