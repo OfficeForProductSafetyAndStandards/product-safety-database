@@ -294,7 +294,7 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
 
   # Devise two_factor_authentication gem
-  if ENV["TWO_FACTOR_AUTHENTICATION_ENABLED"]
+  if Rails.configuration.two_factor_authentication_enabled
     config.max_login_attempts = 10  # Maximum second factor attempts count.
     config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
     config.direct_otp_length = 5  # Direct OTP code length
