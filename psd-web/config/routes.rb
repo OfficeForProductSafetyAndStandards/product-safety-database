@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     get "missing-mobile-number", to: "users#missing_mobile_number"
   end
 
-  resource :password_changed, controller: "users/password_changed", only: :show
+  resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
 
   resources :users, only: [:update] do
     member do
