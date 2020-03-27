@@ -117,16 +117,8 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
         expect(user.mobile_number_verified).to be false
       end
 
-      context "when two factor auth is enabled" do
-        it "redirects to the two factor authentication path" do
-          expect(response).to redirect_to(user_two_factor_authentication_path)
-        end
-      end
-
-      context "when two factor auth is disabled" do
-        it "redirects to the two factor authentication path" do
-          expect(response).to redirect_to(root_path)
-        end
+      it "redirects to the two factor authentication path" do
+        expect(response).to redirect_to(user_two_factor_authentication_path)
       end
 
       it "updates the user’s name" do
