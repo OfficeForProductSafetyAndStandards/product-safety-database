@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User completes registration", type: :request, with_stubbed_keycloak_config: true, with_stubbed_notify: true do
+RSpec.describe "User completes registration", type: :request, with_stubbed_notify: true do
   let(:user) { create(:user, :invited) }
 
   describe "viewing the form" do
