@@ -29,6 +29,7 @@ module Users
     end
 
   private
+
     def passed_two_factor_authentication?
       return true if !Rails.configuration.two_factor_authentication_enabled
 
@@ -37,7 +38,7 @@ module Users
 
     def user_with_unlock_token
       @user_with_unlock_token ||= begin
-        unlock_token   = Devise.token_generator.digest(self, :unlock_token, params[:unlock_token])
+        unlock_token = Devise.token_generator.digest(self, :unlock_token, params[:unlock_token])
 
         User.find_by(unlock_token: unlock_token)
       end

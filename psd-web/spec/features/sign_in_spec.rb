@@ -83,7 +83,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
       expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
 
-      unlock_email = delivered_emails.last
       visit unlock_path
 
       expect(page).to have_css("h1", text: "Check your phone")
