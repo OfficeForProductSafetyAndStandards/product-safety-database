@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
   before { sign_in create(:user, :activated, :opss_user) }
 
   let(:reference_number) { Faker::Number.number(digits: 10) }
@@ -275,7 +275,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_case_businesses_page_to_show(label:, business:)
     expect(page).to have_selector("h1", text: "Businesses")
 
-    expected_address = business.slice(:address_1, :address_2, :postcode, :country).values.join(", ")
+    expected_address = business.slice(:address_1, :address_2, :town, :postcode, :country).values.join(", ")
     expected_contact = business.slice(:contact_name, :contact_job_title, :contact_phone, :contact_email).values.join(", ")
 
     section = page.find("h2", text: label).find("+dl")
@@ -346,18 +346,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_business_details_page(with:)
-    fill_in "Trading name",                  with: with[:trading_name]
-    fill_in "Registered or legal name",      with: with[:legal_name]
-    fill_in "Company number",                with: with[:company_number]
-    fill_in "Address line one",              with: with[:address_1]
-    fill_in "Address line two",              with: with[:address_2]
-    fill_in "Town or city",                  with: with[:town]
-    fill_in "County",                        with: with[:county]
-    fill_in "Postcode",                      with: with[:postcode]
-    fill_in "Name",                          with: with[:contact_name]
-    fill_in "Email",                         with: with[:contact_email]
-    fill_in "Phone number",                  with: with[:contact_phone]
-    fill_in "Job title or role description", with: with[:contact_job_title]
+    fill_in "Trading name",                    with: with[:trading_name]
+    fill_in "Registered or legal name",        with: with[:legal_name]
+    fill_in "Company number",                  with: with[:company_number]
+    fill_in "Building and street line 1 of 2", with: with[:address_1]
+    fill_in "Building and street line 2 of 2", with: with[:address_2]
+    fill_in "Town or city",                    with: with[:town]
+    fill_in "County",                          with: with[:county]
+    fill_in "Postcode",                        with: with[:postcode]
+    fill_in "Name",                            with: with[:contact_name]
+    fill_in "Email",                           with: with[:contact_email]
+    fill_in "Phone number",                    with: with[:contact_phone]
+    fill_in "Job title or role description",   with: with[:contact_job_title]
     select with[:country], from: "Country"
     click_button "Continue"
   end

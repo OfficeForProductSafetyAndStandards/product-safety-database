@@ -1,12 +1,12 @@
 - page_heading = "Overview"
-- content_for :page_title, "#{page_heading} - #{@investigation.pretty_id}"
+= page_title "#{page_heading} - #{@investigation.pretty_id}"
 - products_count = @investigation.products.count
 
 .govuk-grid-row[class="govuk-!-padding-bottom-6"]
   .govuk-grid-column-two-thirds
 
+    span.govuk-caption-l = @investigation.pretty_description
     h1.govuk-heading-l
-      span.govuk-caption-l = @investigation.pretty_description
       = page_heading
 
     p.govuk-body-l = @investigation.title

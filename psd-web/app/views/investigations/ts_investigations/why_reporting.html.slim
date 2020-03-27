@@ -1,14 +1,14 @@
 - page_heading = "Why are you reporting this product?"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @investigation.errors.any?
 
 = form_with scope: :investigation, model: @investigation, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
       - heading_html = capture do
+        span.govuk-caption-l Report an unsafe or non-compliant product
         h1.govuk-heading-l
-          span.govuk-caption-l Report an unsafe or non-compliant product
           = page_heading
       - unsafe_details = capture do
         #hazard-type-auto-complete-container

@@ -1,12 +1,12 @@
 - page_heading = "Other information and files"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @investigation.errors.any?
 
 = form_with model: @investigation, scope: :information, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
+      span.govuk-caption-l Reporting an unsafe product
       h1.govuk-heading-l
-        span.govuk-caption-l Reporting an unsafe product
         = page_heading
       = render "form_components/govuk_checkboxes", form: form, key: :information_types,
         fieldset: { legend: { text: "What information do you have?", classes: "govuk-fieldset__legend--m" } },

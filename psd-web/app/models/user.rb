@@ -1,9 +1,15 @@
 class User < ApplicationRecord
+  INVITATION_EXPIRATION_DAYS = 14
+  COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
+  TWO_FACTOR_LOCK_TIME = 1.hour
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
-  devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
+  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable
 
   belongs_to :organisation
+
+  has_one_time_password(encrypted: true)
 
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations
@@ -11,6 +17,20 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
 
   has_and_belongs_to_many :teams
+
+  validates :password,
+            common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
+            unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
+
+  with_options on: :registration_completion do |registration_completion|
+    registration_completion.validates :mobile_number, presence: true
+    registration_completion.validates :mobile_number,
+                                      phone: { message: I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]) },
+                                      unless: -> { mobile_number.blank? }
+    registration_completion.validates :name, presence: true
+    registration_completion.validates :password, presence: true
+    registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
+  end
 
   attribute :skip_password_validation, :boolean, default: false
 
@@ -26,6 +46,12 @@ class User < ApplicationRecord
       organisation: team.organisation,
       invitation_token: SecureRandom.hex(15)
     )
+
+    # TODO: remove this once we’ve updated the application to no
+    # longer depend upon this role.
+    user.user_roles.create!(name: "psd_user")
+    user.user_roles.create!(name: "opss_user") if inviting_user.is_opss?
+
     team.users << user
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
@@ -84,6 +110,10 @@ class User < ApplicationRecord
     has_role? :team_admin
   end
 
+  def has_completed_registration?
+    encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
+  end
+
   def self.get_assignees(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
     self.activated.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
@@ -103,7 +133,63 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
+  def invitation_expired?
+    return false unless invited_at
+
+    invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
+  end
+
+  def two_factor_authentication_code_expired?
+    return false if !direct_otp_sent_at
+
+    (direct_otp_sent_at + User.direct_otp_valid_for) < Time.current
+  end
+
+  def two_factor_locked?
+    second_factor_attempts_locked_at && !two_factor_lock_expired?
+  end
+
+  def fail_two_factor_authentication!
+    return if max_login_attempts?
+
+    self.increment!(:second_factor_attempts_count, 1)
+    lock_two_factor! if max_login_attempts?
+  end
+
+  def pass_two_factor_authentication!
+    unlock_two_factor! if max_login_attempts?
+    update_column(:second_factor_attempts_count, 0)
+  end
+
+  # BEGIN: place devise overriden method calls bellow
+  def send_two_factor_authentication_code(code)
+    SendTwoFactorAuthenticationJob.perform_later(self, code)
+  end
+
+  def need_two_factor_authentication?(_request)
+    Rails.configuration.two_factor_authentication_enabled
+  end
+
 private
+
+  def lock_two_factor!
+    self.update_column(:second_factor_attempts_locked_at, Time.current)
+  end
+
+  def unlock_two_factor!
+    self.update_column(:second_factor_attempts_locked_at, nil)
+  end
+
+  def two_factor_lock_expired?
+    return true if second_factor_attempts_locked_at.nil?
+
+    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
+  end
+
+  def send_reset_password_instructions_notification(token)
+    NotifyMailer.reset_password_instructions(self, token).deliver_later
+  end
+  # END: Devise methods
 
   def current_user?
     User.current&.id == id

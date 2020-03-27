@@ -2,7 +2,7 @@
 applications:
 - name: ((app-name))
   buildpacks:
-    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.4
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.13
   path: .
   stack: cflinuxfs3
   routes:
@@ -26,8 +26,10 @@ applications:
     - psd-sentry-env
     - psd-session
     - psd-sidekiq-env
+    - psd-two-factor-auth-env
     - psd-web-scout-env
     - antivirus-auth-env
+    - keycloak-database
   processes:
     - type: web
       command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate  && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV

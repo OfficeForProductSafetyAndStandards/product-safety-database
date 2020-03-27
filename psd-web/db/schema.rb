@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_25_163932) do
+ActiveRecord::Schema.define(version: 2020_03_20_144542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -174,17 +174,6 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
 
-  create_table "keycloak_credentials", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "credential_type"
-    t.string "email"
-    t.string "encrypted_password"
-    t.integer "hash_iterations"
-    t.binary "salt"
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_keycloak_credentials_on_email"
-  end
-
   create_table "locations", id: :serial, force: :cascade do |t|
     t.string "address_line_1"
     t.string "address_line_2"
@@ -203,7 +192,9 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
   create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.string "path"
     t.datetime "updated_at", null: false
+    t.index ["path"], name: "index_organisations_on_path"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
@@ -241,10 +232,12 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.datetime "created_at", null: false
     t.string "name"
     t.uuid "organisation_id"
+    t.string "path"
     t.string "team_recipient_email"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_teams_on_name"
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
+    t.index ["path"], name: "index_teams_on_path"
   end
 
   create_table "teams_users", force: :cascade do |t|
@@ -285,7 +278,12 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.string "credential_type"
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
+    t.string "direct_otp"
+    t.datetime "direct_otp_sent_at"
     t.string "email"
+    t.string "encrypted_otp_secret_key"
+    t.string "encrypted_otp_secret_key_iv"
+    t.string "encrypted_otp_secret_key_salt"
     t.string "encrypted_password", default: "", null: false
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
@@ -293,18 +291,24 @@ ActiveRecord::Schema.define(version: 2020_02_25_163932) do
     t.integer "hash_iterations", default: 27500
     t.text "invitation_token"
     t.datetime "invited_at"
+    t.datetime "keycloak_created_at"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
+    t.text "mobile_number"
+    t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"
     t.uuid "organisation_id"
     t.binary "password_salt"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
+    t.integer "second_factor_attempts_count", default: 0
+    t.datetime "second_factor_attempts_locked_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
     t.index ["email"], name: "index_users_on_email"
+    t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

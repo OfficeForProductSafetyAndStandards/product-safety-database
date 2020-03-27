@@ -1,4 +1,4 @@
-- content_for :page_title, "Edit product"
+= page_title "Edit product", errors: @product.object.errors.any?
 - content_for :after_header do
   = link_to "Back to product", @product, class: "govuk-back-link"
 = form_with model: @product.object, local: true do |form|

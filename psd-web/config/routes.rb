@@ -18,11 +18,19 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users, path: "", path_names: { sign_in: "sign-in" }, controllers: { sessions: "users/sessions" }
+  devise_for :users, path: "", path_names: { sign_in: "sign-in", sign_out: "sign-out", two_factor_authentication: "two-factor" }, controllers: { sessions: "users/sessions", passwords: "users/passwords", two_factor_authentication: "users/two_factor_authentication" } do
+    get "reset-password", to: "users/passwords#new", as: :new_user_password
+  end
 
-  resources :users, only: [] do
+  devise_scope :user do
+    resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
+    get "missing-mobile-number", to: "users#missing_mobile_number"
+  end
+
+  resources :users, only: [:update] do
     member do
-      get :create_account
+      get "complete-registration", action: :complete_registration
+      post "sign-out-before-accepting-invitation", action: :sign_out_before_accepting_invitation
     end
   end
 
@@ -181,5 +189,7 @@ Rails.application.routes.draw do
   end
   # Handle old post-login redirect URIs from previous implementation which are still bookmarked
   match "/sessions/signin", to: redirect("/"), via: %i[get post]
+
+  get "/health/all", to: "health#show"
 end
 # rubocop:enable Metrics/BlockLength

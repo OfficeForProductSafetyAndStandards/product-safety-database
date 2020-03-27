@@ -40,7 +40,7 @@ module BusinessesHelper
       :legal_name,
       :trading_name,
       :company_number,
-      locations_attributes: %i[id name address_line_1 address_line_2 phone_number county country postal_code],
+      locations_attributes: %i[id name address_line_1 address_line_2 phone_number city county country postal_code],
       contacts_attributes: %i[id name email phone_number job_title]
     )
   end

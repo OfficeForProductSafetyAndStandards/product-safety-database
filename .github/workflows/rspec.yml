@@ -16,6 +16,7 @@ env:
   ANTIVIRUS_USERNAME: av
   ANTIVIRUS_PASSWORD: password
   PSD_HOST: example.com
+  TWO_FACTOR_AUTHENTICATION_ENABLED: false
 
 jobs:
   ruby:
@@ -48,13 +49,12 @@ jobs:
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.5.x
+        ruby-version: 2.6.x
 
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
-        node-version: 10.16.x
-
+        node-version: 10.19.x
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
 

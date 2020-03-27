@@ -1,13 +1,13 @@
 - page_heading = "Add your own reference number"
 
-- content_for :page_title, page_heading
+= page_title page_heading, errors: @investigation.errors.any?
 
 = form_with scope: :investigation, model: @investigation, url: wizard_path, method: :put, local: true do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
+      span.govuk-caption-l Reporting an unsafe product
       h1.govuk-heading-l
-        span.govuk-caption-l Reporting an unsafe product
         = page_heading
       p.govuk-body
         | The Product safety database assigns each case an ID.

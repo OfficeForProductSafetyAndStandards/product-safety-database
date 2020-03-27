@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe KeycloakToken do
+  subject(:token) do
+    described_class.new(token_endpoint)
+  end
+
   before do
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_ID").and_return(client_id)
     allow(ENV).to receive(:fetch).with("KEYCLOAK_CLIENT_SECRET").and_return(client_secret)
@@ -15,9 +19,6 @@ RSpec.describe KeycloakToken do
       to_return(status: returned_status, body: json_body, headers: {})
   end
 
-  subject do
-    described_class.new(token_endpoint)
-  end
 
   let(:token_endpoint) { "example.com" }
   let(:client_id) { "123" }
@@ -32,49 +33,60 @@ RSpec.describe KeycloakToken do
   let(:new_token) { "new-token-123" }
 
   describe "#access_token" do
-    context "no existing access token" do
-      context "request successful" do
-        it "gets a new token from Keycloak and returns it" do
-          expect(subject.access_token).to eq(new_token)
+    context "with no existing access token" do
+      context "when request successful" do
+        it "gets a new token from Keycloak" do
+          token.access_token
           expect(request_for_token).to have_been_requested
+        end
+
+        it "returns the new token" do
+          expect(token.access_token).to eq(new_token)
         end
       end
 
-      context "request unsuccessful" do
+      context "when request unsuccessful" do
         let(:returned_status) { 400 }
 
         it "raises exception" do
-          expect { subject.access_token }.to raise_exception(RestClient::BadRequest)
+          expect { token.access_token }.to raise_exception(RestClient::BadRequest)
         end
       end
     end
 
-    context "existing access token" do
+    context "with existing access token" do
       before do
-        subject.send(:token=, existing_token)
+        token.send(:token=, existing_token)
       end
 
       let(:existing_token) { "existing-token-123" }
 
-      context "which is not expired" do
+      context "when it is not expired" do
         before do
-          subject.send(:expires_at=, Time.now.to_i + 10)
+          token.send(:expires_at=, Time.now.to_i + 10)
         end
 
-        it "returns the existing token without requesting from Keycloak" do
-          expect(subject.access_token).to eq(existing_token)
+        it "does not request a new token from Keycloak" do
           expect(request_for_token).not_to have_been_requested
+        end
+
+        it "returns the existing token" do
+          expect(token.access_token).to eq(existing_token)
         end
       end
 
-      context "which is expired" do
+      context "when it is expired" do
         before do
-          subject.send(:expires_at=, Time.now.to_i - 10)
+          token.send(:expires_at=, Time.now.to_i - 10)
         end
 
         it "gets a new token from Keycloak and returns it" do
-          expect(subject.access_token).to eq(new_token)
+          token.access_token
           expect(request_for_token).to have_been_requested
+        end
+
+        it "returns the new token" do
+          expect(token.access_token).to eq(new_token)
         end
       end
     end

@@ -3,13 +3,17 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.safe_email }
     organisation
-    password { "password" }
+    password { "2538fhdkvuULE36f" }
     password_confirmation(&:password)
     has_accepted_declaration { false }
     has_been_sent_welcome_email { true }
     has_viewed_introduction { false }
     account_activated { false }
     hash_iterations { 27_500 }
+    mobile_number { "07700 900 982" }
+    mobile_number_verified { true }
+    direct_otp_sent_at { Time.current }
+    direct_otp { "12345" }
 
     transient do
       roles { [:psd_user] }
@@ -28,7 +32,7 @@ FactoryBot.define do
     trait :activated do
       has_viewed_introduction { true }
       after(:build) do |user|
-        mailer = double("mailer", welcome: double("welcome mailer", deliver_later: true))
+        mailer = instance_double("NotifyMailer", welcome: instance_double("ActionMailer::MessageDelivery", deliver_later: true))
         UserDeclarationService.accept_declaration(user, mailer)
       end
     end
@@ -37,9 +41,27 @@ FactoryBot.define do
       account_activated { false }
     end
 
+    trait :invited do
+      skip_password_validation { true }
+      invitation_token { SecureRandom.hex(15) }
+      invited_at { Time.zone.now }
+      account_activated { false }
+      password { nil }
+      password_confirmation { nil }
+      mobile_number { nil }
+      mobile_number_verified { false }
+      name { nil }
+    end
+
     trait :team_admin do
       transient do
         roles { %i[psd_user team_admin] }
+      end
+    end
+
+    trait :psd_admin do
+      transient do
+        roles { %i[psd_user psd_admin] }
       end
     end
 

@@ -127,7 +127,7 @@ private
   end
 
   def redirect_to_investigation_businesses_tab(flash)
-    redirect_to investigation_path(@investigation, anchor: "businesses"), flash: flash
+    redirect_to investigation_businesses_path(@investigation), flash: flash
   end
 
   def set_investigation

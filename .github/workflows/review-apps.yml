@@ -2,6 +2,9 @@ name: Review application
 
 on: [pull_request]
 
+env:
+  PR_NUMBER: ${{ github.event.number }}
+
 jobs:
   reviewapp:
     name: Deploy
@@ -9,12 +12,35 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
+    - name: Create GitHub deployment
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
+        BRANCH: ${{ github.head_ref }}
+      run: |
+        source psd-web/deploy-github-functions.sh
+        gh_deploy_create review-app-${PR_NUMBER}
+
+    - name: Initiate deployment status
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
+        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
+      run: |
+        source psd-web/deploy-github-functions.sh
+
+        # URL where the deployment progress can be tracked. Exported for future steps.
+        log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/pull/$PR_NUMBER/checks")
+        echo "::set-env name=LOG_URL::$log_url"
+
+        gh_deploy_initiate review-app-${PR_NUMBER} $log_url
+
     - name: Install cf client
       env:
         CF_CLI_VERSION: 7.0.0-beta.28
       run: |
         curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C /tmp
         sudo cp /tmp/cf7 /usr/local/bin/cf7
+
     - name: Deploy
       env:
         SPACE: int
@@ -24,7 +50,6 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        export PR_NUMBER=`echo $GITHUB_REF | grep -o '[0-9_]\+'`
         export DB_VERSION=`cat psd-web/db/schema.rb | grep 'ActiveRecord::Schema.define' | grep -o '[0-9_]\+'`
         export APP_NAME=psd-pr-$PR_NUMBER
         export DB_NAME=psd-db-$DB_VERSION
@@ -32,3 +57,26 @@ jobs:
         echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /psd-web/deploy-review.sh"
         ./psd-web/deploy-review.sh
         cf7 logout
+
+    - name: Update deployment status (success)
+      if: success()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
+        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
+        LOG_URL: ${{ env.LOG_URL }}
+      run: |
+        source psd-web/deploy-github-functions.sh
+
+        environment_url=https://psd-pr-${PR_NUMBER}.london.cloudapps.digital/
+
+        gh_deploy_success review-app-${PR_NUMBER} $LOG_URL $environment_url
+
+    - name: Update deployment status (failure)
+      if: failure()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
+        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
+        LOG_URL: ${{ env.LOG_URL }}
+      run: |
+        source psd-web/deploy-github-functions.sh
+        gh_deploy_failure review-app-${PR_NUMBER} $LOG_URL
