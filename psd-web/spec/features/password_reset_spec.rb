@@ -54,6 +54,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
+      expect_to_be_on_password_changed_page
+
+      click_link "Continue"
+
       expect(page).to have_css("h1", text: "Declaration")
 
       sign_out
@@ -174,5 +178,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
   def expect_to_be_on_check_your_email_page
     expect(page).to have_css("h1", text: "Check your email")
+  end
+
+  def expect_to_be_on_password_changed_page
+    expect(page).to have_current_path("/password-changed")
+    expect(page).to have_css("h1", text: "You have changed your password successfully")
   end
 end
