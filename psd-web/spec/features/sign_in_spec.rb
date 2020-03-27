@@ -63,6 +63,9 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "when using wrong credentials over and over again", :with_2fa do
+    let(:unlock_email) { delivered_emails.last }
+    let(:unlock_path) { unlock_email.personalization_path(:unlock_user_url_token) }
+
     scenario "locks and sends email with unlock link" do
       visit "/sign-in"
       fill_in_credentials
@@ -81,16 +84,37 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
 
       unlock_email = delivered_emails.last
-      visit unlock_email.personalization_path(:unlock_user_url_token)
-      fill_in_credentials
+      visit unlock_path
 
       expect(page).to have_css("h1", text: "Check your phone")
 
       fill_in "Enter security code", with: user.reload.direct_otp
       click_on "Continue"
 
+      fill_in_credentials
+
       expect(page).to have_css("h2", text: "Your cases")
       expect(page).to have_link("Sign out", href: destroy_user_session_path)
+    end
+
+    context "when logged in as different user" do
+      let(:user2) { create(:user, :activated, has_viewed_introduction: true) }
+
+      before do
+        user2.lock_access!
+      end
+
+      scenario "logouts currently logged in user" do
+        visit "/sign-in"
+        fill_in_credentials
+        fill_in "Enter security code", with: user.reload.direct_otp
+        click_on "Continue"
+
+        expect(page).to have_css("h2", text: "Your cases")
+
+        visit unlock_path
+        expect(page).to have_css("h1", text: "Check your phone")
+      end
     end
 
     scenario "sends email with reset password link", :with_2fa do
