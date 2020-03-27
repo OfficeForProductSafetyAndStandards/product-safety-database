@@ -38,16 +38,21 @@ class UsersController < ApplicationController
     if @user.save(context: :registration_completion)
 
       sign_in :user, @user
-      warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-      @user.send_new_otp
-
-      redirect_to user_two_factor_authentication_path
+      redirect_user
     else
       render :complete_registration
     end
   end
 
 private
+
+  def redirect_user
+    return redirect_to root_path unless Rails.configuration.two_factor_authentication_enabled
+
+    warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
+    @user.send_new_otp
+    redirect_to user_two_factor_authentication_path
+  end
 
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)

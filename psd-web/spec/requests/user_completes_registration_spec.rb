@@ -114,19 +114,29 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_keycl
       end
 
       it "does not set the mobile number as verified" do
-        expect(user.mobile_number_verified).to be false
+        expect(user).not_to be_mobile_number_verified
       end
 
-      it "redirects to the two factor authentication path" do
-        expect(response).to redirect_to(user_two_factor_authentication_path)
+      context "when two factor auth is enabled" do
+        it "redirects to the two factor authentication path", :with_2fa do
+          expect(response).to redirect_to(user_two_factor_authentication_path)
+        end
       end
 
-      it "updates the user’s name" do
-        expect(user.name).to eql("Foo Bar")
+      context "when two factor auth is disabled" do
+        before do
+          allow(Rails.configuration)
+            .to receive(:two_factor_authentication_enabled)
+            .and_return(false)
+        end
+
+        it "redirects to the two factor authentication path" do
+          expect(response).to redirect_to(root_path)
+        end
       end
 
-      it "updates the user’s mobile number" do
-        expect(user.mobile_number).to eql("07700900000")
+      it "updates the user’s attributes" do
+        expect(user).to have_attributes(name: "Foo Bar", mobile_number: "07700900000")
       end
 
       it "updates the user’s password" do
