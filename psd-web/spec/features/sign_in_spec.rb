@@ -119,6 +119,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     scenario "shows invalid link page for invalid link" do
       visit "/unlock?unlock_token=wrong-token"
       expect(page).to have_css("h1", text: "Invalid link")
+      expect(page.status_code).to eq(404)
     end
 
 

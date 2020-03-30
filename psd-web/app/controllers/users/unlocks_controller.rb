@@ -27,7 +27,7 @@ module Users
         redirect_to user_two_factor_authentication_path
       end
     rescue ActiveRecord::RecordNotFound
-      render "invalid_link"
+      render "invalid_link", status: :not_found
     end
 
   private
