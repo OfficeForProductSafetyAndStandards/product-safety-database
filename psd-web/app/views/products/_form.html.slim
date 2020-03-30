@@ -11,10 +11,10 @@
       aria_describedby: "report-product-category-hint",
       is_autocomplete: true,
       label: { text: "Product category", classes: label_class },
-      hint: { text: "For example, ‘Furniture’ or ‘Stationery’" }
+      hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" }
 
 - hint_html = capture do
-  | For example, ‘Dining chair’ or ‘Ballpoint pen’
+  | For example, ‘Face mask’ or ‘Latex gloves’
 = render "form_components/govuk_input", key: :product_type, form: form,
         classes: "app-!-max-width-one-half",
         label: { text: "Product type", classes: label_class },
@@ -23,7 +23,7 @@
 - hint_html = capture do
   | Include brand, model name and model number – information that will help
     others identify the product.
-    For example, ‘Initech Cristal Medium Point (1.0mm), 795487’.
+    For example, ‘Inotech respirator face mask (FFP), 795487’.
 
 = render "form_components/govuk_input", key: :name, form: form,
         classes: "app-!-max-width-three-quarters",
