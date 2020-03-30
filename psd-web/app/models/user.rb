@@ -193,6 +193,11 @@ class User < ApplicationRecord
     true
   end
 
+  def increment_failed_attempts
+    return unless mobile_number_verified?
+    super
+  end
+
 private
 
   def lock_two_factor!
