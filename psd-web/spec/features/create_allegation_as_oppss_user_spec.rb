@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:contact_details) do
     {

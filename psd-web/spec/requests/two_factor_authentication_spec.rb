@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User submits two factor authentication code", :with_stubbed_notify, :with_stubbed_keycloak_config, type: :request do
+RSpec.describe "User submits two factor authentication code", :with_stubbed_notify, type: :request do
   include ActiveSupport::Testing::TimeHelpers
 
   describe "submitting the form" do

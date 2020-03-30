@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User requests password reset", type: :request, with_stubbed_keycloak_config: true, with_stubbed_mailer: true do
+RSpec.describe "User requests password reset", type: :request, with_stubbed_mailer: true do
   context "when the user hasn’t previously set up an account" do
     subject(:request_password_reset) do
       post user_password_path, params: {

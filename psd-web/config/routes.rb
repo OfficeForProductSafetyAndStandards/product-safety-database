@@ -25,8 +25,10 @@ Rails.application.routes.draw do
   devise_scope :user do
     resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
     get "missing-mobile-number", to: "users#missing_mobile_number"
-    get "account-locked", to: "users/sessions#account_locked", as: :account_locked
+    post "sign-out-before-resetting-password", to: "users/passwords#sign_out_before_resetting_password", as: :sign_out_before_resetting_password
   end
+
+  resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
 
   resources :users, only: [:update] do
     member do
