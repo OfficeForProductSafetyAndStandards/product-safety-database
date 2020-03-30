@@ -184,10 +184,11 @@ class User < ApplicationRecord
   # Don't reset password attempts yet, it will happen on next successful login
   def unlock_access!
     self.locked_at = nil
-    self.unlock_token = nil if respond_to?(:unlock_token=)
+    self.unlock_token = nil
     save(validate: false)
   end
 
+  # Part of devise interface. Called before user authentication.
   def active_for_authentication?
     true
   end

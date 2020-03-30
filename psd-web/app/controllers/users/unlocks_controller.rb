@@ -26,6 +26,8 @@ module Users
 
         redirect_to user_two_factor_authentication_path
       end
+    rescue ActiveRecord::RecordNotFound
+      render 'invalid_link'
     end
 
   private
@@ -40,7 +42,7 @@ module Users
       @user_with_unlock_token ||= begin
         unlock_token = Devise.token_generator.digest(self, :unlock_token, params[:unlock_token])
 
-        User.find_by(unlock_token: unlock_token)
+        User.find_by!(unlock_token: unlock_token)
       end
     end
   end

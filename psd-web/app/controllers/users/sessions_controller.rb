@@ -18,7 +18,7 @@ module Users
 
       user = User.find_by(email: sign_in_form.email)
       if user&.access_locked?
-        return redirect_to account_locked_path
+        return render 'account_locked'
       end
 
       self.resource = warden.authenticate(auth_options)

@@ -93,7 +93,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       fill_in_credentials
 
       expect(page).to have_css("h2", text: "Your cases")
-      expect(page).to have_link("Sign out", href: destroy_user_session_path)
+      expect(page).to have_link("Sign out")
     end
 
     context "when logged in as different user" do
@@ -115,6 +115,12 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
         expect(page).to have_css("h1", text: "Check your phone")
       end
     end
+
+    scenario "shows invalid link page for invalid link" do
+      visit "/unlock?unlock_token=wrong-token"
+      expect(page).to have_css("h1", text: "Invalid link")
+    end
+
 
     scenario "sends email with reset password link", :with_2fa do
       Devise.maximum_attempts.times do
