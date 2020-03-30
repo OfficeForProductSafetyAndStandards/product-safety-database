@@ -133,13 +133,13 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         # Need to pass 2FA authentication for original user
         complete_two_factor_authentication_with(user.reload.direct_otp)
 
-        # Finally can reset the original user password
+        # Finally can change the original user password
         expect_to_be_on_edit_user_password_page
 
         fill_in "Password", with: "a_new_password"
         click_on "Continue"
 
-        expect(page).to have_css("h1", text: "Declaration")
+        expect(page).to have_css("h1", text: "You have changed your password successfully")
       end
     end
   end
