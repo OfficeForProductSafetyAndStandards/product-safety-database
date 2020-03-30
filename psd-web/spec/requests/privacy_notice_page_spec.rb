@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Privacy notice page", type: :request, with_stubbed_keycloak_config: true do
+RSpec.describe "Privacy notice page", type: :request do
   context "when signed in" do
     before do
       sign_in(user)

@@ -49,8 +49,14 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       expect_to_be_on_edit_user_password_page
 
+      expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
+
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
+
+      expect_to_be_on_password_changed_page
+
+      click_link "Continue"
 
       expect(page).to have_css("h1", text: "Declaration")
 
@@ -82,6 +88,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_link("Password is too short", href: "#password")
+
+        expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
       end
 
       scenario "when the password is empty it shows an error" do
@@ -100,6 +108,8 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_link("Enter a password", href: "#password")
+
+        expect(page).to have_field("username", type: "email", with: user.email, disabled: true)
       end
     end
 
@@ -202,5 +212,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
   def expect_to_be_on_check_your_email_page
     expect(page).to have_css("h1", text: "Check your email")
+  end
+
+  def expect_to_be_on_password_changed_page
+    expect(page).to have_current_path("/password-changed")
+    expect(page).to have_css("h1", text: "You have changed your password successfully")
   end
 end

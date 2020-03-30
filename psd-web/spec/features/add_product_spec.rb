@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_keycloak_config do
+RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:investigation) { create(:enquiry) }
   let(:product)       { create(:product_iphone) }
 

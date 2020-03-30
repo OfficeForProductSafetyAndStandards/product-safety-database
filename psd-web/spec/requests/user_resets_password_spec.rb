@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_config: true, with_stubbed_notify: true, with_2fa: true do
+RSpec.describe "User resets password", type: :request, with_stubbed_notify: true, with_2fa: true do
   describe "viewing the form" do
     context "with a valid reset token" do
       let(:reset_token) { SecureRandom.hex(20) }
@@ -85,8 +85,8 @@ RSpec.describe "User resets password", type: :request, with_stubbed_keycloak_con
         }
       end
 
-      it "redirects to the homepage" do
-        expect(response).to redirect_to(root_path)
+      it "redirects to the password changed page" do
+        expect(response).to redirect_to(password_changed_path)
       end
     end
 

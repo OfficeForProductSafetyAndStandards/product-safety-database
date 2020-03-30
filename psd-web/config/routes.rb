@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     get "sign-out-before-resetting-password", to: "users/passwords#sign_out_before_resetting_password", as: :sign_out_before_resetting_password
   end
 
+  resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
+
   resources :users, only: [:update] do
     member do
       get "complete-registration", action: :complete_registration

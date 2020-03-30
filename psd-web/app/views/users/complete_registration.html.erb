@@ -13,13 +13,15 @@
         classes: "app-!-max-width-two-thirds",
         label: { text: "Full name" },
         value: @user.name,
-        autocomplete: "name"
+        autocomplete: "name",
+        id: "name"
         %>
 
       <%= render "form_components/govuk_input", key: :mobile_number, form: form,
         classes: "app-!-max-width-two-thirds",
         label: { text: "Mobile number" },
         value: @user.mobile_number,
+        id: "mobile_number",
         autocomplete: "tel",
         type: "tel"
         %>
@@ -30,7 +32,7 @@
         the controller process the input.
       %>
       <%= content_tag :div, class: "app-password-manager-hidden" do -%>
-        <%= email_field_tag :username, @user.email, "disabled" => true, "tabindex" => "-1", "aria-hidden" => true, autocomplete: "username"  %>
+        <%= email_field_tag :username, @user.email, disabled: true, tabindex: "-1", 'aria-hidden': true, autocomplete: "username" %>
       <% end -%>
 
       <%= password_input @user, autocomplete: "new-password" %>

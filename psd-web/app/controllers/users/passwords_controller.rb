@@ -11,6 +11,8 @@ module Users
       return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
       return render :expired, status: :gone if reset_token_expired?
 
+      @email = user_with_reset_token.email
+
       if passed_two_factor_authentication?
         # Devise password update requires the user to be signed out, as it relies on the "reset password token"
         # parameter and an user attempting to reset its password because does not remember it is not supposed to be
@@ -54,7 +56,9 @@ module Users
     end
 
     def update
-      super do |_resource|
+      super do |resource|
+        @email = resource.email
+
         if reset_password_token_just_expired?
           return render :expired
         end
@@ -120,6 +124,10 @@ module Users
 
     def after_sending_reset_password_instructions_path_for(_resource_name)
       check_your_email_path
+    end
+
+    def after_resetting_password_path_for(_resource)
+      password_changed_path
     end
   end
 end
