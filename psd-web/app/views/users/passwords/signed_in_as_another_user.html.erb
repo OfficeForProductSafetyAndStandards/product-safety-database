@@ -8,9 +8,10 @@
     <p class="govuk-body">Do you want to</p>
 
     <ul class="govuk-list govuk-list--bullet">
-      <li><%= link_to "Continue as #{current_user.name}", root_path %></li>
+      <li><%= link_to "Continue as #{current_user.name}", root_path, class: "govuk-link" %></li>
       <li><%= link_to "Reset password for #{@user_with_reset_token.name}",
-              sign_out_before_resetting_password_path(reset_password_token: reset_password_token) %>
+              sign_out_before_resetting_password_path(reset_password_token: reset_password_token),
+              class: "govuk-link" %>
       </li>
     </ul>
 
