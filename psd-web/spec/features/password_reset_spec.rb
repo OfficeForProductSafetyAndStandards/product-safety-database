@@ -126,7 +126,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         expect_to_be_on_signed_in_as_another_user_page
 
         # Second user decides to continue resetting the password for the original user
-        click_link "Reset password for #{user.name}"
+        click_on "Reset password for #{user.name}"
 
         expect_to_be_on_two_factor_authentication_page
 
