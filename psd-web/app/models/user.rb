@@ -195,6 +195,7 @@ class User < ApplicationRecord
 
   def increment_failed_attempts
     return unless mobile_number_verified?
+
     super
   end
 
