@@ -4,10 +4,11 @@ module Users
                        :require_no_authentication,
                        :has_accepted_declaration,
                        :has_viewed_introduction,
-                       only: :edit
+                       only: %i(edit sign_out_before_resetting_password)
 
     def edit
       return render :invalid_link, status: :not_found if reset_token_invalid?
+      return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
       return render :expired, status: :gone if reset_token_expired?
 
       @email = user_with_reset_token.email
@@ -32,6 +33,11 @@ module Users
 
         redirect_to user_two_factor_authentication_path
       end
+    end
+
+    def sign_out_before_resetting_password
+      sign_out
+      redirect_to edit_user_password_path(reset_password_token: params[:reset_password_token])
     end
 
     def create
@@ -66,6 +72,10 @@ module Users
     end
 
   private
+
+    def wrong_user?
+      user_signed_in? && current_user != user_with_reset_token
+    end
 
     def passed_two_factor_authentication?
       return true if !Rails.configuration.two_factor_authentication_enabled
