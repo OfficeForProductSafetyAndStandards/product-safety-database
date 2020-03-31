@@ -1,5 +1,9 @@
 ---
+# The two coranvirus-related categories come first, rather than being
+# alphabetical, to make it quicker to select them from the dropdown.
 product_category:
+  - Personal protective equipment (PPE)
+  - Hand sanitiser
   - Chemical products
   - Childcare articles and children’s equipment
   - Clothing, textiles and fashion items
@@ -27,7 +31,6 @@ product_category:
   - Measuring instruments
   - Motor vehicles
   - Pressure equipment / vessels
-  - Protective equipment
   - Pyrotechnic articles
   - Rail and guided transport
   - Recreational crafts
