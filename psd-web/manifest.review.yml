@@ -12,6 +12,7 @@ applications:
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
     KEYCLOAK_REDIRECT_URI: https://((psd-host))/users/auth/openid_connect/callback
+    LOCK_MAXIMUM_ATTEMPTS: 3
   timeout: 180
   services:
     - ((psd-db-name))

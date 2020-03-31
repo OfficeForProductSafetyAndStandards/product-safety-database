@@ -533,5 +533,27 @@ RSpec.describe User do
         end
       end
     end
+
+    describe "#increment_failed_attempts" do
+      let(:user) { create(:user, mobile_number_verified: verified) }
+
+      context "when user mobile number is not verified" do
+        let(:verified) { false }
+
+        it "does not increment attempts" do
+          user.increment_failed_attempts
+          expect(user.reload.failed_attempts).to eq 0
+        end
+      end
+
+      context "when user mobile number is verified" do
+        let(:verified) { true }
+
+        it "increments attempts" do
+          user.increment_failed_attempts
+          expect(user.reload.failed_attempts).to eq 1
+        end
+      end
+    end
   end
 end

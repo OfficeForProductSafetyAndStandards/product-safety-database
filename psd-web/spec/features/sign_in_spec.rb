@@ -5,18 +5,22 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:password) { "2538fhdkvuULE36f" }
 
-  def fill_in_credentials
-    visit "/sign-in"
-
+  def fill_in_credentials(password_override: nil)
     fill_in "Email address", with: user.email
-    fill_in "Password", with: "2538fhdkvuULE36f"
+    if password_override
+      fill_in "Password", with: password_override
+    else
+      fill_in "Password", with: password
+    end
     click_on "Continue"
   end
 
   context "when succeeeding signin in", :with_2fa do
     context "when in two factor authentication page" do
       it "allows user to sign in with correct two factor authentication code" do
+        visit "/sign-in"
         fill_in_credentials
 
         expect(page).to have_css("h1", text: "Check your phone")
@@ -29,6 +33,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       end
 
       it "allows user to sign out and be sent to the homepage" do
+        visit "/sign-in"
         fill_in_credentials
 
         expect(page).to have_css("h1", text: "Check your phone")
@@ -42,6 +47,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       end
 
       it "don't allow the user to sign in with a wrong two factor authentication code" do
+        visit "/sign-in"
         fill_in_credentials
 
         expect(page).to have_css("h1", text: "Check your phone")
@@ -53,6 +59,87 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
         expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
         expect(page).to have_css("#otp_code-error", text: "Error: Incorrect security code")
       end
+    end
+  end
+
+  context "when using wrong credentials over and over again", :with_2fa do
+    let(:unlock_email) { delivered_emails.last }
+    let(:unlock_path) { unlock_email.personalization_path(:unlock_user_url_token) }
+
+    scenario "locks and sends email with unlock link" do
+      visit "/sign-in"
+      fill_in_credentials
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_on "Continue"
+      expect(page).to have_link("Sign out", href: destroy_user_session_path)
+      within(".psd-header__secondary-navigation") do
+        click_link("Sign out")
+      end
+
+      Devise.maximum_attempts.times do
+        visit "/sign-in"
+        fill_in_credentials(password_override: "XXX")
+      end
+
+      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+
+      visit unlock_path
+
+      expect(page).to have_css("h1", text: "Check your phone")
+
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_on "Continue"
+
+      fill_in_credentials
+
+      expect(page).to have_css("h2", text: "Your cases")
+      expect(page).to have_link("Sign out")
+    end
+
+    context "when logged in as different user" do
+      let(:user2) { create(:user, :activated, has_viewed_introduction: true) }
+
+      before do
+        user2.lock_access!
+      end
+
+      scenario "logouts currently logged in user" do
+        visit "/sign-in"
+        fill_in_credentials
+        fill_in "Enter security code", with: user.reload.direct_otp
+        click_on "Continue"
+
+        expect(page).to have_css("h2", text: "Your cases")
+
+        visit unlock_path
+        expect(page).to have_css("h1", text: "Check your phone")
+      end
+    end
+
+    scenario "shows invalid link page for invalid link" do
+      visit "/unlock?unlock_token=wrong-token"
+      expect(page).to have_css("h1", text: "Invalid link")
+      expect(page.status_code).to eq(404)
+    end
+
+
+    scenario "sends email with reset password link", :with_2fa do
+      Devise.maximum_attempts.times do
+        visit "/sign-in"
+        fill_in_credentials(password_override: "XXX")
+      end
+
+      expect(page).to have_css("p", text: "We’ve locked this account to protect its security.")
+
+      unlock_email = delivered_emails.last
+      visit unlock_email.personalization_path(:edit_user_password_url_token)
+
+      expect(page).to have_css("h1", text: "Check your phone")
+
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_on "Continue"
+
+      expect(page).to have_css("h1", text: "Create a new password")
     end
   end
 
@@ -105,6 +192,19 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       visit "/sign-in"
 
       fill_in "Email address", with: user.email
+      fill_in "Password", with: "passworD"
+      click_on "Continue"
+
+      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+      expect(page).to have_link("Enter correct email address and password", href: "#email")
+      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+      expect(page).to have_css("span#password-error", text: "")
+    end
+
+    it "does not work with email no in database" do
+      visit "/sign-in"
+
+      fill_in "Email address", with: "user.email@foo.bar"
       fill_in "Password", with: "passworD"
       click_on "Continue"
 

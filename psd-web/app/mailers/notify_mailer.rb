@@ -8,7 +8,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       user_added_to_team: "e3b2bbf5-3002-49fb-adb5-ad18e483c7e4",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
-      expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2"
+      expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
+      account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -101,5 +102,17 @@ class NotifyMailer < GovukNotifyRails::Mailer
       inviting_team_member_name: inviting_team_member_name
     )
     mail(to: email)
+  end
+
+  def account_locked(user, tokens)
+    set_template(TEMPLATES[:account_locked])
+
+    personalization = {
+      name: user.name,
+      edit_user_password_url_token: edit_user_password_url(reset_password_token: tokens[:reset_password_token]),
+      unlock_user_url_token: user_unlock_url(unlock_token: tokens[:unlock_token])
+    }
+    set_personalisation(personalization)
+    mail(to: user.email)
   end
 end

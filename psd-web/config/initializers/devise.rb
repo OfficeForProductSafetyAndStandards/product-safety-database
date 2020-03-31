@@ -293,6 +293,15 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 
+
+  config.lock_strategy = :failed_attempts
+  config.unlock_strategy = :email
+  if Rails.env.test?
+    config.maximum_attempts = 2
+  else
+    config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
+  end
+
   # Devise two_factor_authentication gem
   config.max_login_attempts = 10  # Maximum second factor attempts count.
   config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
