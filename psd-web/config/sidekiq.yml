@@ -1,5 +1,5 @@
 ---
-:concurrency: 10
+:concurrency: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
 :queues:
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>
   - <%= ENV['SIDEKIQ_QUEUE'] || "psd" %>-mailers
