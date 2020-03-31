@@ -28,7 +28,7 @@ module Users
         # warden.authenticate(auth_options) above.
         sign_out
         User.current = nil
-        resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+        add_wrong_credentials_errors
         return render :new
       end
 
@@ -40,8 +40,7 @@ module Users
       end
 
       self.resource = resource_class.new(sign_in_params).decorate
-      resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
-      resource.errors.add(:password, nil)
+      add_wrong_credentials_errors
       render :new
     end
 
@@ -49,6 +48,11 @@ module Users
 
     def sign_in_form
       @sign_in_form ||= SignInForm.new(sign_in_params)
+    end
+
+    def add_wrong_credentials_errors
+      resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
+      resource.errors.add(:password, nil)
     end
   end
 end

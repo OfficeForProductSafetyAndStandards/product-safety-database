@@ -17,6 +17,14 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     click_on "Continue"
   end
 
+  def expect_incorrect_email_or_password
+    expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
+    expect(page).to have_link("Enter correct email address and password", href: "#email")
+    expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+
+    expect(page).not_to have_link("Cases")
+  end
+
   context "when succeeeding signin in", :with_2fa do
     context "when in two factor authentication page" do
       it "allows user to sign in with correct two factor authentication code" do
@@ -165,10 +173,14 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       fill_in "Password", with: "2538fhdkvuULE36f"
       click_on "Continue"
 
-      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-      expect(page).to have_link("Enter correct email address and password", href: "#email")
-      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
-      expect(page).not_to have_link("Cases")
+      expect_incorrect_email_or_password
+
+      # tries again with another wrong password
+      fill_in "Email address", with: user.email
+      fill_in "Password", with: "2538fhdkvuULE36f"
+      click_on "Continue"
+
+      expect_incorrect_email_or_password
     end
   end
 
