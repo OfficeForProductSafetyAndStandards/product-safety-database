@@ -58,4 +58,6 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+  config.included_models = %w[ User ]
 end
