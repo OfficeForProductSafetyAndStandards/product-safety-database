@@ -12,7 +12,7 @@
       If you don’t have an account, ask someone in your team to send you an invite or <%= mail_to("OPSS.enquiries@beis.gov.uk", "email OPSS") %>.
     </p>
 
-    <%= form_for(resource, as: resource_name, url: user_session_path, html: { novalidate: true }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: user_session_path, html: { novalidate: true }, method: :post) do |f| %>
       <%= email_input resource %>
       <%= password_input resource %>
 
