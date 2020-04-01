@@ -117,5 +117,4 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: email_address } }
     put resend_invitation_team_path(email_address: email_address)
   end
-
 end
