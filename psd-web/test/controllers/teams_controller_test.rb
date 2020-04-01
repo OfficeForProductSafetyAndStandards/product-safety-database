@@ -3,7 +3,6 @@ require "test_helper"
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notify_mailer
-    stub_user_management
     sign_in users(:southampton)
     users(:southampton).teams << teams(:southampton)
     users(:southampton_bob).teams << teams(:southampton)
