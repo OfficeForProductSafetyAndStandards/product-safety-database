@@ -46,18 +46,56 @@ RailsAdmin.config do |config|
   config.actions do
     dashboard                     # mandatory
     index                         # mandatory
-    new
-    export
-    bulk_delete
     show
     edit
-    delete
-    show_in_app
+
+    # export
+    # bulk_delete
+    # delete
+    # show_in_app
 
     ## With an audit adapter, you can add:
     # history_index
     # history_show
   end
 
+  config.model 'User' do
+    list do
+      field :name
+      field :created_at
+    end
+    show do
+      field :name
+      field :email
+      field :has_accepted_declaration
+      field :mobile_number_verified
+      field :sign_in_count
+    end
+    edit do
+      field :mobile_number
+      field :password
+    end
+  end
+
+  config.authenticate_with do
+    warden.authenticate! scope: :user
+  end
+  config.authorize_with do |controller|
+    if warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION]
+      redirect_to "/two-factor"
+    end
+    if !current_user.is_superadmin?
+      redirect_to main_app.root_path
+    end
+  end
+
   config.included_models = %w[ User ]
 end
+
+module RailsAdminTwoFactor
+  def user_two_factor_authentication_path
+    "/two-factor"
+  end
+end
+
+RailsAdmin::MainController.include RailsAdminTwoFactor

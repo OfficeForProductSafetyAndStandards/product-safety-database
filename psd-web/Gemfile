@@ -27,7 +27,7 @@ gem "rack", "~> 2.2.2"
 gem "rails", "~> 5.2.3"
 gem "redcarpet"
 gem "redis-rails"
-gem "rails_admin", '2.0.0'
+gem "rails_admin", '~> 2.0'
 gem "request_store", "1.5.0"
 gem "rest-client", "2.1.0"
 gem "rubyzip"
