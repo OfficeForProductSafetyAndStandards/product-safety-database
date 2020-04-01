@@ -101,8 +101,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "Inviting user with email domain in whitelist is compared case-insensitively" do
     skip "https://trello.com/c/noFdfN5e/335-3-send-invitation-emails-when-invite-or-resend-invite-is-triggered"
 
-    new_whitelisted_address = "new_user@NORTHAMPTONSHIRE.gov.uk"
-
     assert_difference "teams(:southampton).users.count" => 1, "User.all.size" => 1 do
       put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: "new_user@NORTHAMPTONSHIRE.gov.uk" } }
       assert_response :see_other
