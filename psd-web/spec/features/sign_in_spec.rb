@@ -25,9 +25,9 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).not_to have_link("Cases")
   end
 
-  context "when succeeeding signin in", :with_2fa do
+  context "when succeeding signin in", :with_2fa do
     context "when in two factor authentication page" do
-      it "allows user to sign in with correct two factor authentication code" do
+      scenario "allows user to sign in with correct two factor authentication code" do
         visit "/sign-in"
         fill_in_credentials
 
@@ -40,7 +40,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
         expect(page).to have_link("Sign out", href: destroy_user_session_path)
       end
 
-      it "allows user to sign out and be sent to the homepage" do
+      scenario "allows user to sign out and be sent to the homepage" do
         visit "/sign-in"
         fill_in_credentials
 
@@ -54,7 +54,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
         expect(page).to have_link("Sign in to your account")
       end
 
-      it "don't allow the user to sign in with a wrong two factor authentication code" do
+      scenario "don't allow the user to sign in with a wrong two factor authentication code" do
         visit "/sign-in"
         fill_in_credentials
 
@@ -152,7 +152,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "when signed in" do
-    it "times you out in due time" do
+    scenario "times you out in due time" do
       visit investigation_path(investigation)
       expect(page).not_to have_css("h2#error-summary-title", text: "You need to sign in or sign up before continuing.")
 
@@ -166,7 +166,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   context "when the user hasn’t verified their mobile number", :with_2fa do
     let(:user) { create(:user, mobile_number_verified: false) }
 
-    it "doesn’t let them sign in" do
+    scenario "doesn’t let them sign in" do
       visit "/sign-in"
 
       fill_in "Email address", with: user.email
@@ -185,7 +185,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "when email address does not belong to any user", :with_2fa do
-    it "shows a generic error message" do
+    scenario "shows a generic error message" do
       visit "/sign-in"
 
       fill_in "Email address", with: "notarealuser@example.com"
@@ -200,7 +200,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "with credentials entered incorrectly" do
-    it "highlights email field" do
+    scenario "highlights email field" do
       visit "/sign-in"
 
       fill_in "Email address", with: user.email
@@ -213,7 +213,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       expect(page).to have_css("span#password-error", text: "")
     end
 
-    it "does not work with email no in database" do
+    scenario "does not work with email no in database" do
       visit "/sign-in"
 
       fill_in "Email address", with: "user.email@foo.bar"
