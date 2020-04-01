@@ -18,7 +18,6 @@ applications:
     - psd-elasticsearch
     - psd-email-whitelist-env
     - psd-health-env
-    - psd-keycloak-env
     - psd-notify-env
     - psd-pghero-env
     - psd-queue
@@ -29,7 +28,6 @@ applications:
     - psd-two-factor-auth-env
     - psd-web-scout-env
     - antivirus-auth-env
-    - keycloak-database
   processes:
     - type: web
       command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate  && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
