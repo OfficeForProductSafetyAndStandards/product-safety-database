@@ -38,6 +38,10 @@ class User < ApplicationRecord
     where(account_activated: true)
   end
 
+  def self.find_user_in_teams_with!(email, teams)
+    joins(:teams).where(teams: { id: teams.pluck(:id) }).find_by!(email: email)
+  end
+
   def self.create_and_send_invite!(email_address, team, inviting_user)
     user = create!(
       skip_password_validation: true,
@@ -59,9 +63,9 @@ class User < ApplicationRecord
 
   def self.resend_invite(email_address, inviting_user)
     # Only want to allow resending invites to users that share a team with the inviting user.
-    user = User.joins(:teams)
-               .where(teams: { id: inviting_user.teams.pluck(:id) })
-               .find_by!(email: email_address)
+    user = find_user_in_teams_with!(email_address, inviting_user.teams)
+
+    user.update!(invitation_token: SecureRandom.hex(15))
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end

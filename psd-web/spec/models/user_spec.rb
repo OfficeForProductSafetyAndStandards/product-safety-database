@@ -185,6 +185,15 @@ RSpec.describe User do
         described_class.resend_invite(invited_user.email, inviting_user)
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
+
+      context "when the invitee does not have an invitation token" do
+        it "re-regerates the token" do
+          allow(SecureRandom).to receive(:hex).with(15).and_return("new_token")
+          expect {
+            described_class.resend_invite(invited_user.email, inviting_user)
+          }.to change { invited_user.reload.invitation_token }.from(nil).to("new_token")
+        end
+      end
     end
 
     context "when the given email does not match any user" do
