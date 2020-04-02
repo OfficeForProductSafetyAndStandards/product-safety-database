@@ -36,10 +36,10 @@
   }
 
   a:hover {
-    color:  $govuk-link-hover-colour;
+    color: $govuk-link-hover-colour;
   }
 
-  & >:last-of-type {
+  >:last-of-type {
     margin-bottom: govuk-spacing(0);
   }
 
