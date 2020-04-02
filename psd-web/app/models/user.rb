@@ -62,10 +62,9 @@ class User < ApplicationRecord
   end
 
   def self.resend_invite(email_address, inviting_user)
-    # Only want to allow resending invites to users that share a team with the inviting user.
-    user = find_user_in_teams_with!(email_address, inviting_user.teams)
+    user = find_user_within_teams_with_email!(email: email_address, teams: inviting_user.teams)
 
-    user.update!(invitation_token: SecureRandom.hex(15))
+    user.update!(invitation_token: SecureRandom.hex(15)) unless user.invitation_token?
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
