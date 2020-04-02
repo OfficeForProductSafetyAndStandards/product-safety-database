@@ -2,6 +2,7 @@ module Users
   class SessionsController < Devise::SessionsController
     skip_before_action :has_accepted_declaration
     skip_before_action :has_viewed_introduction
+    skip_before_action :set_current_user, :set_raven_context, :authorize_user, only: :create
 
     def new
       super { self.resource = resource.decorate }
@@ -17,13 +18,10 @@ module Users
       end
 
       user = User.find_by(email: sign_in_form.email)
-      return render "account_locked" if user&.access_locked?
-
-      self.resource = warden.authenticate(auth_options)
 
       # Stop users from signing in if they’ve not completed 2FA verification
       # of their mobile number during account set up process.
-      if Rails.configuration.two_factor_authentication_enabled && resource && !resource.mobile_number_verified
+      if Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
         # Need to sign the user out here as they will have been signed in by
         # warden.authenticate(auth_options) above.
         sign_out
@@ -32,7 +30,13 @@ module Users
         return render :new
       end
 
+      self.resource = warden.authenticate(auth_options)
+      return render "account_locked" if user&.reload&.access_locked?
+
       if resource&.mobile_number?
+        set_current_user
+        set_raven_context
+        authorize_user
         sign_in(resource_name, resource)
         return respond_with resource, location: after_sign_in_path_for(resource)
       elsif resource

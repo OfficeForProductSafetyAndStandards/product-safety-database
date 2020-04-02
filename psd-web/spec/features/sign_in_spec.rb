@@ -5,14 +5,13 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:password) { "2538fhdkvuULE36f" }
 
   def fill_in_credentials(password_override: nil)
     fill_in "Email address", with: user.email
     if password_override
       fill_in "Password", with: password_override
     else
-      fill_in "Password", with: password
+      fill_in "Password", with: user.password
     end
     click_on "Continue"
   end
@@ -166,21 +165,12 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   context "when the user hasn’t verified their mobile number", :with_2fa do
     let(:user) { create(:user, mobile_number_verified: false) }
 
-    scenario "doesn’t let them sign in" do
+    scenario "doesn’t let them sign in and does not send them a 2FA code by sms" do
       visit "/sign-in"
 
-      fill_in "Email address", with: user.email
-      fill_in "Password", with: "2538fhdkvuULE36f"
-      click_on "Continue"
-
+      fill_in_credentials
       expect_incorrect_email_or_password
-
-      # tries again with another wrong password
-      fill_in "Email address", with: user.email
-      fill_in "Password", with: "2538fhdkvuULE36f"
-      click_on "Continue"
-
-      expect_incorrect_email_or_password
+      expect(notify_stub).not_to have_received(:send_sms)
     end
   end
 
