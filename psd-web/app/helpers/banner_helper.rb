@@ -13,7 +13,6 @@ module BannerHelper
   # <% end %>
   def banner(text: nil, html: nil, &block)
     tag.div(class: "app-banner") do
-
       if block_given?
         tag.div(class: "app-banner__message", &block)
       else
