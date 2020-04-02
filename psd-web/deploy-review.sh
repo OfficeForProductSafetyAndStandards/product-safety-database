@@ -16,12 +16,22 @@ if [ -z "$DB_NAME" ]
 then
   DB_NAME=psd-review-database
 fi
-cf7 create-service postgres small-10 $DB_NAME
+cf7 create-service postgres small-10 $DB_NAME -c '{"enable_extensions": ["pgcrypto"]}'
 
 # Wait until db is prepared, might take up to 10 minutes
 until cf7 service $DB_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
+
+if [ -z "$WEB_MAX_THREADS" ]
+then
+  WEB_MAX_THREADS=5
+fi
+
+if [ -z "$WORKER_MAX_THREADS" ]
+then
+  WORKER_MAX_THREADS=10
+fi
 
 # Set the amount of time in minutes that the CLI will wait for all instances to start.
 # Because of the rolling deployment strategy, this should be set to at least the amount of
