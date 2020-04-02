@@ -17,7 +17,7 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
     click_on "Continue"
   end
 
-  context "admin access", :with_2fa do
+  context "when user tries to access admin", :with_2fa do
     it "needs to sign in" do
       visit "/admin"
       expect(page).to have_css("h1", text: "Sign in")
@@ -32,7 +32,7 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
       visit "/admin"
       expect(page).to have_css("h2", text: "Your cases")
 
-      user.user_roles.create(name: 'superadmin')
+      user.user_roles.create(name: "superadmin")
 
       visit "/admin"
       expect(page).to have_css("h1", text: "Site Administration")

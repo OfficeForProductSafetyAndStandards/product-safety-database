@@ -7,8 +7,11 @@ if defined?(WillPaginate)
     module ActiveRecord
       module RelationMethods
         def per(value = nil) per_page(value) end
+
         def total_count() count end
+
         def first_page?() self == first end
+
         def last_page?() self == last end
       end
     end
@@ -19,7 +22,6 @@ if defined?(WillPaginate)
 end
 
 RailsAdmin.config do |config|
-
   ### Popular gems integration
 
   ## == Devise ==
@@ -59,7 +61,7 @@ RailsAdmin.config do |config|
     # history_show
   end
 
-  config.model 'User' do
+  config.model "User" do
     list do
       field :name
       field :created_at
@@ -80,7 +82,7 @@ RailsAdmin.config do |config|
   config.authenticate_with do
     warden.authenticate! scope: :user
   end
-  config.authorize_with do |controller|
+  config.authorize_with do |_controller|
     if warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION]
       redirect_to "/two-factor"
     end
@@ -89,7 +91,7 @@ RailsAdmin.config do |config|
     end
   end
 
-  config.included_models = %w[ User ]
+  config.included_models = %w[User]
 end
 
 module RailsAdminTwoFactor
