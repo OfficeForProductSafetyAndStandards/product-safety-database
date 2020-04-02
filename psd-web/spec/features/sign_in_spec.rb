@@ -20,6 +20,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
     expect(page).to have_link("Enter correct email address and password", href: "#email")
     expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
+    expect(page).to have_css("span#password-error", text: "")
 
     expect(page).not_to have_link("Cases")
   end
@@ -182,10 +183,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       fill_in "Password", with: "notarealpassword"
       click_on "Continue"
 
-      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-      expect(page).to have_link("Enter correct email address and password", href: "#email")
-      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
-      expect(page).to have_css("span#password-error", text: "")
+      expect_incorrect_email_or_password
     end
   end
 
@@ -197,10 +195,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       fill_in "Password", with: "passworD"
       click_on "Continue"
 
-      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-      expect(page).to have_link("Enter correct email address and password", href: "#email")
-      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
-      expect(page).to have_css("span#password-error", text: "")
+      expect_incorrect_email_or_password
     end
 
     scenario "does not work with email no in database" do
@@ -210,10 +205,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       fill_in "Password", with: "passworD"
       click_on "Continue"
 
-      expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
-      expect(page).to have_link("Enter correct email address and password", href: "#email")
-      expect(page).to have_css("span#email-error", text: "Error: Enter correct email address and password")
-      expect(page).to have_css("span#password-error", text: "")
+      expect_incorrect_email_or_password
     end
 
     context "when email address is not in correct format" do
