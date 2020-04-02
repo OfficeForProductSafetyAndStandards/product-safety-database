@@ -2,7 +2,14 @@
   <%= tag.div(class: "govuk-grid-column-full") do %>
     <%= banner do %>
       <%= tag.p "Coronavirus (COVID-19): OPSS is urging all market surveillance authorities to prioritise coronavirus-related cases above other work." %>
-      <%= tag.p link_to("Read more", "https://www.gov.uk/guidance/opss-coronavirus-covid-19-guidance-for-business-and-local-authorities") %>
+
+      <%= tag.p do %>
+        <%= link_to("https://www.gov.uk/guidance/opss-coronavirus-covid-19-guidance-for-business-and-local-authorities") do %>
+          Read more
+          <%= tag.span("about the coronavirus guidance for local authorities", class: "govuk-visually-hidden") %>
+          on GOV.UK
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
