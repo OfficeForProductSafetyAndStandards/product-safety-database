@@ -2,6 +2,9 @@
 
 .env.development
 .env.test
+
+env/*
+
 *.swp
 *.swo
 ### Node ###
