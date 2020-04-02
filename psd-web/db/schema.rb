@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_144542) do
+ActiveRecord::Schema.define(version: 2020_04_02_142659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_144542) do
     t.text "hazard_description"
     t.string "hazard_type"
     t.boolean "is_closed", default: false
+    t.boolean "coronavirus_related", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
     t.string "pretty_id"
@@ -285,6 +286,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_144542) do
     t.string "encrypted_otp_secret_key_iv"
     t.string "encrypted_otp_secret_key_salt"
     t.string "encrypted_password", default: "", null: false
+    t.integer "failed_attempts", default: 0, null: false
     t.boolean "has_accepted_declaration", default: false
     t.boolean "has_been_sent_welcome_email", default: false
     t.boolean "has_viewed_introduction", default: false
@@ -294,6 +296,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_144542) do
     t.datetime "keycloak_created_at"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
+    t.datetime "locked_at"
     t.text "mobile_number"
     t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"
@@ -305,6 +308,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_144542) do
     t.integer "second_factor_attempts_count", default: 0
     t.datetime "second_factor_attempts_locked_at"
     t.integer "sign_in_count", default: 0, null: false
+    t.string "unlock_token"
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
     t.index ["email"], name: "index_users_on_email"
@@ -312,6 +316,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_144542) do
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   add_foreign_key "activities", "businesses"
