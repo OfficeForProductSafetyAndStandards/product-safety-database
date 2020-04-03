@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
-  include ActiveSupport::Testing::TimeHelpers
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
