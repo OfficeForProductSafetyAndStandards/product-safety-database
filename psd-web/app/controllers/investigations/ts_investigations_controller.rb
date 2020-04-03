@@ -9,7 +9,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   set_attachment_names :file
   set_file_params_key :file
 
-  steps :product, :why_reporting, :which_businesses, :business, :has_corrective_action, :corrective_action,
+  steps :coronavirus, :product, :why_reporting, :which_businesses, :business, :has_corrective_action, :corrective_action,
         :other_information, :test_results, :risk_assessments, :product_images, :evidence_images, :other_files,
         :reference_number
 
@@ -35,7 +35,7 @@ class Investigations::TsInvestigationsController < ApplicationController
     %i[has_corrective_action risk_assessments product_images evidence_images other_files].include? step
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
-  before_action :store_investigation, only: %i[update], if: -> { %i[why_reporting reference_number].include? step }
+  before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
   before_action :store_why_reporting, only: %i[update], if: -> { step == :why_reporting }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
@@ -221,9 +221,16 @@ private
   end
 
   def investigation_request_params
+    # This must be done first because the browser will send no params if no radio is selected
+    if step == :coronavirus
+      params[:investigation] ||= { coronavirus_related: nil }
+    end
+
     return {} if params[:investigation].blank?
 
     case step
+    when :coronavirus
+      params.require(:investigation).permit(:coronavirus_related)
     when :why_reporting
       params[:investigation][:hazard_description] = nil unless params[:investigation][:unsafe] == "1"
       params[:investigation][:hazard_type] = nil unless params[:investigation][:unsafe] == "1"
@@ -452,6 +459,9 @@ private
 
   def records_valid?
     case step
+    when :coronavirus
+      # Ideally we would only validate the coronavirus_related attribute here, but there are currently no other validations and this is simpler
+      @investigation.validate
     when :product
       @product.validate
     when :why_reporting
