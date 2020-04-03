@@ -4,11 +4,15 @@
       = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
     - if @investigation.is_private? || @investigation.is_closed?
       .govuk-grid-column-one-half.psd-case__status-area[class="govuk-!-margin-bottom-5"]
+        - if @investigation.coronavirus_related?
+          = render "components/hmcts_badge",
+                text: t(:coronavirus_related, scope: :case_badges),
+                classes: "app-badge--pink hmcts-badge--aligned-right-from-tablet"
         - if @investigation.is_closed?
           = render "components/hmcts_badge",
-                text: "Closed case",
+                text: t(:closed, scope: :case_badges),
                 classes: "hmcts-badge--grey hmcts-badge--aligned-right-from-tablet"
         - if @investigation.is_private?
           = render "components/hmcts_badge",
-              text: "Restricted case",
+              text: t(:restricted, scope: :case_badges),
               classes: "hmcts-badge--grey hmcts-badge--aligned-right-from-tablet"

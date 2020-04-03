@@ -63,3 +63,9 @@ $badge-spacing-width: 5px;
   border-color: $govuk-secondary-text-colour;
   color: $govuk-secondary-text-colour;
 }
+
+// Pink badge is used for coronavirus (COVID-19) related cases
+.app-badge--pink {
+  border-color: govuk-colour("pink");
+  color: govuk-colour("pink");
+}
