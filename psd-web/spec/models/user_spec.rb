@@ -179,8 +179,8 @@ RSpec.describe User do
     before { allow(SendUserInvitationJob).to receive(:perform_later) }
 
     context "when both users belong to same team" do
-      let!(:inviation_token) { SecureRandom.hex }
-      let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation, invitation_token: inviation_token) }
+      let!(:invitation_token) { SecureRandom.hex }
+      let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation, invitation_token: invitation_token) }
 
       it "resends an invitation to the user" do
         described_class.resend_invite(invited_user.email, inviting_user)
