@@ -10,7 +10,7 @@ RSpec.describe "Registration process", :with_stubbed_mailer do
       .to receive(:email_whitelist_enabled).and_return(true)
   end
 
-  it "sending an invitation and recieving it" do
+  it "sending an invitation and registering" do
     sign_in(admin)
 
     visit "/teams/#{team.id}/invite"
