@@ -67,17 +67,6 @@ class Investigation < ApplicationRecord
     self.assignable_type = "Team" if entity.is_a?(Team)
   end
 
-  def coronavirus_related=(value)
-    if value.is_a?(String)
-      value = case value
-              when "yes" then true
-              when "no" then false
-              end
-    end
-
-    super(value)
-  end
-
   def status
     is_closed? ? "Closed" : "Open"
   end

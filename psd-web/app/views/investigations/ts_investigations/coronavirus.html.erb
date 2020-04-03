@@ -11,8 +11,8 @@
       <%= render "form_components/govuk_radios", form: form, key: :coronavirus_related,
               fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
               hint: { text: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)" },
-              items: [{ text: "Yes, it is (or could be)", value: "yes" },
-                      { text: "No, this is business as usual", value: "no" }] %>
+              items: [{ text: "Yes, it is (or could be)", value: "true" },
+                      { text: "No, this is business as usual", value: "false" }] %>
 
       <%= form.submit "Continue", class: "govuk-button" %>
     </div>
