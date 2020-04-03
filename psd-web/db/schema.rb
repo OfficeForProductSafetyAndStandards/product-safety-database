@@ -155,13 +155,13 @@ ActiveRecord::Schema.define(version: 2020_04_02_142659) do
     t.uuid "assignable_id"
     t.string "assignable_type"
     t.string "complainant_reference"
+    t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
     t.date "date_received"
     t.text "description"
     t.text "hazard_description"
     t.string "hazard_type"
     t.boolean "is_closed", default: false
-    t.boolean "coronavirus_related", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
     t.string "pretty_id"
