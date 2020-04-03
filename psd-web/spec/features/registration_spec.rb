@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Registration process", :with_stubbed_mailer do
+RSpec.feature "Registration process", :with_stubbed_mailer do
   let(:team) { create(:team) }
   let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, teams: [team]) }
   let(:invitee_email) { Faker::Internet.safe_email }
