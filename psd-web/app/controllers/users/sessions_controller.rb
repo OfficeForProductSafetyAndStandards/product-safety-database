@@ -20,8 +20,8 @@ module Users
 
       matching_user = User.find_by(email: sign_in_form.email)
 
-      if missing_mobile_verification?(matching_user)
-        handle_missing_mobile_verification(resource)
+      if mobile_not_verified?(matching_user)
+        handle_mobile_not_verified(resource)
         return render :new
       end
 
@@ -58,7 +58,7 @@ module Users
       resource.errors.merge!(sign_in_form.errors)
     end
 
-    def handle_missing_mobile_verification(resource)
+    def handle_mobile_not_verified(resource)
       sign_out
       add_wrong_credentials_errors(resource)
     end
@@ -74,7 +74,7 @@ module Users
       resource.errors.add(:password, nil)
     end
 
-    def missing_mobile_verification?(user)
+    def mobile_not_verified?(user)
       Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
     end
 
