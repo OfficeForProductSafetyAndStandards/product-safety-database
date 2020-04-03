@@ -2,6 +2,8 @@ module Users
   class SessionsController < Devise::SessionsController
     skip_before_action :has_accepted_declaration
     skip_before_action :has_viewed_introduction
+    # These methods trigger Warden authentication.
+    # We don't want this to happen until we explicitely attempt to authenticate the user.
     skip_before_action :set_current_user, :set_raven_context, :authorize_user, only: :create
 
     def new
