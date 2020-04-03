@@ -298,6 +298,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_to_be_on_coronavirus_page
     expect(page).to have_current_path("/ts_investigation/coronavirus")
     expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
+    expect(page).to have_selector(".app-banner", text: "Coronavirus")
   end
 
   def expect_to_be_on_product_page
