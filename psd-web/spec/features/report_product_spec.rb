@@ -96,11 +96,13 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         }
       end
 
+      let(:coronavirus) { false }
+
       scenario "not coronavirus-related" do
         visit new_ts_investigation_path
 
         expect_to_be_on_coronavirus_page
-        fill_in_coronavirus_page(false)
+        fill_in_coronavirus_page(coronavirus)
 
         expect_to_be_on_product_page
         fill_in_product_page(with: product_details)
@@ -200,6 +202,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         }
       end
 
+      let(:coronavirus) { true }
+
       scenario "coronavirus-related, with input errors" do
         visit new_ts_investigation_path
 
@@ -211,7 +215,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_coronavirus_page
         expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
 
-        fill_in_coronavirus_page(true)
+        fill_in_coronavirus_page(coronavirus)
 
         expect_to_be_on_product_page
         click_button "Continue"
@@ -408,6 +412,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_case_activity_page_to_show_allegation_logged
     item = page.find("h3", text: "Allegation logged: #{product_details[:name]}, #{product_details[:type]}").find(:xpath, "..")
     expect(item).to have_text("Assigned to #{user.display_name}")
+    expect(item).to have_text("Case is related to the coronavirus outbreak") if coronavirus
   end
 
   def expect_case_activity_page_to_show_product_added
