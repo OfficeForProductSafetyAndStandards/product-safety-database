@@ -1,23 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
-  before { sign_in as_user: create(:user, :activated, :opss_user) }
-
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }
   let(:non_compliance_details) { Faker::Lorem.paragraph }
-  let(:product_details) do
-    {
-      name: Faker::Lorem.sentence,
-      barcode: Faker::Number.number(digits: 10),
-      category: Rails.application.config.product_constants["product_category"].sample,
-      type: Faker::Appliance.equipment,
-      webpage: Faker::Internet.url,
-      country_of_origin: Country.all.sample.first,
-      description: Faker::Lorem.sentence
-    }
-  end
 
   let(:business_details) do
     business = -> {
@@ -91,165 +78,291 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     ]
   }
 
-  scenario "as a non-OPSS user" do
-    visit new_ts_investigation_path
+  context "as a non-OPSS user" do
+    let(:user) { create(:user, :activated, :viewed_introduction, :psd_user) }
+    before { sign_in as_user: user }
 
-    expect_to_be_on_product_page
-    fill_in_product_page(with: product_details)
+    context "with full details" do
+      let(:product_details) do
+        {
+          name: Faker::Lorem.sentence,
+          barcode: Faker::Number.number(digits: 10),
+          category: Rails.application.config.product_constants["product_category"].sample,
+          type: Faker::Appliance.equipment,
+          webpage: Faker::Internet.url,
+          country_of_origin: Country.all.sample.first,
+          description: Faker::Lorem.sentence
+        }
+      end
 
-    expect_to_be_on_why_reporting_page
-    fill_in_why_reporting_page
+      scenario "not coronavirus-related" do
+        visit new_ts_investigation_path
 
-    expect_to_be_on_supply_chain_page
-    fill_in_supply_chain_page
+        expect_to_be_on_coronavirus_page
+        fill_in_coronavirus_page(false)
 
-    expect_to_be_on_business_details_page("Retailer")
-    fill_in_business_details_page(with: business_details[:retailer])
+        expect_to_be_on_product_page
+        fill_in_product_page(with: product_details)
 
-    expect_to_be_on_business_details_page("Distributor")
-    skip_page
+        expect_to_be_on_why_reporting_page
+        fill_in_why_reporting_page
 
-    expect_to_be_on_business_details_page("Advertiser")
-    fill_in_business_details_page(with: business_details[:advertiser])
+        expect_to_be_on_supply_chain_page
+        fill_in_supply_chain_page
 
-    expect_to_be_on_corrective_action_taken_page
-    fill_in_corrective_action_taken_page
+        expect_to_be_on_business_details_page("Retailer")
+        fill_in_business_details_page(with: business_details[:retailer])
 
-    expect_to_be_on_record_corrective_action_page
+        expect_to_be_on_business_details_page("Distributor")
+        skip_page
 
-    corrective_actions.each do |action|
-      fill_in_record_corrective_action_page(with: action)
-      expect_to_be_on_record_corrective_action_page
+        expect_to_be_on_business_details_page("Advertiser")
+        fill_in_business_details_page(with: business_details[:advertiser])
+
+        expect_to_be_on_corrective_action_taken_page
+        fill_in_corrective_action_taken_page
+
+        expect_to_be_on_record_corrective_action_page
+
+        corrective_actions.each do |action|
+          fill_in_record_corrective_action_page(with: action)
+          expect_to_be_on_record_corrective_action_page
+        end
+
+        skip_page
+
+        expect_to_be_on_other_information_page
+        fill_in_other_information_page
+
+        expect_to_be_on_test_result_details_page
+
+        test_results.each do |result|
+          fill_in_test_results_page(with: result)
+          expect_to_be_on_test_result_details_page
+        end
+
+        skip_page
+
+        expect_to_be_on_risk_assessment_details_page
+
+        risk_assessments.each do |assessment|
+          fill_in_risk_assessment_details_page(with: assessment)
+          expect_to_be_on_risk_assessment_details_page
+        end
+
+        skip_page
+
+        expect_to_be_on_reference_number_page
+        fill_in_reference_number_page(reference_number)
+
+        expect_to_be_on_case_created_page
+        expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard has now been assigned to you")
+
+        click_link "View case"
+
+        expect_to_be_on_case_details_page
+        expect_case_details_page_to_show_entered_information
+
+        click_link "Products (1)"
+
+        expect_to_be_on_case_products_page
+        expect_case_products_page_to_show(info: product_details)
+
+        click_link "Businesses (2)"
+
+        expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
+        expect_case_businesses_page_to_show(label: "Advertiser", business: business_details[:advertiser])
+
+        click_link "Attachments (5)"
+
+        corrective_actions.each { |action| expect_case_attachments_page_to_show(file_description: action[:summary]) }
+        test_results.each { |test| expect_case_attachments_page_to_show(file_description: "#{test[:result]}ed test") }
+        risk_assessments.each { |assessment| expect_case_attachments_page_to_show(file_description: assessment[:title]) }
+
+        click_link "Activity"
+
+        expect_to_be_on_case_activity_page
+        expect_case_activity_page_to_show_allegation_logged
+        expect_case_activity_page_to_show_product_added
+        corrective_actions.each { |action| expect_case_activity_page_to_show_corrective_action(action) }
+        test_results.each { |test| expect_case_activity_page_to_show_test_result(test) }
+        risk_assessments.each { |assessment| expect_case_activity_page_to_show_risk_assessment(assessment) }
+      end
     end
 
-    skip_page
+    context "with minimum details" do
+      let(:product_details) do
+        {
+          name: Faker::Lorem.sentence,
+          category: Rails.application.config.product_constants["product_category"].sample,
+          type: Faker::Appliance.equipment,
+        }
+      end
 
-    expect_to_be_on_other_information_page
-    fill_in_other_information_page
+      scenario "coronavirus-related, with input errors" do
+        visit new_ts_investigation_path
 
-    expect_to_be_on_test_result_details_page
+        expect_to_be_on_coronavirus_page
 
-    test_results.each do |result|
-      fill_in_test_results_page(with: result)
-      expect_to_be_on_test_result_details_page
+        # Do not select an option
+        click_button "Continue"
+
+        expect_to_be_on_coronavirus_page
+        expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
+
+        fill_in_coronavirus_page(true)
+
+        expect_to_be_on_product_page
+        click_button "Continue"
+
+        expect_to_be_on_product_page
+        expect(page).to have_error_summary "Name cannot be blank", "Product type cannot be blank", "Category cannot be blank"
+
+        fill_in_product_page(with: product_details)
+
+        expect_to_be_on_why_reporting_page
+        click_button "Continue"
+
+        expect_to_be_on_why_reporting_page
+        expect(page).to have_error_summary "Choose at least one option"
+
+        check "It’s non-compliant (or suspected to be)"
+
+        click_button "Continue"
+
+        expect_to_be_on_why_reporting_page
+        expect(page).to have_error_summary "Non compliant reason cannot be blank"
+
+        fill_in "Why is the product non-compliant?", with: non_compliance_details
+        click_button "Continue"
+
+        expect_to_be_on_supply_chain_page
+        click_button "Continue"
+
+        expect_to_be_on_supply_chain_page
+        expect(page).to have_error_summary "Indicate which if any business is known"
+
+        check "None of the above"
+        click_button "Continue"
+
+        expect_to_be_on_corrective_action_taken_page
+        click_button "Continue"
+
+        expect_to_be_on_corrective_action_taken_page
+        expect(page).to have_error_summary "Select whether or not you have corrective action to record"
+
+        choose "No"
+        click_button "Continue"
+
+        expect_to_be_on_other_information_page
+        click_button "Continue"
+
+        expect_to_be_on_reference_number_page
+        click_button "Create case"
+
+        expect_to_be_on_reference_number_page
+        expect(page).to have_error_summary "Choose whether you want to add your own reference number"
+
+        choose "No"
+        click_button "Create case"
+
+        expect_to_be_on_case_created_page
+        expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} has now been assigned to you")
+
+        click_link "View case"
+
+        expect_to_be_on_case_details_page
+        expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]}")
+        expect(page).to have_text("Product reported because it is non-compliant.")
+
+        click_link "Products (1)"
+
+        expect_to_be_on_case_products_page
+        expect_case_products_page_to_show(info: product_details)
+
+        click_link "Activity"
+
+        expect_to_be_on_case_activity_page
+        expect_case_activity_page_to_show_allegation_logged
+        expect_case_activity_page_to_show_product_added
+      end
     end
-
-    skip_page
-
-    expect_to_be_on_risk_assessment_details_page
-
-    risk_assessments.each do |assessment|
-      fill_in_risk_assessment_details_page(with: assessment)
-      expect_to_be_on_risk_assessment_details_page
-    end
-
-    skip_page
-
-    fill_in_reference_number_page(reference_number)
-
-    expect_to_be_on_case_created_page
-
-    click_link "View case"
-
-    expect_case_details_page_to_show_entered_information
-
-    click_link "Products (1)"
-
-    expect_case_products_page_to_show(info: product_details)
-
-    click_link "Businesses (2)"
-
-    expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
-    expect_case_businesses_page_to_show(label: "Advertiser", business: business_details[:advertiser])
-
-    click_link "Attachments (5)"
-
-    corrective_actions.each { |action| expect_case_attachments_page_to_show(file_description: action[:summary]) }
-    test_results.each { |test| expect_case_attachments_page_to_show(file_description: "#{test[:result]}ed test") }
-    risk_assessments.each { |assessment| expect_case_attachments_page_to_show(file_description: assessment[:title]) }
-
-    click_link "Activity"
-
-    corrective_actions.each { |action| expect_case_activity_page_to_show_corrective_action(action) }
-    test_results.each { |test| expect_case_activity_page_to_show_test_result(test) }
-    risk_assessments.each { |assessment| expect_case_activity_page_to_show_risk_assessment(assessment) }
   end
 
-  def expect_no_error_messages
-    expect(page).not_to have_error_messages
+  def expect_to_be_on_coronavirus_page
+    expect(page).to have_current_path("/ts_investigation/coronavirus")
+    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
   end
 
   def expect_to_be_on_product_page
     expect(page).to have_current_path("/ts_investigation/product")
     expect(page).to have_selector("h1", text: "What product are you reporting?")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_why_reporting_page
     expect(page).to have_current_path("/ts_investigation/why_reporting")
     expect(page).to have_selector("h1", text: "Why are you reporting this product?")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_supply_chain_page
     expect(page).to have_current_path("/ts_investigation/which_businesses")
     expect(page).to have_selector("h1", text: "Supply chain information")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_business_details_page(title)
     expect(page).to have_current_path("/ts_investigation/business")
     expect(page).to have_selector("h1", text: "#{title} details")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_corrective_action_taken_page
     expect(page).to have_current_path("/ts_investigation/has_corrective_action")
     expect(page).to have_selector("h1", text: "Has any corrective action been agreed or taken?")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_record_corrective_action_page
     expect(page).to have_current_path("/ts_investigation/corrective_action")
     expect(page).to have_selector("h1", text: "Record corrective action")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_other_information_page
     expect(page).to have_current_path("/ts_investigation/other_information")
     expect(page).to have_selector("h1", text: "Other information and files")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_test_result_details_page
     expect(page).to have_current_path("/ts_investigation/test_results")
     expect(page).to have_selector("h1", text: "Test result details")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_risk_assessment_details_page
     expect(page).to have_current_path("/ts_investigation/risk_assessments")
     expect(page).to have_selector("h1", text: "Risk assessment details")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_reference_number_page
     expect(page).to have_current_path("/ts_investigation/reference_number")
     expect(page).to have_selector("h1", text: "Add your own reference number")
-    expect_no_error_messages
   end
 
   def expect_to_be_on_case_created_page
     expect(page).to have_current_path(/\/cases\/([\d-]+)\/created/)
     expect(page).to have_selector("h1", text: "Case created")
-    expect_no_error_messages
     expect(page).to have_text(/Case ID: ([\d-]+)/)
-    expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard has now been assigned to you")
+  end
+
+  def expect_to_be_on_case_details_page
+    expect(page).to have_selector("h1", text: "Overview")
+  end
+
+  def expect_to_be_on_case_products_page
+    expect(page).to have_selector("h1", text: "Products")
+  end
+
+  def expect_to_be_on_case_activity_page
+    expect(page).to have_selector("h1", text: "Activity")
   end
 
   def expect_case_details_page_to_show_entered_information
-    expect(page).to have_selector("h1", text: "Overview")
-
     expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard")
     expect(page).to have_text("Product reported because it is unsafe and non-compliant.")
 
@@ -260,16 +373,14 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def expect_case_products_page_to_show(info:)
-    expect(page).to have_selector("h1", text: "Products")
-
     expect(page).to have_selector("h2", text: info[:name])
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
-    expect(page.find("dt", text: "Barcode or serial number")).to have_sibling("dd", text: info[:barcode])
+    expect(page.find("dt", text: "Barcode or serial number")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
     expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: info[:type])
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
-    expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage])
-    expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin])
-    expect(page.find("dt", text: "Description")).to have_sibling("dd", text: info[:description])
+    expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
+    expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin]) if info[:country_of_origin]
+    expect(page.find("dt", text: "Description")).to have_sibling("dd", text: info[:description]) if info[:description]
   end
 
   def expect_case_businesses_page_to_show(label:, business:)
@@ -291,8 +402,19 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h2", text: file_description)
   end
 
+  def expect_case_activity_page_to_show_allegation_logged
+    item = page.find("h3", text: "Allegation logged: #{product_details[:name]}, #{product_details[:type]}").find(:xpath, "..")
+    expect(item).to have_text("Assigned to #{user.display_name}")
+  end
+
+  def expect_case_activity_page_to_show_product_added
+    item = page.find("p", text: "Product added").find(:xpath, "..")
+    expect(item).to have_text(product_details[:name])
+    expect(item).to have_text("Product added by #{user.display_name}")
+    expect(item).to have_link("View product details")
+  end
+
   def expect_case_activity_page_to_show_corrective_action(action)
-    expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: action[:summary]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
@@ -317,14 +439,19 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(item).to have_text(test[:details])
   end
 
+  def fill_in_coronavirus_page(answer)
+    choose (answer ? "investigation_coronavirus_related_yes" : "investigation_coronavirus_related_no")
+    click_button "Continue"
+  end
+
   def fill_in_product_page(with:)
     select with[:category],          from: "Product category"
-    select with[:country_of_origin], from: "Country of origin"
+    select with[:country_of_origin], from: "Country of origin" if with[:country_of_origin]
     fill_in "Product type",               with: with[:type]
     fill_in "Product name",               with: with[:name]
-    fill_in "Barcode or serial number",   with: with[:barcode]
-    fill_in "Webpage",                    with: with[:webpage]
-    fill_in "Description of product",     with: with[:description]
+    fill_in "Barcode or serial number",   with: with[:barcode] if with[:barcode]
+    fill_in "Webpage",                    with: with[:webpage] if with[:webpage]
+    fill_in "Description of product",     with: with[:description] if with[:description]
     click_button "Continue"
   end
 

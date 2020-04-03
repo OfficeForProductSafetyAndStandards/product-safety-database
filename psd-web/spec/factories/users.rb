@@ -24,6 +24,10 @@ FactoryBot.define do
       account_activated { false }
     end
 
+    trait :viewed_introduction do
+      has_viewed_introduction { true }
+    end
+
     trait :team_admin do
       transient do
         roles { %i[psd_user team_admin] }
