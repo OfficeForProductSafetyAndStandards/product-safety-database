@@ -39,7 +39,7 @@ module Users
       # of their mobile number during account set up process.
       if user_missing_2fa_mobile_verification?(matching_user)
         sign_out
-        add_wrong_credentials_errors
+        add_wrong_credentials_errors(resource)
         return render :new
       end
 
@@ -68,16 +68,17 @@ module Users
       return render "account_locked" if user&.reload&.access_locked?
 
       set_resource_as_new_user_from_params
-      add_wrong_credentials_errors
+      add_wrong_credentials_errors(resource)
       return render :new
     end
-
 
     def sign_in_form
       @sign_in_form ||= SignInForm.new(sign_in_params)
     end
 
-    def add_wrong_credentials_errors
+    def add_wrong_credentials_errors(resource)
+      return unless resource
+
       resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
       resource.errors.add(:password, nil)
     end
