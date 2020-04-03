@@ -464,6 +464,9 @@ if run_seeds
     %i[opss_user psd_user user].each do |role|
       UserRole.create!(user: user1, name: role)
     end
+    %i[superadmin team_admin opss_user psd_user user].each do |role|
+      UserRole.create!(user: user2, name: role)
+    end
   end
 
   Investigation.__elasticsearch__.create_index! force: true
