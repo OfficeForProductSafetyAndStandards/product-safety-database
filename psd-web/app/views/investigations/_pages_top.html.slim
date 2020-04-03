@@ -2,7 +2,7 @@
   .govuk-grid-row
     .govuk-grid-column-one-half
       = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
-    - if @investigation.is_private? || @investigation.is_closed?
+    - if @investigation.is_private? || @investigation.is_closed? || @investigation.coronavirus_related?
       .govuk-grid-column-one-half.psd-case__status-area[class="govuk-!-margin-bottom-5"]
         - if @investigation.coronavirus_related?
           = render "components/hmcts_badge",
