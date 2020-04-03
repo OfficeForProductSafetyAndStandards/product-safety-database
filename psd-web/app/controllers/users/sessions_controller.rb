@@ -10,36 +10,18 @@ module Users
       super { self.resource = resource.decorate }
     end
 
-    # Submission of the sign-in form.
-    #
-    # This method follows a sequence of steps checking possible errors and edge
-    # cases that would impede the user from being signed in.
-    # The checks are, in listed order:
-    # 1. Are the sumbitted values invalid?
-    # 2. Do the credentials correspond to an user that didn't verify its mobile
-    #    number through 2FA when completing its user registration?
-    # 3. In case of failing authentication. Did the user acount become locked?
-    # 4. Were the credentials wrong in the authentication attempt?
-    # 5. On successful authentication. Is the user missing its mobile number?
-    #
-    # When the sign-in submission does not fall under any of these checks,
-    # the user will be successfully set and signed in.
     def create
       set_resource_as_new_user_from_params
 
-      # Checks against form attributes validations
       if sign_in_form.invalid?
-        resource.errors.merge!(sign_in_form.errors)
+        handle_invalid_form(resource)
         return render :new
       end
 
       matching_user = User.find_by(email: sign_in_form.email)
 
-      # Stop users from signing in if they’ve not completed 2FA verification
-      # of their mobile number during account set up process.
-      if user_missing_2fa_mobile_verification?(matching_user)
-        sign_out
-        add_wrong_credentials_errors(resource)
+      if missing_mobile_verification?(matching_user)
+        handle_missing_mobile_verification(resource)
         return render :new
       end
 
@@ -72,6 +54,15 @@ module Users
       return render :new
     end
 
+    def handle_invalid_form(resource)
+      resource.errors.merge!(sign_in_form.errors)
+    end
+
+    def handle_missing_mobile_verification(resource)
+      sign_out
+      add_wrong_credentials_errors(resource)
+    end
+
     def sign_in_form
       @sign_in_form ||= SignInForm.new(sign_in_params)
     end
@@ -83,7 +74,7 @@ module Users
       resource.errors.add(:password, nil)
     end
 
-    def user_missing_2fa_mobile_verification?(user)
+    def missing_mobile_verification?(user)
       Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
     end
 
