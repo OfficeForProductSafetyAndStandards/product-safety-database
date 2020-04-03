@@ -3,7 +3,7 @@
     <% if investigation.coronavirus_related? %>
       <%= render "components/hmcts_badge",
         text: t(:coronavirus_related, scope: :case_badges),
-        classes: "app-badge--pink psd-case-card__badge"
+        classes: "app-badge--coronavirus psd-case-card__badge"
       %>
     <% end %>
     <% if investigation.is_closed? %>
