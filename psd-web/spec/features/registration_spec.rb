@@ -5,6 +5,11 @@ RSpec.describe "Registration process", :with_stubbed_mailer do
   let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, teams: [team]) }
   let(:invitee_email) { Faker::Internet.safe_email }
 
+  before do
+    allow(Rails.application.config)
+      .to receive(:email_whitelist_enabled).and_return(true)
+  end
+
   it "sending an invitation and recieving it" do
     sign_in(admin)
 
