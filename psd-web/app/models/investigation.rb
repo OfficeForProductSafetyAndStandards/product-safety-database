@@ -12,6 +12,7 @@ class Investigation < ApplicationRecord
 
   validates :description, presence: true, on: :update
   validates :assignable_id, presence: { message: "Select assignee" }, on: :update
+  validates :coronavirus_related, inclusion: { in: [true, false] }
 
   validates_length_of :user_title, maximum: 100
   validates_length_of :description, maximum: 10000
@@ -64,6 +65,17 @@ class Investigation < ApplicationRecord
     self.assignable_id = entity&.id
     self.assignable_type = "User" if entity.is_a?(User)
     self.assignable_type = "Team" if entity.is_a?(Team)
+  end
+
+  def coronavirus_related=(value)
+    if value.is_a?(String)
+      value = case value
+              when "yes" then true
+              when "no" then false
+              end
+    end
+
+    super(value)
   end
 
   def status

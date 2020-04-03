@@ -78,8 +78,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     ]
   }
 
-  context "as a non-OPSS user" do
+  context "when signed in as a non-OPSS user" do
     let(:user) { create(:user, :activated, :viewed_introduction, :psd_user) }
+
     before { sign_in as_user: user }
 
     context "with full details" do
@@ -274,6 +275,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_case_details_page
         expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]}")
         expect(page).to have_text("Product reported because it is non-compliant.")
+        expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Coronavirus related case")
 
         click_link "Products (1)"
 
@@ -370,6 +372,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page.find("dt", text: "Hazards")).to have_sibling("dd", text: hazard_type)
     expect(page.find("dt", text: "Hazards")).to have_sibling("dd", text: hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliance_details)
+    expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Not a coronavirus related case")
   end
 
   def expect_case_products_page_to_show(info:)
@@ -440,7 +443,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_coronavirus_page(answer)
-    choose (answer ? "investigation_coronavirus_related_yes" : "investigation_coronavirus_related_no")
+    choose answer ? "Yes, it is (or could be)" : "No, this is business as usual"
     click_button "Continue"
   end
 
