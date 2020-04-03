@@ -5,7 +5,9 @@ module BannerHelper
   #
   # <%= banner(text: "We are experiencing temporary performance issues") %>
   #
-  # The component can contain HTML, given either as a `html` param or a block:
+  # The component can contain HTML, given either as a `html` argument or a block
+  # (the block will take precedence over the `html` argument, which takes precendence
+  # over the `text` argument).
   #
   # <%= banner do %>
   #   <%= tag.p "We are experiencing temporary performance issues" %>
