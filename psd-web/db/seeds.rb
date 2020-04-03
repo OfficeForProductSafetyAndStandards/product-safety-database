@@ -423,32 +423,47 @@ if run_seeds
   Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
   Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-  user1 = User.create!(
-    name: "Test User",
-    email: "user@example.com",
-    password: "testpassword",
-    password_confirmation: "testpassword",
-    organisation: organisation,
-    mobile_number_verified: true,
-    teams: [enforcement],
-    mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-  )
-  user2 = User.create!(
-    name: "Team Admin",
-    email: "admin@example.com",
-    password: "testpassword",
-    password_confirmation: "testpassword",
-    organisation: organisation,
-    mobile_number_verified: true,
-    teams: [processing],
-    mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER"),
-  )
+  if ENV["TEST_USERS"].present?
+    ENV["TEST_USERS"].split(";").map { |u| u.split(":") }.each do |name, email, phone|
+      user = User.create!(
+        name: name,
+        email: email,
+        password: "testpassword",
+        password_confirmation: "testpassword",
+        organisation: organisation,
+        mobile_number_verified: true,
+        teams: [enforcement],
+        mobile_number: phone
+      )
+      %i[superadmin team_admin opss_user psd_user user].each do |role|
+        UserRole.create!(user: user, name: role)
+      end
+    end
+  else
+    user1 = User.create!(
+      name: "Test User",
+      email: "user@example.com",
+      password: "testpassword",
+      password_confirmation: "testpassword",
+      organisation: organisation,
+      mobile_number_verified: true,
+      teams: [enforcement],
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+    )
+    user2 = User.create!(
+      name: "Team Admin",
+      email: "admin@example.com",
+      password: "testpassword",
+      password_confirmation: "testpassword",
+      organisation: organisation,
+      mobile_number_verified: true,
+      teams: [processing],
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER"),
+    )
 
-  %i[opss_user psd_user user].each do |role|
-    UserRole.create!(user: user1, name: role)
-  end
-  %i[team_admin opss_user psd_user user].each do |role|
-    UserRole.create!(user: user2, name: role)
+    %i[opss_user psd_user user].each do |role|
+      UserRole.create!(user: user1, name: role)
+    end
   end
 
   Investigation.__elasticsearch__.create_index! force: true
