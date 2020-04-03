@@ -43,21 +43,18 @@ module Users
         return render :new
       end
 
-      # Attempts to authenticate the user with its credentials.
-      # The resource will be null if the authentication fails.
       self.resource = warden.authenticate(auth_options)
 
-      # On authentication failure
-      if !resource
-        # User may have become locked
-        return render "account_locked" if matching_user&.reload&.access_locked?
-
-        set_resource_as_new_user_from_params
-        add_wrong_credentials_errors
-        return render :new
+      if resource
+        handle_authentication_success
+      else
+        handle_authentication_failure(matching_user)
       end
+    end
 
-      # On successful authentication
+  private
+
+    def handle_authentication_success
       return redirect_to missing_mobile_number_path if !resource.mobile_number?
 
       set_current_user
@@ -67,7 +64,14 @@ module Users
       respond_with resource, location: after_sign_in_path_for(resource)
     end
 
-  private
+    def handle_authentication_failure(user)
+      return render "account_locked" if user&.reload&.access_locked?
+
+      set_resource_as_new_user_from_params
+      add_wrong_credentials_errors
+      return render :new
+    end
+
 
     def sign_in_form
       @sign_in_form ||= SignInForm.new(sign_in_params)
