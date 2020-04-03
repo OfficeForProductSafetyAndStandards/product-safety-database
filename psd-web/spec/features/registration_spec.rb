@@ -8,6 +8,8 @@ RSpec.feature "Registration process", :with_stubbed_mailer do
   before do
     allow(Rails.application.config)
       .to receive(:email_whitelist_enabled).and_return(false)
+    allow(Rails.application.config)
+      .to receive(:two_factor_authentication_enabled).and_return(true)
   end
 
   it "sending an invitation and registering" do
