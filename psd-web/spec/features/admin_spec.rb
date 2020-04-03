@@ -7,16 +7,6 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:password) { user.password }
 
-  def fill_in_credentials(password_override: nil)
-    fill_in "Email address", with: user.email
-    if password_override
-      fill_in "Password", with: password_override
-    else
-      fill_in "Password", with: password
-    end
-    click_on "Continue"
-  end
-
   context "when user tries to access admin", :with_2fa do
     scenario "needs to be signed in as superadmin" do
       visit "/admin"
