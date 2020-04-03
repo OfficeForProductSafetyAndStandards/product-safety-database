@@ -51,7 +51,7 @@ module Users
 
       set_resource_as_new_user_from_params
       add_wrong_credentials_errors(resource)
-      return render :new
+      render :new
     end
 
     def handle_invalid_form(resource)
