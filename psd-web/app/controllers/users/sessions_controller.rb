@@ -25,7 +25,7 @@ module Users
     # When the sign-in submission does not fall under any of these checks,
     # the user will be successfully set and signed in.
     def create
-      set_dummy_devise_resource_for_display_errors
+      set_resource_as_new_user_from_params
 
       # Checks against form attributes validations
       if sign_in_form.invalid?
@@ -52,7 +52,7 @@ module Users
         # User may have become locked
         return render "account_locked" if matching_user&.reload&.access_locked?
 
-        set_dummy_devise_resource_for_display_errors
+        set_resource_as_new_user_from_params
         add_wrong_credentials_errors
         return render :new
       end
@@ -82,7 +82,7 @@ module Users
       Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
     end
 
-    def set_dummy_devise_resource_for_display_errors
+    def set_resource_as_new_user_from_params
       self.resource = resource_class.new(sign_in_params).decorate
     end
   end
