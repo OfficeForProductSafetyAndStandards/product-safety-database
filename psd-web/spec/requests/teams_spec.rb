@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Teams management", :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.describe "Teams management", :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:team) { create(:team) }
   let(:team_admin) { create(:user, :team_admin, :activated, has_viewed_introduction: true, teams: [team]) }
 
@@ -16,9 +16,8 @@ RSpec.describe "Teams management", :with_stubbed_mailer, :with_stubbed_notify do
       it "checks whitelisted TLDs insensitively" do
         expect {
           put invite_to_team_url(team), params: { new_user: { email_address: "new_user@NORTHAMPTONSHIRE.gov.uk" } }
-        }.to change { team.reload.users.count }
-               .from(1).to(2)
-               .and(change(User, :count).from(1).to(2))
+        }.to change { team.reload.users.count }.from(1).to(2)
+         .and(change(User, :count).from(1).to(2))
       end
     end
   end
