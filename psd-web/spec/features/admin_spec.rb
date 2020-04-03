@@ -5,7 +5,7 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
 
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:password) { "2538fhdkvuULE36f" }
+  let(:password) { user.password }
 
   def fill_in_credentials(password_override: nil)
     fill_in "Email address", with: user.email
@@ -18,11 +18,11 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
   end
 
   context "when user tries to access admin", :with_2fa do
-    it "needs to sign in" do
+    scenario "needs to be signed in as superadmin" do
       visit "/admin"
       expect(page).to have_css("h1", text: "Sign in")
-      visit "/sign-in"
       fill_in_credentials
+      expect(page).to have_css("h1", text: "Check your phone")
       visit "/admin"
       expect(page).to have_css("h1", text: "Check your phone")
 

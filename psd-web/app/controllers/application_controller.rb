@@ -15,13 +15,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
 
-
-  def current_admin
-    if current_user && current_user.is_superadmin?
-      current_user
-    end
-  end
-
   def set_current_user
     return unless user_signed_in?
 
