@@ -4,4 +4,6 @@
       = render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs
     - if @investigation.is_private? || @investigation.is_closed? || @investigation.coronavirus_related?
       .govuk-grid-column-one-half.psd-case__status-area[class="govuk-!-margin-bottom-5"]
-        = render "investigations/case_badges", investigation: @investigation, classes: "hmcts-badge--aligned-right-from-tablet"
+        = render "investigations/case_badges",
+          investigation: @investigation,
+          classes: "hmcts-badge--aligned-right-from-tablet"
