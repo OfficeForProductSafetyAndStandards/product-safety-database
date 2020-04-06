@@ -23,6 +23,16 @@ until cf7 service $DB_NAME > /tmp/db_exists && grep -E "create succeeded|update 
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
+if [ -z "$WEB_MAX_THREADS" ]
+then
+  WEB_MAX_THREADS=5
+fi
+
+if [ -z "$WORKER_MAX_THREADS" ]
+then
+  WORKER_MAX_THREADS=10
+fi
+
 # Set the amount of time in minutes that the CLI will wait for all instances to start.
 # Because of the rolling deployment strategy, this should be set to at least the amount of
 # time each app takes to start multiplied by the number of instances.
@@ -31,7 +41,7 @@ cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 export CF_STARTUP_TIMEOUT=10
 
 # Deploy the app
-cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --strategy rolling
+cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --strategy rolling
 
 
 # Remove the copied infrastructure env files to clean up
