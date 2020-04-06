@@ -31,10 +31,11 @@
 
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
-  case_badges:
-    coronavirus_related: "COVID-19 related case"
-    closed: "Closed case"
-    restricted: "Restricted case"
+  case:
+    badges:
+      coronavirus_related: "COVID-19 related case"
+      closed: "Closed case"
+      restricted: "Restricted case"
   errors:
     format: "%{message}"
     messages:

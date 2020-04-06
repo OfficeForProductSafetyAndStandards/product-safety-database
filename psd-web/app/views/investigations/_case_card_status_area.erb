@@ -2,7 +2,7 @@
   <div class="psd-case-card__status-area">
     <% if investigation.coronavirus_related? %>
       <%= render "components/hmcts_badge",
-        text: t(:coronavirus_related, scope: :case_badges),
+        text: t(:coronavirus_related, scope: "case.badges"),
         classes: "app-badge--coronavirus psd-case-card__badge"
       %>
     <% end %>
