@@ -37,7 +37,7 @@ To create a database for the current space:
 
     cf7 marketplace -s postgres
     cf7 enable-service-access postgres
-    cf7 create-service postgres small-10.5 psd-database
+    cf7 create-service postgres small-10.5 psd-database -c '{"enable_extensions": ["pgcrypto"]}'
 
 
 #### Elasticsearch

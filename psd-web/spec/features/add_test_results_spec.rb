@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignee: user) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
@@ -8,7 +8,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
 
   before do
-    sign_in(as_user: user)
+    sign_in(user)
     visit "/cases/#{investigation.pretty_id}/activity/new"
   end
 

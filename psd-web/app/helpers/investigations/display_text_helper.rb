@@ -138,37 +138,6 @@ module Investigations::DisplayTextHelper
     render "components/govuk_summary_list", rows: rows
   end
 
-  def investigation_summary_list(investigation, include_actions: false, classes: "")
-    rows = [
-      {
-        key: { text: "Status", classes: classes },
-        value: { text: investigation.status, classes: classes }
-      },
-      {
-        key: { text: "Assigned to", classes: classes },
-        value: { text: investigation_assignee(investigation, classes) }
-      },
-      {
-        key: { text: "Last updated", classes: classes },
-        value: { text: "#{time_ago_in_words(investigation.updated_at)} ago", classes: classes }
-      }
-    ]
-
-    if include_actions
-      rows[0][:actions] = [
-        { href: status_investigation_path(investigation), text: "Change", classes: classes, visually_hidden_text: "status" }
-      ]
-      rows[1][:actions] = [
-        { href: new_investigation_assign_path(investigation), text: "Change", classes: classes, visually_hidden_text: "assigned to" }
-      ]
-      rows[2][:actions] = [
-        { href: new_investigation_activity_path(investigation), text: "Add activity", classes: classes, visually_hidden_text: "last updated" }
-      ]
-    end
-
-    render "components/govuk_summary_list", rows: rows
-  end
-
   def report_summary_list(investigation)
     rows = [
       { key: { text: "Date recorded" }, value: { text: investigation.created_at.strftime("%d/%m/%Y") } },

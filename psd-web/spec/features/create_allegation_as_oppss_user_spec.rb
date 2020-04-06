@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:contact_details) do
     {
@@ -30,7 +30,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
   context "when login as an OPSS user" do
     before do
-      sign_in as_user: create(:user, :activated, :opss_user)
+      sign_in(create(:user, :activated, :opss_user))
       visit "/allegation/complainant"
     end
 

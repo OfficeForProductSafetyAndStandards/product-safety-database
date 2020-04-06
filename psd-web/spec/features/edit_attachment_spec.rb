@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, :with_document, assignee: user) }
   let(:document) { investigation.documents.first }
@@ -9,7 +9,7 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :w
   let(:new_description) { Faker::Lorem.paragraph }
 
   before do
-    sign_in(as_user: user)
+    sign_in(user)
     visit edit_investigation_document_path(investigation, document)
   end
 

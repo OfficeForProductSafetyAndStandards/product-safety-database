@@ -5,10 +5,6 @@ RSpec.configure do |config|
   config.include PageMatchers
 end
 
-def have_summary_error(text)
-  have_css(".govuk-error-summary__list", text: text)
-end
-
 def expect_confirmation_banner(msg)
   expect(page).to have_css(".hmcts-banner__message", text: msg)
 end

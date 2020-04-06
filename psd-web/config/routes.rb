@@ -18,11 +18,22 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+  devise_for :users, path: "", path_names: { sign_in: "sign-in", sign_out: "sign-out", two_factor_authentication: "two-factor" }, controllers: { sessions: "users/sessions", passwords: "users/passwords", two_factor_authentication: "users/two_factor_authentication", unlocks: "users/unlocks" } do
+    get "reset-password", to: "users/passwords#new", as: :new_user_password
+  end
+
   devise_scope :user do
-    resource :home_page, only: :show, as: :new_session
-    resource :session do
-      get :logout, to: "devise/sessions#destroy"
+    resource :check_your_email, path: "check-your-email", only: :show, controller: "users/check_your_email"
+    get "missing-mobile-number", to: "users#missing_mobile_number"
+    post "sign-out-before-resetting-password", to: "users/passwords#sign_out_before_resetting_password", as: :sign_out_before_resetting_password
+  end
+
+  resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
+
+  resources :users, only: [:update] do
+    member do
+      get "complete-registration", action: :complete_registration
+      post "sign-out-before-accepting-invitation", action: :sign_out_before_accepting_invitation
     end
   end
 

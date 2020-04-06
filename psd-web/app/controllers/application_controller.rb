@@ -88,10 +88,11 @@ class ApplicationController < ActionController::Base
   def secondary_nav_items
     items = []
     if user_signed_in?
-      items.push text: "Your account", href: KeycloakClient.instance.user_account_url
-      items.push text: "Sign out", href: logout_session_path
+      # TODO: Remove comment when account page is re-implemented in app
+      # items.push text: "Your account", href: TODO
+      items.push text: "Sign out", href: destroy_user_session_path
     else
-      items.push text: "Sign in", href: root_path
+      items.push text: "Sign in", href: new_user_session_path
     end
     items
   end

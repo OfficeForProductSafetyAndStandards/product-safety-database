@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.feature "Deleting an attachment from a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Deleting an attachment from a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product, :with_document) }
   let(:document) { product.documents.first }
 
-  before { sign_in(as_user: user) }
+  before { sign_in(user) }
 
   scenario "deletes the attachment" do
     visit "/products/#{product.id}"

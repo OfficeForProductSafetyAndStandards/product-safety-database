@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:user)            { create :user, :activated, has_viewed_introduction: true }
   let!(:business_one)   { create(:business, trading_name: "great value",    created_at: 1.day.ago) }
   let!(:business_two)   { create(:business, trading_name: "mediocre stuff", created_at: 2.days.ago) }
@@ -10,7 +10,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, :wi
 
   scenario "lists products according to search relevance" do
     Business.import refresh: :wait_for
-    sign_in(as_user: user)
+    sign_in(user)
     visit businesses_path
 
     within ".govuk-grid-row.psd-case-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(1) span:nth-child(2)" do

@@ -22,6 +22,7 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/helpers/js-only";
 @import "stylesheets/helpers/field-widths";
 @import "stylesheets/helpers/media-queries";
+@import "stylesheets/helpers/password-manager-hidden";
 @import "stylesheets/images";
 @import "stylesheets/inverted";
 @import "stylesheets/teams";
