@@ -8,7 +8,9 @@ ruby:
     span.govuk-caption-m[class="govuk-!-font-size-16"]
       = investigation.pretty_description
     span = link_to investigation.title, investigation_path(investigation)
-    = render "investigations/case_card_status_area", investigation: investigation
+    - if investigation.is_private? || investigation.is_closed? || investigation.coronavirus_related?
+      .psd-case-card__status-area
+        = render "investigations/case_badges", investigation: investigation, classes: "psd-case-card__badge"
   .govuk-grid-column-one-quarter
     span.govuk-caption-m[class="govuk-!-font-size-16"] Assigned to
     span = investigation.assignable_display_name_for(viewing_user: current_user)
