@@ -87,10 +87,4 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
       assert_response :bad_request
     end
   end
-
-  def stub_user_management
-    allow(KeycloakClient.instance).to receive(:add_user_to_team)
-    allow(KeycloakClient.instance).to receive(:create_user)
-    allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_return(true)
-  end
 end
