@@ -179,11 +179,32 @@ RSpec.describe User do
     before { allow(SendUserInvitationJob).to receive(:perform_later) }
 
     context "when both users belong to same team" do
-      let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation) }
+      let!(:invitation_token) { SecureRandom.hex }
+      let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation, invitation_token: invitation_token) }
 
       it "resends an invitation to the user" do
         described_class.resend_invite(invited_user.email, inviting_user)
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
+      end
+
+      context "when resending an invite" do
+        context "when the invitee has already been sent an invite but has not yet accepted it" do
+          it "does not change the existing invitation token" do
+            expect { described_class.resend_invite(invited_user.email, inviting_user) }
+              .not_to(change { invited_user.reload.invitation_token })
+          end
+        end
+
+        context "when the invitee does not have an invitation token" do
+          before { invited_user.update!(invitation_token: nil) }
+
+          it "re-regerates the token" do
+            allow(SecureRandom).to receive(:hex).with(15).and_return("new_token")
+            expect {
+              described_class.resend_invite(invited_user.email, inviting_user)
+            }.to change { invited_user.reload.invitation_token }.from(nil).to("new_token")
+          end
+        end
       end
     end
 

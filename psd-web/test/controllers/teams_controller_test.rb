@@ -79,16 +79,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "Inviting new user creates the account and adds them to the team" do
-    skip "https://trello.com/c/noFdfN5e/335-3-send-invitation-emails-when-invite-or-resend-invite-is-triggered"
-    new_email_address = "new_user@northamptonshire.gov.uk"
-
-    assert_difference "teams(:southampton).users.count" => 1, "User.all.size" => 1 do
-      put invite_to_team_path(teams(:southampton)), params: { new_user: { email_address: new_email_address } }
-      assert_response :see_other
-    end
-  end
-
   test "Inviting user with email not on the whitelist returns an error" do
     allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
     not_whitelisted_address = "not_whitelisted@gmail.com"
@@ -98,20 +88,9 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "Inviting user with email domain in whitelist is compared case-insensitively" do
-    skip "https://trello.com/c/noFdfN5e/335-3-send-invitation-emails-when-invite-or-resend-invite-is-triggered"
-
-    assert_difference "teams(:southampton).users.count" => 1, "User.all.size" => 1 do
-      put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: "new_user@NORTHAMPTONSHIRE.gov.uk" } }
-      assert_response :see_other
-    end
-  end
-
-  test "Resend invite when user is invited but not signed up" do
-    skip "https://trello.com/c/noFdfN5e/335-3-send-invitation-emails-when-invite-or-resend-invite-is-triggered"
-    email_address = "new_user@northamptonshire.gov.uk"
-
-    put invite_to_team_url(teams(:southampton)), params: { new_user: { email_address: email_address } }
-    put resend_invitation_team_path(email_address: email_address)
+  def stub_user_management
+    allow(KeycloakClient.instance).to receive(:add_user_to_team)
+    allow(KeycloakClient.instance).to receive(:create_user)
+    allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_return(true)
   end
 end
