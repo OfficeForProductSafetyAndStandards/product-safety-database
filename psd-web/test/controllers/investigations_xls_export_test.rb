@@ -30,6 +30,19 @@ class InvestigationsXlsExportTest < ActionDispatch::IntegrationTest
     File.delete(path)
   end
 
+  test "exports coronavirus flag" do
+    path = Rails.root + "test/fixtures/files/cases3.xlsx"
+    Investigation::Allegation.new(coronavirus_related: true).save
+    Investigation.import refresh: true, force: true
+
+    file = get_file(path)
+    coronavirus_cell_title = file.sheet("Cases").cell(1, 8)
+    coronavirus_cell_content = file.sheet("Cases").cell(2, 8)
+    assert_equal "Coronavirus_Related", coronavirus_cell_title
+    assert_equal "true", coronavirus_cell_content
+    File.delete(path)
+  end
+
   def create_stub_investigations(how_many)
     [*1..how_many].each do
       Investigation::Allegation.new.save
