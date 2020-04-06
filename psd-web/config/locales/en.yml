@@ -31,6 +31,10 @@
 
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
+  case:
+    coronavirus_related:
+      true: "Coronavirus related case"
+      false: "Not a coronavirus related case"
   errors:
     format: "%{message}"
     messages:
@@ -135,6 +139,8 @@ en:
               blank: "Enter a valid hazard type"
             product_category:
               blank: "Enter a valid product category"
+            coronavirus_related:
+              inclusion: "Select whether or not the case is related to the coronavirus outbreak"
         product:
           attributes:
             product_category:

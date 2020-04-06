@@ -9,6 +9,7 @@ class AuditActivity::Investigation::AddAllegation < AuditActivity::Investigation
 
   def self.build_body(investigation)
     body =  "**Allegation details**<br>"
+    body += "<br>Case is related to the coronavirus outbreak." if investigation.coronavirus_related?
     body += "<br>Product category: **#{investigation.product_category}**" if investigation.product_category.present?
     body += "<br>Hazard type: **#{investigation.hazard_type}**" if investigation.hazard_type.present?
     body += "<br>Attachment: **#{self.sanitize_text investigation.documents.first.filename}**" if investigation.documents.attached?
