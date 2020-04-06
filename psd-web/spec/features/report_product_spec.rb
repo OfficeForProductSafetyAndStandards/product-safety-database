@@ -449,7 +449,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_coronavirus_page(answer)
-    choose answer ? "Yes, it is (or could be)" : "No, this is business as usual"
+    within_fieldset("Is this case related to the coronavirus outbreak?") do
+      choose answer ? "Yes, it is (or could be)" : "No, this is business as usual"
+    end
+
     click_button "Continue"
   end
 
