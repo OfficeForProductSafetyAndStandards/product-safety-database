@@ -9,13 +9,13 @@
 <%= form_with scope: :investigation, model: @investigation, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= error_summary @investigation.errors  %>
       <span class="govuk-caption-l">Report an unsafe or non-compliant product</span>
 
       <%= render "form_components/govuk_radios", form: form, key: :coronavirus_related,
               fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
               hint: { text: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)" },
-              items: [{ text: "Yes, it is (or could be)", value: "true" },
+              items: [{ text: "Yes, it is (or could be)", value: "true", id: "coronavirus_related" },
                       { text: "No, this is business as usual", value: "false" }] %>
 
       <%= govukButton(text: "Continue") %>
