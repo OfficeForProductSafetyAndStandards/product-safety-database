@@ -12,6 +12,7 @@ end
 run_seeds = (Product.count.zero? || Complainant.count.zero?)
 
 if run_seeds
+
   Rails.logger.info("Running seeds.rb")
   # First investigation
   investigation = Investigation::Allegation.new(
@@ -108,7 +109,7 @@ if run_seeds
     hazard_description: nil,
     non_compliant_reason: nil,
     complainant_reference: nil
-    )
+  )
 
   investigation.complainant = Complainant.new(
     name: "Jacob Bonwitt",
@@ -116,7 +117,7 @@ if run_seeds
     email_address: "jacob.bonwitt@digital.cabinet-office.gov.uk",
     complainant_type: "Local authority (Trading Standards)",
     other_details: ""
-    )
+  )
 
   investigation.save!
 
@@ -140,14 +141,14 @@ if run_seeds
   # Fourth investigation
   investigation = Investigation::Allegation.new(
     description: "The product contains acetaldehyde and/or propionaldehyde which are skin irritants and are also carcinogenic or an eye irritant respectively.\nIn case of eye contact, ingestion or inhalation, it could lead to eye or lung irritation.",
-      is_closed: false,
-      user_title: nil,
-      hazard_type: "Chemical",
-      product_category: "Other Product Type",
-      is_private: false,
-      hazard_description: nil,
-      non_compliant_reason: nil,
-      complainant_reference: nil
+    is_closed: false,
+    user_title: nil,
+    hazard_type: "Chemical",
+    product_category: "Other Product Type",
+    is_private: false,
+    hazard_description: nil,
+    non_compliant_reason: nil,
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -156,7 +157,7 @@ if run_seeds
     email_address: "random@random.com",
     complainant_type: "Local authority (Trading Standards)",
     other_details: ""
-    )
+  )
 
   investigation.save!
 
@@ -260,6 +261,10 @@ if run_seeds
     legal_name: "ABC limited"
   )
 
+  # migrations are causing model having wrong attributes,
+  # we need to reset them, it happens only when db:migrate and db:seed are being
+  # run by the same process
+  Location.reset_column_information
   business.locations << Location.new(
     name: "Registered office address",
     country: "",
@@ -363,11 +368,11 @@ if run_seeds
 
   Test::Result.new(
     legislation: "Electrical Equipment (Safety) Regulations 2016",
-      result: "other",
-      details: "Passed tests 1 to 4 and failed test 5",
-      date: "2018-03-31",
-      investigation: investigation,
-      product: product
+    result: "other",
+    details: "Passed tests 1 to 4 and failed test 5",
+    date: "2018-03-31",
+    investigation: investigation,
+    product: product
   )
 
   # Ninth investigation
@@ -408,9 +413,43 @@ if run_seeds
 
   investigation.products << product
 
-  KeycloakService.sync_orgs_and_users_and_teams
+  organisation = Organisation.create!(name: "Office for Product Safety and Standards")
 
-  User.load_from_keycloak
+  enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+  processing  = Team.create!(name: "OPSS Processing", team_recipient_email: nil, "organisation": organisation)
+
+  Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
+  Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
+
+  user1 = User.create!(
+    name: "Test User",
+    email: "user@example.com",
+    password: "testpassword",
+    password_confirmation: "testpassword",
+    organisation: organisation,
+    mobile_number_verified: true,
+    teams: [enforcement],
+    mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+  )
+  user2 = User.create!(
+    name: "Team Admin",
+    email: "admin@example.com",
+    password: "testpassword",
+    password_confirmation: "testpassword",
+    organisation: organisation,
+    mobile_number_verified: true,
+    teams: [processing],
+    mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER"),
+  )
+
+  %i[opss_user psd_user user].each do |role|
+    UserRole.create!(user: user1, name: role)
+  end
+  %i[team_admin opss_user psd_user user].each do |role|
+    UserRole.create!(user: user2, name: role)
+  end
 
   Investigation.__elasticsearch__.create_index! force: true
   Investigation.import

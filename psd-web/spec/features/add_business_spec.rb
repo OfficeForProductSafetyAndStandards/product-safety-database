@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_keycloak_config do
+RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:city)             { Faker::Address.city }
   let(:trading_name)     { Faker::Company.name }
   let(:business_details) { Faker::Company.buzzword }

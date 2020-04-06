@@ -17,4 +17,12 @@ module PageMatchers
   def have_summary_item(key:, value:)
     HaveSummaryItem.new(key: key, value: value)
   end
+
+  def have_summary_error(text)
+    have_css(".govuk-error-summary__list", text: text)
+  end
+
+  def have_h1(text)
+    have_selector("h1", text: text)
+  end
 end

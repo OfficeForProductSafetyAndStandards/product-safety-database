@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config do
+RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:date) { Faker::Date.backward(days: 14) }
   let(:received_type) { "enquiry_received_type_email" }
   let(:contact_details) do
@@ -19,7 +19,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   context "when logged in as an OPSS user" do
-    before { sign_in as_user: create(:user, :activated, :opss_user) }
+    before { sign_in(create(:user, :activated, :opss_user)) }
 
     scenario "able to report an enquiry" do
       click_link "Open a new case"

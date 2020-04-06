@@ -10,7 +10,7 @@ RSpec.shared_examples "finds the relevant investigation" do
   end
 end
 
-RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_keycloak_config do
+RSpec.describe ElasticsearchQuery, :with_elasticsearch do
   subject { described_class.new(query, filter_params, sorting_params) }
 
   let(:user)           { create(:user) }

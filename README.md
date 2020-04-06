@@ -56,10 +56,6 @@ See [antivirus repo](https://github.com/UKGovernmentBEIS/beis-opss-antivirus).
 
 See [maintenance in infrastructure repo](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure/blob/master/maintenance/README.md).
 
-### Keycloak
-
-See [keycloak repository](https://github.com/UKGovernmentBEIS/beis-opss-keycloak).
-
 ### Other infrastructure
 
 See [infrastructure repository](https://github.com/UKGovernmentBEIS/beis-opss-infrastructure).
