@@ -11,10 +11,6 @@ class HealthController < ApplicationController
     # Check database connection
     ActiveRecord::Migrator.current_version
 
-    # Check Keycloak service is available
-    # TODO: remove once Keycloak is no longer required.
-    raise "No Keycloak organisation data found" if KeycloakClient.instance.all_organisations.count < 1
-
     # Check Elasticsearch cluster health
     raise "Elasticsearch is down" if Elasticsearch::Client.new(Rails.application.config_for(:elasticsearch)).cluster.health[:status] == "red"
 
