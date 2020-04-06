@@ -67,9 +67,20 @@ module Users
       @sign_in_form ||= SignInForm.new(sign_in_params)
     end
 
-    def add_wrong_credentials_errors
+    def add_wrong_credentials_errors(resource)
+      return unless resource
+
       resource.errors.add(:email, I18n.t(:wrong_email_or_password, scope: "sign_user_in.email"))
       resource.errors.add(:password, nil)
     end
   end
+
+  def mobile_not_verified?(user)
+     Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
+   end
+
+    def set_resource_as_new_user_from_params
+     self.resource = resource_class.new(sign_in_params).decorate
+   end
+
 end
