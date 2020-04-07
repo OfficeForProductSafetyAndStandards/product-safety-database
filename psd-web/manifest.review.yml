@@ -31,7 +31,7 @@ applications:
     - psd-sentry-env
     - psd-sidekiq-env
     - psd-two-factor-auth-env
-    - psd-test-users-env
+    - psd-seed-users-env
     - antivirus-auth-env
     - keycloak-database
   processes:
