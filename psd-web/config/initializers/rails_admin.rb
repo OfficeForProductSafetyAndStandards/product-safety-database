@@ -64,6 +64,7 @@ RailsAdmin.config do |config|
   config.model "User" do
     list do
       field :name
+      field :email
       field :created_at
     end
     show do
@@ -75,7 +76,6 @@ RailsAdmin.config do |config|
     end
     edit do
       field :mobile_number
-      field :password
     end
   end
 
