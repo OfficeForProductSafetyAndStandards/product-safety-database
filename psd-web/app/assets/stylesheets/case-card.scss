@@ -78,10 +78,6 @@
   // Make everything grey
   color: govuk-colour("dark-grey");
 
-  * {
-    color: govuk-colour("dark-grey");
-  }
-
   // Restricted cases use different markup
   span {
     &::before {

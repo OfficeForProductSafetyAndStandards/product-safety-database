@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-04-03
+- Added a question for MSA users to identify cases related to the coronavirus outbreak.
+
 ## 2020-03-17
 - Only enquiries will now display Received by and Received date in the source summary list.
 
