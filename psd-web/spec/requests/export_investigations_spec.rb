@@ -4,13 +4,17 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
   # rubocop:disable RSpec/ExampleLength
   describe "#index as XLSX" do
     let(:user) { create(:user, :activated, :psd_user, :viewed_introduction) }
-    let(:export_path) { Rails.root + "spec/tmp/export_cases.xlsx" }
+    let(:temp_dir) { "spec/tmp/" }
+    let(:export_path) { Rails.root + temp_dir + "export_cases.xlsx" }
     let(:exported_data) do
       File.open(export_path, "w") { |f| f.write response.body }
       Roo::Excelx.new(export_path).sheet("Cases")
     end
 
-    before { sign_in(user) }
+    before do
+      Dir.mkdir(temp_dir) unless Dir.exist?(temp_dir)
+      sign_in(user)
+    end
 
     after { File.delete(export_path) }
 
