@@ -423,8 +423,8 @@ if run_seeds
   Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
   Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-  if ENV['SEED_USERS']
-    ENV['SEED_USERS'].split(';').map { |set| set.split(':') }.each do |name, email, phone|
+  if ENV["SEED_USERS"]
+    ENV["SEED_USERS"].split(";").map { |set| set.split(":") }.each do |name, email, phone|
       user = User.create!(
         name: name,
         email: email,
