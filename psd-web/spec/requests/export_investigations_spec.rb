@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-
+  # rubocop:disable RSpec/ExampleLength
   describe "#index as XLSX" do
     let(:user) { create(:user, :activated, :psd_user, :viewed_introduction) }
     let(:export_path) { Rails.root + "spec/tmp/export_cases.xlsx" }
@@ -11,6 +11,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
     end
 
     before { sign_in(user) }
+
     after { File.delete(export_path) }
 
     it "exports all the investigations into a XLSX file" do
@@ -48,9 +49,10 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       coronavirus_cell_content = exported_data.cell(2, 8)
 
       aggregate_failures "coronavirus cells values" do
-        expect(coronavirus_cell_title).to eq  "Coronavirus_Related"
+        expect(coronavirus_cell_title).to eq "Coronavirus_Related"
         expect(coronavirus_cell_content).to eq "true"
       end
     end
   end
+  # rubocop:enable RSpec/ExampleLength
 end
