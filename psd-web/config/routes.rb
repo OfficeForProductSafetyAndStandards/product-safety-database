@@ -85,7 +85,7 @@ Rails.application.routes.draw do
     resource :search, only: :show
   end
 
-  resources :investigations, path: "cases", only: %i[index show new update], param: :pretty_id,
+  resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
       get :status
