@@ -32,7 +32,7 @@ gem "rubyzip"
 gem "scout_apm"
 gem "sentry-raven", "~> 2.13"
 gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
-gem "sidekiq-cron", "~> 1.1"
+gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.6.2"
