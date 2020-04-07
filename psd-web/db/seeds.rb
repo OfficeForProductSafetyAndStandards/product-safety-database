@@ -423,6 +423,8 @@ if run_seeds
   Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
   Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
+  # export SEED_USERS='Johann Muster:muster@example.org:07777888999;John Doe:example@example.org:07777888999'
+  # you can modify this variable for your needs
   if ENV["SEED_USERS"].present?
     ENV["SEED_USERS"].split(";").map { |u| u.split(":") }.each do |name, email, phone|
       user = User.create!(
