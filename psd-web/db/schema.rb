@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_144542) do
+ActiveRecord::Schema.define(version: 2020_04_02_142659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_144542) do
     t.uuid "assignable_id"
     t.string "assignable_type"
     t.string "complainant_reference"
+    t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
     t.date "date_received"
     t.text "description"

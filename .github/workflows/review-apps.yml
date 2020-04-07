@@ -47,6 +47,8 @@ jobs:
         CF_USERNAME: ${{ secrets.PaaSUsernameInt }}
         CF_PASSWORD: ${{ secrets.PaaSPasswordInt }}
         BRANCH: ${{ github.head_ref }}
+        WEB_MAX_THREADS: 5
+        WORKER_MAX_THREADS: 10
       run: |
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
