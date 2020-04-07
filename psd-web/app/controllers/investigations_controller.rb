@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show status visibility edit_summary created update]
+  before_action :set_investigation, only: %i[show status visibility edit_summary created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
