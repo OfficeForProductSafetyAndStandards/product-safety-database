@@ -85,7 +85,7 @@ Rails.application.routes.draw do
     resource :search, only: :show
   end
 
-  resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
+  resources :investigations, path: "cases", only: %i[index show new update], param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
       get :status
@@ -97,7 +97,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-    resource :coronavirus_related, only: %i[update edit], path: "change-coronavirus-related", controller: "investigations/coronavirus_related"
+    resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
 
     resource :activity, controller: "investigations/activities", only: %i[show create new] do

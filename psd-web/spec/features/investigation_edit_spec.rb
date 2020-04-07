@@ -3,9 +3,7 @@ require "rails_helper"
 RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:investigation) { create(:project) }
 
-  before do
-    sign_in
-  end
+  before { sign_in }
 
   scenario "allows to edit some the attributes" do
     visit investigation_path(investigation)
@@ -17,10 +15,13 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
 
     expect(page).to have_css("p", text: "new description")
 
-    change_link = page.find(".govuk-summary-list__row .govuk-summary-list__key", text: "Coronavirus related").sibling("govuk-summary-list__actions a")
+    page.find(".govuk-summary-list__row .govuk-summary-list__value", text: "Not a coronavirus related case")
+      .sibling(".govuk-summary-list__actions")
+      .find("a").click
 
-    click_on change_link
+    choose "Yes, it is (or could be)"
+    click_on "Update coronavirus status"
 
-    save_and_open_page
+    expect(page).to have_css(".govuk-summary-list__row .govuk-summary-list__key + .govuk-summary-list__value", text: "Coronavirus related case")
   end
 end

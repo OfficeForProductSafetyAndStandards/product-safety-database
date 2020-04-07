@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show status visibility edit_summary created]
+  before_action :set_investigation, only: %i[show status visibility edit_summary created update]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -75,8 +75,6 @@ class InvestigationsController < ApplicationController
 
   def created; end
 
-private
-
   def update
     return if request.get?
 
@@ -95,6 +93,8 @@ private
     end
   end
 
+private
+
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
     authorize investigation
@@ -108,7 +108,7 @@ private
   end
 
   def editable_keys
-    %i[description is_closed status_rationale is_private visibility_rationale]
+    %i[description is_closed status_rationale is_private visibility_rationale coronavirus_related]
   end
 
   def build_breadcrumbs
