@@ -75,6 +75,8 @@ class InvestigationsController < ApplicationController
 
   def created; end
 
+private
+
   def update
     return if request.get?
 
@@ -93,8 +95,6 @@ class InvestigationsController < ApplicationController
     end
   end
 
-private
-
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
     authorize investigation
@@ -108,7 +108,7 @@ private
   end
 
   def editable_keys
-    %i[description is_closed status_rationale is_private visibility_rationale coronavirus_related]
+    %i[description is_closed status_rationale is_private visibility_rationale]
   end
 
   def build_breadcrumbs
