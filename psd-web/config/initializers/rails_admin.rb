@@ -76,6 +76,7 @@ RailsAdmin.config do |config|
     end
     edit do
       field :mobile_number
+      field :name
     end
   end
 
