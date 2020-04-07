@@ -13,7 +13,13 @@
                  items: [{ text: "Yes, it is (or could be)", value: "true", id: "coronavirus_related" },
                          { text: "No, this is business as usual", value: "false" }] %>
 
-      <%= govukButton(text: "Update coronavirus status") %>
+      <div>
+        <%= govukButton(text: "Update coronavirus status") %>
+        <p>
+          <%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %>
+        </p>
+      </div>
+
     </div>
   </div>
 <% end %>
