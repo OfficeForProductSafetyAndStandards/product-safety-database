@@ -193,9 +193,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_142659) do
   create_table "organisations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
-    t.string "path"
     t.datetime "updated_at", null: false
-    t.index ["path"], name: "index_organisations_on_path"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
@@ -233,12 +231,10 @@ ActiveRecord::Schema.define(version: 2020_04_02_142659) do
     t.datetime "created_at", null: false
     t.string "name"
     t.uuid "organisation_id"
-    t.string "path"
     t.string "team_recipient_email"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_teams_on_name"
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
-    t.index ["path"], name: "index_teams_on_path"
   end
 
   create_table "teams_users", force: :cascade do |t|
