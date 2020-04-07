@@ -11,7 +11,7 @@ applications:
     PSD_HOST: ((psd-host))
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
-    KEYCLOAK_REDIRECT_URI: https://((psd-host))/users/auth/openid_connect/callback
+    LOCK_MAXIMUM_ATTEMPTS: 3
   timeout: 180
   services:
     - ((psd-db-name))
@@ -23,19 +23,18 @@ applications:
     - psd-auth-env
     - psd-email-whitelist-env
     - psd-health-env
-    - psd-keycloak-env
     - psd-notify-env
     - psd-pghero-env
     - psd-rails-env
     - psd-sentry-env
     - psd-sidekiq-env
+    - psd-two-factor-auth-env
     - antivirus-auth-env
-    - keycloak-database
   processes:
     - type: web
       env:
         RAILS_MAX_THREADS: ((web-max-threads))
-      command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate keycloak:sync db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+      command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
       instances: 1
       memory: 1G
     - type: worker

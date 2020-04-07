@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
-  let(:investigation) { create(:enquiry) }
+RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+  let(:investigation) { create(:project) }
 
   before do
     sign_in

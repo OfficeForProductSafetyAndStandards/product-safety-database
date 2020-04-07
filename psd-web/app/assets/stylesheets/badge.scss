@@ -63,3 +63,10 @@ $badge-spacing-width: 5px;
   border-color: $govuk-secondary-text-colour;
   color: $govuk-secondary-text-colour;
 }
+
+// Used for coronavirus (COVID-19) related cases
+.app-badge--coronavirus {
+  background-color: $coronavirus-colour;
+  border-color: $coronavirus-colour;
+  color: govuk-colour("white");
+}

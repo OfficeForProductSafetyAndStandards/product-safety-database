@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'devise/encryptable/encryptors/pbkdf2'
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -166,7 +167,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :validatable
   # Range for password length.
-  config.password_length = 6..128
+  config.password_length = 8..128
 
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly
@@ -212,7 +213,7 @@ Devise.setup do |config|
   # Time interval you can reset your password with a reset password key.
   # Don't put a too small interval or your users won't have the time to
   # change their passwords.
-  config.reset_password_within = 6.hours
+  config.reset_password_within = 1.hours
 
   # When set to false, does not sign a user in automatically after their password is
   # reset. Defaults to true, so a user is signed in automatically after a reset.
@@ -226,7 +227,7 @@ Devise.setup do |config|
   # stretches to 10, and copy REST_AUTH_SITE_KEY to pepper).
   #
   # Require the `devise-encryptable` gem when using anything other than bcrypt
-  # config.encryptor = :sha512
+  config.encryptor = :pbkdf2
 
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
@@ -256,31 +257,6 @@ Devise.setup do |config|
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :get
 
-  # ==> OmniAuth
-  # Add a new OmniAuth provider. Check the wiki for more information on setting
-  # up on your models and hooks.
-
-  # This is used under the hood by omniauth_openid_connect
-  if ENV["KEYCLOAK_AUTH_URL"].present?
-    keycloak_url = URI(ENV["KEYCLOAK_AUTH_URL"])
-    SWD.url_builder = keycloak_url.scheme == "https" ? URI::HTTPS : URI::HTTP
-
-    config.omniauth :openid_connect,
-                    name: :openid_connect,
-                    discovery:  true,
-                    log: :debug,
-                    scope: "openid,email,profile,address,roles",
-                    issuer: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss",
-                    client_options: {
-                      authorization_endpoint: "#{ENV['KEYCLOAK_AUTH_URL']}/realms/opss/protocol/openid-connect/auth",
-                      port:         keycloak_url.port,
-                      scheme:       keycloak_url.scheme,
-                      host:         keycloak_url.host,
-                      identifier:   ENV["KEYCLOAK_CLIENT_ID"],
-                      secret:       ENV["KEYCLOAK_CLIENT_SECRET"],
-                      redirect_uri: ENV["KEYCLOAK_REDIRECT_URI"]
-                    }
-  end
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
@@ -316,4 +292,27 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+
+  config.lock_strategy = :failed_attempts
+  config.unlock_strategy = :email
+  if Rails.env.test?
+    config.maximum_attempts = 2
+  else
+    config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
+  end
+
+  # Devise two_factor_authentication gem
+  config.max_login_attempts = 10  # Maximum second factor attempts count.
+  config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
+  config.direct_otp_length = 5  # Direct OTP code length
+  config.remember_otp_session_for_seconds = 7.days  # Time before browser has to perform 2fA again. Default is 0.
+  config.second_factor_resource_id = 'id' # Field or method name used to set value for 2fA remember cookie
+  config.delete_cookie_on_logout = false # Delete cookie when user signs out, to force 2fA again on login
+  # Only needed for TOTP:
+  # config.otp_secret_encryption_key = ENV.fetch("OTP_SECRET_ENCRYPTION_KEY")
+  # config.allowed_otp_drift_seconds = 30  # Allowed TOTP time drift between client and server.
+  # config.otp_length = 5  # TOTP code length
 end
+
+DeviseController.include NoSecondaryNav

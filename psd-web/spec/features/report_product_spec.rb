@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }
@@ -81,7 +81,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   context "when signed in as a non-OPSS user" do
     let(:user) { create(:user, :activated, :viewed_introduction, :psd_user) }
 
-    before { sign_in as_user: user }
+    before { sign_in user }
 
     context "with full details" do
       let(:product_details) do
@@ -449,7 +449,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_coronavirus_page(answer)
-    choose answer ? "Yes, it is (or could be)" : "No, this is business as usual"
+    within_fieldset("Is this case related to the coronavirus outbreak?") do
+      choose answer ? "Yes, it is (or could be)" : "No, this is business as usual"
+    end
+
     click_button "Continue"
   end
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignee: user) }
 
@@ -14,7 +14,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:duration) { CorrectiveAction::DURATION_TYPES.sample }
   let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
 
-  before { sign_in(as_user: user) }
+  before { sign_in(user) }
 
   context "with valid input" do
     scenario "shows inputted data on the confirmation page and on the case attachments and activity pages" do

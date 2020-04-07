@@ -32,6 +32,10 @@
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
   case:
+    badges:
+      coronavirus_related: "COVID-19 related case"
+      closed: "Closed case"
+      restricted: "Restricted case"
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
@@ -145,6 +149,17 @@ en:
           attributes:
             product_category:
               blank: "Enter a valid product category"
+        user:
+          attributes:
+            mobile_number:
+              blank: "Enter your mobile number"
+              invalid: "Enter your mobile number in the correct format, like 07700 900 982"
+            name:
+              blank: "Enter your full name"
+            password:
+              blank: "Enter a password"
+              too_common: "Choose a less frequently used password"
+              too_short: "Password is too short"
     attributes:
       corrective_action:
         measure_type:
@@ -156,6 +171,20 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  enter_email_address: "Enter your email address"
+  otp_code:
+    blank: "Enter the security code"
+    too_short: "You haven’t entered enough numbers"
+    too_long: "You’ve entered too many numbers"
+    incorrect: "Incorrect security code"
+    expired: "The security code has expired"
+    numericality: "The code must be 5 numbers"
+  sign_in_form:
+    email:
+      wrong_email_or_password: "Enter your email address in the correct format, like name@example.com"
+  sign_user_in:
+    email:
+      wrong_email_or_password: "Enter correct email address and password"
   support:
     array:
       two_words_connector: " and "

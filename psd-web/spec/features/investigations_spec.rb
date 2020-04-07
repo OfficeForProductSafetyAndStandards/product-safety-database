@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, :with_stubbed_keycloak_config, type: :feature do
+RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create :user, :activated, has_viewed_introduction: true }
   let(:pagination_link_params) do
     {
@@ -29,7 +29,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     # it is necessary to re-import and wait for the indexing to be done.
     Investigation.import refresh: :wait_for
 
-    sign_in(as_user: user)
+    sign_in(user)
     visit investigations_path
 
     # Expect investigations to be in reverse chronological order

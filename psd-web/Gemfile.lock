@@ -66,15 +66,13 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    aes_key_wrap (1.0.1)
     ansi (1.5.0)
     arel (9.0.0)
     ast (2.4.0)
-    attr_required (1.0.1)
     awesome_print (1.8.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.284.0)
-    aws-sdk-core (3.91.1)
+    aws-partitions (1.295.0)
+    aws-sdk-core (3.93.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -82,7 +80,7 @@ GEM
     aws-sdk-kms (1.30.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.61.1)
+    aws-sdk-s3 (1.61.2)
       aws-sdk-core (~> 3, >= 3.83.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -90,7 +88,6 @@ GEM
       aws-eventstream (~> 1.0, >= 1.0.2)
     backport (1.1.2)
     bcrypt (3.1.13)
-    bindata (2.4.4)
     brakeman (4.8.0)
     builder (3.2.4)
     byebug (11.1.1)
@@ -127,7 +124,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
-    database_cleaner (1.8.3)
+    database_cleaner (1.8.4)
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.6)
@@ -137,6 +134,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-encryptable (0.2.0)
+      devise (>= 2.1.0)
     diff-lcs (1.3)
     docile (1.3.2)
     domain_name (0.5.20190701)
@@ -164,8 +163,9 @@ GEM
     elasticsearch-transport (6.8.1)
       faraday (>= 0.14, < 1)
       multi_json
+    encryptor (3.0.0)
     erubi (1.9.0)
-    et-orbi (1.2.2)
+    et-orbi (1.2.4)
       tzinfo
     factory_bot (5.1.1)
       activesupport (>= 4.2.0)
@@ -177,7 +177,7 @@ GEM
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.12.1)
-    fugit (1.3.3)
+    fugit (1.3.4)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
     globalid (0.4.2)
@@ -191,27 +191,13 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    httpclient (2.8.3)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    interactor (3.1.2)
-    interactor-rails (2.2.1)
-      interactor (~> 3.0)
-      rails (>= 4.2)
     jaro_winkler (1.5.4)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
-    json (2.3.0)
-    json-jwt (1.11.0)
-      activesupport (>= 4.2)
-      aes_key_wrap
-      bindata
     jwt (2.2.1)
-    keycloak (3.0.0)
-      json
-      jwt
-      rest-client
     launchy (2.5.0)
       addressable (~> 2.7)
     listen (3.2.1)
@@ -249,26 +235,6 @@ GEM
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
-    omniauth (1.9.1)
-      hashie (>= 3.4.6)
-      rack (>= 1.6.2, < 3)
-    omniauth-rails_csrf_protection (0.1.2)
-      actionpack (>= 4.2)
-      omniauth (>= 1.3.1)
-    omniauth_openid_connect (0.3.3)
-      addressable (~> 2.5)
-      omniauth (~> 1.9)
-      openid_connect (~> 1.1)
-    openid_connect (1.1.8)
-      activemodel
-      attr_required (>= 1.0.0)
-      json-jwt (>= 1.5.0)
-      rack-oauth2 (>= 1.6.1)
-      swd (>= 1.0.0)
-      tzinfo
-      validate_email
-      validate_url
-      webfinger (>= 1.0.1)
     orm_adapter (0.5.0)
     parallel (1.19.1)
     parser (2.7.0.5)
@@ -279,7 +245,10 @@ GEM
     pry (0.13.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    pry-doc (1.1.0)
+    pry-byebug (3.9.0)
+      byebug (~> 11.0)
+      pry (~> 0.13.0)
+    pry-doc (1.0.0)
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (4.0.3)
@@ -289,13 +258,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.1.6)
     rack (2.2.2)
-    rack-oauth2 (1.10.1)
-      activesupport
-      attr_required
-      httpclient
-      json-jwt (>= 1.11.0)
-      rack
-    rack-protection (2.0.7)
+    rack-protection (2.0.8.1)
       rack
     rack-proxy (0.6.5)
       rack
@@ -331,6 +294,7 @@ GEM
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
     rake (13.0.1)
+    randexp (0.1.7)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -369,6 +333,8 @@ GEM
     roo (2.8.3)
       nokogiri (~> 1)
       rubyzip (>= 1.3.0, < 3.0.0)
+    rotp (5.1.0)
+      addressable (~> 2.5)
     rspec-core (3.9.1)
       rspec-support (~> 3.9.1)
     rspec-expectations (3.9.1)
@@ -443,7 +409,7 @@ GEM
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
-    sidekiq-cron (1.1.0)
+    sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
     simplecov (0.18.5)
@@ -486,12 +452,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strong_migrations (0.6.2)
+    strong_migrations (0.6.3)
       activerecord (>= 5)
-    swd (1.1.2)
-      activesupport (>= 3)
-      attr_required (>= 0.0.5)
-      httpclient (>= 2.4)
     temple (0.8.2)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
@@ -501,7 +463,13 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.10)
     tins (1.21.1)
-    tzinfo (1.2.6)
+    two_factor_authentication (2.2.0)
+      devise
+      encryptor
+      rails (>= 3.1.1)
+      randexp
+      rotp (>= 4.0.0)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
@@ -510,14 +478,8 @@ GEM
     validate_email (0.1.6)
       activemodel (>= 3.0)
       mail (>= 2.2.5)
-    validate_url (1.0.8)
-      activemodel (>= 3.0.0)
-      public_suffix
     warden (1.2.8)
       rack (>= 2.0.6)
-    webfinger (1.1.0)
-      activesupport
-      httpclient (>= 2.4)
     webmock (3.8.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -542,7 +504,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
-  aws-sdk-s3 (= 1.61.1)
+  aws-sdk-s3 (= 1.61.2)
   axlsx!
   brakeman
   byebug
@@ -554,6 +516,7 @@ DEPENDENCIES
   database_cleaner
   debase
   devise
+  devise-encryptable
   dotenv-rails
   draper
   elasticsearch (= 6.8.1)
@@ -563,19 +526,16 @@ DEPENDENCIES
   faker
   govuk-design-system-rails!
   govuk_notify_rails (= 2.1.2)
-  interactor-rails
   jbuilder
-  keycloak (= 3.0.0)
   launchy
   listen
   lograge (= 0.11.2)
   m
   mini_magick (= 4.10.1)
-  omniauth-rails_csrf_protection (~> 0.1)
-  omniauth_openid_connect
   pg
   pghero
   pry
+  pry-byebug
   pry-doc
   puma
   pundit
@@ -602,7 +562,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-raven (~> 2.13)
   sidekiq (= 5.2.7)
-  sidekiq-cron (~> 1.1)
+  sidekiq-cron (~> 1.2)
   simplecov
   simplecov-console
   slim-rails
@@ -611,7 +571,9 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
-  strong_migrations (= 0.6.2)
+  strong_migrations (= 0.6.3)
+  two_factor_authentication (~> 2.2)
+  validate_email (~> 0.1)
   webmock
   webpacker (= 5.0.1)
   wicked
