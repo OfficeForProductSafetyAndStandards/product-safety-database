@@ -8,6 +8,7 @@ FactoryBot.define do
     date_received { 1.day.ago }
     received_type { %w(email phone other).sample }
     is_closed { false }
+    coronavirus_related { false }
 
     association :assignee, factory: :user
 

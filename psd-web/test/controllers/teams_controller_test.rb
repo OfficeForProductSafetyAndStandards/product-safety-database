@@ -3,7 +3,6 @@ require "test_helper"
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notify_mailer
-    stub_user_management
     sign_in users(:southampton)
     users(:southampton).teams << teams(:southampton)
     users(:southampton_bob).teams << teams(:southampton)
@@ -83,16 +82,9 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "Inviting user with email not on the whitelist returns an error" do
     allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
     not_whitelisted_address = "not_whitelisted@gmail.com"
-    expect(KeycloakClient.instance).to receive(:get_user).with(not_whitelisted_address).and_return({})
     assert_difference "teams(:southampton).users.count" => 0, "User.count" => 0 do
       put invite_to_team_path(teams(:southampton)), params: { new_user: { email_address: not_whitelisted_address } }
       assert_response :bad_request
     end
-  end
-
-  def stub_user_management
-    allow(KeycloakClient.instance).to receive(:add_user_to_team)
-    allow(KeycloakClient.instance).to receive(:create_user)
-    allow(KeycloakClient.instance).to receive(:send_required_actions_welcome_email).and_return(true)
   end
 end

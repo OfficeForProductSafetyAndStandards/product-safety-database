@@ -1,0 +1,15 @@
+<% content_for :after_header do %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <%= render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs %>
+    </div>
+
+    <% if @investigation.is_private? || @investigation.is_closed? || @investigation.coronavirus_related? %>
+      <div class="govuk-grid-column-one-half psd-case__status-area govuk-!-margin-bottom-5">
+        <%= render "investigations/case_badges",
+        investigation: @investigation,
+        classes: "hmcts-badge--aligned-right-from-tablet" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

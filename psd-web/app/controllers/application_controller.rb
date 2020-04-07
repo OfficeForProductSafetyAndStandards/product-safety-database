@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
     items = []
     if user_signed_in?
       # TODO: Remove comment when account page is re-implemented in app
-      # items.push text: "Your account", href: KeycloakClient.instance.user_account_url
+      # items.push text: "Your account", href: TODO
       items.push text: "Sign out", href: destroy_user_session_path
     else
       items.push text: "Sign in", href: new_user_session_path

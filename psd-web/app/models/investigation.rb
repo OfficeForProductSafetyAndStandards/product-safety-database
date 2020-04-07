@@ -12,6 +12,7 @@ class Investigation < ApplicationRecord
 
   validates :description, presence: true, on: :update
   validates :assignable_id, presence: { message: "Select assignee" }, on: :update
+  validates :coronavirus_related, inclusion: { in: [true, false] }
 
   validates_length_of :user_title, maximum: 100
   validates_length_of :description, maximum: 10000
