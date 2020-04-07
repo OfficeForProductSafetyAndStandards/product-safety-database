@@ -11,7 +11,6 @@ applications:
     PSD_HOST: ((psd-host))
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
-    KEYCLOAK_REDIRECT_URI: https://((psd-host))/users/auth/openid_connect/callback
     LOCK_MAXIMUM_ATTEMPTS: 3
   timeout: 180
   services:
@@ -24,7 +23,6 @@ applications:
     - psd-auth-env
     - psd-email-whitelist-env
     - psd-health-env
-    - psd-keycloak-env
     - psd-notify-env
     - psd-pghero-env
     - psd-rails-env
@@ -32,7 +30,6 @@ applications:
     - psd-sidekiq-env
     - psd-two-factor-auth-env
     - antivirus-auth-env
-    - keycloak-database
   processes:
     - type: web
       env:

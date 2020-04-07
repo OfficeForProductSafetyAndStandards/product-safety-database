@@ -49,6 +49,10 @@ class InvestigationDecorator < ApplicationDecorator
         actions: []
       },
       {
+        key: { text: "Coronavirus related", classes: classes },
+        value: { text: I18n.t(coronavirus_related, scope: "case.coronavirus_related"), classes: classes },
+      },
+      {
         key: { text: "Created by", classes: classes },
         value: { text: created_by, classes: classes },
         actions: []
@@ -76,10 +80,10 @@ class InvestigationDecorator < ApplicationDecorator
       rows[0][:actions] = [
         { href: h.status_investigation_path(investigation), text: "Change", classes: classes, visually_hidden_text: "status" }
       ]
-      rows[2][:actions] = [
+      rows[3][:actions] = [
         { href: h.new_investigation_assign_path(investigation), text: "Change", classes: classes, visually_hidden_text: "assigned to" }
       ]
-      rows[4][:actions] = [
+      rows[5][:actions] = [
         { href: h.new_investigation_activity_path(investigation), text: "Add activity", classes: classes }
       ]
     end

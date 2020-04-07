@@ -28,7 +28,7 @@ class Team < ApplicationRecord
 
     return true if missing.empty?
 
-    raise "Team name #{missing.join(', ')} not found, if recently changed in Keycloak, please update important_team_names.yml"
+    raise "Team name #{missing.join(', ')} not found"
   end
 
   def self.get_visible_teams(user)

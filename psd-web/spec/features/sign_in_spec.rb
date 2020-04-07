@@ -6,6 +6,16 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   let(:investigation) { create(:project) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
 
+  def fill_in_credentials(password_override: nil)
+    fill_in "Email address", with: user.email
+    if password_override
+      fill_in "Password", with: password_override
+    else
+      fill_in "Password", with: user.password
+    end
+    click_on "Continue"
+  end
+
   def expect_incorrect_email_or_password
     expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
     expect(page).to have_link("Enter correct email address and password", href: "#email")

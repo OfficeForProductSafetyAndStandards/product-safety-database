@@ -10,7 +10,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:creator)      { create(:user, organisation: organisation) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
-  let(:investigation) { create(:allegation, products: products, assignee: user, source: user_source) }
+  let(:coronavirus_related) { false }
+  let(:investigation) { create(:allegation, coronavirus_related: coronavirus_related, products: products, assignee: user, source: user_source) }
 
   before { create(:complainant, investigation: investigation) }
 
@@ -151,6 +152,22 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
     it "displays the Trading Standards reference" do
       expect(investigation_summary_list).to summarise("Trading Standards reference", text: investigation.complainant_reference)
+    end
+
+    context "when the investigation is not coronavirus related" do
+      let(:coronavirus_related) { false }
+
+      it "displays the non-coronavirus related text" do
+        expect(investigation_summary_list).to summarise("Coronavirus related", text: "Not a coronavirus related case")
+      end
+    end
+
+    context "when the investigation is coronavirus related" do
+      let(:coronavirus_related) { true }
+
+      it "displays the coronavirus related text" do
+        expect(investigation_summary_list).to summarise("Coronavirus related", text: "Coronavirus related case")
+      end
     end
 
     context "when investigation has no source" do
