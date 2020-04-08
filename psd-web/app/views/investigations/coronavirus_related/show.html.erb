@@ -4,4 +4,4 @@
   <%= link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link" %>
 <% end %>
 
-<%= render 'form', investigation: @investigation, fieldset_label: page_heading, url: investigation_coronavirus_related_path(@investigation)  %>
+<%= render 'form', investigation: @investigation, fieldset_label: page_heading, url: investigation_coronavirus_related_path(@investigation), button_text: "Update coronavirus status"%>

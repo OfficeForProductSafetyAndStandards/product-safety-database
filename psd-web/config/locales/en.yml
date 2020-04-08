@@ -161,6 +161,13 @@ en:
               too_common: "Choose a less frequently used password"
               too_short: "Password is too short"
     attributes:
+      audit_activity:
+        investigation:
+          update_coronavirus_status:
+            title: "Status updated: coronavirus related"
+            body:
+              true: "The case is related to the coronavirus outbreak."
+              false: "The case is not related to the coronavirus outbreak."
       corrective_action:
         measure_type:
           one: "Type of measure"
@@ -171,6 +178,7 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+
   enter_email_address: "Enter your email address"
   otp_code:
     blank: "Enter the security code"

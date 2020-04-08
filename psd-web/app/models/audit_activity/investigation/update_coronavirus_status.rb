@@ -1,8 +1,6 @@
 class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Investigation::Base
   def self.from(investigation)
-    title = "Status updated: coronavirus related"
-    body = investigation.coronavirus_related? ? "The case is related to the coronavirus outbreak." : "The case is not related to the coronavirus outbreak."
-    super(investigation, title, body)
+    super(investigation, I18n.t(".title"), I18n.t(".body.#{investigation.coronavirus_related}"))
   end
 
   def email_update_text

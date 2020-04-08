@@ -15,9 +15,7 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
 
     expect(page).to have_css("p", text: "new description")
 
-    page.find(".govuk-summary-list__row .govuk-summary-list__value", text: "Not a coronavirus related case")
-      .sibling(".govuk-summary-list__actions")
-      .find("a").click
+    click_on "Change coronavirus status"
 
     choose "Yes, it is (or could be)"
     click_on "Update coronavirus status"
