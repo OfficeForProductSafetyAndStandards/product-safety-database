@@ -43,9 +43,9 @@ en:
     coronavirus_related:
       show:
         title: "Is the case related to the coronavirus outbreak?"
-        button: "Update coronavirus status"
-        yes: "Yes, it is (or could be)"
-        no: "No, this is business as usual"
+        submit_button: "Update coronavirus status"
+        yes_label: "Yes, it is (or could be)"
+        no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "%{case_title} was successfully updated."
   audit_activity:
