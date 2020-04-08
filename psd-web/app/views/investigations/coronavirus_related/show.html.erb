@@ -1,7 +1,21 @@
-<% page_heading = "Update coronavirus status" %>
-<% page_title page_heading, errors: @investigation.errors %>
+<% page_heading = t(".title") %>
+<% page_title page_heading, errors: @investigation.errors.any? %>
 <% content_for :after_header do %>
   <%= link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link" %>
 <% end %>
 
-<%= render 'form', investigation: @investigation, fieldset_label: page_heading, url: investigation_coronavirus_related_path(@investigation), button_text: "Update coronavirus status"%>
+<%= form_with scope: :investigation, model: investigation, url: investigation_coronavirus_related_path(@investigation), method: :put do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @investigation.errors  %>
+
+      <%= render "form_components/govuk_radios", form: form, key: :coronavirus_related,
+                 fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
+                 hint: { text: t(".hit") },
+                 items: [{ text: t(".yes"), value: "true", id: "coronavirus_related" },
+                         { text: t(".no"), value: "false" }] %>
+
+      <%= govukButton(text: t(".submit_button")) %>
+    </div>
+  </div>
+<% end %>

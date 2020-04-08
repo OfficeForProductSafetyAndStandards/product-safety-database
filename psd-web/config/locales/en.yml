@@ -41,11 +41,19 @@ en:
       false: "Not a coronavirus related case"
   investigations:
     coronavirus_related:
+      show:
+        title: "Is the case related to the coronavirus outbreak?"
+        button: "Update coronavirus status"
+        yes: "Yes, it is (or could be)"
+        no: "No, this is business as usual"
+        hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "%{case_title} was successfully updated."
   audit_activity:
     investigation:
       update_coronavirus_status:
-        title: "Status updated: coronavirus related"
+        title:
+          true: "Status updated: coronavirus related"
+          false: "Status updated: not coronavirus related"
         body:
           true: "The case is related to the coronavirus outbreak."
           false: "The case is not related to the coronavirus outbreak."
