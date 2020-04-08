@@ -8,12 +8,15 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
       @investigation.assign_attributes(params.require(:investigation).permit(:coronavirus_related))
 
-      return render :show unless @investigation.valid? && @investigation.coronavirus_related_changed?
+      return render :show unless @investigation.valid?
 
-      @investigation.save
-      AuditActivity::Investigation::UpdateCoronavirusStatus.from(@investigation)
+      if @investigation.coronavirus_related_changed?
+        @investigation.save
+        AuditActivity::Investigation::UpdateCoronavirusStatus.from(@investigation)
+        flash[:success] = I18n.t(".success", scope: "investigations.coronavirus_related", case_title: @investigation.case_type.titleize)
+      end
 
-      redirect_to investigation_path(@investigation), success: "#{@investigation.case_type.titleize} was successfully updated."
+      redirect_to investigation_path(@investigation)
     end
   end
 end

@@ -39,6 +39,9 @@ en:
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
+  investigations:
+    coronavirus_related:
+      success: "%{case_title} was successfully updated."
   errors:
     format: "%{message}"
     messages:

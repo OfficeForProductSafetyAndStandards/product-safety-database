@@ -16,18 +16,22 @@ RSpec.describe "Managing a case’s coronavirus status", :with_stubbed_elasticse
   end
 
   context "when submitting the same value" do
-    it "does not create an audit log" do
+    it "does not create an audit log", :aggregate_failures do
       expect {
         patch investigation_coronavirus_related_path(investigation), params: { investigation: { coronavirus_related: investigation.coronavirus_related } }
       }.not_to(change { investigation.reload.activities.where(type: "AuditActivity::Investigation::UpdateCoronavirusStatus").count })
+      expect(response).to redirect_to(investigation_path(investigation))
+      expect(flash[:success]).to be nil
     end
   end
 
   context "when changing the value" do
-    it "creates an audit log" do
+    it "creates an audit log", :aggregate_failures do
       expect {
         patch investigation_coronavirus_related_path(investigation), params: { investigation: { coronavirus_related: !investigation.coronavirus_related } }
       }.to(change { investigation.reload.activities.where(type: "AuditActivity::Investigation::UpdateCoronavirusStatus").count }.by(1))
+      expect(response).to redirect_to(investigation_path(investigation))
+      expect(flash[:success]).to eq("#{investigation.case_type.titleize} was successfully updated.")
     end
   end
 end
