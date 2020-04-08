@@ -12,6 +12,7 @@ class Investigations::CreationFlowController < ApplicationController
 
   # GET /xxx/step
   def show
+    @model_key = model_key
     render_wizard
   end
 

@@ -26,6 +26,10 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       choose "type_enquiry"
       click_button "Continue"
 
+      expect_to_be_on_coronavirus_page
+      choose "Yes, it is (or could be)"
+      click_button "Continue"
+
       expect_to_be_on_new_enquiry_page
 
       fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
@@ -86,6 +90,12 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
         expect(page).to have_summary_error("Enter a received type \"Other\"")
       end
     end
+  end
+
+  def expect_to_be_on_coronavirus_page
+    expect(page).to have_current_path("/enquiry/coronavirus")
+    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
+    expect(page).to have_selector(".app-banner", text: "Coronavirus")
   end
 
   def expect_to_be_on_new_enquiry_page
