@@ -39,6 +39,9 @@ en:
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
+  cases:
+    filters:
+      coronavirus_cases_only: "Coronavirus cases only"
   errors:
     format: "%{message}"
     messages:
