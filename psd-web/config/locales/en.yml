@@ -42,6 +42,13 @@ en:
   investigations:
     coronavirus_related:
       success: "%{case_title} was successfully updated."
+  audit_activity:
+    investigation:
+      update_coronavirus_status:
+        title: "Status updated: coronavirus related"
+        body:
+          true: "The case is related to the coronavirus outbreak."
+          false: "The case is not related to the coronavirus outbreak."
   errors:
     format: "%{message}"
     messages:
@@ -164,13 +171,6 @@ en:
               too_common: "Choose a less frequently used password"
               too_short: "Password is too short"
     attributes:
-      audit_activity:
-        investigation:
-          update_coronavirus_status:
-            title: "Status updated: coronavirus related"
-            body:
-              true: "The case is related to the coronavirus outbreak."
-              false: "The case is not related to the coronavirus outbreak."
       corrective_action:
         measure_type:
           one: "Type of measure"
