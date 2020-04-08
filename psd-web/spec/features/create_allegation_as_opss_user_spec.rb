@@ -31,10 +31,21 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   context "when login as an OPSS user" do
     before do
       sign_in(create(:user, :activated, :opss_user))
-      visit "/allegation/complainant"
     end
 
     scenario "able to create safety allegation from a consumer and optionally add a product" do
+      visit "/cases"
+
+      click_link "Open a new case"
+
+      expect_page_to_have_h1("Create new")
+      choose "Product safety allegation"
+      click_button "Continue"
+
+      expect_to_be_on_coronavirus_page
+      choose "Yes, it is (or could be)"
+      click_button "Continue"
+
       expect_page_to_have_h1("New allegation")
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
@@ -62,6 +73,12 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_page_to_show_entered_product_details(product_details)
     end
+  end
+
+  def expect_to_be_on_coronavirus_page
+    expect(page).to have_current_path("/allegation/coronavirus")
+    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
+    expect(page).to have_selector(".app-banner", text: "Coronavirus")
   end
 
   def enter_allegation_details(description:, hazard_type:, category:)

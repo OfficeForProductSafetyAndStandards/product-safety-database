@@ -2,7 +2,7 @@ class Investigations::AllegationController < Investigations::CreationFlowControl
   set_attachment_names :attachment
   set_file_params_key :allegation
 
-  steps :complainant, :complainant_details, :allegation_details
+  steps :coronavirus, :complainant, :complainant_details, :allegation_details
 
 private
 
@@ -11,7 +11,7 @@ private
   end
 
   def model_params
-    %i[description hazard_type product_category]
+    %i[description hazard_type product_category coronavirus_related]
   end
 
   def set_investigation

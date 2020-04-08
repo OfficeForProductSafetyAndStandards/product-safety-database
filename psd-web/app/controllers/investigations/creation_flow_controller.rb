@@ -8,7 +8,7 @@ class Investigations::CreationFlowController < ApplicationController
   before_action :set_attachment, only: %i[show create update]
   before_action :update_attachment, only: %i[create update]
   before_action :store_investigation, only: %i[update]
-  before_action :store_complainant, only: %i[update], if: -> { step != :about_enquiry }
+  before_action :store_complainant, only: %i[update], unless: -> { %i[coronavirus about_enquiry].include? step }
 
   # GET /xxx/step
   def show
@@ -93,7 +93,10 @@ private
   end
 
   def investigation_valid?
-    if step == :about_enquiry
+    case step
+    when :coronavirus
+      @investigation.validate(step)
+    when :about_enquiry
       if params[:enquiry][:received_type].nil?
         @investigation.errors.add(:received_type, "Select a type")
       elsif params[:enquiry][:received_type] == "other" && params[:enquiry][:other_received_type].blank?
@@ -140,6 +143,11 @@ private
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def investigation_request_params
+    # This must be done first because the browser will send no params if no radio is selected
+    if step == :coronavirus
+      params[model_key] ||= { coronavirus_related: nil }
+    end
+
     return {} if params[model_key].blank?
 
     params.require(model_key).permit(model_params)
