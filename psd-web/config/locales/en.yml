@@ -49,6 +49,9 @@ en:
         body:
           true: "The case is related to the coronavirus outbreak."
           false: "The case is not related to the coronavirus outbreak."
+  cases:
+    filters:
+      coronavirus_cases_only: "Coronavirus cases only"
   errors:
     format: "%{message}"
     messages:
