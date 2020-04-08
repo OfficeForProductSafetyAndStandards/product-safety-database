@@ -11,14 +11,12 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       Roo::Excelx.new(export_path).sheet("Cases")
     end
 
-    around do |example|
-      RSpec::Mocks.with_temporary_scope do
-        sign_in(user)
-        Dir::mktmpdir(temp_dir) do
-          example.run
-        end
-      end
+    before do
+      Dir.mkdir(temp_dir) unless Dir.exist?(temp_dir)
+      sign_in(user)
     end
+
+    after { File.delete(export_path) }
 
     it "exports all the investigations into a XLSX file" do
       create_list(:allegation, 5)
