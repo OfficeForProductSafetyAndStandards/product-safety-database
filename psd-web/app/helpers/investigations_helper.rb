@@ -21,7 +21,13 @@ module InvestigationsHelper
   end
 
   def merged_must_filters
-    { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_assignee_filter }] }
+    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_assignee_filter }] }
+
+    if params[:coronavirus_related_only] == "yes"
+      must_filters[:must] << { term: { coronavirus_related: true } }
+    end
+
+    must_filters
   end
 
   def get_status_filter
