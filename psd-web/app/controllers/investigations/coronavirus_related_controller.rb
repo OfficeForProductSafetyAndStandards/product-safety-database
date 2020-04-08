@@ -5,7 +5,7 @@ module Investigations
     end
 
     def update
-      investigation = Investigation.find_by(pretty_id: params.require(:investigation_pretty_id))
+      investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id))
 
       investigation.assign_attributes(params.require(:investigation).permit(:coronavirus_related))
       create_audit = investigation.coronavirus_related_changed?
