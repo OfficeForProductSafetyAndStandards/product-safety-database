@@ -1,20 +1,19 @@
 module Investigations
   class CoronavirusRelatedController < ApplicationController
     def show
-      @investigation = Investigation.find_by(pretty_id: params.require(:investigation_pretty_id)).decorate
+      @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
     end
 
     def update
-      investigation = Investigation.find_by(pretty_id: params.require(:investigation_pretty_id))
+      @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
+      @investigation.assign_attributes(params.require(:investigation).permit(:coronavirus_related))
 
-      investigation.assign_attributes(params.require(:investigation).permit(:coronavirus_related))
-      create_audit = investigation.coronavirus_related_changed?
+      return render :show unless @investigation.valid? && @investigation.coronavirus_related_changed?
 
-      investigation.save!
+      @investigation.save
+      AuditActivity::Investigation::UpdateCoronavirusStatus.from(@investigation)
 
-      AuditActivity::Investigation::UpdateCoronavirusStatus.from(investigation) if create_audit
-
-      redirect_to investigation_path(investigation), success: "#{investigation.case_type.titleize} was successfully updated."
+      redirect_to investigation_path(@investigation), success: "#{@investigation.case_type.titleize} was successfully updated."
     end
   end
 end
