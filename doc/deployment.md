@@ -15,6 +15,17 @@ In order to make the PR review process fast and independent, it is possible to c
 
 By default, the database is shared, but it can be overriden by setting the `DB_NAME` env variable. This will create a new database instance, however this can take several minutes.
 
+#### Custom environment variables in review application
+
+Variables used by `psd-web/deploy-review.sh` can be overriden. Especially changing `$DB_NAME` can be usefull.
+To do so, create `.github/workflows/overrides/branch-name.env` file, where branch-name is name of branch used for PR. Define variables in this file:
+
+```
+export DB_NAME=psd-db-custom-db
+```
+
+To export this variables, `source` command is used.
+
 #### Debuging review application
 
 Please run debug app deployment locally. See [".github/workflows/review-apps.yml"](https://github.com/UKGovernmentBEIS/beis-opss-psd/blob/master/.github/workflows/review-apps.yml) for details.
