@@ -113,8 +113,8 @@ class User < ApplicationRecord
     has_role? :team_admin
   end
 
-  def is_superadmin?
-    has_role? :superadmin
+  def is_superuser?
+    has_role? :superuser
   end
 
   def has_completed_registration?

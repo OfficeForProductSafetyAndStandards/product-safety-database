@@ -84,7 +84,7 @@ RailsAdmin.config do |config|
     warden.authenticate! scope: :user
   end
   config.authorize_with do |_controller|
-    if !current_user.is_superadmin?
+    if !current_user.is_superuser?
       redirect_to main_app.root_path
     end
     if warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION]
