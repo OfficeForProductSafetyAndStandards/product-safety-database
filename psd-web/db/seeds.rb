@@ -423,6 +423,9 @@ if run_seeds
   Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
   Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
+  # On review apps environment (int) this will be set using `psd-seed-users-env`
+  # example of variable:
+  # SEED_USERS='JohannMuster:muster@example.org:07777888999;JohnDoe:example@example.org:07777888999'
   if ENV["SEED_USERS"]
     ENV["SEED_USERS"].split(";").map { |set| set.split(":") }.each do |name, email, phone|
       user = User.create!(
