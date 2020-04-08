@@ -178,7 +178,6 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
-
   enter_email_address: "Enter your email address"
   otp_code:
     blank: "Enter the security code"
