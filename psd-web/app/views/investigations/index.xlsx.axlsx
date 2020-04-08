@@ -1,8 +1,8 @@
 book = xlsx_package.workbook
 
 book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
-  sheet_investigations.add_row %w[ID Status Title Type Description Product_Category Hazard_Type Assignee Source
-                                  Complainant_Name Complainant_Email Complainant_Phone Complainant_Type
+  sheet_investigations.add_row %w[ID Status Title Type Description Product_Category Hazard_Type Coronavirus_Related
+                                  Assignee Source Complainant_Name Complainant_Email Complainant_Phone Complainant_Type
                                   Products Businesses Activities Correspondences Corrective_Actions Tests]
   @investigations.each do |investigation|
     complainant = investigation.complainant
@@ -14,6 +14,7 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       investigation.description,
       investigation.product_category,
       investigation.hazard_type,
+      investigation.coronavirus_related?,
       investigation.assignee ? investigation.assignee.display_name : "Unassigned",
       investigation.source&.show,
       complainant.present? ? complainant&.name : "",
