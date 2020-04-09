@@ -15,7 +15,10 @@
                  items: [{ text: t(".yes_label"), value: "true", id: "coronavirus_related" },
                          { text: t(".no_label"), value: "false" }] %>
 
-      <%= govukButton(text: t(".submit_button")) %>
+      <div class="govuk-form-group">
+        <%= govukButton(text: t(".submit_button")) %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
     </div>
   </div>
 <% end %>
