@@ -65,10 +65,6 @@ RSpec.describe SendUserInvitationJob do
             expect(message_delivery_instance).to have_received(:deliver_now)
           end
 
-          it "sends an email about the expired notification via the NotifyMailer" do
-            expect(message_delivery_instance).to have_received(:deliver_now)
-          end
-
           it "does not change the the time that the user was invited at" do
             expect(user.reload.invited_at).to be_within(1.second).of(invited_at)
           end

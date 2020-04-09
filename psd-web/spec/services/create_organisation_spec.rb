@@ -9,7 +9,7 @@ RSpec.describe CreateOrganisation, :with_stubbed_mailer do
       let(:result) { described_class.call }
 
       it "returns a failure" do
-        expect(result.failure?).to be true
+        expect(result).to be_failure
       end
     end
 
@@ -17,7 +17,7 @@ RSpec.describe CreateOrganisation, :with_stubbed_mailer do
       let(:result) { described_class.call(admin_email: email) }
 
       it "returns a failure" do
-        expect(result.failure?).to be true
+        expect(result).to be_failure
       end
     end
 
@@ -25,7 +25,7 @@ RSpec.describe CreateOrganisation, :with_stubbed_mailer do
       let(:result) { described_class.call(org_name: org_name) }
 
       it "returns a failure" do
-        expect(result.failure?).to be true
+        expect(result).to be_failure
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe CreateOrganisation, :with_stubbed_mailer do
 
       context "when no exceptions are raised" do
         it "returns success" do
-          expect(result.success?).to be true
+          expect(result).to be_success
         end
 
         it "creates an Organisation" do
@@ -105,15 +105,13 @@ RSpec.describe CreateOrganisation, :with_stubbed_mailer do
           expect(created_user).to be_is_team_admin
         end
 
-        it "sends an email to the user" do
-          result
-          expect(invitation_email.recipient).to eq(email)
+        # rubocop:disable RSpec/MultipleExpectations
+        it "sends an email to the user", :with_test_queue_adapter do
+          expect { result }.to(have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with { |user_id|
+            expect(user_id).to eq created_user.id
+          })
         end
-
-        it "includes the invitation URL in the email" do
-          result
-          expect(invitation_email.personalization_path(:invitation_url)).to eq complete_registration_user_path(created_user.id, invitation: created_user.invitation_token)
-        end
+        # rubocop:enable RSpec/MultipleExpectations
       end
     end
   end
