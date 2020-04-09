@@ -16,6 +16,9 @@ ActiveRecord::Schema.define(version: 2020_04_17_130015) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  # These are custom enum types that must be created before they can be used in the schema definition
+  create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
+
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -177,6 +180,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_130015) do
     t.string "pretty_id"
     t.string "product_category"
     t.string "received_type"
+    t.enum "reported_reason", as: "reported_reasons"
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"
