@@ -1,76 +1,59 @@
 require "rails_helper"
 
-RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
-  describe "#teams_with_access" do
-    context "when there is no-one assigned" do
-      let(:investigation) { create(:investigation, assignee: nil) }
+RSpec.describe Investigation do
 
-      it "is an empty list" do
-        expect(investigation.teams_with_access).to be_empty
+  describe "setting reported_reason from separate boolean attributes" do
+
+    let(:investigation) { Investigation.new }
+
+    context "when setting only unsafe to true" do
+      before do
+        investigation.reported_reason_unsafe = true
+        investigation.reported_reason_non_compliant = false
+        investigation.reported_reason_safe_and_compliant = false
+      end
+
+      it "sets the reported_reason to `unsafe`" do
+        expect(investigation.reported_reason).to eql(:unsafe)
       end
     end
 
-    context "when there is just a team assigned" do
-      let(:team) { create(:team) }
-      let(:investigation) { create(:investigation, assignee: team) }
+    context "when setting only non_compliant to true" do
+      before do
+        investigation.reported_reason_unsafe = false
+        investigation.reported_reason_non_compliant = true
+        investigation.reported_reason_safe_and_compliant = false
+      end
 
-      it "is a list of just the team assigned" do
-        expect(investigation.teams_with_access).to eql([team])
+      it "sets the reported_reason to `non_compliant`" do
+        expect(investigation.reported_reason).to eql(:non_compliant)
       end
     end
 
-    context "when there is a team assigned and a collaborator team added" do
-      let(:team_assigned) { create(:team) }
-      let(:collaborator_team) { create(:team) }
-      let(:investigation) {
-        create(:investigation,
-               assignee: team_assigned,
-               collaborators: [
-                 create(:collaborator, team: collaborator_team)
-               ])
-      }
+    context "when setting only safe_and_compliant to true" do
+      before do
+        investigation.reported_reason_unsafe = false
+        investigation.reported_reason_non_compliant = false
+        investigation.reported_reason_safe_and_compliant = true
+      end
 
-      it "is a list of the team assigned and the collaborator team" do
-        expect(investigation.teams_with_access).to match_array([team_assigned, collaborator_team])
+      it "sets the reported_reason to `safe_and_compliant`" do
+        expect(investigation.reported_reason).to eql(:safe_and_compliant)
       end
     end
+
+    context "when not setting any reported_reason properties to true" do
+      before do
+        investigation.reported_reason_unsafe = false
+        investigation.reported_reason_non_compliant = false
+        investigation.reported_reason_safe_and_compliant = false
+      end
+
+      it "sets the reported_reason to `nil`" do
+        expect(investigation.reported_reason).to be_nil
+      end
+    end
+
   end
 
-  describe "#assignee_team" do
-    context "when there is no-one assigned" do
-      let(:investigation) { create(:investigation, assignee: nil) }
-
-      it "is nil" do
-        expect(investigation.assignee_team).to be_nil
-      end
-    end
-
-    context "when there is a team assigned" do
-      let(:team) { create(:team) }
-      let(:investigation) { create(:investigation, assignee: team) }
-
-      it "is is the team" do
-        expect(investigation.assignee_team).to eql(team)
-      end
-    end
-
-    context "when there is a user who belongs to a team assigned" do
-      let(:team) { create(:team) }
-      let(:user) { create(:user, teams: [team]) }
-      let(:investigation) { create(:investigation, assignee: user) }
-
-      it "is is the team the user belongs to" do
-        expect(investigation.assignee_team).to eql(team)
-      end
-    end
-
-    context "when there is a user who doesn’t belong to a team assigned" do
-      let(:user) { create(:user, teams: []) }
-      let(:investigation) { create(:investigation, assignee: user) }
-
-      it "is nil" do
-        expect(investigation.assignee_team).to be_nil
-      end
-    end
-  end
 end
