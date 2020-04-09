@@ -14,6 +14,7 @@ class InvestigationsController < ApplicationController
         @answer         = search_for_investigations(20)
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
+        logger.info "searchparams: #{params}"
       end
       format.xlsx do
         @answer = search_for_investigations
