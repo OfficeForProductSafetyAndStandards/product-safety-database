@@ -38,15 +38,15 @@
         hint: { text: "Select all that apply" },
         items: [
           {
-            key: "unsafe",
+            key: "reported_reason_unsafe",
             text: "It’s unsafe (or suspected to be)",
-            checked: @unsafe,
+            value: true,
             conditional: { html: unsafe_details }
           },
           {
-            key: "non_compliant",
+            key: "reported_reason_non_compliant",
             text: "It’s non-compliant (or suspected to be)",
-            checked: @non_compliant,
+            value: true,
             conditional: { html: non_compliant_details }
           },
           {
@@ -54,10 +54,10 @@
             divider: "or"
           },
           {
-            key: "safe",
-            text: "It’s safe",
+            key: "reported_reason_safe_and_compliant",
+            text: "It’s safe and compliant",
             hint: {text: "Help other market surveillance authorities avoid testing the same product again"},
-            checked: @safe
+            value: true
           }
         ] %>
       <%= form.submit "Continue", class: "govuk-button" %>
