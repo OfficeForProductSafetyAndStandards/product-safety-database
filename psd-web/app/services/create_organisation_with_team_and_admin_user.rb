@@ -1,4 +1,4 @@
-class CreateOrganisation
+class CreateOrganisationWithTeamAndAdminUser
   include Interactor
 
   def call

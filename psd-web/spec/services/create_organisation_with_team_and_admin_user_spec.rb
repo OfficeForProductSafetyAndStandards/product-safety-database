@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CreateOrganisation, :with_stubbed_mailer do
+RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
   let(:email) { Faker::Internet.safe_email }
   let(:org_name) { Faker::Team.name }
 
