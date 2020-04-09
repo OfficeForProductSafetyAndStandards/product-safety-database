@@ -51,7 +51,10 @@ en:
   audit_activity:
     investigation:
       update_coronavirus_status:
-        email_update_text: "%{case_type} coronavirus related status was updated by %{source}."
+        email_subject_text: "Coronavirus status updated on %{case_type}"
+        email_update_text:
+          false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
+          true: "%{case_type} %{pretty_id} coronavirus related status was updated by %{name}."
         title:
           true: "Status updated: coronavirus related"
           false: "Status updated: not coronavirus related"
