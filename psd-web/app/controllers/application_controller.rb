@@ -78,7 +78,8 @@ class ApplicationController < ActionController::Base
         project: s[:project],
         status_open: s[:status_open],
         sort_by: s[:sort_by],
-        status_closed: s[:status_closed]
+        status_closed: s[:status_closed],
+        coronavirus_related_only: s[:coronavirus_related_only]
       }
     else
       {}
