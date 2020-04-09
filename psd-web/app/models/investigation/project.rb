@@ -1,6 +1,6 @@
 class Investigation < ApplicationRecord
   class Project < Investigation
-    validates :user_title, :description, presence: true
+    validates :user_title, :description, presence: true, on: :project_details
 
     index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
