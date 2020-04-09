@@ -48,6 +48,16 @@
             text: "It’s non-compliant (or suspected to be)",
             checked: @non_compliant,
             conditional: { html: non_compliant_details }
+          },
+          {
+            key: "or",
+            divider: "or"
+          },
+          {
+            key: "safe",
+            text: "It’s safe",
+            hint: {text: "Help other market surveillance authorities avoid testing the same product again"},
+            checked: @safe
           }
         ] %>
       <%= form.submit "Continue", class: "govuk-button" %>
