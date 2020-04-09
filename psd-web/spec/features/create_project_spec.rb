@@ -18,10 +18,10 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
       choose "Project"
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page
+      expect_to_be_on_coronavirus_page("/investigation/project/coronavirus")
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page
+      expect_to_be_on_coronavirus_page("/investigation/project/coronavirus")
       expect(page).to have_error_messages
       expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
 
@@ -47,11 +47,5 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
       expect(page.find("dt", text: "Coronavirus related"))
         .to have_sibling("dd", text: "Coronavirus related case")
     end
-  end
-
-  def expect_to_be_on_coronavirus_page
-    expect(page).to have_current_path("/investigation/project/coronavirus")
-    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
-    expect(page).to have_selector(".app-banner", text: "Coronavirus")
   end
 end

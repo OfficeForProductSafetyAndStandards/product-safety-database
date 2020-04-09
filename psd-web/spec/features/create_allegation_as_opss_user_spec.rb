@@ -42,7 +42,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       choose "Product safety allegation"
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page
+      expect_to_be_on_coronavirus_page("/allegation/coronavirus")
       choose "Yes, it is (or could be)"
       click_button "Continue"
 
@@ -74,12 +74,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_page_to_show_entered_product_details(product_details)
     end
-  end
-
-  def expect_to_be_on_coronavirus_page
-    expect(page).to have_current_path("/allegation/coronavirus")
-    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
-    expect(page).to have_selector(".app-banner", text: "Coronavirus")
   end
 
   def enter_allegation_details(description:, hazard_type:, category:)
