@@ -102,7 +102,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation.new(investigation_step_params.except(:unsafe, :non_compliant))
+    @investigation = Investigation.new(investigation_step_params.except(:unsafe, :non_compliant, :safe))
     @investigation.description = @investigation.reason_created if step == :why_reporting
   end
 
@@ -113,6 +113,7 @@ private
                      else
                        session[:non_compliant]
                      end
+    @safe = investigation_step_params[:safe] == "1"
   end
 
   def set_selected_businesses
@@ -238,7 +239,7 @@ private
       params[:investigation][:hazard_type] = nil unless params[:investigation][:unsafe] == "1"
       params[:investigation][:non_compliant_reason] = nil unless params[:investigation][:non_compliant] == "1"
       params.require(:investigation).permit(
-        :unsafe, :hazard_type, :hazard_description, :non_compliant, :non_compliant_reason
+        :unsafe, :hazard_type, :hazard_description, :non_compliant, :non_compliant_reason, :safe
       )
     when :reference_number
       params[:investigation][:complainant_reference] = nil unless params[:investigation][:has_complainant_reference] == "Yes"
