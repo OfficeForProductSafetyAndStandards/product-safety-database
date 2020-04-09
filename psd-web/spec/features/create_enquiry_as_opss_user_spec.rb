@@ -53,10 +53,10 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       expect_page_to_have_h1("Overview")
 
-      validate_input_details_on_summary_page(contact_details)
+      expect_details_on_summary_page(contact_details)
 
       click_on "Activity"
-      validate_details_on_activity_page(contact_details, enquiry_details)
+      expect_details_on_activity_page(contact_details, enquiry_details)
     end
 
     context "with enquiry date as future" do
@@ -119,7 +119,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_css(".govuk-fieldset__legend--m", text: "What is the enquiry?")
   end
 
-  def validate_input_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
+  def expect_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
     expect(page).to have_css("p", text: contact_name)
     expect(page).to have_css("p", text: contact_email)
@@ -128,7 +128,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       .to have_sibling("dd", text: "Coronavirus related case")
   end
 
-  def validate_details_on_activity_page(contact, enquiry)
+  def expect_details_on_activity_page(contact, enquiry)
     expect(page).to have_text("Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
     expect(page).to have_text(enquiry.fetch(:enquiry_description))
     expect(page).to have_text("Attachment: testImage.png")
