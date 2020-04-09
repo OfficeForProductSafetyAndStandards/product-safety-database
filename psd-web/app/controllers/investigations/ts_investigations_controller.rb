@@ -16,7 +16,6 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   before_action :set_countries, only: %i[show create update]
   before_action :set_product, only: %i[show create update]
-  before_action :set_why_reporting, only: %i[show update], if: -> { step == :why_reporting }
   before_action :set_investigation, only: %i[show create update]
   before_action :set_selected_businesses, only: %i[show update], if: -> { step == :which_businesses }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
@@ -102,18 +101,8 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation.new(investigation_step_params.except(:unsafe, :non_compliant, :safe))
+    @investigation = Investigation.new(investigation_step_params)
     @investigation.description = @investigation.reason_created if step == :why_reporting
-  end
-
-  def set_why_reporting
-    @unsafe = investigation_step_params.include?(:unsafe) ? product_unsafe : session[:unsafe]
-    @non_compliant = if investigation_step_params.include?(:non_compliant)
-                       product_non_compliant
-                     else
-                       session[:non_compliant]
-                     end
-    @safe = investigation_step_params[:safe] == "1"
   end
 
   def set_selected_businesses
@@ -235,11 +224,9 @@ private
     when :coronavirus
       params.require(:investigation).permit(:coronavirus_related)
     when :why_reporting
-      params[:investigation][:hazard_description] = nil unless params[:investigation][:unsafe] == "1"
-      params[:investigation][:hazard_type] = nil unless params[:investigation][:unsafe] == "1"
-      params[:investigation][:non_compliant_reason] = nil unless params[:investigation][:non_compliant] == "1"
       params.require(:investigation).permit(
-        :unsafe, :hazard_type, :hazard_description, :non_compliant, :non_compliant_reason, :safe
+        :hazard_type, :hazard_description, :non_compliant_reason,
+        :reported_reason_unsafe, :reported_reason_non_compliant, :reported_reason_safe_and_compliant
       )
     when :reference_number
       params[:investigation][:complainant_reference] = nil unless params[:investigation][:has_complainant_reference] == "Yes"
@@ -471,9 +458,7 @@ private
     when :product
       @product.validate
     when :why_reporting
-      @investigation.errors.add(:why_reporting, "Choose at least one option") if !product_unsafe && !product_non_compliant
-      @investigation.validate :unsafe if product_unsafe
-      @investigation.validate :non_compliant if product_non_compliant
+      @investigation.valid?(:why_reporting)
     when :which_businesses
       validate_none_as_only_selection
       @investigation.errors.add(:which_business, "Indicate which if any business is known") if no_business_selected
@@ -569,14 +554,6 @@ private
       file_blob = ActiveStorage::Blob.find_by(id: file_blob_id)
       attach_blobs_to_list(file_blob, @product.documents)
     end
-  end
-
-  def product_unsafe
-    investigation_step_params[:unsafe] == "1"
-  end
-
-  def product_non_compliant
-    investigation_step_params[:non_compliant] == "1"
   end
 
   def no_business_selected
