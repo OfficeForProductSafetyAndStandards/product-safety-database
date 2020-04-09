@@ -26,16 +26,15 @@ module Search
       ignore_status = !f.status_open? && !f.status_closed?
       return @search if ignore_status
 
-      # new_search = Investigation
+      if f.status_open? && f.status_closed?
+        @search = @search.where("is_closed IN (?)", [true, false])
+        return
+      end
       if f.status_open?
         @search = @search.where(is_closed: false)
       end
       if f.status_closed?
-        if f.status_open?
-          @search = @search.or(Investigation.where(is_closed: true))
-        else
-          @search = @search.where(is_closed: true)
-        end
+        @search = @search.where(is_closed: true)
       end
     end
 
