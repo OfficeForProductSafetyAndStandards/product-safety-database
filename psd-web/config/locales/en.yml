@@ -184,6 +184,10 @@ en:
               blank: "Enter a valid hazard type"
             product_category:
               blank: "Enter a valid product category"
+            coronavirus_related:
+              inclusion: "Select whether or not the case is related to the coronavirus outbreak"
+            reported_reason:
+              blank: "Choose at least one option"
         product:
           attributes:
             product_category:
