@@ -33,6 +33,7 @@ class Investigations::CreationFlowController < ApplicationController
 
   # PATCH/PUT /xxx
   def update
+    @model_key = model_key
     if investigation_valid?
       if step == steps.last
         create
