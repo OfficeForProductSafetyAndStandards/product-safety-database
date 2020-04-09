@@ -21,28 +21,31 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   context "when logged in as an OPSS user" do
     before { sign_in(create(:user, :activated, :opss_user)) }
 
-    scenario "able to report an enquiry" do
+    scenario "is able to report an enquiry" do
       click_link "Open a new case"
       choose "type_enquiry"
       click_button "Continue"
 
       expect_to_be_on_coronavirus_page("/enquiry/coronavirus")
+      click_button "Continue"
+
+      expect_to_be_on_coronavirus_page("/enquiry/coronavirus")
+      expect(page).to have_summary_error("Select whether or not the case is related to the coronavirus outbreak",)
       choose "Yes, it is (or could be)"
       click_button "Continue"
 
-      expect_to_be_on_new_enquiry_page
-
+      expect_to_be_on_about_enquiry_page
       fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+      click_button "Continue"
 
+      expect_to_be_on_complainant_page
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
-
+      expect_to_be_on_complainant_details_page
       enter_contact_details(contact_details)
 
-      expect(page).to have_css(".govuk-fieldset__legend--m", text: "What is the enquiry?")
-
+      expect_to_be_on_enquiry_details_page
       fill_in_new_enquiry_details(with: enquiry_details)
       click_button "Create enquiry"
 
@@ -51,15 +54,17 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect_page_to_have_h1("Overview")
 
       validate_input_details_on_summary_page(contact_details)
-    end
 
+      click_on "Activity"
+      validate_details_on_activity_page(contact_details, enquiry_details)
+    end
 
     context "with enquiry date as future" do
       let(:date) { Faker::Date.forward(days: 14) }
 
       scenario "shows an error message" do
         visit "/enquiry/about_enquiry"
-        expect_to_be_on_new_enquiry_page
+        expect_to_be_on_about_enquiry_page
 
         fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
@@ -70,7 +75,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     context "with enquiry received type empty" do
       scenario "shows an error message" do
         visit "/enquiry/about_enquiry"
-        expect_to_be_on_new_enquiry_page
+        expect_to_be_on_about_enquiry_page
 
         fill_in_when_was_it_received(day: date.day, month: date.month, year: date.year)
 
@@ -83,7 +88,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       scenario "shows an error message" do
         visit "/enquiry/about_enquiry"
-        expect_to_be_on_new_enquiry_page
+        expect_to_be_on_about_enquiry_page
 
         fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
 
@@ -92,8 +97,26 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     end
   end
 
-  def expect_to_be_on_new_enquiry_page
+  def expect_to_be_on_about_enquiry_page
+    expect(page).to have_current_path("/enquiry/about_enquiry")
     expect_page_to_have_h1("New enquiry")
+  end
+
+  def expect_to_be_on_complainant_page
+    expect(page).to have_current_path("/enquiry/complainant")
+    expect_page_to_have_h1("New enquiry")
+  end
+
+  def expect_to_be_on_complainant_details_page
+    expect(page).to have_current_path("/enquiry/complainant_details")
+    expect_page_to_have_h1("New enquiry")
+    expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
+  end
+
+  def expect_to_be_on_enquiry_details_page
+    expect(page).to have_current_path("/enquiry/enquiry_details")
+    expect_page_to_have_h1("New enquiry")
+    expect(page).to have_css(".govuk-fieldset__legend--m", text: "What is the enquiry?")
   end
 
   def validate_input_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
@@ -103,6 +126,16 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_css("p", text: contact_phone)
     expect(page.find("dt", text: "Coronavirus related"))
       .to have_sibling("dd", text: "Coronavirus related case")
+  end
+
+  def validate_details_on_activity_page(contact, enquiry)
+    expect(page).to have_text("Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
+    expect(page).to have_text(enquiry.fetch(:enquiry_description))
+    expect(page).to have_text("Attachment: testImage.png")
+    expect(page).to have_text("Name: #{contact.fetch(:contact_name)}")
+    expect(page).to have_text("Email address: #{contact.fetch(:contact_email)}")
+    expect(page).to have_text("Phone number: #{contact.fetch(:contact_phone)}")
+    expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
   end
 
   def fill_in_when_was_it_received(day:, month:, year:)
