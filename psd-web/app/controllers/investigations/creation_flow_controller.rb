@@ -27,7 +27,7 @@ class Investigations::CreationFlowController < ApplicationController
     if investigation_saved?
       redirect_to investigation_path(@investigation), flash: { success: success_message }
     else
-      render step
+      render_wizard
     end
   end
 
@@ -41,7 +41,7 @@ class Investigations::CreationFlowController < ApplicationController
         redirect_to next_wizard_path
       end
     else
-      render step
+      render_wizard
     end
   end
 
