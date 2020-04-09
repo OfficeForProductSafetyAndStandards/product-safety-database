@@ -19,10 +19,10 @@ RSpec.describe Search::Base, :with_elasticsearch do
   let(:user22) { create(:user, teams: [team2]) }
 
   let(:allegation1) { create(:allegation, assignable: team1) }
-  let(:allegation2) { create(:allegation, is_closed: true,  assignable: user22) }
+  let(:allegation2) { create(:allegation, is_closed: true,  assignable: user11) }
   let(:enquiry1)    { create(:enquiry, assignable: team1) }
-  let(:enquiry2)    { create(:enquiry, is_closed: true,  assignable: user22 ) }
-  let(:project1)    { create(:project, assignable: team1) }
+  let(:enquiry2)    { create(:enquiry, is_closed: true,  assignable: user12 ) }
+  let(:project1)    { create(:project, assignable: team2) }
   let(:project2)    { create(:project, is_closed: true, assignable: user22) }
 
   let(:source1) { create(:user_source, user: user11, sourceable: allegation1) }
@@ -157,12 +157,25 @@ RSpec.describe Search::Base, :with_elasticsearch do
         end
       end
 
-      context "user" do
+      context "by user" do
         it_should_behave_like "search" do
           let(:created_by_someone_else_id) { user11.id }
           let(:expected_products) do
             [ allegation2, allegation1, ]
           end
+        end
+      end
+    end
+
+    context "all checked" do
+      it_should_behave_like "search" do
+        let(:created_by_me) { user11.id }
+        let(:created_by_team_0) { team1.id }
+        let(:created_by_someone_else) { checked }
+        let(:created_by_someone_else_id) { team2.id }
+
+        let(:expected_products) do
+          [ project2, project1, enquiry2, enquiry1, allegation2, allegation1, ]
         end
       end
     end
@@ -202,6 +215,52 @@ RSpec.describe Search::Base, :with_elasticsearch do
         let(:enquiry) { checked }
         let(:expected_products) do
           [  enquiry2, enquiry1, ]
+        end
+      end
+    end
+  end
+
+  context "Assignee" do
+    context "to me" do
+      it_should_behave_like "search" do
+        let(:assigned_to_me) { user11.id }
+
+        let(:expected_products) do
+          [  allegation1 ]
+        end
+      end
+    end
+
+    context "to my team" do
+      it_should_behave_like "search" do
+        let(:assigned_to_me) { team1.id }
+
+        let(:expected_products) do
+          [  enquiry2, enquiry1, allegation2, allegation1 ]
+        end
+      end
+    end
+
+    context "other" do
+      let(:assigned_to_someone_else) { checked }
+
+      context "to me" do
+        it_should_behave_like "search" do
+          let(:assigned_to_someone_else_id) { user11.id }
+
+          let(:expected_products) do
+            [  allegation1 ]
+          end
+        end
+      end
+
+      context "to my team" do
+        it_should_behave_like "search" do
+          let(:assigned_to_someone_else_id) { team1.id }
+
+          let(:expected_products) do
+            [  enquiry2, enquiry1, allegation2, allegation1 ]
+          end
         end
       end
     end
