@@ -107,6 +107,8 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_css("p", text: contact_name)
     expect(page).to have_css("p", text: contact_email)
     expect(page).to have_css("p", text: contact_phone)
+    expect(page.find("dt", text: "Coronavirus related"))
+      .to have_sibling("dd", text: "Coronavirus related case")
   end
 
   def fill_in_when_was_it_received(day:, month:, year:)

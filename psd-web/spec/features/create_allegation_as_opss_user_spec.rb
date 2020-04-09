@@ -59,6 +59,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       enter_allegation_details(allegation_details)
 
       expect_confirmation_banner("Allegation was successfully created")
+      expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Coronavirus related case")
 
       click_link "Products (0)"
       click_link "Add product"
