@@ -5,19 +5,18 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     context "when there is no-one assigned" do
       let(:investigation) { create(:investigation, assignable: nil) }
 
-      it "is an empty list" do
-        expect(investigation.teams_with_access).to be_empty
-      end
-    end
+  describe "setting reported_reason from separate boolean attributes" do
 
     context "when there is just a team assigned" do
       let(:team) { create(:team) }
       let(:investigation) { create(:investigation, assignable: team) }
 
-      it "is a list of just the team assigned" do
-        expect(investigation.teams_with_access).to eql([team])
+    context "when setting only unsafe to true" do
+      before do
+        investigation.reported_reason_unsafe = true
+        investigation.reported_reason_non_compliant = false
+        investigation.reported_reason_safe_and_compliant = false
       end
-    end
 
     context "when there is a team assigned and a collaborator team added" do
       let(:team_assigned) { create(:team) }
@@ -40,8 +39,11 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     context "when there is no-one assigned" do
       let(:investigation) { create(:investigation, assignable: nil) }
 
-      it "is nil" do
-        expect(investigation.assignee_team).to be_nil
+    context "when setting only non_compliant to true" do
+      before do
+        investigation.reported_reason_unsafe = false
+        investigation.reported_reason_non_compliant = true
+        investigation.reported_reason_safe_and_compliant = false
       end
     end
 
@@ -49,18 +51,20 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:team) { create(:team) }
       let(:investigation) { create(:investigation, assignable: team) }
 
-      it "is is the team" do
-        expect(investigation.assignee_team).to eql(team)
+      it "sets the reported_reason to `non_compliant`" do
+        expect(investigation.reported_reason).to eql(:non_compliant)
       end
     end
 
-    context "when there is a user who belongs to a team assigned" do
-      let(:team) { create(:team) }
-      let(:user) { create(:user, teams: [team]) }
-      let(:investigation) { create(:investigation, assignable: user) }
+    context "when setting only safe_and_compliant to true" do
+      before do
+        investigation.reported_reason_unsafe = false
+        investigation.reported_reason_non_compliant = false
+        investigation.reported_reason_safe_and_compliant = true
+      end
 
-      it "is is the team the user belongs to" do
-        expect(investigation.assignee_team).to eql(team)
+      it "sets the reported_reason to `safe_and_compliant`" do
+        expect(investigation.reported_reason).to eql(:safe_and_compliant)
       end
     end
 
@@ -68,9 +72,11 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:user) { create(:user, teams: []) }
       let(:investigation) { create(:investigation, assignable: user) }
 
-      it "is nil" do
-        expect(investigation.assignee_team).to be_nil
+      it "sets the reported_reason to `nil`" do
+        expect(investigation.reported_reason).to be_nil
       end
     end
+
   end
+
 end
