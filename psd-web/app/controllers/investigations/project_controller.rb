@@ -12,6 +12,7 @@ class Investigations::ProjectController < ApplicationController
 
   # GET /xxx/new
   def new
+    session.delete :investigation
     redirect_to wizard_path(steps.first)
   end
 
