@@ -55,6 +55,10 @@ GEM
       activemodel (= 5.2.4.2)
       activesupport (= 5.2.4.2)
       arel (>= 9.0)
+    activerecord-pg_enum (1.1.0)
+      activerecord (>= 4.1.0)
+      activesupport
+      pg
     activestorage (5.2.4.2)
       actionpack (= 5.2.4.2)
       activerecord (= 5.2.4.2)
@@ -532,6 +536,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-pg_enum
   awesome_print
   aws-sdk-s3 (= 1.63.0)
   axlsx!
