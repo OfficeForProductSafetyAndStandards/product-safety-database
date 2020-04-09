@@ -5,19 +5,21 @@ class CreateOrganisation
     context.fail!(error: "No organisation name supplied") unless context.org_name
     context.fail!(error: "No team admin email supplied") unless context.admin_email
 
-    context.org = Organisation.create!(name: context.org_name)
-    context.team = context.org.teams.create!(name: context.org_name)
+    ActiveRecord::Base.transaction do
+      context.org = Organisation.create!(name: context.org_name)
+      context.team = context.org.teams.create!(name: context.org_name)
 
-    context.user = context.team.users.create!(
-      email: context.admin_email,
-      organisation: context.org,
-      skip_password_validation: true,
-      invitation_token: SecureRandom.hex(15)
-    )
+      context.user = context.team.users.create!(
+        email: context.admin_email,
+        organisation: context.org,
+        skip_password_validation: true,
+        invitation_token: SecureRandom.hex(15)
+      )
 
-    context.user.user_roles.create!(name: "psd_user")
-    context.user.user_roles.create!(name: "team_admin")
+      context.user.user_roles.create!(name: "psd_user")
+      context.user.user_roles.create!(name: "team_admin")
 
-    SendUserInvitationJob.perform_later(context.user.id)
+      SendUserInvitationJob.perform_later(context.user.id)
+    end
   end
 end
