@@ -16,26 +16,26 @@ module Search
     include ActiveModel::Model
 
     SORT_BY_OPTIONS = [
-      NEWEST   = "newest",
-      OLDEST   = "oldest",
-      RECENT   = "recent",
-      RELEVANT = "relevant"
+      NEWEST   = "newest".freeze,
+      OLDEST   = "oldest".freeze,
+      RECENT   = "recent".freeze,
+      RELEVANT = "relevant".freeze
     ].freeze
 
-    ACCESSORS = [:allegation,
-      :assigned_to_me,
-      :assigned_to_someone_else,
-      :assigned_to_someone_else_id,
-      :created_by_me,
-      :created_by_someone_else,
-      :created_by_someone_else_id,
-      :direction,
-      :enquiry,
-      :project,
-      :q,
-      :sort,
-      :status_open,
-      :status_closed]
+    ACCESSORS = %i[allegation
+                   assigned_to_me
+                   assigned_to_someone_else
+                   assigned_to_someone_else_id
+                   created_by_me
+                   created_by_someone_else
+                   created_by_someone_else_id
+                   direction
+                   enquiry
+                   project
+                   q
+                   sort
+                   status_open
+                   status_closed].freeze
 
     attr_accessor *ACCESSORS
 
@@ -84,13 +84,12 @@ module Search
 
     def method_missing(*args)
       name = args.first
-      candidate_name = name.to_s.gsub(/\?$/,'').to_sym
-      if ACCESSORS.include?(candidate_name.to_sym) && ["checked", "unchecked"].include?(self.send(candidate_name))
-        return self.send(candidate_name) == "checked" ? true : false
+      candidate_name = name.to_s.gsub(/\?$/, "").to_sym
+      if ACCESSORS.include?(candidate_name.to_sym) && %w[checked unchecked].include?(self.send(candidate_name))
+        return self.send(candidate_name) == "checked"
       end
 
       super(*args)
     end
-
   end
 end
