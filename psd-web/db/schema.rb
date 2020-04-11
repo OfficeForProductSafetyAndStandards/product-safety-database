@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_02_142659) do
+ActiveRecord::Schema.define(version: 2020_04_11_173023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_142659) do
     t.string "pretty_id"
     t.string "product_category"
     t.string "received_type"
+    t.tsvector "search_index"
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"

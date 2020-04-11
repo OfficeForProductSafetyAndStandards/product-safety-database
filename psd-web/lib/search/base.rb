@@ -29,7 +29,7 @@ module Search
 
     def search_by_keyword
       if f.q.present?
-        @search = @search.where("description ILIKE ? OR product_category ILIKE ?", "%#{f.q}%", "%#{f.q}%")
+        @search = @search.where("search_index @@ to_tsquery(?)", f.q)
       end
     end
 

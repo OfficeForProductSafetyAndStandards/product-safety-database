@@ -8,6 +8,10 @@ begin
   Search::Form
 rescue LoadError
 end
+begin
+  Search::Index
+rescue LoadError
+end
 
 RSpec.describe Search::Base, :with_elasticsearch do
   let(:team1) { create(:team) }
@@ -104,6 +108,8 @@ RSpec.describe Search::Base, :with_elasticsearch do
     source6
 
     investigations.map(&:reload)
+    # Its crucial to update index after all investigations were created
+    Search::Index.update_index
   end
 
   let(:search_form)   { Search::Form.new(params) }
