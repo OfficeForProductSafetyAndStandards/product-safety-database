@@ -2,16 +2,28 @@ module InvestigationsHelper
   include SearchHelper
 
   def search_for_investigations(page_size = Investigation.count)
-    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
-    result = Investigation.full_search(query)
-    result.paginate(page: params[:page], per_page: page_size)
+    if use_pg_search?
+      result = Search::Base.new(@search).search
+      result.paginate(page: params[:page], per_page: page_size)
+    else
+      query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
+      result = Investigation.full_search(query)
+      result.paginate(page: params[:page], per_page: page_size)
+    end
   end
 
   def set_search_params
-    params_to_save = params.dup
-    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
-    @search = SearchParams.new(query_params)
-    session[:previous_search_params] = params_to_save
+    if use_pg_search?
+      params_to_save = params.dup
+      params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
+      @search = Search::Form.new(query_params)
+      session[:previous_search_params] = params_to_save
+    else
+      params_to_save = params.dup
+      params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
+      @search = SearchParams.new(query_params)
+      session[:previous_search_params] = params_to_save
+    end
   end
 
   def filter_params

@@ -18,7 +18,7 @@ RSpec.describe Search::Base, :with_elasticsearch do
   let(:user21) { create(:user, teams: [team2]) }
   let(:user22) { create(:user, teams: [team2]) }
 
-  let(:allegation1) { create(:allegation, assignable: team1) }
+  let(:allegation1) { create(:allegation, assignable: team1, description: "glider") }
   let(:allegation2) { create(:allegation, is_closed: true, assignable: user11) }
   let(:enquiry1)    { create(:enquiry, assignable: team1) }
   let(:enquiry2)    { create(:enquiry, is_closed: true, assignable: user12) }
@@ -27,11 +27,16 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
   let(:source1) { create(:user_source, user: user11, sourceable: allegation1) }
   let(:source2) { create(:user_source, user: user11, sourceable: allegation2) }
+  let(:source2) { create(:user_source, user: user11, sourceable: allegation2) }
   let(:source3) { create(:user_source, user: user12, sourceable: enquiry1) }
   let(:source4) { create(:user_source, user: user21, sourceable: enquiry2) }
   let(:source5) { create(:user_source, user: user21, sourceable: project1) }
   let(:source6) { create(:user_source, user: user22, sourceable: project2) }
 
+  let(:current_user_id) { User.first.id }
+  let(:current_team_id) { Team.first.id }
+
+  let(:q) { "" }
   let(:unchecked) { "unchecked" }
   let(:checked) { "checked" }
 
@@ -56,6 +61,7 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
   let(:params) do
     {
+      "q" => q,
       "assigned_to_me" => assigned_to_me,
       "assigned_to_someone_else" => assigned_to_someone_else,
       "assigned_to_someone_else_id" => assigned_to_someone_else_id,
@@ -101,7 +107,7 @@ RSpec.describe Search::Base, :with_elasticsearch do
   end
 
   let(:search_form)   { Search::Form.new(params) }
-  let(:search_engine) { described_class.new(search_form) }
+  let(:search_engine) { described_class.new(search_form: search_form, user_id: current_user_id, team_id: current_team_id) }
 
   shared_examples_for "search" do
     it "return correct products" do
@@ -113,6 +119,15 @@ RSpec.describe Search::Base, :with_elasticsearch do
     let(:status_closed) { unchecked }
     let(:expected_products) do
       [project1, enquiry1, allegation1,]
+    end
+  end
+
+  context "simple text search" do
+    it_behaves_like "search" do
+      let(:q) { "glider" }
+      let(:expected_products) do
+        [allegation1]
+      end
     end
   end
 
@@ -129,7 +144,8 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
     context "by me" do
       it_behaves_like "search" do
-        let(:created_by_me) { user11.id }
+        let(:created_by_me) { checked }
+        let(:current_user_id) { user11.id }
         let(:expected_products) do
           [allegation2, allegation1,]
         end
@@ -138,7 +154,8 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
     context "by my team" do
       it_behaves_like "search" do
-        let(:created_by_team_0) { team1.id }
+        let(:created_by_team_0) { checked }
+        let(:current_team_id) { team1.id }
         let(:expected_products) do
           [enquiry1, allegation2, allegation1,]
         end
@@ -169,8 +186,10 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
     context "all checked" do
       it_behaves_like "search" do
-        let(:created_by_me) { user11.id }
-        let(:created_by_team_0) { team1.id }
+        let(:created_by_me) { checked }
+        let(:current_user_id) { user11.id }
+        let(:created_by_team_0) { checked }
+        let(:current_team_id) { team1.id }
         let(:created_by_someone_else) { checked }
         let(:created_by_someone_else_id) { team2.id }
 
@@ -223,17 +242,19 @@ RSpec.describe Search::Base, :with_elasticsearch do
   context "Assignee" do
     context "to me" do
       it_behaves_like "search" do
-        let(:assigned_to_me) { user11.id }
+        let(:assigned_to_me) { checked }
+        let(:current_user_id) { user11.id }
 
         let(:expected_products) do
-          [allegation1]
+          [allegation2]
         end
       end
     end
 
     context "to my team" do
       it_behaves_like "search" do
-        let(:assigned_to_me) { team1.id }
+        let(:assigned_to_team_0) { checked }
+        let(:current_team_id) { team1.id }
 
         let(:expected_products) do
           [enquiry2, enquiry1, allegation2, allegation1]
@@ -244,17 +265,17 @@ RSpec.describe Search::Base, :with_elasticsearch do
     context "other" do
       let(:assigned_to_someone_else) { checked }
 
-      context "to me" do
+      context "to user" do
         it_behaves_like "search" do
           let(:assigned_to_someone_else_id) { user11.id }
 
           let(:expected_products) do
-            [allegation1]
+            [allegation2]
           end
         end
       end
 
-      context "to my team" do
+      context "to team" do
         it_behaves_like "search" do
           let(:assigned_to_someone_else_id) { team1.id }
 

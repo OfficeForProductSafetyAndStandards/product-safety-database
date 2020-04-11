@@ -11,10 +11,15 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @answer         = search_for_investigations(20)
-        @investigations = InvestigationDecorator
-                            .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
-        logger.info "searchparams: #{params}"
+        if use_pg_search?
+          @answer         = search_for_investigations(20)
+          @investigations = InvestigationDecorator.decorate_collection(@answer.includes([{ assignable: :organisation }, :products]))
+        else
+          @answer         = search_for_investigations(20)
+          @investigations = InvestigationDecorator
+                              .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
+          logger.info "searchparams: #{params}"
+        end
       end
       format.xlsx do
         @answer = search_for_investigations

@@ -2,12 +2,16 @@ module Search
   class Base
     attr_reader :f
 
-    def initialize(search_form)
+    def initialize(search_form:, user_id:, team_id:)
       @f = search_form
+      @user_id = user_id
+      @team_id = team_id
     end
 
     def search
       @search = Investigation
+      # search by text
+      search_by_keyword
       # search for type
       filter_by_type
       # search for status
@@ -22,6 +26,12 @@ module Search
     end
 
   private
+
+    def search_by_keyword
+      if f.q.present?
+        @search = @search.where("description ILIKE ?", "%#{f.q}%")
+      end
+    end
 
     def filter_by_status
       ignore_status = !f.status_open? && !f.status_closed?
@@ -42,14 +52,14 @@ module Search
     def filter_by_creator
       relations = []
       relations << if f.created_by_me != "unchecked"
-                     Investigation.joins(:source).where("sources.user_id = ?", f.created_by_me)
+                     Investigation.joins(:source).where("sources.user_id = ?", @user_id)
                    else
-                     Investigation.none#joins(:source)
+                     Investigation.none
                    end
       relations << if f.created_by_team_0 != "unchecked"
-                     Investigation.joins(:source).where("sources.user_id IN (?)", Team.find(f.created_by_team_0).users.pluck(:id))
+                     Investigation.joins(:source).where("sources.user_id IN (?)", Team.find(@team_id).users.pluck(:id))
                    else
-                     Investigation.none#joins(:source)
+                     Investigation.none
                    end
       if f.created_by_someone_else?
         ids = [f.created_by_someone_else_id]
@@ -59,9 +69,9 @@ module Search
         end
         relations << Investigation.joins(:source).where("sources.user_id IN (?)", ids.flatten.uniq.compact)
       else
-        relations << Investigation.none#.joins(:source)
+        relations << Investigation.none
       end
-      or_relation = Investigation.none#joins(:source)
+      or_relation = Investigation.none
       or_relation = or_relation.or(relations[0]) if relations[0].present?
       or_relation = or_relation.or(relations[1]) if relations[1].present?
       or_relation = or_relation.or(relations[2]) if relations[2].present?
@@ -85,22 +95,36 @@ module Search
     end
 
     def filter_by_assignee
-      return
-
-      if f.assigned_to_me != "unchecked"
-        @search = @search.joins(:source).where("sources.user_id = ?", f.assigned_to_me)
+      relations = []
+      relations << if f.assigned_to_me != "unchecked"
+        Investigation.where("assignable_type = 'User'").where(assignable_id: @user_id)
+      else
+        Investigation.none
       end
-      if f.created_by_team_0 != "unchecked"
-        @search = @search.joins(:source).where("sources.user_id IN (?)", Team.find(f.created_by_team_0).users.pluck(:id))
+      relations << if f.assigned_to_team_0 != "unchecked"
+        team = Investigation.where("assignable_type = 'Team'").where(assignable_id: @team_id)
+        team_users = Team.find(@team_id).users.pluck(:id)
+        team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: team_users))
+      else
+        Investigation.none
       end
-      if f.created_by_someone_else?
-        ids = [f.created_by_someone_else_id]
-        team = Team.find_by(id: f.created_by_someone_else_id)
+      relations << if f.assigned_to_someone_else != "unchecked"
+        ids = [f.assigned_to_someone_else_id]
+        team = Team.find_by(id: f.assigned_to_someone_else_id)
         if team
           ids << team.users.pluck(:id)
         end
-        @search = @search.joins(:source).where("sources.user_id IN (?)", ids.flatten.uniq.compact)
+        team = Investigation.where("assignable_type = 'Team'").where(assignable_id: f.assigned_to_someone_else_id)
+        team = team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: ids.flatten.compact.uniq)) if ids.present?
+        team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: f.assigned_to_someone_else_id))
+      else
+        Investigation.none
       end
+      or_relation = Investigation.none
+      or_relation = or_relation.or(relations[0]) if relations[0].present?
+      or_relation = or_relation.or(relations[1]) if relations[1].present?
+      or_relation = or_relation.or(relations[2]) if relations[2].present?
+      @search = @search.merge(or_relation) if or_relation.present?
     end
   end
 end

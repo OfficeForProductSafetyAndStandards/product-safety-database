@@ -17,6 +17,7 @@ class SearchesController < ApplicationController
     else
       @answer = search_for_investigations(20)
       @investigations = @answer.records(includes: [{ assignable: :organisation }, :products])
+      logger.info "searchparams: #{params}"
     end
   end
 end
