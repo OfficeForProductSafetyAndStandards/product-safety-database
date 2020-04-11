@@ -2,6 +2,33 @@ class SearchesController < ApplicationController
   include InvestigationsHelper
 
   def show
+    use_pg_search? ? show_with_pg : show_with_es
+  end
+
+  def show_with_pg
+    params_to_save = params.dup
+    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
+
+    if params[:override_sort_by]
+      params[:sort_by] = params[:override_sort_by]
+    end
+
+    @search = Search::Form.new(query_params)
+    session[:previous_search_params] = params_to_save
+
+    if @search.q.blank?
+      redirect_to investigations_path(previous_search_params)
+    else
+      @answer = search_for_investigations(20)
+      def @answer.results
+        self
+      end
+      @investigations = @answer.includes([{ assignable: :organisation }, :products])
+      logger.info "searchparams: #{params}"
+    end
+  end
+
+  def show_with_es
     params_to_save = params.dup
     params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
 

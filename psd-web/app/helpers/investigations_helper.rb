@@ -3,7 +3,7 @@ module InvestigationsHelper
 
   def search_for_investigations(page_size = Investigation.count)
     if use_pg_search?
-      result = Search::Base.new(@search).search
+      result = Search::Base.new(search_form: @search, user_id: current_user.id, team_id: current_team_for_search.id).search
       result.paginate(page: params[:page], per_page: page_size)
     else
       query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
