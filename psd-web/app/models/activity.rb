@@ -38,6 +38,9 @@ class Activity < ApplicationRecord
   end
 
   def notify_relevant_users
+    # Hack to prevent creating activities in certain tests
+    return if Activity.instance_eval { @disable_update_email }
+
     entities_to_notify.each do |entity|
       NotifyMailer.investigation_updated(investigation.pretty_id, entity[:name], entity[:email], email_update_text, email_subject_text).deliver_later
     end

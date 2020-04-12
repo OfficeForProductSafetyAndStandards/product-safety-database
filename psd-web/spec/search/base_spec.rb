@@ -1,41 +1,6 @@
 require "rails_helper"
 
-begin
-  Search::Base
-rescue LoadError
-end
-begin
-  Search::Form
-rescue LoadError
-end
-begin
-  Search::Index
-rescue LoadError
-end
-
 RSpec.describe Search::Base, :with_elasticsearch do
-  let(:team1) { create(:team) }
-  let(:user11) { create(:user, teams: [team1]) }
-  let(:user12) { create(:user, teams: [team1]) }
-
-  let(:team2) { create(:team) }
-  let(:user21) { create(:user, teams: [team2]) }
-  let(:user22) { create(:user, teams: [team2]) }
-
-  let(:allegation1) { create(:allegation, assignable: team1, description: "glider", product_category: "airplane") }
-  let(:allegation2) { create(:allegation, is_closed: true, assignable: user11) }
-  let(:enquiry1)    { create(:enquiry, assignable: team1) }
-  let(:enquiry2)    { create(:enquiry, is_closed: true, assignable: user12) }
-  let(:project1)    { create(:project, assignable: team2) }
-  let(:project2)    { create(:project, is_closed: true, assignable: user22) }
-
-  let(:source1) { create(:user_source, user: user11, sourceable: allegation1) }
-  let(:source2) { create(:user_source, user: user11, sourceable: allegation2) }
-  let(:source2) { create(:user_source, user: user11, sourceable: allegation2) }
-  let(:source3) { create(:user_source, user: user12, sourceable: enquiry1) }
-  let(:source4) { create(:user_source, user: user21, sourceable: enquiry2) }
-  let(:source5) { create(:user_source, user: user21, sourceable: project1) }
-  let(:source6) { create(:user_source, user: user22, sourceable: project2) }
 
   let(:current_user_id) { User.first.id }
   let(:current_team_id) { Team.first.id }
@@ -87,29 +52,76 @@ RSpec.describe Search::Base, :with_elasticsearch do
     }
   end
 
-  before do
-    mailer = double
-    allow(mailer).to receive(:deliver_later)
-    allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
+  before(:all) do
+    WebMock.disable!
+
+    # mailer = double
+    # allow(mailer).to receive(:deliver_later)
+    # allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
+    Activity.instance_eval { @disable_update_email = true }
+
+    @team1 = create(:team)
+    @user11 = create(:user, teams: [@team1])
+    @user12 = create(:user, teams: [@team1])
+
+    @team2 = create(:team)
+    @user21 = create(:user, teams: [@team2])
+    @user22 = create(:user, teams: [@team2])
+
+    @allegation1 = create(:allegation, assignable: @team1, description: "glider", product_category: "airplane")
+    @allegation2 = create(:allegation, is_closed: true, assignable: @user11)
+    @enquiry1 = create(:enquiry, assignable: @team1)
+    @enquiry2 = create(:enquiry, is_closed: true, assignable: @user12)
+    @project1 = create(:project, assignable: @team2)
+    @project2 = create(:project, is_closed: true, assignable: @user22)
+
+    @source1 = create(:user_source, user: @user11, sourceable: @allegation1)
+    @source2 = create(:user_source, user: @user11, sourceable: @allegation2)
+    @source2 = create(:user_source, user: @user11, sourceable: @allegation2)
+    @source3 = create(:user_source, user: @user12, sourceable: @enquiry1)
+    @source4 = create(:user_source, user: @user21, sourceable: @enquiry2)
+    @source5 = create(:user_source, user: @user21, sourceable: @project1)
+    @source6 = create(:user_source, user: @user22, sourceable: @project2)
 
     investigations = []
-    investigations << allegation1
-    investigations << allegation2
-    investigations << enquiry1
-    investigations << enquiry2
-    investigations << project1
-    investigations << project2
-
-    source1
-    source2
-    source3
-    source4
-    source5
-    source6
+    investigations << @allegation1
+    investigations << @allegation2
+    investigations << @enquiry1
+    investigations << @enquiry2
+    investigations << @project1
+    investigations << @project2
 
     investigations.map(&:reload)
     # Its crucial to update index after all investigations were created
     Search::Index.update_index
+  end
+
+  let(:team1) { @team1 }
+  let(:user11) { @user11 }
+  let(:user12) { @user12 }
+
+  let(:team2) { @team2 }
+  let(:user21) { @user21 }
+  let(:user22) { @user22 }
+
+  let(:allegation1) { @allegation1 }
+  let(:allegation2) { @allegation2 }
+  let(:enquiry1)    { @enquiry1 }
+  let(:enquiry2)    { @enquiry2 }
+  let(:project1)    { @project1 }
+  let(:project2)    { @project2 }
+
+  let(:source1) { @source1 }
+  let(:source2) { @source2 }
+  let(:source3) { @source3 }
+  let(:source4) { @source4 }
+  let(:source5) { @source5 }
+  let(:source6) { @source6 }
+
+  after do
+    WebMock.enable!
+    Activity.instance_eval { @disable_update_email = false }
+    DatabaseCleaner.clean
   end
 
   let(:search_form)   { Search::Form.new(params) }

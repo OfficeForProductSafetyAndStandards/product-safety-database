@@ -10,19 +10,14 @@ module Search
 
     def search
       @search = Investigation
-      # search by text
       search_by_keyword
-      # search for type
       filter_by_type
-      # search for status
       filter_by_status
-      # search for creator
       filter_by_creator
-      # search for assignee
       filter_by_assignee
-      puts @search.to_sql
+      # puts @search.to_sql
+      # TODO: add order
       @search
-      # order
     end
 
   private

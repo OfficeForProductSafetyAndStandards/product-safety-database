@@ -49,6 +49,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
   end
 
   def investigation_updated(investigation_pretty_id, name, email, update_text, subject_text)
+    return
     set_template(TEMPLATES[:investigation_updated])
     set_reference("Case updated")
 
