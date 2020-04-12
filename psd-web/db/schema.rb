@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_02_142659) do
+ActiveRecord::Schema.define(version: 2020_04_12_181146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -213,6 +213,17 @@ ActiveRecord::Schema.define(version: 2020_04_02_142659) do
     t.datetime "created_at", null: false
     t.string "reference", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "secondary_authentications", force: :cascade do |t|
+    t.boolean "authenticated"
+    t.datetime "authentication_expires_at"
+    t.datetime "created_at", null: false
+    t.string "direct_otp"
+    t.datetime "direct_otp_sent_at"
+    t.string "operation"
+    t.datetime "updated_at", null: false
+    t.string "user_id"
   end
 
   create_table "sources", id: :serial, force: :cascade do |t|

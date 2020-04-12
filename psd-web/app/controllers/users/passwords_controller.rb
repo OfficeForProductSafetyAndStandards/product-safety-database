@@ -6,6 +6,8 @@ module Users
                        :has_viewed_introduction,
                        only: %i(edit sign_out_before_resetting_password)
 
+    before_action :require_secondary_authentication, only: :edit
+
     def edit
       return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
@@ -13,26 +15,7 @@ module Users
 
       @email = user_with_reset_token.email
 
-      if passed_two_factor_authentication?
-        # Devise password update requires the user to be signed out, as it relies on the "reset password token"
-        # parameter and an user attempting to reset its password because does not remember it is not supposed to be
-        # already signed in.
-        # In order to be able to enforce 2FA, we need to to sign the user in.
-        # Given this contradiction between needing it for 2FA but needing the opposite for the password update,
-        # when the user gets redirected back after 2FA, we have to sign out the users before allowing them to
-        # update their password.
-        sign_out(:user)
-        super
-      else
-        sign_in(user_with_reset_token)
-        warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-        # Will redirect back to #edit after passing 2FA.
-        # fullpath contains "reset_password_token", necessary for the further update.
-        store_location_for(:user, request.fullpath)
-        user_with_reset_token.send_new_otp
-
-        redirect_to user_two_factor_authentication_path
-      end
+      super
     end
 
     def sign_out_before_resetting_password
@@ -128,6 +111,14 @@ module Users
 
     def after_resetting_password_path_for(_resource)
       password_changed_path
+    end
+
+    def current_operation
+      "reset_password"
+    end
+
+    def user_id_for_operation
+      user_with_reset_token.id
     end
   end
 end

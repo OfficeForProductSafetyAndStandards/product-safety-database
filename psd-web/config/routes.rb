@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
+  resource :secondary_authentications, only: [:new, :create]
 
   resources :users, only: [:update] do
     member do
