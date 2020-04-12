@@ -77,7 +77,6 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
     @source1 = create(:user_source, user: @user11, sourceable: @allegation1)
     @source2 = create(:user_source, user: @user11, sourceable: @allegation2)
-    @source2 = create(:user_source, user: @user11, sourceable: @allegation2)
     @source3 = create(:user_source, user: @user12, sourceable: @enquiry1)
     @source4 = create(:user_source, user: @user21, sourceable: @enquiry2)
     @source5 = create(:user_source, user: @user21, sourceable: @project1)
