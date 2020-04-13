@@ -66,18 +66,14 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       complete_two_factor_authentication_with(last_user_otp(user))
       expect(page).to have_css("h1", text: "Declaration")
 
-      puts "=== before sign_out"
       sign_out
-      puts "=== after_sign_out"
 
       click_on "Sign in to your account"
 
-      binding.pry
       fill_in "Email address", with: user.email
       fill_in "Password", with: "a_new_password"
       click_on "Continue"
 
-      binding.pry
       expect(page).to have_css("h1", text: "Declaration")
     end
 
