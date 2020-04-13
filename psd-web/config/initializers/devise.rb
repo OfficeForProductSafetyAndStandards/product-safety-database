@@ -302,13 +302,17 @@ Devise.setup do |config|
     config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
   end
 
+
+  # to prevent devise to destroying entire session object
+  # need to be false as secondary authentication relies on session
+  config.sign_out_all_scopes = false
   # Devise two_factor_authentication gem
-  config.max_login_attempts = 10  # Maximum second factor attempts count.
-  config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
-  config.direct_otp_length = 5  # Direct OTP code length
-  config.remember_otp_session_for_seconds = 7.days  # Time before browser has to perform 2fA again. Default is 0.
-  config.second_factor_resource_id = 'id' # Field or method name used to set value for 2fA remember cookie
-  config.delete_cookie_on_logout = false # Delete cookie when user signs out, to force 2fA again on login
+  # config.max_login_attempts = 10  # Maximum second factor attempts count.
+  # config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
+  # config.direct_otp_length = 5  # Direct OTP code length
+  # config.remember_otp_session_for_seconds = 7.days  # Time before browser has to perform 2fA again. Default is 0.
+  # config.second_factor_resource_id = 'id' # Field or method name used to set value for 2fA remember cookie
+  #config.delete_cookie_on_logout = false # Delete cookie when user signs out, to force 2fA again on login
   # Only needed for TOTP:
   # config.otp_secret_encryption_key = ENV.fetch("OTP_SECRET_ENCRYPTION_KEY")
   # config.allowed_otp_drift_seconds = 30  # Allowed TOTP time drift between client and server.

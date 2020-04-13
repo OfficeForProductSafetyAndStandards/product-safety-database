@@ -7,7 +7,6 @@ class SecondaryAuthenticationsController < ActionController::Base
   end
 
   def create
-    binding.pry
     params.permit!
     @auth = SecondaryAuthentication.find(params[:secondary_authentication][:id])
     @auth.otp_code = params[:secondary_authentication][:otp_code]

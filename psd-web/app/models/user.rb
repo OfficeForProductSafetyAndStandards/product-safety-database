@@ -5,11 +5,11 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
-  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable, :lockable
+  devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable, :lockable
 
   belongs_to :organisation
 
-  has_one_time_password(encrypted: true)
+  # has_one_time_password(encrypted: true)
 
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations

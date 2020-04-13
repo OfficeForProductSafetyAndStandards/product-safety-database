@@ -31,7 +31,9 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
     expect(page).to have_css("h1", text: "Check your phone")
 
-    fill_in "Enter security code", with: user.reload.direct_otp
+    # TODO: use proper mock
+    code = SecondaryAuthentication.last.direct_otp
+    fill_in "Enter security code", with: code#user.reload.direct_otp
     click_on "Continue"
 
     expect(page).to have_css("h2", text: "Your cases")

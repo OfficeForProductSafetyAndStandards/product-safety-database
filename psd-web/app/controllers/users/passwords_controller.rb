@@ -6,7 +6,7 @@ module Users
                        :has_viewed_introduction,
                        only: %i(edit sign_out_before_resetting_password)
 
-    before_action :require_secondary_authentication, only: :edit
+    skip_before_action :require_secondary_authentication, only: [:new, :create]
 
     def edit
       return render :invalid_link, status: :not_found if reset_token_invalid?
@@ -113,12 +113,14 @@ module Users
       password_changed_path
     end
 
-    def current_operation
-      "reset_password"
+    def user_id_for_secondary_authentication
+      token_from_put = Devise.token_generator.digest(User, :reset_password_token, params[:user][:reset_password_token]) if request.put?
+      user_with_reset_token&.id ||
+        User.find_by(reset_password_token: token_from_put)&.id
     end
 
-    def user_id_for_operation
-      user_with_reset_token.id
+    def current_operation
+      "reset_password"
     end
   end
 end

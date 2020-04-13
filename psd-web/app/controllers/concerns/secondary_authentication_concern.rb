@@ -1,18 +1,20 @@
+# By default is using 'secondary_authentication' operation.
+# To protect some actions with custom `secondary_authentication`,
+# please override `user_id_for_secondary_authentication` and `current_operation` methods
+# in such controller
+#
+# Only one action in controller can be protected by secondary authentication.
 module SecondaryAuthenticationConcern
   extend ActiveSupport::Concern
 
-  # included do
-  #   before_action :ensure_secondary_authentication
-  #   before_action :cleanup_secondary_authentication
-  # end
-
-  # To be called by controller that require secondary authentication
-  # Such controller should define `current_operation` and `user_id_for_operation`
   def require_secondary_authentication
-    binding.pry
+    perform_secondary_authentication
+  end
+
+  def perform_secondary_authentication
     unless secondary_authentication_present_for_operation_and_user
       session[:secondary_authentication_redirect_to] = request.fullpath
-      auth = SecondaryAuthentication.create(user_id: user_id, operation: current_operation)
+      auth = SecondaryAuthentication.create(user_id: user_id_for_secondary_authentication, operation: current_operation)
       auth.generate_and_send_code
       redirect_to new_secondary_authentications_path(secondary_authentication_id: auth.id)
     end
@@ -20,7 +22,7 @@ module SecondaryAuthenticationConcern
 
   # Use as `before_filter` in application_controller controller
   def ensure_secondary_authentication
-    session[:secondary_authentication] = [] unless session[:secondary_authentication].present?
+    session[:secondary_authentication] ||= []
   end
 
   # used in application controller to cleanup old auths
@@ -29,7 +31,7 @@ module SecondaryAuthenticationConcern
       unless SecondaryAuthentication.find_by(id: auth_id)
         return true
       end
-      if SecondaryAuthentication.find_by(auth_id).expired?
+      if SecondaryAuthentication.find(auth_id).expired?
         SecondaryAuthentication.find(auth_id).delete
         true
       else
@@ -40,10 +42,18 @@ module SecondaryAuthenticationConcern
 
   def secondary_authentication_present_for_operation_and_user
     ids = session[:secondary_authentication]
-    SecondaryAuthentication.where(id: ids).where(user_id: user_id).where(operation: current_operation).where(authenticated: true).present?
+    SecondaryAuthentication.where(id: ids).where(user_id: user_id_for_secondary_authentication).where(operation: current_operation).where(authenticated: true).present?
   end
 
-  def user_id
-    user_id_for_operation || current_user.id
+  # can be overrided for actions which require
+  # custom secondary authentication flow
+  def user_id_for_secondary_authentication
+    current_user.id
+  end
+
+  # can be overrided for actions which require
+  # custom secondary authentication flow
+  def current_operation
+    "secondary_authentication"
   end
 end

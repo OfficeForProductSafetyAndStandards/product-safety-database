@@ -22,7 +22,7 @@ class SecondaryAuthentication < ApplicationRecord
 
   # raises exception
   def authenticate!
-    raise unless otp_code == direct_otp
+    raise "secondary authentication failed" unless otp_code == direct_otp
     update(authenticated: true)
   end
 
@@ -32,7 +32,11 @@ class SecondaryAuthentication < ApplicationRecord
 
   # TODO: make dependend from operation type
   def valid_for_seconds
-    300
+    candidate = {
+      "passwords/edit" => 300,
+    }[self.operation]
+
+    candidate || 300
   end
 
   private
