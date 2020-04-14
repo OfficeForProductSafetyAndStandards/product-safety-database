@@ -14,7 +14,11 @@ class SecondaryAuthenticationsController < ActionController::Base
 
     set_secondary_authentication_cookie_for(@auth)
     # redirect to saved path
-    redirect_to session[:secondary_authentication_redirect_to]
+    if session[:secondary_authentication_redirect_to]
+      redirect_to session[:secondary_authentication_redirect_to]
+    else
+      redirect_to '/'
+    end
   end
 
   def set_secondary_authentication_cookie_for(authentication)
