@@ -1,31 +1,45 @@
 require "rails_helper"
 
 RSpec.describe WhyReportingForm do
-  subject(:form) { described_class.new(why_reporrting_form) }
+  subject(:form) { described_class.new(why_reporting_form) }
 
   let(:reported_reason_unsafe) { nil }
   let(:reported_reason_non_compliant) { nil }
   let(:reported_reason_safe_and_compliant) { nil }
 
-  describe "validations" do
+  describe "validates the options are mututally exclusive" do
+    context "when only option is set" do
+      let(:why_reporting_form) { { reported_reason_unsafe: true } }
 
+      it { is_expected.to be_valid }
+    end
+
+    context "when two options are set" do
+      let(:why_reporting_form) { { reported_reason_unsafe: true, reported_reason_non_compliant: true } }
+
+      it "is invalid and sets and error", :aggregate_failures do
+        expect(form).to be_invalid
+        expect(form.errors[:reported_reason_unsafe]).to eq("Select only one answer")
+        expect(form.errors[:reported_reason_non_compliant]).to eq("Select only one answer")
+      end
+    end
   end
 
   describe "#reported_reason" do
     context "when setting only unsafe to true" do
-      let(:why_reporrting_form) { { reported_reason_unsafe: true } }
+      let(:why_reporting_form) { { reported_reason_unsafe: true } }
 
       it { expect(form.reported_reason).to eq(:unsafe) }
     end
 
     context "when setting only non_compliant to true" do
-      let(:why_reporrting_form) { { reported_reason_non_compliant: true } }
+      let(:why_reporting_form) { { reported_reason_non_compliant: true } }
 
       it { expect(form.reported_reason).to eq(:non_compliant) }
     end
 
     context "when setting only safe_and_compliant to true" do
-      let(:why_reporrting_form) { { reported_reason_safe_and_compliant: true } }
+      let(:why_reporting_form) { { reported_reason_safe_and_compliant: true } }
 
       it { expect(form.reported_reason).to eq(:safe_and_compliant) }
     end
