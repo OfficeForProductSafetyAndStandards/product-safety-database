@@ -23,7 +23,8 @@ class SearchParams
                 :q,
                 :sort,
                 :status_open,
-                :status_closed
+                :status_closed,
+                :coronavirus_related_only
 
   attr_writer :sort_by
 

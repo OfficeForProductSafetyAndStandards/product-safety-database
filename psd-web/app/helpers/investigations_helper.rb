@@ -21,7 +21,13 @@ module InvestigationsHelper
   end
 
   def merged_must_filters
-    { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_assignee_filter }] }
+    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_assignee_filter }] }
+
+    if params[:coronavirus_related_only] == "yes"
+      must_filters[:must] << { term: { coronavirus_related: true } }
+    end
+
+    must_filters
   end
 
   def get_status_filter
@@ -169,7 +175,7 @@ module InvestigationsHelper
     set_default_type_filter
     set_default_assignee_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id,
+    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
                   assignee_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
   end
 
