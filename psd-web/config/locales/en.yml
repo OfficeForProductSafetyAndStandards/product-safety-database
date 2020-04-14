@@ -39,6 +39,28 @@ en:
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
+  investigations:
+    coronavirus_related:
+      show:
+        title: "Is the case related to the coronavirus outbreak?"
+        submit_button: "Update coronavirus status"
+        yes_label: "Yes, it is (or could be)"
+        no_label: "No, this is business as usual"
+        hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
+      success: "%{case_title} was successfully updated."
+  audit_activity:
+    investigation:
+      update_coronavirus_status:
+        email_subject_text: "Coronavirus status updated on %{case_type}"
+        email_update_text:
+          false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
+          true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
+        title:
+          true: "Status updated: coronavirus related"
+          false: "Status updated: not coronavirus related"
+        body:
+          true: "The case is related to the coronavirus outbreak."
+          false: "The case is not related to the coronavirus outbreak."
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"

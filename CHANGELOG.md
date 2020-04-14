@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-04-07
+- Added ability to edit the coronavirus related flag
+
 ## 2020-04-03
 - Added a question for MSA users to identify cases related to the coronavirus outbreak.
 

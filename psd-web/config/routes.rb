@@ -98,7 +98,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-
+    resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
 
     resource :activity, controller: "investigations/activities", only: %i[show create new] do
