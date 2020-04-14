@@ -18,7 +18,7 @@ class Investigations::ProjectController < ApplicationController
 
   # POST /xxx
   def create
-    if @investigation.valid?(step)
+    if @investigation.valid?
       @investigation.save
       redirect_to investigation_path(@investigation), flash: { success: "Project was successfully created" }
     else
