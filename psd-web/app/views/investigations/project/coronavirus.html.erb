@@ -1,4 +1,5 @@
 <% content_for :after_header do %>
   <%= link_to "Back to Cases", investigations_path(previous_search_params), class: "govuk-back-link" %>
 <% end %>
-<%= render template: "investigations/coronavirus", locals: { scope: :investigation } %>
+<%= render template: "investigations/coronavirus",
+    locals: { scope: :investigation, unsafe_product_message: false } %>
