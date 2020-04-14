@@ -80,6 +80,9 @@ class InvestigationDecorator < ApplicationDecorator
       rows[0][:actions] = [
         { href: h.status_investigation_path(investigation), text: "Change", classes: classes, visually_hidden_text: "status" }
       ]
+      rows[1][:actions] = [
+        { href: h.investigation_coronavirus_related_path(investigation), text: "Change", classes: classes, visually_hidden_text: "coronavirus status" }
+      ]
       rows[3][:actions] = [
         { href: h.new_investigation_assign_path(investigation), text: "Change", classes: classes, visually_hidden_text: "assigned to" }
       ]
