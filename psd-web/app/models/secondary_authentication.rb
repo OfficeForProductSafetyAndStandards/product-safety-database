@@ -1,5 +1,7 @@
 class SecondaryAuthentication < ApplicationRecord
-  RESET_PASSWORD = "reset_password"
+  DEFAULT_OPERATION = "secondary_authentication"
+  RESET_PASSWORD_OPERATION = "reset_password"
+
   OTP_LENGTH = 6
 
   attr_accessor :otp_code

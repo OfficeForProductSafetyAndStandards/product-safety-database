@@ -54,6 +54,6 @@ module SecondaryAuthenticationConcern
   # can be overrided for actions which require
   # custom secondary authentication flow
   def current_operation
-    "secondary_authentication"
+    SecondaryAuthentication::DEFAULT_OPERATION
   end
 end

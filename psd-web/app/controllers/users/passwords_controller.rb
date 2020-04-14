@@ -120,7 +120,7 @@ module Users
     end
 
     def current_operation
-      "reset_password"
+      SecondaryAuthentication::RESET_PASSWORD_OPERATION
     end
   end
 end
