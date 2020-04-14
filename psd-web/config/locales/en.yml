@@ -34,6 +34,7 @@ en:
   mail:
     team_added_to_case:
       message_from: "Message from %{user_name}:"
+  multiple_reported_reasons_selected: "Select only one answer"
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
