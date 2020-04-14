@@ -18,10 +18,10 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
       choose "Project"
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page("/investigation/project/coronavirus")
+      expect_to_be_on_coronavirus_page("/project/coronavirus")
       click_button "Continue"
 
-      expect_to_be_on_coronavirus_page("/investigation/project/coronavirus")
+      expect_to_be_on_coronavirus_page("/project/coronavirus")
       expect(page).to have_error_messages
       expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
 
