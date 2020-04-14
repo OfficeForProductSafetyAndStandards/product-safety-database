@@ -12,6 +12,7 @@ end
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => "/admin", as: "rails_admin"
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
   unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
@@ -97,7 +98,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-
+    resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
 
     resource :activity, controller: "investigations/activities", only: %i[show create new] do
