@@ -113,6 +113,10 @@ class User < ApplicationRecord
     has_role? :team_admin
   end
 
+  def is_superuser?
+    has_role? :superuser
+  end
+
   def has_completed_registration?
     encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
   end
