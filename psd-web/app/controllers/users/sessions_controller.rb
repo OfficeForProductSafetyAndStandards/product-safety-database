@@ -76,7 +76,7 @@ module Users
     end
 
     def mobile_not_verified?(user)
-      Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
+      user && !user.mobile_number_verified
     end
 
     def set_resource_as_new_user_from_params
