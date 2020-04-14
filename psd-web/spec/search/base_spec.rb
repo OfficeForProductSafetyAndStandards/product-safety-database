@@ -64,7 +64,7 @@ RSpec.describe Search::Base, :with_elasticsearch do
     @user21 = create(:user, teams: [@team2])
     @user22 = create(:user, teams: [@team2])
 
-    @allegation1 = create(:allegation, assignable: @team1, description: "glider", product_category: "airplane")
+    @allegation1 = create(:allegation, assignable: @team1, description: "glider flies", product_category: "airplane")
     @allegation2 = create(:allegation, is_closed: true, assignable: @user11)
     @enquiry1 = create(:enquiry, assignable: @team1)
     @enquiry2 = create(:enquiry, is_closed: true, assignable: @user12)
@@ -138,7 +138,7 @@ RSpec.describe Search::Base, :with_elasticsearch do
   context "simple text search" do
     context "by description" do
       it_behaves_like "search" do
-        let(:q) { "glider" }
+        let(:q) { "glider fly" }
         let(:expected_products) do
           [allegation1]
         end

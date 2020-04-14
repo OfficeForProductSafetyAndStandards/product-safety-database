@@ -113,6 +113,10 @@ class User < ApplicationRecord
     has_role? :team_admin
   end
 
+  def uses_postgres_search?
+    has_role? :postgres_search
+  end
+
   def has_completed_registration?
     encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
   end

@@ -27,10 +27,13 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       description: Faker::Lorem.sentence
     }
   end
-
+  let(:team) { create(:team) }
+  let(:user) {
+    create(:user, :activated, :opss_user, teams: [team])
+  }
   context "when login as an OPSS user" do
     before do
-      sign_in(create(:user, :activated, :opss_user))
+      sign_in(user)
       visit "/allegation/complainant"
     end
 

@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let(:user) { create :user, :activated, has_viewed_introduction: true }
+  let(:team) { create :team }
+  let(:user) { create :user, :activated, has_viewed_introduction: true, teams: [team] }
   let(:pagination_link_params) do
     {
       allegation: :unchecked,
@@ -23,6 +24,8 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
   before do
     allow(AuditActivity::Investigation::Base).to receive(:from)
     create_list :project, 18, updated_at: 4.days.ago
+
+    Search::Index.update_index
   end
 
   scenario "lists cases correctly sorted" do

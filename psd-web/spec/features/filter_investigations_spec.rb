@@ -67,7 +67,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     click_button "Apply filters"
 
     expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end

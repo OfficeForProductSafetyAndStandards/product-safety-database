@@ -20,9 +20,12 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
     let(:has_accepted_declaration) { true }
     let(:has_viewed_introduction) { true }
     let(:user_state) { :activated }
-
+    let(:team) { create(:team) }
+    let(:user) do
+      create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction, teams: [team])
+    end
     before do
-      sign_in(create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
+      sign_in(user)
     end
 
     def expect_small_beta_phase_banner

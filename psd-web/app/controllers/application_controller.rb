@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
 
   def use_pg_search?
-    true
+    current_user.uses_postgres_search?
   end
 
   def current_team_for_search

@@ -18,8 +18,13 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
+  let(:team) { create(:team) }
+  let(:user) do
+    create(:user, :activated, :opss_user, teams: [team])
+  end
+
   context "when logged in as an OPSS user" do
-    before { sign_in(create(:user, :activated, :opss_user)) }
+    before { sign_in(user) }
 
     scenario "able to report an enquiry" do
       click_link "Open a new case"

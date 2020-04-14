@@ -23,7 +23,7 @@ module Search
 
     def search_by_keyword
       if f.q.present?
-        @search = @search.where("search_index @@ to_tsquery(?)", f.q)
+        @search = @search.where("search_index @@ to_tsquery('english',  ?)", f.q.split(" ").join(" & "))
       end
     end
 
