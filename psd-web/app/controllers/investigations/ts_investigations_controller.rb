@@ -223,11 +223,6 @@ private
     case step
     when :coronavirus
       params.require(:investigation).permit(:coronavirus_related)
-    when :why_reporting
-      params.require(:investigation).permit(
-        :hazard_type, :hazard_description, :non_compliant_reason,
-        :reported_reason_unsafe, :reported_reason_non_compliant, :reported_reason_safe_and_compliant
-      )
     when :reference_number
       params[:investigation][:complainant_reference] = nil unless params[:investigation][:has_complainant_reference] == "Yes"
       params.require(:investigation).permit(:complainant_reference)
@@ -451,6 +446,21 @@ private
     params.require(:investigation).permit(:coronavirus_related)
   end
 
+  def why_reporting_form_params
+    params.require(:investigation)
+      .permit(
+        :hazard_type,
+        :hazard_description,
+        :non_compliant_reason,
+        :reported_reason_unsafe,
+        :reported_reason_non_compliant,
+        :reported_reason_safe_and_compliant)
+  end
+
+  def why_reporting_form
+    @why_reporting_form ||= WhyReportingForm.new(@investigation, why_reporting_form_params)
+  end
+
   def records_valid?
     case step
     when :coronavirus
@@ -458,6 +468,7 @@ private
     when :product
       @product.validate
     when :why_reporting
+      why_reporting_form.valid?
       @investigation.valid?(:why_reporting)
     when :which_businesses
       validate_none_as_only_selection

@@ -8,9 +8,12 @@ class Investigation < ApplicationRecord
   attr_accessor :visibility_rationale
   attr_accessor :assignee_rationale
 
-  attr_accessor :reported_reason_unsafe, :reported_reason_non_compliant, :reported_reason_safe_and_compliant
-
-  enum reported_reason: {unsafe: 'unsafe', non_compliant: 'non_compliant', unsafe_and_non_compliant: 'unsafe_and_non_compliant', safe_and_compliant: 'safe_and_compliant' }
+  enum reported_reason: {
+         unsafe: "unsafe",
+         non_compliant: "non_compliant",
+         unsafe_and_non_compliant: "unsafe_and_non_compliant",
+         safe_and_compliant: "safe_and_compliant"
+       }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
@@ -21,8 +24,6 @@ class Investigation < ApplicationRecord
   validates_length_of :description, maximum: 10000
   validates_length_of :non_compliant_reason, maximum: 10000
   validates_length_of :hazard_description, maximum: 10000
-
-  validates :reported_reason, presence: true, on: :why_reporting
 
   after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
                :create_audit_activity_for_visibility, :create_audit_activity_for_summary
@@ -151,13 +152,6 @@ class Investigation < ApplicationRecord
 
 private
 
-  # From https://api.rubyonrails.org/classes/ActiveModel/Type/Boolean.html
-  FALSE_VALUES  = [false, 0, "0", "f", "F", "false", "FALSE", "off", "OFF"].to_set.freeze
-
-  def cast_to_boolean(value)
-    !FALSE_VALUES.include?(value)
-  end
-
   def create_audit_activity_for_case
     # To be implemented by children
   end
@@ -230,21 +224,6 @@ private
       ).deliver_later
     end
   end
-
-  def update_reported_reason!
-    if @reported_reason_unsafe && @reported_reason_non_compliant && !@reported_reason_safe_and_compliant
-      self.reported_reason = :unsafe_and_non_compliant
-    elsif @reported_reason_unsafe && !@reported_reason_non_compliant && !@reported_reason_safe_and_compliant
-      self.reported_reason = :unsafe
-    elsif !@reported_reason_unsafe && @reported_reason_non_compliant && !@reported_reason_safe_and_compliant
-      self.reported_reason = :non_compliant
-    elsif !@reported_reason_unsafe && !@reported_reason_non_compliant && @reported_reason_safe_and_compliant
-      self.reported_reason = :safe_and_compliant
-    else
-      self.reported_reason = nil
-    end
-  end
-
 end
 
 require_dependency "investigation/allegation"
