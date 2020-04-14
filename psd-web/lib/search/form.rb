@@ -24,9 +24,11 @@ module Search
 
     ACCESSORS = %i[allegation
                    assigned_to_me
+                   assigned_to_team_0
                    assigned_to_someone_else
                    assigned_to_someone_else_id
                    created_by_me
+                   created_by_team_0
                    created_by_someone_else
                    created_by_someone_else_id
                    direction
@@ -85,7 +87,8 @@ module Search
     def method_missing(*args)
       name = args.first
       candidate_name = name.to_s.gsub(/\?$/, "").to_sym
-      if ACCESSORS.include?(candidate_name.to_sym) && %w[checked unchecked].include?(self.send(candidate_name))
+      # binding.pry if candidate_name == :status_closed
+      if ACCESSORS.include?(candidate_name.to_sym) && ['checked', 'unchecked', nil].include?(self.send(candidate_name))
         return self.send(candidate_name) == "checked"
       end
 

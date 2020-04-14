@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Search::Base, :with_elasticsearch do
 
-  let(:current_user_id) { User.first.id }
-  let(:current_team_id) { Team.first.id }
+  let(:current_user_id) { @user11.id }
+  let(:current_team_id) { @team1.id }
 
   let(:q) { "" }
   let(:unchecked) { "unchecked" }
@@ -54,10 +54,6 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
   before(:all) do
     WebMock.disable!
-
-    # mailer = double
-    # allow(mailer).to receive(:deliver_later)
-    # allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
     Activity.instance_eval { @disable_update_email = true }
 
     @team1 = create(:team)
@@ -193,6 +189,14 @@ RSpec.describe Search::Base, :with_elasticsearch do
     context "by other" do
       let(:created_by_someone_else) { checked }
 
+      context "no user or team selected" do
+        it_behaves_like "search" do
+          let(:expected_products) do
+            [project2, project1, enquiry2]
+          end
+        end
+      end
+
       context "team" do
         it_behaves_like "search" do
           let(:created_by_someone_else_id) { team1.id }
@@ -292,6 +296,14 @@ RSpec.describe Search::Base, :with_elasticsearch do
 
     context "other" do
       let(:assigned_to_someone_else) { checked }
+
+      context "no user or team selected" do
+        it_behaves_like "search" do
+          let(:expected_products) do
+            [project2, project1]
+          end
+        end
+      end
 
       context "to user" do
         it_behaves_like "search" do

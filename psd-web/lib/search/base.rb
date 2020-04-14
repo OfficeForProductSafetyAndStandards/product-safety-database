@@ -15,7 +15,6 @@ module Search
       filter_by_status
       filter_by_creator
       filter_by_assignee
-      # puts @search.to_sql
       # TODO: add order
       @search
     end
@@ -57,12 +56,19 @@ module Search
                      Investigation.none
                    end
       if f.created_by_someone_else?
-        ids = [f.created_by_someone_else_id]
-        team = Team.find_by(id: f.created_by_someone_else_id)
-        if team
-          ids << team.users.pluck(:id)
+        if f.created_by_someone_else_id != "unchecked"
+          ids = [f.created_by_someone_else_id]
+          team = Team.find_by(id: f.created_by_someone_else_id)
+          if team
+            ids << team.users.pluck(:id)
+          end
+          relations << Investigation.joins(:source).where("sources.user_id IN (?)", ids.flatten.uniq.compact)
+        else
+          # use ids different then current user and team
+          team_users_ids = Team.find(@team_id).users.pluck(:id)
+          team_users_ids << @user_id
+          relations << Investigation.joins(:source).where("sources.user_id NOT IN (?)", team_users_ids.uniq)
         end
-        relations << Investigation.joins(:source).where("sources.user_id IN (?)", ids.flatten.uniq.compact)
       else
         relations << Investigation.none
       end
@@ -103,17 +109,28 @@ module Search
       else
         Investigation.none
       end
-      relations << if f.assigned_to_someone_else != "unchecked"
-        ids = [f.assigned_to_someone_else_id]
-        team = Team.find_by(id: f.assigned_to_someone_else_id)
-        if team
-          ids << team.users.pluck(:id)
+      if f.assigned_to_someone_else != "unchecked"
+        if f.assigned_to_someone_else_id != "unchecked" && f.assigned_to_someone_else_id.present?
+          ids = [f.assigned_to_someone_else_id]
+          team = Team.find_by(id: f.assigned_to_someone_else_id)
+          if team
+            ids << team.users.pluck(:id)
+          end
+          team = Investigation.where("assignable_type = 'Team'").where(assignable_id: f.assigned_to_someone_else_id)
+          team = team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: ids.flatten.compact.uniq)) if ids.present?
+          relations << team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: f.assigned_to_someone_else_id))
+        else # not in user_id or team_id
+          ids = [@user_id]
+          team = Team.find_by(id: @team_id)
+          if team
+            ids << team.users.pluck(:id)
+          end
+          team = Investigation.where("(assignable_type = 'Team' AND assignable_id != ?)", @team_id)
+          team = team.or(Investigation.where("(assignable_type = 'User' AND assignable_id NOT IN (?))", ids.flatten.compact.uniq))
+          relations << team
         end
-        team = Investigation.where("assignable_type = 'Team'").where(assignable_id: f.assigned_to_someone_else_id)
-        team = team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: ids.flatten.compact.uniq)) if ids.present?
-        team.or(Investigation.where("assignable_type = 'User'").where(assignable_id: f.assigned_to_someone_else_id))
       else
-        Investigation.none
+        relations << Investigation.none
       end
       or_relation = Investigation.none
       or_relation = or_relation.or(relations[0]) if relations[0].present?
