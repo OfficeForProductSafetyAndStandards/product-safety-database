@@ -8,6 +8,8 @@ module SecondaryAuthenticationConcern
   extend ActiveSupport::Concern
 
   def require_secondary_authentication
+    return unless Rails.configuration.two_factor_authentication_enabled
+
     perform_secondary_authentication
   end
 
