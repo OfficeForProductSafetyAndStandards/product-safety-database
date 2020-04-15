@@ -94,10 +94,10 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
   def expect_test_result_confirmation_page_to_show_entered_data(legislation:, date:, test_result:)
     expect(page).to have_css("h1", text: "Confirm test result details")
-    expect(page).to have_summary_item(key: "Legislation", value: legislation)
-    expect(page).to have_summary_item(key: "Test date", value: date.strftime("%d/%m/%Y"))
-    expect(page).to have_summary_item(key: "Test result", value: test_result)
-    expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
-    expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
+    expect(page).to have_summary_table_item(key: "Legislation", value: legislation)
+    expect(page).to have_summary_table_item(key: "Test date", value: date.strftime("%d/%m/%Y"))
+    expect(page).to have_summary_table_item(key: "Test result", value: test_result)
+    expect(page).to have_summary_table_item(key: "Attachment", value: File.basename(file))
+    expect(page).to have_summary_table_item(key: "Attachment description", value: "test result file")
   end
 end

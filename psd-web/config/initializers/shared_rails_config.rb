@@ -14,3 +14,4 @@ ActionView::Base.include GovukDesignSystem::ErrorSummaryHelper
 ActionView::Base.include GovukDesignSystem::FileUploadHelper
 ActionView::Base.include GovukDesignSystem::LabelHelper
 ActionView::Base.include GovukDesignSystem::SkipLinkHelper
+ActionView::Base.include GovukDesignSystem::SummaryListHelper

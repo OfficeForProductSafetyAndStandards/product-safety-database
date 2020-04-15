@@ -1,17 +1,27 @@
 module PageMatchers
   # Matcher for items within the [Summary list](https://design-system.service.gov.uk/components/summary-list/) component.
   #
-  # Note: currently this expects table markup. However this should be updated to use
-  # definition list (`<dd>` and `<dt>`) markup when the template is updated.
+  # Note: by default this expects definition list (`<dd>` and `<dt>`) markup, as recommended by the
+  # GOV.UK Design System. However some of our existing summary lists use table markup (`<th>` and `<td>`),
+  # which can be matched using the `table: true` param.
   class HaveSummaryItem
-    def initialize(key:, value:)
+    def initialize(key:, value:, table: false)
       @key = key
       @value = value
+      @table = table
     end
 
     def matches?(page)
-      page.find("th", text: @key, exact_text: true).sibling("td", text: @value, exact_text: true)
+      key_element = @table ? "th" : "dt"
+      value_element = @table ? "td" : "dd"
+
+      page.find(key_element, text: @key, exact_text: true).sibling(value_element, text: @value, exact_text: true)
     end
+  end
+
+  # Deprecated: remove once all summary lists have been switched to definition list markup
+  def have_summary_table_item(key:, value:)
+    HaveSummaryItem.new(key: key, value: value, table: true)
   end
 
   def have_summary_item(key:, value:)

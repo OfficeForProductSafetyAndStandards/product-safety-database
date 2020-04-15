@@ -1,0 +1,31 @@
+<% title = "Change your name" %>
+<% page_title title, errors: false %>
+
+<% content_for(:after_header) do %>
+  <%= govukBackLink(text: "Back", href: account_path) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= error_summary(@user.errors) %>
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <%= form_with model: @user, url: account_name_path, method: :patch do |form| %>
+
+      <%= render "form_components/govuk_input", key: :name, form: form,
+        classes: "app-!-max-width-two-thirds",
+        label: {
+          text: "Full name"
+        },
+        value: @user.name,
+        autocomplete: "name",
+        id: "name"
+        %>
+
+      <%= govukButton(text: "Save") %>
+
+    <% end %>
+  </div>
+</div>
