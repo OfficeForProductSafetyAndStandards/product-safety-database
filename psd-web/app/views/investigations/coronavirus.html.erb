@@ -6,7 +6,7 @@
   <p>Coronavirus (COVID-19): OPSS is urging all market surveillance authorities to prioritise coronavirus-related cases above other work.</p>
 <% end %>
 
-<%= form_with scope: scope, model: @investigation, url: wizard_path, method: :put, local: true do |form| %>
+<%= form_with scope: scope, model: @coronavirus_related_form, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @investigation.errors  %>

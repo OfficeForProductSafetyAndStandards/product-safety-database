@@ -4,6 +4,8 @@ class Investigations::ProjectController < ApplicationController
   steps :coronavirus, :project_details
 
   before_action :set_investigation, only: %i[show new create update]
+  before_action :set_coronavirus_related_form, only: :show, if: -> { step == :coronavirus }
+
 
   #GET /xxx/step
   def show
@@ -49,13 +51,7 @@ private
     investigation_session_params.merge(investigation_request_params)
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def investigation_request_params
-    # This must be done first because the browser will send no params if no radio is selected
-    if step == :coronavirus
-      params[:investigation] ||= { coronavirus_related: nil }
-    end
-
     return {} if params[:investigation].blank?
 
     params.require(:investigation).permit(:user_title, :description, :coronavirus_related)
@@ -63,5 +59,9 @@ private
 
   def set_investigation
     @investigation = Investigation::Project.new(investigation_params).decorate
+  end
+
+  def set_coronavirus_related_form
+    @coronavirus_relared_form = CoronavirusRelatedForm.new
   end
 end
