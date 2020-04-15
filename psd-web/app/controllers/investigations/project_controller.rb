@@ -4,6 +4,7 @@ class Investigations::ProjectController < ApplicationController
   steps :coronavirus, :project_details
 
   before_action :set_investigation, only: %i[show new create update]
+  before_action :set_new_coronavirus_form, only: :show, if: -> { step == :coronavirus }
 
   #GET /xxx/step
   def show
@@ -60,12 +61,17 @@ private
     @investigation = Investigation::Project.new(investigation_params).decorate
   end
 
+  def set_new_coronavirus_form
+    @coronavirus_related_form = CoronavirusRelatedForm.new
+  end
+
   def coronavirus_related_form
-    @coronavirus_related_form ||= CoronavirusRelatedForm.new(investigation_params)
+    @coronavirus_related_form ||= CoronavirusRelatedForm.new(params.require(:investigation).permit(:coronavirus_related))
   end
 
   def set_coronavirus_info_from_form
-    @investigation.errors.merge!(coronavirus_related_form.errors) if coronavirus_related_form.invalid?
-    @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
+    if coronavirus_related_form.valid?
+      @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
+    end
   end
 end
