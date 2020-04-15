@@ -1,10 +1,12 @@
 class SecondaryAuthentication < ApplicationRecord
   DEFAULT_OPERATION = "secondary_authentication"
   RESET_PASSWORD_OPERATION = "reset_password"
+  INVITE_USER = "invite_user"
 
   TIMEOUTS = {
     DEFAULT_OPERATION => 7 * 24 * 3600, # 7 days
     RESET_PASSWORD_OPERATION => 300, # 5 minutes
+    INVITE_USER => 3600, # 1 hour
   }
 
   OTP_LENGTH = 6

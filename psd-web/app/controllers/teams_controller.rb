@@ -2,6 +2,7 @@ class TeamsController < ApplicationController
   before_action :set_user_teams, only: :index
   before_action :set_team, only: %i[show invite_to]
   before_action :set_new_user, only: :invite_to
+  before_action :require_secondary_authentication, only: [:invite_to, :resend_invitation]
 
   # GET /teams, GET /my-teams
   def index; end
@@ -95,5 +96,9 @@ private
 
   def whitelisted_emails
     Rails.application.config.whitelisted_emails["email_domains"].map { |domain| domain.downcase.strip }
+  end
+
+  def current_operation
+    SecondaryAuthentication::INVITE_USER
   end
 end
