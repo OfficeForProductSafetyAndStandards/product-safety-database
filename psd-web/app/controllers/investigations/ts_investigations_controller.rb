@@ -36,12 +36,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
-
-  with_options if: -> { step == :why_reporting } do
-    after_action :store_why_reporting_form, only: %i[update]
-    before_action :set_why_reporting_form, only: %i[show]
-  end
-
+  before_action :set_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_business, only: %i[update], if: -> { step == :business }
@@ -73,7 +68,6 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
 
   def create
-    byebug
     if records_saved?
       redirect_to created_investigation_path(@investigation)
     else
@@ -184,8 +178,6 @@ private
   def clear_session
     session.delete :investigation
     session.delete :product
-    session.delete :unsafe
-    session.delete :non_compliant
     session.delete :other_business_type
     session.delete :further_corrective_action
     other_information_types.each do |type|
@@ -309,10 +301,6 @@ private
       businesses << which_businesses_params[:other_business_type] if which_businesses_params[:other] == "1"
       session[:businesses] = businesses.map { |type| { type: type, business: nil } }
     end
-  end
-
-  def store_why_reporting_form
-    session[:why_reporting_form] = why_reporting_form.attributes
   end
 
   def store_business
@@ -479,8 +467,7 @@ private
       @product.validate
     when :why_reporting
       if (form_valid = why_reporting_form.valid?)
-        @investigation.reported_reason = why_reporting_form.reported_reason
-        @investigation.reported_reason = why_reporting_form.reported_reason
+        why_reporting_form.assign_to(@investigation)
       end
       form_valid
     when :which_businesses
