@@ -19,6 +19,14 @@ class WhyReportingForm
                          end
   end
 
+  def assign_to(investigation)
+    investigation.assign_attributes(
+      attributes
+        .slice(:hazard_description, :hazard_type, :non_compliant_reason)
+        .merge(reported_reason: reported_reason)
+    )
+  end
+
 private
 
   def mutually_exclusive_checkboxes
