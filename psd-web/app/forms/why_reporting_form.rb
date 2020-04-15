@@ -12,17 +12,18 @@ class WhyReportingForm
   validate :mutually_exclusive_checkboxes
 
   def reported_reason
-    @reported_reason ||= case boolean_checkboxes
-                         when [true,  false, false] then :unsafe
-                         when [false, true,  false] then :non_compliant
-                         when [false, false, true]  then :safe_and_compliant
+    @reported_reason ||= case [reported_reason_unsafe, reported_reason_non_compliant, reported_reason_safe_and_compliant]
+                         when [true,  false, false] then Investigation.reported_reasons[:unsafe]
+                         when [false, true,  false] then Investigation.reported_reasons[:non_compliant]
+                         when [true,  true,  false] then Investigation.reported_reasons[:unsafe_and_non_compliant]
+                         when [false, false, true]  then Investigation.reported_reasons[:safe_and_compliant]
                          end
   end
 
   def assign_to(investigation)
     investigation.assign_attributes(
       attributes
-        .slice(:hazard_description, :hazard_type, :non_compliant_reason)
+        .slice("hazard_description", "hazard_type", "non_compliant_reason")
         .merge(reported_reason: reported_reason)
     )
   end
@@ -39,9 +40,5 @@ private
 
   def mutually_exclusive_checkboxes_selected?
     reported_reason_safe_and_compliant && [reported_reason_unsafe, reported_reason_non_compliant].any? { |reason| reason == true }
-  end
-
-  def boolean_checkboxes
-    [reported_reason_unsafe, reported_reason_non_compliant, reported_reason_safe_and_compliant]
   end
 end

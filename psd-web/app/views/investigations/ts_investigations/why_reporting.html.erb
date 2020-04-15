@@ -2,10 +2,10 @@
 
 <%= page_title page_heading, errors: @why_reporting_form.errors.any? %>
 
-<%= form_with scope: :investigation, model: WhyReportingForm.new, url: wizard_path, method: :put, local: true do |form| %>
+<%= form_with scope: :investigation, model: @why_reporting_form, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= error_summary @why_reporting_form.errors %>
       <% heading_html = capture do %>
         <span class="govuk-caption-l">Report an unsafe or non-compliant product</span>
         <h1 class="govuk-heading-l"><%= page_heading %></h1>
@@ -32,34 +32,34 @@
                    classes: "govuk-!-width-three-quarters" %>
       <% end %>
       <%= render "form_components/govuk_checkboxes",
-                 form: form,
-                 key: :why_reporting,
-                 fieldset: { legend: { html: heading_html } },
-                 hint: { text: "Select all that apply" },
-                 items: [
-                   {
-                     key: "reported_reason_unsafe",
-                     text: "It’s unsafe (or suspected to be)",
-                     value: true,
-                     conditional: { html: unsafe_details }
-                   },
-                   {
-                     key: "reported_reason_non_compliant",
-                     text: "It’s non-compliant (or suspected to be)",
-                     value: true,
-                     conditional: { html: non_compliant_details }
-                   },
-                   {
-                     key: "or",
-                     divider: "or"
-                   },
-                   {
-                     key: "reported_reason_safe_and_compliant",
-                     text: "It’s safe and compliant",
-                     hint: {text: "Help other market surveillance authorities avoid testing the same product again"},
-                     value: true
-                   }
-                 ] %>
+                form: form,
+                key: :why_reporting,
+                fieldset: { legend: { html: heading_html } },
+                hint: { text: "Select all that apply" },
+                items: [
+                  {
+                    key: "reported_reason_unsafe",
+                    text: "It’s unsafe (or suspected to be)",
+                    value: true,
+                    conditional: { html: unsafe_details }
+                  },
+                  {
+                    key: "reported_reason_non_compliant",
+                    text: "It’s non-compliant (or suspected to be)",
+                    value: true,
+                    conditional: { html: non_compliant_details }
+                  },
+                  {
+                    key: "or",
+                    divider: "or"
+                  },
+                  {
+                    key: "reported_reason_safe_and_compliant",
+                    text: "It’s safe and compliant",
+                    hint: {text: "Help other market surveillance authorities avoid testing the same product again"},
+                    value: true
+                  }
+                ] %>
       <%= form.submit "Continue", class: "govuk-button" %>
     </div>
   </div>
