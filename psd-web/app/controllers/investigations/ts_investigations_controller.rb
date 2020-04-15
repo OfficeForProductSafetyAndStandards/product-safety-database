@@ -36,8 +36,9 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
+
   with_options if: -> { step == :why_reporting } do
-    before_action :store_why_reporting_form, only: %i[update]
+    after_action :store_why_reporting_form, only: %i[update]
     before_action :set_why_reporting_form, only: %i[show]
   end
 
@@ -53,6 +54,7 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   #GET /xxx/step
   def show
+    logger.ap session.to_h
     case step
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
@@ -71,6 +73,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
 
   def create
+    byebug
     if records_saved?
       redirect_to created_investigation_path(@investigation)
     else
@@ -476,6 +479,7 @@ private
       @product.validate
     when :why_reporting
       if (form_valid = why_reporting_form.valid?)
+        @investigation.reported_reason = why_reporting_form.reported_reason
         @investigation.reported_reason = why_reporting_form.reported_reason
       end
       form_valid
