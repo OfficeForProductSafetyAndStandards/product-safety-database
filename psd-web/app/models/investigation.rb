@@ -20,7 +20,7 @@ class Investigation < ApplicationRecord
   validates_length_of :hazard_description, maximum: 10000
 
   after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
-               :create_audit_activity_for_visibility, :create_audit_activity_for_summary
+               :create_audit_activity_for_visibility, :create_audit_activity_for_summary, :reindex_search
 
   default_scope { order(updated_at: :desc) }
 
@@ -50,7 +50,7 @@ class Investigation < ApplicationRecord
 
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
-  after_create :create_audit_activity_for_case, :send_confirmation_email
+  after_create :create_audit_activity_for_case, :send_confirmation_email, :reindex_search
 
   def assignee
     begin
@@ -226,6 +226,10 @@ private
         case_type
       ).deliver_later
     end
+  end
+
+  def reindex_search
+    Search::Index.update_index
   end
 end
 
