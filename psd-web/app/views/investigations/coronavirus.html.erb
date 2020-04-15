@@ -1,6 +1,6 @@
 <%- page_heading = "Is this case related to the coronavirus outbreak?" %>
 
-<%= page_title page_heading, errors: @investigation.errors.any? %>
+<%= page_title page_heading, errors: @coronavirus_related_form.errors.any? %>
 
 <%= banner do %>
   <p>Coronavirus (COVID-19): OPSS is urging all market surveillance authorities to prioritise coronavirus-related cases above other work.</p>
@@ -9,11 +9,11 @@
 <%= form_with scope: scope, model: @coronavirus_related_form, url: wizard_path, method: :put, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary @investigation.errors  %>
+      <%= error_summary @coronavirus_related_form.errors  %>
       <% if unsafe_product_message %>
         <span class="govuk-caption-l">Report an unsafe or non-compliant product</span>
       <% end %>
-
+      <%= form.hidden_field :coronavirus_related %>
       <%= render "form_components/govuk_radios", form: form, key: :coronavirus_related,
               fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
               hint: { text: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)" },
