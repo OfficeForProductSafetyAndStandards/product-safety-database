@@ -47,11 +47,7 @@ class UsersController < ApplicationController
 private
 
   def redirect_user
-    return redirect_to root_path unless Rails.configuration.two_factor_authentication_enabled
-
-    warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-    @user.send_new_otp
-    redirect_to user_two_factor_authentication_path
+    return redirect_to root_path
   end
 
   def new_user_attributes

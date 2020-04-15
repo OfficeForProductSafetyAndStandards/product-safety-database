@@ -21,5 +21,5 @@ RSpec.shared_context "with stubbed otp sms", shared_context: :metadata do
 end
 
 RSpec.configure do |rspec|
-  rspec.include_context "with stubbed otp sms", with_stubbed_otp_sms: true
+  # rspec.include_context "with stubbed otp sms", with_stubbed_otp_sms: true
 end
