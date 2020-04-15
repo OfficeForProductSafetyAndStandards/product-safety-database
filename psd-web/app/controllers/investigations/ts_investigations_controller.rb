@@ -47,6 +47,11 @@ class Investigations::TsInvestigationsController < ApplicationController
     %i[risk_assessments product_images evidence_images other_files].include? step
   end
 
+
+  before_action :set_new_coronavirus_form, only: :show,   if: -> { step == :coronavirus }
+  after_action  :store_investigation,      only: :update, if: -> { step == :coronavirus }
+
+
   #GET /xxx/step
   def show
     case step
@@ -457,11 +462,23 @@ private
     end
   end
 
+  def coronavirus_related_form
+    @coronavirus_related_form ||= CoronavirusRelatedForm.new(params.require(:investigation).permit(:coronavirus_related))
+  end
+
+  def set_coronavirus_info_from_form
+    if coronavirus_related_form.valid?
+      @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
+    end
+  end
+
   def records_valid?
     case step
     when :coronavirus
-      # Ideally we would only validate the coronavirus_related attribute here, but there are currently no other validations and this is simpler
-      @investigation.validate
+      if (form_valid = coronavirus_related_form.valid?)
+        @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
+      end
+      return form_valid
     when :product
       @product.validate
     when :why_reporting
@@ -584,5 +601,9 @@ private
   def clear_repeat_step
     @repeat_step = nil
     session.delete further_key(step)
+  end
+
+  def set_new_coronavirus_form
+    @coronavirus_related_form = CoronavirusRelatedForm.new
   end
 end

@@ -166,6 +166,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_case_details_page
         expect_case_details_page_to_show_entered_information
 
+        expect(page.find("dt.govuk-summary-list__key", text: "Coronavirus related")).to have_sibling("dd.govuk-summary-list__value", text: "Not a coronavirus related case")
+
         click_link "Products (1)"
 
         expect_to_be_on_case_products_page
