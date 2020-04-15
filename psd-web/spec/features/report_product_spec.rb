@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }
@@ -80,22 +80,21 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   context "when signed in as a non-OPSS user" do
     let(:user) { create(:user, :activated, :viewed_introduction, :psd_user) }
+    let(:product_details) do
+      {
+        name: Faker::Lorem.sentence,
+        barcode: Faker::Number.number(digits: 10),
+        category: Rails.application.config.product_constants["product_category"].sample,
+        type: Faker::Appliance.equipment,
+        webpage: Faker::Internet.url,
+        country_of_origin: Country.all.sample.first,
+        description: Faker::Lorem.sentence
+      }
+    end
 
     before { sign_in user }
 
     context "with full details" do
-      let(:product_details) do
-        {
-          name: Faker::Lorem.sentence,
-          barcode: Faker::Number.number(digits: 10),
-          category: Rails.application.config.product_constants["product_category"].sample,
-          type: Faker::Appliance.equipment,
-          webpage: Faker::Internet.url,
-          country_of_origin: Country.all.sample.first,
-          description: Faker::Lorem.sentence
-        }
-      end
-
       let(:coronavirus) { false }
 
       scenario "not coronavirus-related" do
@@ -108,7 +107,12 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         fill_in_product_page(with: product_details)
 
         expect_to_be_on_why_reporting_page
-        fill_in_why_reporting_page(reporting_reasons: ["It’s unsafe (or suspected to be)", "It’s non-compliant (or suspected to be)"],hazard_type: hazard_type, hazard_description: hazard_description, non_compliance_details: non_compliance_details)
+        fill_in_why_reporting_page(
+          reporting_reasons: ["It’s unsafe (or suspected to be)", "It’s non-compliant (or suspected to be)"],
+          hazard_type: hazard_type,
+          hazard_description: hazard_description,
+          non_compliance_details: non_compliance_details
+        )
 
         expect_to_be_on_supply_chain_page
         fill_in_supply_chain_page
@@ -210,8 +214,57 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       })
 
       expect_to_be_on_why_reporting_page
+
       fill_in_why_reporting_page(reporting_reasons: ["It’s safe"])
 
+      click_on "Continue"
+
+      expect_to_be_on_supply_chain_page
+      fill_in_supply_chain_page
+
+      expect_to_be_on_business_details_page("Retailer")
+      fill_in_business_details_page(with: business_details[:retailer])
+
+      expect_to_be_on_business_details_page("Distributor")
+      skip_page
+
+      expect_to_be_on_business_details_page("Advertiser")
+      fill_in_business_details_page(with: business_details[:advertiser])
+
+      expect_to_be_on_corrective_action_taken_page
+      fill_in_corrective_action_taken_page
+
+      expect_to_be_on_record_corrective_action_page
+      skip_page
+
+      expect_to_be_on_other_information_page
+      fill_in_other_information_page
+
+      expect_to_be_on_test_result_details_page
+
+      test_results.each do |result|
+        fill_in_test_results_page(with: result)
+        expect_to_be_on_test_result_details_page
+      end
+
+      skip_page
+
+      expect_to_be_on_risk_assessment_details_page
+
+      risk_assessments.each do |assessment|
+        fill_in_risk_assessment_details_page(with: assessment)
+        expect_to_be_on_risk_assessment_details_page
+      end
+
+      skip_page
+
+      expect_to_be_on_reference_number_page
+      fill_in_reference_number_page(reference_number)
+
+      expect_to_be_on_case_created_page
+
+      click_link "View case"
+      expect_to_be_on_reported_safe_overview_case_page
     end
 
     context "with minimum details" do
@@ -582,5 +635,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def skip_page
     click_button "Skip this page"
+  end
+
+  def expect_to_be_on_reported_safe_overview_case_page
+    expect(page.find("h2", text: "Summary")).to have_sibling("p", text: "Product reported because it is safe and compliant.")
   end
 end
