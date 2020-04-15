@@ -5,7 +5,7 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <%= govukSummaryList(rows: [
+    <%= govukSummaryList(classes: "app-summary-list--key-weight-regular", rows: [
       {
         key: {text: "Name"},
         value: {text: current_user.name },
