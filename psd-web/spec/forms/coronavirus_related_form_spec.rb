@@ -29,5 +29,17 @@ RSpec.describe CoronavirusRelatedForm do
         expect(form.errors.full_messages_for(:coronavirus_related)).to be_empty
       end
     end
+
+    describe "when the coronavirus option is not true or false" do
+      let(:coronavirus_related) { "foobar" }
+
+      it "is not valid" do
+        expect(form).to be_invalid
+      end
+
+      it "populates an error message" do
+        expect(form.errors.full_messages_for(:coronavirus_related)).to eq(["Select whether or not the case is related to the coronavirus outbreak"])
+      end
+    end
   end
 end
