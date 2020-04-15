@@ -6,6 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include TestsHelper
   include FileConcern
+  include CoronavirusForm
   set_attachment_names :file
   set_file_params_key :file
 
@@ -36,6 +37,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
+  after_action  :store_investigation, only: :update, if: -> { step == :coronavirus }
   before_action :store_why_reporting, only: %i[update], if: -> { step == :why_reporting }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
@@ -46,11 +48,6 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_file, only: %i[update], if: -> do
     %i[risk_assessments product_images evidence_images other_files].include? step
   end
-
-
-  before_action :set_new_coronavirus_form, only: :show,   if: -> { step == :coronavirus }
-  after_action  :store_investigation,      only: :update, if: -> { step == :coronavirus }
-
 
   #GET /xxx/step
   def show
@@ -459,16 +456,6 @@ private
       "corrective action"
     else
       "further " + key.to_s.humanize(capitalize: false)
-    end
-  end
-
-  def coronavirus_related_form
-    @coronavirus_related_form ||= CoronavirusRelatedForm.new(params.require(:investigation).permit(:coronavirus_related))
-  end
-
-  def set_coronavirus_info_from_form
-    if coronavirus_related_form.valid?
-      @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
     end
   end
 
