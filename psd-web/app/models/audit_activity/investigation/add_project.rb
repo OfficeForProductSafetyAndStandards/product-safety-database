@@ -8,8 +8,9 @@ class AuditActivity::Investigation::AddProject < AuditActivity::Investigation::A
   end
 
   def self.build_body(investigation)
-    body =  "**Project details**<br><br>"
-    body += (self.sanitize_text investigation.description).to_s if investigation.description.present?
+    body =  "**Project details**<br>"
+    body += "<br>Case is related to the coronavirus outbreak.<br>" if investigation.coronavirus_related?
+    body += "<br>#{self.sanitize_text investigation.description}" if investigation.description.present?
     body += self.build_assignee_details(investigation) if investigation.assignee.present?
     body
   end
