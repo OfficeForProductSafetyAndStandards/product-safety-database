@@ -1,6 +1,7 @@
 class Investigations::CreationFlowController < ApplicationController
   include FileConcern
   include Wicked::Wizard
+  include CoronavirusForm
 
   before_action :set_page_title, only: %i[show create update]
   before_action :set_complainant, only: %i[show create update]
@@ -94,10 +95,14 @@ private
     session[model_key] = @investigation.attributes if @investigation.valid?(step)
   end
 
+  def coronvirus_form_params
+    params.require(@model_key).permit(:coronavirus_related)
+  end
+
   def investigation_valid?
     case step
     when :coronavirus
-      @investigation.validate(step)
+      return assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
     when :about_enquiry
       if params[:enquiry][:received_type].nil?
         @investigation.errors.add(:received_type, "Select a type")
@@ -136,20 +141,13 @@ private
     session[model_key] || {}
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def complainant_request_params
     return {} if params[:complainant].blank?
 
     params.require(:complainant).permit(:complainant_type, :name, :phone_number, :email_address, :other_details)
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def investigation_request_params
-    # This must be done first because the browser will send no params if no radio is selected
-    if step == :coronavirus
-      params[model_key] ||= { coronavirus_related: nil }
-    end
-
     return {} if params[model_key].blank?
 
     params.require(model_key).permit(model_params)

@@ -459,13 +459,14 @@ private
     end
   end
 
+  def coronvirus_form_params
+    params.require(:investigation).permit(:coronavirus_related)
+  end
+
   def records_valid?
     case step
     when :coronavirus
-      if (form_valid = coronavirus_related_form.valid?)
-        @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
-      end
-      return form_valid
+      return assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
     when :product
       @product.validate
     when :why_reporting
@@ -588,9 +589,5 @@ private
   def clear_repeat_step
     @repeat_step = nil
     session.delete further_key(step)
-  end
-
-  def set_new_coronavirus_form
-    @coronavirus_related_form = CoronavirusRelatedForm.new
   end
 end

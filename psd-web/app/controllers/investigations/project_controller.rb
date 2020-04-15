@@ -1,10 +1,10 @@
 class Investigations::ProjectController < ApplicationController
   include Wicked::Wizard
-
+  include CoronavirusForm
   steps :coronavirus, :project_details
 
   before_action :set_investigation, only: %i[show new create update]
-  before_action :set_new_coronavirus_form, only: :show, if: -> { step == :coronavirus }
+  before_action :set_coronavirus_info_from_form, only: :update, if: -> { step == :coronavirus }
 
   #GET /xxx/step
   def show
@@ -29,7 +29,6 @@ class Investigations::ProjectController < ApplicationController
 
   # PATCH/PUT /xxx
   def update
-    set_coronavirus_info_from_form if step == :coronavirus
     return render_wizard unless @investigation.valid?(step)
 
     session[:investigation] = @investigation.attributes
@@ -61,17 +60,11 @@ private
     @investigation = Investigation::Project.new(investigation_params).decorate
   end
 
-  def set_new_coronavirus_form
-    @coronavirus_related_form = CoronavirusRelatedForm.new
-  end
-
-  def coronavirus_related_form
-    @coronavirus_related_form ||= CoronavirusRelatedForm.new(params.require(:investigation).permit(:coronavirus_related))
+  def coronvirus_form_params
+    params.require(:investigation).permit(:coronavirus_related)
   end
 
   def set_coronavirus_info_from_form
-    if coronavirus_related_form.valid?
-      @investigation.coronavirus_related = coronavirus_related_form.coronavirus_related
-    end
+    assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
   end
 end
