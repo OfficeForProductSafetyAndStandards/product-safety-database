@@ -2,6 +2,11 @@ class SecondaryAuthentication < ApplicationRecord
   DEFAULT_OPERATION = "secondary_authentication"
   RESET_PASSWORD_OPERATION = "reset_password"
 
+  TIMEOUTS = {
+    DEFAULT_OPERATION => 7 * 24 * 3600, # 7 days
+    RESET_PASSWORD_OPERATION => 300, # 5 minutes
+  }
+
   OTP_LENGTH = 6
 
   attr_accessor :otp_code
@@ -25,20 +30,15 @@ class SecondaryAuthentication < ApplicationRecord
   # raises exception
   def authenticate!
     raise "secondary authentication failed" unless otp_code == direct_otp
-    update(authenticated: true)
+    update(authenticated: true, authentication_expires_at: (Time.now.utc + expiry_seconds.seconds))
   end
 
   def expired?
-    direct_otp_sent_at < (Time.now.utc - valid_for_seconds.seconds)
+    Time.now.utc > authentication_expires_at
   end
 
-  # TODO: make dependend from operation type
-  def valid_for_seconds
-    candidate = {
-      "passwords/edit" => 300,
-    }[self.operation]
-
-    candidate || 300
+  def expiry_seconds
+    TIMEOUTS[self.operation]
   end
 
   private
