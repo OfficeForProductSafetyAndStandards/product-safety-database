@@ -32,8 +32,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).to have_css("h1", text: "Check your phone")
 
     # TODO: use proper mock
-    code = SecondaryAuthentication.last.direct_otp
-    fill_in "Enter security code", with: code#user.reload.direct_otp
+    fill_in "Enter security code", with: otp_code
     click_on "Continue"
 
     expect(page).to have_css("h2", text: "Your cases")
@@ -60,7 +59,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
     expect(page).to have_css("h1", text: "Check your phone")
 
-    fill_in "Enter security code", with: user.reload.direct_otp.reverse
+    fill_in "Enter security code", with: otp_code.reverse
     click_on "Continue"
 
     expect(page).to have_css("h1", text: "Check your phone")
@@ -75,7 +74,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     scenario "user gets locked and uses the unlock link received by email" do
       visit "/sign-in"
       fill_in_credentials
-      fill_in "Enter security code", with: user.reload.direct_otp
+      fill_in "Enter security code", with: otp_code
       click_on "Continue"
       expect(page).to have_link("Sign out", href: destroy_user_session_path)
       within(".psd-header__secondary-navigation") do
@@ -93,7 +92,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
       expect(page).to have_css("h1", text: "Check your phone")
 
-      fill_in "Enter security code", with: user.reload.direct_otp
+      fill_in "Enter security code", with: otp_code
       click_on "Continue"
 
       fill_in_credentials
@@ -108,7 +107,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
       visit "/sign-in"
       fill_in_credentials
-      fill_in "Enter security code", with: user.reload.direct_otp
+      fill_in "Enter security code", with: otp_code
       click_on "Continue"
 
       expect(page).to have_css("h2", text: "Your cases")
@@ -136,7 +135,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
       expect(page).to have_css("h1", text: "Check your phone")
 
-      fill_in "Enter security code", with: user.reload.direct_otp
+      fill_in "Enter security code", with: otp_code
       click_on "Continue"
 
       expect(page).to have_css("h1", text: "Create a new password")
@@ -215,5 +214,9 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
     expect(page).to have_css(".govuk-error-message", text: "Enter your password")
     expect(page).to have_css(".govuk-error-summary__list", text: "Enter your password")
+  end
+
+  def otp_code
+    SecondaryAuthentication.last.direct_otp
   end
 end
