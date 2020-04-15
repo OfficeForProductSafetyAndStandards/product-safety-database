@@ -130,6 +130,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_details_on_activity_page(contact, enquiry)
     expect(page).to have_text("Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
+    expect(page).to have_text("Case is related to the coronavirus outbreak.")
     expect(page).to have_text(enquiry.fetch(:enquiry_description))
     expect(page).to have_text("Attachment: testImage.png")
     expect(page).to have_text("Name: #{contact.fetch(:contact_name)}")
