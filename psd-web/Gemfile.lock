@@ -155,7 +155,7 @@ GEM
       elasticsearch-transport (= 6.8.1)
     elasticsearch-api (6.8.1)
       multi_json
-    elasticsearch-model (6.0.0)
+    elasticsearch-model (7.1.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
@@ -559,7 +559,7 @@ DEPENDENCIES
   dotenv-rails
   draper
   elasticsearch (= 6.8.1)
-  elasticsearch-model (= 6.0.0)
+  elasticsearch-model (= 7.1.0)
   elasticsearch-rails (= 6.0.0)
   factory_bot_rails
   faker
