@@ -467,10 +467,7 @@ private
     when :product
       @product.validate
     when :why_reporting
-      if (form_valid = why_reporting_form.valid?)
-        why_reporting_form.assign_to(@investigation)
-      end
-      return form_valid
+      return assigns_why_reporting_from_form(why_reporting_form)
     when :which_businesses
       validate_none_as_only_selection
       @investigation.errors.add(:which_business, "Indicate which if any business is known") if no_business_selected
@@ -493,6 +490,14 @@ private
       end
     end
     @investigation.errors.empty? && @product.errors.empty?
+  end
+
+  def assigns_why_reporting_from_form(why_reporting_form)
+    if (form_valid = why_reporting_form.valid?)
+      why_reporting_form.assign_to(@investigation)
+    end
+
+    form_valid
   end
 
   def validate_none_as_only_selection
