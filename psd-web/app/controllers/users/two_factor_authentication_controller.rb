@@ -46,7 +46,7 @@ module Users
   private
 
     def otp_code_param
-      @otp_code_param ||= resource_params.permit(:otp_code)[:otp_code]
+      @otp_code_param ||= resource_params.permit(:otp_code)[:otp_code].strip
     end
 
     # Suppress unwanted Devise alert.
