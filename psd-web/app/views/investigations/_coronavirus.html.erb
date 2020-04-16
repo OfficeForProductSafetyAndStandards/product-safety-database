@@ -2,13 +2,15 @@
 
 <%= page_title page_heading, errors: @coronavirus_related_form.errors.any? %>
 
-<%= form_with scope: scope, model: @coronavirus_related_form, url: wizard_path, method: :put, local: true do |form| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary @coronavirus_related_form.errors  %>
-      <% if defined?(caption) %>
-        <span class="govuk-caption-l"><%= caption %></span>
-      <% end %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= error_summary @coronavirus_related_form.errors  %>
+
+    <% if defined?(caption) %>
+      <span class="govuk-caption-l"><%= caption %></span>
+    <% end %>
+
+    <%= form_with scope: scope, model: @coronavirus_related_form, url: wizard_path, method: :put, local: true do |form| %>
       <%= form.hidden_field :coronavirus_related %>
       <%= render "form_components/govuk_radios", form: form, key: :coronavirus_related,
               fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
@@ -17,6 +19,6 @@
                       { text: "No, this is business as usual", value: "false" }] %>
 
       <%= govukButton(text: "Continue") %>
-    </div>
+    <% end %>
   </div>
-<% end %>
+</div>
