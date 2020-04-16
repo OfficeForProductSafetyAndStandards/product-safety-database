@@ -45,6 +45,10 @@ class SecondaryAuthentication < ApplicationRecord
     TIMEOUTS[self.operation]
   end
 
+  def try_to_verify_user_mobile_number
+    user = User.find(self.user_id)
+    user.update(mobile_number_verified: true) unless user.mobile_number_verified
+  end
   private
 
   def random_base10(digits)

@@ -12,6 +12,7 @@ class SecondaryAuthenticationsController < ActionController::Base
     @auth.otp_code = params[:secondary_authentication][:otp_code]
     @auth.authenticate!
 
+    @auth.try_to_verify_user_mobile_number
     set_secondary_authentication_cookie_for(@auth)
     # redirect to saved path
     if session[:secondary_authentication_redirect_to]

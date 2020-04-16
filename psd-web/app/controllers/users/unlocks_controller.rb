@@ -29,6 +29,9 @@ module Users
 
     def user_id_for_secondary_authentication
       user_with_unlock_token.id
+     rescue ActiveRecord::RecordNotFound
+      render "invalid_link", status: :not_found
+      return nil
     end
 
     def current_operation

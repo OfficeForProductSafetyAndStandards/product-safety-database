@@ -14,7 +14,7 @@ module SecondaryAuthenticationConcern
   end
 
   def perform_secondary_authentication
-    unless secondary_authentication_present_for_operation_and_user
+    if user_id_for_secondary_authentication && !secondary_authentication_present_for_operation_and_user
       session[:secondary_authentication_redirect_to] = request.fullpath
       auth = SecondaryAuthentication.create(user_id: user_id_for_secondary_authentication, operation: current_operation)
       auth.generate_and_send_code

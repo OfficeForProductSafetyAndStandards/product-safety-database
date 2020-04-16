@@ -6,13 +6,11 @@ module Users
                        :has_viewed_introduction,
                        only: %i(edit sign_out_before_resetting_password)
 
-    skip_before_action :require_secondary_authentication, only: [:new, :create]
+    skip_before_action :require_secondary_authentication
+    before_action :secondary_authentication_before_edit, only: :edit
+    before_action :secondary_authentication_before_update, only: :update
 
     def edit
-      return render :invalid_link, status: :not_found if reset_token_invalid?
-      return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
-      return render :expired, status: :gone if reset_token_expired?
-
       @email = user_with_reset_token.email
 
       super
@@ -56,6 +54,17 @@ module Users
 
   private
 
+    def secondary_authentication_before_edit
+      return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
+      return render :invalid_link, status: :not_found if reset_token_invalid?
+      return render :expired, status: :gone if reset_token_expired?
+      require_secondary_authentication
+    end
+
+    def secondary_authentication_before_update
+      require_secondary_authentication
+    end
+
     def wrong_user?
       user_signed_in? && current_user != user_with_reset_token
     end
@@ -72,6 +81,7 @@ module Users
     end
 
     def reset_token_invalid?
+      # return render :expired, status: :gone if reset_token_expired?
       params[:reset_password_token].blank? || user_with_reset_token.blank?
     end
 

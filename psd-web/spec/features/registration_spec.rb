@@ -16,6 +16,9 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     sign_in(admin)
 
     visit "/teams/#{team.id}/invite"
+
+    enter_two_factor_authentication_code(otp_code)
+
     invite_user_to_team
 
     expect_user_invited_successfully
@@ -29,7 +32,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
     expect_to_be_on_two_factor_authentication_page
 
-    enter_two_factor_authentication_code(invitee.reload.direct_otp)
+    enter_two_factor_authentication_code(otp_code)
 
     expect_to_be_on_declaration_page
   end
@@ -62,5 +65,9 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
   def expect_to_be_on_declaration_page
     expect(page).to have_title("Declaration - Product safety database - GOV.UK")
+  end
+
+  def otp_code
+    SecondaryAuthentication.last.direct_otp
   end
 end
