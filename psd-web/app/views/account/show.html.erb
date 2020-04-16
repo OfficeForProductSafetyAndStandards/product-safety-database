@@ -39,7 +39,7 @@
           key: { text: "Your #{current_user.teams.size == 1 ? 'team' : 'teams'}" },
           value: {
             text: current_user.teams.collect do |team|
-              link_to(team.name, team)
+              link_to(team.name, team, class: "govuk-link")
             end.to_sentence.html_safe
           }
         }
