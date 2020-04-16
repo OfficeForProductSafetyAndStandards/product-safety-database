@@ -3,7 +3,7 @@
 <%= page_title page_heading, errors: @coronavirus_related_form.errors.any? %>
 
 <%= banner do %>
-  <p>Coronavirus (COVID-19): OPSS is urging all market surveillance authorities to prioritise coronavirus-related cases above other work.</p>
+  <p class="govuk-body">Coronavirus (COVID-19): OPSS is urging all market surveillance authorities to prioritise coronavirus-related cases above other work.</p>
 <% end %>
 
 <%= form_with scope: scope, model: @coronavirus_related_form, url: wizard_path, method: :put, local: true do |form| %>
