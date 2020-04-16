@@ -31,6 +31,10 @@ Rails.application.routes.draw do
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
 
+  resource :account, only: [:show], controller: :account do
+    resource :name, controller: :account_name, only: %i[show update]
+  end
+
   resources :users, only: [:update] do
     member do
       get "complete-registration", action: :complete_registration

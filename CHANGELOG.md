@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-04-15
+- Added Your account page and ability to change your name
+
 ## 2020-04-07
 - Added ability to edit the coronavirus related flag
 
