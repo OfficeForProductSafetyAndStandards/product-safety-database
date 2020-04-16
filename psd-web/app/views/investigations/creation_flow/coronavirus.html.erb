@@ -2,5 +2,5 @@
   <%= govukBackLink text: "Back to Cases", href: investigations_path(previous_search_params) %>
 <% end %>
 
-<%= render template: "investigations/coronavirus",
+<%= render partial: "investigations/coronavirus",
     locals: { scope: @model_key, unsafe_product_message: false } %>
