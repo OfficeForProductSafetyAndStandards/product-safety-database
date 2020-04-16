@@ -52,7 +52,6 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   #GET /xxx/step
   def show
-    logger.ap session.to_h
     case step
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
