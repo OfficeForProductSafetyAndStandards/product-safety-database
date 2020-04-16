@@ -459,14 +459,14 @@ private
     end
   end
 
-  def coronvirus_form_params
+  def coronavirus_form_params
     params.require(:investigation).permit(:coronavirus_related)
   end
 
   def records_valid?
     case step
     when :coronavirus
-      return assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
+      return assigns_coronavirus_related_from_form(@investigation, coronavirus_form_params)
     when :product
       @product.validate
     when :why_reporting

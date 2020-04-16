@@ -95,14 +95,14 @@ private
     session[model_key] = @investigation.attributes if @investigation.valid?(step)
   end
 
-  def coronvirus_form_params
+  def coronavirus_form_params
     params.require(@model_key).permit(:coronavirus_related)
   end
 
   def investigation_valid?
     case step
     when :coronavirus
-      return assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
+      return assigns_coronavirus_related_from_form(@investigation, coronavirus_form_params)
     when :about_enquiry
       if params[:enquiry][:received_type].nil?
         @investigation.errors.add(:received_type, "Select a type")

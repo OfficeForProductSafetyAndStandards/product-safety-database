@@ -59,13 +59,13 @@ private
     @investigation = Investigation::Project.new(investigation_params).decorate
   end
 
-  def coronvirus_form_params
+  def coronavirus_form_params
     params.require(:investigation).permit(:coronavirus_related)
   end
 
   def investigation_valid?
     if step == :coronavirus
-      assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
+      assigns_coronavirus_related_from_form(@investigation, coronavirus_form_params)
     else
       @investigation.valid?(step)
     end
