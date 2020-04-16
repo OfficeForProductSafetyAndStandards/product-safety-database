@@ -4,7 +4,6 @@ class Investigations::ProjectController < ApplicationController
   steps :coronavirus, :project_details
 
   before_action :set_investigation, only: %i[show new create update]
-  before_action :set_coronavirus_info_from_form, only: :update, if: -> { step == :coronavirus }
 
   #GET /xxx/step
   def show
@@ -29,7 +28,7 @@ class Investigations::ProjectController < ApplicationController
 
   # PATCH/PUT /xxx
   def update
-    return render_wizard unless @investigation.valid?(step)
+    return render_wizard unless investigation_valid?
 
     session[:investigation] = @investigation.attributes
 
@@ -64,7 +63,11 @@ private
     params.require(:investigation).permit(:coronavirus_related)
   end
 
-  def set_coronavirus_info_from_form
-    assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
+  def investigation_valid?
+    if step == :coronavirus
+      assigns_coronavirus_related_from_form(@investigation, coronvirus_form_params)
+    else
+      @investigation.valid?(step)
+    end
   end
 end
