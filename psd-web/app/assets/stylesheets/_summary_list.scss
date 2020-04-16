@@ -1,0 +1,8 @@
+// Summary list (https://design-system.service.gov.uk/components/summary-list/)
+
+// Override to make the keys appear in regular font weight
+.app-summary-list--key-weight-regular {
+  .govuk-summary-list__key {
+    @include govuk-typography-weight-regular;
+  }
+}
