@@ -27,38 +27,6 @@ RSpec.describe WhyReportingForm do
     end
   end
 
-  describe "#reported_reason" do
-    context "when setting only unsafe to true" do
-      let(:why_reporting_params) { { reported_reason_unsafe: true } }
-
-      it { expect(form.reported_reason).to eq(Investigation.reported_reasons[:unsafe]) }
-    end
-
-    context "when setting only non_compliant to true" do
-      let(:why_reporting_params) { { reported_reason_non_compliant: true } }
-
-      it { expect(form.reported_reason).to eq(Investigation.reported_reasons[:non_compliant]) }
-    end
-
-    context "when setting unsafe and non_compliant to true" do
-      let(:why_reporting_params) { { reported_reason_unsafe: true, reported_reason_non_compliant: true } }
-
-      it { expect(form.reported_reason).to eq(Investigation.reported_reasons[:unsafe_and_non_compliant]) }
-    end
-
-    context "when setting only safe_and_compliant to true" do
-      let(:why_reporting_params) { { reported_reason_safe_and_compliant: true } }
-
-      it { expect(form.reported_reason).to eq(Investigation.reported_reasons[:safe_and_compliant]) }
-    end
-
-    context "when not setting any reported_reason properties to true" do
-      let(:form) { described_class.new }
-
-      it { expect(form.reported_reason).to be nil }
-    end
-  end
-
   describe "#assign_to" do
     let(:investigation)        { build(:project) }
     let(:hazard_type)          { Faker::Lorem.word }
@@ -66,27 +34,67 @@ RSpec.describe WhyReportingForm do
     let(:non_compliant_reason) { Faker::Lorem.paragraph }
     let(:why_reporting_params) do
       {
-        reported_reason_unsafe: true,
-        reported_reason_non_compliant: true,
-        hazard_type: hazard_type,
-        hazard_description: hazard_description,
-        non_compliant_reason: non_compliant_reason
+        hazard_type:                   hazard_type,
+        hazard_description:            hazard_description,
+        non_compliant_reason:          non_compliant_reason
       }
     end
     let(:expected_assigned_attributes) do
       {
-        reported_reason: Investigation.reported_reasons[:unsafe_and_non_compliant],
-        hazard_type: hazard_type,
-        hazard_description: hazard_description,
-        non_compliant_reason: non_compliant_reason
+        reported_reason:      reported_reason,
+        hazard_type:          hazard_type,
+        hazard_description:   hazard_description,
+        non_compliant_reason: non_compliant_reason,
+        description:          description
       }
     end
 
-    it "assign all the relevant attributes to the investigation", :aggregate_failures do
-      expect(form).to be_valid
-      form.assign_to(investigation)
+    shared_examples "assigns the correct attributes to the investigation" do
+      it "assign all the relevant attributes to the investigation", :aggregate_failures do
+        expect(form).to be_valid
+        form.assign_to(investigation)
 
-      expect(investigation).to have_attributes(expected_assigned_attributes)
+        expect(investigation).to have_attributes(expected_assigned_attributes)
+      end
+    end
+
+    context "when reporting unsafe" do
+      let(:reported_reason) { Investigation.reported_reasons[:unsafe] }
+      let(:description)     { "Product reported because it is unsafe." }
+
+      before { why_reporting_params[:reported_reason_unsafe] = true }
+
+      it_behaves_like "assigns the correct attributes to the investigation"
+    end
+
+    context "when reporting non compliant to" do
+      let(:reported_reason) { Investigation.reported_reasons[:non_compliant] }
+      let(:description) { "Product reported because it is non-compliant." }
+
+      before { why_reporting_params[:reported_reason_non_compliant] = true }
+
+      it_behaves_like "assigns the correct attributes to the investigation"
+    end
+
+    context "when reporting unsafe and non compliant" do
+      let(:reported_reason) { Investigation.reported_reasons[:unsafe_and_non_compliant] }
+      let(:description) { "Product reported because it is unsafe and non-compliant." }
+
+      before do
+        why_reporting_params[:reported_reason_unsafe]        = true
+        why_reporting_params[:reported_reason_non_compliant] = true
+      end
+
+      it_behaves_like "assigns the correct attributes to the investigation"
+    end
+
+    context "when reporting safe and compliant" do
+      let(:reported_reason) { Investigation.reported_reasons[:safe_and_compliant] }
+      let(:description) { "Product reported because it is safe and compliant." }
+
+      before { why_reporting_params[:reported_reason_safe_and_compliant] = true }
+
+      it_behaves_like "assigns the correct attributes to the investigation"
     end
   end
 end

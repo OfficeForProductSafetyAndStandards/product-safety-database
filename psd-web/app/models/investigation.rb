@@ -167,15 +167,6 @@ class Investigation < ApplicationRecord
     false
   end
 
-  def reason_created
-    return "Product reported because it is unsafe and non-compliant." if reported_reason == :unsafe_and_non_compliant
-    return "Product reported because it is unsafe." if reported_reason == :unsafe
-
-    return "Product reported because it is non-compliant." if reported_reason == :non_compliant
-
-    "Product reported because it is safe and compliant."
-  end
-
 private
 
   def create_audit_activity_for_case
