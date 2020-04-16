@@ -105,7 +105,6 @@ private
 
   def set_investigation
     @investigation = Investigation.new(investigation_step_params)
-    @investigation.description = @investigation.reason_created if step == :why_reporting
   end
 
   def set_selected_businesses
