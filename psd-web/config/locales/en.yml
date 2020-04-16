@@ -48,6 +48,9 @@ en:
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "%{case_title} was successfully updated."
+    ts_investigations:
+      coronavirus:
+        caption: "Report an unsafe or non-compliant product"
   audit_activity:
     investigation:
       update_coronavirus_status:
