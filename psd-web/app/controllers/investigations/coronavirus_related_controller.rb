@@ -13,7 +13,7 @@ module Investigations
       @investigation.coronavirus_related = @coronavirus_related_form.coronavirus_related
 
       if @investigation.coronavirus_related_changed?
-        @investigation.save
+        @investigation.save!
         AuditActivity::Investigation::UpdateCoronavirusStatus.from(@investigation)
         flash[:success] = I18n.t(".success", scope: "investigations.coronavirus_related", case_title: @investigation.case_type.titleize)
       end
