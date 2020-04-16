@@ -1,4 +1,4 @@
-module CoronavirusForm
+module FlowWithCoronavirusForm
   extend ActiveSupport::Concern
 
   included do

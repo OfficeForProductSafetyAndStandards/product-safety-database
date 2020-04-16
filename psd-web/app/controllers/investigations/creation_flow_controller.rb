@@ -1,7 +1,7 @@
 class Investigations::CreationFlowController < ApplicationController
   include FileConcern
   include Wicked::Wizard
-  include CoronavirusForm
+  include FlowWithCoronavirusForm
 
   before_action :set_page_title, only: %i[show create update]
   before_action :set_complainant, only: %i[show create update]

@@ -1,6 +1,6 @@
 class Investigations::ProjectController < ApplicationController
   include Wicked::Wizard
-  include CoronavirusForm
+  include FlowWithCoronavirusForm
   steps :coronavirus, :project_details
 
   before_action :set_investigation, only: %i[show new create update]

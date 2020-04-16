@@ -6,7 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include TestsHelper
   include FileConcern
-  include CoronavirusForm
+  include FlowWithCoronavirusForm
   set_attachment_names :file
   set_file_params_key :file
 
