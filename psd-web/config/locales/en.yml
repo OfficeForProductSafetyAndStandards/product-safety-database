@@ -168,8 +168,6 @@ en:
               blank: "Enter a valid hazard type"
             product_category:
               blank: "Enter a valid product category"
-            coronavirus_related:
-              inclusion: "Select whether or not the case is related to the coronavirus outbreak"
         product:
           attributes:
             product_category:
@@ -196,6 +194,8 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  coronavirus_related_form:
+    inclusion: "Select whether or not the case is related to the coronavirus outbreak"
   enter_email_address: "Enter your email address"
   otp_code:
     blank: "Enter the security code"
