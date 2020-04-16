@@ -19,8 +19,10 @@ module PageMatchers
     end
   end
 
-  # Deprecated: remove once all summary lists have been switched to definition list markup
+
+  # TODO: remove once all summary lists have been switched to definition list markup
   def have_summary_table_item(key:, value:)
+    Rails.logger.warn "#have_summary_table_item is deprecated: use #have_summary_item instead"
     HaveSummaryItem.new(key: key, value: value, table: true)
   end
 
