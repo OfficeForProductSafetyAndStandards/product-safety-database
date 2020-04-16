@@ -6,6 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include TestsHelper
   include FileConcern
+  include FlowWithCoronavirusForm
   set_attachment_names :file
   set_file_params_key :file
 
@@ -36,6 +37,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
+  after_action  :store_investigation, only: :update, if: -> { step == :coronavirus }
   before_action :store_why_reporting, only: %i[update], if: -> { step == :why_reporting }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
@@ -457,11 +459,14 @@ private
     end
   end
 
+  def coronavirus_form_params
+    params.require(:investigation).permit(:coronavirus_related)
+  end
+
   def records_valid?
     case step
     when :coronavirus
-      # Ideally we would only validate the coronavirus_related attribute here, but there are currently no other validations and this is simpler
-      @investigation.validate
+      return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
     when :product
       @product.validate
     when :why_reporting

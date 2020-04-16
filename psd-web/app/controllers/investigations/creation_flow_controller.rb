@@ -5,10 +5,14 @@ class Investigations::CreationFlowController < ApplicationController
   before_action :set_page_title, only: %i[show create update]
   before_action :set_complainant, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
+  before_action :set_model_key, only: %i[show update]
   before_action :set_attachment, only: %i[show create update]
   before_action :update_attachment, only: %i[create update]
   before_action :store_investigation, only: %i[update]
-  before_action :store_complainant, only: %i[update], if: -> { step != :about_enquiry }
+  before_action :store_complainant, only: %i[update], unless: -> { %i[coronavirus about_enquiry].include? step }
+
+  # We need model key to be set before setting form parameters
+  include FlowWithCoronavirusForm
 
   # GET /xxx/step
   def show
@@ -26,7 +30,7 @@ class Investigations::CreationFlowController < ApplicationController
     if investigation_saved?
       redirect_to investigation_path(@investigation), flash: { success: success_message }
     else
-      render step
+      render_wizard
     end
   end
 
@@ -40,7 +44,7 @@ class Investigations::CreationFlowController < ApplicationController
         redirect_to next_wizard_path
       end
     else
-      render step
+      render_wizard
     end
   end
 
@@ -80,6 +84,10 @@ private
     @file_blob, * = load_file_attachments
   end
 
+  def set_model_key
+    @model_key = model_key
+  end
+
   def update_attachment
     update_blob_metadata @file_blob, attachment_metadata
   end
@@ -92,8 +100,15 @@ private
     session[model_key] = @investigation.attributes if @investigation.valid?(step)
   end
 
+  def coronavirus_form_params
+    params.require(@model_key).permit(:coronavirus_related)
+  end
+
   def investigation_valid?
-    if step == :about_enquiry
+    case step
+    when :coronavirus
+      return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
+    when :about_enquiry
       if params[:enquiry][:received_type].nil?
         @investigation.errors.add(:received_type, "Select a type")
       elsif params[:enquiry][:received_type] == "other" && params[:enquiry][:other_received_type].blank?
@@ -131,14 +146,12 @@ private
     session[model_key] || {}
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def complainant_request_params
     return {} if params[:complainant].blank?
 
     params.require(:complainant).permit(:complainant_type, :name, :phone_number, :email_address, :other_details)
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def investigation_request_params
     return {} if params[model_key].blank?
 

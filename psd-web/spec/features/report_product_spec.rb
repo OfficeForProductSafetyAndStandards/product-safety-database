@@ -101,7 +101,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       scenario "not coronavirus-related" do
         visit new_ts_investigation_path
 
-        expect_to_be_on_coronavirus_page
+        expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
         fill_in_coronavirus_page(coronavirus)
 
         expect_to_be_on_product_page
@@ -166,6 +166,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_case_details_page
         expect_case_details_page_to_show_entered_information
 
+        expect(page.find("dt.govuk-summary-list__key", text: "Coronavirus related")).to have_sibling("dd.govuk-summary-list__value", text: "Not a coronavirus related case")
+
         click_link "Products (1)"
 
         expect_to_be_on_case_products_page
@@ -207,12 +209,12 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       scenario "coronavirus-related, with input errors" do
         visit new_ts_investigation_path
 
-        expect_to_be_on_coronavirus_page
+        expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
 
         # Do not select an option
         click_button "Continue"
 
-        expect_to_be_on_coronavirus_page
+        expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
         expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
 
         fill_in_coronavirus_page(coronavirus)
@@ -293,12 +295,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_case_activity_page_to_show_product_added
       end
     end
-  end
-
-  def expect_to_be_on_coronavirus_page
-    expect(page).to have_current_path("/ts_investigation/coronavirus")
-    expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
-    expect(page).to have_selector(".app-banner", text: "Coronavirus")
   end
 
   def expect_to_be_on_product_page
