@@ -7,7 +7,7 @@ class AccountNameController < ApplicationController
   def update
     @user = current_user
 
-    @user.name = params[:user][:name]
+    @user.name = params.dig(:user, :name)
 
     if @user.save(context: :change_name)
       redirect_to account_path
