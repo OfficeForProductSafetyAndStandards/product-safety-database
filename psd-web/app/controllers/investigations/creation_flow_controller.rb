@@ -1,19 +1,21 @@
 class Investigations::CreationFlowController < ApplicationController
   include FileConcern
   include Wicked::Wizard
-  include FlowWithCoronavirusForm
 
   before_action :set_page_title, only: %i[show create update]
   before_action :set_complainant, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
+  before_action :set_model_key, only: %i[show update]
   before_action :set_attachment, only: %i[show create update]
   before_action :update_attachment, only: %i[create update]
   before_action :store_investigation, only: %i[update]
   before_action :store_complainant, only: %i[update], unless: -> { %i[coronavirus about_enquiry].include? step }
 
+  # We need model key to be set before setting form parameters
+  include FlowWithCoronavirusForm
+
   # GET /xxx/step
   def show
-    @model_key = model_key
     render_wizard
   end
 
@@ -34,7 +36,6 @@ class Investigations::CreationFlowController < ApplicationController
 
   # PATCH/PUT /xxx
   def update
-    @model_key = model_key
     if investigation_valid?
       if step == steps.last
         create
@@ -83,6 +84,10 @@ private
     @file_blob, * = load_file_attachments
   end
 
+  def set_model_key
+    @model_key = model_key
+  end
+
   def update_attachment
     update_blob_metadata @file_blob, attachment_metadata
   end
@@ -102,7 +107,7 @@ private
   def investigation_valid?
     case step
     when :coronavirus
-      return assigns_coronavirus_related_from_form(@investigation, coronavirus_form_params)
+      return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
     when :about_enquiry
       if params[:enquiry][:received_type].nil?
         @investigation.errors.add(:received_type, "Select a type")

@@ -466,7 +466,7 @@ private
   def records_valid?
     case step
     when :coronavirus
-      return assigns_coronavirus_related_from_form(@investigation, coronavirus_form_params)
+      return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
     when :product
       @product.validate
     when :why_reporting
