@@ -48,6 +48,9 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
+  has_many :collaborators, dependent: :destroy
+  has_many :teams, through: :collaborators
+
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
