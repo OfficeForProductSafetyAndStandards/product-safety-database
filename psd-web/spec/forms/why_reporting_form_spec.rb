@@ -8,7 +8,19 @@ RSpec.describe WhyReportingForm do
   let(:reported_reason_safe_and_compliant) { nil }
 
   describe "validates the options are mututally exclusive" do
-    context "when only option is set" do
+    context "when no option is set" do
+      let(:why_reporting_params) { {} }
+
+      it "is invalid", :aggregate_failures do
+        expect(form).to be_invalid
+
+        expect(form.errors.full_messages_for(:reported_reason_unsafe)).to eq("asdasd")
+        expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to eq("asdasd")
+        expect(form.errors.full_messages_for(:reported_reason_safe_and_compliant)).to eq("asdasd")
+      end
+    end
+
+    context "when only one option is set" do
       let(:why_reporting_params) { { reported_reason_unsafe: true } }
 
       it { is_expected.to be_valid }
