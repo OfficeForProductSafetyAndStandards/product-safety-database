@@ -19,18 +19,7 @@ The application requires several backing services to run. Install these:
 
 ### 1.1 Install supporting services via Docker
 
-Some of the dependencies are easier to install via Docker:
-
-* Keycloak
-* Antivirus (optional)
-
-[Install Docker](https://docs.docker.com/install/) if you have not already done so, and then run:
-
-```bash
-docker-compose build keycloak
-```
-
-and
+Some of the dependencies are easier to install via Docker. [Install Docker](https://docs.docker.com/install/) if you have not already done so, and then run:
 
 ```bash
 docker-compose build antivirus
@@ -76,9 +65,8 @@ cp .env.development.example .env.development
 You will need to edit this file to add:
 
 * [GOV.UK Notify](https://www.notifications.service.gov.uk) API key
-* Keycloak client secret
 * Your mobile number to `TWO_FACTOR_AUTH_MOBILE_NUMBER` so that when using the seeded user you will receive the two factor authentication code. Alternatively you cab set `TWO_FACTOR_AUTHENTICATION_ENABLED=false` to bypass two factor authentication in development mode.
-  
+
 
 
 ### 5. Setup the database
@@ -103,17 +91,6 @@ Start the application (from `psd-web`):
 bundle exec bin/rails server
 bundle exec bin/sidekiq
 ```
-
-### Keycloak
-
-The development instance of Keycloak is configured with the following default user accounts:
-
-* Internal user: `user@example.com` / `password`
-* Trading Standards user: `msa@example.com` / `password`
-* Admin Console: `admin` / `admin`
-
-Log in to the [Keycloak admin console](http://keycloak:8080/auth/admin) to add/edit users or to obtain client credentials.
-
 
 ## Running the tests
 
