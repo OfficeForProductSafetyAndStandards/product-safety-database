@@ -13,6 +13,8 @@ class SecondaryAuthentication < ApplicationRecord
 
   OTP_LENGTH = 6
 
+  belongs_to :user
+
   def generate_and_send_code
     generate_code
     send_two_factor_authentication_code
@@ -31,6 +33,7 @@ class SecondaryAuthentication < ApplicationRecord
 
   def authenticate!
     update(authenticated: true, authentication_expires_at: (Time.now.utc + expiry_seconds.seconds))
+    try_to_verify_user_mobile_number
   end
 
   def expired?
@@ -42,7 +45,6 @@ class SecondaryAuthentication < ApplicationRecord
   end
 
   def try_to_verify_user_mobile_number
-    user = User.find(self.user_id)
     user.update(mobile_number_verified: true) unless user.mobile_number_verified
   end
   private
