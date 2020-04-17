@@ -80,8 +80,6 @@ Create an S3 bucket named `psd-<<SPACE>>`.
 
 #### PSD Website
 
-This assumes that you've run [the deployment from scratch steps for Keycloak](https://github.com/UKGovernmentBEIS/beis-opss-keycloak#deployment-from-scratch)
-
 Start by setting up the following credentials:
 
 * To configure rails to use the production database amongst other things and set the server's encryption key (generate a new value by running `rake secret`):
@@ -156,8 +154,6 @@ Start by setting up the following credentials:
         "SIDEKIQ_PASSWORD": "XXX"
     }'
 ```
-
-* `psd-keycloak-env` should already be setup from [the keycloak steps](https://github.com/UKGovernmentBEIS/beis-opss/blob/master/keycloak/README.md#setup-clients).
 
 Once all the credentials are created, the app can be deployed using:
 
