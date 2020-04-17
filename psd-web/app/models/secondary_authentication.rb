@@ -13,8 +13,6 @@ class SecondaryAuthentication < ApplicationRecord
 
   OTP_LENGTH = 6
 
-  attr_accessor :otp_code
-
   def generate_and_send_code
     generate_code
     send_two_factor_authentication_code
@@ -31,14 +29,12 @@ class SecondaryAuthentication < ApplicationRecord
     SendTwoFactorAuthenticationJob.perform_later(User.find(self.user_id), self.direct_otp)
   end
 
-  # raises exception
   def authenticate!
-    raise "secondary authentication failed" unless otp_code == direct_otp
     update(authenticated: true, authentication_expires_at: (Time.now.utc + expiry_seconds.seconds))
   end
 
   def expired?
-    Time.now.utc > authentication_expires_at
+    authentication_expires_at && Time.now.utc > authentication_expires_at
   end
 
   def expiry_seconds

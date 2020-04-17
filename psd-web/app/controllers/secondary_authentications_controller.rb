@@ -1,24 +1,38 @@
 # Dont inherit from authentication controller
-class SecondaryAuthenticationsController < ActionController::Base
-  layout "application"
+class SecondaryAuthenticationsController < ApplicationController
+  skip_before_action :authenticate_user!
+  skip_before_action :set_current_user
+  skip_before_action :ensure_secondary_authentication
+  skip_before_action :cleanup_secondary_authentication
+  skip_before_action :require_secondary_authentication
+  skip_before_action :set_raven_context
+  skip_before_action :authorize_user
+  skip_before_action :has_accepted_declaration
+  skip_before_action :has_viewed_introduction
+  skip_before_action :set_cache_headers
 
   def new
-    @secondary_authentication = SecondaryAuthentication.find(params[:secondary_authentication_id])
+    @two_factor_authentication_form = TwoFactorAuthenticationForm.new(secondary_authentication_id: params[:secondary_authentication_id])
   end
 
   def create
     params.permit!
-    @auth = SecondaryAuthentication.find(params[:secondary_authentication][:id])
-    @auth.otp_code = params[:secondary_authentication][:otp_code]
-    @auth.authenticate!
+    @two_factor_authentication_form = TwoFactorAuthenticationForm.new(params[:two_factor_authentication_form])
 
-    @auth.try_to_verify_user_mobile_number
-    set_secondary_authentication_cookie_for(@auth)
-    # redirect to saved path
-    if session[:secondary_authentication_redirect_to]
-      redirect_to session[:secondary_authentication_redirect_to]
+    if @two_factor_authentication_form.valid?
+      @two_factor_authentication_form.authenticate!
+
+
+      set_secondary_authentication_cookie_for(@two_factor_authentication_form.secondary_authentication)
+      # redirect to saved path
+      if session[:secondary_authentication_redirect_to]
+        redirect_to session[:secondary_authentication_redirect_to]
+      else
+        redirect_to '/'
+      end
     else
-      redirect_to '/'
+      @two_factor_authentication_form.otp_code = nil
+      render :new
     end
   end
 
@@ -28,8 +42,4 @@ class SecondaryAuthenticationsController < ActionController::Base
 
   private
   def nav_items; end
-  helper_method :nav_items
-
-  def secondary_nav_items; end
-  helper_method :secondary_nav_items
 end
