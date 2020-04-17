@@ -169,6 +169,10 @@ class User < ApplicationRecord
     update_column(:second_factor_attempts_count, 0)
   end
 
+  def mark_as_deleted!
+    update!(deleted: true)
+  end
+
   # BEGIN: place devise overriden method calls bellow
   def send_two_factor_authentication_code(code)
     SendTwoFactorAuthenticationJob.perform_later(self, code)

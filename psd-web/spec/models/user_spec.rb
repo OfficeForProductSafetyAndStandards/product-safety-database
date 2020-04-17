@@ -426,6 +426,18 @@ RSpec.describe User do
     end
   end
 
+  describe "#mark_as_deleted!" do
+    it "enables the user 'deleted' flag" do
+      user = create(:user)
+      expect { user.mark_as_deleted! }.to change { user.deleted }.from(false).to(true)
+    end
+
+    it "does not change the flag if was already enabled" do
+      user = create(:user, deleted: true)
+      expect { user.mark_as_deleted! }.not_to change { user.deleted }.from(true)
+    end
+  end
+
   describe "Devise gem related methods" do
     describe "#send_two_factor_authentication_code", :with_test_queue_adapter do
       subject(:user) { create(:user) }
