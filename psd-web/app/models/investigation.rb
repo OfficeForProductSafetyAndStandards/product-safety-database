@@ -64,6 +64,18 @@ class Investigation < ApplicationRecord
     end
   end
 
+  def assignee_team
+    if assignable_type == "Team"
+      assignee
+    else
+      assignee.teams.first
+    end
+  end
+
+  def teams_with_access
+    teams + [assignee_team]
+  end
+
   def assignee=(entity)
     self.assignable_id = entity&.id
     self.assignable_type = "User" if entity.is_a?(User)

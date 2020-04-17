@@ -28,8 +28,48 @@
     <% end %>
 
     <%= govuk_hr %>
+    <h2 class="govuk-heading-m">Sharing and collaboration</h2>
+
+    <% team_actions = {
+      items: [
+        href: new_investigation_collaborator_path(@investigation),
+        text: "Add team"
+      ]
+    } %>
+
+    <% team_list_html = capture do %>
+      <% if @investigation.teams_with_access.length > 1 %>
+        <ul class="govuk-list">
+          <% @investigation.teams_with_access.each do |team| %>
+            <li><%= team.name %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <%= @investigation.teams_with_access.first.name %>
+      <% end %>
+
+    <% end %>
+
+    <%= govukSummaryList(
+      classes: "govuk-summary-list--no-border",
+      rows: [
+        # {
+        #   key: { text: "Case owner" },
+        #   value: { text: investigation_assignee(@investigation) }
+        # },
+        {
+          key: { text: "Teams added to case" },
+          value: { text: team_list_html },
+          actions: team_actions
+        }
+      ]
+    ) %>
+
+    <%= govuk_hr %>
     <h2 class="govuk-heading-m">About the case</h2>
     <%= @investigation.investigation_summary_list %>
+
+
   </div>
 
   <% if @investigation.products.any? %>
