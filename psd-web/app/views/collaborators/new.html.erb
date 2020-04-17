@@ -14,7 +14,7 @@
 
     <%= form_with model: @collaborator, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
-      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id } } %>
+      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @collaborator.team_id) } } %>
 
       <% if @collaborator.errors.include?(:team) %>
         <% error_message = { text: @collaborator.errors.full_messages_for(:team).first } %>
@@ -33,6 +33,7 @@
         <%= render "form_components/govuk_textarea",
           form: form,
           key: :message,
+          id: "message",
           label: {
             text: "Message to the team"
           }
@@ -50,6 +51,7 @@
         },
         items: [
           {
+            id: "include_message",
             text: "Yes, add a message",
             value: "true",
             conditional: {

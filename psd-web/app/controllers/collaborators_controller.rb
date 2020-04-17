@@ -32,6 +32,6 @@ private
   end
 
   def collaborator_params
-    params.require(:collaborator).permit(:team_id, :message)
+    params.require(:collaborator).permit(:team_id, :message, :include_message)
   end
 end

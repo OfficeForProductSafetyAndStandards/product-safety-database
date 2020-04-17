@@ -138,6 +138,10 @@ en:
           attributes:
             team:
               required: "Select a team"
+            message:
+              blank: Enter a message to the team
+            include_message:
+              inclusion: "Select whether you want to include a message"
         comment_activity:
           attributes:
             body:
