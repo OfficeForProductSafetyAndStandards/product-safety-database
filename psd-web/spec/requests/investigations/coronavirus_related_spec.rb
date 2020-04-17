@@ -10,8 +10,8 @@ RSpec.describe "Managing a case’s coronavirus status", :with_stubbed_elasticse
       patch investigation_coronavirus_related_path(investigation), params: { investigation: { coronavirus_related: nil } }
 
       expect(response).to render_template(:show)
-      expect(assigns(:investigation)).not_to be_valid
-      expect(assigns(:investigation).errors[:coronavirus_related]).to eq(["Select whether or not the case is related to the coronavirus outbreak"])
+      expect(assigns(:coronavirus_related_form)).not_to be_valid
+      expect(assigns(:coronavirus_related_form).errors[:coronavirus_related]).to eq(["Select whether or not the case is related to the coronavirus outbreak"])
     end
   end
 

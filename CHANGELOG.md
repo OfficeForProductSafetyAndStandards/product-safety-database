@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-04-16
+- Extended the question to identify cases related to the coronavirus outbreak to:
+  - Allegations
+  - Enquiries
+  - Projects
+
 ## 2020-04-15
 - Added Your account page and ability to change your name
 

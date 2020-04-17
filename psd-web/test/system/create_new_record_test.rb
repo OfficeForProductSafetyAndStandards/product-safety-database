@@ -35,13 +35,15 @@ class CreateNewRecordTest < ApplicationSystemTestCase
     choose "type_allegation", visible: false
     click_on "Continue"
 
-    assert_text "New allegation"
+    assert_current_path("/allegation/coronavirus")
+    assert_text "Is this case related to the coronavirus outbreak?"
   end
 
   test "should show the new enquiry page when selecting enquiry" do
     choose "type_enquiry", visible: false
     click_on "Continue"
 
-    assert_text "New enquiry"
+    assert_current_path("/enquiry/coronavirus")
+    assert_text "Is this case related to the coronavirus outbreak?"
   end
 end
