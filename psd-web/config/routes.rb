@@ -69,7 +69,7 @@ Rails.application.routes.draw do
 
   resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
   resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
-  resources :project, controller: "investigations/project", only: %i[new create]
+  resources :project, controller: "investigations/project", only: %i[show new create update]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
   scope :investigation, path: "", as: :investigation do
@@ -82,7 +82,7 @@ Rails.application.routes.draw do
   scope :investigation, path: "", module: "investigations", as: :investigation do
     resources :enquiry,          controller: "enquiry",           only: %i[show new create update]
     resources :allegation,       controller: "allegation",        only: %i[show new create update]
-    resources :project,          controller: "project",           only: %i[show new create]
+    resources :project,          controller: "project",           only: %i[show new create update]
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 
