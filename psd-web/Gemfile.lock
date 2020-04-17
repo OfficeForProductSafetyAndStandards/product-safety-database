@@ -265,7 +265,7 @@ GEM
     pg (1.2.3)
     pghero (2.4.1)
       activerecord (>= 5)
-    pry (0.13.0)
+    pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-byebug (3.9.0)
@@ -491,7 +491,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strong_migrations (0.6.3)
+    strong_migrations (0.6.4)
       activerecord (>= 5)
     temple (0.8.2)
     term-ansicolor (1.7.1)
@@ -613,7 +613,7 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets (= 3.7.2)
   sprockets-rails
-  strong_migrations (= 0.6.3)
+  strong_migrations (= 0.6.4)
   two_factor_authentication (~> 2.2)
   validate_email (~> 0.1)
   webmock

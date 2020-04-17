@@ -18,5 +18,13 @@ RSpec.describe AuditActivity::Investigation::AddProject, :with_stubbed_elasticse
     it "stores the body" do
       expect(activity.body).to eq("**Project details**<br><br>#{project.description}<br><br>Assigned to #{project.assignee.display_name}.")
     end
+
+    context "when case is coronavirus related" do
+      let(:project) { create(:project, coronavirus_related: true) }
+
+      it "adds text to the body" do
+        expect(activity.body).to eq("**Project details**<br><br>Case is related to the coronavirus outbreak.<br><br>#{project.description}<br><br>Assigned to #{project.assignee.display_name}.")
+      end
+    end
   end
 end
