@@ -16,9 +16,14 @@
 
       <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id } } %>
 
-      <%= render "form_components/govuk_select",
-        key: :team_id,
-        form: form,
+      <% if @collaborator.errors.include?(:team) %>
+        <% error_message = { text: @collaborator.errors.full_messages_for(:team).first } %>
+      <% end %>
+
+      <%= render "components/govuk_select",
+        name: "collaborator[team_id]",
+        id: "team",
+        errorMessage: error_message,
         items: team_select_items,
         label: { text: "Choose team" },
         is_autocomplete: true
