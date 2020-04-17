@@ -1,8 +1,6 @@
 require "notifications/client"
 
 class SendUserInvitationJob < ApplicationJob
-  GOV_UK_NOTIFY_TEMPLATE_ID = "22b3799c-aa3d-43e8-899d-3f30307a488f".freeze
-
   # If the user_inviting_id is present, it is implied that the invitation
   # is being sent (or resent) by a colleague, and so the invited_at time
   # is reset.
