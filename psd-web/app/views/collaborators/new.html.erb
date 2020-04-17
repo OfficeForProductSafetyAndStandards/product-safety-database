@@ -14,11 +14,14 @@
 
     <%= form_with model: @collaborator, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
+      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id } } %>
+
       <%= render "form_components/govuk_select",
         key: :team_id,
         form: form,
-        items: @teams.map { |team| { text: team.name, value: team.id } },
-        label: { text: "Choose team" }
+        items: team_select_items,
+        label: { text: "Choose team" },
+        is_autocomplete: true
       %>
 
       <% message_html = capture do %>
