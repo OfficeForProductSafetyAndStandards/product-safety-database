@@ -67,13 +67,13 @@ class Investigation < ApplicationRecord
   def assignee_team
     if assignable_type == "Team"
       assignee
-    else
+    elsif assignable_type == "User"
       assignee.teams.first
     end
   end
 
   def teams_with_access
-    teams + [assignee_team]
+    (teams + [assignee_team]).compact
   end
 
   def assignee=(entity)
