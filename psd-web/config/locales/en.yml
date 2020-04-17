@@ -35,6 +35,12 @@ en:
     team_added_to_case:
       message_from: "Message from %{user_name}:"
   multiple_reported_reasons_selected: "Select only one answer"
+  why_reporting_form:
+    mutually_exclusive_checkboxes_selected:
+    unsafe: "Product reported because it is unsafe."
+    non_compliant: "Product reported because it is non-compliant."
+    unsafe_and_non_compliant: "Product reported because it is unsafe and non-compliant."
+    safe_and_compliant: "Product reported because it is safe and compliant."
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
