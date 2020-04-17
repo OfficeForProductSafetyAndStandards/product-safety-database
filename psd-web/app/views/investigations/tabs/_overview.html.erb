@@ -44,7 +44,7 @@
             <li><%= team.name %></li>
           <% end %>
         </ul>
-      <% else %>
+      <% elsif @investigation.teams_with_access.length == 1 %>
         <%= @investigation.teams_with_access.first.name %>
       <% end %>
 
