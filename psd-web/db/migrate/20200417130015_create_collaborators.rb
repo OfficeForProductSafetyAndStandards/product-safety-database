@@ -14,7 +14,7 @@ class CreateCollaborators < ActiveRecord::Migration[5.2]
       add_foreign_key :collaborators, :teams
       add_foreign_key :collaborators, :users, column: :added_by_user_id
 
-      add_index :collaborators, [:investigation_id, :team_id], unique: true
+      add_index :collaborators, %i[investigation_id team_id], unique: true
     end
   end
 end
