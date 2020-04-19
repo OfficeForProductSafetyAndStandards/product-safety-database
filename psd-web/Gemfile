@@ -41,7 +41,7 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.6.4"
 gem "two_factor_authentication", "~> 2.2"
 gem "validate_email", "~> 0.1"
-gem "webpacker", "5.0.1"
+gem "webpacker", "5.1.0"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.6.4", require: "govuk_design_system"
