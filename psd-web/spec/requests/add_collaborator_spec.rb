@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
-  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:user_team) { create(:team) }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true, teams: [user_team]) }
 
   context "when the collaborator params are valid" do
     let(:message) { "Thanks for collaborating on this case" }
@@ -89,6 +90,19 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
     it "redirects back to the case overview page" do
       expect(response).to redirect_to(investigation_path(investigation))
+    end
+  end
+
+  context "when the user isn't part of the team assigned", :with_errors_rendered do
+    let(:investigation) { create(:investigation, assignee: create(:team)) }
+
+    before do
+      sign_in user
+      post investigation_collaborators_path(investigation.pretty_id)
+    end
+
+    it "responds with a 403 (Forbidden) status code" do
+      expect(response).to have_http_status(:forbidden)
     end
   end
 end

@@ -55,4 +55,9 @@ class InvestigationPolicy < ApplicationPolicy
   def investigation_restricted?
     !@record.is_private
   end
+
+  def add_collaborators?
+    return true if @record.assignee.is_a?(Team) && (user.teams.include? @record.assignee)
+    return true if @record.assignee.is_a?(User) && (user.teams & @record.assignee.teams).any?
+  end
 end

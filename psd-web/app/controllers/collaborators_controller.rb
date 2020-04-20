@@ -2,6 +2,8 @@ class CollaboratorsController < ApplicationController
   def new
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
 
+    authorize @investigation, :add_collaborators?
+
     @collaborator = @investigation.collaborators.new
 
     @teams = teams_without_access
@@ -9,6 +11,8 @@ class CollaboratorsController < ApplicationController
 
   def create
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+
+    authorize @investigation, :add_collaborators?
 
     @collaborator = @investigation.collaborators.new(collaborator_params)
     @collaborator.added_by_user = current_user
