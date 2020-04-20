@@ -200,10 +200,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     scenario "reporting a safe product" do
-
       visit new_ts_investigation_path
 
-      expect_to_be_on_coronavirus_page
+      expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
       fill_in_coronavirus_page(false)
 
       expect_to_be_on_product_page
@@ -536,7 +535,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_why_reporting_page(reporting_reasons:, hazard_type: nil, hazard_description: nil, non_compliance_details: nil)
-
     reporting_reasons.each do |reporting_reason|
       check reporting_reason
     end

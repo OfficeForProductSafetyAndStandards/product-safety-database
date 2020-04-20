@@ -59,14 +59,14 @@ RSpec.describe WhyReportingForm do
         end
       end
 
-      context "when no non compliance reason is provided" do
+      context "when a non compliance reason is provided" do
         let(:non_compliant_reason) { Faker::Lorem.sentence }
 
         it "is invalid", :aggregate_failures do
-            expect(form).to be_valid
+          expect(form).to be_valid
 
-            expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to be_empty
-            expect(form.errors.full_messages_for(:non_compliant_reason)).to be_empty
+          expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to be_empty
+          expect(form.errors.full_messages_for(:non_compliant_reason)).to be_empty
         end
       end
     end
