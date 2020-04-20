@@ -37,6 +37,9 @@ class InvestigationPolicy < ApplicationPolicy
     return true if @record.assignee.present? && (@record.assignee&.organisation == user.organisation)
     return true if @record.source&.user_has_gdpr_access?(user: user)
 
+    # Have any of the user’s teams been added to the case as a collaborator?
+    return true if (@record.teams & user.teams).any?
+
     false
   end
 
