@@ -61,6 +61,14 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(notification_email.personalization[:updater_name]).to eql("Bob Jones")
     expect(notification_email.personalization[:optional_message]).to eql("^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
+
+    click_link "Activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("Southampton Trading Standards added to allegation")
+    expect(page).to have_text("Team added by Bob Jones")
+    expect(page).to have_text("Thanks for collaborating on this case with us.")
   end
 
 private
@@ -73,5 +81,10 @@ private
   def expect_to_be_on_add_team_to_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/teams/add")
     expect(page).to have_selector("h1", text: "Add a team to the case")
+  end
+
+  def expect_to_be_on_case_activity_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/activity")
+    expect(page).to have_selector("h1", text: "Activity")
   end
 end

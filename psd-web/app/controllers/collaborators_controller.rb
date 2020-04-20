@@ -20,6 +20,13 @@ class CollaboratorsController < ApplicationController
     begin
       if @collaborator.save
         NotifyTeamAddedToCaseJob.perform_later(@collaborator)
+
+        AuditActivity::Investigation::TeamAdded.create!(
+          source: UserSource.new(user: current_user),
+          investigation: @investigation,
+          title: "#{@collaborator.team.name} added to #{@investigation.case_type.downcase}",
+          body: @collaborator.message.to_s
+        )
         redirect_to investigation_path(@investigation)
       else
         @teams = teams_without_access
