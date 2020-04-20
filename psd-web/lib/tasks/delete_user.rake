@@ -4,18 +4,25 @@ namespace :user do
     user_id = ENV.fetch("ID", nil)
     user_email = ENV.fetch("EMAIL", nil)
 
-    result = DeleteUser.call(user_id: user_id, user_email: user_email)
-
-    if result.success?
-      puts "User #{user_id.presence || user_email} successfully marked as deleted."
-      puts "User investigations assigned to #{result.team.name}"
-    elsif result.error == DeleteUser::MISSING_PARAMS_ERROR
+    if !user_id && !user_email
       puts "Error: Need to provide user ID or EMAIL with the call."
-      puts "Eg: EMAIL=\"example@example.com\" rake user:delete"
-    elsif result.error == DeleteUser::USER_NOT_FOUND_ERROR
-      puts "Error: User #{user_id.presence || user_email} not found"
+      puts "Eg: EMAIL=example@example.com rake user:delete"
+    else
+      delete_user(user_id, user_email)
+    end
+  end
+
+  def delete_user(id, email)
+    user = id ? User.find(id) : User.find_by!(email: email)
+
+    result = DeleteUser.call(user: user)
+    if result.success?
+      puts "User #{id.presence || email} successfully marked as deleted."
+      puts "User investigations assigned to #{result.team.name}"
     else
       puts result.error
     end
+  rescue ActiveRecord::RecordNotFound
+    puts "Error: User #{id.presence || email} not found"
   end
 end
