@@ -57,10 +57,10 @@
     <%= govukSummaryList(
       classes: "govuk-summary-list--no-border",
       rows: [
-        # {
-        #   key: { text: "Case owner" },
-        #   value: { text: investigation_assignee(@investigation) }
-        # },
+        {
+          key: { text: "Case owner" },
+          value: { text: investigation_assignee(@investigation) }
+        },
         {
           key: { text: "Teams added to case" },
           value: { text: team_list_html },
