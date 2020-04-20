@@ -65,7 +65,7 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk", "~> 3.3.2"
+  gem "rubocop-govuk", "~> 3.5.0"
   gem "rubocop-performance"
   gem "rubocop-rspec", "~> 1.38", require: false
   gem "ruby-debug-ide"
