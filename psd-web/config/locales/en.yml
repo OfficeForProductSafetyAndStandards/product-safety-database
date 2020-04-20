@@ -36,7 +36,8 @@ en:
       message_from: "Message from %{user_name}:"
   multiple_reported_reasons_selected: "Select only one answer"
   why_reporting_form:
-    mutually_exclusive_checkboxes_selected:
+    no_checkboxes_selected: "Choose at least one option"
+    mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
     unsafe: "Product reported because it is unsafe."
     non_compliant: "Product reported because it is non-compliant."
     unsafe_and_non_compliant: "Product reported because it is unsafe and non-compliant."
@@ -193,8 +194,6 @@ en:
               blank: "Enter a valid product category"
             coronavirus_related:
               inclusion: "Select whether or not the case is related to the coronavirus outbreak"
-            reported_reason:
-              blank: "Choose at least one option"
         product:
           attributes:
             product_category:
