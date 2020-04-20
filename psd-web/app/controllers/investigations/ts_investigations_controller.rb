@@ -36,10 +36,8 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
-  with_options if: -> { step == :why_reporting } do
-    after_action :store_investigation, only: %i[update]
-    before_action :set_new_why_reporting_form, only: %i[show]
-  end
+  before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
+  after_action  :store_investigation, only: :update, if: -> { %i[why_reporting coronavirus].include?(step) }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_business, only: %i[update], if: -> { step == :business }
