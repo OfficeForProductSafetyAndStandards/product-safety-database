@@ -2,13 +2,13 @@ class AddAuditFieldsForActivities < ActiveRecord::Migration[5.2]
   disable_ddl_transaction!
 
   def change
-    add_column :activities, :title, :string
-    add_reference :activities, :business, foreign_key: true, index: false
-    add_index :activities, :business_id, algorithm: :concurrently
-    add_reference :activities, :product, index: false, foreign_key: true
-    add_index :activities, :product_id, algorithm: :concurrently
-
     safety_assured do
+      add_column :activities, :title, :string
+      add_reference :activities, :business, foreign_key: true, index: false
+      add_index :activities, :business_id, algorithm: :concurrently
+      add_reference :activities, :product, index: false, foreign_key: true
+      add_index :activities, :product_id, algorithm: :concurrently
+
       reversible do |dir|
         dir.up do
           drop_table :versions
