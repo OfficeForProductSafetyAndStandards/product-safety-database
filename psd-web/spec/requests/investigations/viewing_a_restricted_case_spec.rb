@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, :with_errors_rendered, type: :request do
-
   let(:users_organisation) { create(:organisation, name: "Org A") }
   let(:users_team) { create(:team, organisation: users_organisation, name: "Team A") }
   let(:user) { create(:user, :activated, organisation: users_organisation, teams: [users_team]) }
@@ -58,13 +57,14 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when the case is assigned to a team from another organisation but the user’s team has been added as a collaborator" do
-    let(:investigation) { create(:investigation, is_private: true, assignee: other_team, collaborators: [
-      create(:collaborator, team: users_team, added_by_user: other_user )
-    ]) }
+    let(:investigation) {
+      create(:investigation, is_private: true, assignee: other_team, collaborators: [
+      create(:collaborator, team: users_team, added_by_user: other_user)
+    ])
+    }
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)
     end
   end
-
 end
