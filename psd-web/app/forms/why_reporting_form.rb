@@ -11,6 +11,7 @@ class WhyReportingForm
 
   validate :selected_at_least_one_checkbox
   validate :mutually_exclusive_checkboxes
+  validates :non_compliant_reason, presence: true, if: -> { reported_reason_non_compliant }
 
   def assign_to(investigation)
     investigation.assign_attributes(
@@ -59,9 +60,12 @@ private
   def selected_at_least_one_checkbox
     return if at_least_one_checkbox_checked?
 
-    errors.add(:reported_reason_unsafe, I18n.t(:no_checkboxes_selected))
-    errors.add(:reported_reason_non_compliant, I18n.t(:no_checkboxes_selected))
-    errors.add(:reported_reason_safe_and_compliant, I18n.t(:mutually_exclusive_checkboxes_selected))
+    errors.add(:reported_reason_unsafe,
+               I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
+    errors.add(:reported_reason_non_compliant,
+               I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
+    errors.add(:reported_reason_safe_and_compliant,
+               I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
   end
 
   def at_least_one_checkbox_checked?

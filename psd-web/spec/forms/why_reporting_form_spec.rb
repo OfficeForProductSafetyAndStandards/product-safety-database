@@ -14,9 +14,9 @@ RSpec.describe WhyReportingForm do
       it "is invalid", :aggregate_failures do
         expect(form).to be_invalid
 
-        expect(form.errors.full_messages_for(:reported_reason_unsafe)).to eq("asdasd")
-        expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to eq("asdasd")
-        expect(form.errors.full_messages_for(:reported_reason_safe_and_compliant)).to eq("asdasd")
+        expect(form.errors.full_messages_for(:reported_reason_unsafe)).to eq(["Choose at least one option"])
+        expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to eq(["Choose at least one option"])
+        expect(form.errors.full_messages_for(:reported_reason_safe_and_compliant)).to eq(["Choose at least one option"])
       end
     end
 
@@ -33,8 +33,41 @@ RSpec.describe WhyReportingForm do
 
       it "is invalid and sets and error", :aggregate_failures do
         expect(form).to be_invalid
-        expect(form.errors[:reported_reason_safe_and_compliant]).to eq(["Select only one answer"])
-        expect(form.errors[:reported_reason_non_compliant]).to eq(["Select only one answer"])
+        expect(form.errors[:reported_reason_safe_and_compliant]).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
+        expect(form.errors[:reported_reason_non_compliant]).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
+      end
+    end
+  end
+
+  describe "#validates non compiance reason" do
+    let(:why_reporting_params) do
+      {
+        reported_reason_non_compliant: true,
+        non_compliant_reason: non_compliant_reason
+      }
+    end
+
+    context "when non compliant is checked" do
+      let(:non_compliant_reason) { nil }
+
+      context "when no non compliance reason is provided" do
+        it "is invalid", :aggregate_failures do
+          expect(form).to be_invalid
+
+          expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to be_empty
+          expect(form.errors.full_messages_for(:non_compliant_reason)).to eq(["Non compliant reason cannot be blank"])
+        end
+      end
+
+      context "when no non compliance reason is provided" do
+        let(:non_compliant_reason) { Faker::Lorem.sentence }
+
+        it "is invalid", :aggregate_failures do
+            expect(form).to be_valid
+
+            expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to be_empty
+            expect(form.errors.full_messages_for(:non_compliant_reason)).to be_empty
+        end
       end
     end
   end
