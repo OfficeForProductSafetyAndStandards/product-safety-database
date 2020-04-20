@@ -19,6 +19,7 @@ class CollaboratorsController < ApplicationController
 
     begin
       if @collaborator.save
+        NotifyTeamAddedToCaseJob.perform_later(@collaborator)
         redirect_to investigation_path(@investigation)
       else
         @teams = teams_without_access

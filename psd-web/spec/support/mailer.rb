@@ -6,6 +6,8 @@ class TestNotifyEmail
     @personalization = personalization
   end
 
+  attr_reader :personalization
+
   def recipient
     @recipient.second
   end
