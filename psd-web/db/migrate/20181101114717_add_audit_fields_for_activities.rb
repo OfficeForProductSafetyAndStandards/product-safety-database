@@ -1,6 +1,7 @@
 class AddAuditFieldsForActivities < ActiveRecord::Migration[5.2]
   disable_ddl_transaction!
 
+  # rubocop:disable Metrics/BlockLength
   def change
     safety_assured do
       add_column :activities, :title, :string
@@ -37,4 +38,5 @@ class AddAuditFieldsForActivities < ActiveRecord::Migration[5.2]
       end
     end
   end
+  # rubocop:enable Metrics/BlockLength
 end
