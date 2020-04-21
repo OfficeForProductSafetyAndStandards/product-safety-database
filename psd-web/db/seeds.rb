@@ -413,62 +413,22 @@ if run_seeds
 
   investigation.products << product
 
-  organisation = Organisation.create!(name: "Office for Product Safety and Standards")
-
-  enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
-  processing  = Team.create!(name: "OPSS Processing", team_recipient_email: nil, "organisation": organisation)
-
-  Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
-  Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
-  Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
-  Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
-
-  # On review apps environment (int) this will be set using `psd-seed-users-env`
-  # example of variable:
-  # SEED_USERS='JohannMuster:muster@example.org:07777888999;JohnDoe:example@example.org:07777888999'
   if ENV["SEED_USERS"]
-    ENV["SEED_USERS"].split(";").map { |set| set.split(":") }.each do |name, email, phone|
-      user = User.create!(
-        name: name,
-        email: email,
-        password: "testpassword",
-        password_confirmation: "testpassword",
-        organisation: organisation,
-        mobile_number_verified: true,
-        teams: [enforcement],
-        mobile_number: phone
-      )
-      %i[superuser team_admin opss_user psd_user user].each do |role|
-        UserRole.create!(user: user, name: role)
-      end
-    end
-  else
-    user1 = User.create!(
-      name: "Test User",
-      email: "user@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: organisation,
-      mobile_number_verified: true,
-      teams: [enforcement],
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
-    user2 = User.create!(
-      name: "Team Admin",
-      email: "admin@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: organisation,
-      mobile_number_verified: true,
-      teams: [processing],
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
+    Organisation.destroy_all
+    Team.destroy_all
+    User.destroy_all
 
-    %i[opss_user psd_user user].each do |role|
-      UserRole.create!(user: user1, name: role)
-    end
-    %i[team_admin opss_user psd_user user].each do |role|
-      UserRole.create!(user: user2, name: role)
+    Team.accepts_nested_attributes_for :users
+    User.accepts_nested_attributes_for :user_roles
+
+    Rails.application.credentials.organisations.each do |organisation_attributes|
+      teams_attributes = organisation_attributes.delete(:teams_attributes)
+      organisation = Organisation.create! organisation_attributes
+
+      teams_attributes.map do |team_attributes|
+        (team_attributes[:users_attributes] || []).map! { |user_attributes| user_attributes[:organisation] = organisation; user_attributes }
+        organisation.teams.create! team_attributes
+      end
     end
   end
 
