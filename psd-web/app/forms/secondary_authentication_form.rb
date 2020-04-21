@@ -1,4 +1,4 @@
-class TwoFactorAuthenticationForm
+class SecondaryAuthenticationForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 

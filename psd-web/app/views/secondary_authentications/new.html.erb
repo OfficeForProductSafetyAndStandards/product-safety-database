@@ -1,23 +1,23 @@
 <% title = "Check your phone" %>
-<% page_title(title, errors: @two_factor_authentication_form.errors.any?) %>
+<% page_title(title, errors: @secondary_authentication_form.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= error_summary @two_factor_authentication_form.errors %>
+    <%= error_summary @secondary_authentication_form.errors %>
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">We have sent you a security code by text message.</p>
     <%= form_tag(secondary_authentications_path, :method => :post, novalidate: true) do %>
-      <%= hidden_field_tag 'two_factor_authentication_form[secondary_authentication_id]', @two_factor_authentication_form.secondary_authentication_id %>
+      <%= hidden_field_tag 'secondary_authentication_form[secondary_authentication_id]', @secondary_authentication_form.secondary_authentication_id %>
       <%= render "components/govuk_input",
-          id: "otp_code", name: "two_factor_authentication_form[otp_code]",
+          id: "otp_code", name: "secondary_authentication_form[otp_code]",
           type: "text",
           classes: "govuk-input--width-5",
           label: { text: "Enter security code" },
           attributes: { pattern: "[0-9]*", inputmode: "numeric" },
-          errorMessage: format_errors_for(@two_factor_authentication_form, @two_factor_authentication_form.errors.full_messages_for(:otp_code)),
+          errorMessage: format_errors_for(@secondary_authentication_form, @secondary_authentication_form.errors.full_messages_for(:otp_code)),
           autocomplete: "one-time-code" %>
 
       <%= govukButton(text: "Continue") %>
@@ -25,7 +25,7 @@
 
     <%if false # Following block is a placeholder. Hiding it pending future implementation %>
       <div class="govuk-body">
-        <%= link_to "Not received a text message?", resend_code_user_two_factor_authentication_path, class: "govuk-link" %>
+        <%= link_to "Not received a text message?", resend_code_user_secondary_authentication_path, class: "govuk-link" %>
       </div>
     <% end %>
   </div>

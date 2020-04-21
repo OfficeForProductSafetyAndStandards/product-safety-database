@@ -9,7 +9,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     allow(Rails.application.config)
       .to receive(:email_whitelist_enabled).and_return(false)
     allow(Rails.application.config)
-      .to receive(:two_factor_authentication_enabled).and_return(true)
+      .to receive(:secondary_authentication_enabled).and_return(true)
   end
 
   it "sending an invitation and registering" do
@@ -17,7 +17,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
     visit "/teams/#{team.id}/invite"
 
-    enter_two_factor_authentication_code(otp_code)
+    enter_secondary_authentication_code(otp_code)
 
     invite_user_to_team
 
@@ -30,9 +30,9 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
     fill_in_registration_form
 
-    expect_to_be_on_two_factor_authentication_page
+    expect_to_be_on_secondary_authentication_page
 
-    enter_two_factor_authentication_code(otp_code)
+    enter_secondary_authentication_code(otp_code)
 
     expect_to_be_on_declaration_page
   end
@@ -54,11 +54,11 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     click_on "Continue"
   end
 
-  def expect_to_be_on_two_factor_authentication_page
+  def expect_to_be_on_secondary_authentication_page
     expect(page).to have_title("Check your phone")
   end
 
-  def enter_two_factor_authentication_code(otp_code)
+  def enter_secondary_authentication_code(otp_code)
     fill_in "Enter security code", with: otp_code
     click_on "Continue"
   end

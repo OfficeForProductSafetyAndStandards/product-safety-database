@@ -306,7 +306,7 @@ Devise.setup do |config|
   # to prevent devise to destroying entire session object
   # need to be false as secondary authentication relies on session
   config.sign_out_all_scopes = false
-  # Devise two_factor_authentication gem
+  # Devise secondary_authentication gem
   # config.max_login_attempts = 10  # Maximum second factor attempts count.
   # config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid
   # config.direct_otp_length = 5  # Direct OTP code length

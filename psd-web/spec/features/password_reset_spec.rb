@@ -46,9 +46,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       # FIXME: just for POC, as 2FA url changed
       # does not changes anything in flow
       #
-      # expect_to_be_on_two_factor_authentication_page
+      # expect_to_be_on_secondary_authentication_page
 
-      complete_two_factor_authentication_with(last_user_otp(user))
+      complete_secondary_authentication_with(last_user_otp(user))
 
       expect_to_be_on_edit_user_password_page
 
@@ -63,7 +63,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
 
       # bug or feature? requires second otp for login, as only 2FA was for reset password
-      complete_two_factor_authentication_with(last_user_otp(user))
+      complete_secondary_authentication_with(last_user_otp(user))
       expect(page).to have_css("h1", text: "Declaration")
 
       sign_out
@@ -83,12 +83,11 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         visit edit_user_password_url_with_token
 
-        expect_to_be_on_two_factor_authentication_page
+        expect_to_be_on_secondary_authentication_page
 
-        complete_two_factor_authentication_with(otp_code)
+        complete_secondary_authentication_with(otp_code)
 
         expect_to_be_on_edit_user_password_page
-        puts "filing password"
 
         fill_in "Password", with: "as"
         click_on "Continue"
@@ -104,9 +103,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         visit edit_user_password_url_with_token
 
-        expect_to_be_on_two_factor_authentication_page
+        expect_to_be_on_secondary_authentication_page
 
-        complete_two_factor_authentication_with(otp_code)
+        complete_secondary_authentication_with(otp_code)
 
         expect_to_be_on_edit_user_password_page
 
@@ -135,10 +134,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         # Second user decides to continue resetting the password for the original user
         click_on "Reset password for #{user.name}"
 
-        expect_to_be_on_two_factor_authentication_page
+        expect_to_be_on_secondary_authentication_page
 
         # Need to pass 2FA authentication for original user
-        complete_two_factor_authentication_with(otp_code)
+        complete_secondary_authentication_with(otp_code)
 
         # Finally can change the original user password
         expect_to_be_on_edit_user_password_page
@@ -196,12 +195,12 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
-  def complete_two_factor_authentication_with(security_code)
+  def complete_secondary_authentication_with(security_code)
     fill_in "Enter security code", with: security_code
     click_on "Continue"
   end
 
-  def expect_to_be_on_two_factor_authentication_page
+  def expect_to_be_on_secondary_authentication_page
     expect(page).to have_current_path(/\/secondary_authentications\/new/)
   end
 

@@ -11,18 +11,18 @@ class SecondaryAuthenticationsController < ApplicationController
   skip_before_action :set_cache_headers
 
   def new
-    @two_factor_authentication_form = TwoFactorAuthenticationForm.new(secondary_authentication_id: params[:secondary_authentication_id])
+    @secondary_authentication_form = SecondaryAuthenticationForm.new(secondary_authentication_id: params[:secondary_authentication_id])
   end
 
   def create
     params.permit!
-    @two_factor_authentication_form = TwoFactorAuthenticationForm.new(params[:two_factor_authentication_form])
+    @secondary_authentication_form = SecondaryAuthenticationForm.new(params[:secondary_authentication_form])
 
-    if @two_factor_authentication_form.valid?
-      @two_factor_authentication_form.authenticate!
+    if @secondary_authentication_form.valid?
+      @secondary_authentication_form.authenticate!
 
 
-      set_secondary_authentication_cookie_for(@two_factor_authentication_form.secondary_authentication)
+      set_secondary_authentication_cookie_for(@secondary_authentication_form.secondary_authentication)
       # redirect to saved path
       if session[:secondary_authentication_redirect_to]
         redirect_to session[:secondary_authentication_redirect_to]
@@ -30,7 +30,7 @@ class SecondaryAuthenticationsController < ApplicationController
         redirect_to "/"
       end
     else
-      @two_factor_authentication_form.otp_code = nil
+      @secondary_authentication_form.otp_code = nil
       render :new
     end
   end

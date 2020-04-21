@@ -19,7 +19,7 @@ class SecondaryAuthentication < ApplicationRecord
 
   def generate_and_send_code
     generate_code
-    send_two_factor_authentication_code
+    send_secondary_authentication_code
   end
 
   def otp_needs_refreshing?
@@ -47,8 +47,8 @@ class SecondaryAuthentication < ApplicationRecord
     )
   end
 
-  def send_two_factor_authentication_code
-    SendTwoFactorAuthenticationJob.perform_later(User.find(self.user_id), self.direct_otp)
+  def send_secondary_authentication_code
+    SendSecondaryAuthenticationJob.perform_later(User.find(self.user_id), self.direct_otp)
   end
 
   def authenticate!

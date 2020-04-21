@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TwoFactorAuthenticationForm do
+RSpec.describe SecondaryAuthenticationForm do
   subject(:form) { described_class.new(otp_code: otp_code, secondary_authentication_id: secondary_authentication.id) }
 
   let(:attempts) { 0 }

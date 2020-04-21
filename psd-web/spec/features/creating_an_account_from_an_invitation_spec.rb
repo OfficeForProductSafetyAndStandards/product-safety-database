@@ -14,7 +14,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     click_button "Continue"
 
-    expect_to_be_on_two_factor_authentication_page
+    expect_to_be_on_secondary_authentication_page
 
     fill_in "Enter security code", with: otp_code
     click_on "Continue"
@@ -55,7 +55,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     click_button "Continue"
 
-    expect_to_be_on_two_factor_authentication_page
+    expect_to_be_on_secondary_authentication_page
 
     fill_in "Enter security code", with: otp_code
     click_on "Continue"
@@ -95,7 +95,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
       click_button "Continue"
 
-      expect_to_be_on_two_factor_authentication_page
+      expect_to_be_on_secondary_authentication_page
 
       fill_in "Enter security code", with: otp_code
       click_on "Continue"
@@ -105,7 +105,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     end
   end
 
-  def expect_to_be_on_two_factor_authentication_page
+  def expect_to_be_on_secondary_authentication_page
     expect(page).to have_current_path(/\/secondary_authentications\/new/)
 
     expect(page).to have_h1("Check your phone")

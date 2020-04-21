@@ -70,8 +70,8 @@ module Users
       user_signed_in? && current_user != user_with_reset_token
     end
 
-    def passed_two_factor_authentication?
-      return true if !Rails.configuration.two_factor_authentication_enabled
+    def passed_secondary_authentication?
+      return true if !Rails.configuration.secondary_authentication_enabled
 
       user_signed_in? && is_fully_authenticated?
     end

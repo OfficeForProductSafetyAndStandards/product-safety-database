@@ -13,7 +13,7 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
     subject(:submit_2fa) do
       post secondary_authentications_path,
            params: {
-           two_factor_authentication_form: {
+           secondary_authentication_form: {
              otp_code: submitted_code,
              secondary_authentication_id: secondary_authentication.id
            }

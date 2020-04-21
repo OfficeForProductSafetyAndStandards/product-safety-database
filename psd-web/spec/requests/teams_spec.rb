@@ -8,7 +8,7 @@ RSpec.describe "Teams management", :with_stubbed_mailer, :with_stubbed_notify, t
     context "when the email whitelist is enabled" do
       before do
         allow(Rails.application.config).to receive(:email_whitelist_enabled).and_return(true)
-        allow(Rails.application.config).to receive(:two_factor_authentication_enabled).and_return(false)
+        allow(Rails.application.config).to receive(:secondary_authentication_enabled).and_return(false)
 
         sign_in(team_admin)
       end

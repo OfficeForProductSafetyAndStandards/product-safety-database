@@ -126,7 +126,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
       context "when two factor auth is disabled" do
         before do
           allow(Rails.configuration)
-            .to receive(:two_factor_authentication_enabled)
+            .to receive(:secondary_authentication_enabled)
             .and_return(false)
         end
 
