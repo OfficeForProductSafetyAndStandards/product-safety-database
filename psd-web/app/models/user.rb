@@ -23,6 +23,8 @@ class User < ApplicationRecord
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
             unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
 
+  validates :name, presence: true, on: :change_name
+
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
     registration_completion.validates :mobile_number,
@@ -112,6 +114,10 @@ class User < ApplicationRecord
 
   def is_team_admin?
     has_role? :team_admin
+  end
+
+  def is_superuser?
+    has_role? :superuser
   end
 
   def has_completed_registration?

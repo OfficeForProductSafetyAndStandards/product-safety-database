@@ -1,8 +1,6 @@
 require "notifications/client"
 
 class SendUserInvitationJob < ApplicationJob
-  GOV_UK_NOTIFY_TEMPLATE_ID = "22b3799c-aa3d-43e8-899d-3f30307a488f".freeze
-
   # If the user_inviting_id is present, it is implied that the invitation
   # is being sent (or resent) by a colleague, and so the invited_at time
   # is reset.
@@ -14,16 +12,11 @@ class SendUserInvitationJob < ApplicationJob
   def perform(user_id, user_inviting_id = nil)
     user = User.find(user_id)
 
-    if user_inviting_id
-      user_inviting = User.find(user_inviting_id)
+    return NotifyMailer.expired_invitation_email(user).deliver_now if user.invitation_expired?
 
-      NotifyMailer.invitation_email(user, user_inviting).deliver_now
-      user.update!(has_been_sent_welcome_email: true, invited_at: Time.current)
+    user_inviting = user_inviting_id ? User.find(user_inviting_id) : nil
 
-    elsif user.invitation_expired?
-      NotifyMailer.expired_invitation_email(user).deliver_now
-    else
-      NotifyMailer.invitation_email(user, nil).deliver_now
-    end
+    NotifyMailer.invitation_email(user, user_inviting).deliver_now
+    user.update!(has_been_sent_welcome_email: true, invited_at: user.invited_at || Time.current)
   end
 end

@@ -17,6 +17,9 @@ class HealthController < ApplicationController
     # Check Sidekiq queue length (in time) is within an acceptable limit
     raise "Sidekiq queue latency is above 30 seconds" if Sidekiq::Queue.new(ENV["SIDEKIQ_QUEUE"] || "psd").latency > 30
 
+    # Check investigations being present in the database
+    raise "Database does not contain any investigation" if Investigation.count.zero?
+
     render plain: "OK"
   end
 end

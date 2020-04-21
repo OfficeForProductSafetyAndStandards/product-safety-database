@@ -1,0 +1,43 @@
+<% page_heading = "Overview" %>
+<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+<% products_count = @investigation.products.count %>
+
+<div class="govuk-grid-row govuk-!-padding-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <p class="govuk-body-l"><%= @investigation.title %></p>
+
+    <h2 class="govuk-heading-m">Summary</h2>
+
+    <p class="govuk-body"><%= @investigation.description %></p>
+
+    <p class="govuk-body"><%= link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link" %></p>
+
+    <% if @investigation.display_product_summary_list? %>
+      <%= govuk_hr %>
+      <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).titleize %></h2>
+      <%= @investigation.product_summary_list %>
+    <% end %>
+
+    <% if @investigation.complainant %>
+      <%= govuk_hr %>
+      <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.titleize %></h2>
+      <%= @investigation.source_details_summary_list %>
+    <% end %>
+
+    <%= govuk_hr %>
+    <h2 class="govuk-heading-m">About the case</h2>
+    <%= @investigation.investigation_summary_list %>
+  </div>
+
+  <% if @investigation.products.any? %>
+    <div class="govuk-grid-column-one-third">
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible app-!-display-mobile--only">
+
+      <h2 class="govuk-heading-m"><%= "Products (#{products_count})" %></h2>
+      <%= @investigation.products_list %>
+    </div>
+  <% end %>
+</div>

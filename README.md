@@ -46,6 +46,10 @@ See [logging and monitoring](doc/logging-and-monitoring.md).
 
 See [Cloud Foundry reference](doc/using-cloud-foundry.md).
 
+## Running Tasks
+
+See [Tasks](doc/tasks.md).
+
 ## Related projects
 
 ### Antivirus API

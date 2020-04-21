@@ -1,0 +1,11 @@
+<nav class="hmcts-sub-navigation">
+  <ul class="hmcts-sub-navigation__list">
+    <% items.each do |item| %>
+      <li class="hmcts-sub-navigation__item">
+        <%= link_to(item[:href], class: "hmcts-sub-navigation__link", 'aria-current':("page" if item[:active]), id: "#{item[:text]}_id") do %>
+          <%= item[:html] || item[:text] + item[:count].to_s %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

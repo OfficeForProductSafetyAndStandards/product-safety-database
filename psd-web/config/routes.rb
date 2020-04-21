@@ -12,6 +12,7 @@ end
 
 # rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => "/admin", as: "rails_admin"
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
 
   unless Rails.env.production? && (!ENV["SIDEKIQ_USERNAME"] || !ENV["SIDEKIQ_PASSWORD"])
@@ -30,6 +31,10 @@ Rails.application.routes.draw do
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
   resource :secondary_authentications, only: %i[new create]
+
+  resource :account, only: [:show], controller: :account do
+    resource :name, controller: :account_name, only: %i[show update]
+  end
 
   resources :users, only: [:update] do
     member do
@@ -65,7 +70,7 @@ Rails.application.routes.draw do
 
   resources :enquiry, controller: "investigations/enquiry", only: %i[show new create update]
   resources :allegation, controller: "investigations/allegation", only: %i[show new create update]
-  resources :project, controller: "investigations/project", only: %i[new create]
+  resources :project, controller: "investigations/project", only: %i[show new create update]
   resources :ts_investigation, controller: "investigations/ts_investigations", only: %i[show new create update]
 
   scope :investigation, path: "", as: :investigation do
@@ -78,7 +83,7 @@ Rails.application.routes.draw do
   scope :investigation, path: "", module: "investigations", as: :investigation do
     resources :enquiry,          controller: "enquiry",           only: %i[show new create update]
     resources :allegation,       controller: "allegation",        only: %i[show new create update]
-    resources :project,          controller: "project",           only: %i[show new create]
+    resources :project,          controller: "project",           only: %i[show new create update]
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
   end
 
@@ -98,7 +103,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-
+    resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
 
     resource :activity, controller: "investigations/activities", only: %i[show create new] do

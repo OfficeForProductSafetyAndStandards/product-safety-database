@@ -3,11 +3,6 @@ name: System Tests
 on: [push]
 
 env:
-  KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-  KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-  KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-  KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
-  KEYCLOAK_REDIRECT_URI: http://localhost:3000/users/auth/openid_connect/callback
   DATABASE_URL: postgres://postgres@localhost:5432
   ELASTICSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
@@ -93,9 +88,4 @@ jobs:
 
     - name: Run Tests
       working-directory: psd-web
-      env:
-        KEYCLOAK_AUTH_URL: ${{ secrets.KeycloakAuthUrl }}
-        KEYCLOAK_CLIENT_ID: ${{ secrets.KeycloakClientId }}
-        KEYCLOAK_CLIENT_SECRET: ${{ secrets.KeycloakClientSecret }}
-        KEYCLOAK_USER_PASSWORD: ${{ secrets.KeycloakUserPassword }}
       run: bundle exec rake test:system
