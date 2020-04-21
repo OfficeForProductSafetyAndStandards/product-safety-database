@@ -12,6 +12,8 @@ class SecondaryAuthentication < ApplicationRecord
   }
 
   OTP_LENGTH = 6
+  MAX_ATTEMPTS = Rails.configuration.two_factor_attempts
+  OTP_EXPIRY_SECONDS = 300
 
   belongs_to :user
 
@@ -20,8 +22,26 @@ class SecondaryAuthentication < ApplicationRecord
     send_two_factor_authentication_code
   end
 
+  def otp_needs_refreshing?
+    otp_locked? || otp_expired?
+  end
+
+  def otp_expired?
+    self.direct_otp_sent_at && (self.direct_otp_sent_at + OTP_EXPIRY_SECONDS) < Time.now.utc
+  end
+
+  def otp_locked?
+    self.attempts > MAX_ATTEMPTS
+  end
+
+  def valid_otp?(otp)
+    self.increment!(:attempts)
+    otp == self.direct_otp
+  end
+
   def generate_code
     update_attributes(
+      attempts: 0,
       direct_otp: random_base10(OTP_LENGTH),
       direct_otp_sent_at: Time.now.utc
     )

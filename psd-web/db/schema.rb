@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_12_181146) do
+ActiveRecord::Schema.define(version: 2020_04_17_162650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(version: 2020_04_12_181146) do
     t.string "pretty_id"
     t.string "product_category"
     t.string "received_type"
+    t.tsvector "search_index"
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"
@@ -216,6 +217,7 @@ ActiveRecord::Schema.define(version: 2020_04_12_181146) do
   end
 
   create_table "secondary_authentications", force: :cascade do |t|
+    t.integer "attempts", default: 0
     t.boolean "authenticated"
     t.datetime "authentication_expires_at"
     t.datetime "created_at", null: false

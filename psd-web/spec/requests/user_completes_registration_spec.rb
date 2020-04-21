@@ -65,7 +65,6 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
 
       before do
         sign_in user
-        allow(user).to receive(:send_new_otp)
       end
 
       it "redirects to the homepage" do
@@ -80,7 +79,6 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
 
       before do
         sign_in other_user
-        allow(other_user).to receive(:send_new_otp)
       end
 
       it "shows a message telling the user they’re already signed in as someone else" do
@@ -119,7 +117,9 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
 
       context "when two factor auth is enabled" do
         it "redirects to the two factor authentication path", :with_2fa do
-          expect(response).to redirect_to(user_two_factor_authentication_path)
+          follow_redirect!
+          expected_path = new_secondary_authentications_path(secondary_authentication_id: SecondaryAuthentication.last.id)
+          expect(response).to redirect_to(expected_path)
         end
       end
 

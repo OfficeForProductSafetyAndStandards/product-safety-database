@@ -36,7 +36,6 @@ class UsersController < ApplicationController
     @user.assign_attributes(new_user_attributes)
 
     if @user.save(context: :registration_completion)
-
       sign_in :user, @user
       redirect_user
     else

@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
+  has_many :secondary_authentications, dependent: :destroy
 
   has_and_belongs_to_many :teams
 

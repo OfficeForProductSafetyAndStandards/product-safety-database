@@ -21,14 +21,28 @@ class TwoFactorAuthenticationForm
             allow_blank: true,
             if: -> { INTEGER_REGEX === otp_code }
   validate :correct_otp_validation
+  validate :otp_expiry_validation
+  validate :otp_attempts_validation
 
   def authenticate!
     secondary_authentication.authenticate!
   end
 
   def correct_otp_validation
-    if secondary_authentication.direct_otp != self.otp_code
+    unless secondary_authentication.valid_otp? self.otp_code
       errors.add(:otp_code, "Incorrect security code")
+    end
+  end
+
+  def otp_attempts_validation
+    if secondary_authentication.otp_locked?
+      errors.add(:otp_code, "Too many attempts. New code sent")
+    end
+  end
+
+  def otp_expiry_validation
+    if secondary_authentication.otp_expired?
+      errors.add(:otp_code, "Code expired. New code sent")
     end
   end
 
