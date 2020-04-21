@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::UpdateAssignee::WithNotification, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe AuditActivity::Investigation::UpdateAssignee, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   subject(:audit_activity) { described_class.from(investigation) }
 
   let(:user) { create(:user) }

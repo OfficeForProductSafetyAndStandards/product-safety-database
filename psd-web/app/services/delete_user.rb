@@ -17,10 +17,9 @@ private
     context.team = context.user.teams.first
 
     context.user.investigations.each do |investigation|
-      AuditActivity::Investigation::DeleteAssignee.from(investigation)
       investigation.assignee = context.team
       investigation.save
-      AuditActivity::Investigation::UpdateAssignee::WithoutNotification.from(investigation)
+      AuditActivity::Investigation::AutomaticallyReassign.from(investigation)
     end
   end
 end
