@@ -14,7 +14,7 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
       visit "/admin"
       expect(page).to have_css("h1", text: "Check your phone")
 
-      fill_in "Enter security code", with: user.reload.direct_otp
+      fill_in "Enter security code", with: SecondaryAuthentication.last.direct_otp
       click_on "Continue"
 
       visit "/admin"

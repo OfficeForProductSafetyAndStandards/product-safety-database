@@ -24,6 +24,10 @@ class TwoFactorAuthenticationForm
   validate :otp_expiry_validation
   validate :otp_attempts_validation
 
+  def otp_code=(code)
+    super(code.to_s.strip)
+  end
+
   def authenticate!
     secondary_authentication.authenticate!
   end
