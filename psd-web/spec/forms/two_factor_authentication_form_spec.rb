@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe TwoFactorAuthenticationForm do
+  subject(:form) { described_class.new(otp_code: otp_code, secondary_authentication_id: secondary_authentication.id) }
+
   let(:attempts) { 0 }
   let(:direct_otp_sent_at) { Time.new.utc }
   let(:secondary_authentication) { create(:secondary_authentication, attempts: attempts, direct_otp_sent_at: direct_otp_sent_at) }
   let(:otp_code) { secondary_authentication.direct_otp }
-  subject(:form) { described_class.new(otp_code: otp_code, secondary_authentication_id: secondary_authentication.id) }
+
 
   describe "#valid?" do
     before { form.validate }

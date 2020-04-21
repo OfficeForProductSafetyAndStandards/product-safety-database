@@ -27,7 +27,7 @@ class SecondaryAuthenticationsController < ApplicationController
       if session[:secondary_authentication_redirect_to]
         redirect_to session[:secondary_authentication_redirect_to]
       else
-        redirect_to '/'
+        redirect_to "/"
       end
     else
       @two_factor_authentication_form.otp_code = nil
@@ -39,6 +39,7 @@ class SecondaryAuthenticationsController < ApplicationController
     session[:secondary_authentication] << authentication.id
   end
 
-  private
+private
+
   def nav_items; end
 end

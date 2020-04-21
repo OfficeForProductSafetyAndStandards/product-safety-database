@@ -202,7 +202,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   def expect_to_be_on_two_factor_authentication_page
-    expect(page.current_path).to match("/secondary_authentications\/new")
+    expect(page).to have_current_path(/\/secondary_authentications\/new/)
   end
 
   def expect_to_be_on_reset_password_page

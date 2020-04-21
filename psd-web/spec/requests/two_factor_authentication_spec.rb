@@ -12,12 +12,12 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
   describe "the form" do
     subject(:submit_2fa) do
       post secondary_authentications_path,
-        params: {
-        two_factor_authentication_form: {
-          otp_code: submitted_code,
-          secondary_authentication_id: secondary_authentication.id
-        }
-      }
+           params: {
+           two_factor_authentication_form: {
+             otp_code: submitted_code,
+             secondary_authentication_id: secondary_authentication.id
+           }
+         }
     end
 
     let(:previous_attempts_count) { 1 }
@@ -31,7 +31,7 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
       secondary_authentication
     end
 
-    context "after successful signup" do
+    context "with successful signup" do
       before { sign_in(user) }
 
       shared_examples_for "code not accepted" do |*errors|
@@ -55,7 +55,6 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
       end
 
       context "with correct otp" do
-
         it "redirects to the main page" do
           submit_2fa
           expect(response).to redirect_to(root_path)

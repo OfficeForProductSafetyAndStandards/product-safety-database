@@ -33,6 +33,7 @@ module SecondaryAuthenticationConcern
       unless SecondaryAuthentication.find_by(id: auth_id)
         return true
       end
+
       if SecondaryAuthentication.find(auth_id).expired?
         SecondaryAuthentication.find(auth_id).delete
         true

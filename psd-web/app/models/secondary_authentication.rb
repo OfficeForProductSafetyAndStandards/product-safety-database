@@ -1,15 +1,15 @@
 class SecondaryAuthentication < ApplicationRecord
-  DEFAULT_OPERATION = "secondary_authentication"
-  RESET_PASSWORD_OPERATION = "reset_password"
-  INVITE_USER = "invite_user"
-  UNLOCK_OPERATION = "unlock_operation"
+  DEFAULT_OPERATION = "secondary_authentication".freeze
+  RESET_PASSWORD_OPERATION = "reset_password".freeze
+  INVITE_USER = "invite_user".freeze
+  UNLOCK_OPERATION = "unlock_operation".freeze
 
   TIMEOUTS = {
     DEFAULT_OPERATION => 7 * 24 * 3600, # 7 days
     RESET_PASSWORD_OPERATION => 300, # 5 minutes
     INVITE_USER => 3600, # 1 hour
     UNLOCK_OPERATION => 300, # 5 minutes
-  }
+  }.freeze
 
   OTP_LENGTH = 6
   MAX_ATTEMPTS = Rails.configuration.two_factor_attempts
@@ -40,7 +40,7 @@ class SecondaryAuthentication < ApplicationRecord
   end
 
   def generate_code
-    update_attributes(
+    update(
       attempts: 0,
       direct_otp: random_base10(OTP_LENGTH),
       direct_otp_sent_at: Time.now.utc
@@ -67,9 +67,10 @@ class SecondaryAuthentication < ApplicationRecord
   def try_to_verify_user_mobile_number
     user.update(mobile_number_verified: true) unless user.mobile_number_verified
   end
-  private
+
+private
 
   def random_base10(digits)
-    SecureRandom.random_number(10**digits).to_s.rjust(digits, '0')
+    SecureRandom.random_number(10**digits).to_s.rjust(digits, "0")
   end
 end

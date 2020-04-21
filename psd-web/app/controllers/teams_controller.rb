@@ -2,7 +2,7 @@ class TeamsController < ApplicationController
   before_action :set_user_teams, only: :index
   before_action :set_team, only: %i[show invite_to]
   before_action :set_new_user, only: :invite_to
-  before_action :require_secondary_authentication, only: [:invite_to, :resend_invitation]
+  before_action :require_secondary_authentication, only: %i[invite_to resend_invitation]
 
   # GET /teams, GET /my-teams
   def index; end

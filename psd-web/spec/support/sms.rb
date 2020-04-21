@@ -11,13 +11,11 @@ end
 
 RSpec.shared_context "with stubbed otp sms", shared_context: :metadata do
   let!(:delivered_sms) { [] }
-  # rubocop:disable RSpec/AnyInstance
   before do
-    allow(SendSMS).to receive(:otp_code).and_wrap_original do |m, *args|
+    allow(SendSMS).to receive(:otp_code).and_wrap_original do |_m, *args|
       delivered_sms << TestOTPSMS.new(*args.first, *args.second)
     end
   end
-  # rubocop:enable RSpec/AnyInstance
 end
 
 RSpec.configure do |rspec|

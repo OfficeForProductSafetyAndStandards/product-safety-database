@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 private
 
   def redirect_user
-    return redirect_to root_path
+    redirect_to root_path
   end
 
   def new_user_attributes

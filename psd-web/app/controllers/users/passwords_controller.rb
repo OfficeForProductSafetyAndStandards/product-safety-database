@@ -58,6 +58,7 @@ module Users
       return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
       return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
+
       require_secondary_authentication
     end
 
