@@ -14,7 +14,21 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
       end
     end
 
-    context "when given an user" do
+    context "when given an user that is already deleted" do
+      subject(:delete_call) { described_class.call(user: user) }
+
+      let(:user) { create(:user, deleted: true) }
+
+      it "returns a failure" do
+        expect(delete_call).to be_failure
+      end
+
+      it "provides an error message" do
+        expect(delete_call.error).to eq "User already deleted"
+      end
+    end
+
+    context "when given an user that is not already deleted" do
       subject(:delete_call) { described_class.call(user: user) }
 
       let(:user) { create(:user_with_teams, teams_count: 2) }

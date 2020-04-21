@@ -3,6 +3,7 @@ class DeleteUser
 
   def call
     context.fail!(error: "No user supplied") unless context.user
+    context.fail!(error: "User already deleted") if context.user.deleted?
 
     ActiveRecord::Base.transaction do
       context.user.mark_as_deleted!
