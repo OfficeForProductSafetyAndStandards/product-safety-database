@@ -65,14 +65,11 @@ cp .env.development.example .env.development
 You will need to edit this file to add:
 
 * [GOV.UK Notify](https://www.notifications.service.gov.uk) API key
-* You can set `TWO_FACTOR_AUTHENTICATION_ENABLED=false` to bypass two factor authentication in development mode.
+* Your mobile number to `TWO_FACTOR_AUTH_MOBILE_NUMBER` so that when using the seeded user you will receive the two factor authentication code. Alternatively you cab set `TWO_FACTOR_AUTHENTICATION_ENABLED=false` to bypass two factor authentication in development mode.
 
 
 
 ### 5. Setup the database
-
-In order to run the seed file you will need to ask a member of the team for the credentials file private keys and put it in `config/master.key`, have a look at the documentation for [rails custom credentials](https://guides.rubyonrails.org/security.html#custom-credentials)
-
 
 Create and populate the database:
 
