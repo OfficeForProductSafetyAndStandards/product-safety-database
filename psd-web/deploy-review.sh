@@ -32,6 +32,8 @@ until cf7 service $DB_NAME > /tmp/db_exists && grep -E "create succeeded|update 
 
 cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
 
+cf bind-service $APP_NAME psd-seeds --binding-name psd-seeds
+
 if [ -z "$WEB_MAX_THREADS" ]
 then
   WEB_MAX_THREADS=5

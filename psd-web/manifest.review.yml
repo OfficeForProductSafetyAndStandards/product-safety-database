@@ -31,6 +31,7 @@ applications:
     - psd-two-factor-auth-env
     - psd-seed-users-env
     - antivirus-auth-env
+    - psd-seeds
   processes:
     - type: web
       env:
