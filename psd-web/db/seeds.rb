@@ -418,7 +418,7 @@ if run_seeds
     organisations = Rails.env.production? ? CF::App::Credentials.find_by_service_name("psd-seeds")["organisations"] : Rails.application.credentials.organisations
     # rubocop:enable Rails/DynamicFindBy
 
-    organisations.symobolize_keys!
+    # organisations.symbolize_keys!
 
     Organisation.destroy_all
     Team.destroy_all
