@@ -1,25 +1,7 @@
-class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigation::Base
-  include NotifyHelper
-
+class AuditActivity::Investigation::UpdateAssignee::WithNotification < AuditActivity::Investigation::UpdateAssignee::Base
   def self.from(investigation)
-    title = investigation.assignee.id.to_s
     body = investigation.assignee_rationale
-    super(investigation, title, self.sanitize_text(body))
-  end
-
-  def subtitle_slug
-    "Assigned"
-  end
-
-  def assignable_id
-    # We store assignable_id in title field, this is getting it back
-    # Using alias for accessing parent method causes errors elsewhere :(
-    AuditActivity::Investigation::Base.instance_method(:title).bind(self).call
-  end
-
-  def title
-    # We store assignable_id in title field, this is computing title based on that
-    "Assigned to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name}"
+    super(investigation, body)
   end
 
   def email_update_text

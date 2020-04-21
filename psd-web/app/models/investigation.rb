@@ -189,7 +189,7 @@ private
     # TODO: User.current check is here to avoid triggering activity and emails from migrations
     # Can be safely removed once the migration PopulateAssigneeAndDescription has run
     if ((saved_changes.key? :assignable_id) || (saved_changes.key? :assignable_type)) && User.current
-      AuditActivity::Investigation::UpdateAssignee.from(self)
+      AuditActivity::Investigation::UpdateAssignee::WithNotification.from(self)
     end
   end
 

@@ -20,6 +20,7 @@ private
       AuditActivity::Investigation::DeleteAssignee.from(investigation)
       investigation.assignee = context.team
       investigation.save
+      AuditActivity::Investigation::UpdateAssignee::WithoutNotification.from(investigation)
     end
   end
 end

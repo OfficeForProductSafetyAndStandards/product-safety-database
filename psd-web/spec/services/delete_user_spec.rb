@@ -71,6 +71,16 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           expect(activity.title).to start_with "User #{user.name} (#{user.organisation.name}) deleted"
         end
       end
+
+      it "registers the assignee update in the investigations activity log" do
+        update_assignee_activities = Activity.where(type: "AuditActivity::Investigation::UpdateAssignee::WithoutNotification")
+
+        expect { delete_call }.to change(update_assignee_activities, :count).by(3)
+
+        update_assignee_activities.last(3).each do |activity|
+          expect(activity.title).to eq "Assigned to #{user_first_team.display_name}"
+        end
+      end
       # rubocop:enable RSpec/MultipleExpectations
 
       it "does not send notifications to the user or the team" do
