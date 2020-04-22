@@ -9,7 +9,7 @@ function cookieBanner () {
     const expires = `expires=${date.toUTCString()}`
     document.cookie = `seen_cookie_message = true;${expires};path=/`
   }
-  function hideCookieBanner () {
+  function hideCookieBanner (event) {
     event.preventDefault()
     setCookie(365)
     document.getElementById('global-cookie-message').style.display = 'none'
