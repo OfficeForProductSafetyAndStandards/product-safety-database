@@ -9,12 +9,13 @@ module Search
     end
 
     def search
-      @search = Investigation
+      @search = Investigation.unscoped
       search_by_keyword
       filter_by_type
       filter_by_status
       filter_by_creator
       filter_by_assignee
+      sort
       # TODO: add order
       @search
     end
@@ -137,6 +138,17 @@ module Search
       or_relation = or_relation.or(relations[1]) if relations[1].present?
       or_relation = or_relation.or(relations[2]) if relations[2].present?
       @search = @search.merge(or_relation) if or_relation.present?
+    end
+
+    def sort
+      case f.sort_by
+      when "recent"
+        @search = @search.order("updated_at DESC")
+      when "oldest"
+        @search = @search.order("updated_at ASC")
+      when "newest"
+        @search = @search.order("created_at DESC")
+      end
     end
   end
 end

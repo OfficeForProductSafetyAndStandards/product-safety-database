@@ -26,7 +26,7 @@ RSpec.describe Search::Base, :with_elasticsearch do
   let(:status_open) { checked }
   let(:status_closed) { checked }
 
-  let(:sort_by) { unchecked }
+  let(:sort_by) { "recent" }
 
   let(:params) do
     {
@@ -322,6 +322,44 @@ RSpec.describe Search::Base, :with_elasticsearch do
           let(:expected_products) do
             [enquiry2, enquiry1, allegation2, allegation1]
           end
+        end
+      end
+    end
+  end
+
+  context "Sorting" do
+    let(:status_closed) { unchecked }
+
+    context "by most recently updated" do
+      it_behaves_like "search" do
+        let(:sort_by) { "recent" }
+
+        before do
+          allegation1.touch
+        end
+
+        let(:expected_products) do
+          [allegation1, project1, enquiry1,]
+        end
+      end
+    end
+
+    context "by least recently updated" do
+      it_behaves_like "search" do
+        let(:sort_by) { "oldest" }
+
+        let(:expected_products) do
+          [allegation1, enquiry1, project1,]
+        end
+      end
+    end
+
+    context "by most recently created" do
+      it_behaves_like "search" do
+        let(:sort_by) { "newest" }
+
+        let(:expected_products) do
+          [project1, enquiry1, allegation1,]
         end
       end
     end
