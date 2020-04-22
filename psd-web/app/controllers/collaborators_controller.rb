@@ -14,30 +14,22 @@ class CollaboratorsController < ApplicationController
 
     authorize @investigation, :add_collaborators?
 
-    @collaborator = @investigation.collaborators.new(collaborator_params)
-    @collaborator.added_by_user = current_user
+    message = params.dig(:collaborator, :message)
 
-    begin
-      if @collaborator.save
-        NotifyTeamAddedToCaseJob.perform_later(@collaborator)
+    result = AddTeamToAnInvestigation.call(
+      team_id: params.dig(:collaborator, :team_id),
+      include_message: params.dig(:collaborator, :include_message),
+      message: message,
+      investigation: @investigation,
+      current_user: current_user
+    )
 
-        AuditActivity::Investigation::TeamAdded.create!(
-          source: UserSource.new(user: current_user),
-          investigation: @investigation,
-          title: "#{@collaborator.team.name} added to #{@investigation.case_type.downcase}",
-          body: @collaborator.message.to_s
-        )
-        redirect_to investigation_path(@investigation)
-      else
-        @teams = teams_without_access
-        render "collaborators/new"
-      end
-    # If the team is already a collaborator, we can just redirect back to the case
-    # page rather than displaying an error, as this should only have occured if the
-    # user double-clicks the submit button or two users submit the same form at the
-    # same time.
-    rescue ActiveRecord::RecordNotUnique
+    if result.success?
       redirect_to investigation_path(@investigation)
+    else
+      @teams = teams_without_access
+      @collaborator = result.collaborator
+      render "collaborators/new"
     end
   end
 
@@ -49,9 +41,5 @@ private
 
   def team_ids_with_access
     @investigation.collaborators.pluck(:team_id) + [@investigation.assignee_team.try(:id)]
-  end
-
-  def collaborator_params
-    params.require(:collaborator).permit(:team_id, :message, :include_message)
   end
 end
