@@ -20,7 +20,19 @@ RSpec.describe SecondaryAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["Enter the security code", "Incorrect security code"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["Enter the security code"])
+      end
+    end
+
+    context "when the two factor code is wrong" do
+      let(:otp_code) { secondary_authentication.direct_otp.reverse }
+
+      it "is not valid" do
+        expect(form).to be_invalid
+      end
+
+      it "populates an error message" do
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["Incorrect security code"])
       end
     end
 
@@ -32,7 +44,7 @@ RSpec.describe SecondaryAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["The code must be 5 numbers", "Incorrect security code"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["The code must be 5 numbers"])
       end
     end
 
@@ -44,7 +56,7 @@ RSpec.describe SecondaryAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["You haven’t entered enough numbers", "Incorrect security code"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["You haven’t entered enough numbers"])
       end
     end
 
@@ -57,7 +69,7 @@ RSpec.describe SecondaryAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["The code must be 5 numbers", "Incorrect security code"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["The code must be 5 numbers"])
       end
     end
 
@@ -69,7 +81,7 @@ RSpec.describe SecondaryAuthenticationForm do
       end
 
       it "populates an error message" do
-        expect(form.errors.full_messages_for(:otp_code)).to eq(["You’ve entered too many numbers", "Incorrect security code"])
+        expect(form.errors.full_messages_for(:otp_code)).to eq(["You’ve entered too many numbers"])
       end
     end
 

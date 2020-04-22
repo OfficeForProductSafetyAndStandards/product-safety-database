@@ -33,18 +33,24 @@ class SecondaryAuthenticationForm
   end
 
   def correct_otp_validation
+    return if errors.present?
+
     unless secondary_authentication.valid_otp? self.otp_code
       errors.add(:otp_code, "Incorrect security code")
     end
   end
 
   def otp_attempts_validation
+    return if errors.present?
+
     if secondary_authentication.otp_locked?
       errors.add(:otp_code, "Too many attempts. New code sent")
     end
   end
 
   def otp_expiry_validation
+    return if errors.present?
+
     if secondary_authentication.otp_expired?
       errors.add(:otp_code, "Code expired. New code sent")
     end
