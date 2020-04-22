@@ -84,7 +84,7 @@ private
       if @investigation.update(update_params)
         format.html {
           redirect_to investigation_path(@investigation), flash: {
-            success: "#{@investigation.case_type.titleize} was successfully updated."
+            success: "#{@investigation.case_type.upcase_first} was successfully updated."
           }
         }
         format.json { render :show, status: :ok, location: @investigation }

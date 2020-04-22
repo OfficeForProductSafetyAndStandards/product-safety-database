@@ -14,6 +14,6 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   end
 
   def email_update_text
-    "Test result was added to the #{investigation.case_type} by #{source&.show&.titleize}."
+    "Test result was added to the #{investigation.case_type} by #{source&.show}."
   end
 end
