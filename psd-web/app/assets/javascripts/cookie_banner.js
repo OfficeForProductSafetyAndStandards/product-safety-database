@@ -10,6 +10,7 @@ function cookieBanner () {
     document.cookie = `seen_cookie_message = true;${expires};path=/`
   }
   function hideCookieBanner () {
+    event.preventDefault()
     setCookie(365)
     document.getElementById('global-cookie-message').style.display = 'none'
   }
