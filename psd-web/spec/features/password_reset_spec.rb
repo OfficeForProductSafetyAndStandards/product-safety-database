@@ -13,12 +13,11 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     click_link "Forgot your password?"
 
     perform_enqueued_jobs do
-      assert_not_requested(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
-
       expect(page).to have_css("h1", text: "Reset your password")
       fill_in "Email address", with: Faker::Internet.safe_email
       click_on "Send email"
 
+      expect(delivered_emails).to be_empty
       expect_to_be_on_check_your_email_page
     end
   end
@@ -165,25 +164,21 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     click_link "Forgot your password?"
 
     perform_enqueued_jobs do
-      body = {
-        email_address: user.email,
-        template_id: NotifyMailer::TEMPLATES[:reset_password_instruction],
-        reference: "Password reset",
-        personalisation: {
-          name: user.name,
-          edit_user_password_url_with_token: edit_user_password_url_with_token
-        }
-      }
-
-      stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/email")
-        .with(body: body.to_json).to_return(status: 200, body: {}.to_json, headers: {})
-
       expect_to_be_on_reset_password_page
 
       expect(page).to have_css("h1", text: "Reset your password")
 
       fill_in "Email address", with: user.email
       click_on "Send email"
+
+      expect(delivered_emails.size).to eq 1
+      email = delivered_emails.first
+
+      expect(email.recipient).to eq user.email
+      expect(email.reference).to eq "Password reset"
+      expect(email.template).to eq NotifyMailer::TEMPLATES[:reset_password_instruction]
+      expect(email.personalization[:name]).to eq user.name
+      expect(email.personalization[:edit_user_password_url_token]).to eq edit_user_password_url_with_token
 
       expect_to_be_on_check_your_email_page
     end
