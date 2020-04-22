@@ -12,6 +12,8 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
+    <p class="govuk-body">The team will be able to view and edit all case details. They cannot add or remove teams or close the case.</p>
+
     <%= form_with model: @collaborator, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
       <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @collaborator.team_id) } } %>
@@ -29,6 +31,9 @@
         is_autocomplete: true
       %>
 
+      <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.
+</p>
+
       <% message_html = capture do %>
         <%= render "form_components/govuk_textarea",
           form: form,
@@ -36,6 +41,9 @@
           id: "message",
           label: {
             text: "Message to the team"
+          },
+          hint: {
+            text: "Message will also be included on the case timeline"
           }
         %>
       <% end %>
