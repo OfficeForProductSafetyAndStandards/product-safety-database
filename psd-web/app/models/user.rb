@@ -217,6 +217,10 @@ class User < ApplicationRecord
     true
   end
 
+  def self.find_first_by_auth_conditions(conditions, opts = {})
+    super(conditions, opts.merge(deleted: false))
+  end
+
 private
 
   def lock_two_factor!
@@ -234,7 +238,7 @@ private
   end
 
   def send_reset_password_instructions_notification(token)
-    NotifyMailer.reset_password_instructions(self, token).deliver_later
+    NotifyMailer.reset_password_instructions(self, token).deliver_later unless deleted?
   end
   # END: Devise methods
 
