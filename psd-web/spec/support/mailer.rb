@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class TestNotifyEmail
-  def initialize(recipient, personalization)
+  attr_reader :recipient, :reference, :template, :personalization
+
+  def initialize(recipient:, reference:, template:, personalization:)
     @recipient = recipient
+    @reference = reference
+    @template = template
     @personalization = personalization
-  end
-
-  attr_reader :personalization
-
-  def recipient
-    @recipient.second
   end
 
   def personalization_path(param)
@@ -23,7 +21,10 @@ RSpec.shared_context "with stubbed mailer", shared_context: :metadata do
   # rubocop:disable RSpec/AnyInstance
   before do
     allow_any_instance_of(NotifyMailer).to receive(:mail).and_wrap_original do |m, *args|
-      delivered_emails << TestNotifyEmail.new(*args.first, m.receiver.govuk_notify_personalisation)
+      delivered_emails << TestNotifyEmail.new(recipient: args.first[:to],
+                                              reference: m.receiver.govuk_notify_reference,
+                                              template: m.receiver.govuk_notify_template,
+                                              personalization: m.receiver.govuk_notify_personalisation)
     end
   end
   # rubocop:enable RSpec/AnyInstance
