@@ -34,8 +34,7 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
       # rubocop:enable RSpec/ExampleLength
 
       # rubocop:disable RSpec/MultipleExpectations
-      it "queues a job to notify the team" do
-        ActiveJob::Base.queue_adapter = :test
+      it "queues a job to notify the team", :with_test_queue_adapter do
         expect { result }.to have_enqueued_job(NotifyTeamAddedToCaseJob).with do |collaborator|
           expect(collaborator.team_id).to eql(team.id)
         end
