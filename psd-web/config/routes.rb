@@ -158,7 +158,7 @@ Rails.application.routes.draw do
     member do
       get :invite_to, path: "invite"
       put :invite_to, path: "invite"
-      put :resend_invitation
+      get :resend_invitation
     end
   end
 
@@ -166,7 +166,7 @@ Rails.application.routes.draw do
     member do
       get :invite_to, path: "invite"
       put :invite_to, path: "invite"
-      put :resend_invitation
+      get :resend_invitation
     end
   end
 
