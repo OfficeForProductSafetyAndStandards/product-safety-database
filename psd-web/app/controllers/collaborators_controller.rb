@@ -25,7 +25,11 @@ class CollaboratorsController < ApplicationController
     )
 
     if result.success?
-      flash[:success] = "#{result.collaborator.team.name} added to the case"
+      flash[:success] = I18n.t(
+        :team_added_to_case,
+        team_name: result.collaborator.team.name,
+        scope: "case.add_team"
+        )
       redirect_to investigation_path(@investigation)
     else
       @teams = teams_without_access

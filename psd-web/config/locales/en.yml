@@ -42,6 +42,8 @@ en:
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
+    add_team:
+      team_added_to_case: "%{team_name} added to the case"
   investigations:
     coronavirus_related:
       show:
