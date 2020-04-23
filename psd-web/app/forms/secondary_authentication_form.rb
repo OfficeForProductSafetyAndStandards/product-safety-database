@@ -59,4 +59,8 @@ class SecondaryAuthenticationForm
   def secondary_authentication
     SecondaryAuthentication.find_by(id: self.secondary_authentication_id)
   end
+
+  def operation
+    secondary_authentication.operation
+  end
 end
