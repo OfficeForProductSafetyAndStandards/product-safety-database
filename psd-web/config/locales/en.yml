@@ -137,7 +137,7 @@ en:
         collaborator:
           attributes:
             team:
-              required: "Select a team"
+              required: "Select a team to add to the case"
             message:
               blank: Enter a message to the team
             include_message:
