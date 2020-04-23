@@ -24,12 +24,10 @@ class WhyReportingForm
 private
 
   def reported_reason
-    @reported_reason ||= case checkboxes
-                         when [true,  false, false] then Investigation.reported_reasons[:unsafe]
-                         when [false, true,  false] then Investigation.reported_reasons[:non_compliant]
-                         when [true,  true,  false] then Investigation.reported_reasons[:unsafe_and_non_compliant]
-                         when [false, false, true]  then Investigation.reported_reasons[:safe_and_compliant]
-                         end
+return :unsafe_and_non_compliant if reported_reason_unsafe && reported_reason_non_compliant
+return :unsafe if reported_reason_unsafe
+return :non_compliant if reported_reason_non_compliant
+return :safe_and_compliant if reported_reason_safe_and_compliant
   end
 
   def reason_created
