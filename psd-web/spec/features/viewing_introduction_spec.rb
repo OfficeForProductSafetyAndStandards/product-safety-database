@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Viewing the introduction", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-
   let(:user) { create(:user, :activated, has_viewed_introduction: false) }
 
   scenario "Vieiwng the steps in order" do
@@ -22,7 +21,6 @@ RSpec.feature "Viewing the introduction", :with_stubbed_elasticsearch, :with_stu
 
     expect(page).to have_content("Open a new case")
     expect(page).to have_current_path("/")
-
   end
 
   scenario "Skipping the introduction" do
@@ -45,5 +43,4 @@ RSpec.feature "Viewing the introduction", :with_stubbed_elasticsearch, :with_stu
     visit "/"
     expect(page).to have_current_path("/")
   end
-
 end

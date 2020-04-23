@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-
   let(:user) { create(:user, :activated) }
   let(:investigation) { create(:investigation) }
 
