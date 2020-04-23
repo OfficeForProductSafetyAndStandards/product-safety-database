@@ -41,5 +41,11 @@ class SecondaryAuthenticationsController < ApplicationController
 
 private
 
-  def nav_items; end
+   def hide_nav?
+    true
+  end
+
+  def secondary_nav_items
+    [text: "Sign out", href: destroy_user_session_path]
+  end
 end

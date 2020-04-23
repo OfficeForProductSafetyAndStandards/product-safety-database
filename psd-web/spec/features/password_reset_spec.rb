@@ -43,10 +43,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       visit edit_user_password_url_with_token
 
-      # FIXME: just for POC, as 2FA url changed
-      # does not changes anything in flow
-      #
-      # expect_to_be_on_secondary_authentication_page
+      expect_to_be_on_secondary_authentication_page
 
       complete_secondary_authentication_with(last_user_otp(user))
 
@@ -201,7 +198,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   def expect_to_be_on_secondary_authentication_page
-    expect(page).to have_current_path(/\/secondary_authentications\/new/)
+    expect(page).to have_current_path(/\/two-factor\/new/)
   end
 
   def expect_to_be_on_reset_password_page
