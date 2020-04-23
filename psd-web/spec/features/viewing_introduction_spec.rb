@@ -4,7 +4,7 @@ RSpec.feature "Viewing the introduction", :with_stubbed_elasticsearch, :with_stu
 
   let(:user) { create(:user, :activated, has_viewed_introduction: false) }
 
-  scenario "Vieiwng the steps in order" do
+  scenario "Viewing the steps in order" do
     sign_in user
 
     visit "/introduction/overview"
