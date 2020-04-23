@@ -173,7 +173,10 @@ class User < ApplicationRecord
     update!(deleted: true)
   end
 
-  # BEGIN: place devise overriden method calls bellow
+  # BEGIN: place Devise overriden method calls bellow
+
+  # Devise::Models::TwoFactorAuthenticatable
+
   def send_two_factor_authentication_code(code)
     SendTwoFactorAuthenticationJob.perform_later(self, code)
   end
@@ -181,6 +184,8 @@ class User < ApplicationRecord
   def need_two_factor_authentication?(_request)
     Rails.configuration.two_factor_authentication_enabled
   end
+
+  # Devise::Models::Lockable
 
   def send_unlock_instructions
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
@@ -193,6 +198,12 @@ class User < ApplicationRecord
     raw
   end
 
+  def increment_failed_attempts
+    return unless mobile_number_verified?
+
+    super
+  end
+
   # Don't reset password attempts yet, it will happen on next successful login
   def unlock_access!
     self.locked_at = nil
@@ -200,15 +211,10 @@ class User < ApplicationRecord
     save(validate: false)
   end
 
-  # Part of devise interface. Called before user authentication.
+  # Devise::Models::Authenticatable
+
   def active_for_authentication?
     true
-  end
-
-  def increment_failed_attempts
-    return unless mobile_number_verified?
-
-    super
   end
 
 private
