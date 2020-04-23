@@ -14,9 +14,7 @@ RSpec.describe WhyReportingForm do
       it "is invalid", :aggregate_failures do
         expect(form).to be_invalid
 
-        expect(form.errors.full_messages_for(:reported_reason_unsafe)).to eq(["Choose at least one option"])
-        expect(form.errors.full_messages_for(:reported_reason_non_compliant)).to eq(["Choose at least one option"])
-        expect(form.errors.full_messages_for(:reported_reason_safe_and_compliant)).to eq(["Choose at least one option"])
+        expect(form.errors.full_messages_for(:base)).to eq(["Choose at least one option"])
       end
     end
 
@@ -33,8 +31,7 @@ RSpec.describe WhyReportingForm do
 
       it "is invalid and sets and error", :aggregate_failures do
         expect(form).to be_invalid
-        expect(form.errors[:reported_reason_safe_and_compliant]).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
-        expect(form.errors[:reported_reason_non_compliant]).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
+        expect(form.errors.full_messages_for(:base)).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
       end
     end
   end
