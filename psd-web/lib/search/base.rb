@@ -16,7 +16,6 @@ module Search
       filter_by_creator
       filter_by_assignee
       sort
-      # TODO: add order
       @search
     end
 
