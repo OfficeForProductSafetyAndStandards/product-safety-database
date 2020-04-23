@@ -17,6 +17,6 @@ class CommentActivity < Activity
   end
 
   def email_update_text
-    "#{source&.show&.titleize} commented on the #{investigation.case_type}."
+    "#{source&.show} commented on the #{investigation.case_type}."
   end
 end

@@ -113,7 +113,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def pretty_description
-    "#{case_type.titleize}: #{pretty_id}"
+    "#{case_type.upcase_first}: #{pretty_id}"
   end
 
   # rubocop:disable Rails/OutputSafety

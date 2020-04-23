@@ -50,7 +50,7 @@ table[style="width:100%; text-align:left"]
         td
           = activity.created_at.to_s :db
         td
-          = activity.type.titleize
+          = activity.type.upcase_first
         td
           = activity.source.show
         td
