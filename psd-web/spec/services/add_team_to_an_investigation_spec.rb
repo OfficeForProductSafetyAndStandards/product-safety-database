@@ -33,24 +33,26 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
       end
       # rubocop:enable RSpec/ExampleLength
 
-      # rubocop:disable RSpec/MultipleExpectations
       it "queues a job to notify the team", :with_test_queue_adapter do
-        expect { result }.to have_enqueued_job(NotifyTeamAddedToCaseJob).with do |collaborator|
-          expect(collaborator.team_id).to eql(team.id)
+        aggregate_failures do
+          expect { result }.to have_enqueued_job(NotifyTeamAddedToCaseJob).with do |collaborator|
+            expect(collaborator.team_id).to eql(team.id)
+          end
         end
       end
-      # rubocop:enable RSpec/MultipleExpectations
 
-      # rubocop:disable RSpec/MultipleExpectations
+      # rubocop:disable RSpec/ExampleLength
       it "adds an activity audit record" do
         result
         last_added_activity = investigation.activities.order(:id).first
 
-        expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
-        expect(last_added_activity.title).to eql("Testing team added to allegation")
-        expect(last_added_activity.source.user_id).to eql(user.id)
+        aggregate_failures do
+          expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
+          expect(last_added_activity.title).to eql("Testing team added to allegation")
+          expect(last_added_activity.source.user_id).to eql(user.id)
+        end
       end
-      # rubocop:enable RSpec/MultipleExpectations
+      # rubocop:enable RSpec/ExampleLength
     end
   end
 end
