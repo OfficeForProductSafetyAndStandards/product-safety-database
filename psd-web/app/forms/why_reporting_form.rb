@@ -39,15 +39,7 @@ private
   def mutually_exclusive_checkboxes
     return unless mutually_exclusive_checkboxes_selected?
 
-    errors.add(:reported_reason_unsafe,
-               I18n.t(:mutually_exclusive_checkboxes_selected, scope: :why_reporting_form))
-    if reported_reason_non_compliant
-      errors.add(:reported_reason_non_compliant,
-                 I18n.t(:mutually_exclusive_checkboxes_selected, scope: :why_reporting_form))
-    end
-    if reported_reason_safe_and_compliant
-      errors.add(:reported_reason_safe_and_compliant,
-                 I18n.t(:mutually_exclusive_checkboxes_selected, scope: :why_reporting_form))
+    errors.add(:base, I18n.t(:mutually_exclusive_checkboxes_selected, scope: :why_reporting_form))
     end
   end
 
@@ -60,12 +52,7 @@ private
   def selected_at_least_one_checkbox
     return if at_least_one_checkbox_checked?
 
-    errors.add(:reported_reason_unsafe,
-               I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
-    errors.add(:reported_reason_non_compliant,
-               I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
-    errors.add(:reported_reason_safe_and_compliant,
-               I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
+    errors.add(:base, I18n.t(:no_checkboxes_selected, scope: :why_reporting_form))
   end
 
   def at_least_one_checkbox_checked?
