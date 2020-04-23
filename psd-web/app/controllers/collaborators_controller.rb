@@ -14,14 +14,11 @@ class CollaboratorsController < ApplicationController
 
     authorize @investigation, :add_collaborators?
 
-    message = params.dig(:collaborator, :message)
-
     result = AddTeamToAnInvestigation.call(
-      team_id: params.dig(:collaborator, :team_id),
-      include_message: params.dig(:collaborator, :include_message),
-      message: message,
-      investigation: @investigation,
-      current_user: current_user
+      params.require(:collaborator).permit(:team_id, :include_message, :message).merge({
+        investigation: @investigation,
+        current_user: current_user
+      })
     )
 
     if result.success?
