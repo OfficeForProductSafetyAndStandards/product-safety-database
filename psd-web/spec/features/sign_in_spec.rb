@@ -181,6 +181,15 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect_incorrect_email_or_password
   end
 
+  scenario "user tries to sign in with email address belonging to a deleted account" do
+    user.update_column(:deleted, true)
+
+    visit "/sign-in"
+    fill_in_credentials
+
+    expect_incorrect_email_or_password
+  end
+
   scenario "user introduces email address with incorrect format" do
     visit "/sign-in"
 
