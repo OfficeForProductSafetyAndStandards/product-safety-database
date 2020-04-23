@@ -31,6 +31,9 @@
 
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
+  mail:
+    team_added_to_case:
+      message_from: "Message from %{user_name}:"
   case:
     badges:
       coronavirus_related: "COVID-19 related case"

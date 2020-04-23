@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe NotifyMailer do
+RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   describe "#reset_password_instruction" do
     let(:user)  { build(:user) }
     let(:token) { SecureRandom.hex }
@@ -57,6 +57,44 @@ RSpec.describe NotifyMailer do
 
         expect(mail.govuk_notify_personalisation)
           .to eq(invitation_url: invitation_url, inviting_team_member_name: "a colleague")
+      end
+    end
+  end
+
+  describe "#team_added_to_case_email" do
+    context "when called with a collaborator with a message" do
+      let(:collaborator) {
+        create(:collaborator,
+               message: "Thanks for collaborating!",
+                     added_by_user: create(:user, name: "Bob Jones"))
+      }
+
+      let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+
+      it "sets the personalisation" do
+        expect(mail.govuk_notify_personalisation).to eql(
+          updater_name: "Bob Jones",
+          optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
+          investigation_url: investigation_url(collaborator.investigation)
+        )
+      end
+    end
+
+    context "when called with a collaborator with a no message" do
+      let(:collaborator) {
+        create(:collaborator,
+               message: nil,
+                     added_by_user: create(:user, name: "Bob Jones"))
+      }
+
+      let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+
+      it "sets the personalisation" do
+        expect(mail.govuk_notify_personalisation).to eql(
+          updater_name: "Bob Jones",
+          optional_message: nil,
+          investigation_url: investigation_url(collaborator.investigation)
+        )
       end
     end
   end
