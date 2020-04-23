@@ -41,6 +41,18 @@
       <% team_actions = {} %>
     <% end %>
 
+    <% if policy(@investigation).assign? %>
+      <% assign_actions = {
+        items: [
+          href: new_investigation_assign_path(@investigation),
+          text: "Change",
+          visuallyHiddenText: "assigned to"
+        ]
+      } %>
+    <% else %>
+      <% assign_actions = {} %>
+    <% end %>
+
     <% team_list_html = capture do %>
       <% if @investigation.teams_with_access.length > 1 %>
         <ul class="govuk-list">
@@ -58,8 +70,9 @@
       classes: "govuk-summary-list--no-border",
       rows: [
         {
-          key: { text: "Case owner" },
-          value: { text: investigation_assignee(@investigation) }
+          key: { text: "Assigned to" },
+          value: { text: investigation_assignee(@investigation) },
+          actions: assign_actions
         },
         {
           key: { text: "Teams added to case" },
