@@ -24,10 +24,10 @@ class WhyReportingForm
 private
 
   def reported_reason
-return :unsafe_and_non_compliant if reported_reason_unsafe && reported_reason_non_compliant
-return :unsafe if reported_reason_unsafe
-return :non_compliant if reported_reason_non_compliant
-return :safe_and_compliant if reported_reason_safe_and_compliant
+    return :unsafe_and_non_compliant if reported_reason_unsafe && reported_reason_non_compliant
+    return :unsafe                   if reported_reason_unsafe
+    return :non_compliant            if reported_reason_non_compliant
+    return :safe_and_compliant       if reported_reason_safe_and_compliant
   end
 
   def reason_created
@@ -38,7 +38,6 @@ return :safe_and_compliant if reported_reason_safe_and_compliant
     return unless mutually_exclusive_checkboxes_selected?
 
     errors.add(:base, I18n.t(:mutually_exclusive_checkboxes_selected, scope: :why_reporting_form))
-    end
   end
 
   def mutually_exclusive_checkboxes_selected?
