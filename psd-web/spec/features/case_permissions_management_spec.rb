@@ -30,7 +30,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     # Validation errors
     expect(page).to have_title("Error: Add a team to the case")
-    expect(page).to have_selector("a", text: "Select a team")
+    expect(page).to have_selector("a", text: "Select a team to add to the case")
     expect(page).to have_selector("a", text: "Select whether you want to include a message")
 
     select "Southampton Trading Standards", from: "Choose team"
@@ -42,7 +42,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     # Validation errors
     expect(page).to have_title("Error: Add a team to the case")
-    expect(page).to have_selector("a", text: "Enter a message to the team")
+    expect(page).to have_selector("a", text: "Enter a message")
 
     within_fieldset "Do you want to include instructions or more information?" do
       fill_in "Message to the team", with: "Thanks for collaborating on this case with us."
