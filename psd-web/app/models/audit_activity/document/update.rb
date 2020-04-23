@@ -27,7 +27,7 @@ class AuditActivity::Document::Update < AuditActivity::Document::Base
   end
 
   def email_update_text
-    "Document attached to the #{investigation.case_type.titleize} was updated by #{source&.show&.titleize}."
+    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show}."
   end
 
   def restricted_title
