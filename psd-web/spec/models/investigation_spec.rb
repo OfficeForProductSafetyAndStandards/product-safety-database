@@ -6,7 +6,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:investigation) { create(:investigation, assignee: nil) }
 
       it "is an empty list" do
-        expect(investigation.teams_with_access).to eql([])
+        expect(investigation.teams_with_access).to be_empty
       end
     end
 
