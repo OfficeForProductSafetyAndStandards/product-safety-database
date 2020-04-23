@@ -7,4 +7,12 @@ class UserDecorator < Draper::Decorator
 
     name
   end
+
+  def name
+    if deleted?
+      "#{object.name} [user deleted]"
+    else
+      object.name
+    end
+  end
 end

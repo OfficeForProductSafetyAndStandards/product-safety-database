@@ -87,13 +87,15 @@ class User < ApplicationRecord
   def display_name(ignore_visibility_restrictions: false, other_user: User.current)
     return @display_name if @display_name
 
-    membership = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && teams.any?
-                   team_names
-                 else
-                   organisation.name
-                 end
+    suffix = if deleted?
+               "[user deleted]"
+             elsif (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && teams.any?
+               "(#{team_names})"
+             else
+               "(#{organisation.name})"
+             end
 
-    @display_name = "#{name} (#{membership})"
+    @display_name = "#{name} #{suffix}"
   end
 
   def team_names

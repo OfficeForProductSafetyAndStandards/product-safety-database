@@ -322,6 +322,14 @@ RSpec.describe User do
 
     let(:result) { user.display_name(other_user: other_user, ignore_visibility_restrictions: ignore_visibility_restrictions) }
 
+    context "when the user has been deleted" do
+      let(:user) { create(:user, name: user_name, deleted: true) }
+
+      it "returns their name an user deleted info" do
+        expect(result).to eq("#{user_name} [user deleted]")
+      end
+    end
+
     context "when the user is a member of the same organisation" do
       context "when the user has no teams" do
         it "returns their name and organisation name" do
