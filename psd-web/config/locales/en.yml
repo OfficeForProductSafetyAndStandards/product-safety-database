@@ -139,7 +139,7 @@ en:
             team:
               required: "Select a team to add to the case"
             message:
-              blank: Enter a message
+              blank: Enter a message to the team
             include_message:
               inclusion: "Select whether you want to include a message"
         comment_activity:
