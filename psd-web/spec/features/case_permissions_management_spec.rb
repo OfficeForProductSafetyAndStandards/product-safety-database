@@ -59,7 +59,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
     expect(notification_email.personalization[:updater_name]).to eq("Bob Jones")
-    expect(notification_email.personalization[:optional_message]).to eq("^ Thanks for collaborating on this case with us.")
+    expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones:\n\n^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
 
     click_link "Activity"
