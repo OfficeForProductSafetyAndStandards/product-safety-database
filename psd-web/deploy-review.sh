@@ -40,6 +40,9 @@ fi
 # See https://docs.cloudfoundry.org/devguide/deploy-apps/large-app-deploy.html
 export CF_STARTUP_TIMEOUT=10
 
+# Cancel any existing deployments in progress
+cf7 cancel-deployment $APP_NAME
+
 # Deploy the app
 cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --strategy rolling
 
