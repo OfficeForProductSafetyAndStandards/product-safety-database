@@ -11,8 +11,8 @@ class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Inv
     I18n.t(
       ".email_update_text.#{investigation.coronavirus_related?}",
       scope: self.class.i18n_scope,
-      case_type: investigation.case_type.titleize,
-      name: source&.show&.titleize,
+      case_type: investigation.case_type.upcase_first,
+      name: source&.show,
       pretty_id: investigation.pretty_id
     )
   end

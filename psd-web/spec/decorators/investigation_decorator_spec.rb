@@ -114,7 +114,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#pretty_description" do
     it {
       expect(decorated_investigation.pretty_description)
-        .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
+        .to eq("#{investigation.case_type.upcase_first}: #{investigation.pretty_id}")
     }
   end
 
