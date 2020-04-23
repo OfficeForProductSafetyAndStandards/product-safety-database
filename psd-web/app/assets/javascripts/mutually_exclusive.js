@@ -26,7 +26,7 @@ function mutuallyExclusive (el) {
   }
 }
 
-$(document).ready(() => {
+document.addEventListener('DOMContentLoaded', () => {
   const mutuallyExclusiveComponents = document.getElementsByClassName('js-mutually-exclusive')
   for (const mutuallyExclusiveComponent of mutuallyExclusiveComponents) {
     mutuallyExclusive(mutuallyExclusiveComponent)
