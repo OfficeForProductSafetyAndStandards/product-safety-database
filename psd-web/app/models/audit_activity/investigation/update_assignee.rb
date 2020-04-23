@@ -22,14 +22,14 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def email_update_text
     body = []
-    body << "#{investigation.case_type.titleize} was assigned to #{investigation.assignee.display_name} by #{source&.show&.titleize}."
-    body << "\nComment provided by #{source&.show&.titleize}:" if investigation.visibility_rationale.present?
+    body << "#{investigation.case_type.upcase_first} was assigned to #{investigation.assignee.display_name} by #{source&.show}."
+    body << "\nComment provided by #{source&.show}:" if investigation.visibility_rationale.present?
     body << investigation.assignee_rationale if investigation.assignee_rationale.present?
     body.join("\n")
   end
 
   def email_subject_text
-    "#{investigation.case_type.titleize} was reassigned"
+    "#{investigation.case_type.upcase_first} was reassigned"
   end
 
   def users_to_notify

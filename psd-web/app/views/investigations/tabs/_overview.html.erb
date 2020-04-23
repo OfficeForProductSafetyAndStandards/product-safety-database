@@ -17,13 +17,13 @@
 
     <% if @investigation.display_product_summary_list? %>
       <%= govuk_hr %>
-      <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).titleize %></h2>
+      <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).upcase_first %></h2>
       <%= @investigation.product_summary_list %>
     <% end %>
 
     <% if @investigation.complainant %>
       <%= govuk_hr %>
-      <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.titleize %></h2>
+      <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
       <%= @investigation.source_details_summary_list %>
     <% end %>
 

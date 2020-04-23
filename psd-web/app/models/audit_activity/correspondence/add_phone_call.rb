@@ -48,7 +48,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
   end
 
   def email_update_text
-    "Phone call details added to the #{investigation.case_type.titleize} by #{source&.show&.titleize}."
+    "Phone call details added to the #{investigation.case_type.upcase_first} by #{source&.show}."
   end
 
   def activity_type
