@@ -567,8 +567,4 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def skip_page
     click_button "Skip this page"
   end
-
-  def expect_to_be_on_reported_safe_overview_case_page
-    expect(page.find("h2", text: "Summary")).to have_sibling("p", text: "Product reported because it is safe and compliant.")
-  end
 end
