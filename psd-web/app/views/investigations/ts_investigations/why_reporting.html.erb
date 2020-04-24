@@ -6,63 +6,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @why_reporting_form.errors %>
-      <% heading_html = capture do %>
-        <span class="govuk-caption-l">Report an unsafe or non-compliant product</span>
-        <h1 class="govuk-heading-l"><%= page_heading %></h1>
-      <% end %>
-      <% unsafe_details = capture do %>
-        <div id="hazard-type-auto-complete-container"></div>
-        <% # Todo: find a better way of setting widths on autocompletes %>
-        <div class="govuk-!-width-one-half govuk-!-margin-bottom-6">
-          <%= render "form_components/govuk_select", choices: hazard_types, key: :hazard_type, form: form,
-                     show_all_values: true,
-                     aria_describedby: "hazard-type-category-hint", label: { text: "What is the primary hazard?" },
-                     is_autocomplete: true %>
-        </div>
-        <%= render "form_components/govuk_textarea", key: :hazard_description, form: form,
-                   attributes: { maxlength: 10000 },
-                   label: { text: "Why is the product unsafe?" },
-                   hint: { text: "Also include details if it has been involved in an incident" },
-                   classes: "govuk-!-width-three-quarters" %>
-      <% end %>
-      <% non_compliant_details = capture do %>
-        <%= render "form_components/govuk_textarea", key: :non_compliant_reason, form: form,
-                   attributes: { maxlength: 10000 },
-                   label: { text: "Why is the product non-compliant?" },
-                   classes: "govuk-!-width-three-quarters" %>
-      <% end %>
-      <%= render "form_components/govuk_checkboxes",
-                 form: form,
-                 key: :why_reporting,
-                 fieldset: { legend: { html: heading_html }, classes: "js-mutually-exclusive" },
-                 hint: { text: "Select all that apply" },
-                 items: [
-                   {
-                     key: "reported_reason_unsafe",
-                     text: "It’s unsafe (or suspected to be)",
-                     value: true,
-                     conditional: { html: unsafe_details },
-                     attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
-                   },
-                   {
-                     key: "reported_reason_non_compliant",
-                     text: "It’s non-compliant (or suspected to be)",
-                     value: true,
-                     conditional: { html: non_compliant_details },
-                     attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "reported-set" } }
-                   },
-                   {
-                     key: "or",
-                     divider: "or"
-                   },
-                   {
-                     key: "reported_reason_safe_and_compliant",
-                     text: "It’s safe and compliant",
-                     hint: {text: "Help other market surveillance authorities avoid testing the same product again"},
-                     value: true,
-                     attributes: { class: "js-mutually-exclusive__item", data: { "mutually-exclusive-set-id": "safe-set" } }
-                   }
-                 ] %>
+      <%= why_reporting_checkboxes(form, page_heading, @why_reporting_form.errors) %>
       <%= form.submit "Continue", class: "govuk-button" %>
     </div>
   </div>
