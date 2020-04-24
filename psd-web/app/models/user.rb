@@ -42,6 +42,10 @@ class User < ApplicationRecord
     where(account_activated: true, deleted: false)
   end
 
+  def self.not_deleted
+    where(deleted: false)
+  end
+
   def self.find_user_within_teams_with_email!(teams:, email:)
     joins(:teams).where(teams: { id: teams.pluck(:id) }).find_by!(email: email)
   end

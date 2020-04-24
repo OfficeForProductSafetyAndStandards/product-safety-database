@@ -7,7 +7,7 @@
       a.govuk-button role="button" href=invite_to_team_url Invite a team member
     h2.govuk-heading-m Team members
     ul.teams--list
-      - @team.users.sort_by(&:name).each do |user|
+      - @team.users.not_deleted.sort_by(&:name).each do |user|
         li.teams--user class="govuk-!-padding-top-3 govuk-!-padding-bottom-3 govuk-!-margin-0"
           - if !user.account_activated? && current_user_is_team_admin
             - html = capture do
