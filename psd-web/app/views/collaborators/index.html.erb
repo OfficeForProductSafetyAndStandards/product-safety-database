@@ -26,10 +26,12 @@
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.assignee_team.name %></th>
-          <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Assignee</span></td>
-        </tr>
+        <% if @investigation.assignee_team %>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.assignee_team.name %></th>
+            <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Assignee</span></td>
+          </tr>
+        <% end %>
         <% @investigation.teams.each do |team| %>
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
