@@ -118,7 +118,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
       context "when two factor auth is enabled" do
         it "redirects to the two factor authentication path", :with_2fa do
           follow_redirect!
-          expected_path = new_secondary_authentications_path(secondary_authentication_id: SecondaryAuthentication.last.id)
+          expected_path = new_secondary_authentication_path
           expect(response).to redirect_to(expected_path)
         end
       end

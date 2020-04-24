@@ -56,17 +56,9 @@ class SecondaryAuthentication
     SendSecondaryAuthenticationJob.perform_later(user, user.direct_otp)
   end
 
-  def otp_expired?
-  end
-
-  def expired?
-    # TODO
-    authentication_expires_at && Time.now.utc > authentication_expires_at
-  end
-
-  def expiry_seconds
-    TIMEOUTS[user.secondary_authentication_operation]
-  end
+  # def expiry_seconds
+  #   TIMEOUTS[user.secondary_authentication_operation]
+  # end
 
   def try_to_verify_user_mobile_number
     user.update(mobile_number_verified: true) unless user.mobile_number_verified

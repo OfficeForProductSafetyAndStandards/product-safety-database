@@ -38,7 +38,7 @@ module SecondaryAuthenticationConcern
     return false if get_secondary_authentication_datetime.nil?
 
     last_otp_time = get_secondary_authentication_datetime
-    (last_otp_time + SecondaryAuthentication::TIMEOUTS[current_operation]) > Time.now.utc
+    (last_otp_time + SecondaryAuthentication::TIMEOUTS[current_operation].seconds) > Time.now.utc
   end
 
   # can be overrided for actions which require

@@ -28,10 +28,6 @@ class SecondaryAuthenticationForm
     super(code.to_s.strip)
   end
 
-  # def authenticate!
-  #   secondary_authentication.authenticate!
-  # end
-
   def correct_otp_validation
     return if errors.present?
 

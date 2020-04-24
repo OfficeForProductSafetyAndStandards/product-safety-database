@@ -24,7 +24,8 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
     let(:user) do
       create(:user, :activated,
              mobile_number_verified: false,
-             second_factor_attempts_count: previous_attempts_count)
+             direct_otp_sent_at: direct_otp_sent_at,
+             second_factor_attempts_count: attempts)
     end
 
     before do
@@ -73,7 +74,7 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
       end
 
       context "with incorrect otp" do
-        let(:submitted_code) { SecondaryAuthentication.last.direct_otp.reverse }
+        let(:submitted_code) { secondary_authentication.direct_otp.reverse }
 
         include_examples "code not accepted", "Incorrect security code"
       end

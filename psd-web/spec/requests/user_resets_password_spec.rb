@@ -14,7 +14,7 @@ RSpec.describe "User resets password", type: :request, with_stubbed_notify: true
       it "redirects the user to the two factor authentication page" do
         get(edit_user_password_path(reset_password_token: reset_token))
 
-        expected_path = new_secondary_authentications_path(secondary_authentication_id: user.secondary_authentications.last.id)
+        expected_path = new_secondary_authentication_path
         expect(response).to redirect_to(expected_path)
       end
     end
