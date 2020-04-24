@@ -1,10 +1,10 @@
 class CollaboratorsController < ApplicationController
   def index
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = find_investigation_from_params
   end
 
   def new
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = find_investigation_from_params
 
     authorize @investigation, :add_collaborators?
 
@@ -14,7 +14,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def create
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = find_investigation_from_params
 
     authorize @investigation, :add_collaborators?
 
@@ -35,6 +35,10 @@ class CollaboratorsController < ApplicationController
   end
 
 private
+
+  def find_investigation_from_params
+    Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+  end
 
   def teams_without_access
     Team.where.not(id: team_ids_with_access).order(:name)
