@@ -1,5 +1,3 @@
-import $ from 'jquery'
-
 function mutuallyExclusive (el) {
   const checkboxes = Array.from(el.querySelectorAll('.js-mutually-exclusive__item[data-mutually-exclusive-set-id]'))
   const checkboxesGroupedBySetId = checkboxes.reduce((acc, checkbox) => {
