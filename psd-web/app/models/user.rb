@@ -9,8 +9,6 @@ class User < ApplicationRecord
 
   belongs_to :organisation
 
-  # has_one_time_password(encrypted: true)
-
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
@@ -149,33 +147,7 @@ class User < ApplicationRecord
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
-  def secondary_authentication_code_expired?
-    return false if !direct_otp_sent_at
-
-    (direct_otp_sent_at + User.direct_otp_valid_for) < Time.current
-  end
-
-  def two_factor_locked?
-    second_factor_attempts_locked_at && !two_factor_lock_expired?
-  end
-
-  def fail_secondary_authentication!
-    return if max_login_attempts?
-
-    self.increment!(:second_factor_attempts_count, 1)
-    lock_two_factor! if max_login_attempts?
-  end
-
-  def pass_secondary_authentication!
-    unlock_two_factor! if max_login_attempts?
-    update_column(:second_factor_attempts_count, 0)
-  end
-
   # BEGIN: place devise overriden method calls bellow
-  def send_secondary_authentication_code(code)
-    SendSecondaryAuthenticationJob.perform_later(self, code)
-  end
-
   def need_secondary_authentication?(_request)
     Rails.configuration.secondary_authentication_enabled
   end

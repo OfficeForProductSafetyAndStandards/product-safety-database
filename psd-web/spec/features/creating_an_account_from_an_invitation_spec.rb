@@ -106,7 +106,7 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
   end
 
   def expect_to_be_on_secondary_authentication_page
-    expect(page).to have_current_path(/\/two-factor\/new/)
+    expect(page).to have_current_path(/\/two-factor/)
 
     expect(page).to have_h1("Check your phone")
   end
