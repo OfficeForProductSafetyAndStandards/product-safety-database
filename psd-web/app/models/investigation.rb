@@ -72,7 +72,7 @@ class Investigation < ApplicationRecord
   end
 
   def teams_with_access
-    (teams + [assignee_team]).compact
+    ([assignee_team] + teams.order(:name)).compact
   end
 
   def assignee=(entity)
