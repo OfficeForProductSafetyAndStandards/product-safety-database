@@ -51,6 +51,8 @@
         </ul>
       <% elsif @investigation.teams_with_access.length == 1 %>
         <%= @investigation.teams_with_access.first.name %>
+      <% else %>
+        No teams added
       <% end %>
 
     <% end %>
