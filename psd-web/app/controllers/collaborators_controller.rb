@@ -1,6 +1,7 @@
 class CollaboratorsController < ApplicationController
   def index
     @investigation = find_investigation_from_params
+    @teams = @investigation.teams.order(:name)
   end
 
   def new

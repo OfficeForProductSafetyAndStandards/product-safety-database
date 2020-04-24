@@ -32,7 +32,7 @@
             <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Assignee</span></td>
           </tr>
         <% end %>
-        <% @investigation.teams.each do |team| %>
+        <% @teams.each do |team| %>
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
             <td class="govuk-table__cell">Edit full case</td>
