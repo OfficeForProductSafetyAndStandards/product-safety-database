@@ -57,10 +57,6 @@ class InvestigationDecorator < ApplicationDecorator
         value: { text: created_by, classes: classes },
         actions: []
       },
-      {
-        key: { text: "Assigned to", classes: classes },
-        value: { text: h.investigation_assignee(object, classes) },
-      },
       # TODO: Created by should contain the creator's organisation a bit like in
       # def investigation_assignee(investigation, classes = "")
       {
@@ -83,10 +79,7 @@ class InvestigationDecorator < ApplicationDecorator
       rows[1][:actions] = [
         { href: h.investigation_coronavirus_related_path(investigation), text: "Change", classes: classes, visually_hidden_text: "coronavirus status" }
       ]
-      rows[3][:actions] = [
-        { href: h.new_investigation_assign_path(investigation), text: "Change", classes: classes, visually_hidden_text: "assigned to" }
-      ]
-      rows[5][:actions] = [
+      rows[4][:actions] = [
         { href: h.new_investigation_activity_path(investigation), text: "Add activity", classes: classes }
       ]
     end

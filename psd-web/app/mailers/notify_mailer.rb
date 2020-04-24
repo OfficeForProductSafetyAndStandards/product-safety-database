@@ -1,4 +1,6 @@
 class NotifyMailer < GovukNotifyRails::Mailer
+  include NotifyHelper
+
   TEMPLATES =
     {
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
@@ -9,7 +11,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
-      account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d"
+      account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d",
+      team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -114,5 +117,28 @@ class NotifyMailer < GovukNotifyRails::Mailer
     }
     set_personalisation(personalization)
     mail(to: user.email)
+  end
+
+  def team_added_to_case_email(collaborator, to_email:)
+    set_template(TEMPLATES[:team_added_to_case])
+
+    optional_message = if collaborator.message.present?
+                         [
+                           I18n.t(
+                             :message_from,
+                             user_name: collaborator.added_by_user.name,
+                             scope: "mail.team_added_to_case"
+                           ),
+                           inset_text_for_notify(collaborator.message)
+                         ].join("\n\n")
+                       end
+
+    set_personalisation(
+      updater_name: collaborator.added_by_user.name,
+      optional_message: optional_message,
+      investigation_url: investigation_url(collaborator.investigation)
+    )
+
+    mail(to: to_email)
   end
 end

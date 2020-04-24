@@ -47,6 +47,9 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
+  has_many :collaborators, dependent: :destroy
+  has_many :teams, through: :collaborators
+
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
@@ -58,6 +61,18 @@ class Investigation < ApplicationRecord
     rescue StandardError
       nil
     end
+  end
+
+  def assignee_team
+    if assignable_type == "Team"
+      assignee
+    elsif assignable_type == "User"
+      assignee.teams.first
+    end
+  end
+
+  def teams_with_access
+    (teams + [assignee_team]).compact
   end
 
   def assignee=(entity)
