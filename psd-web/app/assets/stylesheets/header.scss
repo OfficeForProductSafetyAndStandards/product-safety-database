@@ -16,3 +16,7 @@ $navbar-link-colour: #ffffff;
   @include govuk-link-common;
   padding: 0;
 }
+
+.psd-header .govuk-tag {
+  margin-right: 0;
+}
