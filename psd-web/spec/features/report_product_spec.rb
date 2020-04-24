@@ -80,21 +80,21 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   context "when signed in as a non-OPSS user" do
     let(:user) { create(:user, :activated, :viewed_introduction, :psd_user) }
-    let(:product_details) do
-      {
-        name: Faker::Lorem.sentence,
-        barcode: Faker::Number.number(digits: 10),
-        category: Rails.application.config.product_constants["product_category"].sample,
-        type: Faker::Appliance.equipment,
-        webpage: Faker::Internet.url,
-        country_of_origin: Country.all.sample.first,
-        description: Faker::Lorem.sentence
-      }
-    end
 
     before { sign_in user }
 
     context "with full details" do
+      let(:product_details) do
+        {
+          name: Faker::Lorem.sentence,
+          barcode: Faker::Number.number(digits: 10),
+          category: Rails.application.config.product_constants["product_category"].sample,
+          type: Faker::Appliance.equipment,
+          webpage: Faker::Internet.url,
+          country_of_origin: Country.all.sample.first,
+          description: Faker::Lorem.sentence
+        }
+      end
       let(:coronavirus) { false }
 
       scenario "not coronavirus-related" do
