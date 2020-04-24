@@ -1,4 +1,8 @@
 class CollaboratorsController < ApplicationController
+  def index
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+  end
+
   def new
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
 
@@ -22,12 +26,7 @@ class CollaboratorsController < ApplicationController
     )
 
     if result.success?
-      flash[:success] = I18n.t(
-        :team_added_to_case,
-        team_name: result.collaborator.team.name,
-        scope: "case.add_team"
-        )
-      redirect_to investigation_path(@investigation)
+      redirect_to investigation_collaborators_path(@investigation)
     else
       @teams = teams_without_access
       @collaborator = result.collaborator

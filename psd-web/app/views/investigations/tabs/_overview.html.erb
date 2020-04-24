@@ -33,8 +33,9 @@
     <% if policy(@investigation).add_collaborators? %>
       <% team_actions = {
         items: [
-          href: new_investigation_collaborator_path(@investigation),
-          text: "Add team"
+          href: investigation_collaborators_path(@investigation),
+          text: "Change",
+          visuallyHiddenText: "teams added to the case"
         ]
       } %>
     <% else %>

@@ -22,7 +22,15 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Add team"
+    click_link "Change teams added to the case"
+
+    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+
+    expect_teams_tables_to_contain([
+      { team_name: "Portsmouth Trading Standards", permission_level: "Assignee" }
+    ])
+
+    click_link "Add a team to the case"
 
     expect_to_be_on_add_team_to_case_page(case_id: investigation.pretty_id)
 
@@ -50,10 +58,12 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     click_button "Add team to this case"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Southampton Trading Standards Portsmouth Trading Standards")
-
+    expect_teams_tables_to_contain([
+      { team_name: "Portsmouth Trading Standards", permission_level: "Assignee" },
+      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
+    ])
 
     notification_email = delivered_emails.last
 
@@ -61,6 +71,14 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(notification_email.personalization[:updater_name]).to eq("Bob Jones")
     expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones:\n\n^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
+
+
+    click_link "Back"
+
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Southampton Trading Standards Portsmouth Trading Standards")
+
 
     click_link "Activity"
 
@@ -78,6 +96,11 @@ private
     expect(page).to have_selector("h1", text: "Overview")
   end
 
+  def expect_to_be_on_teams_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/teams")
+    expect(page).to have_selector("h1", text: "Teams added to the case")
+  end
+
   def expect_to_be_on_add_team_to_case_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/teams/add")
     expect(page).to have_selector("h1", text: "Add a team to the case")
@@ -86,5 +109,16 @@ private
   def expect_to_be_on_case_activity_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/activity")
     expect(page).to have_selector("h1", text: "Activity")
+  end
+
+  def expect_teams_tables_to_contain(expected_teams)
+    teams_table = page.find(:table, "Teams added to the case")
+
+    within(teams_table) do
+      expected_teams.each do |expected_team|
+        row_heading = page.find("th", text: expected_team[:team_name])
+        expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
+      end
+    end
   end
 end

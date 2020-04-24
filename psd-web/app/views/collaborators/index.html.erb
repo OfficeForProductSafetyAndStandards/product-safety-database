@@ -1,0 +1,43 @@
+<% title = "Teams added to the case" %>
+<% page_title title %>
+
+<% content_for(:after_header) do %>
+  <%= govukBackLink(text: "Back", href: investigation_path(@investigation)) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h1 class="govuk-heading-l"><%= title %></h1>
+
+    <% if policy(@investigation).add_collaborators? %>
+      <%= govukButton(
+        text: "Add a team to the case",
+        href: new_investigation_collaborator_path(@investigation))
+      %>
+    <% end %>
+
+    <table class="govuk-table">
+      <caption class="govuk-table__body govuk-visually-hidden">Teams added to the case</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Team name</th>
+          <th scope="col" class="govuk-table__header">Permission level</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.assignee_team.name %></th>
+          <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Assignee</span></td>
+        </tr>
+        <% @investigation.teams.each do |team| %>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
+            <td class="govuk-table__cell">Edit full case</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+</div>
