@@ -1,7 +1,7 @@
-/* ==========================================================================
-   #Permission notice
-   ========================================================================== */
-
+// ==========================================================================
+// Permission notice
+// ========================================================================== */
+//
 // Loosely copied from
 // https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/components/inset-text/_inset-text.scss
 .app-permission-notice {
@@ -10,6 +10,7 @@
   * {
     @include govuk-font($size: 16);
   }
+
   @include govuk-text-colour;
   padding: govuk-spacing(2); //reduced padding from inset-text
   padding-left: govuk-spacing(3); // to match inset-text
