@@ -5,7 +5,7 @@ class SecondaryAuthenticationForm
   INTEGER_REGEX = /\A\d+\z/.freeze
 
   attribute :otp_code
-  attribute :secondary_authentication_id
+  attribute :user_id
 
   validates_presence_of :otp_code, message: I18n.t(".otp_code.blank")
   validates :otp_code,
@@ -28,9 +28,9 @@ class SecondaryAuthenticationForm
     super(code.to_s.strip)
   end
 
-  def authenticate!
-    secondary_authentication.authenticate!
-  end
+  # def authenticate!
+  #   secondary_authentication.authenticate!
+  # end
 
   def correct_otp_validation
     return if errors.present?
@@ -57,7 +57,7 @@ class SecondaryAuthenticationForm
   end
 
   def secondary_authentication
-    SecondaryAuthentication.find_by(id: self.secondary_authentication_id)
+    SecondaryAuthentication.new(User.find(self.user_id))
   end
 
   def operation

@@ -5,17 +5,17 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
 
   let(:attempts) { 0 }
   let(:direct_otp_sent_at) { Time.new.utc }
-  let(:secondary_authentication) { create(:secondary_authentication, user: user, attempts: attempts, direct_otp_sent_at: direct_otp_sent_at) }
+  let(:secondary_authentication) { SecondaryAuthentication.new(user) }
   let(:submitted_code) { secondary_authentication.direct_otp }
   let(:max_attempts) { SecondaryAuthentication::MAX_ATTEMPTS }
 
   describe "the form" do
     subject(:submit_2fa) do
-      post secondary_authentications_path,
+      post secondary_authentication_path,
            params: {
            secondary_authentication_form: {
              otp_code: submitted_code,
-             secondary_authentication_id: secondary_authentication.id
+             user_id: user.id
            }
          }
     end

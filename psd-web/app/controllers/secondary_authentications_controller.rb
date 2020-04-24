@@ -2,7 +2,6 @@
 class SecondaryAuthenticationsController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :set_current_user
-  skip_before_action :cleanup_secondary_authentication
   skip_before_action :require_secondary_authentication
   skip_before_action :set_raven_context
   skip_before_action :authorize_user
@@ -11,7 +10,7 @@ class SecondaryAuthenticationsController < ApplicationController
   skip_before_action :set_cache_headers
 
   def new
-    @secondary_authentication_form = SecondaryAuthenticationForm.new(secondary_authentication_id: params[:secondary_authentication_id])
+    @secondary_authentication_form = SecondaryAuthenticationForm.new(user_id: session[:secondary_authentication_user_id])
   end
 
   def create
@@ -19,9 +18,11 @@ class SecondaryAuthenticationsController < ApplicationController
     @secondary_authentication_form = SecondaryAuthenticationForm.new(params[:secondary_authentication_form])
 
     if @secondary_authentication_form.valid?
-      @secondary_authentication_form.authenticate!
+      # @secondary_authentication_form.authenticate!
 
-      set_secondary_authentication_cookie_for(@secondary_authentication_form.secondary_authentication)
+      set_secondary_authentication_cookie(Time.now.utc.to_i)
+      @secondary_authentication_form.secondary_authentication.try_to_verify_user_mobile_number
+      session[:secondary_authentication_user_id] = nil
       # redirect to saved path
       if session[:secondary_authentication_redirect_to]
         redirect_to session[:secondary_authentication_redirect_to]
@@ -32,10 +33,6 @@ class SecondaryAuthenticationsController < ApplicationController
       @secondary_authentication_form.otp_code = nil
       render :new
     end
-  end
-
-  def set_secondary_authentication_cookie_for(authentication)
-    session[:secondary_authentication] << authentication.id
   end
 
 private
