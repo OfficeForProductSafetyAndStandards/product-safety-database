@@ -418,8 +418,6 @@ if run_seeds
     organisations = Rails.env.production? ? CF::App::Credentials.find_by_service_name("psd-seeds")["organisations"] : Rails.application.credentials.organisations
     # rubocop:enable Rails/DynamicFindBy
 
-    # organisations.symbolize_keys!
-
     Organisation.destroy_all
     Team.destroy_all
     User.destroy_all
@@ -428,6 +426,7 @@ if run_seeds
     User.accepts_nested_attributes_for :user_roles
 
     organisations.each do |organisation_attributes|
+      organisation_attributes.deep_symbolize_keys!
       teams_attributes = organisation_attributes.delete(:teams_attributes)
       organisation = Organisation.create! organisation_attributes
 
