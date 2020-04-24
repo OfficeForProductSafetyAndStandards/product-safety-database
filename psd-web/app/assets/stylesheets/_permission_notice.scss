@@ -22,9 +22,9 @@
   clear: both;
 
   border-left: $govuk-border-width-wide solid;
-  border-color: lighten(desaturate(govuk-colour("light-blue"), 20), 15);
 
-  background-color: lighten(desaturate(govuk-colour("light-blue"), 8.46), 42.55);
+  border-color: lighten(desaturate(govuk-colour("light-blue"), 5), 5);
+  background-color: lighten(desaturate(govuk-colour("light-blue"), 5), 30);
 
   > :first-child {
     margin-top: 0;
