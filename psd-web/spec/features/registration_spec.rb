@@ -17,24 +17,31 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
     visit "/teams/#{team.id}/invite"
 
-    enter_secondary_authentication_code(otp_code)
+    expect(page).to have_title("Invite a team member")
 
-    invite_user_to_team
+    wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
+    travel_to(Time.now.utc + wait_time.seconds) do
+      visit "/teams/#{team.id}/invite"
 
-    expect_user_invited_successfully
+      enter_secondary_authentication_code(admin.reload.direct_otp)
 
-    sign_out
+      invite_user_to_team
 
-    invitee = User.find_by!(email: invitee_email)
+      expect_user_invited_successfully
 
-    visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
-    fill_in_registration_form
+      sign_out
 
-    expect_to_be_on_secondary_authentication_page
+      invitee = User.find_by!(email: invitee_email)
 
-    enter_secondary_authentication_code(otp_code)
+      visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
+      fill_in_registration_form
 
-    expect_to_be_on_declaration_page
+      expect_to_be_on_secondary_authentication_page
+
+      enter_secondary_authentication_code(invitee.reload.direct_otp)
+
+      expect_to_be_on_declaration_page
+    end
   end
 
   def invite_user_to_team
@@ -68,6 +75,6 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
   end
 
   def otp_code
-    SecondaryAuthentication.last.direct_otp
+    user.reload.direct_otp
   end
 end

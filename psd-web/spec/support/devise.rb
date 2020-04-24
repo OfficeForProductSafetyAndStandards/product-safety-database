@@ -8,7 +8,7 @@ module LoginHelpers
     click_on "Continue"
 
     if page.has_field?("Enter security code")
-      fill_in "Enter security code", with: SecondaryAuthentication.last.direct_otp
+      fill_in "Enter security code", with: user.reload.direct_otp
       click_on "Continue"
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_17_162650) do
+ActiveRecord::Schema.define(version: 2020_04_24_100228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_162650) do
     t.string "reset_password_token"
     t.integer "second_factor_attempts_count", default: 0
     t.datetime "second_factor_attempts_locked_at"
+    t.string "secondary_authentication_operation"
     t.integer "sign_in_count", default: 0, null: false
     t.string "unlock_token"
     t.datetime "updated_at", null: false

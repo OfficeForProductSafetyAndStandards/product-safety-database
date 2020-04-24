@@ -1,12 +1,13 @@
 require "rails_helper"
 
 RSpec.describe SecondaryAuthenticationForm do
-  subject(:form) { described_class.new(otp_code: otp_code, secondary_authentication_id: secondary_authentication.id) }
+  let(:user) { create(:user, second_factor_attempts_count: attempts, direct_otp_sent_at: direct_otp_sent_at) }
+  subject(:form) { described_class.new(otp_code: otp_code, user_id: user.id) }
 
   let(:attempts) { 0 }
   let(:direct_otp_sent_at) { Time.new.utc }
-  let(:secondary_authentication) { create(:secondary_authentication, attempts: attempts, direct_otp_sent_at: direct_otp_sent_at) }
-  let(:otp_code) { secondary_authentication.direct_otp }
+  let(:secondary_authentication) { SecondaryAuthentication.new(user) }
+  let(:otp_code) { user.direct_otp }
 
 
   describe "#valid?" do

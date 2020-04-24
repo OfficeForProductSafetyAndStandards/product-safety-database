@@ -16,8 +16,8 @@
       <% end %>
     </p>
 
-    <%= form_tag(secondary_authentications_path, :method => :post, novalidate: true) do %>
-      <%= hidden_field_tag 'secondary_authentication_form[secondary_authentication_id]', @secondary_authentication_form.secondary_authentication_id %>
+    <%= form_tag(secondary_authentication_path, :method => :post, novalidate: true) do %>
+      <%= hidden_field_tag 'secondary_authentication_form[user_id]', @secondary_authentication_form.user_id %>
       <%= render "components/govuk_input",
           id: "otp_code", name: "secondary_authentication_form[otp_code]",
           type: "text",

@@ -1,4 +1,4 @@
-class SecondaryAuthentication < ApplicationRecord
+class SecondaryAuthentication
   DEFAULT_OPERATION = "secondary_authentication".freeze
   RESET_PASSWORD_OPERATION = "reset_password".freeze
   INVITE_USER = "invite_user".freeze
@@ -11,14 +11,18 @@ class SecondaryAuthentication < ApplicationRecord
     UNLOCK_OPERATION => 300, # 5 minutes
   }.freeze
 
-  OTP_LENGTH = 6
+  OTP_LENGTH = 5
   MAX_ATTEMPTS = Rails.configuration.two_factor_attempts
   OTP_EXPIRY_SECONDS = 300
 
-  belongs_to :user
+  attr_accessor :user
 
-  def generate_and_send_code
-    generate_code
+  def initialize(user)
+    @user = user
+  end
+
+  def generate_and_send_code(operation)
+    generate_code(operation)
     send_secondary_authentication_code
   end
 
@@ -27,47 +31,46 @@ class SecondaryAuthentication < ApplicationRecord
   end
 
   def otp_expired?
-    self.direct_otp_sent_at && (self.direct_otp_sent_at + OTP_EXPIRY_SECONDS) < Time.now.utc
+    user.direct_otp_sent_at && (user.direct_otp_sent_at + OTP_EXPIRY_SECONDS) < Time.now.utc
   end
 
   def otp_locked?
-    self.attempts > MAX_ATTEMPTS
+    user.second_factor_attempts_count > MAX_ATTEMPTS
   end
 
   def valid_otp?(otp)
-    self.increment!(:attempts)
-    otp == self.direct_otp
+    user.increment!(:second_factor_attempts_count)
+    otp == user.direct_otp
   end
 
-  def generate_code
-    update(
-      attempts: 0,
+  def generate_code(operation)
+    user.update(
+      second_factor_attempts_count: 0,
       direct_otp: random_base10(OTP_LENGTH),
-      direct_otp_sent_at: Time.now.utc
+      direct_otp_sent_at: Time.now.utc,
+      secondary_authentication_operation: operation
     )
   end
 
   def send_secondary_authentication_code
-    SendSecondaryAuthenticationJob.perform_later(User.find(self.user_id), self.direct_otp)
+    SendSecondaryAuthenticationJob.perform_later(user, user.direct_otp)
   end
 
-  def authenticate!
-    update(authenticated: true, authentication_expires_at: (Time.now.utc + expiry_seconds.seconds))
-    try_to_verify_user_mobile_number
-  end
-
-  def expired?
-    authentication_expires_at && Time.now.utc > authentication_expires_at
-  end
-
-  def expiry_seconds
-    TIMEOUTS[self.operation]
-  end
+  # def expiry_seconds
+  #   TIMEOUTS[user.secondary_authentication_operation]
+  # end
 
   def try_to_verify_user_mobile_number
     user.update(mobile_number_verified: true) unless user.mobile_number_verified
   end
 
+  def operation
+    user.secondary_authentication_operation
+  end
+
+  def direct_otp
+    user.direct_otp
+  end
 private
 
   def random_base10(digits)

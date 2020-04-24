@@ -71,15 +71,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     let(:unlock_path) { unlock_email.personalization_path(:unlock_user_url_token) }
 
     scenario "user gets locked and uses the unlock link received by email" do
-      visit "/sign-in"
-      fill_in_credentials
-      fill_in "Enter security code", with: otp_code
-      click_on "Continue"
-      expect(page).to have_link("Sign out", href: destroy_user_session_path)
-      within(".psd-header__secondary-navigation") do
-        click_link("Sign out")
-      end
-
       Devise.maximum_attempts.times do
         visit "/sign-in"
         fill_in_credentials(password_override: "XXX")
@@ -216,6 +207,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   def otp_code
-    SecondaryAuthentication.last.direct_otp
+    user.reload.direct_otp
   end
 end

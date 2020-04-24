@@ -58,9 +58,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
       click_link "Continue"
 
-
-      # bug or feature? requires second otp for login, as only 2FA was for reset password
-      complete_secondary_authentication_with(last_user_otp(user))
       expect(page).to have_css("h1", text: "Declaration")
 
       sign_out
@@ -223,10 +220,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   def last_user_otp(user)
-    SecondaryAuthentication.where(user_id: user.id).last.direct_otp
+    user.reload.direct_otp
   end
 
   def otp_code
-    SecondaryAuthentication.last.direct_otp
+    user.reload.direct_otp
   end
 end

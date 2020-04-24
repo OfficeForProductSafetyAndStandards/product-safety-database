@@ -5,17 +5,17 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
 
   let(:attempts) { 0 }
   let(:direct_otp_sent_at) { Time.new.utc }
-  let(:secondary_authentication) { create(:secondary_authentication, user: user, attempts: attempts, direct_otp_sent_at: direct_otp_sent_at) }
+  let(:secondary_authentication) { SecondaryAuthentication.new(user) }
   let(:submitted_code) { secondary_authentication.direct_otp }
   let(:max_attempts) { SecondaryAuthentication::MAX_ATTEMPTS }
 
   describe "the form" do
     subject(:submit_2fa) do
-      post secondary_authentications_path,
+      post secondary_authentication_path,
            params: {
            secondary_authentication_form: {
              otp_code: submitted_code,
-             secondary_authentication_id: secondary_authentication.id
+             user_id: user.id
            }
          }
     end
@@ -24,7 +24,8 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
     let(:user) do
       create(:user, :activated,
              mobile_number_verified: false,
-             second_factor_attempts_count: previous_attempts_count)
+             direct_otp_sent_at: direct_otp_sent_at,
+             second_factor_attempts_count: attempts)
     end
 
     before do
@@ -73,7 +74,7 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
       end
 
       context "with incorrect otp" do
-        let(:submitted_code) { SecondaryAuthentication.last.direct_otp.reverse }
+        let(:submitted_code) { secondary_authentication.direct_otp.reverse }
 
         include_examples "code not accepted", "Incorrect security code"
       end

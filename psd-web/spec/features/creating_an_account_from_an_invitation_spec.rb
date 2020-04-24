@@ -144,6 +144,6 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
   end
 
   def otp_code
-    SecondaryAuthentication.last.direct_otp
+    invited_user.reload.direct_otp
   end
 end
