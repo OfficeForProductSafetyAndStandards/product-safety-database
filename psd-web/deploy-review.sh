@@ -45,7 +45,7 @@ export CF_STARTUP_TIMEOUT=10
 if cf7 cancel-deployment $APP_NAME
 then
   # Wait enough time for cancellation to finish
-  sleep 5
+  sleep 6
 fi
 
 # Deploy the app
