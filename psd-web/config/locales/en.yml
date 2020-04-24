@@ -34,7 +34,6 @@ en:
   mail:
     team_added_to_case:
       message_from: "Message from %{user_name}:"
-  multiple_reported_reasons_selected: "Select only one answer"
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
     mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
@@ -190,8 +189,6 @@ en:
               blank: "Enter a valid hazard type"
             product_category:
               blank: "Enter a valid product category"
-            coronavirus_related:
-              inclusion: "Select whether or not the case is related to the coronavirus outbreak"
         product:
           attributes:
             product_category:
