@@ -44,7 +44,7 @@
 
     someone_else = capture do
       render "investigations/assign/assignee_selection", form: form, key: :select_someone_else,
-             items: User.activated, label: "Select other user"
+             items: User.active, label: "Select other user"
     end
     items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else }
 

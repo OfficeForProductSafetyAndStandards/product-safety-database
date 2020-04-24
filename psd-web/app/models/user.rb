@@ -38,8 +38,8 @@ class User < ApplicationRecord
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
   attribute :invited_at, :datetime, default: -> { Time.current }
 
-  def self.activated
-    where(account_activated: true)
+  def self.active
+    where(account_activated: true, deleted: false)
   end
 
   def self.find_user_within_teams_with_email!(teams:, email:)
@@ -128,13 +128,13 @@ class User < ApplicationRecord
 
   def self.get_assignees(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
-    self.activated.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
+    self.active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
   end
 
   def self.get_team_members(user:)
     users = [].to_set
     user.teams.each do |team|
-      team.users.activated.find_each do |team_member|
+      team.users.active.find_each do |team_member|
         users << team_member
       end
     end

@@ -105,12 +105,14 @@ RSpec.describe User do
     end
   end
 
-  describe ".activated" do
-    it "returns only users with activated accounts" do
+  describe ".active" do
+    it "returns only users with activated accounts and not marked as deleted" do
       create(:user, :inactive)
-      activated_user = create(:user, :activated)
+      create(:user, :activated, deleted: true)
 
-      expect(described_class.activated.to_a).to eq [activated_user]
+      active_user = create(:user, :activated)
+
+      expect(described_class.active.to_a).to eq [active_user]
     end
   end
 
