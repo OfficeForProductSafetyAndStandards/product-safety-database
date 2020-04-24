@@ -21,7 +21,6 @@ class SecondaryAuthenticationsController < ApplicationController
     if @secondary_authentication_form.valid?
       @secondary_authentication_form.authenticate!
 
-
       set_secondary_authentication_cookie_for(@secondary_authentication_form.secondary_authentication)
       # redirect to saved path
       if session[:secondary_authentication_redirect_to]
@@ -41,7 +40,7 @@ class SecondaryAuthenticationsController < ApplicationController
 
 private
 
-   def hide_nav?
+  def hide_nav?
     true
   end
 

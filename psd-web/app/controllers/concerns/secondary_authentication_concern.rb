@@ -30,12 +30,11 @@ module SecondaryAuthenticationConcern
   # used in application controller to cleanup old auths
   def cleanup_secondary_authentication
     session[:secondary_authentication].reject! do |auth_id|
-      unless SecondaryAuthentication.find_by(id: auth_id)
-        return true
-      end
+      secondary_authentication = SecondaryAuthentication.find_by(id: auth_id)
+      return true unless secondary_authentication
 
-      if SecondaryAuthentication.find(auth_id).expired?
-        SecondaryAuthentication.find(auth_id).delete
+      if secondary_authentication.expired?
+        secondary_authentication.delete
         true
       else
         false
