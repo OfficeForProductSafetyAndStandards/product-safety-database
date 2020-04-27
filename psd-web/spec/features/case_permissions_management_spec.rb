@@ -77,8 +77,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Southampton Trading Standards Portsmouth Trading Standards")
-
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 
