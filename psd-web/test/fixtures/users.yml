@@ -2,6 +2,7 @@ southampton:
   email: southampton@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Yann
   organisation: southampton
   password_salt: 123
@@ -13,6 +14,7 @@ southampton_steve:
   email: southampton.steve@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Steve
   organisation: southampton
   password_salt: 123
@@ -24,6 +26,7 @@ southampton_bob:
   email: southampton.bob@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Bob
   organisation: southampton
   password_salt: 123
@@ -35,6 +38,7 @@ southampton_frankie:
   email: southampton.frankie@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Frankie
   organisation: southampton
   password_salt: 123
@@ -46,6 +50,7 @@ opss:
   email: opss@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Slavosh
   organisation: opss
   password_salt: 123
@@ -57,6 +62,7 @@ opss_yann:
   email: opss.yann@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Yann
   organisation: opss
   password_salt: 123
@@ -68,6 +74,7 @@ luton:
   email: luton@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
+  account_activated: true
   name: Luton User
   organisation: luton
   password_salt: 123
