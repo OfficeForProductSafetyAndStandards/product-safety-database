@@ -35,7 +35,7 @@
         items: [
           href: new_investigation_assign_path(@investigation),
           text: "Change",
-          visuallyHiddenText: "assigned to"
+          visuallyHiddenText: "case owner"
         ]
       } %>
     <% else %>
@@ -61,7 +61,7 @@
       classes: "govuk-summary-list--no-border",
       rows: [
         {
-          key: { text: "Assigned to" },
+          key: { text: "Case owner" },
           value: { text: investigation_assignee(@investigation) },
           actions: assign_actions
         },
