@@ -415,7 +415,7 @@ if run_seeds
 
   if ENV["SEED_USERS"]
     # rubocop:disable Rails/DynamicFindBy
-    organisations = Rails.env.production? ? CF::App::Credentials.find_by_service_name("psd-seeds")["organisations"] : Rails.application.credentials.organisations
+    organisations = CF::App::Credentials.find_by_service_name("psd-seeds")["organisations"]
     # rubocop:enable Rails/DynamicFindBy
 
     Organisation.destroy_all
