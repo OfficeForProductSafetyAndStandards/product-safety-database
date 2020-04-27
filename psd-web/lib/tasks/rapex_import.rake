@@ -17,6 +17,7 @@ namespace :data_import do
   end
 
   # this will delete products even if they are used by an investigation not from RAPEX
+  desc "Delete products sourced from RAPEX"
   task delete_rapex: :environment do
     RapexImport.all.destroy_all
     Source.where(name: "RAPEX").each do |source|
