@@ -65,6 +65,11 @@ private
   end
 
   def invite_existing_user_if_able(user)
+    if user.deleted?
+      @new_user.errors.add(:email_address, :user_deleted)
+      return
+    end
+
     if user.organisation.present? && user.organisation != @team.organisation
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return

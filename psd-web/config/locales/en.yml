@@ -116,6 +116,7 @@ en:
         new_user:
           attributes:
             email_address:
+              user_deleted: "%{attribute} belongs to a user that has been deleted. Email OPSS if you would like their account restored."
               member_of_another_organisation: "You cannot invite this person to join your team because they are already a member of another team from a different organisation.\n\nTo join your team they will need to leave their current organisation"
               email_not_in_whitelist: "The email address is not recognised. Check you’ve entered it correctly, or email OPSS to add it to the approved list."
   activerecord:
