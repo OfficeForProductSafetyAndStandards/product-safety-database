@@ -417,6 +417,8 @@ if run_seeds
     # rubocop:disable Rails/DynamicFindBy
 
     # The structure is as follows:
+    # If you want to inspect the current structure on you review app you can inspect the review app env:
+    # $ cf7 env REVIEW_APP_NAME
     #
     # {
     #   "organisations": [
@@ -496,7 +498,7 @@ if run_seeds
       organisation: organisation,
       mobile_number_verified: true,
       teams: [processing],
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER"),
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 
     %i[opss_user psd_user user].each do |role|
