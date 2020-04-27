@@ -5,11 +5,11 @@ class CommentActivity < Activity
   validates_length_of :body, maximum: 10000
 
   def title
-    "Comment: #{source&.show&.titleize}"
+    "Comment added"
   end
 
-  def subtitle
-    pretty_date_stamp
+  def subtitle_slug
+    "Comment added"
   end
 
   def search_index
@@ -17,6 +17,6 @@ class CommentActivity < Activity
   end
 
   def email_update_text
-    "#{source&.show&.titleize} commented on the #{investigation.case_type}."
+    "#{source&.show} commented on the #{investigation.case_type}."
   end
 end
