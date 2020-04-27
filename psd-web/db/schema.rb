@@ -167,7 +167,6 @@ ActiveRecord::Schema.define(version: 2020_04_24_100228) do
     t.string "pretty_id"
     t.string "product_category"
     t.string "received_type"
-    t.tsvector "search_index"
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"
