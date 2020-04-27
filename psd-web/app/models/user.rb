@@ -148,10 +148,6 @@ class User < ApplicationRecord
   end
 
   # BEGIN: place devise overriden method calls bellow
-  def need_secondary_authentication?(_request)
-    Rails.configuration.secondary_authentication_enabled
-  end
-
   def send_unlock_instructions
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
     self.unlock_token = enc
