@@ -4,10 +4,11 @@ RSpec.describe User do
   include ActiveSupport::Testing::TimeHelpers
 
   describe "attributes" do
-    let(:user) { User.new }
+    let(:user) { described_class.new }
 
     describe "invitation_token" do
       before { allow(SecureRandom).to receive(:hex).with(15).and_return(expected_token) }
+
       let(:expected_token) { "abcd1234" }
 
       it "is generated on instantiation" do
