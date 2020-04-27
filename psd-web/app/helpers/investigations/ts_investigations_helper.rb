@@ -1,4 +1,4 @@
-module Investigations::TsInstigationsHelper
+module Investigations::TsInvestigationsHelper
   def why_reporting_checkboxes(form, page_heading, errors)
     render "form_components/govuk_checkboxes",
            form: form,
