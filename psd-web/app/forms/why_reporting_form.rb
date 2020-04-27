@@ -12,6 +12,7 @@ class WhyReportingForm
   validate :selected_at_least_one_checkbox
   validate :mutually_exclusive_checkboxes
   validates :non_compliant_reason, presence: true, if: -> { reported_reason_non_compliant }
+  validates :hazard_description, :hazard_type, presence: true, if: -> { reported_reason_unsafe }
 
   def assign_to(investigation)
     investigation.assign_attributes(

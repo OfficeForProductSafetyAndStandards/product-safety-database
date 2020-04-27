@@ -19,7 +19,13 @@ RSpec.describe WhyReportingForm do
     end
 
     context "when only one option is set" do
-      let(:why_reporting_params) { { reported_reason_unsafe: true } }
+      let(:why_reporting_params) do
+        {
+          reported_reason_unsafe: true,
+          hazard_type: Rails.application.config.hazard_constants["hazard_type"].sample,
+          hazard_description: Faker::Hipster.sentence
+        }
+      end
 
       it { is_expected.to be_valid }
     end
@@ -32,6 +38,39 @@ RSpec.describe WhyReportingForm do
       it "is invalid and sets and error", :aggregate_failures do
         expect(form).to be_invalid
         expect(form.errors.full_messages_for(:base)).to eq(["A product cannot be unsafe or non-compliant, and also safe and compliant"])
+      end
+    end
+  end
+
+  describe "#validates unsafe" do
+    let(:hazard_type)          { Faker::Hipster.word }
+    let(:hazard_description)   { Faker::Hipster.sentence }
+    let(:why_reporting_params) do
+      {
+        reported_reason_unsafe: true,
+        hazard_type:            hazard_type,
+        hazard_description:     hazard_description
+      }
+    end
+
+    context "when reporting unsafe" do
+      context "when the hazard type is empty", :aggregate_failures do
+        let(:hazard_type) { "" }
+
+        it "is not valid and has an error" do
+          expect(form).to be_invalid
+
+          expect(form.errors.full_messages_for(:hazard_type)).to eq(["Enter the primary hazard"])
+        end
+      end
+
+      context "when the hazard description is empty" do
+        let(:hazard_description) { "" }
+
+        it "is not valid and has an error", :aggregate_failures do
+          expect(form).to be_invalid
+          expect(form.errors.full_messages_for(:hazard_description)).to eq(["Hazard description cannot be blank"])
+        end
       end
     end
   end
