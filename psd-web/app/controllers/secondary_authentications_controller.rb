@@ -18,8 +18,6 @@ class SecondaryAuthenticationsController < ApplicationController
     @secondary_authentication_form = SecondaryAuthenticationForm.new(params[:secondary_authentication_form])
 
     if @secondary_authentication_form.valid?
-      # @secondary_authentication_form.authenticate!
-
       set_secondary_authentication_cookie(Time.now.utc.to_i)
       @secondary_authentication_form.secondary_authentication.try_to_verify_user_mobile_number
       session[:secondary_authentication_user_id] = nil
@@ -30,6 +28,9 @@ class SecondaryAuthenticationsController < ApplicationController
         redirect_to "/"
       end
     else
+      if secondary_authentication.otp_expired? && !secondary_authentication.otp_locked?
+        secondary_authentication.generate_and_send_code(secondary_authentication.operation)
+      end
       @secondary_authentication_form.otp_code = nil
       render :new
     end
@@ -43,5 +44,9 @@ private
 
   def secondary_nav_items
     [text: "Sign out", href: destroy_user_session_path]
+  end
+
+  def secondary_authentication
+    @secondary_authentication_form.secondary_authentication
   end
 end

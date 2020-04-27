@@ -21,8 +21,8 @@ class SecondaryAuthenticationForm
             allow_blank: true,
             if: -> { INTEGER_REGEX === otp_code }
   validate :correct_otp_validation
-  validate :otp_expiry_validation
   validate :otp_attempts_validation
+  validate :otp_expiry_validation
 
   def otp_code=(code)
     super(code.to_s.strip)
@@ -32,7 +32,7 @@ class SecondaryAuthenticationForm
     return if errors.present?
 
     unless secondary_authentication.valid_otp? self.otp_code
-      errors.add(:otp_code, "Incorrect security code")
+      errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
     end
   end
 
@@ -40,7 +40,7 @@ class SecondaryAuthenticationForm
     return if errors.present?
 
     if secondary_authentication.otp_locked?
-      errors.add(:otp_code, "Too many attempts. New code sent")
+      errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
     end
   end
 
@@ -48,7 +48,7 @@ class SecondaryAuthenticationForm
     return if errors.present?
 
     if secondary_authentication.otp_expired?
-      errors.add(:otp_code, "Code expired. New code sent")
+      errors.add(:otp_code, I18n.t(".otp_code.expired"))
     end
   end
 

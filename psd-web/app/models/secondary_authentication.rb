@@ -13,6 +13,7 @@ class SecondaryAuthentication
 
   OTP_LENGTH = 5
   MAX_ATTEMPTS = Rails.configuration.two_factor_attempts
+  MAX_ATTEMPTS_COOLDOWN = 3600 # 1 hour
   OTP_EXPIRY_SECONDS = 300
 
   attr_accessor :user
@@ -26,21 +27,23 @@ class SecondaryAuthentication
     send_secondary_authentication_code
   end
 
-  def otp_needs_refreshing?
-    otp_locked? || otp_expired?
-  end
-
   def otp_expired?
     user.direct_otp_sent_at && (user.direct_otp_sent_at + OTP_EXPIRY_SECONDS) < Time.now.utc
   end
 
   def otp_locked?
-    user.second_factor_attempts_count > MAX_ATTEMPTS
+    user.second_factor_attempts_locked_at.present? && (user.second_factor_attempts_locked_at + MAX_ATTEMPTS_COOLDOWN.seconds) > Time.now.utc
   end
 
   def valid_otp?(otp)
-    user.increment!(:second_factor_attempts_count)
-    otp == user.direct_otp
+    try_to_unlock_secondary_authentication
+
+    user.increment!(:second_factor_attempts_count) unless otp_locked?
+
+    if user.second_factor_attempts_count > MAX_ATTEMPTS
+      user.update(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
+    end
+    user.reload.second_factor_attempts_locked_at.nil? && otp == user.direct_otp
   end
 
   def generate_code(operation)
@@ -62,6 +65,12 @@ class SecondaryAuthentication
 
   def try_to_verify_user_mobile_number
     user.update(mobile_number_verified: true) unless user.mobile_number_verified
+  end
+
+  def try_to_unlock_secondary_authentication
+    if user.second_factor_attempts_locked_at && (user.second_factor_attempts_locked_at + MAX_ATTEMPTS_COOLDOWN.seconds) < Time.now.utc
+      user.update(second_factor_attempts_locked_at: nil)
+    end
   end
 
   def operation

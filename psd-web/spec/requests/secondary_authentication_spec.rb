@@ -6,15 +6,16 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
   let(:secondary_authentication) { SecondaryAuthentication.new(user) }
   let(:submitted_code) { secondary_authentication.direct_otp }
   let(:max_attempts) { SecondaryAuthentication::MAX_ATTEMPTS }
+  let(:second_factor_attempts_locked_at) { nil }
 
   subject(:submit_2fa) do
     post secondary_authentication_path,
-         params: {
-         secondary_authentication_form: {
-           otp_code: submitted_code,
-           user_id: user.id
-         }
-       }
+      params: {
+      secondary_authentication_form: {
+        otp_code: submitted_code,
+        user_id: user.id
+      }
+    }
   end
 
   let(:previous_attempts_count) { 1 }
@@ -22,16 +23,17 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
     create(:user, :activated,
            mobile_number_verified: false,
            direct_otp_sent_at: direct_otp_sent_at,
-           second_factor_attempts_count: attempts)
+           second_factor_attempts_count: attempts,
+           second_factor_attempts_locked_at: second_factor_attempts_locked_at
+          )
   end
+
 
   before do
-    secondary_authentication
+    sign_in(user)
   end
 
-  context "with successful signup" do
-    before { sign_in(user) }
-
+  context do
     shared_examples_for "code not accepted" do |*errors|
       it "does not leave the two factor form page" do
         submit_2fa
@@ -79,13 +81,34 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
     context "with expired otp" do
       let(:direct_otp_sent_at) { (SecondaryAuthentication::OTP_EXPIRY_SECONDS * 2).seconds.ago }
 
-      include_examples "code not accepted", "Code expired. New code sent"
+      include_examples "code not accepted", "The security code has expired. New code sent."
     end
 
     context "with too many attempts" do
       let(:attempts) { max_attempts + 1 }
 
-      include_examples "code not accepted", "Too many attempts. New code sent"
+      include_examples "code not accepted", "Incorrect security code"
+    end
+
+  end
+
+  context "resending otp code" do
+    context "when code is expired" do
+      let(:direct_otp_sent_at) { (SecondaryAuthentication::OTP_EXPIRY_SECONDS * 2).seconds.ago }
+
+      context "when secondary authentication is locked" do
+        let(:second_factor_attempts_locked_at) { Time.now.utc }
+
+        it "does not send the code" do
+          expect_any_instance_of(SecondaryAuthentication).not_to receive(:generate_and_send_code)
+          submit_2fa
+        end
+      end
+
+      it "resends the code" do
+        expect_any_instance_of(SecondaryAuthentication).to receive(:generate_and_send_code)
+        submit_2fa
+      end
     end
   end
 end
