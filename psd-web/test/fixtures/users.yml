@@ -6,6 +6,8 @@ southampton:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
 
 southampton_steve:
   email: southampton.steve@example.com
@@ -15,6 +17,8 @@ southampton_steve:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
 
 southampton_bob:
   email: southampton.bob@example.com
@@ -24,6 +28,8 @@ southampton_bob:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
 
 southampton_frankie:
   email: southampton.frankie@example.com
@@ -33,6 +39,8 @@ southampton_frankie:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
 
 opss:
   email: opss@example.com
@@ -42,6 +50,8 @@ opss:
   organisation: opss
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
 
 opss_yann:
   email: opss.yann@example.com
@@ -51,6 +61,8 @@ opss_yann:
   organisation: opss
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
 
 luton:
   email: luton@example.com
@@ -60,3 +72,5 @@ luton:
   organisation: luton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
+  invitation_token: <%= SecureRandom.hex(15) %>
+  invited_at: <%= Time.current %>
