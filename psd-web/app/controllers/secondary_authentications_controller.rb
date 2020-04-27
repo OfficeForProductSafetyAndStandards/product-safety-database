@@ -20,17 +20,9 @@ class SecondaryAuthenticationsController < ApplicationController
     if @secondary_authentication_form.valid?
       set_secondary_authentication_cookie(Time.now.utc.to_i)
       @secondary_authentication_form.secondary_authentication.try_to_verify_user_mobile_number
-      session[:secondary_authentication_user_id] = nil
-      # redirect to saved path
-      if session[:secondary_authentication_redirect_to]
-        redirect_to session[:secondary_authentication_redirect_to]
-      else
-        redirect_to "/"
-      end
+      redirect_to_saved_path
     else
-      if secondary_authentication.otp_expired? && !secondary_authentication.otp_locked?
-        secondary_authentication.generate_and_send_code(secondary_authentication.operation)
-      end
+      try_to_resend_code
       @secondary_authentication_form.otp_code = nil
       render :new
     end
@@ -48,5 +40,20 @@ private
 
   def secondary_authentication
     @secondary_authentication_form.secondary_authentication
+  end
+
+  def redirect_to_saved_path
+    session[:secondary_authentication_user_id] = nil
+    if session[:secondary_authentication_redirect_to]
+      redirect_to session[:secondary_authentication_redirect_to]
+    else
+      redirect_to "/"
+    end
+  end
+
+  def try_to_resend_code
+    if secondary_authentication.otp_expired? && !secondary_authentication.otp_locked?
+      secondary_authentication.generate_and_send_code(secondary_authentication.operation)
+    end
   end
 end
