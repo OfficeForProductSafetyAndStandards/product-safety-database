@@ -415,6 +415,38 @@ if run_seeds
 
   if ENV["SEED_USERS"]
     # rubocop:disable Rails/DynamicFindBy
+
+    # The structure is as follows:
+    #
+    # {
+    #   "organisations": [
+    #     {
+    #       "name": "Southampton Council",
+    #       "teams_attributes": [
+    #          {
+    #           "name": "Southampton Council",
+    #           "team_recipient_email": "southampton@example.com",
+    #           "users_attributes": [
+    #              {
+    #               "account_activated": true,
+    #               "email": "your.email@example.com",
+    #               "mobile_number": "01234567890",
+    #               "mobile_number_verified": true,
+    #               "name": "John Doe",
+    #               "password": "super secret",
+    #               "password_confirmation": "super secret",
+    #               "user_roles_attributes": [
+    #                { "name": "team_admin" },
+    #                { "name": "psd_user" }
+    #               ]
+    #              }
+    #           ]
+    #          }
+    #       ]
+    #     }
+    #   ]
+    # }
+
     organisations = CF::App::Credentials.find_by_service_name("psd-seeds")["organisations"]
     # rubocop:enable Rails/DynamicFindBy
 
