@@ -1,6 +1,11 @@
 class CollaboratorsController < ApplicationController
+  def index
+    @investigation = find_investigation_from_params
+    @teams = @investigation.teams.order(:name)
+  end
+
   def new
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = find_investigation_from_params
 
     authorize @investigation, :add_collaborators?
 
@@ -10,7 +15,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def create
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = find_investigation_from_params
 
     authorize @investigation, :add_collaborators?
 
@@ -22,12 +27,7 @@ class CollaboratorsController < ApplicationController
     )
 
     if result.success?
-      flash[:success] = I18n.t(
-        :team_added_to_case,
-        team_name: result.collaborator.team.name,
-        scope: "case.add_team"
-        )
-      redirect_to investigation_path(@investigation)
+      redirect_to investigation_collaborators_path(@investigation)
     else
       @teams = teams_without_access
       @collaborator = result.collaborator
@@ -36,6 +36,10 @@ class CollaboratorsController < ApplicationController
   end
 
 private
+
+  def find_investigation_from_params
+    Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+  end
 
   def teams_without_access
     Team.where.not(id: team_ids_with_access).order(:name)

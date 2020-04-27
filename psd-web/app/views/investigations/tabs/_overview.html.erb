@@ -30,17 +30,6 @@
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-    <% if policy(@investigation).add_collaborators? %>
-      <% team_actions = {
-        items: [
-          href: new_investigation_collaborator_path(@investigation),
-          text: "Add team"
-        ]
-      } %>
-    <% else %>
-      <% team_actions = {} %>
-    <% end %>
-
     <% if policy(@investigation).assign? %>
       <% assign_actions = {
         items: [
@@ -62,6 +51,8 @@
         </ul>
       <% elsif @investigation.teams_with_access.length == 1 %>
         <%= @investigation.teams_with_access.first.name %>
+      <% else %>
+        No teams added
       <% end %>
 
     <% end %>
@@ -77,7 +68,13 @@
         {
           key: { text: "Teams added to case" },
           value: { text: team_list_html },
-          actions: team_actions
+          actions: {
+            items: [
+              href: investigation_collaborators_path(@investigation),
+              text: (policy(@investigation).add_collaborators? ? "Change" : "View"),
+              visuallyHiddenText: "teams added to the case"
+            ]
+          }
         }
       ]
     ) %>
