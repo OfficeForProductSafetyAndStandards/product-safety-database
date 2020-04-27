@@ -461,7 +461,7 @@ if run_seeds
       organisation: organisation,
       mobile_number_verified: true,
       teams: [processing],
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER"),
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 
     %i[opss_user psd_user user].each do |role|
