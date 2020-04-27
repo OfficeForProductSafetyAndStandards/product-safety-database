@@ -104,7 +104,7 @@ module Investigations::DisplayTextHelper
 
   # rubocop:disable Rails/OutputSafety
   def investigation_assignee(investigation, classes = "")
-    out = [investigation.assignee ? investigation.assignee.name.to_s : tag.div("Unassigned", class: classes)]
+    out = [investigation.assignee ? investigation.assignee.name.to_s : tag.div("No case owner", class: classes)]
     out << tag.div(investigation.assignee.organisation.name, class: classes) if investigation.assignee&.organisation.present?
     out.join.html_safe
   end

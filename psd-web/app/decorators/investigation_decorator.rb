@@ -142,7 +142,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def assignable_display_name_for(viewing_user:)
-    return "Unassigned" unless investigation.assignable
+    return "No case owner" unless investigation.assignable
 
     assignable.assignee_short_name(viewing_user: viewing_user)
   end
