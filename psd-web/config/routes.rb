@@ -102,7 +102,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-    resources :collaborators, only: %i[new create], path: "teams", path_names: { new: "add" }
+    resources :collaborators, only: %i[index new create], path: "teams", path_names: { new: "add" }
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]

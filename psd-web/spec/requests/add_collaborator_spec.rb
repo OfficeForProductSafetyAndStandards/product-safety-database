@@ -22,8 +22,8 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
            }
     end
 
-    it "redirects to the case path" do
-      expect(response).to redirect_to(investigation_path(investigation))
+    it "redirects back to the 'teams added to case' page" do
+      expect(response).to redirect_to(investigation_collaborators_path(investigation))
     end
 
     it "adds the team as a collaborator to the case" do
@@ -88,8 +88,8 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
            }
     end
 
-    it "redirects back to the case overview page" do
-      expect(response).to redirect_to(investigation_path(investigation))
+    it "redirects back to the 'teams added to case' page" do
+      expect(response).to redirect_to(investigation_collaborators_path(investigation))
     end
   end
 

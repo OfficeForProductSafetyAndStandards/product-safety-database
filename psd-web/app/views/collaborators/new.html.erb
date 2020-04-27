@@ -2,7 +2,7 @@
 <% page_title title, errors: @collaborator.errors.any? %>
 
 <% content_for(:after_header) do %>
-  <%= govukBackLink(text: "Back", href: investigation_path(@investigation)) %>
+  <%= govukBackLink(text: "Back", href: investigation_collaborators_path(@investigation)) %>
 <% end %>
 
 <div class="govuk-grid-row">
