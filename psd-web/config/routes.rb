@@ -30,8 +30,8 @@ Rails.application.routes.draw do
   end
 
   resource :password_changed, controller: "users/password_changed", only: :show, path: "password-changed"
-  get 'two-factor', to: 'secondary_authentications#new', as: :new_secondary_authentication
-  post 'two-factor', to: 'secondary_authentications#create', as: :secondary_authentication
+  get "two-factor", to: "secondary_authentications#new", as: :new_secondary_authentication
+  post "two-factor", to: "secondary_authentications#create", as: :secondary_authentication
 
   resource :account, only: [:show], controller: :account do
     resource :name, controller: :account_name, only: %i[show update]

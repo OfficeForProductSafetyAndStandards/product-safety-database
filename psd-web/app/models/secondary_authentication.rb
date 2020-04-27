@@ -80,6 +80,7 @@ class SecondaryAuthentication
   def direct_otp
     user.direct_otp
   end
+
 private
 
   def random_base10(digits)

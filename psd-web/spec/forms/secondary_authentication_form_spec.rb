@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
-  let(:user) { create(:user, second_factor_attempts_count: attempts, direct_otp_sent_at: direct_otp_sent_at) }
   subject(:form) { described_class.new(otp_code: otp_code, user_id: user.id) }
+
+  let(:user) { create(:user, second_factor_attempts_count: attempts, direct_otp_sent_at: direct_otp_sent_at) }
 
   let(:attempts) { 0 }
   let(:direct_otp_sent_at) { Time.new.utc }
@@ -11,7 +12,7 @@ RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
 
 
   describe "#valid?" do
-    context do
+    context "with form validation" do
       before { form.validate }
 
       context "when the two factor code is blank" do
@@ -103,7 +104,7 @@ RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
     context "when otp is expired" do
       let(:direct_otp_sent_at) { (SecondaryAuthentication::OTP_EXPIRY_SECONDS * 2).seconds.ago }
 
-      context do
+      context "with form validation" do
         before { form.validate }
 
         it "is not valid" do
@@ -118,7 +119,7 @@ RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
       context "when maximum attempts were exceeded" do
         let(:attempts) { 11 }
 
-        context do
+        context "with form falidation" do
           before { form.validate }
 
           it "is not valid" do
@@ -129,7 +130,6 @@ RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
             expect(form.errors.full_messages_for(:otp_code)).to eq(["Incorrect security code"])
           end
         end
-
       end
     end
   end

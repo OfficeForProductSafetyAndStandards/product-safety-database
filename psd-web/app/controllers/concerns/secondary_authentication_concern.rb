@@ -64,6 +64,6 @@ module SecondaryAuthenticationConcern
     return if cookies.signed["two-factor-#{user_id_for_secondary_authentication}"].nil?
 
     timestamp = cookies.signed["two-factor-#{user_id_for_secondary_authentication}"].to_i
-    Time.at(timestamp).to_datetime
+    Time.zone.at(timestamp).to_datetime
   end
 end
