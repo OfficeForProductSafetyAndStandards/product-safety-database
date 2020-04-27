@@ -50,7 +50,8 @@ class User < ApplicationRecord
       id: SecureRandom.uuid,
       email: email_address,
       organisation: team.organisation,
-      invitation_token: SecureRandom.hex(15)
+      invitation_token: SecureRandom.hex(15),
+      invited_at: Time.now
     )
 
     # TODO: remove this once we’ve updated the application to no
@@ -143,7 +144,7 @@ class User < ApplicationRecord
   end
 
   def invitation_expired?
-    return false unless invited_at
+    return true unless invited_at
 
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end

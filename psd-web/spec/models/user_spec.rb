@@ -115,6 +115,10 @@ RSpec.describe User do
         expect(created_user.invitation_token).not_to be_nil
       end
 
+      it "adds an invited_at timestamp to the created user" do
+        expect(created_user.invited_at).not_to be_nil
+      end
+
       it "associates the created user with the given team's organisation" do
         expect(created_user.organisation).to eq team.organisation
       end
@@ -376,9 +380,9 @@ RSpec.describe User do
   end
 
   describe "#invitation_expired?" do
-    it "returns false when the user has not been invited" do
+    it "returns true when the user has no invited_at" do
       user = build_stubbed(:user, invited_at: nil)
-      expect(user.invitation_expired?).to be false
+      expect(user.invitation_expired?).to be true
     end
 
     it "returns false when user was invited less than 14 days ago" do
