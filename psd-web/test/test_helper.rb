@@ -58,7 +58,7 @@ class ActiveSupport::TestCase
 
   def create_new_case
     description = "new_investigation_description"
-    Investigation::Allegation.create(description: description)
+    Investigation::Allegation.create(description: description, reported_reason: Investigation.reported_reasons[:unsafe])
   end
 
   def load_case(key)

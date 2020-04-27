@@ -9,48 +9,56 @@ one:
   non_compliant_reason: investigation one non_compliant_reason
   complainant_reference: investigation one complainant_reference
   pretty_id: 1902-0000
+  reported_reason: unsafe
 
 two:
   description: Investigation two description
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0001
+  reported_reason: unsafe
 
 three:
   description: Investigation into faulty toys
   is_closed: true
   type: Investigation::Allegation
   pretty_id: 1902-0002
+  reported_reason: unsafe
 
 no_products:
   description: Investigation with no product
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0003
+  reported_reason: unsafe
 
 search_related_products:
   description: Investigation for search by product
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0004
+  reported_reason: unsafe
 
 search_related_correspondence:
   description: Investigation for search by correspondence
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0005
+  reported_reason: unsafe
 
 search_related_businesses:
   description: Investigation for search by business
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0006
+  reported_reason: unsafe
 
 search_related_complainant:
   description: Investigation for search by complainant
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0007
+  reported_reason: unsafe
 
 no_products_case_title:
   description: Investigation with no products
@@ -59,6 +67,7 @@ no_products_case_title:
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0008
+  reported_reason: unsafe
 
 one_product:
   description: Investigation with one product
@@ -67,6 +76,7 @@ one_product:
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0009
+  reported_reason: unsafe
 
 two_products_with_common_values:
   description: Investigation with two products
@@ -75,6 +85,7 @@ two_products_with_common_values:
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0010
+  reported_reason: unsafe
 
 two_products_with_no_common_values:
   description: Investigation with two products
@@ -83,18 +94,21 @@ two_products_with_no_common_values:
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0011
+  reported_reason: unsafe
 
 private:
   description: private investigation
   product_category: Alarms
   is_private: true
   pretty_id: 1902-0012
+  reported_reason: unsafe
 
 allegation:
   description: Investigation allegation
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0013
+  reported_reason: unsafe
 
 enquiry:
   description: Investigation enquiry
