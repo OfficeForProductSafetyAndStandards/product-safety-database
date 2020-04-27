@@ -8,7 +8,7 @@ RSpec.describe SendUserInvitationJob do
       let(:user_id) { SecureRandom.uuid }
       let(:message_delivery_instance) { instance_double(ActionMailer::MessageDelivery, deliver_now: true) }
       let!(:user) { create(:user, id: user_id, invitation_token: SecureRandom.hex(10), invited_at: invited_at, has_been_sent_welcome_email: false) }
-      let(:invited_at) { Time.now }
+      let(:invited_at) { 1.hour.ago }
 
       context "with a user inviting id" do
         before do
@@ -21,10 +21,6 @@ RSpec.describe SendUserInvitationJob do
 
         it "sends an email via the NotifyMailer" do
           expect(message_delivery_instance).to have_received(:deliver_now)
-        end
-
-        it "adds the time that the user was invited" do
-          expect(user.reload.invited_at).to be_within(1.second).of(Time.zone.now)
         end
 
         it "sets the user flag for having been sent the welcome email" do
@@ -47,10 +43,6 @@ RSpec.describe SendUserInvitationJob do
           it "re-sends the invitation email via the NotifyMailer" do
             expect(message_delivery_instance).to have_received(:deliver_now)
           end
-
-          it "does not change the the time that the user was invited at" do
-            expect(user.reload.invited_at).to be_within(1.second).of(invited_at)
-          end
         end
 
         context "with user whose invitation has expired" do
@@ -64,10 +56,6 @@ RSpec.describe SendUserInvitationJob do
           it "sends an email about the expired notification via the NotifyMailer" do
             expect(message_delivery_instance).to have_received(:deliver_now)
           end
-
-          it "does not change the the time that the user was invited at" do
-            expect(user.reload.invited_at).to be_within(1.second).of(invited_at)
-          end
         end
 
         context "with user who has not been invited before" do
@@ -78,10 +66,6 @@ RSpec.describe SendUserInvitationJob do
 
           it "sends an email via the NotifyMailer" do
             expect(message_delivery_instance).to have_received(:deliver_now)
-          end
-
-          it "adds the time that the user was invited" do
-            expect(user.reload.invited_at).to be_within(1.second).of(Time.zone.now)
           end
 
           it "sets the user flag for having been sent the welcome email" do

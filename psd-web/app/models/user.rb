@@ -35,6 +35,8 @@ class User < ApplicationRecord
   end
 
   attribute :skip_password_validation, :boolean, default: false
+  attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
+  attribute :invited_at, :datetime, default: -> { Time.current }
 
   def self.activated
     where(account_activated: true)
@@ -49,9 +51,7 @@ class User < ApplicationRecord
       skip_password_validation: true,
       id: SecureRandom.uuid,
       email: email_address,
-      organisation: team.organisation,
-      invitation_token: SecureRandom.hex(15),
-      invited_at: Time.now
+      organisation: team.organisation
     )
 
     # TODO: remove this once we’ve updated the application to no
@@ -144,8 +144,6 @@ class User < ApplicationRecord
   end
 
   def invitation_expired?
-    return true unless invited_at
-
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
