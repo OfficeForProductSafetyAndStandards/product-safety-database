@@ -115,7 +115,7 @@ class InvestigationDecorator < ApplicationDecorator
 
     out = []
     out << if source.user.nil?
-             h.tag.div("Unassigned")
+             h.tag.div("Unknown")
            else
              h.escape_once(source.user.name.to_s)
            end
