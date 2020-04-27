@@ -4,7 +4,8 @@ class Investigation < ApplicationRecord
     def title
       title = build_title_from_products || "Allegation"
       title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?
-      title << " (no product specified)" if object.products.empty?
+      title << compliance_line                            if reported_reason.safe_and_compliant?
+      title << " (no product specified)"                  if object.products.empty?
       title.presence || "Untitled case"
     end
 
@@ -13,6 +14,10 @@ class Investigation < ApplicationRecord
     end
 
   private
+
+    def compliance_line
+      " – #{'product'.pluralize(products.size)} reported safe"
+    end
 
     def build_title_from_products
       return object.product_category.dup if object.products.empty?

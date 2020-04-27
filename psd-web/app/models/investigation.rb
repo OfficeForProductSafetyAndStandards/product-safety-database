@@ -135,6 +135,12 @@ class Investigation < ApplicationRecord
     self.pretty_id = "#{created_at.strftime('%y%m')}-%04d" % (cases_before + 1)
   end
 
+  def reported_reason
+    return if super.blank?
+
+    @reported_reason ||= ActiveSupport::StringInquirer.new(super)
+  end
+
   def child_should_be_displayed?
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
