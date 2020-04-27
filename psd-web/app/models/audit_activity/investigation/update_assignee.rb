@@ -24,7 +24,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def email_update_text
     body = []
-    body << "#{investigation.case_type.upcase_first} was assigned to #{investigation.assignee.display_name} by #{source&.show}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.assignee.display_name} by #{source&.show}."
 
     if investigation.assignee_rationale.present?
       body << "Message from #{source&.show}:"
@@ -35,7 +35,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   end
 
   def email_subject_text
-    "#{investigation.case_type.upcase_first} was reassigned"
+    "Case owner changed for #{investigation.case_type}"
   end
 
   def users_to_notify
