@@ -67,7 +67,7 @@ class User < ApplicationRecord
   def self.resend_invite(email_address, inviting_user)
     user = find_user_within_teams_with_email!(email: email_address, teams: inviting_user.teams)
 
-    user.update!(invitation_token: SecureRandom.hex(15)) unless user.invitation_token?
+    user.update! invitation_token: user.invitation_token || SecureRandom.hex(15), invited_at: Time.current
 
     SendUserInvitationJob.perform_later(user.id, inviting_user.id)
   end
