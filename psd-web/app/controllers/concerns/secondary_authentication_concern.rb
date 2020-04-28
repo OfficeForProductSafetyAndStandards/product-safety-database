@@ -25,10 +25,6 @@ module SecondaryAuthenticationConcern
     session[:last_secondary_authentication_performed_at] = {}
   end
 
-  def cleanup_secondary_authentication
-    # TODO: delete
-  end
-
   # returns true if 2 FA not needed
   def secondary_authentication_present?
     return false if get_secondary_authentication_datetime.nil?
