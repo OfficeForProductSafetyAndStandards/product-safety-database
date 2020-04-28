@@ -28,11 +28,6 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
 
   context "when the user is a team admin" do
     let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
-    let(:message_delivery_instance) { instance_double(ActionMailer::MessageDelivery, deliver_now: true) }
-
-    before do
-      allow(NotifyMailer).to receive(:invitation_email).with(another_inactive_user, user).and_return(message_delivery_instance)
-    end
 
     scenario "displays the invite a team member link and only displays the resend invite link for inactive users" do
       expect(page).to have_link("Invite a team member")
@@ -42,8 +37,14 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
 
     scenario "resending an invitation sends an email to the user and shows a confirmation message" do
       click_link "Resend invitation to #{another_inactive_user.email}"
-      expect(message_delivery_instance).to have_received(:deliver_now)
       expect_confirmation_banner "Invite sent to #{another_inactive_user.email}"
+
+      email = delivered_emails.last
+
+      expect(email.action_name).to eq("invitation_email")
+      expect(email.recipient).to eq(another_inactive_user.email)
+      expect(email.personalization[:invitation_url]).to eq("http://www.example.com/users/#{another_inactive_user.id}/complete-registration?invitation=#{another_inactive_user.invitation_token}")
+      expect(email.personalization[:inviting_team_member_name]).to eq(user.name)
     end
   end
 
