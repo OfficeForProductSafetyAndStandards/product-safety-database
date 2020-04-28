@@ -28,7 +28,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch d
           let(:allegation) { build(:allegation, :reported_safe) }
 
           it "produces the correct title" do
-            expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – product reported safe")
+            expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – product safe and compliant")
           end
         end
 
@@ -50,7 +50,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch d
           before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
 
           it "produces the correct title" do
-            expect(decorated_allegation.title).to eq("2 products, phone – products reported safe")
+            expect(decorated_allegation.title).to eq("2 products, phone – products safe and compliant")
           end
         end
 

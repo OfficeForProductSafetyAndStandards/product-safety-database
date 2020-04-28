@@ -16,7 +16,7 @@ class Investigation < ApplicationRecord
   private
 
     def compliance_line
-      " – #{'product'.pluralize(products.size)} reported safe"
+      " – #{'product'.pluralize(products.size)} safe and compliant"
     end
 
     def build_title_from_products
