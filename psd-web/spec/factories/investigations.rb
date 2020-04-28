@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :investigation do
     user_title { "investigation title" }
+    complainant_reference { "complainant reference" }
     date_received { 1.day.ago }
     received_type { %w(email phone other).sample }
     is_closed { false }
@@ -9,7 +10,6 @@ FactoryBot.define do
     hazard_type           {}
     hazard_description    {}
     non_compliant_reason  {}
-    complainant_reference {}
 
 
     association :assignable, factory: :user
@@ -58,7 +58,7 @@ FactoryBot.define do
       end
     end
 
-    trait :reported_unsafe_and_compliant do
+    trait :reported_unsafe_and_non_compliant do
       after(:build) do |investigation|
         WhyReportingForm.new(
           reported_reason_unsafe: true,
