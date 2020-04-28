@@ -28,11 +28,19 @@ class SecondaryAuthenticationsController < ApplicationController
 private
 
   def hide_nav?
-    true
+    if secondary_authentication.operation == SecondaryAuthentication::INVITE_USER
+      super
+    else
+      true
+    end
   end
 
   def secondary_nav_items
-    [text: "Sign out", href: destroy_user_session_path]
+    if secondary_authentication.operation == SecondaryAuthentication::INVITE_USER
+      super
+    else
+      [text: "Sign out", href: destroy_user_session_path]
+    end
   end
 
   def secondary_authentication
