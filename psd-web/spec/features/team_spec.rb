@@ -10,7 +10,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
 
   before do
     sign_in(user)
-    visit team_path(team)
+    visit "/teams/#{team.id}"
     expect_to_be_on_team_page
   end
 
@@ -57,6 +57,6 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
   end
 
   def have_resend_invite_link_for(user)
-    have_link("Resend invitation", href: resend_invitation_team_path(team, email_address: user.email))
+    have_link("Resend invitation", href: "/teams/#{team.id}/resend_invitation?email_address=#{CGI.escape(user.email)}")
   end
 end
