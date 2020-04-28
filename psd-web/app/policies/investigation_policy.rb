@@ -44,11 +44,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def can_be_assigned_by(user: @user)
-    return true if @record.assignable.blank?
-    return true if @record.assignable.is_a?(Team) && (user.teams.include? @record.assignable)
-    return true if @record.assignable.is_a?(User) && (user.teams & @record.assignable.teams).any? || @record.assignable == user
-
-    false
+    @record.assignable.blank? || @record.assignable.in_same_team_as?(user) || @record.assignable == user
   end
 
   def user_allowed_to_raise_alert?(user: @user)
@@ -60,7 +56,8 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def add_collaborators?
-    return true if @record.assignable.is_a?(Team) && (user.teams.include? @record.assignable)
-    return true if @record.assignable.is_a?(User) && (user.teams & @record.assignable.teams).any?
+    return false if @record.assignable.nil?
+
+    @record.assignable.in_same_team_as?(user)
   end
 end

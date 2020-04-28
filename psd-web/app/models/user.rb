@@ -84,7 +84,7 @@ class User < ApplicationRecord
     teams.first
   end
 
-  def display_child?(user)
+  def in_same_team_as?(user)
     (teams & user.teams).any?
   end
 

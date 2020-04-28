@@ -25,7 +25,7 @@ class Team < ApplicationRecord
     self
   end
 
-  def display_child?(user)
+  def in_same_team_as?(user)
     users.include?(user)
   end
 

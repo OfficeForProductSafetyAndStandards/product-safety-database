@@ -55,7 +55,7 @@ class Investigation < ApplicationRecord
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
   def assignee_team
-    assignable.team
+    assignable&.team
   end
 
   def teams_with_access
@@ -131,7 +131,7 @@ class Investigation < ApplicationRecord
   def child_should_be_displayed?
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    assignable.display_child?(User.current)
+    assignable.in_same_team_as?(User.current)
   end
 
   def reason_created
