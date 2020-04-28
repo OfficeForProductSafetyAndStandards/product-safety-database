@@ -17,10 +17,6 @@ class Team < ApplicationRecord
     organisation.name
   end
 
-  def full_name
-    display_name
-  end
-
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 
