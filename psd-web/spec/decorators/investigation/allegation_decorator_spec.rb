@@ -33,7 +33,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch d
         end
 
         context "when reported unsafe and non-compliant" do
-          let(:allegation) { build(:allegation, :reported_unsafe_and_compliant) }
+          let(:allegation) { build(:allegation, :reported_unsafe_and_non_compliant) }
 
           it "produces the correct title" do
             expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – #{allegation.hazard_type.downcase} hazard")
