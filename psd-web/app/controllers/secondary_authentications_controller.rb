@@ -55,7 +55,7 @@ private
   end
 
   def secondary_authentication_form
-    @secondary_authentication_form ||= SecondaryAuthenticationForm.new(params[:secondary_authentication_form])
+    @secondary_authentication_form ||= SecondaryAuthenticationForm.new(secondary_authentication_params)
   end
 
   def secondary_authentication_params
