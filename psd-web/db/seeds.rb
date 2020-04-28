@@ -11,7 +11,7 @@ end
 
 run_seeds = (Product.count.zero? || Complainant.count.zero?)
 
-if true || run_seeds
+if run_seeds
 
   Rails.logger.info("Running seeds.rb")
   # First investigation
