@@ -45,10 +45,6 @@ class UsersController < ApplicationController
 
 private
 
-  def redirect_user
-    redirect_to root_path
-  end
-
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)
   end

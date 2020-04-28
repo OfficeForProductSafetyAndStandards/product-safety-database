@@ -10,10 +10,6 @@ module SecondaryAuthenticationConcern
   def require_secondary_authentication
     return unless Rails.configuration.secondary_authentication_enabled
 
-    perform_secondary_authentication
-  end
-
-  def perform_secondary_authentication
     if user_id_for_secondary_authentication && !secondary_authentication_present?
       user = User.find(user_id_for_secondary_authentication)
       session[:secondary_authentication_redirect_to] = request.fullpath

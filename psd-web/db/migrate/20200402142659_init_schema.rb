@@ -1,6 +1,7 @@
 class InitSchema < ActiveRecord::Migration[5.2]
   def up
     # These are extensions that must be enabled in order to support this database
+    safety_assured do
     enable_extension "pgcrypto"
     enable_extension "plpgsql"
 
@@ -329,6 +330,7 @@ class InitSchema < ActiveRecord::Migration[5.2]
     add_foreign_key "locations", "businesses"
     add_foreign_key "tests", "investigations"
     add_foreign_key "tests", "products"
+    end
   end
 
   def down
