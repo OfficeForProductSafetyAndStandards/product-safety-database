@@ -38,16 +38,18 @@ class SecondaryAuthentication
   def valid_otp?(otp)
     try_to_unlock_secondary_authentication
 
-    user.increment!(:second_factor_attempts_count) unless otp_locked?
+    user.with_lock do
+      user.increment!(:second_factor_attempts_count) unless otp_locked?
 
-    if user.second_factor_attempts_count > MAX_ATTEMPTS
-      user.update(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
+      if user.second_factor_attempts_count > MAX_ATTEMPTS
+        user.update!(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
+      end
     end
     user.reload.second_factor_attempts_locked_at.nil? && otp == user.direct_otp
   end
 
   def generate_code(operation)
-    user.update(
+    user.update!(
       second_factor_attempts_count: 0,
       direct_otp: random_base10(OTP_LENGTH),
       direct_otp_sent_at: Time.now.utc,
@@ -60,12 +62,12 @@ class SecondaryAuthentication
   end
 
   def try_to_verify_user_mobile_number
-    user.update(mobile_number_verified: true) unless user.mobile_number_verified
+    user.update!(mobile_number_verified: true) unless user.mobile_number_verified
   end
 
   def try_to_unlock_secondary_authentication
     if user.second_factor_attempts_locked_at && (user.second_factor_attempts_locked_at + MAX_ATTEMPTS_COOLDOWN.seconds) < Time.now.utc
-      user.update(second_factor_attempts_locked_at: nil)
+      user.update!(second_factor_attempts_locked_at: nil)
     end
   end
 
