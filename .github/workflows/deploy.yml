@@ -44,7 +44,7 @@ jobs:
         SPACE: staging
         APP_NAME: psd-web
         DOMAIN: staging.product-safety-database.service.gov.uk
-        WEB_MEMORY: 1G
+        WEB_MEMORY: 2G
         WORKER_MEMORY: 1G
         WEB_INSTANCES: 1
         WORKER_INSTANCES: 1
