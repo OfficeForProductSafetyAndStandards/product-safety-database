@@ -88,19 +88,6 @@ class User < ApplicationRecord
     super.to_s
   end
 
-  def display_name(ignore_visibility_restrictions: false, other_user: User.current)
-    return @display_name if @display_name
-
-    suffix = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && teams.any?
-               "(#{team_names})"
-             else
-               "(#{organisation.name})"
-             end
-    suffix << " [user deleted]" if deleted?
-
-    @display_name = "#{name} #{suffix}"
-  end
-
   def team_names
     teams.map(&:name).join(", ")
   end

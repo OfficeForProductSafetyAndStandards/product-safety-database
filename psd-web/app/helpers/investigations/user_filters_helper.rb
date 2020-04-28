@@ -29,13 +29,13 @@ module Investigations::UserFiltersHelper
 
   def other_assignee(form)
     render "form_components/govuk_select", key: :assigned_to_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.display_name, value: e.id } },
+                  items: entities.map { |e| { text: e.decorate.display_name, value: e.id } },
                   label: { text: "Name" }, is_autocomplete: true
   end
 
   def other_creator(form)
     render "form_components/govuk_select", key: :created_by_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.display_name, value: e.id } },
+                  items: entities.map { |e| { text: e.decorate.display_name, value: e.id } },
                   label: { text: "Name" }, is_autocomplete: true
   end
 end

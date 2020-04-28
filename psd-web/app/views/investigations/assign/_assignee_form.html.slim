@@ -4,7 +4,7 @@
 
   ruby:
     items = investigation.important_assignable_people.map do |user|
-      { text: user.display_name, value: user.id, checked: investigation.assignee == user }
+      { text: user.decorate.display_name, value: user.id, checked: investigation.assignee == user }
     end
 
     if current_user.teams.any?

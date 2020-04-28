@@ -10,7 +10,7 @@
       - if @investigation.assignee.present?
         p
           ' Currently assigned to:
-          strong = @investigation.assignee.display_name
+          strong = @investigation.assignee.decorate.display_name
       - else
         p Nobody is assigned yet
 
@@ -23,7 +23,7 @@
         = "You do not have permission to assign this #{@investigation.case_type}."
         br
         ' Contact
-        strong = @investigation.assignee.display_name
+        strong = @investigation.assignee.decorate.display_name
         '
         | to change assignment.
       = link_to "Return to case", investigation_path(@investigation), class: "govuk-button"

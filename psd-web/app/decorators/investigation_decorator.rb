@@ -117,7 +117,7 @@ class InvestigationDecorator < ApplicationDecorator
     out << if source.user.nil?
              h.tag.div("Unassigned")
            else
-             h.escape_once(source.user.decorate.name.to_s)
+             h.escape_once(source.user.decorate.full_name.to_s)
            end
     out << h.escape_once(source.user&.organisation&.name) if source&.user&.organisation.present?
 
