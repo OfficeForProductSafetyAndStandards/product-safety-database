@@ -16,6 +16,14 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch d
           allegation.products.build attributes_for(:product, name: "iPhone XS MAX", product_type: "phone")
         end
 
+        context "when no reason was reported" do
+          let(:allegation) { build(:allegation) }
+
+          it "produces the correct title" do
+            expect(decorated_allegation.title).to eq("iPhone XS MAX, phone")
+          end
+        end
+
         context "when reported safe" do
           let(:allegation) { build(:allegation, :reported_safe) }
 

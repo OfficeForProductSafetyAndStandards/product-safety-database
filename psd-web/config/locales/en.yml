@@ -196,6 +196,8 @@ en:
           attributes:
             product_category:
               blank: "Enter a valid product category"
+            hazard_type:
+              blank: "Enter the primary hazard"
         product:
           attributes:
             product_category:

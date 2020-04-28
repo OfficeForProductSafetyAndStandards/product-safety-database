@@ -63,8 +63,9 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_to_be_on_allegation_details_page
       expect(page).to have_summary_error("Description cannot be blank")
-      expect(page).to have_summary_error("Enter a valid hazard type")
+      expect(page).to have_summary_error("Enter the primary hazard")
       expect(page).to have_summary_error("Enter a valid product category")
+
       enter_allegation_details(allegation_details)
 
       expect_confirmation_banner("Allegation was successfully created")
