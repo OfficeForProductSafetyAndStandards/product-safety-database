@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     # this even once their account has been created. Hence redirecting them to the root page.
     return redirect_to(root_path) if signed_in_as?(@user) || @user.has_completed_registration?
     return render(:expired_invitation) if @user.invitation_expired?
-    return (render "errors/not_found", status: :not_found) if @user.invitation_token != params[:invitation]
+    return (render "errors/not_found", status: :not_found) if !params[:invitation] || (@user.invitation_token != params[:invitation])
 
     # Reset name and mobile number in case they’ve been remembered
     # from a previous registration that was abandoned before the mobile number

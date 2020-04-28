@@ -3,6 +3,26 @@ require "rails_helper"
 RSpec.describe User do
   include ActiveSupport::Testing::TimeHelpers
 
+  describe "attributes" do
+    let(:user) { described_class.new }
+
+    describe "invitation_token" do
+      before { allow(SecureRandom).to receive(:hex).with(15).and_return(expected_token) }
+
+      let(:expected_token) { "abcd1234" }
+
+      it "is generated on instantiation" do
+        expect(user.invitation_token).to eq(expected_token)
+      end
+    end
+
+    describe "invited_at" do
+      it "is generated on instantiation" do
+        expect(user.invited_at).to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
   describe "validations" do
     before { user.validate(:registration_completion) }
 
@@ -109,10 +129,6 @@ RSpec.describe User do
 
       it "creates an user with the given email address" do
         expect(created_user).not_to be_nil
-      end
-
-      it "adds a invitation token to the created user" do
-        expect(created_user.invitation_token).not_to be_nil
       end
 
       it "associates the created user with the given team's organisation" do
@@ -376,11 +392,6 @@ RSpec.describe User do
   end
 
   describe "#invitation_expired?" do
-    it "returns false when the user has not been invited" do
-      user = build_stubbed(:user, invited_at: nil)
-      expect(user.invitation_expired?).to be false
-    end
-
     it "returns false when user was invited less than 14 days ago" do
       user = build_stubbed(:user, invited_at: 13.days.ago)
       expect(user.invitation_expired?).to be false

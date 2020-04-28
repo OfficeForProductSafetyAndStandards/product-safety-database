@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_17_130015) do
+ActiveRecord::Schema.define(version: 2020_04_27_131227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -310,7 +310,7 @@ ActiveRecord::Schema.define(version: 2020_04_17_130015) do
     t.boolean "has_viewed_introduction", default: false
     t.integer "hash_iterations", default: 27500
     t.text "invitation_token"
-    t.datetime "invited_at"
+    t.datetime "invited_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "keycloak_created_at"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"

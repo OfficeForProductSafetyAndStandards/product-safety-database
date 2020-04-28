@@ -30,6 +30,15 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
       end
     end
 
+    context "when the user has no invitation token" do
+      let(:user) { create(:user, :invited, invitation_token: nil) }
+
+      it "sends visitor to not found page" do
+        get complete_registration_user_path(user.id)
+        expect(response).to have_http_status :not_found
+      end
+    end
+
     context "when the user invitation has expired" do
       let(:user) { create(:user, :invited, account_activated: false, invited_at: 15.days.ago) }
 

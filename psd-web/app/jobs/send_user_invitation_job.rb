@@ -17,6 +17,6 @@ class SendUserInvitationJob < ApplicationJob
     user_inviting = user_inviting_id ? User.find(user_inviting_id) : nil
 
     NotifyMailer.invitation_email(user, user_inviting).deliver_now
-    user.update!(has_been_sent_welcome_email: true, invited_at: user.invited_at || Time.current)
+    user.update!(has_been_sent_welcome_email: true)
   end
 end
