@@ -114,7 +114,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#pretty_description" do
     it {
       expect(decorated_investigation.pretty_description)
-        .to eq("#{investigation.case_type.titleize}: #{investigation.pretty_id}")
+        .to eq("#{investigation.case_type.upcase_first}: #{investigation.pretty_id}")
     }
   end
 
@@ -135,10 +135,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
     it "displays the organisation name" do
       expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.organisation.name}/)
-    end
-
-    it "displays the assignee" do
-      expect(investigation_summary_list).to summarise("Assigned to", text: /#{Regexp.escape(user.name.to_s)}/)
     end
 
     it "displays the Date created" do

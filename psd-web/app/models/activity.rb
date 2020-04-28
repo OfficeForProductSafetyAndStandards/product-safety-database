@@ -75,7 +75,7 @@ class Activity < ApplicationRecord
   def email_update_text; end
 
   def email_subject_text
-    "#{investigation.case_type.titleize} updated"
+    "#{investigation.case_type.upcase_first} updated"
   end
 
 private

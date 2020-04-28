@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
     unless current_user.is_opss?
       items.push text: "Home", href: root_path, active: params[:controller] == "homepage"
     end
-    items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches/)
+    items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators/)
     items.push text: "Businesses", href: businesses_path, active: params[:controller].start_with?("businesses")
     items.push text: "Products", href: products_path, active: params[:controller].start_with?("products")
     # In principle all our users belong to a team, but this saves crashes in case of a misconfiguration

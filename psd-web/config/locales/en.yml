@@ -31,6 +31,9 @@
 
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
+  mail:
+    team_added_to_case:
+      message_from: "Message from %{user_name}:"
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -134,6 +137,14 @@ en:
               blank: "Enter date of the test request"
               invalid: "Enter a real date of the test request"
               date_missing_component: "Enter date of the test request and include a %{missing_components}"
+        collaborator:
+          attributes:
+            team:
+              required: "Select a team to add to the case"
+            message:
+              blank: Enter a message to the team
+            include_message:
+              inclusion: "Select whether you want to include a message"
         comment_activity:
           attributes:
             body:

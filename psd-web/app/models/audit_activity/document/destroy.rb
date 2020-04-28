@@ -9,7 +9,7 @@ class AuditActivity::Document::Destroy < AuditActivity::Document::Base
   end
 
   def email_update_text
-    "Document attached to the #{investigation.case_type.titleize} was removed by #{source&.show&.titleize}."
+    "Document attached to the #{investigation.case_type.upcase_first} was removed by #{source&.show}."
   end
 
   def restricted_title

@@ -16,6 +16,7 @@ AllCops:
     - 'bin/**/*'
     - 'coverage/**/*'
     - 'db/schema.rb'
+    - 'db/migrate/20200402142659_init_schema.rb'
     - 'log/**/*'
     - 'node_modules/**/*'
     - 'tmp/**/*'

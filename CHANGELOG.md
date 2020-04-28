@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 2020-04-24
+- Added the ability to add collaborating teams to a case, who will then be able to view all details, even if the case is restricted.
+
 ## 2020-04-16
 - Extended the question to identify cases related to the coronavirus outbreak to:
   - Allegations

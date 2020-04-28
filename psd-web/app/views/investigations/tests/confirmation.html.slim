@@ -21,7 +21,7 @@ h1.govuk-heading-l
         - if @test.result
           tr.govuk-table__row
             th.govuk-table__header scope="row" Test result
-            td.govuk-table__cell = @test.result.titleize
+            td.govuk-table__cell = @test.result.upcase_first
         - if @test.details.present?
           tr.govuk-table__row
             th.govuk-table__header scope="row" Details
