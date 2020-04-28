@@ -144,8 +144,6 @@ class InvestigationTest < ActiveSupport::TestCase
 
   def create_new_private_case
     description = "new_investigation_description"
-    @new_investigation = Investigation::Allegation.create(
-      description: description, is_private: true, reported_reason: Investigation.reported_reasons[:unsafe]
-    )
+    @new_investigation = Investigation::Allegation.create(description: description, is_private: true)
   end
 end

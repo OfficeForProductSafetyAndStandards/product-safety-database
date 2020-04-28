@@ -3,7 +3,7 @@ require "test_helper"
 class NotificationTest < ActiveSupport::TestCase
   setup do
     stub_notify_mailer
-    @investigation = Investigation.create(description: "new investigation for notification test", reported_reason: Investigation.reported_reasons[:unsafe])
+    @investigation = Investigation.create(description: "new investigation for notification test")
   end
 
   teardown do

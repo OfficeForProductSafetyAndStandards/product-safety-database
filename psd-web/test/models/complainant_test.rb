@@ -19,7 +19,7 @@ class ComplainantTest < ActiveSupport::TestCase
   end
 
   def add_investigation
-    @investigation = Investigation::Allegation.new(reported_reason: Investigation.reported_reasons[:unsafe])
+    @investigation = Investigation::Allegation.new
     @investigation.complainant = @complainant
   end
 end
