@@ -225,18 +225,6 @@ ActiveRecord::Schema.define(version: 2020_04_27_131227) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "secondary_authentications", force: :cascade do |t|
-    t.integer "attempts", default: 0
-    t.boolean "authenticated"
-    t.datetime "authentication_expires_at"
-    t.datetime "created_at", null: false
-    t.string "direct_otp"
-    t.datetime "direct_otp_sent_at"
-    t.string "operation"
-    t.datetime "updated_at", null: false
-    t.string "user_id"
-  end
-
   create_table "sources", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
