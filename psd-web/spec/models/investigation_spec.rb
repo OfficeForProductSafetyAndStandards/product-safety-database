@@ -56,12 +56,10 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
     end
 
-    context "when setting only safe_and_compliant to true" do
-      before do
-        investigation.reported_reason_unsafe = false
-        investigation.reported_reason_non_compliant = false
-        investigation.reported_reason_safe_and_compliant = true
-      end
+    context "when there is a user who belongs to a team assigned" do
+      let(:team) { create(:team) }
+      let(:user) { create(:user, teams: [team]) }
+      let(:investigation) { create(:investigation, assignable: user) }
 
       it "sets the reported_reason to `safe_and_compliant`" do
         expect(investigation.reported_reason).to eql(:safe_and_compliant)
