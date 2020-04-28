@@ -55,16 +55,13 @@ class Investigation < ApplicationRecord
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
   def assignee_team
-    if assignable_type == "Team"
-      assignable
-    elsif assignable_type == "User"
-      assignable.teams.first
-    end
+    assignable.team
   end
 
   def teams_with_access
     ([assignee_team] + teams.order(:name)).compact
   end
+
   def status
     is_closed? ? "Closed" : "Open"
   end
@@ -134,10 +131,7 @@ class Investigation < ApplicationRecord
   def child_should_be_displayed?
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    return true if (self.assignable.is_a? Team) && self.assignable.users.include?(User.current)
-    return true if (self.assignable.is_a? User) && (self.assignable.teams & User.current.teams).any?
-
-    false
+    assignable.display_child?(User.current)
   end
 
   def reason_created

@@ -80,6 +80,14 @@ class User < ApplicationRecord
     RequestStore.store[:current_user] = user
   end
 
+  def team
+    teams.first
+  end
+
+  def display_child?(user)
+    (teams & user.teams).any?
+  end
+
   def name
     super.to_s
   end

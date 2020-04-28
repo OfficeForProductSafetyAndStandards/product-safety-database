@@ -21,6 +21,14 @@ class Team < ApplicationRecord
     display_name
   end
 
+  def team
+    self
+  end
+
+  def display_child?(user)
+    users.include?(user)
+  end
+
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 
