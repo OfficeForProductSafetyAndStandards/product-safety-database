@@ -89,7 +89,7 @@ class InvestigationTest < ActiveSupport::TestCase
   test "past assignables should be computed" do
     user = users(:southampton)
     @investigation.update(assignable: user)
-    assert_includes @investigation.past_assignables, user
+    assert_includes @investigation.past_assignees, user
   end
 
   test "past assignable teams should be computed" do
