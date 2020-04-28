@@ -14,16 +14,13 @@ class SecondaryAuthenticationsController < ApplicationController
   end
 
   def create
-    params.permit!
-    @secondary_authentication_form = SecondaryAuthenticationForm.new(params[:secondary_authentication_form])
-
-    if @secondary_authentication_form.valid?
+    if secondary_authentication_form.valid?
       set_secondary_authentication_cookie(Time.now.utc.to_i)
-      @secondary_authentication_form.secondary_authentication.try_to_verify_user_mobile_number
+      secondary_authentication_form.try_to_verify_user_mobile_number
       redirect_to_saved_path
     else
       try_to_resend_code
-      @secondary_authentication_form.otp_code = nil
+      secondary_authentication_form.otp_code = nil
       render :new
     end
   end
@@ -45,9 +42,9 @@ private
   def redirect_to_saved_path
     session[:secondary_authentication_user_id] = nil
     if session[:secondary_authentication_redirect_to]
-      redirect_to session[:secondary_authentication_redirect_to]
+      redirect_to session.delete(:secondary_authentication_redirect_to)
     else
-      redirect_to "/"
+      redirect_to root_path
     end
   end
 
@@ -55,5 +52,13 @@ private
     if secondary_authentication.otp_expired? && !secondary_authentication.otp_locked?
       secondary_authentication.generate_and_send_code(secondary_authentication.operation)
     end
+  end
+
+  def secondary_authentication_form
+    @secondary_authentication_form ||= SecondaryAuthenticationForm.new(params[:secondary_authentication_form])
+  end
+
+  def secondary_authentication_params
+    params.require(:secondary_authentication_form).permit(:otp_code, :user_id)
   end
 end

@@ -24,6 +24,8 @@ class SecondaryAuthenticationForm
   validate :otp_attempts_validation
   validate :otp_expiry_validation
 
+  delegate :try_to_verify_user_mobile_number, :operation, to: :secondary_authentication
+
   def otp_code=(code)
     super(code.to_s.strip)
   end
@@ -53,10 +55,6 @@ class SecondaryAuthenticationForm
   end
 
   def secondary_authentication
-    SecondaryAuthentication.new(User.find(self.user_id))
-  end
-
-  def operation
-    secondary_authentication.operation
+    @secondary_authentication ||= SecondaryAuthentication.new(User.find(self.user_id))
   end
 end
