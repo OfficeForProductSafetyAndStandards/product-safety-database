@@ -16,6 +16,8 @@ class Investigation < ApplicationRecord
   private
 
     def compliance_line
+      return " - safe and compliant" if products.empty?
+
       " – #{'product'.pluralize(products.size)} safe and compliant"
     end
 

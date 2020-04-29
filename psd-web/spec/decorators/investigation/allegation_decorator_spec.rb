@@ -79,8 +79,18 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch d
     context "when no products are present on the case" do
       before { allegation.product_category = "Alarms" }
 
-      it "has the correct title" do
-        expect(decorated_allegation.title).to eq("Alarms – #{allegation.hazard_type.downcase} hazard (no product specified)")
+      context "when reporting unsafe" do
+        it "has the correct title" do
+          expect(decorated_allegation.title).to eq("Alarms – #{allegation.hazard_type.downcase} hazard (no product specified)")
+        end
+      end
+
+      context "when reporting safe" do
+        let(:allegation) { build(:allegation, :reported_safe) }
+
+        it "has the correct title" do
+          expect(decorated_allegation.title).to eq("Alarms - safe and compliant (no product specified)")
+        end
       end
     end
   end
