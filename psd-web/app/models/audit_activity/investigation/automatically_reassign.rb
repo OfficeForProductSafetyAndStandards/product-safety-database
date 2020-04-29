@@ -13,7 +13,7 @@ class AuditActivity::Investigation::AutomaticallyReassign < AuditActivity::Inves
   # We store assignable_id in title field, this is computing title based on that
   def title
     type = investigation.case_type.capitalize
-    new_assignable = (User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name
+    new_assignable = (User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.decorate&.display_name
     "#{type} automatically reassigned to #{new_assignable}"
   end
 

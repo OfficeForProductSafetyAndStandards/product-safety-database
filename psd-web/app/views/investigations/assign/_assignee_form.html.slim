@@ -29,7 +29,7 @@
     items.push divider: "Teams"
 
     teams = investigation.important_assignable_teams.map do |team|
-      { text: team.display_name, value: team.id, checked: investigation.assignable == team }
+      { text: team.decorate.display_name, value: team.id, checked: investigation.assignable == team }
     end
     items.concat teams
 

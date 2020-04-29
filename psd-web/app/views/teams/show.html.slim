@@ -1,8 +1,8 @@
-= page_title @team.display_name
+= page_title @team.decorate.display_name
 - current_user_is_team_admin = current_user.is_team_admin?
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop
-    h1.govuk-heading-l = @team.display_name
+    h1.govuk-heading-l = @team.decorate.display_name
     - if current_user_is_team_admin
       a.govuk-button role="button" href=invite_to_team_url Invite a team member
     h2.govuk-heading-m Team members
