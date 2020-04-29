@@ -25,7 +25,7 @@ class Investigation < ApplicationRecord
   validates_length_of :non_compliant_reason, maximum: 10000
   validates_length_of :hazard_description, maximum: 10000
 
-  after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
+  after_update :create_audit_activity_for_owner, :create_audit_activity_for_status,
                :create_audit_activity_for_visibility, :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
@@ -165,7 +165,7 @@ private
     end
   end
 
-  def create_audit_activity_for_assignee
+  def create_audit_activity_for_owner
     # TODO: User.current check is here to avoid triggering activity and emails from migrations
     # Can be safely removed once the migration PopulateAssigneeAndDescription has run
     if ((saved_changes.key? :owner_id) || (saved_changes.key? :owner_type)) && User.current
