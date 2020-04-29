@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :has_accepted_declaration
   skip_before_action :has_viewed_introduction
-  skip_before_action :handle_two_factor_authentication
+  skip_before_action :require_secondary_authentication
 
   def complete_registration
     @user = User.find(params[:id])
@@ -36,23 +36,14 @@ class UsersController < ApplicationController
     @user.assign_attributes(new_user_attributes)
 
     if @user.save(context: :registration_completion)
-
       sign_in :user, @user
-      redirect_user
+      redirect_to root_path
     else
       render :complete_registration
     end
   end
 
 private
-
-  def redirect_user
-    return redirect_to root_path unless Rails.configuration.two_factor_authentication_enabled
-
-    warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-    @user.send_new_otp
-    redirect_to user_two_factor_authentication_path
-  end
 
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)

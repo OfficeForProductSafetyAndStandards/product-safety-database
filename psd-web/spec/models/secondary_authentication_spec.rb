@@ -1,0 +1,89 @@
+require "rails_helper"
+
+RSpec.describe SecondaryAuthentication do
+  let(:attempts) { 0 }
+  let(:direct_otp_sent_at) { Time.new.utc }
+  let(:second_factor_attempts_locked_at) { nil }
+  let(:user) { create(:user, second_factor_attempts_count: attempts, direct_otp_sent_at: direct_otp_sent_at, second_factor_attempts_locked_at: second_factor_attempts_locked_at) }
+  let(:secondary_authentication) { described_class.new(user) }
+
+  describe "#valid_otp?" do
+    # rubocop:disable Style/MethodCalledOnDoEndBlock
+    it "increase attempts when checking code" do
+      expect do
+        secondary_authentication.valid_otp? "123"
+      end.to change { user.reload.second_factor_attempts_count }.from(0).to(1)
+    end
+    # rubocop:enable Style/MethodCalledOnDoEndBlock
+
+    it "returns true" do
+      expect(secondary_authentication).to be_valid_otp(user.reload.direct_otp)
+    end
+
+    context "when maximum attempts exceeded" do
+      let(:attempts) { 11 }
+
+      before do
+        secondary_authentication.valid_otp? "123"
+      end
+
+      it "sets second_factor_attempts_locked_at" do
+        expect(user.reload.second_factor_attempts_locked_at).to be_within(1.second).of(Time.zone.now)
+      end
+
+      it "resets attempts count" do
+        expect(user.reload.second_factor_attempts_count).to eq(0)
+      end
+
+      # rubocop:disable Style/MethodCalledOnDoEndBlock
+      it "does not increase attempts when checking code" do
+        expect do
+          secondary_authentication.valid_otp? "123"
+        end.not_to(change { user.reload.second_factor_attempts_count })
+      end
+      # rubocop:enable Style/MethodCalledOnDoEndBlock
+
+      it "returns false" do
+        expect(secondary_authentication).not_to be_valid_otp(user.reload.direct_otp)
+      end
+
+      # rubocop:disable Style/MethodCalledOnDoEndBlock
+      it "sets second_factor_attempts_count after lock cooldown" do
+        travel_to(Time.now.utc + (SecondaryAuthentication::MAX_ATTEMPTS_COOLDOWN + 1).seconds) do
+          expect do
+            secondary_authentication.valid_otp? "123"
+          end.to change { user.reload.second_factor_attempts_count }.from(0).to(1)
+        end
+      end
+      # rubocop:enable Style/MethodCalledOnDoEndBlock
+
+      it "clears second_factor_attempts_locked_at after lock cooldown" do
+        travel_to(Time.now.utc + (SecondaryAuthentication::MAX_ATTEMPTS_COOLDOWN + 1).seconds) do
+          secondary_authentication.valid_otp? "123"
+
+          expect(user.reload.second_factor_attempts_locked_at).to eq(nil)
+        end
+      end
+    end
+  end
+
+  describe "#otp_locked?" do
+    it "returns false when second_factor_attempts_locked_at is empty" do
+      expect(secondary_authentication.otp_locked?).to eq(false)
+    end
+
+    context "when second_factor_attempts_locked_at is not empty" do
+      let(:second_factor_attempts_locked_at) { Time.now.utc }
+
+      it "returns true" do
+        expect(secondary_authentication.otp_locked?).to eq(true)
+      end
+
+      it "returns false when cooldown passed" do
+        travel_to(second_factor_attempts_locked_at + (SecondaryAuthentication::MAX_ATTEMPTS_COOLDOWN + 1).seconds) do
+          expect(secondary_authentication.otp_locked?).to eq(false)
+        end
+      end
+    end
+  end
+end

@@ -5,6 +5,7 @@ module Users
     # These methods trigger Warden authentication.
     # We don't want this to happen until we explicitly attempt to authenticate the user.
     skip_before_action :set_current_user, :set_raven_context, :authorize_user, only: :create
+    skip_before_action :require_secondary_authentication
 
     def new
       super { self.resource = resource.decorate }
@@ -75,7 +76,7 @@ module Users
     end
 
     def mobile_not_verified?(user)
-      Rails.configuration.two_factor_authentication_enabled && user && !user.mobile_number_verified
+      user && !user.mobile_number_verified
     end
 
     def set_resource_as_new_user_from_params
