@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   include NotifyHelper
 
   def self.from(investigation)
-    title = investigation.assignable.id.to_s
+    title = investigation.owner.id.to_s
     body = investigation.assignee_rationale
     super(investigation, title, self.sanitize_text(body))
   end
@@ -11,20 +11,20 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
     "Changed"
   end
 
-  def assignable_id
-    # We store assignable_id in title field, this is getting it back
+  def owner_id
+    # We store owner_id in title field, this is getting it back
     # Using alias for accessing parent method causes errors elsewhere :(
     AuditActivity::Investigation::Base.instance_method(:title).bind(self).call
   end
 
   def title
-    # We store assignable_id in title field, this is computing title based on that
-    "Case owner changed to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name}"
+    # We store owner_id in title field, this is computing title based on that
+    "Case owner changed to #{(User.find_by(id: owner_id) || Team.find_by(id: owner_id))&.display_name}"
   end
 
   def email_update_text
     body = []
-    body << "Case owner changed on #{investigation.case_type} to #{investigation.assignable.display_name} by #{source&.show}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.display_name} by #{source&.show}."
 
     if investigation.assignee_rationale.present?
       body << "Message from #{source&.show}:"
@@ -47,9 +47,9 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   end
 
   def compute_relevant_entities(model:, compute_users_from_entity:)
-    previous_assignee_id = investigation.saved_changes["assignable_id"][0]
+    previous_assignee_id = investigation.saved_changes["owner_id"][0]
     previous_assignee = model.find_by(id: previous_assignee_id)
-    new_assignee = investigation.assignable
+    new_assignee = investigation.owner
     assigner = source.user
 
     old_users = previous_assignee.present? ? compute_users_from_entity.call(previous_assignee) : []

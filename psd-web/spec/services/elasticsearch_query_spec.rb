@@ -30,7 +30,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch do
     let(:batch_number)      { SecureRandom.uuid }
     let(:country_of_origin) { "United Kingdom" }
     let(:product)           { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
-    let(:investigation)     { create(:allegation, assignable: user, products: [product]) }
+    let(:investigation)     { create(:allegation, owner: user, products: [product]) }
 
     before do
       allow(NotifyMailer)

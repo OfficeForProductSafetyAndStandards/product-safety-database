@@ -101,7 +101,7 @@ module InvestigationsHelper
 
   def format_assignee_terms(assignee_array)
     assignee_array.map do |a|
-      { term: { assignable_id: a } }
+      { term: { owner_id: a } }
     end
   end
 

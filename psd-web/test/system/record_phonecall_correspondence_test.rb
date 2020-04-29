@@ -11,7 +11,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
 
     stub_antivirus_api
     @investigation = load_case(:one)
-    @investigation.update!(source: UserSource.new(sourceable: user), assignable: user)
+    @investigation.update!(source: UserSource.new(sourceable: user), owner: user)
     @correspondence = correspondences(:phone_call)
     visit new_investigation_phone_call_path(@investigation)
   end

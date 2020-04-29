@@ -25,7 +25,7 @@ class Investigations::AssignController < ApplicationController
   end
 
   def create
-    @investigation.assignable = potential_assignee
+    @investigation.owner = potential_assignee
     @investigation.assignee_rationale = params[:investigation][:assignee_rationale]
     @investigation.save
     redirect_to investigation_path(@investigation), notice: "#{@investigation.case_type.upcase_first} was successfully updated."
@@ -34,7 +34,7 @@ class Investigations::AssignController < ApplicationController
 private
 
   def clear_session
-    session[:assignable_id] = nil
+    session[:owner_id] = nil
   end
 
   def set_investigation
@@ -44,7 +44,7 @@ private
   end
 
   def assignee_params
-    params[:investigation][:assignable_id] = case params[:investigation][:assignable_id]
+    params[:investigation][:owner_id] = case params[:investigation][:owner_id]
                                              when "someone_in_your_team"
                                                params[:investigation][:select_team_member]
                                              when "previously_assigned"
@@ -54,25 +54,25 @@ private
                                              when "someone_else"
                                                params[:investigation][:select_someone_else]
                                              else
-                                               params[:investigation][:assignable_id]
+                                               params[:investigation][:owner_id]
                                              end
-    params.require(:investigation).permit(:assignable_id)
+    params.require(:investigation).permit(:owner_id)
   end
 
   def store_assignee
-    session[:assignable_id] = assignee_params[:assignable_id]
+    session[:owner_id] = assignee_params[:owner_id]
   end
 
   def assignee_valid?
     if step == :choose
       if potential_assignee == nil
-        @investigation.errors.add(:assignable_id, :invalid, message: "Select case owner")
+        @investigation.errors.add(:owner_id, :invalid, message: "Select case owner")
       end
     end
     @investigation.errors.empty?
   end
 
   def potential_assignee
-    User.find_by(id: session[:assignable_id]) || Team.find_by(id: session[:assignable_id])
+    User.find_by(id: session[:owner_id]) || Team.find_by(id: session[:owner_id])
   end
 end

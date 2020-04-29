@@ -3,8 +3,8 @@
   = yield
 
   ruby:
-    items = investigation.important_assignable_people.map do |user|
-      { text: user.display_name, value: user.id, checked: investigation.assignable == user }
+    items = investigation.important_owner_people.map do |user|
+      { text: user.display_name, value: user.id, checked: investigation.owner == user }
     end
 
     if current_user.teams.any?
@@ -28,8 +28,8 @@
 
     items.push divider: "Teams"
 
-    teams = investigation.important_assignable_teams.map do |team|
-      { text: team.display_name, value: team.id, checked: investigation.assignable == team }
+    teams = investigation.important_owner_teams.map do |team|
+      { text: team.display_name, value: team.id, checked: investigation.owner == team }
     end
     items.concat teams
 
@@ -48,7 +48,7 @@
     end
     items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else }
 
-  = render "form_components/govuk_radios", form: form, key: :assignable_id, items: items
+  = render "form_components/govuk_radios", form: form, key: :owner_id, items: items
   .govuk-form-group
     = form.submit "Continue", class: "govuk-button"
     p = link_to "Cancel", investigation_path(investigation), class: "psd-block-link"

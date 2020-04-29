@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   belongs_to :organisation
 
-  has_many :investigations, dependent: :nullify, as: :assignable
+  has_many :investigations, dependent: :nullify, as: :owner
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy

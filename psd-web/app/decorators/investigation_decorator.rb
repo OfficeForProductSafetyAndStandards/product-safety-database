@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :documents_attachments, :assignable
+  decorates_associations :documents_attachments, :owner
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -141,10 +141,10 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
-  def assignable_display_name_for(viewing_user:)
-    return "No case owner" unless investigation.assignable
+  def owner_display_name_for(viewing_user:)
+    return "No case owner" unless investigation.owner
 
-    assignable.assignee_short_name(viewing_user: viewing_user)
+    owner.assignee_short_name(viewing_user: viewing_user)
   end
 
 private

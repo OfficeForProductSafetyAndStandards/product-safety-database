@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_131227) do
+ActiveRecord::Schema.define(version: 2020_04_29_110552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -162,8 +162,6 @@ ActiveRecord::Schema.define(version: 2020_04_27_131227) do
   end
 
   create_table "investigations", id: :serial, force: :cascade do |t|
-    t.uuid "assignable_id"
-    t.string "assignable_type"
     t.string "complainant_reference"
     t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
@@ -174,13 +172,15 @@ ActiveRecord::Schema.define(version: 2020_04_27_131227) do
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
+    t.uuid "owner_id"
+    t.string "owner_type"
     t.string "pretty_id"
     t.string "product_category"
     t.string "received_type"
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"
-    t.index ["assignable_type", "assignable_id"], name: "index_investigations_on_assignable_type_and_assignable_id"
+    t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id"
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end

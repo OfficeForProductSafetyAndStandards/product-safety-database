@@ -141,8 +141,8 @@ class InitSchema < ActiveRecord::Migration[5.2]
       end
 
       create_table "investigations", id: :serial, force: :cascade do |t|
-        t.uuid "assignable_id"
-        t.string "assignable_type"
+        t.uuid "owner_id"
+        t.string "owner_type"
         t.string "complainant_reference"
         t.boolean "coronavirus_related", default: false
         t.datetime "created_at", null: false
@@ -159,7 +159,7 @@ class InitSchema < ActiveRecord::Migration[5.2]
         t.string "type", default: "Investigation::Allegation"
         t.datetime "updated_at", null: false
         t.string "user_title"
-        t.index ["assignable_type", "assignable_id"], name: "index_investigations_on_assignable_type_and_assignable_id"
+        t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
         t.index ["pretty_id"], name: "index_investigations_on_pretty_id"
         t.index ["updated_at"], name: "index_investigations_on_updated_at"
       end

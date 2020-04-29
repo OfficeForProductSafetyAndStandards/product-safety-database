@@ -17,7 +17,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when the user is assigned to the case" do
-    let(:investigation) { create(:investigation, is_private: true, assignable: user) }
+    let(:investigation) { create(:investigation, is_private: true, owner: user) }
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)
@@ -25,7 +25,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when the user’s team is assigned to the case" do
-    let(:investigation) { create(:investigation, is_private: true, assignable: users_team) }
+    let(:investigation) { create(:investigation, is_private: true, owner: users_team) }
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)
@@ -33,7 +33,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when another team from the same organisation is assigned to the case" do
-    let(:investigation) { create(:investigation, is_private: true, assignable: other_team_from_the_same_organisation) }
+    let(:investigation) { create(:investigation, is_private: true, owner: other_team_from_the_same_organisation) }
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)
@@ -41,7 +41,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when a team from a different organisation is assigned to the case" do
-    let(:investigation) { create(:investigation, is_private: true, assignable: other_team) }
+    let(:investigation) { create(:investigation, is_private: true, owner: other_team) }
 
     it "displays an forbidden message" do
       expect(response).to have_http_status(:forbidden)
@@ -49,7 +49,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when a user from from a different organisation is assigned to the case" do
-    let(:investigation) { create(:investigation, is_private: true, assignable: other_user) }
+    let(:investigation) { create(:investigation, is_private: true, owner: other_user) }
 
     it "displays an forbidden message" do
       expect(response).to have_http_status(:forbidden)
@@ -58,7 +58,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
 
   context "when the case is assigned to a team from another organisation but the user’s team has been added as a collaborator" do
     let(:investigation) {
-      create(:investigation, is_private: true, assignable: other_team, collaborators: [
+      create(:investigation, is_private: true, owner: other_team, collaborators: [
       create(:collaborator, team: users_team, added_by_user: other_user)
     ])
     }

@@ -13,7 +13,7 @@ class InvestigationsController < ApplicationController
       format.html do
         @answer         = search_for_investigations(20)
         @investigations = InvestigationDecorator
-                            .decorate_collection(@answer.records(includes: [{ assignable: :organisation }, :products]))
+                            .decorate_collection(@answer.records(includes: [{ owner: :organisation }, :products]))
       end
       format.xlsx do
         @answer = search_for_investigations
