@@ -89,7 +89,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch d
         let(:allegation) { build(:allegation, :reported_safe) }
 
         it "has the correct title" do
-          expect(decorated_allegation.title).to eq("Alarms - safe and compliant (no product specified)")
+          expect(decorated_allegation.title).to eq("Alarms - safe and compliant")
         end
       end
     end

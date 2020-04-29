@@ -5,7 +5,7 @@ class Investigation < ApplicationRecord
       title = build_title_from_products || "Allegation"
       title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?
       title << compliance_line                            if reported_reason&.safe_and_compliant?
-      title << " (no product specified)"                  if object.products.empty?
+      title << " (no product specified)"                  if !reported_reason&.safe_and_compliant? && object.products.empty?
       title.presence || "Untitled case"
     end
 
