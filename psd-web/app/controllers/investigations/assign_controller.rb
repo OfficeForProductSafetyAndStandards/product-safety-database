@@ -55,7 +55,7 @@ private
                                           params[:investigation][:select_someone_else]
                                         else
                                           params[:investigation][:owner_id]
-                                             end
+                                        end
     params.require(:investigation).permit(:owner_id)
   end
 
