@@ -39,11 +39,7 @@ class SecondaryAuthentication
     try_to_unlock_secondary_authentication
 
     user.with_lock do
-      user.increment!(:second_factor_attempts_count) unless otp_locked?
-
-      if user.second_factor_attempts_count > MAX_ATTEMPTS
-        user.update!(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
-      end
+      increment_attempts_and_try_to_lock
     end
     user.reload.second_factor_attempts_locked_at.nil? && otp == user.direct_otp
   end
@@ -83,5 +79,13 @@ private
 
   def random_base10(digits)
     SecureRandom.random_number(10**digits).to_s.rjust(digits, "0")
+  end
+
+  def increment_attempts_and_try_to_lock
+    user.increment!(:second_factor_attempts_count) unless otp_locked?
+
+    if user.second_factor_attempts_count > MAX_ATTEMPTS
+      user.update!(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
+    end
   end
 end
