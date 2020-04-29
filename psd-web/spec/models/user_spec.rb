@@ -279,9 +279,9 @@ RSpec.describe User do
     end
 
     it "includes associations needed for display_name" do
-      assignees = described_class.get_owners.to_a # to_a forces the query execution and load immediately
+      owners = described_class.get_owners.to_a # to_a forces the query execution and load immediately
       expect(-> {
-        assignees.map(&:display_name)
+        owners.map(&:display_name)
       }).to not_talk_to_db
     end
 
