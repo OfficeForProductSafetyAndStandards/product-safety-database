@@ -2,7 +2,9 @@
   .govuk-grid-column-two-thirds-from-desktop
 
     h2.govuk-heading-m Full detail
-    = link_to "Edit details", edit_product_path(@product)
+
+    p.govuk-body
+      = link_to "Edit details", edit_product_path(@product), class: "govuk-link"
 
     hr.govuk-section-break.govuk-section-break--l
 

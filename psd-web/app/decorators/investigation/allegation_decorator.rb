@@ -4,7 +4,8 @@ class Investigation < ApplicationRecord
     def title
       title = build_title_from_products || "Allegation"
       title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?
-      title << " (no product specified)" if object.products.empty?
+      title << compliance_line                            if reported_reason&.safe_and_compliant?
+      title << " (no product specified)"                  if display_no_product_specified?
       title.presence || "Untitled case"
     end
 
@@ -13,6 +14,12 @@ class Investigation < ApplicationRecord
     end
 
   private
+
+    def compliance_line
+      return " - safe and compliant" if products.empty?
+
+      " – #{'product'.pluralize(products.size)} safe and compliant"
+    end
 
     def build_title_from_products
       return object.product_category.dup if object.products.empty?
@@ -27,6 +34,10 @@ class Investigation < ApplicationRecord
     def get_product_property_value_if_shared(property_name)
       first_product = object.products.first
       first_product[property_name] if object.products.drop(1).all? { |product| product[property_name] == first_product[property_name] }
+    end
+
+    def display_no_product_specified?
+      !reported_reason&.safe_and_compliant? && object.products.empty?
     end
   end
 end

@@ -87,21 +87,7 @@ RailsAdmin.config do |config|
     if !current_user.is_superuser?
       redirect_to main_app.root_path
     end
-    if warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION]
-      redirect_to "/two-factor"
-    end
   end
 
   config.included_models = %w[User]
 end
-
-# Due two_factor_authentication_gem implementation, which is being hooked to
-# RailsAdmin controller, we need to define this path.
-module RailsAdminTwoFactor
-  # This method will be called inside RailsAdmin, but is only defined for host app.
-  def user_two_factor_authentication_path
-    "/two-factor"
-  end
-end
-
-RailsAdmin::MainController.include RailsAdminTwoFactor

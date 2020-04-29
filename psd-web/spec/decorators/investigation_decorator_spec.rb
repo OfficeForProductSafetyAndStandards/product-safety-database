@@ -11,7 +11,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, coronavirus_related: coronavirus_related, products: products, assignee: user, source: user_source) }
+  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, assignable: user, source: user_source) }
 
   before { create(:complainant, investigation: investigation) }
 
@@ -301,7 +301,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     context "when the investigation is not assigned" do
-      before { investigation.assignee = nil }
+      before { investigation.assignable = nil }
 
       it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
     end

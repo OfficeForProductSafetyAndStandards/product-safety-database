@@ -92,7 +92,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
       it "sets the personalisation" do
         expect(mail.govuk_notify_personalisation).to eql(
           updater_name: "Bob Jones",
-          optional_message: nil,
+          optional_message: "",
           investigation_url: investigation_url(collaborator.investigation)
         )
       end

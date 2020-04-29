@@ -6,33 +6,20 @@ module Users
                        :has_viewed_introduction,
                        only: %i(edit sign_out_before_resetting_password)
 
+    skip_before_action :require_secondary_authentication
+
+    before_action :require_secondary_authentication, only: :update
+
     def edit
-      return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
+      return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
+
+      require_secondary_authentication
 
       @email = user_with_reset_token.email
 
-      if passed_two_factor_authentication?
-        # Devise password update requires the user to be signed out, as it relies on the "reset password token"
-        # parameter and an user attempting to reset its password because does not remember it is not supposed to be
-        # already signed in.
-        # In order to be able to enforce 2FA, we need to to sign the user in.
-        # Given this contradiction between needing it for 2FA but needing the opposite for the password update,
-        # when the user gets redirected back after 2FA, we have to sign out the users before allowing them to
-        # update their password.
-        sign_out(:user)
-        super
-      else
-        sign_in(user_with_reset_token)
-        warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-        # Will redirect back to #edit after passing 2FA.
-        # fullpath contains "reset_password_token", necessary for the further update.
-        store_location_for(:user, request.fullpath)
-        user_with_reset_token.send_new_otp
-
-        redirect_to user_two_factor_authentication_path
-      end
+      super
     end
 
     def sign_out_before_resetting_password
@@ -77,8 +64,8 @@ module Users
       user_signed_in? && current_user != user_with_reset_token
     end
 
-    def passed_two_factor_authentication?
-      return true if !Rails.configuration.two_factor_authentication_enabled
+    def passed_secondary_authentication?
+      return true if !Rails.configuration.secondary_authentication_enabled
 
       user_signed_in? && is_fully_authenticated?
     end
@@ -89,6 +76,7 @@ module Users
     end
 
     def reset_token_invalid?
+      # return render :expired, status: :gone if reset_token_expired?
       params[:reset_password_token].blank? || user_with_reset_token.blank?
     end
 
@@ -128,6 +116,16 @@ module Users
 
     def after_resetting_password_path_for(_resource)
       password_changed_path
+    end
+
+    def user_id_for_secondary_authentication
+      token_from_put = Devise.token_generator.digest(User, :reset_password_token, params[:user][:reset_password_token]) if request.put?
+      user_with_reset_token&.id ||
+        User.find_by(reset_password_token: token_from_put)&.id
+    end
+
+    def current_operation
+      SecondaryAuthentication::RESET_PASSWORD_OPERATION
     end
   end
 end
