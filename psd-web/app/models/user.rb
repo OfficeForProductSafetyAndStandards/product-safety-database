@@ -79,6 +79,14 @@ class User < ApplicationRecord
     RequestStore.store[:current_user] = user
   end
 
+  def team
+    teams.first
+  end
+
+  def in_same_team_as?(user)
+    (teams & user.teams).any?
+  end
+
   def name
     super.to_s
   end

@@ -8,12 +8,12 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, teams: [team]) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, teams: [other_team]) }
 
-  let!(:investigation) { create(:allegation, assignee: user) }
-  let!(:other_user_investigation) { create(:allegation, assignee: other_user_same_team) }
-  let!(:other_user_other_team_investigation) { create(:allegation, assignee: other_user_other_team) }
-  let!(:other_team_investigation) { create(:allegation, assignee: other_team) }
+  let!(:investigation) { create(:allegation, assignable: user) }
+  let!(:other_user_investigation) { create(:allegation, assignable: other_user_same_team) }
+  let!(:other_user_other_team_investigation) { create(:allegation, assignable: other_user_other_team) }
+  let!(:other_team_investigation) { create(:allegation, assignable: other_team) }
 
-  let!(:coronavirus_investigation) { create(:allegation, assignee: user, coronavirus_related: true) }
+  let!(:coronavirus_investigation) { create(:allegation, assignable: user, coronavirus_related: true) }
 
 
   let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, teams: [team]) }
