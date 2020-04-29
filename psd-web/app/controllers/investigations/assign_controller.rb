@@ -45,16 +45,16 @@ private
 
   def assignee_params
     params[:investigation][:owner_id] = case params[:investigation][:owner_id]
-                                             when "someone_in_your_team"
-                                               params[:investigation][:select_team_member]
-                                             when "previously_assigned"
-                                               params[:investigation][:select_previously_assigned]
-                                             when "other_team"
-                                               params[:investigation][:select_other_team]
-                                             when "someone_else"
-                                               params[:investigation][:select_someone_else]
-                                             else
-                                               params[:investigation][:owner_id]
+                                        when "someone_in_your_team"
+                                          params[:investigation][:select_team_member]
+                                        when "previously_assigned"
+                                          params[:investigation][:select_previously_assigned]
+                                        when "other_team"
+                                          params[:investigation][:select_other_team]
+                                        when "someone_else"
+                                          params[:investigation][:select_someone_else]
+                                        else
+                                          params[:investigation][:owner_id]
                                              end
     params.require(:investigation).permit(:owner_id)
   end
