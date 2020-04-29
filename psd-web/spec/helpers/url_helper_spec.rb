@@ -8,7 +8,7 @@ RSpec.describe UrlHelper do
 
 
     context "with an instance of Investigation" do
-      let(:object) { create(:allegation, assignee: nil) }
+      let(:object) { create(:allegation, assignable: nil) }
 
       context "with no slug" do
         it "returns /cases/:pretty_id" do
@@ -48,7 +48,7 @@ RSpec.describe UrlHelper do
     subject(:path) { helper.associated_documents_path(object) }
 
     context "with an instance of Investigation" do
-      let(:object) { create(:allegation, assignee: nil) }
+      let(:object) { create(:allegation, assignable: nil) }
 
       it "returns /cases/:pretty_id/attachments" do
         expect(path).to eq("/cases/#{object.pretty_id}/attachments")
@@ -71,7 +71,7 @@ RSpec.describe UrlHelper do
 
 
     context "with an instance of Investigation" do
-      let(:object) { create(:allegation, :with_document, assignee: nil) }
+      let(:object) { create(:allegation, :with_document, assignable: nil) }
 
       it "returns /cases/:pretty_id/documents/:id" do
         expect(path).to eq("/cases/#{object.pretty_id}/documents/#{document.id}")

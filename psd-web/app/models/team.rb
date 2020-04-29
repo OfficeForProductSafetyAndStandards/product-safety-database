@@ -17,6 +17,14 @@ class Team < ApplicationRecord
     organisation.name
   end
 
+  def team
+    self
+  end
+
+  def in_same_team_as?(user)
+    users.include?(user)
+  end
+
   def self.ensure_names_up_to_date
     return if Rails.env.test?
 

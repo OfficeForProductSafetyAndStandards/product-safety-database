@@ -9,29 +9,39 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     allow(Rails.application.config)
       .to receive(:email_whitelist_enabled).and_return(false)
     allow(Rails.application.config)
-      .to receive(:two_factor_authentication_enabled).and_return(true)
+      .to receive(:secondary_authentication_enabled).and_return(true)
   end
 
   it "sending an invitation and registering" do
     sign_in(admin)
 
     visit "/teams/#{team.id}/invite"
-    invite_user_to_team
 
-    expect_user_invited_successfully
+    expect(page).to have_title("Invite a team member")
 
-    sign_out
+    wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
+    travel_to(Time.now.utc + wait_time.seconds) do
+      visit "/teams/#{team.id}/invite"
 
-    invitee = User.find_by!(email: invitee_email)
+      enter_secondary_authentication_code(admin.reload.direct_otp)
 
-    visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
-    fill_in_registration_form
+      invite_user_to_team
 
-    expect_to_be_on_two_factor_authentication_page
+      expect_user_invited_successfully
 
-    enter_two_factor_authentication_code(invitee.reload.direct_otp)
+      sign_out
 
-    expect_to_be_on_declaration_page
+      invitee = User.find_by!(email: invitee_email)
+
+      visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
+      fill_in_registration_form
+
+      expect_to_be_on_secondary_authentication_page
+
+      enter_secondary_authentication_code(invitee.reload.direct_otp)
+
+      expect_to_be_on_declaration_page
+    end
   end
 
   def invite_user_to_team
@@ -51,16 +61,20 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     click_on "Continue"
   end
 
-  def expect_to_be_on_two_factor_authentication_page
+  def expect_to_be_on_secondary_authentication_page
     expect(page).to have_title("Check your phone")
   end
 
-  def enter_two_factor_authentication_code(otp_code)
+  def enter_secondary_authentication_code(otp_code)
     fill_in "Enter security code", with: otp_code
     click_on "Continue"
   end
 
   def expect_to_be_on_declaration_page
     expect(page).to have_title("Declaration - Product safety database - GOV.UK")
+  end
+
+  def otp_code
+    user.reload.direct_otp
   end
 end

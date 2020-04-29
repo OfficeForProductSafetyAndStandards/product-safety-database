@@ -4,7 +4,6 @@ RSpec.describe "Terms and conditions page", type: :request do
   context "when signed in" do
     before do
       sign_in(user)
-      allow(user).to receive(:send_new_otp)
       get help_terms_and_conditions_path
     end
 

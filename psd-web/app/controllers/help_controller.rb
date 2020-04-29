@@ -3,7 +3,7 @@ class HelpController < ApplicationController
                      :authorize_user,
                      :has_accepted_declaration,
                      :has_viewed_introduction,
-                     :handle_two_factor_authentication
+                     :require_secondary_authentication
 
   def terms_and_conditions; end
 

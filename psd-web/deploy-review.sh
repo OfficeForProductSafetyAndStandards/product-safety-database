@@ -18,7 +18,7 @@ then
 fi
 
 # Unbind any databases which may already be bound to this app (if it already exists) and which are no longer required
-for existing_db_name in `cf services | grep $APP_NAME | grep postgres | awk '{print $1}'`; do
+for existing_db_name in `cf7 services | grep $APP_NAME | grep postgres | awk '{print $1}'`; do
   if [ $existing_db_name != $DB_NAME ]
   then
     cf7 unbind-service $APP_NAME $existing_db_name

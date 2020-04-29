@@ -25,7 +25,7 @@ class Investigations::AssignController < ApplicationController
   end
 
   def create
-    @investigation.assignee = potential_assignee
+    @investigation.assignable = potential_assignee
     @investigation.assignee_rationale = params[:investigation][:assignee_rationale]
     @investigation.save
     redirect_to investigation_path(@investigation), notice: "#{@investigation.case_type.upcase_first} was successfully updated."

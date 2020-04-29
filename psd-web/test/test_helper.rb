@@ -64,7 +64,7 @@ class ActiveSupport::TestCase
   def load_case(key)
     Investigation.import force: true, refresh: :wait_for
     investigation = investigations(key)
-    investigation.assignee = User.current
+    investigation.assignable = User.current
     investigation.save
     investigation
   end

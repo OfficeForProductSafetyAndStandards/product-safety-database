@@ -2,7 +2,9 @@
   .govuk-grid-column-two-thirds-from-desktop
 
     h2.govuk-heading-m Attachments
-    = link_to "Add attachment", new_document_flow_path(@business)
+
+    p.govuk-body
+      = link_to "Add attachment", new_document_flow_path(@business), class: "govuk-link"
 
     hr.govuk-section-break.govuk-section-break--m
 

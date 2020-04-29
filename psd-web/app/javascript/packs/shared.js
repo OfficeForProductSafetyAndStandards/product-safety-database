@@ -8,6 +8,7 @@ import 'javascripts/cookie_banner'
 
 import 'javascripts/investigations/attachment_description'
 import 'javascripts/investigations/ts_investigations/which_businesses'
+import 'javascripts/mutually_exclusive'
 import 'javascripts/close_page_button'
 import 'javascripts/date_input'
 
