@@ -1,6 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "Healthcheck", :with_elasticsearch, :with_stubbed_mailer, :with_2fa do
+# rubocop:disable RSpec/DescribeClass
+RSpec.describe "Health Check", :with_elasticsearch, :with_stubbed_mailer, :with_2fa do
   describe "/health/all" do
     before do
       create(:allegation)
@@ -13,3 +14,4 @@ RSpec.describe "Healthcheck", :with_elasticsearch, :with_stubbed_mailer, :with_2
     end
   end
 end
+# rubocop:enable RSpec/DescribeClass
