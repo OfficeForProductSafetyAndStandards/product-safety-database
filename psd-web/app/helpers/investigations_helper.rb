@@ -232,7 +232,7 @@ module InvestigationsHelper
     [team.id] + team.users.map(&:id)
   end
 
-  def suggested_previous_assignees
+  def suggested_previous_owners
     all_past_assignees = @investigation.past_assignees + @investigation.past_teams
     return [] if all_past_assignees.empty? || all_past_assignees == [current_user]
 

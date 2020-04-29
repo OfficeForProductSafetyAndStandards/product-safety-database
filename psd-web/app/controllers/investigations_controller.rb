@@ -115,7 +115,7 @@ private
     @breadcrumbs = build_breadcrumb_structure
   end
 
-  def set_suggested_previous_assignees
-    @suggested_previous_assignees = suggested_previous_assignees
+  def set_suggested_previous_owners
+    @suggested_previous_owners = suggested_previous_owners
   end
 end
