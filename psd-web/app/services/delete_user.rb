@@ -17,7 +17,7 @@ private
     context.team = context.user.teams.first
 
     context.user.investigations.each do |investigation|
-      investigation.assignee = context.team
+      investigation.assignable = context.team
       investigation.save
       AuditActivity::Investigation::AutomaticallyReassign.from(investigation)
     end

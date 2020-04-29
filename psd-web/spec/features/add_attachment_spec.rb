@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Adding an attachment to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, assignee: user) }
+  let(:investigation) { create(:allegation, assignable: user) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
   let(:title) { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }

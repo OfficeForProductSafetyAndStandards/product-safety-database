@@ -1,6 +1,6 @@
 class AuditActivity::Investigation::AutomaticallyReassign < AuditActivity::Investigation::Base
   def self.from(investigation)
-    title = investigation.assignee.id.to_s
+    title = investigation.assignable.id.to_s
     super(investigation, title)
   end
 
@@ -13,8 +13,8 @@ class AuditActivity::Investigation::AutomaticallyReassign < AuditActivity::Inves
   # We store assignable_id in title field, this is computing title based on that
   def title
     type = investigation.case_type.capitalize
-    new_assignee = (User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name
-    "#{type} automatically reassigned to #{new_assignee}"
+    new_assignable = (User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name
+    "#{type} automatically reassigned to #{new_assignable}"
   end
 
   def subtitle

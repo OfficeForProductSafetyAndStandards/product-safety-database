@@ -54,14 +54,14 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   context "with a valid token" do
-    scenario "entering a valid password resets your password", :with_stubbed_notify do
+    scenario "entering a valid password resets your password" do
       request_password_reset
 
       visit edit_user_password_url_with_token
 
-      expect_to_be_on_two_factor_authentication_page
+      expect_to_be_on_secondary_authentication_page
 
-      complete_two_factor_authentication_with(user.reload.direct_otp)
+      complete_secondary_authentication_with(last_user_otp(user))
 
       expect_to_be_on_edit_user_password_page
 
@@ -93,9 +93,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         visit edit_user_password_url_with_token
 
-        expect_to_be_on_two_factor_authentication_page
+        expect_to_be_on_secondary_authentication_page
 
-        complete_two_factor_authentication_with(user.reload.direct_otp)
+        complete_secondary_authentication_with(otp_code)
 
         expect_to_be_on_edit_user_password_page
 
@@ -113,9 +113,9 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
         visit edit_user_password_url_with_token
 
-        expect_to_be_on_two_factor_authentication_page
+        expect_to_be_on_secondary_authentication_page
 
-        complete_two_factor_authentication_with(user.reload.direct_otp)
+        complete_secondary_authentication_with(otp_code)
 
         expect_to_be_on_edit_user_password_page
 
@@ -144,10 +144,10 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
         # Second user decides to continue resetting the password for the original user
         click_on "Reset password for #{user.name}"
 
-        expect_to_be_on_two_factor_authentication_page
+        expect_to_be_on_secondary_authentication_page
 
         # Need to pass 2FA authentication for original user
-        complete_two_factor_authentication_with(user.reload.direct_otp)
+        complete_secondary_authentication_with(otp_code)
 
         # Finally can change the original user password
         expect_to_be_on_edit_user_password_page
@@ -201,13 +201,13 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
-  def complete_two_factor_authentication_with(security_code)
+  def complete_secondary_authentication_with(security_code)
     fill_in "Enter security code", with: security_code
     click_on "Continue"
   end
 
-  def expect_to_be_on_two_factor_authentication_page
-    expect(page).to have_current_path("/two-factor")
+  def expect_to_be_on_secondary_authentication_page
+    expect(page).to have_current_path(/\/two-factor/)
   end
 
   def expect_to_be_on_reset_password_page
@@ -229,5 +229,13 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   def expect_to_be_on_password_changed_page
     expect(page).to have_current_path("/password-changed")
     expect(page).to have_css("h1", text: "You have changed your password successfully")
+  end
+
+  def last_user_otp(user)
+    user.reload.direct_otp
+  end
+
+  def otp_code
+    user.reload.direct_otp
   end
 end

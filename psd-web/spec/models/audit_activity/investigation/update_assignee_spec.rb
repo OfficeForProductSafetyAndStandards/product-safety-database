@@ -4,7 +4,7 @@ RSpec.describe AuditActivity::Investigation::UpdateAssignee, :with_stubbed_maile
   subject(:audit_activity) { described_class.from(investigation) }
 
   let(:user) { create(:user) }
-  let(:investigation) { create(:enquiry, assignee: user, assignee_rationale: "Test assign") }
+  let(:investigation) { create(:enquiry, assignable: user, assignee_rationale: "Test assign") }
 
   around do |ex|
     User.current = user

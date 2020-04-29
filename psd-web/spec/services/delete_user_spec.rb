@@ -33,9 +33,9 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
 
       let(:user) { create(:user_with_teams, teams_count: 2) }
       let(:user_first_team) { user.teams.first }
-      let!(:allegation) { create(:allegation, assignee: user) }
-      let!(:enquiry) { create(:enquiry, assignee: user) }
-      let!(:project) { create(:project, assignee: user) }
+      let!(:allegation) { create(:allegation, assignable: user) }
+      let!(:enquiry) { create(:enquiry, assignable: user) }
+      let!(:project) { create(:project, assignable: user) }
 
       it "succeeds" do
         expect(delete_call).to be_a_success
@@ -55,19 +55,19 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           allegation.reload
           enquiry.reload
           project.reload
-        }.to change(allegation, :assignee).from(user).to(user_first_team)
-         .and change(enquiry, :assignee).from(user).to(user_first_team)
-         .and change(project, :assignee).from(user).to(user_first_team)
+        }.to change(allegation, :assignable).from(user).to(user_first_team)
+         .and change(enquiry, :assignable).from(user).to(user_first_team)
+         .and change(project, :assignable).from(user).to(user_first_team)
       end
       # rubocop:enable RSpec/ExampleLength
 
       # rubocop:disable RSpec/MultipleExpectations
-      it "registers the assignee automatic update in the investigations activity log" do
-        update_assignee_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyReassign")
+      it "registers the assignable automatic update in the investigations activity log" do
+        update_assignable_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyReassign")
 
-        expect { delete_call }.to change(update_assignee_activities, :count).by(3)
+        expect { delete_call }.to change(update_assignable_activities, :count).by(3)
 
-        update_assignee_activities.last(3).each do |activity|
+        update_assignable_activities.last(3).each do |activity|
           expect(activity.title).to include "assigned to #{user_first_team.display_name}"
         end
       end

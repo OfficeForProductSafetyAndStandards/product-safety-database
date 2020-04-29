@@ -7,8 +7,7 @@ southampton:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true
 
 southampton_steve:
   email: southampton.steve@example.com
@@ -19,8 +18,7 @@ southampton_steve:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true
 
 southampton_bob:
   email: southampton.bob@example.com
@@ -31,8 +29,7 @@ southampton_bob:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true
 
 southampton_frankie:
   email: southampton.frankie@example.com
@@ -43,20 +40,18 @@ southampton_frankie:
   organisation: southampton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true
 
 opss:
   email: opss@example.com
   has_accepted_declaration: true
   has_viewed_introduction: true
   account_activated: true
-  name: Slavosh
+  name: Slawosz
   organisation: opss
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true
 
 opss_yann:
   email: opss.yann@example.com
@@ -67,8 +62,7 @@ opss_yann:
   organisation: opss
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true
 
 luton:
   email: luton@example.com
@@ -79,5 +73,4 @@ luton:
   organisation: luton
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
-  invitation_token: <%= SecureRandom.hex(15) %>
-  invited_at: <%= Time.current %>
+  mobile_number_verified: true

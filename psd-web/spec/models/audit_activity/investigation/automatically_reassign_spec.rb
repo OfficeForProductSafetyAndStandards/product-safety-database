@@ -4,7 +4,7 @@ RSpec.describe AuditActivity::Investigation::AutomaticallyReassign, :with_stubbe
   subject(:audit_activity) { described_class.from(investigation) }
 
   let(:team) { create(:team) }
-  let(:investigation) { create(:enquiry, assignee: team, assignee_rationale: "Test assign") }
+  let(:investigation) { create(:enquiry, assignable: team, assignee_rationale: "Test assign") }
 
   describe ".from" do
     it "creates an audit activity without information for email notification", :aggregate_failures do

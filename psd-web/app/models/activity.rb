@@ -59,17 +59,17 @@ class Activity < ApplicationRecord
   end
 
   def users_to_notify
-    return [] unless investigation.assignee.is_a? User
-    return [] if source&.user == investigation.assignee
+    return [] unless investigation.assignable.is_a? User
+    return [] if source&.user == investigation.assignable
 
-    [investigation.assignee]
+    [investigation.assignable]
   end
 
   def teams_to_notify
-    return [] unless investigation.assignee.is_a? Team
-    return [] if source&.user&.teams&.include? investigation.assignee
+    return [] unless investigation.assignable.is_a? Team
+    return [] if source&.user&.teams&.include? investigation.assignable
 
-    [investigation.assignee]
+    [investigation.assignable]
   end
 
   def email_update_text; end
