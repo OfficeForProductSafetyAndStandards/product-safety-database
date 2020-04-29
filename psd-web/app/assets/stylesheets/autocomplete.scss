@@ -71,7 +71,8 @@
   }
 
   // Remove error colour when focused
-  .autocomplete__input:focus, .autocomplete__input--focused {
+  .autocomplete__input:focus,
+  .autocomplete__input--focused {
     border-color: $govuk-input-border-colour;
     // Remove `box-shadow` inherited from `:focus` as `input--error`
     // already has the thicker border.
