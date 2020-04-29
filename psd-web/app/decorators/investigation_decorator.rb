@@ -58,7 +58,7 @@ class InvestigationDecorator < ApplicationDecorator
         actions: []
       },
       # TODO: Created by should contain the creator's organisation a bit like in
-      # def investigation_assignee(investigation, classes = "")
+      # def investigation_owner(investigation, classes = "")
       {
         key: { text: "Date created", classes: classes },
         value: { text: investigation.created_at.to_s(:govuk), classes: classes },
