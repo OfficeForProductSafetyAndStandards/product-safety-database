@@ -176,7 +176,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     assignee = users(:southampton_bob)
     same_team_user = users(:southampton_steve)
 
-    set_investigation_assignee! @investigation, assignee
+    set_investigation_owner! @investigation, assignee
 
     visit new_investigation_email_path(@investigation)
     fill_in_context_form

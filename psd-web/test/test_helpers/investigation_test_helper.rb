@@ -3,7 +3,7 @@ module InvestigationTestHelper
     investigation.source.update user_id: user.id
   end
 
-  def set_investigation_assignee!(investigation, assignee, owner_type = "User")
+  def set_investigation_owner!(investigation, assignee, owner_type = "User")
     investigation.update_columns(owner_id: assignee.id, owner_type: owner_type)
   end
 end
