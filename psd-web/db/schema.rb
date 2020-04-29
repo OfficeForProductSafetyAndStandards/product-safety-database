@@ -313,6 +313,7 @@ ActiveRecord::Schema.define(version: 2020_04_27_131227) do
     t.string "reset_password_token"
     t.integer "second_factor_attempts_count", default: 0
     t.datetime "second_factor_attempts_locked_at"
+    t.string "secondary_authentication_operation"
     t.integer "sign_in_count", default: 0, null: false
     t.string "unlock_token"
     t.datetime "updated_at", null: false
