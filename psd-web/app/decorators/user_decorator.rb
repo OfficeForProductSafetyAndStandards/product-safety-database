@@ -9,7 +9,7 @@ class UserDecorator < Draper::Decorator
   end
 
   def full_name
-    object.name + deleted_suffix
+    name + deleted_suffix
   end
 
   def display_name(ignore_visibility_restrictions: false, other_user: User.current)
