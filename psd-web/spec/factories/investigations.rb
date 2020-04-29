@@ -10,7 +10,7 @@ FactoryBot.define do
     is_closed { false }
     coronavirus_related { false }
 
-    association :assignee, factory: :user
+    association :assignable, factory: :user
 
     factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }
