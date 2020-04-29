@@ -133,8 +133,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.name}/)
     end
 
-    it "displays the organisation name" do
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.organisation.name}/)
+    it "displays the Team name" do
+      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.team_names}/)
     end
 
     it "displays the Date created" do
