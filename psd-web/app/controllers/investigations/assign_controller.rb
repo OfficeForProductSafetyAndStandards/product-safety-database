@@ -43,7 +43,7 @@ private
     @investigation = investigation.decorate
   end
 
-  def assignee_params
+  def owner_params
     params[:investigation][:owner_id] = case params[:investigation][:owner_id]
                                         when "someone_in_your_team"
                                           params[:investigation][:select_team_member]
@@ -60,7 +60,7 @@ private
   end
 
   def store_owner
-    session[:owner_id] = assignee_params[:owner_id]
+    session[:owner_id] = owner_params[:owner_id]
   end
 
   def owner_valid?
