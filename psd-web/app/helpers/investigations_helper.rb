@@ -53,13 +53,13 @@ module InvestigationsHelper
   end
 
   def get_owner_filter
-    return { should: [], must_not: [] } if no_assignee_boxes_checked
+    return { should: [], must_not: [] } if no_owner_boxes_checked
     return { should: [], must_not: compute_excluded_terms } if assignee_filter_exclusive
 
     { should: compute_included_terms, must_not: [] }
   end
 
-  def no_assignee_boxes_checked
+  def no_owner_boxes_checked
     no_people_boxes_checked = params[:assigned_to_me] == "unchecked" && params[:assigned_to_someone_else] == "unchecked"
     no_team_boxes_checked = owner_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
     no_people_boxes_checked && no_team_boxes_checked
