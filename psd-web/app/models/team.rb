@@ -17,10 +17,6 @@ class Team < ApplicationRecord
     organisation.name
   end
 
-  def full_name
-    display_name
-  end
-
   def team
     self
   end
