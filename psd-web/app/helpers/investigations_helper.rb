@@ -99,8 +99,8 @@ module InvestigationsHelper
     team.present? ? user_ids_from_team(team) : [params[:assigned_to_someone_else_id]]
   end
 
-  def format_owner_terms(assignee_array)
-    assignee_array.map do |a|
+  def format_owner_terms(owner_array)
+    owner_array.map do |a|
       { term: { owner_id: a } }
     end
   end
