@@ -39,9 +39,7 @@ function simpleAccessibleAutocomplete (id, autocompleteOptions) {
     // https://github.com/alphagov/accessible-autocomplete/issues/240
     const removeButton = document.getElementById(`clear-${id}`)
     if (removeButton) {
-
       const removeValue = () => {
-
         // Clear autocomplete and hidden select
         $enhancedElement.val('')
         $(element).parent().find('select').val('')
@@ -53,7 +51,6 @@ function simpleAccessibleAutocomplete (id, autocompleteOptions) {
 
         // Return focus to the button
         removeButton.focus()
-
       }
 
       removeButton.addEventListener('keypress', (e) => {
