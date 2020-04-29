@@ -1,11 +1,12 @@
 module Investigations::TsInvestigationsHelper
   def why_reporting_checkboxes(form, page_heading, errors)
+    base_errors = errors.full_messages_for(:base)
     render "form_components/govuk_checkboxes",
            form: form,
            key: :why_reporting,
            fieldset: { legend: { html: page_heading_html(page_heading) }, classes: "js-mutually-exclusive" },
            hint: { text: "Select all that apply" },
-           errorMessage: errors.any? ? { text: errors.full_messages_for(:base).to_sentence } : nil,
+           errorMessage: base_errors.any? ? { text: base_errors.to_sentence } : nil,
            items: [
              reported_unsafe_checkbox(form, hazard_types),
              reported_non_compliant_checkbox(form),
