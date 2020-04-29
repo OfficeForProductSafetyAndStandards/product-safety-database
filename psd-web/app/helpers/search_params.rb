@@ -29,12 +29,10 @@ class SearchParams
   attr_writer :sort_by
 
   # ActionController::Parameters#each_key is not implemented in Rails 5.2 but is implemented in 6.0
-  # rubocop:disable Style/HashEachMethods
   def initialize(attributes = {})
     attributes.keys.each { |name| class_eval { attr_accessor name } } # Add any additional query attributes to the model
     super(attributes)
   end
-  # rubocop:enable Style/HashEachMethods
 
   def sort_by
     @sort_by || RECENT
