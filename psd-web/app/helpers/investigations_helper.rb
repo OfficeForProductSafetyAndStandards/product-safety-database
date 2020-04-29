@@ -73,7 +73,7 @@ module InvestigationsHelper
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
     excluded_owners = []
     excluded_owners << current_user.id if params[:assigned_to_me] == "unchecked"
-    format_assignee_terms(excluded_owners)
+    format_owner_terms(excluded_owners)
   end
 
   def compute_included_terms
@@ -81,7 +81,7 @@ module InvestigationsHelper
     assignees = checked_team_assignees
     assignees.concat(someone_else_assignees)
     assignees << current_user.id if params[:assigned_to_me] == "checked"
-    format_assignee_terms(assignees.uniq)
+    format_owner_terms(assignees.uniq)
   end
 
   def checked_team_assignees
@@ -99,7 +99,7 @@ module InvestigationsHelper
     team.present? ? user_ids_from_team(team) : [params[:assigned_to_someone_else_id]]
   end
 
-  def format_assignee_terms(assignee_array)
+  def format_owner_terms(assignee_array)
     assignee_array.map do |a|
       { term: { owner_id: a } }
     end
