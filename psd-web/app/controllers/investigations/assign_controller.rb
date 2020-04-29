@@ -4,7 +4,7 @@ class Investigations::AssignController < ApplicationController
   before_action :potential_owner, only: %i[show create]
   before_action :store_owner, only: %i[update]
 
-  steps :choose, :confirm_assignment_change
+  steps :choose, :confirm_ownership_change
 
   def show
     @potential_owner = potential_owner
