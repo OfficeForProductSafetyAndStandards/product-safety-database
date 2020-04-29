@@ -15,7 +15,7 @@
         p Nobody is assigned yet
 
     - if policy(@investigation).assign?
-      = render "investigations/assign/assignee_form", investigation: @investigation do
+      = render "investigations/assign/owner_form", investigation: @investigation do
         = heading
     - else
       = heading
