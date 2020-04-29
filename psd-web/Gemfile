@@ -70,7 +70,7 @@ group :development, :test do
   gem "rubocop-rspec", "~> 1.38", require: false
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
-  gem "sassc", "~> 2.3.0" # Unable to upgrade until https://github.com/sass/sassc-ruby/issues/146 is resolved
+  gem "sassc", "~> 2.1.0" # Unable to upgrade until https://github.com/sass/sassc-ruby/issues/197 is resolved
   gem "scss_lint-govuk"
   gem "selenium-webdriver"
   gem "simplecov"
