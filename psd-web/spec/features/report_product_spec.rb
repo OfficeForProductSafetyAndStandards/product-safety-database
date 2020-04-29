@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }
@@ -95,7 +95,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           description: Faker::Lorem.sentence
         }
       end
-
       let(:coronavirus) { false }
 
       scenario "not coronavirus-related" do
@@ -108,7 +107,12 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         fill_in_product_page(with: product_details)
 
         expect_to_be_on_why_reporting_page
-        fill_in_why_reporting_page
+        fill_in_why_reporting_page(
+          reporting_reasons: ["It’s unsafe (or suspected to be)", "It’s non-compliant (or suspected to be)"],
+          hazard_type: hazard_type,
+          hazard_description: hazard_description,
+          non_compliance_details: non_compliance_details
+        )
 
         expect_to_be_on_supply_chain_page
         fill_in_supply_chain_page
@@ -165,6 +169,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_case_details_page
         expect_case_details_page_to_show_entered_information
+        expect_product_reported_unsafe_and_non_compliant
 
         expect(page.find("dt.govuk-summary-list__key", text: "Coronavirus related")).to have_sibling("dd.govuk-summary-list__value", text: "Not a coronavirus related case")
 
@@ -463,12 +468,20 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     click_button "Continue"
   end
 
-  def fill_in_why_reporting_page
-    check "It’s unsafe (or suspected to be)"
-    select hazard_type, from: "What is the primary hazard?"
-    fill_in "Why is the product unsafe?", with: hazard_description
-    check "It’s non-compliant (or suspected to be)"
-    fill_in "Why is the product non-compliant?", with: non_compliance_details
+  def fill_in_why_reporting_page(reporting_reasons:, hazard_type: nil, hazard_description: nil, non_compliance_details: nil)
+    reporting_reasons.each do |reporting_reason|
+      check reporting_reason
+    end
+
+    if reporting_reasons.include?("It’s unsafe (or suspected to be)")
+      select hazard_type, from: "What is the primary hazard?"
+      fill_in "Why is the product unsafe?", with: hazard_description
+    end
+
+    if reporting_reasons.include?("It’s non-compliant (or suspected to be)")
+      fill_in "Why is the product non-compliant?", with: non_compliance_details
+    end
+
     click_button "Continue"
   end
 
@@ -554,5 +567,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def skip_page
     click_button "Skip this page"
+  end
+
+  def expect_product_reported_unsafe_and_non_compliant
+    expect(page.find("h2", text: "Summary")).to have_sibling("p", text: "Product reported because it is unsafe and non-compliant.")
   end
 end

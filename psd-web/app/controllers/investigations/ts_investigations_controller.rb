@@ -16,7 +16,6 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   before_action :set_countries, only: %i[show create update]
   before_action :set_product, only: %i[show create update]
-  before_action :set_why_reporting, only: %i[show update], if: -> { step == :why_reporting }
   before_action :set_investigation, only: %i[show create update]
   before_action :set_selected_businesses, only: %i[show update], if: -> { step == :which_businesses }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
@@ -37,8 +36,8 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
-  after_action  :store_investigation, only: :update, if: -> { step == :coronavirus }
-  before_action :store_why_reporting, only: %i[update], if: -> { step == :why_reporting }
+  before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
+  after_action  :store_investigation, only: :update, if: -> { %i[why_reporting coronavirus].include?(step) }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_business, only: %i[update], if: -> { step == :business }
@@ -102,17 +101,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation.new(investigation_step_params.except(:unsafe, :non_compliant))
-    @investigation.description = @investigation.reason_created if step == :why_reporting
-  end
-
-  def set_why_reporting
-    @unsafe = investigation_step_params.include?(:unsafe) ? product_unsafe : session[:unsafe]
-    @non_compliant = if investigation_step_params.include?(:non_compliant)
-                       product_non_compliant
-                     else
-                       session[:non_compliant]
-                     end
+    @investigation = Investigation.new(investigation_step_params)
   end
 
   def set_selected_businesses
@@ -188,8 +177,6 @@ private
   def clear_session
     session.delete :investigation
     session.delete :product
-    session.delete :unsafe
-    session.delete :non_compliant
     session.delete :other_business_type
     session.delete :further_corrective_action
     other_information_types.each do |type|
@@ -233,13 +220,6 @@ private
     case step
     when :coronavirus
       params.require(:investigation).permit(:coronavirus_related)
-    when :why_reporting
-      params[:investigation][:hazard_description] = nil unless params[:investigation][:unsafe] == "1"
-      params[:investigation][:hazard_type] = nil unless params[:investigation][:unsafe] == "1"
-      params[:investigation][:non_compliant_reason] = nil unless params[:investigation][:non_compliant] == "1"
-      params.require(:investigation).permit(
-        :unsafe, :hazard_type, :hazard_description, :non_compliant, :non_compliant_reason
-      )
     when :reference_number
       params[:investigation][:complainant_reference] = nil unless params[:investigation][:has_complainant_reference] == "Yes"
       params.require(:investigation).permit(:complainant_reference)
@@ -320,11 +300,6 @@ private
       businesses << which_businesses_params[:other_business_type] if which_businesses_params[:other] == "1"
       session[:businesses] = businesses.map { |type| { type: type, business: nil } }
     end
-  end
-
-  def store_why_reporting
-    session[:unsafe] = @unsafe
-    session[:non_compliant] = @non_compliant
   end
 
   def store_business
@@ -463,6 +438,26 @@ private
     params.require(:investigation).permit(:coronavirus_related)
   end
 
+  def why_reporting_form_params
+    params.require(:investigation)
+      .permit(
+        :hazard_type,
+        :hazard_description,
+        :non_compliant_reason,
+        :reported_reason_unsafe,
+        :reported_reason_non_compliant,
+        :reported_reason_safe_and_compliant
+      )
+  end
+
+  def why_reporting_form
+    @why_reporting_form ||= WhyReportingForm.new(why_reporting_form_params)
+  end
+
+  def set_new_why_reporting_form
+    @why_reporting_form = WhyReportingForm.new
+  end
+
   def records_valid?
     case step
     when :coronavirus
@@ -470,9 +465,7 @@ private
     when :product
       @product.validate
     when :why_reporting
-      @investigation.errors.add(:why_reporting, "Choose at least one option") if !product_unsafe && !product_non_compliant
-      @investigation.validate :unsafe if product_unsafe
-      @investigation.validate :non_compliant if product_non_compliant
+      return assigns_why_reporting_from_form(why_reporting_form)
     when :which_businesses
       validate_none_as_only_selection
       @investigation.errors.add(:which_business, "Indicate which if any business is known") if no_business_selected
@@ -495,6 +488,14 @@ private
       end
     end
     @investigation.errors.empty? && @product.errors.empty?
+  end
+
+  def assigns_why_reporting_from_form(why_reporting_form)
+    if (form_valid = why_reporting_form.valid?)
+      why_reporting_form.assign_to(@investigation)
+    end
+
+    form_valid
   end
 
   def validate_none_as_only_selection
@@ -568,14 +569,6 @@ private
       file_blob = ActiveStorage::Blob.find_by(id: file_blob_id)
       attach_blobs_to_list(file_blob, @product.documents)
     end
-  end
-
-  def product_unsafe
-    investigation_step_params[:unsafe] == "1"
-  end
-
-  def product_non_compliant
-    investigation_step_params[:non_compliant] == "1"
   end
 
   def no_business_selected
