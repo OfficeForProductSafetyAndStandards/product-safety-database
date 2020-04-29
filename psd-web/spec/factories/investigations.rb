@@ -1,14 +1,16 @@
 FactoryBot.define do
   factory :investigation do
     user_title { "investigation title" }
-    hazard_type { "hazard type" }
-    hazard_description { "hazard description" }
-    non_compliant_reason { "non compliant reason" }
     complainant_reference { "complainant reference" }
     date_received { 1.day.ago }
     received_type { %w(email phone other).sample }
     is_closed { false }
     coronavirus_related { false }
+    reported_reason       {}
+    hazard_type           {}
+    hazard_description    {}
+    non_compliant_reason  {}
+
 
     association :owner, factory: :user
 
@@ -36,6 +38,35 @@ FactoryBot.define do
       after(:create) do |investigation, evaluator|
         investigation.add_business(evaluator.business_to_add, evaluator.business_relationship)
         investigation.reload # This ensures investigation.businesses returns business_to_add
+      end
+    end
+
+    trait :reported_safe do
+      after(:build) do |investigation|
+        WhyReportingForm.new(reported_reason_safe_and_compliant: true)
+          .assign_to(investigation)
+      end
+    end
+
+    trait :reported_unsafe do
+      after(:build) do |investigation|
+        WhyReportingForm.new(
+          reported_reason_unsafe: true,
+          hazard_type: Rails.application.config.hazard_constants["hazard_type"].sample,
+          hazard_description: Faker::Hipster.sentence,
+        ).assign_to(investigation)
+      end
+    end
+
+    trait :reported_unsafe_and_non_compliant do
+      after(:build) do |investigation|
+        WhyReportingForm.new(
+          reported_reason_unsafe: true,
+          hazard_type: Rails.application.config.hazard_constants["hazard_type"].sample,
+          hazard_description: Faker::Hipster.sentence,
+          non_compliant_reason: Faker::Hipster.sentence,
+          reported_reason_non_compliant: true
+        ).assign_to(investigation)
       end
     end
   end

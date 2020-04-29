@@ -55,6 +55,10 @@ GEM
       activemodel (= 5.2.4.2)
       activesupport (= 5.2.4.2)
       arel (>= 9.0)
+    activerecord-pg_enum (1.1.0)
+      activerecord (>= 4.1.0)
+      activesupport
+      pg
     activestorage (5.2.4.2)
       actionpack (= 5.2.4.2)
       activerecord (= 5.2.4.2)
@@ -150,18 +154,18 @@ GEM
       activemodel-serializers-xml (>= 1.0)
       activesupport (>= 5.0)
       request_store (>= 1.0)
-    elasticsearch (6.8.1)
-      elasticsearch-api (= 6.8.1)
-      elasticsearch-transport (= 6.8.1)
-    elasticsearch-api (6.8.1)
+    elasticsearch (6.8.2)
+      elasticsearch-api (= 6.8.2)
+      elasticsearch-transport (= 6.8.2)
+    elasticsearch-api (6.8.2)
       multi_json
     elasticsearch-model (6.0.0)
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
     elasticsearch-rails (6.0.0)
-    elasticsearch-transport (6.8.1)
-      faraday (>= 0.14, < 1)
+    elasticsearch-transport (6.8.2)
+      faraday (~> 1)
       multi_json
     erubi (1.9.0)
     et-orbi (1.2.4)
@@ -173,7 +177,7 @@ GEM
       railties (>= 4.2.0)
     faker (2.11.0)
       i18n (>= 1.6, < 2)
-    faraday (0.17.3)
+    faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.12.2)
     fugit (1.3.4)
@@ -437,8 +441,8 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (2.3.0)
-    sentry-raven (2.13.0)
-      faraday (>= 0.7.6, < 1.0)
+    sentry-raven (3.0.0)
+      faraday (>= 1.0)
     sidekiq (5.2.7)
       connection_pool (~> 2.2, >= 2.2.2)
       rack (>= 1.5.0)
@@ -532,6 +536,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-pg_enum
   awesome_print
   aws-sdk-s3 (= 1.63.0)
   axlsx!
@@ -548,7 +553,7 @@ DEPENDENCIES
   devise-encryptable
   dotenv-rails
   draper
-  elasticsearch (= 6.8.1)
+  elasticsearch (= 6.8.2)
   elasticsearch-model (= 6.0.0)
   elasticsearch-rails (= 6.0.0)
   factory_bot_rails
@@ -591,7 +596,7 @@ DEPENDENCIES
   scout_apm
   scss_lint-govuk
   selenium-webdriver
-  sentry-raven (~> 2.13)
+  sentry-raven (~> 3.0)
   sidekiq (= 5.2.7)
   sidekiq-cron (~> 1.2)
   simplecov

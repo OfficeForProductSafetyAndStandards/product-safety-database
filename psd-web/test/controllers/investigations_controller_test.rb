@@ -70,7 +70,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should set description" do
     old_description = "old"
     new_description = "description"
-    investigation = Investigation.create(description: old_description)
+    investigation = Investigation.create(description: old_description, reported_reason: Investigation.reported_reasons[:unsafe])
     investigation_status = lambda { Investigation.find(investigation.id).description }
     assert_changes investigation_status, from: old_description, to: new_description do
       patch edit_summary_investigation_url(investigation), params: {
