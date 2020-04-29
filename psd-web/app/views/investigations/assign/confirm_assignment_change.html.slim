@@ -11,7 +11,7 @@
       = render "minimal_investigation_heading", investigation: @investigation, title: page_heading
       p
         = "You are changing the case owner to:"
-        strong = " #{@potential_assignee.display_name || @potential_assignee.name}"
+        strong = " #{@potential_owner.display_name || @potential_owner.name}"
       .govuk-form-group
         = render "form_components/govuk_textarea", key: :assignee_rationale, form: form,
                     classes: "govuk-!-width-two-thirds",

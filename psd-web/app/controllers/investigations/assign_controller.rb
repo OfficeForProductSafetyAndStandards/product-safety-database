@@ -1,13 +1,13 @@
 class Investigations::AssignController < ApplicationController
   include Wicked::Wizard
   before_action :set_investigation
-  before_action :potential_assignee, only: %i[show create]
+  before_action :potential_owner, only: %i[show create]
   before_action :store_assignee, only: %i[update]
 
   steps :choose, :confirm_assignment_change
 
   def show
-    @potential_assignee = potential_assignee
+    @potential_owner = potential_owner
     render_wizard
   end
 
@@ -25,7 +25,7 @@ class Investigations::AssignController < ApplicationController
   end
 
   def create
-    @investigation.owner = potential_assignee
+    @investigation.owner = potential_owner
     @investigation.assignee_rationale = params[:investigation][:assignee_rationale]
     @investigation.save
     redirect_to investigation_path(@investigation), notice: "#{@investigation.case_type.upcase_first} was successfully updated."
@@ -65,14 +65,14 @@ private
 
   def assignee_valid?
     if step == :choose
-      if potential_assignee == nil
+      if potential_owner == nil
         @investigation.errors.add(:owner_id, :invalid, message: "Select case owner")
       end
     end
     @investigation.errors.empty?
   end
 
-  def potential_assignee
+  def potential_owner
     User.find_by(id: session[:owner_id]) || Team.find_by(id: session[:owner_id])
   end
 end
