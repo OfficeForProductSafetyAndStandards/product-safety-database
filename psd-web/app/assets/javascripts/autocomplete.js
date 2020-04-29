@@ -39,6 +39,7 @@ function simpleAccessibleAutocomplete (id, autocompleteOptions) {
     // https://github.com/alphagov/accessible-autocomplete/issues/240
     const removeButton = document.getElementById(`clear-${id}`)
     if (removeButton) {
+
       const removeValue = () => {
 
         // Clear autocomplete and hidden select
@@ -53,14 +54,15 @@ function simpleAccessibleAutocomplete (id, autocompleteOptions) {
         // Return focus to the button
         removeButton.focus()
 
-
       }
+
       removeButton.addEventListener('keypress', (e) => {
         // Trigger on enter or space click only
         if (e.keyCode === 13 || e.keyCode === 32) {
           removeValue()
         }
       })
+
       removeButton.addEventListener('click', () => {
         removeValue()
       })
