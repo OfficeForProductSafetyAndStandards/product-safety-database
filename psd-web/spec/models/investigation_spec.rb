@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
   describe "#teams_with_access" do
     context "when there is no-one assigned" do
-      let(:investigation) { create(:investigation, assignee: nil) }
+      let(:investigation) { create(:investigation, assignable: nil) }
 
       it "is an empty list" do
         expect(investigation.teams_with_access).to be_empty
@@ -12,7 +12,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
     context "when there is just a team assigned" do
       let(:team) { create(:team) }
-      let(:investigation) { create(:investigation, assignee: team) }
+      let(:investigation) { create(:investigation, assignable: team) }
 
       it "is a list of just the team assigned" do
         expect(investigation.teams_with_access).to eql([team])
@@ -24,7 +24,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:collaborator_team) { create(:team) }
       let(:investigation) {
         create(:investigation,
-               assignee: team_assigned,
+               assignable: team_assigned,
                collaborators: [
                  create(:collaborator, team: collaborator_team)
                ])
@@ -38,7 +38,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
   describe "#assignee_team" do
     context "when there is no-one assigned" do
-      let(:investigation) { create(:investigation, assignee: nil) }
+      let(:investigation) { create(:investigation, assignable: nil) }
 
       it "is nil" do
         expect(investigation.assignee_team).to be_nil
@@ -47,7 +47,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
     context "when there is a team assigned" do
       let(:team) { create(:team) }
-      let(:investigation) { create(:investigation, assignee: team) }
+      let(:investigation) { create(:investigation, assignable: team) }
 
       it "is is the team" do
         expect(investigation.assignee_team).to eql(team)
@@ -57,7 +57,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     context "when there is a user who belongs to a team assigned" do
       let(:team) { create(:team) }
       let(:user) { create(:user, teams: [team]) }
-      let(:investigation) { create(:investigation, assignee: user) }
+      let(:investigation) { create(:investigation, assignable: user) }
 
       it "is is the team the user belongs to" do
         expect(investigation.assignee_team).to eql(team)
@@ -66,7 +66,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
     context "when there is a user who doesn’t belong to a team assigned" do
       let(:user) { create(:user, teams: []) }
-      let(:investigation) { create(:investigation, assignee: user) }
+      let(:investigation) { create(:investigation, assignable: user) }
 
       it "is nil" do
         expect(investigation.assignee_team).to be_nil

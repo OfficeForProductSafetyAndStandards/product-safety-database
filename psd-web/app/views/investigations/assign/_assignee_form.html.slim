@@ -4,7 +4,7 @@
 
   ruby:
     items = investigation.important_assignable_people.map do |user|
-      { text: user.display_name, value: user.id, checked: investigation.assignee == user }
+      { text: user.display_name, value: user.id, checked: investigation.assignable == user }
     end
 
     if current_user.teams.any?
@@ -29,7 +29,7 @@
     items.push divider: "Teams"
 
     teams = investigation.important_assignable_teams.map do |team|
-      { text: team.display_name, value: team.id, checked: investigation.assignee == team }
+      { text: team.display_name, value: team.id, checked: investigation.assignable == team }
     end
     items.concat teams
 
