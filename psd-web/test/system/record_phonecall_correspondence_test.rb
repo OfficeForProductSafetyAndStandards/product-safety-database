@@ -107,7 +107,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
   end
 
-  test "does not conceal consumer information from assignee" do
+  test "does not conceal consumer information from case owner" do
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -121,7 +121,7 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
     assert_equal(@correspondence.overview, first("h3").text)
   end
 
-  test "does not conceal consumer information from assignee's team" do
+  test "does not conceal consumer information from case owner's team" do
     fill_in_context_form
     choose :correspondence_phone_call_has_consumer_info_true, visible: false
     click_button "Continue"
