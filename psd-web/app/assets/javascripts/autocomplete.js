@@ -40,8 +40,20 @@ function simpleAccessibleAutocomplete (id, autocompleteOptions) {
     const removeButton = document.getElementById(`clear-${id}`)
     if (removeButton) {
       const removeValue = () => {
+
+        // Clear autocomplete and hidden select
         $enhancedElement.val('')
         $(element).parent().find('select').val('')
+
+        // Needed to collapse menu
+        $enhancedElement.click()
+        $enhancedElement.focus()
+        $enhancedElement.blur()
+
+        // Return focus to the button
+        removeButton.focus()
+
+
       }
       removeButton.addEventListener('keypress', (e) => {
         // Trigger on enter or space click only
@@ -65,3 +77,4 @@ function callAutocompleteWhenReady (id, options) {
   })
 }
 window.callAutocompleteWhenReady = callAutocompleteWhenReady
+//
