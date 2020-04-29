@@ -12,7 +12,7 @@ module Investigations::UserFiltersHelper
                  value: "checked",
                  unchecked_value: "unchecked",
                  text: "Other person or team",
-                 conditional: { html: other_assignee(form) } }
+                 conditional: { html: other_owner(form) } }
   end
 
   def created_by(form)
@@ -27,7 +27,7 @@ module Investigations::UserFiltersHelper
                  conditional: { html: other_creator(form) } }
   end
 
-  def other_assignee(form)
+  def other_owner(form)
     render "form_components/govuk_select", key: :assigned_to_someone_else_id, form: form,
                   items: entities.map { |e| { text: e.display_name, value: e.id } },
                   label: { text: "Name" }, is_autocomplete: true
