@@ -296,7 +296,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when the investigation is assigned" do
       it "displays the assignee owner name" do
         expect(decorated_investigation.owner_display_name_for(viewing_user: viewing_user))
-          .to eq(user.decorate.assignee_short_name(viewing_user: viewing_user))
+          .to eq(user.decorate.owner_short_name(viewing_user: viewing_user))
       end
     end
 
