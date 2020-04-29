@@ -21,7 +21,7 @@ module InvestigationsHelper
   end
 
   def merged_must_filters
-    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_assignee_filter }] }
+    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_owner_filter }] }
 
     if params[:coronavirus_related_only] == "yes"
       must_filters[:must] << { term: { coronavirus_related: true } }
@@ -52,7 +52,7 @@ module InvestigationsHelper
     { must: [{ terms: type }] }
   end
 
-  def get_assignee_filter
+  def get_owner_filter
     return { should: [], must_not: [] } if no_assignee_boxes_checked
     return { should: [], must_not: compute_excluded_terms } if assignee_filter_exclusive
 
