@@ -132,7 +132,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                            inset_text_for_notify(collaborator.message)
                          ].join("\n\n")
                        else
-                        ""
+                         ""
                        end
 
     set_personalisation(
