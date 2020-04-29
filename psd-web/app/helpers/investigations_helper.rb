@@ -71,9 +71,9 @@ module InvestigationsHelper
 
   def compute_excluded_terms
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
-    excluded_assignees = []
-    excluded_assignees << current_user.id if params[:assigned_to_me] == "unchecked"
-    format_assignee_terms(excluded_assignees)
+    excluded_owners = []
+    excluded_owners << current_user.id if params[:assigned_to_me] == "unchecked"
+    format_assignee_terms(excluded_owners)
   end
 
   def compute_included_terms
