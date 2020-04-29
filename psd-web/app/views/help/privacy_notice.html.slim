@@ -306,7 +306,7 @@
           td.govuk-table__cell
             | This allows you to sign in without re-entering a security code.
           td.govuk-table__cell
-            = distance_of_time_in_words(Rails.application.config.devise.remember_otp_session_for_seconds)
+            = distance_of_time_in_words(SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::DEFAULT_OPERATION])
         tr.govuk-table__row
           td.govuk-table__cell seen_cookie_message
           td.govuk-table__cell Saves a message to let us know that you’ve seen our cookie message

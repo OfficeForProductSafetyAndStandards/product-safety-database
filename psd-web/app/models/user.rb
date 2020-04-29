@@ -5,16 +5,15 @@ class User < ApplicationRecord
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
-  devise :two_factor_authenticatable, :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable, :lockable
+  devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable, :lockable
 
   belongs_to :organisation
-
-  has_one_time_password(encrypted: true)
 
   has_many :investigations, dependent: :nullify, as: :assignable
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
+  has_many :secondary_authentications, dependent: :destroy
 
   has_and_belongs_to_many :teams
 
@@ -155,37 +154,7 @@ class User < ApplicationRecord
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
-  def two_factor_authentication_code_expired?
-    return false if !direct_otp_sent_at
-
-    (direct_otp_sent_at + User.direct_otp_valid_for) < Time.current
-  end
-
-  def two_factor_locked?
-    second_factor_attempts_locked_at && !two_factor_lock_expired?
-  end
-
-  def fail_two_factor_authentication!
-    return if max_login_attempts?
-
-    self.increment!(:second_factor_attempts_count, 1)
-    lock_two_factor! if max_login_attempts?
-  end
-
-  def pass_two_factor_authentication!
-    unlock_two_factor! if max_login_attempts?
-    update_column(:second_factor_attempts_count, 0)
-  end
-
   # BEGIN: place devise overriden method calls bellow
-  def send_two_factor_authentication_code(code)
-    SendTwoFactorAuthenticationJob.perform_later(self, code)
-  end
-
-  def need_two_factor_authentication?(_request)
-    Rails.configuration.two_factor_authentication_enabled
-  end
-
   def send_unlock_instructions
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
     self.unlock_token = enc

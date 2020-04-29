@@ -216,7 +216,7 @@ en:
     too_short: "You haven’t entered enough numbers"
     too_long: "You’ve entered too many numbers"
     incorrect: "Incorrect security code"
-    expired: "The security code has expired"
+    expired: "The security code has expired. New code sent."
     numericality: "The code must be 5 numbers"
   sign_in_form:
     email:
