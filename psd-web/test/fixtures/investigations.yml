@@ -15,7 +15,6 @@ two:
   is_closed: false
   type: Investigation::Allegation
   pretty_id: 1902-0001
-  reported_reason: unsafe
 
 three:
   description: Investigation into faulty toys
