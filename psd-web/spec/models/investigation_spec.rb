@@ -36,12 +36,12 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     end
   end
 
-  describe "#assignee_team" do
+  describe "#owner_team" do
     context "when there is no-one assigned" do
       let(:investigation) { create(:investigation, owner: nil) }
 
       it "is nil" do
-        expect(investigation.assignee_team).to be_nil
+        expect(investigation.owner_team).to be_nil
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:investigation) { create(:investigation, owner: team) }
 
       it "is is the team" do
-        expect(investigation.assignee_team).to eql(team)
+        expect(investigation.owner_team).to eql(team)
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:investigation) { create(:investigation, owner: user) }
 
       it "is is the team the user belongs to" do
-        expect(investigation.assignee_team).to eql(team)
+        expect(investigation.owner_team).to eql(team)
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:investigation) { create(:investigation, owner: user) }
 
       it "is nil" do
-        expect(investigation.assignee_team).to be_nil
+        expect(investigation.owner_team).to be_nil
       end
     end
   end

@@ -61,12 +61,12 @@ class Investigation < ApplicationRecord
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
-  def assignee_team
+  def owner_team
     owner&.team
   end
 
   def teams_with_access
-    ([assignee_team] + teams.order(:name)).compact
+    ([owner_team] + teams.order(:name)).compact
   end
 
   def status

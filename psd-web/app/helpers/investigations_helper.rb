@@ -61,7 +61,7 @@ module InvestigationsHelper
 
   def no_assignee_boxes_checked
     no_people_boxes_checked = params[:assigned_to_me] == "unchecked" && params[:assigned_to_someone_else] == "unchecked"
-    no_team_boxes_checked = assignee_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
+    no_team_boxes_checked = owner_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
     no_people_boxes_checked && no_team_boxes_checked
   end
 
@@ -86,7 +86,7 @@ module InvestigationsHelper
 
   def checked_team_assignees
     assignees = []
-    assignee_teams_with_keys.each do |key, team, _n|
+    owner_teams_with_keys.each do |key, team, _n|
       assignees.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
     end
     assignees
@@ -176,7 +176,7 @@ module InvestigationsHelper
     set_default_assignee_filter
     set_default_creator_filter
     params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
-                  assignee_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
+                  owner_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
   end
 
   def export_params
@@ -217,7 +217,7 @@ module InvestigationsHelper
     }
   end
 
-  def assignee_teams_with_keys
+  def owner_teams_with_keys
     current_user.teams.map.with_index do |team, index|
       # key, team, name
       [
