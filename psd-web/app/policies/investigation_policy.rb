@@ -34,7 +34,7 @@ class InvestigationPolicy < ApplicationPolicy
   def visible_to(user:, private: @record.is_private)
     return true unless private
     return true if user.is_opss?
-    return true if @record.assignee.present? && (@record.assignee&.organisation == user.organisation)
+    return true if @record.assignable.present? && (@record.assignable&.organisation == user.organisation)
     return true if @record.source&.user_has_gdpr_access?(user: user)
 
     # Have any of the user’s teams been added to the case as a collaborator?
@@ -44,11 +44,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def can_be_assigned_by(user: @user)
-    return true if @record.assignee.blank?
-    return true if @record.assignee.is_a?(Team) && (user.teams.include? @record.assignee)
-    return true if @record.assignee.is_a?(User) && (user.teams & @record.assignee.teams).any? || @record.assignee == user
-
-    false
+    @record.assignable.blank? || @record.assignable.in_same_team_as?(user) || @record.assignable == user
   end
 
   def user_allowed_to_raise_alert?(user: @user)
@@ -60,7 +56,8 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def add_collaborators?
-    return true if @record.assignee.is_a?(Team) && (user.teams.include? @record.assignee)
-    return true if @record.assignee.is_a?(User) && (user.teams & @record.assignee.teams).any?
+    return false if @record.assignable.nil?
+
+    @record.assignable.in_same_team_as?(user)
   end
 end

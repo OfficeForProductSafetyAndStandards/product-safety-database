@@ -148,7 +148,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
     end
   end
 
-  describe "#create_audit_activity" do
+  describe "#create_audit_activity", :with_stubbed_mailer do
     it "creates an activity" do
       expect { corrective_action.save }.to change { AuditActivity::CorrectiveAction::Add.count }.by(1)
     end
