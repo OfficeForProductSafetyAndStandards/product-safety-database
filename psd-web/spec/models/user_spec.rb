@@ -3,6 +3,26 @@ require "rails_helper"
 RSpec.describe User do
   include ActiveSupport::Testing::TimeHelpers
 
+  describe "attributes" do
+    let(:user) { described_class.new }
+
+    describe "invitation_token" do
+      before { allow(SecureRandom).to receive(:hex).with(15).and_return(expected_token) }
+
+      let(:expected_token) { "abcd1234" }
+
+      it "is generated on instantiation" do
+        expect(user.invitation_token).to eq(expected_token)
+      end
+    end
+
+    describe "invited_at" do
+      it "is generated on instantiation" do
+        expect(user.invited_at).to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
   describe "validations" do
     before { user.validate(:registration_completion) }
 
@@ -111,10 +131,6 @@ RSpec.describe User do
         expect(created_user).not_to be_nil
       end
 
-      it "adds a invitation token to the created user" do
-        expect(created_user.invitation_token).not_to be_nil
-      end
-
       it "associates the created user with the given team's organisation" do
         expect(created_user.organisation).to eq team.organisation
       end
@@ -163,13 +179,11 @@ RSpec.describe User do
 
       before { allow(SendUserInvitationJob).to receive(:perform_later) }
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "raises an exception and does not send the invitation" do
+      it "raises an exception and does not send the invitation", :aggregate_failures do
         expect { described_class.create_and_send_invite!(email, team, inviting_user) }
           .to raise_exception(ActiveRecord::RecordInvalid)
         expect(SendUserInvitationJob).not_to have_received(:perform_later)
       end
-      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 
@@ -182,28 +196,28 @@ RSpec.describe User do
       let!(:invitation_token) { SecureRandom.hex }
       let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation, invitation_token: invitation_token) }
 
-      it "resends an invitation to the user" do
-        described_class.resend_invite(invited_user.email, inviting_user)
+      it "resends an invitation to the user", :aggregate_failures do
+        expect {
+          described_class.resend_invite(invited_user.email, inviting_user)
+        }.to(change { invited_user.reload.invited_at })
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
 
-      context "when resending an invite" do
-        context "when the invitee has already been sent an invite but has not yet accepted it" do
-          it "does not change the existing invitation token" do
-            expect { described_class.resend_invite(invited_user.email, inviting_user) }
-              .not_to(change { invited_user.reload.invitation_token })
-          end
+      context "when the invitee has already been sent an invite but has not yet accepted it" do
+        it "does not change the existing invitation token" do
+          expect { described_class.resend_invite(invited_user.email, inviting_user) }
+            .not_to(change { invited_user.reload.invitation_token })
         end
+      end
 
-        context "when the invitee does not have an invitation token" do
-          before { invited_user.update!(invitation_token: nil) }
+      context "when the invitee does not have an invitation token" do
+        before { invited_user.update!(invitation_token: nil) }
 
-          it "re-regerates the token" do
-            allow(SecureRandom).to receive(:hex).with(15).and_return("new_token")
-            expect {
-              described_class.resend_invite(invited_user.email, inviting_user)
-            }.to change { invited_user.reload.invitation_token }.from(nil).to("new_token")
-          end
+        it "re-regerates the token" do
+          allow(SecureRandom).to receive(:hex).with(15).and_return("new_token")
+          expect {
+            described_class.resend_invite(invited_user.email, inviting_user)
+          }.to change { invited_user.reload.invitation_token }.from(nil).to("new_token")
         end
       end
     end
@@ -211,25 +225,21 @@ RSpec.describe User do
     context "when the given email does not match any user" do
       let(:email) { "inexistent@southampton.gov.uk" }
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "raises an exception and does not send the invitation" do
+      it "raises an exception and does not send the invitation", :aggregate_failures do
         expect { described_class.resend_invite(email, inviting_user) }
           .to raise_exception(ActiveRecord::RecordNotFound)
         expect(SendUserInvitationJob).not_to have_received(:perform_later)
       end
-      # rubocop:enable RSpec/MultipleExpectations
     end
 
     context "when inviting and invited users belong to different teams" do
       let(:invited_user) { create(:user_with_teams) }
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "raises an exception and does not send the invitation" do
+      it "raises an exception and does not send the invitation", :aggregate_failures do
         expect { described_class.resend_invite(invited_user.email, inviting_user) }
           .to raise_exception(ActiveRecord::RecordNotFound)
         expect(SendUserInvitationJob).not_to have_received(:perform_later)
       end
-      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 
@@ -376,11 +386,6 @@ RSpec.describe User do
   end
 
   describe "#invitation_expired?" do
-    it "returns false when the user has not been invited" do
-      user = build_stubbed(:user, invited_at: nil)
-      expect(user.invitation_expired?).to be false
-    end
-
     it "returns false when user was invited less than 14 days ago" do
       user = build_stubbed(:user, invited_at: 13.days.ago)
       expect(user.invitation_expired?).to be false
@@ -411,169 +416,6 @@ RSpec.describe User do
 
       it "is true" do
         expect(user.has_completed_registration?).to be true
-      end
-    end
-  end
-
-  describe "Devise gem related methods" do
-    describe "#send_two_factor_authentication_code", :with_test_queue_adapter do
-      subject(:user) { create(:user) }
-
-      # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
-      it "enqueues a SendTwoFactorAuthenticationJob" do
-        # Favouring "with { |x, y| }" over "with(x, y)" because with the param
-        # approach "user.direct_otp" asserts over the original "direct_otp"
-        # instead of the one generated by "#send_new_otp" call and fails.
-        # Asserting inside the block avoids this.
-        expect { user.send_new_otp }
-          .to enqueue_job(SendTwoFactorAuthenticationJob)
-          .at(:no_wait)
-          .on_queue("psd")
-          .with do |user_param, code_param|
-            expect(user_param).to be user
-            expect(user.direct_otp).to eq(code_param)
-          end
-      end
-      # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
-    end
-
-    describe "#fail_two_factor_authentication!" do
-      subject(:user) do
-        create(:user,
-               second_factor_attempts_count: previous_attempts,
-               second_factor_attempts_locked_at: lock_time)
-      end
-
-      context "when the user is not reaching the maximum number of failed attempts" do
-        let(:previous_attempts) { 0 }
-        let(:lock_time) { nil }
-
-        it "increases the number of user failed attempts" do
-          expect { user.fail_two_factor_authentication! }
-            .to change(user, :second_factor_attempts_count).by(1)
-        end
-
-        it "the user stays unlocked" do
-          expect { user.fail_two_factor_authentication! }
-            .not_to change(user, :second_factor_attempts_locked_at)
-        end
-      end
-
-      context "when the user already reached the maximum number of failed attempts" do
-        let(:previous_attempts) { described_class.max_login_attempts }
-        let(:lock_time) { Time.zone.now }
-
-        it "does not increase the number of user failed attempts" do
-          expect { user.fail_two_factor_authentication! }
-            .not_to change(user, :second_factor_attempts_count)
-        end
-
-        it "the user stays locked" do
-          expect { user.fail_two_factor_authentication! }
-            .not_to change(user, :second_factor_attempts_locked_at)
-        end
-      end
-
-      context "when the user was in the last allowed attempt" do
-        let(:previous_attempts) { described_class.max_login_attempts - 1 }
-        let(:lock_time) { nil }
-
-        it "increases the number of user failed attempts" do
-          expect { user.fail_two_factor_authentication! }
-            .to change(user, :second_factor_attempts_count).by(1)
-        end
-
-        it "sets the user 2fa lock to the current timestamp" do
-          freeze_time do
-            expect { user.fail_two_factor_authentication! }
-              .to change(user, :second_factor_attempts_locked_at).from(nil).to(Time.current)
-          end
-        end
-      end
-    end
-
-    describe "#pass_two_factor_authentication!" do
-      subject(:user) do
-        create(:user,
-               second_factor_attempts_count: previous_attempts,
-               second_factor_attempts_locked_at: lock_time)
-      end
-
-      context "when the user hasn't previously reached the maximum number of attempts" do
-        let(:previous_attempts) { described_class.max_login_attempts - 1 }
-        let(:lock_time) { nil }
-
-        it "restarts the user attempts counter" do
-          expect { user.pass_two_factor_authentication! }
-            .to change(user, :second_factor_attempts_count).from(previous_attempts).to(0)
-        end
-
-        it "the user stays unlocked" do
-          expect { user.pass_two_factor_authentication! }
-            .not_to change(user, :second_factor_attempts_locked_at)
-        end
-      end
-
-      context "when the user has previously reached the maximum number of failed attempts" do
-        let(:previous_attempts) { described_class.max_login_attempts }
-        let(:lock_time) { Time.zone.now }
-
-        it "restarts the user attempts counter" do
-          expect { user.pass_two_factor_authentication! }
-            .to change(user, :second_factor_attempts_count).from(previous_attempts).to(0)
-        end
-
-        it "removes user 2fa lock" do
-          expect { user.pass_two_factor_authentication! }
-            .to change(user, :second_factor_attempts_locked_at).from(lock_time).to(nil)
-        end
-      end
-    end
-
-    describe "#two_factor_locked?" do
-      it "returns false when there is no two factor lock for the user" do
-        user = build_stubbed(:user, second_factor_attempts_locked_at: nil)
-        expect(user).not_to be_two_factor_locked
-      end
-
-      it "returns false when the lock time has expired for the user" do
-        user = build_stubbed(:user, second_factor_attempts_locked_at: Time.current)
-        expired_lock_time = user.second_factor_attempts_locked_at + User::TWO_FACTOR_LOCK_TIME + 10.seconds
-
-        travel_to expired_lock_time do
-          expect(user).not_to be_two_factor_locked
-        end
-      end
-
-      it "returns true when the lock time hasn't expired for the user" do
-        user = build_stubbed(:user, second_factor_attempts_locked_at: Time.current)
-        locked_time = user.second_factor_attempts_locked_at + User::TWO_FACTOR_LOCK_TIME - 10.seconds
-
-        travel_to locked_time do
-          expect(user).to be_two_factor_locked
-        end
-      end
-    end
-
-    describe "#increment_failed_attempts" do
-      let(:user) { create(:user, mobile_number_verified: verified) }
-
-      context "when user mobile number is not verified" do
-        let(:verified) { false }
-
-        it "does not increment attempts" do
-          user.increment_failed_attempts
-          expect(user.reload.failed_attempts).to eq 0
-        end
-      end
-
-      context "when user mobile number is verified" do
-        let(:verified) { true }
-
-        it "increments attempts" do
-          user.increment_failed_attempts
-          expect(user.reload.failed_attempts).to eq 1
-        end
       end
     end
   end

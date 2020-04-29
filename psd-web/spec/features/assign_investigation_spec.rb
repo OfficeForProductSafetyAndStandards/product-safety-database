@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, teams: [team], has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, assignee: user) }
+  let(:investigation) { create(:allegation, assignable: user) }
 
 
   let!(:another_active_user) { create(:user, :activated, name: "other user same team", organisation: user.organisation, teams: [team]) }

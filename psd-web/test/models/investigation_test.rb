@@ -71,42 +71,42 @@ class InvestigationTest < ActiveSupport::TestCase
     assert_equal(policy(@new_investigation).show?(user: user), true)
   end
 
-  test "visible to assignee organisation" do
+  test "visible to assignable organisation" do
     User.current = users(:southampton)
     create_new_private_case
-    assignee = users(:southampton_steve)
-    @new_investigation.assignable = assignee
+    assignable = users(:southampton_steve)
+    @new_investigation.assignable = assignable
 
-    assert(policy(@new_investigation).show?(user: assignee))
+    assert(policy(@new_investigation).show?(user: assignable))
   end
 
-  test "not visible to no-source, no-assignee organisation" do
+  test "not visible to no-source, no-assignable organisation" do
     user = users(:luton)
     create_new_private_case
     assert_not(policy(@new_investigation).show?(user: user))
   end
 
-  test "past assignees should be computed" do
+  test "past assignables should be computed" do
     user = users(:southampton)
-    @investigation.update(assignee: user)
+    @investigation.update(assignable: user)
     assert_includes @investigation.past_assignees, user
   end
 
-  test "past assignee teams should be computed" do
+  test "past assignable teams should be computed" do
     team = Team.first
-    @investigation.update(assignee: team)
+    @investigation.update(assignable: team)
     assert_includes @investigation.past_teams, team
   end
 
-  test "people out of current assignee's team should not be able to re-assign case" do
+  test "people out of current assignable's team should not be able to re-assign case" do
     User.current = users(:southampton)
     investigation = create_new_case
     assert_not policy(investigation).assign?(user: users(:luton))
   end
 
-  test "people in current assignee's team should be able to re-assign case" do
+  test "people in current assignable's team should be able to re-assign case" do
     investigation = create_new_case
-    investigation.assignee = User.find_by(name: "Test User_one")
+    investigation.assignable = User.find_by(name: "Test User_one")
     assert policy(investigation).assign?(user: User.find_by(name: "Test User_two"))
   end
 
@@ -119,7 +119,7 @@ class InvestigationTest < ActiveSupport::TestCase
 
   test "people in currently assigned team should be able to re-assign case" do
     investigation = create_new_case
-    investigation.assignee = Team.find_by(name: "Team 1")
+    investigation.assignable = Team.find_by(name: "Team 1")
     assert policy(investigation).assign?(user: User.find_by(name: "Test User_four"))
   end
 
@@ -139,7 +139,7 @@ class InvestigationTest < ActiveSupport::TestCase
 
   test "assigns to current user by default" do
     investigation = create_new_case
-    assert_equal User.current, investigation.assignee
+    assert_equal User.current, investigation.assignable
   end
 
   def create_new_private_case

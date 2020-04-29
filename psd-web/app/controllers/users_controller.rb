@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :has_accepted_declaration
   skip_before_action :has_viewed_introduction
-  skip_before_action :handle_two_factor_authentication
+  skip_before_action :require_secondary_authentication
 
   def complete_registration
     @user = User.find(params[:id])
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     # this even once their account has been created. Hence redirecting them to the root page.
     return redirect_to(root_path) if signed_in_as?(@user) || @user.has_completed_registration?
     return render(:expired_invitation) if @user.invitation_expired?
-    return (render "errors/not_found", status: :not_found) if @user.invitation_token != params[:invitation]
+    return (render "errors/not_found", status: :not_found) if !params[:invitation] || (@user.invitation_token != params[:invitation])
 
     # Reset name and mobile number in case they’ve been remembered
     # from a previous registration that was abandoned before the mobile number
@@ -36,23 +36,14 @@ class UsersController < ApplicationController
     @user.assign_attributes(new_user_attributes)
 
     if @user.save(context: :registration_completion)
-
       sign_in :user, @user
-      redirect_user
+      redirect_to root_path
     else
       render :complete_registration
     end
   end
 
 private
-
-  def redirect_user
-    return redirect_to root_path unless Rails.configuration.two_factor_authentication_enabled
-
-    warden.session(:user)[TwoFactorAuthentication::NEED_AUTHENTICATION] = true
-    @user.send_new_otp
-    redirect_to user_two_factor_authentication_path
-  end
 
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)

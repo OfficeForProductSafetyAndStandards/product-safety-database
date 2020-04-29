@@ -1,5 +1,5 @@
 class HealthController < ApplicationController
-  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, :has_viewed_introduction
+  skip_before_action :authenticate_user!, :authorize_user, :has_accepted_declaration, :has_viewed_introduction, :require_secondary_authentication
 
   http_basic_authenticate_with name: ENV.fetch("HEALTH_CHECK_USERNAME", "health"), password: ENV.fetch("HEALTH_CHECK_PASSWORD", "check")
 

@@ -54,31 +54,12 @@ class Investigation < ApplicationRecord
   before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
-  def assignee
-    begin
-      return User.find(assignable_id) if assignable_type == "User"
-      return Team.find(assignable_id) if assignable_type == "Team"
-    rescue StandardError
-      nil
-    end
-  end
-
   def assignee_team
-    if assignable_type == "Team"
-      assignee
-    elsif assignable_type == "User"
-      assignee.teams.first
-    end
+    assignable&.team
   end
 
   def teams_with_access
     ([assignee_team] + teams.order(:name)).compact
-  end
-
-  def assignee=(entity)
-    self.assignable_id = entity&.id
-    self.assignable_type = "User" if entity.is_a?(User)
-    self.assignable_type = "Team" if entity.is_a?(Team)
   end
 
   def status
@@ -91,7 +72,7 @@ class Investigation < ApplicationRecord
 
   def important_assignable_people
     people = [].to_set
-    people << assignee if assignee.is_a? User
+    people << assignable if assignable.is_a? User
     people << User.current
     people
   end
@@ -107,7 +88,7 @@ class Investigation < ApplicationRecord
     Team.get_visible_teams(User.current).each do |team|
       teams << team
     end
-    teams << assignee if assignee.is_a? Team
+    teams << assignable if assignable.is_a? Team
     teams
   end
 
@@ -115,10 +96,6 @@ class Investigation < ApplicationRecord
     activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
     team_id_list = activities.map(&:assignable_id)
     Team.where(id: team_id_list)
-  end
-
-  def past_assignees_except_current
-    past_assignees.reject { |user| user.id == assignee.id }
   end
 
   def enquiry?
@@ -154,10 +131,7 @@ class Investigation < ApplicationRecord
   def child_should_be_displayed?
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    return true if (self.assignee.is_a? Team) && self.assignee.users.include?(User.current)
-    return true if (self.assignee.is_a? User) && (self.assignee.teams & User.current.teams).any?
-
-    false
+    assignable.in_same_team_as?(User.current)
   end
 
   def reason_created
@@ -226,7 +200,7 @@ private
   end
 
   def assign_to_current_user
-    self.assignee = User.current if assignee.blank? && User.current
+    self.assignable = User.current if assignable.blank? && User.current
   end
 
   # TODO: Refactor to remove dependency on User.current

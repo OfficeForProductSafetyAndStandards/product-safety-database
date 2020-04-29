@@ -43,8 +43,6 @@ FactoryBot.define do
 
     trait :invited do
       skip_password_validation { true }
-      invitation_token { SecureRandom.hex(15) }
-      invited_at { Time.zone.now }
       account_activated { false }
       password { nil }
       password_confirmation { nil }

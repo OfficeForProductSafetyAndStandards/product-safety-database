@@ -20,7 +20,7 @@ table[style="width:100%; text-align:left"]
     th
       | Case owner
     td
-      = @investigation.assignee.nil? ? "No case owner" : @investigation.assignee.display_name
+      = @investigation.assignable.nil? ? "No case owner" : @investigation.assignable.display_name
   tr
     th
       | Source

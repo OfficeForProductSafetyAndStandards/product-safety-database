@@ -2,7 +2,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   include NotifyHelper
 
   def self.from(investigation)
-    title = investigation.assignee.id.to_s
+    title = investigation.assignable.id.to_s
     body = investigation.assignee_rationale
     super(investigation, title, self.sanitize_text(body))
   end
@@ -24,7 +24,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def email_update_text
     body = []
-    body << "Case owner changed on #{investigation.case_type} to #{investigation.assignee.display_name} by #{source&.show}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.assignable.display_name} by #{source&.show}."
 
     if investigation.assignee_rationale.present?
       body << "Message from #{source&.show}:"
@@ -49,7 +49,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   def compute_relevant_entities(model:, compute_users_from_entity:)
     previous_assignee_id = investigation.saved_changes["assignable_id"][0]
     previous_assignee = model.find_by(id: previous_assignee_id)
-    new_assignee = investigation.assignee
+    new_assignee = investigation.assignable
     assigner = source.user
 
     old_users = previous_assignee.present? ? compute_users_from_entity.call(previous_assignee) : []

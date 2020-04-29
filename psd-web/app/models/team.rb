@@ -17,8 +17,12 @@ class Team < ApplicationRecord
     organisation.name
   end
 
-  def full_name
-    display_name
+  def team
+    self
+  end
+
+  def in_same_team_as?(user)
+    users.include?(user)
   end
 
   def self.ensure_names_up_to_date

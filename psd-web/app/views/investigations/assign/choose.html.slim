@@ -8,10 +8,10 @@
     - heading = capture do
       = render "minimal_investigation_heading", investigation: @investigation,
               title: page_heading
-      - if @investigation.assignee.present?
+      - if @investigation.assignable.present?
         p
           ' Current case owner:
-          strong = @investigation.assignee.display_name
+          strong = @investigation.assignable.display_name
       - else
         p This case has no owner
 
@@ -24,7 +24,7 @@
         = "You do not have permission to change the case owner."
         br
         ' Contact
-        strong = @investigation.assignee.display_name
+        strong = @investigation.assignable.display_name
         '
         | to change the case owner.
       = link_to "Return to case", investigation_path(@investigation), class: "govuk-button"
