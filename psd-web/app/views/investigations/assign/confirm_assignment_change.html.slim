@@ -13,7 +13,7 @@
         = "You are changing the case owner to:"
         strong = " #{@potential_owner.display_name || @potential_owner.name}"
       .govuk-form-group
-        = render "form_components/govuk_textarea", key: :assignee_rationale, form: form,
+        = render "form_components/govuk_textarea", key: :owner_rationale, form: form,
                     classes: "govuk-!-width-two-thirds",
                     rows: "3",
                     label: { text: "Message to new case owner (optional)" },

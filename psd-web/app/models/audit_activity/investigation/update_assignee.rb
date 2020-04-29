@@ -3,7 +3,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def self.from(investigation)
     title = investigation.owner.id.to_s
-    body = investigation.assignee_rationale
+    body = investigation.owner_rationale
     super(investigation, title, self.sanitize_text(body))
   end
 
@@ -26,9 +26,9 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
     body = []
     body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.display_name} by #{source&.show}."
 
-    if investigation.assignee_rationale.present?
+    if investigation.owner_rationale.present?
       body << "Message from #{source&.show}:"
-      body << inset_text_for_notify(investigation.assignee_rationale)
+      body << inset_text_for_notify(investigation.owner_rationale)
     end
 
     body.join("\n\n")

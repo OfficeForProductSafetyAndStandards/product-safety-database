@@ -6,7 +6,7 @@ class Investigation < ApplicationRecord
 
   attr_accessor :status_rationale
   attr_accessor :visibility_rationale
-  attr_accessor :assignee_rationale
+  attr_accessor :owner_rationale
 
   enum reported_reason: {
          unsafe: "unsafe",
