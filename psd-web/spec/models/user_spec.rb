@@ -181,13 +181,11 @@ RSpec.describe User do
 
       before { allow(SendUserInvitationJob).to receive(:perform_later) }
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "raises an exception and does not send the invitation" do
+      it "raises an exception and does not send the invitation", :aggregate_failures do
         expect { described_class.create_and_send_invite!(email, team, inviting_user) }
           .to raise_exception(ActiveRecord::RecordInvalid)
         expect(SendUserInvitationJob).not_to have_received(:perform_later)
       end
-      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 
@@ -200,28 +198,28 @@ RSpec.describe User do
       let!(:invitation_token) { SecureRandom.hex }
       let(:invited_user) { create(:user, teams: inviting_user.teams, organisation: inviting_user.organisation, invitation_token: invitation_token) }
 
-      it "resends an invitation to the user" do
-        described_class.resend_invite(invited_user.email, inviting_user)
+      it "resends an invitation to the user", :aggregate_failures do
+        expect {
+          described_class.resend_invite(invited_user.email, inviting_user)
+        }.to(change { invited_user.reload.invited_at })
         expect(SendUserInvitationJob).to have_received(:perform_later).with(anything, inviting_user.id)
       end
 
-      context "when resending an invite" do
-        context "when the invitee has already been sent an invite but has not yet accepted it" do
-          it "does not change the existing invitation token" do
-            expect { described_class.resend_invite(invited_user.email, inviting_user) }
-              .not_to(change { invited_user.reload.invitation_token })
-          end
+      context "when the invitee has already been sent an invite but has not yet accepted it" do
+        it "does not change the existing invitation token" do
+          expect { described_class.resend_invite(invited_user.email, inviting_user) }
+            .not_to(change { invited_user.reload.invitation_token })
         end
+      end
 
-        context "when the invitee does not have an invitation token" do
-          before { invited_user.update!(invitation_token: nil) }
+      context "when the invitee does not have an invitation token" do
+        before { invited_user.update!(invitation_token: nil) }
 
-          it "re-regerates the token" do
-            allow(SecureRandom).to receive(:hex).with(15).and_return("new_token")
-            expect {
-              described_class.resend_invite(invited_user.email, inviting_user)
-            }.to change { invited_user.reload.invitation_token }.from(nil).to("new_token")
-          end
+        it "re-regerates the token" do
+          allow(SecureRandom).to receive(:hex).with(15).and_return("new_token")
+          expect {
+            described_class.resend_invite(invited_user.email, inviting_user)
+          }.to change { invited_user.reload.invitation_token }.from(nil).to("new_token")
         end
       end
     end
@@ -229,25 +227,21 @@ RSpec.describe User do
     context "when the given email does not match any user" do
       let(:email) { "inexistent@southampton.gov.uk" }
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "raises an exception and does not send the invitation" do
+      it "raises an exception and does not send the invitation", :aggregate_failures do
         expect { described_class.resend_invite(email, inviting_user) }
           .to raise_exception(ActiveRecord::RecordNotFound)
         expect(SendUserInvitationJob).not_to have_received(:perform_later)
       end
-      # rubocop:enable RSpec/MultipleExpectations
     end
 
     context "when inviting and invited users belong to different teams" do
       let(:invited_user) { create(:user_with_teams) }
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "raises an exception and does not send the invitation" do
+      it "raises an exception and does not send the invitation", :aggregate_failures do
         expect { described_class.resend_invite(invited_user.email, inviting_user) }
           .to raise_exception(ActiveRecord::RecordNotFound)
         expect(SendUserInvitationJob).not_to have_received(:perform_later)
       end
-      # rubocop:enable RSpec/MultipleExpectations
     end
   end
 

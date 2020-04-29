@@ -13,11 +13,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     User.current = nil
   end
 
-  test "Team pages are visible to members" do
-    get team_url(teams(:southampton))
-    assert_response :success
-  end
-
   test "Team pages are not visible to non-members" do
     assert_raises Pundit::NotAuthorizedError do
       get team_url(teams(:luton))
@@ -28,14 +23,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_raises Pundit::NotAuthorizedError do
       get invite_to_team_url(teams(:luton))
     end
-  end
-
-  test "Team pages don’t include invite links for non-team-admins" do
-    sign_out(:user)
-    sign_in users(:southampton_bob)
-
-    get team_url(teams(:southampton))
-    assert_not_includes(response.body, "Invite a team member")
   end
 
   test "Team invite pages are visible to users with team_admin role only" do
