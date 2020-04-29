@@ -89,7 +89,7 @@ class InvestigationTest < ActiveSupport::TestCase
   test "past owners should be computed" do
     user = users(:southampton)
     @investigation.update(owner: user)
-    assert_includes @investigation.past_assignees, user
+    assert_includes @investigation.past_owners, user
   end
 
   test "past owner teams should be computed" do

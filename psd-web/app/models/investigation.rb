@@ -84,7 +84,7 @@ class Investigation < ApplicationRecord
     people
   end
 
-  def past_assignees
+  def past_owners
     activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
     user_id_list = activities.map(&:owner_id)
     User.where(id: user_id_list)

@@ -78,21 +78,21 @@ module InvestigationsHelper
 
   def compute_included_terms
     # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    assignees = checked_team_assignees
-    assignees.concat(someone_else_assignees)
-    assignees << current_user.id if params[:assigned_to_me] == "checked"
-    format_owner_terms(assignees.uniq)
+    owners = checked_team_owners
+    owners.concat(someone_else_owners)
+    owners << current_user.id if params[:assigned_to_me] == "checked"
+    format_owner_terms(owners.uniq)
   end
 
-  def checked_team_assignees
-    assignees = []
+  def checked_team_owners
+    owners = []
     owner_teams_with_keys.each do |key, team, _n|
-      assignees.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
+      owners.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
     end
-    assignees
+    owners
   end
 
-  def someone_else_assignees
+  def someone_else_owners
     return [] unless params[:assigned_to_someone_else] == "checked"
 
     team = Team.find_by(id: params[:assigned_to_someone_else_id])
@@ -233,9 +233,9 @@ module InvestigationsHelper
   end
 
   def suggested_previous_owners
-    all_past_assignees = @investigation.past_assignees + @investigation.past_teams
-    return [] if all_past_assignees.empty? || all_past_assignees == [current_user]
+    all_past_owners = @investigation.past_owners + @investigation.past_teams
+    return [] if all_past_owners.empty? || all_past_owners == [current_user]
 
-    all_past_assignees || []
+    all_past_owners || []
   end
 end
