@@ -2,7 +2,9 @@
   .govuk-grid-column-two-thirds-from-desktop
 
     h2.govuk-heading-m Locations
-    = link_to "Add location", new_business_location_path(@business)
+
+    p.govuk-body
+      = link_to "Add location", new_business_location_path(@business), class: "govuk-link"
 
     hr.govuk-section-break.govuk-section-break--m
 
