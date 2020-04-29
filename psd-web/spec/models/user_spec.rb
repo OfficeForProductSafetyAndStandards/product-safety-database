@@ -266,20 +266,20 @@ RSpec.describe User do
     end
   end
 
-  describe ".get_assignees" do
+  describe ".get_owners" do
     let!(:active_user) { create(:user, :activated) }
     let!(:inactive_user) { create(:user, :inactive) }
 
     it "returns other users" do
-      expect(described_class.get_assignees).to include(active_user)
+      expect(described_class.get_owners).to include(active_user)
     end
 
     it "does not return other users who are not activated" do
-      expect(described_class.get_assignees).not_to include(inactive_user)
+      expect(described_class.get_owners).not_to include(inactive_user)
     end
 
     it "includes associations needed for display_name" do
-      assignees = described_class.get_assignees.to_a # to_a forces the query execution and load immediately
+      assignees = described_class.get_owners.to_a # to_a forces the query execution and load immediately
       expect(-> {
         assignees.map(&:display_name)
       }).to not_talk_to_db
@@ -287,7 +287,7 @@ RSpec.describe User do
 
     context "when a user to except is supplied" do
       it "does not return the excepted user" do
-        expect(described_class.get_assignees(except: active_user)).to be_empty
+        expect(described_class.get_owners(except: active_user)).to be_empty
       end
     end
   end
