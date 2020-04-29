@@ -42,6 +42,12 @@
   stroke-width: 5;
 }
 
+// Hide IE / Edge browser clear buttons (that don't work anyway)
+.autocomplete-select-with-clear {
+  .autocomplete__input::-ms-clear, .autocomplete__hint::-ms-clear {
+    display:none;
+  }
+}
 
 @include govuk-media-query($from: tablet) {
 
