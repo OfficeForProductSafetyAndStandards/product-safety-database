@@ -49,12 +49,12 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   def compute_relevant_entities(model:, compute_users_from_entity:)
     previous_owner_id = investigation.saved_changes["owner_id"][0]
     previous_assignee = model.find_by(id: previous_owner_id)
-    new_assignee = investigation.owner
+    new_owner = investigation.owner
     assigner = source.user
 
     old_users = previous_assignee.present? ? compute_users_from_entity.call(previous_assignee) : []
     old_entities = previous_assignee.present? ? [previous_assignee] : []
-    new_entities = new_assignee.is_a?(model) ? [new_assignee] : []
+    new_entities = new_owner.is_a?(model) ? [new_owner] : []
     return new_entities if old_users.include? assigner
 
     (new_entities + old_entities).uniq
