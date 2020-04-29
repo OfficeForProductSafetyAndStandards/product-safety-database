@@ -54,7 +54,7 @@ module InvestigationsHelper
 
   def get_owner_filter
     return { should: [], must_not: [] } if no_owner_boxes_checked
-    return { should: [], must_not: compute_excluded_terms } if assignee_filter_exclusive
+    return { should: [], must_not: compute_excluded_terms } if owner_filter_exclusive
 
     { should: compute_included_terms, must_not: [] }
   end
@@ -65,7 +65,7 @@ module InvestigationsHelper
     no_people_boxes_checked && no_team_boxes_checked
   end
 
-  def assignee_filter_exclusive
+  def owner_filter_exclusive
     params[:assigned_to_someone_else] == "checked" && params[:assigned_to_someone_else_id].blank?
   end
 
