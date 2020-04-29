@@ -1,6 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-04-27
+- Allow to report a case as safe. Previously one could only report a case as non-compliant, unsafe or both.
 
 ## 2020-04-24
 - Added the ability to add collaborating teams to a case, who will then be able to view all details, even if the case is restricted.
