@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch do
+RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:decorated_allegation) { allegation.decorate }
 
   let(:allegation) { build(:allegation, :reported_unsafe) }
