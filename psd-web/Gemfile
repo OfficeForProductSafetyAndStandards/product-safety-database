@@ -37,7 +37,7 @@ gem "sentry-raven", "~> 3.0"
 gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
-gem "sprockets", "4.0.0"
+gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.6.4"
 gem "validate_email", "~> 0.1"
@@ -70,7 +70,7 @@ group :development, :test do
   gem "rubocop-rspec", "~> 1.38", require: false
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
-  gem "sassc", "~> 2.3.0" # Unable to upgrade until https://github.com/sass/sassc-ruby/issues/146 is resolved
+  gem "sassc"
   gem "scss_lint-govuk"
   gem "selenium-webdriver"
   gem "simplecov"
