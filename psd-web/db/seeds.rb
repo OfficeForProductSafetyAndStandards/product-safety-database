@@ -314,7 +314,7 @@ if run_seeds
     description: "",
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
     name: "Lynx Shower speaker with USB charger",
-    category:     Rails.application.config.product_constants["product_category"].sample,
+    category: Rails.application.config.product_constants["product_category"].sample,
     product_type: "Shower speaker with USB charger",
     webpage: ""
   )

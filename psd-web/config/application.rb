@@ -33,7 +33,7 @@ module ProductSafetyDatabase
     # Use a longer timeout on development environments to allow for asset compilation.
     # config.slowpoke.timeout = Rails.env.production? ? 15 : 180
 
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
 
     config.email_whitelist_enabled = ENV.fetch("EMAIL_WHITELIST_ENABLED", "true") == "true"

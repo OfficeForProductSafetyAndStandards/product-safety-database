@@ -15,7 +15,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   before { create(:complainant, investigation: investigation) }
 
-
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }
 
@@ -138,8 +137,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     it "displays the Date created" do
-      expect(investigation_summary_list).
-        to summarise("Date created", text: investigation.created_at.to_s(:govuk))
+      expect(investigation_summary_list)
+        .to summarise("Date created", text: investigation.created_at.to_s(:govuk))
     end
 
     it "displays the Last updated" do

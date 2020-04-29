@@ -369,7 +369,6 @@ RSpec.describe User do
     end
   end
 
-
   describe "#send_reset_password_instructions" do
     subject(:user) { create(:user) }
 

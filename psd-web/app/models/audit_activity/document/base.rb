@@ -4,8 +4,8 @@ class AuditActivity::Document::Base < AuditActivity::Base
   with_attachments attachment: "document"
 
   private_class_method def self.from(document, investigation, title)
-    activity = self.create(
-      body: self.sanitize_text(document.metadata[:description]),
+    activity = create(
+      body: sanitize_text(document.metadata[:description]),
       source: UserSource.new(user: User.current),
       investigation: investigation,
       title: title
@@ -18,12 +18,12 @@ class AuditActivity::Document::Base < AuditActivity::Base
   end
 
   def attached_image?
-    self.attachment.image?
+    attachment.image?
   end
 
   def restricted_title; end
 
   def can_display_all_data?
-    can_be_displayed?(self.attachment, self.investigation)
+    can_be_displayed?(attachment, investigation)
   end
 end

@@ -5,7 +5,6 @@ RSpec.describe ProductDecorator do
 
   let(:product) { build(:product) }
 
-
   describe "#summary_list" do
     include CountriesHelper
 
