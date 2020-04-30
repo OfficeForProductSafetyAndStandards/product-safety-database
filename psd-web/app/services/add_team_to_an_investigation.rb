@@ -2,8 +2,6 @@ class AddTeamToAnInvestigation
   include Interactor
 
   delegate :collaborator, :current_user, :investigation, :team_id, :include_message, :message, to: :context
-
-  # rubocop:disable Lint/SuppressedException
   def call
     context.collaborator = investigation.collaborators.new(
       team_id: team_id,
@@ -30,5 +28,4 @@ class AddTeamToAnInvestigation
       # or creating an audit log.
     end
   end
-  # rubocop:enable Lint/SuppressedException
 end
