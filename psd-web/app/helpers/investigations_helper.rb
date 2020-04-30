@@ -60,19 +60,19 @@ module InvestigationsHelper
   end
 
   def no_owner_boxes_checked
-    no_people_boxes_checked = params[:assigned_to_me] == "unchecked" && params[:assigned_to_someone_else] == "unchecked"
+    no_people_boxes_checked = params[:case_owner_is_me] == "unchecked" && params[:case_owner_is_someone_else] == "unchecked"
     no_team_boxes_checked = owner_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
     no_people_boxes_checked && no_team_boxes_checked
   end
 
   def owner_filter_exclusive
-    params[:assigned_to_someone_else] == "checked" && params[:assigned_to_someone_else_id].blank?
+    params[:case_owner_is_someone_else] == "checked" && params[:case_owner_is_someone_else_id].blank?
   end
 
   def compute_excluded_terms
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
     excluded_owners = []
-    excluded_owners << current_user.id if params[:assigned_to_me] == "unchecked"
+    excluded_owners << current_user.id if params[:case_owner_is_me] == "unchecked"
     format_owner_terms(excluded_owners)
   end
 
@@ -80,7 +80,7 @@ module InvestigationsHelper
     # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
     owners = checked_team_owners
     owners.concat(someone_else_owners)
-    owners << current_user.id if params[:assigned_to_me] == "checked"
+    owners << current_user.id if params[:case_owner_is_me] == "checked"
     format_owner_terms(owners.uniq)
   end
 
@@ -93,10 +93,10 @@ module InvestigationsHelper
   end
 
   def someone_else_owners
-    return [] unless params[:assigned_to_someone_else] == "checked"
+    return [] unless params[:case_owner_is_someone_else] == "checked"
 
-    team = Team.find_by(id: params[:assigned_to_someone_else_id])
-    team.present? ? user_ids_from_team(team) : [params[:assigned_to_someone_else_id]]
+    team = Team.find_by(id: params[:case_owner_is_someone_else_id])
+    team.present? ? user_ids_from_team(team) : [params[:case_owner_is_someone_else_id]]
   end
 
   def format_owner_terms(owner_array)
@@ -175,7 +175,7 @@ module InvestigationsHelper
     set_default_type_filter
     set_default_owner_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
+    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :case_owner_is_me, :case_owner_is_someone_else, :case_owner_is_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
                   owner_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
   end
 
@@ -188,8 +188,8 @@ module InvestigationsHelper
   end
 
   def set_default_owner_filter
-    params[:assigned_to_me] = "unchecked" if params[:assigned_to_me].blank?
-    params[:assigned_to_someone_else] = "unchecked" if params[:assigned_to_someone_else].blank?
+    params[:case_owner_is_me] = "unchecked" if params[:case_owner_is_me].blank?
+    params[:case_owner_is_someone_else] = "unchecked" if params[:case_owner_is_someone_else].blank?
   end
 
   def set_default_creator_filter

@@ -177,8 +177,8 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return all investigations if both owner checkboxes are unchecked" do
     get investigations_path, params: {
-        assigned_to_me: "unchecked",
-        assigned_to_someone_else: "unchecked",
+        case_owner_is_me: "unchecked",
+        case_owner_is_someone_else: "unchecked",
         status_open: "unchecked",
         status_closed: "unchecked"
     }
@@ -189,9 +189,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return all investigations if both owner checkboxes are checked and name input is blank" do
     get investigations_path, params: {
-        assigned_to_me: "checked",
-        assigned_to_someone_else: "checked",
-        assigned_to_someone_else_id: nil,
+        case_owner_is_me: "checked",
+        case_owner_is_someone_else: "checked",
+        case_owner_is_someone_else_id: nil,
         status_open: "unchecked",
         status_closed: "unchecked"
     }
@@ -202,10 +202,10 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return investigations assigned to current user if only the 'Me' checkbox is checked" do
     get investigations_path, params: {
-        assigned_to_me: "checked",
-        assigned_to_someone_else: "unchecked",
-        assigned_to_someone_else_id: nil,
-        assigned_to_team_0: "unchecked",
+        case_owner_is_me: "checked",
+        case_owner_is_someone_else: "unchecked",
+        case_owner_is_someone_else_id: nil,
+        case_owner_is_team_0: "unchecked",
         status_open: "unchecked",
         status_closed: "unchecked"
     }
@@ -217,9 +217,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should return investigations assigned to current user or given user if both checkboxes are checked
               and a user is given in the input" do
     get investigations_path, params: {
-        assigned_to_me: "checked",
-        assigned_to_someone_else: "checked",
-        assigned_to_someone_else_id: @investigation_two.owner_id,
+        case_owner_is_me: "checked",
+        case_owner_is_someone_else: "checked",
+        case_owner_is_someone_else_id: @investigation_two.owner_id,
         status_open: "unchecked",
         status_closed: "unchecked"
     }
@@ -231,10 +231,10 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should return investigations assigned to a given user if only 'someone else' checkbox is checked
               and a user is given in the input" do
     get investigations_path, params: {
-        assigned_to_me: "unchecked",
-        assigned_to_someone_else: "checked",
-        assigned_to_someone_else_id: @investigation_two.owner_id,
-        assigned_to_team_0: "unchecked",
+        case_owner_is_me: "unchecked",
+        case_owner_is_someone_else: "checked",
+        case_owner_is_someone_else_id: @investigation_two.owner_id,
+        case_owner_is_team_0: "unchecked",
         status_open: "unchecked",
         status_closed: "unchecked"
     }
@@ -246,9 +246,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should return investigations assigned to anyone except current user if only 'someone else' checkbox
               is checked and no user is given in the input" do
     get investigations_path, params: {
-        assigned_to_me: "unchecked",
-        assigned_to_someone_else: "checked",
-        assigned_to_someone_else_id: nil,
+        case_owner_is_me: "unchecked",
+        case_owner_is_someone_else: "checked",
+        case_owner_is_someone_else_id: nil,
         status_open: "unchecked",
         status_closed: "unchecked"
     }

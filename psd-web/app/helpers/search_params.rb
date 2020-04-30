@@ -11,9 +11,9 @@ class SearchParams
   ].freeze
 
   attr_accessor :allegation,
-                :assigned_to_me,
-                :assigned_to_someone_else,
-                :assigned_to_someone_else_id,
+                :case_owner_is_me,
+                :case_owner_is_someone_else,
+                :case_owner_is_someone_else_id,
                 :created_by_me,
                 :created_by_someone_else,
                 :created_by_someone_else_id,
