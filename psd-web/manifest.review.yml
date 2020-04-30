@@ -29,7 +29,6 @@ applications:
     - psd-sentry-env
     - psd-sidekiq-env
     - psd-two-factor-auth-env
-    - psd-seed-users-env
     - antivirus-auth-env
   processes:
     - type: web
