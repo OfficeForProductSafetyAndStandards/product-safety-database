@@ -38,7 +38,7 @@ class User < ApplicationRecord
   attribute :invited_at, :datetime, default: -> { Time.current }
 
   def self.active
-    where(account_activated: true, deleted: false)
+    where(account_activated: true).not_deleted
   end
 
   def self.not_deleted
