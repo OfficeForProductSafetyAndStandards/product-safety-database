@@ -110,7 +110,6 @@ module Investigations::DisplayTextHelper
     safe_join(out, "<br>".html_safe)
   end
 
-  # rubocop:enable Rails/OutputSafety
   def business_summary_list(business)
     rows = [
       { key: { text: "Trading name" }, value: { text: business.trading_name } },
