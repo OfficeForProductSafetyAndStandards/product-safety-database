@@ -1,4 +1,4 @@
-class RenameownerToOwner < ActiveRecord::Migration[5.2]
+class RenameAssignableToOwner < ActiveRecord::Migration[5.2]
   def change
     safety_assured do
       rename_column :investigations, :owner_type, :owner_type
