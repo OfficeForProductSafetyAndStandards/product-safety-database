@@ -22,20 +22,22 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     end
   end
 
-  scenario "entering an email from a deleted user does not send a notification but shows the confirmation page" do
-    user.update!(deleted: true)
+  context "when entering an email from a deleted user " do
+    let(:user) { create(:user, deleted: true) }
 
-    visit "/sign-in"
+    scenario "does not send a notification but shows the confirmation page" do
+      visit "/sign-in"
 
-    click_link "Forgot your password?"
+      click_link "Forgot your password?"
 
-    perform_enqueued_jobs do
-      expect(page).to have_css("h1", text: "Reset your password")
-      fill_in "Email address", with: user.email
-      click_on "Send email"
+      perform_enqueued_jobs do
+        expect(page).to have_css("h1", text: "Reset your password")
+        fill_in "Email address", with: user.email
+        click_on "Send email"
 
-      expect(delivered_emails).to be_empty
-      expect_to_be_on_check_your_email_page
+        expect(delivered_emails).to be_empty
+        expect_to_be_on_check_your_email_page
+      end
     end
   end
 

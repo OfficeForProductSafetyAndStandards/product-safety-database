@@ -53,7 +53,8 @@ RSpec.describe UserDecorator do
     let(:other_user_name) { "other user" }
     let(:user_organisation) { organisation }
     let(:user_teams) { [] }
-    let(:user) { create(:user, name: user_name, organisation: user_organisation, teams: user_teams) }
+    let(:user_deleted) { false }
+    let(:user) { create(:user, name: user_name, organisation: user_organisation, teams: user_teams, deleted: user_deleted) }
     let(:other_user) { create(:user, name: other_user_name, organisation: organisation) }
 
     let(:ignore_visibility_restrictions) { false }
@@ -66,9 +67,12 @@ RSpec.describe UserDecorator do
           expect(result).to eq("#{user_name} (#{organisation_name})")
         end
 
-        it "deleted users get a 'user deleted' flag" do
-          user.update_column(:deleted, true)
-          expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")
+        context "when the user is deleted" do
+          let(:user_deleted) { true }
+
+          it "gets a 'user deleted' flag" do
+            expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")
+          end
         end
       end
 
@@ -79,9 +83,12 @@ RSpec.describe UserDecorator do
           expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name})")
         end
 
-        it "deleted users get a 'user deleted' flag" do
-          user.update_column(:deleted, true)
-          expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name}) [user deleted]")
+        context "when the user is deleted" do
+          let(:user_deleted) { true }
+
+          it "gets a 'user deleted' flag" do
+            expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name}) [user deleted]")
+          end
         end
       end
     end
@@ -94,9 +101,12 @@ RSpec.describe UserDecorator do
           expect(result).to eq("#{user_name} (#{other_organisation_name})")
         end
 
-        it "deleted users get a 'user deleted' flag" do
-          user.update_column(:deleted, true)
-          expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
+        context "when the user is deleted" do
+          let(:user_deleted) { true }
+
+          it "gets a 'user deleted' flag" do
+            expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
+          end
         end
       end
 
@@ -108,9 +118,12 @@ RSpec.describe UserDecorator do
             expect(result).to eq("#{user_name} (#{other_organisation_name})")
           end
 
-          it "deleted users get a 'user deleted' flag" do
-            user.update_column(:deleted, true)
-            expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
+          context "when the user is deleted" do
+            let(:user_deleted) { true }
+
+            it "gets a 'user deleted' flag" do
+              expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
+            end
           end
         end
 
@@ -121,9 +134,12 @@ RSpec.describe UserDecorator do
             expect(result).to eq("#{user_name} (#{other_org_team_name})")
           end
 
-          it "deleted users get a 'user deleted' flag" do
-            user.update_column(:deleted, true)
-            expect(result).to eq("#{user_name} (#{other_org_team_name}) [user deleted]")
+          context "when the user is deleted" do
+            let(:user_deleted) { true }
+
+            it "gets a 'user deleted' flag" do
+              expect(result).to eq("#{user_name} (#{other_org_team_name}) [user deleted]")
+            end
           end
         end
       end
@@ -136,9 +152,12 @@ RSpec.describe UserDecorator do
         expect(result).to eq("#{user_name} (#{organisation_name})")
       end
 
-      it "deleted users get a 'user deleted' flag" do
-        user.update_column(:deleted, true)
-        expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")
+      context "when the user is deleted" do
+        let(:user_deleted) { true }
+
+        it "gets a 'user deleted' flag" do
+          expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")
+        end
       end
     end
   end
