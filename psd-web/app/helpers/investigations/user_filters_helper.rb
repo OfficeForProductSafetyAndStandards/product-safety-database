@@ -3,12 +3,12 @@ module Investigations::UserFiltersHelper
     User.get_owners(except: current_user) + Team.all_with_organisation
   end
 
-  def assigned_to(form)
-    assigned_to_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
+  def case_owner_is(form)
+    case_owner_is_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
     owner_teams_with_keys.each do |key, team, name|
-      assigned_to_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
+      case_owner_is_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
     end
-    assigned_to_items << { key: "case_owner_is_someone_else",
+    case_owner_is_items << { key: "case_owner_is_someone_else",
                  value: "checked",
                  unchecked_value: "unchecked",
                  text: "Other person or team",
