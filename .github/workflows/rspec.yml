@@ -15,7 +15,7 @@ env:
 
 jobs:
   ruby:
-    name: "Ruby"
+    name: "Tests"
     runs-on: ubuntu-latest
 
     # Example for can be found here:
