@@ -104,7 +104,7 @@ module Investigations::DisplayTextHelper
 
   # rubocop:disable Rails/OutputSafety
   def investigation_assignee(investigation)
-    out = [investigation.assignable ? h(investigation.assignable.name.to_s) : h("Unassigned")]
+    out = [investigation.assignable ? h(investigation.assignable.name.to_s) : "Unassigned"]
     if investigation&.assignable&.organisation&.name != investigation&.assignable&.name
       out << h(investigation.assignable.organisation.name)
     end
