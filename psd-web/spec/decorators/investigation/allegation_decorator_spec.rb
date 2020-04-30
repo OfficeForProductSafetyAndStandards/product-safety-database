@@ -1,12 +1,9 @@
 require "rails_helper"
 
-RSpec.describe Investigation::AllegationDecorator do
-  fixtures(:investigation_products, :investigations, :products)
-
+RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:decorated_allegation) { allegation.decorate }
 
-  let(:allegation) { investigations :one_product }
-
+  let(:allegation) { build(:allegation, :reported_unsafe) }
 
   describe "#display_product_summary_list?" do
     it { is_expected.to be_display_product_summary_list }
@@ -15,35 +12,85 @@ RSpec.describe Investigation::AllegationDecorator do
   describe "#title" do
     context "when products are present" do
       context "with one product" do
-        it "produces the correct title" do
-          expect(allegation.decorate.title).to eq("iPhone XS MAX, phone – asphyxiation hazard")
+        before do
+          allegation.products.build attributes_for(:product, name: "iPhone XS MAX", product_type: "phone")
+        end
+
+        context "when no reason was reported" do
+          let(:allegation) { build(:allegation) }
+
+          it "produces the correct title" do
+            expect(decorated_allegation.title).to eq("iPhone XS MAX, phone")
+          end
+        end
+
+        context "when reported safe" do
+          let(:allegation) { build(:allegation, :reported_safe) }
+
+          it "produces the correct title" do
+            expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – product safe and compliant")
+          end
+        end
+
+        context "when reported unsafe and non-compliant" do
+          let(:allegation) { build(:allegation, :reported_unsafe_and_non_compliant) }
+
+          it "produces the correct title" do
+            expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – #{allegation.hazard_type.downcase} hazard")
+          end
         end
       end
 
       context "with two products" do
-        context "with two common values" do
-          let!(:allegation) { investigations :two_products_with_common_values }
+        before { allegation.products.build attributes_for(:product, name: "iPhone XS MAX", product_type: "phone") }
+
+        context "when reported safe" do
+          let(:allegation) { build(:allegation, :reported_safe) }
+
+          before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
 
           it "produces the correct title" do
-            expect(allegation.decorate.title).to eq("2 products, phone – asphyxiation hazard")
+            expect(decorated_allegation.title).to eq("2 products, phone – products safe and compliant")
           end
         end
 
-        context "with no common values" do
-          let!(:allegation) { investigations :two_products_with_no_common_values }
+        context "when reported unsafe" do
+          let(:allegation) { build(:allegation, :reported_unsafe) }
 
-          it "produces the correct title" do
-            expect(allegation.decorate.title).to eq("2 products – asphyxiation hazard")
+          context "with two common values" do
+            before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
+
+            it "produces the correct title" do
+              expect(decorated_allegation.title).to eq("2 products, phone – #{allegation.hazard_type.downcase} hazard")
+            end
+          end
+
+          context "with no common values" do
+            before { allegation.products.build attributes_for(:product, name: "chromcast", product_type: "tv dongle") }
+
+            it "produces the correct title" do
+              expect(decorated_allegation.title).to eq("2 products – #{allegation.hazard_type.downcase} hazard")
+            end
           end
         end
       end
     end
 
     context "when no products are present on the case" do
-      let(:allegation) { investigations :no_products_case_title }
+      before { allegation.product_category = "Alarms" }
 
-      it "has the correct title" do
-        expect(decorated_allegation.title).to eq("Alarms – asphyxiation hazard (no product specified)")
+      context "when reporting unsafe" do
+        it "has the correct title" do
+          expect(decorated_allegation.title).to eq("Alarms – #{allegation.hazard_type.downcase} hazard (no product specified)")
+        end
+      end
+
+      context "when reporting safe" do
+        let(:allegation) { build(:allegation, :reported_safe) }
+
+        it "has the correct title" do
+          expect(decorated_allegation.title).to eq("Alarms - safe and compliant")
+        end
       end
     end
   end

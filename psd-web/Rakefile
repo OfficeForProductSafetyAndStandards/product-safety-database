@@ -5,8 +5,10 @@ require_relative "config/application"
 
 Rails.application.load_tasks
 
+desc "Dump the database schema"
 task "db:schema:dump": "strong_migrations:alphabetize_columns"
 
 namespace :test do
+  desc "Run all the tests"
   task all: ["spec", "test:system", "test"]
 end
