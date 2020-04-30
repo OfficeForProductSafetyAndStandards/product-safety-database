@@ -37,7 +37,7 @@ gem "sentry-raven", "~> 3.0"
 gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
-gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
+gem "sprockets", "4.0.0" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.6.4"
 gem "validate_email", "~> 0.1"
