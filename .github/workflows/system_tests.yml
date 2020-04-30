@@ -11,10 +11,11 @@ env:
   PGHOST: localhost
   PGUSER: postgres
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
+  TEST_TOTAL_SLICES: 3
 
 jobs:
   ruby:
-    name: "Ruby"
+    name: "Tests"
     runs-on: ubuntu-latest
 
     # Example for can be found here:
@@ -37,6 +38,16 @@ jobs:
         ports:
         - 6379:6379
         options: --entrypoint redis-server
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # If we divide the tests in X groups, elements in the array represent
+        # each of those slices from 1 to X.
+        # Eg: TEST_TOTAL_SLICES is 4, then test-slice will need to be [1, 2, 3, 4]
+        # Each slice of tests will run in a parallel job.
+        test-slice: [1, 2, 3]
+
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby
@@ -88,4 +99,4 @@ jobs:
 
     - name: Run Tests
       working-directory: psd-web
-      run: bundle exec rake test:system
+      run: bundle exec rake test:system_slice TEST_SLICE=${{ matrix.test-slice }}
