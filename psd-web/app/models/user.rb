@@ -207,7 +207,9 @@ private
   end
 
   def send_reset_password_instructions_notification(token)
-    NotifyMailer.reset_password_instructions(self, token).deliver_later unless deleted?
+    return if deleted?
+
+    NotifyMailer.reset_password_instructions(self, token).deliver_later
   end
   # END: Devise methods
 
