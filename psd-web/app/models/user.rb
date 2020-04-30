@@ -37,6 +37,8 @@ class User < ApplicationRecord
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
   attribute :invited_at, :datetime, default: -> { Time.current }
 
+  # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
+  # and who have accepted the user declaration
   def self.active
     where(account_activated: true).not_deleted
   end
