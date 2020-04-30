@@ -20,7 +20,7 @@ table[style="width:100%; text-align:left"]
     th
       | Assignee
     td
-      = @investigation.assignable.nil? ? "Unassigned" : @investigation.assignable.decorate.display_name
+      = @investigation.assignable.nil? ? "Unassigned" : @investigation.assignable.display_name
   tr
     th
       | Source

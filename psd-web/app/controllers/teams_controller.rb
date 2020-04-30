@@ -44,7 +44,7 @@ private
   end
 
   def set_user_teams
-    @teams = current_user.teams
+    @teams = current_user.teams.decorate
   end
 
   def whitelisted_user
@@ -57,7 +57,7 @@ private
   end
 
   def set_team
-    @team = Team.find(params[:id])
+    @team = Team.find(params[:id]).decorate
     authorize @team
   end
 
@@ -79,7 +79,7 @@ private
     if @team.users.include? user
       if user.name.present?
         @new_user.errors.add(:email_address,
-                             "#{@new_user.email_address} is already a member of #{@team.decorate.display_name}")
+                             "#{@new_user.email_address} is already a member of #{@team.display_name}")
         nil
       else
         resend_invitation_to_user(user.email)

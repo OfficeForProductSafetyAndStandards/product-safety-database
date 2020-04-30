@@ -1,6 +1,6 @@
 module Investigations::UserFiltersHelper
   def entities
-    User.get_assignees(except: current_user) + Team.all_with_organisation
+    User.get_assignees(except: current_user).decorate + Team.all_with_organisation.decorate
   end
 
   def assigned_to(form)
@@ -29,13 +29,13 @@ module Investigations::UserFiltersHelper
 
   def other_assignee(form)
     render "form_components/govuk_select", key: :assigned_to_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.decorate.display_name, value: e.id } },
+                  items: entities.map { |e| { text: e.display_name, value: e.id } },
                   label: { text: "Name" }, is_autocomplete: true
   end
 
   def other_creator(form)
     render "form_components/govuk_select", key: :created_by_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.decorate.display_name, value: e.id } },
+                  items: entities.map { |e| { text: e.display_name, value: e.id } },
                   label: { text: "Name" }, is_autocomplete: true
   end
 end

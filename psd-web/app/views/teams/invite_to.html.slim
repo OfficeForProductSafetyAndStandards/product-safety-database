@@ -1,4 +1,4 @@
-= page_title "Invite a team member to #{@team.decorate.display_name}", errors: @new_user.errors.any?
+= page_title "Invite a team member to #{@team.display_name}", errors: @new_user.errors.any?
 - content_for :after_header do
   = link_to "Back", team_path(@team), class: "govuk-back-link"
 
