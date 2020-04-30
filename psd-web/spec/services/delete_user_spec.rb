@@ -14,6 +14,20 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
       end
     end
 
+    context "when given an user that does not belong to any team" do
+      subject(:delete_call) do
+        described_class.call(user: build_stubbed(:user, teams: []))
+      end
+
+      it "returns a failure" do
+        expect(delete_call).to be_failure
+      end
+
+      it "provides an error message" do
+        expect(delete_call.error).to eq "User does not belong to a team so their investigations can't be reassigned"
+      end
+    end
+
     context "when given an user that is already deleted" do
       subject(:delete_call) { described_class.call(user: user) }
 
