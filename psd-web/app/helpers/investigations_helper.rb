@@ -221,7 +221,7 @@ module InvestigationsHelper
     current_user.teams.map.with_index do |team, index|
       # key, team, name
       [
-        "assigned_to_team_#{index}".to_sym,
+        "case_owner_is_team_#{index}".to_sym,
         team,
         current_user.teams.count > 1 ? team.name : "My team"
       ]
