@@ -1,4 +1,4 @@
-name: RSpec test suite
+name: RSpec Unit test suite
 
 on: [push]
 
@@ -15,7 +15,7 @@ env:
 
 jobs:
   ruby:
-    name: "Ruby"
+    name: "Unit tests"
     runs-on: ubuntu-latest
 
     # Example for can be found here:
@@ -50,11 +50,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 10.19.x
+
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
-
-    - name: Install Chromedriver
-      run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
 
     - uses: actions/cache@v1
       with:
@@ -69,6 +67,7 @@ jobs:
         gem install bundler --no-doc
         bundle config path vendor/bundle
         bundle check || bundle install --jobs=4 --retry=3
+
     - name: Install yarn
       run: npm install yarn -g
 
@@ -91,13 +90,8 @@ jobs:
       working-directory: psd-web
       run: bin/rails db:create db:schema:load
 
-    - name: Run Specs
+    - name: Run Specs excluding Feature ones
       working-directory: psd-web
       run: |
-        bundle exec rspec spec
+        bundle exec rspec spec --tag ~type:feature
 
-    - uses: actions/upload-artifact@v1
-      if: failure()
-      with:
-        name: capybara screenshots
-        path: psd-web/tmp/capybara
