@@ -102,7 +102,6 @@ module Investigations::DisplayTextHelper
     true
   end
 
-  # rubocop:disable Rails/OutputSafety
   def investigation_assignee(investigation)
     out = [investigation.assignable ? h(investigation.assignable.name.to_s) : "Unassigned".html_safe]
     if investigation&.assignable&.organisation&.name != investigation&.assignable&.name
@@ -110,8 +109,8 @@ module Investigations::DisplayTextHelper
     end
     safe_join(out, "<br>".html_safe)
   end
-  # rubocop:enable Rails/OutputSafety
 
+  # rubocop:enable Rails/OutputSafety
   def business_summary_list(business)
     rows = [
       { key: { text: "Trading name" }, value: { text: business.trading_name } },
