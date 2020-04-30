@@ -104,10 +104,10 @@ module Investigations::DisplayTextHelper
 
   # rubocop:disable Rails/OutputSafety
   def investigation_assignee(investigation, classes = "")
-    out = [investigation.assignable ? investigation.assignable.name.to_s : tag.div("Unassigned", class: classes)]
-    out << investigation.assignable.organisation.name if investigation.assignable&.organisation.present?
-    out.uniq!
-    out.compact!
+    out = [investigation.assignable ? h(investigation.assignable.name.to_s) : h("Unassigned")]
+    if investigation&.assignable&.organisation&.name != investigation&.assignable&.name
+      out << h(investigation.assignable.organisation.name)
+    end
     out.join("<br />").html_safe
   end
   # rubocop:enable Rails/OutputSafety
