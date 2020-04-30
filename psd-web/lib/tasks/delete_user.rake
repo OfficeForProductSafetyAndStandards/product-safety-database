@@ -5,8 +5,7 @@ namespace :user do
     user_email = ENV.fetch("EMAIL", nil)
 
     if !user_id && !user_email
-      puts "Error: Need to provide user ID or EMAIL with the call."
-      puts "Eg: EMAIL=example@example.com rake user:delete"
+      raise RuntimeError, "Error: Need to provide user ID or EMAIL with the call.\nEg: EMAIL=example@example.com rake user:delete"
     else
       delete_user(user_id, user_email)
     end
