@@ -5,7 +5,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
 
-    @user = users(:opss)
+    @user = users(:opss).decorate
     User.current = @user
     sign_in @user
     @user.teams << teams(:opss_enforcement)
@@ -16,13 +16,13 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
   teardown { User.current = nil }
 
   test "should show current user as a radio, and to assign user to case" do
-    assert_text @user.decorate.display_name
-    choose @user.decorate.display_name, visible: false
+    assert_text @user.display_name
+    choose @user.display_name, visible: false
     click_on "Continue"
     click_on "Confirm change"
     assert_text "Assigned to #{@user.name}\n#{@user.organisation.name}"
     click_on "Activity"
-    assert_text "Assigned to #{@user.decorate.display_name}"
+    assert_text "Assigned to #{@user.display_name}"
   end
 
   test "should show current users team as a radio, and to assign team to case" do

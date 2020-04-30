@@ -196,8 +196,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       expect(email.recipient).to eq user.email
       expect(email.reference).to eq "Password reset"
       expect(email.template).to eq NotifyMailer::TEMPLATES[:reset_password_instruction]
-      expect(email.personalization[:name]).to eq user.name
-      expect(email.personalization[:edit_user_password_url_token]).to eq edit_user_password_url_with_token
+      expect(email.personalization).to eq(edit_user_password_url_token: edit_user_password_url_with_token, name: user.name)
 
       expect_to_be_on_check_your_email_page
     end

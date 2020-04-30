@@ -7,6 +7,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
     @user = User.current = sign_in(users(:southampton))
+    @user = @user.decorate
     @user.teams << teams(:southampton)
     @team = @user.teams.first
     visit new_investigation_assign_path(load_case(:one))
@@ -15,7 +16,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
   teardown { User.current = nil }
 
   test "non-OPSS assigns to OPSS, on re-assign sees the OPSS assign and no permission to reassign again" do
-    assert_text @user.decorate.display_name
+    assert_text @user.display_name
     choose "Other team", visible: false
     fill_autocomplete "investigation_select_other_team", with: "OPSS Enforcement"
     click_on "Continue"

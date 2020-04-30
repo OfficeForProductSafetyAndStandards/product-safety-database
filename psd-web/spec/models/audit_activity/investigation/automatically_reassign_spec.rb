@@ -7,11 +7,12 @@ RSpec.describe AuditActivity::Investigation::AutomaticallyReassign, :with_stubbe
   let(:investigation) { create(:enquiry, assignable: team, assignee_rationale: "Test assign") }
 
   describe ".from" do
-    it "creates an audit activity without information for email notification", :aggregate_failures do
-      expect(audit_activity.title).to eq("Enquiry automatically reassigned to #{team.display_name}")
-      expect(audit_activity.body).to eq(nil)
-      expect(audit_activity.email_update_text).to eq(nil)
-      expect(audit_activity.email_subject_text).to eq(nil)
+    it "creates an audit activity without information for email notification" do
+      expect(audit_activity)
+        .to have_attributes(title: "Enquiry automatically reassigned to #{team.display_name}",
+                            body: nil,
+                            email_update_text: nil,
+                            email_subject_text: nil)
     end
   end
 end

@@ -79,7 +79,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   }
 
   context "when signed in as a non-OPSS user" do
-    let(:user) { create(:user, :activated, :viewed_introduction, :psd_user) }
+    let(:user) { create(:user, :activated, :viewed_introduction, :psd_user).decorate }
 
     before { sign_in user }
 
@@ -413,14 +413,14 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_allegation_logged
     item = page.find("h3", text: "Allegation logged: #{product_details[:name]}, #{product_details[:type]}").find(:xpath, "..")
-    expect(item).to have_text("Assigned to #{user.decorate.display_name}")
+    expect(item).to have_text("Assigned to #{user.display_name}")
     expect(item).to have_text("Case is related to the coronavirus outbreak") if coronavirus
   end
 
   def expect_case_activity_page_to_show_product_added
     item = page.find("p", text: "Product added").find(:xpath, "..")
     expect(item).to have_text(product_details[:name])
-    expect(item).to have_text("Product added by #{user.decorate.display_name}")
+    expect(item).to have_text("Product added by #{user.display_name}")
     expect(item).to have_link("View product details")
   end
 
