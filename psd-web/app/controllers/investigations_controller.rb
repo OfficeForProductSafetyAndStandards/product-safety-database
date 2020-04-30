@@ -18,7 +18,7 @@ class InvestigationsController < ApplicationController
       format.xlsx do
         @answer = search_for_investigations
         @investigations = Investigation.eager_load(:complainant,
-                                                   :source).where(id: @answer.results.map(&:_id)).decorate
+                                                   :source).where(id: @answer.results.map(&:_id))
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
