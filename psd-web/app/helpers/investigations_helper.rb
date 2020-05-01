@@ -105,7 +105,6 @@ module InvestigationsHelper
     end
   end
 
-  # Created by filter shares a lot of similarities with assigned to. In the future the methods could be shared.
   def get_creator_filter
     return { should: [], must_not: [] } if no_created_by_boxes_checked
     return { should: [], must_not: compute_excluded_created_by_terms } if creator_filter_exclusive
