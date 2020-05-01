@@ -47,7 +47,7 @@ private
     params[:investigation][:owner_id] = case params[:investigation][:owner_id]
                                         when "someone_in_your_team"
                                           params[:investigation][:select_team_member]
-                                        when "previously_assigned"
+                                        when "previous_owners"
                                           params[:investigation][:select_previous_owner]
                                         when "other_team"
                                           params[:investigation][:select_other_team]
