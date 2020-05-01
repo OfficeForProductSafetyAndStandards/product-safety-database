@@ -19,12 +19,12 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
 
   def title
     # We store owner_id in title field, this is computing title based on that
-    "Case owner changed to #{(User.find_by(id: owner_id) || Team.find_by(id: owner_id))&.display_name}"
+    "Case owner changed to #{(User.find_by(id: owner_id) || Team.find_by(id: owner_id))&.decorate&.display_name}"
   end
 
   def email_update_text
     body = []
-    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.display_name} by #{source&.show}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name} by #{source&.show}."
 
     if investigation.owner_rationale.present?
       body << "Message from #{source&.show}:"

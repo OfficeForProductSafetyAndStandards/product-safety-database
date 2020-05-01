@@ -6,7 +6,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   subject(:decorated_investigation) { investigation.decorate }
 
   let(:organisation) { create :organisation }
-  let(:user)         { create(:user, organisation: organisation) }
+  let(:user)         { create(:user, organisation: organisation).decorate }
   let(:creator)      { create(:user, organisation: organisation) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
@@ -296,7 +296,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when the investigation has an owner" do
       it "displays the owner name" do
         expect(decorated_investigation.owner_display_name_for(viewing_user: viewing_user))
-          .to eq(user.decorate.owner_short_name(viewing_user: viewing_user))
+          .to eq(user.owner_short_name(viewing_user: viewing_user))
       end
     end
 

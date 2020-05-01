@@ -7,7 +7,7 @@ class Investigations::OwnershipController < ApplicationController
   steps :"select-owner", :confirm
 
   def show
-    @potential_owner = potential_owner
+    @potential_owner = potential_owner&.decorate
     render_wizard
   end
 

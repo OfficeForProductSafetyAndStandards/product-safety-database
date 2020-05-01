@@ -50,7 +50,7 @@ class Activity < ApplicationRecord
       if team.team_recipient_email.present?
         entities << { name: team.name, email: team.team_recipient_email }
       else
-        users_from_team = team.users.map { |user| { name: user.name, email: user.email } }
+        users_from_team = team.users.active.map { |user| { name: user.name, email: user.email } }
         entities.concat(users_from_team)
       end
     end

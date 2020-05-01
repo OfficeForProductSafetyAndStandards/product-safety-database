@@ -1,6 +1,6 @@
 module Investigations::UserFiltersHelper
   def entities
-    User.get_owners(except: current_user) + Team.all_with_organisation
+    User.get_owners(except: current_user).decorate + Team.all_with_organisation.decorate
   end
 
   def case_owner_is(form)

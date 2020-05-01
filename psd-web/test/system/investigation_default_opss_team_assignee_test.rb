@@ -7,6 +7,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
     @user = User.current = sign_in(users(:southampton))
+    @user = @user.decorate
     @user.teams << teams(:southampton)
     @team = @user.teams.first
     visit new_investigation_ownership_path(load_case(:one))

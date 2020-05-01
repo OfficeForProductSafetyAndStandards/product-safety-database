@@ -614,7 +614,7 @@ DEPENDENCIES
   strong_migrations (= 0.6.4)
   validate_email (~> 0.1)
   webmock
-  webpacker (= 5.1.1)
+  webpacker (~> 5.1.1)
   wicked
   will_paginate (~> 3.3)
 
