@@ -1,4 +1,4 @@
-class Investigations::AssignController < ApplicationController
+class Investigations::OwnershipController < ApplicationController
   include Wicked::Wizard
   before_action :set_investigation
   before_action :potential_owner, only: %i[show create]

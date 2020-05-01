@@ -9,7 +9,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     @user = User.current = sign_in(users(:southampton))
     @user.teams << teams(:southampton)
     @team = @user.teams.first
-    visit new_investigation_assign_path(load_case(:one))
+    visit new_investigation_ownership_path(load_case(:one))
   end
 
   teardown { User.current = nil }
@@ -23,7 +23,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
 
     assert_text "Case owner #{teams(:opss_enforcement).name}"
 
-    visit new_investigation_assign_path(load_case(:one))
+    visit new_investigation_ownership_path(load_case(:one))
     assert_text "Current case owner: Office for Product Safety and Standards"
     assert_text "You do not have permission to change the case owner"
   end

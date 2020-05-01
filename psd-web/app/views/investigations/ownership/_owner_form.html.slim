@@ -9,7 +9,7 @@
 
     if current_user.teams.any?
       someone_in_your_team = capture do
-        render "investigations/assign/owner_selection", form: form, key: :select_team_member,
+        render "investigations/ownership/owner_selection", form: form, key: :select_team_member,
                  items: User.get_team_members(user: current_user), label: "Select team member", show_all_values: true
       end
       items.push text: "Someone in your team",
@@ -19,7 +19,7 @@
 
     if @suggested_previous_owners.present?
       previous_owners = capture do
-        render "investigations/assign/owner_selection", form: form, key: :select_previous_owner,
+        render "investigations/ownership/owner_selection", form: form, key: :select_previous_owner,
               items: @suggested_previous_owners, ignore_restrictions: true,
               label: "Select previously assigned person or team", show_all_values: true
       end
@@ -34,7 +34,7 @@
     items.concat teams
 
     other_teams = capture do
-      render "investigations/assign/owner_selection", form: form, key: :select_other_team,
+      render "investigations/ownership/owner_selection", form: form, key: :select_other_team,
              items: Team.all, label: "Select other team name", ignore_restrictions: true,
              show_all_values: true
     end
@@ -43,7 +43,7 @@
     items.push divider: "or"
 
     someone_else = capture do
-      render "investigations/assign/owner_selection", form: form, key: :select_someone_else,
+      render "investigations/ownership/owner_selection", form: form, key: :select_someone_else,
              items: User.activated, label: "Select other user"
     end
     items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else }

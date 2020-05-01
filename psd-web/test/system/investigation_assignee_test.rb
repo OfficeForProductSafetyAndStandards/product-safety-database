@@ -10,7 +10,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     sign_in @user
     @user.teams << teams(:opss_enforcement)
     @team = @user.teams.first
-    visit new_investigation_assign_path(load_case(:one))
+    visit new_investigation_ownership_path(load_case(:one))
   end
 
   teardown { User.current = nil }

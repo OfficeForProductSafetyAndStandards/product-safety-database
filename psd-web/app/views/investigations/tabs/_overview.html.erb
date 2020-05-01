@@ -33,7 +33,7 @@
     <% if policy(@investigation).change_owner? %>
       <% case_owner_actions = {
         items: [
-          href: new_investigation_assign_path(@investigation),
+          href: new_investigation_ownership_path(@investigation),
           text: "Change",
           visuallyHiddenText: "case owner"
         ]
