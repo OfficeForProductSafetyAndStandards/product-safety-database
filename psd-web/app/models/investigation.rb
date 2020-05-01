@@ -85,7 +85,7 @@ class Investigation < ApplicationRecord
   end
 
   def past_owners
-    activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
+    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
     user_id_list = activities.map(&:owner_id)
     User.where(id: user_id_list)
   end
@@ -100,7 +100,7 @@ class Investigation < ApplicationRecord
   end
 
   def past_teams
-    activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
+    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
     team_id_list = activities.map(&:owner_id)
     Team.where(id: team_id_list)
   end
@@ -169,7 +169,7 @@ private
     # TODO: User.current check is here to avoid triggering activity and emails from migrations
     # Can be safely removed once the migration PopulateAssigneeAndDescription has run
     if ((saved_changes.key? :owner_id) || (saved_changes.key? :owner_type)) && User.current
-      AuditActivity::Investigation::UpdateAssignee.from(self)
+      AuditActivity::Investigation::UpdateOwner.from(self)
     end
   end
 

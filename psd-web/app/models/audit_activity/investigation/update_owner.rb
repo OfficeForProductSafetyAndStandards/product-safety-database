@@ -1,4 +1,4 @@
-class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigation::Base
+class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::Base
   include NotifyHelper
 
   def self.from(investigation)
