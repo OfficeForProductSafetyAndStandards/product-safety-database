@@ -102,13 +102,13 @@ module Investigations::DisplayTextHelper
     true
   end
 
-  # rubocop:disable Rails/OutputSafety
-  def investigation_owner(investigation, classes = "")
-    out = [investigation.owner ? investigation.owner.name.to_s : tag.div("No case owner", class: classes)]
-    out << tag.div(investigation.owner.organisation.name, class: classes) if investigation.owner&.organisation.present?
-    out.join.html_safe
+  def investigation_assignee(investigation)
+    out = [investigation.owner ? h(investigation.owner.name.to_s) : "No case owner".html_safe]
+    if investigation&.owner&.organisation&.name != investigation&.owner&.name
+      out << h(investigation.owner.organisation.name)
+    end
+    safe_join(out, "<br>".html_safe)
   end
-  # rubocop:enable Rails/OutputSafety
 
   def business_summary_list(business)
     rows = [
