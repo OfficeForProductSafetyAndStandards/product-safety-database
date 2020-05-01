@@ -50,12 +50,12 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
     previous_owner_id = investigation.saved_changes["owner_id"][0]
     previous_owner = model.find_by(id: previous_owner_id)
     new_owner = investigation.owner
-    assigner = source.user
+    owner_changed_by = source.user
 
     old_users = previous_owner.present? ? compute_users_from_entity.call(previous_owner) : []
     old_entities = previous_owner.present? ? [previous_owner] : []
     new_entities = new_owner.is_a?(model) ? [new_owner] : []
-    return new_entities if old_users.include? assigner
+    return new_entities if old_users.include? owner_changed_by
 
     (new_entities + old_entities).uniq
   end
