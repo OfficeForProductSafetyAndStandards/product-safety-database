@@ -12,10 +12,10 @@ namespace :user do
         puts "User #{id.presence || email} successfully marked as deleted."
         puts "User investigations assigned to #{result.team.name}"
       else
-        puts result.error
+        STDERR.puts result.error
       end
     rescue ActiveRecord::RecordNotFound
-      puts "Error: User #{id.presence || email} not found"
+      STDERR.puts "Error: User #{id.presence || email} not found"
     end
     # rubocop:enable Rake/MethodDefinitionInTask
 
