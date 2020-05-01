@@ -15,7 +15,7 @@ class InvestigationPolicy < ApplicationPolicy
     visible_to(user: @user)
   end
 
-  def assign?(user: @user)
+  def change_owner?(user: @user)
     can_be_assigned_by(user: user)
   end
 

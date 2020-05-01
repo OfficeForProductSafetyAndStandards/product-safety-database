@@ -15,7 +15,7 @@
       - else
         p This case has no owner
 
-    - if policy(@investigation).assign?
+    - if policy(@investigation).change_owner?
       = render "investigations/assign/owner_form", investigation: @investigation do
         = heading
     - else

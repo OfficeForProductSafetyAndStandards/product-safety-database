@@ -30,7 +30,7 @@
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-    <% if policy(@investigation).assign? %>
+    <% if policy(@investigation).change_owner? %>
       <% assign_actions = {
         items: [
           href: new_investigation_assign_path(@investigation),

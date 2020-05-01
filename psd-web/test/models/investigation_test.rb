@@ -101,26 +101,26 @@ class InvestigationTest < ActiveSupport::TestCase
   test "people out of current owner's team should not be able to re-assign case" do
     User.current = users(:southampton)
     investigation = create_new_case
-    assert_not policy(investigation).assign?(user: users(:luton))
+    assert_not policy(investigation).change_owner?(user: users(:luton))
   end
 
   test "people in current owner's team should be able to re-assign case" do
     investigation = create_new_case
     investigation.owner = User.find_by(name: "Test User_one")
-    assert policy(investigation).assign?(user: User.find_by(name: "Test User_two"))
+    assert policy(investigation).change_owner?(user: User.find_by(name: "Test User_two"))
   end
 
   test "people out of currently assigned team should not be able to re-assign case" do
     users(:southampton).teams << teams(:southampton)
     investigation = create_new_case
     investigation.owner = User.current.teams.first
-    assert_not policy(investigation).assign?(user: users(:luton))
+    assert_not policy(investigation).change_owner?(user: users(:luton))
   end
 
   test "people in currently assigned team should be able to re-assign case" do
     investigation = create_new_case
     investigation.owner = Team.find_by(name: "Team 1")
-    assert policy(investigation).assign?(user: User.find_by(name: "Test User_four"))
+    assert policy(investigation).change_owner?(user: User.find_by(name: "Test User_four"))
   end
 
   test "pretty_id should contain YYMM" do
