@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Rspec will run in parallel with each job running a subset of tests filtered by each tag.
+        # Each group of tests affected by the following tags will run in a different job in parallel.
         rspec-tag: ["type:feature", "~type:feature"]
 
     steps:
