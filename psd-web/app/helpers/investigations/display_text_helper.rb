@@ -102,7 +102,7 @@ module Investigations::DisplayTextHelper
     true
   end
 
-  def investigation_assignee(investigation)
+  def investigation_owner(investigation)
     out = [investigation.owner ? h(investigation.owner.name.to_s) : "No case owner".html_safe]
     if investigation&.owner&.organisation&.name != investigation&.owner&.name
       out << h(investigation.owner.organisation.name)
