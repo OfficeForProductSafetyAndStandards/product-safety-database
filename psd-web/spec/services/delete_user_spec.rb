@@ -77,7 +77,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
       end
 
       it "registers the owner automatic update in the investigations activity log", :aggregate_failures do
-        update_owner_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyReassign")
+        update_owner_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyUpdateOwner")
 
         expect { delete_call }.to change(update_owner_activities, :count).by(3)
 

@@ -1,4 +1,4 @@
-class AuditActivity::Investigation::AutomaticallyReassign < AuditActivity::Investigation::Base
+class AuditActivity::Investigation::AutomaticallyUpdateOwner < AuditActivity::Investigation::Base
   def self.from(investigation)
     title = investigation.owner.id.to_s
     super(investigation, title)

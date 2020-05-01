@@ -22,7 +22,7 @@ private
     context.user.investigations.each do |investigation|
       investigation.owner = context.team
       investigation.save!
-      AuditActivity::Investigation::AutomaticallyReassign.from(investigation)
+      AuditActivity::Investigation::AutomaticallyUpdateOwner.from(investigation)
     end
   end
 end
