@@ -67,11 +67,17 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
-        key: ${{ runner.OS }}-gems
+        key: ${{ runner.os }}-gems-system-tests-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.OS }}-gems
-          ${{ runner.OS }}-gems-
-          ${{ runner.OS }}-
+          ${{ runner.os }}-gems-system-tests-
+          ${{ runner.os }}-gems-
+
+    - name: Install RubyGems
+      working-directory: psd-web
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --jobs=4 --retry=3
 
     - uses: actions/cache@v1
       with:
@@ -82,11 +88,6 @@ jobs:
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
 
-    - name: Install RubyGems
-      working-directory: psd-web
-      run: |
-        gem install bundler
-        bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - name: Install Node.js dependencies
       working-directory: psd-web
       run: |
