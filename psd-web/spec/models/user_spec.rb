@@ -375,7 +375,7 @@ RSpec.describe User do
 
     it "returns false for users without deleted timestamp" do
       user = create(:user)
-      expect(user).to be_deleted
+      expect(user).not_to be_deleted
     end
   end
 end
