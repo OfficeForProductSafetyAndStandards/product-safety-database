@@ -4,7 +4,7 @@ class Investigations::OwnershipController < ApplicationController
   before_action :potential_owner, only: %i[show create]
   before_action :store_owner, only: %i[update]
 
-  steps :choose, :confirm_ownership_change
+  steps :"select-owner", :"confirm"
 
   def show
     @potential_owner = potential_owner
@@ -64,7 +64,7 @@ private
   end
 
   def owner_valid?
-    if step == :choose
+    if step == :"select-owner"
       if potential_owner == nil
         @investigation.errors.add(:owner_id, :invalid, message: "Select case owner")
       end

@@ -14,7 +14,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   before { sign_in(user) }
 
   scenario "only shows other active users" do
-    visit "/cases/#{investigation.pretty_id}/ownership/choose"
+    visit "/cases/#{investigation.pretty_id}/assign/select-owner"
 
     expect(page).to have_css("#investigation_select_team_member option[value=\"#{another_active_user.id}\"]")
     expect(page).not_to have_css("#investigation_select_team_member option[value=\"#{another_inactive_user.id}\"]")
@@ -50,7 +50,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     click_button "Continue"
     fill_in "investigation_owner_rationale", with: "Test assign"
     click_button "Confirm change"
-    visit "/cases/#{investigation.pretty_id}/ownership/choose"
+    visit "/cases/#{investigation.pretty_id}/assign/select-owner"
     expect(page).to have_css(".govuk-grid-row p", text: "You do not have permission to change the case owner.")
   end
 end
