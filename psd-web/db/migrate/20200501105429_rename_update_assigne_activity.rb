@@ -1,4 +1,7 @@
+# rubocop:disable Rails/ApplicationRecord
 class Activity < ActiveRecord::Base; end
+# rubocop:enable Rails/ApplicationRecord
+
 class RenameUpdateAssigneActivity < ActiveRecord::Migration[5.2]
   def up
     Activity.where(type: "AuditActivity::Investigation::UpdateAssignee").update_all(type: "AuditActivity::Investigation::UpdateOwner")
