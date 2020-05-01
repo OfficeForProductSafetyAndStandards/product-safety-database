@@ -75,10 +75,8 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
          .and change(enquiry, :owner).from(user).to(user_first_team)
          .and change(project, :owner).from(user).to(user_first_team)
       end
-      # rubocop:enable RSpec/ExampleLength
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "registers the owner automatic update in the investigations activity log" do
+      it "registers the owner automatic update in the investigations activity log", :aggregate_failures do
         update_owner_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyReassign")
 
         expect { delete_call }.to change(update_owner_activities, :count).by(3)
@@ -88,7 +86,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           expect(activity.title).to end_with "to #{user_first_team.display_name}"
         end
       end
-      # rubocop:enable RSpec/MultipleExpectations
+      # rubocop:enable RSpec/ExampleLength
 
       it "does not send notifications to the user or the team" do
         expect { delete_call }.not_to change(delivered_emails, :count)
