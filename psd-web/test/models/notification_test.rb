@@ -65,7 +65,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal 2, @number_of_notifications
   end
 
-  test "should notify previous owner if case is assigned to someone else by someone else" do
+  test "should notify previous owner if case is owned by someone else by someone else" do
     User.current = users(:southampton)
     @investigation.update(owner: teams(:southampton))
     @investigation.update(owner: users(:southampton_bob))
@@ -74,7 +74,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal @number_of_notifications, 2
   end
 
-  test "should not notify previous owner if case is assigned to someone else by them" do
+  test "should not notify previous owner if case is owned by someone else by them" do
     User.current = users(:southampton)
     @investigation.update(owner: users(:southampton))
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
@@ -82,7 +82,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal @number_of_notifications, 1
   end
 
-  test "should notify previous owner team if case is assigned to someone by someone outside" do
+  test "should notify previous owner team if case is owned by someone by someone outside" do
     User.current = users(:southampton)
     @investigation.update!(owner: users(:southampton))
 
@@ -97,7 +97,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal @number_of_notifications, 2
   end
 
-  test "should not notify previous owner team if case is assigned to someone by someone inside" do
+  test "should not notify previous owner team if case is owned by someone by someone inside" do
     User.current = users(:southampton)
     @investigation.update(owner: users(:southampton_bob))
     @investigation.update(owner: teams(:southampton))
@@ -106,14 +106,14 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal @number_of_notifications, 1
   end
 
-  test "should notify a person who gets assigned a case" do
+  test "should notify a person who is the case owner" do
     User.current = users(:southampton)
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
     @investigation.update(owner: users(:southampton_bob))
     assert_equal @number_of_notifications, 1
   end
 
-  test "should notify everyone in team that gets assigned a case" do
+  test "should notify everyone in team that is the case owner" do
     users(:southampton).teams << teams(:southampton)
     users(:southampton_steve).teams << teams(:southampton)
     User.current = users(:southampton)

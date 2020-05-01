@@ -14,7 +14,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
 
   teardown { User.current = nil }
 
-  test "non-OPSS assigns to OPSS, on re-assign sees the OPSS assign and no permission to reassign again" do
+  test "non-OPSS changes case owner to OPSS, and then has no permission to change case ownership again" do
     assert_text @user.display_name
     choose "Other team", visible: false
     fill_autocomplete "investigation_select_other_team", with: "OPSS Enforcement"

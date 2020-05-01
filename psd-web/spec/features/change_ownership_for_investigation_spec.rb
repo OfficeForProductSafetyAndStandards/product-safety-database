@@ -23,32 +23,32 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     expect(page).not_to have_css("#investigation_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
   end
 
-  scenario "assign case to other user in same team" do
+  scenario "change case owner to other user in same team" do
     visit new_investigation_ownership_path(investigation)
     choose("Someone in your team")
     select another_active_user.name, from: "investigation_select_team_member"
     click_button "Continue"
-    fill_in "investigation_owner_rationale", with: "Test assign"
+    fill_in "investigation_owner_rationale", with: "Testing"
     click_button "Confirm change"
     expect(page.find("dt", text: "Case owner")).to have_sibling("dd", text: another_active_user.name.to_s)
   end
 
-  scenario "assign case to someone else in another team" do
+  scenario "change case owner to someone else in another team" do
     visit new_investigation_ownership_path(investigation)
     choose("Someone else")
     select another_active_user_another_team.name, from: "investigation_select_someone_else"
     click_button "Continue"
-    fill_in "investigation_owner_rationale", with: "Test assign"
+    fill_in "investigation_owner_rationale", with: "Testing"
     click_button "Confirm change"
     expect(page.find("dt", text: "Case owner")).to have_sibling("dd", text: another_active_user_another_team.name.to_s)
   end
 
-  scenario "once case Case owner other team- cannot re-assign" do
+  scenario "being unable to change case owner once the owner is another team" do
     visit new_investigation_ownership_path(investigation)
     choose("Someone else")
     select another_active_user_another_team.name, from: "investigation_select_someone_else"
     click_button "Continue"
-    fill_in "investigation_owner_rationale", with: "Test assign"
+    fill_in "investigation_owner_rationale", with: "Testing"
     click_button "Confirm change"
     visit "/cases/#{investigation.pretty_id}/assign/select-owner"
     expect(page).to have_css(".govuk-grid-row p", text: "You do not have permission to change the case owner.")

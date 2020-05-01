@@ -25,7 +25,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     visit investigations_path
   end
 
-  scenario "selecting filters only shows other active users in the assigned to and created by filters" do
+  scenario "selecting filters only shows other active users in the case owner and created by filters" do
     expect(page).to have_css("#case_owner_is_someone_else_id option[value=\"#{another_active_user.id}\"]")
     expect(page).not_to have_css("#case_owner_is_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
 
@@ -40,7 +40,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to me" do
+  scenario "filtering cases where the user is the owner" do
     check "Me", id: "case_owner_is_me"
     click_button "Apply filters"
 
@@ -50,7 +50,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to my team" do
+  scenario "filtering cases where the user’s team is the owner" do
     check "My team", id: "case_owner_is_team_0"
     click_button "Apply filters"
 
@@ -60,7 +60,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to anyone else" do
+  scenario "filtering cases where the owner is someone else" do
     check "Other person or team", id: "case_owner_is_someone_else"
     click_button "Apply filters"
 
@@ -70,7 +70,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "filtering cases assigned to another person or team" do
+  scenario "filtering cases where another person or team is the owner" do
     check "Other person or team", id: "case_owner_is_someone_else"
     select other_team.name, from: "case_owner_is_someone_else_id"
     click_button "Apply filters"

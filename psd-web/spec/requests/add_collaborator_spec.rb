@@ -93,7 +93,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
   end
 
-  context "when the user isn't part of the team assigned", :with_errors_rendered do
+  context "when the user isn't part of the team that is the case owner", :with_errors_rendered do
     let(:investigation) { create(:investigation, owner: create(:team)) }
 
     before do

@@ -98,26 +98,26 @@ class InvestigationTest < ActiveSupport::TestCase
     assert_includes @investigation.past_teams, team
   end
 
-  test "people out of current owner's team should not be able to re-assign case" do
+  test "people out of current owner's team should not be able to change the case owner" do
     User.current = users(:southampton)
     investigation = create_new_case
     assert_not policy(investigation).change_owner?(user: users(:luton))
   end
 
-  test "people in current owner's team should be able to re-assign case" do
+  test "people in current owner's team should be able to change the case owner" do
     investigation = create_new_case
     investigation.owner = User.find_by(name: "Test User_one")
     assert policy(investigation).change_owner?(user: User.find_by(name: "Test User_two"))
   end
 
-  test "people out of currently assigned team should not be able to re-assign case" do
+  test "people not in the team that is the case owner should not be able to change the case owner" do
     users(:southampton).teams << teams(:southampton)
     investigation = create_new_case
     investigation.owner = User.current.teams.first
     assert_not policy(investigation).change_owner?(user: users(:luton))
   end
 
-  test "people in currently assigned team should be able to re-assign case" do
+  test "people in the team that is the case owner should be able to change the case owner" do
     investigation = create_new_case
     investigation.owner = Team.find_by(name: "Team 1")
     assert policy(investigation).change_owner?(user: User.find_by(name: "Test User_four"))
@@ -137,7 +137,7 @@ class InvestigationTest < ActiveSupport::TestCase
     assert_equal Investigation.where(pretty_id: investigation.pretty_id).count, 1
   end
 
-  test "assigns to current user by default" do
+  test "sets the to current user as the case owner by default" do
     investigation = create_new_case
     assert_equal User.current, investigation.owner
   end

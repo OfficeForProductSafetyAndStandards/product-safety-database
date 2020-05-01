@@ -200,7 +200,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     assert_includes(response.body, @investigation_three.pretty_id)
   end
 
-  test "should return investigations assigned to current user if only the 'Me' checkbox is checked" do
+  test "should return investigations owneed by the current user if only the 'Me' checkbox is checked" do
     get investigations_path, params: {
         case_owner_is_me: "checked",
         case_owner_is_someone_else: "unchecked",
@@ -214,7 +214,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes(response.body, @investigation_three.pretty_id)
   end
 
-  test "should return investigations assigned to current user or given user if both checkboxes are checked
+  test "should return investigations owned by the current user or given user if both checkboxes are checked
               and a user is given in the input" do
     get investigations_path, params: {
         case_owner_is_me: "checked",
@@ -228,7 +228,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes(response.body, @investigation_three.pretty_id)
   end
 
-  test "should return investigations assigned to a given user if only 'someone else' checkbox is checked
+  test "should return investigations owned by a given user if only 'someone else' checkbox is checked
               and a user is given in the input" do
     get investigations_path, params: {
         case_owner_is_me: "unchecked",
@@ -243,7 +243,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes(response.body, @investigation_three.pretty_id)
   end
 
-  test "should return investigations assigned to anyone except current user if only 'someone else' checkbox
+  test "should return investigations owned by anyone except current user if only 'someone else' checkbox
               is checked and no user is given in the input" do
     get investigations_path, params: {
         case_owner_is_me: "unchecked",
