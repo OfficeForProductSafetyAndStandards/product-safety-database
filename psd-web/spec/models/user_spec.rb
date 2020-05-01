@@ -370,12 +370,12 @@ RSpec.describe User do
   describe "#deleted?" do
     it "returns true for users with deleted timestamp" do
       user = create(:user, :deleted)
-      expect(user.deleted?).to be true
+      expect(user).to be_deleted
     end
 
     it "returns false for users without deleted timestamp" do
       user = create(:user)
-      expect(user.deleted?).to be false
+      expect(user).to be_deleted
     end
   end
 end
