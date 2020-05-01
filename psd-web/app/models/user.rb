@@ -44,7 +44,7 @@ class User < ApplicationRecord
   end
 
   def self.not_deleted
-    where(deleted: false)
+    where(deleted_at: nil)
   end
 
   def self.find_user_within_teams_with_email!(teams:, email:)
@@ -144,12 +144,18 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
+  def deleted?
+    deleted_at.present?
+  end
+
   def invitation_expired?
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
   def mark_as_deleted!
-    update!(deleted: true)
+    return if deleted?
+
+    update!(deleted_at: Time.current)
   end
 
   # BEGIN: place devise overriden method calls bellow
@@ -187,7 +193,7 @@ class User < ApplicationRecord
   end
 
   def self.find_first_by_auth_conditions(conditions, opts = {})
-    super(conditions, opts.merge(deleted: false))
+    super(conditions, opts.merge(deleted_at: nil))
   end
 
 private

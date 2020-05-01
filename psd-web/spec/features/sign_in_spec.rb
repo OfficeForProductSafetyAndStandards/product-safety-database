@@ -173,7 +173,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   context "when trying to sign in credentials corresponding to a deleted user" do
-    let(:user) { create(:user, deleted: true) }
+    let(:user) { create(:user, :deleted) }
 
     scenario "user gets an error message" do
       visit "/sign-in"

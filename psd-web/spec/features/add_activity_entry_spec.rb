@@ -42,7 +42,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     commentator_user = create(:user, :activated)
 
     create(:user, :inactive, email: "not_activated@example.com", teams: [team_without_email])
-    create(:user, :activated, deleted: true, email: "deleted@example.com", teams: [team_without_email])
+    create(:user, :activated, :deleted, email: "deleted@example.com", teams: [team_without_email])
     investigation.update_attribute(:assignable, team_without_email)
 
     sign_in commentator_user

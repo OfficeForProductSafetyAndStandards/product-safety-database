@@ -108,11 +108,20 @@ RSpec.describe User do
   describe ".active" do
     it "returns only users with activated accounts and not marked as deleted" do
       create(:user, :inactive)
-      create(:user, :activated, deleted: true)
+      create(:user, :activated, :deleted)
 
       active_user = create(:user, :activated)
 
       expect(described_class.active.to_a).to eq [active_user]
+    end
+  end
+
+  describe ".not_deleted" do
+    it "returns only users without deleted timestamp" do
+      create(:user, :deleted)
+      not_deleted_user = create(:user)
+
+      expect(described_class.not_deleted.to_a).to eq [not_deleted_user]
     end
   end
 
@@ -345,14 +354,28 @@ RSpec.describe User do
   end
 
   describe "#mark_as_deleted!" do
-    it "enables the user 'deleted' flag" do
+    it "sets the user 'deleted_at' timestamp to the current time" do
       user = create(:user)
-      expect { user.mark_as_deleted! }.to change { user.deleted }.from(false).to(true)
+      freeze_time do
+        expect { user.mark_as_deleted! }.to change { user.deleted_at }.from(nil).to(Time.current)
+      end
     end
 
     it "does not change the flag if was already enabled" do
-      user = create(:user, deleted: true)
-      expect { user.mark_as_deleted! }.not_to change { user.deleted }.from(true)
+      user = create(:user, :deleted)
+      expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)
+    end
+  end
+
+  describe "#deleted?" do
+    it "returns true for users with deleted timestamp" do
+      user = create(:user, :deleted)
+      expect(user.deleted?).to be true
+    end
+
+    it "returns false for users without deleted timestamp" do
+      user = create(:user)
+      expect(user.deleted?).to be false
     end
   end
 end

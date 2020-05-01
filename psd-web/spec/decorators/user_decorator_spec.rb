@@ -24,7 +24,7 @@ RSpec.describe UserDecorator do
 
   describe "#full_name" do
     context "when the user is deleted" do
-      let(:user) { build_stubbed(:user, name: "Foo Bar", deleted: true) }
+      let(:user) { build_stubbed(:user, :deleted, name: "Foo Bar") }
 
       it "returns user name with a tag after their name" do
         expect(decorated_user.full_name).to eq("Foo Bar [user deleted]")
@@ -53,8 +53,8 @@ RSpec.describe UserDecorator do
     let(:other_user_name) { "other user" }
     let(:user_organisation) { organisation }
     let(:user_teams) { [] }
-    let(:user_deleted) { false }
-    let(:user) { create(:user, name: user_name, organisation: user_organisation, teams: user_teams, deleted: user_deleted) }
+    let(:user_deleted_timestamp) { nil }
+    let(:user) { create(:user, name: user_name, organisation: user_organisation, teams: user_teams, deleted_at: user_deleted_timestamp) }
     let(:other_user) { create(:user, name: other_user_name, organisation: organisation) }
 
     let(:ignore_visibility_restrictions) { false }
@@ -68,7 +68,7 @@ RSpec.describe UserDecorator do
         end
 
         context "when the user is deleted" do
-          let(:user_deleted) { true }
+          let(:user_deleted_timestamp) { Time.current }
 
           it "gets a 'user deleted' flag" do
             expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")
@@ -84,7 +84,7 @@ RSpec.describe UserDecorator do
         end
 
         context "when the user is deleted" do
-          let(:user_deleted) { true }
+          let(:user_deleted_timestamp) { Time.current }
 
           it "gets a 'user deleted' flag" do
             expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name}) [user deleted]")
@@ -102,7 +102,7 @@ RSpec.describe UserDecorator do
         end
 
         context "when the user is deleted" do
-          let(:user_deleted) { true }
+          let(:user_deleted_timestamp) { Time.current }
 
           it "gets a 'user deleted' flag" do
             expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
@@ -119,7 +119,7 @@ RSpec.describe UserDecorator do
           end
 
           context "when the user is deleted" do
-            let(:user_deleted) { true }
+            let(:user_deleted_timestamp) { Time.current }
 
             it "gets a 'user deleted' flag" do
               expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
@@ -135,7 +135,7 @@ RSpec.describe UserDecorator do
           end
 
           context "when the user is deleted" do
-            let(:user_deleted) { true }
+            let(:user_deleted_timestamp) { Time.current }
 
             it "gets a 'user deleted' flag" do
               expect(result).to eq("#{user_name} (#{other_org_team_name}) [user deleted]")
@@ -153,7 +153,7 @@ RSpec.describe UserDecorator do
       end
 
       context "when the user is deleted" do
-        let(:user_deleted) { true }
+        let(:user_deleted_timestamp) { Time.current }
 
         it "gets a 'user deleted' flag" do
           expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")

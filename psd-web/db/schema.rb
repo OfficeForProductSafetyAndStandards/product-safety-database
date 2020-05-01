@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_131227) do
+ActiveRecord::Schema.define(version: 2020_05_01_113156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -289,7 +289,7 @@ ActiveRecord::Schema.define(version: 2020_04_27_131227) do
     t.string "credential_type"
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
-    t.boolean "deleted", default: false, null: false
+    t.datetime "deleted_at"
     t.string "direct_otp"
     t.datetime "direct_otp_sent_at"
     t.string "email"
@@ -323,7 +323,7 @@ ActiveRecord::Schema.define(version: 2020_04_27_131227) do
     t.string "unlock_token"
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
-    t.index ["deleted"], name: "index_users_on_deleted"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
     t.index ["name"], name: "index_users_on_name"

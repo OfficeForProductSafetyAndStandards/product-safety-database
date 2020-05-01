@@ -19,7 +19,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   end
 
   context "when the email corresponds to a deleted user" do
-    let(:deleted_user) { create(:user, deleted: true) }
+    let(:deleted_user) { create(:user, :deleted) }
 
     scenario "shows an error message" do
       fill_in "new_user_email_address", with: deleted_user.email

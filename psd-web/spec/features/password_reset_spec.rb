@@ -23,7 +23,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
   end
 
   context "when entering an email from a deleted user " do
-    let(:user) { create(:user, deleted: true) }
+    let(:user) { create(:user, :deleted) }
 
     scenario "does not send a notification but shows the confirmation page" do
       visit "/sign-in"

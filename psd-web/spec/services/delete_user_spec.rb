@@ -31,7 +31,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
     context "when given an user that is already deleted" do
       subject(:delete_call) { described_class.call(user: user) }
 
-      let(:user) { create(:user, deleted: true) }
+      let(:user) { create(:user, :deleted) }
 
       it "returns a failure" do
         expect(delete_call).to be_failure
@@ -55,14 +55,16 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         expect(delete_call).to be_a_success
       end
 
-      it "sets the user as deleted" do
-        expect {
-          delete_call
-          user.reload
-        }.to change(user, :deleted).from(false).to(true)
+      # rubocop:disable RSpec/ExampleLength
+      it "sets the user deleted timestamp" do
+        freeze_time do
+          expect {
+            delete_call
+            user.reload
+          }.to change(user, :deleted_at).from(nil).to(Time.current)
+        end
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it "reassigns user cases to their first team" do
         expect {
           delete_call
