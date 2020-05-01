@@ -16,7 +16,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def change_owner?(user: @user)
-    can_be_assigned_by(user: user)
+    can_change_owner(user: user)
   end
 
   def visibility?(user: @user)
@@ -43,7 +43,7 @@ class InvestigationPolicy < ApplicationPolicy
     false
   end
 
-  def can_be_assigned_by(user: @user)
+  def can_change_owner(user: @user)
     @record.owner.blank? || @record.owner.in_same_team_as?(user) || @record.owner == user
   end
 
