@@ -31,7 +31,7 @@
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
     <% if policy(@investigation).change_owner? %>
-      <% assign_actions = {
+      <% case_owner_actions = {
         items: [
           href: new_investigation_assign_path(@investigation),
           text: "Change",
@@ -39,7 +39,7 @@
         ]
       } %>
     <% else %>
-      <% assign_actions = {} %>
+      <% case_owner_actions = {} %>
     <% end %>
 
     <% team_list_html = capture do %>
@@ -63,7 +63,7 @@
         {
           key: { text: "Case owner" },
           value: { text: investigation_owner(@investigation) },
-          actions: assign_actions
+          actions: case_owner_actions
         },
         {
           key: { text: "Teams added to case" },
