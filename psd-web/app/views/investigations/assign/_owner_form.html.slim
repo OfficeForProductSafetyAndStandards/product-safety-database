@@ -19,7 +19,7 @@
 
     if @suggested_previous_owners.present?
       previously_assigned = capture do
-        render "investigations/assign/owner_selection", form: form, key: :select_previously_assigned,
+        render "investigations/assign/owner_selection", form: form, key: :select_previous_owner,
               items: @suggested_previous_owners, ignore_restrictions: true,
               label: "Select previously assigned person or team", show_all_values: true
       end

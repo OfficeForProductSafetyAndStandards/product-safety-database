@@ -48,7 +48,7 @@ private
                                         when "someone_in_your_team"
                                           params[:investigation][:select_team_member]
                                         when "previously_assigned"
-                                          params[:investigation][:select_previously_assigned]
+                                          params[:investigation][:select_previous_owner]
                                         when "other_team"
                                           params[:investigation][:select_other_team]
                                         when "someone_else"
