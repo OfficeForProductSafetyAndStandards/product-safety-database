@@ -19,12 +19,12 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def title
     # We store assignable_id in title field, this is computing title based on that
-    "Assigned to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.display_name}"
+    "Assigned to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.decorate&.display_name}"
   end
 
   def email_update_text
     body = []
-    body << "#{investigation.case_type.upcase_first} was assigned to #{investigation.assignable.display_name} by #{source&.show}."
+    body << "#{investigation.case_type.upcase_first} was assigned to #{investigation.assignable.decorate.display_name} by #{source&.show}."
 
     if investigation.assignee_rationale.present?
       body << "Message from #{source&.show}:"

@@ -2,7 +2,7 @@ ruby:
   ignore_restrictions = local_assigns[:ignore_restrictions]
   actual_items = items.map { |item|
     {
-          text: item.display_name(ignore_visibility_restrictions: ignore_restrictions),
+          text: item.decorate.display_name(ignore_visibility_restrictions: ignore_restrictions),
           value: item.id
     }
   }

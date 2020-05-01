@@ -7,7 +7,7 @@ class Investigations::AssignController < ApplicationController
   steps :choose, :confirm_assignment_change
 
   def show
-    @potential_assignee = potential_assignee
+    @potential_assignee = potential_assignee&.decorate
     render_wizard
   end
 
