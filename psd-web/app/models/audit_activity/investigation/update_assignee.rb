@@ -35,7 +35,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   end
 
   def email_subject_text
-    "Case owner changed for #{investigation.case_type}"
+    "Case owner changed on #{investigation.case_type}"
   end
 
   def users_to_notify
