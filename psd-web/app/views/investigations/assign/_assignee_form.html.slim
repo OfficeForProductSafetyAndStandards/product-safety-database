@@ -4,7 +4,7 @@
 
   ruby:
     items = investigation.important_assignable_people.map do |user|
-      { text: user.display_name, value: user.id, checked: investigation.assignable == user }
+      { text: user.decorate.display_name, value: user.id, checked: investigation.assignable == user }
     end
 
     if current_user.teams.any?
@@ -29,7 +29,7 @@
     items.push divider: "Teams"
 
     teams = investigation.important_assignable_teams.map do |team|
-      { text: team.display_name, value: team.id, checked: investigation.assignable == team }
+      { text: team.decorate.display_name, value: team.id, checked: investigation.assignable == team }
     end
     items.concat teams
 
@@ -44,7 +44,7 @@
 
     someone_else = capture do
       render "investigations/assign/assignee_selection", form: form, key: :select_someone_else,
-             items: User.activated, label: "Select other user"
+             items: User.active, label: "Select other user"
     end
     items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else }
 

@@ -34,6 +34,7 @@
 .autocomplete__clear-viewbox {
   cursor: pointer;
   width: 30px;
+  height: 30px; // Set explicitly as IE needs it
 }
 
 .autocomplete__clear-icon {

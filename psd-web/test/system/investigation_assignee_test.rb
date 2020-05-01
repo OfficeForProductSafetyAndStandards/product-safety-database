@@ -5,7 +5,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
 
-    @user = users(:opss)
+    @user = users(:opss).decorate
     User.current = @user
     sign_in @user
     @user.teams << teams(:opss_enforcement)
