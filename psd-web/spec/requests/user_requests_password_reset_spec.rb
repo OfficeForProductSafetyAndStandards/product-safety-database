@@ -12,7 +12,6 @@ RSpec.describe "User requests password reset", type: :request, with_stubbed_mail
 
     let(:user) { create(:user, :invited, invited_at: 1.hour.ago) }
 
-
     before do
       allow(SendUserInvitationJob).to receive(:perform_later).with(user.id, nil)
     end

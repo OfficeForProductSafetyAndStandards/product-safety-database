@@ -33,7 +33,7 @@ class SecondaryAuthenticationForm
   def correct_otp_validation
     return if errors.present?
 
-    unless secondary_authentication.valid_otp? self.otp_code
+    unless secondary_authentication.valid_otp? otp_code
       errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
     end
   end
@@ -55,6 +55,6 @@ class SecondaryAuthenticationForm
   end
 
   def secondary_authentication
-    @secondary_authentication ||= SecondaryAuthentication.new(User.find(self.user_id))
+    @secondary_authentication ||= SecondaryAuthentication.new(User.find(user_id))
   end
 end

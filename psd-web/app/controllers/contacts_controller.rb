@@ -74,12 +74,12 @@ private
     @contact.source = UserSource.new(user: current_user)
   end
 
-    # Use callbacks to share common setup or constraints between actions.
+  # Use callbacks to share common setup or constraints between actions.
   def set_contact
     @contact = Contact.find(params[:id])
   end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the white list through.
   def contact_params
     params.require(:contact).permit(:business_id, :name, :email, :phone_number, :job_title)
   end

@@ -4,7 +4,7 @@ module Users
                        :require_no_authentication,
                        :has_accepted_declaration,
                        :has_viewed_introduction,
-                       only: %i(edit sign_out_before_resetting_password)
+                       only: %i[edit sign_out_before_resetting_password]
 
     skip_before_action :require_secondary_authentication
 

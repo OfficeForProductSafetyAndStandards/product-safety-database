@@ -18,7 +18,6 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
   let(:max_attempts) { SecondaryAuthentication::MAX_ATTEMPTS }
   let(:second_factor_attempts_locked_at) { nil }
 
-
   let(:previous_attempts_count) { 1 }
   let(:user) do
     create(:user, :activated,
@@ -27,7 +26,6 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
            second_factor_attempts_count: attempts,
            second_factor_attempts_locked_at: second_factor_attempts_locked_at)
   end
-
 
   before do
     sign_in(user)
