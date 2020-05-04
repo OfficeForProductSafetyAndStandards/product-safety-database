@@ -18,7 +18,7 @@ class Investigation < ApplicationRecord
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
   validates :description, presence: true, on: :update
-  validates :assignable_id, presence: { message: "Select assignee" }, on: :update
+  validates :assignable_id, presence: { message: "Select case owner" }, on: :update
 
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 10000 }

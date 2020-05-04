@@ -7,6 +7,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
     @user = User.current = sign_in(users(:southampton))
+    @user = @user.decorate
     @user.teams << teams(:southampton)
     @team = @user.teams.first
     visit new_investigation_assign_path(load_case(:one))
@@ -21,10 +22,10 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     click_on "Continue"
     click_on "Confirm change"
 
-    assert_text "Assigned to #{teams(:opss_enforcement).name}"
+    assert_text "Case owner #{teams(:opss_enforcement).name}"
 
     visit new_investigation_assign_path(load_case(:one))
-    assert_text "Currently assigned to: Office for Product Safety and Standards"
-    assert_text "You do not have permission to assign this allegation"
+    assert_text "Current case owner: Office for Product Safety and Standards"
+    assert_text "You do not have permission to change the case owner"
   end
 end

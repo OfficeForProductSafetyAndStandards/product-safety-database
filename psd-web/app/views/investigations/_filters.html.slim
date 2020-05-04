@@ -13,7 +13,7 @@
       = render "investigations/coronavirus_related_checkbox", form: form
       = render "form_components/govuk_checkboxes", form: form, key: :assigned_to,
         classes: "govuk-checkboxes--small",
-        fieldset: { legend: { text: "Assigned to", classes: "govuk-fieldset__legend--s" } },
+        fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
         items: assigned_to(form)
       = render "form_components/govuk_checkboxes", form: form, key: :created_by,
         classes: "govuk-checkboxes--small",

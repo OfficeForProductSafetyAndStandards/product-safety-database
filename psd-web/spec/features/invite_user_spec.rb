@@ -18,6 +18,16 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
   end
 
+  context "when the email corresponds to a deleted user" do
+    let(:deleted_user) { create(:user, :deleted) }
+
+    scenario "shows an error message" do
+      fill_in "new_user_email_address", with: deleted_user.email
+      click_button "Send invitation email"
+      expect(page).to have_css(".govuk-error-summary__list", text: "Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored.")
+    end
+  end
+
   def expect_to_be_on_invite_a_team_member_page
     expect(page).to have_css("h1", text: "Invite a team member")
   end

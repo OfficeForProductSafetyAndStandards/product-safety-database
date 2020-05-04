@@ -6,7 +6,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   subject(:decorated_investigation) { investigation.decorate }
 
   let(:organisation) { create :organisation }
-  let(:user)         { create(:user, organisation: organisation) }
+  let(:user)         { create(:user, organisation: organisation).decorate }
   let(:creator)      { create(:user, organisation: organisation) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
@@ -295,14 +295,14 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when the investigation is assigned" do
       it "displays the assignee assignable name" do
         expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user))
-          .to eq(user.decorate.assignee_short_name(viewing_user: viewing_user))
+          .to eq(user.assignee_short_name(viewing_user: viewing_user))
       end
     end
 
     context "when the investigation is not assigned" do
       before { investigation.assignable = nil }
 
-      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
+      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("No case owner") }
     end
   end
 end

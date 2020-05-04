@@ -51,42 +51,4 @@ RSpec.describe Team do
       end
     end
   end
-
-  describe "#display_name" do
-    subject(:team) { create(:team, organisation: organisation) }
-
-    let(:organisation) { create(:organisation) }
-
-    let(:user_same_org) { create(:user, organisation: organisation) }
-    let(:user_other_org) { create(:user) }
-
-    let(:ignore_visibility_restrictions) { false }
-    let(:result) { team.display_name(ignore_visibility_restrictions: ignore_visibility_restrictions, current_user: viewing_user) }
-
-    context "with user of same organisation" do
-      let(:viewing_user) { user_same_org }
-
-      it "returns the team name" do
-        expect(result).to eq(team.name)
-      end
-    end
-
-    context "with user of another organisation" do
-      let(:viewing_user) { user_other_org }
-
-      context "with ignore_visibility_restrictions: true" do
-        let(:ignore_visibility_restrictions) { true }
-
-        it "returns the team name" do
-          expect(result).to eq(team.name)
-        end
-      end
-
-      context "with ignore_visibility_restrictions: false" do
-        it "returns the organisation name" do
-          expect(result).to eq(organisation.name)
-        end
-      end
-    end
-  end
 end

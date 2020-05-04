@@ -44,7 +44,7 @@ private
   end
 
   def set_user_teams
-    @teams = current_user.teams
+    @teams = current_user.teams.decorate
   end
 
   def whitelisted_user
@@ -57,7 +57,7 @@ private
   end
 
   def set_team
-    @team = Team.find(params[:id])
+    @team = Team.find(params[:id]).decorate
     authorize @team
   end
 
@@ -66,6 +66,11 @@ private
   end
 
   def invite_existing_user_if_able(user)
+    if user.deleted?
+      @new_user.errors.add(:email_address, :user_deleted)
+      return
+    end
+
     if user.organisation.present? && user.organisation != @team.organisation
       @new_user.errors.add(:email_address, :member_of_another_organisation)
       return

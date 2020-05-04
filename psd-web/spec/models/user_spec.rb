@@ -105,12 +105,23 @@ RSpec.describe User do
     end
   end
 
-  describe ".activated" do
-    it "returns only users with activated accounts" do
+  describe ".active" do
+    it "returns only users with activated accounts and not marked as deleted" do
       create(:user, :inactive)
-      activated_user = create(:user, :activated)
+      create(:user, :activated, :deleted)
 
-      expect(described_class.activated.to_a).to eq [activated_user]
+      active_user = create(:user, :activated)
+
+      expect(described_class.active.to_a).to eq [active_user]
+    end
+  end
+
+  describe ".not_deleted" do
+    it "returns only users without deleted timestamp" do
+      create(:user, :deleted)
+      not_deleted_user = create(:user)
+
+      expect(described_class.not_deleted.to_a).to eq [not_deleted_user]
     end
   end
 
@@ -281,90 +292,13 @@ RSpec.describe User do
     it "includes associations needed for display_name" do
       assignees = described_class.get_assignees.to_a # to_a forces the query execution and load immediately
       expect(-> {
-        assignees.map(&:display_name)
+        assignees.map { |assignee| assignee.decorate.display_name }
       }).to not_talk_to_db
     end
 
     context "when a user to except is supplied" do
       it "does not return the excepted user" do
         expect(described_class.get_assignees(except: active_user)).to be_empty
-      end
-    end
-  end
-
-  describe "#display_name" do
-    let(:organisation_name) { "test org" }
-    let(:other_organisation_name) { "other org" }
-    let(:organisation) { create(:organisation, name: organisation_name) }
-    let(:other_organisation) { create(:organisation, name: other_organisation_name) }
-
-    let(:team_name) { "test team" }
-    let(:other_team_name) { "other team" }
-    let(:other_org_team_name) { "other org team" }
-    let(:team) { create(:team, name: team_name, organisation: organisation) }
-    let(:other_team) { create(:team, name: other_team_name, organisation: organisation) }
-    let(:other_organisation_team) { create(:team, name: other_org_team_name, organisation: other_organisation) }
-
-    let(:user_name) { "test user" }
-    let(:other_user_name) { "other user" }
-    let(:user_organisation) { organisation }
-    let(:user_teams) { [] }
-    let(:user) { create(:user, name: user_name, organisation: user_organisation, teams: user_teams) }
-    let(:other_user) { create(:user, name: other_user_name, organisation: organisation) }
-
-    let(:ignore_visibility_restrictions) { false }
-
-    let(:result) { user.display_name(other_user: other_user, ignore_visibility_restrictions: ignore_visibility_restrictions) }
-
-    context "when the user is a member of the same organisation" do
-      context "when the user has no teams" do
-        it "returns their name and organisation name" do
-          expect(result).to eq("#{user_name} (#{organisation_name})")
-        end
-      end
-
-      context "when the user has teams" do
-        let(:user_teams) { [team, other_team] }
-
-        it "returns their name and team names" do
-          expect(result).to eq("#{user_name} (#{team_name}, #{other_team_name})")
-        end
-      end
-    end
-
-    context "when the user is a member of a different organisation" do
-      let(:user_organisation) { other_organisation }
-
-      context "when the user has no teams" do
-        it "returns their name and organisation name" do
-          expect(result).to eq("#{user_name} (#{other_organisation_name})")
-        end
-      end
-
-      context "when the user has teams" do
-        let(:user_teams) { [other_organisation_team] }
-
-        context "with ignore_visibility_restrictions: false" do
-          it "returns their name and organisation name" do
-            expect(result).to eq("#{user_name} (#{other_organisation_name})")
-          end
-        end
-
-        context "with ignore_visibility_restrictions: true" do
-          let(:ignore_visibility_restrictions) { true }
-
-          it "returns their name and team names" do
-            expect(result).to eq("#{user_name} (#{other_org_team_name})")
-          end
-        end
-      end
-    end
-
-    context "with other_user: nil" do
-      let(:other_user) { nil }
-
-      it "returns their name and organisation name" do
-        expect(result).to eq("#{user_name} (#{organisation_name})")
       end
     end
   end
@@ -416,6 +350,32 @@ RSpec.describe User do
       it "is true" do
         expect(user.has_completed_registration?).to be true
       end
+    end
+  end
+
+  describe "#mark_as_deleted!" do
+    it "sets the user 'deleted_at' timestamp to the current time" do
+      user = create(:user)
+      freeze_time do
+        expect { user.mark_as_deleted! }.to change { user.deleted_at }.from(nil).to(Time.current)
+      end
+    end
+
+    it "does not change the flag if was already enabled" do
+      user = create(:user, :deleted)
+      expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)
+    end
+  end
+
+  describe "#deleted?" do
+    it "returns true for users with deleted timestamp" do
+      user = create(:user, :deleted)
+      expect(user).to be_deleted
+    end
+
+    it "returns false for users without deleted timestamp" do
+      user = create(:user)
+      expect(user).not_to be_deleted
     end
   end
 end

@@ -5,7 +5,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_notify_mailer
     stub_antivirus_api
 
-    @user = users(:opss)
+    @user = users(:opss).decorate
     User.current = @user
     sign_in @user
     @user.teams << teams(:opss_enforcement)
@@ -20,9 +20,9 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     choose @user.display_name, visible: false
     click_on "Continue"
     click_on "Confirm change"
-    assert_text "Assigned to #{@user.name}\n#{@user.organisation.name}"
+    assert_text "Case owner #{@user.name}\n#{@user.organisation.name}"
     click_on "Activity"
-    assert_text "Assigned to #{@user.display_name}"
+    assert_text "Case owner changed to #{@user.display_name}"
   end
 
   test "should show current users team as a radio, and to assign team to case" do
@@ -30,20 +30,20 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     choose @team.name, visible: false
     click_on "Continue"
     click_on "Confirm change"
-    assert_text "Assigned to #{@team.name}"
+    assert_text "Case owner #{@team.name}"
     click_on "Activity"
-    assert_text "Assigned to #{@team.name}"
+    assert_text "Case owner changed to #{@team.name}"
   end
 
   test "should add comment to assignment activity" do
     assert_text @team.name
     choose @team.name, visible: false
     click_on "Continue"
-    fill_in "Message to new assignee (optional)", with: "Test assignment comment"
+    fill_in "Message to new case owner (optional)", with: "Test assignment comment"
     click_on "Confirm change"
-    assert_text "Assigned to #{@team.name}"
+    assert_text "Case owner #{@team.name}"
     click_on "Activity"
-    assert_text "Assigned to #{@team.name}"
+    assert_text "Case owner changed to #{@team.name}"
     assert_text "Test assignment comment"
   end
 end

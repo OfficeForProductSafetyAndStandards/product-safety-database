@@ -5,8 +5,7 @@ class NotifyTeamAddedToCaseJob < ApplicationJob
     if team.team_recipient_email.present?
       NotifyMailer.team_added_to_case_email(collaborator, to_email: team.team_recipient_email).deliver_later
     else
-
-      team.users.activated.each do |user|
+      team.users.active.each do |user|
         NotifyMailer.team_added_to_case_email(collaborator, to_email: user.email).deliver_later
       end
     end

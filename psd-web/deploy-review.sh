@@ -60,6 +60,7 @@ fi
 # Deploy the app
 cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --strategy rolling
 
+cf7 bind-service $APP_NAME psd-seeds --binding-name psd-seeds
 
 # Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/psd-web/env/
