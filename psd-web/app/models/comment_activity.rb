@@ -2,7 +2,7 @@ class CommentActivity < Activity
   include SanitizationHelper
   before_validation { trim_line_endings(:body) }
   validates :body, presence: true
-  validates_length_of :body, maximum: 10000
+  validates :body, length: { maximum: 10000 }
 
   def title
     "Comment added"

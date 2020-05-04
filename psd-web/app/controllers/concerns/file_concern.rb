@@ -77,7 +77,7 @@ module FileConcern
     raise "attachment_names must be specified in #{self.class}" unless self.class.attachment_names
   end
 
-  # TODO move to model?
+  # TODO: move to model?
 
   def update_blob_metadata blob, metadata
     return unless blob

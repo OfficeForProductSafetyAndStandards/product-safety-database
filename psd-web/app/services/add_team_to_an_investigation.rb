@@ -8,7 +8,7 @@ class AddTeamToAnInvestigation
       include_message: include_message,
       added_by_user: current_user,
       message: message
-      )
+    )
 
     begin
       if collaborator.save

@@ -66,7 +66,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
       let(:collaborator) {
         create(:collaborator,
                message: "Thanks for collaborating!",
-                     added_by_user: create(:user, name: "Bob Jones"))
+               added_by_user: create(:user, name: "Bob Jones"))
       }
 
       let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
@@ -84,7 +84,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
       let(:collaborator) {
         create(:collaborator,
                message: nil,
-                     added_by_user: create(:user, name: "Bob Jones"))
+               added_by_user: create(:user, name: "Bob Jones"))
       }
 
       let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }

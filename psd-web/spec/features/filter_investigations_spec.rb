@@ -15,7 +15,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   let!(:coronavirus_investigation) { create(:allegation, assignable: user, coronavirus_related: true) }
 
-
   let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, teams: [team]) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
 

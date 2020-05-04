@@ -10,7 +10,6 @@ RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
   let(:secondary_authentication) { SecondaryAuthentication.new(user) }
   let(:otp_code) { user.direct_otp }
 
-
   describe "#valid?" do
     context "with form validation" do
       before { form.validate }
@@ -62,7 +61,6 @@ RSpec.describe SecondaryAuthenticationForm, :with_stubbed_notify do
           expect(form.errors.full_messages_for(:otp_code)).to eq(["You haven’t entered enough numbers"])
         end
       end
-
 
       context "when the two factor code has less digits than the required and contains letters" do
         let(:otp_code) { "1a" }

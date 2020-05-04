@@ -5,8 +5,8 @@ class AuditActivity::Test::Base < AuditActivity::Base
   belongs_to :product
 
   private_class_method def self.from(test, title)
-    activity = self.create(
-      body: self.build_body(test),
+    activity = create(
+      body: build_body(test),
       title: title,
       source: UserSource.new(user: User.current),
       investigation: test.investigation,
@@ -17,10 +17,10 @@ class AuditActivity::Test::Base < AuditActivity::Base
 
   def self.build_body(test)
     body = ""
-    body += "Legislation: **#{self.sanitize_text(test.legislation)}**<br>" if test.legislation.present?
+    body += "Legislation: **#{sanitize_text(test.legislation)}**<br>" if test.legislation.present?
     body += "#{date_label}: **#{test.date.strftime('%d/%m/%Y')}**<br>" if test.date.present?
-    body += "Attached: **#{self.sanitize_text test.documents.first.filename}**<br>" if test.documents.attached?
-    body += "<br>#{self.sanitize_text(test.details)}" if test.details.present?
+    body += "Attached: **#{sanitize_text test.documents.first.filename}**<br>" if test.documents.attached?
+    body += "<br>#{sanitize_text(test.details)}" if test.details.present?
     body
   end
 
