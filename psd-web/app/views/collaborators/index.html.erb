@@ -23,6 +23,7 @@
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Team name</th>
           <th scope="col" class="govuk-table__header">Permission level</th>
+          <th scope="col" class="govuk-table__header"></th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -30,12 +31,16 @@
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.assignee_team.name %></th>
             <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Assignee</span></td>
+            <td class="govuk-table__cell"></td>
           </tr>
         <% end %>
         <% @teams.each do |team| %>
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
             <td class="govuk-table__cell">Edit full case</td>
+            <td class="govuk-table__cell">
+              <%= link_to "Change", edit_investigation_collaborator_path(@investigation, team) %>
+            </td>
           </tr>
         <% end %>
       </tbody>

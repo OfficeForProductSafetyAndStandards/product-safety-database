@@ -12,7 +12,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
       account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d",
-      team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c"
+      team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
+      team_deleted_from_case: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -139,6 +140,34 @@ class NotifyMailer < GovukNotifyRails::Mailer
       updater_name: collaborator.added_by_user.name,
       optional_message: optional_message,
       investigation_url: investigation_url(collaborator.investigation)
+    )
+
+    mail(to: to_email)
+  end
+
+  def team_deleted_from_case_email(form, to_email:)
+    set_template(TEMPLATES[:team_deleted_from_case])
+    form = OpenStruct.new(form) # form comes as hash due to rails 5 serialization issues
+
+    optional_message = if form.message.present?
+                         [
+                           I18n.t(
+                             :message_from,
+                             user_name: form.user.name,
+                             scope: "mail.team_removed_from_case"
+                           ),
+                           inset_text_for_notify(form.message)
+                         ].join("\n\n")
+                       else
+                         ""
+                       end
+
+    set_personalisation(
+      case_type: form.investigation.class,
+      case_title: form.investigation.class,
+      case_id: form.investigation.id,
+      updater_name: form.user.name,
+      optional_message: optional_message,
     )
 
     mail(to: to_email)

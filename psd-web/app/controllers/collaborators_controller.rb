@@ -1,12 +1,13 @@
 class CollaboratorsController < ApplicationController
+  before_action do
+    find_investigation_from_params
+  end
+
   def index
-    @investigation = find_investigation_from_params
     @teams = @investigation.teams.order(:name)
   end
 
   def new
-    @investigation = find_investigation_from_params
-
     authorize @investigation, :add_collaborators?
 
     @collaborator = @investigation.collaborators.new
@@ -15,8 +16,6 @@ class CollaboratorsController < ApplicationController
   end
 
   def create
-    @investigation = find_investigation_from_params
-
     authorize @investigation, :add_collaborators?
 
     result = AddTeamToAnInvestigation.call(
@@ -35,10 +34,33 @@ class CollaboratorsController < ApplicationController
     end
   end
 
+  def edit
+    authorize @investigation, :add_collaborators?
+
+    @team = Team.find(params[:id])
+    @collaborator = @investigation.collaborators.find_by! team_id: @team.id
+    @edit_form = EditInvestigationCollaboratorForm.new
+  end
+
+  def update
+    authorize @investigation, :add_collaborators?
+
+    params.permit!
+    @team = Team.find(params[:id])
+    @edit_form = EditInvestigationCollaboratorForm.new(params[:edit_investigation_collaborator_form]
+      .merge(investigation: @investigation, team: @team, user: current_user))
+    if @edit_form.save
+      flash[:success] = "#{@team.name} removed from the case"
+      redirect_to investigation_collaborators_path(@investigation)
+    else
+      render "edit"
+    end
+  end
+
 private
 
   def find_investigation_from_params
-    Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation ||= Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
   end
 
   def teams_without_access
