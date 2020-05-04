@@ -4,7 +4,7 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
   def self.from(investigation)
     title = investigation.owner.id.to_s
     body = investigation.owner_rationale
-    super(investigation, title, self.sanitize_text(body))
+    super(investigation, title, sanitize_text(body))
   end
 
   def subtitle_slug
@@ -39,11 +39,11 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
   end
 
   def users_to_notify
-    compute_relevant_entities(model: User, compute_users_from_entity: Proc.new { |user| [user] })
+    compute_relevant_entities(model: User, compute_users_from_entity: proc { |user| [user] })
   end
 
   def teams_to_notify
-    compute_relevant_entities(model: Team, compute_users_from_entity: Proc.new { |team| team.users })
+    compute_relevant_entities(model: Team, compute_users_from_entity: proc { |team| team.users })
   end
 
   def compute_relevant_entities(model:, compute_users_from_entity:)

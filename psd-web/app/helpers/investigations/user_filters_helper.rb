@@ -9,10 +9,10 @@ module Investigations::UserFiltersHelper
       case_owner_is_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
     end
     case_owner_is_items << { key: "case_owner_is_someone_else",
-                 value: "checked",
-                 unchecked_value: "unchecked",
-                 text: "Other person or team",
-                 conditional: { html: other_owner(form) } }
+                             value: "checked",
+                             unchecked_value: "unchecked",
+                             text: "Other person or team",
+                             conditional: { html: other_owner(form) } }
   end
 
   def created_by(form)
@@ -29,8 +29,8 @@ module Investigations::UserFiltersHelper
 
   def other_owner(form)
     render "form_components/govuk_select", key: :case_owner_is_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.display_name, value: e.id } },
-                  label: { text: "Name" }, is_autocomplete: true
+                                           items: entities.map { |e| { text: e.display_name, value: e.id } },
+                                           label: { text: "Name" }, is_autocomplete: true
   end
 
   def other_creator(form)
