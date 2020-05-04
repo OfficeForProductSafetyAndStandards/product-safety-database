@@ -303,7 +303,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when the investigation is not assigned" do
       before { investigation.assignable = nil }
 
-      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
+      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("No case owner") }
     end
   end
 end

@@ -103,7 +103,7 @@ module Investigations::DisplayTextHelper
   end
 
   def investigation_assignee(investigation)
-    out = [investigation.assignable ? h(investigation.assignable.name.to_s) : "Unassigned".html_safe]
+    out = [investigation.assignable ? h(investigation.assignable.name.to_s) : "No case owner".html_safe]
     if investigation&.assignable&.organisation&.name != investigation&.assignable&.name
       out << h(investigation.assignable.organisation.name)
     end
