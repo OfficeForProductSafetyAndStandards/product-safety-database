@@ -66,7 +66,7 @@ private
   def assignee_valid?
     if step == :choose
       if potential_assignee == nil
-        @investigation.errors.add(:assignable_id, :invalid, message: "Select assignee")
+        @investigation.errors.add(:assignable_id, :invalid, message: "Select case owner")
       end
     end
     @investigation.errors.empty?

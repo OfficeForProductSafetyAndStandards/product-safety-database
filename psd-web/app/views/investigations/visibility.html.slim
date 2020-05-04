@@ -9,7 +9,7 @@
       = render "form_components/govuk_radios", form: form, key: :is_private,
               fieldset: { legend: { text: "Visibility", classes: "govuk-label--m" } },
               hint: { text: "Restricted cases are visible only to the organisation that created them and the \
-              organisation to which they are currently assigned." },
+              organisation of the current case owner." },
               items: [{ text: visibility_options[:public], value: "false" },
                       { text: visibility_options[:private], value: "true" }]
       = render "form_components/govuk_textarea", key: :visibility_rationale, form: form,

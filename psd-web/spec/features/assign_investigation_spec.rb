@@ -30,7 +30,7 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     click_button "Continue"
     fill_in "investigation_assignee_rationale", with: "Test assign"
     click_button "Confirm change"
-    expect(page.find("dt", text: "Assigned to")).to have_sibling("dd", text: another_active_user.name.to_s)
+    expect(page.find("dt", text: "Case owner")).to have_sibling("dd", text: another_active_user.name.to_s)
   end
 
   scenario "assign case to someone else in another team" do
@@ -40,10 +40,10 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     click_button "Continue"
     fill_in "investigation_assignee_rationale", with: "Test assign"
     click_button "Confirm change"
-    expect(page.find("dt", text: "Assigned to")).to have_sibling("dd", text: another_active_user_another_team.name.to_s)
+    expect(page.find("dt", text: "Case owner")).to have_sibling("dd", text: another_active_user_another_team.name.to_s)
   end
 
-  scenario "once case assigned to other team- cannot re-assign" do
+  scenario "once case Case owner other team- cannot re-assign" do
     visit new_investigation_assign_path(investigation)
     choose("Someone else")
     select another_active_user_another_team.name, from: "investigation_select_someone_else"
@@ -51,6 +51,6 @@ RSpec.feature "Assigning an investigation", :with_stubbed_elasticsearch, :with_s
     fill_in "investigation_assignee_rationale", with: "Test assign"
     click_button "Confirm change"
     visit "/cases/#{investigation.pretty_id}/assign/choose"
-    expect(page).to have_css(".govuk-grid-row p", text: "You do not have permission to assign this allegation.")
+    expect(page).to have_css(".govuk-grid-row p", text: "You do not have permission to change the case owner.")
   end
 end

@@ -8,7 +8,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   end
 
   def subtitle_slug
-    "Assigned"
+    "Changed"
   end
 
   def assignable_id
@@ -19,12 +19,12 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
 
   def title
     # We store assignable_id in title field, this is computing title based on that
-    "Assigned to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.decorate&.display_name}"
+    "Case owner changed to #{(User.find_by(id: assignable_id) || Team.find_by(id: assignable_id))&.decorate&.display_name}"
   end
 
   def email_update_text
     body = []
-    body << "#{investigation.case_type.upcase_first} was assigned to #{investigation.assignable.decorate.display_name} by #{source&.show}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.assignable.decorate.display_name} by #{source&.show}."
 
     if investigation.assignee_rationale.present?
       body << "Message from #{source&.show}:"
@@ -35,7 +35,7 @@ class AuditActivity::Investigation::UpdateAssignee < AuditActivity::Investigatio
   end
 
   def email_subject_text
-    "#{investigation.case_type.upcase_first} was reassigned"
+    "Case owner changed on #{investigation.case_type}"
   end
 
   def users_to_notify

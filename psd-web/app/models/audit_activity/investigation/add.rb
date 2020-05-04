@@ -18,7 +18,7 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
   end
 
   def self.build_assignee_details(investigation)
-    "<br><br>Assigned to #{investigation.assignable&.decorate&.display_name}."
+    "<br><br>Case owner: #{investigation.assignable&.decorate&.display_name}"
   end
 
   def can_display_all_data?
