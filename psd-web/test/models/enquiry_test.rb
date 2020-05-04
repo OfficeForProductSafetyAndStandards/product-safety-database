@@ -2,7 +2,7 @@ require "test_helper"
 
 class EnquiryTest < ActiveSupport::TestCase
   include Pundit
-    # Pundit requires this method to be able to call policies
+  # Pundit requires this method to be able to call policies
   def pundit_user
     User.current
   end

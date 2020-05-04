@@ -6,7 +6,6 @@ RSpec.describe UrlHelper do
 
     let(:slug) { nil }
 
-
     context "with an instance of Investigation" do
       let(:object) { create(:allegation, assignable: nil) }
 
@@ -68,7 +67,6 @@ RSpec.describe UrlHelper do
     subject(:path) { helper.associated_document_path(object, document) }
 
     let(:document) { object.documents.first }
-
 
     context "with an instance of Investigation" do
       let(:object) { create(:allegation, :with_document, assignable: nil) }

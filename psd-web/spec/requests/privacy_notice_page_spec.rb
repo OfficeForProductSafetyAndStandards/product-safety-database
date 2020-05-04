@@ -23,7 +23,6 @@ RSpec.describe "Privacy notice page", type: :request do
       end
     end
 
-
     context "when signed in as an OPSS user, having not yet accepted the declaration" do
       let(:user) { create(:user, :opss_user, has_accepted_declaration: false) }
 

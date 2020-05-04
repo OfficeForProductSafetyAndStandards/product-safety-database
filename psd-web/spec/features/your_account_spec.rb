@@ -11,7 +11,6 @@ RSpec.feature "Your Account", :with_stubbed_elasticsearch, :with_stubbed_mailer,
            teams: [create(:team, name: "Standards and testing")])
   }
 
-
   scenario "Changing your name (with validation error)" do
     sign_in user
 

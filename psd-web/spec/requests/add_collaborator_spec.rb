@@ -75,7 +75,6 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
              ])
     }
 
-
     before do
       sign_in user
 

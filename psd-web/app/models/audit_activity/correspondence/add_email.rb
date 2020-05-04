@@ -4,19 +4,19 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
   with_attachments email_file: "email file", email_attachment: "email attachment"
 
   def self.from(correspondence, investigation)
-    activity = super(correspondence, investigation, self.build_body(correspondence))
+    activity = super(correspondence, investigation, build_body(correspondence))
     activity.attach_blob(correspondence.email_file.blob, :email_file) if correspondence.email_file.attached?
     activity.attach_blob(correspondence.email_attachment.blob, :email_attachment) if correspondence.email_attachment.attached?
   end
 
   def self.build_body correspondence
     body = ""
-    body += self.build_correspondent_details correspondence
-    body += "Subject: **#{self.sanitize_text correspondence.email_subject}**<br>" if correspondence.email_subject.present?
+    body += build_correspondent_details correspondence
+    body += "Subject: **#{sanitize_text correspondence.email_subject}**<br>" if correspondence.email_subject.present?
     body += "Date sent: **#{correspondence.correspondence_date.strftime('%d/%m/%Y')}**<br>" if correspondence.correspondence_date.present?
-    body += self.build_email_file_body correspondence
-    body += self.build_attachment_body correspondence
-    body += "<br>#{self.sanitize_text correspondence.details}" if correspondence.details.present?
+    body += build_email_file_body correspondence
+    body += build_attachment_body correspondence
+    body += "<br>#{sanitize_text correspondence.details}" if correspondence.details.present?
     body
   end
 
@@ -25,25 +25,25 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
 
     output = ""
     output += "#{Correspondence::Email.email_directions[correspondence.email_direction]}: " if correspondence.email_direction.present?
-    output += "**#{self.sanitize_text correspondence.correspondent_name}** " if correspondence.correspondent_name.present?
-    output += self.build_email_address correspondence if correspondence.email_address.present?
+    output += "**#{sanitize_text correspondence.correspondent_name}** " if correspondence.correspondent_name.present?
+    output += build_email_address correspondence if correspondence.email_address.present?
     output
   end
 
   def self.build_email_file_body correspondence
     file = correspondence.email_file
-    file.attached? ? "Email: #{self.sanitize_text file.filename}<br>" : ""
+    file.attached? ? "Email: #{sanitize_text file.filename}<br>" : ""
   end
 
   def self.build_attachment_body correspondence
     file = correspondence.email_attachment
-    file.attached? ? "Attached: #{self.sanitize_text file.filename}<br>" : ""
+    file.attached? ? "Attached: #{sanitize_text file.filename}<br>" : ""
   end
 
   def self.build_email_address correspondence
     output = ""
     output += "(" if correspondence.correspondent_name.present?
-    output += self.sanitize_text correspondence.email_address
+    output += sanitize_text correspondence.email_address
     output += ")" if correspondence.correspondent_name.present?
     output + "<br>"
   end
