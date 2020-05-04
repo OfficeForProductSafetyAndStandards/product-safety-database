@@ -67,7 +67,7 @@ group :development, :test do
   gem "rubocop"
   gem "rubocop-govuk", "~> 3.5.0"
   gem "rubocop-performance"
-  gem "rubocop-rspec", "~> 1.38", require: false
+  gem "rubocop-rspec", "~> 1.39", require: false
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
   gem "sassc"
