@@ -455,15 +455,14 @@ if run_seeds
     User.accepts_nested_attributes_for :user_roles
 
     organisations.each do |organisation_attributes|
+      Rails.logger.info(organisation_attributes)
       organisation_attributes.deep_symbolize_keys!
       teams_attributes = organisation_attributes.delete(:teams_attributes)
       organisation = Organisation.create! organisation_attributes
 
       teams_attributes.map do |team_attributes|
-        (team_attributes[:users_attributes] || []).map! do |user_attributes|
-          user_attributes[:organisation] = organisation
-          user_attributes
-        end
+        Rails.logger.info(team_attributes)
+        (team_attributes[:users_attributes] || []).map! { |user_attributes| user_attributes[:organisation] = organisation; user_attributes }
         organisation.teams.create! team_attributes
       end
     end
