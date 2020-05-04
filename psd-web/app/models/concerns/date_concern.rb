@@ -13,7 +13,7 @@ module DateConcern
     end
 
     def self.date_attribute(key, required: true)
-      self.class_eval do
+      class_eval do
         attribute "#{key}_day".to_sym, :integer
         attribute "#{key}_month".to_sym, :integer
         attribute "#{key}_year".to_sym, :integer
@@ -68,27 +68,27 @@ private
   end
 
   def set_day(key, value)
-    self.send("#{key}_day=", value)
+    send("#{key}_day=", value)
   end
 
   def set_month(key, value)
-    self.send("#{key}_month=", value)
+    send("#{key}_month=", value)
   end
 
   def set_year(key, value)
-    self.send("#{key}_year=", value)
+    send("#{key}_year=", value)
   end
 
   def get_day(key)
-    self.send(day_symbol(key))
+    send(day_symbol(key))
   end
 
   def get_month(key)
-    self.send(month_symbol(key))
+    send(month_symbol(key))
   end
 
   def get_year(key)
-    self.send(year_symbol(key))
+    send(year_symbol(key))
   end
 
   def day_symbol(key)

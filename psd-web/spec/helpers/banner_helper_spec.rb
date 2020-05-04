@@ -10,7 +10,6 @@ RSpec.describe BannerHelper do
       end
     end
 
-
     context "with an html param" do
       let(:banner) { helper.banner(html: tag.p("There is a problem")) }
 

@@ -8,7 +8,7 @@ class Correspondence < ApplicationRecord
   before_validation { trim_line_endings(:details) }
 
   validates :email_address, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }, on: :context
-  validates_length_of :details, maximum: 50000
+  validates :details, length: { maximum: 50000 }
   validate :date_cannot_be_in_the_future
 
   date_attribute :correspondence_date

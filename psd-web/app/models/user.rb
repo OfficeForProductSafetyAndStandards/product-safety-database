@@ -19,7 +19,7 @@ class User < ApplicationRecord
 
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
-            unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
+            unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
 
@@ -127,7 +127,7 @@ class User < ApplicationRecord
 
   def self.get_owners(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
-    self.active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
+    active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
   end
 
   def self.get_team_members(user:)
@@ -199,11 +199,11 @@ class User < ApplicationRecord
 private
 
   def lock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, Time.current)
+    update_column(:second_factor_attempts_locked_at, Time.current)
   end
 
   def unlock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, nil)
+    update_column(:second_factor_attempts_locked_at, nil)
   end
 
   def two_factor_lock_expired?

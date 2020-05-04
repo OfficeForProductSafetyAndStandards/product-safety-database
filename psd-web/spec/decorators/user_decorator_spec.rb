@@ -5,7 +5,6 @@ RSpec.describe UserDecorator do
 
   let(:user) { build(:user) }
 
-
   describe "#owner_short_name" do
     let(:viewing_user) { build(:user, organisation: organisation) }
 

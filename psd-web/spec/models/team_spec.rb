@@ -26,13 +26,13 @@ RSpec.describe Team do
 
       org = Organisation.create!(name: "test")
 
-      (important_team_names + %w{bobbins cribbins}).map do |name|
+      (important_team_names + %w[bobbins cribbins]).map do |name|
         described_class.create!(id: SecureRandom.uuid, name: name, organisation: org)
       end
     end
 
     let(:important_team_names) do
-      %w{bish bosh bash}
+      %w[bish bosh bash]
     end
 
     context "with an OPSS user" do

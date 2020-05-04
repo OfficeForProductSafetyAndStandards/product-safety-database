@@ -69,7 +69,6 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     choose "Add a comment"
     click_button "Continue"
 
-
     expect(page).to have_css("h1", text: "Add comment")
 
     fill_in "body", with: Faker::Lorem.sentence

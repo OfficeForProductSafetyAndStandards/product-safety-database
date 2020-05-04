@@ -7,7 +7,6 @@ RSpec.describe AuditActivity::Investigation::AddProject, :with_stubbed_elasticse
 
   let(:project) { create(:project) }
 
-
   describe "#build_title" do
     it "stores the title" do
       expect(activity.title).to eq("Project logged: #{project.decorate.title}")

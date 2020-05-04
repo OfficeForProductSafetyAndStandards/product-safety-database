@@ -17,7 +17,6 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch do
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
-
   def perform_search
     Investigation.full_search(subject)
   end

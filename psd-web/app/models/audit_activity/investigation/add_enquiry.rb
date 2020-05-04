@@ -1,6 +1,6 @@
 class AuditActivity::Investigation::AddEnquiry < AuditActivity::Investigation::Add
   def self.from(investigation)
-    super(investigation, self.build_title(investigation), self.build_body(investigation))
+    super(investigation, build_title(investigation), build_body(investigation))
   end
 
   def self.build_title(investigation)

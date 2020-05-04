@@ -9,11 +9,9 @@ end
 RSpec.shared_context "with Elasticsearch", shared_context: :metadata do
   def clean_elasticsearch_indices!
     elasticsearch_models.each do |model|
-      begin
-        model.__elasticsearch__.delete_index!
-      rescue Elasticsearch::Transport::Transport::Errors::NotFound
-        # Ideally the index should not exist before the test run but this guards against unclean state
-      end
+      model.__elasticsearch__.delete_index!
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound
+      # Ideally the index should not exist before the test run but this guards against unclean state
     end
   end
 

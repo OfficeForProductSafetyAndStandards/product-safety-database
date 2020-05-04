@@ -39,6 +39,7 @@ linters:
       - Layout/AlignHash
       - Layout/ArgumentAlignment
       - Layout/AlignParameters
+      - Layout/HashAlignment
       - Layout/FirstParameterIndentation
       - Layout/IndentationConsistency
       - Layout/IndentationWidth
@@ -62,10 +63,12 @@ linters:
       - Style/EmptyLineAfterGuardClause
       - Style/FrozenStringLiteralComment
       - Style/IfUnlessModifier
+      - Style/LineEndConcatenation
       - Style/Next
       - Style/WhileUntilModifier
       - Style/TrailingCommaInHashLiteral
       - Style/TrailingCommaInArrayLiteral
+      - Style/PercentLiteralDelimiters
       - Style/StringLiterals
       # This one flags some false positives in slim files
       - Style/IdenticalConditionalBranches

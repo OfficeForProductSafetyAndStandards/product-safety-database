@@ -24,7 +24,7 @@ class InvestigationTest < ActiveSupport::TestCase
 
   test "should create an activity when business is added to investigation" do
     @investigation = create_new_case
-    assert_difference"Activity.count" do
+    assert_difference "Activity.count" do
       @business = businesses :new_business
       @investigation.add_business @business, "manufacturer"
     end
@@ -34,14 +34,14 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation = create_new_case
     @business = businesses :new_business
     @investigation.add_business @business, "retailer"
-    assert_difference"Activity.count" do
+    assert_difference "Activity.count" do
       @investigation.businesses.delete(@business)
     end
   end
 
   test "should create an activity when product is added to investigation" do
     @investigation = create_new_case
-    assert_difference"Activity.count" do
+    assert_difference "Activity.count" do
       @product = Product.new(name: "Test Product", product_type: "test product type", category: "test product category")
       @investigation.products << @product
     end
@@ -51,7 +51,7 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation = create_new_case
     @product = Product.new(name: "Test Product", product_type: "test product type", category: "test product category")
     @investigation.products << @product
-    assert_difference"Activity.count" do
+    assert_difference "Activity.count" do
       @investigation.products.delete(@product)
     end
   end

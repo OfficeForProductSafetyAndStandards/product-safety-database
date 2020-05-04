@@ -21,10 +21,10 @@ module Investigations::UserFiltersHelper
       created_by_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
     end
     created_by_items << { key: "created_by_someone_else",
-                 value: "checked",
-                 unchecked_value: "unchecked",
-                 text: "Other person or team",
-                 conditional: { html: other_creator(form) } }
+                          value: "checked",
+                          unchecked_value: "unchecked",
+                          text: "Other person or team",
+                          conditional: { html: other_creator(form) } }
   end
 
   def other_owner(form)
@@ -35,7 +35,7 @@ module Investigations::UserFiltersHelper
 
   def other_creator(form)
     render "form_components/govuk_select", key: :created_by_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.display_name, value: e.id } },
-                  label: { text: "Name" }, is_autocomplete: true
+                                           items: entities.map { |e| { text: e.display_name, value: e.id } },
+                                           label: { text: "Name" }, is_autocomplete: true
   end
 end

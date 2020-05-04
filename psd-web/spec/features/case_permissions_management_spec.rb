@@ -72,7 +72,6 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones:\n\n^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
 
-
     click_link "Back"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
