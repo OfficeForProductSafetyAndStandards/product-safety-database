@@ -460,7 +460,10 @@ if run_seeds
       organisation = Organisation.create! organisation_attributes
 
       teams_attributes.map do |team_attributes|
-        (team_attributes[:users_attributes] || []).map! { |user_attributes| user_attributes[:organisation] = organisation; user_attributes }
+        (team_attributes[:users_attributes] || []).map! do |user_attributes|
+          user_attributes[:organisation] = organisation
+          user_attributes
+        end
         organisation.teams.create! team_attributes
       end
     end
@@ -468,7 +471,6 @@ if run_seeds
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
     enforcement  = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
     processing   = Team.create!(name: "OPSS Processing", team_recipient_email: nil, "organisation": organisation)
-
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
