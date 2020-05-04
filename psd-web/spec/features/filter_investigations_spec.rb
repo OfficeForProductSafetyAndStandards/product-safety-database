@@ -15,7 +15,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   let!(:coronavirus_investigation) { create(:allegation, assignable: user, coronavirus_related: true) }
 
-
   let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, teams: [team]) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
 
@@ -111,6 +110,17 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(coronavirus_investigation.pretty_id)
 
     expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+  end
+
+  scenario "filtering cases assigned to me via homepage link" do
+    visit "/"
+    click_link "Your cases"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
+
     expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)

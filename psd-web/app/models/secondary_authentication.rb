@@ -71,9 +71,7 @@ class SecondaryAuthentication
     user.secondary_authentication_operation
   end
 
-  def direct_otp
-    user.direct_otp
-  end
+  delegate :direct_otp, to: :user
 
 private
 

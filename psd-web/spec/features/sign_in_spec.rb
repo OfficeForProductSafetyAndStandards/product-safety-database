@@ -172,13 +172,23 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect_incorrect_email_or_password
   end
 
+  context "when trying to sign in credentials corresponding to a deleted user" do
+    let(:user) { create(:user, :deleted) }
+
+    scenario "user gets an error message" do
+      visit "/sign-in"
+      fill_in_credentials
+
+      expect_incorrect_email_or_password
+    end
+  end
+
   scenario "user introduces email address with incorrect format" do
     visit "/sign-in"
 
     fill_in "Email address", with: "test.email"
     fill_in "Password", with: "password "
     click_on "Continue"
-
 
     expect(page).to have_css(".govuk-error-summary__list", text: "Enter your email address in the correct format, like name@example.com")
     expect(page).to have_css(".govuk-error-message", text: "Enter your email address in the correct format, like name@example.com")

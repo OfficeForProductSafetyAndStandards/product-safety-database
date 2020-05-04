@@ -189,6 +189,7 @@ module InvestigationsHelper
 
   def set_default_assignee_filter
     params[:assigned_to_me] = "unchecked" if params[:assigned_to_me].blank?
+    params[:assigned_to_team_0] = "unchecked" if params[:assigned_to_team_0].blank?
     params[:assigned_to_someone_else] = "unchecked" if params[:assigned_to_someone_else].blank?
   end
 

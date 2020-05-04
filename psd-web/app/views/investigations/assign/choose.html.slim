@@ -1,4 +1,5 @@
-= page_title "Update assignee"
+- page_heading = "Change case owner"
+= page_title page_heading
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
 
@@ -6,13 +7,13 @@
   .govuk-grid-column-two-thirds-from-desktop
     - heading = capture do
       = render "minimal_investigation_heading", investigation: @investigation,
-              title: "Who do you want to assign the #{@investigation.case_type} to?"
+              title: page_heading
       - if @investigation.assignable.present?
         p
-          ' Currently assigned to:
+          ' Current case owner:
           strong = @investigation.assignable.display_name
       - else
-        p Nobody is assigned yet
+        p This case has no owner
 
     - if policy(@investigation).assign?
       = render "investigations/assign/assignee_form", investigation: @investigation do
@@ -20,10 +21,10 @@
     - else
       = heading
       p
-        = "You do not have permission to assign this #{@investigation.case_type}."
+        = "You do not have permission to change the case owner."
         br
         ' Contact
         strong = @investigation.assignable.display_name
         '
-        | to change assignment.
+        | to change the case owner.
       = link_to "Return to case", investigation_path(@investigation), class: "govuk-button"

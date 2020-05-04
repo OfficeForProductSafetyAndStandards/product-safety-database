@@ -6,7 +6,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   subject(:decorated_investigation) { investigation.decorate }
 
   let(:organisation) { create :organisation }
-  let(:user)         { create(:user, organisation: organisation) }
+  let(:user)         { create(:user, organisation: organisation).decorate }
   let(:creator)      { create(:user, organisation: organisation) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
@@ -14,7 +14,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, assignable: user, source: user_source) }
 
   before { create(:complainant, investigation: investigation) }
-
 
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }
@@ -138,8 +137,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     it "displays the Date created" do
-      expect(investigation_summary_list).
-        to summarise("Date created", text: investigation.created_at.to_s(:govuk))
+      expect(investigation_summary_list)
+        .to summarise("Date created", text: investigation.created_at.to_s(:govuk))
     end
 
     it "displays the Last updated" do
@@ -296,14 +295,14 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when the investigation is assigned" do
       it "displays the assignee assignable name" do
         expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user))
-          .to eq(user.decorate.assignee_short_name(viewing_user: viewing_user))
+          .to eq(user.assignee_short_name(viewing_user: viewing_user))
       end
     end
 
     context "when the investigation is not assigned" do
       before { investigation.assignable = nil }
 
-      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
+      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("No case owner") }
     end
   end
 end

@@ -48,7 +48,7 @@ class Investigations::TsInvestigationsController < ApplicationController
     %i[risk_assessments product_images evidence_images other_files].include? step
   end
 
-  #GET /xxx/step
+  # GET /xxx/step
   def show
     case step
     when :business
@@ -253,17 +253,17 @@ private
   end
 
   def business_session_params
-    # TODO PSD-980 use this to retrieve a business for editing eg for browser back button
+    # TODO: PSD-980 use this to retrieve a business for editing eg for browser back button
     {}
   end
 
   def corrective_action_session_params
-    # TODO PSD-980 use this to retrieve a corrective action for editing eg for browser back button
+    # TODO: PSD-980 use this to retrieve a corrective action for editing eg for browser back button
     {}
   end
 
   def test_session_params
-    # TODO PSD-980 use this to retrieve a test for editing eg for browser back button
+    # TODO: PSD-980 use this to retrieve a test for editing eg for browser back button
     { type: Test::Result.name }
   end
 

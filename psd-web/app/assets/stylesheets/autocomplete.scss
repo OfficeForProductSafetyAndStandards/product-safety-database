@@ -34,6 +34,7 @@
 .autocomplete__clear-viewbox {
   cursor: pointer;
   width: 30px;
+  height: 30px; // Set explicitly as IE needs it
 }
 
 .autocomplete__clear-icon {
@@ -43,6 +44,13 @@
   stroke-width: 5;
 }
 
+// Hide IE browser input clear button (that doesn't work anyway)
+.autocomplete-select-with-clear {
+  .autocomplete__input::-ms-clear,
+  .autocomplete__hint::-ms-clear {
+    display: none;
+  }
+}
 
 @include govuk-media-query($from: tablet) {
 

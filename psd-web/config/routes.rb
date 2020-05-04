@@ -93,7 +93,7 @@ Rails.application.routes.draw do
   end
 
   resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
-            concerns: %i[document_attachable] do
+                             concerns: %i[document_attachable] do
     member do
       get :status
       patch :status
@@ -178,8 +178,6 @@ Rails.application.routes.draw do
     get :privacy_notice, path: "privacy-notice"
     get :about
   end
-
-
 
   match "/404", to: "errors#not_found", via: :all
   match "/403", to: "errors#forbidden", via: :all, as: :forbidden

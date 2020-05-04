@@ -41,7 +41,7 @@ gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/spro
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.6.4"
 gem "validate_email", "~> 0.1"
-gem "webpacker", "5.1.1"
+gem "webpacker", "~> 5.1.1"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.6.4", require: "govuk_design_system"
@@ -65,9 +65,9 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk", "~> 3.5.0"
+  gem "rubocop-govuk", "~> 3.7.0"
   gem "rubocop-performance"
-  gem "rubocop-rspec", "~> 1.38", require: false
+  gem "rubocop-rspec", "~> 1.39", require: false
   gem "ruby-debug-ide"
   gem "sass-rails", "~> 6.0"
   gem "sassc"

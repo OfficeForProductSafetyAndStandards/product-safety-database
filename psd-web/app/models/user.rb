@@ -13,13 +13,12 @@ class User < ApplicationRecord
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
-  has_many :secondary_authentications, dependent: :destroy
 
   has_and_belongs_to_many :teams
 
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
-            unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
+            unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
 
@@ -37,8 +36,14 @@ class User < ApplicationRecord
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
   attribute :invited_at, :datetime, default: -> { Time.current }
 
-  def self.activated
-    where(account_activated: true)
+  # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
+  # and who have accepted the user declaration
+  def self.active
+    where(account_activated: true).not_deleted
+  end
+
+  def self.not_deleted
+    where(deleted_at: nil)
   end
 
   def self.find_user_within_teams_with_email!(teams:, email:)
@@ -91,18 +96,6 @@ class User < ApplicationRecord
     super.to_s
   end
 
-  def display_name(ignore_visibility_restrictions: false, other_user: User.current)
-    return @display_name if @display_name
-
-    membership = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && teams.any?
-                   team_names
-                 else
-                   organisation.name
-                 end
-
-    @display_name = "#{name} (#{membership})"
-  end
-
   def team_names
     teams.map(&:name).join(", ")
   end
@@ -133,13 +126,13 @@ class User < ApplicationRecord
 
   def self.get_assignees(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
-    self.activated.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
+    active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
   end
 
   def self.get_team_members(user:)
     users = [].to_set
     user.teams.each do |team|
-      team.users.activated.find_each do |team_member|
+      team.users.active.find_each do |team_member|
         users << team_member
       end
     end
@@ -150,11 +143,24 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
+  def deleted?
+    deleted_at.present?
+  end
+
   def invitation_expired?
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
   end
 
+  def mark_as_deleted!
+    return if deleted?
+
+    update!(deleted_at: Time.current)
+  end
+
   # BEGIN: place devise overriden method calls bellow
+
+  # Devise::Models::Lockable
+
   def send_unlock_instructions
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
     self.unlock_token = enc
@@ -166,6 +172,12 @@ class User < ApplicationRecord
     raw
   end
 
+  def increment_failed_attempts
+    return unless mobile_number_verified?
+
+    super
+  end
+
   # Don't reset password attempts yet, it will happen on next successful login
   def unlock_access!
     self.locked_at = nil
@@ -173,25 +185,24 @@ class User < ApplicationRecord
     save(validate: false)
   end
 
-  # Part of devise interface. Called before user authentication.
+  # Devise::Models::Authenticatable
+
   def active_for_authentication?
     true
   end
 
-  def increment_failed_attempts
-    return unless mobile_number_verified?
-
-    super
+  def self.find_first_by_auth_conditions(conditions, opts = {})
+    super(conditions, opts.merge(deleted_at: nil))
   end
 
 private
 
   def lock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, Time.current)
+    update_column(:second_factor_attempts_locked_at, Time.current)
   end
 
   def unlock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, nil)
+    update_column(:second_factor_attempts_locked_at, nil)
   end
 
   def two_factor_lock_expired?
@@ -201,6 +212,8 @@ private
   end
 
   def send_reset_password_instructions_notification(token)
+    return if deleted?
+
     NotifyMailer.reset_password_instructions(self, token).deliver_later
   end
   # END: Devise methods

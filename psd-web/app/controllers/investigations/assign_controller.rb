@@ -7,7 +7,7 @@ class Investigations::AssignController < ApplicationController
   steps :choose, :confirm_assignment_change
 
   def show
-    @potential_assignee = potential_assignee
+    @potential_assignee = potential_assignee&.decorate
     render_wizard
   end
 
@@ -66,7 +66,7 @@ private
   def assignee_valid?
     if step == :choose
       if potential_assignee == nil
-        @investigation.errors.add(:assignable_id, :invalid, message: "Select assignee")
+        @investigation.errors.add(:assignable_id, :invalid, message: "Select case owner")
       end
     end
     @investigation.errors.empty?

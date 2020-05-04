@@ -15,7 +15,7 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
           message: message,
           investigation: investigation,
           current_user: user
-      )
+        )
       }
 
       it "succeeds" do

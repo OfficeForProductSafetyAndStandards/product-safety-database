@@ -1,10 +1,10 @@
 class AuditActivity::Document::Update < AuditActivity::Document::Base
   def self.from(document, investigation, previous_data)
-    return if self.no_change?(document, previous_data)
+    return if no_change?(document, previous_data)
 
-    if self.title_changed?(document, previous_data)
+    if title_changed?(document, previous_data)
       title = "Updated: #{document.metadata[:title] || 'Untitled document'} (was: #{previous_data[:title] || 'Untitled document'})"
-    elsif self.description_changed?(document, previous_data)
+    elsif description_changed?(document, previous_data)
       title = "Updated: Description for #{document.metadata[:title]}"
     end
     super(document, investigation, title)

@@ -18,12 +18,12 @@ class Investigation < ApplicationRecord
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
   validates :description, presence: true, on: :update
-  validates :assignable_id, presence: { message: "Select assignee" }, on: :update
+  validates :assignable_id, presence: { message: "Select case owner" }, on: :update
 
-  validates_length_of :user_title, maximum: 100
-  validates_length_of :description, maximum: 10000
-  validates_length_of :non_compliant_reason, maximum: 10000
-  validates_length_of :hazard_description, maximum: 10000
+  validates :user_title, length: { maximum: 100 }
+  validates :description, length: { maximum: 10000 }
+  validates :non_compliant_reason, length: { maximum: 10000 }
+  validates :hazard_description, length: { maximum: 10000 }
 
   after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
                :create_audit_activity_for_visibility, :create_audit_activity_for_summary
@@ -34,13 +34,13 @@ class Investigation < ApplicationRecord
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products,
-    after_add: :create_audit_activity_for_product,
-    after_remove: :create_audit_activity_for_removing_product
+                      after_add: :create_audit_activity_for_product,
+                      after_remove: :create_audit_activity_for_removing_product
 
   has_many :investigation_businesses, dependent: :destroy
   has_many :businesses, through: :investigation_businesses,
-    after_add: :create_audit_activity_for_business,
-    after_remove: :create_audit_activity_for_removing_business
+                        after_add: :create_audit_activity_for_business,
+                        after_remove: :create_audit_activity_for_removing_business
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -106,11 +106,11 @@ class Investigation < ApplicationRecord
   end
 
   def enquiry?
-    self.is_a?(Investigation::Enquiry)
+    is_a?(Investigation::Enquiry)
   end
 
   def allegation?
-    self.is_a?(Investigation::Allegation)
+    is_a?(Investigation::Allegation)
   end
 
   # To be implemented by children
@@ -202,7 +202,7 @@ private
   end
 
   def creator_id
-    self.source&.user_id
+    source&.user_id
   end
 
   def assign_to_current_user
@@ -216,7 +216,7 @@ private
         pretty_id,
         User.current.name,
         User.current.email,
-        self.decorate.title,
+        decorate.title,
         case_type
       ).deliver_later
     end

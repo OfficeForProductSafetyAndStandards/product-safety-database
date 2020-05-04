@@ -1,7 +1,7 @@
 class AuditActivity::Investigation::UpdateStatus < AuditActivity::Investigation::Base
   def self.from(investigation)
     title = "#{investigation.case_type.upcase_first} #{investigation.is_closed? ? 'closed' : 'reopened'}"
-    super(investigation, title, self.sanitize_text(investigation.status_rationale))
+    super(investigation, title, sanitize_text(investigation.status_rationale))
   end
 
   def email_update_text

@@ -1,6 +1,6 @@
 module Investigations::UserFiltersHelper
   def entities
-    User.get_assignees(except: current_user) + Team.all_with_organisation
+    User.get_assignees(except: current_user).decorate + Team.all_with_organisation.decorate
   end
 
   def assigned_to(form)
@@ -9,10 +9,10 @@ module Investigations::UserFiltersHelper
       assigned_to_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
     end
     assigned_to_items << { key: "assigned_to_someone_else",
-                 value: "checked",
-                 unchecked_value: "unchecked",
-                 text: "Other person or team",
-                 conditional: { html: other_assignee(form) } }
+                           value: "checked",
+                           unchecked_value: "unchecked",
+                           text: "Other person or team",
+                           conditional: { html: other_assignee(form) } }
   end
 
   def created_by(form)
@@ -21,21 +21,21 @@ module Investigations::UserFiltersHelper
       created_by_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
     end
     created_by_items << { key: "created_by_someone_else",
-                 value: "checked",
-                 unchecked_value: "unchecked",
-                 text: "Other person or team",
-                 conditional: { html: other_creator(form) } }
+                          value: "checked",
+                          unchecked_value: "unchecked",
+                          text: "Other person or team",
+                          conditional: { html: other_creator(form) } }
   end
 
   def other_assignee(form)
     render "form_components/govuk_select", key: :assigned_to_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.display_name, value: e.id } },
-                  label: { text: "Name" }, is_autocomplete: true
+                                           items: entities.map { |e| { text: e.display_name, value: e.id } },
+                                           label: { text: "Name" }, is_autocomplete: true
   end
 
   def other_creator(form)
     render "form_components/govuk_select", key: :created_by_someone_else_id, form: form,
-                  items: entities.map { |e| { text: e.display_name, value: e.id } },
-                  label: { text: "Name" }, is_autocomplete: true
+                                           items: entities.map { |e| { text: e.display_name, value: e.id } },
+                                           label: { text: "Name" }, is_autocomplete: true
   end
 end

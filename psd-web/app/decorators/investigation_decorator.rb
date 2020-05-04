@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :documents_attachments, :assignable
+  decorates_associations :documents_attachments, :assignable, :source
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -115,9 +115,9 @@ class InvestigationDecorator < ApplicationDecorator
 
     out = []
     out << if source.user.nil?
-             h.tag.div("Unassigned")
+             h.tag.div("Unknown")
            else
-             h.escape_once(source.user.name.to_s)
+             h.escape_once(source.user.full_name.to_s)
            end
     out << h.escape_once(source.user&.team_names) if source&.user&.team_names.present?
 
@@ -142,7 +142,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def assignable_display_name_for(viewing_user:)
-    return "Unassigned" unless investigation.assignable
+    return "No case owner" unless investigation.assignable
 
     assignable.assignee_short_name(viewing_user: viewing_user)
   end
