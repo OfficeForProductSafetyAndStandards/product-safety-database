@@ -8,6 +8,10 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   setup do
+    users(:southampton).teams << teams(:southampton)
+    users(:southampton_steve).teams << teams(:southampton)
+    users(:luton).teams << teams(:luton)
+
     user = users(:southampton)
     User.current = user
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }

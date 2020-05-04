@@ -1,0 +1,39 @@
+<%= page_title(@team.display_name) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l"><%= @team.display_name %></h1>
+
+    <%= link_to "Invite a team member", new_team_invitation_path(@team), class: "govuk-button", role: "button" if current_user.is_team_admin? %>
+
+    <h2 class="govuk-heading-m">Team members</h2>
+
+    <ul class="teams--list">
+      <% @team.users.not_deleted.sort_by(&:name).each do |user| %>
+        <li class="teams--user govuk-!-padding-top-3 govuk-!-padding-bottom-3 govuk-!-margin-0">
+          <% if !user.account_activated? && current_user.is_team_admin? %>
+
+            <%= button_to resend_team_invitation_path(@team, user), method: :put, class: "button-link right", role: "link" do %>
+              Resend invitation<span class="govuk-visually-hidden"> to <%= user.email %></span>
+            <% end %>
+          <% end %>
+
+          <h3 class="teams--user-contact">
+            <% if user.name.present? %>
+              <span class="govuk-heading-s teams--user-name"><%= user.name %></span>
+            <% end %>
+            <span class="govuk-caption-m teams--user-email"><%= user.email %></span>
+          </h3>
+
+          <% if user.is_team_admin? %>
+            <ul class="govuk-list permissions">
+              <li>
+                <span class="tick-cross-tick">Can invite team members</span>
+              </li>
+            </ul>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

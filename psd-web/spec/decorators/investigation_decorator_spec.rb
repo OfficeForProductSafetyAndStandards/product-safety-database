@@ -5,9 +5,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   include ActionView::Helpers::TextHelper
   subject(:decorated_investigation) { investigation.decorate }
 
-  let(:organisation) { create :organisation }
-  let(:user)         { create(:user, organisation: organisation).decorate }
-  let(:creator)      { create(:user, organisation: organisation) }
+  let(:organisation)  { create :organisation }
+  let(:user)          { create(:user, organisation: organisation).decorate }
+  let(:team)          { create(:team) }
+  let(:creator)       { create(:user, organisation: organisation, teams: [team]) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }
@@ -129,11 +130,11 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     it "displays the User name" do
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.name}/)
+      expect(investigation_summary_list).to summarise("Created by", text: /#{creator.name}/)
     end
 
     it "displays the Team name" do
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.team_names}/)
+      expect(investigation_summary_list).to summarise("Created by", text: /#{team.name}/)
     end
 
     it "displays the Date created" do

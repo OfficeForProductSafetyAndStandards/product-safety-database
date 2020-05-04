@@ -119,7 +119,7 @@ class InvestigationDecorator < ApplicationDecorator
            else
              h.escape_once(source.user.full_name.to_s)
            end
-    out << h.escape_once(source.user&.team_names) if source&.user&.team_names.present?
+    out << h.escape_once(source.user.team.name) if source&.user&.team
 
     out.join("<br />").html_safe
   end

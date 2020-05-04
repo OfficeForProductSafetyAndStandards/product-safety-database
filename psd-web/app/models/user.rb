@@ -46,36 +46,6 @@ class User < ApplicationRecord
     where(deleted_at: nil)
   end
 
-  def self.find_user_within_teams_with_email!(teams:, email:)
-    joins(:teams).where(teams: { id: teams.pluck(:id) }).find_by!(email: email)
-  end
-
-  def self.create_and_send_invite!(email_address, team, inviting_user)
-    user = create!(
-      skip_password_validation: true,
-      id: SecureRandom.uuid,
-      email: email_address,
-      organisation: team.organisation
-    )
-
-    # TODO: remove this once we’ve updated the application to no
-    # longer depend upon this role.
-    user.user_roles.create!(name: "psd_user")
-    user.user_roles.create!(name: "opss_user") if inviting_user.is_opss?
-
-    team.users << user
-
-    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
-  end
-
-  def self.resend_invite(email_address, inviting_user)
-    user = find_user_within_teams_with_email!(email: email_address, teams: inviting_user.teams)
-
-    user.update! invitation_token: user.invitation_token || SecureRandom.hex(15), invited_at: Time.current
-
-    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
-  end
-
   def self.current
     RequestStore.store[:current_user]
   end
@@ -89,15 +59,11 @@ class User < ApplicationRecord
   end
 
   def in_same_team_as?(user)
-    (teams & user.teams).any?
+    team == user.team
   end
 
   def name
     super.to_s
-  end
-
-  def team_names
-    teams.map(&:name).join(", ")
   end
 
   def is_psd_user?
