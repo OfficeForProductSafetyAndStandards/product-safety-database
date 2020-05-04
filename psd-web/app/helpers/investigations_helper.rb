@@ -188,6 +188,7 @@ module InvestigationsHelper
 
   def set_default_owner_filter
     params[:case_owner_is_me] = "unchecked" if params[:case_owner_is_me].blank?
+    params[:case_owner_is_team_0] = "unchecked" if params[:case_owner_is_team_0].blank?
     params[:case_owner_is_someone_else] = "unchecked" if params[:case_owner_is_someone_else].blank?
   end
 

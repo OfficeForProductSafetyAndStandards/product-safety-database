@@ -6,6 +6,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     {
       allegation: :unchecked,
       case_owner_is_me: :unchecked,
+      case_owner_is_team_0: :unchecked,
       case_owner_is_someone_else: :unchecked,
       created_by_me: :unchecked,
       created_by_someone_else: :unchecked,
