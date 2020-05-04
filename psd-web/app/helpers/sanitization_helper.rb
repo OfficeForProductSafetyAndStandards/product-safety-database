@@ -3,7 +3,7 @@ module SanitizationHelper
   # To keep max length consistent we need to reverse that
   def trim_line_endings(*keys)
     keys.each do |key|
-      self.send(key).gsub!("\r\n", "\n") if self.send(key)
+      send(key).gsub!("\r\n", "\n") if send(key)
     end
   end
 end

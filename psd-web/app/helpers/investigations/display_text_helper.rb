@@ -73,7 +73,7 @@ module Investigations::DisplayTextHelper
   end
 
   def get_highlight_content(result)
-    sanitized_content = sanitize(result, tags: %w(em))
+    sanitized_content = sanitize(result, tags: %w[em])
     sanitized_content.html_safe # rubocop:disable Rails/OutputSafety
   end
 
@@ -119,7 +119,7 @@ module Investigations::DisplayTextHelper
       { key: { text: "Contact" }, value: { text: business.primary_contact&.summary } }
     ]
 
-    # TODO PSD-693 Add primary authorities to businesses
+    # TODO: PSD-693 Add primary authorities to businesses
     # { key: { text: 'Primary authority' }, value: { text: 'Suffolk Trading Standards' } }
 
     render "components/govuk_summary_list", rows: rows

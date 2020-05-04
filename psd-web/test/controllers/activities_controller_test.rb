@@ -13,7 +13,6 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     allow(NotifyMailer).to receive(:investigation_created).and_call_original
   end
 
-
   test "should create activity" do
     assert_difference("Activity.count") do
       post investigation_activity_comment_path(@activity.investigation), params: {

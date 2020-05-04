@@ -11,7 +11,7 @@ class Test < ApplicationRecord
 
   before_validation { trim_line_endings(:details) }
   validates :legislation, presence: { message: "Select the legislation that relates to this test" }
-  validates_length_of :details, maximum: 50000
+  validates :details, length: { maximum: 50000 }
 
   def initialize(*args)
     raise "Cannot directly instantiate a Test record" if self.class == Test

@@ -13,7 +13,7 @@ module Devise
             iterations: 27_500,
             length: KEY_LEN,
             hash: HASH_FUNCTION
-)
+          )
 
           Base64.strict_encode64(hashed_password).strip
         end

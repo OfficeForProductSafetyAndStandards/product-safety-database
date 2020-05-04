@@ -9,7 +9,6 @@ RSpec.describe LinkHelper do
     let(:hidden_text) { "hidden text" }
     let(:class_name) { "test" }
 
-
     it "outputs hidden text" do
       expect(link).to eq("<a class=\"#{class_name}\" href=\"#{url}\">#{title}<span class=\"govuk-visually-hidden\"> (#{hidden_text})</span>\n</a>")
     end
