@@ -62,7 +62,7 @@ cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NA
 
 # run the seeds once the app has migrated, startd and
 # the psd-seeds service was successfully bound to the app
-cf7 run-task "export \$(./env/get-env-from-vcap.sh) && bin/rails db:seed"
+cf7 run-task $APP_NAME --command "export \$(./env/get-env-from-vcap.sh) && bin/rails db:seed"
 
 # Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/psd-web/env/
