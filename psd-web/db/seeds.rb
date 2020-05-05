@@ -413,7 +413,7 @@ if run_seeds
 
   investigation.products << product
 
-  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_name("psd-seeds").try(:[], "organisations")) # rubocop:disable Rails/DynamicFindBy
+  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations")) # rubocop:disable Rails/DynamicFindBy
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
     # $ cf7 env REVIEW_APP_NAME
@@ -446,10 +446,6 @@ if run_seeds
     #     }
     #   ]
     # }
-
-    Organisation.destroy_all
-    Team.destroy_all
-    User.destroy_all
 
     Team.accepts_nested_attributes_for :users
     User.accepts_nested_attributes_for :user_roles
