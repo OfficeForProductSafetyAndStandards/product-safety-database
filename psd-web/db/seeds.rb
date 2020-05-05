@@ -447,23 +447,20 @@ if run_seeds
     #   ]
     # }
 
-    # Organisation.destroy_all
-    # Team.destroy_all
-    # User.destroy_all
-
     Team.accepts_nested_attributes_for :users
     User.accepts_nested_attributes_for :user_roles
 
     organisations.each do |organisation_attributes|
-      Rails.logger.info(organisation_attributes)
       organisation_attributes.deep_symbolize_keys!
       teams_attributes = organisation_attributes.delete(:teams_attributes)
       organisation = Organisation.create! organisation_attributes
 
       teams_attributes.map do |team_attributes|
-        Rails.logger.info(team_attributes)
-        (team_attributes[:users_attributes] || []).map! { |user_attributes| user_attributes[:organisation] = organisation; user_attributes }
-          organisation.teams.create! team_attributes
+        (team_attributes[:users_attributes] || []).map! do |user_attributes|
+          user_attributes[:organisation] = organisation
+          user_attributes
+        end
+        organisation.teams.create! team_attributes
       end
     end
   else
