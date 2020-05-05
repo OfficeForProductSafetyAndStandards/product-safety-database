@@ -39,7 +39,7 @@ class CollaboratorsController < ApplicationController
 
     @team = Team.find(params[:id])
     @collaborator = @investigation.collaborators.find_by! team_id: @team.id
-    @edit_form = EditInvestigationCollaboratorForm.new
+    @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
   def update

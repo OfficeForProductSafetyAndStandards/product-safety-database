@@ -34,6 +34,8 @@ en:
   mail:
     team_added_to_case:
       message_from: "Message from %{user_name}:"
+    team_removed_from_case:
+      message_from: "Message from %{user_name}:"
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
     mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"

@@ -54,10 +54,6 @@ private
     )
   end
 
-   def email_payload
-     { permission_level: permission_level, include_message: include_message, message: message, investigation: investigation, team: team, user: user }
-   end
-
    def select_different_permission_level
      if permission_level == EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT
        errors.add(:permission_level, :select_different_permission_level)
@@ -68,5 +64,9 @@ private
      emails.each do |email|
        NotifyMailer.team_deleted_from_case_email(email_payload, to_email: email).deliver_later
      end
+   end
+
+   def email_payload
+     { permission_level: permission_level, include_message: include_message, message: message, investigation: investigation, team: team, user: user }
    end
 end

@@ -87,6 +87,9 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(page).to have_text("Thanks for collaborating on this case with us.")
   end
 
+  scenario "Remove a team from a case (with validation errors)" do
+  end
+
 private
 
   def expect_to_be_on_case_page(case_id:)
