@@ -59,12 +59,12 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
 
         context "when team has no email" do
           let(:team) { create(:team, team_recipient_email: nil) }
-          let(:team_user) { create(:user, :activated, has_viewed_introduction: true, teams: [team]) }
+          let!(:team_user) { create(:user, :activated, has_viewed_introduction: true, teams: [team]) }
 
           it "sends email to users" do
             form.save
 
-            email = delivered_emails.first
+            email = delivered_emails.last
             expect(email.recipient).to eq(team_user.email)
           end
         end
