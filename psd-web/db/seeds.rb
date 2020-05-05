@@ -463,11 +463,7 @@ if run_seeds
       teams_attributes.map do |team_attributes|
         Rails.logger.info(team_attributes)
         (team_attributes[:users_attributes] || []).map! { |user_attributes| user_attributes[:organisation] = organisation; user_attributes }
-        begin
           organisation.teams.create! team_attributes
-        rescue ActiveRecord::RecordInvalid
-          Rails.logger.tagged("SEEDING DEBUG") { team_attributes }
-        end
       end
     end
   else
