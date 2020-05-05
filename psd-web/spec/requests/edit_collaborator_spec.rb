@@ -6,15 +6,16 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
   let(:team) { create(:team) }
   let(:investigation) { create(:investigation, assignable: user) }
-  let!(:collaborator) do
+  let(:collaborator) do
     create(:collaborator, investigation: investigation, team: team, added_by_user: user)
   end
 
   before do
+    collaborator
     sign_in user
   end
 
-  context "deletion" do
+  context "when deleting" do
     let(:permission_level) { EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE }
     let(:message) { "" }
     let(:include_message) { "false" }
@@ -24,8 +25,7 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
           permission_level: permission_level,
           message: message,
           include_message: include_message,
-        }
-      }
+        } }
     end
 
     let(:do_request) do
@@ -34,14 +34,14 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
     context "when successful" do
       it "removes collaborator" do
-        expect { do_request }.to change { Collaborator.count }.from(1).to(0)
+        expect { do_request }.to change(Collaborator, :count).from(1).to(0)
       end
 
       it "redirects back to the 'teams added to case' page" do
         expect(do_request).to redirect_to(investigation_collaborators_path(investigation))
       end
 
-      it "redirects back to the 'teams added to case' page" do
+      it "displays proper flash message" do
         do_request
         expect(flash[:success]).to eq("#{team.name} removed from the case")
       end

@@ -26,7 +26,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   end
 
   let(:form) {
-    EditInvestigationCollaboratorForm.new(params)
+    described_class.new(params)
   }
 
   before do
@@ -37,13 +37,14 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     context "when deleting" do
       context "when successful" do
         it "removes collaborator record" do
-          expect { form.save }.to change { Collaborator.count }.from(1).to(0)
+          expect { form.save }.to change(Collaborator, :count).from(1).to(0)
         end
 
         it "returns true" do
           expect(form.save).to be_truthy
         end
 
+        # rubocop:disable RSpec/ExampleLength
         it "sends email" do
           form.save
 
@@ -54,6 +55,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
             expect(email.personalization_value(:updater_name)).to eq(user.name)
           end
         end
+        # rubocop:enable RSpec/ExampleLength
 
         context "when team has no email" do
           let(:team) { create(:team, team_recipient_email: nil) }
@@ -67,6 +69,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
           end
         end
 
+        # rubocop:disable RSpec/ExampleLength
         it "creates activity entry" do
           form.save
 
@@ -77,6 +80,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
             expect(last_added_activity.source.user_id).to eql(user.id)
           end
         end
+        # rubocop:enable RSpec/ExampleLength
       end
 
       context "when unsucessful" do
