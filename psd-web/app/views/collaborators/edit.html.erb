@@ -11,8 +11,6 @@
     <%= error_summary @edit_form.errors %>
 
     <h1 class="govuk-heading-l"><%= title %></h1>
-    <h2 class="govuk-heading-l">Permission level</h2>
-
 
     <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @team), method: :put do |form| %>
 
@@ -21,13 +19,20 @@
         form: form,
         key: :permission_level,
         classes: "",
+        fieldset: {
+          legend: {
+            text: "Permision level",
+            is_page_heading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
         items: [
           {
             id: "edit_full_case",
             text: "Edit full case",
             value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT,
             hint: {
-              text: "View full case details including correspondence"
+              text: "View full case details including correspondence",
             }
           },
           {key: "or", divider: "or"},
