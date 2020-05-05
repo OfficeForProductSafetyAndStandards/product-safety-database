@@ -5,7 +5,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   let(:user) { create(:user, :activated, has_viewed_introduction: true, teams: [user_team]) }
   let(:investigation) { create(:investigation, assignable: user) }
   let(:team) { create(:team) }
-  let!(:collaborator) do
+  let(:collaborator) do
     create(:collaborator, investigation: investigation, team: team, added_by_user: user)
   end
 
@@ -29,6 +29,10 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     EditInvestigationCollaboratorForm.new(params)
   }
 
+  before do
+    collaborator
+  end
+
   describe "#save" do
     context "when deleting" do
       context "when successful" do
@@ -48,6 +52,18 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
             expect(email.recipient).to eq(team.team_recipient_email)
             expect(email.personalization_value(:case_id)).to eq(investigation.id)
             expect(email.personalization_value(:updater_name)).to eq(user.name)
+          end
+        end
+
+        context "when team has no email" do
+          let(:team) { create(:team, team_recipient_email: nil) }
+          let(:team_user) { create(:user, :activated, has_viewed_introduction: true, teams: [team]) }
+
+          it "sends email to users" do
+            form.save
+
+            email = delivered_emails.first
+            expect(email.recipient).to eq(team_user.email)
           end
         end
 

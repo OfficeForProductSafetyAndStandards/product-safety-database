@@ -5,16 +5,16 @@ class EditInvestigationCollaboratorForm
 
   attr_accessor :permission_level, :include_message, :message, :investigation, :team, :user
 
+  validates_presence_of :permission_level
+  validate :select_different_permission_level
   validates :include_message, inclusion: { in: [true, false] }
   validates_presence_of :message,
     if: -> { include_message }
-  validates_presence_of :permission_level
-  validate :select_different_permission_level
 
   def save
     if valid?
       collaborator.delete
-      schedule_delete_email
+      schedule_delete_emails
       add_deletion_activity
       true
     else
@@ -36,14 +36,13 @@ private
     investigation.collaborators.find_by!(team_id: team.id)
   end
 
-  def schedule_delete_email
-    if team.team_recipient_email.present?
-      NotifyMailer.team_deleted_from_case_email(email_payload, to_email: team.team_recipient_email).deliver_later
+  def schedule_delete_emails
+    emails = if team.team_recipient_email.present?
+      [team.team_recipient_email]
     else
-      team.users.activated.each do |user|
-        NotifyMailer.team_deleted_from_case_email(email_payload, to_email: user.email).deliver_later
-      end
+      team.users.active.pluck(:email)
     end
+    schedule_delete_email(emails)
   end
 
   def add_deletion_activity
@@ -62,6 +61,12 @@ private
    def select_different_permission_level
      if permission_level == EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT
        errors.add(:permission_level, :select_different_permission_level)
+     end
+   end
+
+   def schedule_delete_email(emails)
+     emails.each do |email|
+       NotifyMailer.team_deleted_from_case_email(email_payload, to_email: email).deliver_later
      end
    end
 end
