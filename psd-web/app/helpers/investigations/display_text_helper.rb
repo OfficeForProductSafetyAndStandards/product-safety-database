@@ -104,8 +104,9 @@ module Investigations::DisplayTextHelper
 
   def investigation_assignee(investigation)
     out = [investigation.assignable ? h(investigation.assignable.name.to_s) : "No case owner".html_safe]
-    if investigation&.assignable&.organisation&.name != investigation&.assignable&.name
-      out << h(investigation.assignable.organisation.name)
+    # Add team name if owner is a user
+    if investigation&.assignee_team&.name != investigation&.assignable&.name
+      out << h(investigation.assignee_team.name)
     end
     safe_join(out, "<br>".html_safe)
   end
