@@ -1,5 +1,5 @@
 ruby:
-  restricted = true #!can_be_displayed?(document, parent)
+  restricted = !can_be_displayed?(document, parent)
   title = restricted ? document_restricted_title : document.title
   safe = document.metadata["safe"]
   document = document.decorate
