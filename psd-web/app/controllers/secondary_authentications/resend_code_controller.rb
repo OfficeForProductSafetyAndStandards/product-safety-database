@@ -1,13 +1,13 @@
 module SecondaryAuthentications
   class ResendCodeController < ApplicationController
-    skip_before_action :authenticate_user!
-    skip_before_action :set_current_user
-    skip_before_action :require_secondary_authentication
-    skip_before_action :set_raven_context
-    skip_before_action :authorize_user
-    skip_before_action :has_accepted_declaration
-    skip_before_action :has_viewed_introduction
-    skip_before_action :set_cache_headers
+    skip_before_action :authenticate_user!,
+                       :set_current_user,
+                       :require_secondary_authentication,
+                       :set_raven_context,
+                       :authorize_user,
+                       :has_accepted_declaration,
+                       :has_viewed_introduction,
+                       :set_cache_headers
 
     def show; end
 
