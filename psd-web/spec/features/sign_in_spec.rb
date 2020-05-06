@@ -87,7 +87,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).to have_css("h1", text: "Resend security code")
     expect(page).to have_current_path("/text-not-received")
 
-    click_on "Resend security code"
+    click_button "Resend security code"
 
     expect_user_to_have_received_sms_code("54321")
 
