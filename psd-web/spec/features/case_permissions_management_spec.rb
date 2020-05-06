@@ -13,8 +13,12 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
            assignable: user)
   }
 
-  before do
+  let(:team) do
     create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk")
+  end
+
+  before do
+    team
   end
 
   scenario "Adding a team to a case (with validation errors)" do
@@ -88,6 +92,67 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   end
 
   scenario "Remove a team from a case (with validation errors)" do
+    # create collaborator
+    sign_in user
+    create(:collaborator, investigation: investigation, team: team)
+
+    visit "/cases/#{investigation.pretty_id}"
+
+    click_link "Change teams added to the case"
+
+    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+
+    expect_teams_tables_to_contain([
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner" },
+      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
+    ])
+
+    click_on "Change"
+
+    expect_to_be_on_edit_case_permissions_page(case_id: investigation.pretty_id)
+
+    click_button "Update team"
+
+    expect(page).to have_title("Error: #{team.name}")
+    expect(page).to have_selector("a", text: "This team already has this permission level. Select a different option or return to the case.")
+    expect(page).to have_selector("a", text: "Select whether you want to include a message")
+
+    within_fieldset "Permission level" do
+      choose "Remove #{team.name} from the case"
+    end
+    within_fieldset "Do you want to include more information?" do
+      choose "Yes, add a message"
+    end
+
+    click_button "Update team"
+
+    expect(page).to have_title("Error: #{team.name}")
+    expect(page).to have_selector("a", text: "Enter a message to the team")
+
+    within_fieldset "Do you want to include more information?" do
+      fill_in "Message to the team", with: "Thanks for collaborating on this case with us."
+    end
+
+    click_button "Update team"
+
+    notification_email = delivered_emails.last
+
+    expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
+    expect(notification_email.personalization_value(:case_id)).to eq(investigation.pretty_id)
+    expect(notification_email.personalization_value(:case_type)).to eq("allegation")
+    expect(notification_email.personalization_value(:case_title)).to eq(investigation.decorate.title)
+    expect(notification_email.personalization_value(:updater_name)).to eq(user.name)
+    expect(notification_email.personalization_value(:optional_message)).to eq("Message from #{user.name}:\n\n^ Thanks for collaborating on this case with us.")
+
+    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+
+    expect_teams_tables_to_contain([
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner" }
+    ])
+
+    expect_teams_tables_not_to_contain([
+      { team_name: "Southampton Trading Standards"}
+    ])
   end
 
 private
@@ -112,6 +177,11 @@ private
     expect(page).to have_selector("h1", text: "Activity")
   end
 
+  def expect_to_be_on_edit_case_permissions_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/teams/#{team.id}/edit")
+    expect(page).to have_selector("h1", text: team.name)
+  end
+
   def expect_teams_tables_to_contain(expected_teams)
     teams_table = page.find(:table, "Teams added to the case")
 
@@ -119,6 +189,17 @@ private
       expected_teams.each do |expected_team|
         row_heading = page.find("th", text: expected_team[:team_name])
         expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
+      end
+    end
+  end
+
+  def expect_teams_tables_not_to_contain(teams)
+    teams_table = page.find(:table, "Teams added to the case")
+
+    within(teams_table) do
+      teams.each do |expected_team|
+        elems = page.all("th", text: expected_team[:team_name])
+        expect(elems).to be_empty, "#{expected_team[:team_name]} should not be visible"
       end
     end
   end

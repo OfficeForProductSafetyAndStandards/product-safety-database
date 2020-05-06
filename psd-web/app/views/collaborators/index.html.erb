@@ -40,7 +40,7 @@
             <td class="govuk-table__cell">Edit full case</td>
             <td class="govuk-table__cell">
               <% if policy(@investigation).add_collaborators? %>
-                <%= link_to "Change", edit_investigation_collaborator_path(@investigation, team) %>
+                <%= link_with_hidden_text_to "Change", "#{team.name}",  edit_investigation_collaborator_path(@investigation, team) %>
               <% end %>
             </td>
           </tr>

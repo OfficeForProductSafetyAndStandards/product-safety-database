@@ -21,14 +21,14 @@
         classes: "",
         fieldset: {
           legend: {
-            text: "Permision level",
+            text: "Permission level",
             is_page_heading: false,
             classes: "govuk-fieldset__legend--m"
           }
         },
         items: [
           {
-            id: "edit_full_case",
+            id: "permission_level",
             text: "Edit full case",
             value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT,
             hint: {
@@ -55,7 +55,7 @@
           key: :message,
           id: "message",
           label: {
-            text: "Message to the team"
+            text: "Message to the #{@team.name}"
           },
           hint: {
             text: "Message will also be included on the case timeline"
@@ -74,8 +74,8 @@
         },
         items: [
           {
-            id: "include_message",
             text: "Yes, add a message",
+            id: "include_message",
             value: "true",
             conditional: {
               html: message_html

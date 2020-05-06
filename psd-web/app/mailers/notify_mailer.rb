@@ -163,9 +163,9 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      case_type: form.investigation.type.to_s.downcase,
+      case_type: form.investigation.case_type.to_s.downcase,
       case_title: form.investigation.decorate.title,
-      case_id: form.investigation.id,
+      case_id: form.investigation.pretty_id,
       updater_name: form.user.name,
       optional_message: optional_message,
     )

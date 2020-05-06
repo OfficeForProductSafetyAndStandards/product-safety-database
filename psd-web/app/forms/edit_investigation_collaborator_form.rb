@@ -19,7 +19,7 @@ class EditInvestigationCollaboratorForm
 
   def save
     if valid?
-      collaborator.delete
+      collaborator.destroy!
       add_deletion_activity
       schedule_delete_emails
       true

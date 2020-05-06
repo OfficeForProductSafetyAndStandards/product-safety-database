@@ -49,8 +49,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
 
           email = delivered_emails.last
           expect(email.recipient).to eq(team.team_recipient_email)
-          expect(email.personalization_value(:case_id)).to eq(investigation.id)
-          expect(email.personalization_value(:updater_name)).to eq(user.name)
+          expect(email.personalization_value(:case_id)).to eq(investigation.pretty_id)
         end
 
         context "when team has no email" do
