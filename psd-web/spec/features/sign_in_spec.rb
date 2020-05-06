@@ -95,7 +95,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).to have_css("h1", text: "Check your phone")
 
     fill_in "Enter security code", with: otp_code
-    click_on "Continue"
+    click_button "Continue"
 
     expect(page).to have_css("h2", text: "Your cases")
     expect(page).to have_link("Sign out", href: destroy_user_session_path)
