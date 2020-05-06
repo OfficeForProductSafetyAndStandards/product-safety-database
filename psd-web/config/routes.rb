@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   get "two-factor", to: "secondary_authentications#new", as: :new_secondary_authentication
   post "two-factor", to: "secondary_authentications#create", as: :secondary_authentication
 
+  get "text-not-received", to: "secondary_authentications/resend_code#new", as: :new_resend_secondary_authentication_code
+  post "text-not-received", to: "secondary_authentications/resend_code#create", as: :resend_secondary_authentication_code
+
   resource :account, only: [:show], controller: :account do
     resource :name, controller: :account_name, only: %i[show update]
   end

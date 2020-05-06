@@ -25,6 +25,12 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).not_to have_link("Cases")
   end
 
+  def expect_user_to_have_received_sms_code(code)
+    expect(notify_stub).to have_received(:send_sms).with(
+      hash_including(phone_number: user.mobile_number, personalisation: { code: code })
+    )
+  end
+
   scenario "user signs in with correct two factor authentication code" do
     visit "/sign-in"
     fill_in_credentials
@@ -64,6 +70,35 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).to have_css("h1", text: "Check your phone")
     expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
     expect(page).to have_css("#otp_code-error", text: "Error: Incorrect security code")
+  end
+
+  scenario "user signs in with correct secondary authentication code after requesting a second code" do
+    visit "/sign-in"
+    fill_in_credentials
+
+    first_2fa_code = otp_code
+    expect_user_to_have_received_sms_code(first_2fa_code)
+
+    expect(page).to have_css("h1", text: "Check your phone")
+
+    click_link "Not received a text message?"
+
+    expect(page).to have_css("h1", text: "Resend security code")
+    expect(page).to have_current_path("/text-not-received")
+
+    click_on "Resend security code"
+
+    second_2fa_code = otp_code
+    expect(second_2fa_code).not_to eq first_2fa_code
+    expect_user_to_have_received_sms_code(second_2fa_code)
+
+    expect(page).to have_css("h1", text: "Check your phone")
+
+    fill_in "Enter security code", with: otp_code
+    click_on "Continue"
+
+    expect(page).to have_css("h2", text: "Your cases")
+    expect(page).to have_link("Sign out", href: destroy_user_session_path)
   end
 
   context "when using wrong credentials over and over again" do
