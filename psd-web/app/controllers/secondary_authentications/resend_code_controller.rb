@@ -9,8 +9,6 @@ module SecondaryAuthentications
                        :has_viewed_introduction,
                        :set_cache_headers
 
-    def show; end
-
     def create
       # To avoid the user being redirected back to "Resend Security Code" page after successfully introducing
       # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
