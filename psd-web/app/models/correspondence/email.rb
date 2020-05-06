@@ -4,8 +4,8 @@ class Correspondence::Email < Correspondence
   attribute :email_direction
 
   enum email_direction: {
-      outbound: "To",
-      inbound: "From"
+    outbound: "To",
+    inbound: "From"
   }
 
   def validate_email_file_and_content file_blob

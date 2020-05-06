@@ -9,11 +9,11 @@ class Investigation < ApplicationRecord
   attr_accessor :assignee_rationale
 
   enum reported_reason: {
-         unsafe: "unsafe",
-         non_compliant: "non_compliant",
-         unsafe_and_non_compliant: "unsafe_and_non_compliant",
-         safe_and_compliant: "safe_and_compliant"
-       }
+    unsafe: "unsafe",
+    non_compliant: "non_compliant",
+    unsafe_and_non_compliant: "unsafe_and_non_compliant",
+    safe_and_compliant: "safe_and_compliant"
+  }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 

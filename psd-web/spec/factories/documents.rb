@@ -12,10 +12,10 @@ FactoryBot.define do
 
     after :create do |model, evaluator|
       file = ActiveSupportHelper.create_file(model, evaluator, metadata: {
-                         title: evaluator.document_title,
-                         description: evaluator.document_description,
-                         updated: Time.now.iso8601
-                        })
+        title: evaluator.document_title,
+        description: evaluator.document_description,
+        updated: Time.now.iso8601
+      })
 
       model.documents.attach(file)
     end
@@ -26,13 +26,13 @@ FactoryBot.define do
 
     after :create do |model, evaluator|
       file = ActiveSupportHelper.create_file(model, evaluator, metadata: {
-                         analyzed: true,
-                         description: evaluator.document_description,
-                         identified: true,
-                         safe: true,
-                         title: evaluator.document_title,
-                         updated: Time.now.iso8601
-                        })
+        analyzed: true,
+        description: evaluator.document_description,
+        identified: true,
+        safe: true,
+        title: evaluator.document_title,
+        updated: Time.now.iso8601
+      })
 
       model.documents.attach(file)
     end
