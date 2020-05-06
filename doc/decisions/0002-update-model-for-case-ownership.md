@@ -72,7 +72,20 @@ Cons
 * The database wouldn’t enforce that all cases have exactly one team owner (it’d be possible to have zero or 2+ team owners), this would have to be done at the application layer.
 * Querying for the owner team of the case would require a join rather than a simpler query.
 
-#### 4. Any other alternatives?
+### 4. Polymorphic `Collaborator` model
+
+Adding `assignee_id` and `assignee_type` columns, which will store either `Team` or `User`. Adding `role` column which will store permission level, eg: `owner`, `read_access`, `write_access` etc.
+
+Pros
+----
+* Moves all of the relationships between cases and teams to a single place (the `collaborators` table)
+* Changing the case owner team becomes simpler: by using `role` column we can have fine grained permissions.
+
+Cons
+----
+* Querying for the owner team of the case would require a join rather than a simpler query.
+
+### 5. Any other alternatives?
 
 Other ideas?
 
