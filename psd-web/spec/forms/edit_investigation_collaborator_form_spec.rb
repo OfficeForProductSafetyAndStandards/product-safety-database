@@ -68,8 +68,8 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
         it "creates activity entry", :aggregate_failures do
           form.save
 
-          last_added_activity = investigation.activities.reload.order(:created_at).first
-          expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamDeleted)
+          last_added_activity = investigation.activities.reload.order(created_at: :desc)
+            .find_by!(type: "AuditActivity::Investigation::TeamDeleted")
           expect(last_added_activity.title).to eql("test team removed from allegation")
           expect(last_added_activity.source.user_id).to eql(user.id)
         end
