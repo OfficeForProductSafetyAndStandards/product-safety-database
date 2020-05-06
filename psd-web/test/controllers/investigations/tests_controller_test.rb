@@ -32,7 +32,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
             day: "18"
           }
         }
-    }
+      }
     end
 
     assert Test.last.is_a?(Test::Request)
@@ -55,7 +55,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
           },
           result: "Fail",
           file: {
-              file: fixture_file_upload("files/testImage.png", "application/png")
+            file: fixture_file_upload("files/testImage.png", "application/png")
           }
         }
       }
