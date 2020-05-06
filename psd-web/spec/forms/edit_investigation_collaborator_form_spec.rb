@@ -41,7 +41,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
         end
 
         it "returns true" do
-          expect(form.save).to be_truthy
+          expect(form.save).to be true
         end
 
         # rubocop:disable RSpec/ExampleLength
