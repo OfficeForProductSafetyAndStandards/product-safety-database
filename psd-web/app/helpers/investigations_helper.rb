@@ -205,15 +205,15 @@ module InvestigationsHelper
 
   def build_breadcrumb_structure
     {
-        items: [
-            {
-                text: "Cases",
-                href: investigations_path(previous_search_params)
-            },
-            {
-                text: @investigation.pretty_description
-            }
-        ]
+      items: [
+        {
+          text: "Cases",
+          href: investigations_path(previous_search_params)
+        },
+        {
+          text: @investigation.pretty_description
+        }
+      ]
     }
   end
 

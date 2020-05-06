@@ -5,9 +5,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   let(:received_type) { "enquiry_received_type_email" }
   let(:contact_details) do
     {
-        contact_name: Faker::Name.name,
-        contact_email: Faker::Internet.safe_email,
-        contact_phone: Faker::PhoneNumber.phone_number,
+      contact_name: Faker::Name.name,
+      contact_email: Faker::Internet.safe_email,
+      contact_phone: Faker::PhoneNumber.phone_number,
     }
   end
   let(:enquiry_details) do

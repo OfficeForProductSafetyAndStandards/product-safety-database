@@ -58,11 +58,11 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     investigation_status = lambda { Investigation.find(investigation.id).is_closed }
     assert_changes investigation_status, from: false, to: is_closed do
       patch status_investigation_url(investigation), params: {
-              investigation: {
-                is_closed: is_closed,
-                status_rationale: "some rationale"
-              }
-            }
+        investigation: {
+          is_closed: is_closed,
+          status_rationale: "some rationale"
+        }
+      }
     end
     assert_redirected_to investigation_path(investigation)
   end
@@ -74,20 +74,20 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     investigation_status = lambda { Investigation.find(investigation.id).description }
     assert_changes investigation_status, from: old_description, to: new_description do
       patch edit_summary_investigation_url(investigation), params: {
-              investigation: {
-                description: new_description
-              }
-            }
+        investigation: {
+          description: new_description
+        }
+      }
     end
     assert_redirected_to investigation_path(investigation)
   end
 
   test "should require description to not be empty" do
     patch edit_summary_investigation_url(@investigation_one), params: {
-            investigation: {
-              description: ""
-            }
-          }, headers: { "HTTP_REFERER": "/cases/1111-1111/edit_summary" }
+      investigation: {
+        description: ""
+      }
+    }, headers: { "HTTP_REFERER": "/cases/1111-1111/edit_summary" }
     assert_includes(CGI.unescapeHTML(response.body), "Description cannot be blank")
   end
 
@@ -101,9 +101,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "status filter for both open and closed checked" do
     get investigations_path, params: {
-          status_open: "checked",
-          status_closed: "checked"
-        }
+      status_open: "checked",
+      status_closed: "checked"
+    }
     assert_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_three.pretty_id)
     assert_includes(response.body, @investigation_no_products.pretty_id)
@@ -111,9 +111,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "status filter for both open and closed unchecked" do
     get investigations_path, params: {
-          status_open: "unchecked",
-          status_closed: "unchecked"
-        }
+      status_open: "unchecked",
+      status_closed: "unchecked"
+    }
     assert_includes(response.body, @investigation_one.pretty_id)
     # assert_includes(response.body, @investigation_two.pretty_id)
     assert_includes(response.body, @investigation_three.pretty_id)
@@ -122,9 +122,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "status filter for only open checked" do
     get investigations_path, params: {
-          status_open: "checked",
-          status_closed: "unchecked"
-        }
+      status_open: "checked",
+      status_closed: "unchecked"
+    }
     assert_not_includes(response.body, @investigation_three.pretty_id)
     assert_includes(response.body, @investigation_one.pretty_id)
     # assert_includes(response.body, @investigation_two.pretty_id)
@@ -144,9 +144,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return all investigations if all unchecked" do
     get investigations_path, params: {
-        allegation: "unchecked",
-        enquiry: "unchecked",
-        project: "unchecked",
+      allegation: "unchecked",
+      enquiry: "unchecked",
+      project: "unchecked",
     }
     assert_includes(response.body, load_case(:allegation).pretty_id)
     assert_includes(response.body, load_case(:enquiry).pretty_id)
@@ -155,9 +155,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return all investigations if all checked" do
     get investigations_path, params: {
-        allegation: "checked",
-        enquiry: "checked",
-        project: "checked",
+      allegation: "checked",
+      enquiry: "checked",
+      project: "checked",
     }
     assert_includes(response.body, load_case(:allegation).pretty_id)
     assert_includes(response.body, load_case(:enquiry).pretty_id)
@@ -166,9 +166,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return allegation investigations if allegation unchecked" do
     get investigations_path, params: {
-        allegation: "checked",
-        enquiry: "unchecked",
-        project: "unchecked",
+      allegation: "checked",
+      enquiry: "unchecked",
+      project: "unchecked",
     }
     assert_includes(response.body, load_case(:allegation).pretty_id)
     assert_not_includes(response.body, load_case(:enquiry).pretty_id)
@@ -177,10 +177,10 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return all investigations if both owner checkboxes are unchecked" do
     get investigations_path, params: {
-        case_owner_is_me: "unchecked",
-        case_owner_is_someone_else: "unchecked",
-        status_open: "unchecked",
-        status_closed: "unchecked"
+      case_owner_is_me: "unchecked",
+      case_owner_is_someone_else: "unchecked",
+      status_open: "unchecked",
+      status_closed: "unchecked"
     }
     assert_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_two.pretty_id)
@@ -189,11 +189,11 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return all investigations if both owner checkboxes are checked and name input is blank" do
     get investigations_path, params: {
-        case_owner_is_me: "checked",
-        case_owner_is_someone_else: "checked",
-        case_owner_is_someone_else_id: nil,
-        status_open: "unchecked",
-        status_closed: "unchecked"
+      case_owner_is_me: "checked",
+      case_owner_is_someone_else: "checked",
+      case_owner_is_someone_else_id: nil,
+      status_open: "unchecked",
+      status_closed: "unchecked"
     }
     assert_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_two.pretty_id)
@@ -202,12 +202,12 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return investigations owneed by the current user if only the 'Me' checkbox is checked" do
     get investigations_path, params: {
-        case_owner_is_me: "checked",
-        case_owner_is_someone_else: "unchecked",
-        case_owner_is_someone_else_id: nil,
-        case_owner_is_team_0: "unchecked",
-        status_open: "unchecked",
-        status_closed: "unchecked"
+      case_owner_is_me: "checked",
+      case_owner_is_someone_else: "unchecked",
+      case_owner_is_someone_else_id: nil,
+      case_owner_is_team_0: "unchecked",
+      status_open: "unchecked",
+      status_closed: "unchecked"
     }
     assert_not_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_two.pretty_id)
@@ -217,11 +217,11 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should return investigations owned by the current user or given user if both checkboxes are checked
               and a user is given in the input" do
     get investigations_path, params: {
-        case_owner_is_me: "checked",
-        case_owner_is_someone_else: "checked",
-        case_owner_is_someone_else_id: @investigation_two.owner_id,
-        status_open: "unchecked",
-        status_closed: "unchecked"
+      case_owner_is_me: "checked",
+      case_owner_is_someone_else: "checked",
+      case_owner_is_someone_else_id: @investigation_two.owner_id,
+      status_open: "unchecked",
+      status_closed: "unchecked"
     }
     assert_not_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_two.pretty_id)
@@ -231,12 +231,12 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should return investigations owned by a given user if only 'someone else' checkbox is checked
               and a user is given in the input" do
     get investigations_path, params: {
-        case_owner_is_me: "unchecked",
-        case_owner_is_someone_else: "checked",
-        case_owner_is_someone_else_id: @investigation_two.owner_id,
-        case_owner_is_team_0: "unchecked",
-        status_open: "unchecked",
-        status_closed: "unchecked"
+      case_owner_is_me: "unchecked",
+      case_owner_is_someone_else: "checked",
+      case_owner_is_someone_else_id: @investigation_two.owner_id,
+      case_owner_is_team_0: "unchecked",
+      status_open: "unchecked",
+      status_closed: "unchecked"
     }
     assert_not_includes(response.body, @investigation_one.pretty_id)
     assert_includes(response.body, @investigation_two.pretty_id)
@@ -246,11 +246,11 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should return investigations owned by anyone except current user if only 'someone else' checkbox
               is checked and no user is given in the input" do
     get investigations_path, params: {
-        case_owner_is_me: "unchecked",
-        case_owner_is_someone_else: "checked",
-        case_owner_is_someone_else_id: nil,
-        status_open: "unchecked",
-        status_closed: "unchecked"
+      case_owner_is_me: "unchecked",
+      case_owner_is_someone_else: "checked",
+      case_owner_is_someone_else_id: nil,
+      status_open: "unchecked",
+      status_closed: "unchecked"
     }
     assert_includes(response.body, @investigation_one.pretty_id)
     assert_not_includes(response.body, @investigation_two.pretty_id)
@@ -264,27 +264,27 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should return the most recently updated investigation first if sort by 'Most recently updated' is selected" do
     get investigations_path, params: {
-        status_open: "unchecked",
-        status_closed: "unchecked",
-        sort_by: "recent"
+      status_open: "unchecked",
+      status_closed: "unchecked",
+      sort_by: "recent"
     }
     # assert response.body.index(@investigation_one.pretty_id.to_s) < response.body.index(@investigation_two.pretty_id.to_s)
   end
 
   test "should return the oldest updated investigation first if sort by 'Least recently updated' is selected" do
     get investigations_path, params: {
-        status_open: "unchecked",
-        status_closed: "unchecked",
-        sort_by: "oldest"
+      status_open: "unchecked",
+      status_closed: "unchecked",
+      sort_by: "oldest"
     }
     # assert response.body.index(@investigation_two.pretty_id.to_s) < response.body.index(@investigation_one.pretty_id.to_s)
   end
 
   test "should return the most recently created investigation first if sort by 'Most recently created' is selected" do
     get investigations_path, params: {
-        status_open: "unchecked",
-        status_closed: "unchecked",
-        sort_by: "newest"
+      status_open: "unchecked",
+      status_closed: "unchecked",
+      sort_by: "newest"
     }
     # assert response.body.index(@investigation_two.pretty_id.to_s) < response.body.index(@investigation_one.pretty_id.to_s)
   end

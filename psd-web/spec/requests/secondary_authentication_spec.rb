@@ -4,11 +4,11 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
   subject(:submit_2fa) do
     post secondary_authentication_path,
          params: {
-         secondary_authentication_form: {
-           otp_code: submitted_code,
-           user_id: user.id
+           secondary_authentication_form: {
+             otp_code: submitted_code,
+             user_id: user.id
+           }
          }
-       }
   end
 
   let(:attempts) { 0 }
