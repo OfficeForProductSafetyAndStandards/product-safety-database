@@ -44,18 +44,14 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
           expect(form.save).to be true
         end
 
-        # rubocop:disable RSpec/ExampleLength
-        it "sends email" do
+        it "sends email", :aggregate_failures do
           form.save
 
           email = delivered_emails.last
-          aggregate_failures do
-            expect(email.recipient).to eq(team.team_recipient_email)
-            expect(email.personalization_value(:case_id)).to eq(investigation.id)
-            expect(email.personalization_value(:updater_name)).to eq(user.name)
-          end
+          expect(email.recipient).to eq(team.team_recipient_email)
+          expect(email.personalization_value(:case_id)).to eq(investigation.id)
+          expect(email.personalization_value(:updater_name)).to eq(user.name)
         end
-        # rubocop:enable RSpec/ExampleLength
 
         context "when team has no email" do
           let(:team) { create(:team, team_recipient_email: nil) }
@@ -69,18 +65,14 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
           end
         end
 
-        # rubocop:disable RSpec/ExampleLength
-        it "creates activity entry" do
+        it "creates activity entry", :aggregate_failures do
           form.save
 
           last_added_activity = investigation.activities.reload.order(:created_at).first
-          aggregate_failures do
-            expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamDeleted)
-            expect(last_added_activity.title).to eql("test team removed from allegation")
-            expect(last_added_activity.source.user_id).to eql(user.id)
-          end
+          expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamDeleted)
+          expect(last_added_activity.title).to eql("test team removed from allegation")
+          expect(last_added_activity.source.user_id).to eql(user.id)
         end
-        # rubocop:enable RSpec/ExampleLength
       end
 
       context "when unsucessful" do

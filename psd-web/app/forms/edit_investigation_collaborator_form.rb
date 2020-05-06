@@ -2,9 +2,14 @@ class EditInvestigationCollaboratorForm
   PERMISSION_LEVEL_EDIT = "edit".freeze
   PERMISSION_LEVEL_DELETE = "delete".freeze
   include ActiveModel::Model
+  include ActiveModel::Attributes
 
-  attr_accessor :permission_level, :message, :investigation, :team, :user
-  attr_reader :include_message
+  attribute :permission_level
+  attribute :message
+  attribute :investigation
+  attribute :team
+  attribute :user
+  attribute :include_message, :boolean
 
   validates_presence_of :permission_level
   validate :select_different_permission_level
@@ -15,20 +20,12 @@ class EditInvestigationCollaboratorForm
   def save
     if valid?
       collaborator.delete
-      schedule_delete_emails
       add_deletion_activity
+      schedule_delete_emails
       true
     else
       false
     end
-  end
-
-  def include_message=(value)
-    @include_message = if value.is_a? String
-                         (value == "true")
-                       else
-                         value
-                       end
   end
 
 private
@@ -38,12 +35,15 @@ private
   end
 
   def schedule_delete_emails
-    emails = if team.team_recipient_email.present?
-               [team.team_recipient_email]
-             else
-               team.users.active.pluck(:email)
-             end
-    schedule_delete_email(emails)
+    schedule_delete_email(find_emails)
+  end
+
+  def find_emails
+    if team.team_recipient_email.present?
+      [team.team_recipient_email]
+    else
+      team.users.active.pluck(:email)
+    end
   end
 
   def add_deletion_activity

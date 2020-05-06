@@ -45,9 +45,8 @@ class CollaboratorsController < ApplicationController
   def update
     authorize @investigation, :add_collaborators?
 
-    params.permit!
     @team = Team.find(params[:id])
-    @edit_form = EditInvestigationCollaboratorForm.new(params[:edit_investigation_collaborator_form]
+    @edit_form = EditInvestigationCollaboratorForm.new(edit_params
       .merge(investigation: @investigation, team: @team, user: current_user))
     if @edit_form.save
       flash[:success] = "#{@team.name} removed from the case"
@@ -71,5 +70,9 @@ private
 
   def team_ids_with_access
     @investigation.collaborators.pluck(:team_id) + [@investigation.assignee_team.try(:id)]
+  end
+
+  def edit_params
+    params.require(:edit_investigation_collaborator_form).permit(:permission_level, :include_message, :message)
   end
 end
