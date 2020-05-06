@@ -16,5 +16,11 @@ module SecondaryAuthentications
       # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
       require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])
     end
+
+  private
+
+    def hide_nav?
+      true
+    end
   end
 end
