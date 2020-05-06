@@ -120,8 +120,8 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
   test "Alert trading standards should go to new alert page" do
     get new_investigation_activity_path(@investigation), params: {
-        commit: "Continue",
-        activity_type: "alert"
+      commit: "Continue",
+      activity_type: "alert"
     }
 
     assert_redirected_to new_investigation_alert_path(@investigation)
