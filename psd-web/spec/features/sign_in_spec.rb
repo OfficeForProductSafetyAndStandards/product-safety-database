@@ -73,11 +73,12 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   scenario "user signs in with correct secondary authentication code after requesting a second code" do
+    allow(SecureRandom).to receive(:random_number).and_return(12345, 54321)
+
     visit "/sign-in"
     fill_in_credentials
 
-    first_2fa_code = otp_code
-    expect_user_to_have_received_sms_code(first_2fa_code)
+    expect_user_to_have_received_sms_code("12345")
 
     expect(page).to have_css("h1", text: "Check your phone")
 
@@ -88,9 +89,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
     click_on "Resend security code"
 
-    second_2fa_code = otp_code
-    expect(second_2fa_code).not_to eq first_2fa_code
-    expect_user_to_have_received_sms_code(second_2fa_code)
+    expect_user_to_have_received_sms_code("54321")
 
     expect(page).to have_css("h1", text: "Check your phone")
 
