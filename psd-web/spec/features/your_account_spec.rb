@@ -38,16 +38,4 @@ RSpec.feature "Your Account", :with_stubbed_elasticsearch, :with_stubbed_mailer,
     expect_to_be_on_your_account_page
     expect(page).to have_summary_item(key: "Name", value: "Joe Smith")
   end
-
-private
-
-  def expect_to_be_on_your_account_page
-    expect(page).to have_current_path("/account")
-    expect(page).to have_selector("h1", text: "Your account")
-  end
-
-  def expect_to_be_on_change_name_page
-    expect(page).to have_current_path("/account/name")
-    expect(page).to have_selector("h1", text: "Change your name")
-  end
 end
