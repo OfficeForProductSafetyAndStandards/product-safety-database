@@ -47,9 +47,9 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
 
       let(:user) { create(:user_with_teams, teams_count: 2) }
       let(:user_first_team) { user.teams.first }
-      let!(:allegation) { create(:allegation, assignable: user) }
-      let!(:enquiry) { create(:enquiry, assignable: user) }
-      let!(:project) { create(:project, assignable: user) }
+      let!(:allegation) { create(:allegation, owner: user) }
+      let!(:enquiry) { create(:enquiry, owner: user) }
+      let!(:project) { create(:project, owner: user) }
 
       it "succeeds" do
         expect(delete_call).to be_a_success
@@ -65,29 +65,28 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         end
       end
 
-      it "reassigns user cases to their first team" do
+      it "changes user cases ownership to their first team" do
         expect {
           delete_call
           allegation.reload
           enquiry.reload
           project.reload
-        }.to change(allegation, :assignable).from(user).to(user_first_team)
-         .and change(enquiry, :assignable).from(user).to(user_first_team)
-         .and change(project, :assignable).from(user).to(user_first_team)
+        }.to change(allegation, :owner).from(user).to(user_first_team)
+         .and change(enquiry, :owner).from(user).to(user_first_team)
+         .and change(project, :owner).from(user).to(user_first_team)
       end
-      # rubocop:enable RSpec/ExampleLength
 
-      # rubocop:disable RSpec/MultipleExpectations
-      it "registers the assignable automatic update in the investigations activity log" do
-        update_assignable_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyReassign")
+      it "registers the owner automatic update in the investigations activity log", :aggregate_failures do
+        update_owner_activities = Activity.where(type: "AuditActivity::Investigation::AutomaticallyUpdateOwner")
 
-        expect { delete_call }.to change(update_assignable_activities, :count).by(3)
+        expect { delete_call }.to change(update_owner_activities, :count).by(3)
 
-        update_assignable_activities.last(3).each do |activity|
-          expect(activity.title).to include "assigned to #{user_first_team.display_name}"
+        update_owner_activities.last(3).each do |activity|
+          expect(activity.title).to start_with "Case owner automatically changed on"
+          expect(activity.title).to end_with "to #{user_first_team.display_name}"
         end
       end
-      # rubocop:enable RSpec/MultipleExpectations
+      # rubocop:enable RSpec/ExampleLength
 
       it "does not send notifications to the user or the team" do
         expect { delete_call }.not_to change(delivered_emails, :count)

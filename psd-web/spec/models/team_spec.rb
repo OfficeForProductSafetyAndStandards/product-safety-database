@@ -4,16 +4,16 @@ RSpec.describe Team do
   describe ".all_with_organisation" do
     before { create_list(:team, 3) }
 
-    let(:assignees) { described_class.all_with_organisation }
+    let(:owners) { described_class.all_with_organisation }
 
     it "retrieves all teams" do
-      expect(assignees.length).to eq(3)
+      expect(owners.length).to eq(3)
     end
 
     it "includes associations needed for display_name" do
-      assignees.length
+      owners.length
       expect(-> {
-        assignees.map(&:display_name)
+        owners.map(&:display_name)
       }).to not_talk_to_db
     end
   end
