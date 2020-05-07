@@ -5,7 +5,7 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
   let(:user) { create(:user, :activated, has_viewed_introduction: true, teams: [user_team]) }
 
   let(:team) { create(:team) }
-  let(:investigation) { create(:investigation, assignable: user) }
+  let(:investigation) { create(:investigation, owner: user) }
   let(:collaborator) do
     create(:collaborator, investigation: investigation, team: team, added_by_user: user)
   end
