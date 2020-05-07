@@ -8,7 +8,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def new
-    authorize @investigation, :manage_colalborators?
+    authorize @investigation, :manage_collaborators?
 
     @collaborator = @investigation.collaborators.new
 
@@ -16,7 +16,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def create
-    authorize @investigation, :manage_colalborators?
+    authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
       params.require(:collaborator).permit(:team_id, :include_message, :message).merge({
@@ -35,7 +35,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def edit
-    authorize @investigation, :manage_colalborators?
+    authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
     @collaborator = @investigation.collaborators.find_by! team_id: @team.id
@@ -43,7 +43,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def update
-    authorize @investigation, :manage_colalborators?
+    authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params

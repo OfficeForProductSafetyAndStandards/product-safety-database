@@ -10,7 +10,7 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <% if policy(@investigation).add_collaborators? %>
+    <% if policy(@investigation).manage_collaborators? %>
       <%= govukButton(
         text: "Add a team to the case",
         href: new_investigation_collaborator_path(@investigation))
@@ -39,7 +39,7 @@
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
             <td class="govuk-table__cell">Edit full case</td>
             <td class="govuk-table__cell">
-              <% if policy(@investigation).add_collaborators? %>
+              <% if policy(@investigation).manage_collaborators? %>
                 <%= link_with_hidden_text_to "Change", "#{team.name}",  edit_investigation_collaborator_path(@investigation, team) %>
               <% end %>
             </td>
