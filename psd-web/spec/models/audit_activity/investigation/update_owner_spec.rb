@@ -6,11 +6,7 @@ RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_mailer, 
   let(:user) { create(:user).decorate }
   let(:investigation) { create(:enquiry, owner: user, owner_rationale: "Test owner") }
 
-  around do |ex|
-    User.current = user
-    ex.run
-    User.current = nil
-  end
+  before { User.current = user }
 
   describe ".from" do
     it "creates an audit activity with information for email notification", :aggregate_failures do

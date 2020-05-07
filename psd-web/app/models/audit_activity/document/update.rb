@@ -10,10 +10,6 @@ class AuditActivity::Document::Update < AuditActivity::Document::Base
     super(document, investigation, title)
   end
 
-  def subtitle_slug
-    "#{attachment_type} details updated"
-  end
-
   def self.no_change?(document, previous_data)
     document.metadata[:title] == previous_data[:title] && document.metadata[:description] == previous_data[:description]
   end
@@ -26,11 +22,17 @@ class AuditActivity::Document::Update < AuditActivity::Document::Base
     document.metadata[:description] != previous_data[:description]
   end
 
-  def email_update_text
-    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show}."
-  end
-
   def restricted_title
     "Document updated"
+  end
+
+  def email_update_text(viewing_user = nil)
+    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show(viewing_user)}."
+  end
+
+private
+
+  def subtitle_slug
+    "#{attachment_type} details updated"
   end
 end

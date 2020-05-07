@@ -7,12 +7,12 @@ class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Inv
     super(investigation, I18n.t(".title.#{investigation.coronavirus_related?}", scope: i18n_scope), I18n.t(".body.#{investigation.coronavirus_related?}", scope: i18n_scope))
   end
 
-  def email_update_text
+  def email_update_text(viewing_user = nil)
     I18n.t(
       ".email_update_text.#{investigation.coronavirus_related?}",
       scope: self.class.i18n_scope,
       case_type: investigation.case_type.upcase_first,
-      name: source&.show,
+      name: source&.show(viewing_user),
       pretty_id: investigation.pretty_id
     )
   end

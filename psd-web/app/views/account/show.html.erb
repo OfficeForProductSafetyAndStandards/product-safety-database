@@ -34,14 +34,8 @@
           value: { text: "********" }
         },
         {
-          # TODO: simplify this once we’ve removed the ability for users to belong
-          # to multiple teams.
-          key: { text: "Your #{"team".pluralize(current_user.teams.size)}" },
-          value: {
-            text: current_user.teams.collect do |team|
-              link_to(team.name, team, class: "govuk-link")
-            end.to_sentence.html_safe
-          }
+          key: { text: "Your team" },
+          value: { text: link_to(current_user.team.name, current_user.team, class: "govuk-link") }
         }
       ]
     ) %>

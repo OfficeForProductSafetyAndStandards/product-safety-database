@@ -13,6 +13,8 @@ class UserDecorator < Draper::Decorator
   end
 
   def display_name(ignore_visibility_restrictions: false, other_user: User.current)
+    other_user ||= User.current
+
     suffix = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && team
                "(#{team.name})"
              else

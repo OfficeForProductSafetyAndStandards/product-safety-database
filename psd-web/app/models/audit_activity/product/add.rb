@@ -4,11 +4,13 @@ class AuditActivity::Product::Add < AuditActivity::Product::Base
     super(product, investigation, title)
   end
 
-  def subtitle_slug
-    "Product added"
+  def email_update_text(viewing_user = nil)
+    "Product was added to the #{investigation.case_type} by #{source&.show(viewing_user)}."
   end
 
-  def email_update_text
-    "Product was added to the #{investigation.case_type} by #{source&.show}."
+private
+
+  def subtitle_slug
+    "Product added"
   end
 end

@@ -19,7 +19,7 @@ RSpec.describe TeamDecorator do
 
     let(:ignore_visibility_restrictions) { false }
     let(:result) do
-      decorated_team.display_name(ignore_visibility_restrictions: ignore_visibility_restrictions, current_user: viewing_user)
+      decorated_team.display_name(ignore_visibility_restrictions: ignore_visibility_restrictions, other_user: viewing_user)
     end
 
     context "with user of same organisation" do

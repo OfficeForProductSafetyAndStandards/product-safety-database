@@ -4,11 +4,13 @@ class AuditActivity::Business::Destroy < AuditActivity::Business::Base
     super(business, investigation, title, nil)
   end
 
-  def subtitle_slug
-    "Business removed"
+  def email_update_text(viewing_user = nil)
+    "Business was removed from the #{investigation.case_type} by #{source&.show(viewing_user)}."
   end
 
-  def email_update_text
-    "Business was removed from the #{investigation.case_type} by #{source&.show}."
+private
+
+  def subtitle_slug
+    "Business removed"
   end
 end

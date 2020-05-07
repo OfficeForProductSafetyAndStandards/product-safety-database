@@ -4,7 +4,6 @@ class DeleteUser
   def call
     context.fail!(error: "No user supplied") unless context.user
     context.fail!(error: "User already deleted") if context.user.deleted?
-    context.fail!(error: "User does not belong to a team so their investigations can't be reassigned") if context.user.teams.empty?
 
     ActiveRecord::Base.transaction do
       context.user.mark_as_deleted!

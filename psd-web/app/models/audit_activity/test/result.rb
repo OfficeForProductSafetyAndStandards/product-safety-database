@@ -9,11 +9,13 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     "Test date"
   end
 
-  def subtitle_slug
-    "Test result recorded"
+  def email_update_text(viewing_user = nil)
+    "Test result was added to the #{investigation.case_type} by #{source&.show(viewing_user)}."
   end
 
-  def email_update_text
-    "Test result was added to the #{investigation.case_type} by #{source&.show}."
+private
+
+  def subtitle_slug
+    "Test result recorded"
   end
 end

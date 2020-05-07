@@ -7,10 +7,6 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
     super(investigation, title, sanitize_text(body))
   end
 
-  def subtitle_slug
-    "Changed"
-  end
-
   def owner_id
     # We store owner_id in title field, this is getting it back
     # Using alias for accessing parent method causes errors elsewhere :(
@@ -22,12 +18,12 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
     "Case owner changed to #{(User.find_by(id: owner_id) || Team.find_by(id: owner_id))&.decorate&.display_name}"
   end
 
-  def email_update_text
+  def email_update_text(viewing_user = nil)
     body = []
-    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name} by #{source&.show}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name(other_user: viewing_user)}} by #{source&.show(viewing_user)}."
 
     if investigation.owner_rationale.present?
-      body << "Message from #{source&.show}:"
+      body << "Message from #{source&.show(viewing_user)}:"
       body << inset_text_for_notify(investigation.owner_rationale)
     end
 
@@ -36,6 +32,12 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
 
   def email_subject_text
     "Case owner changed for #{investigation.case_type}"
+  end
+
+private
+
+  def subtitle_slug
+    "Changed"
   end
 
   def users_to_notify

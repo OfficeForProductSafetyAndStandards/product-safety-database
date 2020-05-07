@@ -8,15 +8,17 @@ class CommentActivity < Activity
     "Comment added"
   end
 
-  def subtitle_slug
-    "Comment added"
-  end
-
   def search_index
     body
   end
 
-  def email_update_text
-    "#{source&.show} commented on the #{investigation.case_type}."
+  def email_update_text(viewing_user = nil)
+    "#{source&.show(viewing_user)} commented on the #{investigation.case_type}."
+  end
+
+private
+
+  def subtitle_slug
+    "Comment added"
   end
 end
