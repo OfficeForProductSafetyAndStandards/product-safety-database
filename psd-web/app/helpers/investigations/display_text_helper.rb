@@ -106,7 +106,7 @@ module Investigations::DisplayTextHelper
     return "No case owner".html_safe if !investigation.owner
 
     owner_names = [h(investigation.owner.name.to_s)]
-    # Add team name if owner is a user
+    # Add team name if not already added
     if investigation.owner != investigation.owner_team
       owner_names << h(investigation.owner_team.name)
     end
