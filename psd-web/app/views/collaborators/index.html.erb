@@ -26,9 +26,9 @@
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        <% if @investigation.assignee_team %>
+        <% if @investigation.owner_team %>
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.assignee_team.name %></th>
+            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.owner_team.name %></th>
             <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Case owner</span></td>
           </tr>
         <% end %>

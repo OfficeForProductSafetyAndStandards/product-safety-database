@@ -11,7 +11,7 @@ FactoryBot.define do
     hazard_description    {}
     non_compliant_reason  {}
 
-    association :assignable, factory: :user
+    association :owner, factory: :user
 
     factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }

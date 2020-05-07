@@ -46,6 +46,6 @@ private
   end
 
   def team_ids_with_access
-    @investigation.collaborators.pluck(:team_id) + [@investigation.assignee_team.try(:id)]
+    @investigation.collaborators.pluck(:team_id) + [@investigation.owner_team.try(:id)]
   end
 end

@@ -6,7 +6,7 @@ class Investigation < ApplicationRecord
 
   attr_accessor :status_rationale
   attr_accessor :visibility_rationale
-  attr_accessor :assignee_rationale
+  attr_accessor :owner_rationale
 
   enum reported_reason: {
     unsafe: "unsafe",
@@ -18,19 +18,19 @@ class Investigation < ApplicationRecord
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
   validates :description, presence: true, on: :update
-  validates :assignable_id, presence: { message: "Select case owner" }, on: :update
+  validates :owner_id, presence: { message: "Select case owner" }, on: :update
 
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 10000 }
   validates :non_compliant_reason, length: { maximum: 10000 }
   validates :hazard_description, length: { maximum: 10000 }
 
-  after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
+  after_update :create_audit_activity_for_owner, :create_audit_activity_for_status,
                :create_audit_activity_for_visibility, :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
 
-  belongs_to :assignable, polymorphic: true, optional: true
+  belongs_to :owner, polymorphic: true, optional: true
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products,
@@ -58,15 +58,15 @@ class Investigation < ApplicationRecord
   has_many :teams, through: :collaborators
 
   # TODO: Refactor to remove this callback hell
-  before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
+  before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
-  def assignee_team
-    assignable&.team
+  def owner_team
+    owner&.team
   end
 
   def teams_with_access
-    ([assignee_team] + teams.order(:name)).compact
+    ([owner_team] + teams.order(:name)).compact
   end
 
   def status
@@ -77,31 +77,31 @@ class Investigation < ApplicationRecord
     is_private ? ApplicationController.helpers.visibility_options[:private] : ApplicationController.helpers.visibility_options[:public]
   end
 
-  def important_assignable_people
+  def important_owner_people
     people = [].to_set
-    people << assignable if assignable.is_a? User
+    people << owner if owner.is_a? User
     people << User.current
     people
   end
 
-  def past_assignees
-    activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
-    user_id_list = activities.map(&:assignable_id)
+  def past_owners
+    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
+    user_id_list = activities.map(&:owner_id)
     User.where(id: user_id_list)
   end
 
-  def important_assignable_teams
+  def important_owner_teams
     teams = User.current.teams.to_set
     Team.get_visible_teams(User.current).each do |team|
       teams << team
     end
-    teams << assignable if assignable.is_a? Team
+    teams << owner if owner.is_a? Team
     teams
   end
 
   def past_teams
-    activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
-    team_id_list = activities.map(&:assignable_id)
+    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
+    team_id_list = activities.map(&:owner_id)
     Team.where(id: team_id_list)
   end
 
@@ -144,7 +144,7 @@ class Investigation < ApplicationRecord
   def child_should_be_displayed?
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    assignable.in_same_team_as?(User.current)
+    owner.in_same_team_as?(User.current)
   end
 
 private
@@ -165,11 +165,11 @@ private
     end
   end
 
-  def create_audit_activity_for_assignee
+  def create_audit_activity_for_owner
     # TODO: User.current check is here to avoid triggering activity and emails from migrations
     # Can be safely removed once the migration PopulateAssigneeAndDescription has run
-    if ((saved_changes.key? :assignable_id) || (saved_changes.key? :assignable_type)) && User.current
-      AuditActivity::Investigation::UpdateAssignee.from(self)
+    if ((saved_changes.key? :owner_id) || (saved_changes.key? :owner_type)) && User.current
+      AuditActivity::Investigation::UpdateOwner.from(self)
     end
   end
 
@@ -205,8 +205,8 @@ private
     source&.user_id
   end
 
-  def assign_to_current_user
-    self.assignable = User.current if assignable.blank? && User.current
+  def set_owner_as_current_user
+    self.owner = User.current if owner.blank? && User.current
   end
 
   # TODO: Refactor to remove dependency on User.current

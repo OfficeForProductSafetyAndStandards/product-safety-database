@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   belongs_to :organisation
 
-  has_many :investigations, dependent: :nullify, as: :assignable
+  has_many :investigations, dependent: :nullify, as: :owner
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
@@ -124,7 +124,7 @@ class User < ApplicationRecord
     encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
   end
 
-  def self.get_assignees(except: [])
+  def self.get_owners(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
     active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
   end
