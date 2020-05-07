@@ -58,7 +58,7 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
   end
 
   context "when the user isn't part of the team assigned", :with_errors_rendered do
-    let(:investigation) { create(:investigation, assignable: create(:team)) }
+    let(:investigation) { create(:investigation, owner: create(:team)) }
 
     it "responds with a 403 (Forbidden) status code on update" do
       put investigation_collaborator_path(investigation.pretty_id, team.id)
