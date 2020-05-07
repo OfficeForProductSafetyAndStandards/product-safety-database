@@ -8,21 +8,21 @@ class DeleteUser
 
     ActiveRecord::Base.transaction do
       context.user.mark_as_deleted!
-      assign_user_investigations_to_their_team
+      change_user_investigations_ownership_to_their_team
     end
   end
 
 private
 
-  def assign_user_investigations_to_their_team
+  def change_user_investigations_ownership_to_their_team
     # Even when an user belonging to multiple teams is a possibility, users should belong
     # to a single team. This is planned to be enforced in guture.
     context.team = context.user.teams.first
 
     context.user.investigations.each do |investigation|
-      investigation.assignable = context.team
+      investigation.owner = context.team
       investigation.save!
-      AuditActivity::Investigation::AutomaticallyReassign.from(investigation)
+      AuditActivity::Investigation::AutomaticallyUpdateOwner.from(investigation)
     end
   end
 end

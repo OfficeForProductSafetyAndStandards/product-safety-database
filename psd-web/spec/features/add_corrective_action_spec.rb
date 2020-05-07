@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignable: user) }
+  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
 
   let(:summary) { Faker::Lorem.sentence }
   let(:date) { Faker::Date.backward(days: 14) }
