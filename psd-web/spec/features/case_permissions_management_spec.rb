@@ -151,7 +151,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     ])
 
     expect_teams_tables_not_to_contain([
-      { team_name: "Southampton Trading Standards"}
+      { team_name: "Southampton Trading Standards" }
     ])
   end
 

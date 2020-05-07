@@ -22,10 +22,10 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
     let(:params) do
       { edit_investigation_collaborator_form: {
-          permission_level: permission_level,
-          message: message,
-          include_message: include_message,
-        } }
+        permission_level: permission_level,
+        message: message,
+        include_message: include_message,
+      } }
     end
 
     let(:do_request) do
