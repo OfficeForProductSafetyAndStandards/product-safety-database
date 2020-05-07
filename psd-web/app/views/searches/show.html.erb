@@ -16,8 +16,8 @@
     <% else %>
       <%= render "investigations/case_card", investigation: investigation.decorate, sorted_by: @search.sort_by %>
     <% end %>
-    <%= will_paginate @answer.results %>
   <% end %>
+  <%= will_paginate @answer.results %>
   <br />
   <% if current_user.is_psd_admin? %>
     <%= link_to "Export as spreadsheet", investigations_path(format: :xlsx, params: export_params), class: "govuk-link" %>
