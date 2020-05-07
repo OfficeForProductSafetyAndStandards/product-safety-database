@@ -12,6 +12,7 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
         expect(result).to eq("#{user.name}<br>Southampton Council")
       end
     end
+
     context "when the case owner is a team" do
       let(:team) { create(:team, name: "Southampton Council") }
       let(:investigation) { create(:investigation, owner: team) }
