@@ -19,16 +19,6 @@ FactoryBot.define do
       roles { [:psd_user] }
     end
 
-    factory :user_with_teams do
-      transient do
-        teams_count { 1 }
-      end
-
-      after(:create) do |user, evaluator|
-        create_list(:team, evaluator.teams_count, users: [user], organisation_id: user.organisation.id)
-      end
-    end
-
     trait :activated do
       has_viewed_introduction { true }
       after(:build) do |user|
@@ -87,6 +77,8 @@ FactoryBot.define do
       evaluator.roles.each do |role|
         create(:user_role, name: role, user: user)
       end
+
+      create_list(:team, 1, users: [user], organisation_id: user.organisation.id) unless user.team
     end
   end
 end
