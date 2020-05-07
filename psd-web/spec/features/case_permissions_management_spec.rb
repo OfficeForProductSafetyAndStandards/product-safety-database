@@ -11,6 +11,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   let(:investigation) {
     create(:investigation,
            owner: user)
+
   }
 
   let(:team) do
@@ -153,54 +154,5 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_teams_tables_not_to_contain([
       { team_name: "Southampton Trading Standards" }
     ])
-  end
-
-private
-
-  def expect_to_be_on_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}")
-    expect(page).to have_selector("h1", text: "Overview")
-  end
-
-  def expect_to_be_on_teams_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams")
-    expect(page).to have_selector("h1", text: "Teams added to the case")
-  end
-
-  def expect_to_be_on_add_team_to_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams/add")
-    expect(page).to have_selector("h1", text: "Add a team to the case")
-  end
-
-  def expect_to_be_on_case_activity_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/activity")
-    expect(page).to have_selector("h1", text: "Activity")
-  end
-
-  def expect_to_be_on_edit_case_permissions_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams/#{team.id}/edit")
-    expect(page).to have_selector("h1", text: team.name)
-  end
-
-  def expect_teams_tables_to_contain(expected_teams)
-    teams_table = page.find(:table, "Teams added to the case")
-
-    within(teams_table) do
-      expected_teams.each do |expected_team|
-        row_heading = page.find("th", text: expected_team[:team_name])
-        expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
-      end
-    end
-  end
-
-  def expect_teams_tables_not_to_contain(teams)
-    teams_table = page.find(:table, "Teams added to the case")
-
-    within(teams_table) do
-      teams.each do |expected_team|
-        elems = page.all("th", text: expected_team[:team_name])
-        expect(elems).to be_empty, "#{expected_team[:team_name]} should not be visible"
-      end
-    end
   end
 end

@@ -47,6 +47,7 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
     click_on "Save business"
 
     expect_to_be_on_investigation_businesses_page
+    expect(page).not_to have_error_messages
 
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Trading name")
     expect(page).to have_css("dd.govuk-summary-list__value", text: trading_name)
@@ -62,11 +63,5 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
     expected_contact = [name, job_title, phone_number, email].join(", ")
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
     expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
-  end
-
-  def expect_to_be_on_investigation_businesses_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses")
-    expect(page).to have_selector("h1", text: "Businesses")
-    expect(page).not_to have_error_messages
   end
 end

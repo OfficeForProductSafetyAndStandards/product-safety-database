@@ -55,7 +55,7 @@ RSpec.feature "Adding an attachment to a case", :with_stubbed_elasticsearch, :wi
 
     fill_and_submit_attachment_details_page
 
-    expect_to_be_on_case_overview_page
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
     click_link "Attachments (1)"
 
@@ -64,23 +64,6 @@ RSpec.feature "Adding an attachment to a case", :with_stubbed_elasticsearch, :wi
     click_link "Activity"
 
     expect_case_activity_page_to_show_entered_information
-  end
-
-  def expect_to_be_on_add_attachment_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
-    expect(page).to have_selector("h1", text: "Add attachment")
-    expect(page).to have_link("Back", href: investigation_path(investigation))
-  end
-
-  def expect_to_be_on_enter_attachment_details_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
-    expect(page).to have_selector("h3", text: "Document details")
-    expect(page).to have_link("Back", href: investigation_path(investigation))
-  end
-
-  def expect_to_be_on_case_overview_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-    expect(page).to have_selector("h1", text: "Overview")
   end
 
   def expect_case_attachments_page_to_show_entered_information
