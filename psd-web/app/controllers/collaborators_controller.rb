@@ -8,7 +8,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def new
-    authorize @investigation, :add_collaborators?
+    authorize @investigation, :manage_colalborators?
 
     @collaborator = @investigation.collaborators.new
 
@@ -16,7 +16,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def create
-    authorize @investigation, :add_collaborators?
+    authorize @investigation, :manage_colalborators?
 
     result = AddTeamToAnInvestigation.call(
       params.require(:collaborator).permit(:team_id, :include_message, :message).merge({
@@ -35,7 +35,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def edit
-    authorize @investigation, :add_collaborators?
+    authorize @investigation, :manage_colalborators?
 
     @team = Team.find(params[:id])
     @collaborator = @investigation.collaborators.find_by! team_id: @team.id
@@ -43,13 +43,13 @@ class CollaboratorsController < ApplicationController
   end
 
   def update
-    authorize @investigation, :add_collaborators?
+    authorize @investigation, :manage_colalborators?
 
     @team = Team.find(params[:id])
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params
       .merge(investigation: @investigation, team: @team, user: current_user))
-    if @edit_form.save
-      flash[:success] = "#{@team.name} removed from the case"
+    if @edit_form.save!
+      flash[:success] = "#{@team.name} had been removed from the case"
       redirect_to investigation_collaborators_path(@investigation)
     else
       render "edit"

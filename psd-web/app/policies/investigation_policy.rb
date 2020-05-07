@@ -55,7 +55,7 @@ class InvestigationPolicy < ApplicationPolicy
     !@record.is_private
   end
 
-  def add_collaborators?
+  def manage_colalborators?
     return false if @record.owner.nil?
 
     @record.owner.in_same_team_as?(user)

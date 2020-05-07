@@ -17,10 +17,10 @@ class EditInvestigationCollaboratorForm
   validates_presence_of :message,
                         if: -> { include_message }
 
-  def save
+  def save!
     if valid?
       collaborator.destroy!
-      add_deletion_activity
+      add_deletion_activity!
       schedule_delete_emails
       true
     else
@@ -46,7 +46,7 @@ private
     end
   end
 
-  def add_deletion_activity
+  def add_deletion_activity!
     AuditActivity::Investigation::TeamDeleted.create!(
       source: UserSource.new(user: user),
       investigation: investigation,

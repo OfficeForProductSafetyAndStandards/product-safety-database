@@ -33,19 +33,19 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     collaborator
   end
 
-  describe "#save" do
+  describe "#save!" do
     context "when deleting" do
       context "when successful" do
         it "removes collaborator record" do
-          expect { form.save }.to change(Collaborator, :count).from(1).to(0)
+          expect { form.save! }.to change(Collaborator, :count).from(1).to(0)
         end
 
         it "returns true" do
-          expect(form.save).to be true
+          expect(form.save!).to be true
         end
 
         it "sends email", :aggregate_failures do
-          form.save
+          form.save!
 
           email = delivered_emails.last
           expect(email.recipient).to eq(team.team_recipient_email)
@@ -57,7 +57,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
           let!(:team_user) { create(:user, :activated, has_viewed_introduction: true, teams: [team]) }
 
           it "sends email to users" do
-            form.save
+            form.save!
 
             email = delivered_emails.last
             expect(email.recipient).to eq(team_user.email)
@@ -65,7 +65,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
         end
 
         it "creates activity entry", :aggregate_failures do
-          form.save
+          form.save!
 
           last_added_activity = investigation.activities.reload.order(created_at: :desc)
             .find_by!(type: "AuditActivity::Investigation::TeamDeleted")
@@ -79,17 +79,17 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
           let(:params_team) { create(:team) }
 
           it "raises exception" do
-            expect { form.save }.to raise_error(ActiveRecord::RecordNotFound)
+            expect { form.save! }.to raise_error(ActiveRecord::RecordNotFound)
           end
         end
 
         shared_examples "unsuccessful save" do
           it "returns false" do
-            expect(form.save).to be_falsey
+            expect(form.save!).to be false
           end
 
           it "has proper validation message" do
-            form.save
+            form.save!
             expect(form.errors.full_messages_for(field)).to eq([msg])
           end
         end
