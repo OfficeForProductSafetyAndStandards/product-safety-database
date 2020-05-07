@@ -14,6 +14,7 @@ FactoryBot.define do
     mobile_number_verified { true }
     direct_otp_sent_at { Time.current }
     direct_otp { "12345" }
+    teams { [create(:team, organisation: organisation)] }
 
     transient do
       roles { [:psd_user] }
@@ -77,8 +78,6 @@ FactoryBot.define do
       evaluator.roles.each do |role|
         create(:user_role, name: role, user: user)
       end
-
-      create_list(:team, 1, users: [user], organisation_id: user.organisation.id) unless user.team
     end
   end
 end

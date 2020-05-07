@@ -12,7 +12,8 @@ class CreateOrganisationWithTeamAndAdminUser
       context.user = context.team.users.create!(
         email: context.admin_email,
         organisation: context.org,
-        skip_password_validation: true
+        skip_password_validation: true,
+        teams: [context.team]
       )
 
       context.user.user_roles.create!(name: "psd_user")

@@ -21,6 +21,7 @@ class User < ApplicationRecord
             unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
+  validates :teams, presence: true
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
