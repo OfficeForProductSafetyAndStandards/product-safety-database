@@ -105,13 +105,13 @@ module Investigations::DisplayTextHelper
   def investigation_owner(investigation)
     return "No case owner".html_safe if !investigation.owner
 
-    out = [h(investigation.owner.name.to_s)]
+    owner_names = [h(investigation.owner.name.to_s)]
     # Add team name if owner is a user
     if investigation.owner != investigation.owner_team
-      out << h(investigation.owner_team.name)
+      owner_names << h(investigation.owner_team.name)
     end
 
-    safe_join(out, "<br>".html_safe)
+    safe_join(owner_names, "<br>".html_safe)
   end
 
   def business_summary_list(business)
