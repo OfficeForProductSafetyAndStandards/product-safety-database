@@ -6,7 +6,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
   context "when the collaborator params are valid" do
     let(:message) { "Thanks for collaborating on this case" }
-    let(:investigation) { create(:investigation, assignable: user) }
+    let(:investigation) { create(:investigation, owner: user) }
     let(:other_team) { create(:team) }
 
     before do
@@ -41,7 +41,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
   context "when the collaborator params are invalid" do
     let(:message) { "Thanks for collaborating on this case" }
-    let(:investigation) { create(:investigation, assignable: user) }
+    let(:investigation) { create(:investigation, owner: user) }
     let(:other_team) { create(:team) }
 
     before do
@@ -66,7 +66,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     let(:existing_collaborator_team) { create(:team) }
     let(:investigation) {
       create(:investigation,
-             assignable: user,
+             owner: user,
              collaborators: [
                create(:collaborator,
                       team: existing_collaborator_team,
@@ -92,8 +92,8 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
   end
 
-  context "when the user isn't part of the team assigned", :with_errors_rendered do
-    let(:investigation) { create(:investigation, assignable: create(:team)) }
+  context "when the user isn't part of the team that is the case owner", :with_errors_rendered do
+    let(:investigation) { create(:investigation, owner: create(:team)) }
 
     before do
       sign_in user
