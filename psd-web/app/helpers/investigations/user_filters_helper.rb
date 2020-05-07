@@ -3,23 +3,19 @@ module Investigations::UserFiltersHelper
     User.get_owners(except: current_user).decorate + Team.all_with_organisation.decorate
   end
 
-  def case_owner_is(form)
-    case_owner_is_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
-    owner_teams_with_keys.each do |key, team, name|
-      case_owner_is_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
-    end
-    case_owner_is_items << { key: "case_owner_is_someone_else",
-                             value: "checked",
-                             unchecked_value: "unchecked",
-                             text: "Other person or team",
-                             conditional: { html: other_owner(form) } }
+  def assigned_to(form)
+    assigned_to_items = [{ key: "assigned_to_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
+    assigned_to_items << { key: owner_team_with_key[0], value: owner_team_with_key[1].id, unchecked_value: "unchecked", text: owner_team_with_key[2] }
+    assigned_to_items << { key: "assigned_to_someone_else",
+                           value: "checked",
+                           unchecked_value: "unchecked",
+                           text: "Other person or team",
+                           conditional: { html: other_assignee(form) } }
   end
 
   def created_by(form)
     created_by_items = [{ key: "created_by_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
-    creator_teams_with_keys.each do |key, team, name|
-      created_by_items << { key: key, value: team.id, unchecked_value: "unchecked", text: name }
-    end
+    created_by_items << { key: creator_team_with_key[0], value: creator_team_with_key[1].id, unchecked_value: "unchecked", text: creator_team_with_key[2] }
     created_by_items << { key: "created_by_someone_else",
                           value: "checked",
                           unchecked_value: "unchecked",

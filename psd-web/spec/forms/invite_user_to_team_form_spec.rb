@@ -81,7 +81,7 @@ RSpec.describe InviteUserToTeamForm do
       let(:user_trait) { :psd_user }
       let(:user_team) { create(:team) }
 
-      before { create(:user, user_trait, email: email, teams: [user_team]) }
+      before { create(:user, user_trait, email: email, team: user_team) }
 
       context "when the user is deleted" do
         let(:user_trait) { :deleted }

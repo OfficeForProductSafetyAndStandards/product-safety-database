@@ -6,7 +6,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
 
     let(:email) { Faker::Internet.safe_email }
     let(:team) { create(:team) }
-    let(:inviting_user) { create(:user, :activated, inviting_user_role, teams: [team]) }
+    let(:inviting_user) { create(:user, :activated, inviting_user_role, team: team) }
     let(:inviting_user_role) { :psd_user }
 
     before do
@@ -69,7 +69,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
     end
 
     context "when there is an existing user" do
-      let!(:existing_user) { create(:user, email: email, teams: [existing_user_team], invitation_token: invitation_token, invited_at: invited_at) }
+      let!(:existing_user) { create(:user, email: email, team: existing_user_team, invitation_token: invitation_token, invited_at: invited_at) }
       let(:existing_user_team) { team }
       let(:invitation_token) { "test" }
       let(:invited_at) { Time.current }

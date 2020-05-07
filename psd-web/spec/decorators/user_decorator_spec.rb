@@ -36,10 +36,8 @@ RSpec.describe UserDecorator do
   end
 
   describe "#display_name" do
-    let(:organisation_name) { "test org" }
-    let(:other_organisation_name) { "other org" }
-    let(:organisation) { create(:organisation, name: organisation_name) }
-    let(:other_organisation) { create(:organisation, name: other_organisation_name) }
+    let(:organisation) { create(:organisation) }
+    let(:other_organisation) { create(:organisation) }
 
     let(:team_name) { "test team" }
     let(:other_org_team_name) { "other org team" }
@@ -50,12 +48,10 @@ RSpec.describe UserDecorator do
     let(:other_user_name) { "other user" }
     let(:user_organisation) { organisation }
     let(:user_deleted_timestamp) { nil }
-    let(:user) { create(:user, name: user_name, organisation: user_organisation, teams: [team], deleted_at: user_deleted_timestamp) }
+    let(:user) { create(:user, name: user_name, organisation: user_organisation, team: team, deleted_at: user_deleted_timestamp) }
     let(:other_user) { create(:user, name: other_user_name, organisation: organisation) }
 
-    let(:ignore_visibility_restrictions) { false }
-
-    let(:result) { decorated_user.display_name(other_user: other_user, ignore_visibility_restrictions: ignore_visibility_restrictions) }
+    let(:result) { decorated_user.display_name(other_user: other_user) }
 
     context "when the user is a member of the same organisation" do
       it "returns their name and team names" do
@@ -75,33 +71,15 @@ RSpec.describe UserDecorator do
       let(:user_organisation) { other_organisation }
       let(:team) { other_organisation_team }
 
-      context "with ignore_visibility_restrictions: false" do
-        it "returns their name and organisation name" do
-          expect(result).to eq("#{user_name} (#{other_organisation_name})")
-        end
-
-        context "when the user is deleted" do
-          let(:user_deleted_timestamp) { Time.current }
-
-          it "gets a 'user deleted' flag" do
-            expect(result).to eq("#{user_name} (#{other_organisation_name}) [user deleted]")
-          end
-        end
+      it "returns their name and team names" do
+        expect(result).to eq("#{user_name} (#{other_org_team_name})")
       end
 
-      context "with ignore_visibility_restrictions: true" do
-        let(:ignore_visibility_restrictions) { true }
+      context "when the user is deleted" do
+        let(:user_deleted_timestamp) { Time.current }
 
-        it "returns their name and team names" do
-          expect(result).to eq("#{user_name} (#{other_org_team_name})")
-        end
-
-        context "when the user is deleted" do
-          let(:user_deleted_timestamp) { Time.current }
-
-          it "gets a 'user deleted' flag" do
-            expect(result).to eq("#{user_name} (#{other_org_team_name}) [user deleted]")
-          end
+        it "gets a 'user deleted' flag" do
+          expect(result).to eq("#{user_name} (#{other_org_team_name}) [user deleted]")
         end
       end
     end
@@ -110,14 +88,14 @@ RSpec.describe UserDecorator do
       let(:other_user) { nil }
 
       it "returns their name and organisation name" do
-        expect(result).to eq("#{user_name} (#{organisation_name})")
+        expect(result).to eq("#{user_name} (#{team_name})")
       end
 
       context "when the user is deleted" do
         let(:user_deleted_timestamp) { Time.current }
 
         it "gets a 'user deleted' flag" do
-          expect(result).to eq("#{user_name} (#{organisation_name}) [user deleted]")
+          expect(result).to eq("#{user_name} (#{team_name}) [user deleted]")
         end
       end
     end

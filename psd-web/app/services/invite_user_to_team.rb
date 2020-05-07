@@ -22,7 +22,7 @@ private
       email: email,
       organisation: team.organisation,
       skip_password_validation: true,
-      teams: [team]
+      team: team
     )
 
     user.user_roles.create!(name: "psd_user") # TODO: remove this once we’ve updated the application to no longer depend upon this role.

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbed_notify, :with_exception_errors, type: :request do
   let(:team) { create(:team) }
-  let(:user) { create(:user, user_role, :activated, has_viewed_introduction: true, teams: [user_team]) }
+  let(:user) { create(:user, user_role, :activated, has_viewed_introduction: true, team: user_team) }
   let(:user_role) { :team_admin }
   let(:user_team) { team }
   let(:invite_double) { instance_double(InviteUserToTeam, user: instance_double(User, email: "test@example.com")) }
@@ -104,7 +104,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
   end
 
   describe "#resend" do
-    let(:existing_user) { create(:user, :psd_user, :inactive, teams: [existing_user_team]) }
+    let(:existing_user) { create(:user, :psd_user, :inactive, team: existing_user_team) }
     let(:existing_user_team) { user_team }
 
     it "requires secondary authentication", :with_2fa do

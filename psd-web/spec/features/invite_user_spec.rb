@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_exception_errors, type: :feature do
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, user_role, teams: [team], has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, user_role, team: team, has_viewed_introduction: true) }
   let(:email) { Faker::Internet.safe_email }
 
   before do
@@ -43,7 +43,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
 
     context "when there is already a user with that email" do
-      let(:existing_user) { create(:user, existing_user_trait, teams: [existing_user_team]) }
+      let(:existing_user) { create(:user, existing_user_trait, team: existing_user_team) }
       let(:existing_user_team) { user.team }
       let(:email) { existing_user.email }
 

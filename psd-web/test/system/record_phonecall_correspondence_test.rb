@@ -5,9 +5,6 @@ class RecordPhoneCallCorrespondenceTest < ApplicationSystemTestCase
   include InvestigationTestHelper
 
   setup do
-    users(:southampton).teams << teams(:southampton)
-    users(:opss).teams << teams(:opss_enforcement)
-
     stub_notify_mailer
     stub_antivirus_api
     user = sign_in

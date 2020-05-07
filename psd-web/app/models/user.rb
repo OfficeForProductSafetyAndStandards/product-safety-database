@@ -14,14 +14,14 @@ class User < ApplicationRecord
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
 
-  has_and_belongs_to_many :teams
+  belongs_to :team
 
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
             unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
-  validates :teams, presence: true
+  validates :team, presence: true
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
@@ -53,10 +53,6 @@ class User < ApplicationRecord
 
   def self.current=(user)
     RequestStore.store[:current_user] = user
-  end
-
-  def team
-    teams.first
   end
 
   def in_same_team_as?(user)
@@ -93,15 +89,13 @@ class User < ApplicationRecord
 
   def self.get_owners(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
-    active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
+    active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :team)
   end
 
   def self.get_team_members(user:)
     users = [].to_set
-    user.teams.each do |team|
-      team.users.active.find_each do |team_member|
-        users << team_member
-      end
+    user.team.users.active.find_each do |team_member|
+      users << team_member
     end
     users
   end

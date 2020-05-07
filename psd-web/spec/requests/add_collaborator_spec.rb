@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
   let(:user_team) { create(:team) }
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, teams: [user_team]) }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
   context "when the collaborator params are valid" do
     let(:message) { "Thanks for collaborating on this case" }

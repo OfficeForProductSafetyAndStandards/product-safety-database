@@ -127,13 +127,13 @@ RSpec.describe User do
 
   describe ".get_team_members" do
     let(:team) { create(:team) }
-    let(:user) { create(:user, :activated, teams: [team]) }
+    let(:user) { create(:user, :activated, team: team) }
     let(:investigation) { create(:allegation) }
     let(:team_members) { described_class.get_team_members(user: user) }
 
-    let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, teams: [team]) }
-    let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
-    let!(:another_user_with_another_team) { create(:user, :activated, teams: [create(:team)]) }
+    let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, team: team) }
+    let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team: team) }
+    let!(:another_user_with_another_team) { create(:user, :activated, team: create(:team)) }
 
     it "returns other users on the same team" do
       expect(team_members).to include(another_active_user)

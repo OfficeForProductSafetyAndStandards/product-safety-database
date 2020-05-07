@@ -8,7 +8,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:organisation)  { create :organisation }
   let(:user)          { create(:user, organisation: organisation).decorate }
   let(:team)          { create(:team) }
-  let(:creator)       { create(:user, organisation: organisation, teams: [team]) }
+  let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }

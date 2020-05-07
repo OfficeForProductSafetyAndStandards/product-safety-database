@@ -1,7 +1,7 @@
 class Source < ApplicationRecord
   belongs_to :sourceable, polymorphic: true
 
-  def show(viewing_user = nil)
+  def show(*)
     nil
   end
 

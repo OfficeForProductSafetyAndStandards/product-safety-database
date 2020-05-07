@@ -13,7 +13,7 @@ RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_mailer, 
       expect(audit_activity).to have_attributes(title: "Case owner changed to #{user.display_name}",
                                                 body: investigation.owner_rationale,
                                                 email_subject_text: "Case owner changed for enquiry")
-      expect(audit_activity.email_update_text).to start_with("Case owner changed on enquiry to #{user.display_name} by #{user.name}")
+      expect(audit_activity.email_update_text(user)).to start_with("Case owner changed on enquiry to #{user.name} by #{user.name}")
     end
   end
 end

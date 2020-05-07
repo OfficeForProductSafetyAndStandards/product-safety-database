@@ -56,7 +56,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
     context "when there is a user who belongs to a team that is the case owner" do
       let(:team) { create(:team) }
-      let(:user) { create(:user, teams: [team]) }
+      let(:user) { create(:user, team: team) }
       let(:investigation) { create(:investigation, owner: user) }
 
       it "is is the team the user belongs to" do

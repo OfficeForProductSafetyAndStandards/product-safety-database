@@ -14,7 +14,7 @@ FactoryBot.define do
     mobile_number_verified { true }
     direct_otp_sent_at { Time.current }
     direct_otp { "12345" }
-    teams { [create(:team, organisation: organisation)] }
+    team { create(:team, organisation: organisation) }
 
     transient do
       roles { [:psd_user] }

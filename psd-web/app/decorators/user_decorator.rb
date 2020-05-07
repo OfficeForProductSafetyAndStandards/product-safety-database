@@ -12,17 +12,9 @@ class UserDecorator < Draper::Decorator
     name + deleted_suffix
   end
 
-  def display_name(ignore_visibility_restrictions: false, other_user: User.current)
-    other_user ||= User.current
-
-    suffix = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && team
-               "(#{team.name})"
-             else
-               "(#{organisation.name})"
-             end
-    suffix << deleted_suffix
-
-    "#{name} #{suffix}"
+  def display_name(other_user: User.current)
+    suffix = " (#{team.name})" if team_id != other_user&.team_id
+    "#{name}#{suffix}#{deleted_suffix}"
   end
 
 private

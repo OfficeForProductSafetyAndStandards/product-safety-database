@@ -10,42 +10,8 @@ RSpec.describe TeamDecorator do
   end
 
   describe "#display_name" do
-    let(:team) { create(:team, organisation_id: organisation.id) }
-
-    let(:organisation) { create(:organisation) }
-
-    let(:user_same_org) { create(:user, organisation: organisation) }
-    let(:user_other_org) { create(:user) }
-
-    let(:ignore_visibility_restrictions) { false }
-    let(:result) do
-      decorated_team.display_name(ignore_visibility_restrictions: ignore_visibility_restrictions, other_user: viewing_user)
-    end
-
-    context "with user of same organisation" do
-      let(:viewing_user) { user_same_org }
-
-      it "returns the team name" do
-        expect(result).to eq(team.name)
-      end
-    end
-
-    context "with user of another organisation" do
-      let(:viewing_user) { user_other_org }
-
-      context "with ignore_visibility_restrictions: true" do
-        let(:ignore_visibility_restrictions) { true }
-
-        it "returns the team name" do
-          expect(result).to eq(team.name)
-        end
-      end
-
-      context "with ignore_visibility_restrictions: false" do
-        it "returns the organisation name" do
-          expect(result).to eq(organisation.name)
-        end
-      end
+    it "returns the team name" do
+      expect(decorated_team.display_name).to eq(team.name)
     end
   end
 end

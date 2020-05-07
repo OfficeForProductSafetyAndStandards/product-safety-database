@@ -8,8 +8,7 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_antivirus_api
     @user = User.current = sign_in(users(:southampton))
     @user = @user.decorate
-    @user.teams << teams(:southampton)
-    @team = @user.teams.first
+    @team = @user.team
     visit new_investigation_ownership_path(load_case(:one))
   end
 

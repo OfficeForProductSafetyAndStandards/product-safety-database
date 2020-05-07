@@ -7,20 +7,19 @@
       { text: user.decorate.display_name, value: user.id, checked: investigation.owner == user }
     end
 
-    if current_user.teams.any?
-      someone_in_your_team = capture do
-        render "investigations/ownership/owner_selection", form: form, key: :select_team_member,
-                 items: User.get_team_members(user: current_user), label: "Select team member", show_all_values: true
-      end
-      items.push text: "Someone in your team",
-               value: "someone_in_your_team",
-               conditional: { html: someone_in_your_team }
+    someone_in_your_team = capture do
+      render "investigations/ownership/owner_selection", form: form, key: :select_team_member,
+             items: User.get_team_members(user: current_user), label: "Select team member", show_all_values: true
     end
+
+    items.push text: "Someone in your team",
+             value: "someone_in_your_team",
+             conditional: { html: someone_in_your_team }
 
     if @suggested_previous_owners.present?
       previous_owners = capture do
         render "investigations/ownership/owner_selection", form: form, key: :select_previous_owner,
-              items: @suggested_previous_owners, ignore_restrictions: true,
+              items: @suggested_previous_owners,
               label: "Select previously assigned person or team", show_all_values: true
       end
       items.push text: "Previously assigned", value: "previous_owners", conditional: { html: previous_owners }
@@ -35,7 +34,7 @@
 
     other_teams = capture do
       render "investigations/ownership/owner_selection", form: form, key: :select_other_team,
-             items: Team.all, label: "Select other team name", ignore_restrictions: true,
+             items: Team.all, label: "Select other team name"
              show_all_values: true
     end
     items.push text: "Other team", value: "other_team", conditional: { html: other_teams }

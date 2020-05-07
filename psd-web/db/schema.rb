@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_113156) do
+ActiveRecord::Schema.define(version: 2020_05_07_145004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -251,15 +251,6 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
   end
 
-  create_table "teams_users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.uuid "team_id"
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["team_id"], name: "index_teams_users_on_team_id"
-    t.index ["user_id"], name: "index_teams_users_on_user_id"
-  end
-
   create_table "tests", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -320,6 +311,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
     t.datetime "second_factor_attempts_locked_at"
     t.string "secondary_authentication_operation"
     t.integer "sign_in_count", default: 0, null: false
+    t.uuid "team_id", null: false
     t.string "unlock_token"
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"

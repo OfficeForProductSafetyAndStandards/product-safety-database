@@ -114,8 +114,6 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "should notify everyone in team that is the case owner" do
-    users(:southampton).teams << teams(:southampton)
-    users(:southampton_steve).teams << teams(:southampton)
     User.current = users(:southampton)
     mock_investigation_updated(who_will_be_notified: teams(:southampton).users.map(&:email))
     @investigation.update(owner: teams(:southampton))

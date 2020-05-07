@@ -80,7 +80,7 @@ private
 
   def teams_to_notify
     return [] unless investigation.owner.is_a? Team
-    return [] if source&.user&.teams&.include? investigation.owner
+    return [] if source&.user&.team == investigation.owner
 
     [investigation.owner]
   end

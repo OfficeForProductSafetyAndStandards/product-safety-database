@@ -1,5 +1,5 @@
 class ReportSource < Source
-  def show(viewing_user = nil)
+  def show(*)
     name
   end
 end

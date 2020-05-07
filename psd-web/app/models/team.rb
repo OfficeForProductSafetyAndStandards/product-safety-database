@@ -1,8 +1,6 @@
 class Team < ApplicationRecord
   belongs_to :organisation
-
-  has_and_belongs_to_many :users
-
+  has_many :users, dependent: :restrict_with_exception
   has_many :investigations, dependent: :nullify, as: :owner
 
   validates :name, presence: true
@@ -11,10 +9,8 @@ class Team < ApplicationRecord
     all.includes(:organisation)
   end
 
-  def display_name(ignore_visibility_restrictions: false, current_user: User.current)
-    return name if (current_user && (current_user.organisation_id == organisation_id)) || ignore_visibility_restrictions
-
-    organisation.name
+  def display_name(*)
+    name
   end
 
   def team

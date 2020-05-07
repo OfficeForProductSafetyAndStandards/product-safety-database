@@ -9,11 +9,11 @@ RSpec.describe AuditActivity::Investigation::UpdateCoronavirusStatus, :with_stub
   before { User.current = user }
 
   describe ".from" do
-    it "creates an audit activity" do
+    it "creates an audit activity", :aggregate_failures do
       expect(audit_activity).to have_attributes(title: "Status updated: not coronavirus related",
                                                 body: "The case is not related to the coronavirus outbreak.",
-                                                email_update_text: "#{investigation.case_type.capitalize} #{investigation.pretty_id} is not related to the coronavirus outbreak. This status was updated by #{user.display_name}.",
                                                 email_subject_text: "Coronavirus status updated on #{investigation.case_type.downcase}")
+      expect(audit_activity.email_update_text(user)).to eq("#{investigation.case_type.capitalize} #{investigation.pretty_id} is not related to the coronavirus outbreak. This status was updated by #{user.name}.")
     end
   end
 end

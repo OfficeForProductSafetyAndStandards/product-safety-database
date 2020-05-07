@@ -61,7 +61,7 @@ module InvestigationsHelper
 
   def no_owner_boxes_checked
     no_people_boxes_checked = params[:case_owner_is_me] == "unchecked" && params[:case_owner_is_someone_else] == "unchecked"
-    no_team_boxes_checked = owner_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
+    no_team_boxes_checked = query_params[owner_team_with_key[0]].blank?
     no_people_boxes_checked && no_team_boxes_checked
   end
 
@@ -86,9 +86,7 @@ module InvestigationsHelper
 
   def checked_team_owners
     owners = []
-    owner_teams_with_keys.each do |key, team, _n|
-      owners.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
-    end
+    owners.concat(user_ids_from_team(owner_team_with_key[1])) if query_params[owner_team_with_key[0]] != "unchecked"
     owners
   end
 
@@ -114,7 +112,7 @@ module InvestigationsHelper
 
   def no_created_by_boxes_checked
     no_created_by_people_boxes_checked = params[:created_by_me] == "unchecked" && params[:created_by_someone_else] == "unchecked"
-    no_created_by_team_boxes_checked = creator_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
+    no_created_by_team_boxes_checked = query_params[creator_team_with_key[0]] == "unchecked"
     no_created_by_people_boxes_checked && no_created_by_team_boxes_checked
   end
 
@@ -139,9 +137,7 @@ module InvestigationsHelper
 
   def checked_team_creators
     creators = []
-    creator_teams_with_keys.each do |key, team, _n|
-      creators.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
-    end
+    creators.concat(user_ids_from_team(creator_team_with_key[1])) if query_params[creator_team_with_key[1]] != "unchecked"
     creators
   end
 
@@ -158,15 +154,12 @@ module InvestigationsHelper
     end
   end
 
-  def creator_teams_with_keys
-    current_user.teams.map.with_index do |team, index|
-      # key, team, name
-      [
-        "created_by_team_#{index}".to_sym,
-        team,
-        current_user.teams.count > 1 ? team.name : "My team"
-      ]
-    end
+  def creator_team_with_key
+    [
+      "created_by_team_0".to_sym,
+      current_user.team,
+      "My team"
+    ]
   end
 
   def query_params
@@ -175,7 +168,7 @@ module InvestigationsHelper
     set_default_owner_filter
     set_default_creator_filter
     params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :case_owner_is_me, :case_owner_is_someone_else, :case_owner_is_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
-                  owner_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
+                  owner_team_with_key[0], creator_team_with_key[0])
   end
 
   def export_params
@@ -194,6 +187,7 @@ module InvestigationsHelper
 
   def set_default_creator_filter
     params[:created_by_me] = "unchecked" if params[:created_by_me].blank?
+    params[:created_by_team_0] = "unchecked" if params[:created_by_team_0].blank?
     params[:created_by_someone_else] = "unchecked" if params[:created_by_someone_else].blank?
   end
 
@@ -217,15 +211,12 @@ module InvestigationsHelper
     }
   end
 
-  def owner_teams_with_keys
-    current_user.teams.map.with_index do |team, index|
-      # key, team, name
-      [
-        "case_owner_is_team_#{index}".to_sym,
-        team,
-        current_user.teams.count > 1 ? team.name : "My team"
-      ]
-    end
+  def owner_teams_with_key
+    [
+      "case_owner_is_team_0".to_sym,
+      current_user.team,
+      "My team"
+    ]
   end
 
   def user_ids_from_team(team)
