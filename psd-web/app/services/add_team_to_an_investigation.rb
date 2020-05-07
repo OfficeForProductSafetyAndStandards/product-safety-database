@@ -3,7 +3,7 @@ class AddTeamToAnInvestigation
 
   delegate :collaborator, :current_user, :investigation, :team_id, :include_message, :message, to: :context
   def call
-    context.collaborator = investigation.collaborators.new(
+    context.collaborator = investigation.co_collaborators.new(
       team_id: team_id,
       include_message: include_message,
       added_by_user: current_user,

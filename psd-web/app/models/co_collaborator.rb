@@ -1,0 +1,2 @@
+class CoCollaborator < Collaborator
+end
