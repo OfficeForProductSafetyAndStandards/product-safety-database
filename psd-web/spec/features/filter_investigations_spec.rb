@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+  let(:other_organisation) { create(:organisation) }
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:other_team) { create(:team, organisation: organisation, name: "other team") }
@@ -19,7 +20,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
 
   let(:restricted_case_title) { "Restricted case title" }
-  let!(:restricted_case) { create(:allegation, owner: other_user_same_team, is_private: true, description: restricted_case_title).decorate }
+  let!(:restricted_case) { create(:allegation, owner: create(:team, organisation: other_organisation), is_private: true, description: restricted_case_title).decorate }
 
   before do
     Investigation.import refresh: :wait_for
