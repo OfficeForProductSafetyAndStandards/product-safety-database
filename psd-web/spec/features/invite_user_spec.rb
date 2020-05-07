@@ -58,8 +58,4 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
       expect_to_be_on_invite_a_team_member_page
     end
   end
-
-  def expect_to_be_on_invite_a_team_member_page
-    expect(page).to have_css("h1", text: "Invite a team member")
-  end
 end
