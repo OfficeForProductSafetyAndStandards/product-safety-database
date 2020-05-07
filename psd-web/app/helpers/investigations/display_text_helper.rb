@@ -108,7 +108,7 @@ module Investigations::DisplayTextHelper
     owner_names = [h(investigation.owner.name.to_s)]
     # Add team name if not already added
     if investigation.owner != investigation.owner_team
-      owner_names << h(investigation.owner_team.name)
+      owner_names << h(investigation.owner_team&.name)
     end
 
     safe_join(owner_names, "<br>".html_safe)
