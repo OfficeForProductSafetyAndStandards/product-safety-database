@@ -154,7 +154,7 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     assert_equal("RESTRICTED ACCESS", first(".hmcts-badge").text)
   end
 
-  test "does not conceal consumer information from assignee" do
+  test "does not conceal consumer information from owner" do
     fill_in_context_form
     choose :correspondence_email_has_consumer_info_true, visible: false
     click_button "Continue"
@@ -168,15 +168,15 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     assert_equal(@correspondence.overview, first("h3").text)
   end
 
-  test "does not conceal consumer information from assignee's team" do
+  test "does not conceal consumer information from owner's team" do
     sign_out
     other_org_user = users(:luton)
     sign_in other_org_user
     User.current = other_org_user
-    assignee = users(:southampton_bob)
+    owner = users(:southampton_bob)
     same_team_user = users(:southampton_steve)
 
-    set_investigation_assignee! @investigation, assignee
+    set_investigation_owner! @investigation, owner
 
     visit new_investigation_email_path(@investigation)
     fill_in_context_form

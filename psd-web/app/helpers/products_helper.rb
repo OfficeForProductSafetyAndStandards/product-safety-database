@@ -96,15 +96,15 @@ private
 
   def build_breadcrumb_structure
     {
-        items: [
-            {
-                text: "Products",
-                href: products_path
-            },
-            {
-                text: @product.name
-            }
-        ]
+      items: [
+        {
+          text: "Products",
+          href: products_path
+        },
+        {
+          text: @product.name
+        }
+      ]
     }
   end
 end

@@ -4,16 +4,16 @@
   = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
 
 = form_with(scope: :investigation, model: @investigation, local: true,
-              url: investigation_assign_index_path(@investigation), method: :post) do |form|
+              url: investigation_ownership_index_path(@investigation), method: :post) do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form
       = render "minimal_investigation_heading", investigation: @investigation, title: page_heading
       p
         = "You are changing the case owner to:"
-        strong = " #{@potential_assignee.display_name || @potential_assignee.name}"
+        strong = " #{@potential_owner.display_name || @potential_owner.name}"
       .govuk-form-group
-        = render "form_components/govuk_textarea", key: :assignee_rationale, form: form,
+        = render "form_components/govuk_textarea", key: :owner_rationale, form: form,
                     classes: "govuk-!-width-two-thirds",
                     rows: "3",
                     label: { text: "Message to new case owner (optional)" },

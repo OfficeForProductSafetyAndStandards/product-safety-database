@@ -127,7 +127,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :assign, controller: "investigations/assign", only: %i[show new create update]
+    resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
     resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[show new create update]
     resources :emails, controller: "investigations/emails", only: %i[show new create update]
     resources :phone_calls, controller: "investigations/phone_calls", only: %i[show new create update]
