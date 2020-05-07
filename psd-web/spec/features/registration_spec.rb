@@ -61,17 +61,9 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     click_on "Continue"
   end
 
-  def expect_to_be_on_secondary_authentication_page
-    expect(page).to have_title("Check your phone")
-  end
-
   def enter_secondary_authentication_code(otp_code)
     fill_in "Enter security code", with: otp_code
     click_on "Continue"
-  end
-
-  def expect_to_be_on_declaration_page
-    expect(page).to have_title("Declaration - Product safety database - GOV.UK")
   end
 
   def otp_code

@@ -89,26 +89,6 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
 private
 
-  def expect_to_be_on_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}")
-    expect(page).to have_selector("h1", text: "Overview")
-  end
-
-  def expect_to_be_on_teams_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams")
-    expect(page).to have_selector("h1", text: "Teams added to the case")
-  end
-
-  def expect_to_be_on_add_team_to_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams/add")
-    expect(page).to have_selector("h1", text: "Add a team to the case")
-  end
-
-  def expect_to_be_on_case_activity_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/activity")
-    expect(page).to have_selector("h1", text: "Activity")
-  end
-
   def expect_teams_tables_to_contain(expected_teams)
     teams_table = page.find(:table, "Teams added to the case")
 
