@@ -1,0 +1,31 @@
+<% page_title = "Cases" %>
+
+<%= render 'investigations/heading', answer: @answer %>
+
+<div class="govuk-grid-row">
+  <%= render 'investigations/filters', search: @search, show_relevancy_radion_option: true, submitted_from: "investigation_search" %>
+</div>
+
+<div class="govuk-grid-column-three-quarters"  id="results">
+  <% @investigations.each do |investigation| %>
+    <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
+    <% if !policy(investigation).show? %>
+      <%= render "investigations/restricted_card", investigation: investigation.decorate %>
+    <% elsif result.respond_to?(:highlight) %>
+      <%= render "investigations/highlight_card", investigation: investigation.decorate, highlights: result.highlight %>
+    <% else %>
+      <%= render "investigations/case_card", investigation: investigation.decorate, sorted_by: @search.sort_by %>
+    <% end %>
+    <%= will_paginate @answer.results %>
+  <% end %>
+  <br />
+  <% if current_user.is_psd_admin? %>
+    <%= link_to "Export as spreadsheet", investigations_path(format: :xlsx, params: export_params), class: "govuk-link" %>
+  <% end %>
+
+  <% unless @investigations.any? %>
+    <div style="text-align:center" class="govuk-heading-l">
+      No result
+    </div>
+  <% end %>
+</div>
