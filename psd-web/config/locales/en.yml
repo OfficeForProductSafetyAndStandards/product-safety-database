@@ -34,6 +34,8 @@ en:
   mail:
     team_added_to_case:
       message_from: "Message from %{user_name}:"
+    team_removed_from_case:
+      message_from: "Message from %{user_name}:"
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
     mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
@@ -131,6 +133,15 @@ en:
           attributes:
             hazard_type:
               blank: "Enter the primary hazard"
+        edit_investigation_collaborator_form:
+          attributes:
+            include_message:
+              inclusion: "Select whether you want to include a message"
+            message:
+              blank: "Enter a message to the team"
+            permission_level:
+              blank: "Select the permission level the team should have"
+          select_different_permission_level: "This team already has this permission level. Select a different option or return to the case."
 
   activerecord:
     errors:
