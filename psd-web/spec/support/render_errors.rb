@@ -9,18 +9,14 @@
 #
 # See https://github.com/rspec/rspec-rails/issues/2024
 RSpec.shared_context "with errors rendered" do
-  let(:env_config) { Rails.application.env_config }
-  let(:original_show_exceptions) { env_config["action_dispatch.show_exceptions"] }
-  let(:original_show_detailed_exceptions) { env_config["action_dispatch.show_detailed_exceptions"] }
-
   before do
-    env_config["action_dispatch.show_exceptions"] = true
-    env_config["action_dispatch.show_detailed_exceptions"] = false
-  end
-
-  after do
-    env_config["action_dispatch.show_exceptions"] = original_show_exceptions
-    env_config["action_dispatch.show_detailed_exceptions"] = original_show_detailed_exceptions
+    allow(Rails.application).to receive(:env_config).with(no_args).and_wrap_original do |m|
+      m.call.merge(
+        "consider_all_requests_local" => false,
+        "action_dispatch.show_exceptions" => true,
+        "action_dispatch.show_detailed_exceptions" => false
+      )
+    end
   end
 end
 
