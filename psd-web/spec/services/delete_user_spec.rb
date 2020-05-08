@@ -32,9 +32,9 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
       subject(:delete_call) { described_class.call(user: user) }
 
       let(:user) { create(:user) }
-      let!(:allegation) { create(:allegation, assignable: user) }
-      let!(:enquiry) { create(:enquiry, assignable: user) }
-      let!(:project) { create(:project, assignable: user) }
+      let!(:allegation) { create(:allegation, owner: user) }
+      let!(:enquiry) { create(:enquiry, owner: user) }
+      let!(:project) { create(:project, owner: user) }
 
       it "succeeds" do
         expect(delete_call).to be_a_success

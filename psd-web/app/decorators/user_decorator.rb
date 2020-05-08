@@ -2,7 +2,7 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   def owner_short_name(viewer:)
-    return "Unknown" if viewing_user.nil?
+    return "Unknown" if viewer.nil?
     return organisation.name if organisation != viewer.organisation
 
     name

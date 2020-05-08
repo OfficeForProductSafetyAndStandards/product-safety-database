@@ -13,19 +13,6 @@ def expect_page_to_have_h1(header)
   expect(page).to have_css("h1", text: header)
 end
 
-def expect_to_be_on_coronavirus_page(path)
-  expect(page).to have_current_path(path)
-  expect(page).to have_selector("h1", text: "Is this case related to the coronavirus outbreak?")
-end
-
-def expect_to_be_on_team_page(team)
-  expect(page).to have_css("h1", text: team.display_name)
-end
-
-def expect_to_be_on_access_denied_page
-  expect(page).to have_css("h1", text: "Access denied")
-end
-
 def enter_contact_details(contact_name:, contact_email:, contact_phone:)
   fill_in "complainant[name]", with: contact_name
   fill_in "complainant_email_address", with: contact_email

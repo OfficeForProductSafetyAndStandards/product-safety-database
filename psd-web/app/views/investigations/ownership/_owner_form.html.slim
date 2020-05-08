@@ -34,8 +34,7 @@
 
     other_teams = capture do
       render "investigations/ownership/owner_selection", form: form, key: :select_other_team,
-             items: Team.all, label: "Select other team name"
-             show_all_values: true
+             items: Team.all, label: "Select other team name", show_all_values: true
     end
     items.push text: "Other team", value: "other_team", conditional: { html: other_teams }
 

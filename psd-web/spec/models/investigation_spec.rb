@@ -63,14 +63,5 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
         expect(investigation.owner_team).to eql(team)
       end
     end
-
-    context "when there is a user who doesn’t belong to a team who is the case owner" do
-      let(:user) { create(:user, teams: []) }
-      let(:investigation) { create(:investigation, owner: user) }
-
-      it "is nil" do
-        expect(investigation.owner_team).to be_nil
-      end
-    end
   end
 end

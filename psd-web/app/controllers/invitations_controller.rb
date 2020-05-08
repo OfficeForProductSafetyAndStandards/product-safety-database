@@ -19,9 +19,9 @@ class InvitationsController < ApplicationController
     team = find_team_and_authorize_invite
     user = team.users.find(params[:id])
 
-    InviteUserToTeam.call({ user: user, team: team, inviting_user: current_user })
+    invitation = InviteUserToTeam.call({ user: user, team: team, inviting_user: current_user })
 
-    redirect_to(team, flash: { success: t("invite_user_to_team.invite_sent", email: user.email) })
+    redirect_to(team, flash: { success: t("invite_user_to_team.invite_sent", email: invitation.user.email) })
   end
 
 private

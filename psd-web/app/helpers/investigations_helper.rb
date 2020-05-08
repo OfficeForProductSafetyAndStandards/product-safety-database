@@ -211,7 +211,7 @@ module InvestigationsHelper
     }
   end
 
-  def owner_teams_with_key
+  def owner_team_with_key
     [
       "case_owner_is_team_0".to_sym,
       current_user.team,

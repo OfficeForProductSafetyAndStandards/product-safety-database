@@ -3,14 +3,14 @@ module Investigations::UserFiltersHelper
     User.get_owners(except: current_user).decorate + Team.all_with_organisation.decorate
   end
 
-  def assigned_to(form)
-    assigned_to_items = [{ key: "assigned_to_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
-    assigned_to_items << { key: owner_team_with_key[0], value: owner_team_with_key[1].id, unchecked_value: "unchecked", text: owner_team_with_key[2] }
-    assigned_to_items << { key: "assigned_to_someone_else",
-                           value: "checked",
-                           unchecked_value: "unchecked",
-                           text: "Other person or team",
-                           conditional: { html: other_assignee(form) } }
+  def case_owner_is(form)
+    case_owner_is_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
+    case_owner_is_items << { key: owner_team_with_key[0], value: owner_team_with_key[1].id, unchecked_value: "unchecked", text: owner_team_with_key[2] }
+    case_owner_is_items << { key: "case_owner_is_someone_else",
+                             value: "checked",
+                             unchecked_value: "unchecked",
+                             text: "Other person or team",
+                             conditional: { html: other_owner(form) } }
   end
 
   def created_by(form)

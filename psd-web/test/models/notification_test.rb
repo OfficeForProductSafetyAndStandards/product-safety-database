@@ -94,7 +94,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     mock_investigation_updated(who_will_be_notified: expected_recipients)
     @investigation.update!(owner: users(:southampton))
-    assert_equal @number_of_notifications, 23
+    assert_equal @number_of_notifications, 3
   end
 
   test "should not notify previous owner team if case is owned by someone by someone inside" do

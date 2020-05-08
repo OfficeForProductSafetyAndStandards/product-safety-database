@@ -20,7 +20,7 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
 
   def email_update_text(viewer = nil)
     body = []
-    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name(other_user: viewer)}} by #{source&.show(viewer)}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name(viewer: viewer)} by #{source&.show(viewer)}."
 
     if investigation.owner_rationale.present?
       body << "Message from #{source&.show(viewer)}:"
