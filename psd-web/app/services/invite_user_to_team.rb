@@ -7,15 +7,17 @@ class InviteUserToTeam
     context.fail!(error: "No email or user supplied") unless email || user
     context.fail!(error: "No team supplied") unless team
 
-    unless user
-      existing_user = User.find_by email: email
-      context.user = existing_user&.team == team ? existing_user : create_user
-    end
+    context.user ||= find_or_create_user
 
     send_invite
   end
 
 private
+
+  def find_or_create_user
+    existing_user = User.find_by email: email
+    existing_user&.team == team ? existing_user : create_user
+  end
 
   def create_user
     user = User.create!(
