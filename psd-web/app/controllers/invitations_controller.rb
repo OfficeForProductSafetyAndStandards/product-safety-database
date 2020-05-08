@@ -1,12 +1,11 @@
 class InvitationsController < ApplicationController
-  before_action :get_team
-  before_action :authorize_team_invite
-
   def new
+    @team = find_team_and_authorize_invite
     @invite_user_to_team_form = InviteUserToTeamForm.new
   end
 
   def create
+    @team = find_team_and_authorize_invite
     @invite_user_to_team_form = InviteUserToTeamForm.new(form_params)
 
     return render :new, status: :bad_request unless @invite_user_to_team_form.valid?
@@ -17,23 +16,23 @@ class InvitationsController < ApplicationController
   end
 
   def resend
-    user = @team.users.find(params[:id])
+    team = find_team_and_authorize_invite
+    user = team.users.find(params[:id])
 
-    invitation = InviteUserToTeam.call({ user: user, team: @team, inviting_user: current_user })
+    InviteUserToTeam.call({ user: user, team: team, inviting_user: current_user })
 
-    redirect_to @team, flash: { success: t("invite_user_to_team.invite_sent", email: invitation.user.email) }
+    redirect_to(team, flash: { success: t("invite_user_to_team.invite_sent", email: user.email) })
   end
 
 private
 
-  def get_team
-    @team = Team.find(params[:team_id])
+  def find_team_and_authorize_invite
+    team = Team.find(params[:team_id])
+    authorize team, :invite_user?
+    team
   end
 
-  def authorize_team_invite
-    authorize @team, :invite_user?
-  end
-
+  # See: SecondaryAuthenticationConcern
   def current_operation
     SecondaryAuthentication::INVITE_USER
   end
