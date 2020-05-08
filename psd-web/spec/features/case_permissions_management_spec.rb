@@ -11,7 +11,6 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   let(:investigation) {
     create(:investigation,
            owner: user)
-
   }
 
   let(:team) do
@@ -93,7 +92,6 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   end
 
   scenario "Remove a team from a case (with validation errors)" do
-    # create collaborator
     sign_in user
     create(:collaborator, investigation: investigation, team: team)
 
