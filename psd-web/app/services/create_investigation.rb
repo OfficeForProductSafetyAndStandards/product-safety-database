@@ -5,8 +5,8 @@ class CreateInvestigation
 
   def call
     investigation = Investigation::Allegation.new(investigation_params)
-    investigation.assignable = user
-    investigation.build_case_owner(
+
+    investigation.build_case_creator(
       team: user.teams.first,
       added_by_user: user,
       include_message: "Maybe this message should not be required when creating a case creator"

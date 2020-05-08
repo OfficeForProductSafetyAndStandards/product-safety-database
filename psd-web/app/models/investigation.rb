@@ -30,8 +30,6 @@ class Investigation < ApplicationRecord
 
   default_scope { order(updated_at: :desc) }
 
-  belongs_to :owner, polymorphic: true, optional: true
-
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products,
                       after_add: :create_audit_activity_for_product,
@@ -54,11 +52,17 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
-  has_many :collaborators,     dependent: :destroy
-  has_many :co_collaborators,  dependent: :destroy
-  has_one :case_owner,         dependent: :destroy
+  # belongs_to :owner, polymorphic: true, optional: true
+
+  has_many :collaborators,                 dependent: :destroy
+  has_many :co_collaborators,              dependent: :destroy, inverse_of: :investigation
+  has_many :owners,                        dependent: :destroy, inverse_of: :investigation
+  has_one  :case_creator, -> { readonly }, dependent: :destroy, inverse_of: :investigation
+  has_one  :case_owner, -> { order(Arel.sql("CASE WHEN type = 'CaseOwner' THEN 0 ELSE 1 END")) }, dependent: :destroy, inverse_of: :investigation
 
   has_many :teams, through: :collaborators
+  has_one :owner, through: :case_owner, source: :team
+  has_one :creator, through: :case_creator, source: :team
 
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id

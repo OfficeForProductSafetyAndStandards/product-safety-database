@@ -4,28 +4,33 @@ class AssignInvestigation
   delegate :investigation, :new_collaborating_case_owner, :current_user, to: :context
 
   def call
-    investigation.with_lock do
-      swap_with_co_collaborator! || create_new_case_owner!
-    end
+    swap_with_co_collaborator! || create_new_case_owner!
   end
 
   def create_new_case_owner!
-    investigation.with_lock do
-      old_case_owner = investigation.case_owner
+    collaborator = investigation.collaborators.find_by(team: new_collaborating_case_owner)
 
-      investigation.create_case_owner!(
-        added_by_user: current_user,
-        team: new_collaborating_case_owner,
-        include_message: "Maybe this message should not be required when creating a case creator"
-      )
+    if collaborator
+      return if investigation.case_owner == collaborator
+      return if investigation.case_owner.is_a?(CaseCreator)
 
-      investigation.co_collaborators.create!(
-        added_by_user: old_case_owner.added_by_user,
-        team: old_case_owner.team,
-        created_at: old_case_owner.created_at,
-        include_message: "Maybe this message should not be required when creating a case creator"
-      )
+      investigation.case_owner.update!(type: "CoCollaborator", include_message: false)
+      # make sure to flush the case_owner cached relation
+      # so the case_owner is either fetched from the database or is nil
+      investigation.reload
     end
+
+    return if investigation.owners.exists?(team: new_collaborating_case_owner)
+
+    investigation.owners.create!(
+      type: "CaseOwner",
+      added_by_user: current_user,
+      team: new_collaborating_case_owner,
+      include_message: "Maybe this message should not be required when creating a case creator"
+    )
+  rescue ActiveRecord::RecordNotUnique
+    raise
+    investigation
   end
 
   def swap_with_co_collaborator!

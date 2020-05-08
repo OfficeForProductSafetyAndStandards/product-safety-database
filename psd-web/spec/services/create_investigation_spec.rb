@@ -12,10 +12,10 @@ RSpec.describe CreateInvestigation, :with_stubbed_elasticsearch, :with_stubbed_m
   it "creates the investigation", :aggregate_failures do
     expect(service).to be_a_success
 
-    expect(service.investigation.assignable).to eq(user)
-    expect(service.investigation.case_owner.team).to eq(user.team)
-    expect(service.investigation.collaborators.flat_map(&:team)).to include(user.team)
-    expect(service.investigation.co_collaborators).to be_empty
+    expect(service.investigation.reload.owner).to eq(user.team)
+    expect(service.investigation.owners.where(team: team)).to exist
+    expect(service.investigation.collaborators.where(team: team)).to exist
+    expect(service.investigation.co_collaborators.where(team: team)).to be_empty
   end
 end
 
@@ -36,11 +36,12 @@ RSpec.describe AssignInvestigation, :with_stubbed_elasticsearch, :with_stubbed_m
     it "creates the investigation", :aggregate_failures do
       expect(service).to be_a_success
 
-      expect(investigation.reload.assignable.team).to eq(user.team)
-      expect(investigation.case_owner.team).to eq(new_collaborating_case_owner_team)
-      expect(investigation.collaborators.flat_map(&:team)).to include(user.team, new_collaborating_case_owner_team)
-      expect(investigation.co_collaborators.flat_map(&:team)).to include(user.team)
-      expect(investigation.co_collaborators.flat_map(&:team)).not_to include(new_collaborating_case_owner_team)
+      expect(investigation.reload.case_creator.team).to eq(user.team)
+      expect(investigation.reload.case_owner.team).to eq(new_collaborating_case_owner_team)
+      expect(service.investigation.owners.where(team: [new_collaborating_case_owner_team, user.team])).to exist
+      expect(service.investigation.collaborators.where(team: [new_collaborating_case_owner_team, user.team])).to exist
+      expect(service.investigation.collaborators.where(team: new_collaborating_case_owner_team)).to exist
+      expect(investigation.co_collaborators.where(team: [user.team, new_collaborating_case_owner_team])).not_to exist
     end
   end
 
@@ -58,11 +59,13 @@ RSpec.describe AssignInvestigation, :with_stubbed_elasticsearch, :with_stubbed_m
         )
       }.not_to(change { investigation.collaborators.count })
 
-      expect(investigation.reload.assignable.team).to eq(user.team)
+      expect(investigation.reload.owner.team).to eq(user.team)
+
+      expect(investigation.case_creator.team).to eq(user.team)
       expect(investigation.case_owner.team).to eq(user.team)
-      expect(investigation.collaborators.flat_map(&:team)).to include(user.team, new_collaborating_case_owner_team)
-      expect(investigation.co_collaborators.flat_map(&:team)).to include(new_collaborating_case_owner_team)
-      expect(investigation.co_collaborators.flat_map(&:team)).not_to include(user.team)
+      expect(investigation.collaborators.where(team: [user.team, new_collaborating_case_owner_team]).count).to eq(2)
+      expect(investigation.co_collaborators.where(team: new_collaborating_case_owner_team)).to exist
+      expect(investigation.co_collaborators.where(team: user.team)).not_to exist
     end
   end
 end
@@ -89,10 +92,11 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_elasticsearch, :with_stub
   it "correctly assigns add a collaborator", :aggregate_failures do
     expect(service).to be_a_success
 
-    expect(investigation.reload.assignable.team).to eq(user.team)
-    expect(investigation.case_owner.team).to eq(user.team)
-    expect(investigation.collaborators.flat_map(&:team)).to include(user.team, new_collaborating_team)
-    expect(investigation.co_collaborators.flat_map(&:team)).to include(new_collaborating_team)
-    expect(investigation.co_collaborators.flat_map(&:team)).not_to include(user.team)
+    expect(investigation.reload.owner).to eq(user.team)
+    expect(investigation.creator.team).to eq(user.team)
+
+    expect(investigation.collaborators.where(team: [user.team, new_collaborating_team]).count).to eq(2)
+    expect(investigation.co_collaborators.where(team: new_collaborating_team)).to exist
+    expect(investigation.owners.where(team: user.team)).to exist
   end
 end
