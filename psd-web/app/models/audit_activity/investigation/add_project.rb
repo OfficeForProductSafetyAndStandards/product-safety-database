@@ -11,7 +11,7 @@ class AuditActivity::Investigation::AddProject < AuditActivity::Investigation::A
     body =  "**Project details**<br>"
     body += "<br>Case is related to the coronavirus outbreak.<br>" if investigation.coronavirus_related?
     body += "<br>#{sanitize_text investigation.description}" if investigation.description.present?
-    body += build_assignee_details(investigation) if investigation.assignable.present?
+    body += build_owner_details(investigation) if investigation.owner.present?
     body
   end
 

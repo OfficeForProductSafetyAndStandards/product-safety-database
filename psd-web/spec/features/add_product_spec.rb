@@ -24,6 +24,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     click_on "Save product"
 
     expect_to_be_on_investigation_products_page
+    expect(page).not_to have_error_messages
 
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product name")
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.name)
@@ -41,11 +42,5 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.country_of_origin)
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Description")
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.description)
-  end
-
-  def expect_to_be_on_investigation_products_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
-    expect(page).to have_selector("h1", text: "Products")
-    expect(page).not_to have_error_messages
   end
 end

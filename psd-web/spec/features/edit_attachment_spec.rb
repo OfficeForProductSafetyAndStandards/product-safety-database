@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, :with_document, assignable: user) }
+  let(:investigation) { create(:allegation, :with_document, owner: user) }
   let(:document) { investigation.documents.first }
 
   let(:new_title) { Faker::Lorem.sentence }
@@ -25,12 +25,6 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :w
     click_link "Activity"
 
     expect_case_activity_page_to_show_entered_information
-  end
-
-  def expect_to_be_on_edit_attachment_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.to_param}/edit")
-    expect(page).to have_selector("h2", text: "Edit document details")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
   end
 
   def expect_case_attachments_page_to_show_entered_information

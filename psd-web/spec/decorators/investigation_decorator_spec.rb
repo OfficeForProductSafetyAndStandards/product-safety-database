@@ -11,7 +11,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, assignable: user, source: user_source) }
+  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, owner: user, source: user_source) }
 
   before { create(:complainant, investigation: investigation) }
 
@@ -289,20 +289,20 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
-  describe "#assignable_display_name_for" do
+  describe "#owner_display_name_for" do
     let(:viewing_user) { build(:user) }
 
-    context "when the investigation is assigned" do
-      it "displays the assignee assignable name" do
-        expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user))
-          .to eq(user.assignee_short_name(viewing_user: viewing_user))
+    context "when the investigation has an owner" do
+      it "displays the owner name" do
+        expect(decorated_investigation.owner_display_name_for(viewing_user: viewing_user))
+          .to eq(user.owner_short_name(viewing_user: viewing_user))
       end
     end
 
-    context "when the investigation is not assigned" do
-      before { investigation.assignable = nil }
+    context "when the investigation doesn’t have an owner" do
+      before { investigation.owner = nil }
 
-      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("No case owner") }
+      it { expect(decorated_investigation.owner_display_name_for(viewing_user: viewing_user)).to eq("No case owner") }
     end
   end
 end

@@ -13,7 +13,7 @@ class AuditActivity::Investigation::AddEnquiry < AuditActivity::Investigation::A
     body += "Attachment: **#{sanitize_text investigation.documents.first.filename}**<br>" if investigation.documents.attached?
     body += "<br>#{sanitize_text investigation.description}" if investigation.description.present?
     body += build_complainant_details(investigation.complainant) if investigation.complainant.present?
-    body += build_assignee_details(investigation) if investigation.assignable.present?
+    body += build_owner_details(investigation) if investigation.owner.present?
     body
   end
 end

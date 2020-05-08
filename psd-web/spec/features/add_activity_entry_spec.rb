@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:creator_user) { create(:user, :activated, email: "creator@example.com") }
-  let(:investigation) { create(:investigation, assignable: creator_user) }
+  let(:investigation) { create(:investigation, owner: creator_user) }
   let(:investigation_path) { "/cases/#{investigation.pretty_id}" }
 
   scenario "Picking an activity type" do
@@ -36,14 +36,14 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     )
   end
 
-  scenario "Updates on cases assigned to teams without team email send a notification to their active users" do
+  scenario "Updates on cases owned by teams without team email send a notification to their active users" do
     team_without_email = create(:team, team_recipient_email: nil)
     active_user = create(:user, :activated, email: "active@example.com", teams: [team_without_email])
     commentator_user = create(:user, :activated)
 
     create(:user, :inactive, email: "not_activated@example.com", teams: [team_without_email])
     create(:user, :activated, :deleted, email: "deleted@example.com", teams: [team_without_email])
-    investigation.update_attribute(:assignable, team_without_email)
+    investigation.update_attribute(:owner, team_without_email)
 
     sign_in commentator_user
 
