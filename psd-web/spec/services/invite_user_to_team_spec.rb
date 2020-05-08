@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_test_queue_adapter do
   describe ".call" do
     subject(:result) { described_class.call(params) }
 
@@ -8,10 +8,6 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
     let(:team) { create(:team) }
     let(:inviting_user) { create(:user, :activated, inviting_user_role, team: team) }
     let(:inviting_user_role) { :psd_user }
-
-    before do
-      allow(SendUserInvitationJob).to receive(:perform_later)
-    end
 
     context "when there is no existing user" do
       let(:params) { { email: email, team: team } }
@@ -44,17 +40,21 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
       end
       # rubocop:enable RSpec/ExampleLength
 
-      it "enqueues the SendUserInvitationJob with the new user ID" do
-        result
-        expect(SendUserInvitationJob).to have_received(:perform_later).with(result.user.id, nil)
+      it "enqueues the SendUserInvitationJob with the new user ID", :aggregate_failures do
+        expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+          expect(recipient_id).to eq result.user.id
+          expect(inviting_user_id).to be_nil
+        end
       end
 
       context "with inviting_user parameter" do
         let(:params) { { email: email, team: team, inviting_user: inviting_user } }
 
-        it "enqueues the SendUserInvitationJob with the new user ID and inviting user ID" do
-          result
-          expect(SendUserInvitationJob).to have_received(:perform_later).with(result.user.id, inviting_user.id)
+        it "enqueues the SendUserInvitationJob with the new user ID and inviting user ID", :aggregate_failures do
+          expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+            expect(recipient_id).to eq result.user.id
+            expect(inviting_user_id).to inviting_user.id
+          end
         end
 
         context "when the inviting_user is an OPSS user" do
@@ -78,9 +78,11 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         let(:params) { { email: existing_user.email, team: team } }
 
         context "when the existing user is already on the same team" do
-          it "enqueues the SendUserInvitationJob with the existing user ID" do
-            result
-            expect(SendUserInvitationJob).to have_received(:perform_later).with(existing_user.id, nil)
+          it "enqueues the SendUserInvitationJob with the existing user ID", :aggregate_failures do
+            expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+              expect(recipient_id).to eq existing_user.id
+              expect(inviting_user_id).to be_nil
+            end
           end
         end
 
@@ -134,18 +136,22 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         context "with inviting_user parameter" do
           let(:params) { { user: existing_user, team: team, inviting_user: inviting_user } }
 
-          it "enqueues the SendUserInvitationJob with the inviting user ID" do
-            result
-            expect(SendUserInvitationJob).to have_received(:perform_later).with(existing_user.id, inviting_user.id)
+          it "enqueues the SendUserInvitationJob with the inviting user ID", :aggregate_failures do
+            expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+              expect(recipient_id).to eq existing_user.id
+              expect(inviting_user_id).to inviting_user_id
+            end
           end
         end
 
         context "with no inviting_user parameter" do
           let(:params) { { user: existing_user, team: team } }
 
-          it "enqueues the SendUserInvitationJob with nil inviting user ID" do
-            result
-            expect(SendUserInvitationJob).to have_received(:perform_later).with(existing_user.id, nil)
+          it "enqueues the SendUserInvitationJob with nil inviting user ID", :aggregate_failures do
+            expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+              expect(recipient_id).to eq existing_user.id
+              expect(inviting_user_id).to be_nil
+            end
           end
         end
       end
