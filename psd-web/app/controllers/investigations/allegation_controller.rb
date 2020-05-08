@@ -10,6 +10,10 @@ private
     :allegation
   end
 
+  def model_name
+    "Investigation::Allegation"
+  end
+
   def model_params
     %i[description hazard_type product_category coronavirus_related]
   end

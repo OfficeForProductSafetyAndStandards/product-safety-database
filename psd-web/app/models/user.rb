@@ -14,6 +14,8 @@ class User < ApplicationRecord
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
 
+  has_many :collaborations, as: :collaborating, dependent: :destroy, foreign_key: :collaborating_id, foreign_type: "Collaborator", inverse_of: :user
+
   has_and_belongs_to_many :teams
 
   validates :password,

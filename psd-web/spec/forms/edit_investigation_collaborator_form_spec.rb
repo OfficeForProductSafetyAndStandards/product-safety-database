@@ -6,7 +6,8 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   let(:investigation) { create(:investigation, owner: user) }
   let(:team) { create(:team) }
   let(:collaborator) do
-    create(:collaborator, investigation: investigation, team: team, added_by_user: user)
+
+    create(:collaborator, investigation: investigation, collaborating: team, added_by_user: user)
   end
 
   let(:permission_level) { EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE }

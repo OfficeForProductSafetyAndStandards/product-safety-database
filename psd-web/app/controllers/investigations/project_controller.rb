@@ -44,6 +44,10 @@ class Investigations::ProjectController < ApplicationController
 
 private
 
+  def model_name
+    "Investigation::Project"
+  end
+
   def investigation_session_params
     session[:investigation] || {}
   end

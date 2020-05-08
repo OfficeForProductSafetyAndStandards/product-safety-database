@@ -458,6 +458,7 @@ private
     @why_reporting_form = WhyReportingForm.new
   end
 
+
   def records_valid?
     case step
     when :coronavirus
@@ -507,9 +508,15 @@ private
   def records_saved?
     return false unless records_valid?
 
+    result = CreateInvestigation.call(investigation_params: investigation_step_params, current_user: current_user)
+
+    @investigation = result.investigation
+
+    return false unless result.success?
+
     @product.save
     @investigation.products << @product
-    @investigation.save
+
     save_businesses
     save_corrective_actions
     save_test_results

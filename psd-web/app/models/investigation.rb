@@ -18,7 +18,6 @@ class Investigation < ApplicationRecord
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
   validates :description, presence: true, on: :update
-  validates :owner_id, presence: { message: "Select case owner" }, on: :update
 
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 10000 }
@@ -57,16 +56,20 @@ class Investigation < ApplicationRecord
   has_many :collaborators,                 dependent: :destroy
   has_many :co_collaborators,              dependent: :destroy, inverse_of: :investigation
   has_many :owners,                        dependent: :destroy, inverse_of: :investigation
-  has_one  :case_creator, -> { readonly }, dependent: :destroy, inverse_of: :investigation
-  has_one  :case_owner, -> { order(Arel.sql("CASE WHEN type = 'CaseOwner' THEN 0 ELSE 1 END")) }, dependent: :destroy, inverse_of: :investigation
-
-  has_many :teams, through: :collaborators
-  has_one :owner, through: :case_owner, source: :team
-  has_one :creator, through: :case_creator, source: :team
+  has_one  :case_creator, dependent: :destroy, inverse_of: :investigation
+  has_one  :case_owner, -> { order(Arel.sql("CASE WHEN collaborators.type = 'CaseOwner' THEN 0 ELSE 1 END")) }, dependent: :destroy, inverse_of: :investigation
 
   # TODO: Refactor to remove this callback hell
-  before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id
+  before_create :set_source_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
+
+  def owner
+    case_owner&.collaborating
+  end
+
+  def creator
+    case_creator&.collaborating
+  end
 
   def owner_team
     owner&.team

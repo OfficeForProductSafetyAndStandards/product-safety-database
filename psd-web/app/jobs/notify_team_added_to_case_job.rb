@@ -1,6 +1,6 @@
 class NotifyTeamAddedToCaseJob < ApplicationJob
   def perform(collaborator)
-    team = collaborator.team
+    team = collaborator.collaborating
 
     if team.team_recipient_email.present?
       NotifyMailer.team_added_to_case_email(collaborator, to_email: team.team_recipient_email).deliver_later

@@ -31,7 +31,7 @@ class EditInvestigationCollaboratorForm
 private
 
   def collaborator
-    investigation.collaborators.find_by!(team_id: team.id)
+    investigation.collaborators.find_by!(collaborating: team)
   end
 
   def schedule_delete_emails

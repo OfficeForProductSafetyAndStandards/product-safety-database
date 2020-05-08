@@ -56,7 +56,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def manage_collaborators?
-    return false if @record.owner.nil?
+    return false if @record.case_owner.nil?
 
     @record.owner.in_same_team_as?(user)
   end

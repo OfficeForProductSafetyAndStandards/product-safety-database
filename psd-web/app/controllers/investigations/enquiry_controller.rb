@@ -10,6 +10,10 @@ private
     :enquiry
   end
 
+  def model_name
+    "Investigation::Enquiry"
+  end
+
   def model_params
     %i[user_title description date_received received_type coronavirus_related]
   end
