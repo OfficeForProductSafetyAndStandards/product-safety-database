@@ -3,8 +3,8 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     super(corrective_action)
   end
 
-  def email_update_text(viewing_user = nil)
-    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
 private

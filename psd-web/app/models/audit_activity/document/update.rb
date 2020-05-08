@@ -26,8 +26,8 @@ class AuditActivity::Document::Update < AuditActivity::Document::Base
     "Document updated"
   end
 
-  def email_update_text(viewing_user = nil)
-    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show(viewer)}."
   end
 
 private

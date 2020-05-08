@@ -6,8 +6,8 @@ class AuditActivity::Business::Add < AuditActivity::Business::Base
     super(business, investigation, title, body)
   end
 
-  def email_update_text(viewing_user = nil)
-    "Business was added to the #{investigation.case_type} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Business was added to the #{investigation.case_type} by #{source&.show(viewer)}."
   end
 
 private

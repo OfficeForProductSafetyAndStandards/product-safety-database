@@ -27,8 +27,8 @@ class AuditActivity::Correspondence::AddMeeting < AuditActivity::Correspondence:
     "Meeting added"
   end
 
-  def email_update_text(viewing_user = nil)
-    "Meeting details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Meeting details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
 private

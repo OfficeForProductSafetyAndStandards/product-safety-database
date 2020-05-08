@@ -94,7 +94,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     mock_investigation_updated(who_will_be_notified: expected_recipients)
     @investigation.update!(owner: users(:southampton))
-    assert_equal @number_of_notifications, 2
+    assert_equal @number_of_notifications, 23
   end
 
   test "should not notify previous owner team if case is owned by someone by someone inside" do
@@ -117,7 +117,7 @@ class NotificationTest < ActiveSupport::TestCase
     User.current = users(:southampton)
     mock_investigation_updated(who_will_be_notified: teams(:southampton).users.map(&:email))
     @investigation.update(owner: teams(:southampton))
-    assert_equal @number_of_notifications, 2
+    assert_equal @number_of_notifications, 4
   end
 
   test "previous owner is computed correctly" do

@@ -18,12 +18,12 @@ class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::
     "Case owner changed to #{(User.find_by(id: owner_id) || Team.find_by(id: owner_id))&.decorate&.display_name}"
   end
 
-  def email_update_text(viewing_user = nil)
+  def email_update_text(viewer = nil)
     body = []
-    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name(other_user: viewing_user)}} by #{source&.show(viewing_user)}."
+    body << "Case owner changed on #{investigation.case_type} to #{investigation.owner.decorate.display_name(other_user: viewer)}} by #{source&.show(viewer)}."
 
     if investigation.owner_rationale.present?
-      body << "Message from #{source&.show(viewing_user)}:"
+      body << "Message from #{source&.show(viewer)}:"
       body << inset_text_for_notify(investigation.owner_rationale)
     end
 

@@ -47,8 +47,8 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     "phone call"
   end
 
-  def email_update_text(viewing_user = nil)
-    "Phone call details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Phone call details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
 private

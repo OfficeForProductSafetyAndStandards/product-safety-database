@@ -6,18 +6,18 @@ RSpec.describe UserDecorator do
   let(:user) { build(:user) }
 
   describe "#owner_short_name" do
-    let(:viewing_user) { build(:user, organisation: organisation) }
+    let(:viewer) { build(:user, organisation: organisation) }
 
     context "when viewing from a user within the same organisation" do
       let(:organisation) { user.organisation }
 
-      it { expect(decorated_user.owner_short_name(viewing_user: viewing_user)).to eq(user.name) }
+      it { expect(decorated_user.owner_short_name(viewer: viewer)).to eq(user.name) }
     end
 
     context "when viewing from a user within another organisation" do
       let(:organisation) { build(:organisation) }
 
-      it { expect(decorated_user.owner_short_name(viewing_user: viewing_user)).to eq(user.organisation.name) }
+      it { expect(decorated_user.owner_short_name(viewer: viewer)).to eq(user.organisation.name) }
     end
   end
 
@@ -49,9 +49,9 @@ RSpec.describe UserDecorator do
     let(:user_organisation) { organisation }
     let(:user_deleted_timestamp) { nil }
     let(:user) { create(:user, name: user_name, organisation: user_organisation, team: team, deleted_at: user_deleted_timestamp) }
-    let(:other_user) { create(:user, name: other_user_name, organisation: organisation) }
+    let(:viewer) { create(:user, name: other_user_name, organisation: organisation) }
 
-    let(:result) { decorated_user.display_name(other_user: other_user) }
+    let(:result) { decorated_user.display_name(viewer: viewer) }
 
     context "when the user is a member of the same organisation" do
       it "returns their name and team names" do
@@ -84,8 +84,8 @@ RSpec.describe UserDecorator do
       end
     end
 
-    context "with other_user: nil" do
-      let(:other_user) { nil }
+    context "with viewer: nil" do
+      let(:viewer) { nil }
 
       it "returns their name and organisation name" do
         expect(result).to eq("#{user_name} (#{team_name})")

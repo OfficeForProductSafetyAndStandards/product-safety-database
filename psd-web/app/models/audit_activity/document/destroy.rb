@@ -8,8 +8,8 @@ class AuditActivity::Document::Destroy < AuditActivity::Document::Base
     "Document deleted"
   end
 
-  def email_update_text(viewing_user = nil)
-    "Document attached to the #{investigation.case_type.upcase_first} was removed by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Document attached to the #{investigation.case_type.upcase_first} was removed by #{source&.show(viewer)}."
   end
 
 private

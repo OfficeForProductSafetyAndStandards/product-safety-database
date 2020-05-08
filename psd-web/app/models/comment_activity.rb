@@ -12,8 +12,8 @@ class CommentActivity < Activity
     body
   end
 
-  def email_update_text(viewing_user = nil)
-    "#{source&.show(viewing_user)} commented on the #{investigation.case_type}."
+  def email_update_text(viewer = nil)
+    "#{source&.show(viewer)} commented on the #{investigation.case_type}."
   end
 
 private

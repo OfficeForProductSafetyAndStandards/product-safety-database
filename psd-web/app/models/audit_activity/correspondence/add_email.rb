@@ -56,8 +56,8 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     "email"
   end
 
-  def email_update_text(viewing_user = nil)
-    "Email details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Email details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
 private

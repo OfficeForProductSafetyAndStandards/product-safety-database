@@ -4,8 +4,8 @@ class AuditActivity::Investigation::UpdateStatus < AuditActivity::Investigation:
     super(investigation, title, sanitize_text(investigation.status_rationale))
   end
 
-  def email_update_text(viewing_user = nil)
-    "#{email_subject_text} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "#{email_subject_text} by #{source&.show(viewer)}."
   end
 
   def email_subject_text

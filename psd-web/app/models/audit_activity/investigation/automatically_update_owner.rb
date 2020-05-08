@@ -27,5 +27,5 @@ class AuditActivity::Investigation::AutomaticallyUpdateOwner < AuditActivity::In
 
   def email_subject_text; end
 
-  def email_update_text(viewing_user = nil); end
+  def email_update_text(viewer = nil); end
 end

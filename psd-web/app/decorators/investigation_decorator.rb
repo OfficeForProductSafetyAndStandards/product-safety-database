@@ -141,10 +141,10 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
-  def owner_display_name_for(viewing_user:)
+  def owner_display_name_for(viewer:)
     return "No case owner" unless investigation.owner
 
-    owner.owner_short_name(viewing_user: viewing_user)
+    owner.owner_short_name(viewer: viewing_user)
   end
 
 private

@@ -9,8 +9,8 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     "Test date"
   end
 
-  def email_update_text(viewing_user = nil)
-    "Test result was added to the #{investigation.case_type} by #{source&.show(viewing_user)}."
+  def email_update_text(viewer = nil)
+    "Test result was added to the #{investigation.case_type} by #{source&.show(viewer)}."
   end
 
 private

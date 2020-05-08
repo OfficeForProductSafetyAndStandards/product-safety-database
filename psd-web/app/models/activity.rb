@@ -35,7 +35,7 @@ class Activity < ApplicationRecord
     # where necessary should be implemented by subclasses
   end
 
-  def email_update_text(viewing_user = nil); end
+  def email_update_text(viewer = nil); end
 
   def email_subject_text
     "#{investigation.case_type.upcase_first} updated"
