@@ -41,52 +41,6 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def investigation_summary_list(include_actions: true, classes: "")
-    rows = [
-      {
-        key: { text: "Status", classes: classes },
-        value: { text: status, classes: classes },
-        actions: []
-      },
-      {
-        key: { text: "Coronavirus related", classes: classes },
-        value: { text: I18n.t(coronavirus_related, scope: "case.coronavirus_related"), classes: classes },
-      },
-      {
-        key: { text: "Created by", classes: classes },
-        value: { text: created_by, classes: classes },
-        actions: []
-      },
-      # TODO: Created by should contain the creator's organisation a bit like in
-      # def investigation_owner(investigation, classes = "")
-      {
-        key: { text: "Date created", classes: classes },
-        value: { text: investigation.created_at.to_s(:govuk), classes: classes },
-        actions: []
-      },
-      {
-        key: { text: "Last updated", classes: classes },
-        value: { text: "#{h.time_ago_in_words(investigation.updated_at)} ago", classes: classes }
-      },
-      complainant_reference.present? ? { key: { text: "Trading Standards reference", classes: classes }, value: { text: complainant_reference, classes: classes }, actions: [] } : nil
-    ]
-    rows.compact!
-
-    if include_actions
-      rows[0][:actions] = [
-        { href: h.status_investigation_path(investigation), text: "Change", classes: classes, visually_hidden_text: "status" }
-      ]
-      rows[1][:actions] = [
-        { href: h.investigation_coronavirus_related_path(investigation), text: "Change", classes: classes, visually_hidden_text: "coronavirus status" }
-      ]
-      rows[4][:actions] = [
-        { href: h.new_investigation_activity_path(investigation), text: "Add activity", classes: classes }
-      ]
-    end
-
-    h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
-  end
-
   def source_details_summary_list
     contact_details = if complainant.can_be_displayed?
                         complainant.decorate.contact_details
