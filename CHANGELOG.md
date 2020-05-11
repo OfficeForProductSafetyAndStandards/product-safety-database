@@ -1,8 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2020-05-06
+## 2020-05-11
 - Allow users to request a new security code when the code was not received via SMS.
+
+## 2020-05-06
+- Ability to remove team from case.
 
 ## 2020-04-27
 - Allow to report a case as safe. Previously one could only report a case as non-compliant, unsafe or both.
