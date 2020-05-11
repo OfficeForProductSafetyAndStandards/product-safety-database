@@ -1,13 +1,14 @@
 class CollaboratorsController < ApplicationController
+  before_action do
+    find_investigation_from_params
+  end
+
   def index
-    @investigation = find_investigation_from_params
     @teams = @investigation.teams.order(:name)
   end
 
   def new
-    @investigation = find_investigation_from_params
-
-    authorize @investigation, :add_collaborators?
+    authorize @investigation, :manage_collaborators?
 
     @collaborator = @investigation.collaborators.new
 
@@ -15,9 +16,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def create
-    @investigation = find_investigation_from_params
-
-    authorize @investigation, :add_collaborators?
+    authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
       params.require(:collaborator).permit(:team_id, :include_message, :message).merge({
@@ -35,17 +34,45 @@ class CollaboratorsController < ApplicationController
     end
   end
 
+  def edit
+    authorize @investigation, :manage_collaborators?
+
+    @team = Team.find(params[:id])
+    @collaborator = @investigation.collaborators.find_by! team_id: @team.id
+    @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
+  end
+
+  def update
+    authorize @investigation, :manage_collaborators?
+
+    @team = Team.find(params[:id])
+    @edit_form = EditInvestigationCollaboratorForm.new(edit_params
+      .merge(investigation: @investigation, team: @team, user: current_user))
+    if @edit_form.save!
+      flash[:success] = "#{@team.name} had been removed from the case"
+      redirect_to investigation_collaborators_path(@investigation)
+    else
+      render "edit"
+    end
+  end
+
 private
 
+  # rubocop:disable Naming/MemoizedInstanceVariableName
   def find_investigation_from_params
-    Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation ||= Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
   end
+  # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def teams_without_access
     Team.where.not(id: team_ids_with_access).order(:name)
   end
 
   def team_ids_with_access
-    @investigation.collaborators.pluck(:team_id) + [@investigation.assignee_team.try(:id)]
+    @investigation.collaborators.pluck(:team_id) + [@investigation.owner_team.try(:id)]
+  end
+
+  def edit_params
+    params.require(:edit_investigation_collaborator_form).permit(:permission_level, :include_message, :message)
   end
 end

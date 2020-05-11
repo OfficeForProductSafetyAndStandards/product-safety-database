@@ -51,11 +51,11 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       choose "Yes, it is (or could be)"
       click_button "Continue"
 
-      expect_to_be_on_complainant_page
+      expect_to_be_on_allegation_complainant_page
       choose "complainant_complainant_type_consumer"
       click_button "Continue"
 
-      expect_to_be_on_complainant_details_page
+      expect_to_be_on_allegation_complainant_details_page
       enter_contact_details(contact_details)
 
       expect_to_be_on_allegation_details_page
@@ -119,23 +119,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
-  end
-
-  def expect_to_be_on_complainant_page
-    expect(page).to have_current_path("/allegation/complainant")
-    expect_page_to_have_h1("New allegation")
-  end
-
-  def expect_to_be_on_complainant_details_page
-    expect(page).to have_current_path("/allegation/complainant_details")
-    expect_page_to_have_h1("New allegation")
-    expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
-  end
-
-  def expect_to_be_on_allegation_details_page
-    expect(page).to have_current_path("/allegation/allegation_details")
-    expect_page_to_have_h1("New allegation")
-    expect(page).to have_css(".govuk-label--m", text: "What is being alleged?")
   end
 
   def expect_details_on_summary_page(contact_name:, contact_email:, contact_phone:)

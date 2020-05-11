@@ -3,7 +3,7 @@ class Team < ApplicationRecord
 
   has_and_belongs_to_many :users
 
-  has_many :investigations, dependent: :nullify, as: :assignable
+  has_many :investigations, dependent: :nullify, as: :owner
 
   validates :name, presence: true
 

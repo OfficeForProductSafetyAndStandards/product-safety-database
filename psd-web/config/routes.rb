@@ -104,7 +104,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-    resources :collaborators, only: %i[index new create], path: "teams", path_names: { new: "add" }
+    resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
@@ -127,7 +127,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :assign, controller: "investigations/assign", only: %i[show new create update]
+    resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
     resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[show new create update]
     resources :emails, controller: "investigations/emails", only: %i[show new create update]
     resources :phone_calls, controller: "investigations/phone_calls", only: %i[show new create update]

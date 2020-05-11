@@ -48,10 +48,6 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
     end
   end
 
-  def expect_to_be_on_team_page
-    expect(page).to have_css("h1", text: "test organisation")
-  end
-
   def have_user(user)
     have_css(".teams--user .teams--user-email:contains(\"#{user.email}\")")
   end

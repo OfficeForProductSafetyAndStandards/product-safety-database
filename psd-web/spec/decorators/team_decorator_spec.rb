@@ -5,8 +5,8 @@ RSpec.describe TeamDecorator do
 
   let(:team) { build_stubbed(:team) }
 
-  describe "#assignee_short_name" do
-    it { expect(decorated_team.assignee_short_name).to eq(team.display_name) }
+  describe "#owner_short_name" do
+    it { expect(decorated_team.owner_short_name).to eq(team.display_name) }
   end
 
   describe "#display_name" do

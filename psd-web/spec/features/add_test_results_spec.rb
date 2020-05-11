@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignable: user) }
+  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:date) { Faker::Date.backward(days: 14) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
@@ -61,14 +61,6 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect_confirmation_banner("Test result was successfully recorded.")
       expect_page_to_have_h1("Overview")
     end
-  end
-
-  def expect_to_be_on_new_activity_page
-    expect_page_to_have_h1("New activity")
-  end
-
-  def expect_to_be_on_record_test_result_page
-    expect_page_to_have_h1("Record test result")
   end
 
   def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)

@@ -13,7 +13,7 @@
   .govuk-grid-column-two-thirds-from-desktop
     = render "components/hmcts_banner", html: banner_content
     p.govuk-body
-      / TODO: this should be the assignee, shown as 'you' if the assignee
+      / TODO: this should be the case owner, shown as 'you' if the case owner
       / is the case creator.
       ' You are now the case owner for
       strong = @investigation.title

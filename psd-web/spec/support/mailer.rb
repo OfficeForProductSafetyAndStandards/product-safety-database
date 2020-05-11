@@ -15,6 +15,10 @@ class TestNotifyEmail
     uri = URI(@personalization[param])
     [uri.path, uri.query].join("?")
   end
+
+  def personalization_value(param)
+    @personalization[param]
+  end
 end
 
 RSpec.shared_context "with stubbed mailer", shared_context: :metadata do

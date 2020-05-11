@@ -16,7 +16,7 @@ hr.govuk-section-break.govuk-section-break--l.govuk-section-break--visible class
 .govuk-grid-row
   .govuk-grid-column-one-third
     h2.govuk-heading-m
-      = link_to "Your cases", investigations_path(assigned_to_me: "checked"),
+      = link_to "Your cases", investigations_path(case_owner_is_me: "checked"),
               class: "govuk-link govuk-link--no-visited-state"
     p Cases you own or created.
 

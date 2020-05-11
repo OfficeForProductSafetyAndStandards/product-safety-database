@@ -207,31 +207,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
     click_on "Continue"
   end
 
-  def expect_to_be_on_secondary_authentication_page
-    expect(page).to have_current_path(/\/two-factor/)
-  end
-
-  def expect_to_be_on_reset_password_page
-    expect(page).to have_current_path("/password/new")
-  end
-
-  def expect_to_be_on_signed_in_as_another_user_page
-    expect(page).to have_css("h1", text: "You are already signed in to the Product safety database")
-  end
-
-  def expect_to_be_on_edit_user_password_page
-    expect(page).to have_current_path("/password/edit", ignore_query: true)
-  end
-
-  def expect_to_be_on_check_your_email_page
-    expect(page).to have_css("h1", text: "Check your email")
-  end
-
-  def expect_to_be_on_password_changed_page
-    expect(page).to have_current_path("/password-changed")
-    expect(page).to have_css("h1", text: "You have changed your password successfully")
-  end
-
   def last_user_otp(user)
     user.reload.direct_otp
   end

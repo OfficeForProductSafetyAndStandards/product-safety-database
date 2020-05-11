@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], assignable: user) }
+  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
 
   let(:summary) { Faker::Lorem.sentence }
   let(:date) { Faker::Date.backward(days: 14) }
@@ -20,15 +20,20 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     scenario "shows inputted data on the confirmation page and on the case attachments and activity pages" do
       visit new_investigation_corrective_action_path(investigation)
 
-      expect_to_be_on_record_corrective_action_page
+      expect_to_be_on_record_corrective_action_for_case_page
+      expect(page).not_to have_error_messages
+
       fill_and_submit_form
 
       expect_to_be_on_confirmation_page
+      expect(page).not_to have_error_messages
+
       expect_confirmation_page_to_show_entered_data
 
       click_on "Continue"
 
-      expect_to_be_on_case_overview_page
+      expect_to_be_on_case_page(case_id: investigation.pretty_id)
+      expect(page).not_to have_error_messages
 
       click_on "Activity"
 
@@ -42,10 +47,14 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     scenario "going back to the form from the confirmation page shows inputted data" do
       visit new_investigation_corrective_action_path(investigation)
 
-      expect_to_be_on_record_corrective_action_page
+      expect_to_be_on_record_corrective_action_for_case_page
+      expect(page).not_to have_error_messages
+
       fill_and_submit_form
 
       expect_to_be_on_confirmation_page
+      expect(page).not_to have_error_messages
+
       expect_confirmation_page_to_show_entered_data
 
       click_link "Edit details"
@@ -60,29 +69,13 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     scenario "shows an error message" do
       visit new_investigation_corrective_action_path(investigation)
 
-      expect_to_be_on_record_corrective_action_page
+      expect_to_be_on_record_corrective_action_for_case_page
+      expect(page).not_to have_error_messages
+
       fill_and_submit_form
 
       expect(page).to have_error_messages
     end
-  end
-
-  def expect_to_be_on_record_corrective_action_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective_actions/details")
-    expect(page).to have_selector("h1", text: "Record corrective action")
-    expect(page).not_to have_error_messages
-  end
-
-  def expect_to_be_on_confirmation_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective_actions/confirmation")
-    expect(page).to have_selector("h1", text: "Confirm corrective action details")
-    expect(page).not_to have_error_messages
-  end
-
-  def expect_to_be_on_case_overview_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-    expect(page).to have_selector("h1", text: "Overview")
-    expect(page).not_to have_error_messages
   end
 
   def expect_confirmation_page_to_show_entered_data

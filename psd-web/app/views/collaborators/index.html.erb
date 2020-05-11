@@ -10,7 +10,7 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <% if policy(@investigation).add_collaborators? %>
+    <% if policy(@investigation).manage_collaborators? %>
       <%= govukButton(
         text: "Add a team to the case",
         href: new_investigation_collaborator_path(@investigation))
@@ -23,19 +23,26 @@
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Team name</th>
           <th scope="col" class="govuk-table__header">Permission level</th>
+          <th scope="col" class="govuk-table__header"></th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        <% if @investigation.assignee_team %>
+        <% if @investigation.owner_team %>
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.assignee_team.name %></th>
+            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.owner_team.name %></th>
             <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Case owner</span></td>
+            <td class="govuk-table__cell"></td>
           </tr>
         <% end %>
         <% @teams.each do |team| %>
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
             <td class="govuk-table__cell">Edit full case</td>
+            <td class="govuk-table__cell">
+              <% if policy(@investigation).manage_collaborators? %>
+                <%= link_with_hidden_text_to "Change", "#{team.name}",  edit_investigation_collaborator_path(@investigation, team) %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

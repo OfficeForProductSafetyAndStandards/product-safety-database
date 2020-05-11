@@ -68,10 +68,10 @@ class ApplicationController < ActionController::Base
     if session[:previous_search_params].present?
       s = session[:previous_search_params]
       {
-        assigned_to_me: s[:assigned_to_me],
-        assigned_to_someone_else: s[:assigned_to_someone_else],
-        assigned_to_someone_else_id: s[:assigned_to_someone_else_id],
-        assigned_to_team_0: s[:assigned_to_team_0],
+        case_owner_is_me: s[:case_owner_is_me],
+        case_owner_is_someone_else: s[:case_owner_is_someone_else],
+        case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id],
+        case_owner_is_team_0: s[:case_owner_is_team_0],
         created_by_me: s[:created_by_me],
         created_by_someone_else: s[:created_by_someone_else],
         created_by_someone_else_id: s[:created_by_someone_else_id],
