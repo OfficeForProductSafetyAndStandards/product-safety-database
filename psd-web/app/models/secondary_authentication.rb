@@ -41,12 +41,7 @@ class SecondaryAuthentication
     user.with_lock do
       increment_attempts_and_try_to_lock
     end
-    if ENV["WHITELISTED_2FA_CODES"].present?
-      codes = ENV["WHITELISTED_2FA_CODES"].split(",").map(&:to_s)
-      user.reload.second_factor_attempts_locked_at.nil? && (otp == user.direct_otp || codes.include?(otp.to_s))
-    else
-      user.reload.second_factor_attempts_locked_at.nil? && otp == user.direct_otp
-    end
+    user.reload.second_factor_attempts_locked_at.nil? && (otp == user.direct_otp || whitelisted_code_valid?(otp))
   end
 
   def generate_code(operation)
@@ -89,6 +84,15 @@ private
 
     if user.second_factor_attempts_count > MAX_ATTEMPTS
       user.update!(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
+    end
+  end
+
+  def whitelisted_code_valid?(otp)
+    if ENV["WHITELISTED_2FA_CODES"].present?
+      codes = ENV["WHITELISTED_2FA_CODES"].split(",").map(&:to_s)
+      codes.include?(otp.to_s)
+    else
+      false
     end
   end
 end
