@@ -36,7 +36,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
   end
 
-  context "when 2fa expires", :with_2fa do
+  context "when 2fa expires", :with_2fa, :with_stubbed_notify do
     scenario "user invites with correct secondary authentication code after requesting a second code" do
       allow(Rails.application.config).to receive(:whitelisted_emails).and_return(
         "email_domains" => ["example.com"]
