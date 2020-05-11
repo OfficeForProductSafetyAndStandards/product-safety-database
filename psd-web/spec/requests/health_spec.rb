@@ -5,6 +5,7 @@ RSpec.describe "Health Check", :with_elasticsearch, :with_stubbed_mailer, :with_
   describe "/health/all" do
     before do
       create(:allegation)
+      Investigation.import refresh: true, force: true
     end
 
     it "checks health" do

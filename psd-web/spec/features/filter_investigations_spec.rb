@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+  let(:other_organisation) { create(:organisation) }
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:other_team) { create(:team, organisation: organisation, name: "other team") }
@@ -17,6 +18,9 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, teams: [team]) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, teams: [team]) }
+
+  let(:restricted_case_title) { "Restricted case title" }
+  let!(:restricted_case) { create(:allegation, owner: create(:team, organisation: other_organisation), is_private: true, description: restricted_case_title).decorate }
 
   before do
     Investigation.import refresh: :wait_for
@@ -124,5 +128,12 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+  end
+
+  scenario "search returning a restricted cases" do
+    fill_in "Keywords", with: restricted_case_title
+    click_on "Search"
+
+    expect(page).not_to have_link(restricted_case.title, href: "/cases/#{restricted_case.pretty_id}")
   end
 end

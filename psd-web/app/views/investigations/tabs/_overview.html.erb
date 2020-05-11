@@ -71,7 +71,7 @@
           actions: {
             items: [
               href: investigation_collaborators_path(@investigation),
-              text: (policy(@investigation).add_collaborators? ? "Change" : "View"),
+              text: (policy(@investigation).manage_collaborators? ? "Change" : "View"),
               visuallyHiddenText: "teams added to the case"
             ]
           }
