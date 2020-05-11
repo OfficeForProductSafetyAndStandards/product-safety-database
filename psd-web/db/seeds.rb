@@ -480,7 +480,7 @@ if run_seeds
       password_confirmation: "testpassword",
       organisation: organisation,
       mobile_number_verified: true,
-      teams: [enforcement],
+      team: enforcement,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
     user2 = User.create!(
@@ -490,7 +490,7 @@ if run_seeds
       password_confirmation: "testpassword",
       organisation: organisation,
       mobile_number_verified: true,
-      teams: [processing],
+      team: processing,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 

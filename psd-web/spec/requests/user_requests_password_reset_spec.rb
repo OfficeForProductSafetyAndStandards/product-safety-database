@@ -12,10 +12,6 @@ RSpec.describe "User requests password reset", type: :request, with_stubbed_mail
 
     let(:user) { create(:user, :invited, invited_at: 1.hour.ago) }
 
-    before do
-      allow(SendUserInvitationJob).to receive(:perform_later).with(user.id, nil)
-    end
-
     it "does not set a password reset token" do
       request_password_reset
       expect(user.reload.reset_password_token).to be_nil
@@ -26,9 +22,11 @@ RSpec.describe "User requests password reset", type: :request, with_stubbed_mail
       expect(response).to redirect_to(check_your_email_path)
     end
 
-    it "queues the resend invitation job" do
-      request_password_reset
-      expect(SendUserInvitationJob).to have_received(:perform_later).with(user.id, nil)
+    it "queues the resend invitation job", :with_test_queue_adapter, :aggregate_failures do
+      expect { request_password_reset }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+        expect(recipient_id).to eq user.id
+        expect(inviting_user_id).to be_nil
+      end
     end
   end
 end

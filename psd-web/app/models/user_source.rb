@@ -1,8 +1,8 @@
 class UserSource < Source
   belongs_to :user, optional: true
 
-  def show
-    user.present? ? user.decorate.display_name : "anonymous"
+  def show(viewer = nil)
+    user.present? ? user.decorate.display_name(viewer: viewer) : "anonymous"
   end
 
   def user_has_gdpr_access?(user: User.current)

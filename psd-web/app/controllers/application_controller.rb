@@ -53,12 +53,7 @@ class ApplicationController < ActionController::Base
     items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators/)
     items.push text: "Businesses", href: businesses_path, active: params[:controller].start_with?("businesses")
     items.push text: "Products", href: products_path, active: params[:controller].start_with?("products")
-    # In principle all our users belong to a team, but this saves crashes in case of a misconfiguration
-    if current_user.teams.present?
-      text = current_user.teams.count > 1 ? "Your teams" : "Your team"
-      path = current_user.teams.count > 1 ? your_teams_path : team_path(current_user.teams.first)
-      items.push text: text, href: path, active: params[:controller].start_with?("teams"), right: true
-    end
+    items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
   end
 

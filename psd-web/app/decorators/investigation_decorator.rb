@@ -73,7 +73,7 @@ class InvestigationDecorator < ApplicationDecorator
            else
              h.escape_once(source.user.full_name.to_s)
            end
-    out << h.escape_once(source.user&.team_names) if source&.user&.team_names.present?
+    out << h.escape_once(source.user.team.name) if source&.user&.team
 
     out.join("<br />").html_safe
   end
@@ -95,10 +95,10 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
-  def owner_display_name_for(viewing_user:)
+  def owner_display_name_for(viewer:)
     return "No case owner" unless investigation.owner
 
-    owner.owner_short_name(viewing_user: viewing_user)
+    owner.owner_short_name(viewer: viewer)
   end
 
 private

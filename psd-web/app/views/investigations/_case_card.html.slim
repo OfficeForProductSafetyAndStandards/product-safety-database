@@ -11,7 +11,7 @@ ruby:
     = render "investigations/case_card_status_area", investigation: investigation
   .govuk-grid-column-one-quarter
     span.govuk-caption-m[class="govuk-!-font-size-16"] Case owner
-    span = investigation.owner_display_name_for(viewing_user: current_user)
+    span = investigation.owner_display_name_for(viewer: current_user)
   - if sorted_by == SearchParams::NEWEST
     .govuk-grid-column-one-quarter
       span.govuk-caption-m[class="govuk-!-font-size-16"] Date created
