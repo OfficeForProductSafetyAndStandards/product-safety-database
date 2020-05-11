@@ -298,11 +298,5 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
           .to eq(user.owner_short_name(viewing_user: viewing_user))
       end
     end
-
-    context "when the investigation doesn’t have an owner" do
-      before { investigation.owner = nil }
-
-      it { expect(decorated_investigation.owner_display_name_for(viewing_user: viewing_user)).to eq("No case owner") }
-    end
   end
 end

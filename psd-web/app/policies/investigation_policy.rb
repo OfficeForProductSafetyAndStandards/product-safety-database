@@ -38,13 +38,14 @@ class InvestigationPolicy < ApplicationPolicy
     return true if @record.source&.user_has_gdpr_access?(user: user)
 
     # Have any of the user’s teams been added to the case as a collaborator?
-    return true if (@record.teams & user.teams).any?
+    return true if (@record.collaborators.map(&:collaborating) & user.teams).any?
+    return true if Collaborator.where(collaborating: [user, user.teams]).any?
 
     false
   end
 
   def can_change_owner(user: @user)
-    @record.owner.blank? || @record.owner.in_same_team_as?(user) || @record.owner == user
+    @record.owner.blank? || @record.collaborating.in_same_team_as?(user) || @record.owner == user
   end
 
   def user_allowed_to_raise_alert?(user: @user)
@@ -58,6 +59,6 @@ class InvestigationPolicy < ApplicationPolicy
   def manage_collaborators?
     return false if @record.case_owner.nil?
 
-    @record.owner.in_same_team_as?(user)
+    @record.case_owner.collaborating.in_same_team_as?(user)
   end
 end

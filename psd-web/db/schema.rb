@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_193459) do
 
   create_table "collaborators", force: :cascade do |t|
     t.uuid "added_by_user_id", null: false
-    t.bigint "collaborating_id"
+    t.uuid "collaborating_id"
     t.string "collaborating_type"
     t.datetime "created_at", null: false
     t.integer "investigation_id"

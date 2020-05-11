@@ -71,12 +71,12 @@ FactoryBot.define do
     user_title { "test allegation title" }
   end
 
-  factory :enquiry, class: "Investigation::Enquiry" do
+  factory :enquiry, class: "Investigation::Enquiry", parent: :investigation do
     description { "test enquiry" }
     user_title { "test enquiry title" }
   end
 
-  factory :project, class: "Investigation::Project" do
+  factory :project, class: "Investigation::Project", parent: :investigation do
     description { "test project" }
     user_title { "test project title" }
   end

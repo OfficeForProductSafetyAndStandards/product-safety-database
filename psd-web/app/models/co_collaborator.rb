@@ -1,2 +1,0 @@
-class CoCollaborator < Collaborator
-end

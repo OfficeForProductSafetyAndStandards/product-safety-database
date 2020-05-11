@@ -1,4 +1,4 @@
-class Collaborator < ApplicationRecord
+class Collaborator < Collaborators::Base
   belongs_to :investigation, optional: true
 
   belongs_to :collaborating, polymorphic: true, optional: false

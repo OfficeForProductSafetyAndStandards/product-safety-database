@@ -51,28 +51,57 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
-  # belongs_to :owner, polymorphic: true, optional: true
+  # any old collaborators
+  has_many :historic_collaborators, class_name: "Collaborators::Historic", dependent: :destroy
 
-  has_many :collaborators,                 dependent: :destroy
-  has_many :co_collaborators,              dependent: :destroy, inverse_of: :investigation
-  has_many :owners,                        dependent: :destroy, inverse_of: :investigation
-  has_one  :case_creator, dependent: :destroy, inverse_of: :investigation
-  has_one  :case_owner, -> { rewhere(collaborators: { type: ["CaseOwner, CaseCreator"]} ).order(Arel.sql("CASE WHEN collaborators.type = 'CaseOwner' THEN 0 ELSE 1 END")) }, dependent: :destroy, inverse_of: :investigation
+  has_many :case_creators, class_name: "Collaborators::CaseCreator", dependent: :destroy
+  # => add index to enforce CollaboratingType to be "Team"
+  has_one :case_creator_team, class_name: "Collaborators::CaseCreatorTeam", dependent: :destroy, inverse_of: :investigation
+  # => add index to enforce CollaboratingType to be "User"
+  has_one :case_creator_user, class_name: "Collaborators::CaseCreatorUser", dependent: :destroy, inverse_of: :investigation
+
+  has_many :case_owners, class_name: "Collaborators::CaseOwner", dependent: :destroy, inverse_of: :investigation
+  # => add index to enforce (type, CollaboratingType) to be ("Collaborators::CaseOwnerTeam", "Team")
+  has_one :case_owner_team, class_name: "Collaborators::CaseOwnerTeam", dependent: :destroy, inverse_of: :investigation
+  # => add index to enforce (type, CollaboratingType) to be ("Collaborators::CaseOwnerUser, User")
+  has_one :case_owner_user, class_name: "Collaborators::CaseOwnerUser", dependent: :destroy, inverse_of: :investigation
+
+  has_many :collaborators, dependent: :destroy
+
+  has_many :current_collaborators, -> { where.not(type: "Collaborators::Historical") }, class_name: "Collaborators::Base"
+
+  # scenario: assign a case to a user
+  # 1. make user's team the CaseOwnerTeam
+  # 2. make user's team the CaseOwnerUser
+  # 3. previous CaseOwnerTeam => CoCollaborator
+  # 4. previous CaseOwnerUser => Collaborator
+
+  # investigation.owners => [CaseOwner, CaseCreator]
+  # investigation.case_creator => CaseCreator
+  # investigation.case_owner => CaseOwner || CaseCreator
+  # Scenario 1: assigne back the case to the case creator
+  # 1. move current case owner to a co_collaborators
+  # investigation.case_owner => CaseCreator (sub type of CaseOwner so same behaviour)
+  # Scenario 2: assigne to a new team
+  # 1. move current case owner to a co_collaborators
+  # 2. add the new team or user as the case owner
+  # invesigation.case_owner => CaseOwer with new team or user
+  # invesigation.co_collaborators => Old CaseOwner but now it is a CoCollaborator
+  # invesigation.case_creator => not change
+  # invesigation.owners => [CaseOwner, CaseCreator]
+  # invesigation.collaborators => [CoColloaborator(former case owner), CaseOwner, CaseCreator]
 
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
+  # temporary to retain the "owner id functionality"
+  def owner_id
+    case_owner_team.id || case_owner_user.id
+  end
+
   def owner
-    case_owner&.collaborating
-  end
-
-  def case_owner_id
-    case_owner&.id
-  end
-
-  def creator
-    case_creator&.collaborating
+    case_owner_user&.collaborating
   end
 
   def owner_team
@@ -81,7 +110,6 @@ class Investigation < ApplicationRecord
 
   def teams_with_access
     collaborators.flat_map(&:collaborating)
-  #   # ([owner_team] + teams.order(:name)).compact
   end
 
   def status

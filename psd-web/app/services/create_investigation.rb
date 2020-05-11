@@ -1,19 +1,34 @@
 class CreateInvestigation
   include Interactor
 
-  delegate :investigation_params, :current_user, to: :context
+  delegate :investigation, :current_user, to: :context
 
   def call
-    investigation = Investigation.new(investigation_params)
+    Investigation.transaction do
+      build_case_creators
+      build_case_owners
 
-    investigation.build_case_creator(
-      team: current_user.teams.first,
-      added_by_user: current_user,
-      include_message: "Maybe this message should not be required when creating a case creator"
-    )
-    context.investigation = investigation
-    return if investigation.save
+      context.investigation = investigation
+      # byebug
+      return if investigation.save!
 
-    context.fail!
+      context.fail!
+    end
+  end
+
+private
+
+  def build_case_creators
+    investigation.build_case_creator_team(collaborators_attributes(current_user.team))
+    investigation.build_case_creator_user(collaborators_attributes(current_user))
+  end
+
+  def build_case_owners
+    investigation.build_case_owner_team(collaborators_attributes(current_user.team))
+    investigation.build_case_owner_user(collaborators_attributes(current_user))
+  end
+
+  def collaborators_attributes(collaborating)
+    { added_by_user: current_user, include_message: false, collaborating: collaborating }
   end
 end

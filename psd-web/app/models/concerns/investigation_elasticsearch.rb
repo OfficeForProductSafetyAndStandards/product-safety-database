@@ -11,7 +11,14 @@ module InvestigationElasticsearch
       mappings do
         indexes :status, type: :keyword
         indexes :type, type: :keyword
-        indexes :case_owner_id, type: :keyword
+        indexes :owner_id, type: :keyword
+        indexes :collaborators, type: :object do
+          # querying base on this attributes
+          # will give the correct permissions
+          indexes :collaborating_type, type: :keyword
+          indexes :collaborating_id,   type: :keyword
+          indexes :type,               type: :keyword
+        end
         indexes :creator_id, type: :keyword
       end
     end
@@ -20,8 +27,11 @@ module InvestigationElasticsearch
       as_json(
         only: %i[description hazard_type product_category is_closed type updated_at created_at pretty_id
                  hazard_description non_compliant_reason coronavirus_related],
-        methods: %i[title creator_id case_owner_id],
+        methods: %i[title creator_id owner_id],
         include: {
+          collaborators: {
+            only: %i[collaborating_id collaborating_type type]
+          },
           documents: {
             only: [],
             methods: %i[title description filename]
