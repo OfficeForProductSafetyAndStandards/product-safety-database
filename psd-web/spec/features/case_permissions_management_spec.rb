@@ -4,7 +4,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   let(:user) {
     create(:user,
            :activated,
-           teams: [create(:team, name: "Portsmouth Trading Standards")],
+           team: create(:team, name: "Portsmouth Trading Standards"),
            name: "Bob Jones")
   }
 

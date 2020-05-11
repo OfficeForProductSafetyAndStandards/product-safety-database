@@ -39,19 +39,21 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     file.attached? ? "Attached: #{sanitize_text file.filename}<br>" : ""
   end
 
-  def subtitle_slug
-    "Phone call"
-  end
-
   def restricted_title
     "Phone call added"
   end
 
-  def email_update_text
-    "Phone call details added to the #{investigation.case_type.upcase_first} by #{source&.show}."
-  end
-
   def activity_type
     "phone call"
+  end
+
+  def email_update_text(viewer = nil)
+    "Phone call details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
+  end
+
+private
+
+  def subtitle_slug
+    "Phone call"
   end
 end
