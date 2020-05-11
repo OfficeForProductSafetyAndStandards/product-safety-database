@@ -4,11 +4,11 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, :team_admin, teams: [team], has_viewed_introduction: true) }
 
-  before do
-    sign_in(user)
-  end
-
   context "when there is already a user with that email" do
+    before do
+      sign_in(user)
+    end
+
     scenario "shows an error message" do
       visit invite_to_team_url(team)
       expect_to_be_on_invite_a_team_member_page
@@ -22,6 +22,10 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   context "when the email corresponds to a deleted user" do
     let(:deleted_user) { create(:user, :deleted) }
 
+    before do
+      sign_in(user)
+    end
+
     scenario "shows an error message" do
       visit invite_to_team_url(team)
       expect_to_be_on_invite_a_team_member_page
@@ -32,30 +36,30 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
   end
 
-  context "when 2fa expires" do
+  context "when 2fa expires", :with_2fa do
     scenario "user invites with correct secondary authentication code after requesting a second code" do
-      allow(SecureRandom).to receive(:random_number).and_return(12345, 54321)
-      travel_to 1.day.ago do
-        visit invite_to_team_url(team)
+      allow(Rails.application.config).to receive(:whitelisted_emails).and_return(
+        "email_domains" => ["example.com"]
+      )
+      travel_to(4.hours.ago) do
+        sign_in(user)
       end
 
-      expect(page).to have_css("h1", text: "Check your phone")
-      expect_user_to_have_received_sms_code("12345")
+      visit invite_to_team_url(team)
 
+      expect_to_be_on_secondary_authentication_page
       click_link "Not received a text message?"
-      expect(page).to have_css("h1", text: "Resend security code")
-      expect(page).to have_current_path("/text-not-received")
 
+      expect_to_be_on_resend_secondary_authentication_page
       click_button "Resend security code"
 
-      expect_user_to_have_received_sms_code("54321")
-
-      expect(page).to have_css("h1", text: "Check your phone")
-
-      fill_in "Enter security code", with: otp_code
+      expect_to_be_on_secondary_authentication_page
+      fill_in "Enter security code", with: user.reload.direct_otp
       click_button "Continue"
 
       expect_to_be_on_invite_a_team_member_page
+      fill_in "new_user_email_address", with: Faker::Internet.email(domain: "example.com")
+      click_button "Send invitation email"
     end
   end
 end

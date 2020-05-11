@@ -17,6 +17,10 @@ module SecondaryAuthentications
 
   private
 
+    def current_operation
+      current_user&.secondary_authentication_operation.presence || SecondaryAuthentication::DEFAULT_OPERATION
+    end
+
     def hide_nav?
       true
     end

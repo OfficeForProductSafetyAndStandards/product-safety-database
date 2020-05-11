@@ -80,18 +80,17 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
 
     expect_user_to_have_received_sms_code("12345")
 
-    expect(page).to have_css("h1", text: "Check your phone")
+    expect_to_be_on_secondary_authentication_page
 
     click_link "Not received a text message?"
 
-    expect(page).to have_css("h1", text: "Resend security code")
-    expect(page).to have_current_path("/text-not-received")
+    expect_to_be_on_resend_secondary_authentication_page
 
     click_button "Resend security code"
 
     expect_user_to_have_received_sms_code("54321")
 
-    expect(page).to have_css("h1", text: "Check your phone")
+    expect_to_be_on_secondary_authentication_page
 
     fill_in "Enter security code", with: otp_code
     click_button "Continue"
