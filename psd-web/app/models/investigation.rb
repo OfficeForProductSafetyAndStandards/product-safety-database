@@ -57,7 +57,7 @@ class Investigation < ApplicationRecord
   has_many :co_collaborators,              dependent: :destroy, inverse_of: :investigation
   has_many :owners,                        dependent: :destroy, inverse_of: :investigation
   has_one  :case_creator, dependent: :destroy, inverse_of: :investigation
-  has_one  :case_owner, -> { order(Arel.sql("CASE WHEN collaborators.type = 'CaseOwner' THEN 0 ELSE 1 END")) }, dependent: :destroy, inverse_of: :investigation
+  has_one  :case_owner, -> { rewhere(collaborators: { type: ["CaseOwner, CaseCreator"]} ).order(Arel.sql("CASE WHEN collaborators.type = 'CaseOwner' THEN 0 ELSE 1 END")) }, dependent: :destroy, inverse_of: :investigation
 
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :add_pretty_id
@@ -65,6 +65,10 @@ class Investigation < ApplicationRecord
 
   def owner
     case_owner&.collaborating
+  end
+
+  def case_owner_id
+    case_owner&.id
   end
 
   def creator
@@ -76,7 +80,8 @@ class Investigation < ApplicationRecord
   end
 
   def teams_with_access
-    ([owner_team] + teams.order(:name)).compact
+    collaborators.flat_map(&:collaborating)
+  #   # ([owner_team] + teams.order(:name)).compact
   end
 
   def status

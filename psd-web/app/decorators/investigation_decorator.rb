@@ -1,11 +1,15 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :documents_attachments, :owner, :source
+  decorates_associations :documents_attachments, :source
 
   PRODUCT_DISPLAY_LIMIT = 6
 
   def title
     user_title
+  end
+
+  def owner
+    investigation.owner.decorate
   end
 
   def hazard_description

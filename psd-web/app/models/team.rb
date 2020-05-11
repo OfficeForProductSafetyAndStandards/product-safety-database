@@ -1,5 +1,6 @@
 class Team < ApplicationRecord
   belongs_to :organisation
+  has_many :collaborations, as: :collaborating, dependent: :destroy, foreign_key: :collaborating_id, foreign_type: "Collaborator", inverse_of: :team
 
   has_and_belongs_to_many :users
 

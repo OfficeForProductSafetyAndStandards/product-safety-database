@@ -43,14 +43,14 @@
     <% end %>
 
     <% team_list_html = capture do %>
-      <% if @investigation.teams_with_access.length > 1 %>
+      <% if @investigation.collaborators.length > 1 %>
         <ul class="govuk-list">
-          <% @investigation.teams_with_access.each do |team| %>
+          <% @investigation.collaborators.each do |team| %>
             <li><%= team.name %></li>
           <% end %>
         </ul>
-      <% elsif @investigation.teams_with_access.length == 1 %>
-        <%= @investigation.teams_with_access.first.name %>
+      <% elsif @investigation.collaborators.length == 1 %>
+        <%= @investigation.case_owner.collaborating.name %>
       <% else %>
         No teams added
       <% end %>

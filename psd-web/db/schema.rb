@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_160103) do
+ActiveRecord::Schema.define(version: 2020_05_08_193459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -75,10 +75,10 @@ ActiveRecord::Schema.define(version: 2020_05_08_160103) do
 
   create_table "collaborators", force: :cascade do |t|
     t.uuid "added_by_user_id", null: false
-    t.uuid "collaborating_id"
+    t.bigint "collaborating_id"
     t.string "collaborating_type"
     t.datetime "created_at", null: false
-    t.integer "investigation_id", null: false
+    t.integer "investigation_id"
     t.string "investigation_type"
     t.text "message"
     t.uuid "team_id"
