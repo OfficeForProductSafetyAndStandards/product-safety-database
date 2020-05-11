@@ -33,6 +33,13 @@ class User < ApplicationRecord
     registration_completion.validates :password, length: { minimum: 8 }, allow_blank: true
   end
 
+  with_options on: :mobile_number_change do |mobile_number_change|
+    mobile_number_change.validates :mobile_number, presence: true
+    mobile_number_change.validates :mobile_number,
+                                   phone: { message: I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]) },
+                                   unless: -> { mobile_number.blank? }
+  end
+
   attribute :skip_password_validation, :boolean, default: false
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
   attribute :invited_at, :datetime, default: -> { Time.current }
