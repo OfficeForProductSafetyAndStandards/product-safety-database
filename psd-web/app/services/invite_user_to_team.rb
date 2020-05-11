@@ -34,7 +34,7 @@ private
 
   def send_invite
     if !user.invitation_token || (user.invited_at < 1.hour.ago)
-      user.update! invitation_token: user.invitation_token || SecureRandom.hex(15), invited_at: Time.current
+      user.update! invitation_token: (user.invitation_token || SecureRandom.hex(15)), invited_at: Time.current
     end
 
     SendUserInvitationJob.perform_later(user.id, inviting_user&.id)

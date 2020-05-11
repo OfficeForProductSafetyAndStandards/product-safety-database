@@ -7,6 +7,7 @@ class DropTeamsUsers < ActiveRecord::Migration[5.2]
     end
 
     add_column :users, :team_id, :uuid, index: true
+    add_foreign_key :users, :teams
 
     safety_assured do
       execute "UPDATE users SET team_id=(SELECT team_id FROM teams_users WHERE user_id=users.id LIMIT 1)"
