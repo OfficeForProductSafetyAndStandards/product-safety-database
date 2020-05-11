@@ -82,11 +82,11 @@ private
 
     respond_to do |format|
       if @investigation.update(update_params)
-        format.html {
+        format.html do
           redirect_to investigation_path(@investigation), flash: {
             success: "#{@investigation.case_type.upcase_first} was successfully updated."
           }
-        }
+        end
         format.json { render :show, status: :ok, location: @investigation }
       else
         format.html { render action_name }

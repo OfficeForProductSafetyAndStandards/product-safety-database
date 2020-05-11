@@ -1,17 +1,17 @@
 require "rails_helper"
 
 RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
-  let(:user) {
+  let(:user) do
     create(:user,
            :activated,
            team: create(:team, name: "Portsmouth Trading Standards"),
            name: "Bob Jones")
-  }
+  end
 
-  let(:investigation) {
+  let(:investigation) do
     create(:investigation,
            owner: user)
-  }
+  end
 
   let(:team) do
     create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk")

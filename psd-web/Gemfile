@@ -45,8 +45,6 @@ gem "webpacker", "~> 5.1.1"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.6.4", require: "govuk_design_system"
-
-# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem "awesome_print", require: "ap"
   gem "brakeman"
@@ -81,7 +79,6 @@ group :development, :test do
   gem "spring-commands-rspec"
   gem "webmock"
 end
-# rubocop:enable Metrics/BlockLength
 
 group :test do
   gem "capybara-screenshot"

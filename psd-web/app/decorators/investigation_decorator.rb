@@ -123,7 +123,11 @@ private
   end
   # rubocop:enable Rails/OutputSafety
 
-  def should_display_date_received?; false; end
+  def should_display_date_received?
+    false
+  end
 
-  def should_display_received_by?; false; end
+  def should_display_received_by?
+    false
+  end
 end

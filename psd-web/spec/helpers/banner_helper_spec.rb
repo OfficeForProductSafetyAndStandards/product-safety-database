@@ -19,11 +19,11 @@ RSpec.describe BannerHelper do
     end
 
     context "with a block" do
-      let(:banner) {
+      let(:banner) do
         helper.banner do
           tag.p("There is a problem")
         end
-      }
+      end
 
       it "outputs the text within a container" do
         expect(banner).to eql("<div class=\"app-banner\"><div class=\"app-banner__message\"><p>There is a problem</p></div></div>")

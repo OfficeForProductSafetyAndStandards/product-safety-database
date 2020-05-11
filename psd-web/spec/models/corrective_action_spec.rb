@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
-  subject(:corrective_action) {
+  subject(:corrective_action) do
     build(:corrective_action,
           summary: summary,
           date_decided_day: date_decided ? date_decided.day : nil,
@@ -13,7 +13,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
           geographic_scope: geographic_scope,
           details: details,
           related_file: related_file)
-  }
+  end
 
   let(:summary) { Faker::Lorem.sentence }
   let(:date_decided) { Faker::Date.backward(days: 14) }

@@ -1,5 +1,3 @@
-# coding: utf-8
-
 class Investigation < ApplicationRecord
   class Allegation < Investigation
     validates :description, :hazard_type, :product_category, presence: true, on: :allegation_details
