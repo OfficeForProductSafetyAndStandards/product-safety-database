@@ -41,8 +41,8 @@ class SecondaryAuthentication
     user.with_lock do
       increment_attempts_and_try_to_lock
     end
-    if ENV['WHITELISTED_2FA_CODES'].present?
-      codes = ENV['WHITELISTED_2FA_CODES'].split(',').map(&:to_s)
+    if ENV["WHITELISTED_2FA_CODES"].present?
+      codes = ENV["WHITELISTED_2FA_CODES"].split(",").map(&:to_s)
       user.reload.second_factor_attempts_locked_at.nil? && (otp == user.direct_otp || codes.include?(otp.to_s))
     else
       user.reload.second_factor_attempts_locked_at.nil? && otp == user.direct_otp
