@@ -42,7 +42,8 @@ private
   end
 
   def existing_user
-    @existing_user ||= User.find_by email: email
+    # User emails are forced to lower case when saved, so we must compare case insensitively
+    @existing_user ||= User.find_by email: email&.downcase
   end
 
   def enforce_whitelist?

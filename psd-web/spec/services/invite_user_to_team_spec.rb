@@ -75,13 +75,24 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
       let(:invited_at) { Time.current }
 
       context "with email parameter" do
-        let(:params) { { email: existing_user.email, team: team } }
+        let(:params) { { email: email, team: team } }
 
         context "when the existing user is already on the same team" do
           it "enqueues the SendUserInvitationJob with the existing user ID", :aggregate_failures do
             expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
               expect(recipient_id).to eq existing_user.id
               expect(inviting_user_id).to be_nil
+            end
+          end
+
+          context "when the email supplied is in a different case to the existing user" do
+            let(:email) { "TEst@example.com" }
+
+            it "enqueues the SendUserInvitationJob with the existing user ID", :aggregate_failures do
+              expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+                expect(recipient_id).to eq existing_user.id
+                expect(inviting_user_id).to be_nil
+              end
             end
           end
         end

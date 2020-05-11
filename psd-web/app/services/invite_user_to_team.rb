@@ -1,7 +1,7 @@
 class InviteUserToTeam
   include Interactor
 
-  delegate :email, :user, :team, :inviting_user, to: :context
+  delegate :user, :team, :inviting_user, to: :context
 
   def call
     context.fail!(error: "No email or user supplied") unless email || user
@@ -38,5 +38,10 @@ private
     end
 
     SendUserInvitationJob.perform_later(user.id, inviting_user&.id)
+  end
+
+  def email
+    # User emails are forced to lower case when saved, so we must compare case insensitively
+    context.email&.downcase
   end
 end

@@ -80,8 +80,9 @@ RSpec.describe InviteUserToTeamForm do
     context "with an existing user" do
       let(:user_trait) { :psd_user }
       let(:user_team) { create(:team) }
+      let(:user_email) { email }
 
-      before { create(:user, user_trait, email: email, team: user_team) }
+      before { create(:user, user_trait, email: user_email, team: user_team) }
 
       context "when the user is deleted" do
         let(:user_trait) { :deleted }
@@ -100,6 +101,12 @@ RSpec.describe InviteUserToTeamForm do
           let(:user_trait) { :activated }
 
           include_examples "invalid form", [:email, "test@example.com is already a member of Test Team"]
+
+          context "when the supplied email is in a different case to the existing user email" do
+            let(:email) { "TEst@example.com" }
+
+            include_examples "invalid form", [:email, "TEst@example.com is already a member of Test Team"]
+          end
         end
 
         context "when the user is not activated" do
