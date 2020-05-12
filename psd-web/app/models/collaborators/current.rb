@@ -1,5 +1,6 @@
 module Collaborators
-  class CaseCreator < Base
+  class Current < Base
     self.abstract_class = true
+
   end
 end

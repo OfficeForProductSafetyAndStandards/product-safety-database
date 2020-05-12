@@ -9,10 +9,16 @@ class CreateInvestigation
       build_case_owners
 
       context.investigation = investigation
-      # byebug
-      return if investigation.save!
+      investigation.pretty_id = pretty_id
+      investigation.save!
 
+      investigation.create_audit_activity_for_case
+    rescue StandardError => e
+      raise e unless Rails.env.production?
+      Raven.capture(e)
       context.fail!
+    else
+      send_confirmation_email
     end
   end
 
@@ -30,5 +36,20 @@ private
 
   def collaborators_attributes(collaborating)
     { added_by_user: current_user, include_message: false, collaborating: collaborating }
+  end
+
+  def pretty_id
+    cases_before = Investigation.where("created_at < ? AND created_at > ?", Time.current, Time.current.beginning_of_month).count
+    "#{Time.current.strftime('%y%m')}-%04d" % (cases_before + 1)
+  end
+
+  def send_confirmation_email
+    NotifyMailer.investigation_created(
+      investigation.pretty_id,
+      current_user.name,
+      current_user.email,
+      investigation.title,
+      investigation.case_type
+    ).deliver_later
   end
 end

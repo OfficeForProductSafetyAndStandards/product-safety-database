@@ -1,6 +1,7 @@
 class Team < ApplicationRecord
   belongs_to :organisation
-  has_many :collaborations, as: :collaborating, dependent: :destroy, inverse_of: :collaborating
+  has_many :collaborations, as: :collaborating, inverse_of: :collaborating, dependent: :destroy, class_name: "Collaborator"
+  has_many :owned_collaborations, as: :collaborating, class_name: "Collaborators::CaseOwnerTeam", dependent: :destroy
 
   has_and_belongs_to_many :users
 

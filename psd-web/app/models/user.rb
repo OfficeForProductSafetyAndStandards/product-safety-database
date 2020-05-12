@@ -14,7 +14,7 @@ class User < ApplicationRecord
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
 
-  has_many :collaborations, as: :collaborating, dependent: :destroy, inverse_of: :collaborating
+  has_many :owned_collaborations, as: :collaborating, class_name: "Collaborators::CaseOwnerUser", dependent: :destroy
 
   has_and_belongs_to_many :teams
 
@@ -84,6 +84,13 @@ class User < ApplicationRecord
 
   def self.current=(user)
     RequestStore.store[:current_user] = user
+  end
+
+  def make_case_owner!(investigation, collaboration_attributes)
+    team.make_case_owner!(investigation, collaboration_attributes)
+
+    collaboration_attributes[:collaborating] = self
+    investigation.create_case_owner_user!(collaboration_attributes)
   end
 
   def team

@@ -11,7 +11,6 @@ module Collaborators
 
     # validates :include_message, inclusion: { in: [true, false] }
 
-
     attr_reader :include_message
 
     def include_message=value
@@ -21,5 +20,6 @@ module Collaborators
                            value
                          end
     end
+
   end
 end

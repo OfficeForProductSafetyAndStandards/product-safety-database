@@ -4,32 +4,37 @@ class AssignInvestigation
   delegate :investigation, :new_collaborating_case_owner, :current_user, to: :context
 
   def call
-    swap_case_owner_to_co_collaborator!
-    create_new_case_owner!
-  end
+    return if investigation.case_owner_user.collaborating == new_collaborating_case_owner
 
-  def create_new_case_owner!
-    return if investigation.owners.exists?(team: new_collaborating_case_owner)
-
-    investigation.owners.create!(
-      type: "CaseOwner",
-      added_by_user: current_user,
-      collaborating: new_collaborating_case_owner,
-      include_message: "Maybe this message should not be required when creating a case creator"
-    )
-  end
-
-  def swap_case_owner_to_co_collaborator!
-    collaborator = investigation.collaborators.find_by(team: new_collaborating_case_owner)
-
-    if collaborator
-      return if investigation.case_owner == collaborator
-      return if investigation.case_owner.is_a?(CaseCreator)
-
-      investigation.case_owner.update!(type: "CoCollaborator", include_message: false)
-      # make sure to flush the case_owner cached relation
-      # so the case_owner is either fetched from the database or is nil
-      investigation.reload
+    Collaborators::Base.transaction do
+      swap_current_case_owners_to_collaborators!
+      add_new_case_owner!
     end
+  end
+
+private
+
+  def collaborator_attributes
+    {
+      added_by_user: current_user,
+      include_message: false
+    }
+  end
+
+  def add_new_case_owner!
+    if collaborator
+      collaborator.make_case_owner!(collaborator_attributes)
+    else
+      investigation.collaborators
+        .create!(collaborator_attributes.merge(collaborating: new_collaborating_case_owner))
+    end
+  end
+
+  def swap_current_case_owners_to_collaborators!
+    investigation.case_owners.each { |case_owner| case_owner.make_collaborator!(collaborator_attributes) }
+  end
+
+  def collaborator
+    @collaborator ||= investigation.collaborators.find_by(collaborating: new_collaborating_case_owner)
   end
 end

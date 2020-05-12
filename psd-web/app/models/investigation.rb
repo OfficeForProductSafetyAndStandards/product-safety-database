@@ -48,7 +48,6 @@ class Investigation < ApplicationRecord
 
   has_many_attached :documents
 
-  has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
   # any old collaborators
@@ -68,7 +67,7 @@ class Investigation < ApplicationRecord
 
   has_many :collaborators, dependent: :destroy
 
-  has_many :current_collaborators, -> { where.not(type: "Collaborators::Historical") }, class_name: "Collaborators::Base"
+  # has_many :current_collaborators, -> { where.not(type: "Collaborators::Historical") }, class_name: "Collaborators::Base"
 
   # scenario: assign a case to a user
   # 1. make user's team the CaseOwnerTeam
@@ -91,13 +90,14 @@ class Investigation < ApplicationRecord
   # invesigation.owners => [CaseOwner, CaseCreator]
   # invesigation.collaborators => [CoColloaborator(former case owner), CaseOwner, CaseCreator]
 
-  # TODO: Refactor to remove this callback hell
-  before_create :set_source_to_current_user, :add_pretty_id
-  after_create :create_audit_activity_for_case, :send_confirmation_email
-
   # temporary to retain the "owner id functionality"
   def owner_id
     case_owner_team.id || case_owner_user.id
+  end
+
+  # temporary backward compatibility
+  def source
+    case_creator_user || case_creator_team
   end
 
   def owner
@@ -173,11 +173,6 @@ class Investigation < ApplicationRecord
     pretty_id
   end
 
-  def add_pretty_id
-    cases_before = Investigation.where("created_at < ? AND created_at > ?", created_at, created_at.beginning_of_month).count
-    self.pretty_id = "#{created_at.strftime('%y%m')}-%04d" % (cases_before + 1)
-  end
-
   def reported_reason
     return if super.blank?
 
@@ -191,10 +186,6 @@ class Investigation < ApplicationRecord
   end
 
 private
-
-  def create_audit_activity_for_case
-    # To be implemented by children
-  end
 
   def create_audit_activity_for_status
     if saved_changes.key?(:is_closed) || status_rationale.present?
@@ -240,29 +231,8 @@ private
     AuditActivity::Business::Destroy.from(business, self)
   end
 
-  def set_source_to_current_user
-    self.source = UserSource.new(user: User.current) if source.blank? && User.current
-  end
-
   def creator_id
-    source&.user_id
-  end
-
-  def set_owner_as_current_user
-    self.owner = User.current if owner.blank? && User.current
-  end
-
-  # TODO: Refactor to remove dependency on User.current
-  def send_confirmation_email
-    if User.current
-      NotifyMailer.investigation_created(
-        pretty_id,
-        User.current.name,
-        User.current.email,
-        decorate.title,
-        case_type
-      ).deliver_later
-    end
+    case_creator_team.id
   end
 end
 
