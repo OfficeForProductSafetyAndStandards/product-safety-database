@@ -40,8 +40,9 @@ We now can reference either a `Team` or `User` via the Collaborator object. But 
 This is where polymorphism on `Collaborator` with Single Table Inheritence is here to help. It is pretty obvious by now that each collaborator do not have the same permissions.
 After consulting with Ed, with divised a different sets of permissions
 
+Think of this data modle a bit like a pointer to a pointer in C or C++, you can manipulate the data and defer  as much as possible the constraining access to type of the underlying value;
 
-There basically three main branches in the hierarchy
+Here is the rhierarchy, bear in mind that class names are subject, Slawosh has already made some good suggestions:
 
 ```ruby
 class Collaborators::Base;
@@ -102,3 +103,16 @@ This class hierarchy will work beautifully with Pundit, as each class with have 
 We'll have to index ownership slighlty differently. [See these line](https://github.com/UKGovernmentBEIS/beis-opss-psd/pull/586/files#diff-2cb85cf5237b33fabd4731cbac15181fR14-R20)
 The gives us to be abilty to perform search against a viewing user. And the search would not show cases you do not have access to.
 I think this is a slight hurdle to overcome that will however benefit the user.
+
+
+
+
+### Conclusion
+
+This is a fair bit of work, but it should remove a lot of the complexity.
+I'd would split this in probaly several steps:
+1. First deployable: chunk: Keep the data structures Source, UserSource but start double writing to collaborators (CaseCreator and CaseOwner) table at the same time as source and owner.
+2. Second deployable: Backfill hisetorical data and
+3. Swap view to use, the new data structure
+4. fix the search ( this can be done on a concurrently to step 2 and 3)
+5. bundle steps 3 and 4 and deploy together.
