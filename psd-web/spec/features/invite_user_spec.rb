@@ -5,12 +5,12 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:user) { create(:user, :activated, user_role, team: team, has_viewed_introduction: true) }
   let(:email) { Faker::Internet.safe_email }
 
-  before do
-    sign_in(user)
-  end
-
   context "when the user is not a team admin" do
     let(:user_role) { :psd_admin }
+
+    before do
+      sign_in(user)
+    end
 
     it "shows a forbidden error page" do
       visit "/teams/#{team.id}/invitations/new"
@@ -20,6 +20,10 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
   context "when the user is a team admin" do
     let(:user_role) { :team_admin }
+
+    before do
+      sign_in(user)
+    end
 
     context "when there is no other user with that email" do
       before { visit_invite_page_and_submit_email }
@@ -83,6 +87,38 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
           expect(page).to have_summary_error("Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored.")
         end
       end
+    end
+  end
+
+  context "when the user is a team admin that needs secondary authentication for the invitation", :with_2fa, :with_stubbed_notify do
+    let(:user_role) { :team_admin }
+
+    before do
+      travel_to(4.hours.ago) do
+        sign_in(user)
+      end
+    end
+
+    scenario "sends the invite after after being able to request a second code" do
+      visit "/teams/#{team.id}/invitations/new"
+
+      expect_to_be_on_secondary_authentication_page
+      click_link "Not received a text message?"
+
+      expect_to_be_on_resend_secondary_authentication_page
+      click_button "Resend security code"
+
+      expect_to_be_on_secondary_authentication_page
+      fill_in "Enter security code", with: user.reload.direct_otp
+      click_button "Continue"
+
+      expect_to_be_on_invite_a_team_member_page
+      fill_in "Email address", with: email
+      click_button "Send invitation email"
+
+      expect_to_be_on_team_page(team)
+      expect_confirmation_banner("Invite sent to #{email}")
+      expect_invitation_email_sent(to: email, inviting_user: user)
     end
   end
 
