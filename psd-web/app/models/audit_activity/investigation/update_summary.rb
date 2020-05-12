@@ -4,7 +4,7 @@ class AuditActivity::Investigation::UpdateSummary < AuditActivity::Investigation
     super(investigation, title, investigation.description)
   end
 
-  def email_update_text
-    "#{investigation.case_type.upcase_first} summary was updated by #{source&.show}."
+  def email_update_text(viewer = nil)
+    "#{investigation.case_type.upcase_first} summary was updated by #{source&.show(viewer)}."
   end
 end

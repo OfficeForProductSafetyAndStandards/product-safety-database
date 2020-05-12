@@ -7,7 +7,6 @@ class NotifyMailer < GovukNotifyRails::Mailer
       investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
       investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
       alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
-      user_added_to_team: "e3b2bbf5-3002-49fb-adb5-ad18e483c7e4",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
@@ -90,21 +89,6 @@ class NotifyMailer < GovukNotifyRails::Mailer
       investigation_url: investigation_url(pretty_id: investigation_pretty_id)
     )
 
-    mail(to: email)
-  end
-
-  def user_added_to_team(email,
-                         name:,
-                         team_page_url:,
-                         team_name:,
-                         inviting_team_member_name:)
-    set_template(TEMPLATES[:user_added_to_team])
-    set_personalisation(
-      name: name,
-      team_page_url: team_page_url,
-      team_name: team_name,
-      inviting_team_member_name: inviting_team_member_name
-    )
     mail(to: email)
   end
 

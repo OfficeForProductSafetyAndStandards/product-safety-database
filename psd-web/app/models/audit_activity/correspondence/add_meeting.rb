@@ -9,10 +9,6 @@ class AuditActivity::Correspondence::AddMeeting < AuditActivity::Correspondence:
     activity.attach_blob(correspondence.related_attachment.blob, :related_attachment) if correspondence.related_attachment.attached?
   end
 
-  def subtitle_slug
-    "Meeting recorded"
-  end
-
   def self.build_body correspondence
     body = ""
     body += "Meeting with: **#{sanitize_text correspondence.correspondent_name}**<br>" if correspondence.correspondent_name.present?
@@ -23,15 +19,21 @@ class AuditActivity::Correspondence::AddMeeting < AuditActivity::Correspondence:
     body
   end
 
-  def email_update_text
-    "Meeting details added to the #{investigation.case_type.upcase_first} by #{source&.show}."
-  end
-
   def activity_type
     "meeting"
   end
 
   def restricted_title
     "Meeting added"
+  end
+
+  def email_update_text(viewer = nil)
+    "Meeting details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
+  end
+
+private
+
+  def subtitle_slug
+    "Meeting recorded"
   end
 end

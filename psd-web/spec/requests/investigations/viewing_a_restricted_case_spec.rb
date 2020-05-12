@@ -3,13 +3,13 @@ require "rails_helper"
 RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, :with_errors_rendered, type: :request do
   let(:users_organisation) { create(:organisation, name: "Org A") }
   let(:users_team) { create(:team, organisation: users_organisation, name: "Team A") }
-  let(:user) { create(:user, :activated, organisation: users_organisation, teams: [users_team]) }
+  let(:user) { create(:user, :activated, organisation: users_organisation, team: users_team) }
 
   let(:other_team_from_the_same_organisation) { create(:team, organisation: users_organisation, name: "Team B") }
 
   let(:other_organisation) { create(:organisation) }
   let(:other_team) { create(:team, organisation: other_organisation) }
-  let(:other_user) { create(:user, :activated, organisation: other_organisation, teams: [other_team]) }
+  let(:other_user) { create(:user, :activated, organisation: other_organisation, team: other_team) }
 
   before do
     sign_in user
