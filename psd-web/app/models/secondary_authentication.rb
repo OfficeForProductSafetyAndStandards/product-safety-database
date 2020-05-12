@@ -88,9 +88,9 @@ private
   end
 
   def whitelisted_code_valid?(otp)
-    if ENV["WHITELISTED_2FA_CODES"].present?
-      codes = ENV["WHITELISTED_2FA_CODES"].split(",").map(&:to_s)
-      codes.include?(otp.to_s)
+    if ENV["WHITELISTED_2FA_CODE"].present?
+      code = ENV["WHITELISTED_2FA_CODE"]
+      code == otp
     else
       false
     end
