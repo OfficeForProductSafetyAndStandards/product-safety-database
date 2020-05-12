@@ -104,7 +104,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-    resources :collaborators, only: %i[index new create], path: "teams", path_names: { new: "add" }
+    resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
@@ -156,20 +156,11 @@ Rails.application.routes.draw do
 
   resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
 
-  get "your-teams" => "teams#index"
   resources :teams, only: %i[index show] do
-    member do
-      get :invite_to, path: "invite"
-      put :invite_to, path: "invite"
-      get :resend_invitation
-    end
-  end
-
-  resources :teams, only: %i[index show] do
-    member do
-      get :invite_to, path: "invite"
-      put :invite_to, path: "invite"
-      get :resend_invitation
+    resources :invitations, only: %i[new create] do
+      member do
+        put :resend
+      end
     end
   end
 

@@ -1,15 +1,12 @@
 southampton:
-  id: ddddeef8-1a33-4322-8b8c-fc7fa95a2e3b
-  name: Southampton Council Trading Stanards
+  name: Southampton Council Trading Standards
   organisation: southampton
 
 opss_enforcement:
-  id: cccceef8-1a33-4322-8b8c-fc7fa95a2e3b
   name: OPSS Enforcement
   organisation: opss
 
 luton:
-  id: edddeef8-1a33-4322-8b8c-fc7fa95a2e3b
-  name: Luton Council Trading Stanards
+  name: Luton Council Trading Standards
   organisation: luton
   team_recipient_email: luton@example.com

@@ -82,7 +82,7 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
 
         it "associates the user with the team" do
           result
-          expect(created_user.teams.first).to eq(created_team)
+          expect(created_user.team).to eq(created_team)
         end
 
         it "associates the user with the organisation" do

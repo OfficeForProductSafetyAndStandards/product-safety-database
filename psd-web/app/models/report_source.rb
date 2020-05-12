@@ -1,5 +1,5 @@
 class ReportSource < Source
-  def show
+  def show(*)
     name
   end
 end

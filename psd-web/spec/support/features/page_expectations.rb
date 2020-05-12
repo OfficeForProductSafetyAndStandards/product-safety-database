@@ -265,11 +265,42 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Change your name")
   end
 
-  def expect_to_be_on_team_page
-    expect(page).to have_css("h1", text: "test organisation")
+  def expect_to_be_on_team_page(team)
+    expect(page).to have_css("h1", text: team.name)
   end
 
   def expect_to_be_on_invite_a_team_member_page
     expect(page).to have_css("h1", text: "Invite a team member")
+  end
+
+  def expect_to_be_on_edit_case_permissions_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/teams/#{team.id}/edit")
+    expect(page).to have_selector("h1", text: team.name)
+  end
+
+  def expect_teams_tables_to_contain(expected_teams)
+    teams_table = page.find(:table, "Teams added to the case")
+
+    within(teams_table) do
+      expected_teams.each do |expected_team|
+        row_heading = page.find("th", text: expected_team[:team_name])
+        expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
+      end
+    end
+  end
+
+  def expect_teams_tables_not_to_contain(teams)
+    teams_table = page.find(:table, "Teams added to the case")
+
+    within(teams_table) do
+      teams.each do |expected_team|
+        elems = page.all("th", text: expected_team[:team_name])
+        expect(elems).to be_empty, "#{expected_team[:team_name]} should not be visible"
+      end
+    end
+  end
+
+  def expect_to_be_on_access_denied_page
+    expect(page).to have_css("h1", text: "Access denied")
   end
 end
