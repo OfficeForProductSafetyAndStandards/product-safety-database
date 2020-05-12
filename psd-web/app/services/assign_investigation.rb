@@ -4,8 +4,6 @@ class AssignInvestigation
   delegate :investigation, :new_collaborating_case_owner, :current_user, to: :context
 
   def call
-    return if investigation.case_owner_user.collaborating == new_collaborating_case_owner
-
     Collaborators::Base.transaction do
       swap_current_case_owners_to_collaborators!
       add_new_case_owner!

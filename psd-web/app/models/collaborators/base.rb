@@ -11,6 +11,8 @@ module Collaborators
 
     # validates :include_message, inclusion: { in: [true, false] }
 
+    delegate :name, to: :collaborating
+
     attr_reader :include_message
 
     def include_message=value
@@ -20,6 +22,13 @@ module Collaborators
                            value
                          end
     end
+  end
 
+  def email
+    if collaborating.respond_to?(:team_recipient_email)
+      collaborating.team_recipient_email
+    else
+      collaborating.email
+    end
   end
 end

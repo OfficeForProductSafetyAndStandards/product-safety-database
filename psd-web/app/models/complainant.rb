@@ -27,7 +27,7 @@ class Complainant < ApplicationRecord
 private
 
   def can_be_seen_by_current_user?
-    return true if investigation.source&.user_has_gdpr_access?
+    return true if investigation.case_creator_user.user_has_gdpr_access?
 
     complainant_type != "Consumer"
   end

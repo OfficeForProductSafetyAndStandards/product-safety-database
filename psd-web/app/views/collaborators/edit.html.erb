@@ -1,4 +1,4 @@
-<% title = @team.name %>
+<% title = @collaborator.name %>
 <% page_title title, errors: @edit_form.errors.any? %>
 
 <% content_for(:after_header) do %>
@@ -12,7 +12,7 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @team), method: :put do |form| %>
+    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaborator), method: :put do |form| %>
 
       <% remove_hint = @investigation.is_private? ? "Will not be able to view case details as it is restricted" :  "Will have default view rights"%>
       <%= render "form_components/govuk_radios",
@@ -37,7 +37,7 @@
           },
           {key: "or", divider: "or"},
           {
-            text: "Remove #{@team.name} from the case",
+            text: "Remove #{@collaborator.name} from the case",
             hint: {
               text: remove_hint
             },
@@ -46,7 +46,7 @@
         ]
       %>
 
-      <p class="govuk-body">We’ll email <%= @team.name %> to let them know that their permission level has been changed.
+      <p class="govuk-body">We’ll email <%= @collaborator.name %> to let them know that their permission level has been changed.
 </p>
 
       <% message_html = capture do %>
@@ -55,7 +55,7 @@
           key: :message,
           id: "message",
           label: {
-            text: "Message to the #{@team.name}"
+            text: "Message to the #{@collaborator.name}"
           },
           hint: {
             text: "Message will also be included on the case timeline"

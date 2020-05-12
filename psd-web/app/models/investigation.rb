@@ -230,7 +230,7 @@ private
   end
 
   def creator_id
-    case_creator_team.id
+    case_creator_team&.id
   end
 end
 

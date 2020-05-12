@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :documents_attachments, :source
+  decorates_associations :documents_attachments, :case_creator_user, :case_owner_team
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -9,7 +9,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner
-    investigation.owner.decorate
+    investigation.case_creator_team.collaborating.decorate
   end
 
   def hazard_description
@@ -115,16 +115,8 @@ class InvestigationDecorator < ApplicationDecorator
 
   # rubocop:disable Rails/OutputSafety
   def created_by
-    return if source.nil?
-
-    out = []
-    out << if source.user.nil?
-             h.tag.div("Unknown")
-           else
-             h.escape_once(source.user.full_name.to_s)
-           end
-    out << h.escape_once(source.user&.team_names) if source&.user&.team_names.present?
-
+    out = [h.escape_once(case_creator_user.collaborating.full_name.to_s)]
+    out << h.escape_once(case_creator_user.collaborating&.team_names) if case_creator_user.collaborating&.team_names.present?
     out.join("<br />").html_safe
   end
   # rubocop:enable Rails/OutputSafety
@@ -146,8 +138,6 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner_display_name_for(viewing_user:)
-    return "No case owner" unless investigation.owner
-
     owner.owner_short_name(viewing_user: viewing_user)
   end
 

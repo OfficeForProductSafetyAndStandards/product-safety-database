@@ -125,7 +125,7 @@ private
   def investigation_saved?
     return false unless investigation_valid?
 
-    result = CreateInvestigation.call(investigation_params: @investigation, current_user: current_user)
+    result = CreateInvestigation.call(investigation: @investigation, current_user: current_user)
     return false unless result.success?
 
     @investigation = result.investigation

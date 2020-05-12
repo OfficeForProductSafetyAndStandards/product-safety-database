@@ -7,7 +7,7 @@ class EditInvestigationCollaboratorForm
   attribute :permission_level
   attribute :message
   attribute :investigation
-  attribute :team
+  attribute :collaborator
   attribute :user
   attribute :include_message, :boolean
 
@@ -30,19 +30,15 @@ class EditInvestigationCollaboratorForm
 
 private
 
-  def collaborator
-    investigation.collaborators.find_by!(collaborating: team)
-  end
-
   def schedule_delete_emails
     schedule_delete_email(find_emails)
   end
 
   def find_emails
-    if team.team_recipient_email.present?
-      [team.team_recipient_email]
+    if collaborator.email.present?
+      [collaborator.email]
     else
-      team.users.active.pluck(:email)
+      collaborator.collaborating.users.active.pluck(:email)
     end
   end
 
@@ -50,7 +46,7 @@ private
     AuditActivity::Investigation::TeamDeleted.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
-      title: "#{team.name} removed from #{investigation.case_type.downcase}",
+      title: "#{collaborator.name} removed from #{investigation.case_type.downcase}",
       body: message.to_s
     )
   end
@@ -68,6 +64,6 @@ private
   end
 
   def email_payload
-    { permission_level: permission_level, include_message: include_message, message: message, investigation: investigation, team: team, user: user }
+    { permission_level: permission_level, include_message: include_message, message: message, investigation: investigation, team: collaborator.collaborating, user: user }
   end
 end

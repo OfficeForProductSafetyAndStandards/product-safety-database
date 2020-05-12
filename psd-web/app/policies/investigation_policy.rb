@@ -45,7 +45,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def can_change_owner(user: @user)
-    @record.owner.blank? || @record.collaborating.in_same_team_as?(user) || @record.owner == user
+    @record.case_owner_team.collaborating.in_same_team_as?(user)
   end
 
   def user_allowed_to_raise_alert?(user: @user)
@@ -57,8 +57,6 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def manage_collaborators?
-    return false if @record.case_owner.nil?
-
-    @record.case_owner.collaborating.in_same_team_as?(user)
+    @record.case_owner_team.collaborating.in_same_team_as?(user)
   end
 end

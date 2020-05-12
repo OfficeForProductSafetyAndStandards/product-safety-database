@@ -4,7 +4,8 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @teams = @investigation.teams.order(:name)
+    @investigation.case_owner_team
+    @collaborators = @investigation.collaborators.includes(:collaborating)
   end
 
   def new
@@ -37,17 +38,16 @@ class CollaboratorsController < ApplicationController
   def edit
     authorize @investigation, :manage_collaborators?
 
-    @team = Team.find(params[:id])
-    @collaborator = @investigation.collaborators.find_by! team_id: @team.id
+    @collaborator = @investigation.collaborators.find(params[:id])
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
   def update
     authorize @investigation, :manage_collaborators?
 
-    @team = Team.find(params[:id])
+    @collaborator = @investigation.collaborators.find(params[:id])
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params
-      .merge(investigation: @investigation, team: @team, user: current_user))
+      .merge(investigation: @investigation, collaborator: @collaborator, user: current_user))
     if @edit_form.save!
       flash[:success] = "#{@team.name} had been removed from the case"
       redirect_to investigation_collaborators_path(@investigation)
