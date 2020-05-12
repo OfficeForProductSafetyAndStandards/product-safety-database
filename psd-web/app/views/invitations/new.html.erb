@@ -1,0 +1,21 @@
+<%= page_title "Invite a team member to #{@team.decorate.display_name}", errors: @invite_user_to_team_form.errors.any? %>
+
+<% content_for :after_header do %>
+  <%= link_to "Back", @team, class: "govuk-back-link" %>
+<% end %>
+
+<%= form_with model: @invite_user_to_team_form, url: team_invitations_path(@team) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+
+      <h1 class="govuk-heading-l">Invite a team member</h1>
+
+      <%= render "form_components/govuk_input", form: form, key: :email,
+              label: { text: "Email address", classes: "govuk-label--m" },
+              hint: { text: "This should be their work address" } %>
+
+      <%= form.submit "Send invitation email", class: "govuk-button" %>
+    </div>
+  </div>
+<% end %>

@@ -48,19 +48,21 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     output + "<br>"
   end
 
-  def subtitle_slug
-    "Email recorded"
-  end
-
   def restricted_title
     "Email added"
   end
 
-  def email_update_text
-    "Email details added to the #{investigation.case_type.upcase_first} by #{source&.show}."
-  end
-
   def activity_type
     "email"
+  end
+
+  def email_update_text(viewer = nil)
+    "Email details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
+  end
+
+private
+
+  def subtitle_slug
+    "Email recorded"
   end
 end

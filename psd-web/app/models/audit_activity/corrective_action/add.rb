@@ -3,11 +3,13 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     super(corrective_action)
   end
 
-  def subtitle_slug
-    "Corrective action recorded"
+  def email_update_text(viewer = nil)
+    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
-  def email_update_text
-    "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show}."
+private
+
+  def subtitle_slug
+    "Corrective action recorded"
   end
 end
