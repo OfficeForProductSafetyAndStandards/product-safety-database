@@ -10,18 +10,19 @@ module SecondaryAuthentications
                        :set_cache_headers
 
     def new
-      @mobile_number_verified = current_user.mobile_number_verified
+      @mobile_number_change_allowed = !current_user.mobile_number_verified
     end
 
     def create
-      @mobile_number_verified = current_user.mobile_number_verified
-      if !@mobile_number_verified && user_params.has_key?(:mobile_number)
-        current_user.mobile_number = user_params[:mobile_number]
-        return render(:new) if !current_user.save(context: :mobile_number_change)
+      @mobile_number_change_allowed = !current_user.mobile_number_verified
+      if resend_code_form.save!
+        # To avoid the user being redirected back to "Resend Security Code" page after successfully introducing
+        # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
+        require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])
+      else
+        current_user.errors.merge!(resend_code_form.errors)
+        render(:new)
       end
-      # To avoid the user being redirected back to "Resend Security Code" page after successfully introducing
-      # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
-      require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])
     end
 
   private
@@ -34,8 +35,8 @@ module SecondaryAuthentications
       true
     end
 
-    def user_params
-      params.require(:user).permit(:mobile_number)
+    def resend_code_form
+      @resend_code_form ||= ResendSecondaryAuthenticationCodeForm.new(mobile_number: params[:mobile_number], user: current_user)
     end
   end
 end

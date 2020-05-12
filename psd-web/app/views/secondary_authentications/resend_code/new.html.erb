@@ -15,9 +15,7 @@
     <p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can resend it.</p>
 
     <%= form_with(url: resend_secondary_authentication_code_path, method: "post") do |form| %>
-      <% if @mobile_number_verified %>
-        <p class="govuk-body">If you no longer have access to the phone with the number you registered for this service, contact <%= mail_to t(:enquiries_email), nil, subject: "Update mobile number", class: "govuk-link" %> to reset the number.</p>
-      <% else %>
+      <% if @mobile_number_change_allowed %>
         <details class="govuk-details" data-module="govuk-details">
           <summary class="govuk-details__summary">
             <span class="govuk-details__summary-text">
@@ -29,13 +27,15 @@
               classes: "app-!-max-width-two-thirds",
               label: { text: "Mobile number" },
               value: current_user.mobile_number,
-              name: "user[mobile_number]",
+              name: "mobile_number",
               id: "mobile_number",
               autocomplete: "tel",
               type: "tel"
             %>
           </div>
         </details>
+      <% else %>
+        <p class="govuk-body">If you no longer have access to the phone with the number you registered for this service, contact <%= mail_to t(:enquiries_email), nil, subject: "Update mobile number", class: "govuk-link" %> to reset the number.</p>
       <% end %>
 
       <%= govukButton(text: "Resend security code") %>
