@@ -1,11 +1,11 @@
-<% page_title = "Cases" %>
+<% page_title "Case search results" %>
 
 <%= render 'investigations/heading', answer: @answer %>
 
 <div class="govuk-grid-row">
   <%= render 'investigations/filters', search: @search, show_relevancy_radion_option: true, submitted_from: "investigation_search" %>
 
-  <div class="govuk-grid-column-three-quarters"  id="results">
+  <div class="govuk-grid-column-three-quarters" id="results">
     <% @investigations.each do |investigation| %>
       <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
       <% if !policy(investigation).show? %>
@@ -24,7 +24,7 @@
 
     <% unless @investigations.any? %>
       <div style="text-align:center" class="govuk-heading-l">
-        No result
+        No results
       </div>
     <% end %>
   </div>
