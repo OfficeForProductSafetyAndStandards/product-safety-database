@@ -111,9 +111,8 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "people not in the team that is the case owner should not be able to change the case owner" do
-    users(:southampton).teams << teams(:southampton)
     investigation = create_new_case
-    investigation.owner = User.current.teams.first
+    investigation.owner = User.current.team
     assert_not policy(investigation).change_owner?(user: users(:luton))
   end
 

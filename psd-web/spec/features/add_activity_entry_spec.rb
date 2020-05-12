@@ -32,17 +32,17 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     expect(delivered_emails.last.personalization).to include(
       name: creator_user.name,
       subject_text: "Allegation updated",
-      update_text: "#{commentator_user.name} (test organisation) commented on the allegation."
+      update_text: "#{commentator_user.name} (test team) commented on the allegation."
     )
   end
 
   scenario "Updates on cases owned by teams without team email send a notification to their active users" do
     team_without_email = create(:team, team_recipient_email: nil)
-    active_user = create(:user, :activated, email: "active@example.com", teams: [team_without_email])
+    active_user = create(:user, :activated, email: "active@example.com", team: team_without_email)
     commentator_user = create(:user, :activated)
 
-    create(:user, :inactive, email: "not_activated@example.com", teams: [team_without_email])
-    create(:user, :activated, :deleted, email: "deleted@example.com", teams: [team_without_email])
+    create(:user, :inactive, email: "not_activated@example.com", team: team_without_email)
+    create(:user, :activated, :deleted, email: "deleted@example.com", team: team_without_email)
     investigation.update_attribute(:owner, team_without_email)
 
     sign_in commentator_user
@@ -55,7 +55,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     expect(delivered_emails.last.personalization).to include(
       name: active_user.name,
       subject_text: "Allegation updated",
-      update_text: "#{commentator_user.name} (test organisation) commented on the allegation."
+      update_text: "#{commentator_user.name} (test team) commented on the allegation."
     )
   end
 

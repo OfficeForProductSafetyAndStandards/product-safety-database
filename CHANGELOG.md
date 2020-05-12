@@ -1,8 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2020-05-11
+## 2020-05-12
 - Allow users to request a new security code when the code was not received via SMS.
+
+## 2020-05-08
+- Removed the ability for a user to be in more than one team.
 
 ## 2020-05-06
 - Ability to remove team from case.
