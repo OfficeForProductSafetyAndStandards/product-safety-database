@@ -4,17 +4,16 @@ class AddTeamToAnInvestigation
   delegate :collaborator, :current_user, :investigation, :team_id, :include_message, :message, to: :context
   def call
     team = Team.find_by(id: team_id)
+    context.fail!(error: "Team is required") unless team
 
-    context.collaborator = investigation.co_collaborators.new(
+    return if investigation.collaborators.where(collaborating: team).exists?
+
+    context.collaborator = investigation.collaborators.new(
       collaborating: team,
       include_message: include_message,
       added_by_user: current_user,
       message: message
     )
-
-    unless team
-      context.fail!(error: "Team is required")
-    end
 
     begin
       if collaborator.save

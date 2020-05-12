@@ -67,8 +67,6 @@ class Investigation < ApplicationRecord
 
   has_many :collaborators, dependent: :destroy
 
-  # has_many :current_collaborators, -> { where.not(type: "Collaborators::Historical") }, class_name: "Collaborators::Base"
-
   # scenario: assign a case to a user
   # 1. make user's team the CaseOwnerTeam
   # 2. make user's team the CaseOwnerUser

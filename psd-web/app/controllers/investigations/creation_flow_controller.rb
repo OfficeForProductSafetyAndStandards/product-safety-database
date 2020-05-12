@@ -125,8 +125,10 @@ private
   def investigation_saved?
     return false unless investigation_valid?
 
-    result = CreateInvestigation.call(investigation_params: investigation_params.merge(type: model_name), current_user: current_user)
+    result = CreateInvestigation.call(investigation_params: @investigation, current_user: current_user)
     return false unless result.success?
+
+    @investigation = result.investigation
 
     attach_blobs_to_list(@file_blob, @investigation.documents)
     @investigation.update(complainant: @complainant)

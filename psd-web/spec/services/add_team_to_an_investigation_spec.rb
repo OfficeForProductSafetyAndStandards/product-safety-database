@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   describe ".call" do
     context "with required parameters" do
-      let(:investigation) { create(:allegation) }
+      let(:investigation) { CreateInvestigation.call(investigation: build(:allegation), current_user: user).investigation }
       let(:user) { create(:user) }
       let(:team) { create(:team, name: "Testing team") }
       let(:message) { "Thanks for collaborating." }
@@ -25,13 +25,19 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
       # rubocop:disable RSpec/ExampleLength
       it "returns the collaborator" do
         expect(result.collaborator).to have_attributes(
-          team: team,
+          collaborating: team,
           added_by_user: user,
           investigation: investigation,
           message: message
         )
       end
       # rubocop:enable RSpec/ExampleLength
+
+      it "correctly assigns add a collaborator", :aggregate_failures do
+        expect(result.investigation.case_owner_team.collaborating).to eq(user.team)
+        expect(result.investigation.case_owner_user.collaborating).to eq(user)
+        expect(result.investigation.collaborators.where(collaborating: team)).to exist
+      end
 
       it "queues a job to notify the team", :with_test_queue_adapter do
         aggregate_failures do
