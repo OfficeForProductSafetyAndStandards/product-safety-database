@@ -22,7 +22,7 @@ class AddTeamToAnInvestigation
         AuditActivity::Investigation::TeamAdded.create!(
           source: UserSource.new(user: current_user),
           investigation: investigation,
-          title: "#{collaborator.collaborating.name} added to #{investigation.case_type.downcase}",
+          title: "#{collaborator.name} added to #{investigation.case_type.downcase}",
           body: collaborator.message.to_s
         )
       else

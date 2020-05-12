@@ -50,7 +50,7 @@
           <% end %>
         </ul>
       <% elsif @investigation.collaborators.length == 1 %>
-        <%= @investigation.case_owner_team.collaborating.name %>
+        <%= @investigation.case_owner_team.name %>
       <% else %>
         No teams added
       <% end %>
