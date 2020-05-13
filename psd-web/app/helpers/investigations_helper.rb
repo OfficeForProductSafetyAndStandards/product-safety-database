@@ -229,4 +229,64 @@ module InvestigationsHelper
 
     all_past_owners || []
   end
+
+  # This builds an array from an investigation which can then
+  # be passed as a `rows` argument to the govukSummaryList() helper.
+  def about_the_case_rows(investigation)
+    rows = [
+      {
+        key: { text: "Status" },
+        value: { text: investigation.status },
+        actions: {
+          items: [
+            {
+              href: status_investigation_path(investigation),
+              text: "Change",
+              visuallyHiddenText: "status"
+            }
+          ]
+        }
+      },
+      {
+        key: { text: "Coronavirus related" },
+        value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") },
+        actions: {
+          items: [
+            {
+              href: investigation_coronavirus_related_path(investigation),
+              text: "Change",
+              visuallyHiddenText: "coronavirus status"
+            }
+          ]
+        }
+      },
+      {
+        key: { text: "Created by" },
+        value: { text: investigation.created_by }
+      },
+      {
+        key: { text: "Date created" },
+        value: { text: investigation.created_at.to_s(:govuk) }
+      },
+      {
+        key: { text: "Last updated" },
+        value: { text: "#{time_ago_in_words(investigation.updated_at)} ago" },
+        actions: {
+          items: [
+            { href: new_investigation_activity_path(investigation),
+              text: "Add activity" }
+          ]
+        }
+      }
+    ]
+
+    if investigation.complainant_reference.present?
+      rows << {
+        key: { text: "Trading Standards reference" },
+        value: { text: investigation.complainant_reference }
+      }
+    end
+
+    rows
+  end
 end
