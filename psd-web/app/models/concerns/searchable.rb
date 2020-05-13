@@ -5,7 +5,7 @@ module Searchable
   included do
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
-    after_touch() { __elasticsearch__.index_document }
+    after_touch { __elasticsearch__.index_document }
 
     # The following dynamic templates define custom mappings for the major data types
     # that automatically generate appropriate sort fields for each type.
