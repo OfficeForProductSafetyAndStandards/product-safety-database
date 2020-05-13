@@ -15,7 +15,7 @@ module SecondaryAuthentications
 
     def create
       @mobile_number_change_allowed = !current_user.mobile_number_verified
-      if resend_code_form.save!
+      if resend_code_form.save
         # To avoid the user being redirected back to "Resend Security Code" page after successfully introducing
         # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
         require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])

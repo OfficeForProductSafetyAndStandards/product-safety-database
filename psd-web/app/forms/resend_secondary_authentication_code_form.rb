@@ -10,7 +10,7 @@ class ResendSecondaryAuthenticationCodeForm
   validates :mobile_number, phone: { message: I18n.t(:invalid, scope: %i[activerecord errors models user attributes mobile_number]) },
                             if: -> { update_mobile_number? && mobile_number.present? }
 
-  def save!
+  def save
     return false unless valid?
 
     if update_mobile_number?
