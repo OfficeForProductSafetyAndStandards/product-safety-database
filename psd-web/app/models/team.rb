@@ -21,16 +21,6 @@ class Team < ApplicationRecord
     users.include?(user)
   end
 
-  def self.ensure_names_up_to_date
-    return if Rails.env.test?
-
-    missing = Rails.application.config.team_names["organisations"]["opss"] - all.collect(&:name)
-
-    return true if missing.empty?
-
-    raise "Team name #{missing.join(', ')} not found"
-  end
-
   def self.get_visible_teams(user)
     team_names = Rails.application.config.team_names["organisations"]["opss"]
     return where(name: team_names) if user.is_opss?
