@@ -10,8 +10,8 @@ task add_case_creators_as_collaborators: :environment do
     if creator_team != assignee_team && !collaborator_teams.include?(creator_team)
       count += 1
 
-      investigation.collaborators.create!(team: creator_team, added_by_user: creator, include_message: false)
       puts "Adding #{creator_team.name} as a collaborator to case #{investigation.pretty_id}"
+      investigation.collaborators.create!(team: creator_team, added_by_user: creator, include_message: false)
     end
   end
 
