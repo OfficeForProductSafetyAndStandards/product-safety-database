@@ -18,9 +18,9 @@ table[style="width:100%; text-align:left"]
       = @investigation.description
   tr
     th
-      | Assignee
+      | Case owner
     td
-      = @investigation.assignable.nil? ? "Unassigned" : @investigation.assignable.display_name
+      = @investigation.owner.nil? ? "No case owner" : @investigation.owner.display_name
   tr
     th
       | Source

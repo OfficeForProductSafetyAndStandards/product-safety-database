@@ -11,10 +11,10 @@
 
       hr.govuk-section-break.govuk-section-break--m.govuk-section-break--visible
       = render "investigations/coronavirus_related_checkbox", form: form
-      = render "form_components/govuk_checkboxes", form: form, key: :assigned_to,
+      = render "form_components/govuk_checkboxes", form: form, key: :case_owner,
         classes: "govuk-checkboxes--small",
-        fieldset: { legend: { text: "Assigned to", classes: "govuk-fieldset__legend--s" } },
-        items: assigned_to(form)
+        fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
+        items: case_owner_is(form)
       = render "form_components/govuk_checkboxes", form: form, key: :created_by,
         classes: "govuk-checkboxes--small",
         fieldset: { legend: { text: "Created by", classes: "govuk-fieldset__legend--s" } },

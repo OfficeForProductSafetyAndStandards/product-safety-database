@@ -2,12 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify do
   let(:team) { create(:team) }
-  let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, teams: [team]) }
+  let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, team: team) }
   let(:invitee_email) { Faker::Internet.safe_email }
 
   before do
-    allow(Rails.application.config)
-      .to receive(:email_whitelist_enabled).and_return(false)
+    set_whitelisting_enabled(false)
     allow(Rails.application.config)
       .to receive(:secondary_authentication_enabled).and_return(true)
   end
@@ -15,13 +14,13 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
   it "sending an invitation and registering" do
     sign_in(admin)
 
-    visit "/teams/#{team.id}/invite"
+    visit "/teams/#{team.id}/invitations/new"
 
     expect(page).to have_title("Invite a team member")
 
     wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
     travel_to(Time.now.utc + wait_time.seconds) do
-      visit "/teams/#{team.id}/invite"
+      visit "/teams/#{team.id}/invitations/new"
 
       enter_secondary_authentication_code(admin.reload.direct_otp)
 
@@ -61,17 +60,9 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     click_on "Continue"
   end
 
-  def expect_to_be_on_secondary_authentication_page
-    expect(page).to have_title("Check your phone")
-  end
-
   def enter_secondary_authentication_code(otp_code)
     fill_in "Enter security code", with: otp_code
     click_on "Continue"
-  end
-
-  def expect_to_be_on_declaration_page
-    expect(page).to have_title("Declaration - Product safety database - GOV.UK")
   end
 
   def otp_code

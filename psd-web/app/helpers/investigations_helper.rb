@@ -21,7 +21,7 @@ module InvestigationsHelper
   end
 
   def merged_must_filters
-    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_assignee_filter }] }
+    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_owner_filter }] }
 
     if params[:coronavirus_related_only] == "yes"
       must_filters[:must] << { term: { coronavirus_related: true } }
@@ -52,60 +52,57 @@ module InvestigationsHelper
     { must: [{ terms: type }] }
   end
 
-  def get_assignee_filter
-    return { should: [], must_not: [] } if no_assignee_boxes_checked
-    return { should: [], must_not: compute_excluded_terms } if assignee_filter_exclusive
+  def get_owner_filter
+    return { should: [], must_not: [] } if no_owner_boxes_checked
+    return { should: [], must_not: compute_excluded_terms } if owner_filter_exclusive
 
     { should: compute_included_terms, must_not: [] }
   end
 
-  def no_assignee_boxes_checked
-    no_people_boxes_checked = params[:assigned_to_me] == "unchecked" && params[:assigned_to_someone_else] == "unchecked"
-    no_team_boxes_checked = assignee_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
+  def no_owner_boxes_checked
+    no_people_boxes_checked = params[:case_owner_is_me] == "unchecked" && params[:case_owner_is_someone_else] == "unchecked"
+    no_team_boxes_checked = query_params[owner_team_with_key[0]].blank?
     no_people_boxes_checked && no_team_boxes_checked
   end
 
-  def assignee_filter_exclusive
-    params[:assigned_to_someone_else] == "checked" && params[:assigned_to_someone_else_id].blank?
+  def owner_filter_exclusive
+    params[:case_owner_is_someone_else] == "checked" && params[:case_owner_is_someone_else_id].blank?
   end
 
   def compute_excluded_terms
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
-    excluded_assignees = []
-    excluded_assignees << current_user.id if params[:assigned_to_me] == "unchecked"
-    format_assignee_terms(excluded_assignees)
+    excluded_owners = []
+    excluded_owners << current_user.id if params[:case_owner_is_me] == "unchecked"
+    format_owner_terms(excluded_owners)
   end
 
   def compute_included_terms
     # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    assignees = checked_team_assignees
-    assignees.concat(someone_else_assignees)
-    assignees << current_user.id if params[:assigned_to_me] == "checked"
-    format_assignee_terms(assignees.uniq)
+    owners = checked_team_owners
+    owners.concat(someone_else_owners)
+    owners << current_user.id if params[:case_owner_is_me] == "checked"
+    format_owner_terms(owners.uniq)
   end
 
-  def checked_team_assignees
-    assignees = []
-    assignee_teams_with_keys.each do |key, team, _n|
-      assignees.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
-    end
-    assignees
+  def checked_team_owners
+    owners = []
+    owners.concat(user_ids_from_team(owner_team_with_key[1])) if query_params[owner_team_with_key[0]] != "unchecked"
+    owners
   end
 
-  def someone_else_assignees
-    return [] unless params[:assigned_to_someone_else] == "checked"
+  def someone_else_owners
+    return [] unless params[:case_owner_is_someone_else] == "checked"
 
-    team = Team.find_by(id: params[:assigned_to_someone_else_id])
-    team.present? ? user_ids_from_team(team) : [params[:assigned_to_someone_else_id]]
+    team = Team.find_by(id: params[:case_owner_is_someone_else_id])
+    team.present? ? user_ids_from_team(team) : [params[:case_owner_is_someone_else_id]]
   end
 
-  def format_assignee_terms(assignee_array)
-    assignee_array.map do |a|
-      { term: { assignable_id: a } }
+  def format_owner_terms(owner_array)
+    owner_array.map do |a|
+      { term: { owner_id: a } }
     end
   end
 
-  # Created by filter shares a lot of similarities with assigned to. In the future the methods could be shared.
   def get_creator_filter
     return { should: [], must_not: [] } if no_created_by_boxes_checked
     return { should: [], must_not: compute_excluded_created_by_terms } if creator_filter_exclusive
@@ -115,7 +112,7 @@ module InvestigationsHelper
 
   def no_created_by_boxes_checked
     no_created_by_people_boxes_checked = params[:created_by_me] == "unchecked" && params[:created_by_someone_else] == "unchecked"
-    no_created_by_team_boxes_checked = creator_teams_with_keys.all? { |key, _t, _n| query_params[key].blank? }
+    no_created_by_team_boxes_checked = query_params[creator_team_with_key[0]] == "unchecked"
     no_created_by_people_boxes_checked && no_created_by_team_boxes_checked
   end
 
@@ -140,9 +137,7 @@ module InvestigationsHelper
 
   def checked_team_creators
     creators = []
-    creator_teams_with_keys.each do |key, team, _n|
-      creators.concat(user_ids_from_team(team)) if query_params[key] != "unchecked"
-    end
+    creators.concat(user_ids_from_team(creator_team_with_key[1])) if query_params[creator_team_with_key[1]] != "unchecked"
     creators
   end
 
@@ -159,24 +154,21 @@ module InvestigationsHelper
     end
   end
 
-  def creator_teams_with_keys
-    current_user.teams.map.with_index do |team, index|
-      # key, team, name
-      [
-        "created_by_team_#{index}".to_sym,
-        team,
-        current_user.teams.count > 1 ? team.name : "My team"
-      ]
-    end
+  def creator_team_with_key
+    [
+      "created_by_team_0".to_sym,
+      current_user.team,
+      "My team"
+    ]
   end
 
   def query_params
     set_default_status_filter
     set_default_type_filter
-    set_default_assignee_filter
+    set_default_owner_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :assigned_to_me, :assigned_to_someone_else, :assigned_to_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
-                  assignee_teams_with_keys.map { |key, _t, _n| key }, creator_teams_with_keys.map { |key, _t, _n| key })
+    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :case_owner_is_me, :case_owner_is_someone_else, :case_owner_is_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
+                  owner_team_with_key[0], creator_team_with_key[0])
   end
 
   def export_params
@@ -187,13 +179,15 @@ module InvestigationsHelper
     params[:status_open] = "checked" if params[:status_open].blank?
   end
 
-  def set_default_assignee_filter
-    params[:assigned_to_me] = "unchecked" if params[:assigned_to_me].blank?
-    params[:assigned_to_someone_else] = "unchecked" if params[:assigned_to_someone_else].blank?
+  def set_default_owner_filter
+    params[:case_owner_is_me] = "unchecked" if params[:case_owner_is_me].blank?
+    params[:case_owner_is_team_0] = "unchecked" if params[:case_owner_is_team_0].blank?
+    params[:case_owner_is_someone_else] = "unchecked" if params[:case_owner_is_someone_else].blank?
   end
 
   def set_default_creator_filter
     params[:created_by_me] = "unchecked" if params[:created_by_me].blank?
+    params[:created_by_team_0] = "unchecked" if params[:created_by_team_0].blank?
     params[:created_by_someone_else] = "unchecked" if params[:created_by_someone_else].blank?
   end
 
@@ -205,37 +199,34 @@ module InvestigationsHelper
 
   def build_breadcrumb_structure
     {
-        items: [
-            {
-                text: "Cases",
-                href: investigations_path(previous_search_params)
-            },
-            {
-                text: @investigation.pretty_description
-            }
-        ]
+      items: [
+        {
+          text: "Cases",
+          href: investigations_path(previous_search_params)
+        },
+        {
+          text: @investigation.pretty_description
+        }
+      ]
     }
   end
 
-  def assignee_teams_with_keys
-    current_user.teams.map.with_index do |team, index|
-      # key, team, name
-      [
-        "assigned_to_team_#{index}".to_sym,
-        team,
-        current_user.teams.count > 1 ? team.name : "My team"
-      ]
-    end
+  def owner_team_with_key
+    [
+      "case_owner_is_team_0".to_sym,
+      current_user.team,
+      "My team"
+    ]
   end
 
   def user_ids_from_team(team)
     [team.id] + team.users.map(&:id)
   end
 
-  def suggested_previous_assignees
-    all_past_assignees = @investigation.past_assignees + @investigation.past_teams
-    return [] if all_past_assignees.empty? || all_past_assignees == [current_user]
+  def suggested_previous_owners
+    all_past_owners = @investigation.past_owners + @investigation.past_teams
+    return [] if all_past_owners.empty? || all_past_owners == [current_user]
 
-    all_past_assignees || []
+    all_past_owners || []
   end
 end

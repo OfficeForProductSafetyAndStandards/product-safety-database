@@ -73,7 +73,7 @@ module Investigations::DisplayTextHelper
   end
 
   def get_highlight_content(result)
-    sanitized_content = sanitize(result, tags: %w(em))
+    sanitized_content = sanitize(result, tags: %w[em])
     sanitized_content.html_safe # rubocop:disable Rails/OutputSafety
   end
 
@@ -102,12 +102,16 @@ module Investigations::DisplayTextHelper
     true
   end
 
-  def investigation_assignee(investigation)
-    out = [investigation.assignable ? h(investigation.assignable.name.to_s) : "Unassigned".html_safe]
-    if investigation&.assignable&.organisation&.name != investigation&.assignable&.name
-      out << h(investigation.assignable.organisation.name)
-    end
-    safe_join(out, "<br>".html_safe)
+  def investigation_owner(investigation)
+    return "No case owner".html_safe if !investigation.owner
+
+    owner_names = [h(investigation.owner.name.to_s)]
+    owner_names << h(investigation.owner_team&.name)
+    # Team name can be the same as owner name
+    owner_names.uniq!
+    owner_names.compact!
+
+    safe_join(owner_names, "<br>".html_safe)
   end
 
   def business_summary_list(business)
@@ -119,7 +123,7 @@ module Investigations::DisplayTextHelper
       { key: { text: "Contact" }, value: { text: business.primary_contact&.summary } }
     ]
 
-    # TODO PSD-693 Add primary authorities to businesses
+    # TODO: PSD-693 Add primary authorities to businesses
     # { key: { text: 'Primary authority' }, value: { text: 'Suffolk Trading Standards' } }
 
     render "components/govuk_summary_list", rows: rows

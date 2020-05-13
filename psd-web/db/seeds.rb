@@ -314,7 +314,7 @@ if run_seeds
     description: "",
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
     name: "Lynx Shower speaker with USB charger",
-    category:     Rails.application.config.product_constants["product_category"].sample,
+    category: Rails.application.config.product_constants["product_category"].sample,
     product_type: "Shower speaker with USB charger",
     webpage: ""
   )
@@ -413,7 +413,7 @@ if run_seeds
 
   investigation.products << product
 
-  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_name("psd-seeds").try(:[], "organisations")) # rubocop:disable Rails/DynamicFindBy
+  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations")) # rubocop:disable Rails/DynamicFindBy
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
     # $ cf7 env REVIEW_APP_NAME
@@ -447,10 +447,6 @@ if run_seeds
     #   ]
     # }
 
-    Organisation.destroy_all
-    Team.destroy_all
-    User.destroy_all
-
     Team.accepts_nested_attributes_for :users
     User.accepts_nested_attributes_for :user_roles
 
@@ -460,15 +456,17 @@ if run_seeds
       organisation = Organisation.create! organisation_attributes
 
       teams_attributes.map do |team_attributes|
-        (team_attributes[:users_attributes] || []).map! { |user_attributes| user_attributes[:organisation] = organisation; user_attributes }
+        (team_attributes[:users_attributes] || []).map! do |user_attributes|
+          user_attributes[:organisation] = organisation
+          user_attributes
+        end
         organisation.teams.create! team_attributes
       end
     end
   else
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
-    enforcement  = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
-    processing   = Team.create!(name: "OPSS Processing", team_recipient_email: nil, "organisation": organisation)
-
+    enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+    operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
@@ -482,7 +480,7 @@ if run_seeds
       password_confirmation: "testpassword",
       organisation: organisation,
       mobile_number_verified: true,
-      teams: [enforcement],
+      team: enforcement,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
     user2 = User.create!(
@@ -492,7 +490,7 @@ if run_seeds
       password_confirmation: "testpassword",
       organisation: organisation,
       mobile_number_verified: true,
-      teams: [processing],
+      team: operational_support,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 

@@ -5,16 +5,16 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   include ActionView::Helpers::TextHelper
   subject(:decorated_investigation) { investigation.decorate }
 
-  let(:organisation) { create :organisation }
-  let(:user)         { create(:user, organisation: organisation).decorate }
-  let(:creator)      { create(:user, organisation: organisation) }
+  let(:organisation)  { create :organisation }
+  let(:user)          { create(:user, organisation: organisation).decorate }
+  let(:team)          { create(:team) }
+  let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:user_source)   { build(:user_source, user: creator) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, assignable: user, source: user_source) }
+  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, owner: user, source: user_source) }
 
   before { create(:complainant, investigation: investigation) }
-
 
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }
@@ -130,16 +130,16 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
 
     it "displays the User name" do
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.name}/)
+      expect(investigation_summary_list).to summarise("Created by", text: /#{creator.name}/)
     end
 
     it "displays the Team name" do
-      expect(investigation_summary_list).to summarise("Created by", text: /#{investigation.source.user.team_names}/)
+      expect(investigation_summary_list).to summarise("Created by", text: /#{team.name}/)
     end
 
     it "displays the Date created" do
-      expect(investigation_summary_list).
-        to summarise("Date created", text: investigation.created_at.to_s(:govuk))
+      expect(investigation_summary_list)
+        .to summarise("Date created", text: investigation.created_at.to_s(:govuk))
     end
 
     it "displays the Last updated" do
@@ -290,20 +290,20 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
-  describe "#assignable_display_name_for" do
-    let(:viewing_user) { build(:user) }
+  describe "#owner_display_name_for" do
+    let(:viewer) { build(:user) }
 
-    context "when the investigation is assigned" do
-      it "displays the assignee assignable name" do
-        expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user))
-          .to eq(user.assignee_short_name(viewing_user: viewing_user))
+    context "when the investigation has an owner" do
+      it "displays the owner name" do
+        expect(decorated_investigation.owner_display_name_for(viewer: viewer))
+          .to eq(user.owner_short_name(viewer: viewer))
       end
     end
 
-    context "when the investigation is not assigned" do
-      before { investigation.assignable = nil }
+    context "when the investigation doesn’t have an owner" do
+      before { investigation.owner = nil }
 
-      it { expect(decorated_investigation.assignable_display_name_for(viewing_user: viewing_user)).to eq("Unassigned") }
+      it { expect(decorated_investigation.owner_display_name_for(viewer: viewer)).to eq("No case owner") }
     end
   end
 end

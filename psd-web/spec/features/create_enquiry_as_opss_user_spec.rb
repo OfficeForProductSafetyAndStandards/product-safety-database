@@ -5,9 +5,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   let(:received_type) { "enquiry_received_type_email" }
   let(:contact_details) do
     {
-        contact_name: Faker::Name.name,
-        contact_email: Faker::Internet.safe_email,
-        contact_phone: Faker::PhoneNumber.phone_number,
+      contact_name: Faker::Name.name,
+      contact_email: Faker::Internet.safe_email,
+      contact_phone: Faker::PhoneNumber.phone_number,
     }
   end
   let(:enquiry_details) do
@@ -95,28 +95,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
         expect(page).to have_summary_error("Enter a received type \"Other\"")
       end
     end
-  end
-
-  def expect_to_be_on_about_enquiry_page
-    expect(page).to have_current_path("/enquiry/about_enquiry")
-    expect_page_to_have_h1("New enquiry")
-  end
-
-  def expect_to_be_on_complainant_page
-    expect(page).to have_current_path("/enquiry/complainant")
-    expect_page_to_have_h1("New enquiry")
-  end
-
-  def expect_to_be_on_complainant_details_page
-    expect(page).to have_current_path("/enquiry/complainant_details")
-    expect_page_to_have_h1("New enquiry")
-    expect(page).to have_css(".govuk-fieldset__legend--m", text: "What are their contact details?")
-  end
-
-  def expect_to_be_on_enquiry_details_page
-    expect(page).to have_current_path("/enquiry/enquiry_details")
-    expect_page_to_have_h1("New enquiry")
-    expect(page).to have_css(".govuk-fieldset__legend--m", text: "What is the enquiry?")
   end
 
   def expect_details_on_summary_page(contact_name:, contact_email:, contact_phone:)

@@ -30,16 +30,16 @@
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-    <% if policy(@investigation).assign? %>
-      <% assign_actions = {
+    <% if policy(@investigation).change_owner? %>
+      <% case_owner_actions = {
         items: [
-          href: new_investigation_assign_path(@investigation),
+          href: new_investigation_ownership_path(@investigation),
           text: "Change",
-          visuallyHiddenText: "assigned to"
+          visuallyHiddenText: "case owner"
         ]
       } %>
     <% else %>
-      <% assign_actions = {} %>
+      <% case_owner_actions = {} %>
     <% end %>
 
     <% team_list_html = capture do %>
@@ -61,9 +61,9 @@
       classes: "govuk-summary-list--no-border",
       rows: [
         {
-          key: { text: "Assigned to" },
-          value: { text: investigation_assignee(@investigation) },
-          actions: assign_actions
+          key: { text: "Case owner" },
+          value: { text: investigation_owner(@investigation) },
+          actions: case_owner_actions
         },
         {
           key: { text: "Teams added to case" },
@@ -71,7 +71,7 @@
           actions: {
             items: [
               href: investigation_collaborators_path(@investigation),
-              text: (policy(@investigation).add_collaborators? ? "Change" : "View"),
+              text: (policy(@investigation).manage_collaborators? ? "Change" : "View"),
               visuallyHiddenText: "teams added to the case"
             ]
           }

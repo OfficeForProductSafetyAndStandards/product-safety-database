@@ -1,0 +1,30 @@
+- page_heading = "Change case owner"
+= page_title page_heading
+- content_for :after_header do
+  = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+
+.govuk-grid-row
+  .govuk-grid-column-two-thirds-from-desktop
+    - heading = capture do
+      = render "minimal_investigation_heading", investigation: @investigation,
+              title: page_heading
+      - if @investigation.owner.present?
+        p
+          ' Current case owner:
+          strong = @investigation.owner.display_name
+      - else
+        p This case has no owner
+
+    - if policy(@investigation).change_owner?
+      = render "investigations/ownership/owner_form", investigation: @investigation do
+        = heading
+    - else
+      = heading
+      p
+        = "You do not have permission to change the case owner."
+        br
+        ' Contact
+        strong = @investigation.owner.display_name
+        '
+        | to change the case owner.
+      = link_to "Return to case", investigation_path(@investigation), class: "govuk-button"

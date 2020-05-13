@@ -8,7 +8,7 @@ class Investigations::ProjectController < ApplicationController
                 only: :update,
                 if: -> { step == :coronavirus }
 
-  #GET /xxx/step
+  # GET /xxx/step
   def show
     render_wizard
   end

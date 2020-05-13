@@ -4,17 +4,21 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   let(:user) {
     create(:user,
            :activated,
-           teams: [create(:team, name: "Portsmouth Trading Standards")],
+           team: create(:team, name: "Portsmouth Trading Standards"),
            name: "Bob Jones")
   }
 
   let(:investigation) {
     create(:investigation,
-           assignable: user)
+           owner: user)
   }
 
-  before do
+  let(:team) do
     create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk")
+  end
+
+  before do
+    team
   end
 
   scenario "Adding a team to a case (with validation errors)" do
@@ -27,7 +31,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Assignee" }
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner" }
     ])
 
     click_link "Add a team to the case"
@@ -61,7 +65,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Assignee" },
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner" },
       { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
     ])
 
@@ -71,7 +75,6 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(notification_email.personalization[:updater_name]).to eq("Bob Jones")
     expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones:\n\n^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
-
 
     click_link "Back"
 
@@ -88,36 +91,66 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(page).to have_text("Thanks for collaborating on this case with us.")
   end
 
-private
+  scenario "Remove a team from a case (with validation errors)" do
+    sign_in user
+    create(:collaborator, investigation: investigation, team: team)
 
-  def expect_to_be_on_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}")
-    expect(page).to have_selector("h1", text: "Overview")
-  end
+    visit "/cases/#{investigation.pretty_id}"
 
-  def expect_to_be_on_teams_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams")
-    expect(page).to have_selector("h1", text: "Teams added to the case")
-  end
+    click_link "Change teams added to the case"
 
-  def expect_to_be_on_add_team_to_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams/add")
-    expect(page).to have_selector("h1", text: "Add a team to the case")
-  end
+    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
-  def expect_to_be_on_case_activity_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/activity")
-    expect(page).to have_selector("h1", text: "Activity")
-  end
+    expect_teams_tables_to_contain([
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner" },
+      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
+    ])
 
-  def expect_teams_tables_to_contain(expected_teams)
-    teams_table = page.find(:table, "Teams added to the case")
+    click_on "Change"
 
-    within(teams_table) do
-      expected_teams.each do |expected_team|
-        row_heading = page.find("th", text: expected_team[:team_name])
-        expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
-      end
+    expect_to_be_on_edit_case_permissions_page(case_id: investigation.pretty_id)
+
+    click_button "Update team"
+
+    expect(page).to have_title("Error: #{team.name}")
+    expect(page).to have_selector("a", text: "This team already has this permission level. Select a different option or return to the case.")
+    expect(page).to have_selector("a", text: "Select whether you want to include a message")
+
+    within_fieldset "Permission level" do
+      choose "Remove #{team.name} from the case"
     end
+    within_fieldset "Do you want to include more information?" do
+      choose "Yes, add a message"
+    end
+
+    click_button "Update team"
+
+    expect(page).to have_title("Error: #{team.name}")
+    expect(page).to have_selector("a", text: "Enter a message to the team")
+
+    within_fieldset "Do you want to include more information?" do
+      fill_in "Message to the #{team.name}", with: "Thanks for collaborating on this case with us."
+    end
+
+    click_button "Update team"
+
+    notification_email = delivered_emails.last
+
+    expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
+    expect(notification_email.personalization_value(:case_id)).to eq(investigation.pretty_id)
+    expect(notification_email.personalization_value(:case_type)).to eq("allegation")
+    expect(notification_email.personalization_value(:case_title)).to eq(investigation.decorate.title)
+    expect(notification_email.personalization_value(:updater_name)).to eq(user.name)
+    expect(notification_email.personalization_value(:optional_message)).to eq("Message from #{user.name}:\n\n^ Thanks for collaborating on this case with us.")
+
+    expect_to_be_on_teams_page(case_id: investigation.pretty_id)
+
+    expect_teams_tables_to_contain([
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner" }
+    ])
+
+    expect_teams_tables_not_to_contain([
+      { team_name: "Southampton Trading Standards" }
+    ])
   end
 end

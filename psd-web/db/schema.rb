@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_113156) do
+ActiveRecord::Schema.define(version: 2020_05_11_184000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -165,8 +165,6 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
   end
 
   create_table "investigations", id: :serial, force: :cascade do |t|
-    t.uuid "assignable_id"
-    t.string "assignable_type"
     t.string "complainant_reference"
     t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
@@ -177,6 +175,8 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
+    t.uuid "owner_id"
+    t.string "owner_type"
     t.string "pretty_id"
     t.string "product_category"
     t.string "received_type"
@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
     t.string "type", default: "Investigation::Allegation"
     t.datetime "updated_at", null: false
     t.string "user_title"
-    t.index ["assignable_type", "assignable_id"], name: "index_investigations_on_assignable_type_and_assignable_id"
+    t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id"
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
@@ -251,15 +251,6 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
     t.index ["organisation_id"], name: "index_teams_on_organisation_id"
   end
 
-  create_table "teams_users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.uuid "team_id"
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["team_id"], name: "index_teams_users_on_team_id"
-    t.index ["user_id"], name: "index_teams_users_on_user_id"
-  end
-
   create_table "tests", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date"
@@ -320,6 +311,7 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
     t.datetime "second_factor_attempts_locked_at"
     t.string "secondary_authentication_operation"
     t.integer "sign_in_count", default: 0, null: false
+    t.uuid "team_id", null: false
     t.string "unlock_token"
     t.datetime "updated_at", null: false
     t.index ["account_activated"], name: "index_users_on_account_activated"
@@ -348,4 +340,5 @@ ActiveRecord::Schema.define(version: 2020_05_01_113156) do
   add_foreign_key "locations", "businesses"
   add_foreign_key "tests", "investigations"
   add_foreign_key "tests", "products"
+  add_foreign_key "users", "teams"
 end

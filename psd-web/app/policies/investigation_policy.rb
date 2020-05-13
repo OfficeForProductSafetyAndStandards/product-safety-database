@@ -15,8 +15,8 @@ class InvestigationPolicy < ApplicationPolicy
     visible_to(user: @user)
   end
 
-  def assign?(user: @user)
-    can_be_assigned_by(user: user)
+  def change_owner?(user: @user)
+    can_change_owner(user: user)
   end
 
   def visibility?(user: @user)
@@ -34,17 +34,17 @@ class InvestigationPolicy < ApplicationPolicy
   def visible_to(user:, private: @record.is_private)
     return true unless private
     return true if user.is_opss?
-    return true if @record.assignable.present? && (@record.assignable&.organisation == user.organisation)
+    return true if @record.owner.present? && (@record.owner&.organisation == user.organisation)
     return true if @record.source&.user_has_gdpr_access?(user: user)
 
-    # Have any of the user’s teams been added to the case as a collaborator?
-    return true if (@record.teams & user.teams).any?
+    # Has the user’s team been added to the case as a collaborator?
+    return true if @record.teams.include?(user.team)
 
     false
   end
 
-  def can_be_assigned_by(user: @user)
-    @record.assignable.blank? || @record.assignable.in_same_team_as?(user) || @record.assignable == user
+  def can_change_owner(user: @user)
+    @record.owner.blank? || @record.owner.in_same_team_as?(user) || @record.owner == user
   end
 
   def user_allowed_to_raise_alert?(user: @user)
@@ -55,9 +55,9 @@ class InvestigationPolicy < ApplicationPolicy
     !@record.is_private
   end
 
-  def add_collaborators?
-    return false if @record.assignable.nil?
+  def manage_collaborators?
+    return false if @record.owner.nil?
 
-    @record.assignable.in_same_team_as?(user)
+    @record.owner.in_same_team_as?(user)
   end
 end

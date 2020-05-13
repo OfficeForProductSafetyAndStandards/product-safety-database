@@ -25,6 +25,12 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).not_to have_link("Cases")
   end
 
+  def expect_user_to_have_received_sms_code(code)
+    expect(notify_stub).to have_received(:send_sms).with(
+      hash_including(phone_number: user.mobile_number, personalisation: { code: code })
+    )
+  end
+
   scenario "user signs in with correct two factor authentication code" do
     visit "/sign-in"
     fill_in_credentials
@@ -64,6 +70,33 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     expect(page).to have_css("h1", text: "Check your phone")
     expect(page).to have_css("h2#error-summary-title", text: "There is a problem")
     expect(page).to have_css("#otp_code-error", text: "Error: Incorrect security code")
+  end
+
+  scenario "user signs in with correct secondary authentication code after requesting a second code" do
+    allow(SecureRandom).to receive(:random_number).and_return(12345, 54321)
+
+    visit "/sign-in"
+    fill_in_credentials
+
+    expect_user_to_have_received_sms_code("12345")
+
+    expect_to_be_on_secondary_authentication_page
+
+    click_link "Not received a text message?"
+
+    expect_to_be_on_resend_secondary_authentication_page
+
+    click_button "Resend security code"
+
+    expect_user_to_have_received_sms_code("54321")
+
+    expect_to_be_on_secondary_authentication_page
+
+    fill_in "Enter security code", with: otp_code
+    click_button "Continue"
+
+    expect(page).to have_css("h2", text: "Your cases")
+    expect(page).to have_link("Sign out", href: destroy_user_session_path)
   end
 
   context "when using wrong credentials over and over again" do
@@ -189,7 +222,6 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
     fill_in "Email address", with: "test.email"
     fill_in "Password", with: "password "
     click_on "Continue"
-
 
     expect(page).to have_css(".govuk-error-summary__list", text: "Enter your email address in the correct format, like name@example.com")
     expect(page).to have_css(".govuk-error-message", text: "Enter your email address in the correct format, like name@example.com")

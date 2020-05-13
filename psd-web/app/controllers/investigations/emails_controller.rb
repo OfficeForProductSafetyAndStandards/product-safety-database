@@ -14,8 +14,8 @@ private
 
   def common_file_metadata
     {
-        title: correspondence_params["overview"],
-        has_consumer_info: correspondence_params["has_consumer_info"]
+      title: correspondence_params["overview"],
+      has_consumer_info: correspondence_params["has_consumer_info"]
     }
   end
 

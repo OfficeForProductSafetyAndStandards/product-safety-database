@@ -3,7 +3,7 @@ FactoryBot.define do
     user_title { "investigation title" }
     complainant_reference { "complainant reference" }
     date_received { 1.day.ago }
-    received_type { %w(email phone other).sample }
+    received_type { %w[email phone other].sample }
     is_closed { false }
     coronavirus_related { false }
     reported_reason       {}
@@ -11,8 +11,7 @@ FactoryBot.define do
     hazard_description    {}
     non_compliant_reason  {}
 
-
-    association :assignable, factory: :user
+    association :owner, factory: :user
 
     factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }

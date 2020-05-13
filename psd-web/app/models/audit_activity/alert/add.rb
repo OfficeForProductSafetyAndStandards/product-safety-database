@@ -3,7 +3,7 @@ class AuditActivity::Alert::Add < AuditActivity::Base
   belongs_to :investigation
 
   def self.from(alert)
-    self.create(
+    create(
       title: "Product safety alert sent",
       body: build_body(alert),
       source: UserSource.new(user: User.current),
@@ -13,12 +13,12 @@ class AuditActivity::Alert::Add < AuditActivity::Base
 
   def self.build_body(alert)
     [
-        "From: **Office for Product Safety and Standards**",
-        "To: **All users** (#{number_with_delimiter(User.count, delimiter: ',')} people)",
-        "Subject: **#{alert.summary}**",
-        "Date sent: **#{alert.created_at.strftime('%d/%m/%Y')}**",
-        "",
-        alert.description
+      "From: **Office for Product Safety and Standards**",
+      "To: **All users** (#{number_with_delimiter(User.count, delimiter: ',')} people)",
+      "Subject: **#{alert.summary}**",
+      "Date sent: **#{alert.created_at.strftime('%d/%m/%Y')}**",
+      "",
+      alert.description
     ].join("<br>")
   end
 end

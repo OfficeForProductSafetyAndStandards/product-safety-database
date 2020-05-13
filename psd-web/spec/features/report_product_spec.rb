@@ -103,7 +103,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_coronavirus_page("/ts_investigation/coronavirus")
         fill_in_coronavirus_page(coronavirus)
 
-        expect_to_be_on_product_page
+        expect_to_be_on_what_product_are_you_reporting_page
         fill_in_product_page(with: product_details)
 
         expect_to_be_on_why_reporting_page
@@ -163,11 +163,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         fill_in_reference_number_page(reference_number)
 
         expect_to_be_on_case_created_page
-        expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard has now been assigned to you")
+        expect(page).to have_text("You are now the case owner for #{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase}")
 
         click_link "View case"
 
-        expect_to_be_on_case_details_page
+        expect_to_be_on_case_page
         expect_case_details_page_to_show_entered_information
         expect_product_reported_unsafe_and_non_compliant
 
@@ -224,10 +224,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         fill_in_coronavirus_page(coronavirus)
 
-        expect_to_be_on_product_page
+        expect_to_be_on_what_product_are_you_reporting_page
         click_button "Continue"
 
-        expect_to_be_on_product_page
+        expect_to_be_on_what_product_are_you_reporting_page
         expect(page).to have_error_summary "Name cannot be blank", "Product type cannot be blank", "Category cannot be blank"
 
         fill_in_product_page(with: product_details)
@@ -279,11 +279,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         click_button "Create case"
 
         expect_to_be_on_case_created_page
-        expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} has now been assigned to you")
+        expect(page).to have_text("You are now the case owner for #{product_details[:name]}, #{product_details[:type]}")
 
         click_link "View case"
 
-        expect_to_be_on_case_details_page
+        expect_to_be_on_case_page
         expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]}")
         expect(page).to have_text("Product reported because it is non-compliant.")
         expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Coronavirus related case")
@@ -300,74 +300,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_case_activity_page_to_show_product_added
       end
     end
-  end
-
-  def expect_to_be_on_product_page
-    expect(page).to have_current_path("/ts_investigation/product")
-    expect(page).to have_selector("h1", text: "What product are you reporting?")
-  end
-
-  def expect_to_be_on_why_reporting_page
-    expect(page).to have_current_path("/ts_investigation/why_reporting")
-    expect(page).to have_selector("h1", text: "Why are you reporting this product?")
-  end
-
-  def expect_to_be_on_supply_chain_page
-    expect(page).to have_current_path("/ts_investigation/which_businesses")
-    expect(page).to have_selector("h1", text: "Supply chain information")
-  end
-
-  def expect_to_be_on_business_details_page(title)
-    expect(page).to have_current_path("/ts_investigation/business")
-    expect(page).to have_selector("h1", text: "#{title} details")
-  end
-
-  def expect_to_be_on_corrective_action_taken_page
-    expect(page).to have_current_path("/ts_investigation/has_corrective_action")
-    expect(page).to have_selector("h1", text: "Has any corrective action been agreed or taken?")
-  end
-
-  def expect_to_be_on_record_corrective_action_page
-    expect(page).to have_current_path("/ts_investigation/corrective_action")
-    expect(page).to have_selector("h1", text: "Record corrective action")
-  end
-
-  def expect_to_be_on_other_information_page
-    expect(page).to have_current_path("/ts_investigation/other_information")
-    expect(page).to have_selector("h1", text: "Other information and files")
-  end
-
-  def expect_to_be_on_test_result_details_page
-    expect(page).to have_current_path("/ts_investigation/test_results")
-    expect(page).to have_selector("h1", text: "Test result details")
-  end
-
-  def expect_to_be_on_risk_assessment_details_page
-    expect(page).to have_current_path("/ts_investigation/risk_assessments")
-    expect(page).to have_selector("h1", text: "Risk assessment details")
-  end
-
-  def expect_to_be_on_reference_number_page
-    expect(page).to have_current_path("/ts_investigation/reference_number")
-    expect(page).to have_selector("h1", text: "Add your own reference number")
-  end
-
-  def expect_to_be_on_case_created_page
-    expect(page).to have_current_path(/\/cases\/([\d-]+)\/created/)
-    expect(page).to have_selector("h1", text: "Case created")
-    expect(page).to have_text(/Case ID: ([\d-]+)/)
-  end
-
-  def expect_to_be_on_case_details_page
-    expect(page).to have_selector("h1", text: "Overview")
-  end
-
-  def expect_to_be_on_case_products_page
-    expect(page).to have_selector("h1", text: "Products")
-  end
-
-  def expect_to_be_on_case_activity_page
-    expect(page).to have_selector("h1", text: "Activity")
   end
 
   def expect_case_details_page_to_show_entered_information
@@ -413,14 +345,14 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_allegation_logged
     item = page.find("h3", text: "Allegation logged: #{product_details[:name]}, #{product_details[:type]}").find(:xpath, "..")
-    expect(item).to have_text("Assigned to #{user.display_name}")
+    expect(item).to have_text("Case owner: #{user.name}")
     expect(item).to have_text("Case is related to the coronavirus outbreak") if coronavirus
   end
 
   def expect_case_activity_page_to_show_product_added
     item = page.find("p", text: "Product added").find(:xpath, "..")
     expect(item).to have_text(product_details[:name])
-    expect(item).to have_text("Product added by #{user.display_name}")
+    expect(item).to have_text("Product added by #{user.name}")
     expect(item).to have_link("View product details")
   end
 

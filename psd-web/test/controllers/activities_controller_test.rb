@@ -13,7 +13,6 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     allow(NotifyMailer).to receive(:investigation_created).and_call_original
   end
 
-
   test "should create activity" do
     assert_difference("Activity.count") do
       post investigation_activity_comment_path(@activity.investigation), params: {
@@ -36,7 +35,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "adding a comment should trigger one round of notifications" do
-    @investigation.update(assignable: users(:southampton_bob))
+    @investigation.update(owner: users(:southampton_bob))
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob)])
     post investigation_activity_comment_path(@investigation), params: {
       comment_activity: {
@@ -121,8 +120,8 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
   test "Alert trading standards should go to new alert page" do
     get new_investigation_activity_path(@investigation), params: {
-        commit: "Continue",
-        activity_type: "alert"
+      commit: "Continue",
+      activity_type: "alert"
     }
 
     assert_redirected_to new_investigation_alert_path(@investigation)

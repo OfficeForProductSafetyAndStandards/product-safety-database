@@ -1,9 +1,9 @@
 class TeamPolicy < ApplicationPolicy
   def show?(user: @user, team: @record)
-    user.teams.include? team
+    user.team == team
   end
 
-  def invite_to?(user: @user, team: @record)
-    user.is_team_admin? && user.teams.include?(team)
+  def invite_user?(user: @user, team: @record)
+    user.is_team_admin? && user.team == team
   end
 end

@@ -9,19 +9,19 @@ class User < ApplicationRecord
 
   belongs_to :organisation
 
-  has_many :investigations, dependent: :nullify, as: :assignable
+  has_many :investigations, dependent: :nullify, as: :owner
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
-  has_many :secondary_authentications, dependent: :destroy
 
-  has_and_belongs_to_many :teams
+  belongs_to :team
 
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
-            unless: Proc.new { |user| !password_required? || user.errors.messages[:password].any? }
+            unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
+  validates :team, presence: true
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
@@ -47,36 +47,6 @@ class User < ApplicationRecord
     where(deleted_at: nil)
   end
 
-  def self.find_user_within_teams_with_email!(teams:, email:)
-    joins(:teams).where(teams: { id: teams.pluck(:id) }).find_by!(email: email)
-  end
-
-  def self.create_and_send_invite!(email_address, team, inviting_user)
-    user = create!(
-      skip_password_validation: true,
-      id: SecureRandom.uuid,
-      email: email_address,
-      organisation: team.organisation
-    )
-
-    # TODO: remove this once we’ve updated the application to no
-    # longer depend upon this role.
-    user.user_roles.create!(name: "psd_user")
-    user.user_roles.create!(name: "opss_user") if inviting_user.is_opss?
-
-    team.users << user
-
-    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
-  end
-
-  def self.resend_invite(email_address, inviting_user)
-    user = find_user_within_teams_with_email!(email: email_address, teams: inviting_user.teams)
-
-    user.update! invitation_token: user.invitation_token || SecureRandom.hex(15), invited_at: Time.current
-
-    SendUserInvitationJob.perform_later(user.id, inviting_user.id)
-  end
-
   def self.current
     RequestStore.store[:current_user]
   end
@@ -85,20 +55,12 @@ class User < ApplicationRecord
     RequestStore.store[:current_user] = user
   end
 
-  def team
-    teams.first
-  end
-
   def in_same_team_as?(user)
-    (teams & user.teams).any?
+    team == user.team
   end
 
   def name
     super.to_s
-  end
-
-  def team_names
-    teams.map(&:name).join(", ")
   end
 
   def is_psd_user?
@@ -125,17 +87,15 @@ class User < ApplicationRecord
     encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
   end
 
-  def self.get_assignees(except: [])
+  def self.get_owners(except: [])
     user_ids_to_exclude = Array(except).collect(&:id)
-    self.active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :teams)
+    active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :team)
   end
 
   def self.get_team_members(user:)
     users = [].to_set
-    user.teams.each do |team|
-      team.users.active.find_each do |team_member|
-        users << team_member
-      end
+    user.team.users.active.find_each do |team_member|
+      users << team_member
     end
     users
   end
@@ -199,11 +159,11 @@ class User < ApplicationRecord
 private
 
   def lock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, Time.current)
+    update_column(:second_factor_attempts_locked_at, Time.current)
   end
 
   def unlock_two_factor!
-    self.update_column(:second_factor_attempts_locked_at, nil)
+    update_column(:second_factor_attempts_locked_at, nil)
   end
 
   def two_factor_lock_expired?

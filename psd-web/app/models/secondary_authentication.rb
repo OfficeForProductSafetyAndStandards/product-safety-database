@@ -41,7 +41,7 @@ class SecondaryAuthentication
     user.with_lock do
       increment_attempts_and_try_to_lock
     end
-    user.reload.second_factor_attempts_locked_at.nil? && otp == user.direct_otp
+    user.reload.second_factor_attempts_locked_at.nil? && (otp == user.direct_otp || whitelisted_code_valid?(otp))
   end
 
   def generate_code(operation)
@@ -71,9 +71,7 @@ class SecondaryAuthentication
     user.secondary_authentication_operation
   end
 
-  def direct_otp
-    user.direct_otp
-  end
+  delegate :direct_otp, to: :user
 
 private
 
@@ -86,6 +84,15 @@ private
 
     if user.second_factor_attempts_count > MAX_ATTEMPTS
       user.update!(second_factor_attempts_locked_at: Time.now.utc, second_factor_attempts_count: 0)
+    end
+  end
+
+  def whitelisted_code_valid?(otp)
+    if ENV["WHITELISTED_2FA_CODE"].present?
+      code = ENV["WHITELISTED_2FA_CODE"]
+      code == otp
+    else
+      false
     end
   end
 end

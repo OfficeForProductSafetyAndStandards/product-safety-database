@@ -53,12 +53,7 @@ class ApplicationController < ActionController::Base
     items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators/)
     items.push text: "Businesses", href: businesses_path, active: params[:controller].start_with?("businesses")
     items.push text: "Products", href: products_path, active: params[:controller].start_with?("products")
-    # In principle all our users belong to a team, but this saves crashes in case of a misconfiguration
-    if current_user.teams.present?
-      text = current_user.teams.count > 1 ? "Your teams" : "Your team"
-      path = current_user.teams.count > 1 ? your_teams_path : team_path(current_user.teams.first)
-      items.push text: text, href: path, active: params[:controller].start_with?("teams"), right: true
-    end
+    items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
   end
 
@@ -68,10 +63,10 @@ class ApplicationController < ActionController::Base
     if session[:previous_search_params].present?
       s = session[:previous_search_params]
       {
-        assigned_to_me: s[:assigned_to_me],
-        assigned_to_someone_else: s[:assigned_to_someone_else],
-        assigned_to_someone_else_id: s[:assigned_to_someone_else_id],
-        assigned_to_team_0: s[:assigned_to_team_0],
+        case_owner_is_me: s[:case_owner_is_me],
+        case_owner_is_someone_else: s[:case_owner_is_someone_else],
+        case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id],
+        case_owner_is_team_0: s[:case_owner_is_team_0],
         created_by_me: s[:created_by_me],
         created_by_someone_else: s[:created_by_someone_else],
         created_by_someone_else_id: s[:created_by_someone_else_id],

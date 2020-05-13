@@ -5,7 +5,6 @@ RSpec.describe ComplainantDecorator do
 
   let(:complainant) { build(:complainant, investigation: nil) }
 
-
   describe "#contact_details" do
     context "with contact details" do
       it "displays the complainant name" do

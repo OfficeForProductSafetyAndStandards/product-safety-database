@@ -105,34 +105,6 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     end
   end
 
-  def expect_to_be_on_secondary_authentication_page
-    expect(page).to have_current_path(/\/two-factor/)
-
-    expect(page).to have_h1("Check your phone")
-  end
-
-  def expect_to_be_on_complete_registration_page
-    expect(page).to have_current_path(/\/complete-registration?.+$/)
-
-    expect(page).to have_h1("Create an account")
-
-    expect(page).to have_field("username", type: "email", with: invited_user.email, disabled: true)
-  end
-
-  def expect_to_be_on_signed_in_as_another_user_page
-    expect(page).to have_current_path(/\/complete-registration?.+$/)
-
-    expect(page).to have_h1("You are already signed in to the Product safety database")
-  end
-
-  def expect_to_be_on_declaration_page
-    expect(page).to have_current_path(/^\/declaration$/)
-  end
-
-  def expect_to_be_on_the_homepage
-    expect(page).to have_current_path("/")
-  end
-
   def expect_to_be_signed_in
     expect(page).to have_content("Sign out")
   end

@@ -6,10 +6,10 @@ class Product < ApplicationRecord
   include SanitizationHelper
 
   before_validation { trim_line_endings(:description) }
-  validates :name, presence: true
-  validates :product_type, presence: true
   validates :category, presence: true
-  validates_length_of :description, maximum: 10000
+  validates :product_type, presence: true
+  validates :name, presence: true
+  validates :description, length: { maximum: 10000 }
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 

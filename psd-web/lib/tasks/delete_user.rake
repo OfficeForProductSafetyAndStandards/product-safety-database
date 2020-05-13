@@ -12,10 +12,10 @@ namespace :user do
         puts "User #{id.presence || email} successfully marked as deleted."
         puts "User investigations assigned to #{result.team.name}"
       else
-        raise RuntimeError, result.error
+        raise result.error
       end
     rescue ActiveRecord::RecordNotFound
-      raise RuntimeError, "Error: User #{id.presence || email} not found"
+      raise "Error: User #{id.presence || email} not found"
     end
     # rubocop:enable Rake/MethodDefinitionInTask
 
@@ -23,7 +23,7 @@ namespace :user do
     user_email = ENV.fetch("EMAIL", nil)
 
     if !user_id && !user_email
-      raise RuntimeError, "Error: Need to provide user ID or EMAIL with the call.\nEg: EMAIL=example@example.com rake user:delete"
+      raise "Error: Need to provide user ID or EMAIL with the call.\nEg: EMAIL=example@example.com rake user:delete"
     else
       delete_user(user_id, user_email)
     end

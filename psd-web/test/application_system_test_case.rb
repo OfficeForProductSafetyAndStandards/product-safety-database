@@ -29,9 +29,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   teardown do
-    Organisation.delete_all
-    Team.delete_all
     User.delete_all
+    Team.delete_all
+    Organisation.delete_all
     User.current = nil
   end
 end

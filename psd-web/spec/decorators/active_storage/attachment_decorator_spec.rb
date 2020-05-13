@@ -7,7 +7,6 @@ RSpec.describe ActiveStorage::AttachmentDecorator do
 
   let(:attachment) { ActiveStorage::Attachment.new.tap(&:build_blob) }
 
-
   describe "#description" do
     let(:description) { "something\nwith\nnew lines" }
 

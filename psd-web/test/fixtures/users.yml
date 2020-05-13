@@ -8,6 +8,7 @@ southampton:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: southampton
 
 southampton_steve:
   email: southampton.steve@example.com
@@ -19,6 +20,7 @@ southampton_steve:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: southampton
 
 southampton_bob:
   email: southampton.bob@example.com
@@ -30,6 +32,7 @@ southampton_bob:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: southampton
 
 southampton_frankie:
   email: southampton.frankie@example.com
@@ -41,6 +44,7 @@ southampton_frankie:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: southampton
 
 opss:
   email: opss@example.com
@@ -52,6 +56,7 @@ opss:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: opss_enforcement
 
 opss_yann:
   email: opss.yann@example.com
@@ -63,6 +68,7 @@ opss_yann:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: opss_enforcement
 
 luton:
   email: luton@example.com
@@ -74,3 +80,4 @@ luton:
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
+  team: luton

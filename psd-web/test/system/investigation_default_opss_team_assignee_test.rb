@@ -8,24 +8,23 @@ class InvestigationAssigneeTest < ApplicationSystemTestCase
     stub_antivirus_api
     @user = User.current = sign_in(users(:southampton))
     @user = @user.decorate
-    @user.teams << teams(:southampton)
-    @team = @user.teams.first
-    visit new_investigation_assign_path(load_case(:one))
+    @team = @user.team
+    visit new_investigation_ownership_path(load_case(:one))
   end
 
   teardown { User.current = nil }
 
-  test "non-OPSS assigns to OPSS, on re-assign sees the OPSS assign and no permission to reassign again" do
+  test "non-OPSS changes case owner to OPSS, and then has no permission to change case ownership again" do
     assert_text @user.display_name
     choose "Other team", visible: false
     fill_autocomplete "investigation_select_other_team", with: "OPSS Enforcement"
     click_on "Continue"
     click_on "Confirm change"
 
-    assert_text "Assigned to #{teams(:opss_enforcement).name}"
+    assert_text "Case owner #{teams(:opss_enforcement).name}"
 
-    visit new_investigation_assign_path(load_case(:one))
-    assert_text "Currently assigned to: Office for Product Safety and Standards"
-    assert_text "You do not have permission to assign this allegation"
+    visit new_investigation_ownership_path(load_case(:one))
+    assert_text "Current case owner: OPSS Enforcement"
+    assert_text "You do not have permission to change the case owner"
   end
 end

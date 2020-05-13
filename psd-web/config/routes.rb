@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   get "two-factor", to: "secondary_authentications#new", as: :new_secondary_authentication
   post "two-factor", to: "secondary_authentications#create", as: :secondary_authentication
 
+  get "text-not-received", to: "secondary_authentications/resend_code#new", as: :new_resend_secondary_authentication_code
+  post "text-not-received", to: "secondary_authentications/resend_code#create", as: :resend_secondary_authentication_code
+
   resource :account, only: [:show], controller: :account do
     resource :name, controller: :account_name, only: %i[show update]
   end
@@ -93,7 +96,7 @@ Rails.application.routes.draw do
   end
 
   resources :investigations, path: "cases", only: %i[index show new], param: :pretty_id,
-            concerns: %i[document_attachable] do
+                             concerns: %i[document_attachable] do
     member do
       get :status
       patch :status
@@ -104,7 +107,7 @@ Rails.application.routes.draw do
       get :created
     end
 
-    resources :collaborators, only: %i[index new create], path: "teams", path_names: { new: "add" }
+    resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :attachments, controller: "investigations/attachments", only: %i[index]
@@ -127,7 +130,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :assign, controller: "investigations/assign", only: %i[show new create update]
+    resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
     resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[show new create update]
     resources :emails, controller: "investigations/emails", only: %i[show new create update]
     resources :phone_calls, controller: "investigations/phone_calls", only: %i[show new create update]
@@ -156,20 +159,11 @@ Rails.application.routes.draw do
 
   resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
 
-  get "your-teams" => "teams#index"
   resources :teams, only: %i[index show] do
-    member do
-      get :invite_to, path: "invite"
-      put :invite_to, path: "invite"
-      get :resend_invitation
-    end
-  end
-
-  resources :teams, only: %i[index show] do
-    member do
-      get :invite_to, path: "invite"
-      put :invite_to, path: "invite"
-      get :resend_invitation
+    resources :invitations, only: %i[new create] do
+      member do
+        put :resend
+      end
     end
   end
 
@@ -178,8 +172,6 @@ Rails.application.routes.draw do
     get :privacy_notice, path: "privacy-notice"
     get :about
   end
-
-
 
   match "/404", to: "errors#not_found", via: :all
   match "/403", to: "errors#forbidden", via: :all, as: :forbidden

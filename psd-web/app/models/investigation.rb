@@ -6,41 +6,41 @@ class Investigation < ApplicationRecord
 
   attr_accessor :status_rationale
   attr_accessor :visibility_rationale
-  attr_accessor :assignee_rationale
+  attr_accessor :owner_rationale
 
   enum reported_reason: {
-         unsafe: "unsafe",
-         non_compliant: "non_compliant",
-         unsafe_and_non_compliant: "unsafe_and_non_compliant",
-         safe_and_compliant: "safe_and_compliant"
-       }
+    unsafe: "unsafe",
+    non_compliant: "non_compliant",
+    unsafe_and_non_compliant: "unsafe_and_non_compliant",
+    safe_and_compliant: "safe_and_compliant"
+  }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
   validates :description, presence: true, on: :update
-  validates :assignable_id, presence: { message: "Select assignee" }, on: :update
+  validates :owner_id, presence: { message: "Select case owner" }, on: :update
 
-  validates_length_of :user_title, maximum: 100
-  validates_length_of :description, maximum: 10000
-  validates_length_of :non_compliant_reason, maximum: 10000
-  validates_length_of :hazard_description, maximum: 10000
+  validates :user_title, length: { maximum: 100 }
+  validates :description, length: { maximum: 10000 }
+  validates :non_compliant_reason, length: { maximum: 10000 }
+  validates :hazard_description, length: { maximum: 10000 }
 
-  after_update :create_audit_activity_for_assignee, :create_audit_activity_for_status,
+  after_update :create_audit_activity_for_owner, :create_audit_activity_for_status,
                :create_audit_activity_for_visibility, :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
 
-  belongs_to :assignable, polymorphic: true, optional: true
+  belongs_to :owner, polymorphic: true, optional: true
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products,
-    after_add: :create_audit_activity_for_product,
-    after_remove: :create_audit_activity_for_removing_product
+                      after_add: :create_audit_activity_for_product,
+                      after_remove: :create_audit_activity_for_removing_product
 
   has_many :investigation_businesses, dependent: :destroy
   has_many :businesses, through: :investigation_businesses,
-    after_add: :create_audit_activity_for_business,
-    after_remove: :create_audit_activity_for_removing_business
+                        after_add: :create_audit_activity_for_business,
+                        after_remove: :create_audit_activity_for_removing_business
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -58,15 +58,15 @@ class Investigation < ApplicationRecord
   has_many :teams, through: :collaborators
 
   # TODO: Refactor to remove this callback hell
-  before_create :set_source_to_current_user, :assign_to_current_user, :add_pretty_id
+  before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
-  def assignee_team
-    assignable&.team
+  def owner_team
+    owner&.team
   end
 
   def teams_with_access
-    ([assignee_team] + teams.order(:name)).compact
+    ([owner_team] + teams.order(:name)).compact
   end
 
   def status
@@ -77,40 +77,41 @@ class Investigation < ApplicationRecord
     is_private ? ApplicationController.helpers.visibility_options[:private] : ApplicationController.helpers.visibility_options[:public]
   end
 
-  def important_assignable_people
+  def important_owner_people
     people = [].to_set
-    people << assignable if assignable.is_a? User
+    people << owner if owner.is_a? User
     people << User.current
     people
   end
 
-  def past_assignees
-    activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
-    user_id_list = activities.map(&:assignable_id)
+  def past_owners
+    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
+    user_id_list = activities.map(&:owner_id)
     User.where(id: user_id_list)
   end
 
-  def important_assignable_teams
-    teams = User.current.teams.to_set
+  def important_owner_teams
+    teams = [User.current.team].to_set
+
     Team.get_visible_teams(User.current).each do |team|
       teams << team
     end
-    teams << assignable if assignable.is_a? Team
+    teams << owner if owner.is_a? Team
     teams
   end
 
   def past_teams
-    activities = AuditActivity::Investigation::UpdateAssignee.where(investigation_id: id)
-    team_id_list = activities.map(&:assignable_id)
+    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
+    team_id_list = activities.map(&:owner_id)
     Team.where(id: team_id_list)
   end
 
   def enquiry?
-    self.is_a?(Investigation::Enquiry)
+    is_a?(Investigation::Enquiry)
   end
 
   def allegation?
-    self.is_a?(Investigation::Allegation)
+    is_a?(Investigation::Allegation)
   end
 
   # To be implemented by children
@@ -144,7 +145,7 @@ class Investigation < ApplicationRecord
   def child_should_be_displayed?
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    assignable.in_same_team_as?(User.current)
+    owner.in_same_team_as?(User.current)
   end
 
 private
@@ -165,11 +166,11 @@ private
     end
   end
 
-  def create_audit_activity_for_assignee
+  def create_audit_activity_for_owner
     # TODO: User.current check is here to avoid triggering activity and emails from migrations
     # Can be safely removed once the migration PopulateAssigneeAndDescription has run
-    if ((saved_changes.key? :assignable_id) || (saved_changes.key? :assignable_type)) && User.current
-      AuditActivity::Investigation::UpdateAssignee.from(self)
+    if ((saved_changes.key? :owner_id) || (saved_changes.key? :owner_type)) && User.current
+      AuditActivity::Investigation::UpdateOwner.from(self)
     end
   end
 
@@ -202,11 +203,11 @@ private
   end
 
   def creator_id
-    self.source&.user_id
+    source&.user_id
   end
 
-  def assign_to_current_user
-    self.assignable = User.current if assignable.blank? && User.current
+  def set_owner_as_current_user
+    self.owner = User.current if owner.blank? && User.current
   end
 
   # TODO: Refactor to remove dependency on User.current
@@ -216,7 +217,7 @@ private
         pretty_id,
         User.current.name,
         User.current.email,
-        self.decorate.title,
+        decorate.title,
         case_type
       ).deliver_later
     end
