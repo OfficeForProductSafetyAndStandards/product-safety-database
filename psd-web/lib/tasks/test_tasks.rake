@@ -21,7 +21,7 @@ namespace :test do
         .at(slice - 1)
     end
     # rubocop:enable Rake/MethodDefinitionInTask
-    $: << "test"
+    $LOAD_PATH << "test"
     slice = ENV.fetch("TEST_SLICE", 1).to_i
     total_slices = ENV.fetch("TEST_TOTAL_SLICES", 1).to_i
 
