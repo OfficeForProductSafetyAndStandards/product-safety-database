@@ -51,7 +51,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       click_button "Continue"
       click_link "Skip introduction"
       click_link("Your account", match: :first)
-  
+
       expect(page).to have_h1("Your account")
       expect(page).to have_css("dd", text: "70123456789")
     end
