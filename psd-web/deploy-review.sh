@@ -17,13 +17,8 @@ then
   DB_NAME=psd-review-database
 fi
 
-# Unbind any databases which may already be bound to this app (if it already exists) and which are no longer required
-for existing_db_name in `cf7 services | grep $APP_NAME | grep postgres | awk '{print $1}'`; do
-  if [ $existing_db_name != $DB_NAME ]
-  then
-    cf7 unbind-service $APP_NAME $existing_db_name
-  fi
-done
+# Delete the old app. previously we replaced it but this caused issues with race conditions and re-binding databases when migrations were added
+cf7 delete -f -r $APP_NAME
 
 cf7 create-service postgres small-10 $DB_NAME -c '{"enable_extensions": ["pgcrypto"]}'
 
@@ -48,14 +43,6 @@ fi
 #
 # See https://docs.cloudfoundry.org/devguide/deploy-apps/large-app-deploy.html
 export CF_STARTUP_TIMEOUT=10
-
-
-# Cancel any existing deployments in progress
-if cf7 cancel-deployment $APP_NAME
-then
-  # Wait enough time for cancellation to finish
-  sleep 6
-fi
 
 # Deploy the app
 cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --strategy rolling

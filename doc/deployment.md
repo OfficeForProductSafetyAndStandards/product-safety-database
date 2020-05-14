@@ -11,7 +11,7 @@ The `master` branch represents our staging and production environments. Anything
 
 ### Review applications
 
-In order to make the PR review process fast and independent, it is possible to create a short lived environment for a given change. In order to create your environment, run `REVIEW_INSTANCE_NAME=ticket-123 ./psd-web/deploy-review.sh`, where `ticket-123` is desired name of review app.
+In order to make the PR review process fast and independent, it is possible to create a short lived environment for a given change. In order to create your environment, run `APP_NAME=ticket-123 ./psd-web/deploy-review.sh`, where `ticket-123` is desired name of review app.
 
 By default, the database is shared, but it can be overriden by setting the `DB_NAME` env variable. This will create a new database instance, however this can take several minutes.
 
