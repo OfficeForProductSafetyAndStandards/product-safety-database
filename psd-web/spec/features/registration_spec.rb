@@ -43,6 +43,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       find("details summary", text: "Change where the text message is sent").click
       fill_in "Mobile number", with: "70123456789"
 
+      click_button "Resend security code"
       expect_to_be_on_secondary_authentication_page
       enter_secondary_authentication_code(invitee.reload.direct_otp)
 
