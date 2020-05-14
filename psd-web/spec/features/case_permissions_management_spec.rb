@@ -1,17 +1,17 @@
 require "rails_helper"
 
 RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
-  let(:user) {
+  let(:user) do
     create(:user,
            :activated,
            team: create(:team, name: "Portsmouth Trading Standards"),
            name: "Bob Jones")
-  }
+  end
 
-  let(:investigation) {
+  let(:investigation) do
     create(:investigation,
            owner: user)
-  }
+  end
 
   let(:team) do
     create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk")
@@ -72,8 +72,8 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     notification_email = delivered_emails.last
 
     expect(notification_email.recipient).to eq("enquiries@southampton.gov.uk")
-    expect(notification_email.personalization[:updater_name]).to eq("Bob Jones")
-    expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones:\n\n^ Thanks for collaborating on this case with us.")
+    expect(notification_email.personalization[:updater_name]).to eq("Bob Jones (Portsmouth Trading Standards)")
+    expect(notification_email.personalization[:optional_message]).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this case with us.")
     expect(notification_email.personalization[:investigation_url]).to end_with("/cases/#{investigation.pretty_id}")
 
     click_link "Back"
@@ -140,8 +140,8 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(notification_email.personalization_value(:case_id)).to eq(investigation.pretty_id)
     expect(notification_email.personalization_value(:case_type)).to eq("allegation")
     expect(notification_email.personalization_value(:case_title)).to eq(investigation.decorate.title)
-    expect(notification_email.personalization_value(:updater_name)).to eq(user.name)
-    expect(notification_email.personalization_value(:optional_message)).to eq("Message from #{user.name}:\n\n^ Thanks for collaborating on this case with us.")
+    expect(notification_email.personalization_value(:updater_name)).to eq("Bob Jones (Portsmouth Trading Standards)")
+    expect(notification_email.personalization_value(:optional_message)).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this case with us.")
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 

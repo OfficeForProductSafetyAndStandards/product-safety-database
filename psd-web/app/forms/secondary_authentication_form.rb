@@ -19,7 +19,7 @@ class SecondaryAuthenticationForm
               too_short: I18n.t(".otp_code.too_short")
             },
             allow_blank: true,
-            if: -> { INTEGER_REGEX === otp_code }
+            if: -> { INTEGER_REGEX.match?(otp_code) }
   validate :correct_otp_validation
   validate :otp_attempts_validation
   validate :otp_expiry_validation

@@ -107,11 +107,13 @@ class NotifyMailer < GovukNotifyRails::Mailer
   def team_added_to_case_email(collaborator, to_email:)
     set_template(TEMPLATES[:team_added_to_case])
 
+    user_name = collaborator.added_by_user.decorate.display_name(viewer: collaborator.team)
+
     optional_message = if collaborator.message.present?
                          [
                            I18n.t(
                              :message_from,
-                             user_name: collaborator.added_by_user.name,
+                             user_name: user_name,
                              scope: "mail.team_added_to_case"
                            ),
                            inset_text_for_notify(collaborator.message)
@@ -121,7 +123,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                        end
 
     set_personalisation(
-      updater_name: collaborator.added_by_user.name,
+      updater_name: user_name,
       optional_message: optional_message,
       investigation_url: investigation_url(collaborator.investigation)
     )
@@ -129,28 +131,29 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: to_email)
   end
 
-  def team_deleted_from_case_email(form, to_email:)
+  def team_deleted_from_case_email(message:, investigation:, team_deleted:, user_who_deleted:, to_email:)
     set_template(TEMPLATES[:team_deleted_from_case])
-    form = OpenStruct.new(form) # form comes as hash due to rails 5 serialization issues
 
-    optional_message = if form.message.present?
+    user_name = user_who_deleted.decorate.display_name(viewer: team_deleted)
+
+    optional_message = if message.present?
                          [
                            I18n.t(
                              :message_from,
-                             user_name: form.user.name,
+                             user_name: user_name,
                              scope: "mail.team_removed_from_case"
                            ),
-                           inset_text_for_notify(form.message)
+                           inset_text_for_notify(message)
                          ].join("\n\n")
                        else
                          ""
                        end
 
     set_personalisation(
-      case_type: form.investigation.case_type.to_s.downcase,
-      case_title: form.investigation.decorate.title,
-      case_id: form.investigation.pretty_id,
-      updater_name: form.user.name,
+      case_type: investigation.case_type.to_s.downcase,
+      case_title: investigation.decorate.title,
+      case_id: investigation.pretty_id,
+      updater_name: user_name,
       optional_message: optional_message,
     )
 

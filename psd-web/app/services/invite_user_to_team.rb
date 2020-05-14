@@ -27,7 +27,7 @@ private
       team: team
     )
 
-    user.user_roles.create!(name: "psd_user") # TODO: remove this once we’ve updated the application to no longer depend upon this role.
+    user.user_roles.create!(name: "psd_user") # TODO: remove this once we've updated the application to no longer depend upon this role.
     user.user_roles.create!(name: "opss_user") if inviting_user&.is_opss?
     user
   end

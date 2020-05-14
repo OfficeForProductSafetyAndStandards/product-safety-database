@@ -55,7 +55,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should set status" do
     investigation = create_new_case
     is_closed = true
-    investigation_status = lambda { Investigation.find(investigation.id).is_closed }
+    investigation_status = -> { Investigation.find(investigation.id).is_closed }
     assert_changes investigation_status, from: false, to: is_closed do
       patch status_investigation_url(investigation), params: {
         investigation: {
@@ -71,7 +71,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     old_description = "old"
     new_description = "description"
     investigation = Investigation.create(description: old_description, reported_reason: Investigation.reported_reasons[:unsafe])
-    investigation_status = lambda { Investigation.find(investigation.id).description }
+    investigation_status = -> { Investigation.find(investigation.id).description }
     assert_changes investigation_status, from: old_description, to: new_description do
       patch edit_summary_investigation_url(investigation), params: {
         investigation: {
@@ -308,9 +308,9 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     sign_out :user
     sign_in @non_opss_user
 
-    assert_raise(Pundit::NotAuthorizedError) {
+    assert_raise(Pundit::NotAuthorizedError) do
       get investigation_path(@new_investigation)
-    }
+    end
   end
 
   test "should show private investigations to creator" do
