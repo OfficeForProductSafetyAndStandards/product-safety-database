@@ -20,11 +20,14 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
   end
 
   scenario "Assigned user to the case receives activity notifications" do
-    commentator_user = create(:user, :activated)
+    commentator_user = create(:user, :activated, team: create(:team))
 
     sign_in commentator_user
 
-    add_comment_to_case
+    visit investigation_path
+
+    click_link "Add comment"
+    add_comment
 
     expect(page).to have_current_path(investigation_path)
     expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
@@ -47,7 +50,9 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
     sign_in commentator_user
 
-    add_comment_to_case
+    visit investigation_path
+    click_link "Add comment"
+    add_comment
 
     expect(page).to have_current_path(investigation_path)
     expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
@@ -59,16 +64,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     )
   end
 
-  def add_comment_to_case
-    visit investigation_path
-
-    click_link "Add activity"
-
-    expect(page).to have_css("h1", text: "New activity")
-
-    choose "Add a comment"
-    click_button "Continue"
-
+  def add_comment
     expect(page).to have_css("h1", text: "Add comment")
 
     fill_in "body", with: Faker::Lorem.sentence

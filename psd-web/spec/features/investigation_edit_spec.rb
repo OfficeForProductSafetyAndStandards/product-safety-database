@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let(:investigation) { create(:project) }
+  let(:investigation) { create(:project, owner: user) }
+  let(:user) { create(:user, :activated) }
 
-  before { sign_in }
+  before { sign_in user }
 
   scenario "allows to edit some the attributes" do
     visit investigation_path(investigation)
