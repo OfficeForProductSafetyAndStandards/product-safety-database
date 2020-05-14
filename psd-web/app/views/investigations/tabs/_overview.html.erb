@@ -84,7 +84,7 @@
 
     <%= govukSummaryList(
       classes: "govuk-summary-list--no-border",
-      rows: about_the_case_rows(@investigation)
+      rows: about_the_case_rows(investigation: @investigation, user: current_user)
     ) %>
   </div>
 
