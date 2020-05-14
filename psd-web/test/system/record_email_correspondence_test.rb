@@ -172,6 +172,8 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
     owner = users(:southampton_bob)
     same_team_user = users(:southampton_steve)
 
+    @investigation.collaborators.create!(team: other_org_user.team,include_message: false,added_by_user: users(:southampton_bob))
+
     set_investigation_owner! @investigation, owner
 
     visit new_investigation_email_path(@investigation)
