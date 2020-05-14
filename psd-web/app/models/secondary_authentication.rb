@@ -88,11 +88,23 @@ private
   end
 
   def whitelisted_code_valid?(otp)
+    return unless otp_whitelisting_allowed?
+
     if ENV["WHITELISTED_2FA_CODE"].present?
       code = ENV["WHITELISTED_2FA_CODE"]
       code == otp
     else
       false
     end
+  end
+
+  def otp_whitelisting_allowed?
+    uris = JSON(ENV["VCAP_APPLICATION"])["application_uris"]
+    return false if uris.length != 1
+
+    uri = uris.first
+    uri =~ /staging\.product-safety-database\.service\.gov\.uk|psd-pr-\d{3,5}\.london\.cloudapps\.digital/
+  rescue StandardError
+    false
   end
 end
