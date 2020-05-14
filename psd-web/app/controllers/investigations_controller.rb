@@ -33,6 +33,7 @@ class InvestigationsController < ApplicationController
   # GET /cases/1
   # GET /cases/1.json
   def show
+    authorize @investigation, :visible_to
     @complainant = @investigation.complainant&.decorate
     respond_to do |format|
       format.html
@@ -58,22 +59,27 @@ class InvestigationsController < ApplicationController
   # GET /cases/1/status
   # PATCH /cases/1/status
   def status
+    authorize @investigation, :update?
     update
   end
 
   # GET /cases/1/visibility
   # PATCH /cases/1/visibility
   def visibility
+    authorize @investigation, :update?
     update
   end
 
   # GET /cases/1/edit_summary
   # PATCH /cases/1/edit_summary
   def edit_summary
+    authorize @investigation, :update?
     update
   end
 
-  def created; end
+  def created
+    authorize @investigation, :visible_to
+  end
 
 private
 
@@ -97,7 +103,6 @@ private
 
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
-    authorize investigation
     @investigation = investigation.decorate
   end
 
