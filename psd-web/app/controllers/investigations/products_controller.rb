@@ -14,12 +14,14 @@ class Investigations::ProductsController < ApplicationController
 
   # GET /cases/1/products/new
   def new
+    authorize @investigation, :update?
     excluded_product_ids = @investigation.products.map(&:id)
     @products = advanced_product_search(@product, excluded_product_ids)
   end
 
   # POST /cases/1/products
   def create
+    authorize @investigation, :update?
     respond_to do |format|
       if @product.valid?
         @investigation.products << @product
@@ -36,14 +38,18 @@ class Investigations::ProductsController < ApplicationController
 
   # PUT /cases/1/products/2
   def link
+    authorize @investigation, :update?
     @investigation.products << @product
     redirect_to_investigation_products_tab success: "Product was successfully linked."
   end
 
-  def remove; end
+  def remove
+    authorize @investigation, :update?
+  end
 
   # DELETE /cases/1/products
   def unlink
+    authorize @investigation, :update?
     @investigation.products.delete(@product)
     respond_to do |format|
       format.html do
@@ -61,7 +67,6 @@ private
 
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :show?
     @investigation = investigation.decorate
   end
 end

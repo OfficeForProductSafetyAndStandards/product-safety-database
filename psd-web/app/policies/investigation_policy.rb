@@ -31,7 +31,7 @@ class InvestigationPolicy < ApplicationPolicy
     visible_to(user: @user)
   end
 
-  def visible_to(user:, private: @record.is_private)
+  def visible_to(user: @user, private: @record.is_private)
     return true unless private
     return true if user.is_opss?
     return true if @record.owner.present? && (@record.owner&.organisation == user.organisation)

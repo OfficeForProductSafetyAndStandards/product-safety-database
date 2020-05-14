@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch do
-  let(:investigation) { create(:enquiry) }
+  let(:user)          { create(:user, :activated) }
+  let(:investigation) { create(:enquiry, owner: user) }
   let(:product)       { create(:product_iphone) }
 
-  before { sign_in }
+  before { sign_in user }
 
   scenario "Adding a product to a case" do
     visit "/cases/#{investigation.pretty_id}/products/new"
