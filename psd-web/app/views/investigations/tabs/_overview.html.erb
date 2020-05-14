@@ -81,7 +81,11 @@
 
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">About the case</h2>
-    <%= @investigation.investigation_summary_list %>
+
+    <%= govukSummaryList(
+      classes: "govuk-summary-list--no-border",
+      rows: about_the_case_rows(@investigation)
+    ) %>
   </div>
 
   <% if @investigation.products.any? %>
