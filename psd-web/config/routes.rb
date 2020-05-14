@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   get "two-factor", to: "secondary_authentications#new", as: :new_secondary_authentication
   post "two-factor", to: "secondary_authentications#create", as: :secondary_authentication
 
+  get "text-not-received", to: "secondary_authentications/resend_code#new", as: :new_resend_secondary_authentication_code
+  post "text-not-received", to: "secondary_authentications/resend_code#create", as: :resend_secondary_authentication_code
+
   resource :account, only: [:show], controller: :account do
     resource :name, controller: :account_name, only: %i[show update]
   end
@@ -156,20 +159,11 @@ Rails.application.routes.draw do
 
   resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
 
-  get "your-teams" => "teams#index"
   resources :teams, only: %i[index show] do
-    member do
-      get :invite_to, path: "invite"
-      put :invite_to, path: "invite"
-      get :resend_invitation
-    end
-  end
-
-  resources :teams, only: %i[index show] do
-    member do
-      get :invite_to, path: "invite"
-      put :invite_to, path: "invite"
-      get :resend_invitation
+    resources :invitations, only: %i[new create] do
+      member do
+        put :resend
+      end
     end
   end
 

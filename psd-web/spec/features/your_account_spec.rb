@@ -8,7 +8,7 @@ RSpec.feature "Your Account", :with_stubbed_elasticsearch, :with_stubbed_mailer,
            name: "Joe Jones",
            email: "joe.jones@testing.gov.uk",
            mobile_number: "07700 900000",
-           teams: [create(:team, name: "Standards and testing")])
+           team: create(:team, name: "Standards and testing"))
   }
 
   scenario "Changing your name (with validation error)" do

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stubbed_mailer do
   let(:user_team) { create(:team) }
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, teams: [user_team]) }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
   let(:investigation) { create(:investigation, owner: user) }
   let(:team) { create(:team) }
   let(:collaborator) do
@@ -54,7 +54,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
 
         context "when team has no email" do
           let(:team) { create(:team, team_recipient_email: nil) }
-          let!(:team_user) { create(:user, :activated, has_viewed_introduction: true, teams: [team]) }
+          let!(:team_user) { create(:user, :activated, has_viewed_introduction: true, team: team) }
 
           it "sends email to users" do
             form.save!

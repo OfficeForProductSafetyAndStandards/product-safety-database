@@ -7,10 +7,6 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
 
-    users(:southampton).teams << teams(:southampton)
-    users(:southampton_steve).teams << teams(:southampton)
-    users(:southampton_bob).teams << teams(:southampton)
-
     User.current = sign_in users(:southampton)
     stub_antivirus_api
     @investigation = load_case(:one)

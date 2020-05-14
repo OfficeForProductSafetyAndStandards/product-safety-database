@@ -1,9 +1,9 @@
 class UserDecorator < Draper::Decorator
   delegate_all
 
-  def owner_short_name(viewing_user:)
-    return "Unknown" if viewing_user.nil?
-    return organisation.name if organisation != viewing_user.organisation
+  def owner_short_name(viewer:)
+    return "Unknown" if viewer.nil?
+    return organisation.name if organisation != viewer.organisation
 
     name
   end
@@ -12,15 +12,10 @@ class UserDecorator < Draper::Decorator
     name + deleted_suffix
   end
 
-  def display_name(ignore_visibility_restrictions: false, other_user: User.current)
-    suffix = if (ignore_visibility_restrictions || (organisation_id == other_user&.organisation_id)) && teams.any?
-               "(#{team_names})"
-             else
-               "(#{organisation.name})"
-             end
-    suffix << deleted_suffix
-
-    "#{name} #{suffix}"
+  # viewer could be a Team or User
+  def display_name(viewer: User.current)
+    suffix = " (#{team.name})" if team != viewer&.team
+    "#{name}#{suffix}#{deleted_suffix}"
   end
 
 private

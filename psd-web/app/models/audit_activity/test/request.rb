@@ -8,11 +8,13 @@ class AuditActivity::Test::Request < AuditActivity::Test::Base
     "Date requested"
   end
 
-  def subtitle_slug
-    "Testing requested"
+  def email_update_text(viewer = nil)
+    "Test request was added to the #{investigation.case_type} by #{source&.show(viewer)}."
   end
 
-  def email_update_text
-    "Test request was added to the #{investigation.case_type} by #{source&.show}."
+private
+
+  def subtitle_slug
+    "Testing requested"
   end
 end

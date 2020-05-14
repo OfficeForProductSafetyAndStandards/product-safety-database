@@ -91,7 +91,8 @@ class Investigation < ApplicationRecord
   end
 
   def important_owner_teams
-    teams = User.current.teams.to_set
+    teams = [User.current.team].to_set
+
     Team.get_visible_teams(User.current).each do |team|
       teams << team
     end

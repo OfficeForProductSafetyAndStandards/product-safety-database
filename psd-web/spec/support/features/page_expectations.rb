@@ -223,6 +223,11 @@ module PageExpectations
     expect(page).to have_h1("Check your phone")
   end
 
+  def expect_to_be_on_resend_secondary_authentication_page
+    expect(page).to have_current_path("/text-not-received")
+    expect(page).to have_h1("Resend security code")
+  end
+
   def expect_to_be_on_complete_registration_page
     expect(page).to have_current_path(/\/complete-registration?.+$/)
     expect(page).to have_h1("Create an account")
@@ -265,8 +270,8 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Change your name")
   end
 
-  def expect_to_be_on_team_page
-    expect(page).to have_css("h1", text: "test organisation")
+  def expect_to_be_on_team_page(team)
+    expect(page).to have_css("h1", text: team.name)
   end
 
   def expect_to_be_on_invite_a_team_member_page
@@ -298,5 +303,9 @@ module PageExpectations
         expect(elems).to be_empty, "#{expected_team[:team_name]} should not be visible"
       end
     end
+  end
+
+  def expect_to_be_on_access_denied_page
+    expect(page).to have_css("h1", text: "Access denied")
   end
 end
