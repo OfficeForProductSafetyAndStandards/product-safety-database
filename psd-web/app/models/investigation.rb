@@ -54,7 +54,9 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
-  has_many :collaborators, dependent: :destroy
+  has_many :collaborations, dependent: :destroy
+  has_many :collaborators, through: :collaborations, dependent: :destroy
+
   has_many :teams, through: :collaborators
 
   # TODO: Refactor to remove this callback hell

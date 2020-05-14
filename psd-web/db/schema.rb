@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_11_184000) do
+ActiveRecord::Schema.define(version: 2020_05_14_123702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -73,14 +73,18 @@ ActiveRecord::Schema.define(version: 2020_05_11_184000) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "collaborators", force: :cascade do |t|
+  create_table "collaborations", force: :cascade do |t|
     t.uuid "added_by_user_id", null: false
+    t.uuid "collaborator_id"
+    t.string "collaborator_type"
     t.datetime "created_at", null: false
     t.integer "investigation_id", null: false
     t.text "message"
     t.uuid "team_id", null: false
+    t.string "type", default: "collaborator", null: false
     t.datetime "updated_at", null: false
-    t.index ["investigation_id", "team_id"], name: "index_collaborators_on_investigation_id_and_team_id", unique: true
+    t.index ["investigation_id", "team_id"], name: "index_collaborations_on_investigation_id_and_team_id", unique: true
+    t.index ["investigation_id", "type", "collaborator_type", "collaborator_id"], name: "investigation_collaborator_index", unique: true
   end
 
   create_table "complainants", id: :serial, force: :cascade do |t|
@@ -329,9 +333,9 @@ ActiveRecord::Schema.define(version: 2020_05_11_184000) do
   add_foreign_key "activities", "investigations"
   add_foreign_key "activities", "products"
   add_foreign_key "alerts", "investigations"
-  add_foreign_key "collaborators", "investigations"
-  add_foreign_key "collaborators", "teams"
-  add_foreign_key "collaborators", "users", column: "added_by_user_id"
+  add_foreign_key "collaborations", "investigations"
+  add_foreign_key "collaborations", "teams"
+  add_foreign_key "collaborations", "users", column: "added_by_user_id"
   add_foreign_key "complainants", "investigations"
   add_foreign_key "corrective_actions", "businesses"
   add_foreign_key "corrective_actions", "investigations"
