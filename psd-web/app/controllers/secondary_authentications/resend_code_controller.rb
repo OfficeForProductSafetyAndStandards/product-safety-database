@@ -9,6 +9,8 @@ module SecondaryAuthentications
                        :has_viewed_introduction,
                        :set_cache_headers
 
+    before_action :require_user, only: %w[new create]
+
     def new
       @mobile_number_change_allowed = !current_user.mobile_number_verified
     end
@@ -26,6 +28,10 @@ module SecondaryAuthentications
     end
 
   private
+
+    def require_user
+      return render("errors/forbidden", status: :forbidden) unless current_user
+    end
 
     def current_operation
       current_user&.secondary_authentication_operation.presence || SecondaryAuthentication::DEFAULT_OPERATION
