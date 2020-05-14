@@ -37,15 +37,8 @@ then
   WORKER_MAX_THREADS=10
 fi
 
-# Set the amount of time in minutes that the CLI will wait for all instances to start.
-# Because of the rolling deployment strategy, this should be set to at least the amount of
-# time each app takes to start multiplied by the number of instances.
-#
-# See https://docs.cloudfoundry.org/devguide/deploy-apps/large-app-deploy.html
-export CF_STARTUP_TIMEOUT=10
-
 # Deploy the app
-cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS --strategy rolling
+cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS
 
 # Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/psd-web/env/
