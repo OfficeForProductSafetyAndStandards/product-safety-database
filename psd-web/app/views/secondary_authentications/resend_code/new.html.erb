@@ -8,7 +8,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= error_summary current_user.errors %>
+    <%= error_summary @user.errors %>
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
@@ -26,7 +26,7 @@
             <%= render "form_components/govuk_input", key: :mobile_number, form: form,
               classes: "app-!-max-width-two-thirds",
               label: { text: "Mobile number" },
-              value: current_user.mobile_number,
+              value: @user.mobile_number,
               name: "mobile_number",
               id: "mobile_number",
               autocomplete: "tel",

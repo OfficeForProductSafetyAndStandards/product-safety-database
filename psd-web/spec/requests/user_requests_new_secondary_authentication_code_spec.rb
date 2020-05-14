@@ -5,7 +5,6 @@ RSpec.describe "User requests new secondary authentication code", type: :request
     subject(:request_code) { get new_resend_secondary_authentication_code_path }
 
     context "with an user session" do
-
       let(:user) { create(:user, :activated) }
 
       before do
