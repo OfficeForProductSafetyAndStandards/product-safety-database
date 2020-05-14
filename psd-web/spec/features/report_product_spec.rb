@@ -7,7 +7,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   let(:non_compliance_details) { Faker::Lorem.paragraph }
 
   let(:business_details) do
-    business = -> {
+    business = lambda {
       {
         trading_name: Faker::Restaurant.name,
         legal_name: Faker::Restaurant.name,
@@ -30,8 +30,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
-  let(:corrective_actions) {
-    action = -> {
+  let(:corrective_actions) do
+    action = lambda {
       {
         summary: Faker::Lorem.sentence,
         date: Faker::Date.backward(days: 14),
@@ -49,7 +49,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       action.call,
       action.call
     ]
-  }
+  end
 
   let(:test_results) do
     [
@@ -63,8 +63,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     ]
   end
 
-  let(:risk_assessments) {
-    assessment = -> {
+  let(:risk_assessments) do
+    assessment = lambda {
       {
         file: Rails.root + "test/fixtures/files/new_risk_assessment.txt",
         title: Faker::Lorem.sentence,
@@ -76,7 +76,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       assessment.call,
       assessment.call
     ]
-  }
+  end
 
   context "when signed in as a non-OPSS user" do
     let(:user) { create(:user, :activated, :viewed_introduction, :psd_user).decorate }

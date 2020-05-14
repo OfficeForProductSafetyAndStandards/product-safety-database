@@ -107,9 +107,9 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
 
         # rubocop:disable RSpec/MultipleExpectations
         it "sends an email to the user", :with_test_queue_adapter do
-          expect { result }.to(have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with { |user_id|
+          expect { result }.to(have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |user_id|
             expect(user_id).to eq created_user.id
-          })
+          end)
         end
         # rubocop:enable RSpec/MultipleExpectations
       end

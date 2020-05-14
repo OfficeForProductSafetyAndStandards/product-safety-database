@@ -9,8 +9,6 @@ if Rails.env.production?
       ActiveSupport::SecurityUtils.secure_compare(password, ENV["SIDEKIQ_PASSWORD"])
   end
 end
-
-# rubocop:disable Metrics/BlockLength
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => "/admin", as: "rails_admin"
   mount GovukDesignSystem::Engine => "/", as: "govuk_design_system_engine"
@@ -196,4 +194,3 @@ Rails.application.routes.draw do
 
   get "/health/all", to: "health#show"
 end
-# rubocop:enable Metrics/BlockLength

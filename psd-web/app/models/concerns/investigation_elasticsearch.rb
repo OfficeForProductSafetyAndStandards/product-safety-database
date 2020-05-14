@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 module InvestigationElasticsearch
   extend ActiveSupport::Concern
 
@@ -69,4 +68,3 @@ module InvestigationElasticsearch
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
