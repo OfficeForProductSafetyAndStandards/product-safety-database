@@ -40,7 +40,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       click_link "Not received a text message?"
 
       expect_to_be_on_resend_secondary_authentication_page
-      find(".govuk-details__summary-text", text: "Change where the text message is sent").click
+      find("details summary", text: "Change where the text message is sent").click
       fill_in "Mobile number", with: "70123456789"
 
       expect {
