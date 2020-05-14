@@ -140,8 +140,8 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect(notification_email.personalization_value(:case_id)).to eq(investigation.pretty_id)
     expect(notification_email.personalization_value(:case_type)).to eq("allegation")
     expect(notification_email.personalization_value(:case_title)).to eq(investigation.decorate.title)
-    expect(notification_email.personalization_value(:updater_name)).to eq(user.name)
-    expect(notification_email.personalization_value(:optional_message)).to eq("Message from #{user.name}:\n\n^ Thanks for collaborating on this case with us.")
+    expect(notification_email.personalization_value(:updater_name)).to eq("Bob Jones (Portsmouth Trading Standards)")
+    expect(notification_email.personalization_value(:optional_message)).to eq("Message from Bob Jones (Portsmouth Trading Standards):\n\n^ Thanks for collaborating on this case with us.")
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
