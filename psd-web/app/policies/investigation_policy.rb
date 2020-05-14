@@ -11,8 +11,8 @@ class InvestigationPolicy < ApplicationPolicy
     visible_to(user: @user)
   end
 
-  def update?
-    visible_to(user: @user)
+  def update?(user: @user)
+    record.teams_with_access.include?(user.team)
   end
 
   def change_owner?(user: @user)
