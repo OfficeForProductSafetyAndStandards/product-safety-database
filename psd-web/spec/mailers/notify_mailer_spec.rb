@@ -62,36 +62,45 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   end
 
   describe "#team_added_to_case_email" do
-    context "when called with a collaborator with a message" do
-      let(:collaborator) do
-        create(:collaborator,
-               message: "Thanks for collaborating!",
-               added_by_user: create(:user, name: "Bob Jones"))
+    let(:added_by_user) { create(:user, name: "Bob Jones", team: user_team) }
+    let(:collaborator) { create(:collaborator, message: message, added_by_user: added_by_user, team: collaborator_team) }
+    let(:user_team) { create(:team, name: "User Team") }
+    let(:collaborator_team) { create(:team, name: "Collaborator Team") }
+
+    subject(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+
+    context "with a message" do
+      let(:message) { "Thanks for collaborating!" }
+
+      context "when the user is on another team" do
+        it "sets the personalisation" do
+          expect(mail.govuk_notify_personalisation).to eql(
+            updater_name: "Bob Jones (User Team)",
+            optional_message: "Message from Bob Jones (User Team):\n\n^ Thanks for collaborating!",
+            investigation_url: investigation_url(collaborator.investigation)
+          )
+        end
       end
 
-      let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+      context "when the user is on the same team" do
+        let(:collaborator_team) { user_team }
 
-      it "sets the personalisation" do
-        expect(mail.govuk_notify_personalisation).to eql(
-          updater_name: "Bob Jones",
-          optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
-          investigation_url: investigation_url(collaborator.investigation)
-        )
+        it "sets the personalisation" do
+          expect(mail.govuk_notify_personalisation).to eql(
+            updater_name: "Bob Jones",
+            optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
+            investigation_url: investigation_url(collaborator.investigation)
+          )
+        end
       end
     end
 
-    context "when called with a collaborator with a no message" do
-      let(:collaborator) do
-        create(:collaborator,
-               message: nil,
-               added_by_user: create(:user, name: "Bob Jones"))
-      end
-
-      let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+    context "with no message" do
+      let(:message) { nil }
 
       it "sets the personalisation" do
         expect(mail.govuk_notify_personalisation).to eql(
-          updater_name: "Bob Jones",
+          updater_name: "Bob Jones (User Team)",
           optional_message: "",
           investigation_url: investigation_url(collaborator.investigation)
         )
