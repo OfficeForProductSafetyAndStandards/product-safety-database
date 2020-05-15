@@ -7,8 +7,10 @@ h1.govuk-heading-l
   | Confirm email details
 .govuk-grid-row
   .govuk-grid-column-two-thirds
-    = form_with(model: @correspondence, local: true,
-            url: investigation_emails_path(@investigation), method: :post) do |form|
+    = form_with(model: @correspondence,
+                local: true,
+                url: investigation_emails_path(@investigation),
+                method: :post) do |form|
       table.govuk-table
         tbody.govuk-table__body
           tr.govuk-table__row

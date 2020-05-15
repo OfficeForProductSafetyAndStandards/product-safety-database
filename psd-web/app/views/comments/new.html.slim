@@ -3,8 +3,9 @@
 - content_for :after_header do
   .govuk-grid-row
     .govuk-grid-column-one-third
-      = link_to "Back to #{@investigation.pretty_description}", \
-        investigation_path(@investigation), class: "govuk-back-link"
+      = link_to "Back to #{@investigation.pretty_description}",
+                investigation_path(@investigation),
+                class: "govuk-back-link"
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds
@@ -12,8 +13,12 @@
 
     span.govuk-caption-l = @investigation.pretty_description
 
-    = form_with(model: @comment, \
-      url: investigation_activity_comment_path(@investigation)) do |form|
-      = render "form_components/govuk_textarea", key: :body, form: form, attributes: { maxlength: 10000 }, id: "body",
-              label: { text: page_title, classes: "govuk-label--l", isPageHeading: true }
+    = form_with(model: @comment,
+                url: investigation_activity_comment_path(@investigation)) do |form|
+      = render "form_components/govuk_textarea",
+               key: :body,
+               form: form,
+               attributes: { maxlength: 10_000 },
+               id: "body",
+               label: { text: page_title, classes: "govuk-label--l", isPageHeading: true }
       = form.submit "Continue", class: "govuk-button"

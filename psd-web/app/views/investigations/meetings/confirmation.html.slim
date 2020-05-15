@@ -7,8 +7,10 @@ main.govuk-main-wrapper role="main"
     | Confirm meeting details
   .govuk-grid-row
     .govuk-grid-column-two-thirds
-      = form_with(model: @correspondence, local: true,
-              url: investigation_meetings_path(@investigation), method: :post) do |form|
+      = form_with(model: @correspondence,
+                  local: true,
+                  url: investigation_meetings_path(@investigation),
+                  method: :post) do |form|
         table.govuk-table
           tbody.govuk-table__body
             tr.govuk-table__row
