@@ -1,7 +1,8 @@
 = page_title "Add activity", errors: @activity_type_empty.present?
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description.downcase}",
-  investigation_path(@investigation), class: "govuk-back-link"
+  investigation_path(@investigation),
+  class: "govuk-back-link"
 
 = form_with local: true, url: new_investigation_activity_path, method: :get do |form|
   - error_message = @activity_type_empty && { text: "Activity type must not be empty", href: "#activity_type-error" }

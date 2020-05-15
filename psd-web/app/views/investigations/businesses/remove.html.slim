@@ -1,7 +1,8 @@
 = page_title "Remove business from case"
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description.downcase}",
-  investigation_path(@investigation), class: "govuk-back-link"
+  investigation_path(@investigation),
+  class: "govuk-back-link"
 h2.govuk-heading-m
   | Remove business
 .govuk-grid-row
