@@ -38,6 +38,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     expect_to_be_on_add_team_to_case_page(case_id: investigation.pretty_id)
 
+    save_page
     click_button "Add team to this case"
 
     # Validation errors

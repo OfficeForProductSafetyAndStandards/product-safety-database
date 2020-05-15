@@ -4,13 +4,13 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @teams = @investigation.teams.order(:name)
+    @teams = @investigation.editors.order(:name)
   end
 
   def new
     authorize @investigation, :manage_collaborators?
 
-    @collaborator = @investigation.collaborators.new
+    @edition = @investigation.edition.new
 
     @teams = teams_without_access
   end
@@ -19,7 +19,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
-      params.require(:collaborator).permit(:team_id, :include_message, :message).merge({
+      params.require(:edition).permit(:team_id, :include_message, :message).merge({
         investigation: @investigation,
         current_user: current_user
       })
@@ -29,7 +29,7 @@ class CollaboratorsController < ApplicationController
       redirect_to investigation_collaborators_path(@investigation)
     else
       @teams = teams_without_access
-      @collaborator = result.collaborator
+      @edition = result.edition
       render "collaborators/new"
     end
   end
@@ -38,7 +38,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
-    @collaborator = @investigation.collaborators.find_by! team_id: @team.id
+    @editor = @investigation.editors.find_by! team_id: @team.id
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
@@ -69,7 +69,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.collaborators.pluck(:team_id) + [@investigation.owner_team.try(:id)]
+    @investigation.editors.pluck(:team_id) + [@investigation.owner_team.try(:id)]
   end
 
   def edit_params

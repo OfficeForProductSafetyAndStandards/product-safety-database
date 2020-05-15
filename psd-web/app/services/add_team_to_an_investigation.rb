@@ -1,24 +1,25 @@
 class AddTeamToAnInvestigation
   include Interactor
 
-  delegate :collaborator, :current_user, :investigation, :team_id, :include_message, :message, to: :context
+  delegate :edition, :current_user, :investigation, :team_id, :include_message, :message, to: :context
   def call
-    context.collaborator = investigation.collaborators.new(
-      team_id: team_id,
+    collaborator = Team.find_by(id: team_id)
+    context.edition = investigation.editions.new(
+      collaborator: collaborator,
       include_message: include_message,
       added_by_user: current_user,
       message: message
     )
 
     begin
-      if collaborator.save
-        NotifyTeamAddedToCaseJob.perform_later(collaborator)
+      if edition.save
+        NotifyTeamAddedToCaseJob.perform_later(edition)
 
         AuditActivity::Investigation::TeamAdded.create!(
           source: UserSource.new(user: current_user),
           investigation: investigation,
-          title: "#{collaborator.team.name} added to #{investigation.case_type.downcase}",
-          body: collaborator.message.to_s
+          title: "#{editor.team.name} added to #{investigation.case_type.downcase}",
+          body: edition.message.to_s
         )
       else
         context.fail!
