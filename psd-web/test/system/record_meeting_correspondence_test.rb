@@ -4,10 +4,11 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    sign_in
     @investigation = load_case(:one)
+    @investigation.update!(owner: users(:opss))
     @investigation.source = sources(:investigation_one)
     @correspondence = correspondences(:meeting)
+    sign_in users(:opss)
     visit new_investigation_meeting_path(@investigation)
   end
 
@@ -28,7 +29,7 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the transcript file" do
-    @investigation.update!(owner: users(:opss))
+
     fill_in_context_form
     click_button "Continue"
     attach_file("correspondence_meeting[transcript][file]", file_fixture("testImage.png"))
@@ -40,7 +41,6 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the related attachment" do
-    @investigation.update!(owner: users(:opss))
     fill_in_context_form
     click_button "Continue"
     fill_in_content_form

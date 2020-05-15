@@ -33,7 +33,7 @@ class InvestigationsController < ApplicationController
   # GET /cases/1
   # GET /cases/1.json
   def show
-    authorize @investigation, :visible_to
+    authorize @investigation, :view_non_protected_details?
     @complainant = @investigation.complainant&.decorate
     respond_to do |format|
       format.html
@@ -78,7 +78,7 @@ class InvestigationsController < ApplicationController
   end
 
   def created
-    authorize @investigation, :visible_to
+    authorize @investigation, :view_non_protected_details?
   end
 
 private

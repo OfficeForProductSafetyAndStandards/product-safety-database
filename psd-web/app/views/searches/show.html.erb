@@ -8,7 +8,7 @@
   <div class="govuk-grid-column-three-quarters" id="results">
     <% @investigations.each do |investigation| %>
       <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
-      <% if !policy(investigation).show? %>
+      <% if !policy(investigation).view_non_protected_details? %>
         <%= render "investigations/restricted_card", investigation: investigation.decorate %>
       <% elsif result.respond_to?(:highlight) %>
         <%= render "investigations/highlight_card", investigation: investigation.decorate, highlights: result.highlight %>

@@ -68,7 +68,7 @@ class InvestigationTest < ActiveSupport::TestCase
     User.current = users(:southampton)
     create_new_private_case
     user = users(:southampton_steve)
-    assert_equal(policy(@new_investigation).show?(user: user), true)
+    assert_equal(policy(@new_investigation).view_non_protected_details?(user: user), true)
   end
 
   test "visible to owner organisation" do
@@ -77,13 +77,13 @@ class InvestigationTest < ActiveSupport::TestCase
     owner = users(:southampton_steve)
     @new_investigation.owner = owner
 
-    assert(policy(@new_investigation).show?(user: owner))
+    assert(policy(@new_investigation).view_non_protected_details?(user: owner))
   end
 
   test "not visible to no-source, no-owner organisation" do
     user = users(:luton)
     create_new_private_case
-    assert_not(policy(@new_investigation).show?(user: user))
+    assert_not(policy(@new_investigation).view_non_protected_details?(user: user))
   end
 
   test "past owners should be computed" do
