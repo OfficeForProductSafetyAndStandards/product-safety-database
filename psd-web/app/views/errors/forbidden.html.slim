@@ -1,10 +1,11 @@
 = page_title "Access denied"
 
-- if user_signed_in?
-  = link_to "Back to list", investigations_path, class: "govuk-back-link"
+- content_for :after_header do
+  - if user_signed_in?
+    = link_to "Back to case list", investigations_path, class: "govuk-back-link"
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop
     h1.govuk-heading-l Access denied
     p.govuk-body You don’t have permission to see this page
-    p.govuk-body If you think you need to, ask someone in the processing team to give you access
+    p.govuk-body If you think you need to, ask someone in the OPSS Operational support unit to give you access
