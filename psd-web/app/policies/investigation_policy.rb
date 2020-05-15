@@ -1,5 +1,4 @@
 class InvestigationPolicy < ApplicationPolicy
-
   # Used for all updating of the case, including adding and removing related
   # records, such as products, businesses and documents
   def update?(user: @user)
@@ -40,6 +39,4 @@ class InvestigationPolicy < ApplicationPolicy
   def investigation_restricted?
     !@record.is_private
   end
-
-
 end

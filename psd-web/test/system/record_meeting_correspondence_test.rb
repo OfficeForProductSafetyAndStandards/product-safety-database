@@ -29,7 +29,6 @@ class RecordMeetingCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "attaches the transcript file" do
-
     fill_in_context_form
     click_button "Continue"
     attach_file("correspondence_meeting[transcript][file]", file_fixture("testImage.png"))
