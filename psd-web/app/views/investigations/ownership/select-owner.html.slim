@@ -6,8 +6,9 @@
 .govuk-grid-row
   .govuk-grid-column-two-thirds-from-desktop
     - heading = capture do
-      = render "minimal_investigation_heading", investigation: @investigation,
-              title: page_heading
+      = render "minimal_investigation_heading",
+               investigation: @investigation,
+               title: page_heading
       - if @investigation.owner.present?
         p
           ' Current case owner:

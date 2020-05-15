@@ -1,15 +1,21 @@
 = render "components/govuk_fieldset", legend: { text: "Business details", classes: "govuk-fieldset__legend--m" } do
-  = render "form_components/govuk_input", key: :trading_name, form: form,
-          label: { text: "Trading name" },
-          hint: { text: "The name the business is known as" },
-          classes: "govuk-!-width-two-thirds"
-  = render "form_components/govuk_input", key: :legal_name, form: form,
-          label: { text: "Registered or legal name" },
-          hint: { text: "As it appears on Companies House for UK businesses (usually ends in ‘Ltd’ or ‘Limited’)" },
-          classes: "govuk-!-width-two-thirds"
-  = render "form_components/govuk_input", key: :company_number, form: form,
-          label: { text: "Company number" },
-          classes: "govuk-!-width-one-third"
+  = render "form_components/govuk_input",
+           key: :trading_name,
+           form: form,
+           label: { text: "Trading name" },
+           hint: { text: "The name the business is known as" },
+           classes: "govuk-!-width-two-thirds"
+  = render "form_components/govuk_input",
+           key: :legal_name,
+           form: form,
+           label: { text: "Registered or legal name" },
+           hint: { text: "As it appears on Companies House for UK businesses (usually ends in ‘Ltd’ or ‘Limited’)" },
+           classes: "govuk-!-width-two-thirds"
+  = render "form_components/govuk_input",
+           key: :company_number,
+           form: form,
+           label: { text: "Company number" },
+           classes: "govuk-!-width-one-third"
 = form.fields_for :locations, business.primary_location do |ff|
   = render "locations/address_form", form: ff, countries: countries
 

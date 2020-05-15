@@ -19,11 +19,14 @@
       h2.govuk-heading-m
         = ib.relationship.upcase_first
       = business_summary_list ib.business
-      = link_with_hidden_text_to "View business", "(#{ib.business.trading_name})",
-        ib.business, class: "govuk-link app-block-link govuk-!-margin-right-3"
-      = link_with_hidden_text_to "Remove business", "(#{ib.business.trading_name})",
-        remove_investigation_business_path(@investigation, ib.business),
-        class: "govuk-link app-block-link"
+      = link_with_hidden_text_to "View business",
+                                 "(#{ib.business.trading_name})",
+                                 ib.business,
+                                 class: "govuk-link app-block-link govuk-!-margin-right-3"
+      = link_with_hidden_text_to "Remove business",
+                                 "(#{ib.business.trading_name})",
+                                 remove_investigation_business_path(@investigation, ib.business),
+                                 class: "govuk-link app-block-link"
 
       hr.govuk-section-break.govuk-section-break--m
 

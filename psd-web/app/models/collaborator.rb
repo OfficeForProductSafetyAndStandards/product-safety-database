@@ -10,7 +10,7 @@ class Collaborator < ApplicationRecord
 
   attr_reader :include_message
 
-  def include_message=value
+  def include_message=(value)
     @include_message = if value.is_a? String
                          (value == "true")
                        else

@@ -22,16 +22,21 @@
 
   .govuk-grid-column-one-third class="govuk-!-margin-top-7"
     - if @product.images.any?
-      = render "documents/document_preview", document: @product.images.first, dimensions: "400x300",
-        class_name: "product-image app-document-preview--inherit"
+      = render "documents/document_preview",
+               document: @product.images.first,
+               dimensions: "400x300",
+               class_name: "product-image app-document-preview--inherit"
     - else
       .app-document-preview__image-without-preview.app-document-preview--add-image-prompt
         p.govuk-body = link_to "Add an image of this product", new_document_flow_path(@product)
 
 = render "components/govuk_tabs",
-        items: [{ id: "full-detail", label: "Full detail",
-                        panel: { html: render("products/tabs/details") } },
-                { id: "attachments", label: "Attachments (#{@product.documents.count})",
-                        panel: { html: render("products/tabs/attachments") } },
-                { id: "cases", label: "Cases",
-                        panel: { html: render("products/tabs/cases") } }]
+         items: [{ id: "full-detail",
+                   label: "Full detail",
+                   panel: { html: render("products/tabs/details") } },
+                 { id: "attachments",
+                   label: "Attachments (#{@product.documents.count})",
+                   panel: { html: render("products/tabs/attachments") } },
+                 { id: "cases",
+                   label: "Cases",
+                   panel: { html: render("products/tabs/cases") } }]

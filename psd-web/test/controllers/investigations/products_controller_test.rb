@@ -16,34 +16,36 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create and link product" do
     assert_difference ["InvestigationProduct.count", "Product.count"] do
-      post investigation_products_url(@investigation), params: {
-        product: {
-          name: @product.name,
-          batch_number: @product.batch_number,
-          product_type: @product.product_type,
-          category: @product.category,
-          webpage: @product.webpage,
-          description: @product.description,
-          product_code: @product.product_code,
-        }
-      }
+      post investigation_products_url(@investigation),
+           params: {
+             product: {
+               name: @product.name,
+               batch_number: @product.batch_number,
+               product_type: @product.product_type,
+               category: @product.category,
+               webpage: @product.webpage,
+               description: @product.description,
+               product_code: @product.product_code,
+             }
+           }
     end
     assert_redirected_to investigation_products_path(@investigation)
   end
 
   test "should not create product if name is missing" do
     assert_no_difference ["InvestigationProduct.count", "Product.count"] do
-      post investigation_products_url(@investigation), params: {
-        product: {
-          name: "",
-          batch_number: @product.batch_number,
-          product_type: @product.product_type,
-          category: @product.category,
-          description: @product.description,
-          webpage: @product.webpage,
-          product_code: @product.product_code
-        }
-      }
+      post investigation_products_url(@investigation),
+           params: {
+             product: {
+               name: "",
+               batch_number: @product.batch_number,
+               product_type: @product.product_type,
+               category: @product.category,
+               description: @product.description,
+               webpage: @product.webpage,
+               product_code: @product.product_code
+             }
+           }
     end
   end
 

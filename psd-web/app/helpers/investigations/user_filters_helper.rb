@@ -24,14 +24,20 @@ module Investigations::UserFiltersHelper
   end
 
   def other_owner(form)
-    render "form_components/govuk_select", key: :case_owner_is_someone_else_id, form: form,
-                                           items: entities.map { |e| { text: e.display_name, value: e.id } },
-                                           label: { text: "Name" }, is_autocomplete: true
+    render "form_components/govuk_select",
+           key: :case_owner_is_someone_else_id,
+           form: form,
+           items: entities.map { |e| { text: e.display_name, value: e.id } },
+           label: { text: "Name" },
+           is_autocomplete: true
   end
 
   def other_creator(form)
-    render "form_components/govuk_select", key: :created_by_someone_else_id, form: form,
-                                           items: entities.map { |e| { text: e.display_name, value: e.id } },
-                                           label: { text: "Name" }, is_autocomplete: true
+    render "form_components/govuk_select",
+           key: :created_by_someone_else_id,
+           form: form,
+           items: entities.map { |e| { text: e.display_name, value: e.id } },
+           label: { text: "Name" },
+           is_autocomplete: true
   end
 end

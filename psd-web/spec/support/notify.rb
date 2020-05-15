@@ -2,8 +2,10 @@
 
 RSpec.shared_context "with stubbed notify" do
   let(:notify_stub) do
-    instance_double(Notifications::Client,
-                    send_sms: instance_double(Notifications::Client::ResponseNotification))
+    instance_double(
+      Notifications::Client,
+      send_sms: instance_double(Notifications::Client::ResponseNotification)
+    )
   end
 
   before do

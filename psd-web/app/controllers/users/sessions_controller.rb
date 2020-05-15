@@ -38,7 +38,7 @@ module Users
   private
 
     def handle_authentication_success
-      return redirect_to missing_mobile_number_path if !resource.mobile_number?
+      return redirect_to missing_mobile_number_path unless resource.mobile_number?
 
       set_current_user
       set_raven_context
