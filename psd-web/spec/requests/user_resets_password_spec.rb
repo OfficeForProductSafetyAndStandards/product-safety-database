@@ -79,12 +79,13 @@ RSpec.describe "User resets password", type: :request, with_stubbed_notify: true
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
 
-        patch user_password_path, params: {
-          user: {
-            reset_password_token: reset_token,
-            password: "7rjfy38f74hf937"
-          }
-        }
+        patch user_password_path,
+              params: {
+                user: {
+                  reset_password_token: reset_token,
+                  password: "7rjfy38f74hf937"
+                }
+              }
       end
 
       it "redirects to the password changed page" do
@@ -101,12 +102,13 @@ RSpec.describe "User resets password", type: :request, with_stubbed_notify: true
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
 
-        patch user_password_path, params: {
-          user: {
-            reset_password_token: reset_token,
-            password: ""
-          }
-        }
+        patch user_password_path,
+              params: {
+                user: {
+                  reset_password_token: reset_token,
+                  password: ""
+                }
+              }
       end
 
       it "re-renders the new password form" do
@@ -123,12 +125,13 @@ RSpec.describe "User resets password", type: :request, with_stubbed_notify: true
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
 
-        patch user_password_path, params: {
-          user: {
-            reset_password_token: reset_token,
-            password: "abc"
-          }
-        }
+        patch user_password_path,
+              params: {
+                user: {
+                  reset_password_token: reset_token,
+                  password: "abc"
+                }
+              }
       end
 
       it "re-renders the new password form" do
@@ -145,12 +148,13 @@ RSpec.describe "User resets password", type: :request, with_stubbed_notify: true
 
         user.update!(reset_password_token: reset_password_digest, reset_password_sent_at: 1.minute.ago)
 
-        patch user_password_path, params: {
-          user: {
-            reset_password_token: reset_token,
-            password: "Password123"
-          }
-        }
+        patch user_password_path,
+              params: {
+                user: {
+                  reset_password_token: reset_token,
+                  password: "Password123"
+                }
+              }
       end
 
       it "re-renders the new password form" do

@@ -29,8 +29,8 @@ class CorrectiveAction < ApplicationRecord
   validates :geographic_scope, presence: true
   validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
 
-  validates :summary, length: { maximum: 10000 }
-  validates :details, length: { maximum: 50000 }
+  validates :summary, length: { maximum: 10_000 }
+  validates :details, length: { maximum: 50_000 }
 
   after_create :create_audit_activity
 
