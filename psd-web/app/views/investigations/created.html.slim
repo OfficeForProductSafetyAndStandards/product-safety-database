@@ -20,8 +20,10 @@
       | .
     p.govuk-body If you need to, you can add more information later.
 
-    = link_to "View case", investigation_path(@investigation),
-            class: "govuk-button", role: "button"
+    = link_to "View case",
+              investigation_path(@investigation),
+              class: "govuk-button",
+              role: "button"
 
     div
       = link_to "Home", root_path, class: "govuk-link app-block-link govuk-body"

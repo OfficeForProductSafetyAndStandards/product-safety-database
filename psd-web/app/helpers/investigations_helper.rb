@@ -167,8 +167,26 @@ module InvestigationsHelper
     set_default_type_filter
     set_default_owner_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :case_owner_is_me, :case_owner_is_someone_else, :case_owner_is_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
-                  owner_team_with_key[0], creator_team_with_key[0])
+    params.permit(
+      :q,
+      :status_open,
+      :status_closed,
+      :page,
+      :allegation,
+      :enquiry,
+      :project,
+      :case_owner_is_me,
+      :case_owner_is_someone_else,
+      :case_owner_is_someone_else_id,
+      :sort_by,
+      :created_by_me,
+      :created_by_me,
+      :created_by_someone_else,
+      :created_by_someone_else_id,
+      :coronavirus_related_only,
+      owner_team_with_key[0],
+      creator_team_with_key[0]
+    )
   end
 
   def export_params

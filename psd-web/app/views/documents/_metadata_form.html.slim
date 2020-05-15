@@ -9,12 +9,18 @@
       hr [class = "govuk-section-break govuk-section-break--m govuk-section-break--visible"]
       h3.govuk-heading-m = "#{image_document_text(document).upcase_first} details"
       = form.fields_for :file do |subform|
-        = render "form_components/govuk_input", key: :title, form: subform, classes: "govuk-!-width-two-thirds",
-                value: document.metadata["title"],
-                label: { text: "Document title" }
-        = render "form_components/govuk_textarea", key: :description, form: subform,
-                value: document.metadata["description"], attributes: { maxlength: 10000 },
-                label: { text: "Description" }
+        = render "form_components/govuk_input",
+                 key: :title,
+                 form: subform,
+                 classes: "govuk-!-width-two-thirds",
+                 value: document.metadata["title"],
+                 label: { text: "Document title" }
+        = render "form_components/govuk_textarea",
+                 key: :description,
+                 form: subform,
+                 value: document.metadata["description"],
+                 attributes: { maxlength: 10_000 },
+                 label: { text: "Description" }
         .govuk-form-group
           .govuk-grid-row
             .govuk-grid-column-one-third

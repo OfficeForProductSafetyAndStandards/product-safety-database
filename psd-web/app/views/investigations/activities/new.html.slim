@@ -12,8 +12,10 @@
         span.govuk-caption-l = @investigation.pretty_description
         h1.govuk-heading-l
           | New activity
-      = render "form_components/govuk_radios", form: form, key: :activity_type,
-              errorMessage: error_message,
-              items: activity_types.map { |type, label| { text: label, value: type } },
-              fieldset: { legend: { html: header } }
+      = render "form_components/govuk_radios",
+               form: form,
+               key: :activity_type,
+               errorMessage: error_message,
+               items: activity_types.map { |type, label| { text: label, value: type } },
+               fieldset: { legend: { html: header } }
       = form.submit "Continue", class: "govuk-button"

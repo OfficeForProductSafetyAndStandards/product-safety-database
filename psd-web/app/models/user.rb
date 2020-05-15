@@ -127,9 +127,11 @@ class User < ApplicationRecord
     self.unlock_token = enc
     save(validate: false)
     reset_password_token = set_reset_password_token
-    NotifyMailer.account_locked(self,
-                                unlock_token: raw,
-                                reset_password_token: reset_password_token).deliver_later
+    NotifyMailer.account_locked(
+      self,
+      unlock_token: raw,
+      reset_password_token: reset_password_token
+    ).deliver_later
     raw
   end
 

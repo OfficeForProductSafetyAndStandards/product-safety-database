@@ -9,7 +9,7 @@ class Product < ApplicationRecord
   validates :category, presence: true
   validates :product_type, presence: true
   validates :name, presence: true
-  validates :description, length: { maximum: 10000 }
+  validates :description, length: { maximum: 10_000 }
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 

@@ -8,7 +8,9 @@
     p.govuk-body-l
       |  Report, track and share product safety information.
     = link_to new_ts_investigation_path,
-            class: "govuk-button govuk-button--start", role: "button", draggable: "false"
+              class: "govuk-button govuk-button--start",
+              role: "button",
+              draggable: "false"
       | Open a new case
 
 hr.govuk-section-break.govuk-section-break--l.govuk-section-break--visible class=["govuk-!-margin-top-0"]
@@ -16,8 +18,9 @@ hr.govuk-section-break.govuk-section-break--l.govuk-section-break--visible class
 .govuk-grid-row
   .govuk-grid-column-one-third
     h2.govuk-heading-m
-      = link_to "Your cases", investigations_path(case_owner_is_me: "checked"),
-              class: "govuk-link govuk-link--no-visited-state"
+      = link_to "Your cases",
+                investigations_path(case_owner_is_me: "checked"),
+                class: "govuk-link govuk-link--no-visited-state"
     p Cases you own or created.
 
   .govuk-grid-column-one-third
@@ -28,5 +31,6 @@ hr.govuk-section-break.govuk-section-break--l.govuk-section-break--visible class
   .govuk-grid-column-one-third
     h2.govuk-heading-m
       = link_to "How to use the Product safety database",
-      help_about_path, class: "govuk-link govuk-link--no-visited-state"
+                help_about_path,
+                class: "govuk-link govuk-link--no-visited-state"
     p How and when to use this service.

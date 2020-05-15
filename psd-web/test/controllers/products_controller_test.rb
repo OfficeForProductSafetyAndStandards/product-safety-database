@@ -31,15 +31,16 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update product" do
-    patch product_path(@product_one), params: { product: {
-      batch_number: @product_one.batch_number,
-      product_type: @product_one.product_type,
-      category: @product_one.category,
-      description: @product_one.description,
-      product_code: @product_one.product_code,
-      webpage: @product_one.webpage,
-      name: @product_one.name
-    } }
+    patch product_path(@product_one),
+          params: { product: {
+            batch_number: @product_one.batch_number,
+            product_type: @product_one.product_type,
+            category: @product_one.category,
+            description: @product_one.description,
+            product_code: @product_one.product_code,
+            webpage: @product_one.webpage,
+            name: @product_one.name
+          } }
     assert_redirected_to product_path(@product_one)
   end
 end
