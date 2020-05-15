@@ -8,13 +8,12 @@ RSpec.describe AuditActivity::Investigation::AutomaticallyUpdateOwner, :with_stu
 
   describe ".from" do
     it "creates an audit activity without information for email notification" do
-      expect(audit_activity)
-        .to have_attributes(
-          title: "Case owner automatically changed on Enquiry to #{team.display_name}",
-          body: nil,
-          email_update_text: nil,
-          email_subject_text: nil
-        )
+      expect(audit_activity).to have_attributes(
+        title: "Case owner automatically changed on Enquiry to #{team.display_name}",
+        body: nil,
+        email_update_text: nil,
+        email_subject_text: nil
+      )
     end
   end
 end
