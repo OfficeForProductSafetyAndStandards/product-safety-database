@@ -61,7 +61,7 @@ class AlertTest < ApplicationSystemTestCase
     assert_css "h1", text: "Legal privilege"
   end
 
-  def go_to_new_activity_for_investigation investigation
+  def go_to_new_activity_for_investigation(investigation)
     visit investigation_path(investigation)
 
     click_link "Add activity"
@@ -72,7 +72,7 @@ class AlertTest < ApplicationSystemTestCase
     click_on "Continue"
   end
 
-  def fill_in_compose_alert alert
+  def fill_in_compose_alert(alert)
     fill_in :alert_summary, with: alert.summary
     fill_in :alert_description, with: alert.description
     click_on "Preview alert"
@@ -84,7 +84,7 @@ class AlertTest < ApplicationSystemTestCase
     end
   end
 
-  def stub_email_preview alert
+  def stub_email_preview(alert)
     stubbed_notifications_client = double("NotificationsClient")
     stubbed_template = double("TemplatePreview", html: "<p>#{alert.description}</p>")
     allow(Notifications::Client).to receive(:new) { stubbed_notifications_client }

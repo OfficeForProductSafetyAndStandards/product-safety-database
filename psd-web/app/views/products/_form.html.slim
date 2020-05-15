@@ -15,46 +15,64 @@
 
 - hint_html = capture do
   | For example, ‘Face mask’ or ‘Latex gloves’
-= render "form_components/govuk_input", key: :product_type, form: form,
-        classes: "app-!-max-width-one-half",
-        label: { text: "Product type", classes: label_class },
-        hint: { html: hint_html }
+= render "form_components/govuk_input",
+         key: :product_type,
+         form: form,
+         classes: "app-!-max-width-one-half",
+         label: { text: "Product type", classes: label_class },
+         hint: { html: hint_html }
 
 - hint_html = capture do
   | Include brand, model name and model number – information that will help
     others identify the product.
     For example, ‘Inotech respirator face mask (FFP), 795487’.
 
-= render "form_components/govuk_input", key: :name, form: form,
-        classes: "app-!-max-width-three-quarters",
-        label: { text: "Product name", classes: label_class },
-        hint: { html: hint_html }
+= render "form_components/govuk_input",
+         key: :name,
+         form: form,
+         classes: "app-!-max-width-three-quarters",
+         label: { text: "Product name", classes: label_class },
+         hint: { html: hint_html }
 
-= render "form_components/govuk_input", key: :product_code, form: form, classes: "app-!-max-width-one-half",
-        label: { text: "Barcode or serial number", classes: label_class },
-        hint: { text: "Include both if you have them" }
+= render "form_components/govuk_input",
+         key: :product_code,
+         form: form,
+         classes: "app-!-max-width-one-half",
+         label: { text: "Barcode or serial number", classes: label_class },
+         hint: { text: "Include both if you have them" }
 
-= render "form_components/govuk_input", key: :batch_number, form: form, classes: "app-!-max-width-one-half",
-        label: { text: "Batch number", classes: label_class }
+= render "form_components/govuk_input",
+         key: :batch_number,
+         form: form,
+         classes: "app-!-max-width-one-half",
+         label: { text: "Batch number", classes: label_class }
 
-= render "form_components/govuk_input", key: :webpage, form: form, classes: "app-!-max-width-three-quarters",
-        label: { text: "Webpage", classes: label_class },
-        hint: { text: "The manufacturer’s page for the product, \
-          or a link to where it can be bought" }
+= render "form_components/govuk_input",
+         key: :webpage,
+         form: form,
+         classes: "app-!-max-width-three-quarters",
+         label: { text: "Webpage", classes: label_class },
+         hint: { text: "The manufacturer’s page for the product, \
+           or a link to where it can be bought" }
 
-= render "form_components/govuk_select", form: form, key: :country_of_origin,
-          formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
-          items: countries.map { |country| { text: country[0], value: country[1] } },
-          include_blank: true, id: "location-autocomplete",
-          label: { text: "Country of origin", classes: label_class },
-          hint: { text: "Where the product was manufactured" }
+= render "form_components/govuk_select",
+         form: form,
+         key: :country_of_origin,
+         formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
+         items: countries.map { |country| { text: country[0], value: country[1] } },
+         include_blank: true,
+         id: "location-autocomplete",
+         label: { text: "Country of origin", classes: label_class },
+         hint: { text: "Where the product was manufactured" }
 
-= render "form_components/govuk_textarea", key: :description, form: form,
-        attributes: { maxlength: 10000 },
-        classes: "app-!-max-width-three-quarters",
-        label: { text: "Description of product", classes: label_class },
-        hint: { text: "Details about the product you haven’t \
-          included above. For example, colour, size, packaging description. \
-          You don’t need to include details of damage or incidents." }
+= render "form_components/govuk_textarea",
+         key: :description,
+         form: form,
+         attributes: { maxlength: 10_000 },
+         classes: "app-!-max-width-three-quarters",
+         label: { text: "Description of product", classes: label_class },
+         hint: { text: "Details about the product you haven’t \
+           included above. For example, colour, size, packaging description. \
+           You don’t need to include details of damage or incidents." }
 
 = form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button"

@@ -1,0 +1,63 @@
+<%= page_title "Confirm email details", errors: @correspondence.errors.any? %>
+<% content_for :after_header do %>
+  <%= link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link" %>
+<% end %>
+
+<span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+<h1 class="govuk-heading-l">Confirm email details</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_with(model: @correspondence,
+                local: true,
+                url: investigation_emails_path(@investigation),
+                method: :post) do |form| %>
+      <table class="govuk-table">
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">
+              <%= Correspondence::Email.email_directions[@correspondence.email_direction] %></th>
+            <td class="govuk-table__cell"><%= @correspondence.email_address %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Contains consumer info</th>
+            <td class="govuk-table__cell"><%= @correspondence.has_consumer_info ? "Yes" : "No" %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Summary</th>
+            <td class="govuk-table__cell"><%= @correspondence.overview %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Date sent</th>
+            <td class="govuk-table__cell"><%= @correspondence.correspondence_date&.strftime("%d/%m/%Y") %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Email</th>
+            <td class="govuk-table__cell"><%= @email_file_blob&.filename %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Subject</th>
+            <td class="govuk-table__cell"><%= @correspondence.email_subject %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Content</th>
+            <td class="govuk-table__cell"><%= @correspondence.details %></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Attachments</th>
+            <td class="govuk-table__cell"><%= @email_attachment_blob&.filename %></td>
+          </tr>
+          <% if @email_attachment_blob %>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Attachment description</th>
+              <td class="govuk-table__cell"><%= @email_attachment_blob.metadata[:description] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= link_to("Edit details", wizard_path(:context), class: "govuk-link psd-block-link") %>
+    <% end %>
+  </div>
+</div>

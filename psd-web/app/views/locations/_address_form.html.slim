@@ -1,26 +1,41 @@
 = render "components/govuk_fieldset",
-        legend: { text: "Address", classes: "govuk-fieldset__legend--m" } do
+         legend: { text: "Address", classes: "govuk-fieldset__legend--m" } do
 
-  = render "form_components/govuk_input", key: :address_line_1, form: form,
-          label: { html: "Building and street <span class=\"govuk-visually-hidden\">line 1 of 2</span>".html_safe },
-          classes: "govuk-!-width-two-thirds"
+  = render "form_components/govuk_input",
+           key: :address_line_1,
+           form: form,
+           label: { html: "Building and street <span class=\"govuk-visually-hidden\">line 1 of 2</span>".html_safe },
+           classes: "govuk-!-width-two-thirds"
 
-  = render "form_components/govuk_input", key: :address_line_2, form: form,
-          label: { text: "Building and street line 2 of 2", classes: "govuk-visually-hidden" },
-          classes: "govuk-!-width-two-thirds"
+  = render "form_components/govuk_input",
+           key: :address_line_2,
+           form: form,
+           label: { text: "Building and street line 2 of 2", classes: "govuk-visually-hidden" },
+           classes: "govuk-!-width-two-thirds"
 
-  = render "form_components/govuk_input", key: :city, form: form,
-          label: { text: "Town or city" },
-          classes: "govuk-!-width-two-thirds"
+  = render "form_components/govuk_input",
+           key: :city,
+           form: form,
+           label: { text: "Town or city" },
+           classes: "govuk-!-width-two-thirds"
 
-  = render "form_components/govuk_input", key: :county, form: form,
-          label: { text: "County" },
-          classes: "govuk-!-width-two-thirds"
+  = render "form_components/govuk_input",
+           key: :county,
+           form: form,
+           label: { text: "County" },
+           classes: "govuk-!-width-two-thirds"
 
-  = render "form_components/govuk_input", key: :postal_code, form: form, classes: "govuk-!-width-one-quarter",
-          label: { text: "Postcode" }
+  = render "form_components/govuk_input",
+           key: :postal_code,
+           form: form,
+           classes: "govuk-!-width-one-quarter",
+           label: { text: "Postcode" }
   / Todo: find a better way of setting width on autocompletes
   div class="govuk-!-width-two-thirds"
-    = render "form_components/govuk_select", form: form, key: :country,
-          items: countries.map { |country| { text: country[0], value: country[1] } },
-          include_blank: true, id: "location-autocomplete", label: { text: "Country" }
+    = render "form_components/govuk_select",
+            form: form,
+            key: :country,
+            items: countries.map { |country| { text: country[0], value: country[1] } },
+            include_blank: true,
+            id: "location-autocomplete",
+            label: { text: "Country" }

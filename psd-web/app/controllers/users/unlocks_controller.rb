@@ -14,7 +14,7 @@ module Users
   private
 
     def passed_secondary_authentication?
-      return true if !Rails.configuration.secondary_authentication_enabled
+      return true unless Rails.configuration.secondary_authentication_enabled
 
       user_signed_in? && user_with_unlock_token == current_user && is_fully_authenticated?
     end

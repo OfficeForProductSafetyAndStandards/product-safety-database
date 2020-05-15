@@ -26,11 +26,13 @@ RSpec.shared_context "with stubbed mailer", shared_context: :metadata do
   # rubocop:disable RSpec/AnyInstance
   before do
     allow_any_instance_of(NotifyMailer).to receive(:mail) do |m, *args|
-      delivered_emails << TestNotifyEmail.new(recipient: args.first[:to],
-                                              reference: m.govuk_notify_reference,
-                                              template: m.govuk_notify_template,
-                                              personalization: m.govuk_notify_personalisation,
-                                              action_name: m.action_name)
+      delivered_emails << TestNotifyEmail.new(
+        recipient: args.first[:to],
+        reference: m.govuk_notify_reference,
+        template: m.govuk_notify_template,
+        personalization: m.govuk_notify_personalisation,
+        action_name: m.action_name
+      )
     end
   end
   # rubocop:enable RSpec/AnyInstance

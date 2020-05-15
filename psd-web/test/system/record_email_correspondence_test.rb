@@ -120,8 +120,8 @@ class RecordEmailCorrespondenceTest < ApplicationSystemTestCase
   end
 
   test "requires details to be no longer than 50000 characters" do
-    more_than_50000_characters = "a" * 50001
-    exactly_50000_characters = "a" * 50000
+    more_than_50000_characters = "a" * 50_001
+    exactly_50000_characters = "a" * 50_000
     test_request = Correspondence.create(
       investigation: @investigation,
       correspondence_date: @correspondence.correspondence_date

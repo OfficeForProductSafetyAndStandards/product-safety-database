@@ -70,14 +70,22 @@ module Investigations
 
     def preload_activities
       @activities = @investigation.activities.eager_load(:source)
-      preload_manually(@activities.select { |a| a.respond_to?("attachment") },
-                       [{ attachment_attachment: :blob }])
-      preload_manually(@activities.select { |a| a.respond_to?("email_file") },
-                       [{ email_file_attachment: :blob }, { email_attachment_attachment: :blob }])
-      preload_manually(@activities.select { |a| a.respond_to?("transcript") },
-                       [{ transcript_attachment: :blob }, { related_attachment_attachment: :blob }])
-      preload_manually(@activities.select { |a| a.respond_to?("correspondence") },
-                       [:correspondence])
+      preload_manually(
+        @activities.select { |a| a.respond_to?("attachment") },
+        [{ attachment_attachment: :blob }]
+      )
+      preload_manually(
+        @activities.select { |a| a.respond_to?("email_file") },
+        [{ email_file_attachment: :blob }, { email_attachment_attachment: :blob }]
+      )
+      preload_manually(
+        @activities.select { |a| a.respond_to?("transcript") },
+        [{ transcript_attachment: :blob }, { related_attachment_attachment: :blob }]
+      )
+      preload_manually(
+        @activities.select { |a| a.respond_to?("correspondence") },
+        [:correspondence]
+      )
     end
   end
 end

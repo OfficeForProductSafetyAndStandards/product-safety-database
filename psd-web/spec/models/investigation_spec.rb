@@ -23,11 +23,13 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:team) { create(:team) }
       let(:collaborator_team) { create(:team) }
       let(:investigation) do
-        create(:investigation,
-               owner: team,
-               collaborators: [
-                 create(:collaborator, team: collaborator_team)
-               ])
+        create(
+          :investigation,
+          owner: team,
+          collaborators: [
+            create(:collaborator, team: collaborator_team)
+          ]
+        )
       end
 
       it "is a list of the team and the collaborator team" do

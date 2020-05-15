@@ -37,15 +37,17 @@ module CorrectiveActionsConcern
   def corrective_action_request_params
     return {} if params[:corrective_action].blank?
 
-    params.require(:corrective_action).permit(:product_id,
-                                              :business_id,
-                                              :legislation,
-                                              :summary,
-                                              :details,
-                                              :related_file,
-                                              :measure_type,
-                                              :duration,
-                                              :geographic_scope)
+    params.require(:corrective_action).permit(
+      :product_id,
+      :business_id,
+      :legislation,
+      :summary,
+      :details,
+      :related_file,
+      :measure_type,
+      :duration,
+      :geographic_scope
+    )
   end
 
   def corrective_action_file_metadata

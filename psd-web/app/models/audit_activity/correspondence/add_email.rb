@@ -9,7 +9,7 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     activity.attach_blob(correspondence.email_attachment.blob, :email_attachment) if correspondence.email_attachment.attached?
   end
 
-  def self.build_body correspondence
+  def self.build_body(correspondence)
     body = ""
     body += build_correspondent_details correspondence
     body += "Subject: **#{sanitize_text correspondence.email_subject}**<br>" if correspondence.email_subject.present?
@@ -20,7 +20,7 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     body
   end
 
-  def self.build_correspondent_details correspondence
+  def self.build_correspondent_details(correspondence)
     return "" unless correspondence.correspondent_name || correspondence.email_address
 
     output = ""
@@ -30,17 +30,17 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     output
   end
 
-  def self.build_email_file_body correspondence
+  def self.build_email_file_body(correspondence)
     file = correspondence.email_file
     file.attached? ? "Email: #{sanitize_text file.filename}<br>" : ""
   end
 
-  def self.build_attachment_body correspondence
+  def self.build_attachment_body(correspondence)
     file = correspondence.email_attachment
     file.attached? ? "Attached: #{sanitize_text file.filename}<br>" : ""
   end
 
-  def self.build_email_address correspondence
+  def self.build_email_address(correspondence)
     output = ""
     output += "(" if correspondence.correspondent_name.present?
     output += sanitize_text correspondence.email_address

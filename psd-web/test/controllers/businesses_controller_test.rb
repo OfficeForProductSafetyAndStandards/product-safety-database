@@ -26,13 +26,14 @@ class BusinessesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update business" do
-    patch business_url(@business_one), params: {
-      business: {
-        legal_name: "new legal_name for business_one",
-        trading_name: "new trading_name for business_one",
-        company_number: "new company number for business_one"
-      }
-    }
+    patch business_url(@business_one),
+          params: {
+            business: {
+              legal_name: "new legal_name for business_one",
+              trading_name: "new trading_name for business_one",
+              company_number: "new company number for business_one"
+            }
+          }
     assert_redirected_to business_url(@business_one)
   end
 end

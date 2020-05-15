@@ -8,10 +8,12 @@
       span.govuk-caption-l = @investigation.pretty_description
       h1.govuk-heading-l
         | Record meeting
-      = render "form_components/govuk_input", key: :overview, form: form,
-              classes: "govuk-!-width-two-thirds",
-              label: { text: "Summary", classes: "govuk-label--m" },
-              hint: { text: "Give an overview of the meeting" }
+      = render "form_components/govuk_input",
+               key: :overview,
+               form: form,
+               classes: "govuk-!-width-two-thirds",
+               label: { text: "Summary", classes: "govuk-label--m" },
+               hint: { text: "Give an overview of the meeting" }
       = render "components/govuk_fieldset",
                legend: { text: "Details", classes: "govuk-fieldset__legend--m" },
                describedBy: "details-hint" do
@@ -27,10 +29,16 @@
                 | Selecting a different one will replace it.
             = subform.label :file, "Upload a file", class: "govuk-label"
             = subform.file_field :file, class: "govuk-file-upload"
-        = render "form_components/govuk_textarea", key: :details, form: form, attributes: { maxlength: 50000 },
-                  label: { text: "Notes", classes: "govuk-!-width-two-thirds" }
+        = render "form_components/govuk_textarea",
+                 key: :details,
+                 form: form,
+                 attributes: { maxlength: 50_000 },
+                label: { text: "Notes", classes: "govuk-!-width-two-thirds" }
 
-        = render "related_attachment_fields", form: form,
-              file_blob: @related_attachment_blob, attachment_name: :related_attachment, title: "Related attachments"
+        = render "related_attachment_fields",
+                 form: form,
+                 file_blob: @related_attachment_blob,
+                 attachment_name: :related_attachment,
+                 title: "Related attachments"
 
       = form.submit "Continue", class: "govuk-button"

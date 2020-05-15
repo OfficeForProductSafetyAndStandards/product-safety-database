@@ -17,8 +17,10 @@ class InvestigationsController < ApplicationController
       end
       format.xlsx do
         @answer = search_for_investigations
-        @investigations = Investigation.eager_load(:complainant,
-                                                   :source).where(id: @answer.results.map(&:_id))
+        @investigations = Investigation.eager_load(
+          :complainant,
+          :source
+        ).where(id: @answer.results.map(&:_id))
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
@@ -89,9 +91,10 @@ private
     respond_to do |format|
       if @investigation.update(update_params)
         format.html do
-          redirect_to investigation_path(@investigation), flash: {
-            success: "#{@investigation.case_type.upcase_first} was successfully updated."
-          }
+          redirect_to investigation_path(@investigation),
+                      flash: {
+                        success: "#{@investigation.case_type.upcase_first} was successfully updated."
+                      }
         end
         format.json { render :show, status: :ok, location: @investigation }
       else
