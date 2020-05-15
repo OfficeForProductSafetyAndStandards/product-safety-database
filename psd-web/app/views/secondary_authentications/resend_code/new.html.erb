@@ -1,5 +1,5 @@
 <% title = "Resend security code" %>
-<% content_for :page_title, title %>
+<% page_title(title, errors: @user.errors.any?) %>
 
 <% content_for :after_header do %>
   <%= govukBackLink(text: "Back", href: new_secondary_authentication_path) %>
@@ -13,27 +13,18 @@
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">Text messages sometimes take a few minutes to arrive. If you do not receive the text message, you can resend it.</p>
-
-    <%= form_with(url: resend_secondary_authentication_code_path, method: "post") do |form| %>
+    <%= form_with(model: @user,url: resend_secondary_authentication_code_path, method: "post") do |form| %>
       <% if @mobile_number_change_allowed %>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              Change where the text message is sent
-            </span>
-          </summary>
-          <div class="govuk-details__text">
-            <%= render "form_components/govuk_input", key: :mobile_number, form: form,
-              classes: "app-!-max-width-two-thirds",
-              label: { text: "Mobile number" },
-              value: @user.mobile_number,
-              name: "mobile_number",
-              id: "mobile_number",
-              autocomplete: "tel",
-              type: "tel"
-            %>
-          </div>
-        </details>
+        <%= govukDetails(summaryText: "Change where the text message is sent", open: true) do %>
+          <%= render "form_components/govuk_input", key: :mobile_number, form: form,
+               classes: "app-!-max-width-two-thirds",
+               label: { text: "Mobile number" },
+               value: @user.mobile_number,
+               id: "mobile_number",
+               autocomplete: "tel",
+               type: "tel"
+          %>
+        <% end %>
       <% else %>
         <p class="govuk-body">If you no longer have access to the phone with the number you registered for this service, contact <%= mail_to t(:enquiries_email), nil, subject: "Update mobile number", class: "govuk-link" %> to reset the number.</p>
       <% end %>

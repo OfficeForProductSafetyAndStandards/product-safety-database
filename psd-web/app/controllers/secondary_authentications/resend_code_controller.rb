@@ -17,11 +17,12 @@ module SecondaryAuthentications
 
     def create
       @mobile_number_change_allowed = !user.mobile_number_verified
+      return resend_code unless @mobile_number_change_allowed
+
+      user.mobile_number = mobile_number_param
       if resend_code_form.valid?
-        user.update!(mobile_number: params[:mobile_number]) if @mobile_number_change_allowed
-        # To avoid the user being redirected back to "Resend Security Code" page after successfully introducing
-        # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
-        require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])
+        user.save!
+        resend_code
       else
         user.errors.merge!(resend_code_form.errors)
         render(:new)
@@ -29,6 +30,12 @@ module SecondaryAuthentications
     end
 
   private
+
+    def resend_code
+      # To avoid the user being redirected back to "Resend Security Code" page after successfully introducing
+      # the new secondary auth. code, we carry the original redirection path from where 2FA was triggered.
+      require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])
+    end
 
     def require_user
       return render("errors/forbidden", status: :forbidden) unless user
@@ -43,7 +50,7 @@ module SecondaryAuthentications
     end
 
     def resend_code_form
-      @resend_code_form ||= ResendSecondaryAuthenticationCodeForm.new(mobile_number: params[:mobile_number], user: user)
+      @resend_code_form ||= ResendSecondaryAuthenticationCodeForm.new(mobile_number: mobile_number_param, user: user)
     end
 
     def user_id_for_secondary_authentication
@@ -52,6 +59,10 @@ module SecondaryAuthentications
 
     def user
       @user ||= (current_user || User.find_by(id: session[:secondary_authentication_user_id]))
+    end
+
+    def mobile_number_param
+      params.dig(:user, :mobile_number)
     end
   end
 end
