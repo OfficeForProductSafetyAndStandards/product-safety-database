@@ -47,7 +47,7 @@ module SecondaryAuthentications
     end
 
     def user_id_for_secondary_authentication
-      current_user.id || session[:secondary_authentication_user_id]
+      current_user&.id || session[:secondary_authentication_user_id]
     end
 
     def user
