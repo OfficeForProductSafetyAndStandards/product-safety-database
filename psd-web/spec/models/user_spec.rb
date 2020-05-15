@@ -162,7 +162,7 @@ RSpec.describe User do
 
     it "includes associations needed for display_name" do
       owners = described_class.get_owners.to_a # to_a forces the query execution and load immediately
-      expect(-> {
+      expect(lambda {
         owners.map { |owner| owner.decorate.display_name }
       }).to not_talk_to_db
     end

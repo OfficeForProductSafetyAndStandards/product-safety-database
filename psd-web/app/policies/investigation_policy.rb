@@ -37,7 +37,7 @@ class InvestigationPolicy < ApplicationPolicy
     return true if @record.owner.present? && (@record.owner&.organisation == user.organisation)
     return true if @record.source&.user_has_gdpr_access?(user: user)
 
-    # Has the user’s team been added to the case as a collaborator?
+    # Has the user's team been added to the case as a collaborator?
     return true if @record.teams.include?(user.team)
 
     false

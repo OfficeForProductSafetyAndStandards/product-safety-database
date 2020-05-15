@@ -39,14 +39,12 @@ gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
 gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "0.6.6"
+gem "strong_migrations", "0.6.8"
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.1.1"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.6.4", require: "govuk_design_system"
-
-# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem "awesome_print", require: "ap"
   gem "brakeman"
@@ -65,7 +63,7 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk", "~> 3.8.0"
+  gem "rubocop-govuk", "~> 3.9.0"
   gem "rubocop-performance"
   gem "rubocop-rspec", "~> 1.39", require: false
   gem "ruby-debug-ide"
@@ -81,7 +79,6 @@ group :development, :test do
   gem "spring-commands-rspec"
   gem "webmock"
 end
-# rubocop:enable Metrics/BlockLength
 
 group :test do
   gem "capybara-screenshot"

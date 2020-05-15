@@ -22,13 +22,13 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     context "when there is a team as the case owner and a collaborator team added" do
       let(:team) { create(:team) }
       let(:collaborator_team) { create(:team) }
-      let(:investigation) {
+      let(:investigation) do
         create(:investigation,
                owner: team,
                collaborators: [
                  create(:collaborator, team: collaborator_team)
                ])
-      }
+      end
 
       it "is a list of the team and the collaborator team" do
         expect(investigation.teams_with_access).to match_array([team, collaborator_team])

@@ -73,7 +73,7 @@ private
   end
 
   def alert_request_params
-    return {} unless params.has_key? :alert
+    return {} unless params.key? :alert
 
     params.require(:alert).permit(:summary, :description)
   end

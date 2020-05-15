@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     return render(:expired_invitation) if @user.invitation_expired?
     return (render "errors/not_found", status: :not_found) if !params[:invitation] || (@user.invitation_token != params[:invitation])
 
-    # Reset name and mobile number in case they’ve been remembered
+    # Reset name and mobile number in case they've been remembered
     # from a previous registration that was abandoned before the mobile number
     # was verified via two-factor authentication.
     @user.name = ""

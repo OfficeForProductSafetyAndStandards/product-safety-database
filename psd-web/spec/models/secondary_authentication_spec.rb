@@ -9,13 +9,11 @@ RSpec.describe SecondaryAuthentication do
   let(:secondary_authentication) { described_class.new(user) }
 
   describe "#valid_otp?" do
-    # rubocop:disable Style/MethodCalledOnDoEndBlock
     it "increase attempts when checking code" do
-      expect do
+      expect {
         secondary_authentication.valid_otp? "123"
-      end.to change { user.reload.second_factor_attempts_count }.from(0).to(1)
+      }.to change { user.reload.second_factor_attempts_count }.from(0).to(1)
     end
-    # rubocop:enable Style/MethodCalledOnDoEndBlock
 
     it "returns true" do
       expect(secondary_authentication).to be_valid_otp(user.reload.direct_otp)
@@ -36,27 +34,23 @@ RSpec.describe SecondaryAuthentication do
         expect(user.reload.second_factor_attempts_count).to eq(0)
       end
 
-      # rubocop:disable Style/MethodCalledOnDoEndBlock
       it "does not increase attempts when checking code" do
-        expect do
+        expect {
           secondary_authentication.valid_otp? "123"
-        end.not_to(change { user.reload.second_factor_attempts_count })
+        }.not_to(change { user.reload.second_factor_attempts_count })
       end
-      # rubocop:enable Style/MethodCalledOnDoEndBlock
 
       it "returns false" do
         expect(secondary_authentication).not_to be_valid_otp(user.reload.direct_otp)
       end
 
-      # rubocop:disable Style/MethodCalledOnDoEndBlock
       it "sets second_factor_attempts_count after lock cooldown" do
         travel_to(Time.now.utc + (SecondaryAuthentication::MAX_ATTEMPTS_COOLDOWN + 1).seconds) do
-          expect do
+          expect {
             secondary_authentication.valid_otp? "123"
-          end.to change { user.reload.second_factor_attempts_count }.from(0).to(1)
+          }.to change { user.reload.second_factor_attempts_count }.from(0).to(1)
         end
       end
-      # rubocop:enable Style/MethodCalledOnDoEndBlock
 
       it "clears second_factor_attempts_locked_at after lock cooldown" do
         travel_to(Time.now.utc + (SecondaryAuthentication::MAX_ATTEMPTS_COOLDOWN + 1).seconds) do

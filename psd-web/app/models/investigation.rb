@@ -133,7 +133,7 @@ class Investigation < ApplicationRecord
 
   def add_pretty_id
     cases_before = Investigation.where("created_at < ? AND created_at > ?", created_at, created_at.beginning_of_month).count
-    self.pretty_id = "#{created_at.strftime('%y%m')}-%04d" % (cases_before + 1)
+    self.pretty_id = format("#{created_at.strftime('%y%m')}-%04d", (cases_before + 1))
   end
 
   def reported_reason

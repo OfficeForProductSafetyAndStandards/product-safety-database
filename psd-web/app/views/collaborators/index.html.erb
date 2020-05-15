@@ -38,9 +38,9 @@
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
             <td class="govuk-table__cell">Edit full case</td>
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell app-table__cell--align-right">
               <% if policy(@investigation).manage_collaborators? %>
-                <%= link_with_hidden_text_to "Change", "#{team.name}",  edit_investigation_collaborator_path(@investigation, team) %>
+                <%= link_with_hidden_text_to "Change", "#{team.name}’s permission level",  edit_investigation_collaborator_path(@investigation, team) %>
               <% end %>
             </td>
           </tr>

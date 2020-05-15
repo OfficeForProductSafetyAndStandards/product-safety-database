@@ -65,7 +65,7 @@ private
 
   def owner_valid?
     if step == :"select-owner"
-      if potential_owner == nil
+      if potential_owner.nil?
         @investigation.errors.add(:owner_id, :invalid, message: "Select case owner")
       end
     end

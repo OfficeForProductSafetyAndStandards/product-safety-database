@@ -1,10 +1,10 @@
 ruby:
-  actual_items = items.map { |item|
+  actual_items = items.map do |item|
     {
       text: item.decorate.display_name,
       value: item.id
     }
-  }
+  end
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds
