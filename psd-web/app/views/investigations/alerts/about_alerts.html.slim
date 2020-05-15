@@ -1,6 +1,7 @@
 = page_title "Alert trading standards"
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description.downcase}", investigation_path(@investigation), class: "govuk-back-link"
+  = link_to "Back to #{@investigation.pretty_description.downcase}",
+  investigation_path(@investigation), class: "govuk-back-link"
 
 .govuk-grid-row
   .govuk-grid-column-two-thirds

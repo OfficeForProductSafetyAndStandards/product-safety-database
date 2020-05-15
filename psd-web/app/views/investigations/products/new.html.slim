@@ -1,6 +1,7 @@
 = page_title "Add product to case", errors: @product.errors.any?
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description.downcase}", investigation_path(@investigation), class: "govuk-back-link"
+  = link_to "Back to #{@investigation.pretty_description.downcase}",
+  investigation_path(@investigation), class: "govuk-back-link"
 = form_with model: @product, url: investigation_products_path(@investigation), local: true do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
