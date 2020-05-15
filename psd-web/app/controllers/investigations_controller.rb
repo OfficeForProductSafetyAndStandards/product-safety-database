@@ -59,14 +59,14 @@ class InvestigationsController < ApplicationController
   # GET /cases/1/status
   # PATCH /cases/1/status
   def status
-    authorize @investigation, :update?
+    authorize @investigation, :change_owner_or_status?
     update
   end
 
   # GET /cases/1/visibility
   # PATCH /cases/1/visibility
   def visibility
-    authorize @investigation, :update?
+    authorize @investigation, :change_owner_or_status?
     update
   end
 

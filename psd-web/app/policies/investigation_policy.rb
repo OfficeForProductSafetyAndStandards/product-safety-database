@@ -1,11 +1,15 @@
 class InvestigationPolicy < ApplicationPolicy
   # Used for all updating of the case, including adding and removing related
-  # records, such as products, businesses and documents
+  # records, such as products, businesses and documents, with the exception of
+  # changing the case owner, its status (eg 'open' or 'closed'), and whether
+  # or not it is 'restricted'.
   def update?(user: @user)
     record.teams_with_access.include?(user.team)
   end
 
-  def change_owner?(user: @user)
+  # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),
+  # and whether or not it is 'restricted'.
+  def change_owner_or_status?(user: @user)
     @record.owner.blank? || @record.owner.in_same_team_as?(user) || @record.owner == user
   end
 
