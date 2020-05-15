@@ -46,6 +46,10 @@ module SecondaryAuthentications
       @resend_code_form ||= ResendSecondaryAuthenticationCodeForm.new(mobile_number: params[:mobile_number], user: user)
     end
 
+    def user_id_for_secondary_authentication
+      current_user.id || session[:secondary_authentication_user_id]
+    end
+
     def user
       @user ||= (current_user || User.find_by(id: session[:secondary_authentication_user_id]))
     end
