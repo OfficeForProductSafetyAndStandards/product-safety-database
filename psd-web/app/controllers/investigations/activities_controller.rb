@@ -17,6 +17,8 @@ module Investigations
 
     def new
       set_investigation
+      authorize @investigation, :update?
+
       return unless params[:commit] == "Continue"
 
       case params[:activity_type]

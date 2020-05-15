@@ -14,6 +14,7 @@ class Investigations::CorrectiveActionsController < ApplicationController
 
   # GET /corrective_actions/1
   def show
+    authorize @investigation, :update?
     render_wizard
   end
 
@@ -26,6 +27,7 @@ class Investigations::CorrectiveActionsController < ApplicationController
   # POST /corrective_actions
   # POST /corrective_actions.json
   def create
+    authorize @investigation, :update?
     respond_to do |format|
       update_attachment
       if corrective_action_saved?
@@ -41,6 +43,7 @@ class Investigations::CorrectiveActionsController < ApplicationController
   # PATCH/PUT /corrective_actions/1
   # PATCH/PUT /corrective_actions/1.json
   def update
+    authorize @investigation, :update?
     respond_to do |format|
       update_attachment
       if corrective_action_valid?

@@ -28,6 +28,7 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def create
+    authorize @investigation, :update?
     if @business.save
       @investigation.add_business(@business, session[:type])
       redirect_to_investigation_businesses_tab success: "Business was successfully created."
@@ -37,10 +38,12 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def show
+    authorize @investigation, :update?
     render_wizard
   end
 
   def update
+    authorize @investigation, :update?
     if business_valid?
       if step == :type
         assign_type
