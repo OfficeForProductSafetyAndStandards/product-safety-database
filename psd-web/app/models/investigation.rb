@@ -21,26 +21,30 @@ class Investigation < ApplicationRecord
   validates :owner_id, presence: { message: "Select case owner" }, on: :update
 
   validates :user_title, length: { maximum: 100 }
-  validates :description, length: { maximum: 10000 }
-  validates :non_compliant_reason, length: { maximum: 10000 }
-  validates :hazard_description, length: { maximum: 10000 }
+  validates :description, length: { maximum: 10_000 }
+  validates :non_compliant_reason, length: { maximum: 10_000 }
+  validates :hazard_description, length: { maximum: 10_000 }
 
-  after_update :create_audit_activity_for_owner, :create_audit_activity_for_status,
-               :create_audit_activity_for_visibility, :create_audit_activity_for_summary
+  after_update :create_audit_activity_for_owner,
+               :create_audit_activity_for_status,
+               :create_audit_activity_for_visibility,
+               :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
 
   belongs_to :owner, polymorphic: true, optional: true
 
   has_many :investigation_products, dependent: :destroy
-  has_many :products, through: :investigation_products,
-                      after_add: :create_audit_activity_for_product,
-                      after_remove: :create_audit_activity_for_removing_product
+  has_many :products,
+           through: :investigation_products,
+           after_add: :create_audit_activity_for_product,
+           after_remove: :create_audit_activity_for_removing_product
 
   has_many :investigation_businesses, dependent: :destroy
-  has_many :businesses, through: :investigation_businesses,
-                        after_add: :create_audit_activity_for_business,
-                        after_remove: :create_audit_activity_for_removing_business
+  has_many :businesses,
+           through: :investigation_businesses,
+           after_add: :create_audit_activity_for_business,
+           after_remove: :create_audit_activity_for_removing_business
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -133,7 +137,7 @@ class Investigation < ApplicationRecord
 
   def add_pretty_id
     cases_before = Investigation.where("created_at < ? AND created_at > ?", created_at, created_at.beginning_of_month).count
-    self.pretty_id = format("#{created_at.strftime('%y%m')}-%04d", (cases_before + 1))
+    self.pretty_id = sprintf("#{created_at.strftime('%y%m')}-%04d", (cases_before + 1))
   end
 
   def reported_reason

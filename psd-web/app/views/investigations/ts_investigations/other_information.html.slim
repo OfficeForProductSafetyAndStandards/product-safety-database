@@ -8,7 +8,9 @@
       span.govuk-caption-l Reporting an unsafe product
       h1.govuk-heading-l
         = page_heading
-      = render "form_components/govuk_checkboxes", form: form, key: :information_types,
+      = render "form_components/govuk_checkboxes",
+        form: form,
+        key: :information_types,
         fieldset: { legend: { text: "What information do you have?", classes: "govuk-fieldset__legend--m" } },
         items: [{ key: "test_results",
             text: "Test results",

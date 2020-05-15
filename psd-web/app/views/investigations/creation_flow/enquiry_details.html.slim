@@ -11,16 +11,22 @@
       fieldset.govuk-fieldset
         legend.govuk-fieldset__legend.govuk-fieldset__legend--m
           | What is the enquiry?
-        = render "form_components/govuk_textarea", key: :description, form: form, attributes: { maxlength: 10000 },
-                hint: { text: "Please give as much detail as possible" },
-                label: { text: "Enquiry description", classes: "govuk-visually-hidden" }
+        = render "form_components/govuk_textarea",
+                 key: :description,
+                 form: form,
+                 attributes: { maxlength: 10_000 },
+                 hint: { text: "Please give as much detail as possible" },
+                 label: { text: "Enquiry description", classes: "govuk-visually-hidden" }
 
       fieldset.govuk-fieldset
         legend.govuk-fieldset__legend.govuk-fieldset__legend--m
           | Please provide a title
-        = render "form_components/govuk_input", key: :user_title, form: form, attributes: { maxlength: 100 },
-                label: { text: "Title", classes: "govuk-visually-hidden" },
-                hint: { text: "This will help other users identify this enquiry" }
+        = render "form_components/govuk_input",
+                 key: :user_title,
+                 form: form,
+                 attributes: { maxlength: 100 },
+                 label: { text: "Title", classes: "govuk-visually-hidden" },
+                 hint: { text: "This will help other users identify this enquiry" }
 
       fieldset.govuk-fieldset
         legend.govuk-fieldset__legend.govuk-fieldset__legend--m

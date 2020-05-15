@@ -8,7 +8,7 @@ class Correspondence < ApplicationRecord
   before_validation { trim_line_endings(:details) }
 
   validates :email_address, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }, on: :context
-  validates :details, length: { maximum: 50000 }
+  validates :details, length: { maximum: 50_000 }
   validate :date_cannot_be_in_the_future
 
   date_attribute :correspondence_date
@@ -18,7 +18,8 @@ class Correspondence < ApplicationRecord
   enum contact_method: {
     email: "Email",
     phone: "Phone call"
-  }, _suffix: true
+  },
+       _suffix: true
 
   def strip_whitespace
     changed.each do |attribute|

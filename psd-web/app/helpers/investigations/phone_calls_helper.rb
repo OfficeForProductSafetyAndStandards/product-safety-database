@@ -1,5 +1,5 @@
 module Investigations::PhoneCallsHelper
-  def get_call_with_field correspondence
+  def get_call_with_field(correspondence)
     output = ""
     output += correspondence.correspondent_name if correspondence.correspondent_name.present?
     output += " (" if [correspondence.correspondent_name, correspondence.phone_number].all?(&:present?)

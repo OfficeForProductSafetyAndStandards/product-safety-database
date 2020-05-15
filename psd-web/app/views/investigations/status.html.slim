@@ -4,14 +4,21 @@
 = form_with(scope: :investigation, model: @investigation, url: status_investigation_path(@investigation)) do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
-      = render "form_components/govuk_error_summary", form: form
-      = render "minimal_investigation_heading", investigation: @investigation, title: "Status information"
+      = render "form_components/govuk_error_summary",
+               form: form
+      = render "minimal_investigation_heading",
+               investigation: @investigation,
+               title: "Status information"
       h2.govuk-heading-m
         = "#{@investigation.case_type.upcase_first} status"
-      = render "form_components/govuk_radios", form: form, key: :is_closed,
-              fieldset: { legend: { text: "Status" } },
-              items: [{ text: "Open", value: "false" }, { text: "Closed", value: "true" }]
-      = render "form_components/govuk_textarea", key: :status_rationale, form: form,
-              attributes: { maxlength: 10000 },
-              label: { text: "Why are you changing the status?", classes: "govuk-label--m" }
+      = render "form_components/govuk_radios",
+               form: form,
+               key: :is_closed,
+               fieldset: { legend: { text: "Status" } },
+               items: [{ text: "Open", value: "false" }, { text: "Closed", value: "true" }]
+      = render "form_components/govuk_textarea",
+               key: :status_rationale,
+               form: form,
+               attributes: { maxlength: 10_000 },
+               label: { text: "Why are you changing the status?", classes: "govuk-label--m" }
       = form.submit "Save", class: "govuk-button"

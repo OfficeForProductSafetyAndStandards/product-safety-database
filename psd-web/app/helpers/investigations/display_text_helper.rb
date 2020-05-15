@@ -14,7 +14,8 @@ module Investigations::DisplayTextHelper
       {
         href: investigation_products_path(investigation),
         text: "Products",
-        count: " (#{@investigation.products.size})", active: is_current_tab.products?
+        count: " (#{@investigation.products.size})",
+        active: is_current_tab.products?
       },
       {
         href: investigation_businesses_path(investigation),
@@ -103,7 +104,7 @@ module Investigations::DisplayTextHelper
   end
 
   def investigation_owner(investigation)
-    return "No case owner".html_safe if !investigation.owner
+    return "No case owner".html_safe unless investigation.owner
 
     owner_names = [h(investigation.owner.name.to_s)]
     owner_names << h(investigation.owner_team&.name)

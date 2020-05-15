@@ -20,8 +20,10 @@ li
   - elsif activity.attached_image?
     .govuk-grid-row
       .govuk-grid-column-one-third
-        = render "documents/document_preview", document: activity.attachment, dimensions: "100x100",
-                class_name: "product-image"
+        = render "documents/document_preview",
+                 document: activity.attachment,
+                 dimensions: "100x100",
+                 class_name: "product-image"
       .govuk-grid-column-two-thirds
         = markdown activity.body if activity.body
 
