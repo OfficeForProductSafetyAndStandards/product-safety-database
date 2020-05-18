@@ -1,7 +1,9 @@
 - page_title = "Confirm corrective action details"
 = page_title page_title
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+  = link_to "Back to #{@investigation.pretty_description.downcase}",
+  investigation_path(@investigation),
+  class: "govuk-back-link"
 span.govuk-caption-l = @investigation.pretty_description
 h1.govuk-heading-l
   = page_title
