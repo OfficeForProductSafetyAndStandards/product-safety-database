@@ -85,7 +85,7 @@
     <h2 class="govuk-heading-m">About the case</h2>
 
     <%= govukSummaryList(
-      classes: "govuk-summary-list--no-border",
+      classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
       rows: about_the_case_rows(investigation: @investigation, user: current_user)
     ) %>
   </div>
