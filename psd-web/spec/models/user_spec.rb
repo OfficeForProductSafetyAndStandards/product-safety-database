@@ -249,4 +249,16 @@ RSpec.describe User do
       expect(user).not_to be_deleted
     end
   end
+
+  describe "#mobile_number_change_allowed?" do
+    it "is allowed for users that haven't verified their mobile number" do
+      user = build_stubbed(:user, mobile_number_verified: false)
+      expect(user).to be_mobile_number_change_allowed
+    end
+
+    it "is not allowed for users that have verified their mobile number" do
+      user = build_stubbed(:user, mobile_number_verified: true)
+      expect(user).not_to be_mobile_number_change_allowed
+    end
+  end
 end

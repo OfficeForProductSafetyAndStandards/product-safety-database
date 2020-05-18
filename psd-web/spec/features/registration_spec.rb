@@ -11,7 +11,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       .to receive(:secondary_authentication_enabled).and_return(true)
   end
 
-  it "sending an invitation and registering" do
+  it "sending an invitation and registering after changing the phone number" do
     sign_in(admin)
 
     visit "/teams/#{team.id}/invitations/new"
@@ -37,9 +37,24 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
       expect_to_be_on_secondary_authentication_page
 
+      click_link "Not received a text message?"
+
+      expect_to_be_on_resend_secondary_authentication_page
+      find("details summary", text: "Change where the text message is sent").click
+      fill_in "Mobile number", with: "70123456789"
+
+      click_button "Resend security code"
+      expect_to_be_on_secondary_authentication_page
       enter_secondary_authentication_code(invitee.reload.direct_otp)
 
       expect_to_be_on_declaration_page
+      check "I agree"
+      click_button "Continue"
+      click_link "Skip introduction"
+      click_link("Your account", match: :first)
+
+      expect(page).to have_h1("Your account")
+      expect(page).to have_summary_item(key: "Mobile number", value: "70123456789")
     end
   end
 
