@@ -13,9 +13,10 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
   let(:email)            { Faker::TvShows::TheITCrowd.email }
   let(:phone_number)     { Faker::PhoneNumber.phone_number  }
   let(:job_title)        { Faker::Job.title }
-  let(:investigation)    { create(:enquiry) }
+  let(:user)             { create(:user, :activated) }
+  let(:investigation)    { create(:enquiry, owner: user.team) }
 
-  before { sign_in }
+  before { sign_in user }
 
   scenario "Adding a business" do
     visit "/cases/#{investigation.pretty_id}/businesses/new"
