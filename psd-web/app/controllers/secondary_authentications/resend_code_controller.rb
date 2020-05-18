@@ -9,19 +9,22 @@ module SecondaryAuthentications
                        :has_viewed_introduction,
                        :set_cache_headers
 
-    before_action :require_user, only: %w[new create]
-
-    def new; end
+    def new
+      @user = find_user
+      return render("errors/forbidden", status: :forbidden) unless @user
+    end
 
     def create
-      return resend_code unless user.mobile_number_change_allowed?
+      @user = find_user
+      return render("errors/forbidden", status: :forbidden) unless @user
+      return resend_code unless @user.mobile_number_change_allowed?
 
-      user.mobile_number = mobile_number_param
+      @user.mobile_number = mobile_number_param
       if resend_code_form.valid?
-        user.save!
+        @user.save!
         resend_code
       else
-        user.errors.merge!(resend_code_form.errors)
+        @user.errors.merge!(resend_code_form.errors)
         render(:new)
       end
     end
@@ -34,12 +37,8 @@ module SecondaryAuthentications
       require_secondary_authentication(redirect_to: session[:secondary_authentication_redirect_to])
     end
 
-    def require_user
-      return render("errors/forbidden", status: :forbidden) unless user
-    end
-
     def current_operation
-      user&.secondary_authentication_operation.presence || SecondaryAuthentication::DEFAULT_OPERATION
+      @user&.secondary_authentication_operation.presence || SecondaryAuthentication::DEFAULT_OPERATION
     end
 
     def hide_nav?
@@ -47,15 +46,15 @@ module SecondaryAuthentications
     end
 
     def resend_code_form
-      @resend_code_form ||= ResendSecondaryAuthenticationCodeForm.new(mobile_number: mobile_number_param, user: user)
+      @resend_code_form ||= ResendSecondaryAuthenticationCodeForm.new(mobile_number: mobile_number_param, user: @user)
     end
 
     def user_id_for_secondary_authentication
       current_user&.id || session[:secondary_authentication_user_id]
     end
 
-    def user
-      @user ||= (current_user || User.find_by(id: session[:secondary_authentication_user_id]))
+    def find_user
+      current_user || User.find_by(id: session[:secondary_authentication_user_id])
     end
 
     def mobile_number_param
