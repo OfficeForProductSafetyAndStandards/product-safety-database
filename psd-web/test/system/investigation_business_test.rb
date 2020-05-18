@@ -4,8 +4,9 @@ class InvestigationBusinessTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    sign_in
+    sign_in users(:opss)
     @investigation = load_case(:one)
+    @investigation.update!(owner: users(:opss).team)
     @business = businesses(:three)
     @business.source = sources(:business_three)
     @location = locations(:one)
