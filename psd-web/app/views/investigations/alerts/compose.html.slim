@@ -18,7 +18,7 @@
               value: (@alert.summary.presence || @alert.default_summary)
 
       - description_hint_text = "Include a summary of the incident and what actions you’d like recipients to take." + \
-        "Recipients will need to view the case to see attachments and images."
+        " Recipients will need to view the case to see attachments and images."
       = render "form_components/govuk_textarea",
               form: form,
               key: :description,
