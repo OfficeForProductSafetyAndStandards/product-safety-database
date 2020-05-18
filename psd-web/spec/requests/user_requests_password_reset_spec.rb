@@ -3,11 +3,12 @@ require "rails_helper"
 RSpec.describe "User requests password reset", type: :request, with_stubbed_mailer: true do
   context "when the user hasn’t previously set up an account" do
     subject(:request_password_reset) do
-      post user_password_path, params: {
-        user: {
-          email: user.email
-        }
-      }
+      post user_password_path,
+           params: {
+             user: {
+               email: user.email
+             }
+           }
     end
 
     let(:user) { create(:user, :invited, invited_at: 1.hour.ago) }

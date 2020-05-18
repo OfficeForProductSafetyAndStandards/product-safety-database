@@ -10,8 +10,19 @@ class Investigations::TsInvestigationsController < ApplicationController
   set_attachment_names :file
   set_file_params_key :file
 
-  steps :coronavirus, :product, :why_reporting, :which_businesses, :business, :has_corrective_action, :corrective_action,
-        :other_information, :test_results, :risk_assessments, :product_images, :evidence_images, :other_files,
+  steps :coronavirus,
+        :product,
+        :why_reporting,
+        :which_businesses,
+        :business,
+        :has_corrective_action,
+        :corrective_action,
+        :other_information,
+        :test_results,
+        :risk_assessments,
+        :product_images,
+        :evidence_images,
+        :other_files,
         :reference_number
 
   before_action :set_countries, only: %i[show create update]
@@ -20,20 +31,26 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :set_selected_businesses, only: %i[show update], if: -> { step == :which_businesses }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
   before_action :set_business, only: %i[show update], if: -> { step == :business }
-  before_action :set_skip_step, only: %i[update], if: -> do
-    %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
-  end
+  before_action :set_skip_step,
+                only: %i[update],
+                if: lambda {
+                      %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
+                    }
   before_action :set_corrective_action, only: %i[show update], if: -> { step == :corrective_action }
   # There is no set_other_information because there is no validation on the page so there is no need to set the model
   before_action :set_test, only: %i[show update], if: -> { step == :test_results }
-  before_action :set_file, only: %i[show update], if: -> do
-    %i[risk_assessments product_images evidence_images other_files].include? step
-  end
+  before_action :set_file,
+                only: %i[show update],
+                if: lambda {
+                      %i[risk_assessments product_images evidence_images other_files].include? step
+                    }
   before_action :set_repeat_step, only: %i[show update], if: -> { step == :has_corrective_action }
   # This needs to be first to prevent other models from saving
-  before_action :store_repeat_step, only: %i[update], if: -> do
-    %i[has_corrective_action risk_assessments product_images evidence_images other_files].include? step
-  end
+  before_action :store_repeat_step,
+                only: %i[update],
+                if: lambda {
+                      %i[has_corrective_action risk_assessments product_images evidence_images other_files].include? step
+                    }
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
   before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
@@ -44,9 +61,11 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_corrective_action, only: %i[update], if: -> { step == :corrective_action }
   before_action :store_other_information, only: %i[update], if: -> { step == :other_information }
   before_action :store_test, only: %i[update], if: -> { step == :test_results }
-  before_action :store_file, only: %i[update], if: -> do
-    %i[risk_assessments product_images evidence_images other_files].include? step
-  end
+  before_action :store_file,
+                only: %i[update],
+                if: lambda {
+                      %i[risk_assessments product_images evidence_images other_files].include? step
+                    }
 
   # GET /xxx/step
   def show
@@ -105,7 +124,7 @@ private
   end
 
   def set_selected_businesses
-    if params.has_key?(:businesses)
+    if params.key?(:businesses)
       @selected_businesses = which_businesses_params
                                  .select { |key, selected| key != :other_business_type && selected == "1" }
                                  .keys

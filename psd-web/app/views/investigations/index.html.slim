@@ -2,13 +2,17 @@
 
 = render 'investigations/heading', answer: @answer
 .govuk-grid-row
-  = render 'investigations/filters', search: @search,\
-      show_relevancy_radion_option: false, submitted_from: "investigation_listing"
+  = render 'investigations/filters',
+           search: @search,
+           show_relevancy_radion_option: false,
+           submitted_from: "investigation_listing"
 
   #results.govuk-grid-column-three-quarters
     - if @investigations.any?
-      = render partial: "investigations/table", collection: @investigations, as: :investigation,\
-         locals: { sorted_by: query_params[:sort_by] }
+      = render partial: "investigations/table",
+               collection: @investigations,
+               as: :investigation,
+               locals: { sorted_by: query_params[:sort_by] }
       = will_paginate @investigations
 
       - if current_user.is_psd_admin?

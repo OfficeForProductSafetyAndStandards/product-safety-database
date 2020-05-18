@@ -20,19 +20,20 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create test request" do
     assert_difference("Test.count") do
-      post investigation_tests_path(@investigation), params: {
-        test: {
-          is_result: false,
-          product_id: @product.id,
-          legislation: "Test Legislation",
-          details: "Test Details",
-          date: {
-            year: "2018",
-            month: "11",
-            day: "18"
-          }
-        }
-      }
+      post investigation_tests_path(@investigation),
+           params: {
+             test: {
+               is_result: false,
+               product_id: @product.id,
+               legislation: "Test Legislation",
+               details: "Test Details",
+               date: {
+                 year: "2018",
+                 month: "11",
+                 day: "18"
+               }
+             }
+           }
     end
 
     assert Test.last.is_a?(Test::Request)
@@ -42,23 +43,24 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create test result" do
     assert_difference("Test.count") do
-      post investigation_tests_path(@investigation), params: {
-        test: {
-          is_result: true,
-          product_id: @product.id,
-          legislation: "Test Legislation",
-          details: "Test Details",
-          date: {
-            year: "2018",
-            month: "11",
-            day: "18"
-          },
-          result: "Fail",
-          file: {
-            file: fixture_file_upload("files/testImage.png", "application/png")
-          }
-        }
-      }
+      post investigation_tests_path(@investigation),
+           params: {
+             test: {
+               is_result: true,
+               product_id: @product.id,
+               legislation: "Test Legislation",
+               details: "Test Details",
+               date: {
+                 year: "2018",
+                 month: "11",
+                 day: "18"
+               },
+               result: "Fail",
+               file: {
+                 file: fixture_file_upload("files/testImage.png", "application/png")
+               }
+             }
+           }
     end
 
     assert Test.last.is_a?(Test::Result)
@@ -67,19 +69,20 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should add test record to investigation" do
-    post investigation_tests_path(@investigation), params: {
-      test: {
-        is_result: false,
-        product_id: @product.id,
-        legislation: "Test Legislation",
-        details: "Test Details",
-        date: {
-          year: "2018",
-          month: "11",
-          day: "18"
-        }
-      }
-    }
+    post investigation_tests_path(@investigation),
+         params: {
+           test: {
+             is_result: false,
+             product_id: @product.id,
+             legislation: "Test Legislation",
+             details: "Test Details",
+             date: {
+               year: "2018",
+               month: "11",
+               day: "18"
+             }
+           }
+         }
 
     assert_equal(Investigation.first.tests.last.legislation, "Test Legislation")
   end

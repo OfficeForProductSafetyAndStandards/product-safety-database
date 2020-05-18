@@ -12,7 +12,7 @@ RSpec.describe Team do
 
     it "includes associations needed for display_name" do
       owners.length
-      expect(-> {
+      expect(lambda {
         owners.map(&:display_name)
       }).to not_talk_to_db
     end

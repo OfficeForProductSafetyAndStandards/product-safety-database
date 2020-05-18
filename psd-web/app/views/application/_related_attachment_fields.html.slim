@@ -13,5 +13,9 @@ fieldset.govuk-fieldset
           = subform.label :file, "Upload a file", class: "govuk-label"
           = subform.file_field :file, class: "govuk-file-upload"
       #attachment-description
-        = render "form_components/govuk_textarea", key: :description, value: file_blob&.metadata&.dig(:description),
-              form: subform, label: { text: "Attachment description" }, attributes: { maxlength: 10000 }
+        = render "form_components/govuk_textarea",
+                 key: :description,
+                 value: file_blob&.metadata&.dig(:description),
+                 form: subform,
+                 label: { text: "Attachment description" },
+                 attributes: { maxlength: 10_000 }

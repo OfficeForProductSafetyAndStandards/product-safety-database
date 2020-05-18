@@ -1,15 +1,17 @@
 require "rails_helper"
 
 RSpec.feature "Your Account", :with_stubbed_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let(:user) {
-    create(:user,
-           :activated,
-           :opss_user,
-           name: "Joe Jones",
-           email: "joe.jones@testing.gov.uk",
-           mobile_number: "07700 900000",
-           team: create(:team, name: "Standards and testing"))
-  }
+  let(:user) do
+    create(
+      :user,
+      :activated,
+      :opss_user,
+      name: "Joe Jones",
+      email: "joe.jones@testing.gov.uk",
+      mobile_number: "07700 900000",
+      team: create(:team, name: "Standards and testing")
+    )
+  end
 
   scenario "Changing your name (with validation error)" do
     sign_in user

@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 module InvestigationElasticsearch
   extend ActiveSupport::Concern
 
@@ -18,8 +17,18 @@ module InvestigationElasticsearch
 
     def as_indexed_json(*)
       as_json(
-        only: %i[description hazard_type product_category is_closed owner_id type updated_at created_at pretty_id
-                 hazard_description non_compliant_reason coronavirus_related],
+        only: %i[description
+                 hazard_type
+                 product_category
+                 is_closed
+                 owner_id
+                 type
+                 updated_at
+                 created_at
+                 pretty_id
+                 hazard_description
+                 non_compliant_reason
+                 coronavirus_related],
         methods: %i[title creator_id],
         include: {
           documents: {
@@ -60,8 +69,21 @@ module InvestigationElasticsearch
     end
 
     def self.fuzzy_fields
-      %w[documents.* correspondences.* activities.* businesses.* products.* complainant.* corrective_actions.*
-         tests.* alerts.* title description hazard_type product_category hazard_description non_compliant_reason]
+      %w[documents.*
+         correspondences.*
+         activities.*
+         businesses.*
+         products.*
+         complainant.*
+         corrective_actions.*
+         tests.*
+         alerts.*
+         title
+         description
+         hazard_type
+         product_category
+         hazard_description
+         non_compliant_reason]
     end
 
     def self.exact_fields
@@ -69,4 +91,3 @@ module InvestigationElasticsearch
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

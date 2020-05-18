@@ -20,12 +20,16 @@ ruby:
 
       - if safe
         = link_with_hidden_text_to "View #{pretty_type_description(document)}",
-            "#{title}, opens in a new window", document,
-            class: "govuk-link app-block-link govuk-!-margin-right-3",
-              target: '_blank', rel: 'noopener'
+                                   "(#{title}, opens in a new window)",
+                                   document,
+                                   class: "govuk-link app-block-link govuk-!-margin-right-3",
+                                   target: '_blank',
+                                   rel: 'noopener'
         = link_with_hidden_text_to "Edit #{image_document_text(document)}",
-            title, edit_associated_document_path(parent, document),
-            class: "govuk-link app-block-link govuk-!-margin-right-3"
+                                   "(#{title})",
+                                   edit_associated_document_path(parent, document),
+                                   class: "govuk-link app-block-link govuk-!-margin-right-3"
         = link_with_hidden_text_to "Remove #{image_document_text(document)}",
-            title, remove_associated_document_path(parent, document),
-            class: "govuk-link app-block-link"
+                                   "(#{title})",
+                                   remove_associated_document_path(parent, document),
+                                   class: "govuk-link app-block-link"

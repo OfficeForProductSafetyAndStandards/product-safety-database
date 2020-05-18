@@ -1,10 +1,10 @@
-# rubocop:disable Metrics/BlockLength
 module Searchable
   extend ActiveSupport::Concern
 
   included do
     include Elasticsearch::Model
     include Elasticsearch::Model::Callbacks
+    after_touch { __elasticsearch__.index_document }
 
     # The following dynamic templates define custom mappings for the major data types
     # that automatically generate appropriate sort fields for each type.
@@ -17,7 +17,8 @@ module Searchable
               type: "text"
             }
           }
-        }, {
+        },
+        {
           numbers: {
             match_mapping_type: "long",
             mapping: {
@@ -29,7 +30,8 @@ module Searchable
               }
             }
           }
-        }, {
+        },
+        {
           dates: {
             match_mapping_type: "date",
             mapping: {
@@ -41,7 +43,8 @@ module Searchable
               }
             }
           }
-        }, {
+        },
+        {
           booleans: {
             match_mapping_type: "boolean",
             mapping: {
@@ -99,4 +102,3 @@ module Searchable
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

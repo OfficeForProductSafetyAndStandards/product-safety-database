@@ -73,7 +73,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   scenario "user signs in with correct secondary authentication code after requesting a second code" do
-    allow(SecureRandom).to receive(:random_number).and_return(12345, 54321)
+    allow(SecureRandom).to receive(:random_number).and_return(12_345, 54_321)
 
     visit "/sign-in"
     fill_in_credentials

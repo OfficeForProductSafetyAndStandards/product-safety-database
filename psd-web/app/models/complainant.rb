@@ -18,7 +18,7 @@ class Complainant < ApplicationRecord
   validates :email_address, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }, on: :complainant_details
 
   validates :name, length: { maximum: 100 }
-  validates :other_details, length: { maximum: 10000 }
+  validates :other_details, length: { maximum: 10_000 }
 
   def can_be_displayed?
     can_be_seen_by_current_user? || investigation.child_should_be_displayed?

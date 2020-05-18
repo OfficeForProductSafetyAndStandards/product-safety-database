@@ -2,8 +2,9 @@
 
 = form_with(url: declaration_accept_path, local: true) do |form|
   - if @error_list.include?(:declaration_not_agreed_to)
-    = render "components/govuk_error_summary", titleText: "There is a problem",
-    errorList: [{ text: "You must agree to the declaration to use this service", href: "#agree" }]
+    = render "components/govuk_error_summary",
+             titleText: "There is a problem",
+             errorList: [{ text: "You must agree to the declaration to use this service", href: "#agree" }]
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       h1.govuk-heading-l Declaration
@@ -28,7 +29,8 @@
         li that you have the right to share the information you enter
         li that the information you provide is correct to the best of your knowledge
       - show_error = @error_list.include?(:declaration_not_agreed_to)
-      = render "components/govuk_checkboxes", name: "agree",
-        errorMessage: ({ text: "You must agree to the declaration to use this service" } if show_error),
-        items: [{ id: "agree", value: "checked", text: "I agree" }]
+      = render "components/govuk_checkboxes",
+               name: "agree",
+               errorMessage: ({ text: "You must agree to the declaration to use this service" } if show_error),
+               items: [{ id: "agree", value: "checked", text: "I agree" }]
   = form.submit "Continue", class: "govuk-button"
