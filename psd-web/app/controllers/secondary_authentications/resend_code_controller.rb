@@ -11,13 +11,10 @@ module SecondaryAuthentications
 
     before_action :require_user, only: %w[new create]
 
-    def new
-      @mobile_number_change_allowed = !user.mobile_number_verified
-    end
+    def new; end
 
     def create
-      @mobile_number_change_allowed = !user.mobile_number_verified
-      return resend_code unless @mobile_number_change_allowed
+      return resend_code unless user.mobile_number_change_allowed?
 
       user.mobile_number = mobile_number_param
       if resend_code_form.valid?
