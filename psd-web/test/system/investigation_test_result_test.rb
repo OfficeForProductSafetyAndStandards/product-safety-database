@@ -4,9 +4,10 @@ class InvestigationTestResultTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    sign_in
+    sign_in users(:opss)
 
     @investigation = load_case(:one)
+    @investigation.update!(owner: users(:opss).team)
     @test = tests(:one)
 
     visit new_result_investigation_tests_path(@investigation)
