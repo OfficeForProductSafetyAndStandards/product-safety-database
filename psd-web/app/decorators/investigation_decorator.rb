@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :documents_attachments, :owner, :source
+  decorates_associations :documents_attachments, :owner, :source, :complainant
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -41,17 +41,12 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def source_details_summary_list
-    contact_details = if complainant.can_be_displayed?
-                        complainant.decorate.contact_details
-                      else
-                        "Reporter details are restricted because they contain GDPR protected data."
-                      end
+  def source_details_summary_list(viewing_user)
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,
       should_display_received_by? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
       { key: { text: "Source type" }, value: { text: complainant.complainant_type } },
-      { key: { text: "Contact details" }, value: { text: contact_details } }
+      { key: { text: "Contact details" }, value: { text: contact_details_for_display(viewing_user) } }
     ]
 
     rows.compact!
@@ -129,5 +124,9 @@ private
 
   def should_display_received_by?
     false
+  end
+
+  def contact_details_for_display(viewing_user)
+    complainant.can_be_displayed?(viewing_user) ? complainant.contact_details : "Reporter details are restricted because they contain GDPR protected data."
   end
 end

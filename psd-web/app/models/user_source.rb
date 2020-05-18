@@ -5,7 +5,7 @@ class UserSource < Source
     user.present? ? user.decorate.display_name(viewer: viewer) : "anonymous"
   end
 
-  def user_has_gdpr_access?(user: User.current)
-    user.organisation == self.user&.organisation
+  def user_has_gdpr_access?(viewing_user)
+    viewing_user.organisation == user&.organisation
   end
 end

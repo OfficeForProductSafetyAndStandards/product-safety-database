@@ -20,4 +20,8 @@ module ApplicationHelper
     sanitized_input = sanitize(text, tags: %w[br])
     rc.render(sanitized_input).html_safe # rubocop:disable Rails/OutputSafety
   end
+
+  def permissions_hint(permission = "this")
+    "Only teams added to the case can view #{permission}"
+  end
 end

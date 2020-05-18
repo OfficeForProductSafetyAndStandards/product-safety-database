@@ -10,5 +10,10 @@ class Investigation < ApplicationRecord
     def should_display_received_by?
       received_type?
     end
+
+    def contact_details_for_display(viewing_user)
+      h.permissions_hint("enquiry contact details")
+      super
+    end
   end
 end
