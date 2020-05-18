@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:city)             { Faker::Address.city }
   let(:trading_name)     { Faker::Company.name }
   let(:business_details) { Faker::Company.buzzword }
@@ -21,11 +21,28 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
   scenario "Adding a business" do
     visit "/cases/#{investigation.pretty_id}/businesses/new"
 
-    choose "Manufacturer"
+    # Don't select a business type
     click_on "Continue"
 
+    expect_to_be_on_investigation_add_business_type_page
+
+    expect(page).to have_text("Please select a business type")
+
+    choose "Other"
+    click_on "Continue"
+
+    expect_to_be_on_investigation_add_business_type_page
+
+    expect(page).to have_text('Please enter a business type "Other"')
+
+    choose "Other" # This shouldn't need to be re-selected, but currently does.
+    fill_in "Other type", with: "Advertiser"
+
+    click_on "Continue"
+
+    expect_to_be_on_investigation_add_business_details_page
+
     within_fieldset "Business details" do
-      fill_in "Trading name",             with: trading_name
       fill_in "Registered or legal name", with: business_details
       fill_in "Company number",           with: company_number
     end
@@ -47,6 +64,14 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
 
     click_on "Save business"
 
+    expect(page).to have_text("Trading name cannot be blank")
+
+    within_fieldset "Business details" do
+      fill_in "Trading name", with: trading_name
+    end
+
+    click_on "Save business"
+
     expect_to_be_on_investigation_businesses_page
     expect(page).not_to have_error_messages
 
@@ -64,5 +89,10 @@ RSpec.feature "Adding a business", :with_stubbed_mailer, :with_stubbed_elasticse
     expected_contact = [name, job_title, phone_number, email].join(", ")
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
     expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
+
+    click_link "Remove business"
+
+    expect_to_be_on_remove_business_page
+    click_button "Remove business"
   end
 end

@@ -158,6 +158,10 @@ class User < ApplicationRecord
     super(conditions, opts.merge(deleted_at: nil))
   end
 
+  def mobile_number_change_allowed?
+    !mobile_number_verified?
+  end
+
 private
 
   def lock_two_factor!
