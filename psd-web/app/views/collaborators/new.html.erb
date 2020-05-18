@@ -16,17 +16,17 @@
 
     <%= form_with model: @edition, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
-      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @edition.team_id) } } %>
+      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @edition.collaborator_id) } } %>
 
       <% if @edition.errors.include?(:team) %>
-        <% error_message = { text: @edition.errors.full_messages_for(:team).first } %>
+        <% error_message = { text: @edition.errors.full_messages_for(:editor).first } %>
       <% end %>
 
       <%= render "components/govuk_select",
         formGroup: {
           classes: "app-!-autocomplete--max-width-two-thirds"
         },
-        name: "edition[team_id]",
+        name: "edition[collaborator_id]",
         id: "team",
         errorMessage: error_message,
         items: team_select_items,

@@ -55,7 +55,7 @@ class Investigation < ApplicationRecord
   has_one :complainant, dependent: :destroy
 
   has_many :edition, dependent: :destroy, class_name: 'Edition'
-  has_many :editors, through: :edition, dependent: :destroy, source: :editors, source_type: 'Team'
+  has_many :editors, through: :edition, dependent: :destroy, source: :editor, source_type: 'Team'
 
   has_many :editions, class_name: 'Edition'
 

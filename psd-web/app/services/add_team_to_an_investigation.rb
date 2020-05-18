@@ -1,11 +1,11 @@
 class AddTeamToAnInvestigation
   include Interactor
 
-  delegate :edition, :current_user, :investigation, :team_id, :include_message, :message, to: :context
+  delegate :edition, :current_user, :investigation, :collaborator_id, :include_message, :message, to: :context
   def call
-    collaborator = Team.find_by(id: team_id)
+    editor = Team.find_by(id: collaborator_id)
     context.edition = investigation.editions.new(
-      collaborator: collaborator,
+      collaborator: editor,
       include_message: include_message,
       added_by_user: current_user,
       message: message

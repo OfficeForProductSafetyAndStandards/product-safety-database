@@ -167,9 +167,9 @@ en:
               blank: "Enter date of the test request"
               invalid: "Enter a real date of the test request"
               date_missing_component: "Enter date of the test request and include a %{missing_components}"
-        collaborator:
+        edition:
           attributes:
-            team:
+            collaborator:
               required: "Select a team to add to the case"
             message:
               blank: Enter a message to the team

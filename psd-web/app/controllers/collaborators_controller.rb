@@ -4,6 +4,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
+    binding.pry if $use_pry
     @teams = @investigation.editors.order(:name)
   end
 
@@ -19,7 +20,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
-      params.require(:edition).permit(:team_id, :include_message, :message).merge({
+      params.require(:edition).permit(:collaborator_id, :include_message, :message).merge({
         investigation: @investigation,
         current_user: current_user
       })
@@ -38,7 +39,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
-    @editor = @investigation.editors.find_by! team_id: @team.id
+    @editor = @investigation.editors.find_by! collaborator_id: @team.id
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
@@ -69,7 +70,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.editors.pluck(:team_id) + [@investigation.owner_team.try(:id)]
+    @investigation.editors.pluck(:collaborator_id) + [@investigation.owner_team.try(:id)]
   end
 
   def edit_params
