@@ -62,7 +62,12 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       visit edit_user_password_url_with_token
 
       expect_to_be_on_secondary_authentication_page
+      click_link "Not received a text message?"
 
+      expect_to_be_on_resend_secondary_authentication_page
+      click_button "Resend security code"
+
+      expect_to_be_on_secondary_authentication_page
       complete_secondary_authentication_with(last_user_otp(user))
 
       expect_to_be_on_edit_user_password_page
