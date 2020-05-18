@@ -18,6 +18,21 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Businesses")
   end
 
+  def expect_to_be_on_investigation_add_business_type_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses/type")
+    expect(page).to have_selector("legend", text: "Select business type")
+  end
+
+  def expect_to_be_on_investigation_add_business_details_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses/details")
+    expect(page).to have_selector("legend", text: "Business details")
+  end
+
+  def expect_to_be_on_remove_business_page
+    expect(page).to have_current_path(/\/cases\/#{investigation.pretty_id}\/businesses\/\d+\/remove/)
+    expect(page).to have_selector("h2", text: "Remove business")
+  end
+
   def expect_to_be_on_add_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
