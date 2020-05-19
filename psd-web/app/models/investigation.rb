@@ -54,10 +54,8 @@ class Investigation < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
-  has_many :edition, dependent: :destroy, class_name: 'Edition'
-  has_many :editors, through: :edition, dependent: :destroy, source: :editor, source_type: 'Team'
-
-  has_many :editions, class_name: 'Edition'
+  has_many :editions, dependent: :destroy, class_name: "Edition"
+  has_many :editors, through: :editions, dependent: :destroy, source: :editor, source_type: "Team"
 
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id

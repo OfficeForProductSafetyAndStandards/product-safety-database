@@ -4,14 +4,13 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    binding.pry if $use_pry
     @teams = @investigation.editors.order(:name)
   end
 
   def new
     authorize @investigation, :manage_collaborators?
 
-    @edition = @investigation.edition.new
+    @edition = @investigation.editions.new
 
     @teams = teams_without_access
   end

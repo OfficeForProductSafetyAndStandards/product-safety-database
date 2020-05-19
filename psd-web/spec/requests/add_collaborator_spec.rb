@@ -67,7 +67,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     let(:investigation) {
       create(:investigation,
              owner: user,
-             edition: [
+             editions: [
                create(:edition,
                       collaborator: existing_collaborator_team,
                       include_message: false,
