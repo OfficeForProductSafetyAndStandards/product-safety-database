@@ -14,10 +14,10 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             collaborator: {
+             edition: {
                include_message: "true",
                message: message,
-               team_id: other_team.id
+               collaborator_id: other_team.id
              }
            }
     end
@@ -27,15 +27,15 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
 
     it "adds the team as a collaborator to the case" do
-      expect(investigation.teams).to include(other_team)
+      expect(investigation.editors).to include(other_team)
     end
 
     it "includes the message in the collaborator record" do
-      expect(investigation.collaborators.first.message).to eql(message)
+      expect(investigation.editions.first.message).to eql(message)
     end
 
     it "associates the collaborator with the user who added the team" do
-      expect(investigation.collaborators.first.added_by_user).to eql(user)
+      expect(investigation.editions.first.added_by_user).to eql(user)
     end
   end
 
@@ -49,10 +49,10 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             collaborator: {
+             edition: {
                include_message: "true",
                message: "",
-               team_id: ""
+               collaborator_id: ""
              }
            }
     end
@@ -67,9 +67,9 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     let(:investigation) {
       create(:investigation,
              owner: user,
-             collaborators: [
-               create(:collaborator,
-                      team: existing_collaborator_team,
+             edition: [
+               create(:edition,
+                      collaborator: existing_collaborator_team,
                       include_message: false,
                       added_by_user: user)
              ])
@@ -80,9 +80,9 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             collaborator: {
+             edition: {
                include_message: "false",
-               team_id: existing_collaborator_team.id
+               collaborator_id: existing_collaborator_team.id
              }
            }
     end

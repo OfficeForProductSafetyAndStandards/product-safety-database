@@ -5,8 +5,8 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
   let(:investigation) { create(:investigation, owner: user) }
   let(:team) { create(:team) }
-  let(:collaborator) do
-    create(:collaborator, investigation: investigation, team: team, added_by_user: user)
+  let(:editor) do
+    create(:edition, investigation: investigation, collaborator: team, added_by_user: user)
   end
 
   let(:permission_level) { EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE }
@@ -30,14 +30,14 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   }
 
   before do
-    collaborator
+    editor
   end
 
   describe "#save!" do
     context "when deleting" do
       context "when successful" do
         it "removes collaborator record" do
-          expect { form.save! }.to change(Collaborator, :count).from(1).to(0)
+          expect { form.save! }.to change(Edition, :count).from(1).to(0)
         end
 
         it "returns true" do

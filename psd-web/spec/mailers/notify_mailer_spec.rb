@@ -63,37 +63,37 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
 
   describe "#team_added_to_case_email" do
     context "when called with a collaborator with a message" do
-      let(:collaborator) {
-        create(:collaborator,
+      let(:edition) {
+        create(:edition,
                message: "Thanks for collaborating!",
                added_by_user: create(:user, name: "Bob Jones"))
       }
 
-      let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+      let(:mail) { described_class.team_added_to_case_email(edition, to_email: "test@example.com") }
 
       it "sets the personalisation" do
         expect(mail.govuk_notify_personalisation).to eql(
           updater_name: "Bob Jones",
           optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
-          investigation_url: investigation_url(collaborator.investigation)
+          investigation_url: investigation_url(edition.investigation)
         )
       end
     end
 
     context "when called with a collaborator with a no message" do
-      let(:collaborator) {
-        create(:collaborator,
+      let(:edition) {
+        create(:edition,
                message: nil,
                added_by_user: create(:user, name: "Bob Jones"))
       }
 
-      let(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+      let(:mail) { described_class.team_added_to_case_email(edition, to_email: "test@example.com") }
 
       it "sets the personalisation" do
         expect(mail.govuk_notify_personalisation).to eql(
           updater_name: "Bob Jones",
           optional_message: "",
-          investigation_url: investigation_url(collaborator.investigation)
+          investigation_url: investigation_url(edition.investigation)
         )
       end
     end

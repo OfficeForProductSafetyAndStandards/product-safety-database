@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :collaboration do
+  factory :collaboration, class: 'Collaboration' do
     include_message { "false" }
     association :investigation, factory: :investigation
     association :collaborator, factory: :team

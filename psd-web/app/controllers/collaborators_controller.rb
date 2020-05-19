@@ -39,7 +39,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
-    @editor = @investigation.editors.find_by! collaborator_id: @team.id
+    @editor = @investigation.editors.find @team.id
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
