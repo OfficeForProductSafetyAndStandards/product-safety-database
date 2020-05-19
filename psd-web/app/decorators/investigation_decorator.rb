@@ -94,7 +94,7 @@ class InvestigationDecorator < ApplicationDecorator
   def hint_for_contact_details; end
 
   def contact_details_for_display(viewing_user)
-    complainant.can_be_displayed?(viewing_user) ? complainant.contact_details(show_details) : "Reporter details are restricted because they contain GDPR protected data."
+    complainant.can_be_displayed?(viewing_user) ? complainant.contact_details(viewing_user) : "Reporter details are restricted because they contain GDPR protected data."
   end
 
 private

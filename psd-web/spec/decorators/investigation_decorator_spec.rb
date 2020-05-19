@@ -122,42 +122,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     include_examples "a formated text", :investigation, :hazard_description
   end
 
-  describe "#source_details_summary_list" do
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list }
-
-    before do
-      allow(User).to receive(:current).and_return(user)
-    end
-
-    it "does not display the Received date" do
-      expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_s(:govuk))
-    end
-
-    it "does not display the Received by" do
-      expect(source_details_summary_list).not_to summarise("Received by", text: investigation.received_type.upcase_first)
-    end
-
-    it "has displays the Source type" do
-      expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
-    end
-
-    it "has displays the Complainant name" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
-    end
-
-    it "has displays the Complainant phone number" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
-    end
-
-    it "has displays the Complainant email address" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
-    end
-
-    it "has displays the Complainant other details" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
-    end
-  end
-
   describe "#non_compliant_reason" do
     include_examples "a formated text", :investigation, :non_compliant_reason
   end
