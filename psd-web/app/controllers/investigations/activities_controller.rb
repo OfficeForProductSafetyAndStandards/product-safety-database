@@ -40,8 +40,6 @@ module Investigations
         redirect_to new_investigation_corrective_action_path(@investigation)
       when "business"
         redirect_to new_investigation_business_path(@investigation)
-      when "visibility"
-        redirect_to visibility_investigation_path(@investigation)
       when "alert"
         redirect_to new_investigation_alert_path(@investigation)
       else
