@@ -103,7 +103,9 @@ private
     return false if uris.length != 1
 
     uri = uris.first
-    uri =~ /staging\.product-safety-database\.service\.gov\.uk|psd-pr-\d{3,5}\.london\.cloudapps\.digital/
+    Rails.application.config.domains_allowing_otp_whitelisting["domains-regexps"].any? do |domain_regexp|
+      uri =~ domain_regexp
+    end
   rescue StandardError
     false
   end
