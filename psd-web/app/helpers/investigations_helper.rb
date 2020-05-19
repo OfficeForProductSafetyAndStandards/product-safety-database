@@ -248,6 +248,34 @@ module InvestigationsHelper
     all_past_owners || []
   end
 
+  def source_details_rows(investigation, viewing_user)
+    rows = [
+      investigation.should_display_date_received? ? { key: { text: "Received date" }, value: { text: investigation.date_received.to_s(:govuk) } } : nil,
+      investigation.should_display_received_by? ? { key: { text: "Received by" }, value: { text: investigation.received_type.upcase_first } } : nil,
+      { key: { text: "Source type" }, value: { text: investigation.complainant.complainant_type } },
+      { key: { text: "Contact details" }, value: { text: investigation.contact_details_for_display(viewing_user) } }
+    ]
+
+    rows.compact!
+    rows
+  end
+
+  # rubocop:disable Rails/OutputSafety
+  def team_list_html(investigation)
+    return investigation.teams_with_access.first.name if investigation.teams_with_access.length == 1
+
+    tag.ul(class: "govuk-list") do
+      investigation.teams_with_access.map { |team| tag.li(escape_once(team.name)) }.join.html_safe
+    end
+  end
+
+  def case_owner_actions(investigation)
+    return {} unless policy(investigation).change_owner?
+
+    { items: [href: new_investigation_ownership_path(investigation), text: "Change", visuallyHiddenText: "case owner"] }
+  end
+  # rubocop:enable Rails/OutputSafety
+
   # This builds an array from an investigation which can then
   # be passed as a `rows` argument to the govukSummaryList() helper.
   def about_the_case_rows(investigation)

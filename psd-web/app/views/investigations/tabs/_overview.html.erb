@@ -19,6 +19,7 @@
       <%= govuk_hr %>
       <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).upcase_first %></h2>
       <%= @investigation.product_summary_list %>
+      <%= render "components/govuk_summary_list", rows: source_details_rows(@investigation, current_user), classes: "govuk-summary-list--no-border" %>
     <% end %>
 
     <% if @investigation.complainant %>
@@ -30,44 +31,17 @@
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-    <% if policy(@investigation).change_owner? %>
-      <% case_owner_actions = {
-        items: [
-          href: new_investigation_ownership_path(@investigation),
-          text: "Change",
-          visuallyHiddenText: "case owner"
-        ]
-      } %>
-    <% else %>
-      <% case_owner_actions = {} %>
-    <% end %>
-
-    <% team_list_html = capture do %>
-      <% if @investigation.teams_with_access.length > 1 %>
-        <ul class="govuk-list">
-          <% @investigation.teams_with_access.each do |team| %>
-            <li><%= team.name %></li>
-          <% end %>
-        </ul>
-      <% elsif @investigation.teams_with_access.length == 1 %>
-        <%= @investigation.teams_with_access.first.name %>
-      <% else %>
-        No teams added
-      <% end %>
-
-    <% end %>
-
     <%= govukSummaryList(
       classes: "govuk-summary-list--no-border",
       rows: [
         {
           key: { text: "Case owner" },
           value: { text: investigation_owner(@investigation) },
-          actions: case_owner_actions
+          actions: case_owner_actions(@investigation)
         },
         {
           key: { text: "Teams added to case" },
-          value: { text: team_list_html },
+          value: { text: team_list_html(investigation) },
           actions: {
             items: [
               href: investigation_collaborators_path(@investigation),

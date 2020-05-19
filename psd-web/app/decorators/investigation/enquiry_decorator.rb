@@ -12,8 +12,8 @@ class Investigation < ApplicationRecord
     end
 
     def contact_details_for_display(viewing_user)
-      h.permissions_hint("enquiry contact details")
-      super
+      h.concat(h.tag.span(h.permissions_hint("enquiry contact details"), class: "govuk-hint"))
+      h.concat(super)
     end
   end
 end

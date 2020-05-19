@@ -9,7 +9,7 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_elasticsearch, :wi
   let(:investigation)             { create(:enquiry, date_received_year: 2020, date_received_month: 1, date_received_day: 1, source: build(:user_source, sourceable: user)) }
   let(:viewing_user_organisation) { user.organisation }
   let(:viewing_user_team)         { user.team }
-  let(:viewing_user)              { create(:user, organisation: viewing_user_organisation, teams: viewing_user_team) }
+  let(:viewing_user)              { create(:user, organisation: viewing_user_organisation, teams: [viewing_user_team]) }
   let!(:complainant)              { create(:complainant, complainant_type: "Consumer", investigation: investigation).decorate }
 
   describe "#source_details_summary_list" do
@@ -41,6 +41,7 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_elasticsearch, :wi
       end
 
       context "when in a team not on the case" do
+        let(:viewing_user_team) { create(:team, organisation: viewing_user_organisation) }
 
         it "shows the restriction message" do
           expect(source_details_summary_list).to summarise("Contact details", text: "Only teams added to the case can view enquiry contact details")
