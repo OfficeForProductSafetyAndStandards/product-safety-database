@@ -23,7 +23,7 @@ class AuditActivity::Document::Base < AuditActivity::Base
 
   def restricted_title; end
 
-  def can_display_all_data?
-    can_be_displayed?(attachment, investigation)
+  def can_display_all_data?(viewing_user)
+    can_be_displayed?(attachment, investigation, viewing_user)
   end
 end

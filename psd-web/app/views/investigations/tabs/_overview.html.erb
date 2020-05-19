@@ -19,13 +19,12 @@
       <%= govuk_hr %>
       <h2 class="govuk-heading-m"><%= "product".pluralize(products_count).upcase_first %></h2>
       <%= @investigation.product_summary_list %>
-      <%= render "components/govuk_summary_list", rows: source_details_rows(@investigation, current_user), classes: "govuk-summary-list--no-border" %>
     <% end %>
 
     <% if @investigation.complainant %>
       <%= govuk_hr %>
       <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
-      <%= @investigation.source_details_summary_list %>
+      <%= render "components/govuk_summary_list", rows: source_details_rows(@investigation, current_user), classes: "govuk-summary-list--no-border" %>
     <% end %>
 
     <%= govuk_hr %>
@@ -41,7 +40,7 @@
         },
         {
           key: { text: "Teams added to case" },
-          value: { text: team_list_html(investigation) },
+          value: { text: team_list_html(@investigation) },
           actions: {
             items: [
               href: investigation_collaborators_path(@investigation),

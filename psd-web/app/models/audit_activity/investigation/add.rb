@@ -21,10 +21,10 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
     "<br><br>Case owner: #{investigation.owner&.decorate&.display_name}"
   end
 
-  def can_display_all_data?
+  def can_display_all_data?(viewing_user)
     return true if investigation.complainant.blank?
 
-    investigation.complainant&.can_be_displayed?
+    investigation.complainant&.can_be_displayed?(viewing_user)
   end
 
   def restricted_title

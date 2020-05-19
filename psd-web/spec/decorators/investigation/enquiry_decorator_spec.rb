@@ -22,31 +22,5 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_elasticsearch, :wi
     it "displays the Received by" do
       expect(source_details_summary_list).to summarise("Received by", text: investigation.received_type.upcase_first)
     end
-
-    describe "contact details for a viewing user" do
-      context "when in the same organisation as the investigation creator" do
-        context "when also is in a team with access to the case" do
-          it "shows the enquiry contact details" do
-            expect(source_details_summary_list).to summarise("Contact details", text: complainant.contact_details)
-          end
-        end
-      end
-
-      context "when not in the same organisation as the investigation creator" do
-        let(:viewing_user_organisation) { create(:organisation) }
-
-        it "shows the GDPR warning" do
-          expect(source_details_summary_list).to summarise("Contact details", text: "Reporter details are restricted because they contain GDPR protected data.")
-        end
-      end
-
-      context "when in a team not on the case" do
-        let(:viewing_user_team) { create(:team, organisation: viewing_user_organisation) }
-
-        it "shows the restriction message" do
-          expect(source_details_summary_list).to summarise("Contact details", text: "Only teams added to the case can view enquiry contact details")
-        end
-      end
-    end
   end
 end

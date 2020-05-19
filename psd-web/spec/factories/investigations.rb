@@ -13,6 +13,10 @@ FactoryBot.define do
 
     association :owner, factory: :user
 
+    after(:create) do |investigation|
+      create(:"complainant_#{Complainant::TYPES.keys.sample}", investigation: investigation)
+    end
+
     factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }
       user_title { "test allegation title" }

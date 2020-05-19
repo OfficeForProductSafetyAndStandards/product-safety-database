@@ -1,5 +1,5 @@
 ruby:
-  restricted = !activity.can_display_all_data?
+  restricted = !activity.can_display_all_data?(current_user)
   title = restricted ? activity.restricted_title : activity.title
   creator = activity.source&.user&.organisation&.name || activity.source&.show
 

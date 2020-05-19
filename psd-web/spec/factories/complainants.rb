@@ -5,7 +5,6 @@ FactoryBot.define do
     other_details { Faker::Lorem.paragraph }
     phone_number { Faker::PhoneNumber.phone_number }
     complainant_type { Complainant::TYPES.keys.sample }
-    investigation
   end
 
   Complainant::TYPES.each_key do |type|
