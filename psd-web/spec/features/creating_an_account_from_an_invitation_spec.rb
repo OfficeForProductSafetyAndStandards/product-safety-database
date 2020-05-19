@@ -66,10 +66,13 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
   context "when a previous registration was abandoned before verifying mobile number" do
     let(:invited_user) do
-      create(:user, :invited,
-             name: "Bob Jones",
-             mobile_number: "07700 900 982",
-             mobile_number_verified: false)
+      create(
+        :user,
+        :invited,
+        name: "Bob Jones",
+        mobile_number: "07700 900 982",
+        mobile_number_verified: false
+      )
     end
 
     scenario "it shouldn’t show values entered previously" do

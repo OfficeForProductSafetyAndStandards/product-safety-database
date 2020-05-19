@@ -17,11 +17,14 @@
 
   = render "product_summary", product: product do
     / Add visually hidden product name to make links unique
-    = link_with_hidden_text_to "View product", product.name, product,
-      class: "app-block-link govuk-link govuk-!-margin-right-3"
-    = link_with_hidden_text_to "Remove product", product.name,
-      remove_investigation_product_path(@investigation, product),
-      class: "app-block-link govuk-link"
+    = link_with_hidden_text_to "View product",
+                               "(#{product.name})",
+                               product,
+                               class: "app-block-link govuk-link govuk-!-margin-right-3"
+    = link_with_hidden_text_to "Remove product",
+                               "(#{product.name})",
+                               remove_investigation_product_path(@investigation, product),
+                               class: "app-block-link govuk-link"
 - if @investigation.products.length.zero?
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop

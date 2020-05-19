@@ -1,0 +1,32 @@
+<% page_title = "Add comment" %>
+<% page_title page_title, errors: @comment.errors.any? %>
+<% content_for :after_header do %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <%= link_to "Back to #{@investigation.pretty_description.downcase}",
+                  investigation_path(@investigation),
+                  class: "govuk-back-link" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= error_summary(@comment.errors) %>
+
+    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+
+    <%= form_with(
+          model: @comment,
+          url: investigation_activity_comment_path(@investigation)
+        ) do |form| %>
+      <%= render "form_components/govuk_textarea",
+                 key: :body,
+                 form: form,
+                 attributes: { maxlength: 10_000 },
+                 id: "body",
+                 label: { text: page_title, classes: "govuk-label--l", isPageHeading: true } %>
+      <%= form.submit "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

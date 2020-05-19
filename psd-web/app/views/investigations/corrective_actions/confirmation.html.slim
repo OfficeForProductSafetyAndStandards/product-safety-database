@@ -1,7 +1,9 @@
 - page_title = "Confirm corrective action details"
 = page_title page_title
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+  = link_to "Back to #{@investigation.pretty_description.downcase}",
+  investigation_path(@investigation),
+  class: "govuk-back-link"
 span.govuk-caption-l = @investigation.pretty_description
 h1.govuk-heading-l
   = page_title
@@ -48,7 +50,8 @@ h1.govuk-heading-l
             tr.govuk-table__row
               th.govuk-table__header scope="row" Attachment description
               td.govuk-table__cell = @file_blob.metadata[:description]
-    = form_with model: @corrective_action, url: investigation_corrective_actions_path(@investigation),
-            method: :post do |form|
+    = form_with model: @corrective_action,
+                url: investigation_corrective_actions_path(@investigation),
+                method: :post do |form|
       = form.submit "Continue", class: "govuk-button"
       = link_to "Edit details", previous_wizard_path, class: "govuk-link psd-block-link"

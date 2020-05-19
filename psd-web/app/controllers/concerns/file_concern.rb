@@ -79,7 +79,7 @@ module FileConcern
 
   # TODO: move to model?
 
-  def update_blob_metadata blob, metadata
+  def update_blob_metadata(blob, metadata)
     return unless blob
 
     blob.metadata.update(metadata)

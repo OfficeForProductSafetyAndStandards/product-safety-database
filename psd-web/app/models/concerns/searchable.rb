@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/BlockLength
 module Searchable
   extend ActiveSupport::Concern
 
@@ -18,7 +17,8 @@ module Searchable
               type: "text"
             }
           }
-        }, {
+        },
+        {
           numbers: {
             match_mapping_type: "long",
             mapping: {
@@ -30,7 +30,8 @@ module Searchable
               }
             }
           }
-        }, {
+        },
+        {
           dates: {
             match_mapping_type: "date",
             mapping: {
@@ -42,7 +43,8 @@ module Searchable
               }
             }
           }
-        }, {
+        },
+        {
           booleans: {
             match_mapping_type: "boolean",
             mapping: {
@@ -100,4 +102,3 @@ module Searchable
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

@@ -30,7 +30,7 @@ private
            key: :non_compliant_reason,
            form: form,
            id: "non_compliant_reason",
-           attributes: { maxlength: 10000 },
+           attributes: { maxlength: 10_000 },
            label: { text: "Why is the product non-compliant?" },
            classes: "govuk-!-width-three-quarters"
   end

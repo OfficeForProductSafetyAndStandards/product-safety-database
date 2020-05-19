@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "engines": {
-    "node": "10.19.x",
+    "node": "10.20.x",
     "yarn": "1.22.x"
   },
   "dependencies": {
@@ -21,6 +21,6 @@
     "standard": "^14.3.4",
     "webpack": "4.43.0",
     "webpack-cli": "3.3.11",
-    "webpack-dev-server": "3.10.3"
+    "webpack-dev-server": "3.11.0"
   }
 }

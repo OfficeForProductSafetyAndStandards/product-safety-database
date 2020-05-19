@@ -8,7 +8,7 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
       let(:team) { create(:team, name: "Testing team") }
       let(:message) { "Thanks for collaborating." }
 
-      let(:result) {
+      let(:result) do
         described_class.call(
           collaborator_id: team.id,
           include_message: "true",
@@ -16,13 +16,12 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
           investigation: investigation,
           current_user: user
         )
-      }
+      end
 
       it "succeeds" do
         expect(result).to be_a_success
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it "returns the collaborator" do
         expect(result.edition).to have_attributes(
           collaborator: team,
@@ -31,7 +30,6 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
           message: message
         )
       end
-      # rubocop:enable RSpec/ExampleLength
 
       it "queues a job to notify the team", :with_test_queue_adapter do
         aggregate_failures do

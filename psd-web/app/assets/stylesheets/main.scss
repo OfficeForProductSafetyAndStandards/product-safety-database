@@ -27,12 +27,11 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/helpers/password-manager-hidden";
 @import "stylesheets/images";
 @import "stylesheets/inverted";
+@import "stylesheets/table";
 @import "stylesheets/teams";
 @import "stylesheets/pagination";
 @import "stylesheets/search-box";
 @import "stylesheets/shared";
-@import "stylesheets/sortable_columns";
-@import "stylesheets/summary_table";
 @import "stylesheets/timeline";
 @import "stylesheets/psd_header";
 @import "stylesheets/sub_nav";
@@ -50,16 +49,7 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
   }
 }
 
-.search-background {
-  background-color: govuk-colour("light-grey");
-}
-
 .right {
   float: right;
   margin-left: 2em;
-}
-
-.row-border-top {
-  padding-top: 2em;
-  border-top: 1px solid govuk-colour("light-grey");
 }

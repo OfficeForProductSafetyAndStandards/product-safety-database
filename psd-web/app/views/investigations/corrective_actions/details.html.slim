@@ -1,7 +1,9 @@
 - page_title = "Record corrective action"
 = page_title page_title, errors: @corrective_action.object.errors.any?
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+  = link_to "Back to #{@investigation.pretty_description.downcase}",
+  investigation_path(@investigation),
+  class: "govuk-back-link"
 
 = form_with model: @corrective_action.object, local: true, url: wizard_path, method: :put do |form|
   .govuk-grid-row
@@ -10,10 +12,11 @@
       span.govuk-caption-l = @investigation.pretty_description
       h1.govuk-heading-l
         = page_title
-      = render "investigations/corrective_actions/form", form: form,
-            corrective_action: @corrective_action,
-            investigation: @investigation,
-            file_blob: @file_blob,
-            allow_product_linking: true,
-            allow_business_linking: true
+      = render "investigations/corrective_actions/form",
+               form: form,
+               corrective_action: @corrective_action,
+               investigation: @investigation,
+               file_blob: @file_blob,
+               allow_product_linking: true,
+               allow_business_linking: true
       = form.submit "Continue", class: "govuk-button"

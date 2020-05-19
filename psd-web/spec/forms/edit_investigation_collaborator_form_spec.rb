@@ -25,9 +25,9 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     }
   end
 
-  let(:form) {
+  let(:form) do
     described_class.new(params)
-  }
+  end
 
   before do
     editor

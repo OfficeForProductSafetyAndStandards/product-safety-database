@@ -1,0 +1,19 @@
+<%= page_title "Add business to case", errors: @business.errors.any? %>
+<% content_for :after_header do %>
+  <%= link_to "Back to #{@investigation.pretty_description.downcase}", investigation_path(@investigation), class: "govuk-back-link" %>
+<% end %>
+
+<%= form_with(model: @business,
+              url: wizard_path,
+              method: :put,
+              html: { autocomplete: :off }) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= render "investigation_heading", investigation: @investigation %>
+
+      <h2 class="govuk-heading-m">Add business</h2>
+      <%= render "businesses/form", form: form, business: @business, countries: @countries %>
+    </div>
+  </div>
+<% end %>

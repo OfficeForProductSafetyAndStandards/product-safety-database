@@ -63,11 +63,7 @@ private
 
   def schedule_delete_email(emails)
     emails.each do |email|
-      NotifyMailer.team_deleted_from_case_email(email_payload, to_email: email).deliver_later
+      NotifyMailer.team_deleted_from_case_email(message: message, investigation: investigation, team_deleted: team, user_who_deleted: user, to_email: email).deliver_later
     end
-  end
-
-  def email_payload
-    { permission_level: permission_level, include_message: include_message, message: message, investigation: investigation, team: team, user: user }
   end
 end

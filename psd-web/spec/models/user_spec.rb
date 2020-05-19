@@ -162,7 +162,7 @@ RSpec.describe User do
 
     it "includes associations needed for display_name" do
       owners = described_class.get_owners.to_a # to_a forces the query execution and load immediately
-      expect(-> {
+      expect(lambda {
         owners.map { |owner| owner.decorate.display_name }
       }).to not_talk_to_db
     end
@@ -247,6 +247,18 @@ RSpec.describe User do
     it "returns false for users without deleted timestamp" do
       user = create(:user)
       expect(user).not_to be_deleted
+    end
+  end
+
+  describe "#mobile_number_change_allowed?" do
+    it "is allowed for users that haven't verified their mobile number" do
+      user = build_stubbed(:user, mobile_number_verified: false)
+      expect(user).to be_mobile_number_change_allowed
+    end
+
+    it "is not allowed for users that have verified their mobile number" do
+      user = build_stubbed(:user, mobile_number_verified: true)
+      expect(user).not_to be_mobile_number_change_allowed
     end
   end
 end

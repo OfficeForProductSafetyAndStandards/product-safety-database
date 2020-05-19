@@ -1,19 +1,21 @@
 require "rails_helper"
 
 RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
-  subject(:corrective_action) {
-    build(:corrective_action,
-          summary: summary,
-          date_decided_day: date_decided ? date_decided.day : nil,
-          date_decided_month: date_decided ? date_decided.month : nil,
-          date_decided_year: date_decided ? date_decided.year : nil,
-          legislation: legislation,
-          measure_type: measure_type,
-          duration: duration,
-          geographic_scope: geographic_scope,
-          details: details,
-          related_file: related_file)
-  }
+  subject(:corrective_action) do
+    build(
+      :corrective_action,
+      summary: summary,
+      date_decided_day: date_decided ? date_decided.day : nil,
+      date_decided_month: date_decided ? date_decided.month : nil,
+      date_decided_year: date_decided ? date_decided.year : nil,
+      legislation: legislation,
+      measure_type: measure_type,
+      duration: duration,
+      geographic_scope: geographic_scope,
+      details: details,
+      related_file: related_file
+    )
+  end
 
   let(:summary) { Faker::Lorem.sentence }
   let(:date_decided) { Faker::Date.backward(days: 14) }
@@ -40,7 +42,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
     end
 
     context "with summary longer than 10,000 characters" do
-      let(:summary) { Faker::Lorem.characters(number: 10001) }
+      let(:summary) { Faker::Lorem.characters(number: 10_001) }
 
       it "returns false" do
         expect(corrective_action).not_to be_valid
@@ -56,7 +58,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
     end
 
     context "with details longer than 50,000 characters" do
-      let(:details) { Faker::Lorem.characters(number: 50001) }
+      let(:details) { Faker::Lorem.characters(number: 50_001) }
 
       it "returns false" do
         expect(corrective_action).not_to be_valid

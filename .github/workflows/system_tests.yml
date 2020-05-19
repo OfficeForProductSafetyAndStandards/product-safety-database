@@ -11,10 +11,11 @@ env:
   PGHOST: localhost
   PGUSER: postgres
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
+  TEST_TOTAL_SLICES: 3
 
 jobs:
   ruby:
-    name: "Ruby"
+    name: "Tests"
     runs-on: ubuntu-latest
 
     # Example for can be found here:
@@ -37,6 +38,16 @@ jobs:
         ports:
         - 6379:6379
         options: --entrypoint redis-server
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # If we divide the tests in X groups, elements in the array represent
+        # each of those slices from 1 to X.
+        # Eg: TEST_TOTAL_SLICES is 4, then test-slice will need to be [1, 2, 3, 4]
+        # Each slice of tests will run in a parallel job.
+        test-slice: [1, 2, 3]
+
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby
@@ -46,7 +57,7 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
-        node-version: 10.19.x
+        node-version: 10.20.x
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
 
@@ -56,11 +67,16 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
-        key: ${{ runner.OS }}-gems
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.OS }}-gems
-          ${{ runner.OS }}-gems-
-          ${{ runner.OS }}-
+          ${{ runner.os }}-gems-
+
+    - name: Install RubyGems
+      working-directory: psd-web
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --jobs=4 --retry=3
 
     - uses: actions/cache@v1
       with:
@@ -71,11 +87,6 @@ jobs:
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
 
-    - name: Install RubyGems
-      working-directory: psd-web
-      run: |
-        gem install bundler
-        bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - name: Install Node.js dependencies
       working-directory: psd-web
       run: |
@@ -88,4 +99,4 @@ jobs:
 
     - name: Run Tests
       working-directory: psd-web
-      run: bundle exec rake test:system
+      run: bundle exec rake test:system_slice TEST_SLICE=${{ matrix.test-slice }}

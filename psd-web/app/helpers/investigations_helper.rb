@@ -167,8 +167,26 @@ module InvestigationsHelper
     set_default_type_filter
     set_default_owner_filter
     set_default_creator_filter
-    params.permit(:q, :status_open, :status_closed, :page, :allegation, :enquiry, :project, :case_owner_is_me, :case_owner_is_someone_else, :case_owner_is_someone_else_id, :sort_by, :created_by_me, :created_by_me, :created_by_someone_else, :created_by_someone_else_id, :coronavirus_related_only,
-                  owner_team_with_key[0], creator_team_with_key[0])
+    params.permit(
+      :q,
+      :status_open,
+      :status_closed,
+      :page,
+      :allegation,
+      :enquiry,
+      :project,
+      :case_owner_is_me,
+      :case_owner_is_someone_else,
+      :case_owner_is_someone_else_id,
+      :sort_by,
+      :created_by_me,
+      :created_by_me,
+      :created_by_someone_else,
+      :created_by_someone_else_id,
+      :coronavirus_related_only,
+      owner_team_with_key[0],
+      creator_team_with_key[0]
+    )
   end
 
   def export_params
@@ -228,5 +246,65 @@ module InvestigationsHelper
     return [] if all_past_owners.empty? || all_past_owners == [current_user]
 
     all_past_owners || []
+  end
+
+  # This builds an array from an investigation which can then
+  # be passed as a `rows` argument to the govukSummaryList() helper.
+  def about_the_case_rows(investigation)
+    rows = [
+      {
+        key: { text: "Status" },
+        value: { text: investigation.status },
+        actions: {
+          items: [
+            {
+              href: status_investigation_path(investigation),
+              text: "Change",
+              visuallyHiddenText: "status"
+            }
+          ]
+        }
+      },
+      {
+        key: { text: "Coronavirus related" },
+        value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") },
+        actions: {
+          items: [
+            {
+              href: investigation_coronavirus_related_path(investigation),
+              text: "Change",
+              visuallyHiddenText: "coronavirus status"
+            }
+          ]
+        }
+      },
+      {
+        key: { text: "Created by" },
+        value: { text: investigation.created_by }
+      },
+      {
+        key: { text: "Date created" },
+        value: { text: investigation.created_at.to_s(:govuk) }
+      },
+      {
+        key: { text: "Last updated" },
+        value: { text: "#{time_ago_in_words(investigation.updated_at)} ago" },
+        actions: {
+          items: [
+            { href: new_investigation_activity_path(investigation),
+              text: "Add activity" }
+          ]
+        }
+      }
+    ]
+
+    if investigation.complainant_reference.present?
+      rows << {
+        key: { text: "Trading Standards reference" },
+        value: { text: investigation.complainant_reference }
+      }
+    end
+
+    rows
   end
 end

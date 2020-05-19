@@ -16,7 +16,7 @@ env:
 
 jobs:
   ruby:
-    name: "Ruby"
+    name: "Tests"
     runs-on: ubuntu-latest
 
     # Example for can be found here:
@@ -39,6 +39,13 @@ jobs:
         ports:
         - 6379:6379
         options: --entrypoint redis-server
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Each group of tests affected by the following tags will run in a different job in parallel.
+        rspec-tag: ["type:feature", "~type:feature"]
+
     steps:
     - uses: actions/checkout@v1
 
@@ -50,7 +57,8 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
-        node-version: 10.19.x
+        node-version: 10.20.x
+
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
 
@@ -60,9 +68,9 @@ jobs:
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
-        key: ${{ runner.os }}-gems-rspec-${{ hashFiles('**/Gemfile.lock') }}
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-rspec-
+          ${{ runner.os }}-gems-
 
     - name: Install RubyGems
       working-directory: psd-web
@@ -70,6 +78,7 @@ jobs:
         gem install bundler --no-doc
         bundle config path vendor/bundle
         bundle check || bundle install --jobs=4 --retry=3
+
     - name: Install yarn
       run: npm install yarn -g
 
@@ -95,7 +104,7 @@ jobs:
     - name: Run Specs
       working-directory: psd-web
       run: |
-        bundle exec rspec spec
+        bundle exec rspec spec --tag ${{ matrix.rspec-tag }}
 
     - uses: actions/upload-artifact@v1
       if: failure()

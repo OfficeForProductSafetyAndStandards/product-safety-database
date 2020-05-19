@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-05-13
+- Allow users that haven't verified their mobile number to change their mobile number while requesting a new security code.
+
 ## 2020-05-12
 - Allow users to request a new security code when the code was not received via SMS.
 
