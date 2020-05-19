@@ -28,6 +28,11 @@ module PageExpectations
     expect(page).to have_selector("legend", text: "Business details")
   end
 
+  def expect_to_be_on_investigation_edit_business_details_page
+    expect(page).to have_title("Edit business - Product safety database - GOV.UK")
+    expect(page).to have_selector("legend", text: "Business details")
+  end
+
   def expect_to_be_on_remove_business_page
     expect(page).to have_current_path(/\/cases\/#{investigation.pretty_id}\/businesses\/\d+\/remove/)
     expect(page).to have_selector("h2", text: "Remove business")
