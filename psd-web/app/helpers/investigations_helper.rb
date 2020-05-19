@@ -268,13 +268,13 @@ module InvestigationsHelper
       investigation.teams_with_access.map { |team| tag.li(escape_once(team.name)) }.join.html_safe
     end
   end
+  # rubocop:enable Rails/OutputSafety
 
   def case_owner_actions(investigation)
     return {} unless policy(investigation).change_owner?
 
     { items: [href: new_investigation_ownership_path(investigation), text: "Change", visuallyHiddenText: "case owner"] }
   end
-  # rubocop:enable Rails/OutputSafety
 
   # This builds an array from an investigation which can then
   # be passed as a `rows` argument to the govukSummaryList() helper.
