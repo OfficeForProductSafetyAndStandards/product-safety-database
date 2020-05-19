@@ -32,7 +32,7 @@
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-       <% if policy(@investigation).change_owner_or_status? %>
+    <% if policy(@investigation).change_owner_or_status? %>
       <% case_owner_actions = {
         items: [
           href: new_investigation_ownership_path(@investigation),
