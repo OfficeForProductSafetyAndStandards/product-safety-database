@@ -94,5 +94,6 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect_to_be_on_remove_business_page
     click_button "Remove business"
+    expect_confirmation_banner("Business was successfully removed.")
   end
 end
