@@ -13,7 +13,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
   let(:file) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
   let(:summary) { "Test summary" }
-  let(:subject) { "Test subject" }
+  let(:email_subject) { "Test subject" }
   let(:body) { "Test body" }
 
   before { sign_in(user) }
@@ -53,7 +53,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(name: name, email: email, consumer: true, date: date, file: file)
+    expect_confirm_email_details_page_to_show_entered_information(mail: email, consumer: true, date: date, file: file)
 
     # Test edit details pages retain entered information
     click_link "Edit details"
@@ -115,18 +115,18 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     expect_to_be_on_record_email_details_page
 
-    fill_in_record_email_details_form(summary: summary, subject: subject, body: body)
+    fill_in_record_email_details_form(summary: summary, subject: email_subject, body: body)
     click_button "Continue"
 
     expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(name: name, email: email, consumer: false, date: date, summary: summary, subject: subject, body: body)
+    expect_confirm_email_details_page_to_show_entered_information(email: email, consumer: false, date: date, summary: summary, subject: email_subject, body: body)
     click_button "Continue"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(name: name, email: email, date: date, summary: summary, subject: subject, body: body)
+    expect_case_activity_page_to_show_entered_information(name: name, email: email, date: date, summary: summary, subject: email_subject, body: body)
 
     # Test that another user in a different organisation can see all info
     sign_out
@@ -136,7 +136,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     visit "/cases/#{investigation.pretty_id}/activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(name: name, email: email, date: date, summary: summary, subject: subject, body: body)
+    expect_case_activity_page_to_show_entered_information(name: name, email: email, date: date, summary: summary, subject: email_subject, body: body)
   end
 
   def fill_in_record_email_form(name:, email:, consumer:, date:)
@@ -161,7 +161,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     fill_in "Body", with: body if body
   end
 
-  def expect_confirm_email_details_page_to_show_entered_information(name:, email:, consumer:, date:, file: nil, summary: nil, subject: nil, body: nil)
+  def expect_confirm_email_details_page_to_show_entered_information(email:, consumer:, date:, file: nil, summary: nil, subject: nil, body: nil)
     expect(page).to have_summary_table_item(key: "From", value: email)
     expect(page).to have_summary_table_item(key: "Contains consumer info", value: (consumer ? "Yes" : "No"))
     expect(page).to have_summary_table_item(key: "Date sent", value: date.strftime("%d/%m/%Y"))
