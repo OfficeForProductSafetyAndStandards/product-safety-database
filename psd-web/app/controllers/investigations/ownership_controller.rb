@@ -28,7 +28,7 @@ class Investigations::OwnershipController < ApplicationController
     @investigation.owner = potential_owner
     @investigation.owner_rationale = params[:investigation][:owner_rationale]
     @investigation.save
-    redirect_to investigation_path(@investigation), flash: {success: "#{@investigation.case_type.upcase_first} owner changed to #{@investigation.owner.display_name}"}
+    redirect_to investigation_path(@investigation), flash: { success: "#{@investigation.case_type.upcase_first} owner changed to #{@investigation.owner.display_name}" }
   end
 
 private
