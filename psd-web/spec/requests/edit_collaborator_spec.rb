@@ -43,7 +43,7 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
       it "displays proper flash message" do
         do_request
-        expect(flash[:success]).to eq("#{team.name} had been removed from the case")
+        expect(flash[:success]).to eq("#{team.name} has been removed from the case")
       end
     end
 
