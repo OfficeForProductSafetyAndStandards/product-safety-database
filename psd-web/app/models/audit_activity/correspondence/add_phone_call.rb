@@ -8,7 +8,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     activity.attach_blob(correspondence.transcript.blob, :attachment) if correspondence.transcript.attached?
   end
 
-  def self.build_body correspondence
+  def self.build_body(correspondence)
     output = ""
     output += build_correspondent_details correspondence
     output += "Date: **#{correspondence.correspondence_date.strftime('%d/%m/%Y')}**<br>" if correspondence.correspondence_date.present?
@@ -17,7 +17,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     output
   end
 
-  def self.build_correspondent_details correspondence
+  def self.build_correspondent_details(correspondence)
     return "" unless correspondence.correspondent_name || correspondence.phone_number
 
     output = "Call with: "
@@ -26,7 +26,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     output
   end
 
-  def self.build_phone_number correspondence
+  def self.build_phone_number(correspondence)
     output = ""
     output += "(" if correspondence.correspondent_name.present?
     output += sanitize_text correspondence.phone_number
@@ -34,7 +34,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     output + "<br>"
   end
 
-  def self.build_file_body correspondence
+  def self.build_file_body(correspondence)
     file = correspondence.transcript
     file.attached? ? "Attached: #{sanitize_text file.filename}<br>" : ""
   end

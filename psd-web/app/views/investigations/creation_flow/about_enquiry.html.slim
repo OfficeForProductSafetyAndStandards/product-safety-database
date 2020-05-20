@@ -1,6 +1,6 @@
 = page_title @page_title, errors: @investigation.errors.any?
 - content_for :after_header do
-  = link_to "Back to Cases", investigations_path, class: "govuk-back-link"
+  = link_to "Back to cases", investigations_path, class: "govuk-back-link"
 = form_with model: @investigation, scope: :enquiry, local: true, url: wizard_path, method: :put do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
@@ -13,9 +13,11 @@
           | Set to:
           '  #{link_to('Today', 'javascript:void(0)', id: :today)}
           '  #{link_to('Yesterday', 'javascript:void(0)', id: :yesterday)}
-        = render "form_components/govuk_radios", form: form, key: :received_type,
-                fieldset: { legend: { text: "How was it received?", classes: "govuk-fieldset__legend--m" } },
-                items: received_type(form)
+        = render "form_components/govuk_radios",
+                 form: form,
+                 key: :received_type,
+                 fieldset: { legend: { text: "How was it received?", classes: "govuk-fieldset__legend--m" } },
+                 items: received_type(form)
       .govuk-form-group
         = form.submit "Continue", class: "govuk-button"
 javascript:

@@ -65,14 +65,18 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
   context "when trying to add a team who is already a collaborator" do
     let(:existing_collaborator_team) { create(:team) }
     let(:investigation) do
-      create(:investigation,
-             owner: user,
-             collaborators: [
-               create(:collaborator,
-                      team: existing_collaborator_team,
-                      include_message: false,
-                      added_by_user: user)
-             ])
+      create(
+        :investigation,
+        owner: user,
+        collaborators: [
+          create(
+            :collaborator,
+            team: existing_collaborator_team,
+            include_message: false,
+            added_by_user: user
+          )
+        ]
+      )
     end
 
     before do

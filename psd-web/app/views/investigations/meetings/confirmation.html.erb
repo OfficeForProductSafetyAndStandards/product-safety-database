@@ -1,0 +1,59 @@
+<%= page_title "Confirm meeting details", errors: @correspondence.errors.any? %>
+<% content_for :after_header do %>
+  <%= link_to "Back to #{@investigation.pretty_description.downcase}", investigation_path(@investigation), class: "govuk-back-link" %>
+<% end %>
+
+<main class="govuk-main-wrapper" role="main">
+  <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+  <h1 class="govuk-heading-l">Confirm meeting details</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= form_with(
+            model: @correspondence,
+            local: true,
+            url: investigation_meetings_path(@investigation),
+            method: :post
+          ) do |form| %>
+
+        <table class="govuk-table">
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Meeting with</th>
+              <td class="govuk-table__cell"><%= @correspondence.correspondent_name %></td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Summary</th>
+              <td class="govuk-table__cell"><%= @correspondence.overview %></td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Date</th>
+              <td class="govuk-table__cell"><%= @correspondence.correspondence_date&.strftime("%d/%m/%Y") %></td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Content</th>
+              <td class="govuk-table__cell"><%= @correspondence.details %></td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">Attachments</th>
+              <td class="govuk-table__cell"><%= @transcript_blob&.filename %></td>
+            </tr>
+
+            <% if @related_attachment_blob %>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Related attachments</th>
+                <td class="govuk-table__cell"><%= @related_attachment_blob&.filename %></td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Attachment description</th>
+                <td class="govuk-table__cell"><%= @related_attachment_blob.metadata[:description] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= link_to("Edit details", wizard_path(:context), class: "govuk-link psd-block-link") %>
+      <% end %>
+    </div>
+  </div>
+</main>

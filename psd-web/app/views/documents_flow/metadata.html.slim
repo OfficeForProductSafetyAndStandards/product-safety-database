@@ -1,7 +1,7 @@
 - @parent = @parent.decorate
 = page_title "New document", errors: @file_blob.errors.any?
 - content_for :after_header do
-  = link_to "Back to #{@parent.pretty_description}", path_for_model(@parent), class: "govuk-back-link"
+  = link_to "Back to #{@parent.pretty_description.downcase}", path_for_model(@parent), class: "govuk-back-link"
 
 = render "documents/metadata_form", document: @file_blob, edit: false, target_url: wizard_path do
   .govuk-grid-row

@@ -9,7 +9,7 @@ class AuditActivity::Correspondence::AddMeeting < AuditActivity::Correspondence:
     activity.attach_blob(correspondence.related_attachment.blob, :related_attachment) if correspondence.related_attachment.attached?
   end
 
-  def self.build_body correspondence
+  def self.build_body(correspondence)
     body = ""
     body += "Meeting with: **#{sanitize_text correspondence.correspondent_name}**<br>" if correspondence.correspondent_name.present?
     body += "Date: **#{correspondence.correspondence_date.strftime('%d/%m/%Y')}**<br>" if correspondence.correspondence_date.present?

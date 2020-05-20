@@ -22,7 +22,6 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
         expect(result).to be_a_success
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it "returns the collaborator" do
         expect(result.collaborator).to have_attributes(
           team: team,
@@ -31,7 +30,6 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
           message: message
         )
       end
-      # rubocop:enable RSpec/ExampleLength
 
       it "queues a job to notify the team", :with_test_queue_adapter do
         aggregate_failures do

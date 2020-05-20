@@ -13,14 +13,15 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create contact" do
     assert_difference("Contact.count") do
-      post business_contacts_url(@contact.business), params: {
-        contact: {
-          job_title: @contact.job_title,
-          email: @contact.email,
-          name: @contact.name,
-          phone_number: @contact.phone_number
-        }
-      }
+      post business_contacts_url(@contact.business),
+           params: {
+             contact: {
+               job_title: @contact.job_title,
+               email: @contact.email,
+               name: @contact.name,
+               phone_number: @contact.phone_number
+             }
+           }
     end
 
     assert_redirected_to business_url(@contact.business, anchor: "contacts")
@@ -32,14 +33,15 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update contact" do
-    patch business_contact_url(@contact.business, @contact), params: {
-      contact: {
-        job_title: "Managing director",
-        email: "email@email.com",
-        name: "John Smith",
-        phone_number: "+4477619345346"
-      }
-    }
+    patch business_contact_url(@contact.business, @contact),
+          params: {
+            contact: {
+              job_title: "Managing director",
+              email: "email@email.com",
+              name: "John Smith",
+              phone_number: "+4477619345346"
+            }
+          }
     assert_redirected_to business_url(@contact.business, anchor: "contacts")
   end
 

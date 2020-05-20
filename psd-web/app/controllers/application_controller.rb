@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
 
+  rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
+
   def set_current_user
     return unless user_signed_in?
 
@@ -111,5 +113,11 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(*)
     root_path
+  end
+
+private
+
+  def render_404_page
+    render "errors/not_found", status: :not_found
   end
 end

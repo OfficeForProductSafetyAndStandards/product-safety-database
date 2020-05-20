@@ -127,9 +127,11 @@ class User < ApplicationRecord
     self.unlock_token = enc
     save(validate: false)
     reset_password_token = set_reset_password_token
-    NotifyMailer.account_locked(self,
-                                unlock_token: raw,
-                                reset_password_token: reset_password_token).deliver_later
+    NotifyMailer.account_locked(
+      self,
+      unlock_token: raw,
+      reset_password_token: reset_password_token
+    ).deliver_later
     raw
   end
 
@@ -154,6 +156,10 @@ class User < ApplicationRecord
 
   def self.find_first_by_auth_conditions(conditions, opts = {})
     super(conditions, opts.merge(deleted_at: nil))
+  end
+
+  def mobile_number_change_allowed?
+    !mobile_number_verified?
   end
 
 private

@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "~> 2.6.5"
+ruby "~> 2.6.6"
 
 gem "will_paginate", "~> 3.3" # Must be laoded before elasticsearch gems
 
@@ -44,7 +44,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.1.1"
 gem "wicked"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.6.4", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.6.5", require: "govuk_design_system"
 group :development, :test do
   gem "awesome_print", require: "ap"
   gem "brakeman"
@@ -63,7 +63,7 @@ group :development, :test do
   gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop"
-  gem "rubocop-govuk", "~> 3.9.0"
+  gem "rubocop-govuk", "~> 3.10.0"
   gem "rubocop-performance"
   gem "rubocop-rspec", "~> 1.39", require: false
   gem "ruby-debug-ide"

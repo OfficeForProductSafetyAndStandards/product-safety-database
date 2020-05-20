@@ -26,9 +26,11 @@
             = link_to "Sign in to your account",
                 new_user_session_path,
                 class: "govuk-button govuk-button--start app-button--inverted",
-                role: "button", draggable: false
+                role: "button",
+                draggable: false
             p.govuk-body.app-body--inverted
               | or&nbsp;
-              = mail_to t(:enquiries_email), "email OPSS",
-                class: "govuk-link app-link--inverted"
+              = mail_to t(:enquiries_email),
+                        "email OPSS",
+                        class: "govuk-link app-link--inverted"
               | &nbsp;if you think you should have access

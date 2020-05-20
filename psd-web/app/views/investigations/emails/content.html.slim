@@ -1,6 +1,8 @@
 = page_title "Record email", errors: @correspondence.errors.any?
 - content_for :after_header do
-  = link_to "Back to #{@investigation.pretty_description}", investigation_path(@investigation), class: "govuk-back-link"
+  = link_to "Back to #{@investigation.pretty_description.downcase}",
+  investigation_path(@investigation),
+  class: "govuk-back-link"
 
 = form_with(model: @correspondence, local: true, url: wizard_path, method: :put) do |form|
   .govuk-grid-row
@@ -9,9 +11,12 @@
       span.govuk-caption-l = @investigation.pretty_description
       h1.govuk-heading-l
         | Record email
-      = render "form_components/govuk_input", key: :overview, form: form, classes: "govuk-!-width-two-thirds",
-              label: { text: "Summary", classes: "govuk-label--m" },
-              hint: { text: "Give an overview of the email" }
+      = render "form_components/govuk_input",
+               key: :overview,
+               form: form,
+               classes: "govuk-!-width-two-thirds",
+               label: { text: "Summary", classes: "govuk-label--m" },
+               hint: { text: "Give an overview of the email" }
       = render "components/govuk_fieldset",
                legend: { text: "Email content", classes: "govuk-fieldset__legend--m" },
                describedBy: "email-content-hint" do
@@ -27,13 +32,21 @@
                 | Selecting a different one will replace it.
             = subform.label :file, "Upload a file", class: "govuk-label"
             = subform.file_field :file, class: "govuk-file-upload"
-        = render "form_components/govuk_input", key: :email_subject, form: form,
-                classes: "govuk-!-width-two-thirds",
-                label: { text: "Subject line" }
-        = render "form_components/govuk_textarea", key: :details, form: form, attributes: { maxlength: 50000 },
-                label: { text: "Body" }
+        = render "form_components/govuk_input",
+                 key: :email_subject,
+                 form: form,
+                 classes: "govuk-!-width-two-thirds",
+                 label: { text: "Subject line" }
+        = render "form_components/govuk_textarea",
+                 key: :details,
+                 form: form,
+                 attributes: { maxlength: 50_000 },
+                 label: { text: "Body" }
 
-      = render "related_attachment_fields", form: form,
-              file_blob: @email_attachment_blob, attachment_name: :email_attachment, title: "Attachments"
+      = render "related_attachment_fields",
+               form: form,
+               file_blob: @email_attachment_blob,
+               attachment_name: :email_attachment,
+               title: "Attachments"
 
       = form.submit "Continue", class: "govuk-button"
