@@ -15,7 +15,7 @@ class AuditActivity::Investigation::AddProject < AuditActivity::Investigation::A
     body
   end
 
-  def can_display_all_data?
+  def can_display_all_data?(_viewing_user)
     true
   end
 end

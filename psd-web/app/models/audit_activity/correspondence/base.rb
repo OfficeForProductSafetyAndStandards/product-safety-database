@@ -11,7 +11,7 @@ class AuditActivity::Correspondence::Base < AuditActivity::Base
     )
   end
 
-  def can_display_all_data?
-    correspondence.can_be_displayed?
+  def can_display_all_data?(viewing_user)
+    correspondence.can_be_displayed?(viewing_user)
   end
 end
