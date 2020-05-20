@@ -2,18 +2,27 @@ require "rails_helper"
 
 RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:date) { Faker::Date.backward(days: 14) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
 
-  before do
-    sign_in(user)
-    visit "/cases/#{investigation.pretty_id}/activity/new"
+  context "as another user from different team" do
+    scenario "doesn't allow to add test results" do
+      
+      sign_in(another_user_another_team)
+      visit "/cases/#{investigation.pretty_id}/activity"
+      page.should have_content("Add comment")
+      page.should have_no_content("Add activity")
+    end
   end
+
 
   context "when leaving the form fields empty" do
     scenario "shows error messages" do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/activity/new"
       expect_to_be_on_new_activity_page
 
       expect_to_be_on_new_activity_page
@@ -33,6 +42,8 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
   context "with valid input data" do
     scenario "edit and saves the test result" do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/activity/new"
       expect_to_be_on_new_activity_page
 
       within_fieldset "New activity" do
