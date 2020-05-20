@@ -8,16 +8,14 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:date) { Faker::Date.backward(days: 14) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
 
-  context "as another user from different team" do
+  context "when another user from different team" do
     scenario "doesn't allow to add test results" do
-      
       sign_in(another_user_another_team)
       visit "/cases/#{investigation.pretty_id}/activity"
       page.should have_content("Add comment")
       page.should have_no_content("Add activity")
     end
   end
-
 
   context "when leaving the form fields empty" do
     scenario "shows error messages" do

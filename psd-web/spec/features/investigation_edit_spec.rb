@@ -9,7 +9,7 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
     sign_in user
     visit investigation_path(investigation)
     page.should have_content("Change summary")
-   
+
     click_link "Change summary"
 
     fill_in "investigation[description]", with: "new description"
@@ -24,12 +24,10 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
 
     expect(page).to have_css(".govuk-summary-list__row .govuk-summary-list__key + .govuk-summary-list__value", text: "Coronavirus related case")
   end
-  
+
   scenario "user from other team cannot edit summary" do
     sign_in another_user_another_team
     visit investigation_path(investigation)
     page.should have_no_content("Change summary")
   end
-
-
 end
