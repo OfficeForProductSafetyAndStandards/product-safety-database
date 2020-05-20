@@ -4,10 +4,10 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
   let(:user)          { create(:user, :activated) }
   let(:investigation) { create(:enquiry, owner: user) }
   let(:product)       { create(:product_iphone) }
-
-  before { sign_in user }
+  let(:other_user)    { create(:user, :activated) }
 
   scenario "Adding a product to a case" do
+    sign_in user
     visit "/cases/#{investigation.pretty_id}/products/new"
 
     select product.category, from: "Product category"
@@ -43,5 +43,12 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.country_of_origin)
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Description")
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.description)
+  end
+
+  scenario "Not being able to add a product to another team’s case" do
+    sign_in other_user
+    visit "/cases/#{investigation.pretty_id}/products"
+
+    expect(page).not_to have_link("Add product")
   end
 end
