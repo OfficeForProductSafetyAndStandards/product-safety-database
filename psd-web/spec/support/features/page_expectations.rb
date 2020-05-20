@@ -323,4 +323,18 @@ module PageExpectations
   def expect_to_be_on_access_denied_page
     expect(page).to have_css("h1", text: "Access denied")
   end
+
+  def expect_to_be_on_record_phone_call_page
+    expect_page_to_have_h1("Record phone call")
+    expect(page).to have_selector("legend", text: "Who was the call with?")
+  end
+
+  def expect_to_be_on_record_phone_call_details_page
+    expect_page_to_have_h1("Record phone call")
+    expect(page).to have_selector("legend", text: "Details")
+  end
+
+  def expect_to_be_on_confirm_phone_call_details_page
+    expect_page_to_have_h1("Confirm phone call details")
+  end
 end
