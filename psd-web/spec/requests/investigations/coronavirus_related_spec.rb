@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Managing a case’s coronavirus status", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, type: :request do
   let(:user) { create(:user, :activated, has_accepted_declaration: true) }
-  let(:investigation) { create(:enquiry, owner: user) }
+  let(:investigation) { create(:enquiry, owner: user.team) }
 
   before { sign_in user }
 

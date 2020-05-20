@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let!(:investigation) { create(:project, owner: user) }
+  let!(:investigation) { create(:project, owner: user.team) }
   let!(:user) { create(:user, :activated) }
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
 
