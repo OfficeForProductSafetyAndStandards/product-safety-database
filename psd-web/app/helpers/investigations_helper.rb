@@ -255,17 +255,22 @@ module InvestigationsHelper
     status_actions = { items: [] }
     activity_actions = { items: [] }
 
-    activity_actions[:items] << if policy(investigation).update?(user: user)
-                                  {
-                                    href: new_investigation_activity_path(investigation),
-                                    text: "Add activity"
-                                  }
-                                else
-                                  {
-                                    href: new_investigation_activity_comment_path(investigation),
-                                    text: "Add comment"
-                                  }
-                                end
+    if policy(investigation).update?(user: user)
+      activity_actions[:items] << {
+        href: new_investigation_activity_path(investigation),
+        text: "Add activity"
+      }
+      coronavirus_related_actions[:items] << {
+        href: investigation_coronavirus_related_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "coronavirus status"
+      }
+    else
+      activity_actions[:items] << {
+        href: new_investigation_activity_comment_path(investigation),
+        text: "Add comment"
+      }
+    end
 
     if policy(investigation).send_email_alert?(user: user)
       activity_actions[:items] << {
@@ -275,12 +280,6 @@ module InvestigationsHelper
     end
 
     if policy(investigation).change_owner_or_status?(user: user)
-      coronavirus_related_actions[:items] << {
-        href: investigation_coronavirus_related_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "coronavirus status"
-      }
-
       status_actions[:items] << {
         href: status_investigation_path(investigation),
         text: "Change",
