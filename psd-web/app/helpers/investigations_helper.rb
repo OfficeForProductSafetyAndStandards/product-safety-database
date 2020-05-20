@@ -267,7 +267,7 @@ module InvestigationsHelper
                                   }
                                 end
 
-    if policy(investigation).user_allowed_to_raise_alert?(user: user)
+    if policy(investigation).send_email_alert?(user: user)
       activity_actions[:items] << {
         href: new_investigation_alert_path(investigation),
         text: "Send email alert"
