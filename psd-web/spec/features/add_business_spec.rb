@@ -15,10 +15,16 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:job_title)        { Faker::Job.title }
   let(:user)             { create(:user, :activated) }
   let(:investigation)    { create(:enquiry, owner: user.team) }
+  let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
 
-  before { sign_in user }
+  scenario "when user from another team,it doesn't allow to add business" do
+    sign_in another_user_another_team
+    visit "/cases/#{investigation.pretty_id}/businesses"
+    page.should have_no_content("Add business")
+  end
 
   scenario "Adding a business" do
+    sign_in user
     visit "/cases/#{investigation.pretty_id}/businesses/new"
 
     # Don't select a business type
