@@ -7,69 +7,55 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:date) { Faker::Date.backward(days: 14) }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
+  let(:other_user) { create(:user, :activated) }
 
-  context "when user from another team" do
-    scenario "doesn't allow to add test results" do
-      sign_in(another_user_another_team)
-      visit "/cases/#{investigation.pretty_id}/activity"
-      page.should have_content("Add comment")
-      page.should have_no_content("Add activity")
+
+  scenario "Adding a test result (with validation errors)" do
+    sign_in(user)
+    visit "/cases/#{investigation.pretty_id}/activity"
+
+    click_link "Add activity"
+
+    expect_to_be_on_new_activity_page
+
+    within_fieldset "New activity" do
+      page.choose "Record test result"
     end
+    click_button "Continue"
+
+    expect_to_be_on_record_test_result_page
+    click_button "Continue"
+
+    expect(page).to have_summary_error("Enter date of the test")
+    expect(page).to have_summary_error("Select the legislation that relates to this test")
+    expect(page).to have_summary_error("Select result of the test")
+    expect(page).to have_summary_error("Provide the test results file")
+
+    fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
+
+    expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+
+    click_on "Edit details"
+
+    expect_to_be_on_record_test_result_page
+
+    expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
+
+    click_button "Continue"
+
+    expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+
+    click_button "Continue"
+
+    expect_confirmation_banner("Test result was successfully recorded.")
+    expect_page_to_have_h1("Overview")
   end
 
-  context "when leaving the form fields empty" do
-    scenario "shows error messages" do
-      sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/activity/new"
-      expect_to_be_on_new_activity_page
+  scenario "Not being able to add test results to another team’s case" do
+    sign_in(other_user)
+    visit "/cases/#{investigation.pretty_id}/activity"
 
-      expect_to_be_on_new_activity_page
-
-      choose "activity_type_testing_result"
-      click_button "Continue"
-
-      expect_to_be_on_record_test_result_page
-      click_button "Continue"
-
-      expect(page).to have_summary_error("Enter date of the test")
-      expect(page).to have_summary_error("Select the legislation that relates to this test")
-      expect(page).to have_summary_error("Select result of the test")
-      expect(page).to have_summary_error("Provide the test results file")
-    end
-  end
-
-  context "with valid input data" do
-    scenario "edit and saves the test result" do
-      sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/activity/new"
-      expect_to_be_on_new_activity_page
-
-      within_fieldset "New activity" do
-        page.choose "Record test result"
-      end
-      click_button "Continue"
-
-      expect_to_be_on_record_test_result_page
-
-      fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
-
-      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
-
-      click_on "Edit details"
-
-      expect_to_be_on_record_test_result_page
-
-      expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
-
-      click_button "Continue"
-
-      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
-
-      click_button "Continue"
-
-      expect_confirmation_banner("Test result was successfully recorded.")
-      expect_page_to_have_h1("Overview")
-    end
+    expect(page).not_to have_link("Add activity")
   end
 
   def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)
