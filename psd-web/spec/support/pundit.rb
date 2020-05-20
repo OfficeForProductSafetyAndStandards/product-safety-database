@@ -1,7 +1,7 @@
 RSpec.shared_context "with stubbed pundit", shared_context: :metadata do
   before do
     # Sadly we have to use allow_any_instance_of as pundit embed itself deep into ActionController
-    allow_any_instance_of(ApplicationController) # rubocop:disable Rspec/AnyInstance
+    allow_any_instance_of(ApplicationController) # rubocop:disable RSpec/AnyInstance
       .to receive(:pundit_user).and_return(current_user)
   end
 end

@@ -27,7 +27,7 @@ class Activity < ApplicationRecord
     return text.to_s.strip.gsub(/[*_~]/) { |match| "\\#{match}" } if text
   end
 
-  def can_display_all_data?(viewing_user)
+  def can_display_all_data?(_viewing_user)
     true
   end
 
