@@ -12,7 +12,7 @@ module ActivityHelper
       "business": "Add a business to the case"
     }
     base_types["alert"] = "Send email alert about this case" if policy(@investigation).user_allowed_to_raise_alert?
-
+    
     base_types
   end
 end

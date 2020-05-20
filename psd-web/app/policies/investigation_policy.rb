@@ -36,7 +36,7 @@ class InvestigationPolicy < ApplicationPolicy
     false
   end
 
-  def user_allowed_to_raise_alert?(user: @user)
+  def send_email_alert?(user: @user)
     user.is_opss?
   end
 
