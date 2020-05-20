@@ -87,7 +87,7 @@ private
         format.html do
           redirect_to investigation_path(@investigation),
                       flash: {
-                        success: "#{@investigation.case_type.upcase_first} was successfully updated."
+                        success: "#{@investigation.case_type.upcase_first} was successfully updated"
                       }
         end
         format.json { render :show, status: :ok, location: @investigation }

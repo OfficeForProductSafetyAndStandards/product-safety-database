@@ -61,7 +61,7 @@ en:
         yes_label: "Yes, it is (or could be)"
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
-      success: "%{case_title} was successfully updated."
+      success: "Coronavirus status updated on %{case_type}"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
