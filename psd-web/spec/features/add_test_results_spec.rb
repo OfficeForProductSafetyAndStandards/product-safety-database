@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
   let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:date) { Faker::Date.backward(days: 14) }
