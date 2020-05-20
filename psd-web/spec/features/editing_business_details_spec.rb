@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_elasticsearch do
-
   let(:user)      { create(:user, :activated) }
   let(:business)  { create(:business, trading_name: "OldCo", contacts: [create(:contact)]) }
 
@@ -18,7 +17,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_el
     within_fieldset "Business details" do
       fill_in "Trading name", with: "NewCo"
       fill_in "Registered or legal name", with: "NewCo Ltd"
-      fill_in "Company number",  with: "222 222 22"
+      fill_in "Company number", with: "222 222 22"
     end
 
     within_fieldset "Address" do
@@ -49,5 +48,4 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_el
 
     expect(page).to have_summary_item(key: "Contact", value: "Mr New, CEO, 01632 960000, contact@newco.example")
   end
-
 end

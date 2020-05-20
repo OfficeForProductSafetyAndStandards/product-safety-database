@@ -9,7 +9,6 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
   let(:other_user) { create(:user, :activated) }
 
-
   scenario "Adding a test result (with validation errors)" do
     sign_in(user)
     visit "/cases/#{investigation.pretty_id}/activity"

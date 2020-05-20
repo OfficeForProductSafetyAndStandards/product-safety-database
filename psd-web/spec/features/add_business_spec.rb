@@ -104,5 +104,4 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     visit "/cases/#{investigation.pretty_id}/businesses"
     expect(page).not_to have_link("Add business")
   end
-
 end
