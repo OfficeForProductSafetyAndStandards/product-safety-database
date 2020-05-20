@@ -32,7 +32,7 @@ RSpec.describe "Managing a case’s coronavirus status", :with_stubbed_elasticse
         patch investigation_coronavirus_related_path(investigation), params: { investigation: { coronavirus_related: !investigation.coronavirus_related } }
       }.to(change { investigation.reload.activities.where(type: "AuditActivity::Investigation::UpdateCoronavirusStatus").count }.by(1))
       expect(response).to redirect_to(investigation_path(investigation))
-      expect(flash[:success]).to eq("#{investigation.case_type.upcase_first} was successfully updated.")
+      expect(flash[:success]).to eq("Coronavirus status updated on #{investigation.case_type}")
     end
   end
 end
