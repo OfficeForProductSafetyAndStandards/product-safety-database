@@ -53,7 +53,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(mail: email, consumer: true, date: date, file: file)
+    expect_confirm_email_details_page_to_show_entered_information(email: email, consumer: true, date: date, file: file)
 
     # Test edit details pages retain entered information
     click_link "Edit details"
