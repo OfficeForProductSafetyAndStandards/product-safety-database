@@ -21,9 +21,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk")
   end
 
-  before do
-    team
-  end
+  before { team }
 
   scenario "Adding a team to a case (with validation errors)" do
     sign_in user
@@ -83,8 +81,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     click_link "Back"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Southampton Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading StandardsSouthampton Trading Standards")
 
     click_link "Activity"
 
