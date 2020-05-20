@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Change case visibility restriction", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
+RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   let(:user) do
     create(
       :user,
@@ -24,7 +24,7 @@ RSpec.feature "Change case visibility restriction", :with_stubbed_elasticsearch,
       )
     end
 
-    scenario "user can change the visibility restriction on the case" do
+    scenario "user can change the restriction status of the case" do
       visit "/cases/#{case_id}"
 
       expect_to_be_on_case_page(case_id: case_id)
@@ -34,7 +34,7 @@ RSpec.feature "Change case visibility restriction", :with_stubbed_elasticsearch,
 
       expect(page).to have_h1("Legal privilege")
       choose "Restricted for legal privilege"
-      fill_in "Comment / rationale", with: "Very testing concerns"
+      fill_in "Comment / rationale", with: "Restriction reason"
       click_button "Save"
 
       expect_to_be_on_case_page(case_id: case_id)
@@ -43,7 +43,7 @@ RSpec.feature "Change case visibility restriction", :with_stubbed_elasticsearch,
     end
   end
 
-  context "when the case owner belongs to a different team" do
+  context "when the user is not the case owner" do
     let(:investigation) do
       create(
         :allegation,
@@ -51,7 +51,7 @@ RSpec.feature "Change case visibility restriction", :with_stubbed_elasticsearch,
       )
     end
 
-    scenario "user can't change the visibility restriction on the case" do
+    scenario "user can’t change the restriction status of the case" do
       visit "/cases/#{case_id}"
       expect_to_be_on_case_page(case_id: case_id)
       expect(page).to have_summary_item(key: "Case restriction", value: "Unrestricted")
