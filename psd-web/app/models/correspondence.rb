@@ -29,8 +29,8 @@ class Correspondence < ApplicationRecord
     end
   end
 
-  def can_be_displayed?
-    can_be_seen_by_current_user? || investigation.child_should_be_displayed?
+  def can_be_displayed?(viewing_user)
+    can_be_seen_by_current_user?(viewing_user) || investigation.child_should_be_displayed?(viewing_user)
   end
 
   def date_cannot_be_in_the_future
@@ -41,8 +41,8 @@ class Correspondence < ApplicationRecord
 
 private
 
-  def can_be_seen_by_current_user?
-    return true if activity&.source&.user_has_gdpr_access?
+  def can_be_seen_by_current_user?(viewing_user)
+    return true if activity&.source&.user_has_gdpr_access?(viewing_user)
 
     !has_consumer_info
   end
