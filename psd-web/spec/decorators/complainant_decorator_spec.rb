@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ComplainantDecorator, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_pundit do
+RSpec.describe ComplainantDecorator, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   subject(:decorated_complainant) { complainant.decorate }
 
   let(:current_user) { create(:user) }
