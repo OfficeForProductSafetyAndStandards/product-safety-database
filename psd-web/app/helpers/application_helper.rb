@@ -22,6 +22,6 @@ module ApplicationHelper
   end
 
   def permissions_hint(permission = "this")
-    "Only teams added to the case can view #{permission}"
+    I18n.t("permissions_hint", permission: permission)
   end
 end

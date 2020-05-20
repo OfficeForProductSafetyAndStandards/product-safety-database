@@ -31,6 +31,7 @@
 
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
+  permissions_hint: "Only teams added to the case can view %{permission}"
   mail:
     team_added_to_case:
       message_from: "Message from %{user_name}:"
