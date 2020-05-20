@@ -90,6 +90,23 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
     expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
 
+    # edit business details
+    click_link "View business"
+    click_link "Edit details"
+
+    expect_to_be_on_investigation_edit_business_details_page
+
+    within_fieldset "Business details" do
+      fill_in "Registered or legal name", with: business_details + "edit details"
+      fill_in "Company number",           with: company_number   + "906"
+    end
+
+    click_button "Save business"
+    expect_confirmation_banner("Business was successfully updated.")
+    expect(page).to have_css("dd.govuk-summary-list__value", text: business_details + "edit details")
+    expect(page).to have_css("dd.govuk-summary-list__value", text: company_number   + "906")
+
+    visit "/cases/#{investigation.pretty_id}/businesses"
     click_link "Remove business"
 
     expect_to_be_on_remove_business_page
