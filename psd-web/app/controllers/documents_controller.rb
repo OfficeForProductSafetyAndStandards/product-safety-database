@@ -7,6 +7,7 @@ class DocumentsController < ApplicationController
   include GdprHelper
 
   before_action :set_parent
+  before_action :authorize_if_attached_to_investigation
   before_action :set_file, only: %i[edit update remove destroy]
 
   # GET /documents/1/edit
@@ -41,6 +42,10 @@ class DocumentsController < ApplicationController
   end
 
 private
+
+  def authorize_if_attached_to_investigation
+    authorize @parent, :update? if @parent.is_a? Investigation
+  end
 
   def set_file
     @errors = ActiveModel::Errors.new(ActiveStorage::Blob.new)
