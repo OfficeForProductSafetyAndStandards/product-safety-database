@@ -29,43 +29,43 @@ RSpec.describe InvestigationsHelper, :with_stubbed_mailer, :with_stubbed_elastic
 
   describe "#source_details_rows" do
     describe "contact details for a viewing user" do
-      let(:viewing_user_organisation) { sourceable.organisation }
-      let(:viewing_user_team) { sourceable.team }
-      let(:viewing_user) { create(:user, organisation: viewing_user_organisation, team: viewing_user_team) }
+      let(:current_user_organisation) { sourceable.organisation }
+      let(:current_user_team) { sourceable.team }
+      let(:current_user) { create(:user, organisation: current_user_organisation, team: current_user_team) }
       let!(:complainant) { create(:complainant_Consumer, investigation: investigation).decorate }
 
       context "when in the same organisation as the investigation creator" do
         context "when also is in a team with access to the case" do
           it "shows the enquiry contact details" do
-            expect(source_details_rows(investigation, viewing_user)).to include(key: { text: "Contact details" }, value: { text: complainant.contact_details(viewing_user) })
+            expect(source_details_rows(investigation, current_user)).to include(key: { text: "Contact details" }, value: { text: complainant.contact_details(current_user) })
           end
         end
       end
 
       context "when not in the same organisation as the investigation creator" do
-        let(:viewing_user_organisation) { create(:organisation) }
+        let(:current_user_organisation) { create(:organisation) }
 
         it "shows the GDPR warning" do
-          expect(source_details_rows(investigation, viewing_user)).to include(key: { text: "Contact details" }, value: { text: "Reporter details are restricted because they contain GDPR protected data." })
+          expect(source_details_rows(investigation, current_user)).to include(key: { text: "Contact details" }, value: { text: "Reporter details are restricted because they contain GDPR protected data." })
         end
       end
 
       context "when in a team not on the case" do
-        let(:viewing_user_team) { create(:team, organisation: viewing_user_organisation) }
+        let(:current_user_team) { create(:team, organisation: current_user_organisation) }
 
         it "does not shows the restriction message" do
-          expect(source_details_rows(investigation, viewing_user)).to include(key: { text: "Contact details" }, value: { text: complainant.contact_details(viewing_user) })
+          expect(source_details_rows(investigation, current_user)).to include(key: { text: "Contact details" }, value: { text: complainant.contact_details(current_user) })
         end
 
         context "when the investigation is an enquiry" do
           let(:investigation) { create(:enquiry, source: UserSource.new(user: sourceable)).decorate }
 
           it "shows the restriction message" do
-            expect(source_details_rows(investigation, viewing_user)).to include(key: { text: "Contact details" }, value: { text: /Only teams added to the case can view enquiry contact details/ })
+            expect(source_details_rows(investigation, current_user)).to include(key: { text: "Contact details" }, value: { text: /Only teams added to the case can view enquiry contact details/ })
           end
 
           it "does not shows the contact details" do
-            expect(source_details_rows(investigation, viewing_user)).not_to include(key: { text: "Contact details" }, value: { text: /Regexp.escape(complainant.contact_details)/ })
+            expect(source_details_rows(investigation, current_user)).not_to include(key: { text: "Contact details" }, value: { text: /Regexp.escape(complainant.contact_details)/ })
           end
         end
       end

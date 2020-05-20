@@ -9,7 +9,7 @@ class ComplainantDecorator < ApplicationDecorator
   def contact_details(viewing_user)
     details = [investigation.hint_for_contact_details]
 
-    if h.policy(investigation).show?(user: viewing_user)
+    if Pundit.policy!(viewing_user, investigation).show?(user: viewing_user)
       details << name
       details << phone_number
       details << email_address
