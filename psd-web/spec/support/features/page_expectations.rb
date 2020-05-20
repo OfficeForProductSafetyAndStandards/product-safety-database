@@ -28,11 +28,6 @@ module PageExpectations
     expect(page).to have_selector("legend", text: "Business details")
   end
 
-  def expect_to_be_on_investigation_edit_business_details_page
-    expect(page).to have_title("Edit business - Product safety database - GOV.UK")
-    expect(page).to have_selector("legend", text: "Business details")
-  end
-
   def expect_to_be_on_remove_business_page
     expect(page).to have_current_path(/\/cases\/#{investigation.pretty_id}\/businesses\/\d+\/remove/)
     expect(page).to have_selector("h2", text: "Remove business")
@@ -301,6 +296,18 @@ module PageExpectations
   def expect_to_be_on_edit_case_permissions_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/teams/#{team.id}/edit")
     expect(page).to have_selector("h1", text: team.name)
+  end
+
+  # Businesses
+  def expect_to_be_on_business_page(business_id:, business_name:)
+    expect(page).to have_current_path("/businesses/#{business_id}")
+    expect(page).to have_selector("h1", text: business_name)
+  end
+
+  def expect_to_be_on_edit_business_page(business_id:, business_name:)
+    expect(page).to have_current_path("/businesses/#{business_id}/edit")
+    expect(page).to have_title("Edit business - Product safety database - GOV.UK")
+    expect(page).to have_selector("h1", text: business_name)
   end
 
   def expect_teams_tables_to_contain(expected_teams)

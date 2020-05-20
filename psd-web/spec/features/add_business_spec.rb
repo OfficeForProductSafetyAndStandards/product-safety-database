@@ -17,15 +17,11 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:investigation)    { create(:enquiry, owner: user.team) }
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
 
-  scenario "when user from another team,it doesn't allow to add business" do
-    sign_in another_user_another_team
-    visit "/cases/#{investigation.pretty_id}/businesses"
-    page.should have_no_content("Add business")
-  end
-
   scenario "Adding a business" do
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/businesses/new"
+    visit "/cases/#{investigation.pretty_id}/businesses"
+
+    click_link "Add business"
 
     # Don't select a business type
     click_on "Continue"
@@ -96,27 +92,17 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
     expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
 
-    # edit business details
-    click_link "View business"
-    click_link "Edit details"
-
-    expect_to_be_on_investigation_edit_business_details_page
-
-    within_fieldset "Business details" do
-      fill_in "Registered or legal name", with: business_details + "edit details"
-      fill_in "Company number",           with: company_number   + "906"
-    end
-
-    click_button "Save business"
-    expect_confirmation_banner("Business was successfully updated.")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: business_details + "edit details")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: company_number   + "906")
-
-    visit "/cases/#{investigation.pretty_id}/businesses"
     click_link "Remove business"
 
     expect_to_be_on_remove_business_page
     click_button "Remove business"
     expect_confirmation_banner("Business was successfully removed.")
   end
+
+  scenario "Not being able to add a business to another team’s case" do
+    sign_in another_user_another_team
+    visit "/cases/#{investigation.pretty_id}/businesses"
+    expect(page).not_to have_link("Add business")
+  end
+
 end
