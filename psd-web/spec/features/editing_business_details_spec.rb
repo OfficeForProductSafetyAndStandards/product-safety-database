@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:user)      { create(:user, :activated) }
   let(:business)  { create(:business, trading_name: "OldCo") }
+
   before do
     create(:contact, business: business)
   end
