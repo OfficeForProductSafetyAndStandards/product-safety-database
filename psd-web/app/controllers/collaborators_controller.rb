@@ -26,7 +26,7 @@ class CollaboratorsController < ApplicationController
     )
 
     if result.success?
-      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.collaborator.team.name} added to the case" }
+      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edition.editor.name} added to the case" }
     else
       @teams = teams_without_access
       @edition = result.edition
