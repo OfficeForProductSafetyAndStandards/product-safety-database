@@ -84,7 +84,7 @@ module Investigations::DisplayTextHelper
 
   def should_be_hidden(result, source, investigation)
     return true if correspondence_should_be_hidden(result, source, investigation)
-    return true if (source.include? "complainant") && !investigation&.complainant&.can_be_displayed?
+    return true if (source.include? "complainant") && !investigation&.complainant&.can_be_displayed?(current_user)
 
     false
   end

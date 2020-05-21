@@ -146,10 +146,10 @@ class Investigation < ApplicationRecord
     @reported_reason ||= ActiveSupport::StringInquirer.new(super)
   end
 
-  def child_should_be_displayed?
+  def child_should_be_displayed?(user)
     # This method is responsible for white-list access for assignee and their team, as described in
     # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    owner.in_same_team_as?(User.current)
+    owner.in_same_team_as?(user)
   end
 
 private

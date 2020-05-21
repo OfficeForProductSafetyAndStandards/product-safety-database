@@ -41,8 +41,8 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def source_details_summary_list
-    contact_details = if complainant.can_be_displayed?
+  def source_details_summary_list(user)
+    contact_details = if complainant.can_be_displayed?(user)
                         complainant.decorate.contact_details
                       else
                         "Reporter details are restricted because they contain GDPR protected data."

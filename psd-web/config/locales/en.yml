@@ -67,6 +67,7 @@ en:
         caption: "Report an unsafe or non-compliant product"
   audit_activity:
     investigation:
+      coronavirus_related: Case is related to the coronavirus outbreak.
       update_coronavirus_status:
         email_subject_text: "Coronavirus status updated on %{case_type}"
         email_update_text:

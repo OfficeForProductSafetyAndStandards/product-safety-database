@@ -18,10 +18,16 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
+  let(:user) { create(:user, :activated, :opss_user) }
+  let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
+  let(:other_user_different_org) { create(:user, :activated) }
+
   context "when logged in as an OPSS user" do
-    before { sign_in(create(:user, :activated, :opss_user)) }
+    before { sign_in(user) }
 
     scenario "is able to report an enquiry" do
+      visit "/cases"
+
       click_link "Open a new case"
       choose "type_enquiry"
       click_button "Continue"
@@ -57,9 +63,31 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       click_on "Activity"
       expect_details_on_activity_page(contact_details, enquiry_details)
+
+      # Test that another user in a different organisation cannot see consumer info
+      sign_out
+
+      sign_in(other_user_different_org)
+
+      investigation = Investigation.last
+
+      visit "/cases/#{investigation.pretty_id}/activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_case_activity_page_to_show_restricted_information(enquiry_details)
+
+      # Test that another user in the same team can see consumer info
+      sign_out
+
+      sign_in(other_user_same_team)
+
+      visit "/cases/#{investigation.pretty_id}/activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_details_on_activity_page(contact_details, enquiry_details)
     end
 
-    context "with enquiry date as future" do
+    context "with enquiry date in the future" do
       let(:date) { Faker::Date.forward(days: 14) }
 
       scenario "shows an error message" do
@@ -116,6 +144,23 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_css("p", text: "Email address: #{contact.fetch(:contact_email)}")
       expect(page).to have_css("p", text: "Phone number: #{contact.fetch(:contact_phone)}")
       expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
+    end
+  end
+
+  def expect_case_activity_page_to_show_restricted_information(enquiry)
+    within ".govuk-list" do
+      expect(page).to have_css("h3", text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
+      expect(page).to have_css("p", text: "Case is related to the coronavirus outbreak.")
+      expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
+      expect(page).to have_css("p", text: "Attachment: testImage.png")
+      expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
+
+      expect(page).to have_text("Restricted access")
+      expect(page).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact test organisation, who created this activity, to obtain these details if required.")
+
+      expect(page).not_to have_text("Name")
+      expect(page).not_to have_text("Email address")
+      expect(page).not_to have_text("Phone number")
     end
   end
 
