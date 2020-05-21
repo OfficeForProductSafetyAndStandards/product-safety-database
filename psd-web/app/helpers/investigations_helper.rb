@@ -249,14 +249,15 @@ module InvestigationsHelper
   end
 
   def source_details_rows(investigation, viewing_user)
-    rows = [
-      investigation.should_display_date_received? ? { key: { text: "Received date" }, value: { text: investigation.date_received.to_s(:govuk) } } : nil,
-      investigation.should_display_received_by? ? { key: { text: "Received by" }, value: { text: investigation.received_type.upcase_first } } : nil,
-      { key: { text: "Source type" }, value: { text: investigation.complainant.complainant_type } },
-      { key: { text: "Contact details" }, value: { text: investigation.contact_details_for_display(viewing_user) } }
-    ]
-
-    rows.compact!
+    rows = []
+    if investigation.should_display_date_received?
+      rows << { key: { text: "Received date" }, value: { text: investigation.date_received.to_s(:govuk) }
+    end
+    if investigation.should_display_received_by?
+      rows << { key: { text: "Received by" }, value: { text: investigation.received_type.upcase_first } }
+    end
+    rows << { key: { text: "Source type" }, value: { text: investigation.complainant.complainant_type } }
+    rows << { key: { text: "Contact details" }, value: { text: investigation.contact_details_for_display(viewing_user) } }
     rows
   end
 
