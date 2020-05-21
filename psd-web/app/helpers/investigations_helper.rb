@@ -265,7 +265,9 @@ module InvestigationsHelper
     return investigation.teams_with_access.first.name if investigation.teams_with_access.length == 1
 
     tag.ul(class: "govuk-list") do
-      investigation.teams_with_access.map { |team| tag.li(escape_once(team.name)) }.join.html_safe
+      investigation.teams_with_access do |team|
+        concat tag.li(team.name)
+      end
     end
   end
   # rubocop:enable Rails/OutputSafety
