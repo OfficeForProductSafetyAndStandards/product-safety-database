@@ -1,6 +1,7 @@
 class Investigations::OwnershipController < ApplicationController
   include Wicked::Wizard
   before_action :set_investigation
+  before_action :authorize_user
   before_action :potential_owner, only: %i[show create]
   before_action :store_owner, only: %i[update]
 
@@ -38,9 +39,11 @@ private
   end
 
   def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-    @investigation = investigation.decorate
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+  end
+
+  def authorize_user
+    authorize @investigation, :change_owner_or_status?
   end
 
   def owner_params
