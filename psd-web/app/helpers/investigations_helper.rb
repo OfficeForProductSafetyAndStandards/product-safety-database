@@ -250,7 +250,7 @@ module InvestigationsHelper
 
   # This builds an array from an investigation which can then
   # be passed as a `rows` argument to the govukSummaryList() helper.
-  def about_the_case_rows(investigation:, user:)
+  def about_the_case_rows(investigation, user)
     coronavirus_related_actions = { items: [] }
     status_actions = { items: [] }
     activity_actions = { items: [] }

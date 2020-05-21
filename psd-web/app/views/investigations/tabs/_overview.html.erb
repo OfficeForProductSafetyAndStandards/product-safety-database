@@ -86,7 +86,7 @@
 
     <%= govukSummaryList(
       classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
-      rows: about_the_case_rows(investigation: @investigation, user: current_user)
+      rows: about_the_case_rows(@investigation, current_user)
     ) %>
   </div>
 
