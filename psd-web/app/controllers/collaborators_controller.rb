@@ -10,7 +10,7 @@ class CollaboratorsController < ApplicationController
   def new
     authorize @investigation, :manage_collaborators?
 
-    @edition = @investigation.editions.new
+    @edit_access = @investigation.edit_accesses.new
 
     @teams = teams_without_access
   end
@@ -19,17 +19,17 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
-      params.require(:edition).permit(:collaborator_id, :include_message, :message).merge({
+      params.require(:collaboration_edit_access).permit(:collaborator_id, :include_message, :message).merge({
         investigation: @investigation,
         current_user: current_user
       })
     )
 
     if result.success?
-      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edition.editor.name} added to the case" }
+      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access.editor.name} added to the case" }
     else
       @teams = teams_without_access
-      @edition = result.edition
+      @edit_access = result.edit_access
       render "collaborators/new"
     end
   end

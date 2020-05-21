@@ -19,7 +19,7 @@ class EditInvestigationCollaboratorForm
 
   def save!
     if valid?
-      edition.destroy!
+      edit_access.destroy!
       add_deletion_activity!
       schedule_delete_emails
       true
@@ -30,8 +30,8 @@ class EditInvestigationCollaboratorForm
 
 private
 
-  def edition
-    investigation.editions.find_by!(collaborator_id: team.id)
+  def edit_access
+    investigation.edit_accesses.find_by!(collaborator_id: team.id)
   end
 
   def schedule_delete_emails

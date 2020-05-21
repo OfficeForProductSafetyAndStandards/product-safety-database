@@ -6,12 +6,12 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
   let(:team) { create(:team) }
   let(:investigation) { create(:investigation, owner: user) }
-  let(:edition) do
-    create(:edition, investigation: investigation, collaborator: team, added_by_user: user)
+  let(:edit_access) do
+    create(:edit_access, investigation: investigation, collaborator: team, added_by_user: user)
   end
 
   before do
-    edition
+    edit_access
     sign_in user
   end
 
@@ -34,7 +34,7 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
     context "when successful" do
       it "removes collaborator" do
-        expect { do_request }.to change(Edition, :count).from(1).to(0)
+        expect { do_request }.to change(Collaboration::EditAccess, :count).from(1).to(0)
       end
 
       it "redirects back to the 'teams added to case' page" do

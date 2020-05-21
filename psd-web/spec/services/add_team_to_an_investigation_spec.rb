@@ -23,7 +23,7 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
       end
 
       it "returns the collaborator" do
-        expect(result.edition).to have_attributes(
+        expect(result.edit_access).to have_attributes(
           collaborator: team,
           added_by_user: user,
           investigation: investigation,

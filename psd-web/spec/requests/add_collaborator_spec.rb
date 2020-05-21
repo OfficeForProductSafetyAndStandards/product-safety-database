@@ -14,7 +14,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             edition: {
+             collaboration_edit_access: {
                include_message: "true",
                message: message,
                collaborator_id: other_team.id
@@ -31,11 +31,11 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
 
     it "includes the message in the collaborator record" do
-      expect(investigation.editions.first.message).to eql(message)
+      expect(investigation.edit_accesses.first.message).to eql(message)
     end
 
     it "associates the collaborator with the user who added the team" do
-      expect(investigation.editions.first.added_by_user).to eql(user)
+      expect(investigation.edit_accesses.first.added_by_user).to eql(user)
     end
   end
 
@@ -49,7 +49,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             edition: {
+             collaboration_edit_access: {
                include_message: "true",
                message: "",
                collaborator_id: ""
@@ -68,9 +68,9 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
       create(
         :investigation,
         owner: user,
-        editions: [
+        edit_accesses: [
           create(
-            :edition,
+            :edit_access,
             collaborator: existing_collaborator_team,
             include_message: false,
             added_by_user: user
@@ -84,7 +84,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             edition: {
+             collaboration_edit_access: {
                include_message: "false",
                collaborator_id: existing_collaborator_team.id
              }
