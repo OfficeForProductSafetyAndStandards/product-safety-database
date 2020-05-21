@@ -50,7 +50,7 @@ private
   def set_file
     @errors = ActiveModel::Errors.new(ActiveStorage::Blob.new)
     @file = file_collection.find(params[:id]) if params[:id].present?
-    raise Pundit::NotAuthorizedError unless can_be_displayed?(@file, @parent)
+    raise Pundit::NotAuthorizedError unless can_be_displayed?(@file, @parent, current_user)
   end
 
   def file_valid?

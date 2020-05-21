@@ -1,0 +1,59 @@
+<%
+  restricted = !activity.can_display_all_data?(current_user)
+  title = restricted ? activity.restricted_title : activity.title
+%>
+
+<li>
+  <h3 class="govuk-heading-s"><%= title %></h3>
+
+  <p class="govuk-body-s.timeline-details"><%= activity.subtitle %>
+
+  <% if restricted %>
+    <%= render "restricted", activity: activity %>
+
+    <%
+      if activity.has_attachment?
+        attachments_string = pluralize(activity.attachments.count, 'attachment')
+    %>
+      <p><%= "The #{activity.activity_type} has #{attachments_string}." %></p>
+    <% end %>
+
+  <% elsif activity.attached_image? %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= render "documents/document_preview",
+                 document: activity.attachment,
+                 dimensions: "100x100",
+                 class_name: "product-image" %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <% if activity.metadata %>
+          <%= render "investigations/activities/#{activity.template_name}", activity: activity %>
+        <% elsif activity.body %>
+          <%= markdown simple_format(activity.body) %>
+        <% end %>
+      </div>
+    </div>
+
+  <% else %>
+    <% if activity.metadata %>
+      <%= render "investigations/activities/#{activity.template_name}", activity: activity %>
+    <% elsif activity.body %>
+      <%= markdown simple_format(activity.body) %>
+    <% end %>
+
+    <% if activity.product_id %>
+      <%= link_to "View product details", product_url(activity.product_id), class: "psd-block-link" %>
+    <% end %>
+
+    <% if activity.business_id %>
+      <%= link_to "View business details", business_url(activity.business_id), class: "psd-block-link" %>
+    <% end %>
+
+    <% if activity.has_attachment? %>
+      <% activity.attachments.each do |name, attachment| %>
+        <%= link_to "View #{name}", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
+      <% end %>
+    <% end %>
+  <% end %>
+</li>

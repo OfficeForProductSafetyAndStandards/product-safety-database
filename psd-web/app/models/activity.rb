@@ -27,7 +27,7 @@ class Activity < ApplicationRecord
     return text.to_s.strip.gsub(/[*_~]/) { |match| "\\#{match}" } if text
   end
 
-  def can_display_all_data?
+  def can_display_all_data?(_user)
     true
   end
 
@@ -39,6 +39,12 @@ class Activity < ApplicationRecord
 
   def email_subject_text
     "#{investigation.case_type.upcase_first} updated"
+  end
+
+  # Used to determine which view template to use for new records with metadata
+  # instead of pre-generated HTML
+  def template_name
+    self.class.name.gsub(/^AuditActivity::/, "").underscore
   end
 
 private

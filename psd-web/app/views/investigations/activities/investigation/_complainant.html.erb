@@ -1,0 +1,33 @@
+<br><br>
+<strong>Complainant</strong>
+<br>
+
+<% if !complainant.can_be_displayed?(current_user) %>
+  <%= render "restricted", activity: activity %>
+
+<% else %>
+  <% if complainant.name %>
+    <br>
+    Name: <strong><%= complainant.name %></strong>
+  <% end %>
+
+  <% if complainant.complainant_type %>
+    <br>
+    Type: <strong><%= complainant.complainant_type %></strong>
+  <% end %>
+
+  <% if complainant.phone_number %>
+    <br>
+    Phone number: <strong><%= complainant.phone_number %></strong>
+  <% end %>
+
+  <% if complainant.email_address %>
+    <br>
+    Email address: <strong><%= complainant.email_address %></strong>
+  <% end %>
+
+  <% if complainant.other_details %>
+    <br><br>
+    <%= complainant.other_details %>
+  <% end %>
+<% end %>

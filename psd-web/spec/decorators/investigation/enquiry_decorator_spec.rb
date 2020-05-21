@@ -13,11 +13,7 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_elasticsearch, :wi
   end
 
   describe "#source_details_summary_list" do
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list }
-
-    before do
-      allow(User).to receive(:current).and_return(user)
-    end
+    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(user) }
 
     it "displays the Received date" do
       expect(source_details_summary_list).to summarise("Received date", text: investigation.date_received.to_s(:govuk))

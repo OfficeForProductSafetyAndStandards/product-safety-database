@@ -1,0 +1,16 @@
+<strong>Project details</strong>
+
+<br>
+
+<% if activity.metadata['investigation']['coronavirus_related'] %>
+  <br>
+  <%= t("audit_activity.investigation.coronavirus_related") %>
+  <br>
+<% end %>
+
+<% if activity.metadata['investigation']['description'] %>
+  <br>
+  <%= activity.metadata['investigation']['description'] %>
+<% end %>
+
+<%= render "investigations/activities/investigation/owner", owner: activity.owner if activity.owner %>
