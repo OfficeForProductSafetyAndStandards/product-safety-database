@@ -57,7 +57,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when the case is owned by a team from another organisation but the user’s team has been added as a collaborator" do
-    let(:investigation) {
+    let(:investigation) do
       create(
         :investigation,
         is_private: true,
@@ -66,7 +66,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
           create(:edition, collaborator: users_team, added_by_user: other_user)
         ]
       )
-    }
+    end
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)

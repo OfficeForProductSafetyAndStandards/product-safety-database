@@ -62,12 +62,12 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   end
 
   describe "#team_added_to_case_email" do
+    subject(:mail) { described_class.team_added_to_case_email(edition, to_email: "test@example.com") }
+
     let(:user_team) { create(:team, name: "User Team") }
     let(:added_by_user) { create(:user, name: "Bob Jones", team: user_team) }
     let(:collaborator_team) { create(:team, name: "Collaborator Team") }
     let(:edition) { create(:edition, message: message, added_by_user: added_by_user, collaborator: collaborator_team) }
-
-    subject(:mail) { described_class.team_added_to_case_email(edition, to_email: "test@example.com") }
 
     context "with a message" do
       let(:message) { "Thanks for collaborating!" }
