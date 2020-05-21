@@ -2,7 +2,10 @@ require "rails_helper"
 
 RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:user)      { create(:user, :activated) }
-  let(:business)  { create(:business, trading_name: "OldCo", contacts: [create(:contact)]) }
+  let(:business)  { create(:business, trading_name: "OldCo") }
+  before do
+    create(:contact, business: business)
+  end
 
   scenario "Updating a business’s details" do
     sign_in user
