@@ -29,10 +29,12 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     }
   end
 
-  context "when login as an OPSS user" do
-    before do
-      sign_in(create(:user, :activated, :opss_user))
-    end
+  let(:user) { create(:user, :activated, :opss_user) }
+  let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
+  let(:other_user_different_org) { create(:user, :activated) }
+
+  context "when logged in as an OPSS user" do
+    before { sign_in(user) }
 
     scenario "able to create safety allegation from a consumer and optionally add a product" do
       visit "/cases"
@@ -89,6 +91,28 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       click_link "Activity"
       expect_details_on_activity_page(contact_details, allegation_details)
+
+      # Test that another user in a different organisation cannot see consumer info
+      sign_out
+
+      sign_in(other_user_different_org)
+
+      investigation = Investigation.last
+
+      visit "/cases/#{investigation.pretty_id}/activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_case_activity_page_to_show_restricted_information(allegation_details)
+
+      # Test that another user in the same team can see consumer info
+      sign_out
+
+      sign_in(other_user_same_team)
+
+      visit "/cases/#{investigation.pretty_id}/activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect_details_on_activity_page(contact_details, allegation_details)
     end
   end
 
@@ -141,5 +165,21 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page).to have_text("Email address: #{contact.fetch(:contact_email)}")
     expect(page).to have_text("Phone number: #{contact.fetch(:contact_phone)}")
     expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
+  end
+
+  def expect_case_activity_page_to_show_restricted_information(allegation)
+    expect(page).to have_text("Case is related to the coronavirus outbreak.")
+    expect(page).to have_text("Product category: #{allegation.fetch(:category)}")
+    expect(page).to have_text("Hazard type: #{allegation.fetch(:hazard_type)}")
+    expect(page).to have_text(allegation.fetch(:description))
+    expect(page).to have_text("Attachment: testImage.png")
+    expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
+
+    expect(page).to have_text("Restricted access")
+    expect(page).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact test organisation, who created this activity, to obtain these details if required.")
+
+    expect(page).not_to have_text("Name")
+    expect(page).not_to have_text("Email address")
+    expect(page).not_to have_text("Phone number")
   end
 end

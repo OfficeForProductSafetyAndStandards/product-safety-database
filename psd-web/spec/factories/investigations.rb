@@ -16,6 +16,10 @@ FactoryBot.define do
     factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }
       user_title { "test allegation title" }
+
+      factory :allegation_unsafe do
+        reported_unsafe
+      end
     end
 
     factory :enquiry, class: "Investigation::Enquiry" do
@@ -26,6 +30,10 @@ FactoryBot.define do
     factory :project, class: "Investigation::Project" do
       description { "test project" }
       user_title { "test project title" }
+    end
+
+    trait :with_complainant do
+      association :complainant
     end
 
     trait :with_business do

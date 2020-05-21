@@ -1,8 +1,8 @@
 module GdprHelper
-  def can_be_displayed?(document, parent)
+  def can_be_displayed?(document, parent, user)
     attachment_creator = User.find_by(id: document.metadata[:created_by])
-    child_is_visible = UserSource.new(user: attachment_creator).user_has_gdpr_access? || !document.metadata[:has_consumer_info]
-    parent_forces_to_be_visible = parent.respond_to?(:child_should_be_displayed?) && parent.child_should_be_displayed?
+    child_is_visible = UserSource.new(user: attachment_creator).user_has_gdpr_access?(user) || !document.metadata[:has_consumer_info]
+    parent_forces_to_be_visible = parent.respond_to?(:child_should_be_displayed?) && parent.child_should_be_displayed?(user)
     child_is_visible || parent_forces_to_be_visible
   end
 
