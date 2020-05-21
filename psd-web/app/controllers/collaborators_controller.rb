@@ -26,7 +26,7 @@ class CollaboratorsController < ApplicationController
     )
 
     if result.success?
-      redirect_to investigation_collaborators_path(@investigation)
+      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.collaborator.team.name} added to the case" }
     else
       @teams = teams_without_access
       @edition = result.edition
@@ -49,7 +49,7 @@ class CollaboratorsController < ApplicationController
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params
       .merge(investigation: @investigation, team: @team, user: current_user))
     if @edit_form.save!
-      flash[:success] = "#{@team.name} had been removed from the case"
+      flash[:success] = "#{@team.name} has been removed from the case"
       redirect_to investigation_collaborators_path(@investigation)
     else
       render "edit"
