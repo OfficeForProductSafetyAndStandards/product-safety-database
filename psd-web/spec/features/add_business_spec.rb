@@ -15,7 +15,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:job_title)        { Faker::Job.title }
   let(:user)             { create(:user, :activated) }
   let(:investigation)    { create(:enquiry, owner: user.team) }
-  let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
+  let(:other_user) { create(:user, :activated) }
 
   scenario "Adding a business" do
     sign_in user
@@ -100,7 +100,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   end
 
   scenario "Not being able to add a business to another team’s case" do
-    sign_in another_user_another_team
+    sign_in other_user
     visit "/cases/#{investigation.pretty_id}/businesses"
     expect(page).not_to have_link("Add business")
   end

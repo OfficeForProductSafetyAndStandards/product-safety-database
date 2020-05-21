@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let!(:investigation) { create(:project, owner: user.team) }
-  let!(:user) { create(:user, :activated) }
-  let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
+  let(:investigation) { create(:project, owner: user.team) }
+  let(:user) { create(:user, :activated) }
+  let(:other_user) { create(:user, :activated) }
 
   scenario "allows to edit some the attributes" do
     sign_in user
@@ -26,8 +26,8 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
   end
 
   scenario "user from other team cannot edit summary" do
-    sign_in another_user_another_team
+    sign_in other_user
     visit investigation_path(investigation)
-    page.should have_no_content("Change summary")
+    expect(page).not_to have_link("Change summary")
   end
 end
