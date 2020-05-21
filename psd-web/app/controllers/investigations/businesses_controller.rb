@@ -37,6 +37,7 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
+  # This action is used for the edit flow
   def show
     authorize @investigation, :update?
     render_wizard
