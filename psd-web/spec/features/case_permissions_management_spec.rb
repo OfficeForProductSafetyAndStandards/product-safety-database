@@ -55,7 +55,6 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     end
 
     click_button "Add team to this case"
-    save_page
 
     # Validation errors
     expect(page).to have_title("Error: Add a team to the case")

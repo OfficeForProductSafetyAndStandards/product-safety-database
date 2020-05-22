@@ -5,7 +5,6 @@ FactoryBot.define do
     association :collaborator, factory: :team
     association :added_by_user, factory: :user
 
-    factory :edit_access, parent: :collaboration, class: "Collaboration::EditAccess" do
-    end
+    factory :edit_access, parent: :collaboration, class: "Collaboration::EditAccess"
   end
 end
