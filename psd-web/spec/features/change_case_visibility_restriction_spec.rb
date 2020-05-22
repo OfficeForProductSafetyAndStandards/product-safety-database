@@ -38,7 +38,7 @@ RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :wi
       click_button "Save"
 
       expect_to_be_on_case_page(case_id: case_id)
-      expect_confirmation_banner("Allegation was successfully updated.")
+      expect_confirmation_banner("Allegation was successfully updated")
       expect(page).to have_summary_item(key: "Case restriction", value: "Restricted")
     end
   end
