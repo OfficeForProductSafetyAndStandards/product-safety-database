@@ -15,7 +15,7 @@ module Investigations
       if @investigation.coronavirus_related_changed?
         @investigation.save!
         AuditActivity::Investigation::UpdateCoronavirusStatus.from(@investigation)
-        flash[:success] = I18n.t(".success", scope: "investigations.coronavirus_related", case_title: @investigation.case_type.upcase_first)
+        flash[:success] = I18n.t(".success", scope: "investigations.coronavirus_related", case_type: @investigation.case_type)
       end
 
       redirect_to investigation_path(@investigation)

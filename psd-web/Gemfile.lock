@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: 7783ae1478c08ff3c4f59d9ed0705283b535119b
-  tag: 0.6.5
+  revision: 4459ec585d2223797fbf1f609549277ebe8e304e
+  tag: 0.6.6
   specs:
-    govuk-design-system-rails (0.6.5)
+    govuk-design-system-rails (0.6.6)
 
 GIT
   remote: https://github.com/randym/axlsx.git
@@ -75,8 +75,8 @@ GEM
     ast (2.4.0)
     awesome_print (1.8.0)
     aws-eventstream (1.1.0)
-    aws-partitions (1.313.0)
-    aws-sdk-core (3.95.0)
+    aws-partitions (1.319.0)
+    aws-sdk-core (3.96.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -84,8 +84,8 @@ GEM
     aws-sdk-kms (1.31.0)
       aws-sdk-core (~> 3, >= 3.71.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.64.0)
-      aws-sdk-core (~> 3, >= 3.83.0)
+    aws-sdk-s3 (1.66.0)
+      aws-sdk-core (~> 3, >= 3.96.1)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.3)
@@ -278,7 +278,7 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (4.0.5)
-    puma (4.3.3)
+    puma (4.3.5)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -540,7 +540,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-pg_enum
   awesome_print
-  aws-sdk-s3 (= 1.64.0)
+  aws-sdk-s3 (= 1.66.0)
   axlsx!
   brakeman
   byebug

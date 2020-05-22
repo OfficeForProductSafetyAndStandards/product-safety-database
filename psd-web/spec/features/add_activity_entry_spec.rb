@@ -12,7 +12,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
     click_link "Add activity"
 
-    expect(page).to have_content("New activity")
+    expect_to_be_on_new_activity_page
 
     click_button "Continue"
 
@@ -64,7 +64,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
     click_link "Add activity"
 
-    expect(page).to have_css("h1", text: "New activity")
+    expect_to_be_on_new_activity_page
 
     choose "Add a comment"
     click_button "Continue"

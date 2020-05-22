@@ -84,7 +84,7 @@ module Investigations::DisplayTextHelper
 
   def should_be_hidden(result, source, investigation)
     return true if correspondence_should_be_hidden(result, source, investigation)
-    return true if (source.include? "complainant") && !investigation&.complainant&.can_be_displayed?
+    return true if (source.include? "complainant") && !investigation&.complainant&.can_be_displayed?(current_user)
 
     false
   end
@@ -98,7 +98,7 @@ module Investigations::DisplayTextHelper
     # If a result in its entirety appears in case correspondence that the user can see,
     # we probably don't care what was its source.
     investigation.correspondences.each do |c|
-      return false if (c.send(key)&.include? sanitized_content) && c.can_be_displayed?
+      return false if (c.send(key)&.include? sanitized_content) && c.can_be_displayed?(current_user)
     end
     true
   end
