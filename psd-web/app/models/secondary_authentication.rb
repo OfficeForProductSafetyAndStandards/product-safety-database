@@ -90,8 +90,8 @@ private
   def whitelisted_code_valid?(otp)
     return unless otp_whitelisting_allowed?
 
-    if ENV["WHITELISTED_2FA_CODE"].present?
-      code = ENV["WHITELISTED_2FA_CODE"]
+    if Rails.configuration.whitelisted_2fa_code.present?
+      code = Rails.configuration.whitelisted_2fa_code
       code == otp
     else
       false
@@ -99,7 +99,7 @@ private
   end
 
   def otp_whitelisting_allowed?
-    uris = JSON(ENV["VCAP_APPLICATION"])["application_uris"]
+    uris = JSON(Rails.configuration.vcap_application)["application_uris"]
     return false if uris.length != 1
 
     uri = uris.first

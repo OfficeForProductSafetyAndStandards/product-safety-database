@@ -42,6 +42,8 @@ module ProductSafetyDatabase
     config.antivirus_url = ENV.fetch("ANTIVIRUS_URL", "http://localhost:3006/safe")
 
     config.secondary_authentication_enabled = ENV.fetch("TWO_FACTOR_AUTHENTICATION_ENABLED", "true") == "true"
+    config.whitelisted_2fa_code = ENV["WHITELISTED_2FA_CODE"]
+    config.vcap_application = ENV["VCAP_APPLICATION"]
     config.two_factor_attempts = 10
   end
 end

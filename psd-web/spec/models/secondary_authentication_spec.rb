@@ -83,13 +83,8 @@ RSpec.describe SecondaryAuthentication do
       end
 
       before do
-        ENV["WHITELISTED_2FA_CODE"] = whitelisted_otp
-        ENV["VCAP_APPLICATION"] = vcap_application
-      end
-
-      after do
-        ENV["WHITELISTED_2FA_CODE"] = nil
-        ENV["VCAP_APPLICATION"] = nil
+        allow(Rails.configuration).to receive(:whitelisted_2fa_code).and_return(whitelisted_otp)
+        allow(Rails.configuration).to receive(:vcap_application).and_return(vcap_application)
       end
 
       context "when ENV['VCAP_APPLICATION'] doesn't exist" do
