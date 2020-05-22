@@ -28,6 +28,7 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def create
+    authorize @investigation, :update?
     if @business.save
       @investigation.add_business(@business, session[:type])
       redirect_to_investigation_businesses_tab success: "Business was successfully created."
@@ -36,11 +37,14 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
+  # This action is used for the edit flow
   def show
+    authorize @investigation, :update?
     render_wizard
   end
 
   def update
+    authorize @investigation, :update?
     if business_valid?
       if step == :type
         assign_type
@@ -132,7 +136,7 @@ private
 
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :show?
+    authorize investigation, :view_non_protected_details?
     @investigation = investigation.decorate
   end
 end

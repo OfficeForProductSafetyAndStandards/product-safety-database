@@ -8,8 +8,9 @@
     h1.govuk-heading-l
       = page_heading
 
-    p.govuk-body
-      = link_to "Add attachment", new_investigation_new_path(@investigation)
+    - if policy(@investigation).update?(user: current_user)
+      p.govuk-body
+        = link_to "Add attachment", new_investigation_new_path(@investigation)
 
     hr.govuk-section-break.govuk-section-break--l
 

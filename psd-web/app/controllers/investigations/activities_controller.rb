@@ -17,6 +17,8 @@ module Investigations
 
     def new
       set_investigation
+      authorize @investigation, :update?
+
       return unless params[:commit] == "Continue"
 
       case params[:activity_type]
@@ -51,7 +53,7 @@ module Investigations
 
     def set_investigation
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize investigation, :show?
+      authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
     end
 
@@ -63,7 +65,7 @@ module Investigations
                                      documents_attachments: :blob)
                          .find_by!(pretty_id: params[:investigation_pretty_id])
 
-      authorize investigation, :show?
+      authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
       preload_activities
     end

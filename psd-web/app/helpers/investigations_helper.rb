@@ -250,33 +250,53 @@ module InvestigationsHelper
 
   # This builds an array from an investigation which can then
   # be passed as a `rows` argument to the govukSummaryList() helper.
-  def about_the_case_rows(investigation)
+  def about_the_case_rows(investigation, user)
+    coronavirus_related_actions = { items: [] }
+    status_actions = { items: [] }
+    activity_actions = { items: [] }
+
+    if policy(investigation).update?(user: user)
+      activity_actions[:items] << {
+        href: new_investigation_activity_path(investigation),
+        text: "Add activity"
+      }
+      coronavirus_related_actions[:items] << {
+        href: investigation_coronavirus_related_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "coronavirus status"
+      }
+    else
+      activity_actions[:items] << {
+        href: new_investigation_activity_comment_path(investigation),
+        text: "Add comment"
+      }
+    end
+
+    if policy(investigation).send_email_alert?(user: user)
+      activity_actions[:items] << {
+        href: new_investigation_alert_path(investigation),
+        text: "Send email alert"
+      }
+    end
+
+    if policy(investigation).change_owner_or_status?(user: user)
+      status_actions[:items] << {
+        href: status_investigation_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "status"
+      }
+    end
+
     rows = [
       {
         key: { text: "Status" },
         value: { text: investigation.status },
-        actions: {
-          items: [
-            {
-              href: status_investigation_path(investigation),
-              text: "Change",
-              visuallyHiddenText: "status"
-            }
-          ]
-        }
+        actions: status_actions
       },
       {
         key: { text: "Coronavirus related" },
         value: { text: I18n.t(investigation.coronavirus_related, scope: "case.coronavirus_related") },
-        actions: {
-          items: [
-            {
-              href: investigation_coronavirus_related_path(investigation),
-              text: "Change",
-              visuallyHiddenText: "coronavirus status"
-            }
-          ]
-        }
+        actions: coronavirus_related_actions
       },
       {
         key: { text: "Created by" },
@@ -289,12 +309,7 @@ module InvestigationsHelper
       {
         key: { text: "Last updated" },
         value: { text: "#{time_ago_in_words(investigation.updated_at)} ago" },
-        actions: {
-          items: [
-            { href: new_investigation_activity_path(investigation),
-              text: "Add activity" }
-          ]
-        }
+        actions: activity_actions
       }
     ]
 

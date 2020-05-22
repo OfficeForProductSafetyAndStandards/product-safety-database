@@ -298,6 +298,18 @@ module PageExpectations
     expect(page).to have_selector("h1", text: team.name)
   end
 
+  # Businesses
+  def expect_to_be_on_business_page(business_id:, business_name:)
+    expect(page).to have_current_path("/businesses/#{business_id}")
+    expect(page).to have_selector("h1", text: business_name)
+  end
+
+  def expect_to_be_on_edit_business_page(business_id:, business_name:)
+    expect(page).to have_current_path("/businesses/#{business_id}/edit")
+    expect(page).to have_title("Edit business - Product safety database - GOV.UK")
+    expect(page).to have_selector("h1", text: business_name)
+  end
+
   def expect_teams_tables_to_contain(expected_teams)
     teams_table = page.find(:table, "Teams added to the case")
 

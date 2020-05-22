@@ -13,12 +13,15 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:email)            { Faker::TvShows::TheITCrowd.email }
   let(:phone_number)     { Faker::PhoneNumber.phone_number  }
   let(:job_title)        { Faker::Job.title }
-  let(:investigation)    { create(:enquiry) }
-
-  before { sign_in }
+  let(:user)             { create(:user, :activated) }
+  let(:investigation)    { create(:enquiry, owner: user.team) }
+  let(:other_user) { create(:user, :activated) }
 
   scenario "Adding a business" do
-    visit "/cases/#{investigation.pretty_id}/businesses/new"
+    sign_in user
+    visit "/cases/#{investigation.pretty_id}/businesses"
+
+    click_link "Add business"
 
     # Don't select a business type
     click_on "Continue"
@@ -93,5 +96,12 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     expect_to_be_on_remove_business_page
     click_button "Remove business"
+    expect_confirmation_banner("Business was successfully removed.")
+  end
+
+  scenario "Not being able to add a business to another team’s case" do
+    sign_in other_user
+    visit "/cases/#{investigation.pretty_id}/businesses"
+    expect(page).not_to have_link("Add business")
   end
 end

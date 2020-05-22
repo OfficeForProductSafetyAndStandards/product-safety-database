@@ -4,6 +4,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:southampton)
     @investigation = load_case(:one)
+    @investigation.update!(owner: users(:southampton).team)
     @activity = activities(:one)
     @activity.source = sources(:activity_one)
   end

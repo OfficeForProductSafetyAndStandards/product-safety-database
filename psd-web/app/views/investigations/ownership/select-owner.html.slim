@@ -18,16 +18,5 @@
       - else
         p This case has no owner
 
-    - if policy(@investigation).change_owner?
-      = render "investigations/ownership/owner_form", investigation: @investigation do
-        = heading
-    - else
+    = render "investigations/ownership/owner_form", investigation: @investigation do
       = heading
-      p
-        = "You do not have permission to change the case owner."
-        br
-        ' Contact
-        strong = @investigation.owner.display_name
-        '
-        | to change the case owner.
-      = link_to "Return to case", investigation_path(@investigation), class: "govuk-button"

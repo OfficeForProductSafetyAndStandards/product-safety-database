@@ -4,6 +4,11 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:southampton)
     @investigation = load_case(:one)
+    @investigation.collaborators.create!(
+      team: teams(:southampton),
+      include_message: false,
+      added_by_user: users(:southampton)
+    )
     @investigation.source = sources(:investigation_one)
     @product = products(:iphone)
     @product.source = sources(:product_iphone)

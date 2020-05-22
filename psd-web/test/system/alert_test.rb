@@ -4,8 +4,13 @@ class AlertTest < ApplicationSystemTestCase
   setup do
     stub_notify_mailer
     stub_antivirus_api
-    sign_in
+    sign_in users(:opss)
     @investigation = load_case(:one).decorate
+    @investigation.collaborators.create!(
+      team: teams(:opss_enforcement),
+      include_message: false,
+      added_by_user: users(:opss)
+    )
     @alert = alerts :one
     go_to_new_activity_for_investigation @investigation
   end
@@ -39,6 +44,11 @@ class AlertTest < ApplicationSystemTestCase
 
   test "requires a restricted case be derestricted before raising an alert" do
     @private_investigation = investigations :private
+    @private_investigation.collaborators.create!(
+      team: teams(:opss_enforcement),
+      include_message: false,
+      added_by_user: users(:opss)
+    )
     @alert = alerts :on_private_investigation
     stub_email_preview @alert
 
