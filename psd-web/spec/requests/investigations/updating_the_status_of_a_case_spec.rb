@@ -10,10 +10,10 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
       :investigation,
       is_closed: false,
       owner: user_from_owner_team.team,
-      collaborators: [
+      edit_accesses: [
         create(
-          :collaborator,
-          team: user_from_collaborator_team.team
+          :edit_access,
+          collaborator: user_from_collaborator_team.team
         )
       ]
     )
