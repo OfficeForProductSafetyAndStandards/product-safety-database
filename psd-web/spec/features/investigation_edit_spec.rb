@@ -8,7 +8,7 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
   scenario "allows to edit some the attributes" do
     sign_in user
     visit investigation_path(investigation)
-    expect(page).to have_content("Change summary")
+    expect(page).to have_link("Change summary", href: "/cases/#{investigation.pretty_id}/edit_summary")
 
     click_link "Change summary"
 
