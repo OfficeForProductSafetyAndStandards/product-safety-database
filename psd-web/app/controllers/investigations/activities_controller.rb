@@ -17,6 +17,8 @@ module Investigations
 
     def new
       set_investigation
+      authorize @investigation, :update?
+
       return unless params[:commit] == "Continue"
 
       case params[:activity_type]
@@ -38,8 +40,6 @@ module Investigations
         redirect_to new_investigation_corrective_action_path(@investigation)
       when "business"
         redirect_to new_investigation_business_path(@investigation)
-      when "visibility"
-        redirect_to visibility_investigation_path(@investigation)
       when "alert"
         redirect_to new_investigation_alert_path(@investigation)
       else
@@ -51,7 +51,7 @@ module Investigations
 
     def set_investigation
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize investigation, :show?
+      authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
     end
 
@@ -63,7 +63,7 @@ module Investigations
                                      documents_attachments: :blob)
                          .find_by!(pretty_id: params[:investigation_pretty_id])
 
-      authorize investigation, :show?
+      authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
       preload_activities
     end

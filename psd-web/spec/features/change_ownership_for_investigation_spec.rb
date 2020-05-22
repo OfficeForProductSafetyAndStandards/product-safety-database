@@ -63,8 +63,8 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     expect_page_to_show_case_owner(another_active_user_another_team)
     expect_activity_page_to_show_case_owner_changed_to(another_active_user_another_team)
 
-    visit "/cases/#{investigation.pretty_id}/assign/select-owner"
-    expect(page).to have_css(".govuk-grid-row p", text: "You do not have permission to change the case owner.")
+    click_link "Overview"
+    expect(page).not_to have_link("Change owner")
   end
 
   def fill_and_submit_change_owner_reason_form

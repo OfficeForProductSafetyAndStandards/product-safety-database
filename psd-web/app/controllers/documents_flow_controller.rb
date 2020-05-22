@@ -8,6 +8,7 @@ class DocumentsFlowController < ApplicationController
   steps :upload, :metadata
 
   before_action :set_parent
+  before_action :authorize_if_attached_to_investigation
   before_action :set_file, only: %i[show update]
 
   def show
@@ -35,6 +36,10 @@ class DocumentsFlowController < ApplicationController
   end
 
 private
+
+  def authorize_if_attached_to_investigation
+    authorize @parent, :update? if @parent.is_a? Investigation
+  end
 
   def set_file
     @errors = ActiveModel::Errors.new(ActiveStorage::Blob.new)

@@ -13,7 +13,9 @@
 
     <p class="govuk-body"><%= @investigation.description %></p>
 
-    <p class="govuk-body"><%= link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link" %></p>
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link" %></p>
+    <% end %>
 
     <% if @investigation.display_product_summary_list? %>
       <%= govuk_hr %>
@@ -30,7 +32,7 @@
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
 
-    <% if policy(@investigation).change_owner? %>
+    <% if policy(@investigation).change_owner_or_status? %>
       <% case_owner_actions = {
         items: [
           href: new_investigation_ownership_path(@investigation),
@@ -38,8 +40,16 @@
           visuallyHiddenText: "case owner"
         ]
       } %>
+      <% case_restriction_actions = {
+        items: [
+          href: visibility_investigation_path(@investigation),
+          text: "Change",
+          visuallyHiddenText: "case restriction"
+        ]
+      } %>
     <% else %>
       <% case_owner_actions = {} %>
+      <% case_restriction_actions = {} %>
     <% end %>
 
     <% team_list_html = capture do %>
@@ -75,6 +85,11 @@
               visuallyHiddenText: "teams added to the case"
             ]
           }
+        },
+        {
+          key: { text: "Case restriction" },
+          value: { text: @investigation.is_private? ? "Restricted" : "Unrestricted" },
+          actions: case_restriction_actions
         }
       ]
     ) %>
@@ -83,8 +98,8 @@
     <h2 class="govuk-heading-m">About the case</h2>
 
     <%= govukSummaryList(
-      classes: "govuk-summary-list--no-border",
-      rows: about_the_case_rows(@investigation)
+      classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
+      rows: about_the_case_rows(@investigation, current_user)
     ) %>
   </div>
 

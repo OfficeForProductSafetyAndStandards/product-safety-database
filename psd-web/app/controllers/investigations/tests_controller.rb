@@ -14,6 +14,7 @@ class Investigations::TestsController < ApplicationController
 
   # GET /tests/1
   def show
+    authorize @investigation, :update?
     render_wizard
   end
 
@@ -33,6 +34,7 @@ class Investigations::TestsController < ApplicationController
 
   # POST /tests
   def create
+    authorize @investigation, :update?
     update_attachment
     if test_saved?
       redirect_to investigation_path(@investigation), flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
@@ -43,6 +45,7 @@ class Investigations::TestsController < ApplicationController
 
   # PATCH/PUT /tests/1
   def update
+    authorize @investigation, :update?
     update_attachment
     if test_valid?
       save_attachment

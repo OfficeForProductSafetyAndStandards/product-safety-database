@@ -35,6 +35,7 @@ class InvestigationsController < ApplicationController
   # GET /cases/1
   # GET /cases/1.json
   def show
+    authorize @investigation, :view_non_protected_details?
     @complainant = @investigation.complainant&.decorate
     respond_to do |format|
       format.html
@@ -60,22 +61,27 @@ class InvestigationsController < ApplicationController
   # GET /cases/1/status
   # PATCH /cases/1/status
   def status
+    authorize @investigation, :change_owner_or_status?
     update
   end
 
   # GET /cases/1/visibility
   # PATCH /cases/1/visibility
   def visibility
+    authorize @investigation, :change_owner_or_status?
     update
   end
 
   # GET /cases/1/edit_summary
   # PATCH /cases/1/edit_summary
   def edit_summary
+    authorize @investigation, :update?
     update
   end
 
-  def created; end
+  def created
+    authorize @investigation, :view_non_protected_details?
+  end
 
 private
 
@@ -100,7 +106,6 @@ private
 
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
-    authorize investigation
     @investigation = investigation.decorate
   end
 
