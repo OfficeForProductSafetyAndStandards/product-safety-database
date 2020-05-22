@@ -16,29 +16,24 @@
   <% complainant_info = [] %>
 
   <% if complainant.name.present? %>
-    <% complainant_info << "Name: <strong>#{complainant.name}</strong>" %>
+    <% complainant_info << "Name: <strong>#{escape_once(complainant.name)}</strong>" %>
   <% end %>
 
   <% if complainant.phone_number.present? %>
-    <% complainant_info << "Phone number: <strong>#{complainant.phone_number}</strong>" %>
+    <% complainant_info << "Phone number: <strong>#{escape_once(complainant.phone_number)}</strong>" %>
   <% end %>
 
   <% if complainant.email_address.present? %>
-    <% complainant_info << "Email address: <strong>#{complainant.email_address}</strong>" %>
+    <% complainant_info << "Email address: <strong>#{escape_once(complainant.email_address)}</strong>" %>
   <% end %>
 
   <% if complainant.other_details.present? %>
-    <% complainant_info << "Other details: <strong>#{complainant.other_details}</strong>" %>
+    <% complainant_info << "Other details: <strong>#{escape_once(complainant.other_details)}</strong>" %>
   <% end %>
 
   <% if complainant_info %>
     <p class="govuk-body">
-      <% complainant_info.each do |info| %>
-        <%= info %>
-        <% if !complainant_info.last != info %>
-          <br>
-        <% end %>
-      <% end %>
+      <%= complainant_info.join("<br />").html_safe %>
     </p>
   <% end %>
 
