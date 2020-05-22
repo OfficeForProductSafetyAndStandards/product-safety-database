@@ -49,8 +49,9 @@ private
   end
 
   def compute_relevant_entities(model:, compute_users_from_entity:)
-    previous_owner_id = investigation.saved_changes["owner_id"][0]
-    previous_owner = model.find_by(id: previous_owner_id)
+    return [] unless investigation.owner_id_changed?
+
+    previous_owner = model.find_by(id: investigation.owner_id_was)
     new_owner = investigation.owner
     owner_changed_by = source.user
 
