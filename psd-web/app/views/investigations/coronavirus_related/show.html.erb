@@ -1,7 +1,10 @@
 <% page_heading = t(".title") %>
 <% page_title page_heading, errors: @coronavirus_related_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= link_to "Back to #{@investigation.pretty_description.downcase}", investigation_path(@investigation), class: "govuk-back-link" %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
 <% end %>
 <%= form_with scope: :investigation, model: @coronavirus_related_form, url: investigation_coronavirus_related_path(@investigation), method: :put do |form| %>
   <div class="govuk-grid-row">
