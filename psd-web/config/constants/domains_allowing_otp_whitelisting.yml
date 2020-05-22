@@ -1,0 +1,4 @@
+---
+domains-regexps:
+  - !ruby/regexp /staging\.product-safety-database\.service\.gov\.uk/
+  - !ruby/regexp /psd-pr-\d{3,5}\.london\.cloudapps\.digital/
