@@ -33,7 +33,12 @@
 
   <% if complainant_info %>
     <p class="govuk-body">
-      <%= complainant_info.join("<br>").html_safe %>
+      <% complainant_info.each do |info| %>
+        <%= info %>
+        <% if !complainant_info.last != info %>
+          <br>
+        <% end %>
+      <% end %>
     </p>
   <% end %>
 
