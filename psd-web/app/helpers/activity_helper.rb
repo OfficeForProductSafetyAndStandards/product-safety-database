@@ -11,8 +11,6 @@ module ActivityHelper
       "product": "Add a product to the case",
       "business": "Add a business to the case"
     }
-    visibility_text = @investigation.is_private ? "Unrestrict this case" : "Restrict this case for legal privilege"
-    base_types["visibility"] = visibility_text if policy(@investigation).change_owner_or_status?
     base_types["alert"] = "Send email alert about this case" if policy(@investigation).send_email_alert?
 
     base_types

@@ -40,8 +40,16 @@
           visuallyHiddenText: "case owner"
         ]
       } %>
+      <% case_restriction_actions = {
+        items: [
+          href: visibility_investigation_path(@investigation),
+          text: "Change",
+          visuallyHiddenText: "case restriction"
+        ]
+      } %>
     <% else %>
       <% case_owner_actions = {} %>
+      <% case_restriction_actions = {} %>
     <% end %>
 
     <% team_list_html = capture do %>
@@ -77,6 +85,11 @@
               visuallyHiddenText: "teams added to the case"
             ]
           }
+        },
+        {
+          key: { text: "Case restriction" },
+          value: { text: @investigation.is_private? ? "Restricted" : "Unrestricted" },
+          actions: case_restriction_actions
         }
       ]
     ) %>
