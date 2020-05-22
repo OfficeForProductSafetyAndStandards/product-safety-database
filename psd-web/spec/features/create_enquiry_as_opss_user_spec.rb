@@ -140,9 +140,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_css("p", text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
       expect(page).to have_css("p", text: "Attachment: testImage.png")
-      expect(page).to have_css("p", text: "Name: #{contact.fetch(:contact_name)}")
-      expect(page).to have_css("p", text: "Email address: #{contact.fetch(:contact_email)}")
-      expect(page).to have_css("p", text: "Phone number: #{contact.fetch(:contact_phone)}")
+      expect(page).to have_text("Name: #{contact.fetch(:contact_name)}")
+      expect(page).to have_text("Email address: #{contact.fetch(:contact_email)}")
+      expect(page).to have_text("Phone number: #{contact.fetch(:contact_phone)}")
       expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
     end
   end
