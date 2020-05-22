@@ -1,37 +1,30 @@
 class InvestigationPolicy < ApplicationPolicy
-  def show?(user: @user)
-    visible_to(user: user)
+  # Used for all updating of the case, including adding and removing related
+  # records, such as products, businesses and documents, with the exception of
+  # changing the case owner, its status (eg 'open' or 'closed'), and whether
+  # or not it is 'restricted'.
+  def update?(user: @user)
+    record.teams_with_access.include?(user.team)
   end
 
-  def new?
-    visible_to(user: @user)
+  # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),
+  # and whether or not it is 'restricted'.
+  def change_owner_or_status?(user: @user)
+    @record.owner.blank? || @record.owner.in_same_team_as?(user) || @record.owner == user
   end
 
-  def status?
-    visible_to(user: @user)
+  # Ability to add and remove other teams as collaborators, and to set their
+  # permission levels.
+  def manage_collaborators?
+    return false if @record.owner.nil?
+
+    @record.owner.in_same_team_as?(user)
   end
 
-  def update?
-    visible_to(user: @user)
-  end
-
-  def change_owner?(user: @user)
-    can_change_owner(user: user)
-  end
-
-  def visibility?(user: @user)
-    visible_to(user: user, private: true)
-  end
-
-  def edit_summary?
-    visible_to(user: @user)
-  end
-
-  def created?
-    visible_to(user: @user)
-  end
-
-  def visible_to(user:, private: @record.is_private)
+  # Ability to see most of the details of the case, with the exception of
+  # 'protected' details, such as personal contact details or correspondance
+  # with businesses.
+  def view_non_protected_details?(user: @user, private: @record.is_private)
     return true unless private
     return true if user.is_opss?
     return true if @record.owner.present? && (@record.owner&.organisation == user.organisation)
@@ -43,21 +36,11 @@ class InvestigationPolicy < ApplicationPolicy
     false
   end
 
-  def can_change_owner(user: @user)
-    @record.owner.blank? || @record.owner.in_same_team_as?(user) || @record.owner == user
-  end
-
-  def user_allowed_to_raise_alert?(user: @user)
+  def send_email_alert?(user: @user)
     user.is_opss?
   end
 
   def investigation_restricted?
     !@record.is_private
-  end
-
-  def manage_collaborators?
-    return false if @record.owner.nil?
-
-    @record.owner.in_same_team_as?(user)
   end
 end

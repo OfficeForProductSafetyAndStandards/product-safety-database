@@ -1,12 +1,14 @@
 require "rails_helper"
 
 RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let(:investigation) { create(:project) }
-
-  before { sign_in }
+  let(:investigation) { create(:project, owner: user.team) }
+  let(:user) { create(:user, :activated) }
+  let(:other_user) { create(:user, :activated) }
 
   scenario "allows to edit some the attributes" do
+    sign_in user
     visit investigation_path(investigation)
+    page.should have_content("Change summary")
 
     click_link "Change summary"
 
@@ -21,5 +23,11 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
     click_on "Update coronavirus status"
 
     expect(page).to have_css(".govuk-summary-list__row .govuk-summary-list__key + .govuk-summary-list__value", text: "Coronavirus related case")
+  end
+
+  scenario "user from other team cannot edit summary" do
+    sign_in other_user
+    visit investigation_path(investigation)
+    expect(page).not_to have_link("Change summary")
   end
 end

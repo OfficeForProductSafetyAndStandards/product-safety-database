@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Managing a case’s coronavirus status", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, type: :request do
-  let(:investigation) { create(:enquiry) }
+  let(:user) { create(:user, :activated, has_accepted_declaration: true) }
+  let(:investigation) { create(:enquiry, owner: user.team) }
 
-  before { sign_in create(:user, :activated, has_accepted_declaration: true) }
+  before { sign_in user }
 
   describe "a crafty user fiddles the HTML and sends an invalid value" do
     it "displays an error", :aggregate_failures do

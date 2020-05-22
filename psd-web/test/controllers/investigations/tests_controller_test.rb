@@ -5,6 +5,7 @@ class TestsControllerTest < ActionDispatch::IntegrationTest
     sign_in users(:southampton)
     stub_antivirus_api
     @investigation = load_case(:one)
+    @investigation.update!(owner: users(:southampton).team)
     @product = products(:one)
   end
 

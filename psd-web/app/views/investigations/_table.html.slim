@@ -1,4 +1,4 @@
-- if policy(investigation).show?
+- if policy(investigation).view_non_protected_details?
   = render "investigations/case_card", investigation: investigation.decorate, sorted_by: sorted_by
 - else
   = render "investigations/restricted_card", investigation: investigation.decorate

@@ -50,7 +50,7 @@ private
 
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :show?
+    authorize investigation, :update?
     @investigation = investigation.decorate
   end
 

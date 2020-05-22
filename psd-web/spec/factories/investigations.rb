@@ -10,6 +10,7 @@ FactoryBot.define do
     hazard_type           {}
     hazard_description    {}
     non_compliant_reason  {}
+    description { "Investigation into product" }
 
     association :owner, factory: :user
 
