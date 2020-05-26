@@ -53,6 +53,7 @@ en:
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
+    protected_details: "Only teams added to the case can view %{data_type}"
   investigations:
     coronavirus_related:
       show:

@@ -42,11 +42,12 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list(user)
-    contact_details = if complainant.can_be_displayed?(user)
-                        complainant.decorate.contact_details
-                      else
-                        "Reporter details are restricted because they contain GDPR protected data."
-                      end
+    contact_details = h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
+
+    if Pundit.policy(user, object).view_protected_details?
+      contact_details << complainant.decorate.contact_details
+    end
+
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,
       should_display_received_by? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
