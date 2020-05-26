@@ -88,11 +88,25 @@ private
   end
 
   def whitelisted_code_valid?(otp)
-    if ENV["WHITELISTED_2FA_CODE"].present?
-      code = ENV["WHITELISTED_2FA_CODE"]
+    return unless otp_whitelisting_allowed?
+
+    if Rails.configuration.whitelisted_2fa_code.present?
+      code = Rails.configuration.whitelisted_2fa_code
       code == otp
     else
       false
     end
+  end
+
+  def otp_whitelisting_allowed?
+    uris = JSON(Rails.configuration.vcap_application)["application_uris"]
+    return false if uris.length != 1
+
+    uri = uris.first
+    Rails.application.config.domains_allowing_otp_whitelisting["domains-regexps"].any? do |domain_regexp|
+      uri =~ domain_regexp
+    end
+  rescue StandardError
+    false
   end
 end
