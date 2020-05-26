@@ -31,7 +31,7 @@
     <% complainant_info << "Other details: <strong>#{escape_once(complainant.other_details)}</strong>" %>
   <% end %>
 
-  <% if complainant_info %>
+  <% if complainant_info.any? %>
     <p class="govuk-body">
       <%= complainant_info.join("<br />").html_safe %>
     </p>
