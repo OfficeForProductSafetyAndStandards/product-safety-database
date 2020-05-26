@@ -1,7 +1,7 @@
 class AuditActivity::Investigation::UpdateVisibility < AuditActivity::Investigation::Base
   def self.from(investigation)
     title = "#{investigation.case_type.upcase_first} visibility
-            #{investigation.is_private ? 'Restricted' : 'Unrestricted'}"
+            #{investigation.is_private ? 'restricted' : 'unrestricted'}"
     super(investigation, title, sanitize_text(investigation.visibility_rationale))
   end
 
