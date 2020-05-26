@@ -4,12 +4,12 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
   describe "#investigation_owner", :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_elasticsearch do
     context "when the case owner is a user" do
       let(:team) { create(:team, name: "Southampton Council") }
-      let(:user) { create(:user, team: team) }
+      let(:user) { create(:user, team: team, name: "John Doe") }
       let(:investigation) { create(:investigation, owner: user) }
 
       it "displays their team name as well as their name" do
         result = helper.investigation_owner(investigation)
-        expect(result).to eq("#{user.name}<br>Southampton Council")
+        expect(result).to eq("John Doe<br>Southampton Council")
       end
     end
 
