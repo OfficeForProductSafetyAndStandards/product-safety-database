@@ -73,7 +73,7 @@ group :development, :test do
   gem "selenium-webdriver"
   gem "simplecov"
   gem "simplecov-console"
-  gem "slim_lint", "0.20.0"
+  gem "slim_lint", "0.20.1"
   gem "solargraph"
   gem "spring"
   gem "spring-commands-rspec"

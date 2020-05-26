@@ -16,3 +16,6 @@ Rails.application.config.team_names = YAML.load_file(
 Rails.application.config.whitelisted_emails = YAML.load_file(
   Rails.root.join("config/constants/whitelisted_emails.yml")
 )
+Rails.application.config.domains_allowing_otp_whitelisting = YAML.load_file(
+  Rails.root.join("config/constants/domains_allowing_otp_whitelisting.yml")
+)
