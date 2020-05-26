@@ -31,11 +31,11 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
 
     it "includes the message in the collaborator record" do
-      expect(investigation.edit_accesses.first.message).to eql(message)
+      expect(investigation.edit_access_collaborations.first.message).to eql(message)
     end
 
     it "associates the collaborator with the user who added the team" do
-      expect(investigation.edit_accesses.first.added_by_user).to eql(user)
+      expect(investigation.edit_access_collaborations.first.added_by_user).to eql(user)
     end
   end
 
@@ -68,9 +68,9 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
       create(
         :investigation,
         owner: user,
-        edit_accesses: [
+        edit_access_collaborations: [
           create(
-            :edit_access,
+            :collaboration_edit_access,
             collaborator: existing_collaborator_team,
             include_message: false,
             added_by_user: user

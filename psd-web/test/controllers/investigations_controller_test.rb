@@ -14,7 +14,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     @investigation_one.owner = users(:southampton_bob)
     @investigation_one.source = sources(:investigation_one)
     @investigation_one.save
-    @investigation_one.edit_accesses.create!(
+    @investigation_one.edit_accesses_collaborationes_collaborations.create!(
       collaborator: teams(:opss_enforcement),
       added_by_user: users(:southampton_bob),
       include_message: false

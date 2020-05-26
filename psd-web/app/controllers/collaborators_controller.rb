@@ -10,7 +10,7 @@ class CollaboratorsController < ApplicationController
   def new
     authorize @investigation, :manage_collaborators?
 
-    @edit_access = @investigation.edit_accesses.new
+    @edit_access_collaboration = @investigation.edit_access_collaborations.new
 
     @teams = teams_without_access
   end
@@ -26,10 +26,10 @@ class CollaboratorsController < ApplicationController
     )
 
     if result.success?
-      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access.editor.name} added to the case" }
+      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access_collaboration.editor.name} added to the case" }
     else
       @teams = teams_without_access
-      @edit_access = result.edit_access
+      @edit_access_collaboration = result.edit_access_collaboration
       render "collaborators/new"
     end
   end

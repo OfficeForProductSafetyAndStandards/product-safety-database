@@ -6,7 +6,7 @@ class AlertTest < ApplicationSystemTestCase
     stub_antivirus_api
     sign_in users(:opss)
     @investigation = load_case(:one).decorate
-    @investigation.edit_accesses.create!(
+    @investigation.edit_accesses_collaborationes_collaborations.create!(
       collaborator: teams(:opss_enforcement),
       include_message: false,
       added_by_user: users(:opss)
@@ -44,7 +44,7 @@ class AlertTest < ApplicationSystemTestCase
 
   test "requires a restricted case be derestricted before raising an alert" do
     @private_investigation = investigations :private
-    @private_investigation.edit_accesses.create!(
+    @private_investigation.edit_accesses_collaborationes_collaborations.create!(
       collaborator: teams(:opss_enforcement),
       include_message: false,
       added_by_user: users(:opss)
