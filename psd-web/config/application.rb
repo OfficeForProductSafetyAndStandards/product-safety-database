@@ -23,8 +23,9 @@ module ProductSafetyDatabase
     config.eager_load_paths << Rails.root.join("presenters")
     config.autoload_paths << Rails.root.join("app/forms/concerns")
 
+    config.sidekiq_queue = ENV.fetch("SIDEKIQ_QUEUE", "psd")
     config.active_job.queue_adapter = :sidekiq
-    config.action_mailer.deliver_later_queue_name = "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}-mailers"
+    config.action_mailer.deliver_later_queue_name = "#{config.sidekiq_queue}-mailers"
 
     # This changes Rails timezone, but keeps ActiveRecord in UTC
     config.time_zone = "Europe/London"
