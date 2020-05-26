@@ -6,12 +6,12 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
 
   let(:team) { create(:team) }
   let(:investigation) { create(:investigation, owner: user) }
-  let(:edit_accesses_collaboration) do
-    create(:edit_accesses_collaboration, investigation: investigation, collaborator: team, added_by_user: user)
+  let(:edit_access_collaboration) do
+    create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user)
   end
 
   before do
-    edit_accesses_collaboration
+    edit_access_collaboration
     sign_in user
   end
 

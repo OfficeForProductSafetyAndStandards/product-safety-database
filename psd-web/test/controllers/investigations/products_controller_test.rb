@@ -4,7 +4,7 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:southampton)
     @investigation = load_case(:one)
-    @investigation.edit_accesses_collaborationes_collaborations.create!(
+    @investigation.edit_access_collaborations.create!(
       collaborator: teams(:southampton),
       include_message: false,
       added_by_user: users(:southampton)

@@ -97,7 +97,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
   scenario "Remove a team from a case (with validation errors)" do
     sign_in user
-    create(:edit_accesses_collaboration, investigation: investigation, collaborator: team)
+    create(:collaboration_edit_access, investigation: investigation, collaborator: team)
 
     visit "/cases/#{investigation.pretty_id}"
 
