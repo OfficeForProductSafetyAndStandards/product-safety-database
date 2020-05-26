@@ -59,7 +59,7 @@ class Investigation < ApplicationRecord
   has_one :complainant, dependent: :destroy
 
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::EditAccess"
-  has_many :editors, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
+  has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
 
   # TODO: Refactor to remove this callback hell
   before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id
@@ -70,7 +70,7 @@ class Investigation < ApplicationRecord
   end
 
   def teams_with_access
-    ([owner_team] + editors.order(:name)).compact
+    ([owner_team] + teams_with_edit_access.order(:name)).compact
   end
 
   def status

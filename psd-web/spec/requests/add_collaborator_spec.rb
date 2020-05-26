@@ -27,7 +27,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
 
     it "adds the team as a collaborator to the case" do
-      expect(investigation.editors).to include(other_team)
+      expect(investigation.teams_with_edit_access).to include(other_team)
     end
 
     it "includes the message in the collaborator record" do

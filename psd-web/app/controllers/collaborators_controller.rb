@@ -4,7 +4,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @teams = @investigation.editors.order(:name)
+    @teams = @investigation.teams_with_edit_access.order(:name)
   end
 
   def new
@@ -38,7 +38,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
-    @editor = @investigation.editors.find @team.id
+    @editor = @investigation.teams_with_edit_access.find @team.id
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
@@ -69,7 +69,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.editors.pluck(:collaborator_id) + [@investigation.owner_team.try(:id)]
+    @investigation.teams_with_edit_access.pluck(:collaborator_id) + [@investigation.owner_team.try(:id)]
   end
 
   def edit_params
