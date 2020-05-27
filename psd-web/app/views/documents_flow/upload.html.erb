@@ -2,7 +2,10 @@
 <% title = "Add attachment" %>
 <% page_title title, errors: @errors.any? %>
 <% content_for :after_header do %>
-  <%= link_to "Back to #{@parent.pretty_description.downcase}", path_for_model(@parent), class: "govuk-back-link" %>
+  <%= govukBackLink(
+    text: "Back to #{@parent.pretty_description.downcase}",
+    href: path_for_model(@parent)
+  ) %>
 <% end %>
 
 <div class="govuk-grid-row">

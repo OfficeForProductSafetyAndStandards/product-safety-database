@@ -1,6 +1,9 @@
 <%= page_title "Confirm email details", errors: @correspondence.errors.any? %>
 <% content_for :after_header do %>
-  <%= link_to "Back to #{@investigation.pretty_description.downcase}", investigation_path(@investigation), class: "govuk-back-link" %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
 <% end %>
 
 <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
