@@ -67,8 +67,9 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
     title
   end
 
-  private
-    # Do not send investigation_updated mail when case added. This overrides
-    # inherited functionality in the Activity model :(
-    def notify_relevant_users; end
+private
+
+  # Do not send investigation_updated mail when case added. This overrides
+  # inherited functionality in the Activity model :(
+  def notify_relevant_users; end
 end

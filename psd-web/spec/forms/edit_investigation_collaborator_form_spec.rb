@@ -4,12 +4,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   let!(:investigation) { create(:allegation, owner: creator) }
   let(:creator) { create(:user, :activated, team: creator_team, organisation: creator_team.organisation) }
   let(:creator_team) { create(:team) }
-
   let(:team) { create(:team) }
-
-  let(:editor) do
-    create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user)
-  end
 
   # Use a second user to perform the change so that we can test the generic
   # investigation_updated email doesn't get sent
@@ -32,6 +27,8 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
   end
 
   let(:form) { described_class.new(params) }
+
+  before { create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user) }
 
   describe "#save!" do
     context "when deleting" do
