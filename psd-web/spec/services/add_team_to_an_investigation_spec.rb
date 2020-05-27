@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   describe ".call" do
     context "with required parameters" do
-      let(:investigation) { create(:allegation) }
+      # Create the case before running tests so that we can check which emails are sent by the service
+      let!(:investigation) { create(:allegation) }
+
       let(:user) { create(:user) }
       let(:team) { create(:team, name: "Testing team") }
       let(:message) { "Thanks for collaborating." }
@@ -37,6 +39,10 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
             expect(collaborator.team_id).to eql(team.id)
           end
         end
+      end
+
+      it "does not queue the generic case updated mailer job", :with_test_queue_adapter do
+        expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
       end
 
       # rubocop:disable RSpec/ExampleLength
