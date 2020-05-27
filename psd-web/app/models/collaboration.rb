@@ -1,6 +1,6 @@
-class Collaborator < ApplicationRecord
+class Collaboration < ApplicationRecord
   belongs_to :investigation
-  belongs_to :team
+  belongs_to :collaborator, polymorphic: true
 
   belongs_to :added_by_user, class_name: :User
 

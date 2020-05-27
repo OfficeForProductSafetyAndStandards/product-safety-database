@@ -29,7 +29,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   teardown do
-    Collaborator.delete_all
+    Collaboration.delete_all
     User.delete_all
     Team.delete_all
     Organisation.delete_all

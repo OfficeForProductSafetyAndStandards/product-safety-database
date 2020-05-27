@@ -10,7 +10,7 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
 
       let(:result) do
         described_class.call(
-          team_id: team.id,
+          collaborator_id: team.id,
           include_message: "true",
           message: message,
           investigation: investigation,
@@ -23,8 +23,8 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
       end
 
       it "returns the collaborator" do
-        expect(result.collaborator).to have_attributes(
-          team: team,
+        expect(result.edit_access_collaboration).to have_attributes(
+          collaborator: team,
           added_by_user: user,
           investigation: investigation,
           message: message
