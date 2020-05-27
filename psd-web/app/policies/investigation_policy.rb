@@ -37,13 +37,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def view_protected_details?(user: @user)
-    # Is the user a member of the case owner's team?
-    return true if @record.owner.present? && (@record.owner&.team == user.team)
-
-    # Has the user's team been added to the case as a collaborator?
-    return true if @record.teams.include?(user.team)
-
-    false
+    @record.teams_with_access.include?(user.team)
   end
 
   def send_email_alert?(user: @user)
