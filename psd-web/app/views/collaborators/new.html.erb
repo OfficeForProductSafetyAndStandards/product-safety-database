@@ -1,5 +1,5 @@
 <% title = "Add a team to the case" %>
-<% page_title title, errors: @collaborator.errors.any? %>
+<% page_title title, errors: @edit_access_collaboration.errors.any? %>
 
 <% content_for(:after_header) do %>
   <%= govukBackLink(text: "Back", href: investigation_collaborators_path(@investigation)) %>
@@ -8,25 +8,25 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= error_summary @collaborator.errors %>
+    <%= error_summary @edit_access_collaboration.errors %>
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
     <p class="govuk-body">The team will be able to view and edit all case details. They cannot add or remove teams or close the case.</p>
 
-    <%= form_with model: @collaborator, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
+    <%= form_with model: @edit_access_collaboration, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
-      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @collaborator.team_id) } } %>
+      <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @edit_access_collaboration.collaborator_id) } } %>
 
-      <% if @collaborator.errors.include?(:team) %>
-        <% error_message = { text: @collaborator.errors.full_messages_for(:team).first } %>
+      <% if @edit_access_collaboration.errors.include?(:team) %>
+        <% error_message = { text: @edit_access_collaboration.errors.full_messages_for(:editor).first } %>
       <% end %>
 
       <%= render "components/govuk_select",
         formGroup: {
           classes: "app-!-autocomplete--max-width-two-thirds"
         },
-        name: "collaborator[team_id]",
+        name: "collaboration_edit_access[collaborator_id]",
         id: "team",
         errorMessage: error_message,
         items: team_select_items,

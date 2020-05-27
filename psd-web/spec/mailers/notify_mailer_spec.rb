@@ -62,12 +62,12 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   end
 
   describe "#team_added_to_case_email" do
-    subject(:mail) { described_class.team_added_to_case_email(collaborator, to_email: "test@example.com") }
+    subject(:mail) { described_class.team_added_to_case_email(edit_access_collaboration, to_email: "test@example.com") }
 
-    let(:added_by_user) { create(:user, name: "Bob Jones", team: user_team) }
-    let(:collaborator) { create(:collaborator, message: message, added_by_user: added_by_user, team: collaborator_team) }
     let(:user_team) { create(:team, name: "User Team") }
+    let(:added_by_user) { create(:user, name: "Bob Jones", team: user_team) }
     let(:collaborator_team) { create(:team, name: "Collaborator Team") }
+    let(:edit_access_collaboration) { create(:collaboration_edit_access, message: message, added_by_user: added_by_user, collaborator: collaborator_team) }
 
     context "with a message" do
       let(:message) { "Thanks for collaborating!" }
@@ -77,7 +77,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
           expect(mail.govuk_notify_personalisation).to eql(
             updater_name: "Bob Jones (User Team)",
             optional_message: "Message from Bob Jones (User Team):\n\n^ Thanks for collaborating!",
-            investigation_url: investigation_url(collaborator.investigation)
+            investigation_url: investigation_url(edit_access_collaboration.investigation)
           )
         end
       end
@@ -89,7 +89,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
           expect(mail.govuk_notify_personalisation).to eql(
             updater_name: "Bob Jones",
             optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
-            investigation_url: investigation_url(collaborator.investigation)
+            investigation_url: investigation_url(edit_access_collaboration.investigation)
           )
         end
       end
@@ -102,7 +102,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
         expect(mail.govuk_notify_personalisation).to eql(
           updater_name: "Bob Jones (User Team)",
           optional_message: "",
-          investigation_url: investigation_url(collaborator.investigation)
+          investigation_url: investigation_url(edit_access_collaboration.investigation)
         )
       end
     end
@@ -122,8 +122,8 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
     let(:user_who_deleted) { create(:user, name: "Bob Jones", team: user_team) }
     let(:user_team) { create(:team, name: "User Team") }
     let(:team_to_be_deleted) { create(:team, name: "Collaborator Team") }
-    let(:collaborator) { create(:collaborator, team: team_to_be_deleted) }
-    let(:investigation) { collaborator.investigation }
+    let(:edit_access_collaboration) { create(:collaboration_edit_access, collaborator: team_to_be_deleted) }
+    let(:investigation) { edit_access_collaboration.investigation }
     let(:case_type) { investigation.case_type.to_s.downcase }
     let(:case_title) { investigation.decorate.title }
 
