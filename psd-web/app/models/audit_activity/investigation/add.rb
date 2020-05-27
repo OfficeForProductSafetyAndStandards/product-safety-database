@@ -66,4 +66,11 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
   def restricted_title
     title
   end
+
+  private
+    # Do not send investigation_updated mail when case added. This overrides
+    # inherited functionality in the Activity model :(
+    def entities_to_notify
+      []
+    end
 end
