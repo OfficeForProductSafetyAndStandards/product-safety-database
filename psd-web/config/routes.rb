@@ -87,7 +87,6 @@ Rails.application.routes.draw do
     resources :allegation,       controller: "allegation",        only: %i[show new create update]
     resources :project,          controller: "project",           only: %i[show new create update]
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
-    resources :supporting_informations, path: "supporting-informations", only: %i[index]
   end
 
   resource :investigations, only: [], path: "cases" do
@@ -118,6 +117,8 @@ Rails.application.routes.draw do
     resource :activity, controller: "investigations/activities", only: %i[show create new] do
       resource :comment, only: %i[create new]
     end
+
+    resources :supporting_informations, path: "supporting-informations", controller: "investigations/supporting_informations", only: %i[index]
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
       member do
