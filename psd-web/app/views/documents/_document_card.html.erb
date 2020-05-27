@@ -1,8 +1,9 @@
-<% restricted = !can_be_displayed?(document, parent, current_user) %>
-<% title = restricted ? document_restricted_title : document.title %>
-<% safe = document.metadata["safe"] %>
-<% document = document.decorate %>
-
+<%
+  restricted = !can_be_displayed?(document, parent, current_user)
+  title = restricted ? document_restricted_title : document.title
+  safe = document.metadata["safe"]
+  document = document.decorate
+%>
 
 <div class="govuk-grid-row govuk-!-padding-bottom-6">
   <div class="govuk-grid-column-one-quarter">

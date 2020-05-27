@@ -1,10 +1,12 @@
-<% hide_link ||= false %>
-<% class_name ||= "" %>
-<% image_class = if document.variable?
+<%
+  hide_link ||= false
+  class_name ||= ""
+  image_class = if document.variable?
                   "app-document-preview__image"
                 else
                   "app-document-preview__image-without-preview"
-                end %>
+                end
+%>
 
 <div class="app-document-preview <%= class_name %>">
   <% if local_assigns[:restricted] %>
