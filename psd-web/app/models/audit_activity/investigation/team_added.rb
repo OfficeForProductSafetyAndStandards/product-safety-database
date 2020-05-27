@@ -7,7 +7,5 @@ class AuditActivity::Investigation::TeamAdded < AuditActivity::Investigation::Ba
     # This is handled by the AddTeamToAnInvestigation service, but this
     # override is required to prevent a duplicate investigation_updated email
     # being enqueued, which will fail
-    def entities_to_notify
-      []
-    end
+    def notify_relevant_users; end
 end
