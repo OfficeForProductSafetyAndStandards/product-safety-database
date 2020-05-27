@@ -41,12 +41,9 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def source_details_summary_list(user)
+  def source_details_summary_list(view_protected_details = false)
     contact_details = h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
-
-    if Pundit.policy(user, object).view_protected_details?
-      contact_details << complainant.decorate.contact_details
-    end
+    contact_details << h.tag.p(complainant.decorate.contact_details) if view_protected_details
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,
