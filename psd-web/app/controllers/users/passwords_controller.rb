@@ -53,7 +53,7 @@ module Users
     end
 
     # Overrides from ApplicationController in order to hide the the main navigation links
-    # when the user lands at the password edition page after being signed in by 2FA.
+    # when the user lands at the password edit_accesses_collaboration page after being signed in by 2FA.
     def hide_nav?
       true
     end

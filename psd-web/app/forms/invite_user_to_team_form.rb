@@ -34,7 +34,7 @@ private
 
   def email_domain_must_be_whitelisted
     address = Mail::Address.new(email)
-    errors.add(:email, :not_whitelisted, opss_enquiries_email: opss_enquiries_email) unless whitelisted_domains.include?(address.domain.downcase)
+    errors.add(:email, :not_whitelisted, opss_enquiries_email: opss_enquiries_email) unless whitelisted_domains.include?(address.domain.to_s.downcase)
   end
 
   def team_name

@@ -4,13 +4,13 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @teams = @investigation.teams.order(:name)
+    @teams = @investigation.teams_with_edit_access.order(:name)
   end
 
   def new
     authorize @investigation, :manage_collaborators?
 
-    @collaborator = @investigation.collaborators.new
+    @edit_access_collaboration = @investigation.edit_access_collaborations.new
 
     @teams = teams_without_access
   end
@@ -19,17 +19,17 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
-      params.require(:collaborator).permit(:team_id, :include_message, :message).merge({
+      params.require(:collaboration_edit_access).permit(:collaborator_id, :include_message, :message).merge({
         investigation: @investigation,
         current_user: current_user
       })
     )
 
     if result.success?
-      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.collaborator.team.name} added to the case" }
+      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access_collaboration.editor.name} added to the case" }
     else
       @teams = teams_without_access
-      @collaborator = result.collaborator
+      @edit_access_collaboration = result.edit_access_collaboration
       render "collaborators/new"
     end
   end
@@ -38,7 +38,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     @team = Team.find(params[:id])
-    @collaborator = @investigation.collaborators.find_by! team_id: @team.id
+    @editor = @investigation.teams_with_edit_access.find @team.id
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
@@ -69,7 +69,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.collaborators.pluck(:team_id) + [@investigation.owner_team.try(:id)]
+    @investigation.teams_with_edit_access.pluck(:collaborator_id) + [@investigation.owner_team.try(:id)]
   end
 
   def edit_params

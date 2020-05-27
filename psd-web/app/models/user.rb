@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy
+  has_many :collaborations, dependent: :destroy, as: :collaborator
 
   belongs_to :team
 
