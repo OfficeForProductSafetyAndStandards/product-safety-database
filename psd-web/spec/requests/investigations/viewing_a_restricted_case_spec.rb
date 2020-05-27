@@ -62,8 +62,8 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
         :investigation,
         is_private: true,
         owner: other_team,
-        collaborators: [
-          create(:collaborator, team: users_team, added_by_user: other_user)
+        edit_access_collaborations: [
+          create(:collaboration_edit_access, collaborator: users_team, added_by_user: other_user)
         ]
       )
     end

@@ -2,6 +2,7 @@ class Team < ApplicationRecord
   belongs_to :organisation
   has_many :users, dependent: :restrict_with_exception
   has_many :investigations, dependent: :nullify, as: :owner
+  has_many :collaborations, dependent: :destroy, as: :collaborator
 
   validates :name, presence: true
 

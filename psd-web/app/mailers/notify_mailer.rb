@@ -104,19 +104,19 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: user.email)
   end
 
-  def team_added_to_case_email(collaborator, to_email:)
+  def team_added_to_case_email(collaboration, to_email:)
     set_template(TEMPLATES[:team_added_to_case])
 
-    user_name = collaborator.added_by_user.decorate.display_name(viewer: collaborator.team)
+    user_name = collaboration.added_by_user.decorate.display_name(viewer: collaboration.collaborator)
 
-    optional_message = if collaborator.message.present?
+    optional_message = if collaboration.message.present?
                          [
                            I18n.t(
                              :message_from,
                              user_name: user_name,
                              scope: "mail.team_added_to_case"
                            ),
-                           inset_text_for_notify(collaborator.message)
+                           inset_text_for_notify(collaboration.message)
                          ].join("\n\n")
                        else
                          ""
@@ -125,7 +125,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_personalisation(
       updater_name: user_name,
       optional_message: optional_message,
-      investigation_url: investigation_url(collaborator.investigation)
+      investigation_url: investigation_url(collaboration.investigation)
     )
 
     mail(to: to_email)
