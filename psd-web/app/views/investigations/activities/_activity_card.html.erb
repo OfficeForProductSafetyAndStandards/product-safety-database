@@ -6,7 +6,7 @@
 <li>
   <h3 class="govuk-heading-s"><%= title %></h3>
 
-  <p class="govuk-body-s.timeline-details"><%= activity.subtitle %>
+  <p class="govuk-body-s timeline-details"><%= activity.subtitle %></p>
 
   <% if restricted %>
     <%= render "restricted", activity: activity %>
@@ -43,11 +43,11 @@
     <% end %>
 
     <% if activity.product_id %>
-      <%= link_to "View product details", product_url(activity.product_id), class: "psd-block-link" %>
+      <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link" %>
     <% end %>
 
     <% if activity.business_id %>
-      <%= link_to "View business details", business_url(activity.business_id), class: "psd-block-link" %>
+      <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
     <% end %>
 
     <% if activity.has_attachment? %>
