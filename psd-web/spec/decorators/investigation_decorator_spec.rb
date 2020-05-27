@@ -123,7 +123,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   end
 
   describe "#source_details_summary_list" do
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(user) }
+    let(:view_protected_details) { true }
+    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details) }
 
     it "does not display the Received date" do
       expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_s(:govuk))
@@ -137,20 +138,32 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       expect(source_details_summary_list).to summarise("Source type", text: investigation.complainant.complainant_type)
     end
 
-    it "displays the Complainant name" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
+    context "when view_protected_details is true" do
+      let(:view_protected_details) { true }
+
+      it "displays the complainant details", :aggregate_failures do
+        expect_to_display_protect_details_message
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
+        expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
+      end
     end
 
-    it "displays the Complainant phone number" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
+    context "when view_protected_details is false" do
+      let(:view_protected_details) { false }
+
+      it "does not display the Complainant details", :aggregate_failures do
+        expect_to_display_protect_details_message
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
+        expect(source_details_summary_list).not_to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
+      end
     end
 
-    it "displays the Complainant email address" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.email_address)}/)
-    end
-
-    it "displays the Complainant other details" do
-      expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.other_details)}/)
+    def expect_to_display_protect_details_message
+      expect(source_details_summary_list).to summarise("Contact details", text: /Only teams added to the case can view allegation contact details/)
     end
   end
 

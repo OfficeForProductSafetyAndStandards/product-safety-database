@@ -36,6 +36,10 @@ class InvestigationPolicy < ApplicationPolicy
     false
   end
 
+  def view_protected_details?(user: @user)
+    @record.teams_with_access.include?(user.team)
+  end
+
   def send_email_alert?(user: @user)
     user.is_opss?
   end

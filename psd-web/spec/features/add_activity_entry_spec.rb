@@ -63,11 +63,13 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
       expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
 
       expect(delivered_emails.map(&:recipient).uniq.sort).to eq ["active@example.com", "creator@example.com"]
-      expect(delivered_emails.last.personalization).to include(
-        name: "Active user",
-        subject_text: "Allegation updated",
-        update_text: "#{commentator_user.name} (test team) commented on the allegation."
-      )
+
+      delivered_emails.each do |email|
+        expect(email.personalization).to include(
+          subject_text: "Allegation updated",
+          update_text: "#{commentator_user.name} (test team) commented on the allegation."
+        )
+      end
     end
   end
 
