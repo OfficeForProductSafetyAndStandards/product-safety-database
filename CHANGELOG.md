@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-05-26
+- Update service guidance to give details of revised permission model on cases.
+
+## 2020-05-26
+- Only teams added to a case can view complainant contact details on the case summary page.
+
 ## 2020-05-13
 - Allow users that haven't verified their mobile number to change their mobile number while requesting a new security code.
 

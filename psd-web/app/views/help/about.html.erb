@@ -1,9 +1,10 @@
-<% page_title "How to use the Product safety database" %>
+<% page_heading = "How to use the Product safety database" %>
+<% page_title page_heading %>
 
 <div class="govuk-grid-row govuk-!-margin-bottom-5">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l">
-      How to use the Product safety database
+      <%= page_heading %>
     </h1>
 
     <p class="govuk-body-l govuk-!-margin-bottom-7">
@@ -35,13 +36,19 @@
           <a class="govuk-link" href="#organisations-with-access-to-the-psd">Organisations with access to the PSD</a>
         </li>
         <li>
+          <a class="govuk-link" href="#viewing-cases">Viewing cases</a>
+        </li>
+        <li>
           <a class="govuk-link" href="#restricted-cases">Restricted cases</a>
         </li>
         <li>
-          <a class="govuk-link" href="#using-the-psd-as-a-team">Using the PSD as a team</a>
+          <a class="govuk-link" href="#administrators-with-special-access">Administrators with special access</a>
         </li>
         <li>
-          <a class="govuk-link" href="#how-to-change-the-case-owner">How to change the case owner</a>
+          <a class="govuk-link" href="#collaborating-on-cases">Collaborating on cases</a>
+        </li>
+        <li>
+          <a class="govuk-link" href="#using-the-psd-as-a-team">Using the PSD as a team</a>
         </li>
         <li>
           <a class="govuk-link" href="#update-your-account-details">Update your account details</a>
@@ -51,8 +58,7 @@
         </li>
       </ol>
     </nav>
-    <h2 class="govuk-heading-m">
-      <a name="introduction"></a>
+    <h2 class="govuk-heading-m" id="introduction">
       An introduction to the Product safety database (PSD)
     </h2>
 
@@ -77,8 +83,7 @@
     </ul>
 
 
-    <h2 class="govuk-heading-m">
-      <a name="when-to-use-the-psd"></a>
+    <h2 class="govuk-heading-m" id="when-to-use-the-psd">
       When to use the PSD
     </h2>
 
@@ -107,8 +112,7 @@
     </p>
 
 
-    <h2 class="govuk-heading-m">
-      <a name="how-to-judge-the-level-of-risk"></a>
+    <h2 class="govuk-heading-m" id="how-to-judge-the-level-of-risk">
       How to judge the level of risk
     </h2>
 
@@ -117,8 +121,7 @@
     </p>
 
 
-    <h2 class="govuk-heading-m">
-      <a name="reporting-serious-risks"></a>
+    <h2 class="govuk-heading-m" id="reporting-serious-risks">
       Reporting serious risks
     </h2>
 
@@ -148,8 +151,7 @@
     </p>
 
 
-    <h2 class="govuk-heading-m">
-      <a name="what-youll-be-asked-for-when-you-report-information"></a>
+    <h2 class="govuk-heading-m" id="what-youll-be-asked-for-when-you-report-information">
       What you’ll be asked for when you report information
     </h2>
 
@@ -193,12 +195,11 @@
     </ul>
 
     <p>
-      You must only share personal data and other information on the database if you have the necessary consent or power to do so and acting in compliance with the law (including data protection and intellectual property law).
+      You must only share personal data and other information on the database if you have the necessary consent or power to do so and are acting in compliance with the law (including data protection and intellectual property law).
     </p>
 
 
-    <h2 class="govuk-heading-m">
-      <a name="report-early-and-add-details-when-they-are-available"></a>
+    <h2 class="govuk-heading-m" id="report-early-and-add-details-when-they-are-available">
       Report early and add details when they are available
     </h2>
 
@@ -238,8 +239,7 @@
 
 
 
-    <h2 class="govuk-heading-m">
-      <a name="organisations-with-access-to-the-psd"></a>
+    <h2 class="govuk-heading-m" id="organisations-with-access-to-the-psd">
       Organisations with access to the PSD
     </h2>
 
@@ -277,24 +277,142 @@
       </li>
     </ul>
 
+    <h2 class="govuk-heading-m" id="viewing-cases">
+      Viewing cases
+    </h2>
 
+    <p>
+      Most cases can be viewed by all users of the Product safety database - this enables information sharing and collaboration.
+    </p>
 
-    <h2 class="govuk-heading-m">
-      <a name="restricted-cases"></a>
+    <p>
+      Teams are encouraged to browse products and cases that may relate to ongoing investigations.
+    </p>
+
+    <h3 class="govuk-heading-s">
+      Protecting sensitive case details
+    </h3>
+
+    <p>
+      Where appropriate, the PSD will protect information that should not be viewable by all users. Items likely to contain sensitive information can only be viewed by teams added to a case. Teams not involved in a case will be able to see that those items exist, but will not be able to view them.
+    </p>
+
+    <p>
+      Items that can only be seen by teams added to a case:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>correspondence and their attachments</li>
+      <li>enquiry source contact details</li>
+      <li>‘generic attachments’ - attachments that are not connected to another document like a test result or corrective action</li>
+    </ul>
+
+    <p>
+      If further case details need to be protected, the case should be restricted so that it cannot be viewed by teams not added to a case.
+    </p>
+
+    <h2 class="govuk-heading-m" id="restricted-cases">
       Restricted cases
     </h2>
 
     <p>
-      The information shared in the PSD can only be seen by registered users from market surveillance authorities and the Office for Product Safety and Standards (OPSS). Teams can ‘restrict’ cases which means that only teams that are ‘involved’ in a case – meaning that they are the case owner or have been added to the case – can view it.
+      The information shared in the PSD can only be seen by registered users from market surveillance authorities and the Office for Product Safety and Standards (OPSS). Case owners can ‘restrict’ cases which means that only teams that are added to a case can view it.
     </p>
 
     <p>
       The aim of the Product safety database is to share information within the product safety community to save time, effort and money. Therefore, cases should only be restricted in exceptional circumstances, for example, if it is going to court or contains commercially sensitive information that should not be visible to teams that are not involved.
     </p>
 
+    <p>
+      When you restrict a case, you’ll be asked to give a reason for the change. This reason helps others know why the restriction has happened. It will also be visible to teams that are not involved in the case.
+    </p>
 
-    <h2 class="govuk-heading-m">
-      <a name="using-the-psd-as-a-team"></a>
+    <p>
+      Teams added to the case will be able to see all case details. If the case owner removes a team from a case, that team will no longer be able to view it.
+    </p>
+
+    <p>
+      Products and businesses attached to restricted cases will remain visible to all users.
+    </p>
+
+    <h2 class="govuk-heading-m" id="administrators-with-special-access">
+      Administrators with special access
+    </h2>
+
+    <p>
+      Some staff at OPSS have special access as administrators of the Product safety database service.
+    </p>
+
+    <p>
+      This allows them to:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        view and edit all case details, including cases they are not involved in
+      </li>
+      <li>
+        view all restricted cases
+      </li>
+      <li>
+        export details of cases added to the PSD
+      </li>
+    </ul>
+
+    <h2 class="govuk-heading-m" id="collaborating-on-cases">
+      Collaborating on cases
+    </h2>
+
+    <h3 class="govuk-heading-s">Case owners</h3>
+
+    <p>
+      All cases have a ‘case owner’ - the person or team responsible for the case. The case owner may collaborate on a case with other teams or assign the case to another team as needed.
+    </p>
+
+    <p>
+      Where the case owner is a person, their team also owns the case - anyone in their team has full rights over the case.
+    </p>
+
+    <p>
+      Only case owners can change:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the case owner to someone else</li>
+      <li>case status (open or closed)</li>
+      <li>case restriction</li>
+      <li>the teams added to the case</li>
+    </ul>
+
+    <p>
+      When a case is first created, the person who created it becomes the case owner.
+    </p>
+
+    <h3 class="govuk-heading-s">Teams added to a case</h3>
+
+    <p>
+      Teams added to a case can view and edit all case details - including protected items like correspondence.
+    </p>
+    <p>
+      You should add a team to a case if you want them to be able to view the full case or add further details. If a team no longer needs access to the case, you can remove them.
+    </p>
+    <p>
+      In a future update, case owners will be able to give teams added to the case ‘view all’ or ‘edit’ rights depending on whether they want the team being added to be able to add and edit information on a case.
+    </p>
+
+    <h3 class="govuk-heading-s">Changing the case owner</h3>
+
+    <p>
+      Only the current case owner can assign a new owner.
+    </p>
+    <p>
+      To change the case owner to another authority or team, navigate to the ‘sharing and collaboration’ section of the case overview. The new case owner will be notified that they’ve been made the case owner. You can also include a message that will be sent to them - so you can let them know why you’re assigning them the case.
+    </p>
+    <p>
+      When the case owner changes, the previous case owner’s team remains added to the case.
+    </p>
+
+    <h2 class="govuk-heading-m" id="using-the-psd-as-a-team">
       Using the PSD as a team
     </h2>
 
@@ -306,7 +424,6 @@
       Officers who lead on product safety from each organisation have been given a PSD account and made a ‘team administrator’. Once they’ve set up their own account, they can invite other colleagues – from their organisation only – to create an account too. They can do this by going to the ‘Your team’ part of the service, adding their colleague’s email address and choosing ‘Invite’.
     </p>
 
-
     <h3 class="govuk-heading-s">
       Administrators can add another administrator
     </h3>
@@ -315,79 +432,14 @@
       If there’s someone in the team whose responsibilities make them better placed to be an administrator – for example, they will regularly lead    work connected with the PSD – invite them to create an account. You can then email <%= mail_to t(:enquiries_email), nil, class: "govuk-link" %> and ask for them   to be made a team admin.
     </p>
 
-
-    <h3 class="govuk-heading-s">
-      Cases created by you or your team
-    </h3>
-
-    <p>
-      When you or someone on your team creates a case, you and each of your team members will be able to view all details relating to it.
-    </p>
-
-    <p>
-      You will also be able to edit most details (however, any changes made will be recorded in the activity log).
-    </p>
-
-    <p>
-      You can also change the case owner to:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        yourself
-      </li>
-      <li>
-        someone else in your team
-      </li>
-      <li>
-        an external team
-      </li>
-    </ul>
-
-
-    <h3 class="govuk-heading-s">
-      Cases created by other teams
-    </h3>
-
-    <p>
-      If you and your team are not involved in a case, you will be able to view most details, except some information protected by GDPR, for example,     consumer contact details.
-    </p>
-
-    <p>
-      If the you are made the case owner, you can add the information asked for.
-    </p>
-
-    <p>
-      If you have product safety information that’s relevant to the case, you can add it. The case creator and their team will be notified.
-    </p>
-
-    <p>
-      There will be occasions when a case is marked as ‘restricted’. In those instances, you will be able to see that a case exists but you will not    be able to see further details unless you are involved in the case.
-    </p>
-
-    <p>
-      At the moment, OPSS users can see the details of all restricted cases.
-    </p>
-
-
-    <h2 class="govuk-heading-m">
-      <a name="how-to-change-the-case-owner"></a>
-      How to change the case owner
-    </h2>
-
-    <p>Only the current case owner can change case ownership.</p>
-
-    <p>
-      To change the case owner to another authority or organisation, you need to navigate to the ‘sharing and collaboration’ section of the case overview.
-    </p>
-
-    <h2 class="govuk-heading-m">
-      <a name="update-your-account-details"></a>
+    <h2 class="govuk-heading-m" id="update-your-account-details">
       Update your account details
     </h2>
 
     <p>
-      You can update your name and password yourself by going to the Account part of the service. Email <%= mail_to t(:enquiries_email), nil, class: "govuk-link" %> to:
+      You can update your name yourself by going to the ‘Your account’ part of the service. To update your password, sign out of the service and use the ‘Forgot your password’ link when signing in.
+
+      Email <%= mail_to t(:enquiries_email), nil, class: "govuk-link" %> to:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
@@ -398,12 +450,11 @@
         update your contact details
       </li>
       <li>
-        update your organisation’s details
+        update your team or organisation’s details
       </li>
     </ul>
 
-    <h2 class="govuk-heading-m">
-      <a name="more-support"></a>
+    <h2 class="govuk-heading-m" id="more-support">
       More support
     </h2>
 
@@ -428,5 +479,5 @@
 <%= render "close_page_button" %>
 
 <p class="govuk-body govuk-hint govuk-!-margin-bottom-6">
-  Last updated 4 May 2020
+  Last updated 27 May 2020
 </p>
