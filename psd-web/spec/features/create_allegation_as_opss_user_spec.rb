@@ -74,7 +74,8 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_page_to_have_h1("Overview")
 
-      expect_details_on_summary_page(contact_details)
+      expect_details_on_summary_page
+      expect_protected_details_on_summary_page(contact_details)
 
       click_link "Products (0)"
       click_link "Add product"
@@ -99,7 +100,12 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       investigation = Investigation.last
 
-      visit "/cases/#{investigation.pretty_id}/activity"
+      visit "/cases/#{investigation.pretty_id}"
+
+      expect_details_on_summary_page
+      expect_protected_details_not_on_summary_page(contact_details)
+
+      click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
       expect_case_activity_page_to_show_restricted_information(allegation_details)
@@ -109,7 +115,12 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       sign_in(other_user_same_team)
 
-      visit "/cases/#{investigation.pretty_id}/activity"
+      visit "/cases/#{investigation.pretty_id}"
+
+      expect_details_on_summary_page
+      expect_protected_details_on_summary_page(contact_details)
+
+      click_link "Activity"
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
       expect_details_on_activity_page(contact_details, allegation_details)
@@ -145,13 +156,22 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
   end
 
-  def expect_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
+  def expect_details_on_summary_page
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
+    expect(page.find("dt", text: "Coronavirus related"))
+      .to have_sibling("dd", text: "Coronavirus related case")
+  end
+
+  def expect_protected_details_on_summary_page(contact_name:, contact_email:, contact_phone:)
     expect(page).to have_css("p", text: contact_name)
     expect(page).to have_css("p", text: contact_email)
     expect(page).to have_css("p", text: contact_phone)
-    expect(page.find("dt", text: "Coronavirus related"))
-      .to have_sibling("dd", text: "Coronavirus related case")
+  end
+
+  def expect_protected_details_not_on_summary_page(contact_name:, contact_email:, contact_phone:)
+    expect(page).not_to have_css("p", text: contact_name)
+    expect(page).not_to have_css("p", text: contact_email)
+    expect(page).not_to have_css("p", text: contact_phone)
   end
 
   def expect_details_on_activity_page(contact, allegation)

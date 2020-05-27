@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 2020_05_18_144018) do
     t.datetime "created_at", null: false
     t.integer "investigation_id", null: false
     t.text "message"
-    t.string "type", default: "collaboration", null: false
+    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["investigation_id", "collaborator_id"], name: "index_collaborations_on_investigation_id_and_collaborator_id", unique: true
     t.index ["investigation_id", "type", "collaborator_type", "collaborator_id"], name: "investigation_collaborator_index", unique: true

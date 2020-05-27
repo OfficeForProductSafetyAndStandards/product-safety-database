@@ -2,8 +2,8 @@ class AddCollaboratorsReferencesToCollaborations < ActiveRecord::Migration[5.2]
   def change
     safety_assured do
       change_table :collaborations, bulk: true do |t|
-        t.column :type, :string, null: false
-        t.column :collaborator_type, :string, null: false
+        t.column :type, :string
+        t.column :collaborator_type, :string
       end
       rename_column :collaborations, :team_id, :collaborator_id
       Collaboration.reset_column_information
