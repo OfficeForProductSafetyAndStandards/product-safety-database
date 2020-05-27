@@ -87,6 +87,7 @@ Rails.application.routes.draw do
     resources :allegation,       controller: "allegation",        only: %i[show new create update]
     resources :project,          controller: "project",           only: %i[show new create update]
     resources :ts_investigation, controller: "ts_investigations", only: %i[show new create update]
+    resources :supporting_informations, path: "supporting-informations", only: %i[index]
   end
 
   resource :investigations, only: [], path: "cases" do

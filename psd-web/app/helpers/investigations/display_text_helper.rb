@@ -40,6 +40,12 @@ module Investigations::DisplayTextHelper
         href: investigation_activity_path(@investigation),
         text: "Activity",
         active: is_current_tab.activity?
+      },
+      {
+        href: investigation_supporting_informations_path(@investigation),
+        text: "Supporting informations",
+        count: " (#{@investigation.documents.size})",
+        active: is_current_tab.supporting_information?
       }
     ]
     render "investigations/sub_nav", items: items
