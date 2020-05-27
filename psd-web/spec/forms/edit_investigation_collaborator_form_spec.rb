@@ -1,13 +1,14 @@
 require "rails_helper"
 
 RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stubbed_mailer do
-  let(:user_team) { create(:team) }
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
-  let(:investigation) { create(:investigation, owner: user) }
+  let!(:investigation) { create(:allegation, owner: creator) }
+  let(:creator) { create(:user, :activated, team: creator_team, organisation: creator_team.organisation) }
+  let(:creator_team) { create(:team) }
   let(:team) { create(:team) }
-  let(:collaborator) do
-    create(:collaborator, investigation: investigation, team: team, added_by_user: user)
-  end
+
+  # Use a second user to perform the change so that we can test the generic
+  # investigation_updated email doesn't get sent
+  let(:user) { create(:user, :activated, team: creator_team, organisation: creator_team.organisation) }
 
   let(:permission_level) { EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE }
   let(:message) { "" }
@@ -25,31 +26,33 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     }
   end
 
-  let(:form) do
-    described_class.new(params)
-  end
+  let(:form) { described_class.new(params) }
 
-  before do
-    collaborator
-  end
+  before { create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user) }
 
   describe "#save!" do
     context "when deleting" do
       context "when successful" do
         it "removes collaborator record" do
-          expect { form.save! }.to change(Collaborator, :count).from(1).to(0)
+          expect { form.save! }.to change(Collaboration::EditAccess, :count).from(1).to(0)
         end
 
         it "returns true" do
           expect(form.save!).to be true
         end
 
-        it "sends email", :aggregate_failures do
+        it "sends team deleted from case email", :aggregate_failures do
           form.save!
 
           email = delivered_emails.last
+          expect(email.action_name).to eq("team_deleted_from_case_email")
           expect(email.recipient).to eq(team.team_recipient_email)
           expect(email.personalization_value(:case_id)).to eq(investigation.pretty_id)
+        end
+
+        it "does not send the generic case updated email", :aggregate_failures do
+          form.save!
+          expect(delivered_emails.map(&:action_name)).not_to include("investigation_updated")
         end
 
         context "when team has no email" do

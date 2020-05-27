@@ -44,7 +44,7 @@ class Activity < ApplicationRecord
   # Used to determine which view template to use for new records with metadata
   # instead of pre-generated HTML
   def template_name
-    self.class.name.gsub(/^AuditActivity::/, "").underscore
+    self.class.name.delete_prefix("AuditActivity::").underscore
   end
 
 private

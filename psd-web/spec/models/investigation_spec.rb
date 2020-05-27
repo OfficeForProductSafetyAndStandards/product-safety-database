@@ -26,8 +26,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
         create(
           :investigation,
           owner: team,
-          collaborators: [
-            create(:collaborator, team: collaborator_team)
+          edit_access_collaborations: [
+            create(:collaboration_edit_access, collaborator: collaborator_team)
           ]
         )
       end

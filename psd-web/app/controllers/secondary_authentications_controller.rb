@@ -10,6 +10,8 @@ class SecondaryAuthenticationsController < ApplicationController
   skip_before_action :set_cache_headers
 
   def new
+    return render("errors/forbidden", status: :forbidden) unless session[:secondary_authentication_user_id]
+
     @secondary_authentication_form = SecondaryAuthenticationForm.new(user_id: session[:secondary_authentication_user_id])
   end
 
@@ -28,7 +30,7 @@ class SecondaryAuthenticationsController < ApplicationController
 private
 
   def hide_nav?
-    if secondary_authentication.operation == SecondaryAuthentication::INVITE_USER
+    if secondary_authentication&.operation == SecondaryAuthentication::INVITE_USER
       super
     else
       true
@@ -36,7 +38,7 @@ private
   end
 
   def secondary_nav_items
-    if secondary_authentication.operation == SecondaryAuthentication::INVITE_USER
+    if secondary_authentication&.operation == SecondaryAuthentication::INVITE_USER
       super
     else
       [text: "Sign out", href: destroy_user_session_path]
@@ -44,7 +46,7 @@ private
   end
 
   def secondary_authentication
-    @secondary_authentication_form.secondary_authentication
+    @secondary_authentication_form&.secondary_authentication
   end
 
   def redirect_to_saved_path

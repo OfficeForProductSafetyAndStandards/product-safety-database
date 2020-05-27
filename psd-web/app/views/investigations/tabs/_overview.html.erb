@@ -26,7 +26,7 @@
     <% if @investigation.complainant %>
       <%= govuk_hr %>
       <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
-      <%= @investigation.source_details_summary_list(current_user) %>
+      <%= @investigation.source_details_summary_list(policy(@investigation).view_protected_details?) %>
     <% end %>
 
     <%= govuk_hr %>

@@ -31,9 +31,13 @@ class InvestigationPolicy < ApplicationPolicy
     return true if @record.source&.user_has_gdpr_access?(user)
 
     # Has the user's team been added to the case as a collaborator?
-    return true if @record.teams.include?(user.team)
+    return true if @record.teams_with_edit_access.include?(user.team)
 
     false
+  end
+
+  def view_protected_details?(user: @user)
+    @record.teams_with_access.include?(user.team)
   end
 
   def send_email_alert?(user: @user)
