@@ -141,7 +141,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     context "when view_protected_details is true" do
       let(:view_protected_details) { true }
 
-      it "displays the complainant details" do
+      it "displays the complainant details", :aggregate_failures do
         expect_to_display_protect_details_message
         expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.name)}/)
         expect(source_details_summary_list).to summarise("Contact details", text: /#{Regexp.escape(investigation.complainant.phone_number)}/)
