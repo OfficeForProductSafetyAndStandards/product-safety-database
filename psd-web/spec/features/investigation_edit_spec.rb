@@ -26,15 +26,10 @@ RSpec.feature "Ability to edit an investigation", :with_elasticsearch, :with_stu
     expect(page).to have_css(".govuk-summary-list__row .govuk-summary-list__key + .govuk-summary-list__value", text: "Coronavirus related case")
   end
 
-  scenario "user from other team cannot edit coronavirus flag" do
-    sign_in other_user
-    visit investigation_path(investigation)
-    expect(page).not_to have_link("Change coronavirus status")
-  end
-
-  scenario "user from other team cannot edit summary" do
+  scenario "user from other team cannot edit summary and corona virus flag" do
     sign_in other_user
     visit investigation_path(investigation)
     expect(page).not_to have_link("Change summary")
+    expect(page).not_to have_link("Change coronavirus status")
   end
 end
