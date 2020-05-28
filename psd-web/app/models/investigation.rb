@@ -77,10 +77,6 @@ class Investigation < ApplicationRecord
     is_closed? ? "Closed" : "Open"
   end
 
-  def pretty_visibility
-    is_private ? ApplicationController.helpers.visibility_options[:private] : ApplicationController.helpers.visibility_options[:public]
-  end
-
   def important_owner_people
     people = [].to_set
     people << owner if owner.is_a? User
