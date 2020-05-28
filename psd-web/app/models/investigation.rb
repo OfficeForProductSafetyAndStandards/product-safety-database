@@ -87,7 +87,7 @@ class Investigation < ApplicationRecord
   end
 
   def teams_with_access
-    ([owner_team] + teams_with_edit_access.order(:name)).compact
+    ([owner_team] + teams_with_edit_access.sort_by(&:name)).compact
   end
 
   def status

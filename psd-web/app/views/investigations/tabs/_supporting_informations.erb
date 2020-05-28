@@ -1,0 +1,29 @@
+<% page_heading = "Supporting information" %>
+<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <% if policy(@investigation).update?(user: current_user) %>
+      <p class="govuk-body">
+        <%= link_to "Add supporting information", new_investigation_new_path(@investigation) %>
+      </p>
+    <% end %>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+  </div>
+</div>
+
+<% @attachements.each do |attachement| %>
+  <%= render "documents/document_card", document: attachement, parent: @investigation %>
+<% end %>
+
+<% if @attachements.none? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <p class="govuk-body">No supporting informations</p>
+    </div>
+  </div>
+<% end %>
