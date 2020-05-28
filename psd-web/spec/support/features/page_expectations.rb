@@ -33,15 +33,15 @@ module PageExpectations
     expect(page).to have_selector("h2", text: "Remove business")
   end
 
-  def expect_to_be_on_add_attachment_page
+  def expect_to_be_on_add_image_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
     expect(page).to have_link("Back", href: investigation_path(investigation))
   end
 
-  def expect_to_be_on_enter_attachment_details_page
+  def expect_to_be_on_enter_image_details_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
-    expect(page).to have_selector("h3", text: "Document details")
+    expect(page).to have_selector("h3", text: "Image details")
     expect(page).to have_link("Back", href: investigation_path(investigation))
   end
 

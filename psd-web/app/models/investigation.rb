@@ -74,6 +74,14 @@ class Investigation < ApplicationRecord
     super
   end
 
+  def images
+    documents.joins(:blob).where("left(content_type, 5) = 'image'")
+  end
+
+  def supporting_informations
+    documents.joins(:blob).where.not("left(content_type, 5) = 'image'")
+  end
+
   def owner_team
     owner&.team
   end

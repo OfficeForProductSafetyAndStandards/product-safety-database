@@ -24,11 +24,18 @@ module Investigations::DisplayTextHelper
         active: is_current_tab.businesses?
       },
       {
-        href: investigation_attachments_path(investigation),
-        text: "Attachments",
-        count: " (#{@investigation.documents.size})",
-        active: is_current_tab.attachments?
+        href: investigation_images_path(investigation),
+        text: "Images",
+        count: " (#{@investigation.images.size})",
+        active: is_current_tab.images?
       },
+      {
+        href: investigation_supporting_informations_path(investigation),
+        text: "Supporting informations",
+        count: " (#{@investigation.supporting_informations.size})",
+        active: is_current_tab.supporting_informations?
+      },
+
       {
         href: investigation_activity_path(@investigation),
         text: "Activity",
