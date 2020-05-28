@@ -3,7 +3,7 @@ require "test_helper"
 class NotificationTest < ActiveSupport::TestCase
   setup do
     stub_notify_mailer
-    @investigation = Investigation.create(description: "new investigation for notification test")
+    @investigation = Investigation::Allegation.create(description: "new investigation for notification test")
   end
 
   teardown do
@@ -133,7 +133,7 @@ class NotificationTest < ActiveSupport::TestCase
     User.current = users(:southampton)
     mock_investigation_created(who_will_be_notified: [users(:southampton)])
     @investigation_two = investigations :two
-    Investigation.create(@investigation_two.attributes.merge(id: 123))
+    Investigation::Allegation.create(@investigation_two.attributes.merge(id: 123))
     assert_equal @number_of_notifications, 1
   end
 
