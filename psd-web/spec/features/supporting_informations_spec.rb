@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Supporting informations", :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  let(:investigation) { create(:allegation, :with_antivirus_checked_document) }
+  let(:investigation) { create(:allegation, :with_antivirus_checked_document).decorate }
 
   before { sign_in create(:user, :activated, has_viewed_introduction: true) }
 
@@ -10,6 +10,12 @@ RSpec.feature "Supporting informations", :with_stubbed_elasticsearch, :with_stub
 
     click_on "Supporting informations (1)"
 
-    save_and_open_page
+    within "table.govuk-table tbody.govuk-table__body" do
+      investigation.activities.each do |activity|
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: activity.title)
+      end
+    end
+
+    within
   end
 end
