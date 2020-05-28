@@ -556,7 +556,6 @@ private
       file_blob = ActiveStorage::Blob.find_by(id: session_corrective_action[:file_blob_id])
       if file_blob
         attach_blobs_to_list(file_blob, action_record.documents)
-        attach_blobs_to_list(file_blob, @investigation.documents)
       end
       @investigation.corrective_actions << action_record
     end
@@ -569,7 +568,6 @@ private
       file_blob = ActiveStorage::Blob.find_by(id: session_test_result[:file_blob_id])
       if file_blob
         attach_blobs_to_list(file_blob, test_record.documents)
-        attach_blobs_to_list(file_blob, @investigation.documents)
       end
       @investigation.tests << test_record
     end

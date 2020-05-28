@@ -68,7 +68,6 @@ private
   def attach_files
     attach_blob_to_attachment_slot(@email_file_blob, @correspondence.email_file)
     attach_blob_to_attachment_slot(@email_attachment_blob, @correspondence.email_attachment)
-    attach_blobs_to_list(@email_file_blob, @email_attachment_blob, @investigation.documents)
   end
 
   def save_attachments
