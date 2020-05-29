@@ -2,51 +2,71 @@ require "rails_helper"
 
 RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
-  let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
-  let(:date) { Faker::Date.backward(days: 14) }
+  let(:product) { create(:product_washing_machine, name: "MyBrand washing machine") }
+  let(:investigation) { create(:allegation, products: [product], owner: user) }
+  let(:date) { Date.parse("1 Jan 2020") }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
   let(:other_user) { create(:user, :activated) }
+  let(:legislation) { "General Product Safety Regulations 2005" }
 
   scenario "Adding a test result (with validation errors)" do
-    sign_in(user)
-    visit "/cases/#{investigation.pretty_id}/activity"
+    travel_to Date.parse("2 April 2020") do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/activity"
 
-    click_link "Add activity"
+      click_link "Add activity"
 
-    expect_to_be_on_new_activity_page
+      expect_to_be_on_new_activity_page
 
-    within_fieldset "New activity" do
-      page.choose "Record test result"
+      within_fieldset "New activity" do
+        page.choose "Record test result"
+      end
+      click_button "Continue"
+
+      expect_to_be_on_record_test_result_page
+      click_button "Continue"
+
+      expect(page).to have_summary_error("Enter date of the test")
+      expect(page).to have_summary_error("Select the legislation that relates to this test")
+      expect(page).to have_summary_error("Select result of the test")
+      expect(page).to have_summary_error("Provide the test results file")
+
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "test_result_passed", file: file)
+
+      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+
+      click_on "Edit details"
+
+      expect_to_be_on_record_test_result_page
+
+      expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
+
+      click_button "Continue"
+
+      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+
+      click_button "Continue"
+
+      expect_confirmation_banner("Test result was successfully recorded.")
+      expect_page_to_have_h1("Overview")
+
+      click_link "Activity"
+
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+      expect(page).to have_text("Passed test: MyBrand washing machine")
+
+      click_link "View test result"
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+
+      expect(page).to have_summary_item(key: "Title", value: "Passed test: MyBrand washing machine")
+      expect(page).to have_summary_item(key: "Date", value: "1 January 2020")
+      expect(page).to have_summary_item(key: "Date added", value: "2 April 2020")
+      expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
+      expect(page).to have_summary_item(key: "Result", value: "Passed")
+
+      expect(page).to have_text("test_result.txt")
     end
-    click_button "Continue"
-
-    expect_to_be_on_record_test_result_page
-    click_button "Continue"
-
-    expect(page).to have_summary_error("Enter date of the test")
-    expect(page).to have_summary_error("Select the legislation that relates to this test")
-    expect(page).to have_summary_error("Select result of the test")
-    expect(page).to have_summary_error("Provide the test results file")
-
-    fill_in_test_result_submit_form(legislation: legislation, date: date, test_result: "test_result_passed", file: file)
-
-    expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
-
-    click_on "Edit details"
-
-    expect_to_be_on_record_test_result_page
-
-    expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
-
-    click_button "Continue"
-
-    expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
-
-    click_button "Continue"
-
-    expect_confirmation_banner("Test result was successfully recorded.")
-    expect_page_to_have_h1("Overview")
   end
 
   scenario "Not being able to add test results to another team’s case" do
