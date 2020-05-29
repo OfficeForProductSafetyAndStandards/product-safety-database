@@ -1,0 +1,63 @@
+<% page_heading = @test.title %>
+<% page_title page_heading %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Test result</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @test.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <%= govukSummaryList(
+      rows: [
+        {
+          key: { text: "Title" },
+          value: { text: @test.title }
+        },
+        {
+          key: { text: "Date" },
+          value: { text: @test.date.to_s(:govuk) }
+        },
+        {
+          key: { text: "Date added" },
+          value: { text: @test.created_at.to_s(:govuk) }
+        },
+        {
+          key: { text: "Legislation" },
+          value: { text: @test.legislation }
+        },
+        {
+          key: { text: "Result" },
+          value: { text: @test.result.capitalize }
+        }
+      ]
+    ) %>
+
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Attachments</h1>
+    <% @test.documents.each do |document| %>
+      <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
+
+      <div class="app-document-preview__placeholder" aria-hidden="true">
+        <%= image_tag "document_placeholder.png", alt: "" %>
+        <span class="app-document-preview__filetype">
+          <%= document_file_extension(document) %>
+        </span>
+      </div>
+
+    <% end %>
+  </div>
+</div>

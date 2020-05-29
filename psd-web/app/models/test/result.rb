@@ -18,6 +18,18 @@ class Test::Result < Test
     false
   end
 
+  def title
+    result_text = if passed?
+                    "Passed test"
+                  elsif failed?
+                    "Failed test"
+                  else
+                    "Test result"
+    end
+
+    "#{result_text}: #{product.name}"
+  end
+
 private
 
   def result_file_attached
