@@ -7,8 +7,8 @@ namespace :attachments do
   # log entries are registering the attachment being added to the Investigation.
   # When this happen the Activity entry will the same attachment blob as the
   # Investigation.
-  desc "Delete unrelated attachments from investigations"
-  task delete_unrelated_from_investigations: :environment do
+  desc "Delete activities attachments from investigations"
+  task delete_activities_from_investigations: :environment do
     ActiveStorage::Attachment
       .where(record_type: "Investigation")
       .where(
