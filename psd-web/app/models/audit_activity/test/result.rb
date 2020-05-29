@@ -21,8 +21,8 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   # same actual file to all of the AuditActivity, Investigation and Test records.
   def test_result
     attachment.blob.attachments
-      .where(record_type: "Test")
-      .first.record
+      .find_by(record_type: "Test")
+      .record
   end
 
 private

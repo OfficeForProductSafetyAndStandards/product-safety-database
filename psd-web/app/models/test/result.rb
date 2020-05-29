@@ -25,7 +25,7 @@ class Test::Result < Test
                     "Failed test"
                   else
                     "Test result"
-    end
+                  end
 
     "#{result_text}: #{product.name}"
   end
