@@ -12,7 +12,7 @@ namespace :attachments do
     ActiveStorage::Attachment
       .where(record_type: "Investigation")
       .where(
-        blob_id: ActiveStorage::Attachment.where.not(record_type: %w[Investigation Activity])
+        blob_id: ActiveStorage::Attachment.where.not(record_type: %w[Investigation Activity]).pluck(:blob_id)
       ).delete_all
   end
 end
