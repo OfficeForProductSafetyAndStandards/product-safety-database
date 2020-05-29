@@ -18,9 +18,9 @@
                                      classes: "govuk-label--m" } },
                hint: { text: "Restricted cases are visible only to the organisation that created them and the \
                organisation of the current case owner." },
-               items: [{ text: visibility_options[:public],
+               items: [{ text: t(false, scope: "case.is_private"),
                          value: "false" },
-                       { text: visibility_options[:private],
+                       { text: t(true, scope: "case.is_private"),
                          value: "true" }]
       = render "form_components/govuk_textarea",
                key: :visibility_rationale,
