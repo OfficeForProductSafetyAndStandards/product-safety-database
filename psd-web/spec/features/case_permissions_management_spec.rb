@@ -12,7 +12,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
   let(:investigation) do
     create(
-      :investigation,
+      :allegation,
       owner: user
     )
   end

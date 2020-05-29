@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:investigation) }
+  let(:investigation) { create(:allegation) }
 
   before { sign_in(user) }
 

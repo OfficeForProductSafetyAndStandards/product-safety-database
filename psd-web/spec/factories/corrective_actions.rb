@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :corrective_action do
-    investigation
+    association :investigation, factory: :allegation
     product
     summary { Faker::Lorem.sentence }
     date_decided_day { date_decided.day }

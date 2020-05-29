@@ -18,7 +18,7 @@ FactoryBot.define do
       description { "test allegation" }
       user_title { "test allegation title" }
 
-      factory :allegation_unsafe do
+      factory :allegation_unsafe, class: "Investigation::Allegation" do
         reported_unsafe
       end
     end
