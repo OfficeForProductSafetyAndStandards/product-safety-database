@@ -16,6 +16,10 @@
   </div>
 </div>
 
+<% @supporting_informations.each do |attachement| %>
+  <%= render "documents/document_card", document: attachement, parent: @investigation %>
+<% end %>
+
 <% @attachements.each do |attachement| %>
   <%= render "documents/document_card", document: attachement, parent: @investigation %>
 <% end %>
