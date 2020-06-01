@@ -72,7 +72,7 @@ module TestsHelper
       },
       {
         key: { text: "Result" },
-        value: { text: test_result.result.capitalize }
+        value: { text: test_result.result.upcase_first }
       }
     ]
 
