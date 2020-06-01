@@ -7,8 +7,14 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
   let(:title)         { Faker::Lorem.sentence }
   let(:description)   { Faker::Lorem.paragraph }
 
-  let!(:corrective_action_with_file) { create(:corrective_action, :with_file, owner_id: user.id, investigation: investigation) }
-  let!(:corrective_action_without_file) { create(:corrective_action, investigation: investigation) }
+  let!(:corrective_action) { create(:corrective_action, :with_file, owner_id: user.id, investigation: investigation) }
+  let!(:email)      { create(:correspondence_email,      investigation: investigation) }
+  let!(:phone_call) { create(:correspondence_phone_call, investigation: investigation) }
+  let!(:meeting)    { create(:correspondence_meeting,    investigation: investigation) }
+
+  let(:product) { create(:product) }
+  let!(:test_request) { create(:test_request, product: product, investigation: investigation) }
+  let!(:test_result) { create(:test_result, product: product, investigation: investigation) }
 
   before { sign_in user }
 
@@ -17,9 +23,11 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
 
     click_link "Supporting information"
 
-    save_and_open_page
-
-    expect(page).to have_css("h2", text: corrective_action_with_file.documents.first.title)
-    expect(page).not_to have_css("h2", text: corrective_action_without_file.title)
+    expect(page).to have_css("h2", text: corrective_action.documents.first.title)
+    expect(page).to have_css("h2", text: email.email_file.decorate.title)
+    expect(page).to have_css("h2", text: phone_call.transcript.decorate.title)
+    expect(page).to have_css("h2", text: meeting.transcript.decorate.title)
+    expect(page).to have_css("h2", text: test_request.documents.first.decorate.title)
+    expect(page).to have_css("h2", text: test_result.documents.first.decorate.title)
   end
 end
