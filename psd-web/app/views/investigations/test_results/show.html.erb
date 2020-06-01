@@ -20,47 +20,8 @@
       </p>
     </div>
 
-    <% rows = [
-        {
-          key: { text: "Date of test" },
-          value: { text: @test.date.to_s(:govuk) }
-        },
-        {
-          key: { text: "Product tested" },
-          value: { html: link_to(@test.product.name, product_path(@test.product)) }
-        },
-        {
-          key: { text: "Legislation" },
-          value: { text: @test.legislation }
-        },
-        {
-          key: { text: "Result" },
-          value: { text: @test.result.capitalize }
-        }
-       ] %>
 
-    <%
-      if @test.details.present?
-        rows << {
-          key: { text: "Further details" },
-          value: { text: @test.details }
-        }
-      end
-
-      @test.documents.each do |document|
-
-        attachment_description = document.blob.metadata["description"]
-
-        if attachment_description.present?
-          rows << {
-            key: { text: "Attachment description" },
-            value: { text: attachment_description }
-          }
-        end
-      end
-    %>
-
-    <%= govukSummaryList(rows: rows) %>
+    <%= govukSummaryList(rows: test_result_summary_rows(@test)) %>
 
   </div>
   <div class="govuk-grid-column-one-third">
