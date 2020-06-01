@@ -107,7 +107,7 @@ class InvestigationTestResultTest < ApplicationSystemTestCase
     assert_current_path(/cases\/\d+/)
     click_on "Activity"
     assert_text "Attached: #{attachment_filename}"
-    assert_text "View attachment"
+    assert_text "View test result"
   end
 
   test "attachment description field is not visible when no file is selected" do
