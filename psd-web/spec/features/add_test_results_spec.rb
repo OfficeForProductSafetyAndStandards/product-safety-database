@@ -31,6 +31,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(page).to have_summary_error("Select result of the test")
       expect(page).to have_summary_error("Provide the test results file")
 
+      fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "test_result_passed", file: file)
 
       expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
@@ -59,11 +60,11 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
-      expect(page).to have_summary_item(key: "Title", value: "Passed test: MyBrand washing machine")
-      expect(page).to have_summary_item(key: "Date", value: "1 January 2020")
-      expect(page).to have_summary_item(key: "Date added", value: "2 April 2020")
+      expect(page).to have_summary_item(key: "Date of test", value: "1 January 2020")
       expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
       expect(page).to have_summary_item(key: "Result", value: "Passed")
+      expect(page).to have_summary_item(key: "Further details", value: "Test result includes certificate of conformity")
+      expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
 
       expect(page).to have_text("test_result.txt")
     end
