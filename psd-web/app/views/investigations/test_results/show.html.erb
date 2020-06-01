@@ -68,12 +68,8 @@
     <% @test.documents.each do |document| %>
       <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
 
-      <div class="app-document-preview__placeholder" aria-hidden="true">
-        <%= image_tag "document_placeholder.png", alt: "" %>
-        <span class="app-document-preview__filetype">
-          <%= document_file_extension(document) %>
-        </span>
-      </div>
+      <%= document_placeholder(document_file_extension(document)) %>
+
 
     <% end %>
   </div>

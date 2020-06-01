@@ -1,6 +1,10 @@
 module DocumentsHelper
   include FileConcern
 
+  def document_placeholder(file_extension)
+    render "documents/placeholder", file_extension: file_extension
+  end
+
   def set_parent
     @parent = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]) if params[:investigation_pretty_id]
     @parent ||= Investigation.find_by!(pretty_id: params[:allegation_id]) if params[:allegation_id]
