@@ -8,9 +8,9 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
   before { sign_in(user) }
 
   scenario "deletes the attachment and creates activity" do
-    visit investigation_attachments_path(investigation)
+    visit "/cases/#{investigation.pretty_id}/supporting-informations"
 
-    expect_to_be_on_attachments_page
+    expect_to_be_on_suppoting_informations_page
 
     click_link "Remove document"
 
@@ -21,9 +21,9 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    click_link "Attachments"
+    click_link "Supporting information"
 
-    expect_case_attachments_page_not_to_show_deleted_attachment
+    expect_case_supporting_informartion_page_not_to_show_deleted_attachment
 
     click_link "Activity"
 
@@ -36,7 +36,7 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
     expect(page.find("th", text: "URL")).to have_sibling("td", text: document.filename)
   end
 
-  def expect_case_attachments_page_not_to_show_deleted_attachment
+  def expect_case_supporting_informartion_page_not_to_show_deleted_attachment
     expect(page).not_to have_selector("h2", text: document.title)
     expect(page).not_to have_selector("p",  text: document.description)
   end

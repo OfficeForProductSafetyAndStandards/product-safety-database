@@ -6,13 +6,15 @@ module Investigations
 
       authorize investigation, :view_non_protected_details?
 
-      @attachements = ActiveStorage::Attachment.where(
+      @supporting_informations = ActiveStorage::Attachment.where(
         record: [
           investigation.corrective_actions,
           investigation.correspondences,
           investigation.tests
         ]
       ).decorate
+
+      @attachements = investigation.non_images_documents.decorate
 
       @investigation = investigation.decorate
 

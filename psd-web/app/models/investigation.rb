@@ -78,7 +78,7 @@ class Investigation < ApplicationRecord
     documents.joins(:blob).where("left(content_type, 5) = 'image'")
   end
 
-  def supporting_informations
+  def non_images_documents
     documents.joins(:blob).where.not("left(content_type, 5) = 'image'")
   end
 

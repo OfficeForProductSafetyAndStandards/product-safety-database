@@ -111,7 +111,7 @@ Rails.application.routes.draw do
     resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
-    resources :images, controller: "investigations/images", only: %i[index], path: "documents"
+    resources :images, controller: "investigations/images", only: %i[index], path: "images"
     resources :supporting_informations, controller: "investigations/supporting_informations", only: %i[index], path: "supporting-informations"
 
     resource :activity, controller: "investigations/activities", only: %i[show create new] do
