@@ -77,6 +77,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       expect_details_on_summary_page
       expect_protected_details_on_summary_page(contact_details)
 
+      binding.pry
       click_link "Products (0)"
       click_link "Add product"
 
@@ -91,6 +92,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       expect_page_to_show_entered_product_details(product_details)
 
       click_link "Activity"
+      binding.pry
       expect_details_on_activity_page(contact_details, allegation_details)
 
       # Test that another user in a different organisation cannot see consumer info

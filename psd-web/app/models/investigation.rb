@@ -25,6 +25,10 @@ class Investigation < ApplicationRecord
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
 
+  # TODO: Refactor to remove this callback hell
+  before_create :set_creator, :set_owner_as_current_user, :add_pretty_id
+  after_create :create_audit_activity_for_case, :send_confirmation_email
+
   after_update :create_audit_activity_for_owner,
                :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,
@@ -61,9 +65,10 @@ class Investigation < ApplicationRecord
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::EditAccess"
   has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
 
-  # TODO: Refactor to remove this callback hell
-  before_create :set_source_to_current_user, :set_owner_as_current_user, :add_pretty_id
-  after_create :create_audit_activity_for_case, :send_confirmation_email
+  has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::Creator"
+  has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::Creator"
+  has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
+  has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
   def owner_team
     owner&.team
@@ -202,8 +207,9 @@ private
     AuditActivity::Business::Destroy.from(business, self)
   end
 
-  def set_source_to_current_user
-    self.source = UserSource.new(user: User.current) if source.blank? && User.current
+  def set_creator
+    self.creator_user = User.current
+    self.creator_team = User.current.team
   end
 
   def creator_id
