@@ -3,11 +3,7 @@ require "rails_helper"
 RSpec::Matchers.define_negated_matcher :not_change, :change
 
 # rubocop:disable RSpec/DescribeClass
-RSpec.describe "rake attachments:delete_activities_from_investigations", :with_stubbed_antivirus, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  subject(:task) { Rake::Task["attachments:delete_activities_from_investigations"] }
-
-  before { Rails.application.load_tasks }
-
+RSpec.describe "rake attachments:delete_activities_from_investigations", :with_stubbed_antivirus, :with_stubbed_elasticsearch, :with_stubbed_mailer, type: :task do
   def attach_file_to(obj, attachments, filename)
     attachments.attach(
       io: File.open(Rails.root.join("test/fixtures/files/attachment_filename.txt")),
@@ -44,15 +40,20 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
       investigation.save
     end
 
+    # rubocop:disable RSpec/ExampleLength
     it "deletes the activity attachment from the investigation" do
-      expect { task.invoke }.to change {
+      expect {
+        task.invoke
+        investigation.reload
+      }.to change {
         investigation.documents_blobs.where(filename: "correspondence_attachment.txt").count
       }.from(1).to(0).and change {
         investigation.documents_blobs.where(filename: "corrective_action_attachment.txt").count
-      }.from(1).to(0).and change { investigation.documents.count }.from(3).to(1)
+      }.from(1).to(0).and change {
+        investigation.documents.count 
+      }.from(3).to(1)
     end
 
-    # rubocop:disable RSpec/ExampleLength
     it "does not delete the attachments from the activities or product" do
       expect { task.invoke }.to(
         not_change(correspondence, :email_file).and(
