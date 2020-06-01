@@ -6,7 +6,7 @@ module Investigations
 
       authorize investigation, :view_non_protected_details?
 
-      @supporting_informations = ActiveStorage::Attachment.where(
+      @supporting_informations = ActiveStorage::Attachment.includes(:blob).where(
         record: [
           investigation.corrective_actions,
           investigation.correspondences,
