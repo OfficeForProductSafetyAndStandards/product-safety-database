@@ -31,11 +31,10 @@
       </div>
     <% else %>
       <div class="app-document-preview__placeholder" aria-hidden="true">
-        <%= image_tag "document_placeholder.png", alt: "" do %>
-          <span class="app-document-preview__filetype">
-            <%= document_file_extension(document) %>
-          </span>
-        <% end %>
+        <%= image_tag "document_placeholder.png", alt: "" %>
+        <span class="app-document-preview__filetype">
+          <%= document_file_extension(document) %>
+        </span>
       </div>
     <% end %>
   <% else %>
