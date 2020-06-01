@@ -41,9 +41,9 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
     end
 
     # rubocop:disable RSpec/ExampleLength
-    it "deletes the activity attachment from the investigation" do
+    it "deletes the activities attachments from the investigation", :aggregate_failures do
       expect {
-        task.invoke
+        task.execute
         investigation.reload
         investigation.documents_blobs.reload
         investigation.documents.reload
@@ -57,7 +57,7 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
     end
 
     it "does not delete the attachments from the activities or product" do
-      expect { task.invoke }.to(
+      expect { task.execute }.to(
         not_change(correspondence, :email_file).and(
           not_change(corrective_action, :documents).and(
             not_change { product.documents.count }
