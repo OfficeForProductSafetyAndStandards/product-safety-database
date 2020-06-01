@@ -44,9 +44,6 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
     it "deletes the activities attachments from the investigation", :aggregate_failures do
       expect {
         task.execute
-        investigation.reload
-        investigation.documents_blobs.reload
-        investigation.documents.reload
       }.to change {
         investigation.documents_blobs.where(filename: "correspondence_attachment.txt").count
       }.from(1).to(0).and change {
