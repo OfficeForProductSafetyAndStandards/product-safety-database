@@ -10,12 +10,7 @@
 
 <div class="app-document-preview <%= class_name %>">
   <% if local_assigns[:restricted] %>
-    <div class="app-document-preview__placeholder" aria-hidden="true">
-      <%= image_tag "document_placeholder.png", alt: "" %>
-      <span class="app-document-preview__filetype">
-        <%= document_file_extension(document) %>
-      </span>
-    </div>
+    <%= document_placeholder(document_file_extension(document)) %>
   <% elsif document.metadata["safe"] %>
     <% if document.image? %>
       <div class="<%= image_class %>">
@@ -30,12 +25,7 @@
         <% end %>
       </div>
     <% else %>
-      <div class="app-document-preview__placeholder" aria-hidden="true">
-        <%= image_tag "document_placeholder.png", alt: "" %>
-        <span class="app-document-preview__filetype">
-          <%= document_file_extension(document) %>
-        </span>
-      </div>
+      <%= document_placeholder(document_file_extension(document)) %>
     <% end %>
   <% else %>
     <div class="app-document-preview__processing">
