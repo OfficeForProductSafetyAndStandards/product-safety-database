@@ -75,11 +75,11 @@ class Investigation < ApplicationRecord
   end
 
   def images
-    documents.joins(:blob).where("left(content_type, 5) = 'image'")
+    documents.preload(:blob).joins(:blob).where("left(content_type, 5) = 'image'")
   end
 
   def non_images_documents
-    documents.joins(:blob).where.not("left(content_type, 5) = 'image'")
+    documents.preload(:blob).joins(:blob).where.not("left(content_type, 5) = 'image'")
   end
 
   def owner_team
