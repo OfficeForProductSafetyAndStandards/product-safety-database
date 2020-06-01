@@ -50,7 +50,7 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
       }.from(1).to(0).and change {
         investigation.documents_blobs.where(filename: "corrective_action_attachment.txt").count
       }.from(1).to(0).and change {
-        investigation.documents.count 
+        investigation.documents.count
       }.from(3).to(1)
     end
 
