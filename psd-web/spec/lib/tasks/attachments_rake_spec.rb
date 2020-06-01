@@ -3,8 +3,10 @@ require "rails_helper"
 RSpec::Matchers.define_negated_matcher :not_change, :change
 
 # rubocop:disable RSpec/DescribeClass
-RSpec.describe "attachments:delete_activities_from_investigations", :with_stubbed_antivirus, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  include_context "with rake"
+RSpec.describe "rake attachments:delete_activities_from_investigations", :with_stubbed_antivirus, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+  subject(:task) { Rake::Task["attachments:delete_activities_from_investigations"] }
+
+  before { Rails.application.load_tasks }
 
   def attach_file_to(obj, attachments, filename)
     attachments.attach(
