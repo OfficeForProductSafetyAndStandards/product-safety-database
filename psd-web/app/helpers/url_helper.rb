@@ -19,14 +19,8 @@ module UrlHelper
   end
 
   # DOCUMENTS
-
-  # Unlike Business and Product, Investigation does not implement a /documents
-  # collection route, this is instead implemented as /attachments. But member
-  # routes are under /documents. But the model name is Attachments. Fun!
-  #
   def associated_documents_path(parent)
-    slug = parent.is_a?(Investigation) ? :attachments : :documents
-    path_for_model(parent, slug)
+    path_for_model(parent, :documents)
   end
 
   def associated_document_path(parent, document)
