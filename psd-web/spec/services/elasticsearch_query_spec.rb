@@ -10,7 +10,7 @@ RSpec.shared_examples "finds the relevant investigation" do
   end
 end
 
-RSpec.describe ElasticsearchQuery, :with_elasticsearch do
+RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
   subject { described_class.new(query, filter_params, sorting_params) }
 
   let(:user)           { create(:user) }
@@ -29,7 +29,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch do
     let(:batch_number)      { SecureRandom.uuid }
     let(:country_of_origin) { "United Kingdom" }
     let(:product)           { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
-    let(:investigation)     { create(:allegation, owner: user, products: [product]) }
+    let(:investigation)     { create(:allegation, owner: user, creator: user, products: [product]) }
 
     before do
       allow(NotifyMailer)

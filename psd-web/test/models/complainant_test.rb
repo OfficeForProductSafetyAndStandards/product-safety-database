@@ -20,6 +20,7 @@ class ComplainantTest < ActiveSupport::TestCase
 
   def add_investigation
     @investigation = Investigation::Allegation.new
+    CreateCase.call(investigation: @investigation, user: users(:southampton))
     @investigation.complainant = @complainant
   end
 end

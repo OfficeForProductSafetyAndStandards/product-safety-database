@@ -1,15 +1,10 @@
 class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
-  include ActivityAttachable
-  with_attachments attachment: "attachment"
-
-  private_class_method def self.from(investigation)
-    activity = super(investigation, nil, nil, build_metadata(investigation))
-    activity.attach_blob investigation.documents.first.blob if investigation.documents.attached?
-    activity
+  def self.from(*)
+    raise "Deprecated - use CreateCase.call instead"
   end
 
   def self.build_metadata(investigation)
-    metadata = {
+    {
       owner_id: investigation.owner&.id,
       complainant_id: investigation.complainant&.id,
       investigation: {
@@ -20,15 +15,6 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
         product_category: investigation.product_category
       }
     }
-
-    if investigation.documents.attached?
-      metadata[:attachment] = {
-        id: investigation.documents.first.id,
-        filename: investigation.documents.first.filename
-      }
-    end
-
-    metadata
   end
 
   # owner may change after investigation was created, so we retrieve from the

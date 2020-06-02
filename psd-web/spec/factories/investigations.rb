@@ -14,6 +14,18 @@ FactoryBot.define do
 
     association :owner, factory: :user
 
+    transient do
+      creator do
+        if owner.is_a?(User)
+          owner
+        elsif owner.is_a?(Team)
+          create(:user, team: owner, organisation: owner.organisation)
+        else
+          create(:user)
+        end
+      end
+    end
+
     factory :allegation, class: "Investigation::Allegation" do
       description { "test allegation" }
       user_title { "test allegation title" }
@@ -76,6 +88,12 @@ FactoryBot.define do
           reported_reason_non_compliant: true
         ).assign_to(investigation)
       end
+    end
+
+    # We need to do this before rather than after create because database
+    # constraints on pretty_id need to be satisfied
+    before(:create) do |investigation, options|
+      CreateCase.call(investigation: investigation, user: options.creator)
     end
   end
 end

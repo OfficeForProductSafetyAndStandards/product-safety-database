@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:decorated_allegation) { allegation.decorate }
 
-  let(:allegation) { build(:allegation, :reported_unsafe) }
+  let(:allegation) { create(:allegation, :reported_unsafe) }
 
   describe "#display_product_summary_list?" do
     it { is_expected.to be_display_product_summary_list }
@@ -17,7 +17,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
         end
 
         context "when no reason was reported" do
-          let(:allegation) { build(:allegation) }
+          let(:allegation) { create(:allegation) }
 
           it "produces the correct title" do
             expect(decorated_allegation.title).to eq("iPhone XS MAX, phone")
@@ -25,7 +25,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
         end
 
         context "when reported safe" do
-          let(:allegation) { build(:allegation, :reported_safe) }
+          let(:allegation) { create(:allegation, :reported_safe) }
 
           it "produces the correct title" do
             expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – product safe and compliant")
@@ -33,7 +33,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
         end
 
         context "when reported unsafe and non-compliant" do
-          let(:allegation) { build(:allegation, :reported_unsafe_and_non_compliant) }
+          let(:allegation) { create(:allegation, :reported_unsafe_and_non_compliant) }
 
           it "produces the correct title" do
             expect(decorated_allegation.title).to eq("iPhone XS MAX, phone – #{allegation.hazard_type.downcase} hazard")
@@ -45,7 +45,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
         before { allegation.products.build attributes_for(:product, name: "iPhone XS MAX", product_type: "phone") }
 
         context "when reported safe" do
-          let(:allegation) { build(:allegation, :reported_safe) }
+          let(:allegation) { create(:allegation, :reported_safe) }
 
           before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
 
@@ -55,7 +55,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
         end
 
         context "when reported unsafe" do
-          let(:allegation) { build(:allegation, :reported_unsafe) }
+          let(:allegation) { create(:allegation, :reported_unsafe) }
 
           context "with two common values" do
             before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
@@ -86,7 +86,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
       end
 
       context "when reporting safe" do
-        let(:allegation) { build(:allegation, :reported_safe) }
+        let(:allegation) { create(:allegation, :reported_safe) }
 
         it "has the correct title" do
           expect(decorated_allegation.title).to eq("Alarms - safe and compliant")

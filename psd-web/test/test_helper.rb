@@ -56,9 +56,11 @@ class ActiveSupport::TestCase
     stub_request(:any, /#{Regexp.quote(antivirus_url)}/).to_return(body: stubbed_response, status: 200)
   end
 
-  def create_new_case
+  def create_new_case(user = users(:southampton))
     description = "new_investigation_description"
-    Investigation::Allegation.create(description: description)
+    investigation = Investigation::Allegation.new(description: description)
+    CreateCase.call(investigation: investigation, user: user)
+    investigation
   end
 
   def load_case(key)

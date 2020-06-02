@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
+RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
   let(:user_team) { create(:team) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
   let(:team) { create(:team) }
-  let(:investigation) { create(:allegation, owner: user) }
+  let(:investigation) { create(:allegation, creator: user, owner: user) }
   let(:edit_access_collaboration) do
     create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user)
   end
@@ -58,7 +58,8 @@ RSpec.describe "Editig a collaborator for a case", type: :request, with_stubbed_
   end
 
   context "when the user isn't part of the team assigned", :with_errors_rendered do
-    let(:investigation) { create(:allegation, owner: create(:team)) }
+    let(:creator) { create(:user) }
+    let(:investigation) { create(:allegation, owner: creator.team, creator: creator) }
 
     it "responds with a 403 (Forbidden) status code on update" do
       put investigation_collaborator_path(investigation.pretty_id, team.id)

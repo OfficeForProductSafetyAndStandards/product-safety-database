@@ -16,12 +16,6 @@ class InvestigationTest < ActiveSupport::TestCase
     @business = businesses(:biscuit_base)
   end
 
-  test "should create activity when investigation is created" do
-    assert_difference "Activity.count" do
-      @investigation = create_new_case
-    end
-  end
-
   test "should create an activity when business is added to investigation" do
     @investigation = create_new_case
     assert_difference "Activity.count" do
@@ -39,23 +33,6 @@ class InvestigationTest < ActiveSupport::TestCase
     end
   end
 
-  test "should create an activity when product is added to investigation" do
-    @investigation = create_new_case
-    assert_difference "Activity.count" do
-      @product = Product.new(name: "Test Product", product_type: "test product type", category: "test product category")
-      @investigation.products << @product
-    end
-  end
-
-  test "should create an activity when product is removed from investigation" do
-    @investigation = create_new_case
-    @product = Product.new(name: "Test Product", product_type: "test product type", category: "test product category")
-    @investigation.products << @product
-    assert_difference "Activity.count" do
-      @investigation.products.delete(@product)
-    end
-  end
-
   test "should create an activity when status is updated on investigation" do
     @investigation = create_new_case
     assert_difference "Activity.count" do
@@ -65,25 +42,17 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "visible to creator organisation" do
-    User.current = users(:southampton)
-    create_new_private_case
+    create_new_private_case(users(:southampton))
     user = users(:southampton_steve)
     assert_equal(policy(@new_investigation).view_non_protected_details?(user: user), true)
   end
 
   test "visible to owner organisation" do
-    User.current = users(:southampton)
-    create_new_private_case
+    create_new_private_case(users(:southampton))
     owner = users(:southampton_steve)
     @new_investigation.owner = owner
 
     assert(policy(@new_investigation).view_non_protected_details?(user: owner))
-  end
-
-  test "not visible to no-source, no-owner organisation" do
-    user = users(:luton)
-    create_new_private_case
-    assert_not(policy(@new_investigation).view_non_protected_details?(user: user))
   end
 
   test "past owners should be computed" do
@@ -99,8 +68,7 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "people out of current owner's team should not be able to change the case owner" do
-    User.current = users(:southampton)
-    investigation = create_new_case
+    investigation = create_new_case(users(:southampton))
     assert_not policy(investigation).change_owner_or_status?(user: users(:luton))
   end
 
@@ -122,27 +90,10 @@ class InvestigationTest < ActiveSupport::TestCase
     assert policy(investigation).change_owner_or_status?(user: User.find_by(name: "Test User_four"))
   end
 
-  test "pretty_id should contain YYMM" do
-    investigation = create_new_case
-    assert_includes investigation.pretty_id, Time.zone.now.strftime("%y").to_s
-    assert_includes investigation.pretty_id, Time.zone.now.strftime("%m").to_s
-  end
-
-  test "pretty_id should be unique" do
-    10.times do
-      create_new_case
-    end
-    investigation = create_new_case
-    assert_equal Investigation.where(pretty_id: investigation.pretty_id).count, 1
-  end
-
-  test "sets the to current user as the case owner by default" do
-    investigation = create_new_case
-    assert_equal User.current, investigation.owner
-  end
-
-  def create_new_private_case
+  def create_new_private_case(user)
     description = "new_investigation_description"
-    @new_investigation = Investigation::Allegation.create(description: description, is_private: true)
+    @new_investigation = Investigation::Allegation.new(description: description, is_private: true)
+
+    CreateCase.call(investigation: @new_investigation, user: user)
   end
 end
