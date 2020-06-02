@@ -4,8 +4,6 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:investigation, owner: user.team) }
   let(:file)          { Rails.root + "test/fixtures/files/testImage.png" }
-  let(:title)         { Faker::Lorem.sentence }
-  let(:description)   { Faker::Lorem.paragraph }
 
   let!(:corrective_action) { create(:corrective_action, :with_file, owner_id: user.id, investigation: investigation) }
   let!(:email)      { create(:correspondence_email,      investigation: investigation) }
@@ -22,7 +20,6 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
     visit "/cases/#{investigation.pretty_id}"
 
     click_link "Supporting information"
-
     expect(page).to have_css("h2", text: corrective_action.documents.first.title)
     expect(page).to have_css("h2", text: email.email_file.decorate.title)
     expect(page).to have_css("h2", text: phone_call.transcript.decorate.title)

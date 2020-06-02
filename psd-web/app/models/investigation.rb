@@ -75,11 +75,28 @@ class Investigation < ApplicationRecord
   end
 
   def images
-    documents.preload(:blob).joins(:blob).where("left(content_type, 5) = 'image'")
+    documents
+      .includes(:blob)
+      .joins(:blob).where("left(content_type, 5) = 'image'")
+      .where.not(record: [corrective_actions, correspondences, tests])
   end
 
-  def non_images_documents
-    documents.preload(:blob).joins(:blob).where.not("left(content_type, 5) = 'image'")
+  def other_supporting_informations
+    documents
+      .includes(:blob)
+      .joins(:blob)
+      .where.not("left(content_type, 5) = 'image'")
+      .where.not(record: [corrective_actions, correspondences, tests])
+  end
+
+  def supporting_informations
+    ActiveStorage::Attachment.includes(:blob).where(
+      record: [corrective_actions, correspondences, tests]
+    )
+  end
+
+  def supporting_information_count
+    (supporting_informations + other_supporting_informations).size
   end
 
   def owner_team

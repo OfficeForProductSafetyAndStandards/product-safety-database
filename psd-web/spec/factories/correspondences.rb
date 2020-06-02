@@ -14,31 +14,32 @@ FactoryBot.define do
 
     transient do
       correspondence_date { Faker::Date.backward(days: 14) }
+      correspondence_file { Rails.root + "test/fixtures/files/test_result.txt" }
     end
   end
 
   factory :correspondence_email, class: "Correspondence::Email", parent: :correspondence do
-    after(:build) do |correspondence|
+    after(:build) do |correspondence, evaluator|
       correspondence.email_file.attach(
-        io: File.open(Rails.root + "test/fixtures/files/test_result.txt"),
-        filename: "email correspondence"
+        io: File.open(evaluator.correspondence_file),
+        filename: "email correspondence/"
       )
     end
   end
 
   factory :correspondence_meeting, class: "Correspondence::Meeting", parent: :correspondence do
-    after(:build) do |correspondence|
+    after(:build) do |correspondence, evaluator|
       correspondence.transcript.attach(
-        io: File.open(Rails.root + "test/fixtures/files/test_result.txt"),
+        io: File.open(evaluator.correspondence_file),
         filename: "meeting correspondence"
       )
     end
   end
 
   factory :correspondence_phone_call, class: "Correspondence::PhoneCall", parent: :correspondence do
-    after(:build) do |correspondence|
+    after(:build) do |correspondence, evaluator|
       correspondence.transcript.attach(
-        io: File.open(Rails.root + "test/fixtures/files/test_result.txt"),
+        io: File.open(evaluator.correspondence_file),
         filename: "phone call correspondence"
       )
     end
