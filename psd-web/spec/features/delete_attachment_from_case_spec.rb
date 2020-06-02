@@ -8,7 +8,7 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
   before { sign_in(user) }
 
   scenario "deletes the attachment and creates activity" do
-    visit "/cases/#{investigation.pretty_id}/supporting-informations"
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
 
     expect_to_be_on_suppoting_informations_page
 
