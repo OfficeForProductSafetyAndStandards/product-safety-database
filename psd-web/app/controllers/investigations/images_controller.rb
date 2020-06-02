@@ -2,7 +2,6 @@ module Investigations
   class ImagesController < ApplicationController
     def index
       investigation = Investigation
-                        .with_attached_documents
                         .find_by!(pretty_id: params[:investigation_pretty_id])
 
       authorize investigation, :view_non_protected_details?
