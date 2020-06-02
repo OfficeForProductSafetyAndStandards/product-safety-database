@@ -6,10 +6,10 @@ FactoryBot.define do
     details     { Faker::Hipster.sentence }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
 
-    transient {
+    transient do
       date { Faker::Date.backward(days: 14) }
       test_file { Rails.root + "test/fixtures/files/test_result.txt" }
-    }
+    end
   end
 
   factory :test_result, class: "Test::Result", parent: :test do
