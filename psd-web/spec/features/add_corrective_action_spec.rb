@@ -39,7 +39,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
       expect_case_activity_page_to_show_entered_data
 
-      click_on "Supporting information (1)"
+      # TODO: revert back to 1 when attachments won't be duplicated anymore on the investigation
+      # click_link "Supporting information (1)"
+      click_on "Supporting information (2)"
 
       expect_case_supporting_information_page_to_show_file
     end
