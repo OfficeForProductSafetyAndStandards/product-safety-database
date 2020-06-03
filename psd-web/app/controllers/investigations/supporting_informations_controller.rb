@@ -7,8 +7,8 @@ module Investigations
       authorize investigation, :view_non_protected_details?
 
       @investigation                 = investigation.decorate
-      @supporting_informations       = investigation.supporting_informations.decorate
-      @other_supporting_informations = investigation.other_supporting_informations.decorate
+      @supporting_informations       = investigation.supporting_information_attachments.decorate
+      @other_supporting_informations = investigation.other_supporting_information_attachments.decorate
 
       @breadcrumbs = {
         items: [
