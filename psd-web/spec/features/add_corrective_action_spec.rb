@@ -2,80 +2,72 @@ require "rails_helper"
 
 RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, products: [create(:product_washing_machine)], owner: user) }
+  let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
+  let(:investigation) { create(:allegation, products: [product], owner: user) }
 
   let(:summary) { Faker::Lorem.sentence }
-  let(:date) { Faker::Date.backward(days: 14) }
-  let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
-  let(:details) { Faker::Lorem.sentence }
+  let(:date) { Date.parse("2020-05-01") }
+  let(:legislation) { "General Product Safety Regulations 2005" }
+  let(:details) { "Urgent action following consumer reports" }
   let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
   let(:file_description) { Faker::Lorem.paragraph }
-  let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
-  let(:duration) { CorrectiveAction::DURATION_TYPES.sample }
-  let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
+  let(:measure_type) { "Mandatory" }
+  let(:duration) { "Permanent" }
+  let(:geographic_scope) { "National" }
 
   before { sign_in(user) }
 
-  context "with valid input" do
-    scenario "shows inputted data on the confirmation page and on the case attachments and activity pages" do
-      visit new_investigation_corrective_action_path(investigation)
+  scenario "Adding a corrective action (with validation errors)" do
+    visit "/cases/#{investigation.pretty_id}/activity"
 
-      expect_to_be_on_record_corrective_action_for_case_page
-      expect(page).not_to have_error_messages
+    click_link "Add activity"
 
-      fill_and_submit_form
+    choose "Record corrective action"
 
-      expect_to_be_on_confirmation_page
-      expect(page).not_to have_error_messages
+    click_button "Continue"
 
-      expect_confirmation_page_to_show_entered_data
+    expect_to_be_on_record_corrective_action_for_case_page
+    expect(page).not_to have_error_messages
 
-      click_on "Continue"
+    fill_and_submit_form
 
-      expect_to_be_on_case_page(case_id: investigation.pretty_id)
-      expect(page).not_to have_error_messages
+    expect_to_be_on_confirmation_page
+    expect(page).not_to have_error_messages
 
-      click_on "Activity"
+    expect_confirmation_page_to_show_entered_data
 
-      expect_case_activity_page_to_show_entered_data
+    click_link "Edit details"
 
-      click_on "Attachments (1)"
+    expect_form_to_show_input_data
 
-      expect_case_attachments_page_to_show_file
-    end
+    click_button "Continue"
 
-    scenario "going back to the form from the confirmation page shows inputted data" do
-      visit new_investigation_corrective_action_path(investigation)
+    expect_confirmation_page_to_show_entered_data
 
-      expect_to_be_on_record_corrective_action_for_case_page
-      expect(page).not_to have_error_messages
+    click_button "Continue"
 
-      fill_and_submit_form
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect(page).not_to have_error_messages
 
-      expect_to_be_on_confirmation_page
-      expect(page).not_to have_error_messages
+    click_on "Activity"
 
-      expect_confirmation_page_to_show_entered_data
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-      click_link "Edit details"
+    expect_case_activity_page_to_show_entered_data
 
-      expect_form_to_show_input_data
-    end
-  end
+    click_link "View corrective action"
 
-  context "with invalid input" do
-    let(:date) { nil }
+    expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
-    scenario "shows an error message" do
-      visit new_investigation_corrective_action_path(investigation)
+    expect(page).to have_summary_item(key: "Date", value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Product", value: "MyBrand Washing Machine")
+    expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
+    expect(page).to have_summary_item(key: "Type of action", value: "Mandatory")
+    expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
+    expect(page).to have_summary_item(key: "Scope", value: "National")
+    expect(page).to have_summary_item(key: "Other details", value: "Urgent action following consumer reports")
 
-      expect_to_be_on_record_corrective_action_for_case_page
-      expect(page).not_to have_error_messages
-
-      fill_and_submit_form
-
-      expect(page).to have_error_messages
-    end
+    expect(page).to have_link("old_risk_assessment.txt")
   end
 
   def expect_confirmation_page_to_show_entered_data
@@ -96,8 +88,15 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_field("Month", with: date.month)
     expect(page).to have_field("Year", with: date.year)
     expect(page).to have_field("Under which legislation?", with: legislation)
-    expect(page).to have_checked_field("corrective_action_measure_type_#{measure_type}")
-    expect(page).to have_checked_field("corrective_action_duration_#{duration}")
+
+    within_fieldset "Is the corrective action mandatory?" do
+      expect(page).to have_checked_field("Yes")
+    end
+
+    within_fieldset "How long will the corrective action be in place?" do
+      expect(page).to have_checked_field(duration)
+    end
+
     expect(page).to have_field("What is the geographic scope of the action?", with: geographic_scope)
     expect(page).to have_selector("#conditional-corrective_action_related_file_yes a", text: File.basename(file))
     expect(page).to have_field("Attachment description", with: /#{Regexp.escape(file_description)}/)
@@ -116,25 +115,35 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(item).to have_text(details)
   end
 
-  def expect_case_attachments_page_to_show_file
-    expect(page).to have_selector("h1", text: "Attachments")
-    expect(page).to have_selector("h2", text: summary)
-    expect(page).to have_selector("p", text: file_description)
-  end
-
   def fill_and_submit_form
     fill_in "Summary", with: summary
     fill_in "Day",     with: date.day   if date
     fill_in "Month",   with: date.month if date
     fill_in "Year",    with: date.year  if date
+
     select legislation, from: "Under which legislation?"
+
     fill_in "Further details (optional)", with: details
-    choose "corrective_action_related_file_yes"
-    attach_file "corrective_action[file][file]", file
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+    end
+
+    attach_file "Upload a file", file
+
     fill_in "Attachment description", with: file_description
-    choose "corrective_action_measure_type_#{measure_type}"
-    choose "corrective_action_duration_#{duration}"
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose "Yes"
+    end
+
+    within_fieldset "How long will the corrective action be in place?" do
+      choose duration
+    end
+
     select geographic_scope, from: "What is the geographic scope of the action?"
+
+    fill_in "Further details (optional)", with: "Urgent action following consumer reports"
     click_button "Continue"
   end
 end
