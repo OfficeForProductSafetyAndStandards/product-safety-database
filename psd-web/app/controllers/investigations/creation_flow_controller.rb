@@ -28,7 +28,6 @@ class Investigations::CreationFlowController < ApplicationController
   # POST /xxx
   def create
     if investigation_saved?
-      binding.pry
       redirect_to investigation_path(@investigation), flash: { success: success_message }
     else
       render_wizard

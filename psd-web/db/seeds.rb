@@ -19,6 +19,97 @@ run_seeds = (Product.count.zero? || Complainant.count.zero?)
 if run_seeds
 
   Rails.logger.info("Running seeds.rb")
+
+  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations")) # rubocop:disable Rails/DynamicFindBy
+    # The structure is as follows:
+    # If you want to inspect the current structure on you review app you can inspect the review app env:
+    # $ cf7 env REVIEW_APP_NAME
+    #
+    # {
+    #   "organisations": [
+    #     {
+    #       "name": "Southampton Council",
+    #       "teams_attributes": [
+    #          {
+    #           "name": "Southampton Council",
+    #           "team_recipient_email": "southampton@example.com",
+    #           "users_attributes": [
+    #              {
+    #               "account_activated": true,
+    #               "email": "your.email@example.com",
+    #               "mobile_number": "01234567890",
+    #               "mobile_number_verified": true,
+    #               "name": "John Doe",
+    #               "password": "super secret",
+    #               "password_confirmation": "super secret",
+    #               "user_roles_attributes": [
+    #                { "name": "team_admin" },
+    #                { "name": "psd_user" }
+    #               ]
+    #              }
+    #           ]
+    #          }
+    #       ]
+    #     }
+    #   ]
+    # }
+
+    Team.accepts_nested_attributes_for :users
+    User.accepts_nested_attributes_for :user_roles
+
+    organisations.each do |organisation_attributes|
+      organisation_attributes.deep_symbolize_keys!
+      teams_attributes = organisation_attributes.delete(:teams_attributes)
+      organisation = Organisation.create! organisation_attributes
+
+      teams_attributes.map do |team_attributes|
+        (team_attributes[:users_attributes] || []).map! do |user_attributes|
+          user_attributes[:organisation] = organisation
+          user_attributes
+        end
+        organisation.teams.create! team_attributes
+      end
+    end
+  else
+    organisation = Organisation.create!(name: "Office for Product Safety and Standards")
+    enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+    operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
+
+    Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
+    Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
+    Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
+    Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
+
+    user1 = User.create!(
+      name: "Test User",
+      email: "user@example.com",
+      password: "testpassword",
+      password_confirmation: "testpassword",
+      organisation: organisation,
+      mobile_number_verified: true,
+      team: enforcement,
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+    )
+    user2 = User.create!(
+      name: "Team Admin",
+      email: "admin@example.com",
+      password: "testpassword",
+      password_confirmation: "testpassword",
+      organisation: organisation,
+      mobile_number_verified: true,
+      team: operational_support,
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+    )
+
+    %i[opss_user psd_user user].each do |role|
+      UserRole.create!(user: user1, name: role)
+    end
+    %i[team_admin opss_user psd_user user].each do |role|
+      UserRole.create!(user: user2, name: role)
+    end
+  end
+
+  User.current = User.first
   # First investigation
   investigation = Investigation::Allegation.new(
     description: "The plastic material of the doll contains bis(2-ethylhexyl) phthalate (DEHP)(measured value: 25.7% by weight). This phthalate may harm the health of children, causing possible damage to their reproductive system. The product does not comply with the REACH Regulation.",
@@ -181,6 +272,7 @@ if run_seeds
 
   investigation.products << product
 
+  User.current = User.last
   # Fifth investigation
   investigation = Investigation::Allegation.new(
     description: "Due to its shape, the candle is not sufficiently stable and falls over too easily. As a consequence, it could ignite flammable material and cause a fire.",
@@ -418,94 +510,6 @@ if run_seeds
 
   investigation.products << product
 
-  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations")) # rubocop:disable Rails/DynamicFindBy
-    # The structure is as follows:
-    # If you want to inspect the current structure on you review app you can inspect the review app env:
-    # $ cf7 env REVIEW_APP_NAME
-    #
-    # {
-    #   "organisations": [
-    #     {
-    #       "name": "Southampton Council",
-    #       "teams_attributes": [
-    #          {
-    #           "name": "Southampton Council",
-    #           "team_recipient_email": "southampton@example.com",
-    #           "users_attributes": [
-    #              {
-    #               "account_activated": true,
-    #               "email": "your.email@example.com",
-    #               "mobile_number": "01234567890",
-    #               "mobile_number_verified": true,
-    #               "name": "John Doe",
-    #               "password": "super secret",
-    #               "password_confirmation": "super secret",
-    #               "user_roles_attributes": [
-    #                { "name": "team_admin" },
-    #                { "name": "psd_user" }
-    #               ]
-    #              }
-    #           ]
-    #          }
-    #       ]
-    #     }
-    #   ]
-    # }
-
-    Team.accepts_nested_attributes_for :users
-    User.accepts_nested_attributes_for :user_roles
-
-    organisations.each do |organisation_attributes|
-      organisation_attributes.deep_symbolize_keys!
-      teams_attributes = organisation_attributes.delete(:teams_attributes)
-      organisation = Organisation.create! organisation_attributes
-
-      teams_attributes.map do |team_attributes|
-        (team_attributes[:users_attributes] || []).map! do |user_attributes|
-          user_attributes[:organisation] = organisation
-          user_attributes
-        end
-        organisation.teams.create! team_attributes
-      end
-    end
-  else
-    organisation = Organisation.create!(name: "Office for Product Safety and Standards")
-    enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
-    operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
-
-    Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
-    Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
-    Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
-    Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
-
-    user1 = User.create!(
-      name: "Test User",
-      email: "user@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: organisation,
-      mobile_number_verified: true,
-      team: enforcement,
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
-    user2 = User.create!(
-      name: "Team Admin",
-      email: "admin@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: organisation,
-      mobile_number_verified: true,
-      team: operational_support,
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
-
-    %i[opss_user psd_user user].each do |role|
-      UserRole.create!(user: user1, name: role)
-    end
-    %i[team_admin opss_user psd_user user].each do |role|
-      UserRole.create!(user: user2, name: role)
-    end
-  end
 
   Investigation.__elasticsearch__.create_index! force: true
   Investigation.import

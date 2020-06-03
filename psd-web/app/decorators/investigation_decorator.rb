@@ -63,15 +63,13 @@ class InvestigationDecorator < ApplicationDecorator
 
   # rubocop:disable Rails/OutputSafety
   def created_by
-    return if source.nil?
+    return if creator_user.nil?
+
+    decorated_user = creator_user.decorate
 
     out = []
-    out << if source.user.nil?
-             h.tag.div("Unknown")
-           else
-             h.escape_once(source.user.full_name.to_s)
-           end
-    out << h.escape_once(source.user.team.name) if source&.user&.team
+    out << h.escape_once(decorated_user.full_name.to_s)
+    out << h.escape_once(decorated_user.team.name) if creator_user.team
 
     out.join("<br />").html_safe
   end

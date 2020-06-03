@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_01_122746) do
+ActiveRecord::Schema.define(version: 2020_06_02_102601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -83,8 +83,6 @@ ActiveRecord::Schema.define(version: 2020_06_01_122746) do
     t.text "message"
     t.string "type", null: false
     t.datetime "updated_at", null: false
-    t.index ["investigation_id", "collaborator_id"], name: "index_collaborations_on_investigation_id_and_collaborator_id", unique: true
-    t.index ["investigation_id", "type", "collaborator_type", "collaborator_id"], name: "investigation_collaborator_index", unique: true
   end
 
   create_table "complainants", id: :serial, force: :cascade do |t|

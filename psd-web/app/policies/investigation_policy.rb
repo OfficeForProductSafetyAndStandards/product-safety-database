@@ -28,7 +28,7 @@ class InvestigationPolicy < ApplicationPolicy
     return true unless private
     return true if user.is_opss?
     return true if @record.owner.present? && (@record.owner&.organisation == user.organisation)
-    return true if @record.source&.user_has_gdpr_access?(user)
+    return true if @record.creator_user&.has_gdpr_access?(user)
 
     # Has the user's team been added to the case as a collaborator?
     return true if @record.teams_with_edit_access.include?(user.team)

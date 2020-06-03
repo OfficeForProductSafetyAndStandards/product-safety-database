@@ -25,9 +25,6 @@ class Investigation < ApplicationRecord
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
 
-  # TODO: Refactor to remove this callback hell
-  before_create :set_creator, :set_owner_as_current_user, :add_pretty_id
-  after_create :create_audit_activity_for_case, :send_confirmation_email
 
   after_update :create_audit_activity_for_owner,
                :create_audit_activity_for_status,
@@ -59,11 +56,13 @@ class Investigation < ApplicationRecord
 
   has_many_attached :documents
 
-  has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::EditAccess"
   has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
+  # TODO: Refactor to remove this callback hell
+  before_create :set_creator, :set_owner_as_current_user, :add_pretty_id
+  after_create :create_audit_activity_for_case, :send_confirmation_email
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::Creator"
   has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::Creator"
@@ -208,12 +207,14 @@ private
   end
 
   def set_creator
-    self.creator_user = User.current
-    self.creator_team = User.current.team
+    if User.current
+      self.creator_user = User.current
+      self.creator_team = User.current.team
+    end
   end
 
   def creator_id
-    source&.user_id
+    creator_user&.id
   end
 
   def set_owner_as_current_user
