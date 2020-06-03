@@ -77,11 +77,13 @@ class Investigation < ApplicationRecord
   def images
     documents
       .includes(:blob)
-      .joins(:blob).where("left(content_type, 5) = 'image'")
+      .joins(:blob)
+      .where("left(content_type, 5) = 'image'")
+      .where(record_type: "Investigation")
       .where.not(record: [corrective_actions, correspondences, tests])
   end
 
-  def other_supporting_informations
+  def other_supporting_information_attachments
     documents
       .includes(:blob)
       .joins(:blob)
@@ -89,14 +91,14 @@ class Investigation < ApplicationRecord
       .where.not(record: [corrective_actions, correspondences, tests])
   end
 
-  def supporting_informations
+  def supporting_information_attachments
     ActiveStorage::Attachment.includes(:blob).where(
       record: [corrective_actions, correspondences, tests]
     )
   end
 
   def supporting_information_count
-    (supporting_informations + other_supporting_informations).size
+    (supporting_information_attachments + other_supporting_information_attachments).size
   end
 
   def owner_team
