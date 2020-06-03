@@ -27,7 +27,6 @@ class Investigation < ApplicationRecord
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
 
-
   after_update :create_audit_activity_for_owner,
                :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,

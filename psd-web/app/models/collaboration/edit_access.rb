@@ -12,10 +12,10 @@ class Collaboration < ApplicationRecord
 
     def include_message=(value)
       @include_message = if value.is_a? String
-                          (value == "true")
-                        else
-                          value
-                        end
+                           (value == "true")
+                         else
+                           value
+                         end
     end
   end
 end

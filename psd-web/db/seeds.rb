@@ -510,7 +510,6 @@ if run_seeds
 
   investigation.products << product
 
-
   Investigation.__elasticsearch__.create_index! force: true
   Investigation.import
 

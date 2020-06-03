@@ -57,7 +57,7 @@ class User < ApplicationRecord
   end
 
   def has_gdpr_access?(other_user)
-    other_user.organisation == self.organisation
+    other_user.organisation == organisation
   end
 
   def in_same_team_as?(user)
