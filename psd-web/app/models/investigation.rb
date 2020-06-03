@@ -79,7 +79,6 @@ class Investigation < ApplicationRecord
       .includes(:blob)
       .joins(:blob)
       .where("left(content_type, 5) = 'image'")
-      .where(record_type: "Investigation")
       .where.not(record: [corrective_actions, correspondences, tests])
   end
 
