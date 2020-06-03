@@ -54,6 +54,9 @@ en:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"
     protected_details: "Only teams added to the case can view %{data_type}"
+    is_private:
+      false: Visible to all
+      true: Restricted for legal privilege
   investigations:
     coronavirus_related:
       show:

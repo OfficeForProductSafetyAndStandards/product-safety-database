@@ -17,6 +17,8 @@ class Investigation < ApplicationRecord
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
+  validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
+
   validates :description, presence: true, on: :update
   validates :owner_id, presence: { message: "Select case owner" }, on: :update
 
@@ -52,6 +54,7 @@ class Investigation < ApplicationRecord
   has_many :corrective_actions, dependent: :destroy
   has_many :correspondences, dependent: :destroy
   has_many :tests, dependent: :destroy
+  has_many :test_results, class_name: "Test::Result", dependent: :destroy
   has_many :alerts, dependent: :destroy
 
   has_many_attached :documents
@@ -69,6 +72,12 @@ class Investigation < ApplicationRecord
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
+  def initialize(*args)
+    raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
+
+    super
+  end
+
   def owner_team
     owner&.team
   end
@@ -79,10 +88,6 @@ class Investigation < ApplicationRecord
 
   def status
     is_closed? ? "Closed" : "Open"
-  end
-
-  def pretty_visibility
-    is_private ? ApplicationController.helpers.visibility_options[:private] : ApplicationController.helpers.visibility_options[:public]
   end
 
   def important_owner_people
@@ -145,9 +150,9 @@ class Investigation < ApplicationRecord
   end
 
   def reported_reason
-    return if super.blank?
+    return if self[:reported_reason].blank?
 
-    @reported_reason ||= ActiveSupport::StringInquirer.new(super)
+    @reported_reason ||= ActiveSupport::StringInquirer.new(self[:reported_reason])
   end
 
   def child_should_be_displayed?(user)
