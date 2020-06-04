@@ -82,7 +82,7 @@ class Investigation < ApplicationRecord
       .where.not(record: [corrective_actions, correspondences, tests])
   end
 
-  def other_supporting_information_attachments
+  def generic_supporting_information_attachments
     documents
       .includes(:blob)
       .joins(:blob)
@@ -97,7 +97,7 @@ class Investigation < ApplicationRecord
   end
 
   def supporting_information_count
-    (supporting_information_attachments + other_supporting_information_attachments).size
+    (supporting_information_attachments + generic_supporting_information_attachments).size
   end
 
   def owner_team

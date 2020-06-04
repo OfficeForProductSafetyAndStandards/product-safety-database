@@ -3,16 +3,8 @@ require "rails_helper"
 RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:investigation, owner: user.team) }
-  let(:file)          { Rails.root + "test/fixtures/files/testImage.png" }
 
-  let!(:corrective_action) { create(:corrective_action, :with_file, owner_id: user.id, investigation: investigation) }
-  let!(:email)      { create(:correspondence_email,      investigation: investigation) }
-  let!(:phone_call) { create(:correspondence_phone_call, investigation: investigation) }
-  let!(:meeting)    { create(:correspondence_meeting,    investigation: investigation) }
-
-  let(:product) { create(:product) }
-  let!(:test_request) { create(:test_request, product: product, investigation: investigation) }
-  let!(:test_result) { create(:test_result, product: product, investigation: investigation) }
+  include_context "with all types of supporting information"
 
   before { sign_in user }
 

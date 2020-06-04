@@ -8,7 +8,7 @@ module Investigations
 
       @investigation                 = investigation.decorate
       @supporting_informations       = investigation.supporting_information_attachments.decorate
-      @other_supporting_informations = investigation.other_supporting_information_attachments.decorate
+      @other_supporting_informations = investigation.generic_supporting_information_attachments.decorate
 
       @breadcrumbs = {
         items: [
