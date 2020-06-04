@@ -16,10 +16,10 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
       click_link "Add supporting information"
 
-      expect_to_be_on_new_activity_page
+      expect_to_be_on_add_supporting_information_page
 
-      within_fieldset "New activity" do
-        page.choose "Record test result"
+      within_fieldset "What type of information are you adding?" do
+        page.choose "Test result"
       end
       click_button "Continue"
 

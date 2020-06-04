@@ -10,9 +10,24 @@ class Investigations::CorrespondenceController < ApplicationController
   before_action :store_correspondence, only: %i[update]
 
   def new
-    clear_session
-    initialize_file_attachments
-    redirect_to wizard_path(steps.first, request.query_parameters)
+    @breadcrumbs = {
+      items: [
+        { text: "Cases", href: investigations_path(previous_search_params) },
+        { text: @investigation.pretty_description }
+      ]
+    }
+    return unless params[:commit] == "Continue"
+
+    case params[:correspondence_type]
+    when "email"
+      redirect_to new_investigation_email_path(@investigation)
+    when "meeting"
+      redirect_to new_investigation_meeting_path(@investigation)
+    when "phone_call"
+      redirect_to new_investigation_phone_call_path(@investigation)
+    else
+      @correspondence_type_empty = true
+    end
   end
 
   def create

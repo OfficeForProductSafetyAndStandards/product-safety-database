@@ -19,9 +19,14 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
   before { sign_in(user) }
 
   scenario "with consumer contact details and email file" do
-    visit "/cases/#{investigation.pretty_id}/activity/new"
-    expect_to_be_on_new_activity_page
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+    click_link "Add supporting information"
 
+    expect_to_be_on_add_supporting_information_page
+    choose "Correspondence"
+    click_button "Continue"
+
+    expect_to_be_on_add_correspondence_page
     choose "Record email"
     click_button "Continue"
 
@@ -113,9 +118,14 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
   end
 
   scenario "with non-consumer contact details and summary and subject and body" do
-    visit "/cases/#{investigation.pretty_id}/activity/new"
-    expect_to_be_on_new_activity_page
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+    click_link "Add supporting information"
 
+    expect_to_be_on_add_supporting_information_page
+    choose "Correspondence"
+    click_button "Continue"
+
+    expect_to_be_on_add_correspondence_page
     choose "Record email"
     click_button "Continue"
 

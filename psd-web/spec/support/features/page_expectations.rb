@@ -81,6 +81,16 @@ module PageExpectations
     expect(page).to have_selector("p",  text: document.description)
   end
 
+  def expect_to_be_on_add_supporting_information_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information/new")
+    expect(page).to have_selector("h1", text: "What type of information are you adding?")
+  end
+
+  def expect_to_be_on_add_correspondence_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/correspondence/new")
+    expect(page).to have_selector("h1", text: "What type of correspondence are you adding?")
+  end
+
   def expect_to_be_on_product_attachments_page
     expect(page).to have_selector("h2", text: "Attachments")
     expect(page).to have_selector("h2", text: document.title)
@@ -105,8 +115,8 @@ module PageExpectations
     expect(page).to have_text(/Case ID: ([\d-]+)/)
   end
 
-  def expect_to_be_on_new_activity_page
-    expect_page_to_have_h1("New activity")
+  def expect_to_be_on_new_comment_page
+    expect_page_to_have_h1("Add comment")
   end
 
   def expect_to_be_on_record_test_result_page

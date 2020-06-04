@@ -11,11 +11,13 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
     sign_in(user)
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
-
     click_link "Add supporting information"
 
-    expect_to_be_on_new_activity_page
+    expect_to_be_on_add_supporting_information_page
+    choose "Correspondence"
+    click_button "Continue"
 
+    expect_to_be_on_add_correspondence_page
     choose "Record meeting"
     click_button "Continue"
 

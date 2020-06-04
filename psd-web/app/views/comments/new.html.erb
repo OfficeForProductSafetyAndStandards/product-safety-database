@@ -5,7 +5,7 @@
     <div class="govuk-grid-column-one-third">
       <%= govukBackLink(
         text: "Back to #{@investigation.pretty_description.downcase}",
-        href: investigation_path(@investigation)
+        href: investigation_activity_path(@investigation)
       ) %>
     </div>
   </div>

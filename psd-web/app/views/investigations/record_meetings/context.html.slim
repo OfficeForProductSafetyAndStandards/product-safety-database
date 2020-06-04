@@ -1,7 +1,7 @@
 = page_title "Record meeting", errors: @correspondence.errors.any?
 - content_for :after_header do
   = link_to "Back to #{@investigation.pretty_description.downcase}",
-  investigation_path(@investigation),
+  new_investigation_correspondence_path(@investigation),
   class: "govuk-back-link"
 = form_with(model: @correspondence, local: true, url: wizard_path, method: :put) do |form|
   .govuk-grid-row

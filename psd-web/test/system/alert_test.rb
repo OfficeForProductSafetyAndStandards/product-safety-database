@@ -12,11 +12,10 @@ class AlertTest < ApplicationSystemTestCase
       added_by_user: users(:opss)
     )
     @alert = alerts :one
-    go_to_new_activity_for_investigation @investigation
+    go_to_new_alert_for_investigation @investigation
   end
 
   test "prepopulates email content with link to case" do
-    fill_in_activity_selection
     click_on "Compose new alert"
     assert_includes(find_field(:alert_description).value, investigation_path(@investigation))
   end
@@ -24,7 +23,6 @@ class AlertTest < ApplicationSystemTestCase
   test "sends notify email" do
     stub_email_alert
     stub_email_preview @alert
-    fill_in_activity_selection
     click_on "Compose new alert"
 
     fill_in_compose_alert @alert
@@ -52,8 +50,7 @@ class AlertTest < ApplicationSystemTestCase
     @alert = alerts :on_private_investigation
     stub_email_preview @alert
 
-    go_to_new_activity_for_investigation @private_investigation
-    fill_in_activity_selection
+    go_to_new_alert_for_investigation @private_investigation
 
     assert_css "h1", text: "You cannot send an alert about a restricted case"
 
@@ -61,15 +58,10 @@ class AlertTest < ApplicationSystemTestCase
     assert_css "h1", text: "Legal privilege"
   end
 
-  def go_to_new_activity_for_investigation(investigation)
+  def go_to_new_alert_for_investigation(investigation)
     visit investigation_path(investigation)
 
-    click_link "Add supporting information"
-  end
-
-  def fill_in_activity_selection
-    choose "activity_type_alert", visible: false
-    click_on "Continue"
+    click_link "Send email alert"
   end
 
   def fill_in_compose_alert(alert)

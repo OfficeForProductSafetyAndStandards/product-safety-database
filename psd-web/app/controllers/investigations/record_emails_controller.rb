@@ -2,6 +2,12 @@ class Investigations::RecordEmailsController < Investigations::CorrespondenceCon
   set_file_params_key :correspondence_email
   set_attachment_names :email_file, :email_attachment
 
+  def new
+    clear_session
+    initialize_file_attachments
+    redirect_to wizard_path(steps.first, request.query_parameters)
+  end
+
 private
 
   def audit_class

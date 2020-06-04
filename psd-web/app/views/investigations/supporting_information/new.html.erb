@@ -1,0 +1,44 @@
+<%= render "investigations/pages_top" %>
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.type.demodulize.downcase}",
+    href: investigation_supporting_information_index_path(@investigation)
+  ) %>
+<% end %>
+
+<%
+  supporting_information_types = {
+    "comment": "Comment or case note",
+    "corrective_action": "Corrective action",
+    "correspondence": "Correspondence",
+    "image": "Image",
+    "testing_result": "Test result"
+  }
+
+  radio_items = supporting_information_types.map { |type, label| { text: label, value: type } }.tap do |items|
+                  items.push divider: "or"
+                  items.push text: "Other document or attachment", value: "generic_information"
+               end
+%>
+
+<%= form_with local: true, url: investigation_supporting_information_index_path(@investigation) do |form| %>
+  <% error_message = @supporting_information_type_empty && { text: "Supporting information type must not be empty", href: "#activity_type-error" } %>
+  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+  <% if error_message %>
+    <%= render "components/govuk_error_summary", titleText: "There is a problem", errorList: [error_message] %>
+  <% end %>
+  <% header = capture do %>
+    <h1 class="govuk-heading-l"> What type of information are you adding? </h1>
+  <% end %>
+  <%= render "form_components/govuk_radios",
+            form: form,
+            key: :supporting_information_type,
+            errorMessage: error_message,
+            items: radio_items,
+            fieldset: { legend: { html: header } } %>
+  <%= form.submit "Continue", class: "govuk-button" %>
+<% end %>
+<p class="govuk-body">
+  <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation) %>
+</p>

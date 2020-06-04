@@ -1,0 +1,37 @@
+<%= render "investigations/pages_top" %>
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.type.demodulize.downcase}",
+    href: new_investigation_supporting_information_path(@investigation)
+  ) %>
+<% end %>
+
+<%
+  correspondence_types = {
+      "email": "Record email",
+      "meeting": "Record meeting",
+      "phone_call": "Record phone call"
+  }
+%>
+
+<%= form_with local: true, url: new_investigation_correspondence_path(@investigation), method: :get do |form| %>
+  <% error_message = @correspondence_type_empty && { text: "Correspondence type must not be empty", href: "#activity_type-error" } %>
+  <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+  <% if error_message %>
+    <%= render "components/govuk_error_summary", titleText: "There is a problem", errorList: [error_message] %>
+  <% end %>
+  <% header = capture do %>
+    <h1 class="govuk-heading-l"> What type of correspondence are you adding? </h1>
+  <% end %>
+  <%= render "form_components/govuk_radios",
+            form: form,
+            key: :correspondence_type,
+            errorMessage: error_message,
+            items: correspondence_types.map { |type, label| { text: label, value: type } },
+            fieldset: { legend: { html: header } } %>
+  <%= form.submit "Continue", class: "govuk-button" %>
+<% end %>
+<p class="govuk-body">
+  <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation) %>
+</p>
