@@ -29,7 +29,7 @@ FactoryBot.define do
   trait :with_antivirus_checked_document do
     with_document_info
 
-    after :create do |model, evaluator|
+    before :create do |model, evaluator|
       file = ActiveSupportHelper.create_file(
         model,
         evaluator,

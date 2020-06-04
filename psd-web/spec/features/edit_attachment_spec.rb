@@ -18,7 +18,7 @@ RSpec.feature "Editing an attachment on a case", :with_stubbed_elasticsearch, :w
 
     fill_and_submit_attachment_details_page
 
-    click_link "Attachments (1)"
+    click_link "Supporting information (1)"
 
     expect_case_attachments_page_to_show_entered_information
 
