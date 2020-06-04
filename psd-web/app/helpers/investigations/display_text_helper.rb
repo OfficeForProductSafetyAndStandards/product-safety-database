@@ -30,7 +30,7 @@ module Investigations::DisplayTextHelper
         active: is_current_tab.images?
       },
       {
-        href: investigation_supporting_information_path(investigation),
+        href: investigation_supporting_information_index_path(investigation),
         text: "Supporting information",
         count: " (#{@investigation.supporting_information_count})",
         active: is_current_tab.supporting_information?
