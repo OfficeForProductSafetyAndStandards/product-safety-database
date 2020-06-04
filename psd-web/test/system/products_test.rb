@@ -15,7 +15,7 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
 
     products_link    = "Products (#{@investigation.products.count})"
     businesses_link  = "Businesses (#{@investigation.businesses.count})"
-    attachments_link = "Attachments (#{@investigation.documents.count})"
+    attachments_link = "Images (#{@investigation.images.count})"
     activity_link    = "Activity"
 
     with_options class: "hmcts-sub-navigation__link" do |p|
@@ -26,7 +26,7 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
       p.assert_link businesses_link,
                     href: investigation_businesses_path(@investigation)
       p.assert_link attachments_link,
-                    href: investigation_attachments_path(@investigation)
+                    href: investigation_images_path(@investigation)
       p.assert_link activity_link,
                     href: investigation_activity_path(@investigation)
     end
@@ -38,7 +38,7 @@ class InvestigationSubNavigation < ApplicationSystemTestCase
     assert_css "h1.govuk-heading-l", text: "Businesses"
 
     click_link attachments_link
-    assert_css "h1.govuk-heading-l", text: "Attachments"
+    assert_css "h1.govuk-heading-l", text: "Images"
 
     click_link activity_link
     assert_css "h1.govuk-heading-l", text: "Activity"

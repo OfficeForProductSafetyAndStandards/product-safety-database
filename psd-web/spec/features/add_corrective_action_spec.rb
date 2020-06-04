@@ -36,7 +36,12 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_confirmation_page_to_show_entered_data
 
-    click_link "Edit details"
+      expect_case_activity_page_to_show_entered_data
+
+      click_link "Supporting information (1)"
+
+      expect_case_supporting_information_page_to_show_file
+    end
 
     expect_form_to_show_input_data
 
@@ -113,6 +118,12 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")
     expect(item).to have_text(details)
+  end
+
+  def expect_case_supporting_information_page_to_show_file
+    expect(page).to have_selector("h1", text: "Supporting information")
+    expect(page).to have_selector("h2", text: summary)
+    expect(page).to have_selector("p", text: file_description)
   end
 
   def fill_and_submit_form

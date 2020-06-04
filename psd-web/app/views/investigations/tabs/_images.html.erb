@@ -1,4 +1,4 @@
-<% page_heading = "Attachments" %>
+<% page_heading = "Images" %>
 <%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
 
 <div class="govuk-grid-row">
@@ -8,7 +8,7 @@
 
     <% if policy(@investigation).update?(user: current_user) %>
       <p class="govuk-body">
-        <%= link_to "Add attachment", new_investigation_new_path(@investigation) %>
+        <%= link_to "Add image", new_investigation_new_path(@investigation) %>
       </p>
     <% end %>
 
@@ -16,12 +16,14 @@
   </div>
 </div>
 
-<%= render "documents_list_summary", parent: @investigation %>
+<% @investigation.images.each do |document| %>
+  <%= render "documents/document_card", document: document, parent: @investigation %>
+<% end %>
 
-<% if @investigation.documents.length.zero? %>
+<% if @investigation.images.none? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <p class="govuk-body">No attachments</p>
+      <p class="govuk-body">No images</p>
     </div>
   </div>
 <% end %>
