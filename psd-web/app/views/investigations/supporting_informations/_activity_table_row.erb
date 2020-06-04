@@ -1,15 +1,15 @@
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
-    <%= activity.title %>
+    <%= activity_table_row.title %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity.type.humanize %>
+    <%= activity_table_row.record.type.humanize %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity.updated_at.to_date.to_s(:govuk) %>
+    <%= activity_table_row.record.updated_at.to_date.to_s(:govuk) %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity.created_at.to_s(:govuk) %>
-    <span class="govuk-caption-m"> by <%= activity.source.show(current_user) %></span>
+    <%= activity_table_row.record.created_at.to_s(:govuk) %>
+    <span class="govuk-caption-m"> by <%= activity_table_row.record.source.show(current_user) %></span>
   </td>
 </tr>

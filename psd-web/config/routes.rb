@@ -118,8 +118,6 @@ Rails.application.routes.draw do
       resource :comment, only: %i[create new]
     end
 
-    resources :supporting_informations, path: "supporting-informations", controller: "investigations/supporting_informations", only: %i[index]
-
     resources :products, only: %i[new create index], controller: "investigations/products" do
       member do
         put :link, path: ""

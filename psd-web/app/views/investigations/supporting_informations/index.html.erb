@@ -1,3 +1,19 @@
 <%= render "investigations/pages_top" %>
 <%= investigation_sub_nav(@investigation, current_tab: "supporting_information") %>
 <%= render "investigations/tabs/supporting_information" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <th class="govuk-table__header">Activity</th>
+        <th class="govuk-table__header">Type</th>
+        <th class="govuk-table__header">Date of activity</th>
+        <th class="govuk-table__header">Date added</th>
+      </thead>
+      <tbody class="govuk-table__body">
+        <%= render partial: "activity_table_row", collection: @supporting_information %>
+      </tbody>
+    </table>
+  </div>
+</div>
