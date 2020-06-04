@@ -130,6 +130,14 @@ module PageExpectations
     end
   end
 
+  def expect_to_be_on_corrective_action_page(case_id:, corrective_action_id: nil)
+    if corrective_action_id
+      expect(page).to have_current_path("/cases/#{case_id}/corrective-actions/#{corrective_action_id}")
+    else
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/corrective-actions\/[\d]+/)
+    end
+  end
+
   # Add an allegation flow
   def expect_to_be_on_allegation_complainant_page
     expect(page).to have_current_path("/allegation/complainant")
