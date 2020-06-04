@@ -56,7 +56,6 @@ private
   def attach_files
     attach_blob_to_attachment_slot(@transcript_blob, @correspondence.transcript)
     attach_blob_to_attachment_slot(@related_attachment_blob, @correspondence.related_attachment)
-    attach_blobs_to_list(@transcript_blob, @related_attachment_blob, @investigation.documents)
   end
 
   def save_attachments

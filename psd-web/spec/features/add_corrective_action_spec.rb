@@ -17,7 +17,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   before { sign_in(user) }
 
   context "with valid input" do
-    scenario "shows inputted data on the confirmation page and on the case attachments and activity pages" do
+    scenario "shows inputted data on the confirmation page and on the activity pages" do
       visit new_investigation_corrective_action_path(investigation)
 
       expect_to_be_on_record_corrective_action_for_case_page
@@ -38,10 +38,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
       click_on "Activity"
 
       expect_case_activity_page_to_show_entered_data
-
-      click_on "Attachments (1)"
-
-      expect_case_attachments_page_to_show_file
     end
 
     scenario "going back to the form from the confirmation page shows inputted data" do
@@ -114,12 +110,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")
     expect(item).to have_text(details)
-  end
-
-  def expect_case_attachments_page_to_show_file
-    expect(page).to have_selector("h1", text: "Attachments")
-    expect(page).to have_selector("h2", text: summary)
-    expect(page).to have_selector("p", text: file_description)
   end
 
   def fill_and_submit_form
