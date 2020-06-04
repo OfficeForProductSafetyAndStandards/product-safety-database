@@ -12,7 +12,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
     @investigation_one.owner = users(:southampton_bob)
-    @investigation_one.source = sources(:investigation_one)
+    @investigation_one.creator_user = users(:southampton)
     @investigation_one.save
     @investigation_one.edit_access_collaborations.create!(
       collaborator: teams(:opss_enforcement),

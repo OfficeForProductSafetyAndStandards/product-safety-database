@@ -66,8 +66,8 @@ class Investigation < ApplicationRecord
   before_create :set_creator, :set_owner_as_current_user, :add_pretty_id
   after_create :create_audit_activity_for_case, :send_confirmation_email
 
-  has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::Creator"
-  has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::Creator"
+  has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
+  has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
