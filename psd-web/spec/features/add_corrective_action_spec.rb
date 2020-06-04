@@ -59,7 +59,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Date", value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product", value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Type of action", value: "Mandatory")
