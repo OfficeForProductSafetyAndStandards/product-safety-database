@@ -10,7 +10,7 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
   scenario "deletes the attachment and creates activity" do
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    expect_to_be_on_suppoting_informations_page
+    expect_to_be_on_supporting_information_page
 
     click_link "Remove document"
 

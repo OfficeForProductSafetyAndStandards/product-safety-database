@@ -74,7 +74,7 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Add a team to the case")
   end
 
-  def expect_to_be_on_suppoting_informations_page
+  def expect_to_be_on_supporting_information_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
     expect(page).to have_selector("h1", text: "Supporting information")
     expect(page).to have_selector("h2", text: document.decorate.title)

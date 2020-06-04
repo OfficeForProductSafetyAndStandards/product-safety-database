@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
-  describe "supporting informations" do
+  describe "supporting information" do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation)                           { create(:investigation, owner: user.team) }
     let(:generic_supporting_information_filename) { "a generic supporting information" }
