@@ -1,0 +1,49 @@
+<% page_heading = @correspondence.overview %>
+<% page_title page_heading %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Correspondence</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @correspondence.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <% if @correspondence.is_a? Correspondence::Email %>
+      <%= render "investigations/correspondence/email_summary", correspondence: @correspondence %>
+    <% elsif @correspondence.is_a? Correspondence::PhoneCall %>
+      <%= render "investigations/correspondence/phone_call_summary", correspondence: @correspondence %>
+    <% elsif @correspondence.is_a? Correspondence::Meeting %>
+      <%= render "investigations/correspondence/meeting_summary", correspondence: @correspondence %>
+
+    <% end %>
+
+  </div>
+
+  <% if @correspondence.documents.any? %>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">Attachments</h1>
+      <% @correspondence.documents.each do |document| %>
+        <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
+
+        <%= document_placeholder(document_file_extension(document)) %>
+
+        <% if document.blob.metadata["description"].present? %>
+          <p class="govuk-body"><%= document.blob.metadata["description"] %></p>
+        <% end %>
+
+      <% end %>
+    </div>
+  <% end %>
+</div>

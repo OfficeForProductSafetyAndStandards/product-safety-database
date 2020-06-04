@@ -55,6 +55,11 @@
 
     <% elsif activity.is_a?(AuditActivity::CorrectiveAction::Add) && activity.corrective_action %>
       <%=  link_to "View corrective action", investigation_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
+
+    <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) || activity.is_a?(AuditActivity::Correspondence::AddPhoneCall) || activity.is_a?(AuditActivity::Correspondence::AddMeeting)  %>
+
+      <%=  link_to "View correspondence", investigation_correspondence_path(@investigation, activity.correspondence), class: "govuk-link" %>
+
     <% elsif activity.has_attachment? %>
       <% activity.attachments.each do |name, attachment| %>
         <%= link_to "View #{name}", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>

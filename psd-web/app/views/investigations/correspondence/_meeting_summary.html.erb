@@ -1,0 +1,29 @@
+<% rows = [
+    {
+      key: { text: "Date" },
+      value: { text: correspondence.correspondence_date.to_s(:govuk) }
+    },
+
+    {
+      key: { text: "Meeting with" },
+      value: { text: correspondence.correspondent_name }
+    }
+  ]
+
+  if correspondence.transcript.attached?
+    rows << {
+      key: { text: "Transcript" },
+      value: { text: link_to("View transcript", correspondence.transcript) }
+    }
+  end
+
+  if correspondence.details.present?
+    rows << {
+      key: { text: "Notes" },
+      value: { text: correspondence.details }
+    }
+  end
+
+%>
+
+<%= govukSummaryList(rows: rows) %>
