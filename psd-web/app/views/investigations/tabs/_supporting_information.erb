@@ -21,12 +21,12 @@
 <% end %>
 
 <% if @generic_attachments_visible %>
-  <% @other_supporting_information.each do |attachement| %>
-    <%= render "documents/generic_document_card", document: attachement, parent: @investigation %>
+  <% @other_supporting_information.each do |attachment| %>
+    <%= render "documents/generic_document_card", document: attachment, parent: @investigation %>
   <% end %>
 <% else %>
-  <% @other_supporting_information.each do |attachement| %>
-    <%= render "documents/restricted_generic_document_card", document: attachement %>
+  <% @other_supporting_information.each do |attachment| %>
+    <%= render "documents/restricted_generic_document_card", document: attachment %>
   <% end %>
 <% end %>
 
