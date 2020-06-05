@@ -88,6 +88,7 @@ private:
   description: private investigation
   product_category: Alarms
   is_private: true
+  type: Investigation::Allegation
   pretty_id: 1902-0012
 
 allegation:

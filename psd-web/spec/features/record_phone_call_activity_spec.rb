@@ -197,7 +197,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
   def expect_case_activity_page_to_show_restricted_information
     item = page.find("h3", text: "Phone call added").find(:xpath, "..")
-    expect(item).to have_text("Phone call by #{user.name} (#{user.team.name}), #{Time.zone.today.strftime('%d %B %Y')}")
+    expect(item).to have_text("Phone call by #{user.name} (#{user.team.name}), #{Time.zone.today.strftime('%e %B %Y').lstrip}")
     expect(item).to have_text("Restricted access")
     expect(item).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact #{user.organisation.name}, who created this activity, to obtain these details if required.")
   end
