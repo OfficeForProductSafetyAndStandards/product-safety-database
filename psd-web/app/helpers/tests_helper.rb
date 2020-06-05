@@ -86,12 +86,12 @@ module TestsHelper
     test_result.documents.each do |document|
       attachment_description = document.blob.metadata["description"]
 
-      if attachment_description.present?
-        rows << {
-          key: { text: "Attachment description" },
-          value: { text: attachment_description }
-        }
-      end
+      next if attachment_description.blank?
+
+      rows << {
+        key: { text: "Attachment description" },
+        value: { text: attachment_description }
+      }
     end
 
     rows
