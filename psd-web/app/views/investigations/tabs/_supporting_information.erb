@@ -22,7 +22,7 @@
 
 <% if @generic_attachments_visible %>
   <% @other_supporting_information.each do |attachement| %>
-    <%= render "documents/document_card", document: attachement, parent: @investigation %>
+    <%= render "documents/generic_document_card", document: attachement, parent: @investigation %>
   <% end %>
 <% else %>
   <% @other_supporting_information.each do |attachement| %>

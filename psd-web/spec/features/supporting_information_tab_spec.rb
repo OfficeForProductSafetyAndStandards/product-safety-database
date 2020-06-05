@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:investigation, :with_document, owner: user.team) }
 
   include_context "with all types of supporting information"
