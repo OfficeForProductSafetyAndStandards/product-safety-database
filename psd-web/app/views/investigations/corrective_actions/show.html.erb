@@ -1,0 +1,79 @@
+<% page_heading = @corrective_action.summary %>
+<% page_title page_heading %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Corrective action</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @corrective_action.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <% rows = [
+      {
+        key: { text: "Date of action" },
+        value: { text: @corrective_action.date_decided.to_s(:govuk) }
+      },
+      {
+        key: { text: "Legislation" },
+        value: { text: @corrective_action.legislation }
+      },
+      {
+        key: { text: "Product" },
+        value: { html: link_to(@corrective_action.product.name, product_path(@corrective_action.product)) }
+      },
+      {
+        key: { text: "Business" },
+        value: { html: @corrective_action.business ? link_to(@corrective_action.business.trading_name, business_path(@corrective_action.business)) : "Not specified" }
+      },
+      {
+        key: { text: "Type of action" },
+        value: { text: @corrective_action.measure_type.upcase_first }
+      },
+      {
+        key: { text: "Duration of measure" },
+        value: { text: @corrective_action.duration.upcase_first }
+      },
+      {
+        key: { text: "Scope" },
+        value: { text: @corrective_action.geographic_scope }
+      }
+    ]
+
+    if @corrective_action.details.present?
+      rows << {
+        key: { text: "Other details" },
+        value: { text: @corrective_action.details }
+      }
+    end
+    %>
+    <%= govukSummaryList(rows: rows) %>
+  </div>
+
+  <% if @corrective_action.documents.any? %>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">Attachments</h1>
+      <% @corrective_action.documents.each do |document| %>
+        <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
+
+        <%= document_placeholder(document_file_extension(document)) %>
+
+        <% if document.blob.metadata["description"].present? %>
+          <p class="govuk-body"><%= document.blob.metadata["description"] %></p>
+        <% end %>
+
+      <% end %>
+    </div>
+  <% end %>
+</div>

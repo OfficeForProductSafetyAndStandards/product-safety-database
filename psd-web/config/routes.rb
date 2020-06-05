@@ -140,6 +140,8 @@ Rails.application.routes.draw do
 
     resources :test_results, controller: "investigations/test_results", only: :show, path: "test-results"
 
+    resources :actions, controller: "investigations/view_corrective_actions", only: :show, path: "corrective-actions"
+
     resources :tests, controller: "investigations/tests", only: %i[show create update] do
       collection do
         get :new_request
