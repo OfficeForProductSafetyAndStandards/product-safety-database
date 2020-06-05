@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_28_082345) do
+ActiveRecord::Schema.define(version: 2020_06_04_094957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(version: 2020_05_28_082345) do
     t.text "non_compliant_reason"
     t.uuid "owner_id"
     t.string "owner_type"
-    t.string "pretty_id"
+    t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
@@ -189,7 +189,7 @@ ActiveRecord::Schema.define(version: 2020_05_28_082345) do
     t.datetime "updated_at", null: false
     t.string "user_title"
     t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
-    t.index ["pretty_id"], name: "index_investigations_on_pretty_id"
+    t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
 

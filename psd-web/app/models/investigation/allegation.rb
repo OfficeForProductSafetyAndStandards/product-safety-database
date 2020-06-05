@@ -14,10 +14,8 @@ class Investigation < ApplicationRecord
       "allegation"
     end
 
-  private
-
-    def create_audit_activity_for_case
-      AuditActivity::Investigation::AddAllegation.from(self)
+    def case_created_audit_activity_class
+      AuditActivity::Investigation::AddAllegation
     end
   end
 end

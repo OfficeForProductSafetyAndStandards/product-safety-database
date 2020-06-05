@@ -527,8 +527,12 @@ private
     return false unless records_valid?
 
     @product.save
+
+    # Product must be added before investigation is saved for correct audit
+    # activity title generation
     @investigation.products << @product
-    @investigation.save
+    CreateCase.call(investigation: @investigation, user: current_user)
+
     save_businesses
     save_corrective_actions
     save_test_results

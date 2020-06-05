@@ -45,7 +45,6 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
         expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it "adds an activity audit record" do
         result
         last_added_activity = investigation.activities.order(:id).first
@@ -56,7 +55,6 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
           expect(last_added_activity.source.user_id).to eql(user.id)
         end
       end
-      # rubocop:enable RSpec/ExampleLength
     end
   end
 end
