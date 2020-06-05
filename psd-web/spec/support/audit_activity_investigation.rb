@@ -2,38 +2,9 @@ RSpec.shared_examples "an audit activity for investigation added" do
   let(:investigation) { create(factory, factory_trait) }
   let(:factory_trait) { nil }
 
-  describe ".from" do
-    subject(:activity) { described_class.from(investigation) }
-
-    it "sets the metadata" do
-      expect(activity.metadata).to be_a(Hash)
-    end
-
-    # This is deprecated functionality which exists for compatibility with
-    # other activity classes only.
-    describe "deprecated attributes" do
-      it "does not set the title" do
-        expect(activity[:title]).to be_nil
-      end
-
-      it "does not set the body" do
-        expect(activity[:body]).to be_nil
-      end
-    end
-
-    context "when there is a document attached to the investigation" do
-      let(:factory_trait) { :with_antivirus_checked_document }
-
-      it "attaches it to the activity" do
-        expect(activity.attachments.length).to eq(1)
-      end
-    end
-  end
-
   describe ".build_metadata" do
     subject(:metadata) { described_class.build_metadata(investigation) }
 
-    # rubocop:disable RSpec/ExampleLength
     it "adds the investigation data" do
       expect(metadata[:investigation]).to eq({
         title: investigation.decorate.title,
@@ -43,7 +14,6 @@ RSpec.shared_examples "an audit activity for investigation added" do
         product_category: investigation.product_category
       })
     end
-    # rubocop:enable RSpec/ExampleLength
 
     context "when there is an owner" do
       it "adds the owner ID" do
@@ -56,18 +26,6 @@ RSpec.shared_examples "an audit activity for investigation added" do
 
       it "adds the complainant ID" do
         expect(metadata[:complainant_id]).to eq(investigation.complainant.id)
-      end
-    end
-
-    context "when there is a document attached" do
-      let(:factory_trait) { :with_antivirus_checked_document }
-
-      it "adds the attachment ID" do
-        expect(metadata[:attachment][:id]).to eq(investigation.documents.first.id)
-      end
-
-      it "adds the attachment filename" do
-        expect(metadata[:attachment][:filename]).to eq(investigation.documents.first.filename)
       end
     end
   end

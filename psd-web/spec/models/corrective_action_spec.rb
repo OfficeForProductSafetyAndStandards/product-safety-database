@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
+RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:corrective_action) do
     build(
       :corrective_action,
@@ -13,7 +13,8 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
       duration: duration,
       geographic_scope: geographic_scope,
       details: details,
-      related_file: related_file
+      related_file: related_file,
+      investigation: investigation
     )
   end
 
@@ -25,6 +26,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
   let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { "No" }
+  let(:investigation) { build(:investigation) }
 
   describe "#valid?" do
     context "with valid input" do
@@ -151,6 +153,9 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch do
   end
 
   describe "#create_audit_activity", :with_stubbed_mailer do
+    # The audit activity requires pretty_id to be set on the Investigation
+    let(:investigation) { create(:investigation) }
+
     it "creates an activity" do
       expect { corrective_action.save }.to change { AuditActivity::CorrectiveAction::Add.count }.by(1)
     end

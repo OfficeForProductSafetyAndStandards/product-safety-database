@@ -10,6 +10,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
       :allegation,
       is_closed: false,
       owner: user_from_owner_team.team,
+      creator: user_from_owner_team,
       edit_access_collaborations: [
         create(
           :collaboration_edit_access,

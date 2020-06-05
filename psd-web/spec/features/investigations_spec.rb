@@ -18,13 +18,18 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     }
   end
 
-  let!(:investigation_last_updated_3_days_ago) { create(:allegation, updated_at: 3.days.ago, description: "Electric skateboard investigation").decorate }
-  let!(:investigation_last_updated_2_days_ago) { create(:allegation, updated_at: 2.days.ago, description: "FastToast toaster investigation").decorate }
-  let!(:investigation_last_updated_1_days_ago) { create(:allegation, updated_at: 1.day.ago,  description: "Counterfeit chargers investigation").decorate }
+  let!(:investigation_last_updated_3_days_ago) { create(:allegation, description: "Electric skateboard investigation").decorate }
+  let!(:investigation_last_updated_2_days_ago) { create(:allegation, description: "FastToast toaster investigation").decorate }
+  let!(:investigation_last_updated_1_days_ago) { create(:allegation, description: "Counterfeit chargers investigation").decorate }
 
   before do
     allow(AuditActivity::Investigation::Base).to receive(:from)
-    create_list :project, 18, updated_at: 4.days.ago
+    create_list :project, 18
+
+    investigation_last_updated_3_days_ago.update(updated_at: 3.days.ago)
+    investigation_last_updated_2_days_ago.update(updated_at: 2.days.ago)
+    investigation_last_updated_1_days_ago.update(updated_at: 1.day.ago)
+    Investigation::Project.update_all(updated_at: 4.days.ago)
   end
 
   scenario "lists cases correctly sorted" do
