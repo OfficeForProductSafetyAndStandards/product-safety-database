@@ -61,7 +61,6 @@ class InvestigationDecorator < ApplicationDecorator
     "#{case_type.upcase_first}: #{pretty_id}"
   end
 
-  # rubocop:disable Rails/OutputSafety
   def created_by
     return if source.nil?
 
@@ -75,7 +74,6 @@ class InvestigationDecorator < ApplicationDecorator
 
     out.join("<br />").html_safe
   end
-  # rubocop:enable Rails/OutputSafety
 
   def products_list
     product_count = products.count
@@ -101,7 +99,6 @@ class InvestigationDecorator < ApplicationDecorator
 
 private
 
-  # rubocop:disable Rails/OutputSafety
   def category
     @category ||= \
       begin
@@ -119,7 +116,6 @@ private
         end
       end
   end
-  # rubocop:enable Rails/OutputSafety
 
   def should_display_date_received?
     false

@@ -127,7 +127,8 @@ private
 
     attach_blobs_to_list(@file_blob, @investigation.documents)
     @investigation.complainant = @complainant
-    @investigation.save
+
+    CreateCase.call(investigation: @investigation, user: current_user).success?
   end
 
   def complainant_params

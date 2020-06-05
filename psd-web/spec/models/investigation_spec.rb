@@ -2,14 +2,6 @@ require "rails_helper"
 
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
   describe "#teams_with_access" do
-    context "when there is no case owner" do
-      let(:investigation) { create(:allegation, owner: nil) }
-
-      it "is an empty list" do
-        expect(investigation.teams_with_access).to be_empty
-      end
-    end
-
     context "when there is just a team that is the case owner" do
       let(:team) { create(:team) }
       let(:investigation) { create(:allegation, owner: team) }
@@ -39,14 +31,6 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#owner_team" do
-    context "when there is no case owner" do
-      let(:investigation) { create(:allegation, owner: nil) }
-
-      it "is nil" do
-        expect(investigation.owner_team).to be_nil
-      end
-    end
-
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }
       let(:investigation) { create(:allegation, owner: team) }
