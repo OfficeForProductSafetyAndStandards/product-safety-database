@@ -1,0 +1,54 @@
+<% page_heading = @phone_call.overview %>
+<% page_title page_heading %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Phone call</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @phone_call.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <% rows = [
+        {
+          key: { text: "Date" },
+          value: { text: @phone_call.correspondence_date.to_s(:govuk) }
+        },
+
+        {
+          key: { text: "Call with" },
+          value: { text: "#{@phone_call.correspondent_name} (#{@phone_call.phone_number})" }
+        }
+      ]
+
+      if @phone_call.transcript.attached?
+        rows << {
+          key: { text: "Transcript" },
+          value: { text: link_to("View transcript", @phone_call.transcript) }
+        }
+      end
+
+      if @phone_call.details.present?
+        rows << {
+          key: { text: "Notes" },
+          value: { text: @phone_call.details }
+        }
+      end
+
+    %>
+
+    <%= govukSummaryList(rows: rows) %>
+
+  </div>
+</div>

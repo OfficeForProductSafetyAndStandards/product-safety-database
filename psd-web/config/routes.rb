@@ -131,6 +131,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :phone_calls, controller: "investigations/view_phone_calls", only: :show, constraints: { id: /\d+/ }
+    resources :emails, controller: "investigations/view_emails", only: :show, constraints: { id: /\d+/ }
+    resources :meetings, controller: "investigations/view_meetings", only: :show, constraints: { id: /\d+/ }
+
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
     resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[show new create update]
     resources :emails, controller: "investigations/emails", only: %i[show new create update]
@@ -141,7 +145,6 @@ Rails.application.routes.draw do
     resources :test_results, controller: "investigations/test_results", only: :show, path: "test-results"
 
     resources :actions, controller: "investigations/view_corrective_actions", only: :show, path: "corrective-actions"
-    resources :correspondence, controller: "investigations/view_correspondence", only: :show
 
     resources :tests, controller: "investigations/tests", only: %i[show create update] do
       collection do

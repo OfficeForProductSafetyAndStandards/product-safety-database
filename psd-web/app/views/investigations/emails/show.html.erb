@@ -1,0 +1,82 @@
+<% page_heading = @email.overview %>
+<% page_title page_heading %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Email</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @email.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <% rows = [
+      {
+        key: { text: "Date" },
+        value: { text: @email.correspondence_date.to_s(:govuk) }
+      }
+    ]
+
+
+      direction_key = @email.outbound? ? "To" : "From"
+
+      rows << {
+        key: { text: direction_key },
+        value: { text: "#{@email.correspondent_name} (#{@email.email_address})" }
+      }
+
+      if @email.email_subject.present?
+
+        rows << {
+          key: { text: "Subject" },
+          value: { text: @email.email_subject }
+        }
+
+      end
+
+      if @email.details.present?
+
+        rows << {
+          key: { text: "Email content" },
+          value: { text: @email.details }
+        }
+
+      end
+
+      if @email.email_file.attached?
+        rows << {
+          key: { text: "Email" },
+          value: { text: link_to("View email", @email.email_file) }
+        }
+      end
+    %>
+
+    <%= govukSummaryList(rows: rows) %>
+
+
+  </div>
+
+  <% if @email.email_attachment.attached? %>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">Attachments</h1>
+      <p class="govuk-body"><%= link_to @email.email_attachment.filename, @email.email_attachment, class: "govuk-link" %></p>
+
+      <%= document_placeholder(document_file_extension(@email.email_attachment)) %>
+
+      <% if @email.email_attachment.blob.metadata["description"].present? %>
+        <p class="govuk-body"><%= @email.email_attachment.blob.metadata["description"] %></p>
+      <% end %>
+
+    </div>
+  <% end %>
+</div>

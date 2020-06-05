@@ -1,0 +1,69 @@
+<% page_heading = @meeting.overview %>
+<% page_title page_heading %>
+
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Meeting</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @meeting.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <% rows = [
+        {
+          key: { text: "Date" },
+          value: { text: @meeting.correspondence_date.to_s(:govuk) }
+        },
+
+        {
+          key: { text: "Meeting with" },
+          value: { text: @meeting.correspondent_name }
+        }
+      ]
+
+      if @meeting.transcript.attached?
+        rows << {
+          key: { text: "Transcript" },
+          value: { text: link_to("View transcript", @meeting.transcript) }
+        }
+      end
+
+      if @meeting.details.present?
+        rows << {
+          key: { text: "Notes" },
+          value: { text: @meeting.details }
+        }
+      end
+
+    %>
+
+    <%= govukSummaryList(rows: rows) %>
+
+  </div>
+
+  <% if @meeting.related_attachment.attached? %>
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-m">Attachments</h1>
+      <p class="govuk-body"><%= link_to @meeting.related_attachment.filename, @meeting.related_attachment, class: "govuk-link" %></p>
+
+      <%= document_placeholder(document_file_extension(@meeting.related_attachment)) %>
+
+      <% if @meeting.related_attachment.blob.metadata["description"].present? %>
+        <p class="govuk-body"><%= @meeting.related_attachment.blob.metadata["description"] %></p>
+      <% end %>
+
+
+    </div>
+  <% end %>
+</div>

@@ -196,7 +196,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     if file
       expect(item).to have_text("Email: #{File.basename(file)}")
-      expect(item).to have_link("View email file")
+      expect(item).to have_link("View email")
     else
       expect(item).to have_text(summary)
       expect(item).to have_text(subject)

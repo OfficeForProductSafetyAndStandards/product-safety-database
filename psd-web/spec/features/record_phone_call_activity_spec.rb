@@ -188,7 +188,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
     if file
       expect(item).to have_text("Attached: #{File.basename(file)}")
-      expect(item).to have_link("View attachment")
+      expect(item).to have_link("View phone call")
     else
       expect(item).to have_text(summary)
       expect(item).to have_text(notes)
