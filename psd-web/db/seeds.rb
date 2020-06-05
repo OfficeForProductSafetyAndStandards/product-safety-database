@@ -80,7 +80,6 @@ if run_seeds
     Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-    binding.pry
     user1 = User.create!(
       name: "Test User",
       email: "user@example.com",
