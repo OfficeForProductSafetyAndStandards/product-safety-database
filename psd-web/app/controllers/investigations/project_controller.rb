@@ -22,7 +22,7 @@ class Investigations::ProjectController < ApplicationController
   # POST /xxx
   def create
     if @investigation.valid?
-      @investigation.save
+      CreateCase.call(investigation: @investigation, user: current_user)
       redirect_to investigation_path(@investigation), flash: { success: "Project was successfully created" }
     else
       render_wizard

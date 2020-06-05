@@ -159,11 +159,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_css("h3",           text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
       expect(page).to have_css("p",            text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p",            text: enquiry.fetch(:enquiry_description))
-      expect(page).to have_css("p",            text: "Attachment: testImage.png")
       expect(page).to have_css("p.govuk-body", text: /Name: #{Regexp.escape(contact.fetch(:contact_name))}/)
       expect(page).to have_css("p.govuk-body", text: /Email address: #{Regexp.escape(contact.fetch(:contact_email))}/)
       expect(page).to have_css("p.govuk-body", text: /Phone number: #{Regexp.escape(contact.fetch(:contact_phone))}/)
-      expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
     end
   end
 
@@ -172,8 +170,6 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_css("h3", text: "Enquiry logged: #{enquiry.fetch(:enquiry_title)}")
       expect(page).to have_css("p", text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
-      expect(page).to have_css("p", text: "Attachment: testImage.png")
-      expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
 
       expect(page).to have_text("Restricted access")
       expect(page).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact test organisation, who created this activity, to obtain these details if required.")

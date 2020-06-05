@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
-  let(:investigation) { create(:allegation, products: [product], owner: user) }
+  let(:investigation) { create(:allegation, products: [product], owner: user, creator: user) }
 
   let(:summary) { Faker::Lorem.sentence }
   let(:date) { Date.parse("2020-05-01") }

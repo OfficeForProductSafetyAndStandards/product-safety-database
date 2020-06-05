@@ -179,12 +179,10 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page).to have_text("Product category: #{allegation.fetch(:category)}")
     expect(page).to have_text("Hazard type: #{allegation.fetch(:hazard_type)}")
     expect(page).to have_text(allegation.fetch(:description))
-    expect(page).to have_text("Attachment: testImage.png")
     expect(page).to have_text("Name: #{contact.fetch(:contact_name)}")
     expect(page).to have_text("Type: Consumer")
     expect(page).to have_text("Email address: #{contact.fetch(:contact_email)}")
     expect(page).to have_text("Phone number: #{contact.fetch(:contact_phone)}")
-    expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
   end
 
   def expect_case_activity_page_to_show_restricted_information(allegation)
@@ -192,8 +190,6 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page).to have_text("Product category: #{allegation.fetch(:category)}")
     expect(page).to have_text("Hazard type: #{allegation.fetch(:hazard_type)}")
     expect(page).to have_text(allegation.fetch(:description))
-    expect(page).to have_text("Attachment: testImage.png")
-    expect(page).to have_link("View attachment", href: /^.*testImage\.png$/)
 
     expect(page).to have_text("Restricted access")
     expect(page).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact test organisation, who created this activity, to obtain these details if required.")

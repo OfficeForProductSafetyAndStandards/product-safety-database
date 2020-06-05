@@ -47,21 +47,6 @@ class Activity < ApplicationRecord
     self.class.name.delete_prefix("AuditActivity::").underscore
   end
 
-private
-
-  def pretty_date_stamp
-    created_at.to_s(:govuk)
-  end
-
-  def subtitle_slug; end
-
-  def notify_relevant_users
-    entities_to_notify.each do |entity|
-      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
-      NotifyMailer.investigation_updated(investigation.pretty_id, entity.name, email, email_update_text(entity), email_subject_text).deliver_later
-    end
-  end
-
   def entities_to_notify
     entities = users_to_notify
 
@@ -75,6 +60,21 @@ private
     end
 
     entities.uniq
+  end
+
+private
+
+  def pretty_date_stamp
+    created_at.to_s(:govuk)
+  end
+
+  def subtitle_slug; end
+
+  def notify_relevant_users
+    entities_to_notify.each do |entity|
+      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
+      NotifyMailer.investigation_updated(investigation.pretty_id, entity.name, email, email_update_text(entity), email_subject_text).deliver_later
+    end
   end
 
   def users_to_notify
