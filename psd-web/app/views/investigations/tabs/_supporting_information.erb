@@ -20,7 +20,7 @@
   <%= render "documents/document_card", document: attachement, parent: @investigation %>
 <% end %>
 
-<% if @generic_attachments_visible %>
+<% if policy(@investigation).view_protected_details?(user: current_user) %>
   <% @other_supporting_information.each do |attachment| %>
     <%= render "documents/generic_document_card", document: attachment, parent: @investigation %>
   <% end %>

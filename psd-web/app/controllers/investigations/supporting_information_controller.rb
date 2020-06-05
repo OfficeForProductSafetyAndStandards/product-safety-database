@@ -9,7 +9,6 @@ module Investigations
       @investigation                = investigation.decorate
       @supporting_information       = investigation.supporting_information_attachments.decorate
       @other_supporting_information = investigation.generic_supporting_information_attachments.decorate
-      @generic_attachments_visible  = investigation.teams_with_access.include?(current_user.team)
 
       @breadcrumbs = {
         items: [
