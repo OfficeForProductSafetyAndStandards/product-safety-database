@@ -138,6 +138,19 @@ module PageExpectations
     end
   end
 
+  def expect_to_be_on_email_page(case_id:)
+    expect(page).to have_current_path(/\/cases\/#{case_id}\/emails\/[\d]+/)
+  end
+
+  def expect_to_be_on_phone_call_page(case_id:)
+    expect(page).to have_current_path(/\/cases\/#{case_id}\/phone-calls\/[\d]+/)
+  end
+
+  def expect_to_be_on_meeting_page(case_id:)
+    expect(page).to have_current_path(/\/cases\/#{case_id}\/meetings\/[\d]+/)
+  end
+
+
   # Add an allegation flow
   def expect_to_be_on_allegation_complainant_page
     expect(page).to have_current_path("/allegation/complainant")

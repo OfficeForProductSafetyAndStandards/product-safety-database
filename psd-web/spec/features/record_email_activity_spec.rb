@@ -9,7 +9,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
   let(:name) { "Test name" }
   let(:email) { Faker::Internet.safe_email }
-  let(:date) { Time.zone.today }
+  let(:date) { Date.parse("2020-02-01") }
 
   let(:file) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
   let(:summary) { "Test summary" }
@@ -81,6 +81,15 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     # Consumer info is not hidden from case owner
     expect_case_activity_page_to_show_entered_information(name: name, email: email, date: date, file: file)
+
+    click_link "View email"
+
+    expect_to_be_on_email_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Date", value: "1 February 2020")
+    expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
+    expect(page).to have_summary_item(key: "Email", value: "View email")
+
 
     # Test that another user in a different organisation cannot see consumer info
     sign_out
