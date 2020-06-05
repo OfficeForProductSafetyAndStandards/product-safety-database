@@ -63,7 +63,5 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
     expect(page).to have_summary_item(key: "Date", value: "2 April 2020")
     expect(page).to have_summary_item(key: "Meeting with", value: "Joe Bloggs")
     expect(page).to have_summary_item(key: "Notes", value: "Agreed further meeting in 2 weeks time")
-
   end
-
 end
