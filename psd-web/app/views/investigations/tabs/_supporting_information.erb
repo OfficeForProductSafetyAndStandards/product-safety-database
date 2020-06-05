@@ -20,8 +20,14 @@
   <%= render "documents/document_card", document: attachement, parent: @investigation %>
 <% end %>
 
-<% @other_supporting_information.each do |attachement| %>
-  <%= render "documents/document_card", document: attachement, parent: @investigation %>
+<% if @generic_attachments_visible %>
+  <% @other_supporting_information.each do |attachement| %>
+    <%= render "documents/document_card", document: attachement, parent: @investigation %>
+  <% end %>
+<% else %>
+  <% @other_supporting_information.each do |attachement| %>
+    <%= render "documents/restricted_generic_document_card", document: attachement %>
+  <% end %>
 <% end %>
 
 <% if @supporting_information.none? && @other_supporting_information.none?  %>
