@@ -9,7 +9,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
   let(:name) { "Test name" }
   let(:phone) { "07000 000000" }
-  let(:date) { Time.zone.today }
+  let(:date) { Date.parse("2020-05-05") }
   let(:file) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
   let(:summary) { "Test summary" }
   let(:notes) { "Test notes" }
@@ -79,6 +79,15 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
     # Consumer info is not hidden from case owner
     expect_case_activity_page_to_show_entered_information(name: name, phone: phone, date: date, file: file)
+
+    click_link "View phone call"
+
+    expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Date", value: "5 May 2020")
+    expect(page).to have_summary_item(key: "Call with", value: "#{name} (#{phone})")
+    expect(page).to have_summary_item(key: "Transcript", value: "View transcript")
+
 
     # Test that another user in a different organisation cannot see consumer info
     sign_out
