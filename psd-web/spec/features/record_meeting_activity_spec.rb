@@ -35,8 +35,10 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
 
     fill_in "Summary", with: "Meeting with Chief Executive"
 
-    attach_file "Upload a file", file
-    fill_in "Notes", with: "Agreed further meeting in 2 weeks time"
+    within_fieldset "Details" do
+      attach_file "Upload a file", file
+      fill_in "Notes", with: "Agreed further meeting in 2 weeks time"
+    end
 
     click_button "Continue"
 
