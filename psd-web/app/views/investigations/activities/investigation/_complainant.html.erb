@@ -8,11 +8,10 @@
 <% end %>
 
 <%# Teams not involved in a case shouldn't complianant contact details %>
-<% if !complainant.can_be_displayed?(current_user) %>
+<% if !policy(@investigation).view_protected_details? %>
   <%= render "restricted", activity: activity %>
 
 <% else %>
-
   <% complainant_info = [] %>
 
   <% if complainant.name.present? %>

@@ -45,7 +45,7 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
   def can_display_all_data?(user)
     return true if self[:metadata].present? || investigation.complainant.blank?
 
-    investigation.complainant.can_be_displayed?(user)
+    Pundit.policy(user, investigation).view_protected_details?
   end
 
   # Only used for old records prior to metadata implementation

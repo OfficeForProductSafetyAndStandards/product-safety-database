@@ -19,16 +19,4 @@ class Complainant < ApplicationRecord
 
   validates :name, length: { maximum: 100 }
   validates :other_details, length: { maximum: 10_000 }
-
-  def can_be_displayed?(user)
-    can_be_seen_by_user?(user) || investigation.child_should_be_displayed?(user)
-  end
-
-private
-
-  def can_be_seen_by_user?(user)
-    return true if investigation.creator_user.has_gdpr_access?(user)
-
-    complainant_type != "Consumer"
-  end
 end
