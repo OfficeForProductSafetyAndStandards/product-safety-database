@@ -24,7 +24,7 @@ class Investigations::ProductsController < ApplicationController
     authorize @investigation, :update?
     respond_to do |format|
       if @product.valid?
-        @investigation.products << @product
+        AddProductToCase.call(investigation: @investigation, product: @product, user: current_user)
         format.html { redirect_to_investigation_products_tab success: "Product was successfully created." }
         format.json { render :show, status: :created, location: @investigation }
       else
@@ -50,7 +50,7 @@ class Investigations::ProductsController < ApplicationController
   # DELETE /cases/1/products
   def unlink
     authorize @investigation, :update?
-    @investigation.products.delete(@product)
+    RemoveProductFromCase.call(investigation: @investigation, product: @product, user: current_user)
     respond_to do |format|
       format.html do
         redirect_to_investigation_products_tab success: "Product was successfully removed."

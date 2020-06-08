@@ -11,9 +11,11 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, coronavirus_related: coronavirus_related, products: products, owner: user, creator_user: user) }
+  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, products: products, coronavirus_related: coronavirus_related, owner: user, creator: creator) }
 
-  before { create(:complainant, investigation: investigation) }
+  before do
+    create(:complainant, investigation: investigation)
+  end
 
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }

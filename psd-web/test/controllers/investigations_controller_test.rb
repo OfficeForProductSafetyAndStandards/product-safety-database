@@ -3,11 +3,10 @@ require "test_helper"
 class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notify_mailer
-    user           = users(:opss)
+    @user = users(:opss)
     @non_opss_user = users(:southampton)
 
-    sign_in(user)
-    User.current = user
+    sign_in(@user)
 
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
@@ -22,7 +21,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
     @investigation_two = load_case(:two)
     @investigation_two.created_at = Time.zone.parse("2015-07-11 21:00")
-    @investigation_two.owner = user
+    @investigation_two.owner = @user
     @investigation_two.save
 
     @investigation_three = load_case(:three)
@@ -58,7 +57,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should set status" do
-    investigation = create_new_case
+    investigation = create_new_case(@user)
     is_closed = true
     investigation_status = -> { Investigation.find(investigation.id).is_closed }
     assert_changes investigation_status, from: false, to: is_closed do
@@ -76,7 +75,10 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   test "should set description" do
     old_description = "old"
     new_description = "description"
-    investigation = Investigation::Allegation.create(description: old_description, reported_reason: Investigation.reported_reasons[:unsafe])
+
+    investigation = Investigation::Allegation.new(description: old_description, reported_reason: Investigation.reported_reasons[:unsafe])
+    CreateCase.call(investigation: investigation, user: @user)
+
     investigation_status = -> { Investigation.find(investigation.id).description }
     assert_changes investigation_status, from: old_description, to: new_description do
       patch edit_summary_investigation_url(investigation),
@@ -320,8 +322,8 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not show private investigations to everyone" do
-    create_new_private_case
-    sign_out(:user)
+    create_new_private_case(@user)
+    sign_out :user
     sign_in @non_opss_user
 
     get investigations_path
@@ -329,7 +331,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not show case to someone without access" do
-    create_new_private_case
+    create_new_private_case(@user)
     sign_out :user
     sign_in @non_opss_user
 
@@ -339,15 +341,18 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show private investigations to creator" do
-    create_new_private_case
+    create_new_private_case(@user)
 
     get investigation_path(@new_investigation)
     assert_includes(response.body, @new_investigation.pretty_id)
   end
 
-  def create_new_private_case
+  def create_new_private_case(user)
     description = "new_investigation_description"
-    Investigation::Allegation.create(description: description)
+    investigation = Investigation::Allegation.new(description: description)
+
+    CreateCase.call(investigation: investigation, user: user)
+
     patch visibility_investigation_url(Investigation.find_by(description: description)),
           params: {
             investigation: {

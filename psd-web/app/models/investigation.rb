@@ -37,10 +37,7 @@ class Investigation < ApplicationRecord
   belongs_to :owner, polymorphic: true, optional: true
 
   has_many :investigation_products, dependent: :destroy
-  has_many :products,
-           through: :investigation_products,
-           after_add: :create_audit_activity_for_product,
-           after_remove: :create_audit_activity_for_removing_product
+  has_many :products, through: :investigation_products
 
   has_many :investigation_businesses, dependent: :destroy
   has_many :businesses,
@@ -62,9 +59,6 @@ class Investigation < ApplicationRecord
 
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::EditAccess"
   has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
-  # TODO: Refactor to remove this callback hell
-  before_create :set_creator, :set_owner_as_current_user, :add_pretty_id
-  after_create :create_audit_activity_for_case, :send_confirmation_email
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
   has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
@@ -143,11 +137,6 @@ class Investigation < ApplicationRecord
     pretty_id
   end
 
-  def add_pretty_id
-    cases_before = Investigation.where("created_at < ? AND created_at > ?", created_at, created_at.beginning_of_month).count
-    self.pretty_id = sprintf("#{created_at.strftime('%y%m')}-%04d", (cases_before + 1))
-  end
-
   def reported_reason
     return if self[:reported_reason].blank?
 
@@ -160,11 +149,11 @@ class Investigation < ApplicationRecord
     owner.in_same_team_as?(user)
   end
 
-private
-
-  def create_audit_activity_for_case
+  def case_created_audit_activity_class
     # To be implemented by children
   end
+
+private
 
   def create_audit_activity_for_status
     if saved_changes.key?(:is_closed) || status_rationale.present?
@@ -194,14 +183,6 @@ private
     end
   end
 
-  def create_audit_activity_for_product(product)
-    AuditActivity::Product::Add.from(product, self)
-  end
-
-  def create_audit_activity_for_removing_product(product)
-    AuditActivity::Product::Destroy.from(product, self)
-  end
-
   def create_audit_activity_for_business(business)
     AuditActivity::Business::Add.from(business, self)
   end
@@ -210,32 +191,8 @@ private
     AuditActivity::Business::Destroy.from(business, self)
   end
 
-  def set_creator
-    if User.current
-      self.creator_user = User.current
-      self.creator_team = User.current.team
-    end
-  end
-
   def creator_id
     creator_user&.id
-  end
-
-  def set_owner_as_current_user
-    self.owner = User.current if owner.blank? && User.current
-  end
-
-  # TODO: Refactor to remove dependency on User.current
-  def send_confirmation_email
-    if User.current
-      NotifyMailer.investigation_created(
-        pretty_id,
-        User.current.name,
-        User.current.email,
-        decorate.title,
-        case_type
-      ).deliver_later
-    end
   end
 end
 

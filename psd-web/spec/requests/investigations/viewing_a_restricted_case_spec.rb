@@ -17,7 +17,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when the user is the case owner" do
-    let(:investigation) { create(:allegation, is_private: true, owner: user) }
+    let(:investigation) { create(:allegation, is_private: true, owner: user, creator: user) }
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)
@@ -25,7 +25,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when the user’s team is the case owner" do
-    let(:investigation) { create(:allegation, is_private: true, owner: users_team) }
+    let(:investigation) { create(:allegation, is_private: true, owner: users_team, creator: user) }
 
     it "renders the page" do
       expect(response).to have_http_status(:ok)
