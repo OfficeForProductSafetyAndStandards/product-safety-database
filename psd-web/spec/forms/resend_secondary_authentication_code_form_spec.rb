@@ -27,7 +27,7 @@ RSpec.describe ResendSecondaryAuthenticationCodeForm, :with_stubbed_mailer do
       let(:user) { create(:user, mobile_number_verified: true) }
 
       context "with a mobile number with correct format in the params" do
-        let(:mobile_number) { "70123456789" }
+        let(:mobile_number) { "07012345678" }
 
         include_examples "valid form"
       end
@@ -49,7 +49,7 @@ RSpec.describe ResendSecondaryAuthenticationCodeForm, :with_stubbed_mailer do
       let(:user) { create(:user, mobile_number_verified: false) }
 
       context "with a mobile number with correct format in the params" do
-        let(:mobile_number) { "70123456789" }
+        let(:mobile_number) { "07012345678" }
 
         include_examples "valid form"
       end
