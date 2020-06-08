@@ -1,4 +1,4 @@
-<% page_heading = @email.overview %>
+<% page_heading = @email.title %>
 <% page_title page_heading %>
 
 <% content_for :after_header do %>
@@ -30,10 +30,12 @@
 
       direction_key = @email.outbound? ? "To" : "From"
 
-      rows << {
-        key: { text: direction_key },
-        value: { text: "#{@email.correspondent_name} (#{@email.email_address})" }
-      }
+      if @email.correspondent_name.present? || @email.email_address.present?
+        rows << {
+          key: { text: direction_key },
+          value: { text: name_and_email(@email.correspondent_name, @email.email_address) }
+        }
+      end
 
       if @email.email_subject.present?
 
