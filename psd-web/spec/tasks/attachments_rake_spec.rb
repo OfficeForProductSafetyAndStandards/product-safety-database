@@ -22,7 +22,7 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
     end
 
     let(:corrective_action) do
-      build(:corrective_action, :with_file).tap do |c|
+      build(:corrective_action, :with_file, investigation: investigation).tap do |c|
         attach_file_to(c, c.documents, "corrective_action_attachment.txt")
       end
     end
