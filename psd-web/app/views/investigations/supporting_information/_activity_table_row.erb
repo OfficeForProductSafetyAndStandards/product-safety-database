@@ -6,10 +6,10 @@
     <%= activity_table_row.record.class.model_name.human %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity_table_row.record.updated_at.to_date.to_s(:govuk) %>
+    <%= activity_table_row.date_of_activity %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity_table_row.record.created_at.to_s(:govuk) %>
+    <%= activity_xtable_row.date_added %>
     <span class="govuk-caption-m"> by <%= @creators_by_blob_id[activity_table_row.blob_id]&.display_name(viewer: current_user) || "anonymous" %></span>
   </td>
 </tr>

@@ -22,7 +22,8 @@ FactoryBot.define do
     after(:build) do |correspondence, evaluator|
       correspondence.email_file.attach(
         io: File.open(evaluator.correspondence_file),
-        filename: "email correspondence/"
+        filename: "email correspondence/",
+        metadata: { "updated": rand(10).public_send(:days).ago }
       )
     end
   end
@@ -31,7 +32,8 @@ FactoryBot.define do
     after(:build) do |correspondence, evaluator|
       correspondence.transcript.attach(
         io: File.open(evaluator.correspondence_file),
-        filename: "meeting correspondence"
+        filename: "meeting correspondence",
+        metadata: { "updated": rand(10).public_send(:days).ago }
       )
     end
   end
@@ -40,7 +42,8 @@ FactoryBot.define do
     after(:build) do |correspondence, evaluator|
       correspondence.transcript.attach(
         io: File.open(evaluator.correspondence_file),
-        filename: "phone call correspondence"
+        filename: "phone call correspondence",
+        metadata: { "updated": rand(10).public_send(:days).ago }
       )
     end
   end

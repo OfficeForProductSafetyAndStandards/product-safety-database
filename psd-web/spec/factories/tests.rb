@@ -18,7 +18,8 @@ FactoryBot.define do
     after(:build) do |test, evaluator|
       test.documents.attach(
         io: File.open(evaluator.test_file),
-        filename: "test result"
+        filename: "test result",
+        metadata: { "updated": rand(10).public_send(:days).ago }
       )
     end
   end
@@ -27,7 +28,8 @@ FactoryBot.define do
     after(:build) do |test, evaluator|
       test.documents.attach(
         io: File.open(evaluator.test_file),
-        filename: "test request"
+        filename: "test request",
+        metadata: { "updated": rand(10).public_send(:days).ago }
       )
     end
   end
