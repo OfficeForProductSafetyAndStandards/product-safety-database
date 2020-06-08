@@ -86,7 +86,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
     expect(page).to have_summary_item(key: "Date", value: "5 May 2020")
     expect(page).to have_summary_item(key: "Call with", value: "#{name} (#{phone})")
-    expect(page).to have_summary_item(key: "Transcript", value: "View transcript")
+    expect(page).to have_summary_item(key: "Transcript", value: "attachment_filename.txt (0 Bytes)")
 
     # Test that another user in a different organisation cannot see consumer info
     sign_out

@@ -89,7 +89,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect(page).to have_h1("Test summary")
     expect(page).to have_summary_item(key: "Date", value: "1 February 2020")
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
-    expect(page).to have_summary_item(key: "Email", value: "View email")
+    expect(page).to have_summary_item(key: "Email", value: "attachment_filename.txt (0 Bytes)")
 
     # Test that another user in a different organisation cannot see consumer info
     sign_out

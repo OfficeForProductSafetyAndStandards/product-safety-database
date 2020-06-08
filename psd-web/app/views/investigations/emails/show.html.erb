@@ -56,7 +56,7 @@
       if @email.email_file.attached?
         rows << {
           key: { text: "Email" },
-          value: { text: link_to("View email", @email.email_file) }
+          value: { text: link_to(filename_with_size(@email.email_file), @email.email_file) }
         }
       end
     %>

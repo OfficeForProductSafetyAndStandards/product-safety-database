@@ -35,7 +35,7 @@
       if @phone_call.transcript.attached?
         rows << {
           key: { text: "Transcript" },
-          value: { text: link_to("View transcript", @phone_call.transcript) }
+          value: { text: link_to(filename_with_size(@phone_call.transcript), @phone_call.transcript) }
         }
       end
 
