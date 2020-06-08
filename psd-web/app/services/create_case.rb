@@ -10,7 +10,7 @@ class CreateCase
     investigation.creator_user = user
     investigation.creator_team = user.team
 
-    investigation.owner   ||= user
+    investigation.owner ||= user
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happenning concurrently.
