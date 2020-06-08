@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 2020-06-05
-– Added the ability to view the details of correspondence added to the case.
+– Added the ability to view the details of correspondence added to the case on their own page.
 
 ## 2020-05-26
 - Update service guidance to give details of revised permission model on cases.
