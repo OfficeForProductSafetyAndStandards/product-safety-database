@@ -40,7 +40,7 @@
       if @email.correspondent_name.present? || @email.email_address.present?
         rows << {
           key: { text: direction_key },
-          value: { text: name_and_email(@email.correspondent_name, @email.email_address) }
+          value: { text: name_and_contact_details(@email.correspondent_name, @email.email_address) }
         }
       end
 

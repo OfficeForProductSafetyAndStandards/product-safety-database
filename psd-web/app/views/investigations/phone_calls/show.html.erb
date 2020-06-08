@@ -1,4 +1,4 @@
-<% page_heading = @phone_call.overview %>
+<% page_heading = @phone_call.title %>
 <% page_title page_heading %>
 
 <% content_for :after_header do %>
@@ -24,13 +24,16 @@
         {
           key: { text: "Date of call" },
           value: { text: @phone_call.correspondence_date.to_s(:govuk) }
-        },
-
-        {
-          key: { text: "Call with" },
-          value: { text: "#{@phone_call.correspondent_name} (#{@phone_call.phone_number})" }
         }
       ]
+
+
+      if @phone_call.correspondent_name.present? || @phone_call.phone_number.present?
+        rows << {
+          key: { text: "Call with" },
+          value: { text: name_and_contact_details(@phone_call.correspondent_name, @phone_call.phone_number) }
+        }
+      end
 
       if @phone_call.transcript.attached?
         rows << {

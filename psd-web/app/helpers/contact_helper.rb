@@ -1,11 +1,11 @@
 module ContactHelper
-  def name_and_email(name, email)
-    if name.present? && email.present?
-      "#{name.strip} (#{email.strip})"
+  def name_and_contact_details(name, contact_details)
+    if name.present? && contact_details.present?
+      "#{name.strip} (#{contact_details.strip})"
     elsif name.present?
       name.strip
-    elsif email.present?
-      email.strip
+    elsif contact_details.present?
+      contact_details.strip
     end
   end
 end
