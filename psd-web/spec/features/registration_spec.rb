@@ -41,7 +41,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
       expect_to_be_on_resend_secondary_authentication_page
       find("details summary", text: "Change where the text message is sent").click
-      fill_in "Mobile number", with: "70123456789"
+      fill_in "Mobile number", with: "07012345678"
 
       click_button "Resend security code"
       expect_to_be_on_secondary_authentication_page
@@ -54,7 +54,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       click_link("Your account", match: :first)
 
       expect(page).to have_h1("Your account")
-      expect(page).to have_summary_item(key: "Mobile number", value: "70123456789")
+      expect(page).to have_summary_item(key: "Mobile number", value: "07012345678")
     end
   end
 
@@ -70,7 +70,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
   def fill_in_registration_form
     fill_in "Full name",     with: Faker::Movies::Lebowski.character
-    fill_in "Mobile number", with: "71234567890"
+    fill_in "Mobile number", with: "07123456789"
     fill_in "Password",      with: "testpassword"
     click_on "Continue"
   end
