@@ -20,7 +20,7 @@
       },
       {
         key: { text: "Date decided" },
-        value: { text: @corrective_action.date_decided&.strftime("%d/%m/%Y") }
+        value: { text: @corrective_action.date_decided.to_s(:govuk) }
       },
       {
         key: { text: "Product involved" },
