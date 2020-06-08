@@ -28,7 +28,14 @@
     ]
 
 
-      direction_key = @email.outbound? ? "To" : "From"
+      direction_key =
+        if @email.outbound?
+          "To"
+        elsif @email.inbound?
+          "From"
+        else
+          "Contact"
+        end
 
       if @email.correspondent_name.present? || @email.email_address.present?
         rows << {
