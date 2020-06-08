@@ -42,7 +42,7 @@
       if @meeting.details.present?
         rows << {
           key: { text: "Notes" },
-          value: { text: @meeting.details }
+          value: { text: format_with_line_breaks(@meeting.details) }
         }
       end
 

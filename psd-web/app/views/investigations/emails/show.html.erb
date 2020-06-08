@@ -50,7 +50,7 @@
 
         rows << {
           key: { text: "Email content" },
-          value: { text: @email.details }
+          value: { text: format_with_line_breaks(@email.details) }
         }
 
       end
