@@ -15,7 +15,7 @@ module TaskFormat
   included do
     subject(:task) { tasks[task_name] }
 
-    let(:task_name) { self.class.top_level_description.sub(/\Arake /, "") }
+    let(:task_name) { self.class.top_level_description.delete_prefix("rake ") }
     let(:tasks) { Rake::Task }
   end
 end
