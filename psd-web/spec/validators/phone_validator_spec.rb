@@ -44,6 +44,7 @@ RSpec.describe PhoneValidator do
 
   invalid_phone_numbers = [
     "712345671",
+    "71234567123",
     "00123456789",
     "+111123 456789",
     "564544554455544"
