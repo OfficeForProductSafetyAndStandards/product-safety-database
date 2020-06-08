@@ -84,7 +84,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
     expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Date", value: "5 May 2020")
+    expect(page).to have_summary_item(key: "Date of call", value: "5 May 2020")
     expect(page).to have_summary_item(key: "Call with", value: "#{name} (#{phone})")
     expect(page).to have_summary_item(key: "Transcript", value: "attachment_filename.txt (0 Bytes)")
 

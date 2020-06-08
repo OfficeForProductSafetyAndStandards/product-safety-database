@@ -87,7 +87,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
     expect(page).to have_h1("Test summary")
-    expect(page).to have_summary_item(key: "Date", value: "1 February 2020")
+    expect(page).to have_summary_item(key: "Date of email", value: "1 February 2020")
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
     expect(page).to have_summary_item(key: "Email", value: "attachment_filename.txt (0 Bytes)")
 
