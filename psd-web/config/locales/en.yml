@@ -57,6 +57,10 @@ en:
     is_private:
       false: Visible to all
       true: Restricted for legal privilege
+  supporting_information:
+    restricted_generic:
+      title: "Attachment"
+      placeholder: "Only teams added to the case can view this attachment"
   investigations:
     coronavirus_related:
       show:
