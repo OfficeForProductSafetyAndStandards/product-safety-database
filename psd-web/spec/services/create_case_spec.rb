@@ -37,11 +37,11 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
       end
 
       context "when there is no source already on the investigation" do
-        before { investigation.source = nil }
+        before { investigation.creator_user = nil }
 
         it "sets the user source" do
           result
-          expect(investigation.reload.source.user).to eq(user)
+          expect(investigation.reload.creator_user).to eq(user)
         end
       end
 
