@@ -1,7 +1,7 @@
 import $ from 'jquery'
 
 $(document).ready(() => {
-  const attachmentFileInput = $('input.govuk-file-upload')
+  const attachmentFileInput = $('#attachment-file-input')
   const attachmentDescription = document.getElementById('attachment-description')
   const currentAttachmentDetails = document.getElementById('current-attachment-details')
 
