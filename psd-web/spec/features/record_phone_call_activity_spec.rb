@@ -78,7 +78,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
     # Consumer info is not hidden from case owner
-    expect_case_activity_page_to_show_entered_information(name: name, phone: phone, date: date, file: file)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, file: file)
 
     click_link "View phone call"
 
@@ -106,7 +106,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     visit "/cases/#{investigation.pretty_id}/activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(name: name, phone: phone, date: date, file: file)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, file: file)
   end
 
   scenario "with non-consumer contact details and summary and notes" do
@@ -132,7 +132,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(name: name, phone: phone, date: date, summary: summary, notes: notes)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, summary: summary, notes: notes)
 
     # Test that another user in a different organisation can see all info
     sign_out
@@ -142,7 +142,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     visit "/cases/#{investigation.pretty_id}/activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(name: name, phone: phone, date: date, summary: summary, notes: notes)
+    expect_case_activity_page_to_show_entered_information(user_name: "#{user.name} (#{user.team.name})", name: name, phone: phone, date: date, summary: summary, notes: notes)
   end
 
   def fill_in_record_phone_call_form(name:, phone:, consumer:, date:)
@@ -189,8 +189,8 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect(find_field("Year").value).to eq date.year.to_s
   end
 
-  def expect_case_activity_page_to_show_entered_information(name:, phone:, date:, file: nil, summary: nil, notes: nil)
-    item = page.find("p", text: "Phone call by #{user.name} (#{user.team.name})").find(:xpath, "..")
+  def expect_case_activity_page_to_show_entered_information(user_name:, name:, phone:, date:, file: nil, summary: nil, notes: nil)
+    item = page.find("p", text: "Phone call by #{user_name}").find(:xpath, "..")
     expect(item).to have_text("Call with: #{name} (#{phone})")
     expect(item).to have_text("Date: #{date.strftime('%d/%m/%Y')}")
 

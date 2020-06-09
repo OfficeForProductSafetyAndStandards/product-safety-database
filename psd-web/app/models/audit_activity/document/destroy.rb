@@ -4,7 +4,7 @@ class AuditActivity::Document::Destroy < AuditActivity::Document::Base
     super(document, investigation, title)
   end
 
-  def restricted_title
+  def restricted_title(_user)
     "Document deleted"
   end
 

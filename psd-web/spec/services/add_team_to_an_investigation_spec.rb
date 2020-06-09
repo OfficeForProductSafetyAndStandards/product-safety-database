@@ -51,7 +51,7 @@ RSpec.describe AddTeamToAnInvestigation, :with_stubbed_mailer, :with_stubbed_ela
 
         aggregate_failures do
           expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
-          expect(last_added_activity.title).to eql("Testing team added to allegation")
+          expect(last_added_activity.title(nil)).to eql("Testing team added to allegation")
           expect(last_added_activity.source.user_id).to eql(user.id)
         end
       end

@@ -95,7 +95,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
   end
 
   describe "#title" do
-    subject(:title) { activity.title }
+    subject(:title) { activity.title(nil) }
 
     let(:activity) { described_class.create(investigation: investigation, metadata: metadata, title: test_title) }
     let(:test_title) { nil }
@@ -170,14 +170,14 @@ RSpec.shared_examples "an audit activity for investigation added" do
   end
 
   describe "#restricted_title" do
-    # This metod will only ever be called for older records with no metadata,
+    # This method will only ever be called for older records with no metadata,
     # where the title is pre-generated and stored in the database, so we will
     # set the title here
     subject(:activity) { described_class.create(investigation: investigation, title: "Test title") }
 
     # titles never contain GDPR data for these activity classes so just return the title
     it "returns the title" do
-      expect(activity.restricted_title).to eq("Test title")
+      expect(activity.restricted_title(nil)).to eq("Test title")
     end
   end
 end

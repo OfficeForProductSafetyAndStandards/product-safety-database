@@ -4,7 +4,7 @@ class CommentActivity < Activity
   validates :body, presence: true
   validates :body, length: { maximum: 10_000 }
 
-  def title
+  def title(_user)
     "Comment added"
   end
 
