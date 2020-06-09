@@ -131,6 +131,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :phone_calls, controller: "investigations/view_phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
+    resources :emails, controller: "investigations/view_emails", only: :show, constraints: { id: /\d+/ }
+    resources :meetings, controller: "investigations/view_meetings", only: :show, constraints: { id: /\d+/ }
+
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
     resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[show new create update]
     resources :emails, controller: "investigations/emails", only: %i[show new create update]

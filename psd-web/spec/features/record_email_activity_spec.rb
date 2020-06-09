@@ -9,7 +9,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
   let(:name) { "Test name" }
   let(:email) { Faker::Internet.safe_email }
-  let(:date) { Time.zone.today }
+  let(:date) { Date.parse("2020-02-01") }
 
   let(:file) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
   let(:summary) { "Test summary" }
@@ -64,6 +64,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect_to_be_on_record_email_details_page
+    fill_in "Summary", with: "Test summary"
 
     within_fieldset "Email content" do
       expect(page).to have_css("a", text: File.basename(file))
@@ -81,6 +82,14 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     # Consumer info is not hidden from case owner
     expect_case_activity_page_to_show_entered_information(name: name, email: email, date: date, file: file)
+
+    click_link "View email"
+
+    expect_to_be_on_email_page(case_id: investigation.pretty_id)
+    expect(page).to have_h1("Test summary")
+    expect(page).to have_summary_item(key: "Date of email", value: "1 February 2020")
+    expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
+    expect(page).to have_summary_item(key: "Email", value: "attachment_filename.txt (0 Bytes)")
 
     # Test that another user in a different organisation cannot see consumer info
     sign_out
@@ -196,7 +205,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     if file
       expect(item).to have_text("Email: #{File.basename(file)}")
-      expect(item).to have_link("View email file")
+      expect(item).to have_link("View email")
     else
       expect(item).to have_text(summary)
       expect(item).to have_text(subject)

@@ -22,6 +22,10 @@ module DocumentsHelper
     File.extname(document.filename.to_s)&.remove(".")&.upcase
   end
 
+  def filename_with_size(file)
+    "#{file.filename} (#{number_to_human_size(file.blob.byte_size)})"
+  end
+
   def pretty_type_description(document)
     return "audio" if document.audio?
     return "image" if document.image?
