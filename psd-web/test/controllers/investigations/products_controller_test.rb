@@ -9,7 +9,7 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
       include_message: false,
       added_by_user: users(:southampton)
     )
-    @investigation.source = sources(:investigation_one)
+    @investigation.creator_user = users(:southampton)
     @product = products(:iphone)
     @product.source = sources(:product_iphone)
   end

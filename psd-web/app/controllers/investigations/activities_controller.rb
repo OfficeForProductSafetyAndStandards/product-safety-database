@@ -57,7 +57,7 @@ module Investigations
 
     def set_investigation_with_associations
       investigation = Investigation
-                         .eager_load(:source,
+                         .eager_load(:creator_user,
                                      products: { documents_attachments: :blob },
                                      investigation_businesses: { business: :locations },
                                      documents_attachments: :blob)

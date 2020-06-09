@@ -55,11 +55,15 @@ class Investigation < ApplicationRecord
 
   has_many_attached :documents
 
-  has_one :source, as: :sourceable, dependent: :destroy
   has_one :complainant, dependent: :destroy
 
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::EditAccess"
   has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
+
+  has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
+  has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
+  has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
+  has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
@@ -188,7 +192,7 @@ private
   end
 
   def creator_id
-    source&.user_id
+    creator_user&.id
   end
 end
 

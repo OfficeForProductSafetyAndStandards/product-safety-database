@@ -19,7 +19,7 @@ class InvestigationsController < ApplicationController
         @answer = search_for_investigations
         @investigations = Investigation.eager_load(
           :complainant,
-          :source
+          :creator_user
         ).where(id: @answer.results.map(&:_id))
 
         @activity_counts = Activity.group(:investigation_id).count
