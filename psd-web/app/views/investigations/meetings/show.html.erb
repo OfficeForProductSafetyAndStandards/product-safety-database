@@ -1,4 +1,4 @@
-<% page_heading = @meeting.overview %>
+<% page_heading = @meeting.title %>
 <% page_title page_heading %>
 
 <% content_for :after_header do %>
@@ -24,13 +24,16 @@
         {
           key: { text: "Date of meeting" },
           value: { text: @meeting.correspondence_date.to_s(:govuk) }
-        },
+        }
+      ]
 
-        {
+      if @meeting.correspondent_name.present?
+        rows << {
           key: { text: "Meeting with" },
           value: { text: @meeting.correspondent_name }
         }
-      ]
+      end
+
 
       if @meeting.transcript.attached?
         rows << {
