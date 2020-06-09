@@ -7,8 +7,8 @@ RSpec.feature "Supporting information", :with_stubbed_elasticsearch, :with_stubb
   let(:investigation)              { create(:allegation, :with_antivirus_checked_document).decorate }
   let(:email_file)                 { email.email_file.decorate }
   let(:phone_call_transcript)      { phone_call.transcript.decorate }
-  let(:meeting_transcript)         { meetting.transcript.decorate }
-  let(:corrective_action_document) { corrective_action.document.first.decorate  }
+  let(:meeting_transcript)         { meeting.transcript.decorate }
+  let(:corrective_action_document) { corrective_action.documents.first.decorate }
 
   before { sign_in create(:user, :activated, has_viewed_introduction: true) }
 
@@ -36,7 +36,7 @@ RSpec.feature "Supporting information", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting_transcript.date_added)
 
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action_document.title)
-      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.table_display_type)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action_document.record_type)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action_document.date_of_activity)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action_document.date_added)
     end
