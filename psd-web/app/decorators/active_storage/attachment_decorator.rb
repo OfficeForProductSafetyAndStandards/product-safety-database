@@ -1,6 +1,7 @@
 module ActiveStorage
   class AttachmentDecorator < ApplicationDecorator
     delegate_all
+    decorates_association :record
 
     def description
       h.simple_format(object.description)
@@ -16,6 +17,10 @@ module ActiveStorage
 
     def date_added
       object.blob.created_at.to_s(:govuk)
+    end
+
+    def record_type
+      record.type_for_table_display
     end
   end
 end

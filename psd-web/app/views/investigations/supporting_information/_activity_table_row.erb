@@ -3,13 +3,13 @@
     <%= activity_table_row.title %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity_table_row.record.class.model_name.human %>
+    <%= activity_table_row.record_type %>
   </td>
   <td class="govuk-table__cell">
     <%= activity_table_row.date_of_activity %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity_xtable_row.date_added %>
-    <span class="govuk-caption-m"> by <%= @creators_by_blob_id[activity_table_row.blob_id]&.display_name(viewer: current_user) || "anonymous" %></span>
+    <%= activity_table_row.date_added %>
+    <%= creator_caption(@creators_by_blob_id[activity_table_row.blob_id], current_user) %>
   </td>
 </tr>

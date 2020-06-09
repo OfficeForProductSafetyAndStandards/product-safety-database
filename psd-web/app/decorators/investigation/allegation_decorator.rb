@@ -1,6 +1,7 @@
 class Investigation < ApplicationRecord
   require_dependency "investigation"
   class AllegationDecorator < InvestigationDecorator
+    include SupportingInformationHelper
     def title
       title = build_title_from_products || "Allegation"
       title << " – #{object.hazard_type.downcase} hazard" if object.hazard_type.present?

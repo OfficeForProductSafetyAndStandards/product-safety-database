@@ -1,5 +1,6 @@
 class TestDecorator < Draper::Decorator
   delegate_all
+  include SupportingInformationHelper
 
   def title
     result_text = if passed?
@@ -11,5 +12,9 @@ class TestDecorator < Draper::Decorator
                   end
 
     "#{result_text}: #{product.name}"
+  end
+
+  def test
+
   end
 end
