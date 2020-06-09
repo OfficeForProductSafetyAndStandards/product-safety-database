@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :complainant, :documents_attachments, :owner, :source
+  decorates_associations :complainant, :documents_attachments, :owner, :creator_user
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -62,15 +62,11 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def created_by
-    return if source.nil?
+    return if creator_user.nil?
 
     out = []
-    out << if source.user.nil?
-             h.tag.div("Unknown")
-           else
-             h.escape_once(source.user.full_name.to_s)
-           end
-    out << h.escape_once(source.user.team.name) if source&.user&.team
+    out << h.escape_once(creator_user.full_name)
+    out << h.escape_once(creator_user.team.name)
 
     out.join("<br />").html_safe
   end

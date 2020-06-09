@@ -4,7 +4,7 @@ class Investigations::AlertsControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in users(:southampton)
     @investigation = load_case(:private)
-    @investigation.source = sources(:investigation_private)
+    #    @investigation.source = sources(:investigation_private)
   end
 
   test "prevents creation of alert on private investigation" do
