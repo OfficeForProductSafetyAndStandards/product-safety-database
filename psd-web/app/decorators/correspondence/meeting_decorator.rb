@@ -3,7 +3,7 @@ class Correspondence < ApplicationRecord
   class MeetingDecorator < CorrespondenceDecorator
 
     def title
-      overview.presence || "Meeting on #{correspondence_date.to_s(:govuk)}"
+      super || "Meeting on #{correspondence_date.to_s(:govuk)}"
     end
   end
 end

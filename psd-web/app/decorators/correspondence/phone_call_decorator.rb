@@ -3,7 +3,7 @@ class Correspondence < ApplicationRecord
   class PhoneCallDecorator < CorrespondenceDecorator
 
     def title
-      overview.presence || "Phone call on #{correspondence_date.to_s(:govuk)}"
+      super || "Phone call on #{correspondence_date.to_s(:govuk)}"
     end
   end
 end

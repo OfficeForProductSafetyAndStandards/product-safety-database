@@ -3,7 +3,7 @@ class Correspondence < ApplicationRecord
   class EmailDecorator < CorrespondenceDecorator
 
     def title
-      overview.presence || "Email on #{correspondence_date.to_s(:govuk)}"
+      super || "Email on #{correspondence_date.to_s(:govuk)}"
     end
   end
 end

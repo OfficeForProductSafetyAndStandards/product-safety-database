@@ -1,11 +1,11 @@
-class TestDecorator < Draper::Decorator
+class TestDecorator < ApplicationDecorator
   delegate_all
   include SupportingInformationHelper
 
   def title
-    result_text = if passed?
+    result_text = if result.passed?
                     "Passed test"
-                  elsif failed?
+                  elsif result.failed?
                     "Failed test"
                   else
                     "Test result"
@@ -24,5 +24,9 @@ class TestDecorator < Draper::Decorator
 
   def date_added
     created_at.to_s(:govuk)
+  end
+
+  def result
+    @result ||= ActiveSupport::StringInquirer.new(object.result || "")
   end
 end
