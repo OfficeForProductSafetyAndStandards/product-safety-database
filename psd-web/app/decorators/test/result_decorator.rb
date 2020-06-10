@@ -25,10 +25,6 @@ class Test < ApplicationRecord
       created_at.to_s(:govuk)
     end
 
-    def result
-      @result ||= ActiveSupport::StringInquirer.new(object.result || "")
-    end
-
     def supporting_information_type
       "Test result"
     end
