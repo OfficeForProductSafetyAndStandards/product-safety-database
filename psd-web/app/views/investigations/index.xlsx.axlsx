@@ -15,7 +15,7 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       investigation.product_category,
       investigation.hazard_type,
       investigation.coronavirus_related?,
-      investigation.owner ? investigation.owner.decorate.display_name : "No case owner",
+      investigation.owner ? investigation.owner.decorate.display_name(viewer: current_user) : "No case owner",
       investigation.creator_user&.name,
       complainant.present? ? complainant&.name : "",
       complainant.present? ? complainant&.email_address : "",

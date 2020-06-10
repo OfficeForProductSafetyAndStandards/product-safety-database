@@ -1,7 +1,7 @@
 ruby:
   actual_items = items.map do |item|
     {
-      text: item.decorate.display_name,
+      text: item.decorate.display_name(viewer: current_user),
       value: item.id
     }
   end
