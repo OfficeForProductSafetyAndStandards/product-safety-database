@@ -31,7 +31,6 @@ class TestDecorator < ApplicationDecorator
   end
 
   def supporting_information_type
-    h.concat("Test")
-    h.tag.span(super, class: "govuk-caption-m")
+    "Test result"
   end
 end
