@@ -91,6 +91,10 @@ class Investigation < ApplicationRecord
       .where.not(record: [corrective_actions, correspondences, tests])
   end
 
+  def supporting_information
+    (corrective_actions + correspondences + tests).sort_by(&:created_at).reverse
+  end
+
   def supporting_information_attachments
     ActiveStorage::Attachment.includes(:blob).where(
       record: [corrective_actions, correspondences, tests]

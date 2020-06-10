@@ -22,13 +22,11 @@ RSpec.feature "Supporting information", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email_file.record_type)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email_file.date_of_activity)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email_file.date_added)
-      # expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell govuk-caption-m", text: "by anonymous")
 
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call_transcript.title)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call_transcript.record_type)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call_transcript.date_of_activity)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call_transcript.date_added)
-      # expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell govuk-caption-m", text: "anonymous")
 
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting_transcript.title)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting_transcript.record_type)

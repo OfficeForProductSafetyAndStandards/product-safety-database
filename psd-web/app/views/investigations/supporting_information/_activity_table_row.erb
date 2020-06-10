@@ -1,15 +1,14 @@
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
-    <%= activity_table_row.title %>
+    <%= activity_table_row.supporting_information_title %>
   </td>
   <td class="govuk-table__cell">
-    <%= activity_table_row.record_type %>
+    <%= activity_table_row.type_for_table_display %>
   </td>
   <td class="govuk-table__cell">
     <%= activity_table_row.date_of_activity %>
   </td>
   <td class="govuk-table__cell">
     <%= activity_table_row.date_added %>
-    <%= creator_caption(@creators_by_blob_id[activity_table_row.blob_id], current_user) %>
   </td>
 </tr>

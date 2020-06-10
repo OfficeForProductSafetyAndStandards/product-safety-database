@@ -14,7 +14,15 @@ class TestDecorator < Draper::Decorator
     "#{result_text}: #{product.name}"
   end
 
-  def test
+  def supporting_information_title
+    title
+  end
 
+  def date_of_activity
+    date.to_s(:govuk)
+  end
+
+  def date_added
+    created_at.to_s(:govuk)
   end
 end
