@@ -36,12 +36,11 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_confirmation_page_to_show_entered_data
 
-      expect_case_activity_page_to_show_entered_data
+    expect_case_activity_page_to_show_entered_data
 
-      click_link "Supporting information (1)"
+    click_link "Supporting information (1)"
 
-      expect_case_supporting_information_page_to_show_file
-    end
+    expect_case_supporting_information_page_to_show_file
 
     expect_form_to_show_input_data
 
