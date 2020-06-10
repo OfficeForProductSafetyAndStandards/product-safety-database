@@ -32,7 +32,7 @@ module Investigations::DisplayTextHelper
       {
         href: investigation_supporting_information_index_path(investigation),
         text: "Supporting information",
-        count: " (#{investigation.supporting_information.size +  investigation.generic_supporting_information_attachments.size})",
+        count: " (#{investigation.supporting_information.size + investigation.generic_supporting_information_attachments.size})",
         active: is_current_tab.supporting_information?
       },
 
