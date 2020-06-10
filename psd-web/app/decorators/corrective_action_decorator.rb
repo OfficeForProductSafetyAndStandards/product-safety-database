@@ -17,4 +17,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def date_added
     created_at.to_s(:govuk)
   end
+
+  def show_path
+    h.investigation_action_path(investigation, object)
+  end
 end

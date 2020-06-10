@@ -19,7 +19,6 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def supporting_information_type
-    h.concat("Correspondence")
-    h.tag.span(super, class: "govuk-caption-m")
+    ("Correspondence" + h.tag.span(super, class: "govuk-caption-m")).html_safe
   end
 end

@@ -33,4 +33,8 @@ class TestDecorator < ApplicationDecorator
   def supporting_information_type
     "Test result"
   end
+
+  def show_path
+    h.investigation_test_result_path(investigation, object)
+  end
 end
