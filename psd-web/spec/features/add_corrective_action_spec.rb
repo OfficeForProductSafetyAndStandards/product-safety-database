@@ -71,15 +71,15 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_confirmation_page_to_show_entered_data
-    expect(page.find("th", text: "Summary")).to have_sibling("td", text: summary)
-    expect(page.find("th", text: "Date decided")).to have_sibling("td", text: date.strftime("%d/%m/%Y"))
-    expect(page.find("th", text: "Legislation")).to have_sibling("td", text: legislation)
-    expect(page.find("th", text: "Details")).to have_sibling("td", text: details)
-    expect(page.find("th", text: "Attachment", match: :prefer_exact)).to have_sibling("td", text: File.basename(file))
-    expect(page.find("th", text: "Attachment description")).to have_sibling("td", text: file_description)
-    expect(page.find("th", text: "Type of measure")).to have_sibling("td", text: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
-    expect(page.find("th", text: "Duration of action")).to have_sibling("td", text: CorrectiveAction.human_attribute_name("duration.#{duration}"))
-    expect(page.find("th", text: "Geographic scope")).to have_sibling("td", text: geographic_scope)
+    expect(page).to have_summary_item(key: "Summary", value: summary)
+    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Legislation", value: legislation)
+    expect(page).to have_summary_item(key: "Details", value: details)
+    expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
+    expect(page).to have_summary_item(key: "Attachment description", value: file_description)
+    expect(page).to have_summary_item(key: "Type of measure", value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
+    expect(page).to have_summary_item(key: "Duration of action", value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
+    expect(page).to have_summary_item(key: "Geographic scope", value: geographic_scope)
   end
 
   def expect_form_to_show_input_data
