@@ -72,7 +72,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
   def expect_confirmation_page_to_show_entered_data
     expect(page).to have_summary_item(key: "Summary", value: summary)
-    expect(page).to have_summary_item(key: "Date decided", value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Legislation", value: legislation)
     expect(page).to have_summary_item(key: "Details", value: details)
     expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
