@@ -17,4 +17,9 @@ class CorrespondenceDecorator < ApplicationDecorator
   def date_added
     created_at.to_s(:govuk)
   end
+
+  def supporting_information_type
+    h.concat("Correspondence")
+    h.tag.span(super, class: "govuk-caption-m")
+  end
 end

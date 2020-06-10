@@ -11,7 +11,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def date_of_activity
-    date_decided
+    date_decided.to_s(:govuk)
   end
 
   def date_added

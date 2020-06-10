@@ -29,4 +29,9 @@ class TestDecorator < ApplicationDecorator
   def result
     @result ||= ActiveSupport::StringInquirer.new(object.result || "")
   end
+
+  def supporting_information_type
+    h.concat("Test")
+    h.tag.span(super, class: "govuk-caption-m")
+  end
 end
