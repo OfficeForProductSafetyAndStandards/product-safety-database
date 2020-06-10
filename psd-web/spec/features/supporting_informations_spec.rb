@@ -38,8 +38,6 @@ RSpec.feature "Supporting information", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
-
-      expect(page).not_to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_request.supporting_information_title)
     end
   end
 end
