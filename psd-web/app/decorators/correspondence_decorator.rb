@@ -23,8 +23,8 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def activity_cell_partial(viewing_user)
-    return "activity_table_cell_with_link" if Pundit.policy!(viewing_user, investigation).view_protected_details?(user: viewing_user)
+    return "activity_table_cell_no_link" unless Pundit.policy!(viewing_user, investigation).view_protected_details?(user: viewing_user)
 
-    "activity_table_cell_no_link"
+    super
   end
 end
