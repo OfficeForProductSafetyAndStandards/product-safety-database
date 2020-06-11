@@ -36,6 +36,14 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_confirmation_page_to_show_entered_data
 
+    click_link "Edit details"
+
+    expect_form_to_show_input_data
+
+    click_button "Continue"
+
+    expect_confirmation_page_to_show_entered_data
+
     click_button "Continue"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
@@ -112,9 +120,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_case_supporting_information_page_to_show_file
-    expect(page).to have_selector("h1", text: "Supporting information")
-    expect(page).to have_selector("h2", text: summary)
-    expect(page).to have_selector("p", text: file_description)
+    expect(page).to have_css("h1", text: "Supporting information")
   end
 
   def fill_and_submit_form
