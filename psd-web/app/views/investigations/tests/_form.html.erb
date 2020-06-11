@@ -3,21 +3,14 @@
   <div class="govuk-form-group <%= "govuk-form-group--error" if test.errors[:product].any? %>">
 
     <% label_text = test.requested? ? "Which product should be tested?" : " Which product was tested?" %>
-    <%= render "components/govuk_label",
-      text: label_text,
-      classes: "govuk-label--m" %>
     <% if investigation.products.empty? %>
+      <h2 class="govuk-heading-m"><%= label_text %></h2>
       <span class="govuk-hint">
         There are no products on this case. <%= link_to "Add a product", new_investigation_product_path(investigation) %> to send it for testing.
       </span>
     <% elsif @investigation.products.size == 1 %>
-      <%= render "form_components/govuk_input",
-               key: :product_name,
-               form: form,
-               attributes: { disabled: true },
-               classes: "govuk-!-width-two-thirds",
-               value: @investigation.products.first.name,
-               label: { text: "Product name", classes: "govuk-visually-hidden" } %>
+      <h2 class="govuk-heading-m">Product tested</h2>
+      <p class="govuk-body"><%= @investigation.products.first.name %></p>
       <%= form.hidden_field :product_id, value: @investigation.products.first.id %>
     <% else %>
       <% span_html = capture do %>
@@ -31,7 +24,7 @@
         items: investigation.products.map { |product| { text: product.name, value: product.id } },
         is_autocomplete: true,
         hint: { html: span_html },
-        label: { text: "Product", classes: "govuk-visually-hidden" }
+        label: { text: "Which product was tested?", classes: "govuk-label--m" }
       %>
     <% end %>
   </div>

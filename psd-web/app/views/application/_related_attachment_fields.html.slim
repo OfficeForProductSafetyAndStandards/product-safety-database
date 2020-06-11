@@ -8,10 +8,9 @@ fieldset.govuk-fieldset
         ' Currently selected file:
         = link_to file_blob.filename, file_blob, target: "_blank", rel: 'noopener'
     = form.fields_for attachment_name do |subform|
-      - if file_blob.blank?
-        .govuk-form-group
-          = subform.label :file, "Upload a file", class: "govuk-label", for: "attachment-file-input"
-          = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
+      .govuk-form-group
+        = subform.label :file, "Upload a file", class: "govuk-label", for: "attachment-file-input"
+        = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
       #attachment-description
         = render "form_components/govuk_textarea",
                  key: :description,

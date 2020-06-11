@@ -142,7 +142,7 @@ Rails.application.routes.draw do
     resources :meetings, controller: "investigations/record_meetings", only: %i[show new create update]
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
 
-    resources :test_results, controller: "investigations/test_results", only: :show, path: "test-results"
+    resources :test_results, controller: "investigations/test_results", only: %i[show edit update], path: "test-results"
 
     resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
 
