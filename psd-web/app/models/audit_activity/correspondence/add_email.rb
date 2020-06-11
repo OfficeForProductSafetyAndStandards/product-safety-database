@@ -48,7 +48,7 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     output + "<br>"
   end
 
-  def restricted_title
+  def restricted_title(_user)
     "Email added"
   end
 

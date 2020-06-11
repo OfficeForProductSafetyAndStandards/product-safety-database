@@ -59,7 +59,7 @@ RSpec.describe RemoveProductFromCase, :with_stubbed_elasticsearch, :with_test_qu
         expect(activity).to be_a(AuditActivity::Product::Destroy)
         expect(activity.source.user).to eq(user)
         expect(activity.product_id).to eq(product.id)
-        expect(activity.title).to eq("Removed: #{product.name}")
+        expect(activity.title(nil)).to eq("Removed: #{product.name}")
       end
 
       context "when the case owner is a user" do

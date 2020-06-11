@@ -39,7 +39,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     file.attached? ? "Attached: #{sanitize_text file.filename}<br>" : ""
   end
 
-  def restricted_title
+  def restricted_title(_user)
     "Phone call added"
   end
 

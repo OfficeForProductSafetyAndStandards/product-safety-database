@@ -1,31 +1,30 @@
 class AuditActivity::Investigation::AutomaticallyUpdateOwner < AuditActivity::Investigation::Base
-  def self.from(investigation)
-    title = investigation.owner.id.to_s
-    super(investigation, title)
+  def self.from(*)
+    raise "Deprecated - use DeleteUser.call instead"
   end
 
-  def owner_id
-    # We store owner_id in title field, this is getting it back
-    # Using alias for accessing parent method causes errors elsewhere :(
-    AuditActivity::Investigation::Base.instance_method(:title).bind(self).call
+  def self.build_metadata(owner)
+    {
+      owner_id: owner.id
+    }
   end
 
-  # We store owner_id in title field, this is computing title based on that
-  def title
+  def title(user)
     type = investigation.case_type.capitalize
-    new_owner = (User.find_by(id: owner_id) || Team.find_by(id: owner_id))&.decorate&.display_name
+    new_owner = owner.decorate.display_name(viewer: user)
     "Case owner automatically changed on #{type} to #{new_owner}"
   end
 
-  def subtitle
+  def subtitle(_viewer)
     "Case owner automatically changed, #{pretty_date_stamp}"
   end
 
-  def entities_to_notify
-    []
+private
+
+  def owner
+    User.find_by(id: metadata["owner_id"]) || Team.find_by(id: metadata["owner_id"])
   end
 
-  def email_subject_text; end
-
-  def email_update_text(viewer = nil); end
+  # Do not send investigation_updated mail. This is handled by the DeleteUser service
+  def notify_relevant_users; end
 end

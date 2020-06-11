@@ -21,7 +21,7 @@ class AuditActivity::Document::Base < AuditActivity::Base
     attachment.image?
   end
 
-  def restricted_title; end
+  def restricted_title(_user); end
 
   def can_display_all_data?(user)
     can_be_displayed?(attachment, investigation, user)

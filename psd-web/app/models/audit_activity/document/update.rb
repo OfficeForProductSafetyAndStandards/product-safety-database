@@ -22,7 +22,7 @@ class AuditActivity::Document::Update < AuditActivity::Document::Base
     document.metadata[:description] != previous_data[:description]
   end
 
-  def restricted_title
+  def restricted_title(_user)
     "Document updated"
   end
 
