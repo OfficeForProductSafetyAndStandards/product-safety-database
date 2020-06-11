@@ -72,7 +72,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ansi (1.5.0)
     arel (9.0.0)
-    ast (2.4.0)
+    ast (2.4.1)
     awesome_print (1.8.0)
     aws-eventstream (1.1.0)
     aws-partitions (1.323.0)
@@ -411,7 +411,7 @@ GEM
       rubocop (>= 0.72.0)
     rubocop-rake (0.5.1)
       rubocop
-    rubocop-rspec (1.39.0)
+    rubocop-rspec (1.40.0)
       rubocop (>= 0.68.1)
     ruby-debug-ide (0.7.2)
       rake (>= 0.8.1)
@@ -590,7 +590,7 @@ DEPENDENCIES
   rubocop
   rubocop-govuk (~> 3.14.0)
   rubocop-performance
-  rubocop-rspec (~> 1.39)
+  rubocop-rspec (~> 1.40)
   ruby-debug-ide
   rubyzip
   sass-rails (~> 6.0)
