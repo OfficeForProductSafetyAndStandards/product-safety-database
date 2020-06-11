@@ -18,11 +18,12 @@
 <% if @supporting_information.any? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+      <h2>Documents</h2>
       <table class="govuk-table">
         <thead class="govuk-table__head">
-          <th class="govuk-table__header">Activity</th>
+          <th class="govuk-table__header">Title</th>
           <th class="govuk-table__header">Type</th>
-          <th class="govuk-table__header">Date of activity</th>
+          <th class="govuk-table__header">Date</th>
           <th class="govuk-table__header">Date added</th>
         </thead>
         <tbody class="govuk-table__body">
@@ -45,7 +46,7 @@
 
     <% elsif @other_supporting_information.any?  %>
 
-      <h2 class="govuk-heading-m">Generic attachments</h2>
+      <h2 class="govuk-heading-m">Other files and attachments</h2>
 
       <%= render partial:    @investigation.generic_attachment_partial(current_user),
                  collection: @other_supporting_information,
