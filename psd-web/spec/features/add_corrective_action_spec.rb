@@ -36,11 +36,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_confirmation_page_to_show_entered_data
 
-    expect_case_activity_page_to_show_entered_data
-
-    click_link "Supporting information (1)"
-
-    expect_case_supporting_information_page_to_show_file
+    click_link "Edit details"
 
     expect_form_to_show_input_data
 
@@ -52,6 +48,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
+
+    click_link "Supporting information (1)"
+
+    expect_case_supporting_information_page_to_show_file
 
     click_on "Activity"
 
