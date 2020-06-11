@@ -27,7 +27,7 @@ module Investigations::UserFiltersHelper
     render "form_components/govuk_select",
            key: :case_owner_is_someone_else_id,
            form: form,
-           items: entities.map { |e| { text: e.display_name, value: e.id } },
+           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
            label: { text: "Name" },
            is_autocomplete: true
   end
@@ -36,7 +36,7 @@ module Investigations::UserFiltersHelper
     render "form_components/govuk_select",
            key: :created_by_someone_else_id,
            form: form,
-           items: entities.map { |e| { text: e.display_name, value: e.id } },
+           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
            label: { text: "Name" },
            is_autocomplete: true
   end

@@ -1,8 +1,8 @@
-<%= page_title(@team.display_name) %>
+<%= page_title(@team.display_name(viewer: current_user)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <h1 class="govuk-heading-l"><%= @team.display_name %></h1>
+    <h1 class="govuk-heading-l"><%= @team.display_name(viewer: current_user) %></h1>
 
     <%= link_to "Invite a team member", new_team_invitation_path(@team), class: "govuk-button", role: "button" if current_user.is_team_admin? %>
 

@@ -14,7 +14,7 @@
       - if @investigation.owner.present?
         p
           ' Current case owner:
-          strong = @investigation.owner.display_name
+          strong = @investigation.owner.decorate.display_name(viewer: current_user)
       - else
         p This case has no owner
 
