@@ -1,6 +1,6 @@
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
-    <%= link_to supporting_information_row.supporting_information_title, supporting_information_row.show_path %>
+    <%= render supporting_information_row.activity_cell_partial(current_user), supporting_information_row: supporting_information_row %>
   </td>
   <td class="govuk-table__cell">
     <%= supporting_information_row.supporting_information_type %>

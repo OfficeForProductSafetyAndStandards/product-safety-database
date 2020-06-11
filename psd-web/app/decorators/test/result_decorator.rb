@@ -32,5 +32,9 @@ class Test < ApplicationRecord
     def show_path
       h.investigation_test_result_path(investigation, object)
     end
+
+    def activity_cell_partial(_viewing_user)
+      "activity_table_cell_with_link"
+    end
   end
 end

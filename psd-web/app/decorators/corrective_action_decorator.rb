@@ -21,4 +21,10 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def show_path
     h.investigation_action_path(investigation, object)
   end
+
+  def activity_cell_partial(viewing_user)
+    return "activity_table_cell_with_link" if Pundit.policy!(viewing_user, investigation).view_protected_details?(user: viewing_user)
+
+    "activity_table_cell_no_link"
+  end
 end

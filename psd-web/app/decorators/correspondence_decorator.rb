@@ -21,4 +21,10 @@ class CorrespondenceDecorator < ApplicationDecorator
   def supporting_information_type
     ("Correspondence" + h.tag.span(super, class: "govuk-caption-m")).html_safe
   end
+
+  def activity_cell_partial(viewing_user)
+    return "activity_table_cell_with_link" if Pundit.policy!(viewing_user, investigation).view_protected_details?(user: viewing_user)
+
+    "activity_table_cell_no_link"
+  end
 end
