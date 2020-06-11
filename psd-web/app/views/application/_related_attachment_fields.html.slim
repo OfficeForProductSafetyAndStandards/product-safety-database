@@ -2,19 +2,29 @@ fieldset.govuk-fieldset
   - if local_variables.include?(:title)
     legend.govuk-fieldset__legend.govuk-fieldset__legend--m
       = title
+
+  .govuk-body.govuk-hint
+    | If you have multiple files, compress them in a zip
   .govuk-form-group class=("govuk-form-group--error" if file_validation_errors?(form.object.errors))
-    - if file_blob.present?
-      p#current-attachment-details
-        ' Currently selected file:
-        = link_to file_blob.filename, file_blob, target: "_blank", rel: 'noopener'
+
     = form.fields_for attachment_name do |subform|
-      .govuk-form-group
-        = subform.label :file, "Upload a file", class: "govuk-label", for: "attachment-file-input"
-        = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
-      #attachment-description
-        = render "form_components/govuk_textarea",
-                 key: :description,
-                 value: file_blob&.metadata&.dig(:description),
-                 form: subform,
-                 label: { text: "Attachment description" },
-                 attributes: { maxlength: 10_000 }
+
+      - if file_blob.present?
+        p#current-attachment-details
+          ' Currently selected file:
+          = link_to file_blob.filename, file_blob, target: "_blank", rel: 'noopener'
+
+        details.govuk-details
+          summary.govuk-details__summary
+            span.govuk-details__summary-text Replace this file
+          div.govuk-details__text
+            .govuk-form-group
+              = subform.label :file, "Upload a file", class: "govuk-label", for: "attachment-file-input"
+              = subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input"
+        #attachment-description
+          = render "form_components/govuk_textarea",
+                   key: :description,
+                   value: file_blob&.metadata&.dig(:description),
+                   form: subform,
+                   label: { text: "Attachment description" },
+                   attributes: { maxlength: 10_000 }
