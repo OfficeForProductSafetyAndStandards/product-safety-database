@@ -36,23 +36,22 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <% if @supporting_information.none? && @other_supporting_information.none?  %>
+
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
           <p class="govuk-body">No supporting information</p>
         </div>
       </div>
+
     <% elsif @other_supporting_information.any?  %>
+
       <h2 class="govuk-heading-m">Generic attachments</h2>
 
-      <% if policy(@investigation).view_protected_details?(user: current_user) %>
-        <% @other_supporting_information.each do |attachment| %>
-          <%= render "documents/generic_document_card", document: attachment, parent: @investigation %>
-        <% end %>
-      <% else %>
-        <% @other_supporting_information.each do |attachment| %>
-          <%= render "documents/restricted_generic_document_card", document: attachment %>
-        <% end %>
-      <% end %>
+      <%= render partial:    @investigation.generic_attachment_partial(current_user),
+                 collection: @other_supporting_information,
+                 as:         :document,
+                 locals:     { parent: @investigation }
+      %>
     <% end %>
   </div>
 </div>
