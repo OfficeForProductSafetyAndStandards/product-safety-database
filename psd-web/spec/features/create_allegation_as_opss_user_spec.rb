@@ -191,8 +191,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page).to have_text("Hazard type: #{allegation.fetch(:hazard_type)}")
     expect(page).to have_text(allegation.fetch(:description))
 
-    expect(page).to have_text("Restricted access")
-    expect(page).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact test organisation, who created this activity, to obtain these details if required.")
+    expect(page).to have_css("p", text: "Only teams added to the case can view allegation contact details")
 
     expect(page).not_to have_text("Name")
     expect(page).not_to have_text("Email address")

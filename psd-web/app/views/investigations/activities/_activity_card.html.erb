@@ -1,12 +1,12 @@
 <%
   restricted = !activity.can_display_all_data?(current_user)
-  title = restricted ? activity.restricted_title : activity.title
+  title = restricted ? activity.restricted_title(current_user) : activity.title(current_user)
 %>
 
 <li>
   <h3 class="govuk-heading-s"><%= title %></h3>
 
-  <p class="govuk-body-s timeline-details"><%= activity.subtitle %></p>
+  <p class="govuk-body-s timeline-details"><%= activity.subtitle(current_user) %></p>
 
   <% if restricted %>
     <%= render "restricted", activity: activity %>
@@ -55,6 +55,16 @@
 
     <% elsif activity.is_a?(AuditActivity::CorrectiveAction::Add) && activity.corrective_action %>
       <%=  link_to "View corrective action", investigation_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
+
+    <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) %>
+      <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link" %>
+
+    <% elsif activity.is_a?(AuditActivity::Correspondence::AddPhoneCall) %>
+      <%=  link_to "View phone call", investigation_phone_call_path(@investigation, activity.correspondence), class: "govuk-link" %>
+
+    <% elsif activity.is_a?(AuditActivity::Correspondence::AddMeeting) %>
+      <%=  link_to "View meeting", investigation_meeting_path(@investigation, activity.correspondence), class: "govuk-link" %>
+
     <% elsif activity.has_attachment? %>
       <% activity.attachments.each do |name, attachment| %>
         <%= link_to "View #{name}", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>

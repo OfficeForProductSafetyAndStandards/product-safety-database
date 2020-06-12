@@ -131,16 +131,20 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
+    resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }
+    resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
+
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
-    resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[show new create update]
-    resources :emails, controller: "investigations/emails", only: %i[show new create update]
-    resources :phone_calls, controller: "investigations/phone_calls", only: %i[show new create update]
-    resources :meetings, controller: "investigations/meetings", only: %i[show new create update]
+    resources :corrective_actions, controller: "investigations/record_corrective_actions", only: %i[show new create update]
+    resources :emails, controller: "investigations/record_emails", only: %i[show new create update]
+    resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[show new create update]
+    resources :meetings, controller: "investigations/record_meetings", only: %i[show new create update]
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
 
     resources :test_results, controller: "investigations/test_results", only: :show, path: "test-results"
 
-    resources :actions, controller: "investigations/view_corrective_actions", only: :show, path: "corrective-actions"
+    resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
 
     resources :tests, controller: "investigations/tests", only: %i[show create update] do
       collection do

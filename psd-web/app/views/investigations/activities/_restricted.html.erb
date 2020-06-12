@@ -1,5 +1,5 @@
 <%
-  creator = activity.source&.user&.organisation&.name || activity.source&.show
+  creator = activity.source&.user&.organisation&.name || activity.source&.show(current_user)
 %>
 
 <p><%= render "components/hmcts_badge", text: "Restricted access", classes: "hmcts-badge--grey" %></p>

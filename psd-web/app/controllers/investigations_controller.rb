@@ -124,6 +124,6 @@ private
   end
 
   def set_suggested_previous_owners
-    @suggested_previous_owners = suggested_previous_owners
+    @suggested_previous_owners = suggested_previous_owners(@investigation)
   end
 end

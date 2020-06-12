@@ -12,7 +12,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
 
   before do
     sign_in(user)
-    visit "/cases/#{investigation.pretty_id}/assign/select-owner"
+    visit "/cases/#{investigation.pretty_id}/assign/new"
   end
 
   scenario "does not show inactive users" do

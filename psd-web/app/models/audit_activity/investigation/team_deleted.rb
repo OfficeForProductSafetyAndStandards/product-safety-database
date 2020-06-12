@@ -1,6 +1,6 @@
 class AuditActivity::Investigation::TeamDeleted < AuditActivity::Investigation::Base
-  def subtitle
-    "Team removed by #{source&.show}, #{pretty_date_stamp}"
+  def subtitle(viewer)
+    "Team removed by #{source&.show(viewer)}, #{pretty_date_stamp}"
   end
 
 private
