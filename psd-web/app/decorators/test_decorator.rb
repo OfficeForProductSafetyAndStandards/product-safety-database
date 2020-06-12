@@ -1,15 +1,4 @@
-class TestDecorator < Draper::Decorator
+class TestDecorator < ApplicationDecorator
   delegate_all
-
-  def title
-    result_text = if passed?
-                    "Passed test"
-                  elsif failed?
-                    "Failed test"
-                  else
-                    "Test result"
-                  end
-
-    "#{result_text}: #{product.name}"
-  end
+  include SupportingInformationHelper
 end
