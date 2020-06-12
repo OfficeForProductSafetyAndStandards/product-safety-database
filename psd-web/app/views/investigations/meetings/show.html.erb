@@ -4,7 +4,7 @@
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back",
-    href: investigation_path(@investigation)
+    href: investigation_supporting_information_index_path(@investigation)
   ) %>
 <% end %>
 
@@ -57,7 +57,7 @@
 
   <% if @meeting.related_attachment.attached? %>
     <div class="govuk-grid-column-one-third">
-      <h2 class="govuk-heading-m">Attachments</h1>
+      <h2 class="govuk-heading-m">Attachments</h2>
       <p class="govuk-body"><%= link_to @meeting.related_attachment.filename, @meeting.related_attachment, class: "govuk-link" %></p>
 
       <%= document_placeholder(@meeting.related_attachment) %>

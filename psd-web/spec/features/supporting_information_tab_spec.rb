@@ -9,16 +9,37 @@ RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :wit
   context "when the team from the user viewing the information owns the investigation" do
     before { sign_in user }
 
-    scenario "completing the add attachment flow saves the attachment" do
+    scenario "listing supporting information" do
       visit "/cases/#{investigation.pretty_id}"
-      click_link "Supporting information"
-      expect(page).to have_css("h2", text: corrective_action.documents.first.title)
-      expect(page).to have_css("h2", text: email.email_file.decorate.title)
-      expect(page).to have_css("h2", text: phone_call.transcript.decorate.title)
-      expect(page).to have_css("h2", text: meeting.transcript.decorate.title)
-      expect(page).to have_css("h2", text: test_request.documents.first.decorate.title)
-      expect(page).to have_css("h2", text: test_result.documents.first.decorate.title)
-      expect(page).to have_css("h2", text: investigation.documents.first.title)
+
+      click_on "Supporting information (6)"
+
+      within page.first("table") do
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: email.supporting_information_title)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceEmail")
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_added)
+
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: phone_call.supporting_information_title)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondencePhone call")
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_added)
+
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: meeting.supporting_information_title)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceMeeting")
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_added)
+
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: corrective_action.supporting_information_title)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.supporting_information_type)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_added)
+
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: test_result.supporting_information_title)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+      end
     end
   end
 

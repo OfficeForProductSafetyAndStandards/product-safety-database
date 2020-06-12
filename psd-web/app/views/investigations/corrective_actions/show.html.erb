@@ -4,7 +4,7 @@
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back",
-    href: investigation_path(@investigation)
+    href: investigation_supporting_information_index_path(@investigation)
   ) %>
 <% end %>
 
@@ -63,7 +63,7 @@
 
   <% if @corrective_action.documents.any? %>
     <div class="govuk-grid-column-one-third">
-      <h2 class="govuk-heading-m">Attachments</h1>
+      <h2 class="govuk-heading-m">Attachments</h2>
       <% @corrective_action.documents.each do |document| %>
         <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
 
