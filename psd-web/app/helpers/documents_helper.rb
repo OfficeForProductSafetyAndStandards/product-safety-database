@@ -1,8 +1,8 @@
 module DocumentsHelper
   include FileConcern
 
-  def document_placeholder(file_extension)
-    render "documents/placeholder", file_extension: file_extension
+  def document_placeholder(document)
+    render "documents/placeholder", document: document
   end
 
   def set_parent
@@ -47,6 +47,17 @@ module DocumentsHelper
     else
       document_file_extension(document).upcase
     end
+  end
+
+  def is_spreadsheet(document)
+    spreadsheet_content_types = ["application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+
+    if spreadsheet_content_types.include? document.content_type
+      return true
+    end
+
+    false
   end
 
   def formatted_file_updated_date(file)

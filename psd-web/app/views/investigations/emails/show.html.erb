@@ -80,7 +80,7 @@
       <h2 class="govuk-heading-m">Attachments</h1>
       <p class="govuk-body"><%= link_to @email.email_attachment.filename, @email.email_attachment, class: "govuk-link" %></p>
 
-      <%= document_placeholder(document_file_extension(@email.email_attachment)) %>
+      <%= document_placeholder(@email.email_attachment) %>
 
       <% if @email.email_attachment.blob.metadata["description"].present? %>
         <p class="govuk-body"><%= @email.email_attachment.blob.metadata["description"] %></p>

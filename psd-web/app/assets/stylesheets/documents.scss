@@ -26,24 +26,54 @@ $secondary-hover-colour: #171819; // same as footer links
   @include govuk-responsive-margin(6, "bottom");
 }
 
-// Generic graphic of a document
+// Generic thumbnail graphics
+
+// Adapted from https://github.com/alphagov/whitehall/blob/7b5c5a086b89cb62ffba62b152a0a8dcfc10c8e6/app/assets/stylesheets/frontend/helpers/_attachment.scss
+
+$thumbnail-width: 99px;
+$thumbnail-border: 5px;
+
 .app-document-preview__placeholder {
-  position: relative;
-  width: 120px;
-  height: 160px;
+  position: relative; // Needed so text can overlay correctly
+  width: $thumbnail-width / 2;
+
+  @include govuk-media-query($from: tablet) {
+    width: $thumbnail-width;
+  }
+
+  @include govuk-responsive-margin(6, "right");
   vertical-align: top;
+  margin-top: $thumbnail-border;
+  margin-left: $thumbnail-border;
+
+  padding-bottom: govuk-spacing(3);
+
+  img {
+    display: block;
+    width: 100%;
+    background: white;
+    outline: $thumbnail-border solid rgba(govuk-colour("black"), 0.2);
+    box-shadow: 0 2px 2px rgba(0,0,0,0.4);
+  }
 }
 
-// Positions the file extension over the placeholder
+// For tablet and up, show file extension over thumbnail graphic
 .app-document-preview__filetype {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 75px;
-  height: 30px;
-  color: govuk-colour("white");
-  @include govuk-font(19, $weight: bold, $line-height: 30px);
-  text-align: center;
+  display: none;
+
+  @include govuk-media-query($from: tablet) {
+    display: inherit;
+
+    position: absolute;
+    top: 12px;
+    left: 13px;
+    width: 75px;
+    height: 30px;
+    color: govuk-colour("white");
+    @include govuk-font(19, $weight: bold, $line-height: 30px);
+    text-align: center;
+    user-select: none;
+  }
 }
 
 // Shown while images are being processed
@@ -74,4 +104,8 @@ $secondary-hover-colour: #171819; // same as footer links
       margin-top: 0.5em;
     }
   }
+}
+
+.app-generic-attachment__thumbnail {
+  float: left;
 }

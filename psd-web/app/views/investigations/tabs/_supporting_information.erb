@@ -20,6 +20,8 @@
   <%= render "documents/document_card", document: attachement, parent: @investigation %>
 <% end %>
 
+<h2 class="govuk-heading-m">Other files and attachments</h2>
+<p class="govuk-body govuk-hint govuk-!-margin-bottom-6"><%= t("case.protected_details", data_type: "these files") %></p>
 <% if policy(@investigation).view_protected_details?(user: current_user) %>
   <% @other_supporting_information.each do |attachment| %>
     <%= render "documents/generic_document_card", document: attachment, parent: @investigation %>
