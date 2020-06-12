@@ -9,7 +9,7 @@
 
 <%# Teams not involved in a case shouldn't complianant contact details %>
 <% if !policy(@investigation).view_protected_details? %>
-  <%= render "restricted", activity: activity %>
+  <p class="govuk-hint"><%= t("case.protected_details", data_type: "#{@investigation.case_type} contact details") %></p>
 
 <% else %>
   <% complainant_info = [] %>
