@@ -93,6 +93,12 @@ class InvestigationDecorator < ApplicationDecorator
     owner.owner_short_name(viewer: viewer)
   end
 
+  def generic_attachment_partial(viewing_user)
+    return "documents/restricted_generic_document_card" unless Pundit.policy!(viewing_user, object).view_protected_details?(user: viewing_user)
+
+    "documents/generic_document_card"
+  end
+
 private
 
   def category
