@@ -2,6 +2,7 @@ require "test_helper"
 
 class ComplainantTest < ActiveSupport::TestCase
   setup do
+    stub_notify_mailer
     @complainant = Complainant.new(complainant_type: "Business")
   end
 

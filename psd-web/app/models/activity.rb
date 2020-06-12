@@ -17,8 +17,13 @@ class Activity < ApplicationRecord
     {}
   end
 
-  def subtitle
-    "#{subtitle_slug} by #{source&.show}, #{pretty_date_stamp}"
+  # Can be overridden by child classes but sometimes need to pass in user
+  def title(_user)
+    super()
+  end
+
+  def subtitle(viewer)
+    "#{subtitle_slug} by #{source&.show(viewer)}, #{pretty_date_stamp}"
   end
 
   def search_index;  end
@@ -31,7 +36,7 @@ class Activity < ApplicationRecord
     true
   end
 
-  def restricted_title
+  def restricted_title(_user)
     # where necessary should be implemented by subclasses
   end
 

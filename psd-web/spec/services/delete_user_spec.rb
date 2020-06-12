@@ -67,8 +67,8 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         expect { delete_call }.to change(update_owner_activities, :count).by(3)
 
         update_owner_activities.last(3).each do |activity|
-          expect(activity.title).to start_with "Case owner automatically changed on"
-          expect(activity.title).to end_with "to #{user.team.display_name}"
+          expect(activity.title(user)).to start_with "Case owner automatically changed on"
+          expect(activity.title(user)).to end_with "to #{user.team.name}"
         end
       end
       # rubocop:enable RSpec/ExampleLength

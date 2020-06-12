@@ -56,15 +56,9 @@ class InvestigationTest < ActiveSupport::TestCase
   end
 
   test "past owners should be computed" do
-    user = users(:southampton)
-    @investigation.update(owner: user)
+    user = users(:southampton_bob)
+    ChangeCaseOwner.call!(investigation: @investigation, owner: user, user: user)
     assert_includes @investigation.past_owners, user
-  end
-
-  test "past owner teams should be computed" do
-    team = Team.first
-    @investigation.update(owner: team)
-    assert_includes @investigation.past_teams, team
   end
 
   test "people out of current owner's team should not be able to change the case owner" do

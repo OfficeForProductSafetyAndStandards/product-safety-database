@@ -21,7 +21,7 @@
       <%= render "minimal_investigation_heading", investigation: @investigation, title: page_heading %>
       <p>
         You are changing the case owner to:
-        <strong><%= @potential_owner.display_name || @potential_owner.name %></strong>
+        <strong><%= @potential_owner.decorate.display_name(viewer: current_user) %></strong>
       </p>
       <div class="govuk-form-group">
         <%= render "form_components/govuk_textarea",
