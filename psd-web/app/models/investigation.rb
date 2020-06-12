@@ -20,7 +20,7 @@ class Investigation < ApplicationRecord
   validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
 
   validates :description, presence: true, on: :update
-  validates :owner_id, presence: { message: "Select case owner" }, on: :update
+  # validates :owner_id, presence: { message: "Select case owner" }, on: :update
 
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 10_000 }
@@ -33,8 +33,6 @@ class Investigation < ApplicationRecord
                :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
-
-  belongs_to :owner, polymorphic: true, optional: true
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products
@@ -65,15 +63,39 @@ class Investigation < ApplicationRecord
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
+  # belongs_to :owner, polymorphic: true, optional: true
+  has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerUser"
+  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerTeam"
+  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team"
+  has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
+
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
 
     super
   end
 
-  def owner_team
-    owner&.team
+  def owner
+    owner_user || owner_team
   end
+
+  def owner_team
+    super || owner_user&.team
+  end
+
+  def owner=(team_or_user)
+    @owner_changed = true
+    if team_or_user.is_a? User
+      self.owner_user = team_or_user
+      self.owner_team = nil
+    end
+    if team_or_user.is_a? Team
+      self.owner_team = team_or_user
+      self.owner_user = nil
+    end
+  end
+
+  delegate :id, to: :owner, prefix: true
 
   def teams_with_access
     ([owner_team] + teams_with_edit_access.order(:name)).compact
@@ -170,7 +192,7 @@ private
   def create_audit_activity_for_owner
     # TODO: User.current check is here to avoid triggering activity and emails from migrations
     # Can be safely removed once the migration PopulateAssigneeAndDescription has run
-    if ((saved_changes.key? :owner_id) || (saved_changes.key? :owner_type)) && User.current
+    if @owner_changed && User.current
       AuditActivity::Investigation::UpdateOwner.from(self)
     end
   end
