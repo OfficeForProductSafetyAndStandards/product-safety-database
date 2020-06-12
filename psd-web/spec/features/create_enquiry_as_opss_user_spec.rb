@@ -171,8 +171,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_css("p", text: "Case is related to the coronavirus outbreak.")
       expect(page).to have_css("p", text: enquiry.fetch(:enquiry_description))
 
-      expect(page).to have_text("Restricted access")
-      expect(page).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact test organisation, who created this activity, to obtain these details if required.")
+      expect(page).to have_css("p", text: "Only teams added to the case can view enquiry contact details")
 
       expect(page).not_to have_text("Name")
       expect(page).not_to have_text("Email address")
