@@ -12,7 +12,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   scenario "Adding a test result (with validation errors)" do
     travel_to Date.parse("2 April 2020") do
       sign_in(user)
-      visit "/cases/#{investigation.pretty_id}/activity"
+      visit "/cases/#{investigation.pretty_id}/supporting-information"
 
       click_link "Add supporting information"
 
