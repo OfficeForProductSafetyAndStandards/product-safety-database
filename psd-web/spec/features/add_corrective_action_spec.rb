@@ -20,7 +20,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   scenario "Adding a corrective action (with validation errors)" do
     visit "/cases/#{investigation.pretty_id}/activity"
 
-    click_link "Add activity"
+    click_link "Add supporting information"
 
     choose "Record corrective action"
 

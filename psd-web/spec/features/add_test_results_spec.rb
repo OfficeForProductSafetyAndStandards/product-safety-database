@@ -14,7 +14,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/activity"
 
-      click_link "Add activity"
+      click_link "Add supporting information"
 
       expect_to_be_on_new_activity_page
 
@@ -74,7 +74,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     sign_in(other_user)
     visit "/cases/#{investigation.pretty_id}/activity"
 
-    expect(page).not_to have_link("Add activity")
+    expect(page).not_to have_link("Add supporting information")
   end
 
   def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)

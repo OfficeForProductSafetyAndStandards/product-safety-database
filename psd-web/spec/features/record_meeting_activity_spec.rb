@@ -12,7 +12,7 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
 
     visit "/cases/#{investigation.pretty_id}/activity"
 
-    click_link "Add activity"
+    click_link "Add supporting information"
 
     expect_to_be_on_new_activity_page
 

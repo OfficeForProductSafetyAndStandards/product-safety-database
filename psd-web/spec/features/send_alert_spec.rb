@@ -17,7 +17,7 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
   scenario "shows the number of recipients the alert will be sent to, including active users only" do
     visit investigation_path(investigation)
 
-    click_link "Add activity"
+    click_link "Add supporting information"
 
     choose "Send email alert about this case"
     click_button "Continue"
