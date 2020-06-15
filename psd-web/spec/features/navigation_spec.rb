@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "App navigation", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_errors_rendered, type: :feature do
-
   let(:user) { create(:user, :activated, :opss_user) }
 
   let!(:product) { create(:product) }
