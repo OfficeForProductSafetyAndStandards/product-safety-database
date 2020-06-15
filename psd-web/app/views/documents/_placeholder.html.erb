@@ -1,5 +1,5 @@
 <div class="app-document-preview__placeholder" aria-hidden="true">
-  <% if is_spreadsheet(document) %>
+  <% if spreadsheet?(document) %>
     <%= image_tag "document_placeholder_spreadsheet.png", alt: "" %>
   <% else %>
     <%= image_tag "document_placeholder_document.png", alt: "" %>

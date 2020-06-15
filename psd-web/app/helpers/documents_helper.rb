@@ -49,17 +49,13 @@ module DocumentsHelper
     end
   end
 
-  def is_spreadsheet(document)
+  def spreadsheet?(document)
     spreadsheet_content_types = [
       "application/vnd.ms-excel",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ]
 
-    if spreadsheet_content_types.include? document.content_type
-      return true
-    end
-
-    false
+    spreadsheet_content_types.include?(document.content_type)
   end
 
   def formatted_file_updated_date(file)
