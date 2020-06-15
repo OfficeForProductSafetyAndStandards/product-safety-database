@@ -85,14 +85,10 @@ class Investigation < ApplicationRecord
     owner&.id
   end
 
-  def owner_team
-    super || owner_user&.team
-  end
-
   def owner=(team_or_user)
     if team_or_user.is_a? User
       self.owner_user = team_or_user
-      self.owner_team = nil
+      self.owner_team = team_or_user.team
     end
     if team_or_user.is_a? Team
       self.owner_team = team_or_user
