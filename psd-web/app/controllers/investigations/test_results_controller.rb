@@ -16,30 +16,18 @@ class Investigations::TestResultsController < ApplicationController
   def update
     @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
     authorize @investigation, :update?
+
     @test_result = @investigation.test_results.find(params[:id])
 
-    @test_result.set_dates_from_params(params[:test_result])
-    @test_result.attributes = test_result_attributes
+    result = UpdateTestResult.call(
+      test_result: @test_result,
+      new_attributes: test_result_attributes,
+      new_file: params[:test_result][:file][:file],
+      new_file_description: params[:test_result][:file][:description],
+      user: current_user
+    )
 
-    if params[:test_result][:file][:file]
-
-      # remove previous attachment
-      @test_result.documents.first&.purge_later
-
-      @test_result.documents.attach(params[:test_result][:file][:file])
-
-      document = @test_result.documents.first
-      document.blob.metadata[:description] = params[:test_result][:file][:description]
-      document.blob.save
-
-    end
-
-    if @test_result.save
-
-      document = @test_result.documents.first
-      document.blob.metadata[:description] = params[:test_result][:file][:description]
-      document.blob.save
-
+    if result.success?
       redirect_to investigation_test_result_path(@investigation, @test_result)
     else
       render "edit"
@@ -49,6 +37,6 @@ class Investigations::TestResultsController < ApplicationController
 private
 
   def test_result_attributes
-    params.require(:test_result).permit(:product_id, :legislation, :result, :details)
+    params.require(:test_result).permit(:product_id, :legislation, :result, :details, date: %i[day month year])
   end
 end
