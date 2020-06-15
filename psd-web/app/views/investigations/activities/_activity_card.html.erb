@@ -1,12 +1,12 @@
 <%
   restricted = !activity.can_display_all_data?(current_user)
-  title = restricted ? activity.restricted_title : activity.title
+  title = restricted ? activity.restricted_title(current_user) : activity.title(current_user)
 %>
 
 <li>
   <h3 class="govuk-heading-s"><%= title %></h3>
 
-  <p class="govuk-body-s timeline-details"><%= activity.subtitle %></p>
+  <p class="govuk-body-s timeline-details"><%= activity.subtitle(current_user) %></p>
 
   <% if restricted %>
     <%= render "restricted", activity: activity %>

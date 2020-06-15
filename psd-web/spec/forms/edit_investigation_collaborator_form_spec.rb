@@ -72,7 +72,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
 
           last_added_activity = investigation.activities.reload.order(created_at: :desc)
             .find_by!(type: "AuditActivity::Investigation::TeamDeleted")
-          expect(last_added_activity.title).to eql("test team removed from allegation")
+          expect(last_added_activity.title(user)).to eql("test team removed from allegation")
           expect(last_added_activity.source.user_id).to eql(user.id)
         end
       end

@@ -59,7 +59,7 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
         expect(activity).to be_a(AuditActivity::Product::Add)
         expect(activity.source.user).to eq(user)
         expect(activity.product_id).to eq(product.id)
-        expect(activity.title).to eq(product.name)
+        expect(activity.title(nil)).to eq(product.name)
       end
 
       context "when the case owner is a user" do

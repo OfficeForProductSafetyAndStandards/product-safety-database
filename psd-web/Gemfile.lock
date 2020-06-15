@@ -72,20 +72,20 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ansi (1.5.0)
     arel (9.0.0)
-    ast (2.4.0)
+    ast (2.4.1)
     awesome_print (1.8.0)
     aws-eventstream (1.1.0)
-    aws-partitions (1.323.0)
-    aws-sdk-core (3.97.1)
+    aws-partitions (1.329.0)
+    aws-sdk-core (3.99.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.33.0)
-      aws-sdk-core (~> 3, >= 3.71.0)
+    aws-sdk-kms (1.34.1)
+      aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.67.1)
-      aws-sdk-core (~> 3, >= 3.96.1)
+    aws-sdk-s3 (1.68.1)
+      aws-sdk-core (~> 3, >= 3.99.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.4)
@@ -132,7 +132,7 @@ GEM
     debase (0.2.4.1)
       debase-ruby_core_source (>= 0.10.2)
     debase-ruby_core_source (0.10.6)
-    devise (4.7.1)
+    devise (4.7.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -360,7 +360,7 @@ GEM
     remotipart (1.4.4)
     request_store (1.5.0)
       rack (>= 1.4)
-    responders (3.0.0)
+    responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
     rest-client (2.1.0)
@@ -391,24 +391,28 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.9.3)
-    rubocop (0.83.0)
+    rubocop (0.85.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.7)
       rexml
+      rubocop-ast (>= 0.0.3)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-govuk (3.14.0)
-      rubocop (= 0.83.0)
-      rubocop-rails (~> 2)
-      rubocop-rake (~> 0.5.1)
-      rubocop-rspec (~> 1.28)
+    rubocop-ast (0.0.3)
+      parser (>= 2.7.0.1)
+    rubocop-govuk (3.16.0)
+      rubocop (= 0.85.1)
+      rubocop-rails (= 2.6.0)
+      rubocop-rake (= 0.5.1)
+      rubocop-rspec (= 1.39.0)
     rubocop-performance (1.6.1)
       rubocop (>= 0.71.0)
-    rubocop-rails (2.5.2)
-      activesupport
+    rubocop-rails (2.6.0)
+      activesupport (>= 4.2.0)
       rack (>= 1.1)
-      rubocop (>= 0.72.0)
+      rubocop (>= 0.82.0)
     rubocop-rake (0.5.1)
       rubocop
     rubocop-rspec (1.39.0)
@@ -540,7 +544,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-pg_enum
   awesome_print
-  aws-sdk-s3 (= 1.67.1)
+  aws-sdk-s3 (= 1.68.1)
   axlsx!
   brakeman
   byebug
@@ -588,7 +592,7 @@ DEPENDENCIES
   rspec-mocks
   rspec-rails
   rubocop
-  rubocop-govuk (~> 3.14.0)
+  rubocop-govuk (~> 3.16.0)
   rubocop-performance
   rubocop-rspec (~> 1.39)
   ruby-debug-ide

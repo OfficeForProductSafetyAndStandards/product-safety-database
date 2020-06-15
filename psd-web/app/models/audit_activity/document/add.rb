@@ -8,7 +8,7 @@ class AuditActivity::Document::Add < AuditActivity::Document::Base
     "Document was attached to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
-  def restricted_title
+  def restricted_title(_user)
     "Document added"
   end
 

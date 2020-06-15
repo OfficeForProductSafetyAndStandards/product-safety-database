@@ -4,7 +4,7 @@
 
   ruby:
     items = investigation.important_owner_people.map do |user|
-      { text: user.decorate.display_name, value: user.id, checked: investigation.owner == user }
+      { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
     end
 
     someone_in_your_team = capture do
@@ -35,7 +35,7 @@
     items.push divider: "Teams"
 
     teams = investigation.important_owner_teams.map do |team|
-      { text: team.decorate.display_name, value: team.id, checked: investigation.owner == team }
+      { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
     end
     items.concat teams
 

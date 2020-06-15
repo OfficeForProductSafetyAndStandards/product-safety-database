@@ -20,15 +20,17 @@ class Investigation < ApplicationRecord
   validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
 
   validates :description, presence: true, on: :update
-  validates :owner_id, presence: { message: "Select case owner" }, on: :update
+
+  # Can currently only validate owner_id on update since create case wizards
+  # validate partially-built Investigation instances
+  validates :owner_id, presence: true, on: :update
 
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
 
-  after_update :create_audit_activity_for_owner,
-               :create_audit_activity_for_status,
+  after_update :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,
                :create_audit_activity_for_summary
 
@@ -96,8 +98,7 @@ class Investigation < ApplicationRecord
 
   def past_owners
     activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
-    user_id_list = activities.map(&:owner_id)
-    User.where(id: user_id_list)
+    activities.map(&:owner)
   end
 
   def important_owner_teams
@@ -108,12 +109,6 @@ class Investigation < ApplicationRecord
     end
     teams << owner if owner.is_a? Team
     teams
-  end
-
-  def past_teams
-    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
-    team_id_list = activities.map(&:owner_id)
-    Team.where(id: team_id_list)
   end
 
   def enquiry?
@@ -168,14 +163,6 @@ private
   def create_audit_activity_for_visibility
     if saved_changes.key?(:is_private) || visibility_rationale.present?
       AuditActivity::Investigation::UpdateVisibility.from(self)
-    end
-  end
-
-  def create_audit_activity_for_owner
-    # TODO: User.current check is here to avoid triggering activity and emails from migrations
-    # Can be safely removed once the migration PopulateAssigneeAndDescription has run
-    if ((saved_changes.key? :owner_id) || (saved_changes.key? :owner_type)) && User.current
-      AuditActivity::Investigation::UpdateOwner.from(self)
     end
   end
 

@@ -23,7 +23,7 @@ class AuditActivity::Correspondence::AddMeeting < AuditActivity::Correspondence:
     "meeting"
   end
 
-  def restricted_title
+  def restricted_title(_user)
     "Meeting added"
   end
 
