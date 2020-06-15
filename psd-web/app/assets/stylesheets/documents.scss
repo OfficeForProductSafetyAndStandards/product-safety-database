@@ -51,9 +51,9 @@ $thumbnail-border: 5px;
   img {
     display: block;
     width: 100%;
-    background: white;
+    background: govuk-colour("white");
     outline: $thumbnail-border solid rgba(govuk-colour("black"), 0.2);
-    box-shadow: 0 2px 2px rgba(0,0,0,0.4);
+    box-shadow: 0 2px 2px rgba(govuk-colour("black"), 0.4);
   }
 }
 
