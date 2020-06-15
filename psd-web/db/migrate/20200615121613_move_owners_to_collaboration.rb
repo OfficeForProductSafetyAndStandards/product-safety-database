@@ -3,7 +3,7 @@ class MoveOwnersToCollaboration < ActiveRecord::Migration[5.2]
     safety_assured do
       Investigation.transaction do
         Investigation.all.each do |i|
-          owner = i.owner_type.constantize.find(i.owner_id)
+          owner = i[:owner_type].constantize.find(i[:owner_id])
           i.owner = owner
           i.save
         end
