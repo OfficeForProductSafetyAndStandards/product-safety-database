@@ -16,9 +16,7 @@
   </div>
 </div>
 
-<% @investigation.images.each do |document| %>
-  <%= render "documents/document_card", document: document, parent: @investigation %>
-<% end %>
+<%= render partial: "documents/document_card", collection: @investigation.images, as: :document, locals: { parent: @investigation } %>
 
 <% if @investigation.images.none? %>
   <div class="govuk-grid-row">
