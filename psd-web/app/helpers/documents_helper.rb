@@ -50,8 +50,10 @@ module DocumentsHelper
   end
 
   def is_spreadsheet(document)
-    spreadsheet_content_types = ["application/vnd.ms-excel",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
+    spreadsheet_content_types = [
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ]
 
     if spreadsheet_content_types.include? document.content_type
       return true
