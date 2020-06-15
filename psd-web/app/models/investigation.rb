@@ -81,12 +81,15 @@ class Investigation < ApplicationRecord
     owner_user || owner_team
   end
 
+  def owner_id
+    owner&.id
+  end
+
   def owner_team
     super || owner_user&.team
   end
 
   def owner=(team_or_user)
-    @owner_changed = true
     if team_or_user.is_a? User
       self.owner_user = team_or_user
       self.owner_team = nil
@@ -96,8 +99,6 @@ class Investigation < ApplicationRecord
       self.owner_user = nil
     end
   end
-
-  delegate :id, to: :owner, prefix: true
 
   def teams_with_access
     ([owner_team] + teams_with_edit_access.order(:name)).compact
