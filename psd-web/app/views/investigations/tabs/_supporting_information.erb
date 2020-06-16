@@ -1,0 +1,65 @@
+<% page_heading = "Supporting information" %>
+<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <% if policy(@investigation).update?(user: current_user) %>
+      <p class="govuk-body">
+        <%= link_to "Add supporting information", new_investigation_activity_path(@investigation) %>
+      </p>
+      <p class="govuk-body">
+        <%= link_to "Add file attachment", new_investigation_new_path(@investigation) %>
+      </p>
+
+    <% end %>
+
+
+    <hr class="govuk-section-break govuk-section-break--l">
+  </div>
+</div>
+
+<% if @supporting_information.any? %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m">Documents</h2>
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <thead class="govuk-table__head">
+          <th class="govuk-table__header">Title</th>
+          <th class="govuk-table__header">Type</th>
+          <th class="govuk-table__header">Date of activity</th>
+          <th class="govuk-table__header">Date added</th>
+        </thead>
+        <tbody class="govuk-table__body">
+          <%= render partial: "supporting_information_row", collection: @supporting_information, locals: { investigation: @investigation } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <% if @supporting_information.none? && @other_supporting_information.none?  %>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+          <p class="govuk-body">No supporting information</p>
+        </div>
+      </div>
+
+    <% elsif @other_supporting_information.any?  %>
+
+      <h2 class="govuk-heading-m">Other files and attachments</h2>
+
+      <p class="govuk-body govuk-hint govuk-!-margin-bottom-6"><%= t("case.protected_details", data_type: "these files") %></p>
+      <%= render partial:    @investigation.generic_attachment_partial(current_user),
+                 collection: @other_supporting_information,
+                 as:         :document,
+                 locals:     { parent: @investigation }
+      %>
+    <% end %>
+  </div>
+</div>

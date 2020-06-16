@@ -183,11 +183,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
         expect_case_businesses_page_to_show(label: "Advertiser", business: business_details[:advertiser])
 
-        click_link "Attachments (5)"
+        click_link "Supporting information (5)"
 
-        corrective_actions.each { |action| expect_case_attachments_page_to_show(file_description: action[:summary]) }
-        test_results.each { |test| expect_case_attachments_page_to_show(file_description: "#{test[:result]}ed test") }
-        risk_assessments.each { |assessment| expect_case_attachments_page_to_show(file_description: assessment[:title]) }
+        risk_assessments.each { |assessment| expect_case_supporting_information_page_to_show(file_description: assessment[:title]) }
 
         click_link "Activity"
 
@@ -338,8 +336,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(section.find("dt", text: "Contact")).to have_sibling("dd", text: expected_contact)
   end
 
-  def expect_case_attachments_page_to_show(file_description:)
-    expect(page).to have_selector("h1", text: "Attachments")
+  def expect_case_supporting_information_page_to_show(file_description:)
+    expect(page).to have_selector("h1", text: "Supporting information")
     expect(page).to have_selector("h2", text: file_description)
   end
 

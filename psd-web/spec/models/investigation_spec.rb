@@ -1,6 +1,34 @@
 require "rails_helper"
 
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
+  describe "supporting information" do
+    let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
+    let(:investigation)                           { create(:investigation, owner: user.team) }
+    let(:generic_supporting_information_filename) { "a generic supporting information" }
+    let(:generic_image_filename)                  { "a generic image" }
+    let(:image) { Rails.root.join("test/fixtures/files/testImage.png") }
+
+    include_context "with all types of supporting information"
+
+    before do
+      investigation.documents.attach(io: StringIO.new, filename: generic_supporting_information_filename)
+      investigation.documents.attach(io: File.open(image), filename: generic_image_filename, content_type: "image/png")
+      investigation.save!
+    end
+
+    describe "#generic_supporting_information_attachments" do
+      it "returns attachments that are not images nor attached to any type of correspondences, test result or corrective action", :aggregate_failures do
+        expect(investigation.generic_supporting_information_attachments)
+          .not_to include(corrective_action, email, phone_call, meeting, test_request, test_result)
+
+        expect(investigation.generic_supporting_information_attachments.detect { |document| document.filename == generic_supporting_information_filename })
+          .to be_present
+        expect(investigation.generic_supporting_information_attachments.detect { |document| document.filename == generic_image_filename })
+          .not_to be_present
+      end
+    end
+  end
+
   describe "#teams_with_access" do
     context "when there is just a team that is the case owner" do
       let(:team) { create(:team) }

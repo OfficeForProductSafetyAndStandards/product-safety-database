@@ -10,9 +10,9 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
   scenario "Adding a meeting" do
     sign_in(user)
 
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add activity"
+    click_link "Add supporting information"
 
     expect_to_be_on_new_activity_page
 
