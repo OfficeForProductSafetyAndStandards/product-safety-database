@@ -34,7 +34,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
 
     context "when successful" do
       it "removes collaborator" do
-        expect { do_request }.to change(Collaboration::EditAccess, :count).from(1).to(0)
+        expect { do_request }.to change(Collaboration::Access::Edit, :count).from(1).to(0)
       end
 
       it "redirects back to the 'teams added to case' page" do

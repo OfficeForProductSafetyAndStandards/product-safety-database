@@ -1,4 +1,9 @@
 class InvestigationPolicy < ApplicationPolicy
+  # Ability to view the entire case including protected details
+  def show?(collaborator)
+    record.read_only_collaborators.exists?(collaborator: collaborator)
+  end
+
   # Used for all updating of the case, including adding and removing related
   # records, such as products, businesses and documents, with the exception of
   # changing the case owner, its status (eg 'open' or 'closed'), and whether
