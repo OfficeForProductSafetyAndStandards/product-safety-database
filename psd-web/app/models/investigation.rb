@@ -1,6 +1,5 @@
 class Investigation < ApplicationRecord
   include Documentable
-  include AttachmentConcern
   include SanitizationHelper
   include InvestigationElasticsearch
 
