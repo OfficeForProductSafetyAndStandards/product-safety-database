@@ -48,12 +48,12 @@ RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :wit
 
     before { sign_in other_user }
 
-    scenario "viewing the supporting information displays restricted information for the generic attachments" do
+    scenario "viewing the supporting information tab displays restricted information for the generic attachments" do
       visit "/cases/#{investigation.pretty_id}"
       click_link "Supporting information"
       expect(page).not_to have_css("h2", text: investigation.documents.first.title)
       expect(page).to have_css("h2", text: "Attachment")
-      expect(page).to have_css("p", text: "Only teams added to the case can view this attachment")
+      expect(page).to have_css("p", text: "Only teams added to the case can view these files")
     end
   end
 end

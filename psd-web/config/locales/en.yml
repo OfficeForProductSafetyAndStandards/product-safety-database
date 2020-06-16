@@ -60,7 +60,6 @@ en:
   supporting_information:
     restricted_generic:
       title: "Attachment"
-      placeholder: "Only teams added to the case can view this attachment"
   investigations:
     coronavirus_related:
       show:

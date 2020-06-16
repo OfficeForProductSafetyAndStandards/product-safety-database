@@ -10,7 +10,7 @@
 
 <div class="app-document-preview <%= class_name %>">
   <% if local_assigns[:restricted] %>
-    <%= document_placeholder(document_file_extension(document)) %>
+    <%= document_placeholder(document) %>
   <% elsif document.metadata["safe"] %>
     <% if document.image? %>
       <div class="<%= image_class %>">
@@ -25,7 +25,7 @@
         <% end %>
       </div>
     <% else %>
-      <%= document_placeholder(document_file_extension(document)) %>
+      <%= document_placeholder(document) %>
     <% end %>
   <% else %>
     <div class="app-document-preview__processing">

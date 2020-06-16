@@ -60,7 +60,7 @@
       <h2 class="govuk-heading-m">Attachments</h2>
       <p class="govuk-body"><%= link_to @meeting.related_attachment.filename, @meeting.related_attachment, class: "govuk-link" %></p>
 
-      <%= document_placeholder(document_file_extension(@meeting.related_attachment)) %>
+      <%= document_placeholder(@meeting.related_attachment) %>
 
       <% if @meeting.related_attachment.blob.metadata["description"].present? %>
         <p class="govuk-body"><%= @meeting.related_attachment.blob.metadata["description"] %></p>

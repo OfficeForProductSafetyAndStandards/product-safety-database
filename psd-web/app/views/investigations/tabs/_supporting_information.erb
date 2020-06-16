@@ -20,11 +20,12 @@
     <hr class="govuk-section-break govuk-section-break--l">
   </div>
 </div>
+
 <% if @supporting_information.any? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-m">Documents</h2>
-      <table class="govuk-table">
+      <table class="govuk-table govuk-!-margin-bottom-9">
         <thead class="govuk-table__head">
           <th class="govuk-table__header">Title</th>
           <th class="govuk-table__header">Type</th>
@@ -53,6 +54,7 @@
 
       <h2 class="govuk-heading-m">Other files and attachments</h2>
 
+      <p class="govuk-body govuk-hint govuk-!-margin-bottom-6"><%= t("case.protected_details", data_type: "these files") %></p>
       <%= render partial:    @investigation.generic_attachment_partial(current_user),
                  collection: @other_supporting_information,
                  as:         :document,

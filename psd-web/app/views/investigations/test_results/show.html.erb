@@ -27,7 +27,7 @@
     <% @test_result.documents.each do |document| %>
       <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
 
-      <%= document_placeholder(document_file_extension(document)) %>
+      <%= document_placeholder(document) %>
 
 
     <% end %>
