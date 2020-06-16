@@ -1,5 +1,5 @@
 class Collaboration < ApplicationRecord
-  class ReadOnly < Access
-
+  class Access < Collaboration
+    class ReadOnly < Access; end
   end
 end

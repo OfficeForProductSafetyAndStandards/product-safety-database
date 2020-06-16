@@ -60,7 +60,6 @@ class Investigation < ApplicationRecord
   has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
 
   has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
-  has_many :read_only_collaborators, through: :read_only_collaborations
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
   has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
