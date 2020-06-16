@@ -12,20 +12,6 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
   before { delivered_emails.clear }
 
-  scenario "Picking an activity type" do
-    sign_in creator_user
-
-    visit "/cases/#{investigation.pretty_id}"
-
-    click_link "Add supporting information"
-
-    expect(page).to have_content("New activity")
-
-    click_button "Continue"
-
-    expect(page).to have_content("Activity type must not be empty")
-  end
-
   scenario "Assigned user to the case receives activity notifications" do
     sign_in commentator_user
 
