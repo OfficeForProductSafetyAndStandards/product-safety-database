@@ -34,7 +34,7 @@ gem "rest-client", "2.1.0"
 gem "rubyzip"
 gem "scout_apm"
 gem "sentry-raven", "~> 3.0"
-gem "sidekiq", "5.2.7" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
+gem "sidekiq", "5.2.9" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
 gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
