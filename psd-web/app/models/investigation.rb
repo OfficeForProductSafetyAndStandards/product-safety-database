@@ -67,7 +67,7 @@ class Investigation < ApplicationRecord
   # belongs_to :owner, polymorphic: true, optional: true
   has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerUser"
   has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerTeam"
-  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team"
+  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
   has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
 
   def initialize(*args)
