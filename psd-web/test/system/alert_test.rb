@@ -65,7 +65,7 @@ class AlertTest < ApplicationSystemTestCase
   def go_to_new_activity_for_investigation(investigation)
     visit investigation_path(investigation)
 
-    click_link "Add activity"
+    click_link "Add supporting information"
   end
 
   def fill_in_activity_selection

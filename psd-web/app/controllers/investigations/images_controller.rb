@@ -1,9 +1,9 @@
 module Investigations
-  class AttachmentsController < ApplicationController
+  class ImagesController < ApplicationController
     def index
       investigation = Investigation
-                         .includes(:products, :businesses, :documents_attachments, :documents_blobs)
-                         .find_by!(pretty_id: params[:investigation_pretty_id])
+                        .find_by!(pretty_id: params[:investigation_pretty_id])
+
       authorize investigation, :view_non_protected_details?
       @investigation = investigation.decorate
       @breadcrumbs = {

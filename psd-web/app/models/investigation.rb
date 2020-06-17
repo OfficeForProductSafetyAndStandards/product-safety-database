@@ -1,6 +1,5 @@
 class Investigation < ApplicationRecord
   include Documentable
-  include AttachmentConcern
   include SanitizationHelper
   include InvestigationElasticsearch
 
@@ -96,8 +95,28 @@ class Investigation < ApplicationRecord
     end
   end
 
+  def images
+    @images ||= documents
+      .includes(:blob)
+      .joins(:blob)
+      .where("left(content_type, 5) = 'image'")
+      .where.not(record: [corrective_actions, correspondences, tests])
+  end
+
+  def generic_supporting_information_attachments
+    @generic_supporting_information_attachments ||= documents
+      .includes(:blob)
+      .joins(:blob)
+      .where.not("left(content_type, 5) = 'image'")
+      .where.not(record: [corrective_actions, correspondences, tests])
+  end
+
+  def supporting_information
+    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product)).sort_by(&:created_at).reverse
+  end
+
   def teams_with_access
-    ([owner_team] + teams_with_edit_access.order(:name)).compact
+    ([owner_team] + teams_with_edit_access.sort_by(&:name)).compact
   end
 
   def status

@@ -1,8 +1,12 @@
 class Correspondence < ApplicationRecord
   require_dependency "correspondence"
-  class MeetingDecorator < InvestigationDecorator
+  class MeetingDecorator < CorrespondenceDecorator
     def title
-      overview.presence || "Meeting on #{correspondence_date.to_s(:govuk)}"
+      super || "Meeting on #{correspondence_date.to_s(:govuk)}"
+    end
+
+    def show_path
+      h.investigation_meeting_path(investigation, object)
     end
   end
 end

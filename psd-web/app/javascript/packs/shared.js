@@ -26,7 +26,8 @@ import 'govuk-frontend/govuk/assets/images/govuk-apple-touch-icon.png'
 import 'govuk-frontend/govuk/assets/images/govuk-opengraph-image.png'
 import 'govuk-frontend/govuk/assets/images/govuk-logotype-crown.png'
 
-import 'images/document_placeholder.png'
+import 'images/document_placeholder_document.png'
+import 'images/document_placeholder_spreadsheet.png'
 
 Rails.start()
 window.GOVUKFrontend = GOVUKFrontend

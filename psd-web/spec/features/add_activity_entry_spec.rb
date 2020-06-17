@@ -17,7 +17,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Add activity"
+    click_link "Add supporting information"
 
     expect(page).to have_content("New activity")
 

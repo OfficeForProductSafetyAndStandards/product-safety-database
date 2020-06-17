@@ -15,9 +15,11 @@ FactoryBot.define do
 
     transient do
       date_decided { Faker::Date.backward(days: 14) }
+      owner_id {}
     end
 
     trait :with_file do
+      with_antivirus_checked_document
       related_file { "Yes" }
     end
   end

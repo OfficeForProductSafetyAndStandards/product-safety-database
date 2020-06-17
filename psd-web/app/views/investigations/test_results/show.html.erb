@@ -4,7 +4,7 @@
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back",
-    href: investigation_path(@investigation)
+    href: investigation_supporting_information_index_path(@investigation)
   ) %>
 <% end %>
 
@@ -23,11 +23,11 @@
     <%= govukSummaryList(rows: test_result_summary_rows(@test_result)) %>
   </div>
   <div class="govuk-grid-column-one-third">
-    <h2 class="govuk-heading-m">Attachments</h1>
+    <h2 class="govuk-heading-m">Attachments</h2>
     <% @test_result.documents.each do |document| %>
       <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
 
-      <%= document_placeholder(document_file_extension(document)) %>
+      <%= document_placeholder(document) %>
 
 
     <% end %>

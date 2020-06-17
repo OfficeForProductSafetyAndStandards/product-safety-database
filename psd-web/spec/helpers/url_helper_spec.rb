@@ -14,14 +14,6 @@ RSpec.describe UrlHelper do
           expect(path).to eq("/cases/#{object.pretty_id}")
         end
       end
-
-      context "with slug" do
-        let(:slug) { "attachments" }
-
-        it "returns /cases/:pretty_id/:slug" do
-          expect(path).to eq("/cases/#{object.pretty_id}/attachments")
-        end
-      end
     end
 
     context "with an instance of Business" do
@@ -45,14 +37,6 @@ RSpec.describe UrlHelper do
 
   describe "#associated_documents_path", :with_stubbed_elasticsearch, :with_stubbed_mailer do
     subject(:path) { helper.associated_documents_path(object) }
-
-    context "with an instance of Investigation" do
-      let(:object) { create(:allegation) }
-
-      it "returns /cases/:pretty_id/attachments" do
-        expect(path).to eq("/cases/#{object.pretty_id}/attachments")
-      end
-    end
 
     context "with an instance of Business" do
       let(:object) { create(:business) }

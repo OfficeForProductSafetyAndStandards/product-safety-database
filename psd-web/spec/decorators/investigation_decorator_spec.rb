@@ -239,4 +239,20 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
         .to eq(user.owner_short_name(viewer: viewer))
     end
   end
+
+  describe "#generic_attachment_partial" do
+    let(:partial) { decorated_investigation.generic_attachment_partial(viewing_user) }
+
+    context "when the viewer has accees to view the restricted details" do
+      let(:viewing_user) { investigation.owner }
+
+      it { expect(partial).to eq("documents/generic_document_card") }
+    end
+
+    context "when the viewer does not has accees to view the restricted details" do
+      let(:viewing_user) { create(:user) }
+
+      it { expect(partial).to eq("documents/restricted_generic_document_card") }
+    end
+  end
 end
