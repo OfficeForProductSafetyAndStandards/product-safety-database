@@ -5,7 +5,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
 
   let(:investigation) { create(:allegation) }
 
-  describe "#show?" do
+  describe "policies" do
     let(:collaborator) { create(:team) }
 
     context "when a team has readonly access" do
@@ -14,6 +14,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
       end
 
       it { is_expected.to be_show }
+      it { is_expected.not_to be_update }
     end
 
     context "when a team has edit access" do
