@@ -22,6 +22,8 @@
         <%= correspondence_summary_list(@correspondence, attachments: @transcript_blob&.filename) %>
         <%= form.submit "Continue", class: "govuk-button" %>
         <%= link_to("Edit details", wizard_path(:context), class: "govuk-link psd-block-link") %>
+
+        <p class="govuk-hint"><%= t("case.protected_details", data_type: "phone call correspondence") %></p>
       <% end %>
     </div>
   </div>

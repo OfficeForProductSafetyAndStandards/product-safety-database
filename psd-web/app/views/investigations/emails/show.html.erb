@@ -14,6 +14,8 @@
     <span class="govuk-caption-l">Email</span>
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
+    <p class="govuk-hint"><%= t("case.protected_details", data_type: "email correspondence") %></p>
+
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
         Added <%= @email.created_at.to_s(:govuk) %>

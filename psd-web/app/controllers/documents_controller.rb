@@ -4,7 +4,6 @@ class DocumentsController < ApplicationController
   set_file_params_key :document
 
   include DocumentsHelper
-  include GdprHelper
 
   before_action :set_parent
   before_action :authorize_if_attached_to_investigation
@@ -50,7 +49,6 @@ private
   def set_file
     @errors = ActiveModel::Errors.new(ActiveStorage::Blob.new)
     @file = file_collection.find(params[:id]) if params[:id].present?
-    raise Pundit::NotAuthorizedError unless can_be_displayed?(@file, @parent, current_user)
   end
 
   def file_valid?

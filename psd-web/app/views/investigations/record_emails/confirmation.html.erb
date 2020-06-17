@@ -23,10 +23,6 @@
             <td class="govuk-table__cell"><%= @correspondence.email_address %></td>
           </tr>
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Contains consumer info</th>
-            <td class="govuk-table__cell"><%= @correspondence.has_consumer_info ? "Yes" : "No" %></td>
-          </tr>
-          <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Summary</th>
             <td class="govuk-table__cell"><%= @correspondence.overview %></td>
           </tr>
@@ -61,6 +57,8 @@
 
       <%= form.submit "Continue", class: "govuk-button" %>
       <%= link_to("Edit details", wizard_path(:context), class: "govuk-link psd-block-link") %>
+
+      <p class="govuk-hint"><%= t("case.protected_details", data_type: "email correspondence") %></p>
     <% end %>
   </div>
 </div>

@@ -1,6 +1,6 @@
 <%
-  restricted = !can_be_displayed?(document, parent, current_user)
-  title = restricted ? document_restricted_title : document.title
+  restricted = parent.is_a?(Investigation) && !policy(parent).view_protected_details?
+  title = restricted ? "Attachment restricted" : document.title
   safe = document.metadata["safe"]
   document = document.decorate
 %>
@@ -17,8 +17,7 @@
     </span>
 
     <% if restricted %>
-      <p><%= render "components/hmcts_badge", text: "Restricted access", classes: "hmcts-badge--grey" %></p>
-      <p><%= document_restricted_body %></p>
+      <p class="govuk-hint"><%= t("case.protected_details", data_type: "case attachments") %></p>
     <% else %>
       <p class="govuk-body"><%= document.description %></p>
 

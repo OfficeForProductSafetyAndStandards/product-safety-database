@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_06_18_090108) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -137,7 +136,6 @@ ActiveRecord::Schema.define(version: 2020_06_18_090108) do
     t.string "email_address"
     t.string "email_direction"
     t.string "email_subject"
-    t.boolean "has_consumer_info", default: false, null: false
     t.integer "investigation_id"
     t.string "overview"
     t.string "phone_number"

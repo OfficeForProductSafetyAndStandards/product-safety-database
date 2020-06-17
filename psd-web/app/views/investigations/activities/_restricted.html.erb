@@ -1,6 +1,12 @@
 <%
-  creator = activity.source&.user&.organisation&.name || activity.source&.show(current_user)
+  data_type =
+    if activity.is_a?(AuditActivity::Correspondence::Base) then
+      "correspondence"
+    elsif activity.is_a?(AuditActivity::Document::Base) then
+      "attachments"
+    else
+      "#{@investigation.case_type} contact details"
+    end
 %>
 
-<p><%= render "components/hmcts_badge", text: "Restricted access", classes: "hmcts-badge--grey" %></p>
-<p>Consumer contact details hidden to comply with GDPR legislation. Contact <%= creator %>, who created this activity, to obtain these details if required.</p>
+<p class="govuk-hint"><%= t("case.protected_details", data_type: data_type) %></p>
