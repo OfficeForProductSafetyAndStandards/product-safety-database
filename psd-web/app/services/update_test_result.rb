@@ -30,15 +30,38 @@ class UpdateTestResult
         test_result.documents.attach(new_file)
       end
 
-      if test_result.save
-        update_document_description
-      else
-        context.fail!
+      if any_changes?
+        if test_result.save
+
+          update_document_description
+
+          create_audit_activity_for_test_result_updated
+
+        else
+          context.fail!
+        end
       end
     end
   end
 
 private
+
+  def any_changes?
+    !test_result.changes.except(:date_year, :date_month, :date_day).keys.empty?
+  end
+
+  def create_audit_activity_for_test_result_updated
+    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result)
+
+    AuditActivity::Test::TestResultUpdated.create!(
+      source: UserSource.new(user: user),
+      investigation: test_result.investigation,
+      product: test_result.product,
+      metadata: metadata,
+      title: nil,
+      body: nil
+    )
+  end
 
   # The document description is currently saved within the `metadata` JSON
   # on the 'blob' record. The TestResult model allows multiple

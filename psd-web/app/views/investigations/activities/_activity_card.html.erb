@@ -38,36 +38,38 @@
   <% else %>
     <% if activity.metadata %>
       <%= render "investigations/activities/#{activity.template_name}", activity: activity %>
-    <% elsif activity.body %>
-      <%= markdown simple_format(activity.body) %>
-    <% end %>
+    <% else  %>
+      <% if activity.body %>
+        <%= markdown simple_format(activity.body) %>
+      <% end %>
 
-    <% if activity.product_id %>
-      <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link" %>
-    <% end %>
+      <% if activity.product_id %>
+        <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link" %>
+      <% end %>
 
-    <% if activity.business_id %>
-      <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
-    <% end %>
+      <% if activity.business_id %>
+        <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
+      <% end %>
 
-    <% if activity.is_a?(AuditActivity::Test::Result) && activity.test_result %>
-      <%= link_with_hidden_text_to "View test result", " from #{activity.test_result.date.to_s(:govuk)}", investigation_test_result_path(@investigation, activity.test_result.id) %>
+      <% if activity.is_a?(AuditActivity::Test::Result) && activity.test_result %>
+        <%= link_with_hidden_text_to "View test result", " from #{activity.test_result.date.to_s(:govuk)}", investigation_test_result_path(@investigation, activity.test_result.id) %>
 
-    <% elsif activity.is_a?(AuditActivity::CorrectiveAction::Add) && activity.corrective_action %>
-      <%=  link_to "View corrective action", investigation_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
+      <% elsif activity.is_a?(AuditActivity::CorrectiveAction::Add) && activity.corrective_action %>
+        <%=  link_to "View corrective action", investigation_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
 
-    <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) %>
-      <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link" %>
+      <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) %>
+        <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
-    <% elsif activity.is_a?(AuditActivity::Correspondence::AddPhoneCall) %>
-      <%=  link_to "View phone call", investigation_phone_call_path(@investigation, activity.correspondence), class: "govuk-link" %>
+      <% elsif activity.is_a?(AuditActivity::Correspondence::AddPhoneCall) %>
+        <%=  link_to "View phone call", investigation_phone_call_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
-    <% elsif activity.is_a?(AuditActivity::Correspondence::AddMeeting) %>
-      <%=  link_to "View meeting", investigation_meeting_path(@investigation, activity.correspondence), class: "govuk-link" %>
+      <% elsif activity.is_a?(AuditActivity::Correspondence::AddMeeting) %>
+        <%=  link_to "View meeting", investigation_meeting_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
-    <% elsif activity.has_attachment? %>
-      <% activity.attachments.each do |name, attachment| %>
-        <%= link_to "View #{name}", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
+      <% elsif activity.has_attachment? %>
+        <% activity.attachments.each do |name, attachment| %>
+          <%= link_to "View #{name}", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
