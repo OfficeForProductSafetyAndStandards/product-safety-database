@@ -9,7 +9,6 @@ module Investigations
     end
 
     def new
-      set_investigation
       authorize investigation, :update?
       set_breadcrumbs
     end
