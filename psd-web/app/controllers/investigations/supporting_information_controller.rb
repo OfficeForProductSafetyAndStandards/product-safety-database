@@ -1,8 +1,7 @@
 module Investigations
   class SupportingInformationController < ApplicationController
     def index
-      set_investigation
-      authorize @investigation, :view_non_protected_details?
+      authorize investigation, :view_non_protected_details?
       set_breadcrumbs
 
       @supporting_information       = @investigation.supporting_information.map(&:decorate)
@@ -11,13 +10,12 @@ module Investigations
 
     def new
       set_investigation
-      authorize @investigation, :update?
+      authorize investigation, :update?
       set_breadcrumbs
     end
 
     def create
-      set_investigation
-      authorize @investigation, :update?
+      authorize investigation, :update?
 
       case params[:supporting_information_type]
       when "comment"
@@ -39,8 +37,8 @@ module Investigations
 
   private
 
-    def set_investigation
-      @investigation = Investigation
+    def investigation
+      @investigation ||= Investigation
                         .find_by!(pretty_id: params[:investigation_pretty_id])
                         .decorate
     end
