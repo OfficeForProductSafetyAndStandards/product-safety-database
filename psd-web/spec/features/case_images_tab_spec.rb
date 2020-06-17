@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:investigation, owner: user.team) }
+  let(:investigation) { create(:allegation, owner: user.team) }
   let(:file)          { Rails.root + "test/fixtures/files/testImage.png" }
   let(:title)         { Faker::Lorem.sentence }
   let(:description)   { Faker::Lorem.paragraph }
