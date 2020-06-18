@@ -1,12 +1,1 @@
-<%
-  data_type =
-    if activity.is_a?(AuditActivity::Correspondence::Base) then
-      "correspondence"
-    elsif activity.is_a?(AuditActivity::Document::Base) then
-      "attachments"
-    else
-      "#{@investigation.case_type} contact details"
-    end
-%>
-
-<p class="govuk-hint"><%= t("case.protected_details", data_type: data_type) %></p>
+<p class="govuk-hint"><%= t("case.protected_details", data_type: activity.decorate.protected_details_type) %></p>

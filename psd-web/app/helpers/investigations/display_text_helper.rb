@@ -59,7 +59,7 @@ module Investigations::DisplayTextHelper
     }
 
     highlight[1].each do |result|
-      unless should_be_hidden(source, investigation)
+      unless should_be_hidden?(source, investigation)
         best_highlight[:content] = get_highlight_content(result)
         return best_highlight
       end
@@ -85,7 +85,7 @@ module Investigations::DisplayTextHelper
     sanitized_content.html_safe
   end
 
-  def should_be_hidden(source, investigation)
+  def should_be_hidden?(source, investigation)
     (source.include?("complainant") || source.include?("correspondences")) &&
       !policy(investigation).view_protected_details?
   end
