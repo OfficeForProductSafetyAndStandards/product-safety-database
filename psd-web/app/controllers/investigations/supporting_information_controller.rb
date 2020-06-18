@@ -2,21 +2,23 @@ module Investigations
   class SupportingInformationController < ApplicationController
     def index
       authorize investigation, :view_non_protected_details?
-      set_breadcrumbs
-
       @supporting_information       = @investigation.supporting_information.map(&:decorate)
       @other_supporting_information = @investigation.generic_supporting_information_attachments.decorate
+      @breadcrumbs = {
+        items: [
+          { text: "Cases", href: investigations_path(previous_search_params) },
+          { text: @investigation.pretty_description }
+        ]
+      }
     end
 
     def new
       authorize investigation, :update?
-      set_breadcrumbs
       supporting_information_form
     end
 
     def create
       authorize investigation, :update?
-      set_breadcrumbs
       return render(:new) if supporting_information_form.invalid?
 
       case supporting_information_form.type
@@ -39,15 +41,6 @@ module Investigations
       @investigation ||= Investigation
                         .find_by!(pretty_id: params[:investigation_pretty_id])
                         .decorate
-    end
-
-    def set_breadcrumbs
-      @breadcrumbs = {
-        items: [
-          { text: "Cases", href: investigations_path(previous_search_params) },
-          { text: @investigation.pretty_description }
-        ]
-      }
     end
 
     def supporting_information_form

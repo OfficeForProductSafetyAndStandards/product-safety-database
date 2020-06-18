@@ -11,12 +11,6 @@ class Investigations::CorrespondenceController < ApplicationController
 
   def new
     correspondence_form
-    @breadcrumbs = {
-      items: [
-        { text: "Cases", href: investigations_path(previous_search_params) },
-        { text: @investigation.pretty_description }
-      ]
-    }
     return unless params[:commit] == "Continue" && correspondence_form.valid?
 
     case correspondence_form.type
