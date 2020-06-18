@@ -26,7 +26,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { "No" }
-  let(:investigation) { build(:investigation) }
+  let(:investigation) { build(:allegation) }
 
   describe "#valid?" do
     context "with valid input" do
@@ -154,7 +154,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
 
   describe "#create_audit_activity", :with_stubbed_mailer do
     # The audit activity requires pretty_id to be set on the Investigation
-    let(:investigation) { create(:investigation) }
+    let(:investigation) { create(:allegation) }
 
     it "creates an activity" do
       expect { corrective_action.save }.to change { AuditActivity::CorrectiveAction::Add.count }.by(1)
