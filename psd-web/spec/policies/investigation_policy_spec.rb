@@ -13,7 +13,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
         create(:read_only_collaboration, investigation: investigation, collaborator: collaborator)
       end
 
-      it { is_expected.to be_show }
+      it { is_expected.to be_readonly }
       it { is_expected.not_to be_update }
     end
 
@@ -24,10 +24,5 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
 
       it { is_expected.to be_show }
     end
-
-    context "when the team has neither edit nor view only access" do
-
-    end
   end
-
 end

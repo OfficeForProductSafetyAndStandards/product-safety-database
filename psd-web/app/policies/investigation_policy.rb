@@ -1,6 +1,6 @@
 class InvestigationPolicy < ApplicationPolicy
   # Ability to view the entire case including protected details
-  def show?
+  def readonly?
     record.read_only_collaborations.exists?(collaborator: user.team)
   end
 
