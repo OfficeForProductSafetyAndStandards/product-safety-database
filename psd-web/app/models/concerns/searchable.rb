@@ -61,7 +61,6 @@ module Searchable
     end
 
     def self.full_search(query)
-      # binding.pry
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 

@@ -105,7 +105,7 @@ private
   end
 
   def set_investigation
-    investigation = Investigation.includes(:owner, :products, :teams_with_edit_access).find_by!(pretty_id: params[:pretty_id])
+    investigation = Investigation.includes(:owner_team, :owner_user, :products, :teams_with_edit_access).find_by!(pretty_id: params[:pretty_id])
     @investigation = investigation.decorate
   end
 

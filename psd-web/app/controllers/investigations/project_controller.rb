@@ -59,7 +59,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Project.new(investigation_params).decorate
+    @investigation = Investigation::Project.new(investigation_params.merge(owner: current_user)).decorate
   end
 
   def coronavirus_form_params

@@ -25,6 +25,14 @@ class Investigation < ApplicationRecord
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
 
+  # validate :owner_team_presence, on: :create
+  # def owner_team_presence
+  #   unless owner_team
+  #     errors[:owner_team] << 'Please add owner'
+  #   end
+  # end
+
+
   after_update :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,
                :create_audit_activity_for_summary

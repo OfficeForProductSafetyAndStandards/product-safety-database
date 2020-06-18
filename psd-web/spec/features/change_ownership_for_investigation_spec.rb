@@ -45,7 +45,6 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   end
 
   scenario "change owner to your team" do
-    # binding.pry
     choose user.team.name
     click_button "Continue"
 
@@ -53,7 +52,6 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
 
     expect_confirmation_banner("Allegation owner changed to " + user.team.name)
     expect_page_to_show_case_owner(user.team)
-    # binding.pry
     expect_activity_page_to_show_case_owner_changed_to(user.team)
   end
 
