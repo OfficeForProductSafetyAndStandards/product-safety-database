@@ -34,8 +34,8 @@ class UpdateTestResult
         if test_result.save
 
           update_document_description
-
           create_audit_activity_for_test_result_updated
+          send_notification_email
 
         else
           context.fail!
@@ -53,7 +53,7 @@ private
   def create_audit_activity_for_test_result_updated
     metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result)
 
-    AuditActivity::Test::TestResultUpdated.create!(
+    context.activity = AuditActivity::Test::TestResultUpdated.create!(
       source: UserSource.new(user: user),
       investigation: test_result.investigation,
       product: test_result.product,
@@ -72,4 +72,19 @@ private
     document.blob.metadata[:description] = new_file_description
     document.blob.save
   end
+
+  def send_notification_email
+    context.activity.entities_to_notify.each do |recipient|
+      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
+
+      NotifyMailer.investigation_updated(
+        test_result.investigation.pretty_id,
+        recipient.name,
+        email,
+        "#{context.activity.source.show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
+        "Test result edited for #{test_result.investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
+  end
+
 end

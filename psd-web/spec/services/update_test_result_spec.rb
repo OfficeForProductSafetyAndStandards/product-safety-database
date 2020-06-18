@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus do
+RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_test_queue_adapter do
   describe ".call" do
     context "with no parameters" do
       let(:result) { described_class.call }
@@ -20,8 +20,14 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
     end
 
     context "with required parameters" do
-      let(:user) { create(:user, :activated) }
+      let(:editing_user_team) { create(:team, name: "Test team 2") }
+      let(:user) { create(:user, :activated, name: "User 2", team: editing_user_team) }
       let(:product) { create(:product) }
+      let(:owner_team) { create(:team,
+        name: "Test team 1",
+        team_recipient_email: "test-team@example.com")
+      }
+      let(:investigation) { create(:allegation, owner: owner_team)}
 
       context "when there are changes" do
         let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }
@@ -32,7 +38,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
 
         let(:test_result) do
           create(:test_result,
-                 investigation: create(:allegation),
+                 investigation: investigation,
                  legislation: legislation,
                  details: details,
                  product: product,
@@ -70,6 +76,16 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
           activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
 
           expect(activity_timeline_entry.metadata).to eq(expected_metadata)
+        end
+
+        it "sends a notification email to the case owner" do
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            test_result.investigation.pretty_id,
+            "Test team 1",
+            "test-team@example.com",
+            "User 2 (Test team 2) edited a test result on the allegation.",
+            "Test result edited for Allegation"
+          )
         end
       end
 
