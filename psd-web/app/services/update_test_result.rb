@@ -4,7 +4,7 @@ class UpdateTestResult
   delegate :test_result, :user, :new_attributes, :new_file, :new_file_description, to: :context
 
   def call
-    context.fail!(error: "No rest result supplied") unless test_result.is_a?(Test::Result)
+    context.fail!(error: "No test result supplied") unless test_result.is_a?(Test::Result)
     context.fail!(error: "No new attributes supplied") unless new_attributes
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
@@ -47,7 +47,7 @@ class UpdateTestResult
 private
 
   def any_changes?
-    !test_result.changes.except(:date_year, :date_month, :date_day).keys.empty?
+    test_result.changes.except(:date_year, :date_month, :date_day).keys.any?
   end
 
   def create_audit_activity_for_test_result_updated
