@@ -19,10 +19,10 @@
                                                  @correspondence_form.errors.full_messages_for(:type)),
                  items: CorrespondenceForm::AVAILABLE_TYPES.map { |type, label| { text: label, value: type } },
                  fieldset: { legend: { html: header } } %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <%= govukButton(text: "Continue") %>
     <% end %>
     <p class="govuk-body">
-      <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation) %>
+      <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation), class: "govuk-link" %>
     </p>
   </div>
 </div>
