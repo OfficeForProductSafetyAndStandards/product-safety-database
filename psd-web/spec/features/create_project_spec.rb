@@ -26,7 +26,6 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
       expect(page).to have_error_summary "Select whether or not the case is related to the coronavirus outbreak"
 
       choose "Yes, it is (or could be)"
-      puts "Already"
       click_button "Continue"
 
       expect_page_to_have_h1("New project")

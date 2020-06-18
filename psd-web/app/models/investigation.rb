@@ -25,13 +25,6 @@ class Investigation < ApplicationRecord
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
 
-  # validate :owner_team_presence, on: :create
-  # def owner_team_presence
-  #   unless owner_team
-  #     errors[:owner_team] << 'Please add owner'
-  #   end
-  # end
-
   after_update :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,
                :create_audit_activity_for_summary
@@ -71,7 +64,6 @@ class Investigation < ApplicationRecord
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
-  # belongs_to :owner, polymorphic: true, optional: true
   has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerUser"
   has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerTeam"
   has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
@@ -95,8 +87,7 @@ class Investigation < ApplicationRecord
     if team_or_user.is_a? User
       self.owner_user = team_or_user
       self.owner_team = team_or_user.team
-    end
-    if team_or_user.is_a? Team
+    elsif team_or_user.is_a? Team
       self.owner_team = team_or_user
       self.owner_user = nil
     end
