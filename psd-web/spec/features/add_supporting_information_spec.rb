@@ -16,7 +16,7 @@ RSpec.feature "Add supporting information", :with_stubbed_elasticsearch, :with_s
     click_button "Continue"
 
     expect(page).to have_content("Supporting information type must not be empty")
-    choose "Comment or case note"
+    choose "Comment"
     click_button "Continue"
 
     expect_to_be_on_new_comment_page

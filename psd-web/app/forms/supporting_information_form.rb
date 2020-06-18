@@ -3,7 +3,7 @@ class SupportingInformationForm
   include ActiveModel::Attributes
 
   AVAILABLE_TYPES = {
-    comment: "Comment or case note",
+    comment: "Comment",
     corrective_action: "Corrective action",
     correspondence: "Correspondence",
     image: "Image",
