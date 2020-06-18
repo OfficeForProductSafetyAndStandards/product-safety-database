@@ -3,6 +3,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   include SupportingInformationHelper
 
   def details
+    return if object.details.blank?
+
     h.simple_format(object.details)
   end
 
@@ -20,5 +22,13 @@ class CorrectiveActionDecorator < ApplicationDecorator
 
   def show_path
     h.investigation_action_path(investigation, object)
+  end
+
+  def measure_type
+    object.measure_type&.upcase_first
+  end
+
+  def duration
+    object.duration.upcase_first
   end
 end
