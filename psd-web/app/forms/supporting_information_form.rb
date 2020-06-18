@@ -9,7 +9,7 @@ class SupportingInformationForm
     image: "Image",
     testing_result: "Test result",
     generic_information: "Other document or attachment"
-  }
+  }.freeze
 
   attribute :type
 
