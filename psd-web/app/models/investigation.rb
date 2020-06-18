@@ -32,7 +32,6 @@ class Investigation < ApplicationRecord
   #   end
   # end
 
-
   after_update :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,
                :create_audit_activity_for_summary
