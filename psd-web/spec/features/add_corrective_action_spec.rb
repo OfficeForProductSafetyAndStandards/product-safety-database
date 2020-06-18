@@ -18,9 +18,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   before { sign_in(user) }
 
   scenario "Adding a corrective action (with validation errors)" do
-    visit "/cases/#{investigation.pretty_id}/activity"
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
 
-    click_link "Add activity"
+    click_link "Add supporting information"
 
     choose "Record corrective action"
 
@@ -49,6 +49,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
 
+    click_link "Supporting information (1)"
+
+    expect_case_supporting_information_page_to_show_file
+
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -59,13 +63,13 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
-    expect(page).to have_summary_item(key: "Product", value: "MyBrand Washing Machine")
-    expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
-    expect(page).to have_summary_item(key: "Type of action", value: "Mandatory")
+    expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
+    expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
+    expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
     expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
-    expect(page).to have_summary_item(key: "Scope", value: "National")
-    expect(page).to have_summary_item(key: "Other details", value: "Urgent action following consumer reports")
+    expect(page).to have_summary_item(key: "Scope",               value: "National")
+    expect(page).to have_summary_item(key: "Other details",       value: "Urgent action following consumer reports")
 
     expect(page).to have_link("old_risk_assessment.txt")
   end
@@ -113,6 +117,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")
     expect(item).to have_text(details)
+  end
+
+  def expect_case_supporting_information_page_to_show_file
+    expect(page).to have_css("h1", text: "Supporting information")
   end
 
   def fill_and_submit_form

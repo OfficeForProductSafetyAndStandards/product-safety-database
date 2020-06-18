@@ -22,6 +22,7 @@ module ProductSafetyDatabase
     # the framework and any gems in your application.
     config.eager_load_paths << Rails.root.join("presenters")
     config.autoload_paths << Rails.root.join("app/forms/concerns")
+    config.autoload_paths << Rails.root.join("app/decorators/concerns")
 
     config.sidekiq_queue = ENV.fetch("SIDEKIQ_QUEUE", "psd")
     config.active_job.queue_adapter = :sidekiq

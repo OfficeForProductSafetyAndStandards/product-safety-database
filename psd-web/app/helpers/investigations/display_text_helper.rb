@@ -14,23 +14,30 @@ module Investigations::DisplayTextHelper
       {
         href: investigation_products_path(investigation),
         text: "Products",
-        count: " (#{@investigation.products.size})",
+        count: " (#{investigation.products.size})",
         active: is_current_tab.products?
       },
       {
         href: investigation_businesses_path(investigation),
         text: "Businesses",
-        count: " (#{@investigation.businesses.size})",
+        count: " (#{investigation.businesses.size})",
         active: is_current_tab.businesses?
       },
       {
-        href: investigation_attachments_path(investigation),
-        text: "Attachments",
-        count: " (#{@investigation.documents.size})",
-        active: is_current_tab.attachments?
+        href: investigation_images_path(investigation),
+        text: "Images",
+        count: " (#{investigation.images.size})",
+        active: is_current_tab.images?
       },
       {
-        href: investigation_activity_path(@investigation),
+        href: investigation_supporting_information_index_path(investigation),
+        text: "Supporting information",
+        count: " (#{investigation.supporting_information.size + investigation.generic_supporting_information_attachments.size})",
+        active: is_current_tab.supporting_information?
+      },
+
+      {
+        href: investigation_activity_path(investigation),
         text: "Activity",
         active: is_current_tab.activity?
       }

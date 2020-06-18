@@ -31,14 +31,7 @@
            rel: 'noopener' %>
 
         <% if !parent.is_a?(Investigation) || policy(parent).update?(user: current_user) %>
-          <%= link_with_hidden_text_to "Edit #{image_document_text(document)}",
-            "(#{title})",
-            edit_associated_document_path(parent, document),
-            class: "govuk-link app-block-link govuk-!-margin-right-3" %>
-          <%= link_with_hidden_text_to "Remove #{image_document_text(document)}",
-            "(#{title})",
-            remove_associated_document_path(parent, document),
-            class: "govuk-link app-block-link" %>
+          <%= render "documents/document_card_links", document: document, parent: parent %>
         <% end %>
       <% end %>
     <% end %>
