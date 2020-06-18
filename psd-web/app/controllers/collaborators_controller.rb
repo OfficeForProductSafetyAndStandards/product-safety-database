@@ -19,7 +19,7 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
-      params.require(:collaboration_edit_access).permit(:collaborator_id, :include_message, :message).merge({
+      params.require(:collaboration_access_edit).permit(:collaborator_id, :include_message, :message).merge({
         investigation: @investigation,
         current_user: current_user
       })
