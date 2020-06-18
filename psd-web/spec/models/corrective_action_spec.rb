@@ -26,7 +26,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { "No" }
-  let(:investigation) { build(:investigation) }
+  let(:investigation) { build(:allegation) }
 
   describe "#valid?" do
     context "with valid input" do

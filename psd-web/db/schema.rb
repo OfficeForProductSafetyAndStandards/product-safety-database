@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_10_111320) do
+ActiveRecord::Schema.define(version: 2020_06_18_090108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 2020_06_10_111320) do
     t.string "product_category"
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
-    t.string "type", default: "Investigation::Allegation"
+    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
     t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
