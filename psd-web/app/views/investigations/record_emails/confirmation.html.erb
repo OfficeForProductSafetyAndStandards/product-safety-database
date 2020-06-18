@@ -58,7 +58,7 @@
       <%= form.submit "Continue", class: "govuk-button" %>
       <%= link_to("Edit details", wizard_path(:context), class: "govuk-link psd-block-link") %>
 
-      <p class="govuk-hint"><%= t("case.protected_details", data_type: "email correspondence") %></p>
+      <%= permission_notice(text: t("case.protected_details", data_type: "email correspondence")) %>
     <% end %>
   </div>
 </div>

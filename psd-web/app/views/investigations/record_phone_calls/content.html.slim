@@ -38,4 +38,4 @@
                  label: { text: "Notes", classes: "govuk-!-width-two-thirds" }
         = form.submit "Continue", class: "govuk-button"
 
-        p.govuk-hint = t("case.protected_details", data_type: "phone call correspondence")
+        = permission_notice(text: t("case.protected_details", data_type: "phone call correspondence"))

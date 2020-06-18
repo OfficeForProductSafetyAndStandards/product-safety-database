@@ -17,7 +17,7 @@
     </span>
 
     <% if restricted %>
-      <p class="govuk-hint"><%= t("case.protected_details", data_type: "case attachments") %></p>
+      <p class="govuk-body govuk-hint"><%= t("case.protected_details", data_type: "case attachments") %></p>
     <% else %>
       <p class="govuk-body"><%= document.description %></p>
 

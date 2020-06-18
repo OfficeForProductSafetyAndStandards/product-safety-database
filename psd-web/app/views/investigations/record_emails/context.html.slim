@@ -35,4 +35,4 @@
                fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date sent" } }
       = form.submit "Continue", class: "govuk-button"
 
-      p.govuk-hint = t("case.protected_details", data_type: "email correspondence")
+      = permission_notice(text: t("case.protected_details", data_type: "email correspondence"))

@@ -14,8 +14,6 @@
     <span class="govuk-caption-l">Phone call</span>
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-    <p class="govuk-hint"><%= t("case.protected_details", data_type: "phone call correspondence") %></p>
-
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
         Added <%= @phone_call.created_at.to_s(:govuk) %>
@@ -54,6 +52,8 @@
     %>
 
     <%= govukSummaryList(rows: rows) %>
+
+    <%= permission_notice(text: t("case.protected_details", data_type: "phone call correspondence")) %>
 
   </div>
 </div>
