@@ -19,10 +19,11 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
 
     context "when a team has edit access" do
       before do
-        create(:read_only_collaboration, investigation: investigation, collaborator: collaborator)
+        create(:collaboration_edit_access, investigation: investigation, collaborator: collaborator)
       end
 
-      it { is_expected.to be_show }
+      it { is_expected.to be_readonly }
+      it { is_expected.to be_update }
     end
   end
 end
