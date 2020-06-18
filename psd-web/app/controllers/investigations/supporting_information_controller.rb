@@ -11,12 +11,15 @@ module Investigations
     def new
       authorize investigation, :update?
       set_breadcrumbs
+      supporting_information_form
     end
 
     def create
       authorize investigation, :update?
+      set_breadcrumbs
+      return render(:new) if supporting_information_form.invalid?
 
-      case params[:supporting_information_type]
+      case supporting_information_form.type
       when "comment"
         redirect_to new_investigation_activity_comment_path(@investigation)
       when "corrective_action"
@@ -27,10 +30,6 @@ module Investigations
         redirect_to new_investigation_new_path(@investigation)
       when "testing_result"
         redirect_to new_result_investigation_tests_path(@investigation)
-      else
-        @supporting_information_type_empty = true
-        set_breadcrumbs
-        render :new
       end
     end
 
@@ -49,6 +48,10 @@ module Investigations
           { text: @investigation.pretty_description }
         ]
       }
+    end
+
+    def supporting_information_form
+      @supporting_information_form ||= SupportingInformationForm.new(type: params[:type])
     end
   end
 end
