@@ -81,7 +81,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
   describe "ownership" do
     let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-    let(:investigation) { create(:investigation, creator: user) }
+    let(:investigation) { create(:project, creator: user) }
 
     context "when owner is User" do
       it "has team owner too" do

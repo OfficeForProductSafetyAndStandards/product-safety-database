@@ -5,7 +5,7 @@ RSpec.feature "App navigation", :with_stubbed_mailer, :with_stubbed_elasticsearc
 
   let!(:product) { create(:product) }
   let!(:business) { create(:business) }
-  let!(:investigation) { create(:investigation, :with_business, business_to_add: business) }
+  let!(:investigation) { create(:project, :with_business, business_to_add: business) }
 
   before do
     sign_in(user)
