@@ -63,13 +63,13 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
-    expect(page).to have_summary_item(key: "Product", value: "MyBrand Washing Machine")
-    expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
-    expect(page).to have_summary_item(key: "Type of action", value: "Mandatory")
+    expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
+    expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
+    expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
     expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
-    expect(page).to have_summary_item(key: "Scope", value: "National")
-    expect(page).to have_summary_item(key: "Other details", value: "Urgent action following consumer reports")
+    expect(page).to have_summary_item(key: "Scope",               value: "National")
+    expect(page).to have_summary_item(key: "Other details",       value: "Urgent action following consumer reports")
 
     expect(page).to have_link("old_risk_assessment.txt")
   end
