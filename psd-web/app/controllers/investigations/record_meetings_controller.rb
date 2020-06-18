@@ -2,12 +2,6 @@ class Investigations::RecordMeetingsController < Investigations::CorrespondenceC
   set_attachment_names :transcript, :related_attachment
   set_file_params_key :correspondence_meeting
 
-  def new
-    clear_session
-    initialize_file_attachments
-    redirect_to wizard_path(steps.first, request.query_parameters)
-  end
-
 private
 
   def audit_class

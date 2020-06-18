@@ -10,17 +10,9 @@ class Investigations::CorrespondenceController < ApplicationController
   before_action :store_correspondence, only: %i[update]
 
   def new
-    correspondence_form
-    return unless params[:commit] == "Continue" && correspondence_form.valid?
-
-    case correspondence_form.type
-    when "email"
-      redirect_to new_investigation_email_path(@investigation)
-    when "meeting"
-      redirect_to new_investigation_meeting_path(@investigation)
-    when "phone_call"
-      redirect_to new_investigation_phone_call_path(@investigation)
-    end
+    clear_session
+    initialize_file_attachments
+    redirect_to wizard_path(steps.first, request.query_parameters)
   end
 
   def create

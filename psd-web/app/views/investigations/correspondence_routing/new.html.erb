@@ -1,5 +1,5 @@
 <% page_heading = "What type of correspondence are you adding?" %>
-<% page_title(page_heading, errors: @correspondence_form.errors.any?) %>
+<% page_title(page_heading, errors: @correspondence_routing_form.errors.any?) %>
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.type.demodulize.downcase}",
@@ -9,16 +9,16 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= error_summary @correspondence_form.errors %>
-    <%= form_with local: true, url: new_investigation_correspondence_path(@investigation), method: :get do |form| %>
+    <%= error_summary @correspondence_routing_form.errors %>
+    <%= form_with local: true, url: investigation_correspondence_index_path(@investigation) do |form| %>
       <%= render "form_components/govuk_radios",
                  form: form,
                  key: :type,
-                 errorMessage: format_errors_for(@correspondence_form,
-                                                 @correspondence_form.errors.full_messages_for(:type)),
-                 items: CorrespondenceForm::AVAILABLE_TYPES.map { |type, label| { text: label, value: type } },
+                 errorMessage: format_errors_for(@correspondence_routing_form,
+                                                 @correspondence_routing_form.errors.full_messages_for(:type)),
+                 items: CorrespondenceRoutingForm::AVAILABLE_TYPES.map { |type, label| { text: label, value: type } },
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } } %>
-      <%= govukButton(text: "Continue", type: "submit", name: "commit", value: "Continue") %>
+      <%= govukButton(text: "Continue") %>
     <% end %>
     <p class="govuk-body">
       <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation), class: "govuk-link" %>

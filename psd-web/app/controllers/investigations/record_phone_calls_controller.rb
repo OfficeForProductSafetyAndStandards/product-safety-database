@@ -2,12 +2,6 @@ class Investigations::RecordPhoneCallsController < Investigations::Correspondenc
   set_attachment_names :transcript
   set_file_params_key :correspondence_phone_call
 
-  def new
-    clear_session
-    initialize_file_attachments
-    redirect_to wizard_path(steps.first, request.query_parameters)
-  end
-
 private
 
   def audit_class

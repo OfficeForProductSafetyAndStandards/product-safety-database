@@ -8,8 +8,8 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
 
   context "when not choosing any option" do
     before do
-      get new_investigation_correspondence_path(investigation),
-          params: { commit: "Continue" }
+      post investigation_correspondence_index_path(investigation),
+           params: { commit: "Continue" }
     end
 
     it "renders the form again" do
@@ -23,11 +23,11 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
 
   context  "when choosing a correspondence type" do
     before do
-      get new_investigation_correspondence_path(investigation),
-          params: {
-            commit: "Continue",
-            type: type
-          }
+      post investigation_correspondence_index_path(investigation),
+           params: {
+             commit: "Continue",
+             type: type
+           }
     end
 
     context "when adding an email" do
