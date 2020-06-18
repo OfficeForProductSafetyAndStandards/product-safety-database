@@ -10,23 +10,22 @@ class Investigations::CorrespondenceController < ApplicationController
   before_action :store_correspondence, only: %i[update]
 
   def new
+    correspondence_form
     @breadcrumbs = {
       items: [
         { text: "Cases", href: investigations_path(previous_search_params) },
         { text: @investigation.pretty_description }
       ]
     }
-    return unless params[:commit] == "Continue"
+    return unless params[:commit] == "Continue" && correspondence_form.valid?
 
-    case params[:correspondence_type]
+    case correspondence_form.type
     when "email"
       redirect_to new_investigation_email_path(@investigation)
     when "meeting"
       redirect_to new_investigation_meeting_path(@investigation)
     when "phone_call"
       redirect_to new_investigation_phone_call_path(@investigation)
-    else
-      @correspondence_type_empty = true
     end
   end
 
@@ -90,5 +89,9 @@ private
   def correspondence_params_key
     # Turns the class name into the same format used by rails in form `name` attributes (e.g. 'correspondence_email')
     model_class.name.underscore.tr("/", "_")
+  end
+
+  def correspondence_form
+    @correspondence_form ||= CorrespondenceForm.new(type: params[:type])
   end
 end

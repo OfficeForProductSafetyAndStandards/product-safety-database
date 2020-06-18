@@ -137,6 +137,10 @@ en:
             owner_id:
               blank: Select case owner
               not_found: User or team not found
+        correspondence_form:
+          attributes:
+            type:
+              blank: "Correspondence type must not be empty"
         edit_investigation_collaborator_form:
           attributes:
             include_message:
