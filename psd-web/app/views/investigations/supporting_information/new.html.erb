@@ -1,3 +1,5 @@
+<% page_heading = "What type of information are you adding?" %>
+<% page_title(page_heading, errors: @supporting_information_form.errors.any?) %>
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.type.demodulize.downcase}",
@@ -17,9 +19,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= error_summary @supporting_information_form.errors %>
-    <% header = capture do %>
-      <h1 class="govuk-heading-l"> What type of information are you adding? </h1>
-    <% end %>
     <%= form_with local: true, url: investigation_supporting_information_index_path(@investigation) do |form| %>
       <%= render "form_components/govuk_radios",
                  form: form,
@@ -27,7 +26,7 @@
                  errorMessage: format_errors_for(@supporting_information_form,
                                                  @supporting_information_form.errors.full_messages_for(:type)),
                  items: radio_items,
-                 fieldset: { legend: { html: header } } %>
+                 fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } }%>
       <%= govukButton(text: "Continue") %>
     <% end %>
     <p class="govuk-body">
