@@ -26,12 +26,12 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
       get new_investigation_correspondence_path(investigation),
           params: {
             commit: "Continue",
-            correspondence_type: correspondence_type
+            type: type
           }
     end
 
     context "when adding an email" do
-      let(:correspondence_type) { "email" }
+      let(:type) { "email" }
 
       it "redirects to new email page" do
         expect(response).to redirect_to(new_investigation_email_path(investigation))
@@ -39,7 +39,7 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
     end
 
     context "when adding a meeting" do
-      let(:correspondence_type) { "meeting" }
+      let(:type) { "meeting" }
 
       it "redirects to new meeting page" do
         expect(response).to redirect_to(new_investigation_meeting_path(investigation))
@@ -47,7 +47,7 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
     end
 
     context "when adding a phone call" do
-      let(:correspondence_type) { "phone_call" }
+      let(:type) { "phone_call" }
 
       it "redirects to new phone call page" do
         expect(response).to redirect_to(new_investigation_phone_call_path(investigation))
