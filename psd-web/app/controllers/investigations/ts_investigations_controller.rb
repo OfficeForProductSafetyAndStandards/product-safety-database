@@ -120,7 +120,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Allegation.new(investigation_step_params)
+    @investigation = Investigation::Allegation.new(investigation_step_params.merge(owner: current_user))
   end
 
   def set_selected_businesses

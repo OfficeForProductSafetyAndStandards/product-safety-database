@@ -234,17 +234,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   describe "#owner_display_name_for" do
     let(:viewer) { build(:user) }
 
-    context "when the investigation has an owner" do
-      it "displays the owner name" do
-        expect(decorated_investigation.owner_display_name_for(viewer: viewer))
-          .to eq(user.owner_short_name(viewer: viewer))
-      end
-    end
-
-    context "when the investigation doesn’t have an owner" do
-      before { investigation.owner = nil }
-
-      it { expect(decorated_investigation.owner_display_name_for(viewer: viewer)).to eq("No case owner") }
+    it "displays the owner name" do
+      expect(decorated_investigation.owner_display_name_for(viewer: viewer))
+        .to eq(user.owner_short_name(viewer: viewer))
     end
   end
 
