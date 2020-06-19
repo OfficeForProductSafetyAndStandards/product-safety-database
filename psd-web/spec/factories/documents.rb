@@ -4,7 +4,6 @@ FactoryBot.define do
       document_file { Rails.root + "test/fixtures/files/test_result.txt" }
       document_title { Faker::Lorem.sentence }
       document_description { Faker::Lorem.paragraph }
-      document_has_consumer_info { false }
     end
   end
 
@@ -38,7 +37,6 @@ FactoryBot.define do
           description: evaluator.document_description,
           identified: true,
           safe: true,
-          has_consumer_info: evaluator.document_has_consumer_info,
           created_by: evaluator.owner_id,
           title: evaluator.document_title,
           updated: Time.now.iso8601
