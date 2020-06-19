@@ -152,6 +152,32 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           end
         end
       end
+
+      describe "adding old owner as collaborator" do
+        it "creates collaboration with edit access" do
+          expect { result }.to change { Collaboration::EditAccess.count }.from(0).to(1)
+        end
+
+        it "creates proper collaboration" do
+          result
+          expect(investigation.teams_with_edit_access).to eq([creator.team])
+        end
+
+        context "when old owner is team" do
+          let(:old_owner) { team }
+
+          it "creates proper collaboration" do
+            result
+            expect(investigation.teams_with_edit_access).to eq([team])
+          end
+        end
+
+        context "when new owner is user from same team" do
+          it "does not create collaborator" do
+            expect { result }.not_to change { Collaboration::EditAccess.count }
+          end
+        end
+      end
     end
   end
 
