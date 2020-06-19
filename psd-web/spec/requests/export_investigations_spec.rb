@@ -57,6 +57,30 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         expect(coronavirus_cell_content).to eq "true"
       end
     end
+
+    it "exports owner team and user" do
+      user = create(:user)
+      team = create(:team)
+      case_with_user_owner = create(:allegation, owner: user)
+      case_with_team_owner = create(:allegation, owner: team)
+
+      Investigation.import refresh: true, force: true
+
+      get investigations_path format: :xlsx
+
+      aggregate_failures do
+        expect(exported_data.cell(1, 9)).to eq "Case_Owner_Team"
+        expect(exported_data.cell(1, 10)).to eq "Case_Owner_User"
+
+        expect(exported_data.cell(2, 1)).to eq case_with_team_owner.pretty_id
+        expect(exported_data.cell(2, 9)).to eq team.name
+        expect(exported_data.cell(2, 10)).to be_nil
+
+        expect(exported_data.cell(3, 1)).to eq case_with_user_owner.pretty_id
+        expect(exported_data.cell(3, 9)).to eq user.team.name
+        expect(exported_data.cell(3, 10)).to eq user.name
+      end
+    end
   end
   # rubocop:enable RSpec/ExampleLength
 end
