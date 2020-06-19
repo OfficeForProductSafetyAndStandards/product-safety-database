@@ -17,7 +17,7 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
     end
 
     it "renders an error" do
-      expect(response.body).to include("Correspondence type must not be empty")
+      expect(response.body).to include("Select the type of correspondence you’re adding")
     end
   end
 
