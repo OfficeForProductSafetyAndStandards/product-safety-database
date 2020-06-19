@@ -123,7 +123,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
 
         it "does not make any database changes", :aggregate_failures do
           result
-          expect(test_result.reload.updated_at).to eq(updated_at)
+          expect(test_result.reload.updated_at).to be_within(1.second).of(updated_at)
           expect(AuditActivity::Test::TestResultUpdated.where(source: test_result).size).to eq 0
         end
       end
