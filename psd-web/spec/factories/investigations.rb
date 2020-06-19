@@ -12,8 +12,6 @@ FactoryBot.define do
     non_compliant_reason  {}
     description { "Investigation into product" }
 
-    association :owner, factory: :user
-
     transient do
       creator do
         if owner.is_a?(User)

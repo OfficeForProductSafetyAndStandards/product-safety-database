@@ -24,6 +24,14 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
     expect_to_be_on_record_meeting_context_page(case_id: investigation.pretty_id)
 
     fill_in "Who was the meeting with?", with: "Joe Bloggs"
+    # Test that meeting date cannot be future
+    within_fieldset "Date of meeting" do
+      fill_in "Day", with: "2"
+      fill_in "Month", with: "4"
+      fill_in "Year", with: "2021"
+    end
+    click_button "Continue"
+    expect(page).to have_summary_error("Correspondence date must be today or in the past")
 
     within_fieldset "Date of meeting" do
       fill_in "Day", with: "2"
@@ -34,6 +42,12 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
     click_button "Continue"
 
     expect_to_be_on_record_meeting_content_page(case_id: investigation.pretty_id)
+
+    # Test that empty meeting form on submit returns expected error message
+
+    click_button "Continue"
+
+    expect(page).to have_summary_error("Please provide either a transcript or complete the summary and notes fields")
 
     fill_in "Summary", with: "Meeting with Chief Executive"
 
@@ -67,5 +81,37 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
     expect(page).to have_summary_item(key: "Date of meeting", value: "2 April 2020")
     expect(page).to have_summary_item(key: "Meeting with", value: "Joe Bloggs")
     expect(page).to have_summary_item(key: "Notes", value: "Agreed further meeting in 2 weeks time")
+
+    # Test that another user in a different organisation cannot see correspondence info
+    sign_out
+
+    sign_in(other_user_different_org)
+
+    visit "/cases/#{investigation.pretty_id}/activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_case_activity_page_to_show_restricted_information
+
+    # Test that another user in the same team can see correspondence
+    sign_out
+
+    sign_in(other_user_same_team)
+
+    visit "/cases/#{investigation.pretty_id}/activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect_case_activity_page_to_show_meeting_information
+  end
+
+  def expect_case_activity_page_to_show_restricted_information
+    item = page.find("h3", text: "Meeting added").find(:xpath, "..")
+    expect(item).to have_text("Meeting recorded by #{user.name} (#{user.team.name}), #{Time.zone.today.strftime('%e %B %Y').lstrip}")
+    expect(item).to have_text("Only teams added to the case can view correspondence")
+  end
+
+  def expect_case_activity_page_to_show_meeting_information
+    item = page.find("p", text: "Meeting recorded by #{user.name}").find(:xpath, "..")
+    expect(item).to have_text("Meeting with: Joe Bloggs")
+    expect(item).to have_text("Date: 02/04/2020")
   end
 end

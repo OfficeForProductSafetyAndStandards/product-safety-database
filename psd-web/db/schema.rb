@@ -137,7 +137,6 @@ ActiveRecord::Schema.define(version: 2020_06_18_090108) do
     t.string "email_address"
     t.string "email_direction"
     t.string "email_subject"
-    t.boolean "has_consumer_info", default: false, null: false
     t.integer "investigation_id"
     t.string "overview"
     t.string "phone_number"

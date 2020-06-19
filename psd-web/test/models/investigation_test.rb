@@ -66,22 +66,10 @@ class InvestigationTest < ActiveSupport::TestCase
     assert_not policy(investigation).change_owner_or_status?(user: users(:luton))
   end
 
-  test "people in current owner's team should be able to change the case owner" do
-    investigation = create_new_case
-    investigation.owner = User.find_by(name: "Test User_one")
-    assert policy(investigation).change_owner_or_status?(user: User.find_by(name: "Test User_two"))
-  end
-
   test "people not in the team that is the case owner should not be able to change the case owner" do
     investigation = create_new_case
     investigation.owner = User.current.team
     assert_not policy(investigation).change_owner_or_status?(user: users(:luton))
-  end
-
-  test "people in the team that is the case owner should be able to change the case owner" do
-    investigation = create_new_case
-    investigation.owner = Team.find_by(name: "Team 1")
-    assert policy(investigation).change_owner_or_status?(user: User.find_by(name: "Test User_four"))
   end
 
   def create_new_private_case(user)

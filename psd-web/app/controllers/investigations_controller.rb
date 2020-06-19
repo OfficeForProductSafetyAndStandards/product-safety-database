@@ -13,7 +13,7 @@ class InvestigationsController < ApplicationController
       format.html do
         @answer         = search_for_investigations(20)
         @investigations = InvestigationDecorator
-                            .decorate_collection(@answer.records(includes: [{ owner: :organisation }, :products]))
+                            .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
       end
       format.xlsx do
         @answer = search_for_investigations
@@ -105,7 +105,7 @@ private
   end
 
   def set_investigation
-    investigation = Investigation.includes(:owner, :products, :teams_with_edit_access).find_by!(pretty_id: params[:pretty_id])
+    investigation = Investigation.includes(:owner_team, :owner_user, :products, :teams_with_edit_access).find_by!(pretty_id: params[:pretty_id])
     @investigation = investigation.decorate
   end
 

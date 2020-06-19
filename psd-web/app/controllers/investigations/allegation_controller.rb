@@ -15,7 +15,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Allegation.new(investigation_params)
+    @investigation = Investigation::Allegation.new(investigation_params.merge(owner: current_user))
   end
 
   def success_message

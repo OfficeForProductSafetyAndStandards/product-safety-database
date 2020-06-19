@@ -1,6 +1,1 @@
-<%
-  creator = activity.source&.user&.organisation&.name || activity.source&.show(current_user)
-%>
-
-<p><%= render "components/hmcts_badge", text: "Restricted access", classes: "hmcts-badge--grey" %></p>
-<p>Consumer contact details hidden to comply with GDPR legislation. Contact <%= creator %>, who created this activity, to obtain these details if required.</p>
+<p class="govuk-body govuk-hint"><%= t("case.protected_details", data_type: activity.decorate.protected_details_type) %></p>

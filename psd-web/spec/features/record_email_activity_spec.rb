@@ -18,7 +18,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
   before { sign_in(user) }
 
-  scenario "with consumer contact details and email file" do
+  scenario "with email file" do
     visit "/cases/#{investigation.pretty_id}/supporting-information"
     click_link "Add supporting information"
 
@@ -45,7 +45,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Correspondence date must include a month and year"
 
-    fill_in_record_email_form(name: name, email: email, consumer: true, date: date)
+    fill_in_record_email_form(name: name, email: email, date: date)
 
     expect_to_be_on_record_email_details_page
 
@@ -58,13 +58,13 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(email: email, consumer: true, date: date, file: file)
+    expect_confirm_email_details_page_to_show_entered_information(email: email, date: date, file: file)
 
     # Test edit details pages retain entered information
     click_link "Edit details"
 
     expect_to_be_on_record_email_page
-    expect_record_email_form_to_have_entered_information(name: name, email: email, consumer: true, date: date)
+    expect_record_email_form_to_have_entered_information(name: name, email: email, date: date)
 
     click_button "Continue"
 
@@ -85,7 +85,6 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    # Consumer info is not hidden from case owner
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
 
     click_link "View email"
@@ -96,7 +95,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
     expect(page).to have_summary_item(key: "Email", value: "attachment_filename.txt (0 Bytes)")
 
-    # Test that another user in a different organisation cannot see consumer info
+    # Test that another user in a different organisation cannot see correspondence
     sign_out
 
     sign_in(other_user_different_org)
@@ -106,7 +105,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect_case_activity_page_to_show_restricted_information
 
-    # Test that another user in the same team can see consumer info
+    # Test that another user in the same team can see correspondence
     sign_out
 
     sign_in(other_user_same_team)
@@ -117,7 +116,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
   end
 
-  scenario "with non-consumer contact details and summary and subject and body" do
+  scenario "with summary and subject and body" do
     visit "/cases/#{investigation.pretty_id}/supporting-information"
     click_link "Add supporting information"
 
@@ -130,7 +129,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect_to_be_on_record_email_page
-    fill_in_record_email_form(name: name, email: email, consumer: false, date: date)
+    fill_in_record_email_form(name: name, email: email, date: date)
 
     expect_to_be_on_record_email_details_page
 
@@ -138,7 +137,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(email: email, consumer: false, date: date, summary: summary, subject: email_subject, body: body)
+    expect_confirm_email_details_page_to_show_entered_information(email: email, date: date, summary: summary, subject: email_subject, body: body)
     click_button "Continue"
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
@@ -147,7 +146,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, summary: summary, subject: email_subject, body: body)
 
-    # Test that another user in a different organisation can see all info
+    # Test that another user in a different organisation cannot see correspondence
     sign_out
 
     sign_in(other_user_different_org)
@@ -155,18 +154,14 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     visit "/cases/#{investigation.pretty_id}/activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(user_name: "#{user.name} (#{user.team.name})", name: name, email: email, date: date, summary: summary, subject: email_subject, body: body)
+    expect_case_activity_page_to_show_restricted_information
   end
 
-  def fill_in_record_email_form(name:, email:, consumer:, date:)
+  def fill_in_record_email_form(name:, email:, date:)
     choose "From"
 
     fill_in "Name", with: name if name
     fill_in "Email address", with: email if email
-
-    within_fieldset "Are these consumer contact details?" do
-      choose "Yes" if consumer
-    end
 
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date
@@ -180,9 +175,8 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     fill_in "Body", with: body if body
   end
 
-  def expect_confirm_email_details_page_to_show_entered_information(email:, consumer:, date:, file: nil, summary: nil, subject: nil, body: nil)
+  def expect_confirm_email_details_page_to_show_entered_information(email:, date:, file: nil, summary: nil, subject: nil, body: nil)
     expect(page).to have_summary_table_item(key: "From", value: email)
-    expect(page).to have_summary_table_item(key: "Contains consumer info", value: (consumer ? "Yes" : "No"))
     expect(page).to have_summary_table_item(key: "Date sent", value: date.strftime("%d/%m/%Y"))
 
     if file
@@ -194,15 +188,11 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     end
   end
 
-  def expect_record_email_form_to_have_entered_information(name:, email:, consumer:, date:)
+  def expect_record_email_form_to_have_entered_information(name:, email:, date:)
     expect(page).to have_checked_field("correspondence_email_email_direction_inbound")
 
     expect(find_field("Name").value).to eq name
     expect(find_field("Email").value).to eq email
-
-    checked_option = consumer ? "true" : "false"
-    expect(page).to have_checked_field("correspondence_email_has_consumer_info_#{checked_option}")
-
     expect(find_field("Day").value).to eq date.day.to_s
     expect(find_field("Month").value).to eq date.month.to_s
     expect(find_field("Year").value).to eq date.year.to_s
@@ -226,7 +216,6 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
   def expect_case_activity_page_to_show_restricted_information
     item = page.find("h3", text: "Email added").find(:xpath, "..")
     expect(item).to have_text("Email recorded by #{user.name} (#{user.team.name}), #{Time.zone.today.strftime('%e %B %Y').lstrip}")
-    expect(item).to have_text("Restricted access")
-    expect(item).to have_text("Consumer contact details hidden to comply with GDPR legislation. Contact #{user.organisation.name}, who created this activity, to obtain these details if required.")
+    expect(item).to have_text("Only teams added to the case can view correspondence")
   end
 end

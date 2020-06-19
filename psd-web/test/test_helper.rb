@@ -64,10 +64,10 @@ class ActiveSupport::TestCase
   end
 
   def load_case(key)
-    Investigation.import force: true, refresh: :wait_for
     investigation = investigations(key)
     investigation.owner = User.current
     investigation.save
+    Investigation.import force: true, refresh: :wait_for
     investigation
   end
 end

@@ -55,11 +55,11 @@ module Investigations::DisplayTextHelper
     source = highlight[0]
     best_highlight = {
       label: pretty_source(source),
-      content: gdpr_restriction_text
+      content: protected_details_text(source, investigation)
     }
 
     highlight[1].each do |result|
-      unless should_be_hidden(result, source, investigation)
+      unless should_be_hidden?(source, investigation)
         best_highlight[:content] = get_highlight_content(result)
         return best_highlight
       end
@@ -85,29 +85,14 @@ module Investigations::DisplayTextHelper
     sanitized_content.html_safe
   end
 
-  def gdpr_restriction_text
-    "GDPR protected details hidden"
+  def should_be_hidden?(source, investigation)
+    (source.include?("complainant") || source.include?("correspondences")) &&
+      !policy(investigation).view_protected_details?
   end
 
-  def should_be_hidden(result, source, investigation)
-    return true if correspondence_should_be_hidden(result, source, investigation)
-    return true if (source.include? "complainant") && !policy(investigation).view_protected_details?
-
-    false
-  end
-
-  def correspondence_should_be_hidden(result, source, investigation)
-    return false unless source.include? "correspondences"
-
-    key = source.partition(".").last
-    sanitized_content = sanitize(result, tags: [])
-
-    # If a result in its entirety appears in case correspondence that the user can see,
-    # we probably don't care what was its source.
-    investigation.correspondences.each do |c|
-      return false if (c.send(key)&.include? sanitized_content) && c.can_be_displayed?(current_user)
-    end
-    true
+  def protected_details_text(source, investigation)
+    data_type = source.include?("correspondences") ? "correspondence" : "#{investigation.case_type} contact details"
+    t("case.protected_details", data_type: data_type)
   end
 
   def investigation_owner(investigation)
@@ -140,7 +125,6 @@ module Investigations::DisplayTextHelper
   def correspondence_summary_list(correspondence, attachments: nil)
     rows = [
       { key: { text: "Call with" }, value: { text: get_call_with_field(correspondence) } },
-      { key: { text: "Contains consumer info" }, value: { text: correspondence.has_consumer_info ? "Yes" : "No" } },
       { key: { text: "Summary" }, value: { text: correspondence.overview } },
       { key: { text: "Date" }, value: { text: correspondence.correspondence_date&.strftime("%d/%m/%Y") } },
       { key: { text: "Content" }, value: { text: correspondence.details } },

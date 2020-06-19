@@ -20,10 +20,6 @@ class Investigation < ApplicationRecord
 
   validates :description, presence: true, on: :update
 
-  # Can currently only validate owner_id on update since create case wizards
-  # validate partially-built Investigation instances
-  validates :owner_id, presence: true, on: :update
-
   validates :user_title, length: { maximum: 100 }
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
@@ -34,8 +30,6 @@ class Investigation < ApplicationRecord
                :create_audit_activity_for_summary
 
   default_scope { order(updated_at: :desc) }
-
-  belongs_to :owner, polymorphic: true, optional: true
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products
@@ -70,10 +64,33 @@ class Investigation < ApplicationRecord
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
+  has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerUser"
+  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerTeam"
+  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
+  has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
+
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
 
     super
+  end
+
+  def owner
+    owner_user || owner_team
+  end
+
+  def owner_id
+    owner&.id
+  end
+
+  def owner=(team_or_user)
+    if team_or_user.is_a? User
+      self.owner_user = team_or_user
+      self.owner_team = team_or_user.team
+    elsif team_or_user.is_a? Team
+      self.owner_team = team_or_user
+      self.owner_user = nil
+    end
   end
 
   def images
@@ -94,10 +111,6 @@ class Investigation < ApplicationRecord
 
   def supporting_information
     @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product)).sort_by(&:created_at).reverse
-  end
-
-  def owner_team
-    owner&.team
   end
 
   def teams_with_access
@@ -159,12 +172,6 @@ class Investigation < ApplicationRecord
     return if self[:reported_reason].blank?
 
     @reported_reason ||= ActiveSupport::StringInquirer.new(self[:reported_reason])
-  end
-
-  def child_should_be_displayed?(user)
-    # This method is responsible for white-list access for assignee and their team, as described in
-    # https://regulatorydelivery.atlassian.net/wiki/spaces/PSD/pages/598933517/Approach+to+case+sensitivity
-    owner.in_same_team_as?(user)
   end
 
   def case_created_audit_activity_class

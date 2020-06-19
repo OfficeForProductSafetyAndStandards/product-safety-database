@@ -14,8 +14,7 @@ private
 
   def common_file_metadata
     {
-      title: correspondence_params["overview"],
-      has_consumer_info: correspondence_params["has_consumer_info"]
+      title: correspondence_params["overview"]
     }
   end
 
@@ -42,8 +41,7 @@ private
       :overview,
       :details,
       :email_subject,
-      :attachment_description,
-      :has_consumer_info
+      :attachment_description
     )
   end
 

@@ -15,7 +15,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Enquiry.new(investigation_params)
+    @investigation = Investigation::Enquiry.new(investigation_params.merge(owner: current_user))
     @investigation.set_dates_from_params(params[:enquiry])
   end
 
