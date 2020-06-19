@@ -69,7 +69,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.teams_with_edit_access.pluck(:collaborator_id) + [@investigation.owner_team.try(:id)]
+    @investigation.teams_with_edit_access.pluck(:collaborator_id) + [@investigation.team.try(:id)]
   end
 
   def edit_params

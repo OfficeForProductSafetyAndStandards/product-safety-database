@@ -64,7 +64,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:investigation) { create(:allegation, owner: team) }
 
       it "is is the team" do
-        expect(investigation.owner_team).to eql(team)
+        expect(investigation.team).to eql(team)
       end
     end
 
@@ -74,7 +74,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       let(:investigation) { create(:allegation, owner: user) }
 
       it "is is the team the user belongs to" do
-        expect(investigation.owner_team).to eql(team)
+        expect(investigation.team).to eql(team)
       end
     end
   end
@@ -85,7 +85,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
     context "when owner is User" do
       it "has team owner too" do
-        expect(investigation.owner_team).to eq(user.team)
+        expect(investigation.team).to eq(user.team)
       end
     end
 
@@ -99,8 +99,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
     end
 
-    it "is invalid without owner_team" do
-      investigation.owner_team = nil
+    it "is invalid without team" do
+      investigation.team = nil
       expect(investigation).to be_invalid
     end
   end

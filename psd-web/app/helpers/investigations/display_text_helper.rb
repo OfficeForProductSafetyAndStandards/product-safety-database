@@ -99,7 +99,7 @@ module Investigations::DisplayTextHelper
     return "No case owner".html_safe unless investigation.owner
 
     owner_names = [h(investigation.owner.name.to_s)]
-    owner_names << h(investigation.owner_team&.name)
+    owner_names << h(investigation.team&.name)
     # Team name can be the same as owner name
     owner_names.uniq!
     owner_names.compact!
