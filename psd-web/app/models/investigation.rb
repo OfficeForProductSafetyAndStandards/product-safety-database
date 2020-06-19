@@ -8,11 +8,11 @@ class Investigation < ApplicationRecord
   attr_accessor :owner_rationale
 
   enum reported_reason: {
-    unsafe: "unsafe",
-    non_compliant: "non_compliant",
-    unsafe_and_non_compliant: "unsafe_and_non_compliant",
-    safe_and_compliant: "safe_and_compliant"
-  }
+         unsafe: "unsafe",
+         non_compliant: "non_compliant",
+         unsafe_and_non_compliant: "unsafe_and_non_compliant",
+         safe_and_compliant: "safe_and_compliant"
+       }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
@@ -61,16 +61,17 @@ class Investigation < ApplicationRecord
 
   has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
   has_many :collaboration_accesses, class_name: "Collaboration::Access"
+  has_many :team_with_access, through: :collaboration_accesses, source_type: "Team", source: :collaborator, class_name: "Collaboration::Access"
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
   has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
-  has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerUser"
-  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerTeam"
-  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
-  has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
+  has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerUser"
+  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerTeam"
+  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
+  has_one :user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
 
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
@@ -79,7 +80,7 @@ class Investigation < ApplicationRecord
   end
 
   def owner
-    owner_user || owner_team
+    user || team
   end
 
   def owner_id
@@ -88,28 +89,28 @@ class Investigation < ApplicationRecord
 
   def owner=(team_or_user)
     if team_or_user.is_a? User
-      self.owner_user = team_or_user
-      self.owner_team = team_or_user.team
+      self.user = team_or_user
+      self.team = team_or_user.team
     elsif team_or_user.is_a? Team
-      self.owner_team = team_or_user
-      self.owner_user = nil
+      self.team = team_or_user
+      self.user = nil
     end
   end
 
   def images
     @images ||= documents
-      .includes(:blob)
-      .joins(:blob)
-      .where("left(content_type, 5) = 'image'")
-      .where.not(record: [corrective_actions, correspondences, tests])
+                  .includes(:blob)
+                  .joins(:blob)
+                  .where("left(content_type, 5) = 'image'")
+                  .where.not(record: [corrective_actions, correspondences, tests])
   end
 
   def generic_supporting_information_attachments
     @generic_supporting_information_attachments ||= documents
-      .includes(:blob)
-      .joins(:blob)
-      .where.not("left(content_type, 5) = 'image'")
-      .where.not(record: [corrective_actions, correspondences, tests])
+                                                      .includes(:blob)
+                                                      .joins(:blob)
+                                                      .where.not("left(content_type, 5) = 'image'")
+                                                      .where.not(record: [corrective_actions, correspondences, tests])
   end
 
   def supporting_information
@@ -117,7 +118,7 @@ class Investigation < ApplicationRecord
   end
 
   def teams_with_access
-    ([owner_team] + collaboration_accesses.sort_by(&:name)).compact
+    collaboration_accesses.order("name ASC")
   end
 
   def status
@@ -181,7 +182,7 @@ class Investigation < ApplicationRecord
     # To be implemented by children
   end
 
-private
+  private
 
   def create_audit_activity_for_status
     if saved_changes.key?(:is_closed) || status_rationale.present?
@@ -214,8 +215,8 @@ private
   def creator_id
     creator_user&.id
   end
-end
 
-require_dependency "investigation/allegation"
-require_dependency "investigation/project"
-require_dependency "investigation/enquiry"
+  require_dependency "investigation/allegation"
+  require_dependency "investigation/project"
+  require_dependency "investigation/enquiry"
+end

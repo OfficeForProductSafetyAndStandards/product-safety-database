@@ -94,8 +94,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
         investigation.owner = user.team
       end
 
-      it "does not have owner_user" do
-        expect(investigation.owner_user).to eq(nil)
+      it "does not have owner user" do
+        expect(investigation.user).to eq(nil)
       end
     end
 

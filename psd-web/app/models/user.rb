@@ -10,7 +10,7 @@ class User < ApplicationRecord
   belongs_to :organisation
 
   has_many :owner_user_collaboration, class_name: "Collaboration::OwnerUser", foreign_key: "collaborator_id"
-  has_many :investigations, through: :owner_user_collaboration, dependent: :nullify, as: :owner_user
+  has_many :investigations, through: :owner_user_collaboration, dependent: :nullify, as: :user
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
   has_many :user_roles, dependent: :destroy

@@ -16,7 +16,7 @@ class SearchesController < ApplicationController
       redirect_to investigations_path(previous_search_params)
     else
       @answer = search_for_investigations(20)
-      @investigations = @answer.records(includes: [{ owner_team: :organisation, owner_user: :organisation }, :products])
+      @investigations = @answer.records(includes: [{ team: :organisation, user: :organisation }, :products])
     end
   end
 end
