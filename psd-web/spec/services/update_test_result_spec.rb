@@ -23,11 +23,12 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       let(:editing_user_team) { create(:team, name: "Test team 2") }
       let(:user) { create(:user, :activated, name: "User 2", team: editing_user_team) }
       let(:product) { create(:product) }
-      let(:owner_team) { create(:team,
-        name: "Test team 1",
-        team_recipient_email: "test-team@example.com")
-      }
-      let(:investigation) { create(:allegation, owner: owner_team)}
+      let(:owner_team) do
+        create(:team,
+               name: "Test team 1",
+               team_recipient_email: "test-team@example.com")
+      end
+      let(:investigation) { create(:allegation, owner: owner_team) }
 
       context "when there are changes" do
         let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }

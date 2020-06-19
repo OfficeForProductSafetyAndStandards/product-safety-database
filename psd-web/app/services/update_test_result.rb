@@ -86,5 +86,4 @@ private
       ).deliver_later
     end
   end
-
 end
