@@ -15,7 +15,7 @@ RSpec.feature "Add supporting information", :with_stubbed_elasticsearch, :with_s
     expect_to_be_on_add_supporting_information_page
     click_button "Continue"
 
-    expect(page).to have_content("Supporting information type must not be empty")
+    expect(page).to have_content("Select the type of information you’re adding")
     choose "Comment"
     click_button "Continue"
 

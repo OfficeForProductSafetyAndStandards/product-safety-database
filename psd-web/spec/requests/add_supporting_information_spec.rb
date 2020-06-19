@@ -17,7 +17,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
     end
 
     it "renders an error" do
-      expect(response.body).to include("Supporting information type must not be empty")
+      expect(response.body).to include("Select the type of information you’re adding")
     end
   end
 

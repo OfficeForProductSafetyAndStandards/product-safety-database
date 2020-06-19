@@ -140,7 +140,7 @@ en:
         correspondence_type_form:
           attributes:
             type:
-              blank: "Correspondence type must not be empty"
+              blank: "Select the type of correspondence you’re adding"
         edit_investigation_collaborator_form:
           attributes:
             include_message:
@@ -162,7 +162,7 @@ en:
         supporting_information_type_form:
           attributes:
             type:
-              blank: "Supporting information type must not be empty"
+              blank: "Select the type of information you’re adding"
         why_reporting_form:
           attributes:
             hazard_type:
