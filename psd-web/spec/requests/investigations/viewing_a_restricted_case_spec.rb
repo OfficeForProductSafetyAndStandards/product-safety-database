@@ -31,8 +31,8 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
       ChangeCaseOwner.call!(investigation: investigation, user: user, owner: other_team_from_the_same_organisation)
     end
 
-    it "renders the page" do
-      expect(response).to have_http_status(:ok)
+    it "displays an forbidden message" do
+      expect(response).to have_http_status(:forbidden)
     end
   end
 
