@@ -34,7 +34,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     click_link "Change teams added to the case"
 
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
-
+    save_and_open_page
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true }
     ])

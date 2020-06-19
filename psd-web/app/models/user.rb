@@ -65,6 +65,10 @@ class User < ApplicationRecord
     team == user.team
   end
 
+  def user
+    self
+  end
+
   def name
     super.to_s
   end

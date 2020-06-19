@@ -10,7 +10,9 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
   # Create the case up front and clear the case created email so we can test update email functionality
   let!(:investigation) { create(:allegation, owner: investigation_owner, creator: creator_user) }
 
-  before { delivered_emails.clear }
+  before do
+    delivered_emails.clear
+  end
 
   scenario "Assigned user to the case receives activity notifications" do
     sign_in commentator_user

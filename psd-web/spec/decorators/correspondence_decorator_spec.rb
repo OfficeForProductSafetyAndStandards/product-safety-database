@@ -4,7 +4,7 @@ RSpec.describe CorrespondenceDecorator, :with_stubbed_elasticsearch, :with_stubb
   subject { build(:correspondence_email, investigation: investigation).decorate }
 
   let(:user)          { create(:user) }
-  let(:investigation) { create(:allegation, owner: user.team) }
+  let(:investigation) { create(:allegation, creator: user) }
 
   describe "#activity_cell_partial" do
     let(:partial) { subject.activity_cell_partial(viewing_user) }

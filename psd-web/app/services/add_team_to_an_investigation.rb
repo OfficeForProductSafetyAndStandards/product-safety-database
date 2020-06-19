@@ -12,7 +12,7 @@ class AddTeamToAnInvestigation
     )
 
     begin
-      if edit_access_collaboration.save
+      if edit_access_collaboration.valid?(:add_editor)
         NotifyTeamAddedToCaseJob.perform_later(edit_access_collaboration)
 
         AuditActivity::Investigation::TeamAdded.create!(

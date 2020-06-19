@@ -13,6 +13,7 @@ FactoryBot.define do
     description { "Investigation into product" }
 
     transient do
+      owner { create(:user) }
       creator do
         if owner.is_a?(User)
           owner
@@ -95,7 +96,8 @@ FactoryBot.define do
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
     before(:create) do |investigation, options|
-      CreateCase.call(investigation: investigation, user: options.creator)
+      # byebug
+      CreateCase.call(investigation: investigation, user: options.owner || options.creator)
     end
   end
 end

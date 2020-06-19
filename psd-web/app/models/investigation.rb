@@ -69,9 +69,9 @@ class Investigation < ApplicationRecord
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
   has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerUser"
-  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerTeam"
-  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
-  has_one :user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
+  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerTeam", required: true
+  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
+  has_one :user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
@@ -85,16 +85,6 @@ class Investigation < ApplicationRecord
 
   def owner_id
     owner&.id
-  end
-
-  def owner=(team_or_user)
-    if team_or_user.is_a? User
-      self.user = team_or_user
-      self.team = team_or_user.team
-    elsif team_or_user.is_a? Team
-      self.team = team_or_user
-      self.user = nil
-    end
   end
 
   def images

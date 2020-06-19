@@ -6,6 +6,8 @@ class Team < ApplicationRecord
 
   validates :name, presence: true
 
+  alias_attribute :email, :team_recipient_email
+
   def self.all_with_organisation
     all.includes(:organisation)
   end
@@ -16,6 +18,10 @@ class Team < ApplicationRecord
 
   def team
     self
+  end
+
+  def user
+    nil
   end
 
   def in_same_team_as?(user)
