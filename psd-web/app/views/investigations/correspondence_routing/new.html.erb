@@ -16,7 +16,7 @@
                  key: :type,
                  errorMessage: format_errors_for(@correspondence_type_form,
                                                  @correspondence_type_form.errors.full_messages_for(:type)),
-                 items: CorrespondenceTypeForm::AVAILABLE_TYPES.map { |type, label| { text: label, value: type } },
+                 items: radio_items_from_hash(CorrespondenceTypeForm::AVAILABLE_TYPES),
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } } %>
       <%= govukButton(text: "Continue") %>
     <% end %>

@@ -8,12 +8,10 @@
 <% end %>
 
 <%
-  radio_items = SupportingInformationTypeForm::AVAILABLE_TYPES
-                  .except(:generic_information)
-                  .map { |type, label| { text: label, value: type } }.tap do |items|
-                    items.push divider: "or"
-                    items.push text: SupportingInformationTypeForm::AVAILABLE_TYPES[:generic_information], value: :generic_information
-                  end
+  radio_items = radio_items_from_hash(SupportingInformationTypeForm::MAIN_TYPES).tap do |items|
+                  items.push divider: "or"
+                  items.push(radio_items_from_hash(SupportingInformationTypeForm::GENERIC_TYPE).first)
+                end
 %>
 
 <div class="govuk-grid-row">
