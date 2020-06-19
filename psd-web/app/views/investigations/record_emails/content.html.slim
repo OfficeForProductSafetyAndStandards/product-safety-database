@@ -50,3 +50,5 @@
                title: "Attachments"
 
       = form.submit "Continue", class: "govuk-button"
+
+      = permission_notice(text: t("case.protected_details", data_type: "email correspondence"))

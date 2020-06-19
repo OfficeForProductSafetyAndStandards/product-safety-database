@@ -53,6 +53,7 @@
 
     <%= govukSummaryList(rows: rows) %>
 
+    <%= permission_notice(text: t("case.protected_details", data_type: "meeting correspondence")) %>
   </div>
 
   <% if @meeting.related_attachment.attached? %>

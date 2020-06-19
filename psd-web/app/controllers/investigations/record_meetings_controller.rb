@@ -31,8 +31,7 @@ private
     params.require(correspondence_params_key).permit(
       :correspondent_name,
       :overview,
-      :details,
-      :has_consumer_info
+      :details
     )
   end
 

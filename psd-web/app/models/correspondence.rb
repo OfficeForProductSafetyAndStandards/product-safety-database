@@ -29,21 +29,9 @@ class Correspondence < ApplicationRecord
     end
   end
 
-  def can_be_displayed?(user)
-    can_be_seen_by_user?(user) || investigation.child_should_be_displayed?(user)
-  end
-
   def date_cannot_be_in_the_future
     if correspondence_date.present? && correspondence_date > Time.zone.today
       errors.add(:correspondence_date, "Correspondence date must be today or in the past")
     end
-  end
-
-private
-
-  def can_be_seen_by_user?(user)
-    return true if activity&.source&.user_has_gdpr_access?(user)
-
-    !has_consumer_info
   end
 end
