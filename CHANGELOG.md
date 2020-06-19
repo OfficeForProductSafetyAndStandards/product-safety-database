@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-06-19
+- Added case owner team and removed complainant details from cases export spreadsheet.
+
 ## 2020-06-17
 - Only teams added to a case can now view correspondence or attachment details.
 
