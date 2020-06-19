@@ -77,18 +77,26 @@ RSpec.describe UrlHelper do
     context "with an instance of Investigation" do
       let(:object) { create(:allegation, :with_document) }
 
-      context "when the attachment is an image" do
+      context "when no document is given" do
+        subject(:path) { helper.attachments_tab_path(object) }
+
+        it "returns /cases/:pretty_id/documents/:id/supporting-information" do
+          expect(path).to eq("/cases/#{object.pretty_id}/supporting-information")
+        end
+      end
+
+      context "when the document is an image" do
         before do
-          allow(object.documents.last).to receive(:image?).and_return(true)
+          allow(object.documents.first).to receive(:image?).and_return(true)
         end
 
-        it "returns /cases/:pretty_id/documents/:id" do
+        it "returns /cases/:pretty_id/documents/:id/images" do
           expect(path).to eq("/cases/#{object.pretty_id}/images")
         end
       end
 
-      context "when the attachment is not an image" do
-        it "returns /cases/:pretty_id/documents/:id" do
+      context "when the document is not an image" do
+        it "returns /cases/:pretty_id/documents/:id/supporting-information" do
           expect(path).to eq("/cases/#{object.pretty_id}/supporting-information")
         end
       end
