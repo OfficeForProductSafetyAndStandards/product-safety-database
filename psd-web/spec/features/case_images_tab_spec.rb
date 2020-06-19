@@ -24,8 +24,7 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
 
     fill_and_submit_attachment_details_page
 
-    expect_to_be_on_supporting_information_page
-    click_link "Images (1)"
+    expect_to_be_on_images_page
 
     expect_case_attachments_page_to_show_entered_information
 

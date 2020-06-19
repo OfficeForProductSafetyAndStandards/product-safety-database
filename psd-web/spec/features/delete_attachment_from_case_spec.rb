@@ -20,12 +20,10 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
 
     click_button "Delete attachment"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
-
+    expect_to_be_on_supporting_information_page
     click_link "Supporting information"
 
     expect_case_supporting_informartion_page_not_to_show_deleted_attachment
-
     click_link "Activity"
 
     expect_case_activity_page_to_show_deleted_document

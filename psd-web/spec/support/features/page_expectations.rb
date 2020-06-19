@@ -33,6 +33,11 @@ module PageExpectations
     expect(page).to have_selector("h2", text: "Remove business")
   end
 
+  def expect_to_be_on_images_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/images")
+    expect(page).to have_selector("h1", text: "Images")
+  end
+
   def expect_to_be_on_add_image_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
