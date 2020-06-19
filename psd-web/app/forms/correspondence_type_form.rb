@@ -1,4 +1,4 @@
-class CorrespondenceRoutingForm
+class CorrespondenceTypeForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 

@@ -14,14 +14,14 @@ module Investigations
 
     def new
       authorize investigation, :update?
-      supporting_information_form
+      supporting_information_type_form
     end
 
     def create
       authorize investigation, :update?
-      return render(:new) if supporting_information_form.invalid?
+      return render(:new) if supporting_information_type_form.invalid?
 
-      case supporting_information_form.type
+      case supporting_information_type_form.type
       when "comment"
         redirect_to new_investigation_activity_comment_path(@investigation)
       when "corrective_action"
@@ -43,8 +43,8 @@ module Investigations
                         .decorate
     end
 
-    def supporting_information_form
-      @supporting_information_form ||= SupportingInformationForm.new(type: params[:type])
+    def supporting_information_type_form
+      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type])
     end
   end
 end

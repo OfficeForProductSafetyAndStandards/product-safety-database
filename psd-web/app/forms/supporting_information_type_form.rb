@@ -1,4 +1,4 @@
-class SupportingInformationForm
+class SupportingInformationTypeForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
