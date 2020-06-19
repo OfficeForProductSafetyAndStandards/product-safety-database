@@ -100,13 +100,13 @@ module PageExpectations
   def expect_to_be_on_edit_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.to_param}/edit")
     expect(page).to have_selector("h2", text: "Edit document details")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_remove_attachment_confirmation_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_case_created_page
@@ -256,7 +256,7 @@ module PageExpectations
   def expect_to_be_on_remove_attachment_from_product_confirmation_page
     expect(page).to have_current_path("/products/#{product.id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
-    expect(page).to have_link("Back", href: "/products/#{product.id}")
+    expect(page).to have_link("Back", href: "/products/#{product.id}#attachments")
   end
 
   def expect_to_be_on_product_page
