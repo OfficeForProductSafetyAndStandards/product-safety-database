@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :complainant, :documents_attachments, :owner, :creator_user
+  decorates_associations :complainant, :documents_attachments, :owner, :creator_user, :owner_user, :owner_team
 
   PRODUCT_DISPLAY_LIMIT = 6
 
