@@ -4,7 +4,7 @@
 <% content_for :after_header do %>
   <%= govukBackLink(
     text: "Back",
-    href: path_for_model(@parent)
+    href: attachments_tab_path(@parent)
   ) %>
 <% end %>
 
