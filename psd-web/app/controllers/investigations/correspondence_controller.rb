@@ -21,10 +21,10 @@ class Investigations::CorrespondenceController < ApplicationController
       attach_files
       save_attachments
       audit_class.from(@correspondence, @investigation)
-      redirect_to investigation_path(@investigation), flash: { success: "Correspondence was successfully recorded" }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "Correspondence was successfully recorded" }
     else
       Rails.logger.error "Cannot create correspondence because investigation has errors: #{@investigation.errors.full_messages}" unless @investigation.valid?
-      redirect_to investigation_path(@investigation), flash: { warning: "Correspondence could not be saved." }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { warning: "Correspondence could not be saved." }
     end
   end
 

@@ -80,7 +80,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect_to_be_on_confirm_email_details_page
     click_button "Continue"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -140,7 +140,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect_confirm_email_details_page_to_show_entered_information(email: email, date: date, summary: summary, subject: email_subject, body: body)
     click_button "Continue"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

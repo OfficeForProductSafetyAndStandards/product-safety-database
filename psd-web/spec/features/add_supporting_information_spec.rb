@@ -24,7 +24,7 @@ RSpec.feature "Add supporting information", :with_stubbed_elasticsearch, :with_s
     fill_in "body", with: comment
     click_button "Continue"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect_confirmation_banner("Comment was successfully added.")
     click_link "Activity"
 

@@ -77,8 +77,6 @@ module PageExpectations
   def expect_to_be_on_supporting_information_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
     expect(page).to have_selector("h1", text: "Supporting information")
-    expect(page).to have_selector("h2", text: document.decorate.title)
-    expect(page).to have_selector("p",  text: document.description)
   end
 
   def expect_to_be_on_add_supporting_information_page

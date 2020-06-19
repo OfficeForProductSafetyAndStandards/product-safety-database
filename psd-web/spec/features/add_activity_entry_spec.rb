@@ -21,7 +21,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
     add_comment
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
 
     expect(delivered_emails.last.recipient).to eq creator_user.email
@@ -49,7 +49,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
       add_comment
 
-      expect_to_be_on_case_page(case_id: investigation.pretty_id)
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
       expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
 
       expect(delivered_emails.map(&:recipient).uniq.sort).to eq ["active@example.com", "creator@example.com"]

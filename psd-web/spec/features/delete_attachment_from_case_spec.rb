@@ -11,7 +11,8 @@ RSpec.feature "Deleting an attachment from a case", :with_stubbed_elasticsearch,
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
     expect_to_be_on_supporting_information_page
-
+    expect(page).to have_selector("h2", text: document.decorate.title)
+    expect(page).to have_selector("p",  text: document.description)
     click_link "Remove document"
 
     expect_to_be_on_remove_attachment_confirmation_page
