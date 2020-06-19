@@ -33,9 +33,7 @@ class InvestigationPolicy < ApplicationPolicy
     return true unless private
 
     # Has the user's team been added to the case as a collaborator?
-    return true if @record.teams_with_access.include?(user.team)
-
-    false
+    @record.teams_with_access.include?(user.team)
   end
 
   def view_protected_details?(user: @user)
