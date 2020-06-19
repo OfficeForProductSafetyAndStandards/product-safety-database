@@ -2,7 +2,7 @@
 <% page_title(page_heading, errors: @supporting_information_form.errors.any?) %>
 <% content_for :after_header do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.type.demodulize.downcase}",
+    text: "Back to #{@investigation.pretty_description.downcase}",
     href: investigation_supporting_information_index_path(@investigation)
   ) %>
 <% end %>
