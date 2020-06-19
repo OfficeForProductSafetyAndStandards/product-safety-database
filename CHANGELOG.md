@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-06-17
+- Only teams added to a case can now view correspondence or attachment details.
+
 ## 2020-06-12
 - Users of all teams added to a case can now view complainant contact details on the case activity page.
 

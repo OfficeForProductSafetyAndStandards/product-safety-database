@@ -37,3 +37,5 @@
                  attributes: { maxlength: 50_000 },
                  label: { text: "Notes", classes: "govuk-!-width-two-thirds" }
         = form.submit "Continue", class: "govuk-button"
+
+        = permission_notice(text: t("case.protected_details", data_type: "phone call correspondence"))

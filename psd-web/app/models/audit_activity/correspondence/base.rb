@@ -12,6 +12,6 @@ class AuditActivity::Correspondence::Base < AuditActivity::Base
   end
 
   def can_display_all_data?(user)
-    correspondence.can_be_displayed?(user)
+    Pundit.policy(user, investigation).view_protected_details?
   end
 end
