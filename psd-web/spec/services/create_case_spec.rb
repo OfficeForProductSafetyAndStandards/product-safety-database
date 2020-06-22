@@ -51,12 +51,12 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
           investigation.owner_team_collaboration = nil
         end
 
-        it "sets the owner to the user", :aggregate_failure do
+        it "sets the owner to the user", :aggregate_failures do
           result
 
           investigation.reload
-          expect(investigation.owner_user_collaboration).to eq(user)
-          expect(investigation.owner_team_collaboration).to eq(user.team)
+          expect(investigation.owner_user_collaboration.collaborator).to eq(user)
+          expect(investigation.owner_team_collaboration.collaborator).to eq(user.team)
         end
       end
 

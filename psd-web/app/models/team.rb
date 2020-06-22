@@ -29,8 +29,8 @@ class Team < ApplicationRecord
   end
 
   def own!(investigation)
-    investigation.owner_team_collaboration.update!(collaborator: self)
-    investigation.owner_user_collaboration.destroy!
+    investigation.create_owner_team_collaboration!(collaborator: self)
+    investigation.owner_user_collaboration&.destroy!
   end
 
   def self.get_visible_teams(user)

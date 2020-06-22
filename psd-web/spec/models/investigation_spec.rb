@@ -72,21 +72,11 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
   describe "ownership" do
     let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-    let(:investigation) { create(:project, creator: user) }
+    let(:investigation) { create(:project, owner: user) }
 
     context "when owner is User" do
       it "has team owner too" do
         expect(investigation.team).to eq(user.team)
-      end
-    end
-
-    context "when owner is Team" do
-      before do
-        investigation.owner = user.team
-      end
-
-      it "does not have owner user" do
-        expect(investigation.user).to eq(nil)
       end
     end
 

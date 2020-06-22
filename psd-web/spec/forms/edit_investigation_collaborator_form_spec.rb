@@ -34,7 +34,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     context "when deleting" do
       context "when successful" do
         it "removes collaborator record" do
-          expect { form.save! }.to change(Collaboration::Access::Edit, :count).from(1).to(0)
+          expect { form.save! }.to change(investigation.team_with_access, :count).from(2).to(1)
         end
 
         it "returns true" do

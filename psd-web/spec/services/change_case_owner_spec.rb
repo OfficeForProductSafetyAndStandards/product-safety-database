@@ -227,18 +227,16 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
       end
 
       context "when the new owner was previously a collaborator" do
-        let(:new_owner) { team }
-
-        before do
+        let(:new_owner) { create(:team) }
+        let(:old_collaborator) do
           investigation.edit_access_collaborations.create!(
             editor: new_owner, include_message: false,
             added_by_user: user
           )
         end
 
-        it "removes the new owner as a collaborator" do
-          result
-          expect(investigation.edit_access_collaborations.where(editor: team).size).to eq(0)
+        it "changes the edit collaborator to the owner" do
+          expect { result }.to change(investigation.reload, :team).from(old_owner.team).to(new_owner)
         end
       end
     end

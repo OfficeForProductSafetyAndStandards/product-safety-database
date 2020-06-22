@@ -72,7 +72,7 @@ class Investigation < ApplicationRecord
   has_many :collaboration_access_owners, class_name: "Collaboration::Access::Owner"
   has_one :owner_user_collaboration, class_name: "Collaboration::Access::OwnerUser", dependent: :destroy, inverse_of: :investigation
   has_one :owner_team_collaboration, class_name: "Collaboration::Access::OwnerTeam", dependent: :destroy, required: true
-  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
+  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator, required: true
   has_one :user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
   def initialize(*args)

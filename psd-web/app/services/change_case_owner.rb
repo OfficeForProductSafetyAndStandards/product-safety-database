@@ -14,9 +14,17 @@ class ChangeCaseOwner
     return if old_owner == owner
 
     ActiveRecord::Base.transaction do
-      investigation.owner_team_collaboration.swap_to_edit_access!
+      unless owner.team == investigation.owner_team_collaboration.collaborator
+        investigation.owner_team_collaboration.swap_to_edit_access!
+      end
 
-      old_collaborator = investigation.collaboration_accesses.find_by(collaborator: owner)
+      investigation.reload # force cached associations to be reloaded
+
+      old_collaborator = investigation
+                           .collaboration_accesses
+                           .where.not(type: ["Collaboration::Access::OwnerUser", "Collaboration::Access::OwnerTeam"])
+                           .find_by(collaborator: owner)
+
       (old_collaborator || owner).own!(investigation)
 
       create_audit_activity_for_case_owner_changed
