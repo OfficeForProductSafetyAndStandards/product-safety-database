@@ -29,12 +29,12 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
     end
 
     let(:do_request) do
-      put investigation_collaborator_path(investigation.pretty_id, team.id), params: params
+      put investigation_collaborator_path(investigation.pretty_id, edit_access_collaboration.id), params: params
     end
 
     context "when successful" do
       it "removes collaborator" do
-        expect { do_request }.to change(Collaboration::Access::Edit, :count).from(1).to(0)
+        expect { do_request }.to change(Collaboration::Access::Edit, :count).from(3).to(2)
       end
 
       it "redirects back to the 'teams added to case' page" do

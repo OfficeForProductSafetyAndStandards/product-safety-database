@@ -60,6 +60,7 @@ class Investigation < ApplicationRecord
   has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
 
   has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
+  has_many :edit_collaborations, class_name: "Collaboration::Access::Edit"
   has_many :collaboration_accesses, class_name: "Collaboration::Access"
   has_many :team_with_access, -> { order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")) }, through: :collaboration_accesses, source: :collaborator, source_type: "Team"
 
@@ -69,8 +70,8 @@ class Investigation < ApplicationRecord
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
   has_many :collaboration_access_owners, class_name: "Collaboration::Access::Owner"
-  has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerUser"
-  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerTeam", required: true
+  has_one :owner_user_collaboration, class_name: "Collaboration::Access::OwnerUser", dependent: :destroy, inverse_of: :investigation
+  has_one :owner_team_collaboration, class_name: "Collaboration::Access::OwnerTeam", dependent: :destroy, required: true
   has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
   has_one :user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 

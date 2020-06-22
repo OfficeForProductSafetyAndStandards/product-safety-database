@@ -29,7 +29,7 @@ class Team < ApplicationRecord
   end
 
   def own!(investigation)
-    investigation.create_owner_team_collaboration(collaborator: self)
+    investigation.owner_team_collaboration.update!(collaborator: self)
     investigation.owner_user_collaboration.destroy!
   end
 

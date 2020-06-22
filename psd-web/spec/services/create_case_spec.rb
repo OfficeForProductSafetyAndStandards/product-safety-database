@@ -46,11 +46,17 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
       end
 
       context "when there is no owner already on the investigation" do
-        before { investigation.owner = nil }
+        before do
+          investigation.owner_user_collaboration = nil
+          investigation.owner_team_collaboration = nil
+        end
 
-        it "sets the owner to the user" do
+        it "sets the owner to the user", :aggregate_failure do
           result
-          expect(investigation.reload.owner).to eq(user)
+
+          investigation.reload
+          expect(investigation.owner_user_collaboration).to eq(user)
+          expect(investigation.owner_team_collaboration).to eq(user.team)
         end
       end
 
