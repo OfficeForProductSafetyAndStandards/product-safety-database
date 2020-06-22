@@ -8,11 +8,11 @@ class Investigation < ApplicationRecord
   attr_accessor :owner_rationale
 
   enum reported_reason: {
-         unsafe: "unsafe",
-         non_compliant: "non_compliant",
-         unsafe_and_non_compliant: "unsafe_and_non_compliant",
-         safe_and_compliant: "safe_and_compliant"
-       }
+    unsafe: "unsafe",
+    non_compliant: "non_compliant",
+    unsafe_and_non_compliant: "unsafe_and_non_compliant",
+    safe_and_compliant: "safe_and_compliant"
+  }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 
@@ -170,7 +170,7 @@ class Investigation < ApplicationRecord
     # To be implemented by children
   end
 
-  private
+private
 
   def create_audit_activity_for_status
     if saved_changes.key?(:is_closed) || status_rationale.present?

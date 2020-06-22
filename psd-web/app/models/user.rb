@@ -71,7 +71,7 @@ class User < ApplicationRecord
 
   def own!(investigation)
     investigation.create_owner_user_collaboration!(collaborator: self)
-    investigation.create_owner_team_collaboration!(collaborator: self.team)
+    investigation.create_owner_team_collaboration!(collaborator: team)
   end
 
   def name
