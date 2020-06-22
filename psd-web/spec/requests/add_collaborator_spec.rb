@@ -31,7 +31,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     end
 
     it "includes the message in the collaborator record" do
-      expect(investigation.edit_access_collaborations.first.message).to eql(message)
+      expect(investigation.edit_access_collaborations.find_by!(collaborator: other_team).message).to eq(message)
     end
 
     it "associates the collaborator with the user who added the team" do
