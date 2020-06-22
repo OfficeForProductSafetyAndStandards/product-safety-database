@@ -110,6 +110,10 @@ class InvestigationDecorator < ApplicationDecorator
     "documents/generic_document_card"
   end
 
+  def owner
+    object.owner.decorate
+  end
+
 private
 
   def category
@@ -136,9 +140,5 @@ private
 
   def should_display_received_by?
     false
-  end
-
-  def owner
-    object.owner.decorate
   end
 end

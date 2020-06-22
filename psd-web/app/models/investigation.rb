@@ -62,7 +62,7 @@ class Investigation < ApplicationRecord
   has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
   has_many :edit_collaborations, class_name: "Collaboration::Access::Edit"
   has_many :collaboration_accesses, class_name: "Collaboration::Access"
-  has_many :team_with_access, -> { order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")) }, through: :collaboration_accesses, source: :collaborator, source_type: "Team"
+  has_many :teams_with_access, -> { order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")) }, through: :collaboration_accesses, source: :collaborator, source_type: "Team"
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
   has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
@@ -72,7 +72,7 @@ class Investigation < ApplicationRecord
   has_many :collaboration_access_owners, class_name: "Collaboration::Access::Owner"
   has_one :owner_user_collaboration, class_name: "Collaboration::Access::OwnerUser", dependent: :destroy, inverse_of: :investigation
   has_one :owner_team_collaboration, class_name: "Collaboration::Access::OwnerTeam", dependent: :destroy, required: true
-  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator, required: true
+  has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
   has_one :user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
   def initialize(*args)
@@ -107,10 +107,6 @@ class Investigation < ApplicationRecord
 
   def supporting_information
     @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product)).sort_by(&:created_at).reverse
-  end
-
-  def teams_with_access
-    team_with_access.order("name ASC")
   end
 
   def status
