@@ -1,7 +1,10 @@
 class Collaboration < ApplicationRecord
   class Access < Collaboration
     class OwnerTeam < Owner
-      # belongs_to :team, polymorphic: true, foreign_type: "collaborator_type", foreign_key: :collaborator_id
+      def swap_to_edit_access!
+        update!(type: "Collaboration::Access::Edit")
+        investigation.owner_user_collaboration.destroy!
+      end
     end
   end
 end

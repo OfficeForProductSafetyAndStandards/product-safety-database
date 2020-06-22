@@ -15,7 +15,10 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Enquiry.new(investigation_params.merge(owner: current_user))
+    @investigation = Investigation::Enquiry.new(investigation_params).tap do |enquiry|
+      enquiry.build_owner_user_collaboration(collaborator: current_user)
+      enquiry.build_owner_team_collaboration(collaborator: current_user.team)
+    end
     @investigation.set_dates_from_params(params[:enquiry])
   end
 

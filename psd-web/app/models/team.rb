@@ -28,6 +28,11 @@ class Team < ApplicationRecord
     users.include?(user)
   end
 
+  def own!(investigation)
+    investigation.create_owner_team_collaboration(collaborator: self)
+    investigation.owner_user_collaboration.destroy!
+  end
+
   def self.get_visible_teams(user)
     team_names = Rails.application.config.team_names["organisations"]["opss"]
     return where(name: team_names) if user.is_opss?

@@ -68,6 +68,7 @@ class Investigation < ApplicationRecord
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
+  has_many :collaboration_access_owners, class_name: "Collaboration::Access::Owner"
   has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerUser"
   has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::Access::OwnerTeam", required: true
   has_one :team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator

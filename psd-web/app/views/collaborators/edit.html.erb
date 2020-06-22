@@ -1,4 +1,4 @@
-<% title = @team.name %>
+<% title = @collaborator.name %>
 <% page_title title, errors: @edit_form.errors.any? %>
 
 <% content_for :back_link do %>
@@ -17,80 +17,80 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @team), method: :put do |form| %>
+    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put do |form| %>
 
       <% remove_hint = @investigation.is_private? ? "Will not be able to view case details as it is restricted" :  "Will have default view rights"%>
       <%= render "form_components/govuk_radios",
-        form: form,
-        key: :permission_level,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Permission level",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: [
-          {
-            id: "permission_level",
-            text: "Edit full case",
-            value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT,
-            hint: {
-              text: "View full case details including correspondence",
-            }
-          },
-          {key: "or", divider: "or"},
-          {
-            text: "Remove #{@team.name} from the case",
-            hint: {
-              text: remove_hint
-            },
-            value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE
-          }
-        ]
+                 form: form,
+                 key: :permission_level,
+                 classes: "",
+                 fieldset: {
+                   legend: {
+                     text: "Permission level",
+                     is_page_heading: false,
+                     classes: "govuk-fieldset__legend--m"
+                   }
+                 },
+                 items: [
+                   {
+                     id: "permission_level",
+                     text: "Edit full case",
+                     value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT,
+                     hint: {
+                       text: "View full case details including correspondence",
+                     }
+                   },
+                   {key: "or", divider: "or"},
+                   {
+                     text: "Remove #{@collaborator.name} from the case",
+                     hint: {
+                       text: remove_hint
+                     },
+                     value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE
+                   }
+                 ]
       %>
 
-      <p class="govuk-body">We’ll email <%= @team.name %> to let them know that their permission level has been changed.
-</p>
+      <p class="govuk-body">We’ll email <%= @collaborator.name %> to let them know that their permission level has been changed.
+      </p>
 
       <% message_html = capture do %>
         <%= render "form_components/govuk_textarea",
-          form: form,
-          key: :message,
-          id: "message",
-          label: {
-            text: "Message to the #{@team.name}"
-          },
-          hint: {
-            text: "Message will also be included on the case timeline"
-          }
+                   form: form,
+                   key: :message,
+                   id: "message",
+                   label: {
+                     text: "Message to the #{@collaborator.name}"
+                   },
+                   hint: {
+                     text: "Message will also be included on the case timeline"
+                   }
         %>
       <% end %>
 
       <%= render "form_components/govuk_radios",
-        form: form,
-        key: :include_message,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Do you want to include more information?"
-          }
-        },
-        items: [
-          {
-            text: "Yes, add a message",
-            id: "include_message",
-            value: "true",
-            conditional: {
-              html: message_html
-            }
-          },
-          {
-            text: "No",
-            value: "false"
-          }
-        ]
+                 form: form,
+                 key: :include_message,
+                 classes: "",
+                 fieldset: {
+                   legend: {
+                     text: "Do you want to include more information?"
+                   }
+                 },
+                 items: [
+                   {
+                     text: "Yes, add a message",
+                     id: "include_message",
+                     value: "true",
+                     conditional: {
+                       html: message_html
+                     }
+                   },
+                   {
+                     text: "No",
+                     value: "false"
+                   }
+                 ]
       %>
 
 

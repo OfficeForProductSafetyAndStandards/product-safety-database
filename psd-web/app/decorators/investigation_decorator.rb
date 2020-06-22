@@ -99,9 +99,9 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner_display_name_for(viewer:)
-    return "No case owner" unless investigation.owner
+    return "No case owner" unless investigation.team
 
-    owner.owner_short_name(viewer: viewer)
+    team.owner_short_name(viewer: viewer)
   end
 
   def generic_attachment_partial(viewing_user)

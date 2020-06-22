@@ -364,7 +364,8 @@ module PageExpectations
   end
 
   def expect_to_be_on_edit_case_permissions_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/teams/#{team.id}/edit")
+    collaboration = Investigation.find_by(pretty_id: case_id).collaboration_accesses.find_by!(collaborator: team)
+    expect(page).to have_current_path("/cases/#{case_id}/teams/#{collaboration.id}/edit")
     expect(page).to have_selector("h1", text: team.name)
   end
 

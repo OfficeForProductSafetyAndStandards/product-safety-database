@@ -18,6 +18,10 @@ class Collaboration < ApplicationRecord
                              value
                            end
       end
+
+      def own!(_investigation)
+        collaborator.own!(investigation)
+      end
     end
   end
 end

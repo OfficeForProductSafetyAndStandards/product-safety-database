@@ -14,16 +14,16 @@ class ChangeCaseOwner
     return if old_owner == owner
 
     ActiveRecord::Base.transaction do
-      if owner.is_a?(Team)
-        # Remove the new owner team as a collaborator if they were one.
-        investigation.edit_access_collaborations.where(editor: owner).delete_all
-      end
+      investigation.owner_team_collaboration.swap_to_edit_access!
 
-      investigation.update!(owner: owner)
+      old_collaborator = investigation.collaboration_accesses.find_by(collaborator: owner)
+      (old_collaborator || owner).own!(investigation)
+
       create_audit_activity_for_case_owner_changed
       add_old_owner_as_collaborator
     end
 
+    investigation.reload
     send_notification_email
   end
 

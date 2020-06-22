@@ -4,7 +4,11 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @teams = @investigation.teams_with_edit_access.order(:name)
+    @collaborators = @investigation
+                       .collaboration_accesses
+                       .includes(:collaborator)
+                       .where(collaborator_type: "Team")
+                       .order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END"))
   end
 
   def new
@@ -37,19 +41,20 @@ class CollaboratorsController < ApplicationController
   def edit
     authorize @investigation, :manage_collaborators?
 
-    @team = Team.find(params[:id])
-    @editor = @investigation.teams_with_edit_access.find @team.id
+    @collaboration = @investigation.collaboration_accesses.find(params[:id])
+    @collaborator = @collaboration.collaborator
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
   def update
     authorize @investigation, :manage_collaborators?
 
-    @team = Team.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.find(params[:id])
+    @collaborator = @collaboration.collaborator
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params
-      .merge(investigation: @investigation, team: @team, user: current_user))
+      .merge(investigation: @investigation, team: @collaborator, user: current_user))
     if @edit_form.save!
-      flash[:success] = "#{@team.name} has been removed from the case"
+      flash[:success] = "#{@collaborator.name} has been removed from the case"
       redirect_to investigation_collaborators_path(@investigation)
     else
       render "edit"
