@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Business do
   subject(:business) { build(:business, trading_name: trading_name) }
+
   let(:trading_name) { Faker::Restaurant.name }
 
   describe "#valid?" do
