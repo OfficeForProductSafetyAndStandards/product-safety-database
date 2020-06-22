@@ -345,6 +345,10 @@ module PageExpectations
       expected_teams.each do |expected_team|
         row_heading = page.find("th", text: expected_team[:team_name])
         expect(row_heading).to have_sibling("td", text: expected_team[:permission_level])
+
+        if expected_team[:creator]
+          expect(row_heading).to have_text("Case creator")
+        end
       end
     end
   end
