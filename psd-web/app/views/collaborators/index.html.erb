@@ -29,14 +29,26 @@
       <tbody class="govuk-table__body">
         <% if @investigation.owner_team %>
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= @investigation.owner_team.name %></th>
+            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular">
+              <%= @investigation.owner_team.name %>
+              <% if @investigation.creator_team == @investigation.owner_team %>
+                <br>
+                <span class="app-body--table-heading-supplementary">Case creator</span>
+              <% end %>
+            </th>
             <td class="govuk-table__cell"><span class="hmcts-badge hmcts-badge--grey">Case owner</span></td>
             <td class="govuk-table__cell"></td>
           </tr>
         <% end %>
         <% @teams.each do |team| %>
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= team.name %></th>
+            <th scope="row" class="govuk-table__header govuk-!-font-weight-regular">
+              <%= team.name %>
+              <% if @investigation.creator_team == team %>
+                <br>
+                <span class="govuk-body govuk-hint">Case creator</span>
+              <% end %>
+            </th>
             <td class="govuk-table__cell">Edit full case</td>
             <td class="govuk-table__cell app-table__cell--align-right">
               <% if policy(@investigation).manage_collaborators? %>
