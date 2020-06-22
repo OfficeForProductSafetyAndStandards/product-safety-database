@@ -32,7 +32,8 @@ RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :wi
       expect(page).to have_link "Change case restriction"
       click_link "Change case restriction"
 
-      expect(page).to have_h1("Legal privilege")
+      expect_to_be_on_case_visiblity_page(case_id: case_id)
+
       choose "Restricted for legal privilege"
       fill_in "Comment / rationale", with: "Restriction reason"
       click_button "Save"
