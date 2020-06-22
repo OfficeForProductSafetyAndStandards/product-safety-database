@@ -150,6 +150,12 @@ module PageExpectations
     expect(page).to have_current_path(/\/cases\/#{case_id}\/meetings\/[\d]+/)
   end
 
+  # Open a case flow
+  def expect_to_be_on_new_case_page
+    expect(page).to have_current_path("/cases/new")
+    expect(page).to have_h1("Create new")
+  end
+
   # Add an allegation flow
   def expect_to_be_on_allegation_complainant_page
     expect(page).to have_current_path("/allegation/complainant")
