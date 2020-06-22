@@ -88,6 +88,10 @@ FactoryBot.define do
       end
     end
 
+    trait :restricted do
+      is_private { true }
+    end
+
     # We need to do this before rather than after create because database
     # constraints on pretty_id need to be satisfied
     before(:create) do |investigation, options|

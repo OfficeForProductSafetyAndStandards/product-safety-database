@@ -72,3 +72,9 @@ h6 {
     margin-top: 8px; // to match padding on large buttons
   }
 }
+
+.app-body--table-heading-supplementary {
+  color: $govuk-secondary-text-colour;
+  display: block;
+  margin-top: 8px;
+}
