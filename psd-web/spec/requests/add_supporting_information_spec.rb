@@ -8,8 +8,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
 
   context "when not choosing any option" do
     before do
-      post investigation_supporting_information_index_path(investigation),
-           params: { commit: "Continue" }
+      post investigation_supporting_information_index_path(investigation)
     end
 
     it "renders the form again" do
