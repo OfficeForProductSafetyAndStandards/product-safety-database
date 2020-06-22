@@ -101,7 +101,7 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
     expect_case_activity_page_to_show_meeting_information
   end
 
-  scenario "Adding a meeting using a just a summary and notes" do
+  scenario "Adding a meeting using just a summary and notes" do
     sign_in(user)
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
