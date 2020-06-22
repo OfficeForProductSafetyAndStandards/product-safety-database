@@ -17,7 +17,7 @@ class ChangeCaseOwner
     ActiveRecord::Base.transaction do
       investigation.update!(owner: owner)
       create_audit_activity_for_case_owner_changed
-      # add_old_owner_as_collaborator
+      add_old_owner_as_collaborator
     end
 
     send_notification_email
@@ -75,7 +75,6 @@ private
   end
 
   def add_old_owner_as_collaborator
-    binding.pry
     return if old_owner_and_new_owner_from_same_team?
 
     edit_access_collaboration = investigation.edit_access_collaborations.new(
