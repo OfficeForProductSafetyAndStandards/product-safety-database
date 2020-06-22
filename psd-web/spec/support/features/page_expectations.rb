@@ -109,6 +109,21 @@ module PageExpectations
     expect_page_to_have_h1("New activity")
   end
 
+  def expect_to_be_on_compose_alert_for_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/alerts/compose")
+    expect(page).to have_h1("Compose new alert")
+  end
+
+  def expect_to_be_on_about_alerts_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/alerts/about_alerts")
+    expect(page).to have_h1("You cannot send an alert about a restricted case")
+  end
+
+  def expect_to_be_on_case_visiblity_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/visibility")
+    expect(page).to have_h1("Legal privilege")
+  end
+
   def expect_to_be_on_record_test_result_page
     expect_page_to_have_h1("Record test result")
   end
@@ -148,6 +163,12 @@ module PageExpectations
 
   def expect_to_be_on_meeting_page(case_id:)
     expect(page).to have_current_path(/\/cases\/#{case_id}\/meetings\/[\d]+/)
+  end
+
+  # Open a case flow
+  def expect_to_be_on_new_case_page
+    expect(page).to have_current_path("/cases/new")
+    expect(page).to have_h1("Create new")
   end
 
   # Add an allegation flow
