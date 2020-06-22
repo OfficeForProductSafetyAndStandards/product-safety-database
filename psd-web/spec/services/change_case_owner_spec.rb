@@ -224,6 +224,22 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           include_examples "collaborator not created"
         end
       end
+
+      context "when the new owner was previously a collaborator" do
+        let(:new_owner) { team }
+
+        before do
+          investigation.edit_access_collaborations.create!(
+            editor: new_owner, include_message: false,
+            added_by_user: user
+          )
+        end
+
+        it "removes the new owner as a collaborator" do
+          result
+          expect(investigation.edit_access_collaborations.where(editor: team).size).to eq(0)
+        end
+      end
     end
   end
 
