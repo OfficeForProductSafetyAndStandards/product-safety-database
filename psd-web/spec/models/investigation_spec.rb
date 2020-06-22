@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
+  subject(:investigation) { create(:allegation) }
+
   describe "supporting information" do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation)                           { create(:allegation, owner: user.team) }
@@ -30,31 +32,20 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#teams_with_access" do
-    context "when there is just a team that is the case owner" do
-      let(:team) { create(:team) }
-      let(:investigation) { create(:allegation, owner: team) }
+    let(:owner)  { investigation.team }
+    let(:user)   { create(:user, team: owner) }
+    let(:team_a) { create(:team, name: "a team") }
+    let(:team_b) { create(:team, name: "b team") }
 
-      it "is a list of just the team" do
-        expect(investigation.teams_with_access).to eql([team])
+    before do
+      owner.update!(name: "z to ensure the sorting is correct")
+      [team_a, team_b].each do |team|
+        AddTeamToAnInvestigation.call(current_user: user, investigation: investigation, collaborator_id: team.id, include_message: false)
       end
     end
 
-    context "when there is a team as the case owner and a collaborator team added" do
-      let(:team) { create(:team) }
-      let(:collaborator_team) { create(:team) }
-      let(:investigation) do
-        create(
-          :allegation,
-          owner: team,
-          edit_access_collaborations: [
-            create(:collaboration_edit_access, collaborator: collaborator_team)
-          ]
-        )
-      end
-
-      it "is a list of the team and the collaborator team" do
-        expect(investigation.teams_with_access).to match_array([team, collaborator_team])
-      end
+    it "owner team is a always the first" do
+      expect(investigation.teams_with_access).to eq([owner, team_a, team_b])
     end
   end
 
