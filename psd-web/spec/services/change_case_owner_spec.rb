@@ -171,7 +171,7 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           let(:result) { described_class.call(investigation: investigation, user: user, owner: new_owner, rationale: rationale) }
 
           it "creates no collaboration" do
-            expect { result }.not_to change { Collaboration::EditAccess.count }
+            expect { result }.not_to(change { Collaboration::EditAccess.count })
           end
         end
 
@@ -181,6 +181,7 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
         context "when old owner is team, new owner is team" do
           let(:old_owner) { team }
           let(:new_owner) { other_team }
+
           include_examples "collaborator created"
         end
 

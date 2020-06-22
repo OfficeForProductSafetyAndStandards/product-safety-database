@@ -13,7 +13,6 @@ class ChangeCaseOwner
 
     return if old_owner == owner
 
-
     ActiveRecord::Base.transaction do
       if owner.is_a?(Team)
         # Remove the new owner team as a collaborator if they were one.
