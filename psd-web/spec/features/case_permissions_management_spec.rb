@@ -36,7 +36,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", owner: true }
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true }
     ])
 
     click_link "Add a team to the case"
@@ -70,7 +70,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", owner: true },
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true },
       { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
     ])
 
@@ -107,7 +107,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", owner: true },
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true },
       { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
     ])
 
@@ -151,7 +151,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", owner: true }
+      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true }
     ])
 
     expect_teams_tables_not_to_contain([
