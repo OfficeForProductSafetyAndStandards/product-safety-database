@@ -44,7 +44,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
     end
 
-    it "owner team is a always the first" do
+    it "owner team is always the first" do
       expect(investigation.teams_with_access).to eq([owner, team_a, team_b])
     end
   end
