@@ -1,5 +1,8 @@
 <tr class="govuk-table__row">
-  <th scope="row" class="govuk-table__header govuk-!-font-weight-regular"><%= edit.collaborator.name %></th>
+  <th scope="row" class="govuk-table__header govuk-!-font-weight-regular">
+    <%= edit.collaborator.name %>
+    <%= render "collaboration/case_creator_label" if edit.creator_team? %>
+  </th>
   <td class="govuk-table__cell">Edit full case</td>
   <td class="govuk-table__cell app-table__cell--align-right">
     <% if policy(edit.investigation).manage_collaborators? %>

@@ -6,7 +6,7 @@ class CollaboratorsController < ApplicationController
   def index
     @collaborators = @investigation
                        .collaboration_accesses
-                       .includes(:collaborator)
+                       .includes(:collaborator, investigation: :creator_team)
                        .where(collaborator_type: "Team")
                        .order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END"))
   end
@@ -74,7 +74,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.teams_with_edit_access.pluck(:collaborator_id) + [@investigation.team.try(:id)]
+    @investigation.teams_with_access.pluck(:collaborator_id) + [@investigation.team.try(:id)]
   end
 
   def edit_params

@@ -57,11 +57,13 @@ class Investigation < ApplicationRecord
   has_one :complainant, dependent: :destroy
   has_many :collaborations
   has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::Access::Edit"
-  has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
+  has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :collaborator, source_type: "Team"
 
   has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
-  has_many :edit_collaborations, class_name: "Collaboration::Access::Edit"
-  has_many :collaboration_accesses, class_name: "Collaboration::Access"
+  has_many :teams_with_read_only_access, through: :read_only_collaborations, source: :collaborator, source_type: "Team"
+
+  has_many :edit_collaborations,      class_name: "Collaboration::Access::Edit"
+  has_many :collaboration_accesses,   class_name: "Collaboration::Access"
   has_many :teams_with_access, -> { order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")) }, through: :collaboration_accesses, source: :collaborator, source_type: "Team"
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"

@@ -80,8 +80,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
     end
 
-    it "is invalid without team" do
-      investigation.team = nil
+    it "is invalid without owner team collaboration" do
+      investigation.owner_team_collaboration = nil
       expect(investigation).to be_invalid
     end
   end
