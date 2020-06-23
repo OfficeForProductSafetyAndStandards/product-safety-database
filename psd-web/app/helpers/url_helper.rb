@@ -18,6 +18,14 @@ module UrlHelper
     polymorphic_path([model] + slug, params)
   end
 
+  def attachments_tab_path(parent, file = nil)
+    if parent.is_a?(Investigation)
+      path_for_model(parent) + (file&.image? ? "/images" : "/supporting-information")
+    else
+      path_for_model(parent) + "#attachments"
+    end
+  end
+
   # DOCUMENTS
   def associated_documents_path(parent)
     path_for_model(parent, :documents)

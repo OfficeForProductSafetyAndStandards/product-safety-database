@@ -19,11 +19,7 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
   scenario "Sending an alert about a case to 2 active users" do
     visit investigation_path(investigation)
 
-    click_link "Add supporting information"
-
-    choose "Send email alert about this case"
-    click_button "Continue"
-
+    click_link "Send email alert"
     click_link "Compose new alert"
 
     expect_to_be_on_compose_alert_for_case_page(case_id: investigation.pretty_id)

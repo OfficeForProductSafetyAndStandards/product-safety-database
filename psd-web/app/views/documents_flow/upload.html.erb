@@ -3,8 +3,8 @@
 <% page_title title, errors: @errors.any? %>
 <% content_for :after_header do %>
   <%= govukBackLink(
-    text: "Back to #{@parent.pretty_description.downcase}",
-    href: path_for_model(@parent)
+    text: "Back",
+    href: attachments_tab_path(@parent)
   ) %>
 <% end %>
 

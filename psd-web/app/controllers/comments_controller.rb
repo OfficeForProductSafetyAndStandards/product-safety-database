@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.save
         format.html do
-          redirect_to investigation_url(@investigation), flash: { success: "Comment was successfully added." }
+          redirect_to investigation_activity_path(@investigation), flash: { success: "Comment was successfully added." }
         end
         format.json { render :show, status: :created, location: @comment }
       else
