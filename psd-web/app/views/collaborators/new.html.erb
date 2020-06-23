@@ -27,19 +27,19 @@
       <% end %>
 
       <%= render "components/govuk_select",
-                 formGroup: {
-                   classes: "app-!-autocomplete--max-width-two-thirds"
-                 },
-                 name: "collaboration_access_edit[collaborator_id]",
-                 id: "team",
-                 errorMessage: error_message,
-                 items: team_select_items,
-                 label: {
-                   text: "Choose team",
-                   classes: "govuk-label--s"
-                 },
-                 is_autocomplete: true,
-                 show_all_values: true
+        formGroup: {
+          classes: "app-!-autocomplete--max-width-two-thirds"
+        },
+        name: "collaboration_access_edit[collaborator_id]",
+        id: "team",
+        errorMessage: error_message,
+        items: team_select_items,
+        label: {
+          text: "Choose team",
+          classes: "govuk-label--s"
+        },
+        is_autocomplete: true,
+        show_all_values: true
       %>
 
       <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.</p>
