@@ -1,0 +1,10 @@
+.app--case-bar .app--case-bar-details {
+  display: block;
+}
+
+.app--case-bar .app--case-bar-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

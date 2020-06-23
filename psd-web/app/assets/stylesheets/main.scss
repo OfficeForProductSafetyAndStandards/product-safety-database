@@ -2,6 +2,15 @@ $govuk-page-width: 1200px;
 $govuk-global-styles: true;
 $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "~govuk-frontend/govuk/all";
+
+$hmcts-page-width: $govuk-page-width;
+$hmcts-gutter: $govuk-gutter;
+$hmcts-gutter-half: $govuk-gutter-half;
+@import "~@hmcts/frontend/objects/width-container";
+@import "~@hmcts/frontend/components/hmcts-badge/badge";
+@import "~@hmcts/frontend/components/hmcts-identity-bar/identity-bar";
+@import "~@hmcts/frontend/components/hmcts-sub-navigation/sub-navigation";
+
 @import "colours";
 
 @import "autocomplete";
@@ -12,9 +21,9 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/cookie-banner";
 @import "stylesheets/remove-default-button-styling";
 @import "stylesheets/banner";
-@import "stylesheets/hmcts_banner";
 @import "stylesheets/button";
 @import "stylesheets/block-link";
+@import "stylesheets/case-bar";
 @import "stylesheets/case-card";
 @import "stylesheets/documents";
 @import "stylesheets/email_display";
@@ -34,7 +43,6 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "stylesheets/shared";
 @import "stylesheets/timeline";
 @import "stylesheets/psd_header";
-@import "stylesheets/sub_nav";
 
 // Pages
 @import "stylesheets/investigation";

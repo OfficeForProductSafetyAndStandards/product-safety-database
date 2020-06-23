@@ -12,11 +12,13 @@
 
     <%= form_with scope: scope, model: @coronavirus_related_form, url: wizard_path, method: :put, local: true do |form| %>
       <%= form.hidden_field :coronavirus_related %>
-      <%= render "form_components/govuk_radios", form: form, key: :coronavirus_related,
-              fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
-              hint: { text: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)" },
-              items: [{ text: "Yes, it is (or could be)", value: "true", id: "coronavirus_related" },
-                      { text: "No, this is business as usual", value: "false" }] %>
+      <%= render "form_components/govuk_radios",
+                 form: form,
+                 key: :coronavirus_related,
+                 fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
+                 hint: { text: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)" },
+                 items: [{ text: "Yes, it is (or could be)", value: "true", id: "coronavirus_related" },
+                         { text: "No, this is business as usual", value: "false" }] %>
 
       <%= govukButton(text: "Continue") %>
     <% end %>

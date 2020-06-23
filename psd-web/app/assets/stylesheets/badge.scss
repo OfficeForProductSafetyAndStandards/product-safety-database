@@ -1,65 +1,6 @@
-// CSS adapted from https://github.com/ministryofjustice/moj-frontend/blob/master/src/moj/components/badge/_badge.scss
-
-$badge-spacing-width: 5px;
-
-.hmcts-badge {
-  @include govuk-font($size: 14, $weight: "bold");
-  border: 2px solid govuk-colour("blue");
-  color: govuk-colour("blue");
-  outline: 2px solid transparent;
-  outline-offset: -2px;
-
-  display: inline-block;
-
-  padding: 0 govuk-spacing(1);
-  padding-top: 2px;
-
-  margin-right: $badge-spacing-width;
-  margin-bottom: 2px;
-
-  text-transform: uppercase;
-  vertical-align: middle;
-
-  white-space: nowrap;
-
-  &:last-of-type {
-    margin-right: 0;
-  }
-}
-
-@mixin _badge--aligned-right {
-  margin-right: 0;
-  margin-left: $badge-spacing-width;
-
-  &:first-of-type {
-    margin-left: 0;
-  }
-}
-
-.hmcts-badge--aligned-right {
-  @include _badge--aligned-right;
-}
-
-// Swop spacing margins around when right aligned
-.hmcts-badge--aligned-right-from-tablet {
-  @include govuk-media-query($from: tablet) {
-    @include _badge--aligned-right;
-  }
-}
-
-// Colours
-
-.hmcts-badge--red {
-  border-color: govuk-colour("red");
-  color: govuk-colour("red");
-}
-
-.hmcts-badge--green {
-  border-color: govuk-colour("green");
-  color: govuk-colour("green");
-}
-
-.hmcts-badge--grey {
+.app-badge--owner,
+.app-badge--restricted,
+.app-badge--closed {
   border-color: $govuk-secondary-text-colour;
   color: $govuk-secondary-text-colour;
 }

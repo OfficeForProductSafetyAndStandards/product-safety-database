@@ -1,0 +1,37 @@
+<%= page_title "#{@investigation.case_type.upcase_first} visibility", errors: @investigation.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top" %>
+
+<%= form_with(scope: :investigation, model: @investigation, url: visibility_investigation_path(@investigation)) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= render "minimal_investigation_heading", investigation: @investigation, title: "Legal privilege" %>
+      <%= render "form_components/govuk_radios",
+                 form: form,
+                 key: :is_private,
+                 fieldset: { legend: { text: "Visibility",
+                                       classes: "govuk-label--m" } },
+                 hint: { text: "Restricted cases are visible only to the organisation that created them and the organisation of the current case owner." },
+                 items: [{ text: t(false, scope: "case.is_private"),
+                           value: "false" },
+                         { text: t(true, scope: "case.is_private"),
+                           value: "true" }] %>
+      <%= render "form_components/govuk_textarea",
+                 key: :visibility_rationale,
+                 form: form,
+                 attributes: { maxlength: 10_000 },
+                 classes: "govuk-!-width-two-thirds",
+                 hint: { text: "Visibility should only be restricted where there are legal privilege concerns that mean businesses under investigation should not be exposed." },
+                 label: { text: "Comment / rationale",
+                          classes: "govuk-label--m" } %>
+      <%= form.submit "Save", class: "govuk-button" %>
+    </div>
+  </div>
+<% end %>

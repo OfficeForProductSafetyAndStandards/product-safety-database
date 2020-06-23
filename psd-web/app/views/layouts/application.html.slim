@@ -58,6 +58,7 @@ html.govuk-template.app-html-class[lang="en"]
 
     - content = yield
     - if content.present?
+      = yield :action_bar
       .govuk-width-container
         = yield :after_header
         main#main-content.govuk-main-wrapper.app-main-class[role="main"]

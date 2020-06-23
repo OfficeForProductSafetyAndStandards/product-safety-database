@@ -1,0 +1,58 @@
+<%= page_title "Record phone call", errors: @correspondence.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: previous_wizard_path
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top" %>
+
+<%= form_with(model: @correspondence, local: true, url: wizard_path, method: :put) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+
+      <h1 class="govuk-heading-l">Record phone call</h1>
+
+      <%= render "form_components/govuk_input",
+                 key: :overview,
+                 form: form,
+                 classes: "govuk-!-width-two-thirds",
+                 label: { text: "Summary", classes: "govuk-label--m" },
+                 hint: { text: "Give an overview of the phone call" } %>
+
+      <%= render "components/govuk_fieldset",
+                 legend: { text: "Details", classes: "govuk-fieldset__legend--m" },
+                 describedBy: "details-hint" do %>
+        <span id="details-hint" class="govuk-hint govuk-!-width-full">Upload the transcript if you have one, or enter notes below</span>
+
+        <%= form.fields_for :transcript do |subform| %>
+          <div class="govuk-form-group">
+            <% if @transcript_blob %>
+              <p>
+                Currently selected file: <%= link_to @transcript_blob.filename, @transcript_blob, target: "_blank", rel: 'noopener' %><br>]
+                Selecting a different one will replace it.
+              </p>
+            <% end %>
+
+            <%= subform.label :file, "Upload a file", class: "govuk-label" %>
+            <%= subform.file_field :file, class: "govuk-file-upload" %>
+          </div>
+        <% end %>
+
+        <%= render "form_components/govuk_textarea",
+                   key: :details,
+                   form: form,
+                   attributes: { maxlength: 50_000 },
+                   label: { text: "Notes", classes: "govuk-!-width-two-thirds" } %>
+
+        <%= form.submit "Continue", class: "govuk-button" %>
+
+        <%= permission_notice(text: t("case.protected_details", data_type: "phone call correspondence")) %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

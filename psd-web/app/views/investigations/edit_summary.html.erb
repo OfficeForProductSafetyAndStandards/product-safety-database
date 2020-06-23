@@ -1,10 +1,12 @@
 <%= page_title "Update summary", errors: @investigation.object.errors.any? %>
-<% content_for :after_header do %>
+<% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.pretty_description.downcase}",
     href: investigation_path(@investigation)
   ) %>
 <% end %>
+
+<%= render "investigations/pages_top" %>
 
 <%= form_with(
       scope: :investigation,
