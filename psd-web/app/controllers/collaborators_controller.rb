@@ -74,7 +74,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.teams_with_access.pluck(:collaborator_id) + [@investigation.team.try(:id)]
+    @investigation.edit_collaborations.where(collaborator_type: "Team").pluck(:collaborator_id)
   end
 
   def edit_params

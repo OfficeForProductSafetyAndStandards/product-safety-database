@@ -5,7 +5,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
   let(:team_without_email) { create(:team, team_recipient_email: nil) }
 
   let(:investigation_owner) { creator_user }
-  let(:commentator_user) { create(:user, :activated) }
+  let(:commentator_user) { create(:user, :activated).decorate }
 
   # Create the case up front and clear the case created email so we can test update email functionality
   let!(:investigation) { create(:allegation, owner: investigation_owner, creator: creator_user) }
@@ -30,7 +30,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
     expect(delivered_emails.last.personalization).to include(
       name: creator_user.name,
       subject_text: "Allegation updated",
-      update_text: "#{commentator_user.name} (test team) commented on the allegation."
+      update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the allegation."
     )
   end
 
@@ -59,7 +59,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
       delivered_emails.each do |email|
         expect(email.personalization).to include(
           subject_text: "Allegation updated",
-          update_text: "#{commentator_user.name} (test team) commented on the allegation."
+          update_text: "#{commentator_user.name} (#{commentator_user.team.display_name(viewer: creator_user)}) commented on the allegation."
         )
       end
     end

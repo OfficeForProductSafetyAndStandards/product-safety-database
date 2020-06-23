@@ -22,7 +22,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
         create(:collaboration_edit_access, investigation: investigation, collaborator: collaborator)
       end
 
-      it { is_expected.to be_readonly }
+      it { is_expected.not_to be_readonly }
       it { is_expected.to be_update }
     end
   end
