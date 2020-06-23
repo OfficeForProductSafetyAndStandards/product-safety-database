@@ -18,36 +18,38 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "should notify current owner when the owner is a person and there is any change" do
-    @investigation.update(owner: users(:southampton_steve))
+    users(:southampton_steve).own!(@investigation)
+    @investigation.reload
     mock_investigation_updated(who_will_be_notified: [users(:southampton_steve).email])
     make_generic_change
     assert_equal @number_of_notifications, 1
   end
 
   test "should not notify current owner when the owner makes the change" do
-    @investigation.update(owner: teams(:southampton))
+    teams(:southampton_team).own!(@investigation)
     mock_investigation_updated(who_will_be_notified: [])
     make_generic_change
     assert_equal @number_of_notifications, 0
   end
 
   test "should not notify anyone when the owner is a team and there is any change done by team users" do
-    @investigation.update(owner: teams(:southampton))
+    teams(:southampton_team).own!(@investigation)
     mock_investigation_updated(who_will_be_notified: [])
     make_generic_change
     assert_equal @number_of_notifications, 0
   end
 
   test "should notify all team members when the owner is a team and there is any change done by outsiders" do
-    team_three = Team.find_by(name: "Team 3")
-    @investigation.update(owner: team_three)
+    opss_enforcement = teams(:opss_enforcement)
+    opss_enforcement.own!(@investigation)
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
     make_generic_change
     assert_equal @number_of_notifications, 0
   end
 
   test "should notify creator and owner when case is closed or reopened by someone else" do
-    @investigation.update!(owner: users(:southampton), creator_user: users(:southampton))
+    @investigation.update!(creator_user: users(:southampton))
+    users(:southampton).own!(@investigation)
     mock_investigation_updated(who_will_be_notified: [users(:southampton), users(:southampton_bob)].map(&:email))
     @investigation.update(is_closed: !@investigation.is_closed)
     assert_equal 0, @number_of_notifications
@@ -56,7 +58,9 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "should not notify creator when case is closed or reopened by the creator" do
-    @investigation.update!(creator_user: users(:southampton), owner: users(:southampton_bob))
+    @investigation.update!(creator_user: users(:southampton))
+    users(:southampton_bob).own!(@investigation)
+    @investigation.reload
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
     @investigation.update(is_closed: !@investigation.is_closed)
     assert_equal 1, @number_of_notifications
@@ -73,8 +77,9 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test "Team is notified correctly" do
-    team_with_email = teams(:luton)
-    @investigation.update!(owner: teams(:luton))
+    team_with_email = teams(:luton_team)
+    team_with_email.own!(@investigation)
+    @investigation.reload
     mock_investigation_updated(who_will_be_notified: [team_with_email.team_recipient_email])
     make_generic_change
     assert_equal @number_of_notifications, 1

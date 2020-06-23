@@ -10,7 +10,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
     @investigation_one = load_case(:one)
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
-    @investigation_one.owner = users(:southampton_bob)
+    users(:southampton_bob).own!(@investigation_one)
     @investigation_one.creator_user = users(:southampton)
     @investigation_one.save
     @investigation_one.edit_access_collaborations.create!(
@@ -21,15 +21,15 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
 
     @investigation_two = load_case(:two)
     @investigation_two.created_at = Time.zone.parse("2015-07-11 21:00")
-    @investigation_two.owner = @user
+    @user.own!(@investigation_two)
     @investigation_two.save
 
     @investigation_three = load_case(:three)
-    @investigation_three.owner = @non_opss_user
+    @non_opss_user.own!(@investigation_three)
     @investigation_three.save
 
     @investigation_no_products = load_case(:no_products)
-    @investigation_no_products.owner = @non_opss_user
+    @non_opss_user.own!(@investigation_no_products)
     @investigation_no_products.save
 
     # The updated_at values must be set separately in order to be respected

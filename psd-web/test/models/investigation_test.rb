@@ -13,6 +13,7 @@ class InvestigationTest < ActiveSupport::TestCase
     allow_any_instance_of(NotifyMailer).to receive(:mail) { true }
 
     @investigation = load_case(:one)
+    user.own!(@investigation)
     @business = businesses(:biscuit_base)
   end
 
@@ -50,7 +51,7 @@ class InvestigationTest < ActiveSupport::TestCase
   test "visible to owner organisation" do
     create_new_private_case(users(:southampton))
     owner = users(:southampton_steve)
-    @new_investigation.owner = owner
+    owner.own!(@new_investigation)
 
     assert(policy(@new_investigation).view_non_protected_details?(user: owner))
   end
@@ -68,7 +69,7 @@ class InvestigationTest < ActiveSupport::TestCase
 
   test "people not in the team that is the case owner should not be able to change the case owner" do
     investigation = create_new_case
-    investigation.owner = User.current.team
+    User.current.team.own!(investigation)
     assert_not policy(investigation).change_owner_or_status?(user: users(:luton))
   end
 

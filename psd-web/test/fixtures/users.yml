@@ -4,11 +4,11 @@ southampton:
   has_viewed_introduction: true
   account_activated: true
   name: Yann
-  organisation: southampton
+  organisation: southampton_org
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
-  team: southampton
+  team: southampton_team
 
 southampton_steve:
   email: southampton.steve@example.com
@@ -16,11 +16,11 @@ southampton_steve:
   has_viewed_introduction: true
   account_activated: true
   name: Steve
-  organisation: southampton
+  organisation: southampton_org
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
-  team: southampton
+  team: southampton_team
 
 southampton_bob:
   email: southampton.bob@example.com
@@ -28,11 +28,11 @@ southampton_bob:
   has_viewed_introduction: true
   account_activated: true
   name: Bob
-  organisation: southampton
+  organisation: southampton_org
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
-  team: southampton
+  team: southampton_team
 
 southampton_frankie:
   email: southampton.frankie@example.com
@@ -40,11 +40,11 @@ southampton_frankie:
   has_viewed_introduction: true
   account_activated: true
   name: Frankie
-  organisation: southampton
+  organisation: southampton_org
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
-  team: southampton
+  team: southampton_team
 
 opss:
   email: opss@example.com
@@ -76,8 +76,8 @@ luton:
   has_viewed_introduction: true
   account_activated: true
   name: Luton User
-  organisation: luton
+  organisation: luton_org
   password_salt: 123
   encrypted_password: <%= Devise::Encryptable::Encryptors::PBKDF2.digest("2538fhdkvuULE36f", 27500, "123", nil) %>
   mobile_number_verified: true
-  team: luton
+  team: luton_team

@@ -111,7 +111,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner
-    object.owner.decorate
+    object.owner&.decorate
   end
 
 private
