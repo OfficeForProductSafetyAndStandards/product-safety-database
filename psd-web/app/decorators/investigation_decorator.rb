@@ -99,7 +99,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def owner_display_name_for(viewer:)
-    return "No case owner" unless investigation.team
+    return "No case owner" unless investigation.owner
 
     owner.owner_short_name(viewer: viewer)
   end

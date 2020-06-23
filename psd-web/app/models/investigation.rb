@@ -93,18 +93,18 @@ class Investigation < ApplicationRecord
 
   def images
     @images ||= documents
-                  .includes(:blob)
-                  .joins(:blob)
-                  .where("left(content_type, 5) = 'image'")
-                  .where.not(record: [corrective_actions, correspondences, tests])
+      .includes(:blob)
+      .joins(:blob)
+      .where("left(content_type, 5) = 'image'")
+      .where.not(record: [corrective_actions, correspondences, tests])
   end
 
   def generic_supporting_information_attachments
     @generic_supporting_information_attachments ||= documents
-                                                      .includes(:blob)
-                                                      .joins(:blob)
-                                                      .where.not("left(content_type, 5) = 'image'")
-                                                      .where.not(record: [corrective_actions, correspondences, tests])
+      .includes(:blob)
+      .joins(:blob)
+      .where.not("left(content_type, 5) = 'image'")
+      .where.not(record: [corrective_actions, correspondences, tests])
   end
 
   def supporting_information
@@ -205,8 +205,8 @@ private
   def creator_id
     creator_user&.id
   end
-
-  require_dependency "investigation/allegation"
-  require_dependency "investigation/project"
-  require_dependency "investigation/enquiry"
 end
+
+require_dependency "investigation/allegation"
+require_dependency "investigation/project"
+require_dependency "investigation/enquiry"
