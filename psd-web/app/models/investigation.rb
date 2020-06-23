@@ -91,6 +91,12 @@ class Investigation < ApplicationRecord
     owner&.id
   end
 
+  def build_owner_collaborations_from(user)
+    build_owner_user_collaboration(collaborator: user)
+    build_owner_team_collaboration(collaborator: user.team)
+    self
+  end
+
   def images
     @images ||= documents
       .includes(:blob)

@@ -15,10 +15,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Allegation.new(investigation_params).tap do |allegation|
-      allegation.build_owner_user_collaboration(collaborator: current_user)
-      allegation.build_owner_team_collaboration(collaborator: current_user.team)
-    end
+    @investigation = Investigation::Allegation.new(investigation_params).build_owner_collaborations_from(current_user)
   end
 
   def success_message

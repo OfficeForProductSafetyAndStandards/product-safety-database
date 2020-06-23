@@ -15,10 +15,7 @@ private
   end
 
   def set_investigation
-    @investigation = Investigation::Enquiry.new(investigation_params).tap do |enquiry|
-      enquiry.build_owner_user_collaboration(collaborator: current_user)
-      enquiry.build_owner_team_collaboration(collaborator: current_user.team)
-    end
+    @investigation = Investigation::Enquiry.new(investigation_params).build_owner_collaborations_from(current_user)
     @investigation.set_dates_from_params(params[:enquiry])
   end
 

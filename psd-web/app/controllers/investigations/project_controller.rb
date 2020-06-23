@@ -59,10 +59,7 @@ private
   end
 
   def set_investigation
-    investigation = Investigation::Project.new(investigation_params).tap do |project|
-      project.build_owner_user_collaboration(collaborator: current_user)
-      project.build_owner_team_collaboration(collaborator: current_user.team)
-    end
+    investigation = Investigation::Project.new(investigation_params).build_owner_collaborations_from(current_user)
     @investigation = investigation.decorate
   end
 
