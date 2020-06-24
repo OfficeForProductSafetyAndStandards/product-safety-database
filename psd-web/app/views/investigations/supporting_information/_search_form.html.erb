@@ -1,0 +1,13 @@
+<%= form_tag request.path, method: :get do %>
+  <%= render "components/govuk_select",
+    name: "sort_by",
+    id: "team",
+    items: @supporting_information.sort_items,
+    label: {
+      text: "Sort by",
+      classes: ""
+    },
+    is_autocomplete: false
+  %>
+  <%= govukButton(text: "Sort") %>
+<% end %>
