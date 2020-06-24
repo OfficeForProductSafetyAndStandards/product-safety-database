@@ -13,8 +13,12 @@ module TeamCollaboratorInterface
     users.include?(user)
   end
 
-  def own!(investigation)
-    investigation.create_owner_team_collaboration!(collaborator: self)
+  def own!(investigation, collaborator = nil)
+    if collaborator
+      collaborator.update!(type: Collaboration::Access::OwnerTeam)
+    else
+      investigation.create_owner_team_collaboration!(collaborator: self)
+    end
     investigation.owner_user_collaboration&.destroy!
   end
 end

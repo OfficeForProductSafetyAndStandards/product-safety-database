@@ -10,7 +10,7 @@ class Collaboration < ApplicationRecord
       attribute :include_message, :boolean, default: false
 
       def own!(_investigation)
-        collaborator.own!(investigation)
+        collaborator.own!(investigation, collaborator)
       end
     end
   end
