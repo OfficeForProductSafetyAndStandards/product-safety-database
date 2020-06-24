@@ -65,7 +65,7 @@ class Investigation < ApplicationRecord
   has_many :edit_collaborations,      class_name: "Collaboration::Access::Edit"
   has_many :collaboration_accesses,   class_name: "Collaboration::Access"
   has_many :teams_with_access, lambda {
-    select("teams.*, CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END AS ordering").distinct.left_joins(:collaborations).order(Arel.sql("ordering, teams.name")).references(:collaborations)
+    select("teams.*, CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END").distinct.joins(:collaborations).order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")).references(:collaborations)
   }, through: :collaboration_accesses, source: :collaborator, source_type: "Team"
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
