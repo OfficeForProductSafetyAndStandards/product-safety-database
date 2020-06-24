@@ -8,11 +8,26 @@ RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_elasticsearch, :w
   let(:user) { investigation.user }
 
   describe "#swap_to_edit_access!" do
-    it "swaps the current collaboration to be an editor", :aggregate_failures do
-      expect { owner_team_collaboration.swap_to_edit_access! }
-        .to change { investigation.collaboration_accesses.find_by(collaborator: team) }
-              .from(instance_of(described_class)).to(instance_of(Collaboration::Access::Edit))
-        .and change { investigation.collaboration_accesses.find_by(collaborator: user) }.from(instance_of(Collaboration::Access::OwnerUser)).to(nil)
+    context "when the previous owner was a user" do
+      it "swaps the current collaboration to be an editor", :aggregate_failures do
+        expect { owner_team_collaboration.swap_to_edit_access! }
+          .to change { investigation.collaboration_accesses.find_by(collaborator: team) }
+                .from(instance_of(described_class)).to(instance_of(Collaboration::Access::Edit))
+                .and change { investigation.collaboration_accesses.find_by(collaborator: user) }.from(instance_of(Collaboration::Access::OwnerUser)).to(nil)
+      end
+    end
+
+    context "when the previous owner was a team" do
+      before do
+        team.own!(investigation)
+        investigation.reload
+      end
+
+      it "swaps the current collaboration to be an editor", :aggregate_failures do
+        expect {
+          investigation.owner_team_collaboration.swap_to_edit_access!
+        }.not_to change(investigation, :owner_user_collaboration)
+      end
     end
   end
 end

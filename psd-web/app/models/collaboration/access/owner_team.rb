@@ -3,7 +3,7 @@ class Collaboration < ApplicationRecord
     class OwnerTeam < Owner
       def swap_to_edit_access!
         update!(type: "Collaboration::Access::Edit")
-        investigation.owner_user_collaboration.destroy!
+        investigation.owner_user_collaboration&.destroy!
       end
     end
   end
