@@ -9,15 +9,7 @@ class Collaboration < ApplicationRecord
       validates :added_by_user_id, presence: true,                  on: :add_editor
       validates :include_message, inclusion: { in: [true, false] }, on: :add_editor
 
-      attr_reader :include_message
-
-      def include_message=(value)
-        @include_message = if value.is_a? String
-                             (value == "true")
-                           else
-                             value
-                           end
-      end
+      attribute :include_message, :boolean, default: false
 
       def own!(_investigation)
         collaborator.own!(investigation)
