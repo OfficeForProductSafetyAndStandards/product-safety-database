@@ -17,9 +17,14 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
   before { sign_in(user) }
 
   scenario "with transcript file" do
-    visit "/cases/#{investigation.pretty_id}/activity/new"
-    expect_to_be_on_new_activity_page
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+    click_link "Add supporting information"
 
+    expect_to_be_on_add_supporting_information_page
+    choose "Correspondence"
+    click_button "Continue"
+
+    expect_to_be_on_add_correspondence_page
     choose "Record phone call"
     click_button "Continue"
 
@@ -72,7 +77,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_confirm_phone_call_details_page
     click_button "Continue"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -109,9 +114,14 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
   end
 
   scenario "with summary and notes" do
-    visit "/cases/#{investigation.pretty_id}/activity/new"
-    expect_to_be_on_new_activity_page
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+    click_link "Add supporting information"
 
+    expect_to_be_on_add_supporting_information_page
+    choose "Correspondence"
+    click_button "Continue"
+
+    expect_to_be_on_add_correspondence_page
     choose "Record phone call"
     click_button "Continue"
 
@@ -127,7 +137,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_confirm_phone_call_details_page_to_show_entered_information(name: name, phone: phone, date: date, summary: summary, notes: notes)
     click_button "Continue"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-06-22
+- Moved link for adding meetings, phone calls, emails, test results and corrective actions from the case
+  activity page to the case supporting information page.
+- Users will be redirected to the pertinent tab instead of the case overview once one of these supporting
+  information elements is added to a case.
+
+## 2020-06-19
+- Added case owner team and removed complainant details from cases export spreadsheet.
+
 ## 2020-06-17
 - Only teams added to a case can now view correspondence or attachment details.
 

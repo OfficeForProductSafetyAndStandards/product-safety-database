@@ -21,10 +21,10 @@ class Investigations::CorrespondenceController < ApplicationController
       attach_files
       save_attachments
       audit_class.from(@correspondence, @investigation)
-      redirect_to investigation_path(@investigation), flash: { success: "Correspondence was successfully recorded" }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "Correspondence was successfully recorded" }
     else
       Rails.logger.error "Cannot create correspondence because investigation has errors: #{@investigation.errors.full_messages}" unless @investigation.valid?
-      redirect_to investigation_path(@investigation), flash: { warning: "Correspondence could not be saved." }
+      redirect_to investigation_supporting_information_index_path(@investigation), flash: { warning: "Correspondence could not be saved." }
     end
   end
 
@@ -75,5 +75,9 @@ private
   def correspondence_params_key
     # Turns the class name into the same format used by rails in form `name` attributes (e.g. 'correspondence_email')
     model_class.name.underscore.tr("/", "_")
+  end
+
+  def correspondence_form
+    @correspondence_form ||= CorrespondenceForm.new(type: params[:type])
   end
 end

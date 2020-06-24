@@ -68,4 +68,54 @@ RSpec.describe UrlHelper do
       end
     end
   end
+
+  describe "#attachments_tab_path", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+    subject(:path) { helper.attachments_tab_path(object, document) }
+
+    let(:document) { object.documents.first }
+
+    context "with an instance of Investigation" do
+      let(:object) { create(:allegation, :with_document) }
+
+      context "when no document is given" do
+        subject(:path) { helper.attachments_tab_path(object) }
+
+        it "returns /cases/:pretty_id/documents/:id/supporting-information" do
+          expect(path).to eq("/cases/#{object.pretty_id}/supporting-information")
+        end
+      end
+
+      context "when the document is an image" do
+        before do
+          allow(object.documents.first).to receive(:image?).and_return(true)
+        end
+
+        it "returns /cases/:pretty_id/documents/:id/images" do
+          expect(path).to eq("/cases/#{object.pretty_id}/images")
+        end
+      end
+
+      context "when the document is not an image" do
+        it "returns /cases/:pretty_id/documents/:id/supporting-information" do
+          expect(path).to eq("/cases/#{object.pretty_id}/supporting-information")
+        end
+      end
+    end
+
+    context "with an instance of Business" do
+      let(:object) { create(:business, :with_document) }
+
+      it "returns /businesses/:id#attachments" do
+        expect(path).to eq("/businesses/#{object.id}#attachments")
+      end
+    end
+
+    context "with an instance of Product" do
+      let(:object) { create(:product, :with_document) }
+
+      it "returns /products/:id#attachments" do
+        expect(path).to eq("/products/#{object.id}#attachments")
+      end
+    end
+  end
 end

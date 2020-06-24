@@ -37,7 +37,8 @@ class Investigations::TestsController < ApplicationController
     authorize @investigation, :update?
     update_attachment
     if test_saved?
-      redirect_to investigation_path(@investigation), flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
+      redirect_to investigation_supporting_information_index_path(@investigation),
+                  flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
     else
       render step
     end

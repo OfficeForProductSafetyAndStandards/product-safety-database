@@ -15,45 +15,7 @@ module Investigations
       }
     end
 
-    def new
-      set_investigation
-      authorize @investigation, :update?
-
-      return unless params[:commit] == "Continue"
-
-      case params[:activity_type]
-      when "comment"
-        redirect_to new_investigation_activity_comment_path(@investigation)
-      when "email"
-        redirect_to new_investigation_email_path(@investigation)
-      when "phone_call"
-        redirect_to new_investigation_phone_call_path(@investigation)
-      when "meeting"
-        redirect_to new_investigation_meeting_path(@investigation)
-      when "product"
-        redirect_to new_investigation_product_path(@investigation)
-      when "testing_request"
-        redirect_to new_request_investigation_tests_path(@investigation)
-      when "testing_result"
-        redirect_to new_result_investigation_tests_path(@investigation)
-      when "corrective_action"
-        redirect_to new_investigation_corrective_action_path(@investigation)
-      when "business"
-        redirect_to new_investigation_business_path(@investigation)
-      when "alert"
-        redirect_to new_investigation_alert_path(@investigation)
-      else
-        @activity_type_empty = true
-      end
-    end
-
   private
-
-    def set_investigation
-      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize investigation, :view_non_protected_details?
-      @investigation = investigation.decorate
-    end
 
     def set_investigation_with_associations
       investigation = Investigation
