@@ -1,37 +1,31 @@
 <%
-  restricted = parent.is_a?(Investigation) && !policy(parent).view_protected_details?
-  title = restricted ? "Attachment restricted" : document.title
   safe = document.metadata["safe"]
   document = document.decorate
 %>
 
 <div class="govuk-grid-row govuk-!-padding-bottom-6">
   <div class="govuk-grid-column-one-quarter">
-    <%= render "documents/document_preview", document: document, dimensions: "300x200", restricted: restricted %>
+    <%= render "documents/document_preview", document: document, dimensions: "300x200" %>
   </div>
 
   <div class="govuk-grid-column-three-quarters">
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><%= title %></h2>
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><%= document.title %></h2>
     <span class="govuk-hint govuk-!-font-size-16">
       <%= formatted_file_updated_date(document) %>
     </span>
 
-    <% if restricted %>
-      <p class="govuk-body govuk-hint"><%= t("case.protected_details", data_type: "case attachments") %></p>
-    <% else %>
-      <p class="govuk-body"><%= document.description %></p>
+    <p class="govuk-body"><%= document.description %></p>
 
-      <% if safe %>
-        <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
-           "(#{title}, opens in a new window)",
-           document,
-           class: "govuk-link app-block-link govuk-!-margin-right-3",
-           target: '_blank',
-           rel: 'noopener' %>
+    <% if safe %>
+      <%= link_with_hidden_text_to "View #{pretty_type_description(document)}",
+         "(#{document.title}, opens in a new window)",
+         document,
+         class: "govuk-link app-block-link govuk-!-margin-right-3",
+         target: '_blank',
+         rel: 'noopener' %>
 
-        <% if !parent.is_a?(Investigation) || policy(parent).update?(user: current_user) %>
-          <%= render "documents/document_card_links", document: document, parent: parent %>
-        <% end %>
+      <% if !parent.is_a?(Investigation) || policy(parent).update?(user: current_user) %>
+        <%= render "documents/document_card_links", document: document, parent: parent %>
       <% end %>
     <% end %>
   </div>
