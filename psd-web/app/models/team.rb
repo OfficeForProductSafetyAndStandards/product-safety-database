@@ -1,4 +1,6 @@
 class Team < ApplicationRecord
+  include TeamCollaboratorInterface
+
   belongs_to :organisation
   has_many :users, dependent: :restrict_with_exception
   has_many :investigations, dependent: :nullify, as: :owner
@@ -14,23 +16,6 @@ class Team < ApplicationRecord
 
   def display_name(*)
     name
-  end
-
-  def team
-    self
-  end
-
-  def user
-    nil
-  end
-
-  def in_same_team_as?(user)
-    users.include?(user)
-  end
-
-  def own!(investigation)
-    investigation.create_owner_team_collaboration!(collaborator: self)
-    investigation.owner_user_collaboration&.destroy!
   end
 
   def self.get_visible_teams(user)

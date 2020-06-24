@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include UserCollaboratorInterface
+
   INVITATION_EXPIRATION_DAYS = 14
   COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
   TWO_FACTOR_LOCK_TIME = 1.hour
@@ -16,14 +18,11 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
   has_many :collaborations, dependent: :destroy, as: :collaborator
 
-  belongs_to :team
-
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
             unless: proc { |user| !password_required? || user.errors.messages[:password].any? }
 
   validates :name, presence: true, on: :change_name
-  validates :team, presence: true
 
   with_options on: :registration_completion do |registration_completion|
     registration_completion.validates :mobile_number, presence: true
@@ -59,19 +58,6 @@ class User < ApplicationRecord
 
   def has_gdpr_access?(other_user)
     other_user.organisation == organisation
-  end
-
-  def in_same_team_as?(user)
-    team == user.team
-  end
-
-  def user
-    self
-  end
-
-  def own!(investigation)
-    investigation.create_owner_user_collaboration!(collaborator: self)
-    investigation.create_owner_team_collaboration!(collaborator: team)
   end
 
   def name
