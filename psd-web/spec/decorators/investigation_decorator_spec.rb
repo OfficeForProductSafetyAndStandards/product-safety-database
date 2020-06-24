@@ -17,6 +17,40 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     create(:complainant, investigation: investigation)
   end
 
+  describe "#display_risk_and_issues_list?" do
+    context "when the investigation has no hazard or compliance information" do
+      let(:investigation) do
+        create(:enquiry, hazard_type: nil, non_compliant_reason: nil)
+      end
+
+      it { is_expected.not_to be_display_risk_and_issues_list }
+    end
+
+    context "when the investigation has a hazard information" do
+      let(:investigation) do
+        create(:enquiry, hazard_type: "Chemical", non_compliant_reason: nil)
+      end
+
+      it { is_expected.to be_display_risk_and_issues_list }
+    end
+
+    context "when the investigation has compliance information" do
+      let(:investigation) do
+        create(:enquiry, hazard_type: nil, non_compliant_reason: "Explosive!")
+      end
+
+      it { is_expected.to be_display_risk_and_issues_list }
+    end
+
+    context "when the investigation has both hazard and compliance information" do
+      let(:investigation) do
+        create(:enquiry, hazard_type: "Chemical", non_compliant_reason: "Explosive!")
+      end
+
+      it { is_expected.to be_display_risk_and_issues_list }
+    end
+  end
+
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }
 
@@ -28,6 +62,41 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       before { investigation.products << create(:product) }
 
       it { is_expected.to be_display_product_summary_list }
+    end
+  end
+
+  describe "#risk_and_issues_list" do
+    let(:risk_and_issues_list) { decorated_investigation.risk_and_issues_list }
+
+    it "displays the hazard type" do
+      expect(risk_and_issues_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_type)}/)
+    end
+
+    it "displays the hazard description" do
+      expect(risk_and_issues_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_description)}/)
+    end
+
+    it "displays the compliance reason" do
+      expect(risk_and_issues_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
+    end
+
+    context "without hazard_type" do
+      let(:risk_and_issues_list) { Capybara.string(decorated_investigation.risk_and_issues_list) }
+
+      before do
+        investigation.hazard_type = nil
+        investigation.hazard_description = nil
+      end
+
+      it { expect(risk_and_issues_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
+    end
+
+    context "without non_compliant_reason" do
+      let(:risk_and_issues_list) { Capybara.string(decorated_investigation.risk_and_issues_list) }
+
+      before { investigation.non_compliant_reason = nil }
+
+      it { expect(risk_and_issues_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
     end
   end
 
@@ -43,18 +112,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       investigation.products.each do |product|
         expect(product_summary_list).to summarise("Category", text: /#{Regexp.escape(product.category)}/i)
       end
-    end
-
-    it "displays the hazard type" do
-      expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_type)}/)
-    end
-
-    it "displays the hazard description" do
-      expect(product_summary_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_description)}/)
-    end
-
-    it "displays the compliance reason" do
-      expect(product_summary_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
     end
 
     context "with two products of the same category" do
@@ -90,25 +147,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
             .to have_css("dd.govuk-summary-list__value ul.govuk-list li", text: iphone.category.upcase_first)
         end
       end
-    end
-
-    context "without hazard_type" do
-      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
-
-      before do
-        investigation.hazard_type = nil
-        investigation.hazard_description = nil
-      end
-
-      it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
-    end
-
-    context "without non_compliant_reason" do
-      let(:product_summary_list) { Capybara.string(decorated_investigation.product_summary_list) }
-
-      before { investigation.non_compliant_reason = nil }
-
-      it { expect(product_summary_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
     end
   end
 
