@@ -23,7 +23,7 @@
 
       <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @edit_access_collaboration.collaborator_id) } } %>
       <% if @edit_access_collaboration.errors.include?(:team) %>
-        <% error_message = { text: @edit_access_collaboration.errors.full_messages_for(:editor).first } %>
+        <% error_message = { text: @edit_access_collaboration.errors.full_messages_for(:collaborator).first } %>
       <% end %>
 
       <%= render "components/govuk_select",

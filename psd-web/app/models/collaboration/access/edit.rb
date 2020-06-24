@@ -7,7 +7,7 @@ class Collaboration < ApplicationRecord
       validates :added_by_user_id, presence: true,                  on: :add_editor
       validates :include_message, inclusion: { in: [true, false] }, on: :add_editor
 
-      attribute :include_message, :boolean, default: false
+      attribute :include_message, :boolean, default: nil
 
       def own!(_investigation)
         collaborator.own!(investigation, collaborator)
