@@ -25,12 +25,8 @@ class UpdateTestResult
     @previous_attachment = test_result.documents.first
 
     ActiveRecord::Base.transaction do
-      if new_file
-        # remove previous attachment
-        test_result.documents.detach
 
-        test_result.documents.attach(new_file)
-      end
+      replace_attached_file_with(new_file) if new_file
 
       if any_changes?
         if test_result.save
@@ -47,6 +43,11 @@ class UpdateTestResult
   end
 
 private
+
+  def replace_attached_file_with(new_file)
+    test_result.documents.detach
+    test_result.documents.attach(new_file)
+  end
 
   def any_changes?
     new_file || test_result.changes.except(:date_year, :date_month, :date_day).keys.any?
