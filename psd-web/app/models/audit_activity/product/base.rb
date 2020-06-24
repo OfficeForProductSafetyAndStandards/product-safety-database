@@ -1,5 +1,5 @@
 class AuditActivity::Product::Base < AuditActivity::Base
-  belongs_to :product
+  validates :product, presence: true
 
   # Do not send investigation_updated mail when product added/removed. This
   # overrides inherited functionality in the Activity model :(
