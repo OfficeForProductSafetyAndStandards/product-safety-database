@@ -3,9 +3,13 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
     raise "Deprecated - use UpdateTestResult.call instead"
   end
 
-  def self.build_metadata(test_result)
+  def self.build_metadata(test_result, previous_attachment)
     updated_values = test_result
       .previous_changes.slice(:result, :details, :legislation, :date, :product_id)
+
+    if previous_attachment.filename != test_result.documents.first.filename
+      updated_values["filename"] = [previous_attachment.filename, test_result.documents.first.filename]
+    end
 
     {
       test_result_id: test_result.id,
@@ -46,6 +50,12 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   def new_legislation
     if updates["legislation"]
       updates["legislation"][1]
+    end
+  end
+
+  def new_filename
+    if updates["filename"]
+      updates["filename"][1]
     end
   end
 

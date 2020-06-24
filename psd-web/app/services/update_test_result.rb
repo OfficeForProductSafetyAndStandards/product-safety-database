@@ -22,10 +22,12 @@ class UpdateTestResult
 
     test_result.attributes = new_attributes.except(:date)
 
+    @previous_attachment = test_result.documents.first
+
     ActiveRecord::Base.transaction do
       if new_file
         # remove previous attachment
-        test_result.documents.first&.purge_later
+        test_result.documents.detach
 
         test_result.documents.attach(new_file)
       end
@@ -47,11 +49,11 @@ class UpdateTestResult
 private
 
   def any_changes?
-    test_result.changes.except(:date_year, :date_month, :date_day).keys.any?
+    new_file || test_result.changes.except(:date_year, :date_month, :date_day).keys.any?
   end
 
   def create_audit_activity_for_test_result_updated
-    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result)
+    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, @previous_attachment)
 
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
       source: UserSource.new(user: user),
@@ -59,7 +61,8 @@ private
       product: test_result.product,
       metadata: metadata,
       title: nil,
-      body: nil
+      body: nil,
+      attachment: test_result.documents.first.blob
     )
   end
 

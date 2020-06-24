@@ -30,7 +30,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       end
       let(:investigation) { create(:allegation, owner: owner_team) }
 
-      context "when there are changes" do
+      context "when there are changes to the metadata" do
         let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }
         let(:updated_legislation) { Rails.application.config.legislation_constants["legislation"].last }
 
@@ -77,6 +77,66 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
           activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
 
           expect(activity_timeline_entry.metadata).to eq(expected_metadata)
+          expect(activity_timeline_entry.attachment.blob).to eq(test_result.documents.first.blob)
+        end
+
+        it "sends a notification email to the case owner" do
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            test_result.investigation.pretty_id,
+            "Test team 1",
+            "test-team@example.com",
+            "User 2 (Test team 2) edited a test result on the allegation.",
+            "Test result edited for Allegation"
+          )
+        end
+      end
+
+      context "when just the file attachment is changed" do
+        let(:test_result) do
+          create(:test_result,
+                 investigation: investigation,
+                 product: product)
+        end
+        let(:new_attributes) do
+          ActionController::Parameters.new({
+            legislation: test_result.legislation,
+            details: test_result.details,
+            result: test_result.result,
+            date: {
+              year: test_result.date.year.to_s,
+              month: test_result.date.month.to_s,
+              day: test_result.date.day.to_s
+            }
+          }).permit!
+        end
+
+        let(:new_file) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result_2.txt") }
+        let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user, new_file: new_file) }
+
+        let(:expected_metadata) do
+          {
+            "test_result_id" => test_result.id,
+            "updates" => {
+              "filename" => ["test_result.txt", "test_result_2.txt"]
+            }
+          }
+        end
+
+        it "detaches the old file and attaches the new one", :aggregate_failures do
+          result
+          test_result.reload
+
+          expect(test_result.documents.size).to eq 1
+          expect(test_result.documents.first.filename).to eq("test_result_2.txt")
+        end
+
+        it "generates an activity entry with the new file attached", :aggregate_failures do
+          result
+
+          activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
+
+          expect(activity_timeline_entry.metadata).to eq(expected_metadata)
+          expect(activity_timeline_entry.attachment.filename).to eq("test_result_2.txt")
         end
 
         it "sends a notification email to the case owner" do
