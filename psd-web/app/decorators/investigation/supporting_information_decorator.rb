@@ -6,10 +6,10 @@ class Investigation < ApplicationRecord
     DATE_ADDED       = :date_added
     TITLE            = :title
 
-    SORT_OPTIONS = [DATE_OF_ACTIVITY, DATE_ADDED, TITLE]
+    SORT_OPTIONS = [DATE_OF_ACTIVITY, DATE_ADDED, TITLE].freeze
 
     def initialize(supporting_information, param_sort_by)
-      @sort_by = (param_sort_by || :date_of_activity)
+      @sort_by = (param_sort_by || :date_added)
       @supporting_information = supporting_information.map(&:decorate)
       sort
     end
@@ -34,7 +34,7 @@ class Investigation < ApplicationRecord
       SORT_OPTIONS.map { |option| { text: t("supporting_information.sorting.#{option}"), value: option, selected: (option == sort_by) } }
     end
 
-    private
+  private
 
     def sort
       case sort_by
