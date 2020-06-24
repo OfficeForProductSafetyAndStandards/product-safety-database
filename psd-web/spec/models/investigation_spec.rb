@@ -3,6 +3,17 @@ require "rails_helper"
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
   subject(:investigation) { create(:allegation) }
 
+  describe "#build_owner_collaborations_from" do
+    subject(:investigation) { Investigation::Allegation.new.build_owner_collaborations_from(user) }
+
+    let(:user) { create(:user) }
+
+    it "builds the relevant associations and returns self", :aggregate_failures do
+      expect(investigation.owner_user_collaboration.collaborator).to be user
+      expect(investigation.owner_team_collaboration.collaborator).to be user.team
+    end
+  end
+
   describe "supporting information" do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation)                           { create(:allegation, owner: user.team) }
