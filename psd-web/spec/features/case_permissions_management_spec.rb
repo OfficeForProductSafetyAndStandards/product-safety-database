@@ -112,6 +112,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     ])
 
     click_on "Change"
+
     expect_to_be_on_edit_case_permissions_page(case_id: investigation.pretty_id)
 
     click_button "Update team"

@@ -60,6 +60,10 @@ class User < ApplicationRecord
     other_user.organisation == organisation
   end
 
+  def name
+    super.to_s
+  end
+
   def is_psd_user?
     has_role? :psd_user
   end

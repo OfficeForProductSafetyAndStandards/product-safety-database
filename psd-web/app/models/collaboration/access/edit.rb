@@ -1,8 +1,6 @@
 class Collaboration < ApplicationRecord
   class Access < Collaboration
     class Edit < Access
-      # optional is true, as its instance of collaborator relation, defined in collaboration
-      belongs_to :editor, polymorphic: true, foreign_type: "collaborator_type", foreign_key: :collaborator_id, optional: true
       belongs_to :added_by_user, class_name: :User, optional: true
 
       validates :message, presence: true, if: :include_message,     on: :add_editor
