@@ -14,7 +14,7 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def update
-    @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
     authorize @investigation, :update?
 
     @test_result = @investigation.test_results.find(params[:id])
