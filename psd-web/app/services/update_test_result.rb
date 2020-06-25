@@ -29,10 +29,13 @@ class UpdateTestResult
 
       break if no_changes?
 
-      test_result.save!
-      update_document_description
-      create_audit_activity_for_test_result_updated
-      send_notification_email
+      if test_result.save
+        update_document_description
+        create_audit_activity_for_test_result_updated
+        send_notification_email
+      else
+        context.fail!
+      end
     end
   end
 

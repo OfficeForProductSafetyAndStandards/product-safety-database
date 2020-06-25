@@ -19,6 +19,27 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       end
     end
 
+    context "with required parameters that trigger a validation error" do
+      let(:test_result) { build(:test_result) }
+      let(:user) { create(:user, :activated) }
+      let(:new_attributes) do
+        ActionController::Parameters.new({
+          legislation: "",
+          date: {
+            year: "",
+            month: "",
+            day: ""
+          }
+        }).permit!
+      end
+
+      let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }
+
+      it "returns a failure" do
+        expect(result).to be_failure
+      end
+    end
+
     context "with required parameters" do
       let(:editing_user_team) { create(:team, name: "Test team 2") }
       let(:user) { create(:user, :activated, name: "User 2", team: editing_user_team) }
