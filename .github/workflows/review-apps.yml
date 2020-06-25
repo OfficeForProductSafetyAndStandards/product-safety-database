@@ -54,7 +54,7 @@ jobs:
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
-        export DB_NAME=psd-db-$BRANCH
+        export DB_NAME=psd-db-pr-$PR_NUMBER
         echo "Deploying review app. If fails, use command below to deploy manually:"
         echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /psd-web/deploy-review.sh"
 
