@@ -37,44 +37,34 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
 
   def new_date_of_test
     if updates["date"]
-      Date.parse(updates["date"][1])
+      Date.parse(updates["date"].second)
     end
   end
 
   def new_result
-    if updates["result"]
-      updates["result"][1]
-    end
+    updates["result"]&.second
   end
 
   def new_details
-    if updates["details"]
-      updates["details"][1]
-    end
+    updates["details"]&.second
   end
 
   def new_legislation
-    if updates["legislation"]
-      updates["legislation"][1]
-    end
+    updates["legislation"]&.second
   end
 
   def new_filename
-    if updates["filename"]
-      updates["filename"][1]
-    end
+    updates["filename"]&.second
   end
 
   def new_file_description
-    if updates["file_description"]
-      updates["file_description"][1]
-    end
+    updates["file_description"]&.second
   end
 
   def new_product
     @new_product ||=
       if updates["product_id"]
-        Product.find(updates["product_id"][1])
+        Product.find(updates["product_id"].second)
       end
   end
 
