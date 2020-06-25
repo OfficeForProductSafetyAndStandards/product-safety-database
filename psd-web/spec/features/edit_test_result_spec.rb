@@ -60,8 +60,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
       fill_in "Further details", with: "Final result"
 
-      # TODO: lookup details using the summary text
-      find("details").click
+      find("details > summary", text: "Replace this file").click
 
       attach_file "Upload a file", Rails.root + "test/fixtures/files/test_result_2.txt"
       fill_in "Attachment description", with: "Final test result certificate"
