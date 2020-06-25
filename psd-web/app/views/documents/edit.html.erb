@@ -1,6 +1,6 @@
 <% page_title "Edit document", errors: @file.errors.any? %>
 <% content_for :after_header do %>
-  <%= link_to "Back", path_for_model(@parent), class: "govuk-back-link" %>
+  <%= link_to "Back", attachments_tab_path(@parent, @file), class: "govuk-back-link" %>
 <% end %>
 
 <%= render "metadata_form", document: @file, edit: true, target_url: associated_document_path(@parent, @file) do %>

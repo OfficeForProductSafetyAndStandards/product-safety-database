@@ -26,7 +26,6 @@ class InvestigationDecorator < ApplicationDecorator
 
   def product_summary_list
     products_details = [products.count, "product".pluralize(products.count), "added"].join(" ")
-    hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
     rows = [
       category.present? ? { key: { text: "Category" }, value: { text: category }, actions: [] } : nil,
       {
@@ -34,6 +33,18 @@ class InvestigationDecorator < ApplicationDecorator
         value: { text: products_details },
         actions: [href: h.investigation_products_path(object), visually_hidden_text: "product details", text: "View"]
       },
+    ]
+    rows.compact!
+    h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
+  end
+
+  def display_risk_and_issues_list?
+    object.hazard_type.present? || object.non_compliant_reason.present?
+  end
+
+  def risk_and_issues_list
+    hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
+    rows = [
       object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
       object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
     ]

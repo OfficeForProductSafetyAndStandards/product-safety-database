@@ -1,0 +1,34 @@
+<% page_heading = "What type of information are you adding?" %>
+<% page_title(page_heading, errors: @supporting_information_type_form.errors.any?) %>
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_supporting_information_index_path(@investigation)
+  ) %>
+<% end %>
+
+<%
+  radio_items = radio_items_from_hash(SupportingInformationTypeForm::MAIN_TYPES).tap do |items|
+                  items.push divider: "or"
+                  items.push(radio_items_from_hash(SupportingInformationTypeForm::GENERIC_TYPE).first)
+                end
+%>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= error_summary @supporting_information_type_form.errors %>
+    <%= form_with local: true, url: investigation_supporting_information_index_path(@investigation) do |form| %>
+      <%= render "form_components/govuk_radios",
+                 form: form,
+                 key: :type,
+                 errorMessage: format_errors_for(@supporting_information_type_form,
+                                                 @supporting_information_type_form.errors.full_messages_for(:type)),
+                 items: radio_items,
+                 fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } }%>
+      <%= govukButton(text: "Continue") %>
+    <% end %>
+    <p class="govuk-body">
+      <%= link_to 'Cancel', investigation_supporting_information_index_path(@investigation), class: "govuk-link" %>
+    </p>
+  </div>
+</div>

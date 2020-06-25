@@ -35,8 +35,8 @@ RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer
            }
     end
 
-    it "redirects to the case page" do
-      expect(response).to redirect_to(investigation_path(investigation))
+    it "redirects to the case activities page" do
+      expect(response).to redirect_to(investigation_activity_path(investigation))
     end
   end
 end

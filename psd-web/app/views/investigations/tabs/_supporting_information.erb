@@ -8,19 +8,13 @@
 
     <% if policy(@investigation).update?(user: current_user) %>
       <p class="govuk-body">
-        <%= link_to "Add supporting information", new_investigation_activity_path(@investigation) %>
+        <%= link_to "Add supporting information", new_investigation_supporting_information_path(@investigation) %>
       </p>
-      <p class="govuk-body">
-        <%= link_to "Add file attachment", new_investigation_new_path(@investigation) %>
-      </p>
-
     <% end %>
-
 
     <hr class="govuk-section-break govuk-section-break--l">
   </div>
 </div>
-
 <% if @supporting_information.any? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

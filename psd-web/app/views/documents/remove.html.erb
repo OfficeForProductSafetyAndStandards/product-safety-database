@@ -1,6 +1,6 @@
 <%= page_title "Remove attachment" %>
 <% content_for :after_header do %>
-  <%= link_to "Back", path_for_model(@parent), class: "govuk-back-link" %>
+  <%= link_to "Back", attachments_tab_path(@parent, @file), class: "govuk-back-link" %>
 <% end %>
 
 <%= render "page_heading", title: "Remove attachment" %>

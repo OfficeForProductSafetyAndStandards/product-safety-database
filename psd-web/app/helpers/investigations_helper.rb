@@ -257,7 +257,7 @@ module InvestigationsHelper
 
     if policy(investigation).update?(user: user)
       activity_actions[:items] << {
-        href: new_investigation_activity_path(investigation),
+        href: new_investigation_supporting_information_path(investigation),
         text: "Add supporting information"
       }
       coronavirus_related_actions[:items] << {
