@@ -25,7 +25,6 @@ class UpdateTestResult
     @previous_attachment = test_result.documents.first
 
     ActiveRecord::Base.transaction do
-
       replace_attached_file_with(new_file) if new_file
 
       if any_changes?
