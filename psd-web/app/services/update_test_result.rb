@@ -24,20 +24,15 @@ class UpdateTestResult
 
     @previous_attachment = test_result.documents.first
 
-    ActiveRecord::Base.transaction do
+    test_result.transaction do
       replace_attached_file_with(new_file) if new_file
 
-      if any_changes?
-        if test_result.save
+      break if no_changes?
 
-          update_document_description
-          create_audit_activity_for_test_result_updated
-          send_notification_email
-
-        else
-          context.fail!
-        end
-      end
+      test_result.save!
+      update_document_description
+      create_audit_activity_for_test_result_updated
+      send_notification_email
     end
   end
 
@@ -46,6 +41,10 @@ private
   def replace_attached_file_with(new_file)
     test_result.documents.detach
     test_result.documents.attach(new_file)
+  end
+
+  def no_changes?
+    !any_changes?
   end
 
   def any_changes?
