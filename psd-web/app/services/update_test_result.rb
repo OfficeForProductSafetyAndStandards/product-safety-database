@@ -48,7 +48,11 @@ private
   end
 
   def any_changes?
-    new_file || test_result.changes.except(:date_year, :date_month, :date_day).keys.any?
+    new_file || test_result.changes.except(:date_year, :date_month, :date_day).keys.any? || file_description_changed?
+  end
+
+  def file_description_changed?
+    new_file_description != @previous_attachment.metadata[:description]
   end
 
   def create_audit_activity_for_test_result_updated

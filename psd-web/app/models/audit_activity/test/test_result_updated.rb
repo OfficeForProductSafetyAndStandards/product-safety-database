@@ -7,8 +7,14 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
     updated_values = test_result
       .previous_changes.slice(:result, :details, :legislation, :date, :product_id)
 
-    if previous_attachment.filename != test_result.documents.first.filename
+    current_attachment = test_result.documents.first
+
+    if previous_attachment.filename != current_attachment.filename
       updated_values["filename"] = [previous_attachment.filename, test_result.documents.first.filename]
+    end
+
+    if previous_attachment.metadata[:description] != current_attachment.metadata[:description]
+      updated_values["file_description"] = [previous_attachment.metadata[:description], current_attachment.metadata[:description]]
     end
 
     {
@@ -56,6 +62,12 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   def new_filename
     if updates["filename"]
       updates["filename"][1]
+    end
+  end
+
+  def new_file_description
+    if updates["file_description"]
+      updates["file_description"][1]
     end
   end
 
