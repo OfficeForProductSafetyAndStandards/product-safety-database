@@ -7,12 +7,12 @@
 <% if investigation.is_closed? %>
   <%= render "components/hmcts_badge",
     text: t(:closed, scope: "case.badges"),
-    classes: "hmcts-badge--grey #{local_assigns[:classes]}"
+    classes: "app-badge--closed #{local_assigns[:classes]}"
   %>
 <% end %>
 <% if investigation.is_private? %>
   <%= render "components/hmcts_badge",
     text: t(:restricted, scope: "case.badges"),
-    classes: "hmcts-badge--grey #{local_assigns[:classes]}"
+    classes: "app-badge--restricted #{local_assigns[:classes]}"
   %>
 <% end %>

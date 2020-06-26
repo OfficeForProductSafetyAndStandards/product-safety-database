@@ -1,15 +1,33 @@
-<% content_for :after_header do %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      <%= render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs %>
-    </div>
-
-    <% if @investigation.is_private? || @investigation.is_closed? || @investigation.coronavirus_related? %>
-      <div class="govuk-grid-column-one-half psd-case__status-area govuk-!-margin-bottom-5">
-        <%= render "investigations/case_badges",
-        investigation: @investigation,
-        classes: "hmcts-badge--aligned-right-from-tablet" %>
+<% content_for :action_bar do %>
+  <div class="hmcts-identity-bar app-identity-bar">
+    <div class="hmcts-identity-bar__container">
+      <div class="hmcts-identity-bar__details app-identity-bar__details">
+        <span class="hmcts-identity-bar__title app-identity-bar__title"><span class="app-identity-bar__case-id"><%= investigation.pretty_id %></span> <%= investigation.decorate.title %></span>
       </div>
-    <% end %>
+    </div>
   </div>
+<% end %>
+
+<% content_for :after_header do %>
+  <% if content_for?(:back_link) || has_badges?(investigation) %>
+    <div class="govuk-grid-row">
+      <% if content_for?(:back_link) %>
+        <div class="govuk-grid-column-one-half">
+          <%= yield :back_link %>
+        </div>
+      <% end %>
+
+      <% if has_badges?(investigation) %>
+        <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-0">
+          <%= render "investigations/case_badges",
+          investigation: investigation,
+          classes: "hmcts-badge--aligned-right-from-tablet" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if current_tab ||= nil %>
+  <%= investigation_sub_nav(investigation, current_tab: current_tab) %>
 <% end %>
