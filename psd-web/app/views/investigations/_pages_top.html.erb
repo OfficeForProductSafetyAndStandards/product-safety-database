@@ -2,7 +2,7 @@
   <div class="hmcts-identity-bar app-identity-bar">
     <div class="hmcts-identity-bar__container">
       <div class="hmcts-identity-bar__details app-identity-bar__details">
-        <span class="hmcts-identity-bar__title app-identity-bar__title"><%= @investigation.pretty_id %> &nbsp;&nbsp; <%= @investigation.decorate.title %></span>
+        <span class="hmcts-identity-bar__title app-identity-bar__title"><%= investigation.pretty_id %> &nbsp;&nbsp; <%= investigation.decorate.title %></span>
       </div>
     </div>
   </div>
@@ -16,10 +16,10 @@
       </div>
     <% end %>
 
-    <% if @investigation.is_private? || @investigation.is_closed? || @investigation.coronavirus_related? %>
+    <% if investigation.is_private? || investigation.is_closed? || investigation.coronavirus_related? %>
       <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-5">
         <%= render "investigations/case_badges",
-        investigation: @investigation,
+        investigation: investigation,
         classes: "hmcts-badge--aligned-right-from-tablet" %>
       </div>
     <% end %>
@@ -27,5 +27,5 @@
 <% end %>
 
 <% if current_tab ||= nil %>
-  <%= investigation_sub_nav(@investigation, current_tab: current_tab) %>
+  <%= investigation_sub_nav(investigation, current_tab: current_tab) %>
 <% end %>

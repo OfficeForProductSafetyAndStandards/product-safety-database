@@ -6,7 +6,7 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top" %>
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with(model: @business, local: true, url: wizard_path, method: :put) do |form| %>
   <div class="govuk-grid-row">

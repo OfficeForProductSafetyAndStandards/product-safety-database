@@ -6,7 +6,7 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top" %>
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with(scope: :investigation, model: @investigation, url: visibility_investigation_path(@investigation)) do |form| %>
   <div class="govuk-grid-row">

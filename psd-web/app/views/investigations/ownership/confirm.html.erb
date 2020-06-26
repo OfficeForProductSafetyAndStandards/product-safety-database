@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top" %>
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with(
       scope: :investigation,

@@ -6,7 +6,7 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top" %>
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with(url: unlink_investigation_product_path(@investigation), method: :delete) do |form| %>
   <div class="govuk-grid-row">

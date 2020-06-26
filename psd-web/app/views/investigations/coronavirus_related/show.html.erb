@@ -7,7 +7,7 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top" %>
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with scope: :investigation, model: @coronavirus_related_form, url: investigation_coronavirus_related_path(@investigation), method: :put do |form| %>
   <div class="govuk-grid-row">

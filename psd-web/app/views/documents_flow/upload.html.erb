@@ -12,7 +12,7 @@
     ) %>
   <% end %>
 
-  <%= render "investigations/pages_top" %>
+  <%= render "investigations/pages_top", investigation: @investigation %>
 
 <% else %>
   <% content_for :after_header do %>
