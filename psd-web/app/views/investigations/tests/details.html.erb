@@ -6,7 +6,7 @@
       href: new_investigation_supporting_information_path(@investigation) %>
 <% end %>
 
-<%= form_with model: @test, scope: :test, local: true, url: wizard_path, method: :put do |form| %>
+<%= form_with model: @test, scope: :test, local: true, url: create_draft_investigation_tests_path(@investigation.pretty_id), method: :put do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 

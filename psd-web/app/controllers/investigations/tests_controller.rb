@@ -3,27 +3,33 @@ class Investigations::TestsController < ApplicationController
   set_attachment_names :file
   set_file_params_key :test
 
-  include Wicked::Wizard
-  steps :details, :confirmation
-
   before_action :set_investigation
-  before_action :set_test, only: %i[show create update]
-  before_action :set_attachment, only: %i[show create update]
-  before_action :store_test, only: %i[update]
+  before_action :set_test
+  before_action :set_attachment
 
-  # GET /tests/1
-  def show
-    authorize @investigation, :update?
-    render_wizard
-  end
-
-  # GET /tests/new_result
   def new
-    clear_session
-    redirect_to wizard_path(steps.first, request.query_parameters)
+    set_test
+    authorize @investigation, :update?
+    render :details
   end
 
-  # POST /tests
+  def create_draft
+    authorize @investigation, :update?
+    store_test
+    update_attachment
+    if test_valid?
+      save_attachment
+      redirect_to confirm_investigation_tests_path(@investigation)
+    else
+      render :details
+    end
+  end
+
+  def confirm
+    authorize @investigation, :update?
+    render :confirmation
+  end
+
   def create
     authorize @investigation, :update?
     update_attachment
@@ -31,19 +37,7 @@ class Investigations::TestsController < ApplicationController
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
     else
-      render step
-    end
-  end
-
-  # PATCH/PUT /tests/1
-  def update
-    authorize @investigation, :update?
-    update_attachment
-    if test_valid?
-      save_attachment
-      redirect_to next_wizard_path
-    else
-      render step
+      render :details
     end
   end
 
