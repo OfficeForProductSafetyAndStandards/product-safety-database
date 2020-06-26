@@ -18,7 +18,7 @@
       <% end %>
 
       <% if has_badges?(investigation) %>
-        <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-5">
+        <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-0">
           <%= render "investigations/case_badges",
           investigation: investigation,
           classes: "hmcts-badge--aligned-right-from-tablet" %>
