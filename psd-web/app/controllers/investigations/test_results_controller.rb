@@ -81,9 +81,8 @@ private
   end
 
   def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :view_non_protected_details?
-    @investigation = investigation.decorate
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      .decorate
   end
 
   def set_test
