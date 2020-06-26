@@ -623,6 +623,4 @@ private
     document_type = "test_results"
     get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
   end
-
-
 end
