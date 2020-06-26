@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-06-26
+– Added the ability to edit test results.
+
 ## 2020-06-22
 - Moved link for adding meetings, phone calls, emails, test results and corrective actions from the case
   activity page to the case supporting information page.
