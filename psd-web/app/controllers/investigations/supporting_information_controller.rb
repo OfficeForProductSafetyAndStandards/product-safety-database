@@ -3,7 +3,7 @@ module Investigations
     def index
       authorize investigation, :view_non_protected_details?
 
-      @supporting_information       = Investigation::SupportingInformationDecorator.new(investigation.supporting_information.map(&:decorate), params[:sort_by])
+      @supporting_information       = SupportingInformationPresenter.new(investigation.supporting_information.map(&:decorate), params[:sort_by])
       @other_supporting_information = investigation.generic_supporting_information_attachments.decorate
 
       @breadcrumbs = {

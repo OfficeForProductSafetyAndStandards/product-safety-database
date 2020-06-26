@@ -1,5 +1,7 @@
 class CorrespondenceDecorator < ApplicationDecorator
   include SupportingInformationHelper
+  include SupportingInformation::CorrespondenceSortInterface
+
   delegate_all
 
   def title
@@ -11,11 +13,7 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def date_of_activity
-    correspondence_date
-  end
-
-  def date_of_activity_string
-    date_of_activity.to_s(:govuk)
+    correspondence_date.to_s(:govuk)
   end
 
   def date_added

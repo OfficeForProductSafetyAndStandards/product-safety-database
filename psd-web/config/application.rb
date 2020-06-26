@@ -20,7 +20,7 @@ module ProductSafetyDatabase
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-    config.eager_load_paths << Rails.root.join("presenters")
+    config.autoload_paths << Rails.root.join("app/presenters")
     config.autoload_paths << Rails.root.join("app/forms/concerns")
     config.autoload_paths << Rails.root.join("app/decorators/concerns")
 

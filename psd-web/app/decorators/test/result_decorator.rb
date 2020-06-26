@@ -1,6 +1,8 @@
 class Test < ApplicationRecord
   require_dependency "test"
   class ResultDecorator < TestDecorator
+    include SupportingInformation::TestResultSortInterface
+
     def title
       result_text = if passed?
                       "Passed test"
@@ -18,11 +20,7 @@ class Test < ApplicationRecord
     end
 
     def date_of_activity
-      date
-    end
-
-    def date_of_activity_string
-      date_of_activity.to_s(:govuk)
+      date.to_s(:govuk)
     end
 
     def date_added
