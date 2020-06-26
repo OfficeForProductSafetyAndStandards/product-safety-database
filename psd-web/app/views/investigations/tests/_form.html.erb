@@ -1,10 +1,8 @@
-<%= form.hidden_field :is_result, value: !test.requested? %>
 <% if allow_product_linking %>
   <div class="govuk-form-group <%= "govuk-form-group--error" if test.errors[:product].any? %>">
 
-    <% label_text = test.requested? ? "Which product should be tested?" : " Which product was tested?" %>
     <% if investigation.products.empty? %>
-      <h2 class="govuk-heading-m"><%= label_text %></h2>
+      <h2 class="govuk-heading-m">Which product was tested?</h2>
       <span class="govuk-hint">
         There are no products on this case. <%= link_to "Add a product", new_investigation_product_path(investigation) %> to send it for testing.
       </span>
@@ -46,14 +44,12 @@
   text: "Date of test" } },
   hint: { text: "For example, 12 7 2019" } %>
 
-<% unless test.requested? %>
-  <%= render "form_components/govuk_radios",
-    form: form,
-    key: :result,
-    fieldset: { legend: { text: "What was the result?", classes: "govuk-fieldset__legend--m" } },
-    items: Test::Result.results.map { |result, label| { text: label, value: result } }
-  %>
-<% end %>
+<%= render "form_components/govuk_radios",
+  form: form,
+  key: :result,
+  fieldset: { legend: { text: "What was the result?", classes: "govuk-fieldset__legend--m" } },
+  items: Test::Result.results.map { |result, label| { text: label, value: result } }
+%>
 
 <%= render "form_components/govuk_textarea",
   key: :details,

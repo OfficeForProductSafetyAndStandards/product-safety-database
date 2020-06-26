@@ -1,5 +1,4 @@
 class Investigations::TestsController < ApplicationController
-  include TestsHelper
   include FileConcern
   set_attachment_names :file
   set_file_params_key :test
@@ -21,7 +20,6 @@ class Investigations::TestsController < ApplicationController
   # GET /tests/new_result
   def new_result
     clear_session
-    session[:test] = { type: Test::Result.name }
     redirect_to wizard_path(steps.first, request.query_parameters)
   end
 
@@ -51,6 +49,46 @@ class Investigations::TestsController < ApplicationController
 
 private
 
+  def set_investigation
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :view_non_protected_details?
+    @investigation = investigation.decorate
+  end
+
+  def set_test
+    @test = @investigation.test_results.build(test_params)
+    @test.set_dates_from_params(params[:test])
+  end
+
+  def test_params
+    test_session_params.merge(test_request_params)
+  end
+
+  def test_request_params
+    return {} if params[:test].blank?
+
+    params.require(:test)
+        .permit(:product_id,
+                :legislation,
+                :result,
+                :details)
+  end
+
+  def set_attachment
+    @file_blob, * = load_file_attachments
+    @test.documents.attach(@file_blob) if @file_blob
+  end
+
+  def update_attachment
+    update_blob_metadata @file_blob, test_file_metadata
+  end
+
+  def test_file_metadata
+    title = "#{@test.result&.capitalize} test: #{@test.product&.name}"
+    document_type = "test_results"
+    get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
+  end
+
   def clear_session
     session[:test] = nil
     initialize_file_attachments
@@ -64,6 +102,12 @@ private
     return false unless test_valid?
 
     @test.save
+  end
+
+  def test_valid?
+    @test.validate
+    validate_blob_size(@file_blob, @test.errors, "file")
+    @test.errors.empty?
   end
 
   def save_attachment

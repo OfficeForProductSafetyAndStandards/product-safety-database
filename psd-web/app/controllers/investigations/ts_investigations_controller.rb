@@ -4,7 +4,6 @@ class Investigations::TsInvestigationsController < ApplicationController
   include ProductsHelper
   include BusinessesHelper
   include CorrectiveActionsConcern
-  include TestsHelper
   include FileConcern
   include FlowWithCoronavirusForm
   set_attachment_names :file
@@ -604,4 +603,26 @@ private
     @repeat_step = nil
     session.delete further_key(step)
   end
+
+  def test_params
+    test_session_params.merge(test_request_params)
+  end
+
+  def test_request_params
+    return {} if params[:test].blank?
+
+    params.require(:test)
+        .permit(:product_id,
+                :legislation,
+                :result,
+                :details)
+  end
+
+  def test_file_metadata
+    title = "#{@test.result&.capitalize} test: #{@test.product&.name}"
+    document_type = "test_results"
+    get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
+  end
+
+
 end
