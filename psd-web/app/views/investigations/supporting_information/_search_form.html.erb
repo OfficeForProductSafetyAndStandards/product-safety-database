@@ -1,7 +1,7 @@
 <%= form_tag request.path, method: :get do %>
   <%= render "components/govuk_select",
     name: "sort_by",
-    id: "team",
+    id: "sort_by",
     classes: "app-!-max-width-one-third govuk-!-display-inline",
     items: @supporting_information.sort_options,
     label: {

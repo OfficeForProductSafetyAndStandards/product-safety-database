@@ -39,6 +39,15 @@ RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :wit
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity_string)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+      end
+
+      select "Title", from: "sort_by"
+      click_on "Sort"
+      within page.first("table") do
+        sorted_titles = find_all("tr.govuk-table__row td.govuk-table__cell a").map(&:text)
+        expected_titles = ["Corrective action", "Email correspondence", "Meeting correspondence", "Passed test: product name", "Phone call correspondence"]
+        expect(sorted_titles).to eq expected_titles
       end
     end
   end
