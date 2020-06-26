@@ -151,7 +151,6 @@ Rails.application.routes.draw do
 
     resources :tests, controller: "investigations/tests", only: %i[show create update] do
       collection do
-        get :new_request
         get :new_result
       end
     end

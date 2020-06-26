@@ -18,13 +18,6 @@ class Investigations::TestsController < ApplicationController
     render_wizard
   end
 
-  # GET /tests/new_request
-  def new_request
-    clear_session
-    session[:test] = { type: Test::Request.name }
-    redirect_to wizard_path(steps.first, request.query_parameters)
-  end
-
   # GET /tests/new_result
   def new_result
     clear_session
