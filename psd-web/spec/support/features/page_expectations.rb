@@ -158,6 +158,14 @@ module PageExpectations
     end
   end
 
+  def expect_to_be_on_edit_test_result_page(case_id:, test_result_id: nil)
+    if test_result_id
+      expect(page).to have_current_path("/cases/#{case_id}/test-results/#{test_result_id}/edit")
+    else
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/test\-results\/[\d]+\/edit/)
+    end
+  end
+
   def expect_to_be_on_corrective_action_page(case_id:, corrective_action_id: nil)
     if corrective_action_id
       expect(page).to have_current_path("/cases/#{case_id}/corrective-actions/#{corrective_action_id}")
