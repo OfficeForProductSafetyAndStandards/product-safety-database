@@ -16,6 +16,8 @@ class InvestigationsController < ApplicationController
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
       end
       format.xlsx do
+        authorize current_user, :export_cases?
+
         @answer = search_for_investigations
         @investigations = Investigation.eager_load(
           :complainant,
