@@ -48,7 +48,7 @@ class Investigation < ApplicationRecord
     end
 
     def sort_asc(field)
-      @supporting_information.sort! { |a, b| a.send(field) <=> b.send(field) }
+      @supporting_information.sort! { |a, b| a.send_public(field) <=> b.send_public(field) }
     end
 
     def sort_desc(field)
