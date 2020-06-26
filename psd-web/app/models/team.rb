@@ -8,8 +8,6 @@ class Team < ApplicationRecord
 
   validates :name, presence: true
 
-  alias_attribute :email, :team_recipient_email
-
   def self.all_with_organisation
     all.includes(:organisation)
   end

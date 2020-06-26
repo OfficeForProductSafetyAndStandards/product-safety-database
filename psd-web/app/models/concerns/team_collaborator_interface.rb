@@ -1,6 +1,10 @@
 module TeamCollaboratorInterface
   extend ActiveSupport::Concern
 
+  included do
+    alias_attribute :email, :team_recipient_email
+  end
+
   def team
     self
   end
