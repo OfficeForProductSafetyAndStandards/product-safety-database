@@ -76,7 +76,7 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Product::Add)
           expect(activity.source.user).to eq(user)
-          expect(activity.product_id).to eq(product.id)
+          expect(activity.product).to eq(product)
           expect(activity.title(user)).to eq(product.name)
         end
       end
