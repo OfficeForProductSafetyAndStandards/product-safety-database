@@ -26,7 +26,11 @@ class DocumentsController < ApplicationController
     return redirect_to @parent unless @parent.is_a? Investigation
 
     AuditActivity::Document::Update.from(@file.blob, @parent, previous_data)
-    redirect_to investigation_path(@parent)
+    if @file.blob.image?
+      redirect_to investigation_images_path(@parent)
+    else
+      redirect_to investigation_supporting_information_index_path(@parent)
+    end
   end
 
   def remove; end
@@ -37,7 +41,8 @@ class DocumentsController < ApplicationController
     return redirect_to @parent, flash: { success: "File was successfully removed" } unless @parent.is_a? Investigation
 
     AuditActivity::Document::Destroy.from(@file.blob, @parent)
-    redirect_to investigation_path(@parent), flash: { success: "File was successfully removed" }
+    redirection_path = @file.image? ? investigation_images_path(@parent) : investigation_supporting_information_index_path(@parent)
+    redirect_to redirection_path, flash: { success: "File was successfully removed" }
   end
 
 private

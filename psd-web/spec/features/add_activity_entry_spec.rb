@@ -12,20 +12,6 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
   before { delivered_emails.clear }
 
-  scenario "Picking an activity type" do
-    sign_in creator_user
-
-    visit "/cases/#{investigation.pretty_id}"
-
-    click_link "Add supporting information"
-
-    expect(page).to have_content("New activity")
-
-    click_button "Continue"
-
-    expect(page).to have_content("Activity type must not be empty")
-  end
-
   scenario "Assigned user to the case receives activity notifications" do
     sign_in commentator_user
 
@@ -35,7 +21,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
     add_comment
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
 
     expect(delivered_emails.last.recipient).to eq creator_user.email
@@ -63,7 +49,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
 
       add_comment
 
-      expect_to_be_on_case_page(case_id: investigation.pretty_id)
+      expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
       expect(page).to have_css(".hmcts-banner", text: "Comment was successfully added.")
 
       expect(delivered_emails.map(&:recipient).uniq.sort).to eq ["active@example.com", "creator@example.com"]

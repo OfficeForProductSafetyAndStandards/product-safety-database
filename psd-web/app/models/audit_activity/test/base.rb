@@ -2,7 +2,7 @@ class AuditActivity::Test::Base < AuditActivity::Base
   include ActivityAttachable
   with_attachments attachment: "attachment"
 
-  belongs_to :product
+  validates :product, presence: true
 
   private_class_method def self.from(test, title)
     activity = create(

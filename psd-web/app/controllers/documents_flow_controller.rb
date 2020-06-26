@@ -32,7 +32,11 @@ class DocumentsFlowController < ApplicationController
     return redirect_to(@parent) unless @parent.is_a?(Investigation)
 
     AuditActivity::Document::Add.from(@file_blob, @parent)
-    redirect_to investigation_path(@parent)
+    if @file_blob.image?
+      redirect_to investigation_images_path(@parent)
+    else
+      redirect_to investigation_supporting_information_index_path(@parent)
+    end
   end
 
 private

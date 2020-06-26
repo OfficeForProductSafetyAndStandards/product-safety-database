@@ -33,10 +33,15 @@ module PageExpectations
     expect(page).to have_selector("h2", text: "Remove business")
   end
 
+  def expect_to_be_on_images_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/images")
+    expect(page).to have_selector("h1", text: "Images")
+  end
+
   def expect_to_be_on_add_image_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
-    expect(page).to have_link("Back", href: investigation_path(investigation))
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_enter_image_details_page
@@ -77,8 +82,16 @@ module PageExpectations
   def expect_to_be_on_supporting_information_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
     expect(page).to have_selector("h1", text: "Supporting information")
-    expect(page).to have_selector("h2", text: document.decorate.title)
-    expect(page).to have_selector("p",  text: document.description)
+  end
+
+  def expect_to_be_on_add_supporting_information_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information/new")
+    expect(page).to have_selector("h1", text: "What type of information are you adding?")
+  end
+
+  def expect_to_be_on_add_correspondence_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/correspondence/new")
+    expect(page).to have_selector("h1", text: "What type of correspondence are you adding?")
   end
 
   def expect_to_be_on_product_attachments_page
@@ -90,13 +103,13 @@ module PageExpectations
   def expect_to_be_on_edit_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.to_param}/edit")
     expect(page).to have_selector("h2", text: "Edit document details")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_remove_attachment_confirmation_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
-    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
   def expect_to_be_on_case_created_page
@@ -105,8 +118,8 @@ module PageExpectations
     expect(page).to have_text(/Case ID: ([\d-]+)/)
   end
 
-  def expect_to_be_on_new_activity_page
-    expect_page_to_have_h1("New activity")
+  def expect_to_be_on_new_comment_page
+    expect_page_to_have_h1("Add comment")
   end
 
   def expect_to_be_on_compose_alert_for_case_page(case_id:)
@@ -142,6 +155,14 @@ module PageExpectations
       expect(page).to have_current_path("/cases/#{case_id}/test-results/#{test_result_id}")
     else
       expect(page).to have_current_path(/\/cases\/#{case_id}\/test\-results\/[\d]+/)
+    end
+  end
+
+  def expect_to_be_on_edit_test_result_page(case_id:, test_result_id: nil)
+    if test_result_id
+      expect(page).to have_current_path("/cases/#{case_id}/test-results/#{test_result_id}/edit")
+    else
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/test\-results\/[\d]+\/edit/)
     end
   end
 
@@ -267,7 +288,7 @@ module PageExpectations
   def expect_to_be_on_remove_attachment_from_product_confirmation_page
     expect(page).to have_current_path("/products/#{product.id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
-    expect(page).to have_link("Back", href: "/products/#{product.id}")
+    expect(page).to have_link("Back", href: "/products/#{product.id}#attachments")
   end
 
   def expect_to_be_on_product_page

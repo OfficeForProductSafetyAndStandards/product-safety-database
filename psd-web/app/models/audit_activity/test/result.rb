@@ -22,7 +22,7 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   def test_result
     attachment.blob.attachments
       .find_by(record_type: "Test")
-      .record
+      &.record
   end
 
 private

@@ -112,9 +112,9 @@ Rails.application.routes.draw do
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
-    resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information
+    resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
 
-    resource :activity, controller: "investigations/activities", only: %i[show create new] do
+    resource :activity, controller: "investigations/activities", only: %i[show create] do
       resource :comment, only: %i[create new]
     end
 
@@ -138,12 +138,14 @@ Rails.application.routes.draw do
 
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
     resources :corrective_actions, controller: "investigations/record_corrective_actions", only: %i[show new create update]
+
+    resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
     resources :emails, controller: "investigations/record_emails", only: %i[show new create update]
     resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[show new create update]
     resources :meetings, controller: "investigations/record_meetings", only: %i[show new create update]
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
 
-    resources :test_results, controller: "investigations/test_results", only: :show, path: "test-results"
+    resources :test_results, controller: "investigations/test_results", only: %i[show edit update], path: "test-results"
 
     resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
 

@@ -22,7 +22,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     click_link "Add supporting information"
 
-    choose "Record corrective action"
+    choose "Corrective action"
 
     click_button "Continue"
 
@@ -46,7 +46,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     click_button "Continue"
 
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_supporting_information_page
     expect(page).not_to have_error_messages
 
     click_link "Supporting information (1)"
