@@ -10,7 +10,7 @@ class Investigation < ApplicationRecord
 
     def initialize(supporting_information, param_sort_by)
       @sort_by = (param_sort_by || :date_added)
-      @supporting_information = supporting_information.map(&:decorate)
+      @supporting_information = supporting_information
       sort
     end
 
@@ -48,11 +48,11 @@ class Investigation < ApplicationRecord
     end
 
     def sort_asc(field)
-      @supporting_information.sort! { |a, b| a.send_public(field) <=> b.send_public(field) }
+      @supporting_information.sort! { |a, b| a.public_send(field) <=> b.public_send(field) }
     end
 
     def sort_desc(field)
-      @supporting_information.sort! { |a, b| b.send(field) <=> a.send(field) }
+      @supporting_information.sort! { |a, b| b.public_send(field) <=> a.public_send(field) }
     end
   end
 end
