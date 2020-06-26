@@ -53,3 +53,7 @@ $govuk-assets-path: '~govuk-frontend/govuk/assets/';
   float: right;
   margin-left: 2em;
 }
+
+.force-inline:after {
+  display: inline;
+}
