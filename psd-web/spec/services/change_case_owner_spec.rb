@@ -230,13 +230,13 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
         let(:new_owner) { create(:team) }
         let(:old_collaborator) do
           investigation.edit_access_collaborations.create!(
-            editor: new_owner, include_message: false,
+            collaborator: new_owner, include_message: false,
             added_by_user: user
           )
         end
 
         it "changes the edit collaborator to the owner" do
-          expect { result }.to change(investigation.reload, :team).from(old_owner.team).to(new_owner)
+          expect { result }.to change(investigation.reload, :owner_team).from(old_owner.team).to(new_owner)
         end
       end
     end

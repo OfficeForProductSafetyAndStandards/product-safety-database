@@ -3,7 +3,7 @@ require "rails_helper"
 # rubocop:disable RSpec/MultipleExpectations
 RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, :with_document, owner: user.team) }
+  let(:investigation) { create(:allegation, :with_document, creator: user) }
 
   include_context "with all types of supporting information"
 

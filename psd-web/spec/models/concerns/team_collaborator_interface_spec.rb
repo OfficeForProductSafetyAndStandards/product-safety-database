@@ -17,14 +17,14 @@ RSpec.describe TeamCollaboratorInterface, :with_stubbed_elasticsearch, :with_stu
 
   describe "own!" do
     let(:investigation) { create(:allegation) }
-    let(:old_user)      { investigation.user }
-    let(:old_team)      { investigation.team }
+    let(:old_user)      { investigation.owner_user }
+    let(:old_team)      { investigation.owner_team }
 
     context "when no previous collaborator given" do
       it "swaps to the new owner" do
         expect { team.own!(investigation) && investigation.reload }
-          .to change(investigation, :team).from(old_team).to(team)
-                .and change(investigation, :user).from(old_user).to(nil)
+          .to change(investigation, :owner_team).from(old_team).to(team)
+                .and change(investigation, :owner_user).from(old_user).to(nil)
       end
     end
 

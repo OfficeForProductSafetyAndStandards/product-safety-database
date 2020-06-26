@@ -4,8 +4,8 @@ RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_elasticsearch, :w
   subject(:owner_team_collaboration) { investigation.owner_team_collaboration }
 
   let(:investigation) { create(:allegation) }
-  let(:team) { investigation.team }
-  let(:user) { investigation.user }
+  let(:team) { investigation.owner_team }
+  let(:user) { investigation.owner_user }
 
   describe "#swap_to_edit_access!" do
     context "when the previous owner was a user" do

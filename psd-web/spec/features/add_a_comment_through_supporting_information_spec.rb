@@ -2,7 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Adding a comment through supporting information tab", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, owner: user.team) }
+  let(:investigation) { create(:allegation, creator: user) }
+
+  before do
+    ChangeCaseOwner.call!(investigation: investigation, user: user, owner: user.team)
+  end
 
   scenario "Adding a comment" do
     commentator = create(:user, :activated, has_viewed_introduction: true, team: user.team)

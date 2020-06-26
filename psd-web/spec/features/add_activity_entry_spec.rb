@@ -8,7 +8,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
   let(:commentator_user) { create(:user, :activated).decorate }
 
   # Create the case up front and clear the case created email so we can test update email functionality
-  let!(:investigation) { create(:allegation, owner: investigation_owner, creator: creator_user) }
+  let!(:investigation) { create(:allegation, creator: creator_user) }
 
   before { delivered_emails.clear }
 
@@ -39,6 +39,9 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_elasticsearch, :with
       create(:user, :activated, email: "active@example.com", name: "Active user", team: team_without_email, organisation: team_without_email.organisation)
       create(:user, :inactive, email: "not_activated@example.com", team: team_without_email, organisation: team_without_email.organisation)
       create(:user, :activated, :deleted, email: "deleted@example.com", team: team_without_email, organisation: team_without_email.organisation)
+
+      ChangeCaseOwner.call!(investigation: investigation, owner: investigation_owner, user: creator_user, old_owner: creator_user)
+      delivered_emails.clear
     end
 
     scenario "case updates send a notification to the team's active users" do

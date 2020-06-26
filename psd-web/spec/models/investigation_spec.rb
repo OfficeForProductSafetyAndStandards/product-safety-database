@@ -43,7 +43,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#teams_with_access" do
-    let(:owner)  { investigation.team }
+    let(:owner)  { investigation.owner_team }
     let(:user)   { create(:user, team: owner) }
     let(:team_a) { create(:team, name: "a team") }
     let(:team_b) { create(:team, name: "b team") }
@@ -63,31 +63,35 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   describe "#owner_team" do
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }
-      let(:investigation) { create(:allegation, owner: team) }
+      let(:investigation) { create(:allegation, creator: create(:user, team: team)) }
 
       it "is is the team" do
-        expect(investigation.team).to eql(team)
+        expect(investigation.owner_team).to eq(team)
       end
     end
 
     context "when there is a user who belongs to a team that is the case owner" do
       let(:team) { create(:team) }
       let(:user) { create(:user, team: team) }
-      let(:investigation) { create(:allegation, owner: user) }
+      let(:investigation) { create(:allegation, creator: user) }
+
+      before do
+        ChangeCaseOwner.call!(investigation: investigation, user: user, owner: team)
+      end
 
       it "is is the team the user belongs to" do
-        expect(investigation.team).to eql(team)
+        expect(investigation.owner_team).to eq(team)
       end
     end
   end
 
   describe "ownership" do
     let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-    let(:investigation) { create(:project, owner: user) }
+    let(:investigation) { create(:project, creator: user) }
 
     context "when owner is User" do
       it "has team owner too" do
-        expect(investigation.team).to eq(user.team)
+        expect(investigation.owner_team).to eq(user.team)
       end
     end
 

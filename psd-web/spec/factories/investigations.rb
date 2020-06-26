@@ -13,16 +13,7 @@ FactoryBot.define do
     description { "Investigation into product" }
 
     transient do
-      owner { create(:user) }
-      creator do
-        if owner.is_a?(User)
-          owner
-        elsif owner.is_a?(Team)
-          create(:user, team: owner, organisation: owner.organisation)
-        else
-          create(:user)
-        end
-      end
+      creator { create(:user) }
     end
 
     factory :allegation, class: "Investigation::Allegation" do
