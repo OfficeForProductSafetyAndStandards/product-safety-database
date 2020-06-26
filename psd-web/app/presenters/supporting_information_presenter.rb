@@ -7,12 +7,9 @@ class SupportingInformationPresenter
 
   SORT_OPTIONS = [DATE_OF_ACTIVITY, DATE_ADDED, TITLE].freeze
 
-  delegate :any?, :none?, to: :supporting_information
-
   def initialize(supporting_information, param_sort_by)
     @sort_by = (param_sort_by || :date_added)
     @supporting_information = supporting_information
-
   end
 
   def sort
