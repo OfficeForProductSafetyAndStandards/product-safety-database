@@ -15,7 +15,7 @@ class Investigations::ProjectController < ApplicationController
 
   # GET /xxx/new
   def new
-    session.delete :investigation
+    session.delete model_key
     redirect_to wizard_path(steps.first)
   end
 
@@ -33,7 +33,7 @@ class Investigations::ProjectController < ApplicationController
   def update
     return render_wizard unless @investigation.valid?(step)
 
-    session[:investigation] = @investigation.attributes
+    session[model_key] = @investigation.attributes
 
     if step == steps.last
       create
@@ -45,7 +45,7 @@ class Investigations::ProjectController < ApplicationController
 private
 
   def investigation_session_params
-    session[:investigation] || {}
+    session[model_key] || {}
   end
 
   def investigation_params
@@ -68,5 +68,9 @@ private
 
   def validate_coronavirus_related_form
     return render_wizard unless assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
+  end
+
+  def model_key
+    :project
   end
 end
