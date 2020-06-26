@@ -10,7 +10,6 @@ class Investigations::TestResultsController < ApplicationController
   def new
     set_test
     authorize @investigation, :update?
-    render :details
   end
 
   def create_draft
@@ -21,13 +20,12 @@ class Investigations::TestResultsController < ApplicationController
       save_attachment
       redirect_to confirm_investigation_test_results_path(@investigation)
     else
-      render :details
+      render :new
     end
   end
 
   def confirm
     authorize @investigation, :update?
-    render :confirmation
   end
 
   def create
@@ -37,7 +35,7 @@ class Investigations::TestResultsController < ApplicationController
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
     else
-      render :details
+      render :new
     end
   end
 
