@@ -7,33 +7,13 @@ class SupportingInformationPresenter
 
   SORT_OPTIONS = [DATE_OF_ACTIVITY, DATE_ADDED, TITLE].freeze
 
+  delegate :any?, :none?, to: :supporting_information
+
   def initialize(supporting_information, param_sort_by)
     @sort_by = (param_sort_by || :date_added)
     @supporting_information = supporting_information
-    sort
-  end
 
-  def any?
-    @supporting_information.any?
   end
-
-  def to_a
-    @supporting_information.to_a
-  end
-
-  def none?
-    @supporting_information.none?
-  end
-
-  def sort_by
-    @sort_by.to_sym
-  end
-
-  def sort_options
-    SORT_OPTIONS.map { |option| { text: t("supporting_information.sorting.#{option}"), value: option, selected: (option == sort_by) } }
-  end
-
-  private
 
   def sort
     case sort_by
@@ -45,6 +25,16 @@ class SupportingInformationPresenter
       sort_asc(:supporting_information_title)
     end
   end
+
+  def sort_by
+    @sort_by.to_sym
+  end
+
+  def sort_options
+    SORT_OPTIONS.map { |option| { text: t("supporting_information.sorting.#{option}"), value: option, selected: (option == sort_by) } }
+  end
+
+  private
 
   def sort_asc(field)
     @supporting_information.sort! { |a, b| a.public_send(field) <=> b.public_send(field) }
