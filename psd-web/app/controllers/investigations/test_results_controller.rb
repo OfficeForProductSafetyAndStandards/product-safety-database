@@ -3,9 +3,9 @@ class Investigations::TestResultsController < ApplicationController
   set_attachment_names :file
   set_file_params_key :test
 
-  before_action :set_investigation, only: [:new, :create_draft, :confirm, :create]
-  before_action :set_test, only: [:new, :create_draft, :confirm, :create]
-  before_action :set_attachment, only: [:new, :create_draft, :confirm, :create]
+  before_action :set_investigation, only: %i[new create_draft confirm create]
+  before_action :set_test, only: %i[new create_draft confirm create]
+  before_action :set_attachment, only: %i[new create_draft confirm create]
 
   def new
     set_test
