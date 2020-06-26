@@ -1,0 +1,52 @@
+<%= page_title "Alert trading standards" %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: previous_wizard_path
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with model: @alert, local: true, url: wizard_path, method: :put do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+
+      <h1 class="govuk-heading-l">Preview your alert</h1>
+
+      <div class="email-message">
+        <table class="email-message-meta govuk-table">
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">From</th>
+              <td class="govuk-table__cell">The Office of Product Safety and Standards</td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">To</th>
+              <td class="govuk-table__cell">
+                <span class="placeholder-no-brackets"><%= "All users (#{@user_count} people)" %></span>
+              </td>
+            </tr>
+            <tr class="email-message-meta govuk-table__row">
+              <th class="govuk-table__header">Subject</th>
+              <td class="govuk-table__cell"><%= @alert.summary %></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="email-message-body"><%== @preview.html %></div>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p>If you’re not happy you can <%= link_to "edit your message", previous_wizard_path, class: "govuk-link" %>.</p>
+      <p>Alerts may take up to 5 minutes to send.</p>
+    </div>
+  </div>
+
+  <%= form.submit "Send to #{@user_count} people", class: "govuk-button" %>
+
+  <p><%= link_to "Cancel", investigation_path(@investigation), class: 'govuk-link govuk-link--no-visited-state' %></p>
+<% end %>

@@ -150,4 +150,8 @@ module Investigations::DisplayTextHelper
 
     render "components/govuk_summary_list", rows: rows
   end
+
+  def has_badges?(investigation)
+    investigation.is_private? || investigation.is_closed? || investigation.coronavirus_related?
+  end
 end

@@ -1,0 +1,14 @@
+.app-identity-bar .app-identity-bar__details {
+  display: block;
+}
+
+.app-identity-bar .app-identity-bar__title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-identity-bar .app-identity-bar__case-id {
+  margin-right: 10px;
+}

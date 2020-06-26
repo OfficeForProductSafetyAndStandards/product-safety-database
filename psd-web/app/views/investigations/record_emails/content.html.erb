@@ -1,0 +1,70 @@
+<%= page_title "Record email", errors: @correspondence.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: previous_wizard_path
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with(model: @correspondence, local: true, url: wizard_path, method: :put) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+
+      <h1 class="govuk-heading-l">Record email</h1>
+
+      <%= render "form_components/govuk_input",
+                 key: :overview,
+                 form: form,
+                 classes: "govuk-!-width-two-thirds",
+                 label: { text: "Summary", classes: "govuk-label--m" },
+                 hint: { text: "Give an overview of the email" } %>
+
+      <%= render "components/govuk_fieldset",
+                 legend: { text: "Email content", classes: "govuk-fieldset__legend--m" },
+                 describedBy: "email-content-hint" do %>
+
+        <span id="email-content-hint" class="govuk-hint">Upload the email as a file, or enter the subject and body below</span>
+
+        <%= form.fields_for :email_file do |subform| %>
+          <div class="govuk-form-group">
+            <% if @email_file_blob %>
+              <p>
+                Currently selected file: <%= link_to @email_file_blob.filename, @email_file_blob, target: "_blank", rel: 'noopener' %><br>
+                Selecting a different one will replace it.
+              </p>
+            <% end %>
+
+            <%= subform.label :file, "Upload a file", class: "govuk-label" %>
+            <%= subform.file_field :file, class: "govuk-file-upload" %>
+          </div>
+        <% end %>
+
+        <%= render "form_components/govuk_input",
+                   key: :email_subject,
+                   form: form,
+                   classes: "govuk-!-width-two-thirds",
+                   label: { text: "Subject line" } %>
+        <%= render "form_components/govuk_textarea",
+                   key: :details,
+                   form: form,
+                   attributes: { maxlength: 50_000 },
+                   label: { text: "Body" } %>
+      <% end %>
+
+      <%= render "related_attachment_fields",
+                 form: form,
+                 file_blob: @email_attachment_blob,
+                 attachment_name: :email_attachment,
+                 title: "Attachments" %>
+
+      <%= form.submit "Continue", class: "govuk-button" %>
+
+      <%= permission_notice(text: t("case.protected_details", data_type: "email correspondence")) %>
+    </div>
+  </div>
+<% end %>
