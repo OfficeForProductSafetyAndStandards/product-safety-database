@@ -18,7 +18,7 @@ class Investigations::TestsController < ApplicationController
   end
 
   # GET /tests/new_result
-  def new_result
+  def new
     clear_session
     redirect_to wizard_path(steps.first, request.query_parameters)
   end

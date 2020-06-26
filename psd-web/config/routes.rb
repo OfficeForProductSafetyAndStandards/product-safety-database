@@ -149,7 +149,7 @@ Rails.application.routes.draw do
 
     resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
 
-    resources :tests, controller: "investigations/tests", only: %i[show create update] do
+    resources :tests, controller: "investigations/tests", only: %i[new show create update] do
       collection do
         get :new_result
       end

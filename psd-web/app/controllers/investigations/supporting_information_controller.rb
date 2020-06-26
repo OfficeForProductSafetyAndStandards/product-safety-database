@@ -31,7 +31,7 @@ module Investigations
       when "image", "generic_information"
         redirect_to new_investigation_new_path(@investigation)
       when "testing_result"
-        redirect_to new_result_investigation_tests_path(@investigation)
+        redirect_to new_investigation_test_path(@investigation)
       end
     end
 
