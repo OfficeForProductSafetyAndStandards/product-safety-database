@@ -2,13 +2,18 @@
   <%= render "components/govuk_select",
     name: "sort_by",
     id: "team",
-    classes: "govuk-!-width-one-third",
-    items: @supporting_information.sort_items,
+    classes: "app-!-max-width-one-third govuk-!-display-inline",
+    items: @supporting_information.sort_options,
     label: {
       text: "Sort by",
-      classes: ""
+      classes: "govuk-!-display-inline"
+    },
+    formGroup: {
+      classes: "govuk-!-display-inline"
     },
     is_autocomplete: false
   %>
-  <%= govukButton(text: "Sort") %>
+  <div class="govuk-form-group govuk-!-display-inline">
+    <%= govukButton(text: "Sort", classes: "govuk-!-display-inline") %>
+  </div>
 <% end %>

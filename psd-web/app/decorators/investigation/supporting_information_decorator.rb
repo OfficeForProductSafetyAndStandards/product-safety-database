@@ -30,7 +30,7 @@ class Investigation < ApplicationRecord
       @sort_by.to_sym
     end
 
-    def sort_items
+    def sort_options
       SORT_OPTIONS.map { |option| { text: t("supporting_information.sorting.#{option}"), value: option, selected: (option == sort_by) } }
     end
 
@@ -39,12 +39,20 @@ class Investigation < ApplicationRecord
     def sort
       case sort_by
       when DATE_OF_ACTIVITY
-        @supporting_information.sort_by!(&:date_of_activity)
+        sort_desc(:date_of_activity)
       when DATE_ADDED
-        @supporting_information.sort_by!(&:created_at)
+        sort_desc(:created_at)
       when TITLE
-        @supporting_information.sort_by!(&:supporting_information_title)
+        sort_asc(:supporting_information_title)
       end
+    end
+
+    def sort_asc(field)
+      @supporting_information.sort! { |a,b| a.send(field) <=> b.send(field) }
+    end
+
+    def sort_desc(field)
+      @supporting_information.sort! { |a,b| b.send(field) <=> a.send(field) }
     end
   end
 end
