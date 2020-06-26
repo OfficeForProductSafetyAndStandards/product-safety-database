@@ -53,19 +53,10 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        export DB_VERSION=`cat psd-web/db/schema.rb | grep 'ActiveRecord::Schema.define' | grep -o '[0-9_]\+'`
         export APP_NAME=psd-pr-$PR_NUMBER
-        export DB_NAME=psd-db-$DB_VERSION
+        export DB_NAME=psd-db-pr-$PR_NUMBER
         echo "Deploying review app. If fails, use command below to deploy manually:"
         echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /psd-web/deploy-review.sh"
-        OVERRIDES_FILE=".github/workflows/overrides/$BRANCH.env"
-        if [ -f "$OVERRIDES_FILE" ]; then
-            echo "Using overrides:"
-            cat $OVERRIDES_FILE
-            source $OVERRIDES_FILE
-        else
-            echo "No overrides file $OVERRIDES_FILE. Using default variables."
-        fi
 
         ./psd-web/deploy-review.sh
         cf7 logout

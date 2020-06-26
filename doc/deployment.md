@@ -17,8 +17,7 @@ By default, the database is shared, but it can be overriden by setting the `DB_N
 
 #### Custom environment variables in review application
 
-Variables used by `psd-web/deploy-review.sh` can be overriden. Especially changing `$DB_NAME` can be usefull.
-To do so, create `.github/workflows/overrides/branch-name.env` file, where branch-name is name of branch used for PR. Define variables in this file:
+Variables used by `psd-web/deploy-review.sh` can be overriden. To do so, create `.github/workflows/overrides/branch-name.env` file, where branch-name is name of branch used for PR. Define variables in this file:
 
 ```
 export DB_NAME=psd-db-custom-db
