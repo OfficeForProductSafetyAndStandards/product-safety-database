@@ -15,10 +15,6 @@ class Test < ApplicationRecord
       "#{result_text}: #{product.name}"
     end
 
-    def supporting_information_title
-      title
-    end
-
     def date_of_activity
       date.to_s(:govuk)
     end

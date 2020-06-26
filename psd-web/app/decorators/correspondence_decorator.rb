@@ -8,10 +8,6 @@ class CorrespondenceDecorator < ApplicationDecorator
     overview.presence
   end
 
-  def supporting_information_title
-    title
-  end
-
   def date_of_activity
     correspondence_date.to_s(:govuk)
   end

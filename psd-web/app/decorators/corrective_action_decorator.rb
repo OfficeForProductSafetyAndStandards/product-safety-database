@@ -9,10 +9,6 @@ class CorrectiveActionDecorator < ApplicationDecorator
     h.simple_format(object.details)
   end
 
-  def supporting_information_title
-    summary
-  end
-
   def date_of_activity
     date_decided.to_s(:govuk)
   end
