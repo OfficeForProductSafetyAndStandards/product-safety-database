@@ -3,21 +3,20 @@ class Investigations::TestResultsController < ApplicationController
   set_attachment_names :file
   set_file_params_key :test
 
-  before_action :set_investigation, only: %i[new create_draft confirm create]
+  before_action :set_investigation
   before_action :set_test, only: %i[new create_draft confirm create]
   before_action :set_attachment, only: %i[new create_draft confirm create]
 
   def new
-    set_test
     authorize @investigation, :update?
   end
 
   def create_draft
     authorize @investigation, :update?
-    store_test
+    session[:test] = @test.attributes
     update_attachment
     if test_valid?
-      save_attachment
+      @file_blob.save if @file_blob
       redirect_to confirm_investigation_test_results_path(@investigation)
     else
       render :new
@@ -32,6 +31,7 @@ class Investigations::TestResultsController < ApplicationController
     authorize @investigation, :update?
     update_attachment
     if test_saved?
+      session[:test] = nil
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
     else
@@ -40,13 +40,11 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def show
-    @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
     authorize @investigation, :view_non_protected_details?
     @test_result = @investigation.test_results.find(params[:id]).decorate
   end
 
   def edit
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
     authorize @investigation, :update?
     @test_result = @investigation.test_results.find(params[:id])
 
@@ -54,7 +52,6 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def update
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
     authorize @investigation, :update?
 
     @test_result = @investigation.test_results.find(params[:id])
@@ -119,29 +116,14 @@ private
     get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
   end
 
-  def clear_session
-    session[:test] = nil
-    initialize_file_attachments
-  end
-
-  def store_test
-    session[:test] = @test.attributes
-  end
-
   def test_saved?
-    return false unless test_valid?
-
-    @test.save
+    test_valid? && @test.save
   end
 
   def test_valid?
     @test.validate
     validate_blob_size(@file_blob, @test.errors, "file")
     @test.errors.empty?
-  end
-
-  def save_attachment
-    @file_blob.save if @file_blob
   end
 
   def test_session_params
