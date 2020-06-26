@@ -9,21 +9,23 @@
 <% end %>
 
 <% content_for :after_header do %>
-  <div class="govuk-grid-row">
-    <% if content_for?(:back_link) %>
-      <div class="govuk-grid-column-one-half">
-        <%= yield :back_link %>
-      </div>
-    <% end %>
+  <% if content_for?(:back_link) || has_badges?(investigation) %>
+    <div class="govuk-grid-row">
+      <% if content_for?(:back_link) %>
+        <div class="govuk-grid-column-one-half">
+          <%= yield :back_link %>
+        </div>
+      <% end %>
 
-    <% if investigation.is_private? || investigation.is_closed? || investigation.coronavirus_related? %>
-      <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-5">
-        <%= render "investigations/case_badges",
-        investigation: investigation,
-        classes: "hmcts-badge--aligned-right-from-tablet" %>
-      </div>
-    <% end %>
-  </div>
+      <% if has_badges?(investigation) %>
+        <div class="<%= content_for?(:back_link) ? "govuk-grid-column-one-half" : "govuk-grid-column-full" %> psd-case__status-area govuk-!-margin-bottom-5">
+          <%= render "investigations/case_badges",
+          investigation: investigation,
+          classes: "hmcts-badge--aligned-right-from-tablet" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
 
 <% if current_tab ||= nil %>
