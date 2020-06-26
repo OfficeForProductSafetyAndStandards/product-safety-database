@@ -21,6 +21,7 @@ class ChangeCaseOwner
 
       investigation.update!(owner: owner)
       create_audit_activity_for_case_owner_changed
+      add_old_owner_as_collaborator
     end
 
     send_notification_email
@@ -75,5 +76,28 @@ private
     body = "Case owner changed on #{investigation.case_type} to #{owner.decorate.display_name(viewer: viewer)} by #{user_name}."
     body << "\n\nMessage from #{user_name}: #{inset_text_for_notify(rationale)}" if rationale
     body
+  end
+
+  def add_old_owner_as_collaborator
+    return if old_owner_and_new_owner_from_same_team?
+
+    edit_access_collaboration = investigation.edit_access_collaborations.new(
+      collaborator: old_owner_team,
+      include_message: false,
+      added_by_user: user,
+    )
+    edit_access_collaboration.save!
+  end
+
+  def old_owner_team
+    old_owner.is_a?(Team) ? old_owner : old_owner.team
+  end
+
+  def old_owner_and_new_owner_from_same_team?
+    old_owner_team == new_owner_team
+  end
+
+  def new_owner_team
+    owner.is_a?(Team) ? owner : owner.team
   end
 end
