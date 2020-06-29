@@ -6,17 +6,17 @@ class Investigations::TestResultsController < ApplicationController
   def new
     @investigation = investigation_from_params
     authorize @investigation, :update?
-    @test = build_test_result_from_params
+    @test_result = build_test_result_from_params
     set_attachment
   end
 
   def create_draft
     @investigation = investigation_from_params
     authorize @investigation, :update?
-    @test = build_test_result_from_params
+    @test_result = build_test_result_from_params
     set_attachment
 
-    session[:test] = @test.attributes
+    session[:test] = @test_result.attributes
     update_attachment
     if test_valid?
       @file_blob.save if @file_blob
@@ -29,21 +29,21 @@ class Investigations::TestResultsController < ApplicationController
   def confirm
     @investigation = investigation_from_params
     authorize @investigation, :update?
-    @test = build_test_result_from_params
+    @test_result = build_test_result_from_params
     set_attachment
   end
 
   def create
     @investigation = investigation_from_params
     authorize @investigation, :update?
-    @test = build_test_result_from_params
+    @test_result = build_test_result_from_params
     set_attachment
 
     update_attachment
     if test_saved?
       session[:test] = nil
       redirect_to investigation_supporting_information_index_path(@investigation),
-                  flash: { success: "#{@test.pretty_name.capitalize} was successfully recorded." }
+                  flash: { success: "#{@test_result.pretty_name.capitalize} was successfully recorded." }
     else
       render :new
     end
@@ -117,7 +117,7 @@ private
 
   def set_attachment
     @file_blob, * = load_file_attachments
-    @test.documents.attach(@file_blob) if @file_blob
+    @test_result.documents.attach(@file_blob) if @file_blob
   end
 
   def update_attachment
@@ -125,19 +125,19 @@ private
   end
 
   def test_file_metadata
-    title = "#{@test.result&.capitalize} test: #{@test.product&.name}"
+    title = "#{@test_result.result&.capitalize} test: #{@test_result.product&.name}"
     document_type = "test_results"
     get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
   end
 
   def test_saved?
-    test_valid? && @test.save
+    test_valid? && @test_result.save
   end
 
   def test_valid?
-    @test.validate
-    validate_blob_size(@file_blob, @test.errors, "file")
-    @test.errors.empty?
+    @test_result.validate
+    validate_blob_size(@file_blob, @test_result.errors, "file")
+    @test_result.errors.empty?
   end
 
   def test_session_params

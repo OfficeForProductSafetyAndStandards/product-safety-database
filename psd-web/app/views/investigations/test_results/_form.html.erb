@@ -1,5 +1,5 @@
 <% if allow_product_linking %>
-  <div class="govuk-form-group <%= "govuk-form-group--error" if test.errors[:product].any? %>">
+  <div class="govuk-form-group <%= "govuk-form-group--error" if test_result.errors[:product].any? %>">
 
     <% if investigation.products.empty? %>
       <h2 class="govuk-heading-m">Which product was tested?</h2>

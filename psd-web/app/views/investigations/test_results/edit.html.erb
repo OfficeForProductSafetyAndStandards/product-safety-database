@@ -15,7 +15,7 @@
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
-      <%= render "investigations/test_results/form", form: form, test: @test_result, investigation: @investigation, allow_product_linking: true %>
+      <%= render "investigations/test_results/form", form: form, test_result: @test_result, investigation: @investigation, allow_product_linking: true %>
 
       <%= govukButton text: "Update test result" %>
     </div>
