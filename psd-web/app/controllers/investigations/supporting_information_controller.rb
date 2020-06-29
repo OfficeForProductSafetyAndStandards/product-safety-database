@@ -2,8 +2,10 @@ module Investigations
   class SupportingInformationController < ApplicationController
     def index
       authorize investigation, :view_non_protected_details?
-      @supporting_information       = @investigation.supporting_information.map(&:decorate)
-      @other_supporting_information = @investigation.generic_supporting_information_attachments.decorate
+
+      @supporting_information       = Investigation::SupportingInformationDecorator.new(investigation.supporting_information.map(&:decorate), params[:sort_by])
+      @other_supporting_information = investigation.generic_supporting_information_attachments.decorate
+
       @breadcrumbs = {
         items: [
           { text: "Cases", href: investigations_path(previous_search_params) },
