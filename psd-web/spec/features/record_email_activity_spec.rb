@@ -5,7 +5,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
 
-  let(:investigation) { create(:allegation, owner: user) }
+  let(:investigation) { create(:allegation, creator: user) }
 
   let(:name) { "Test name" }
   let(:email) { Faker::Internet.safe_email }

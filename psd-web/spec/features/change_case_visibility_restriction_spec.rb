@@ -20,7 +20,7 @@ RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :wi
     let(:investigation) do
       create(
         :allegation,
-        owner: user
+        creator: user
       )
     end
 
@@ -48,7 +48,7 @@ RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :wi
     let(:investigation) do
       create(
         :allegation,
-        owner: create(:user)
+        creator: create(:user)
       )
     end
 
