@@ -20,29 +20,10 @@ RSpec.describe TeamCollaboratorInterface, :with_stubbed_elasticsearch, :with_stu
     let(:old_user)      { investigation.owner_user }
     let(:old_team)      { investigation.owner_team }
 
-    context "when no previous collaborator given" do
-      it "swaps to the new owner" do
-        expect { team.own!(investigation) && investigation.reload }
-          .to change(investigation, :owner_team).from(old_team).to(team)
-                .and change(investigation, :owner_user).from(old_user).to(nil)
-      end
-    end
-
-    context "when passing the previous collaborator" do
-      let(:previous_collaborator) { create(:team) }
-      let(:previous_collaboration) do
-        AddTeamToAnInvestigation.call!(
-          current_user: old_user,
-          investigation: investigation,
-          collaborator_id: previous_collaborator.id,
-          include_message: false
-        ).edit_access_collaboration
-      end
-
-      it "swaps to the new owner" do
-        expect { previous_collaborator.own!(investigation, previous_collaboration) && previous_collaboration.reload }
-          .to change(previous_collaboration, :type).from("Collaboration::Access::Edit").to("Collaboration::Access::OwnerTeam")
-      end
+    it "swaps to the new owner" do
+      expect { team.own!(investigation) && investigation.reload }
+        .to change(investigation, :owner_team).from(old_team).to(team)
+              .and change(investigation, :owner_user).from(old_user).to(nil)
     end
   end
 

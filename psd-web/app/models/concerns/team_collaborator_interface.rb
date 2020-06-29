@@ -18,12 +18,8 @@ module TeamCollaboratorInterface
   end
 
   # Do not use on its own. Use ChangeCaseOwner service class
-  def own!(investigation, collaborator = nil)
-    if collaborator
-      collaborator.update!(type: Collaboration::Access::OwnerTeam)
-    else
-      investigation.create_owner_team_collaboration!(collaborator: self)
-    end
+  def own!(investigation)
+    investigation.create_owner_team_collaboration!(collaborator: self)
     investigation.owner_user_collaboration&.destroy!
   end
 end
