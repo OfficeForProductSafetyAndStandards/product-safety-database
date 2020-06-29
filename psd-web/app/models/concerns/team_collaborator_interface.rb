@@ -17,6 +17,7 @@ module TeamCollaboratorInterface
     users.include?(user)
   end
 
+  # Do not use on its own. Use ChangeCaseOwner service class
   def own!(investigation, collaborator = nil)
     if collaborator
       collaborator.update!(type: Collaboration::Access::OwnerTeam)
