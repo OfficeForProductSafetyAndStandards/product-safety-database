@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
   # rubocop:disable RSpec/ExampleLength
   describe "#index as XLSX" do
-    let(:user) { create(:user, :activated, :psd_user, :viewed_introduction) }
     let(:temp_dir) { "spec/tmp/" }
     let(:export_path) { Rails.root + temp_dir + "export_cases.xlsx" }
     let(:exported_data) do
@@ -16,69 +15,84 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       sign_in(user)
     end
 
-    after { File.delete(export_path) }
+    context "when logged in as a normal user" do
+      let(:user) { create(:user, :activated, :psd_user, :viewed_introduction) }
 
-    it "exports all the investigations into a XLSX file" do
-      create_list(:allegation, 5)
-      Investigation.import refresh: true, force: true
+      it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
+        get investigations_path format: :xlsx
 
-      get investigations_path format: :xlsx
-
-      expect(exported_data.last_row).to eq(Investigation.count + 1)
-    end
-
-    it "treats formulas as text" do
-      create(:allegation, description: "=A1")
-      Investigation.import refresh: true, force: true
-
-      get investigations_path format: :xlsx, params: { q: "A1" }
-
-      cell_a1 = exported_data.cell(1, 1)
-      cell_with_formula_as_description = exported_data.cell(2, 5)
-
-      aggregate_failures "cell value checks" do
-        expect(cell_with_formula_as_description).to eq "=A1"
-        expect(cell_with_formula_as_description).not_to eq cell_a1
-        expect(cell_with_formula_as_description).not_to eq nil
+        expect(response).to render_template("errors/forbidden")
+        expect(response).to have_http_status(403)
       end
     end
 
-    it "exports coronavirus flag" do
-      create(:allegation, coronavirus_related: true)
-      Investigation.import refresh: true, force: true
+    context "when logged in as a user with the psd_admin role" do
+      let(:user) { create(:user, :activated, :psd_admin, :viewed_introduction) }
 
-      get investigations_path format: :xlsx
+      after { File.delete(export_path) }
 
-      coronavirus_cell_title = exported_data.cell(1, 8)
-      coronavirus_cell_content = exported_data.cell(2, 8)
+      it "exports all the investigations into a XLSX file" do
+        create_list(:allegation, 5)
+        Investigation.import refresh: true, force: true
 
-      aggregate_failures "coronavirus cells values" do
-        expect(coronavirus_cell_title).to eq "Coronavirus_Related"
-        expect(coronavirus_cell_content).to eq "true"
+        get investigations_path format: :xlsx
+
+        expect(exported_data.last_row).to eq(Investigation.count + 1)
       end
-    end
 
-    it "exports owner team and user" do
-      user = create(:user)
-      team = create(:team)
-      case_with_user_owner = create(:allegation, owner: user)
-      case_with_team_owner = create(:allegation, owner: team)
+      it "treats formulas as text" do
+        create(:allegation, description: "=A1")
+        Investigation.import refresh: true, force: true
 
-      Investigation.import refresh: true, force: true
+        get investigations_path format: :xlsx, params: { q: "A1" }
 
-      get investigations_path format: :xlsx
+        cell_a1 = exported_data.cell(1, 1)
+        cell_with_formula_as_description = exported_data.cell(2, 5)
 
-      aggregate_failures do
-        expect(exported_data.cell(1, 9)).to eq "Case_Owner_Team"
-        expect(exported_data.cell(1, 10)).to eq "Case_Owner_User"
+        aggregate_failures "cell value checks" do
+          expect(cell_with_formula_as_description).to eq "=A1"
+          expect(cell_with_formula_as_description).not_to eq cell_a1
+          expect(cell_with_formula_as_description).not_to eq nil
+        end
+      end
 
-        expect(exported_data.cell(2, 1)).to eq case_with_team_owner.pretty_id
-        expect(exported_data.cell(2, 9)).to eq team.name
-        expect(exported_data.cell(2, 10)).to be_nil
+      it "exports coronavirus flag" do
+        create(:allegation, coronavirus_related: true)
+        Investigation.import refresh: true, force: true
 
-        expect(exported_data.cell(3, 1)).to eq case_with_user_owner.pretty_id
-        expect(exported_data.cell(3, 9)).to eq user.team.name
-        expect(exported_data.cell(3, 10)).to eq user.name
+        get investigations_path format: :xlsx
+
+        coronavirus_cell_title = exported_data.cell(1, 8)
+        coronavirus_cell_content = exported_data.cell(2, 8)
+
+        aggregate_failures "coronavirus cells values" do
+          expect(coronavirus_cell_title).to eq "Coronavirus_Related"
+          expect(coronavirus_cell_content).to eq "true"
+        end
+      end
+
+      it "exports owner team and user" do
+        user = create(:user)
+        team = create(:team)
+        case_with_user_owner = create(:allegation, owner: user)
+        case_with_team_owner = create(:allegation, owner: team)
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 9)).to eq "Case_Owner_Team"
+          expect(exported_data.cell(1, 10)).to eq "Case_Owner_User"
+
+          expect(exported_data.cell(2, 1)).to eq case_with_team_owner.pretty_id
+          expect(exported_data.cell(2, 9)).to eq team.name
+          expect(exported_data.cell(2, 10)).to be_nil
+
+          expect(exported_data.cell(3, 1)).to eq case_with_user_owner.pretty_id
+          expect(exported_data.cell(3, 9)).to eq user.team.name
+          expect(exported_data.cell(3, 10)).to eq user.name
+        end
       end
     end
   end

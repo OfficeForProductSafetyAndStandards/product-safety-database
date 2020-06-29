@@ -316,11 +316,6 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     # assert response.body.index(@investigation_two.pretty_id.to_s) < response.body.index(@investigation_one.pretty_id.to_s)
   end
 
-  test "should create excel file for list of investigations" do
-    get investigations_path format: :xlsx
-    assert_response :success
-  end
-
   test "should not show private investigations to everyone" do
     create_new_private_case(@user)
     sign_out :user
