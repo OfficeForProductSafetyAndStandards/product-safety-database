@@ -3,16 +3,19 @@ class Investigations::TestResultsController < ApplicationController
   set_attachment_names :file
   set_file_params_key :test
 
-  before_action :set_investigation
-  before_action :set_test, only: %i[new create_draft confirm create]
-  before_action :set_attachment, only: %i[new create_draft confirm create]
-
   def new
+    @investigation = investigation_from_params
     authorize @investigation, :update?
+    @test = build_test_result_from_params
+    set_attachment
   end
 
   def create_draft
+    @investigation = investigation_from_params
     authorize @investigation, :update?
+    @test = build_test_result_from_params
+    set_attachment
+
     session[:test] = @test.attributes
     update_attachment
     if test_valid?
@@ -24,11 +27,18 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def confirm
+    @investigation = investigation_from_params
     authorize @investigation, :update?
+    @test = build_test_result_from_params
+    set_attachment
   end
 
   def create
+    @investigation = investigation_from_params
     authorize @investigation, :update?
+    @test = build_test_result_from_params
+    set_attachment
+
     update_attachment
     if test_saved?
       session[:test] = nil
@@ -40,11 +50,13 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def show
+    @investigation = investigation_from_params
     authorize @investigation, :view_non_protected_details?
     @test_result = @investigation.test_results.find(params[:id]).decorate
   end
 
   def edit
+    @investigation = investigation_from_params
     authorize @investigation, :update?
     @test_result = @investigation.test_results.find(params[:id])
 
@@ -52,6 +64,7 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def update
+    @investigation = investigation_from_params
     authorize @investigation, :update?
 
     @test_result = @investigation.test_results.find(params[:id])
@@ -77,14 +90,15 @@ private
     params.require(:test_result).permit(:product_id, :legislation, :result, :details, date: %i[day month year])
   end
 
-  def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+  def investigation_from_params
+    Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       .decorate
   end
 
-  def set_test
-    @test = @investigation.test_results.build(test_params)
-    @test.set_dates_from_params(params[:test])
+  def build_test_result_from_params
+    test_result = @investigation.test_results.build(test_params)
+    test_result.set_dates_from_params(params[:test])
+    test_result
   end
 
   def test_params
