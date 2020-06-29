@@ -1,3 +1,2 @@
-<%= render "investigations/pages_top" %>
-<%= investigation_sub_nav(@investigation) %>
+<%= render "investigations/pages_top", investigation: @investigation, current_tab: "overview" %>
 <%= render "investigations/tabs/overview" %>

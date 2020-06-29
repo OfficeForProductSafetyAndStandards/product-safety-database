@@ -7,6 +7,7 @@
     "yarn": "1.22.x"
   },
   "dependencies": {
+    "@hmcts/frontend": "^0.0.41-alpha",
     "@rails/webpacker": "5.1.1",
     "accessible-autocomplete": "2.0.2",
     "copy-webpack-plugin": "6.0.2",

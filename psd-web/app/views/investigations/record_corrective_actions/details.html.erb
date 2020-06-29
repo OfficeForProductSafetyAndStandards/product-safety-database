@@ -1,11 +1,14 @@
 <% page_title = "Record corrective action" %>
 <%= page_title page_title, errors: @corrective_action.object.errors.any? %>
-<% content_for :after_header do %>
+
+<% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
     href: new_investigation_supporting_information_path(@investigation)
   ) %>
 <% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with model: @corrective_action.object, local: true, url: wizard_path, method: :put do |form| %>
   <div class="govuk-grid-row">
@@ -16,13 +19,12 @@
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
       <%= render "investigations/record_corrective_actions/form",
-        form: form,
-        corrective_action: @corrective_action,
-        investigation: @investigation,
-        file_blob: @file_blob,
-        allow_product_linking: true,
-        allow_business_linking: true
-      %>
+                 form: form,
+                 corrective_action: @corrective_action,
+                 investigation: @investigation,
+                 file_blob: @file_blob,
+                 allow_product_linking: true,
+                 allow_business_linking: true %>
       <%= govukButton(text: "Continue") %>
     </div>
   </div>

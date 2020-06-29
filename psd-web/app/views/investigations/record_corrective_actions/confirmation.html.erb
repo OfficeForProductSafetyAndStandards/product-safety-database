@@ -1,11 +1,14 @@
 <% page_title = "Confirm corrective action details" %>
 <%= page_title page_title %>
-<% content_for :after_header do %>
+
+<% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.pretty_description.downcase}",
-    href: investigation_path(@investigation)
+    text: "Back",
+    href: previous_wizard_path
   ) %>
 <% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
 
 <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
 <h1 class="govuk-heading-l"><%= page_title %></h1>

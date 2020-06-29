@@ -1,0 +1,22 @@
+<%= page_title "Add product to case", errors: @product.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_products_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with model: @product, url: investigation_products_path(@investigation), local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= render "investigation_heading", investigation: @investigation %>
+
+      <h2 class="govuk-heading-m">Add product</h2>
+
+      <%= render "products/form", form: form, product: @product, countries: @countries, search: true %>
+    </div>
+  </div>
+<% end %>
