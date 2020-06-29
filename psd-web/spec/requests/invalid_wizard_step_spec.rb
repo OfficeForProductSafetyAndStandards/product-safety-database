@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Invalid steps within wizards", :with_stubbed_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
   let(:user) { create(:user, :opss_user, :activated) }
-  let(:investigation) { create(:allegation, creator: user.team) }
+  let(:investigation) { create(:allegation, creator: user) }
 
   before do
     ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)

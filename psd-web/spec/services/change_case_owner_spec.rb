@@ -12,7 +12,11 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
   let(:user) { create(:user, :activated, team: team, organisation: team.organisation) }
   let(:rationale) { "Test rationale" }
 
-  let!(:investigation) { create(:enquiry, owner: old_owner, creator: creator) }
+  let!(:investigation) { create(:enquiry, creator: creator) }
+
+  before do
+    described_class.call!(investigation: investigation, owner: old_owner, user: creator)
+  end
 
   describe ".call" do
     context "with no parameters" do

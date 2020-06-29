@@ -15,7 +15,11 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
 
     context "when the case owner is a team" do
       let(:team) { create(:team, name: "Southampton Council") }
-      let(:investigation) { create(:allegation, creator: team) }
+      let(:investigation) { create(:allegation) }
+
+      before do
+        ChangeCaseOwner.call!(investigation: investigation, owner: team, user: create(:user))
+      end
 
       it "displays the team name once" do
         result = helper.investigation_owner(investigation)
