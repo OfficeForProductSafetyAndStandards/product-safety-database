@@ -18,7 +18,7 @@ class Investigations::TestResultsController < ApplicationController
 
     session[:test_result] = @test_result.attributes
     update_attachment
-    if test_valid?
+    if test_result_valid?
       @file_blob.save if @file_blob
       redirect_to confirm_investigation_test_results_path(@investigation)
     else
@@ -40,7 +40,7 @@ class Investigations::TestResultsController < ApplicationController
     set_attachment
 
     update_attachment
-    if test_saved?
+    if test_result_saved?
       session[:test_result] = nil
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: { success: "#{@test_result.pretty_name.capitalize} was successfully recorded." }
@@ -102,10 +102,10 @@ private
   end
 
   def test_params
-    test_session_params.merge(test_request_params)
+    test_session_params.merge(test_result_request_params)
   end
 
-  def test_request_params
+  def test_result_request_params
     return {} if params[:test].blank?
 
     params.require(:test)
@@ -121,20 +121,20 @@ private
   end
 
   def update_attachment
-    update_blob_metadata @file_blob, test_file_metadata
+    update_blob_metadata @file_blob, test_result_file_metadata
   end
 
-  def test_file_metadata
+  def test_result_file_metadata
     title = "#{@test_result.result&.capitalize} test: #{@test_result.product&.name}"
     document_type = "test_results"
     get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
   end
 
-  def test_saved?
-    test_valid? && @test_result.save
+  def test_result_saved?
+    test_result_valid? && @test_result.save
   end
 
-  def test_valid?
+  def test_result_valid?
     @test_result.validate
     validate_blob_size(@file_blob, @test_result.errors, "file")
     @test_result.errors.empty?
