@@ -16,7 +16,7 @@ class Investigations::TestResultsController < ApplicationController
     @test_result = build_test_result_from_params
     set_attachment
 
-    session[:test_result] = @test_result.attributes
+    session[test_result_session_key] = @test_result.attributes
     update_attachment
     if test_result_valid?
       @file_blob.save if @file_blob
@@ -41,7 +41,7 @@ class Investigations::TestResultsController < ApplicationController
 
     update_attachment
     if test_result_saved?
-      session[:test_result] = nil
+      session[test_result_session_key] = nil
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: {
                     success: "#{@test_result.pretty_name.capitalize} was successfully recorded."
@@ -86,6 +86,10 @@ class Investigations::TestResultsController < ApplicationController
   end
 
 private
+
+  def test_result_session_key
+    "test_result_#{@investigation.id}"
+  end
 
   def test_result_attributes
     params.require(:test_result).permit(:product_id, :legislation, :result, :details, date: %i[day month year])
@@ -142,6 +146,6 @@ private
   end
 
   def test_session_params
-    session[:test_result] || {}
+    session[test_result_session_key] || {}
   end
 end
