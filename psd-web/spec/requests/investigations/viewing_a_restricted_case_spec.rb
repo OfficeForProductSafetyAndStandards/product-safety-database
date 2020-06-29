@@ -16,14 +16,6 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
     get investigation_path(investigation.pretty_id)
   end
 
-  context "when the user is the case owner" do
-    let(:investigation) { create(:allegation, is_private: true, creator: user) }
-
-    it "renders the page" do
-      expect(response).to have_http_status(:ok)
-    end
-  end
-
   context "when the user’s team is the case owner" do
     let(:investigation) { create(:allegation, is_private: true, creator: user) }
 
