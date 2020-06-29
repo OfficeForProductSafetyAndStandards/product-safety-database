@@ -18,8 +18,7 @@ class CreateCase
 
       investigation.pretty_id = generate_pretty_id
 
-      investigation.build_owner_user_collaboration(collaborator: user)
-      investigation.build_owner_team_collaboration(collaborator: user.team)
+      investigation.build_owner_collaborations_from(user)
 
       investigation.save!
 
