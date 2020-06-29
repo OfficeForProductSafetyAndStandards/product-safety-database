@@ -32,7 +32,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(page).to have_summary_error("Provide the test results file")
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
-      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "test_result_passed", file: file)
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file)
 
       expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
 
@@ -78,24 +78,32 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   end
 
   def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)
-    select legislation, from: "test_legislation"
+    select legislation, from: "Against which legislation?"
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date
     fill_in "Year",  with: date.year  if date
-    choose test_result
-    attach_file "test[file][file]", file
-    fill_in "test_file_description", with: "test result file"
+    within_fieldset "What was the result?" do
+      choose test_result
+    end
+    within_fieldset "Test report attachment" do
+      attach_file file
+      fill_in "Attachment description", with: "test result file"
+    end
     click_button "Continue"
     expect(page).to have_css("h1", text: "Confirm test result details")
   end
 
   def expect_test_result_form_to_show_input_data(legislation:, date:)
-    expect(page).to have_field("test_legislation", with: legislation)
+    expect(page).to have_field("Against which legislation?", with: legislation)
     expect(page).to have_field("Day", with: date.day)
     expect(page).to have_field("Month", with: date.month)
     expect(page).to have_field("Year", with: date.year)
-    expect(page).to have_field("test_result_passed", with: "passed")
-    expect(page).to have_field("test_file_description", with: "\r\ntest result file")
+    within_fieldset("What was the result?") do
+      expect(page).to have_checked_field("Pass")
+    end
+    within_fieldset "Test report attachment" do
+      expect(page).to have_field("Attachment description", with: "\r\ntest result file")
+    end
   end
 
   def expect_test_result_confirmation_page_to_show_entered_data(legislation:, date:, test_result:)

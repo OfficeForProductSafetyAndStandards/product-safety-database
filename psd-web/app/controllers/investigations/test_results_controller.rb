@@ -1,7 +1,7 @@
 class Investigations::TestResultsController < ApplicationController
   include FileConcern
   set_attachment_names :file
-  set_file_params_key :test
+  set_file_params_key :test_result
 
   def new
     @investigation = investigation_from_params
@@ -97,7 +97,7 @@ private
 
   def build_test_result_from_params
     test_result = @investigation.test_results.build(test_params)
-    test_result.set_dates_from_params(params[:test])
+    test_result.set_dates_from_params(params[:test_result])
     test_result
   end
 
@@ -106,9 +106,9 @@ private
   end
 
   def test_result_request_params
-    return {} if params[:test].blank?
+    return {} if params[:test_result].blank?
 
-    params.require(:test)
+    params.require(:test_result)
         .permit(:product_id,
                 :legislation,
                 :result,
