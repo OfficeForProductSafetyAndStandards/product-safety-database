@@ -21,6 +21,10 @@ class Test < ApplicationRecord
       date.to_s(:govuk)
     end
 
+    def date_of_activity_for_sorting
+      date
+    end
+
     def date_added
       created_at.to_s(:govuk)
     end
