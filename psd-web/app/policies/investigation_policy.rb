@@ -47,4 +47,8 @@ class InvestigationPolicy < ApplicationPolicy
   def investigation_restricted?
     !@record.is_private
   end
+
+  def export?
+    user.is_psd_admin?
+  end
 end
