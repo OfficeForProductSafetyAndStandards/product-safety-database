@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## 2020-06-26
 – Added the ability to edit test results.
 - Added a case bar which always shows which case you are viewing across all case pages.
+- Fixed a bug where case images were only viewable if your team (or another team in your organisation) was added to a case.
 
 ## 2020-06-22
 - Moved link for adding meetings, phone calls, emails, test results and corrective actions from the case
