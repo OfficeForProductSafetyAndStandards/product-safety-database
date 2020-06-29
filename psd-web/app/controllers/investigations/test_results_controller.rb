@@ -1,20 +1,20 @@
 class Investigations::TestResultsController < ApplicationController
   include FileConcern
-  set_attachment_names :file
+  attach_file_from_params_names :file
   set_file_params_key :test_result
 
   def new
     @investigation = investigation_from_params
     authorize @investigation, :update?
     @test_result = build_test_result_from_params
-    set_attachment
+    attach_file_from_params
   end
 
   def create_draft
     @investigation = investigation_from_params
     authorize @investigation, :update?
     @test_result = build_test_result_from_params
-    set_attachment
+    attach_file_from_params
 
     session[test_result_session_key] = @test_result.attributes
     update_attachment
@@ -30,14 +30,14 @@ class Investigations::TestResultsController < ApplicationController
     @investigation = investigation_from_params
     authorize @investigation, :update?
     @test_result = build_test_result_from_params
-    set_attachment
+    attach_file_from_params
   end
 
   def create
     @investigation = investigation_from_params
     authorize @investigation, :update?
     @test_result = build_test_result_from_params
-    set_attachment
+    attach_file_from_params
 
     update_attachment
     if test_result_saved?
@@ -120,7 +120,7 @@ private
                 :details)
   end
 
-  def set_attachment
+  def attach_file_from_params
     @file_blob, * = load_file_attachments
     @test_result.documents.attach(@file_blob) if @file_blob
   end
