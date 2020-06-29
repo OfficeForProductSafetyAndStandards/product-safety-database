@@ -18,6 +18,8 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :destroy
   has_many :collaborations, dependent: :destroy, as: :collaborator
 
+  belongs_to :team
+
   validates :password,
             common_password: { message: I18n.t(:too_common, scope: %i[activerecord errors models user attributes password]) },
             unless: proc { |user| !password_required? || user.errors.messages[:password].any? }

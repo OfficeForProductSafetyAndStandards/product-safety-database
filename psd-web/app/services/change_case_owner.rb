@@ -14,7 +14,7 @@ class ChangeCaseOwner
     return if old_owner == owner
 
     ActiveRecord::Base.transaction do
-      unless owner.team == investigation.owner_team_collaboration.collaborator
+      unless owner.team == investigation.owner_team
         investigation.owner_team_collaboration.swap_to_edit_access!
       end
 
@@ -23,7 +23,7 @@ class ChangeCaseOwner
       old_collaborator = investigation
                            .collaboration_accesses
                            .where.not(type: ["Collaboration::Access::OwnerUser", "Collaboration::Access::OwnerTeam"])
-                           .find_by(collaborator: owner)
+                           .find_by(collaborator: owner.team)
 
       (old_collaborator || owner).own!(investigation)
 

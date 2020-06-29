@@ -1,10 +1,6 @@
 module UserCollaboratorInterface
   extend ActiveSupport::Concern
 
-  included do
-    belongs_to :team
-  end
-
   def user
     self
   end
