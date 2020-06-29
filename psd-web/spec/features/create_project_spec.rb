@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-  context "when login as an OPSS user" do
+  context "when logged in as an OPSS user" do
     let(:title) { Faker::Lorem.sentence }
     let(:summary) { Faker::Lorem.paragraph }
 
@@ -46,6 +46,17 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
       expect(page).to have_css("p", text: summary)
       expect(page.find("dt", text: "Coronavirus related"))
         .to have_sibling("dd", text: "Coronavirus related case")
+
+      click_on "Activity"
+      expect_details_on_activity_page(title, summary)
+    end
+
+    def expect_details_on_activity_page(title, summary)
+      within ".govuk-list" do
+        expect(page).to have_css("h3",           text: "Project logged: #{title}")
+        expect(page).to have_css("p.govuk-body", text: "Case is related to the coronavirus outbreak.")
+        expect(page).to have_css("p.govuk-body", text: summary, exact_text: true)
+      end
     end
   end
 end
