@@ -43,7 +43,9 @@ class Investigations::TestResultsController < ApplicationController
     if test_result_saved?
       session[:test_result] = nil
       redirect_to investigation_supporting_information_index_path(@investigation),
-                  flash: { success: "#{@test_result.pretty_name.capitalize} was successfully recorded." }
+                  flash: {
+                    success: "#{@test_result.pretty_name.capitalize} was successfully recorded."
+                  }
     else
       render :new
     end
@@ -59,7 +61,6 @@ class Investigations::TestResultsController < ApplicationController
     @investigation = investigation_from_params
     authorize @investigation, :update?
     @test_result = @investigation.test_results.find(params[:id])
-
     @file_blob = @test_result.documents.first.blob
   end
 
