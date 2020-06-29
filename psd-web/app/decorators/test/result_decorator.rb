@@ -18,11 +18,11 @@ class Test < ApplicationRecord
     end
 
     def date_of_activity
-      date
+      date.to_s(:govuk)
     end
 
-    def date_of_activity_string
-      date_of_activity.to_s(:govuk)
+    def date_of_activity_for_sorting
+      date
     end
 
     def date_added

@@ -17,27 +17,27 @@ RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :wit
       within page.first("table") do
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: email.supporting_information_title)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceEmail")
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity_string)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_added)
 
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: phone_call.supporting_information_title)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondencePhone call")
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity_string)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_added)
 
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: meeting.supporting_information_title)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceMeeting")
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity_string)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_added)
 
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: corrective_action.supporting_information_title)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.supporting_information_type)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity_string)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_added)
 
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: test_result.supporting_information_title)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity_string)
+        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
         expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
       end

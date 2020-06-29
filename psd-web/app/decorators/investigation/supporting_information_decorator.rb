@@ -39,7 +39,7 @@ class Investigation < ApplicationRecord
     def sort
       case sort_by
       when DATE_OF_ACTIVITY
-        sort_desc(:date_of_activity)
+        sort_desc(:date_of_activity_for_sorting)
       when DATE_ADDED
         sort_desc(:created_at)
       when TITLE

@@ -11,11 +11,11 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def date_of_activity
-    correspondence_date
+    correspondence_date.to_s(:govuk)
   end
 
-  def date_of_activity_string
-    date_of_activity.to_s(:govuk)
+  def date_of_activity_for_sorting
+    correspondence_date
   end
 
   def date_added
