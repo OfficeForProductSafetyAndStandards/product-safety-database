@@ -4,12 +4,11 @@ class CreateCase
   delegate :investigation, :user, to: :context
 
   def call
-    context.team_or_user = user
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
-    context.fail!(error: "No user supplied") unless context.team_or_user.is_a?(User) || context.team_or_user.is_a?(Team)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.creator_user = context.team_or_user.user
-    investigation.creator_team = context.team_or_user.team
+    investigation.creator_user = user
+    investigation.creator_team = user.team
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happenning concurrently.
@@ -19,8 +18,8 @@ class CreateCase
 
       investigation.pretty_id = generate_pretty_id
 
-      investigation.build_owner_user_collaboration(collaborator: context.team_or_user.user)
-      investigation.build_owner_team_collaboration(collaborator: context.team_or_user.team)
+      investigation.build_owner_user_collaboration(collaborator: user)
+      investigation.build_owner_team_collaboration(collaborator: user.team)
 
       investigation.save!
 
@@ -47,7 +46,7 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: UserSource.new(user: user.user),
+      source: UserSource.new(user: user),
       investigation: investigation,
       title: nil,
       body: nil,
@@ -57,7 +56,7 @@ private
 
   def create_audit_activity_for_product_added(product)
     AuditActivity::Product::Add.create!(
-      source: UserSource.new(user: context.team_or_user.user),
+      source: UserSource.new(user: user),
       investigation: investigation,
       title: product.name,
       product: product
