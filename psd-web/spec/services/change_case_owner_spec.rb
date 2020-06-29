@@ -162,12 +162,12 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
       describe "adding old owner as collaborator" do
         shared_examples "collaborator created" do
           it "creates collaboration with edit access" do
-            expect { result }.to change { Collaboration::EditAccess.count }.from(0).to(1)
+            expect { result }.to change { Collaboration::Access::Edit.count }.by(1)
           end
 
           it "creates proper collaboration" do
             result
-            expect(investigation.teams_with_edit_access).to eq([creator_team])
+            expect(investigation.teams_with_edit_access).to eq([creator_team, investigation.owner_team])
           end
         end
 
@@ -175,7 +175,7 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           let(:result) { described_class.call(investigation: investigation, user: user, owner: new_owner, rationale: rationale) }
 
           it "creates no collaboration" do
-            expect { result }.not_to(change { Collaboration::EditAccess.count })
+            expect { result }.not_to(change { Collaboration::Access::Edit.count })
           end
         end
 
@@ -189,11 +189,17 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           include_examples "collaborator created"
         end
 
-        context "when old owner is user, new owner is team" do
+        context "when the old owner is a user and the new owner is a team" do
           let(:old_owner) { creator }
           let(:new_owner) { other_team }
 
-          include_examples "collaborator created"
+          it "correctly swaps the owner" do
+            expect { result }.to change(investigation, :owner_user)
+                                   .from(old_owner)
+                                   .to(nil)
+                                   .and change(investigation, :owner_team)
+                                          .from(old_owner.team).to(new_owner)
+          end
         end
 
         context "when old owner is user, new owner is user" do
@@ -207,14 +213,23 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           let(:old_owner) { team }
           let(:new_owner) { create(:user, :activated, team: other_team, organisation: other_team.organisation) }
 
-          include_examples "collaborator created"
+          it "correctly swaps the owner" do
+            expect { result }.to change(investigation, :owner_user)
+                                   .from(nil)
+                                   .to(new_owner)
+                                   .and change(investigation, :owner_team)
+                                          .from(old_owner).to(new_owner.team)
+          end
         end
 
         context "when old owner is team, new owner is user from the same team" do
           let(:old_owner) { team }
           let(:new_owner) { create(:user, :activated, team: team, organisation: team.organisation) }
 
-          include_examples "collaborator not created"
+          it "correctly swaps the owner", :aggregate_failures do
+            expect { result }.to change(investigation, :owner_user).from(nil).to(new_owner)
+            expect(investigation.owner_team).to eq(old_owner)
+          end
         end
 
         context "when old owner is user, new owner is user from the same team" do
@@ -223,10 +238,13 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
           include_examples "collaborator not created"
         end
 
-        context "when old owner is user, new owner is old owner team" do
+        context "when the old owner is a user and the new owner is the old owner team" do
           let(:new_owner) { team }
 
-          include_examples "collaborator not created"
+          it "correctly swaps the owner", :aggregate_failures do
+            expect { result }.to change(investigation, :owner_user).from(old_owner).to(nil)
+            expect(investigation.owner_team).to eq(team)
+          end
         end
       end
 
