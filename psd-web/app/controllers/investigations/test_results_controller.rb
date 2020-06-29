@@ -16,7 +16,7 @@ class Investigations::TestResultsController < ApplicationController
     @test_result = build_test_result_from_params
     set_attachment
 
-    session[:test] = @test_result.attributes
+    session[:test_result] = @test_result.attributes
     update_attachment
     if test_valid?
       @file_blob.save if @file_blob
@@ -41,7 +41,7 @@ class Investigations::TestResultsController < ApplicationController
 
     update_attachment
     if test_saved?
-      session[:test] = nil
+      session[:test_result] = nil
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: { success: "#{@test_result.pretty_name.capitalize} was successfully recorded." }
     else
@@ -141,6 +141,6 @@ private
   end
 
   def test_session_params
-    session[:test] || {}
+    session[:test_result] || {}
   end
 end
