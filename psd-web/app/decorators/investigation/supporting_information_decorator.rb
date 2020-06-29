@@ -43,12 +43,12 @@ class Investigation < ApplicationRecord
       when DATE_ADDED
         sort_desc(:created_at)
       when TITLE
-        sort_asc(:supporting_information_title)
+        sort_string_asc(:supporting_information_title)
       end
     end
 
-    def sort_asc(field)
-      @supporting_information.sort! { |a, b| a.public_send(field) <=> b.public_send(field) }
+    def sort_string_asc(field)
+      @supporting_information.sort! { |a, b| a.public_send(field).downcase <=> b.public_send(field).downcase }
     end
 
     def sort_desc(field)
