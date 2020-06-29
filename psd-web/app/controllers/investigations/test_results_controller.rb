@@ -1,6 +1,6 @@
 class Investigations::TestResultsController < ApplicationController
   include FileConcern
-  attach_file_from_params_names :file
+  set_attachment_names :file
   set_file_params_key :test_result
 
   def new
