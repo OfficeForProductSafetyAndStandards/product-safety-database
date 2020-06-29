@@ -6,7 +6,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:email) { Faker::Internet.safe_email }
 
   context "when the user is not a team admin" do
-    let(:user_role) { :psd_admin }
+    let(:user_role) { :psd_user }
 
     before do
       sign_in(user)
