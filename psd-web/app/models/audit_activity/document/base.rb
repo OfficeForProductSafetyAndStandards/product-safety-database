@@ -23,6 +23,6 @@ class AuditActivity::Document::Base < AuditActivity::Base
   def restricted_title(_user); end
 
   def can_display_all_data?(user)
-    Pundit.policy(user, investigation).view_protected_details?
+    attached_image? || Pundit.policy(user, investigation).view_protected_details?
   end
 end
