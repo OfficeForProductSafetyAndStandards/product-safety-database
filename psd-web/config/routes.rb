@@ -145,16 +145,14 @@ Rails.application.routes.draw do
     resources :meetings, controller: "investigations/record_meetings", only: %i[show new create update]
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
 
-    resources :test_results, controller: "investigations/test_results", only: %i[show edit update], path: "test-results"
-
-    resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
-
-    resources :tests, controller: "investigations/tests", only: %i[show create update] do
+    resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do
       collection do
-        get :new_request
-        get :new_result
+        put :create_draft, path: "confirm"
+        get :confirm
       end
     end
+
+    resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
   end
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
