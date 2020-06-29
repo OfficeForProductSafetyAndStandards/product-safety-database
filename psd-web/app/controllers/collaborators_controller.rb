@@ -4,11 +4,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @collaborators = @investigation
-                       .collaboration_accesses
-                       .includes(:collaborator, investigation: :creator_team)
-                       .where(collaborator_type: "Team")
-                       .order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END"))
+    @collaborators = @investigation.collaboration_accesses.sorted_by_team_name
   end
 
   def new
