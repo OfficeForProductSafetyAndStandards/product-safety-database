@@ -16,7 +16,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
   describe "supporting information" do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
-    let(:investigation)                           { create(:allegation, owner: user.team) }
+    let(:investigation)                           { create(:allegation, creator: user) }
     let(:generic_supporting_information_filename) { "a generic supporting information" }
     let(:generic_image_filename)                  { "a generic image" }
     let(:image) { Rails.root.join("test/fixtures/files/testImage.png") }
@@ -24,6 +24,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     include_context "with all types of supporting information"
 
     before do
+      ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
       investigation.documents.attach(io: StringIO.new, filename: generic_supporting_information_filename)
       investigation.documents.attach(io: File.open(image), filename: generic_image_filename, content_type: "image/png")
       investigation.save!

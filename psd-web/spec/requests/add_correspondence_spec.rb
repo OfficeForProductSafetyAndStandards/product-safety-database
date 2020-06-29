@@ -2,9 +2,12 @@ require "rails_helper"
 
 RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, owner: user.team) }
+  let(:investigation) { create(:allegation, creator: user) }
 
-  before { sign_in(user) }
+  before do
+    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    sign_in(user)
+  end
 
   context "when not choosing any option" do
     before do

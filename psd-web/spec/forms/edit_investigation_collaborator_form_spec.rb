@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stubbed_mailer do
-  let!(:investigation) { create(:allegation, owner: creator) }
+  let!(:investigation) { create(:allegation, creator: creator) }
   let(:creator) { create(:user, :activated, team: creator_team, organisation: creator_team.organisation) }
   let(:creator_team) { create(:team) }
   let(:team) { create(:team) }

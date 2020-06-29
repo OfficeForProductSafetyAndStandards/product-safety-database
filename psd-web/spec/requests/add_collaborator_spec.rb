@@ -97,9 +97,10 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
   end
 
   context "when the user isn't part of the team that is the case owner", :with_errors_rendered do
-    let(:investigation) { create(:allegation, owner: create(:team)) }
+    let(:investigation) { create(:allegation) }
 
     before do
+      ChangeCaseOwner.call!(investigation: investigation, owner: create(:team), user: user)
       sign_in user
       post investigation_collaborators_path(investigation.pretty_id)
     end
