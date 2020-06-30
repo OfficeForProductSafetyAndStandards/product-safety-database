@@ -55,19 +55,29 @@ class Investigation < ApplicationRecord
   has_many_attached :documents
 
   has_one :complainant, dependent: :destroy
+  has_many :collaborations
+  has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::Access::Edit"
+  has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :collaborator, source_type: "Team"
 
-  has_many :edit_access_collaborations, dependent: :destroy, class_name: "Collaboration::EditAccess"
-  has_many :teams_with_edit_access, through: :edit_access_collaborations, dependent: :destroy, source: :editor, source_type: "Team"
+  has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
+  has_many :teams_with_read_only_access, through: :read_only_collaborations, source: :collaborator, source_type: "Team"
+
+  has_many :edit_collaborations,      class_name: "Collaboration::Access::Edit"
+  has_many :collaboration_accesses,   class_name: "Collaboration::Access"
+  has_many :teams_with_access, lambda {
+    select("teams.*, CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END").distinct.joins(:collaborations).order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")).references(:collaborations)
+  }, through: :collaboration_accesses, source: :collaborator, source_type: "Team"
 
   has_one :creator_user_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorUser"
   has_one :creator_team_collaboration, dependent: :destroy, class_name: "Collaboration::CreatorTeam"
   has_one :creator_team, through: :creator_team_collaboration, dependent: :destroy, source_type: "Team"
   has_one :creator_user, through: :creator_user_collaboration, dependent: :destroy, source_type: "User"
 
-  has_one :owner_user_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerUser"
-  has_one :owner_team_collaboration, dependent: :destroy, class_name: "Collaboration::OwnerTeam"
-  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", required: true
-  has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User"
+  has_many :collaboration_access_owners, class_name: "Collaboration::Access::Owner"
+  has_one :owner_user_collaboration, class_name: "Collaboration::Access::OwnerUser", dependent: :destroy, inverse_of: :investigation
+  has_one :owner_team_collaboration, class_name: "Collaboration::Access::OwnerTeam", dependent: :destroy, required: true
+  has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
+  has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
@@ -83,14 +93,10 @@ class Investigation < ApplicationRecord
     owner&.id
   end
 
-  def owner=(team_or_user)
-    if team_or_user.is_a? User
-      self.owner_user = team_or_user
-      self.owner_team = team_or_user.team
-    elsif team_or_user.is_a? Team
-      self.owner_team = team_or_user
-      self.owner_user = nil
-    end
+  def build_owner_collaborations_from(user)
+    build_owner_user_collaboration(collaborator: user)
+    build_owner_team_collaboration(collaborator: user.team)
+    self
   end
 
   def images
@@ -111,10 +117,6 @@ class Investigation < ApplicationRecord
 
   def supporting_information
     @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product)).sort_by(&:created_at).reverse
-  end
-
-  def teams_with_access
-    ([owner_team] + teams_with_edit_access.sort_by(&:name)).compact
   end
 
   def status

@@ -49,7 +49,11 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
                name: "Test team 1",
                team_recipient_email: "test-team@example.com")
       end
-      let(:investigation) { create(:allegation, owner: owner_team) }
+      let(:investigation) { create(:allegation) }
+
+      before do
+        ChangeCaseOwner.call!(investigation: investigation, owner: owner_team, user: user)
+      end
 
       context "when there are changes to the metadata" do
         let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }

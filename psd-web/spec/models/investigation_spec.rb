@@ -1,9 +1,22 @@
 require "rails_helper"
 
 RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify do
+  subject(:investigation) { create(:allegation) }
+
+  describe "#build_owner_collaborations_from" do
+    subject(:investigation) { Investigation::Allegation.new.build_owner_collaborations_from(user) }
+
+    let(:user) { create(:user) }
+
+    it "builds the relevant associations and returns self", :aggregate_failures do
+      expect(investigation.owner_user_collaboration.collaborator).to be user
+      expect(investigation.owner_team_collaboration.collaborator).to be user.team
+    end
+  end
+
   describe "supporting information" do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
-    let(:investigation)                           { create(:allegation, owner: user.team) }
+    let(:investigation)                           { create(:allegation, creator: user) }
     let(:generic_supporting_information_filename) { "a generic supporting information" }
     let(:generic_image_filename)                  { "a generic image" }
     let(:image) { Rails.root.join("test/fixtures/files/testImage.png") }
@@ -11,6 +24,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     include_context "with all types of supporting information"
 
     before do
+      ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
       investigation.documents.attach(io: StringIO.new, filename: generic_supporting_information_filename)
       investigation.documents.attach(io: File.open(image), filename: generic_image_filename, content_type: "image/png")
       investigation.save!
@@ -30,51 +44,44 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#teams_with_access" do
-    context "when there is just a team that is the case owner" do
-      let(:team) { create(:team) }
-      let(:investigation) { create(:allegation, owner: team) }
+    let(:owner)  { investigation.owner_team }
+    let(:user)   { create(:user, team: owner) }
+    let(:team_a) { create(:team, name: "a team") }
+    let(:team_b) { create(:team, name: "b team") }
 
-      it "is a list of just the team" do
-        expect(investigation.teams_with_access).to eql([team])
+    before do
+      owner.update!(name: "z to ensure the sorting is correct")
+      [team_a, team_b].each do |team|
+        AddTeamToAnInvestigation.call(current_user: user, investigation: investigation, collaborator_id: team.id, include_message: false)
       end
     end
 
-    context "when there is a team as the case owner and a collaborator team added" do
-      let(:team) { create(:team) }
-      let(:collaborator_team) { create(:team) }
-      let(:investigation) do
-        create(
-          :allegation,
-          owner: team,
-          edit_access_collaborations: [
-            create(:collaboration_edit_access, collaborator: collaborator_team)
-          ]
-        )
-      end
-
-      it "is a list of the team and the collaborator team" do
-        expect(investigation.teams_with_access).to match_array([team, collaborator_team])
-      end
+    it "owner team is always the first" do
+      expect(investigation.teams_with_access).to eq([owner, team_a, team_b])
     end
   end
 
   describe "#owner_team" do
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }
-      let(:investigation) { create(:allegation, owner: team) }
+      let(:investigation) { create(:allegation, creator: create(:user, team: team)) }
 
       it "is is the team" do
-        expect(investigation.owner_team).to eql(team)
+        expect(investigation.owner_team).to eq(team)
       end
     end
 
     context "when there is a user who belongs to a team that is the case owner" do
       let(:team) { create(:team) }
       let(:user) { create(:user, team: team) }
-      let(:investigation) { create(:allegation, owner: user) }
+      let(:investigation) { create(:allegation, creator: user) }
+
+      before do
+        ChangeCaseOwner.call!(investigation: investigation, user: user, owner: team)
+      end
 
       it "is is the team the user belongs to" do
-        expect(investigation.owner_team).to eql(team)
+        expect(investigation.owner_team).to eq(team)
       end
     end
   end
@@ -89,18 +96,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
     end
 
-    context "when owner is Team" do
-      before do
-        investigation.owner = user.team
-      end
-
-      it "does not have owner_user" do
-        expect(investigation.owner_user).to eq(nil)
-      end
-    end
-
-    it "is invalid without owner_team" do
-      investigation.owner_team = nil
+    it "is invalid without owner team collaboration" do
+      investigation.owner_team_collaboration = nil
       expect(investigation).to be_invalid
     end
   end

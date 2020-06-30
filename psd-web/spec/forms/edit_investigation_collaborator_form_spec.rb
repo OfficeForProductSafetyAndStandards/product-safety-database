@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stubbed_mailer do
-  let!(:investigation) { create(:allegation, owner: creator) }
+  let!(:investigation) { create(:allegation, creator: creator) }
   let(:creator) { create(:user, :activated, team: creator_team, organisation: creator_team.organisation) }
   let(:creator_team) { create(:team) }
   let(:team) { create(:team) }
@@ -34,7 +34,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
     context "when deleting" do
       context "when successful" do
         it "removes collaborator record" do
-          expect { form.save! }.to change(Collaboration::EditAccess, :count).from(1).to(0)
+          expect { form.save! }.to change(investigation.teams_with_access, :size).from(2).to(1)
         end
 
         it "returns true" do
@@ -72,7 +72,7 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
 
           last_added_activity = investigation.activities.reload.order(created_at: :desc)
             .find_by!(type: "AuditActivity::Investigation::TeamDeleted")
-          expect(last_added_activity.title(user)).to eql("test team removed from allegation")
+          expect(last_added_activity.title(user)).to eql("#{team.display_name(viewer: user)} removed from allegation")
           expect(last_added_activity.source.user_id).to eql(user.id)
         end
       end

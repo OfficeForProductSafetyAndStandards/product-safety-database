@@ -4,7 +4,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product1) { create(:product_washing_machine, name: "MyBrand red washing machine") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand blue washing machine") }
-  let(:investigation) { create(:allegation, products: [product1, product2], creator: user, owner: user) }
+  let(:investigation) { create(:allegation, products: [product1, product2], creator: user) }
 
   let(:test_result) do
     create(:test_result,

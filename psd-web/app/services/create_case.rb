@@ -10,8 +10,6 @@ class CreateCase
     investigation.creator_user = user
     investigation.creator_team = user.team
 
-    investigation.owner ||= user
-
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happenning concurrently.
       # The ID 1 needs to uniquely identify the type of action (in this case
@@ -19,6 +17,9 @@ class CreateCase
       ActiveRecord::Base.connection.execute("SELECT pg_advisory_xact_lock(1)")
 
       investigation.pretty_id = generate_pretty_id
+
+      investigation.build_owner_collaborations_from(user)
+
       investigation.save!
 
       create_audit_activity_for_case_added

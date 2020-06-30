@@ -4,7 +4,7 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
   let(:user) { create(:user, :activated) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
-  let(:investigation) { create(:allegation, owner: user) }
+  let(:investigation) { create(:allegation, creator: user) }
   let(:file) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
 
   scenario "Adding a meeting using a transcript file (and notes)" do

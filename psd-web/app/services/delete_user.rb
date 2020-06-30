@@ -19,8 +19,7 @@ private
     context.team = context.user.team
 
     user.investigations.each do |investigation|
-      investigation.owner = context.team
-      investigation.save!
+      context.team.own!(investigation)
 
       create_audit_activity_for_case_owner_automatically_changed(investigation)
     end

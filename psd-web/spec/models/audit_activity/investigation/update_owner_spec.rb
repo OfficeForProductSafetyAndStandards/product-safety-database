@@ -3,10 +3,14 @@ require "rails_helper"
 RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:activity) { described_class.create(investigation: investigation, metadata: described_class.build_metadata(owner, rationale)) }
 
-  let(:investigation) { create(:allegation, owner: owner) }
+  let(:investigation) { create(:allegation, creator: create(:user, team: owner)) }
   let(:owner) { create(:team) }
   let(:rationale) { "Test rationale" }
   let(:user) { create(:user) }
+
+  before do
+    ChangeCaseOwner.call!(investigation: investigation, owner: owner, user: user)
+  end
 
   describe ".build_metadata" do
     let(:result) { described_class.build_metadata(owner, rationale) }

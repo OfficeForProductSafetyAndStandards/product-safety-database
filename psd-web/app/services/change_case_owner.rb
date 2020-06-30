@@ -14,16 +14,23 @@ class ChangeCaseOwner
     return if old_owner == owner
 
     ActiveRecord::Base.transaction do
-      if owner.is_a?(Team)
-        # Remove the new owner team as a collaborator if they were one.
-        investigation.edit_access_collaborations.where(editor: owner).delete_all
+      unless owner.team == investigation.owner_team
+        investigation.owner_team_collaboration.swap_to_edit_access!
       end
 
-      investigation.update!(owner: owner)
+      investigation.reload # force cached associations to be reloaded
+
+      old_collaborator = investigation
+                           .collaboration_accesses
+                           .where.not(type: ["Collaboration::Access::OwnerUser", "Collaboration::Access::OwnerTeam"])
+                           .find_by(collaborator: owner.team)
+
+      (old_collaborator || owner).own!(investigation)
+
       create_audit_activity_for_case_owner_changed
-      add_old_owner_as_collaborator
     end
 
+    investigation.reload
     send_notification_email
   end
 
@@ -47,12 +54,10 @@ private
 
   def send_notification_email
     entities_to_notify.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         email_body(recipient),
         "Case owner changed for #{investigation.case_type}"
       ).deliver_later
@@ -65,7 +70,7 @@ private
     entities << old_owner if old_owner != user
 
     entities.map { |entity|
-      return entity.users.active if entity.is_a?(Team) && !entity.team_recipient_email
+      return entity.users.active if entity.is_a?(Team) && !entity.email
 
       entity
     }.flatten.uniq
@@ -76,28 +81,5 @@ private
     body = "Case owner changed on #{investigation.case_type} to #{owner.decorate.display_name(viewer: viewer)} by #{user_name}."
     body << "\n\nMessage from #{user_name}: #{inset_text_for_notify(rationale)}" if rationale
     body
-  end
-
-  def add_old_owner_as_collaborator
-    return if old_owner_and_new_owner_from_same_team?
-
-    edit_access_collaboration = investigation.edit_access_collaborations.new(
-      collaborator: old_owner_team,
-      include_message: false,
-      added_by_user: user,
-    )
-    edit_access_collaboration.save!
-  end
-
-  def old_owner_team
-    old_owner.is_a?(Team) ? old_owner : old_owner.team
-  end
-
-  def old_owner_and_new_owner_from_same_team?
-    old_owner_team == new_owner_team
-  end
-
-  def new_owner_team
-    owner.is_a?(Team) ? owner : owner.team
   end
 end

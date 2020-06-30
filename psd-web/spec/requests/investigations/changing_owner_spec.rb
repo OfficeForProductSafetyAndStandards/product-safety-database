@@ -9,7 +9,6 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
     create(
       :allegation,
       is_closed: false,
-      owner: user_from_owner_team.team,
       creator: user_from_owner_team,
       edit_access_collaborations: [
         create(
@@ -18,6 +17,10 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
         )
       ]
     )
+  end
+
+  before do
+    ChangeCaseOwner.call!(investigation: investigation, owner: user_from_owner_team.team, user: user_from_owner_team)
   end
 
   context "when the user is from the case owner’s team" do

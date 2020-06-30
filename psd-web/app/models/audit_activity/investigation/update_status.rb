@@ -17,6 +17,6 @@ private
   def users_to_notify
     return super if source&.user == investigation.creator_user && source.present?
 
-    [investigation.creator_user] + super
+    ([investigation.creator_user] + super).compact
   end
 end

@@ -74,8 +74,10 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       it "exports owner team and user" do
         user = create(:user)
         team = create(:team)
-        case_with_user_owner = create(:allegation, owner: user)
-        case_with_team_owner = create(:allegation, owner: team)
+        case_with_user_owner = create(:allegation, creator: user)
+        case_with_team_owner = create(:allegation, creator: user)
+
+        ChangeCaseOwner.call!(investigation: case_with_team_owner, user: user, owner: team)
 
         Investigation.import refresh: true, force: true
 

@@ -1,12 +1,12 @@
-southampton:
+southampton_team:
   name: Southampton Council Trading Standards
-  organisation: southampton
+  organisation: southampton_org
 
 opss_enforcement:
   name: OPSS Enforcement
   organisation: opss
 
-luton:
+luton_team:
   name: Luton Council Trading Standards
-  organisation: luton
+  organisation: luton_org
   team_recipient_email: luton@example.com

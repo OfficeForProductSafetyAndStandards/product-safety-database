@@ -11,9 +11,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:products)      { [] }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, products: products, coronavirus_related: coronavirus_related, owner: user, creator: creator) }
+  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, products: products, coronavirus_related: coronavirus_related, creator: creator) }
 
   before do
+    ChangeCaseOwner.call!(investigation: investigation, user: creator, owner: user)
     create(:complainant, investigation: investigation)
   end
 
