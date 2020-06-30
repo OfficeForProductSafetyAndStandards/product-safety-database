@@ -74,6 +74,13 @@ en:
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "Coronavirus status updated on %{case_type}"
+    risk_level:
+      show:
+        title_set: "Set case risk level"
+        title_change: "Change case risk level"
+        submit_button: "Set risk level"
+        hint: "Case risk level"
+      success: "Risk level %{action} on %{case_type}"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"

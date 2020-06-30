@@ -38,13 +38,25 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def display_risk_and_issues_list?
-    object.hazard_type.present? || object.non_compliant_reason.present?
+  def risk_level
+    object.risk_level.to_s
   end
 
   def risk_and_issues_list
     hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
+    risk_level_actions =
+      if object.risk_level.present?
+        [href: h.investigation_risk_level_path(object), visually_hidden_text: "change risk level", text: "Change"]
+      else
+        [href: h.investigation_risk_level_path(object), visually_hidden_text: "set risk level", text: "Set"]
+      end
+
     rows = [
+      {
+        key: { text: "Case risk level" },
+        value: { text: object.risk_level.presence || "Not set" },
+        actions: risk_level_actions
+      },
       object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
       object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
     ]
