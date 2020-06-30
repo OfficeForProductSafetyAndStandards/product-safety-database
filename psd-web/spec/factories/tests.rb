@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :test do
-    date_day    { date.day }
-    date_month  { date.month }
-    date_year   { date.year }
+    date_day    { date&.day }
+    date_month  { date&.month }
+    date_year   { date&.year }
     details     { Faker::Hipster.sentence }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
 
