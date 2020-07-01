@@ -522,6 +522,10 @@ if run_seeds
     %i[team_admin opss_user psd_user user].each do |role|
       UserRole.create!(user: user2, name: role)
     end
+
+
+    organisation = Organisation.create!(name: "Southampton Council")
+    Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)
   end
   Investigation.all.each do |i|
     product = i.products.first

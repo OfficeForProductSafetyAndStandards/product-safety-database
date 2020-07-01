@@ -10,7 +10,6 @@ FactoryBot.define do
     hazard_type           {}
     hazard_description    {}
     non_compliant_reason  {}
-    description { "Investigation into product" }
 
     transient do
       creator do
@@ -85,6 +84,16 @@ FactoryBot.define do
           non_compliant_reason: Faker::Hipster.sentence,
           reported_reason_non_compliant: true
         ).assign_to(investigation)
+      end
+    end
+
+    trait :with_products do
+      transient do
+        products { [create(:product)] }
+      end
+
+      after(:build) do |investigation, options|
+        investigation.products = options.products
       end
     end
 
