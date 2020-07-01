@@ -4,6 +4,17 @@
       <div class="hmcts-identity-bar__details app-identity-bar__details">
         <span class="hmcts-identity-bar__title app-identity-bar__title"><span class="app-identity-bar__case-id"><%= investigation.pretty_id %></span> <%= investigation.decorate.title %></span>
       </div>
+
+      <div class="hmcts-identity-bar__actions">
+        <div class="hmcts-identity-bar__menu">
+          <div class="hmcts-menu">
+            <div class="hmcts-menu__wrapper">
+              <%= govukButton(text: "Add new", href: new_investigation_supporting_information_path(investigation), classes: "hmcts-menu__item app-button--case-bar-secondary") %>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 <% end %>
