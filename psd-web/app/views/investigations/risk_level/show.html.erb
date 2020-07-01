@@ -12,9 +12,18 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @risk_level_form.errors %>
 
+      <%- other = capture do %>
+        <%= render "form_components/govuk_input",
+                   key: :risk_level_other,
+                   form: form,
+                   classes: "govuk-!-width-one-third",
+                   label: { text: "Other risk level", classes: "govuk-visually-hidden" } %>
+      <% end %>
+
       <% radio_items = Investigation::STANDARD_RISK_LEVELS.map do |level|
           { text: level, value: level }
          end
+         radio_items.push(text: "Other", value: "other", conditional: { html: other })
          radio_items.push divider: "or"
          radio_items.push(text: "Not set", value: "")
       %>

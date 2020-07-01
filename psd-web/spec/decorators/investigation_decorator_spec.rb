@@ -18,40 +18,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     create(:complainant, investigation: investigation)
   end
 
-  describe "#display_risk_and_issues_list?" do
-    context "when the investigation has no hazard or compliance information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: nil, non_compliant_reason: nil)
-      end
-
-      it { is_expected.not_to be_display_risk_and_issues_list }
-    end
-
-    context "when the investigation has a hazard information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: "Chemical", non_compliant_reason: nil)
-      end
-
-      it { is_expected.to be_display_risk_and_issues_list }
-    end
-
-    context "when the investigation has compliance information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: nil, non_compliant_reason: "Explosive!")
-      end
-
-      it { is_expected.to be_display_risk_and_issues_list }
-    end
-
-    context "when the investigation has both hazard and compliance information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: "Chemical", non_compliant_reason: "Explosive!")
-      end
-
-      it { is_expected.to be_display_risk_and_issues_list }
-    end
-  end
-
   describe "#display_product_summary_list?" do
     let(:investigation) { create(:enquiry) }
 
