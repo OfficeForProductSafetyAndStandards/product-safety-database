@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
-  let(:investigation) { create(:allegation, owner: owner, creator: creator) }
+  let(:investigation) { create(:allegation, creator: creator) }
   let(:product) { create(:product_washing_machine) }
 
   let(:user) { create(:user) }
@@ -72,6 +72,10 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
         context "when the user is another user than the case owner" do
           let(:owner) { create(:user, team: user.team) }
 
+          before do
+            ChangeCaseOwner.call!(investigation: investigation, user: user, owner: owner)
+          end
+
           it "sends a notification email to the case owner" do
             expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
               investigation.pretty_id,
@@ -87,6 +91,10 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
       context "when the case owner is a team" do
         let(:owner) { create(:team, team_recipient_email: team_recipient_email) }
         let(:team_recipient_email) { nil }
+
+        before do
+          ChangeCaseOwner.call!(investigation: investigation, user: user, owner: owner)
+        end
 
         context "when the user is on the same team" do
           let(:user) { create(:user, team: owner) }

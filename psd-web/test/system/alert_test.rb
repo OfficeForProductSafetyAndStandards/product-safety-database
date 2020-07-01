@@ -7,6 +7,7 @@ class AlertTest < ApplicationSystemTestCase
     sign_in users(:opss)
     User.current = users(:opss)
     @investigation = load_case(:one).decorate
+    users(:opss).own!(@investigation)
     @investigation.edit_access_collaborations.create!(
       collaborator: teams(:opss_enforcement),
       include_message: false,
@@ -43,6 +44,7 @@ class AlertTest < ApplicationSystemTestCase
 
   test "requires a restricted case be derestricted before raising an alert" do
     @private_investigation = load_case(:private)
+    users(:opss).own!(@private_investigation)
     @private_investigation.edit_access_collaborations.create!(
       collaborator: teams(:opss_enforcement),
       include_message: false,

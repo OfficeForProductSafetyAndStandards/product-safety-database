@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand washing machine") }
-  let(:investigation) { create(:allegation, products: [product], creator: user, owner: user) }
+  let(:investigation) { create(:allegation, products: [product], creator: user) }
   let(:date) { Date.parse("1 Jan 2020") }
   let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
   let(:other_user) { create(:user, :activated) }

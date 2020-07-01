@@ -1,10 +1,15 @@
 class InvestigationPolicy < ApplicationPolicy
+  # Ability to view the entire case including protected details
+  def readonly?
+    record.teams_with_read_only_access.include?(user.team)
+  end
+
   # Used for all updating of the case, including adding and removing related
   # records, such as products, businesses and documents, with the exception of
   # changing the case owner, its status (eg 'open' or 'closed'), and whether
   # or not it is 'restricted'.
   def update?(user: @user)
-    record.teams_with_access.include?(user.team)
+    record.teams_with_edit_access.include?(user.team)
   end
 
   # Ability to change the case owner, the status of the case (eg 'open' or 'closed'),

@@ -2,9 +2,13 @@ require "rails_helper"
 
 RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:user)          { create(:user, :activated) }
-  let(:investigation) { create(:enquiry, owner: user.team) }
+  let(:investigation) { create(:enquiry, creator: user) }
   let(:product)       { create(:product_iphone) }
   let(:other_user)    { create(:user, :activated) }
+
+  before do
+    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+  end
 
   scenario "Adding a product to a case" do
     sign_in user

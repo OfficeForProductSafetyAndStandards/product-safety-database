@@ -4,12 +4,15 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user_different_org) { create(:user, :activated) }
 
-  let(:investigation) { create(:allegation, owner: user.team) }
+  let(:investigation) { create(:allegation, creator: user) }
   let(:file)          { Rails.root + "test/fixtures/files/testImage.png" }
   let(:title)         { Faker::Lorem.sentence }
   let(:description)   { Faker::Lorem.paragraph }
 
-  before { sign_in user }
+  before do
+    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    sign_in user
+  end
 
   scenario "completing the add attachment flow saves the attachment" do
     visit "/cases/#{investigation.pretty_id}"

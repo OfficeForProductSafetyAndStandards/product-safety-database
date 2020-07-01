@@ -5,7 +5,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
   let(:team) { create(:team) }
-  let(:investigation) { create(:allegation, creator: user, owner: user) }
+  let(:investigation) { create(:allegation, creator: user) }
   let(:edit_access_collaboration) do
     create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user)
   end
@@ -29,12 +29,12 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
     end
 
     let(:do_request) do
-      put investigation_collaborator_path(investigation.pretty_id, team.id), params: params
+      put investigation_collaborator_path(investigation.pretty_id, edit_access_collaboration.id), params: params
     end
 
     context "when successful" do
       it "removes collaborator" do
-        expect { do_request }.to change(Collaboration::EditAccess, :count).from(1).to(0)
+        expect { do_request }.to change(Collaboration::Access::Edit, :count).from(3).to(2)
       end
 
       it "redirects back to the 'teams added to case' page" do
@@ -59,7 +59,11 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
 
   context "when the user isn't part of the team assigned", :with_errors_rendered do
     let(:creator) { create(:user) }
-    let(:investigation) { create(:allegation, owner: creator.team, creator: creator) }
+    let(:investigation) { create(:allegation, creator: creator) }
+
+    before do
+      ChangeCaseOwner.call!(investigation: investigation, owner: creator.team, user: creator)
+    end
 
     it "responds with a 403 (Forbidden) status code on update" do
       put investigation_collaborator_path(investigation.pretty_id, team.id)

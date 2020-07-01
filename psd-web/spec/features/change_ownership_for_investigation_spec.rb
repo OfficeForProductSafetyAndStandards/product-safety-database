@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, owner: user) }
+  let(:investigation) { create(:allegation, creator: user) }
 
   let!(:another_active_user) { create(:user, :activated, name: "other user same team", organisation: user.organisation, team: team) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team: team) }

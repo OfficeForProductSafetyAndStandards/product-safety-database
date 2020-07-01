@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe RemoveProductFromCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
-  let(:investigation) { create(:allegation, products: [product], owner: owner, creator: creator) }
+  let(:investigation) { create(:allegation, products: [product], creator: creator) }
   let(:product) { create(:product_washing_machine) }
 
   let(:user) { create(:user) }
@@ -72,6 +72,10 @@ RSpec.describe RemoveProductFromCase, :with_stubbed_elasticsearch, :with_test_qu
         context "when the user is another user than the case owner" do
           let(:owner) { create(:user, team: user.team) }
 
+          before do
+            ChangeCaseOwner.call!(investigation: investigation, user: user, owner: owner)
+          end
+
           it "sends a notification email to the case owner" do
             expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
               investigation.pretty_id,
@@ -97,10 +101,16 @@ RSpec.describe RemoveProductFromCase, :with_stubbed_elasticsearch, :with_test_qu
         end
 
         context "when the user is on another team" do
+          before do
+            ChangeCaseOwner.call!(investigation: investigation, user: user, owner: owner)
+          end
+
           context "when the team does not have an email" do
             let!(:active_user_owner_team) { create(:user, :activated, team: owner) }
 
-            before { create(:user, team: owner) }
+            before do
+              create(:user, team: owner)
+            end
 
             it "sends an email to all active users on the team" do
               expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(

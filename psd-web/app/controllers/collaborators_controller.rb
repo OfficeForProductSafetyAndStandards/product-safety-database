@@ -4,7 +4,7 @@ class CollaboratorsController < ApplicationController
   end
 
   def index
-    @teams = @investigation.teams_with_edit_access.order(:name)
+    @collaborators = @investigation.collaboration_accesses.sorted_by_team_name
   end
 
   def new
@@ -19,14 +19,14 @@ class CollaboratorsController < ApplicationController
     authorize @investigation, :manage_collaborators?
 
     result = AddTeamToAnInvestigation.call(
-      params.require(:collaboration_edit_access).permit(:collaborator_id, :include_message, :message).merge({
+      params.require(:collaboration_access_edit).permit(:collaborator_id, :include_message, :message).merge({
         investigation: @investigation,
         current_user: current_user
       })
     )
 
     if result.success?
-      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access_collaboration.editor.name} added to the case" }
+      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access_collaboration.collaborator.name} added to the case" }
     else
       @teams = teams_without_access
       @edit_access_collaboration = result.edit_access_collaboration
@@ -37,19 +37,20 @@ class CollaboratorsController < ApplicationController
   def edit
     authorize @investigation, :manage_collaborators?
 
-    @team = Team.find(params[:id])
-    @editor = @investigation.teams_with_edit_access.find @team.id
+    @collaboration = @investigation.collaboration_accesses.find(params[:id])
+    @collaborator = @collaboration.collaborator
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
 
   def update
     authorize @investigation, :manage_collaborators?
 
-    @team = Team.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.find(params[:id])
+    @collaborator = @collaboration.collaborator
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params
-      .merge(investigation: @investigation, team: @team, user: current_user))
+      .merge(investigation: @investigation, team: @collaborator, user: current_user))
     if @edit_form.save!
-      flash[:success] = "#{@team.name} has been removed from the case"
+      flash[:success] = "#{@collaborator.name} has been removed from the case"
       redirect_to investigation_collaborators_path(@investigation)
     else
       render "edit"
@@ -69,7 +70,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.teams_with_edit_access.pluck(:collaborator_id) + [@investigation.owner_team.try(:id)]
+    @investigation.edit_collaborations.where(collaborator_type: "Team").pluck(:collaborator_id)
   end
 
   def edit_params

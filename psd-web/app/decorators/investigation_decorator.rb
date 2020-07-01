@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :complainant, :documents_attachments, :owner, :creator_user, :owner_user, :owner_team
+  decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -108,6 +108,10 @@ class InvestigationDecorator < ApplicationDecorator
     return "documents/restricted_generic_document_card" unless Pundit.policy!(viewing_user, object).view_protected_details?(user: viewing_user)
 
     "documents/generic_document_card"
+  end
+
+  def owner
+    object.owner&.decorate
   end
 
 private

@@ -22,16 +22,15 @@
     <%= form_with model: @edit_access_collaboration, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
       <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @edit_access_collaboration.collaborator_id) } } %>
-
       <% if @edit_access_collaboration.errors.include?(:team) %>
-        <% error_message = { text: @edit_access_collaboration.errors.full_messages_for(:editor).first } %>
+        <% error_message = { text: @edit_access_collaboration.errors.full_messages_for(:collaborator).first } %>
       <% end %>
 
       <%= render "components/govuk_select",
         formGroup: {
           classes: "app-!-autocomplete--max-width-two-thirds"
         },
-        name: "collaboration_edit_access[collaborator_id]",
+        name: "collaboration_access_edit[collaborator_id]",
         id: "team",
         errorMessage: error_message,
         items: team_select_items,
@@ -43,8 +42,7 @@
         show_all_values: true
       %>
 
-      <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.
-</p>
+      <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.</p>
 
       <% message_html = capture do %>
         <%= render "form_components/govuk_textarea",
