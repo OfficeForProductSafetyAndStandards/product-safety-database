@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   before_action :has_accepted_declaration
   before_action :has_viewed_introduction
   before_action :set_cache_headers
+  after_action :log_activity
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
 
@@ -119,5 +120,20 @@ private
 
   def render_404_page
     render "errors/not_found", status: :not_found
+  end
+
+  def log_activity
+    return unless user_signed_in?
+
+    UserActivity.create(
+      action: params[:action],
+      controller: params[:controller],
+      fullpath: request.fullpath,
+      method: request.method,
+      user_id: current_user.id,
+      team_id: current_user.team.id,
+      organisation_id: current_user.team.organisation.id,
+      payload: {}
+    )
   end
 end
