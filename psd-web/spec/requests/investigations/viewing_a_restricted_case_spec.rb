@@ -10,6 +10,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   let(:other_organisation) { create(:organisation) }
   let(:other_team) { create(:team, organisation: other_organisation) }
   let(:other_user) { create(:user, :activated, organisation: other_organisation, team: other_team) }
+  let(:other_user_same_org) { create(:user, :activated, organisation: users_organisation, team: other_team_from_the_same_organisation) }
 
   before do
     sign_in user
@@ -25,11 +26,7 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
   end
 
   context "when another team from the same organisation is the case owner" do
-    let(:investigation) { create(:allegation, is_private: true, creator: user) }
-
-    before do
-      ChangeCaseOwner.call!(investigation: investigation, user: user, owner: other_team_from_the_same_organisation)
-    end
+    let(:investigation) { create(:allegation, is_private: true, creator: other_user_same_org) }
 
     it "displays an forbidden message" do
       expect(response).to have_http_status(:forbidden)
