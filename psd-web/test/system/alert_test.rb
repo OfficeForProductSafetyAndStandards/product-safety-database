@@ -62,9 +62,7 @@ class AlertTest < ApplicationSystemTestCase
   end
 
   def go_to_new_alert_for_investigation(investigation)
-    visit investigation_path(investigation)
-
-    click_link "Send email alert"
+    visit new_investigation_alert_path(investigation)
   end
 
   def fill_in_compose_alert(alert)
