@@ -98,6 +98,11 @@ en:
         body:
           true: "The case is related to the coronavirus outbreak."
           false: "The case is not related to the coronavirus outbreak."
+      update_risk_level:
+        title:
+          set: "Case risk level set to %{level}"
+          changed: "Case risk changed to %{level}"
+          removed: "Case risk level removed"
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"

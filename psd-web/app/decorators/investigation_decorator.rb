@@ -44,13 +44,6 @@ class InvestigationDecorator < ApplicationDecorator
 
   def risk_and_issues_list
     hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
-    risk_level_actions =
-      if object.risk_level.present?
-        [href: h.investigation_risk_level_path(object), visually_hidden_text: "change risk level", text: "Change"]
-      else
-        [href: h.investigation_risk_level_path(object), visually_hidden_text: "set risk level", text: "Set"]
-      end
-
     rows = [
       {
         key: { text: "Case risk level" },
@@ -152,5 +145,13 @@ private
 
   def should_display_received_by?
     false
+  end
+
+  def risk_level_actions
+    if object.risk_level.present?
+      [href: h.investigation_risk_level_path(object), visually_hidden_text: "change risk level", text: "Change"]
+    else
+      [href: h.investigation_risk_level_path(object), visually_hidden_text: "set risk level", text: "Set"]
+    end
   end
 end
