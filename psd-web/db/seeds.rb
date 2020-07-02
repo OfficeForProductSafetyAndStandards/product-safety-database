@@ -523,7 +523,6 @@ if run_seeds
       UserRole.create!(user: user2, name: role)
     end
 
-
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)
   end
