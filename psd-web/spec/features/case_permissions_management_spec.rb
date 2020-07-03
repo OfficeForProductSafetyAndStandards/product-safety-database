@@ -7,7 +7,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
   let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
 
   before do
-    read_only_team.update!(name: "Brummies Trading Standards")
+    read_only_team.update!(name: "Brummy Trading Standards")
     team
   end
 
@@ -80,7 +80,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Brummies Trading Standards Portsmouth Trading Standards Southampton Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Brummy Trading Standards Portsmouth Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 
@@ -104,7 +104,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
       { team_name: "Southampton Trading Standards", permission_level: "Edit full case" },
-      { team_name: "Brummies Trading Standards",    permission_level: "Read only case" }
+      { team_name: "Brummy Trading Standards",    permission_level: "Read only case" }
     ])
 
     click_on "Change Southampton Trading Standards’s permission level"
