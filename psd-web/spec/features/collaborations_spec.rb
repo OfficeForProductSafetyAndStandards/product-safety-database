@@ -1,17 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Collaborations", :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  let(:owner_team) { create :team }
-  let(:user) { create :user, :activated, has_viewed_introduction: true, team: owner_team }
-  let(:editor_team) { create :team, name: "editor" }
-  let(:read_only_team) { create :team, name: "read only"}
-  let(:investigation) { create(:allegation, creator: user) }
+  let(:owner_team)     { create :team }
+  let(:user)           { create :user, :activated, has_viewed_introduction: true, team: owner_team }
+  let(:editor_team)    { create :team, name: "editor" }
+  let(:read_only_team) { create :team, name: "read only" }
+  let(:investigation)  { create(:allegation, creator: user, read_only_teams: read_only_team, edit_access_teams: editor_team) }
 
-  before do
-    sign_in user
-    AddTeamToAnInvestigation.call!(investigation: investigation, current_user: user, include_message: false, collaborator_id: editor_team.id)
-    investigation.read_only_collaborations.create!(collaborator: read_only_team)
-  end
+  before { sign_in user }
 
   it "lists all the teams" do
     visit "/cases/#{investigation.pretty_id}/teams"
