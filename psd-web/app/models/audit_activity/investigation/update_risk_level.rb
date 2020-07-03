@@ -1,12 +1,16 @@
 class AuditActivity::Investigation::UpdateRiskLevel < AuditActivity::Investigation::Base
   I18N_SCOPE = "audit_activity.investigation.update_risk_level".freeze
 
-  def self.from(investigation, action:)
+  def self.from(investigation, action:, source:)
     metadata = build_metadata(investigation, action)
-    super(investigation, nil, nil, metadata)
+    create!(
+      source: source,
+      investigation: investigation,
+      metadata: metadata
+    )
   end
 
-  def self.build_metadata(investigation, action)
+  private_class_method def self.build_metadata(investigation, action)
     {
       risk_level: investigation.risk_level,
       action: action

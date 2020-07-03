@@ -1,10 +1,11 @@
 class ChangeCaseRiskLevel
   include Interactor
 
-  delegate :investigation, :risk_level, :change_action, to: :context
+  delegate :investigation, :risk_level, :user, :change_action, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     context.change_action = risk_level_change_action
     return unless change_action
@@ -33,7 +34,8 @@ private
   def create_audit_activity_for_risk_level_update
     AuditActivity::Investigation::UpdateRiskLevel.from(
       investigation,
-      action: change_action
+      action: change_action,
+      source: UserSource.new(user: user)
     )
   end
 end

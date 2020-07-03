@@ -3,16 +3,25 @@ require "rails_helper"
 RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queue_adapter do
   describe ".call" do
     subject(:result) do
-      described_class.call(investigation: investigation, risk_level: new_risk_level)
+      described_class.call(investigation: investigation, user: user, risk_level: new_risk_level)
     end
 
     let(:previous_risk_level) { nil }
     let(:new_risk_level) { nil }
 
-    let!(:investigation) { create(:enquiry, risk_level: previous_risk_level) }
+    let(:user) { create(:user, :activated) }
+    let!(:investigation) { create(:enquiry, risk_level: previous_risk_level, owner_team: user.team) }
 
     context "with no investigation parameter" do
-      subject(:result) { described_class.call(risk_level: new_risk_level) }
+      subject(:result) { described_class.call(user: user, risk_level: new_risk_level) }
+
+      it "fails" do
+        expect(result).to be_failure
+      end
+    end
+
+    context "with no user parameter" do
+      subject(:result) { described_class.call(investigation: investigation, risk_level: new_risk_level) }
 
       it "fails" do
         expect(result).to be_failure

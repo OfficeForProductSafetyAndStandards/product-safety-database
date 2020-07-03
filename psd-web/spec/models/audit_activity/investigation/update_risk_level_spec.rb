@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::UpdateRiskLevel, :with_stubbed_mailer, :with_stubbed_elasticsearch do
-  subject(:audit_activity) { described_class.from(investigation, action: action) }
+  subject(:audit_activity) { described_class.from(investigation, action: action, source: source) }
 
-  let(:user) { create(:user).decorate }
+  let(:user) { create(:user) }
+  let(:source) { UserSource.new(user: user) }
   let(:investigation) { create(:enquiry, risk_level: "Medium Risk") }
 
   before { User.current = user }
@@ -13,6 +14,7 @@ RSpec.describe AuditActivity::Investigation::UpdateRiskLevel, :with_stubbed_mail
 
     it "creates an audit activity", :aggregate_failures do
       expect(audit_activity).to have_attributes(
+        source: source,
         investigation: investigation,
         metadata: { "action" => action, "risk_level" => "Medium Risk" },
         body: nil
