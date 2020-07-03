@@ -42,13 +42,13 @@ class InvestigationDecorator < ApplicationDecorator
     object.risk_level.to_s
   end
 
-  def risk_and_issues_list
+  def risk_and_issues_list(show_actions = false)
     hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
     rows = [
       {
         key: { text: "Case risk level" },
         value: { text: object.risk_level.presence || "Not set" },
-        actions: risk_level_actions
+        actions: show_actions ? risk_level_actions : []
       },
       object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
       object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
