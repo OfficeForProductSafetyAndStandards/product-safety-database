@@ -1,17 +1,19 @@
 require "rails_helper"
 
 RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:creator_user) { create(:user) }
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: creator_user.team) }
-  let(:investigation) { create(:allegation, creator: creator_user, teams_with_edit_access: [creator_user.team]) }
+  let(:investigation) { create(:allegation) }
+  let(:creator_user) { investigation.creator_user }
+  let(:team_with_access) { create(:team, name: "Team with access") }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
 
   before do
+    AddTeamToAnInvestigation.call!(current_user: user, investigation: investigation, collaborator_id: team_with_access.id, include_message: false)
     sign_in(user)
     delivered_emails.clear
   end
 
   context "when the user does not belong to a team with edit access in the investigation" do
-    let(:user) { create(:user, :activated, has_viewed_introduction: true, team: create(:team, name: "Different team")) }
+    let(:user) { create(:user, :activated, has_viewed_introduction: true, team: create(:team, name: "Team without access")) }
 
     scenario "they cannot set the risk level for the case" do
       visit "/cases/#{investigation.pretty_id}"

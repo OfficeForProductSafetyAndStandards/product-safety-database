@@ -8,9 +8,13 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
 
     let(:previous_risk_level) { nil }
     let(:new_risk_level) { nil }
+    let(:team_with_access) { create(:team, name: "Team with access") }
+    let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
+    let(:investigation) { create(:enquiry, risk_level: previous_risk_level) }
 
-    let(:user) { create(:user, :activated) }
-    let!(:investigation) { create(:enquiry, risk_level: previous_risk_level, owner_team: user.team) }
+    before do
+      AddTeamToAnInvestigation.call!(current_user: user, investigation: investigation, collaborator_id: team_with_access.id, include_message: false)
+    end
 
     context "with no investigation parameter" do
       subject(:result) { described_class.call(user: user, risk_level: new_risk_level) }
