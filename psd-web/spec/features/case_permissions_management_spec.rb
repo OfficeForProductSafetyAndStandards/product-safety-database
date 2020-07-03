@@ -1,31 +1,25 @@
 require "rails_helper"
 
 RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
-  let(:user) do
-    create(
-      :user,
-      :activated,
-      team: create(:team, name: "Portsmouth Trading Standards"),
-      name: "Bob Jones"
-    )
-  end
-
-  let(:investigation) do
-    create(
-      :allegation,
-      creator: user
-    )
-  end
-
-  let(:team) do
-    create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk")
-  end
+  let(:read_only_team) { create(:team) }
+  let(:read_only_user) { create(:user, team: read_only_team) }
+  let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"),name: "Bob Jones") }
+  let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
+  let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
 
   before do
     team
   end
 
   scenario "Adding a team to a case (with validation errors)" do
+    sign_in read_only_user
+
+    visit "/cases/#{investigation.pretty_id}"
+
+    expect(page).not_to have_link("Change teams added to the case")
+
+    sign_out
+
     sign_in user
 
     visit "/cases/#{investigation.pretty_id}"
@@ -69,8 +63,9 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true },
-      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
+      { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
+      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" },
+      { team_name: read_only_team.name,             permission_level: "Read only case" }
     ])
 
     notification_email = delivered_emails.last
@@ -84,7 +79,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Southampton Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Southampton Trading Standards #{read_only_team.name}")
 
     click_link "Activity"
 

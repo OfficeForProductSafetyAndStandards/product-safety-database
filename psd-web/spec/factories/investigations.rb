@@ -13,6 +13,7 @@ FactoryBot.define do
 
     transient do
       creator { create(:user) }
+      read_only_teams { [] }
     end
 
     factory :allegation, class: "Investigation::Allegation" do
@@ -101,6 +102,12 @@ FactoryBot.define do
     # constraints on pretty_id need to be satisfied
     before(:create) do |investigation, options|
       CreateCase.call(investigation: investigation, user: options.creator)
+    end
+
+    after(:create) do |investigation, evaluator|
+      Array.wrap(evaluator.read_only_teams).each do |read_only_team|
+        investigation.read_only_collaborations.create!(collaborator: read_only_team)
+      end
     end
   end
 end
