@@ -301,6 +301,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: product_name)
   end
 
+  def expect_to_be_on_edit_product_page(product_id: nil, product_name: nil)
+    expect(page).to have_current_path("/products/#{product_id}/edit")
+    expect(page).to have_selector("h1", text: product_name)
+  end
+
   # Shared pages across different flows
   def expect_to_be_on_coronavirus_page(path)
     expect(page).to have_current_path(path)
