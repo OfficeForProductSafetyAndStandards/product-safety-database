@@ -20,7 +20,7 @@ private
 
     {
       change_case_status: action_label("change_case_status.#{case_status}"),
-      reassign: action_label(:reassign),
+      change_case_owner: action_label(:change_case_owner),
       change_case_visibility: action_label("change_case_visibility.#{visibility_status}")
     }
   end

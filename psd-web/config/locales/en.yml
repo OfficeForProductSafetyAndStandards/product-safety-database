@@ -137,7 +137,7 @@ en:
   forms:
     investigation_actions:
       actions:
-        reassign: "Reassign this case"
+        change_case_owner: "Change case owner"
         change_case_status:
           open: "Close case"
           closed: "Reopen case"

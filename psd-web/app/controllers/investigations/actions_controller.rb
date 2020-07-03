@@ -29,7 +29,7 @@ module Investigations
       case action
       when "change_case_status"
         status_investigation_path(@investigation)
-      when "reassign"
+      when "change_case_owner"
         new_investigation_ownership_path(@investigation)
       when "change_case_visibility"
         visibility_investigation_path(@investigation)

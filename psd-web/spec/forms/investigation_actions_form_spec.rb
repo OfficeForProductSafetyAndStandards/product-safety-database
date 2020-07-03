@@ -28,7 +28,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       it "contains three possible actions" do
         expect(form.actions).to eq({
           change_case_status: "Close case",
-          reassign: "Reassign this case",
+          change_case_owner: "Change case owner",
           change_case_visibility: "Restrict this case"
         })
       end
@@ -45,7 +45,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       it "contains three actions with alternative labels" do
         expect(form.actions).to eq({
           change_case_status: "Reopen case",
-          reassign: "Reassign this case",
+          change_case_owner: "Change case owner",
           change_case_visibility: "Unrestrict this case"
         })
       end
@@ -59,7 +59,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       it "contains four possible actions" do
         expect(form.actions).to eq({
           change_case_status: "Close case",
-          reassign: "Reassign this case",
+          change_case_owner: "Change case owner",
           change_case_visibility: "Restrict this case",
           send_email_alert: "Send email alert"
         })
