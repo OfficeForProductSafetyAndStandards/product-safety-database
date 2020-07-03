@@ -2,46 +2,32 @@ require "rails_helper"
 
 # rubocop:disable RSpec/MultipleExpectations
 RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
-  let(:investigation) { create(:allegation, :with_document, creator: user) }
+  let(:read_only_team) { create(:team) }
+  let(:read_only_user) { create(:user, :activated, has_viewed_introduction: true, team: read_only_team) }
+  let(:user)           { create(:user, :activated, has_viewed_introduction: true) }
+  let(:investigation)  { create(:allegation, :with_document, creator: user, read_only_teams: read_only_team) }
 
   include_context "with all types of supporting information"
 
   context "when the team from the user viewing the information owns the investigation" do
-    before { sign_in user }
-
     scenario "listing supporting information" do
+      sign_in read_only_user
+
       visit "/cases/#{investigation.pretty_id}"
 
       click_on "Supporting information (6)"
 
-      within page.first("table") do
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: email.supporting_information_title)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceEmail")
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_added)
+      expect_to_view_supporting_information_table
 
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: phone_call.supporting_information_title)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondencePhone call")
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_added)
+      sign_out
 
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: meeting.supporting_information_title)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceMeeting")
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_added)
+      sign_in user
 
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: corrective_action.supporting_information_title)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.supporting_information_type)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_added)
+      visit "/cases/#{investigation.pretty_id}"
 
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: test_result.supporting_information_title)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
-        expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
-      end
+      click_on "Supporting information (6)"
+
+      expect_to_view_supporting_information_table
 
       select "Title", from: "sort_by"
       click_on "Sort"
