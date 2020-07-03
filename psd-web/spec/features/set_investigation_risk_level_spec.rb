@@ -54,12 +54,19 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     investigation.update!(risk_level: "Medium Risk")
     visit "/cases/#{investigation.pretty_id}"
 
-    # Change risk level to a custom one
+    # Selecting Other and leaving the input field empty causes a validation error
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(find_field("Medium Risk")).to be_checked
-    choose "Other"
+    expect(page).to have_checked_field("Medium Risk")
+    choose("Other")
+    click_button "Set risk level"
+
+    expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
+    expect(page).to have_summary_error("Set a risk level")
+    expect(page).to have_checked_field("Other")
+
+    # Fill the field with a custom risk level
     fill_in "Other risk level", with: "Mildly risky"
     click_button "Set risk level"
 
@@ -80,46 +87,18 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
       verb_with_level: "changed to mildly risky",
     )
 
-    # Selecting Other and leaving the input field empty sets the risk level as unset
+    # Selecting Other and introducing a level that matches one of the other options
+    # will result in the other option being pre-selected when changing risk level
+    # in the future
     click_link "Overview"
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Other")
-    expect(page).to have_field("Other risk level", with: "Mildly risky")
-    fill_in "Other risk level", with: ""
-    click_button "Set risk level"
-
-    expect_confirmation_banner("Risk level removed on allegation")
-    expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Not set")
-
-    # Risk level removal reflected in audit activity log
-    click_link "Activity"
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk level removed")
-
-    # Case creator receives an email with the update
-    email = delivered_emails.last
-    expect(email.recipient).to eq creator_user.email
-    expect(email.personalization).to include(
-      name: creator_user.name,
-      verb_with_level: "removed",
-    )
-
-    # Selecting Other and introducing a level that matches one of the other options
-    # will result in the other option being pre-selected when changing risk level
-    # in the future
-    click_link "Overview"
-    click_set_risk_level_link
-
-    expect_to_be_on_set_risk_level_page(case_id: investigation.pretty_id)
-    expect(page).to have_checked_field("Not set")
-    choose "Other"
     fill_in "Other risk level", with: "Low Risk"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Risk level set on allegation")
+    expect_confirmation_banner("Risk level changed on allegation")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Low Risk")
 
