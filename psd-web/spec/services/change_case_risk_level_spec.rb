@@ -47,31 +47,50 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
 
     context "when the previous risk level was not set" do
       let(:previous_risk_level) { nil }
-      let(:new_risk_level) { "Low Risk" }
 
-      it "succeeds" do
-        expect(result).to be_success
+      context "with a different new risk level" do
+        let(:new_risk_level) { "Low Risk" }
+
+        it "succeeds" do
+          expect(result).to be_success
+        end
+
+        it "sets the risk level for the investigation" do
+          expect { result }.to change(investigation, :risk_level).from(previous_risk_level).to(new_risk_level)
+        end
+
+        it "creates a new activity for the risk level being set", :aggregate_failures do
+          expect { result }.to change(Activity, :count).by(1)
+          activity = investigation.reload.activities.first
+          expect(activity).to be_a(AuditActivity::Investigation::UpdateRiskLevel)
+          expect(activity.metadata).to include("risk_level" => new_risk_level, "action" => "set")
+        end
+
+        it "sends an email for the risk level being set" do
+          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
+            email: investigation.creator_user.email,
+            name: investigation.creator_user.name,
+            investigation: investigation,
+            action: "set",
+            level: new_risk_level
+          )
+        end
       end
 
-      it "sets the risk level for the investigation" do
-        expect { result }.to change(investigation, :risk_level).from(previous_risk_level).to(new_risk_level)
-      end
+      context "with empty new risk level" do
+        let(:new_risk_level) { "" }
 
-      it "creates a new activity for the risk level being set", :aggregate_failures do
-        expect { result }.to change(Activity, :count).by(1)
-        activity = investigation.reload.activities.first
-        expect(activity).to be_a(AuditActivity::Investigation::UpdateRiskLevel)
-        expect(activity.metadata).to include("risk_level" => new_risk_level, "action" => "set")
-      end
+        it "succeeds" do
+          expect(result).to be_success
+        end
 
-      it "sends an email for the risk level being set" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
-          email: investigation.creator_user.email,
-          name: investigation.creator_user.name,
-          investigation: investigation,
-          action: "set",
-          level: new_risk_level
-        )
+        it "does not create a new activity" do
+          expect { result }.not_to change(Activity, :count)
+        end
+
+        it "does not send an email" do
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :case_risk_level_updated)
+        end
       end
     end
 

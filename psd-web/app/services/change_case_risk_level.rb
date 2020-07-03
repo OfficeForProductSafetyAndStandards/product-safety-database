@@ -20,7 +20,7 @@ class ChangeCaseRiskLevel
 private
 
   def risk_level_change_action
-    if investigation.risk_level == risk_level
+    if investigation.risk_level.to_s == risk_level.to_s
       nil
     elsif investigation.risk_level.blank?
       "set"
