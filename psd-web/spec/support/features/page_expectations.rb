@@ -296,9 +296,9 @@ module PageExpectations
     expect(page).to have_link("Back", href: "/products/#{product.id}#attachments")
   end
 
-  def expect_to_be_on_product_page
-    expect(page).to have_current_path("/products/#{product.id}")
-    expect(page).to have_selector("h1", text: product.name)
+  def expect_to_be_on_product_page(product_id:, product_name:)
+    expect(page).to have_current_path("/products/#{product_id}")
+    expect(page).to have_selector("h1", text: product_name)
   end
 
   # Shared pages across different flows
