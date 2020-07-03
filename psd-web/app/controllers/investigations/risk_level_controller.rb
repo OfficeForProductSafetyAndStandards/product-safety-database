@@ -14,7 +14,7 @@ module Investigations
 
       result = ChangeCaseRiskLevel.call(investigation: @investigation, user: current_user, risk_level: @risk_level_form.risk_level.presence)
       if result.success?
-        flash[:success] = I18n.t(".success", scope: "investigations.risk_level", action: result.change_action, case_type: @investigation.case_type)
+        flash[:success] = I18n.t(".success", scope: "investigations.risk_level", action: result.change_action, case_type: @investigation.case_type) if result.change_action.present?
         redirect_to investigation_path(@investigation)
       else
         flash[:error] = I18n.t(".error", scope: "investigations.risk_level", action: result.change_action)
