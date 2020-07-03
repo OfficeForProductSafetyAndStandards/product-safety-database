@@ -22,7 +22,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
   describe "#actions" do
     context "when the user is the owner of the investigation but not an OPSS user" do
       let(:user) { create(:user, :activated) }
-      let(:investigation) { create(:allegation, owner_team: user.team, owner_user: nil) }
+      let(:investigation) { create(:allegation, creator: user) }
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
       it "contains three possible actions" do
@@ -37,8 +37,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
     context "when the case is closed and restricted" do
       let(:user) { create(:user, :activated) }
       let(:investigation) do
-        create(:allegation, :restricted, :closed,
-               owner_team: user.team, owner_user: nil)
+        create(:allegation, :restricted, :closed, creator: user)
       end
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
@@ -53,7 +52,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
 
     context "when the user is the owner of the investigation and is an OPSS user" do
       let(:user) { create(:user, :activated, :opss_user) }
-      let(:investigation) { create(:allegation, owner_team: user.team, owner_user: nil) }
+      let(:investigation) { create(:allegation, creator: user) }
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
       it "contains four possible actions" do
