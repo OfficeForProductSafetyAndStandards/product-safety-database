@@ -31,6 +31,10 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
 
     expect_to_be_on_compose_alert_for_case_page(case_id: investigation.pretty_id)
 
+    # Check that the 2 fields are pre-filled with the default values
+    expect(find_field("Alert subject").value).to eq("Product safety alert: ")
+    expect(find_field("Alert summary").value).to include("More details can be found on the case page: http://www.example.com/cases/#{investigation.pretty_id}")
+
     fill_in "Alert subject", with: "Important safety alert"
     fill_in "Alert summary", with: "Please review this case"
 
