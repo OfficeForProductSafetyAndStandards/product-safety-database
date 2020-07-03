@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+  include_context "with read only team and user"
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
-  let(:investigation) { create(:allegation, products: [product], creator: user) }
+  let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
   let(:summary) { Faker::Lorem.sentence }
   let(:date) { Date.parse("2020-05-01") }
@@ -15,10 +16,19 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:duration) { "Permanent" }
   let(:geographic_scope) { "National" }
 
-  before { sign_in(user) }
+  context "when the viewing user only has read only access" do
+    scenario "cannot add supporting information" do
+      sign_in(read_only_user)
+      visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+      expect(page).not_to have_link("Add supporting information")
+    end
+  end
 
   scenario "Adding a corrective action (with validation errors)" do
-    visit "/cases/#{investigation.pretty_id}"
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
 
     click_link "Add new"
     expect_to_be_on_add_supporting_information_page
