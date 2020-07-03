@@ -265,18 +265,6 @@ module InvestigationsHelper
         text: "Change",
         visuallyHiddenText: "coronavirus status"
       }
-    else
-      activity_actions[:items] << {
-        href: new_investigation_activity_comment_path(investigation),
-        text: "Add comment"
-      }
-    end
-
-    if policy(investigation).send_email_alert?(user: user)
-      activity_actions[:items] << {
-        href: new_investigation_alert_path(investigation),
-        text: "Send email alert"
-      }
     end
 
     if policy(investigation).change_owner_or_status?(user: user)

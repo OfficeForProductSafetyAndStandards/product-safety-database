@@ -19,7 +19,14 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
   scenario "Sending an alert about a case to 2 active users" do
     visit investigation_path(investigation)
 
-    click_link "Send email alert"
+    click_link "Actions"
+    expect_to_be_on_case_actions_page(case_id: investigation.pretty_id)
+
+    within_fieldset "Select an action" do
+      choose "Send email alert"
+    end
+    click_button "Continue"
+
     click_link "Compose new alert"
 
     expect_to_be_on_compose_alert_for_case_page(case_id: investigation.pretty_id)
@@ -73,7 +80,13 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
   scenario "Being unable to send an alert about a restricted case" do
     visit investigation_path(restricted_investigation)
 
-    click_link "Send email alert"
+    click_link "Actions"
+    expect_to_be_on_case_actions_page(case_id: restricted_investigation.pretty_id)
+
+    within_fieldset "Select an action" do
+      choose "Send email alert"
+    end
+    click_button "Continue"
 
     expect_to_be_on_about_alerts_page(case_id: restricted_investigation.pretty_id)
     expect(page).to have_text("Email alerts can only be sent for cases that are not restricted. To send an alert about this case you need to unrestrict it.")

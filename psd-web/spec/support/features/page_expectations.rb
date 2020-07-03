@@ -89,6 +89,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "What type of information are you adding?")
   end
 
+  def expect_to_be_on_case_actions_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/actions")
+    expect(page).to have_selector("h1", text: "Select an action")
+  end
+
   def expect_to_be_on_add_correspondence_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/correspondence/new")
     expect(page).to have_selector("h1", text: "What type of correspondence are you adding?")
