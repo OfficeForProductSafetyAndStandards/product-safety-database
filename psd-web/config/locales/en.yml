@@ -81,7 +81,6 @@ en:
         submit_button: "Set risk level"
         hint: "Case risk level"
       success: "Risk level %{action} on %{case_type}"
-      error: "Attempt to get risk level %{action} failed"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
