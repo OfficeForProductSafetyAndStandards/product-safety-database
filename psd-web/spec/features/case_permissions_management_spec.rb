@@ -1,15 +1,13 @@
 require "rails_helper"
 
 RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
-  let(:read_only_team) { create(:team) }
-  let(:read_only_user) { create(:user, team: read_only_team) }
+  let(:read_only_team) { create(:team, name: "Brummies Trading Standards") }
+  let(:read_only_user) { create(:user, :activated, has_viewed_introduction: true, team: read_only_team) }
+  let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"),name: "Bob Jones") }
   let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
-  let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
 
-  before do
-    team
-  end
+  before { team }
 
   scenario "Adding a team to a case (with validation errors)" do
     sign_in read_only_user
@@ -17,6 +15,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     visit "/cases/#{investigation.pretty_id}"
 
     expect(page).not_to have_link("Change teams added to the case")
+    expect(page).to have_link("View teams added to the case")
 
     sign_out
 
@@ -79,7 +78,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Southampton Trading Standards #{read_only_team.name}")
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Brummies Trading Standards Portsmouth Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 
@@ -101,8 +100,9 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_to_be_on_teams_page(case_id: investigation.pretty_id)
 
     expect_teams_tables_to_contain([
-      { team_name: "Portsmouth Trading Standards", permission_level: "Case owner", creator: true },
-      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" }
+      { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
+      { team_name: "Southampton Trading Standards", permission_level: "Edit full case" },
+      { team_name: "Brummies Trading Standards",    permission_level: "Read only case" }
     ])
 
     click_on "Change"
