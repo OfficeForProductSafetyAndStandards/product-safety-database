@@ -10,5 +10,5 @@ task "db:schema:dump": "strong_migrations:alphabetize_columns"
 
 namespace :test do
   desc "Run all the tests"
-  task all: ["spec", "test"]
+  task all: %w[spec test]
 end
