@@ -1,13 +1,15 @@
 require "rails_helper"
 
 RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
-  let(:read_only_team) { create(:team, name: "Brummies Trading Standards") }
-  let(:read_only_user) { create(:user, :activated, has_viewed_introduction: true, team: read_only_team) }
+  include_context "with read only team and user"
   let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"),name: "Bob Jones") }
   let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
 
-  before { team }
+  before do
+    read_only_team.update!(name: "Brummies Trading Standards")
+    team
+  end
 
   scenario "Adding a team to a case (with validation errors)" do
     sign_in read_only_user
@@ -105,7 +107,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
       { team_name: "Brummies Trading Standards",    permission_level: "Read only case" }
     ])
 
-    click_on "Change"
+    click_on "Change Southampton Trading Standards’s permission level"
 
     expect_to_be_on_edit_case_permissions_page(case_id: investigation.pretty_id)
 
