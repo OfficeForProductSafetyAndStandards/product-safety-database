@@ -29,12 +29,12 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     click_set_risk_level_link
 
     expect_to_be_on_set_risk_level_page(case_id: investigation.pretty_id)
-    choose "Medium Risk"
+    choose "Medium risk"
     click_button "Set risk level"
 
     expect_confirmation_banner("Risk level set on allegation")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Medium Risk")
+    expect(page).to have_summary_item(key: "Case risk level", value: "Medium risk")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
@@ -51,14 +51,14 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
   end
 
   scenario "Changing risk level for an investigation" do
-    investigation.update!(risk_level: "Medium Risk")
+    investigation.update!(risk_level: "Medium risk")
     visit "/cases/#{investigation.pretty_id}"
 
     # Selecting Other and leaving the input field empty causes a validation error
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(page).to have_checked_field("Medium Risk")
+    expect(page).to have_checked_field("Medium risk")
     choose("Other")
     click_button "Set risk level"
 
@@ -95,17 +95,17 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("Other")
-    fill_in "Other risk level", with: "Low Risk"
+    fill_in "Other risk level", with: "Low risk"
     click_button "Set risk level"
 
     expect_confirmation_banner("Risk level changed on allegation")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Low Risk")
+    expect(page).to have_summary_item(key: "Case risk level", value: "Low risk")
 
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(find_field("Low Risk")).to be_checked
+    expect(find_field("Low risk")).to be_checked
   end
 
   def risk_level_actions_in_overview

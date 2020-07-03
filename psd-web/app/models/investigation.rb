@@ -14,7 +14,7 @@ class Investigation < ApplicationRecord
     safe_and_compliant: "safe_and_compliant"
   }
 
-  STANDARD_RISK_LEVELS = ["Serious Risk", "High Risk", "Medium Risk", "Low Risk"].freeze
+  STANDARD_RISK_LEVELS = ["Serious risk", "High risk", "Medium risk", "Low risk"].freeze
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
 

@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::Investigation::UpdateRiskLevel, :with_stubbed_mail
 
   let(:user) { create(:user) }
   let(:source) { UserSource.new(user: user) }
-  let(:investigation) { create(:enquiry, risk_level: "Medium Risk") }
+  let(:investigation) { create(:enquiry, risk_level: "Medium risk") }
 
   before { User.current = user }
 
@@ -16,7 +16,7 @@ RSpec.describe AuditActivity::Investigation::UpdateRiskLevel, :with_stubbed_mail
       expect(audit_activity).to have_attributes(
         source: source,
         investigation: investigation,
-        metadata: { "action" => action, "risk_level" => "Medium Risk" },
+        metadata: { "action" => action, "risk_level" => "Medium risk" },
         body: nil
       )
     end

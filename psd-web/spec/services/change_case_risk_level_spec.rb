@@ -33,7 +33,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     end
 
     context "when the previous risk level and the new risk level are the same" do
-      let(:previous_risk_level) { "Low Risk" }
+      let(:previous_risk_level) { "Low risk" }
       let(:new_risk_level) { previous_risk_level }
 
       it "succeeds" do
@@ -53,7 +53,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
       let(:previous_risk_level) { nil }
 
       context "with a different new risk level" do
-        let(:new_risk_level) { "Low Risk" }
+        let(:new_risk_level) { "Low risk" }
 
         it "succeeds" do
           expect(result).to be_success
@@ -99,10 +99,10 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     end
 
     context "when the previous risk level was previously set" do
-      let(:previous_risk_level) { "Low Risk" }
+      let(:previous_risk_level) { "Low risk" }
 
       context "with a different new risk level" do
-        let(:new_risk_level) { "Medium Risk" }
+        let(:new_risk_level) { "Medium risk" }
 
         it "succeeds" do
           expect(result).to be_success

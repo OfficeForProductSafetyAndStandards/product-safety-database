@@ -100,7 +100,7 @@ RSpec.describe RiskLevelForm do
     end
 
     context "when risk level is set to any of the standard levels" do
-      let(:risk_level) { "Low Risk" }
+      let(:risk_level) { "Low risk" }
 
       context "with risk_level_other" do
         let(:risk_level_other) { "custom risk" }
