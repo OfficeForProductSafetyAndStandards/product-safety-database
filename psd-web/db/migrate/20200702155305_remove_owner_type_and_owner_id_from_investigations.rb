@@ -1,6 +1,8 @@
-class RemoveOwnerTypeAndOwnerIdFromInvestigation < ActiveRecord::Migration[5.2]
+class RemoveOwnerTypeAndOwnerIdFromInvestigations < ActiveRecord::Migration[5.2]
   def change
-    remove_column :investigations, :owner_id
-    remove_column :investigations, :owner_type
+    safety_assured do
+      remove_column :investigations, :owner_id
+      remove_column :investigations, :owner_type
+    end
   end
 end
