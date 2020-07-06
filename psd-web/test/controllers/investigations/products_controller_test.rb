@@ -10,6 +10,9 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
       added_by_user: users(:southampton)
     )
     @investigation.creator_user = users(:southampton)
+    @investigation.create_owner_team_collaboration!(
+      collaborator: teams(:southampton_team)
+    )
     @product = products(:iphone)
     @product.source = sources(:product_iphone)
   end

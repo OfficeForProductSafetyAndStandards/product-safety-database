@@ -147,6 +147,18 @@ en:
       email_address:
         invalid: "Enter an email address in the correct format, like name@example.com"
 
+  forms:
+    investigation_actions:
+      actions:
+        change_case_owner: "Change case owner"
+        change_case_status:
+          open: "Close case"
+          closed: "Reopen case"
+        change_case_visibility:
+          restricted: "Unrestrict this case"
+          not_restricted: "Restrict this case"
+        send_email_alert: "Send email alert"
+
   activemodel:
     errors:
       models:
@@ -159,6 +171,10 @@ en:
           attributes:
             type:
               blank: "Select the type of correspondence you’re adding"
+        investigation_actions_form:
+          attributes:
+            action:
+              blank: "Select an action"
         edit_investigation_collaborator_form:
           attributes:
             include_message:

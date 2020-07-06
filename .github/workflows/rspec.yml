@@ -62,9 +62,6 @@ jobs:
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
 
-    - name: Install Chromedriver
-      run: wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin && sudo chmod +x /usr/bin/chromedriver
-
     - uses: actions/cache@v1
       with:
         path: psd-web/vendor/bundle
