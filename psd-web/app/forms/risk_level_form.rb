@@ -10,12 +10,12 @@ class RiskLevelForm
   attribute :risk_level, :string, default: nil
   attribute :risk_level_other, :string, default: nil
 
-  validate :risk_level_allowed
-  validate :risk_level_other_present
+  validate :risk_level_allowed_validation
+  validate :risk_level_other_present_validation
 
   def initialize(attributes)
-    @original_level = attributes[:risk_level]
-    @original_level_other = attributes[:risk_level_other]
+    @original_level = normalise(attributes[:risk_level])
+    @original_level_other = normalise(attributes[:risk_level_other])
     attrs = set_attributes
     super(attrs)
   end
@@ -35,14 +35,14 @@ private
     attrs
   end
 
-  def risk_level_allowed
-    if original_level.present? && !ALLOWED_LEVELS.include?(original_level)
+  def risk_level_allowed_validation
+    if original_level.present? && !matching_level_in_list(original_level, ALLOWED_LEVELS)
       errors.add(:risk_level, :not_allowed)
       restore_originals
     end
   end
 
-  def risk_level_other_present
+  def risk_level_other_present_validation
     if original_level == OTHER && original_level_other.blank?
       errors.add(:risk_level_other, :blank)
       restore_originals
@@ -50,11 +50,27 @@ private
   end
 
   def set_other_from_risk_level?
-    original_level.present? && !Investigation::STANDARD_RISK_LEVELS.include?(original_level)
+    original_level.present? && !matching_level_in_list(original_level, Investigation::STANDARD_RISK_LEVELS)
   end
 
   def restore_originals
     self.risk_level = original_level
     self.risk_level_other = original_level_other
+  end
+
+  def equal_levels?(first_level, second_level)
+    first_level.delete(" ").casecmp(
+      second_level.delete(" ")
+    ).zero?
+  end
+
+  def matching_level_in_list(level, list)
+    return if level.blank?
+
+    list.find { |elem| equal_levels?(elem, level) }
+  end
+
+  def normalise(level)
+    matching_level_in_list(level, Investigation::STANDARD_RISK_LEVELS).presence || level
   end
 end

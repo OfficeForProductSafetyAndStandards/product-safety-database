@@ -6,23 +6,51 @@ RSpec.describe RiskLevelForm do
   describe "#initialize" do
     context "when risk level is set as 'other'" do
       let(:risk_level) { "other" }
-      let(:risk_level_other) { "very very risky" }
 
-      it "sets 'risk_level' attribute from 'risk_level_other'" do
-        expect(form.risk_level).to eq risk_level_other
+      context "with a 'risk_level_other' that does not match a standard level" do
+        let(:risk_level_other) { "very very risky" }
+
+        it "sets 'risk_level' attribute from 'risk_level_other'" do
+          expect(form.risk_level).to eq risk_level_other
+        end
+
+        it "discards the value for 'risk_level_other' attribute" do
+          expect(form.risk_level_other).to be_nil
+        end
       end
 
-      it "discards the value for 'risk_level_other' attribute" do
-        expect(form.risk_level_other).to be_nil
+      context "with a 'risk_level_other' that matches  with space/capital variations a standard level" do
+        let(:risk_level_other) { Investigation::STANDARD_RISK_LEVELS.first.upcase + "  " }
+
+        it "sets 'risk_level' attribute as the standard level matching the 'risk_level_other'" do
+          expect(form.risk_level).to eq Investigation::STANDARD_RISK_LEVELS.first
+        end
+
+        it "discards the value for 'risk_level_other' attribute" do
+          expect(form.risk_level_other).to be_nil
+        end
       end
     end
 
-    context "when risk level belongs to the list of standard ones" do
+    context "when risk level exactly matches a standard level" do
       let(:risk_level) { Investigation::STANDARD_RISK_LEVELS.first }
       let(:risk_level_other) { "whatever level" }
 
       it "keeps the value for risk level attribute" do
         expect(form.risk_level).to eq risk_level
+      end
+
+      it "deletes the value for 'risk_level_other' attribute" do
+        expect(form.risk_level_other).to be_nil
+      end
+    end
+
+    context "when risk level matches with space/capital variations a standard level" do
+      let(:risk_level) { Investigation::STANDARD_RISK_LEVELS.first.upcase + "  " }
+      let(:risk_level_other) { "whatever level" }
+
+      it "normalises the value for risk level attribute" do
+        expect(form.risk_level).to eq Investigation::STANDARD_RISK_LEVELS.first
       end
 
       it "deletes the value for 'risk_level_other' attribute" do
