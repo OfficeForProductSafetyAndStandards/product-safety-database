@@ -1,6 +1,6 @@
 class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigation::Base
   I18N_SCOPE = "audit_activity.investigation.risk_level_updated".freeze
-  SUBTITLE_SLUG="Risk level changed".freeze
+  SUBTITLE_SLUG = "Risk level changed".freeze
 
   def self.from(*)
     raise "Deprecated - use .create_for! instead"
