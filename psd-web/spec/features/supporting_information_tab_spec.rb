@@ -1,6 +1,4 @@
 require "rails_helper"
-
-# rubocop:disable RSpec/MultipleExpectations
 RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   include_context "with read only team and user"
   let(:user)           { create(:user, :activated, has_viewed_introduction: true) }
@@ -52,4 +50,3 @@ RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :wit
     end
   end
 end
-# rubocop:enable RSpec/MultipleExpectations

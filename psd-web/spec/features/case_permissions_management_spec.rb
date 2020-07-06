@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify do
   include_context "with read only team and user"
   let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
-  let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"),name: "Bob Jones") }
+  let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
 
   before do
@@ -104,7 +104,7 @@ RSpec.feature "Case permissions management", :with_stubbed_elasticsearch, :with_
     expect_teams_tables_to_contain([
       { team_name: "Portsmouth Trading Standards",  permission_level: "Case owner", creator: true },
       { team_name: "Southampton Trading Standards", permission_level: "Edit full case" },
-      { team_name: "Brummy Trading Standards",    permission_level: "Read only case" }
+      { team_name: "Brummy Trading Standards", permission_level: "Read only case" }
     ])
 
     click_on "Change Southampton Trading Standards’s permission level"
