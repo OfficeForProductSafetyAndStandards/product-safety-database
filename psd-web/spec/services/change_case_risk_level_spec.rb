@@ -8,7 +8,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
 
     let(:previous_risk_level) { nil }
     let(:new_risk_level) { nil }
-    let(:team_with_access) { create(:team, name: "Team with access") }
+    let(:creator_team) { investigation.creator_user.team }
+    let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
     let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
     let(:investigation) { create(:enquiry, risk_level: previous_risk_level) }
 
@@ -72,8 +73,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
 
         it "sends an email for the risk level being set" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
-            email: investigation.creator_user.email,
-            name: investigation.creator_user.name,
+            email: creator_team.team_recipient_email,
+            name: creator_team.name,
             investigation: investigation,
             action: "set",
             level: new_risk_level
@@ -121,8 +122,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
 
         it "sends an email for the change" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
-            email: investigation.creator_user.email,
-            name: investigation.creator_user.name,
+            email: creator_team.team_recipient_email,
+            name: creator_team.name,
             investigation: investigation,
             action: "changed",
             level: new_risk_level
@@ -150,8 +151,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
 
         it "sends an email for the removal" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
-            email: investigation.creator_user.email,
-            name: investigation.creator_user.name,
+            email: creator_team.team_recipient_email,
+            name: creator_team.name,
             investigation: investigation,
             action: "removed",
             level: nil

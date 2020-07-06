@@ -15,6 +15,7 @@ class ChangeCaseRiskLevel
       investigation.save!
       create_audit_activity_for_risk_level_update
     end
+    send_notification_email
   end
 
 private
@@ -37,5 +38,31 @@ private
       action: change_action,
       source: UserSource.new(user: user)
     )
+  end
+
+  def entities_to_notify
+    entities = []
+    investigation.teams_with_access.each do |team|
+      if team.team_recipient_email.present?
+        entities << team
+      else
+        users_from_team = team.users.active
+        entities.concat(users_from_team)
+      end
+    end
+    entities.uniq - [context.user]
+  end
+
+  def send_notification_email
+    entities_to_notify.each do |entity|
+      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
+      NotifyMailer.case_risk_level_updated(
+        email: email,
+        name: entity.name,
+        investigation: investigation,
+        action: change_action,
+        level: risk_level
+      ).deliver_later
+    end
   end
 end

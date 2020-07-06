@@ -33,16 +33,6 @@ private
     SUBTITLE_SLUG
   end
 
-  def notify_relevant_users
-    entities_to_notify.each do |entity|
-      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
-      NotifyMailer.case_risk_level_updated(
-        email: email,
-        name: entity.name,
-        investigation: investigation,
-        action: metadata["action"],
-        level: metadata["new_risk_level"]
-      ).deliver_later
-    end
-  end
+  # Do not send investigation_updated mail. This is handled by the ChangeCaseOwner service
+  def notify_relevant_users; end
 end

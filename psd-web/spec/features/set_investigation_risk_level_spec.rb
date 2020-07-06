@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:investigation) { create(:allegation) }
-  let(:creator_user) { investigation.creator_user }
-  let(:team_with_access) { create(:team, name: "Team with access") }
+  let(:creator_team) { investigation.creator_user.team }
+  let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
 
   before do
@@ -41,11 +41,11 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect(page).to have_css("h3", text: "Case risk level set to medium risk")
 
-    # Case creator receives an email with the update
+    # Teams/users with access receive an email with the update
     email = delivered_emails.last
-    expect(email.recipient).to eq creator_user.email
+    expect(email.recipient).to eq creator_team.team_recipient_email
     expect(email.personalization).to include(
-      name: creator_user.name,
+      name: creator_team.name,
       verb_with_level: "set to medium risk",
     )
   end
@@ -79,11 +79,11 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect(page).to have_css("h3", text: "Case risk changed to mildly risky")
 
-    # Case creator receives an email with the update
+    # Teams/users with access receive an email with the update
     email = delivered_emails.last
-    expect(email.recipient).to eq creator_user.email
+    expect(email.recipient).to eq creator_team.team_recipient_email
     expect(email.personalization).to include(
-      name: creator_user.name,
+      name: creator_team.name,
       verb_with_level: "changed to mildly risky",
     )
 
