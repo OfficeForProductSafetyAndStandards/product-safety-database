@@ -32,7 +32,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     choose "Medium risk"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Risk level set on allegation")
+    expect_confirmation_banner("Case risk level set to medium risk")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Medium risk")
 
@@ -70,7 +70,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     fill_in "Other risk level", with: "Mildly risky"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Risk level changed on allegation")
+    expect_confirmation_banner("Case risk level changed to mildly risky")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Mildly risky")
 
@@ -98,7 +98,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     fill_in "Other risk level", with: "Low risk"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Risk level changed on allegation")
+    expect_confirmation_banner("Case risk level changed to low risk")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Low risk")
 
