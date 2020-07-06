@@ -4,4 +4,10 @@ class Investigations::CorrectiveActionsController < ApplicationController
     authorize @investigation, :view_non_protected_details?
     @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
   end
+
+  def edit
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :view_non_protected_details?
+    @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
+  end
 end

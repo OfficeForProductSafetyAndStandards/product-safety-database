@@ -40,4 +40,8 @@
       <% end %>
     </div>
   <% end %>
+
+  <% if policy(@investigation).update? %>
+    <p class="govuk-body"><%= link_to "Edit corrective action", edit_investigation_action_path(@investigation, @corrective_action), class: "govuk-link" %></p>
+  <% end %>
 </div>
