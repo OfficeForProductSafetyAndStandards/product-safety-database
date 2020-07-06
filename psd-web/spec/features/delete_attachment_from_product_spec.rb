@@ -10,7 +10,7 @@ RSpec.feature "Deleting an attachment from a product", :with_stubbed_elasticsear
   scenario "deletes the attachment" do
     visit "/products/#{product.id}"
 
-    expect_to_be_on_product_page
+    expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
 
     click_link "Attachments"
 
@@ -23,7 +23,7 @@ RSpec.feature "Deleting an attachment from a product", :with_stubbed_elasticsear
 
     click_button "Delete attachment"
 
-    expect_to_be_on_product_page
+    expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
 
     click_link "Attachments"
 

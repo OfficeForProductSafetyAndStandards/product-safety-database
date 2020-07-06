@@ -58,8 +58,8 @@ class User < ApplicationRecord
     RequestStore.store[:current_user] = user
   end
 
-  def has_gdpr_access?(other_user)
-    other_user.organisation == organisation
+  def in_same_team_as?(user)
+    team == user.team
   end
 
   def name
