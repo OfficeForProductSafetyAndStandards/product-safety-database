@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::UpdateRiskLevel, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   subject(:audit_activity) { described_class.from(investigation, action: action, source: source) }
 
   let(:user) { create(:user) }

@@ -66,7 +66,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         it "creates a new activity for the risk level being set", :aggregate_failures do
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
-          expect(activity).to be_a(AuditActivity::Investigation::UpdateRiskLevel)
+          expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
           expect(activity.metadata).to include("risk_level" => new_risk_level, "action" => "set")
         end
 
@@ -115,7 +115,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         it "creates a new activity for the change", :aggregate_failures do
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
-          expect(activity).to be_a(AuditActivity::Investigation::UpdateRiskLevel)
+          expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
           expect(activity.metadata).to include("risk_level" => new_risk_level, "action" => "changed")
         end
 
@@ -144,7 +144,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         it "creates a new activity for the removal", :aggregate_failures do
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
-          expect(activity).to be_a(AuditActivity::Investigation::UpdateRiskLevel)
+          expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
           expect(activity.metadata).to include("risk_level" => nil, "action" => "removed")
         end
 
