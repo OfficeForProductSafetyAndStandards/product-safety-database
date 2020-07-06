@@ -67,6 +67,26 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
+  describe "#risk_level_description" do
+    let(:risk_level_description) { decorated_investigation.risk_level_description }
+
+    context "when the risk level is set" do
+      let(:investigation) { create(:allegation, risk_level: "High risk") }
+
+      it "displays the risk level" do
+        expect(risk_level_description).to eq "High risk"
+      end
+    end
+
+    context "when the risk level is not set" do
+      let(:investigation) { create(:allegation, risk_level: nil) }
+
+      it "displays 'Not set'" do
+        expect(risk_level_description).to eq "Not set"
+      end
+    end
+  end
+
   describe "#product_summary_list" do
     let(:product_summary_list) { decorated_investigation.product_summary_list }
     let(:products) { create_list(:product, 2) }

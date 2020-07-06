@@ -38,8 +38,8 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def risk_level
-    object.risk_level.to_s
+  def risk_level_description
+    object.risk_level.to_s.presence || "Not set"
   end
 
   def risk_and_issues_list(show_actions = false)
@@ -47,7 +47,7 @@ class InvestigationDecorator < ApplicationDecorator
     rows = [
       {
         key: { text: "Case risk level" },
-        value: { text: object.risk_level.presence || "Not set" },
+        value: { text: risk_level_description },
         actions: show_actions ? risk_level_actions : []
       },
       object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
