@@ -81,7 +81,10 @@ en:
           change: "Change case risk level"
         submit_button: "Set risk level"
         hint: "Case risk level"
-      success: "Risk level %{action} on %{case_type}"
+      success:
+        set: "Case risk level set to %{level}"
+        changed: "Case risk level changed to %{level}"
+        removed: "Case risk level removed"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
