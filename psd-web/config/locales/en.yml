@@ -76,8 +76,9 @@ en:
       success: "Coronavirus status updated on %{case_type}"
     risk_level:
       show:
-        title_set: "Set case risk level"
-        title_change: "Change case risk level"
+        title:
+          set: "Set case risk level"
+          change: "Change case risk level"
         submit_button: "Set risk level"
         hint: "Case risk level"
       success: "Risk level %{action} on %{case_type}"
