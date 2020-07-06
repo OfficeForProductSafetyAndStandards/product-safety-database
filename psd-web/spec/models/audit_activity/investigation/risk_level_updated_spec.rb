@@ -47,7 +47,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
       let(:action) { "changed" }
 
       it "generates title based on the action and risk level" do
-        expect(audit_activity.title(user)).to eq "Case risk changed to medium risk"
+        expect(audit_activity.title(user)).to eq "Case risk level changed to medium risk"
       end
     end
 
