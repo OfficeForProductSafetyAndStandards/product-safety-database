@@ -102,7 +102,7 @@ en:
       risk_level_updated:
         title:
           set: "Case risk level set to %{level}"
-          changed: "Case risk changed to %{level}"
+          changed: "Case risk level changed to %{level}"
           removed: "Case risk level removed"
   cases:
     filters:

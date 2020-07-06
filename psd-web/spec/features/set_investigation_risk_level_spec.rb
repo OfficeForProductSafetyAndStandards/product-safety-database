@@ -77,7 +77,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     # Risk level change reflected in audit activity log
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk changed to mildly risky")
+    expect(page).to have_css("h3", text: "Case risk level changed to mildly risky")
 
     # Teams/users with access receive an email with the update
     email = delivered_emails.last
