@@ -15,12 +15,12 @@ module Investigations
       @actions_form = InvestigationActionsForm.new(
         investigation: @investigation,
         current_user: current_user,
-        action: params[:investigation_action]
+        investigation_action: params[:investigation_action]
       )
 
       return render(:index) if @actions_form.invalid?
 
-      redirect_to path_for_action(@actions_form.action)
+      redirect_to path_for_action(@actions_form.investigation_action)
     end
 
   private

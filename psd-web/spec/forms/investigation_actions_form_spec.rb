@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   describe "validations" do
     context "when an action has been set" do
-      let(:form) { described_class.new(action: "change_case_status") }
+      let(:form) { described_class.new(investigation_action: "change_case_status") }
 
       it "is valid" do
         expect(form).to be_valid
@@ -11,7 +11,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
     end
 
     context "when no action has been set" do
-      let(:form) { described_class.new(action: nil) }
+      let(:form) { described_class.new(investigation_action: nil) }
 
       it "is not valid" do
         expect(form).not_to be_valid

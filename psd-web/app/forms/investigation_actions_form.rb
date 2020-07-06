@@ -3,11 +3,11 @@ class InvestigationActionsForm
   include ActiveModel::Attributes
   include Pundit
 
-  attribute :action
+  attribute :investigation_action
   attribute :investigation
   attribute :current_user
 
-  validates_presence_of :action
+  validates_presence_of :investigation_action
 
   def actions
     status_and_owner_actions.merge(email_alert_action)
