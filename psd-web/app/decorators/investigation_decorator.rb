@@ -149,9 +149,9 @@ private
 
   def risk_level_actions
     if object.risk_level.present?
-      [href: h.investigation_risk_level_path(object), visually_hidden_text: "change risk level", text: "Change"]
+      [href: h.investigation_risk_level_path(object), visually_hidden_text: "risk level", text: "Change"]
     else
-      [href: h.investigation_risk_level_path(object), visually_hidden_text: "set risk level", text: "Set"]
+      [href: h.investigation_risk_level_path(object), visually_hidden_text: "risk level", text: "Set"]
     end
   end
 end
