@@ -80,7 +80,7 @@ en:
           set: "Set case risk level"
           change: "Change case risk level"
         submit_button: "Set risk level"
-        hint: "Case risk level"
+        legend: "Case risk level"
       success:
         set: "Case risk level set to %{level}"
         changed: "Case risk level changed to %{level}"
