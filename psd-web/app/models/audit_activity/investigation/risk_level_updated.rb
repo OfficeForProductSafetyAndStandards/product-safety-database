@@ -11,14 +11,16 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
   end
 
   private_class_method def self.build_metadata(investigation, action)
+    change = investigation.previous_changes[:risk_level]
     {
-      risk_level: investigation.risk_level,
+      previous_risk_level: change&.first,
+      new_risk_level: change&.second,
       action: action
     }
   end
 
   def title(_user)
-    I18n.t(".title.#{metadata['action']}", level: metadata["risk_level"].downcase, scope: I18N_SCOPE)
+    I18n.t(".title.#{metadata['action']}", level: metadata["new_risk_level"]&.downcase, scope: I18N_SCOPE)
   end
 
 private
@@ -35,7 +37,7 @@ private
         name: entity.name,
         investigation: investigation,
         action: metadata["action"],
-        level: metadata["risk_level"]
+        level: metadata["new_risk_level"]
       ).deliver_later
     end
   end
