@@ -160,7 +160,7 @@ en:
               blank: "Select the type of correspondence you’re adding"
         investigation_actions_form:
           attributes:
-            action:
+            investigation_action:
               blank: "Select an action"
         edit_investigation_collaborator_form:
           attributes:
