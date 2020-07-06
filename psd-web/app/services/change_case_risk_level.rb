@@ -32,7 +32,7 @@ private
   end
 
   def create_audit_activity_for_risk_level_update
-    AuditActivity::Investigation::RiskLevelUpdated.from(
+    AuditActivity::Investigation::RiskLevelUpdated.create_for!(
       investigation,
       action: change_action,
       source: UserSource.new(user: user)

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_elasticsearch do
-  subject(:audit_activity) { described_class.from(investigation, action: action, source: source) }
+  subject(:audit_activity) { described_class.create_for!(investigation, action: action, source: source) }
 
   let(:user) { create(:user) }
   let(:source) { UserSource.new(user: user) }
@@ -14,7 +14,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
     investigation.save
   end
 
-  describe ".from" do
+  describe ".create_for!" do
     let(:previous_risk_level) { "Medium risk" }
     let(:new_risk_level) { "High risk" }
 

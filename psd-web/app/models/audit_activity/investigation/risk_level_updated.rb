@@ -1,12 +1,16 @@
 class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigation::Base
   I18N_SCOPE = "audit_activity.investigation.risk_level_updated".freeze
+  SUBTITLE_SLUG="Risk level changed".freeze
 
-  def self.from(investigation, action:, source:)
-    metadata = build_metadata(investigation, action)
+  def self.from(*)
+    raise "Deprecated - use .create_for! instead"
+  end
+
+  def self.create_for!(investigation, action:, source:)
     create!(
       source: source,
       investigation: investigation,
-      metadata: metadata
+      metadata: build_metadata(investigation, action)
     )
   end
 
@@ -26,7 +30,7 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
 private
 
   def subtitle_slug
-    "Risk level changed"
+    SUBTITLE_SLUG
   end
 
   def notify_relevant_users
