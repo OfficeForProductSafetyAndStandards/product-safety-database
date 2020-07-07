@@ -65,8 +65,8 @@ private
   end
 
   def equal_levels?(first_level, second_level)
-    first_level.delete(" ").casecmp(
-      second_level.delete(" ")
+    first_level.strip.casecmp(
+      second_level.strip
     ).zero?
   end
 
