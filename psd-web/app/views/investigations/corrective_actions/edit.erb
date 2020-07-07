@@ -12,8 +12,18 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @corrective_action, scope: :corrective_action, url: investigation_test_result_path(@investigation, @corrective_action) do |form| %>
+    <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_test_result_path(@investigation, @corrective_action) do |form| %>
       <%= render "form_components/govuk_error_summary", form: form %>
+      <%= render "investigations/record_corrective_actions/form",
+                 form: form,
+                 allow_product_linking: true,
+                 allow_business_linking: true,
+                 corrective_action: @corrective_action,
+                 investigation: @investigation
+      %>
+      <% @corrective_action.documents_blobs.each do |blob| %>
+        <%= render partial: "related_attachment_fields", collection: @corrective_action.documents_blobs, locals: { form: form, file_blob: @file_blob, attachment_name: :file } %>
+      <% end %>
     <% end %>
   </div>
 </div>
