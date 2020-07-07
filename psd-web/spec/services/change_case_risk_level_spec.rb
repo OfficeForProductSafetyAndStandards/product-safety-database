@@ -68,7 +68,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
-          expect(activity.metadata).to include("previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level, "action" => "set")
+          expect(activity.metadata).to include("previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level, "update_verb" => "set")
         end
 
         it "sends an email for the risk level being set" do
@@ -76,7 +76,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
             email: creator_team.team_recipient_email,
             name: creator_team.name,
             investigation: investigation,
-            action: "set",
+            update_verb: "set",
             level: new_risk_level
           )
         end
@@ -117,7 +117,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
-          expect(activity.metadata).to include("previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level, "action" => "changed")
+          expect(activity.metadata).to include("previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level, "update_verb" => "changed")
         end
 
         it "sends an email for the change" do
@@ -125,7 +125,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
             email: creator_team.team_recipient_email,
             name: creator_team.name,
             investigation: investigation,
-            action: "changed",
+            update_verb: "changed",
             level: new_risk_level
           )
         end
@@ -146,7 +146,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
           expect { result }.to change(Activity, :count).by(1)
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
-          expect(activity.metadata).to include("previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level, "action" => "removed")
+          expect(activity.metadata).to include("previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level, "update_verb" => "removed")
         end
 
         it "sends an email for the removal" do
@@ -154,7 +154,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
             email: creator_team.team_recipient_email,
             name: creator_team.name,
             investigation: investigation,
-            action: "removed",
+            update_verb: "removed",
             level: nil
           )
         end

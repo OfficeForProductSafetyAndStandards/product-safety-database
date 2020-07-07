@@ -35,7 +35,7 @@ private
   def create_audit_activity_for_risk_level_update
     AuditActivity::Investigation::RiskLevelUpdated.create_for!(
       investigation,
-      action: change_action,
+      update_verb: change_action,
       source: UserSource.new(user: user)
     )
   end
@@ -60,7 +60,7 @@ private
         email: email,
         name: entity.name,
         investigation: investigation,
-        action: change_action,
+        update_verb: change_action,
         level: risk_level
       ).deliver_later
     end

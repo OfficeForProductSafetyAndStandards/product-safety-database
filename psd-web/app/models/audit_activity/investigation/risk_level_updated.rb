@@ -6,25 +6,25 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
     raise "Deprecated - use .create_for! instead"
   end
 
-  def self.create_for!(investigation, action:, source:)
+  def self.create_for!(investigation, update_verb:, source:)
     create!(
       source: source,
       investigation: investigation,
-      metadata: build_metadata(investigation, action)
+      metadata: build_metadata(investigation, update_verb)
     )
   end
 
-  private_class_method def self.build_metadata(investigation, action)
+  private_class_method def self.build_metadata(investigation, update_verb)
     change = investigation.previous_changes[:risk_level]
     {
       previous_risk_level: change&.first,
       new_risk_level: change&.second,
-      action: action
+      update_verb: update_verb
     }
   end
 
   def title(_user)
-    I18n.t(".title.#{metadata['action']}", level: metadata["new_risk_level"]&.downcase, scope: I18N_SCOPE)
+    I18n.t(".title.#{metadata['update_verb']}", level: metadata["new_risk_level"]&.downcase, scope: I18N_SCOPE)
   end
 
 private

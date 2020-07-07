@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_elasticsearch do
-  subject(:audit_activity) { described_class.create_for!(investigation, action: action, source: source) }
+  subject(:audit_activity) { described_class.create_for!(investigation, update_verb: update_verb, source: source) }
 
   let(:user) { create(:user) }
   let(:source) { UserSource.new(user: user) }
@@ -18,45 +18,45 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
     let(:previous_risk_level) { "Medium risk" }
     let(:new_risk_level) { "High risk" }
 
-    let(:action) { "changed" }
+    let(:update_verb) { "changed" }
 
     it "creates an audit activity", :aggregate_failures do
       expect(audit_activity).to have_attributes(
         source: source,
         investigation: investigation,
-        metadata: { "action" => action, "previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level },
+        metadata: { "update_verb" => update_verb, "previous_risk_level" => previous_risk_level, "new_risk_level" => new_risk_level },
         body: nil
       )
     end
   end
 
   describe "#title" do
-    context "when the action is 'set'" do
+    context "when the update_verb is 'set'" do
       let(:previous_risk_level) { nil }
       let(:new_risk_level) { "Medium risk" }
-      let(:action) { "set" }
+      let(:update_verb) { "set" }
 
-      it "generates title based on the action and risk level" do
+      it "generates title based on the update_verb and risk level" do
         expect(audit_activity.title(user)).to eq "Case risk level set to medium risk"
       end
     end
 
-    context "when the action is 'changed'" do
+    context "when the update_verb is 'changed'" do
       let(:previous_risk_level) { "Low risk" }
       let(:new_risk_level) { "Medium risk" }
-      let(:action) { "changed" }
+      let(:update_verb) { "changed" }
 
-      it "generates title based on the action and risk level" do
+      it "generates title based on the update_verb and risk level" do
         expect(audit_activity.title(user)).to eq "Case risk level changed to medium risk"
       end
     end
 
-    context "when the action is 'removed'" do
+    context "when the update_verb is 'removed'" do
       let(:previous_risk_level) { "Low risk" }
       let(:new_risk_level) { nil }
-      let(:action) { "removed" }
+      let(:update_verb) { "removed" }
 
-      it "generates title based on the action" do
+      it "generates title based on the update_verb" do
         expect(audit_activity.title(user)).to eq "Case risk level removed"
       end
     end
