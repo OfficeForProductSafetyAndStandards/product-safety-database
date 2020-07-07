@@ -16,7 +16,7 @@ module InvestigationElasticsearch
     end
 
     def as_indexed_json(*)
-      as_json(
+      data = as_json(
         only: %i[description
                  hazard_type
                  product_category
@@ -62,6 +62,7 @@ module InvestigationElasticsearch
           }
         }
       )
+      data
     end
 
     def self.highlighted_fields

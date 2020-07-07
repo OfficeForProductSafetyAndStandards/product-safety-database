@@ -178,6 +178,8 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
+    t.uuid "owner_id"
+    t.string "owner_type"
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
@@ -185,6 +187,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
+    t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
