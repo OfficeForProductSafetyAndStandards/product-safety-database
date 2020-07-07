@@ -33,6 +33,6 @@ private
     SUBTITLE_SLUG
   end
 
-  # Do not send investigation_updated mail. This is handled by the ChangeCaseOwner service
+  # Do not send investigation_updated mail. This is handled by the ChangeCaseRiskLevel service
   def notify_relevant_users; end
 end
