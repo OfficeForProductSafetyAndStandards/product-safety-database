@@ -8,7 +8,7 @@ Rails.application.configure do
     user_id = controller.current_user&.id
     extra_payload[:user_id] = user_id if user_id
     organisation_id = controller.current_user&.organisation&.id
-    extra_payload[:organization_id] = organisation_id if organisation_id
+    extra_payload[:organisation_id] = organisation_id if organisation_id
     extra_payload
   end
 end
