@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_140028) do
     t.string "product_category"
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
-    t.string "risk_level"
+    t.integer "risk_level"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"

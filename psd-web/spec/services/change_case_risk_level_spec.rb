@@ -17,6 +17,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
     let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
     let(:investigation) { create(:enquiry, risk_level: previous_level, custom_risk_level: previous_custom) }
+    let(:risk_levels) { Investigation.risk_levels.keys }
 
     before do
       AddTeamToAnInvestigation.call!(current_user: user,
@@ -46,8 +47,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     end
 
     context "when the previous risk level and the new risk level are the same" do
-      let(:previous_level) { Investigation::STANDARD_RISK_LEVELS.first }
-      let(:new_level) { Investigation::STANDARD_RISK_LEVELS.first }
+      let(:previous_level) { risk_levels.first }
+      let(:new_level) { risk_levels.first }
 
       it "succeeds" do
         expect(result).to be_success
@@ -74,7 +75,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
       let(:previous_level) { nil }
 
       context "with a different new risk level" do
-        let(:new_level) { Investigation::STANDARD_RISK_LEVELS.first }
+        let(:new_level) { risk_levels.first }
 
         it "succeeds" do
           expect(result).to be_success

@@ -14,7 +14,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
   before { investigation.update!(risk_level: new_risk, custom_risk_level: new_custom) }
 
   describe ".create_for!" do
-    let(:previous_risk) { "Medium risk" }
+    let(:previous_risk) { "low" }
     let(:new_risk) { nil }
     let(:previous_custom) { nil }
     let(:new_custom) { "Custom risk" }
@@ -38,7 +38,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
       context "with an update on risk level" do
         let(:previous_risk) { nil }
-        let(:new_risk) { "Medium risk" }
+        let(:new_risk) { "medium" }
         let(:previous_custom) { nil }
         let(:new_custom) { nil }
 
@@ -63,8 +63,8 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
       let(:update_verb) { "changed" }
 
       context "with an update on risk level" do
-        let(:previous_risk) { "Low risk" }
-        let(:new_risk) { "Medium risk" }
+        let(:previous_risk) { "low" }
+        let(:new_risk) { "medium" }
         let(:previous_custom) { nil }
         let(:new_custom) { nil }
 
@@ -86,7 +86,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
     end
 
     context "when the update_verb is 'removed'" do
-      let(:previous_risk) { "Low risk" }
+      let(:previous_risk) { "low" }
       let(:new_risk) { nil }
       let(:update_verb) { "removed" }
 

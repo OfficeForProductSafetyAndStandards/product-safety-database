@@ -3,6 +3,11 @@ require "rails_helper"
 RSpec.describe RiskLevelForm do
   subject(:form) { described_class.new(risk_level: risk_level, custom_risk_level: custom_risk_level) }
 
+  let(:standard_level_key) { Investigation.risk_levels.keys.first }
+  let(:standard_level_text) do
+    I18n.t(".investigations.risk_level.show.levels.#{standard_level_key}")
+  end
+
   describe "#initialize" do
     context "when risk level is not set" do
       let(:risk_level) { nil }
@@ -20,10 +25,10 @@ RSpec.describe RiskLevelForm do
       end
 
       context "with a custom risk level that matches with space/capital variations a standard level" do
-        let(:custom_risk_level) { Investigation::STANDARD_RISK_LEVELS.first.upcase + "  " }
+        let(:custom_risk_level) { standard_level_text.upcase + "  " }
 
         it "sets risk level attribute as the standard level matching the custom risk level" do
-          expect(form.risk_level).to eq Investigation::STANDARD_RISK_LEVELS.first
+          expect(form.risk_level).to eq standard_level_key
         end
 
         it "discards the value for custom risk level attribute" do
@@ -33,7 +38,7 @@ RSpec.describe RiskLevelForm do
     end
 
     context "when risk level matches a standard level" do
-      let(:risk_level) { Investigation::STANDARD_RISK_LEVELS.first }
+      let(:risk_level) { standard_level_key }
       let(:custom_risk_level) { "whatever level" }
 
       it "keeps the value for risk level attribute" do
@@ -89,7 +94,7 @@ RSpec.describe RiskLevelForm do
     end
 
     context "when risk level is set to any of the standard levels" do
-      let(:risk_level) { Investigation::STANDARD_RISK_LEVELS.last }
+      let(:risk_level) { standard_level_key }
 
       context "with custom risk level" do
         let(:custom_risk_level) { "custom risk" }

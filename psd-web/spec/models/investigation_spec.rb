@@ -104,7 +104,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
   describe "risk_level validity" do
     context "when the risk level is a standard level" do
-      let(:investigation) { build_stubbed(:allegation, risk_level: Investigation::STANDARD_RISK_LEVELS.first) }
+      let(:investigation) { build_stubbed(:allegation, risk_level: described_class.risk_levels.keys.first) }
 
       it "does not contain validation errors for the attribute" do
         investigation.validate
@@ -135,7 +135,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   describe "custom_risk_level validity" do
     context "when the risk_level is also set" do
       let(:investigation) do
-        build_stubbed(:allegation, custom_risk_level: "Custom level", risk_level: Investigation::STANDARD_RISK_LEVELS.first)
+        build_stubbed(:allegation, custom_risk_level: "Custom level", risk_level: described_class.risk_levels.keys.first)
       end
 
       it "contains validation errors for the attribute" do

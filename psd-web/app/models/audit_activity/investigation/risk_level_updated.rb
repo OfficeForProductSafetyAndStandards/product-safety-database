@@ -33,9 +33,11 @@ private
   end
 
   def new_risk_level
-    if investigation.risk_level.present?
-      metadata["updates"]["risk_level"]&.second
-    elsif investigation.custom_risk_level.present?
+    new_risk_level_value = metadata["updates"]["risk_level"]&.second
+
+    if new_risk_level_value.present?
+      I18n.t(".investigations.risk_level.show.levels.#{new_risk_level_value}")
+    else
       metadata["updates"]["custom_risk_level"]&.second
     end
   end

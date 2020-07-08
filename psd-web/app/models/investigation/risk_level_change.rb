@@ -23,7 +23,7 @@ class Investigation::RiskLevelChange
 private
 
   def new_level_accepted?
-    new_level.blank? || Investigation::STANDARD_RISK_LEVELS.include?(new_level.to_s)
+    new_level.blank? || Investigation.risk_levels.key?(new_level.to_s)
   end
 
   def risk_level_changes?

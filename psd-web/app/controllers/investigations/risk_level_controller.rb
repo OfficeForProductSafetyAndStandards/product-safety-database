@@ -19,13 +19,18 @@ module Investigations
                                          user: current_user,
                                          risk_level: @risk_level_form.risk_level.presence,
                                          custom_risk_level: @risk_level_form.custom_risk_level.presence)
-      if result.change_action.present?
-        flash[:success] = I18n.t(".success.#{result.change_action}",
-                                 scope: "investigations.risk_level",
-                                 level: result.updated_risk_level&.downcase)
-      end
-
+      success_flash_message(result)
       redirect_to investigation_path(@investigation)
+    end
+
+  private
+
+    def success_flash_message(result)
+      return if result.change_action.blank?
+
+      flash[:success] = I18n.t(".success.#{result.change_action}",
+                               scope: "investigations.risk_level",
+                               level: @investigation.risk_level_description.downcase)
     end
   end
 end

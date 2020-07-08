@@ -81,6 +81,11 @@ en:
           change: "Change case risk level"
         submit_button: "Set risk level"
         legend: "Case risk level"
+        levels:
+          serious: "Serious risk"
+          high: "High risk"
+          medium: "Medium risk"
+          low: "Low risk"
       success:
         set: "Case risk level set to %{level}"
         changed: "Case risk level changed to %{level}"

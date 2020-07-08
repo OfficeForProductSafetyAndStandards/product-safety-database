@@ -43,7 +43,13 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def risk_level_description
-    object.risk_level.presence || object.custom_risk_level.presence || "Not set"
+    if object.risk_level.present?
+      I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")
+    elsif object.custom_risk_level.present?
+      object.custom_risk_level
+    else
+      "Not set"
+    end
   end
 
   def risk_and_issues_list(show_actions = false)

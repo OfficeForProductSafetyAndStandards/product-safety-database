@@ -25,8 +25,8 @@
                    label: { text: "Custom risk level", classes: "govuk-visually-hidden" } %>
       <% end %>
 
-      <% radio_items = Investigation::STANDARD_RISK_LEVELS.map do |level|
-          { text: level, value: level }
+      <% radio_items = Investigation.risk_levels.keys.map do |level|
+          { text: t(".levels.#{level}"), value: level }
          end
          radio_items.push(text: "Other", value: "other", conditional: { html: custom })
          radio_items.push divider: "or"

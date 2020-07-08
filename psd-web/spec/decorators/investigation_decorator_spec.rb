@@ -10,7 +10,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:team)          { create(:team) }
   let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:products)      { [] }
-  let(:risk_level)    { Investigation::STANDARD_RISK_LEVELS.first }
+  let(:risk_level)    { :serious }
   let(:coronavirus_related) { false }
   let(:investigation) do
     create(:allegation,
@@ -55,8 +55,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       expect(risk_and_issues_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
     end
 
-    it "displays the risk level" do
-      expect(risk_and_issues_list).to summarise("Case risk level", text: investigation.risk_level)
+    it "displays the text associated to the risk level" do
+      expect(risk_and_issues_list).to summarise("Case risk level", text: "Serious risk")
     end
 
     context "without hazard_type" do
@@ -91,9 +91,9 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     let(:risk_level_description) { decorated_investigation.risk_level_description }
 
     context "when the risk level is set" do
-      let(:investigation) { create(:allegation, risk_level: "High risk") }
+      let(:investigation) { create(:allegation, risk_level: :high) }
 
-      it "displays the risk level" do
+      it "displays the risk level text corresponding to the risk level" do
         expect(risk_level_description).to eq "High risk"
       end
     end

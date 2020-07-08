@@ -7,7 +7,7 @@ class ChangeCaseRiskLevel
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    context.risk_level = nil unless Investigation::STANDARD_RISK_LEVELS.include?(context.risk_level)
+    context.risk_level = nil unless Investigation.risk_levels.key?(context.risk_level)
 
     risk_level_change = Investigation::RiskLevelChange.new(investigation, risk_level, custom_risk_level)
     context.change_action = risk_level_change.change_action
@@ -18,7 +18,7 @@ class ChangeCaseRiskLevel
       create_audit_activity_for_risk_level_update
     end
 
-    context.updated_risk_level = (risk_level.presence || custom_risk_level.presence)
+    context.updated_risk_level = investigation.risk_level_description
     send_notification_email
   end
 

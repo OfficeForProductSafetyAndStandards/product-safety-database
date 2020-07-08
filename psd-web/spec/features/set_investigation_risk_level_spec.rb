@@ -51,7 +51,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
   end
 
   scenario "Changing risk level for an investigation" do
-    investigation.update!(risk_level: "Medium risk")
+    investigation.update!(risk_level: :medium)
     visit "/cases/#{investigation.pretty_id}"
 
     # Selecting Other and leaving the input field empty causes a validation error
