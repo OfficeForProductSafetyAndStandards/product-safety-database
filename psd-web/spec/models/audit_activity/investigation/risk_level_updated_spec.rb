@@ -57,17 +57,6 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
           expect(audit_activity.title(user)).to eq "Case risk level set to custom risk"
         end
       end
-
-      context "with an update on both risk and custom levels" do
-        let(:previous_risk) { nil }
-        let(:new_risk) { "Medium risk" }
-        let(:previous_custom) { nil }
-        let(:new_custom) { "Custom risk" }
-
-        it "generates title based on the update_verb and risk level" do
-          expect(audit_activity.title(user)).to eq "Case risk level set to medium risk"
-        end
-      end
     end
 
     context "when the update_verb is 'changed'" do
@@ -92,17 +81,6 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
         it "generates title based on the update_verb and custom risk" do
           expect(audit_activity.title(user)).to eq "Case risk level changed to custom risk"
-        end
-      end
-
-      context "with an update on both risk and custom levels" do
-        let(:previous_risk) { "Low risk" }
-        let(:new_risk) { "Medium risk" }
-        let(:previous_custom) { "mild risk" }
-        let(:new_custom) { "Custom risk" }
-
-        it "generates title based on the update_verb and risk level" do
-          expect(audit_activity.title(user)).to eq "Case risk level changed to medium risk"
         end
       end
     end
