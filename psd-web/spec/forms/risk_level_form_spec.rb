@@ -10,29 +10,22 @@ RSpec.describe RiskLevelForm do
 
   describe "#initialize" do
     context "when risk level is not set" do
-      let(:risk_level) { nil }
+      let(:risk_level) { Investigation.risk_levels[:other] }
 
       context "with a custom risk level that does not match a standard level" do
         let(:custom_risk_level) { "very very risky" }
 
-        it "sets risk level as 'other'" do
-          expect(form.risk_level).to eq "other"
-        end
-
         it "keeps custom risk level " do
-          expect(form.custom_risk_level).to eq custom_risk_level
+          expect(form.attributes).to eq(custom_risk_level: custom_risk_level, risk_level: Investigation.risk_levels[:other])
         end
       end
 
       context "with a custom risk level that matches with space/capital variations a standard level" do
-        let(:custom_risk_level) { standard_level_text.upcase + "  " }
+        let(:custom_risk_level) { standard_level_key.upcase + "  " }
+        let(:risk_level) { Investigation.risk_levels[:other] }
 
         it "sets risk level attribute as the standard level matching the custom risk level" do
-          expect(form.risk_level).to eq standard_level_key
-        end
-
-        it "discards the value for custom risk level attribute" do
-          expect(form.custom_risk_level).to be_nil
+          expect(form.attributes).to eq(custom_risk_level: nil, risk_level: standard_level_key)
         end
       end
     end
@@ -42,11 +35,7 @@ RSpec.describe RiskLevelForm do
       let(:custom_risk_level) { "whatever level" }
 
       it "keeps the value for risk level attribute" do
-        expect(form.risk_level).to eq risk_level
-      end
-
-      it "discards the value for custom risk level attribute" do
-        expect(form.custom_risk_level).to be_nil
+        expect(form.attributes).to eq(risk_level: risk_level, custom_risk_level: nil)
       end
     end
   end
@@ -131,13 +120,13 @@ RSpec.describe RiskLevelForm do
       context "with custom_risk_level" do
         let(:custom_risk_level) { "custom risk" }
 
-        include_examples "invalid form", [:risk_level, "Invalid option"]
+        include_examples "invalid form", [:risk_level, "Risk level is not included in the list"]
       end
 
       context "without custom_risk_level" do
         let(:custom_risk_level) { nil }
 
-        include_examples "invalid form", [:risk_level, "Invalid option"]
+        include_examples "invalid form", [:risk_level, "Risk level is not included in the list"]
       end
     end
   end

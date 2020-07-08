@@ -15,10 +15,11 @@ class Investigation < ApplicationRecord
   }
 
   enum risk_level: {
-    serious: 10,
-    high: 20,
-    medium: 30,
-    low: 40,
+    serious: "serious",
+    high: "high",
+    medium: "medium",
+    low: "low",
+    other: "other"
   }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
