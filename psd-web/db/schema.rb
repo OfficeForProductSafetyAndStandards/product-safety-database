@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_140028) do
+ActiveRecord::Schema.define(version: 2020_07_08_184946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_07_07_140028) do
 
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
+  create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -185,14 +186,13 @@ ActiveRecord::Schema.define(version: 2020_07_07_140028) do
     t.string "product_category"
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
-    t.integer "risk_level"
+    t.enum "risk_level", as: "risk_levels"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
     t.index ["custom_risk_level"], name: "index_investigations_on_custom_risk_level"
     t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
-    t.index ["risk_level"], name: "index_investigations_on_risk_level"
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
 

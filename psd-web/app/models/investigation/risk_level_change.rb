@@ -5,7 +5,7 @@
 class Investigation::RiskLevelChange
   attr_reader :current_level, :current_custom, :new_level, :new_custom
 
-  def initialize(investigation, new_level, new_custom)
+  def initialize(investigation, changes)
     @current_level = investigation.risk_level
     @current_custom = investigation.custom_risk_level
     @new_level = new_level
