@@ -10,8 +10,16 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:team)          { create(:team) }
   let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:products)      { [] }
+  let(:risk_level)    { Investigation::STANDARD_RISK_LEVELS.first }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, products: products, coronavirus_related: coronavirus_related, creator: creator) }
+  let(:investigation) do
+    create(:allegation,
+           :reported_unsafe_and_non_compliant,
+           products: products,
+           coronavirus_related: coronavirus_related,
+           creator: creator,
+           risk_level: risk_level)
+  end
 
   before do
     ChangeCaseOwner.call!(investigation: investigation, user: creator, owner: user)
@@ -47,6 +55,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       expect(risk_and_issues_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
     end
 
+    it "displays the risk level" do
+      expect(risk_and_issues_list).to summarise("Case risk level", text: investigation.risk_level)
+    end
+
     context "without hazard_type" do
       let(:risk_and_issues_list) { Capybara.string(decorated_investigation.risk_and_issues_list) }
 
@@ -65,6 +77,14 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
       it { expect(risk_and_issues_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
     end
+
+    context "without risk level" do
+      let(:risk_level) { nil }
+
+      it "displays risk level as not set" do
+        expect(risk_and_issues_list).to summarise("Case risk level", text: "Not set")
+      end
+    end
   end
 
   describe "#risk_level_description" do
@@ -78,8 +98,16 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
     end
 
-    context "when the risk level is not set" do
-      let(:investigation) { create(:allegation, risk_level: nil) }
+    context "when the custom risk level is set" do
+      let(:investigation) { create(:allegation, custom_risk_level: "Custom risk") }
+
+      it "displays the risk level" do
+        expect(risk_level_description).to eq "Custom risk"
+      end
+    end
+
+    context "when the risk level and the custom risk level are not set" do
+      let(:investigation) { create(:allegation, risk_level: nil, custom_risk_level: nil) }
 
       it "displays 'Not set'" do
         expect(risk_level_description).to eq "Not set"

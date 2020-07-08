@@ -1,4 +1,4 @@
-<% page_heading = @investigation.risk_level.present? ? t(".title.change") : t(".title.set") %>
+<% page_heading = @investigation.risk_level_set? ? t(".title.change") : t(".title.set") %>
 <% page_title page_heading, errors: @risk_level_form.errors.any? %>
 <% content_for :after_header do %>
   <%= govukBackLink(
@@ -17,18 +17,18 @@
     <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put do |form| %>
       <%= error_summary @risk_level_form.errors %>
 
-      <%- other = capture do %>
+      <%- custom = capture do %>
         <%= render "form_components/govuk_input",
-                   key: :risk_level_other,
+                   key: :custom_risk_level,
                    form: form,
                    classes: "govuk-!-width-one-third",
-                   label: { text: "Other risk level", classes: "govuk-visually-hidden" } %>
+                   label: { text: "Custom risk level", classes: "govuk-visually-hidden" } %>
       <% end %>
 
       <% radio_items = Investigation::STANDARD_RISK_LEVELS.map do |level|
           { text: level, value: level }
          end
-         radio_items.push(text: "Other", value: "other", conditional: { html: other })
+         radio_items.push(text: "Other", value: "other", conditional: { html: custom })
          radio_items.push divider: "or"
          radio_items.push(text: "Not set", value: "")
       %>

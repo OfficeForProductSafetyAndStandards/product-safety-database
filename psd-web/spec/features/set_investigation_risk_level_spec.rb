@@ -67,7 +67,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     expect(page).to have_checked_field("Other")
 
     # Fill the field with a custom risk level
-    fill_in "Other risk level", with: "Mildly risky"
+    fill_in "Custom risk level", with: "Mildly risky"
     click_button "Set risk level"
 
     expect_confirmation_banner("Case risk level changed to mildly risky")
@@ -87,6 +87,32 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
       verb_with_level: "changed to mildly risky",
     )
 
+    # Changing the risk level back to a default one
+    click_link "Overview"
+    click_change_risk_level_link
+
+    expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
+    expect(page).to have_checked_field("Other")
+    choose("High risk")
+    click_button "Set risk level"
+
+    expect_confirmation_banner("Case risk level changed to high risk")
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+    expect(page).to have_summary_item(key: "Case risk level", value: "High risk")
+
+    # Risk level change reflected in audit activity log
+    click_link "Activity"
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+    expect(page).to have_css("h3", text: "Case risk level changed to high risk")
+
+    # Teams/users with access receive an email with the update
+    email = delivered_emails.last
+    expect(email.recipient).to eq creator_team.team_recipient_email
+    expect(email.personalization).to include(
+      name: creator_team.name,
+      verb_with_level: "changed to high risk",
+    )
+
     # Selecting Other and introducing a level that matches one of the other options
     # will result in the other option being pre-selected when changing risk level
     # in the future
@@ -94,8 +120,9 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     click_change_risk_level_link
 
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
-    expect(page).to have_checked_field("Other")
-    fill_in "Other risk level", with: "Low risk"
+    expect(page).to have_checked_field("High risk")
+    choose("Other")
+    fill_in "Custom risk level", with: "Low risk"
     click_button "Set risk level"
 
     expect_confirmation_banner("Case risk level changed to low risk")

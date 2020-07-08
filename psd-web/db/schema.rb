@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_142459) do
+ActiveRecord::Schema.define(version: 2020_07_07_140028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_142459) do
     t.string "complainant_reference"
     t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
+    t.string "custom_risk_level"
     t.date "date_received"
     t.text "description"
     t.text "hazard_description"
@@ -188,6 +189,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_142459) do
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
+    t.index ["custom_risk_level"], name: "index_investigations_on_custom_risk_level"
     t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
     t.index ["risk_level"], name: "index_investigations_on_risk_level"

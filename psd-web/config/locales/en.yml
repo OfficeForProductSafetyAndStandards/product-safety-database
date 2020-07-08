@@ -200,7 +200,7 @@ en:
           attributes:
             risk_level:
               not_allowed: "Invalid option"
-            risk_level_other:
+            custom_risk_level:
               blank: "Set a risk level"
         supporting_information_type_form:
           attributes:
@@ -275,6 +275,10 @@ en:
               blank: "Enter a valid product category"
             hazard_type:
               blank: "Enter the primary hazard"
+            risk_level:
+              inclusion: "Risk level does not belong to the list of standard risk levels"
+            custom_risk_level:
+              present: "Custom risk level cannot be set when there is a standard risk level"
         product:
           attributes:
             product_category:

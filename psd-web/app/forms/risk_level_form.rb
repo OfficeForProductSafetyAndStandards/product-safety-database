@@ -5,63 +5,49 @@ class RiskLevelForm
   OTHER = "other".freeze
   ALLOWED_LEVELS = Investigation::STANDARD_RISK_LEVELS + [OTHER]
 
-  attr_reader :input_level, :input_other
-
   attribute :risk_level, :string, default: nil
-  attribute :risk_level_other, :string, default: nil
+  attribute :custom_risk_level, :string, default: nil
 
-  validate :input_level_allowed_validation
-  validate :input_other_present_validation
+  validate :risk_level_allowed_validation
+  validate :custom_risk_level_present_validation
 
   def initialize(attributes)
-    @input_level = normalise(attributes[:risk_level])
-    @input_other = normalise(attributes[:risk_level_other])
-    attrs = set_attributes
-    super(attrs)
+    # With a valid risk level selection we ignore/override the custom field
+    # as both fields exclude each other and risk level selection takes priority.
+    if standard_level?(attributes[:risk_level])
+      attributes[:custom_risk_level] = nil
+    elsif attributes[:custom_risk_level].present?
+      # When the custom level introduced by the user matches a standard risk
+      # level, it becomes the selected risk level instead of being stored in the
+      # custom field.
+      if (standard_matching_level = matching_level_in_list(attributes[:custom_risk_level], Investigation::STANDARD_RISK_LEVELS).presence)
+        attributes[:risk_level] = standard_matching_level
+        attributes[:custom_risk_level] = nil
+      # When loading custom risk level from DB, the empty risk level needs to be set
+      # as "other" so the custom field is displayed in the form.
+      elsif attributes[:risk_level].blank?
+        attributes[:risk_level] = OTHER
+      end
+    end
+    super(attributes)
   end
 
 private
 
-  # Transforms in 2 directions:
-  # 1. User selection/input (risk_level and risk_level_other) into risk_level stored in DB.
-  # 2. DB risk_level value into risk_level and risk_level other to be displayed in the form.
-  def set_attributes
-    attrs = {}
-    # User selected "other" in the risk level selection and filled the custom input field
-    if input_level == OTHER
-      attrs[:risk_level] = input_other
-    # Building the form from DB value coming from 'risk_level' field
-    elsif other_set_as_risk_level?
-      attrs[:risk_level_other] = input_level
-      attrs[:risk_level] = OTHER
-    # Just sets the risk level from the selection or from DB value
-    else
-      attrs[:risk_level] = input_level
-    end
-    attrs
-  end
-
-  def input_level_allowed_validation
-    if input_level.present? && !matching_level_in_list(input_level, ALLOWED_LEVELS)
+  def risk_level_allowed_validation
+    if risk_level.present? && !matching_level_in_list(risk_level, ALLOWED_LEVELS)
       errors.add(:risk_level, :not_allowed)
-      restore_inputs # To display the invalid inputs with the errors.
     end
   end
 
-  def input_other_present_validation
-    if input_level == OTHER && input_other.blank?
-      errors.add(:risk_level_other, :blank)
-      restore_inputs
+  def custom_risk_level_present_validation
+    if risk_level == OTHER && custom_risk_level.blank?
+      errors.add(:custom_risk_level, :blank)
     end
   end
 
-  def other_set_as_risk_level?
-    input_level.present? && !matching_level_in_list(input_level, Investigation::STANDARD_RISK_LEVELS)
-  end
-
-  def restore_inputs
-    self.risk_level = input_level
-    self.risk_level_other = input_other
+  def standard_level?(level)
+    Investigation::STANDARD_RISK_LEVELS.include? level
   end
 
   def equal_levels?(first_level, second_level)
@@ -74,9 +60,5 @@ private
     return if level.blank?
 
     list.find { |elem| equal_levels?(elem, level) }
-  end
-
-  def normalise(level)
-    matching_level_in_list(level, Investigation::STANDARD_RISK_LEVELS).presence || level
   end
 end

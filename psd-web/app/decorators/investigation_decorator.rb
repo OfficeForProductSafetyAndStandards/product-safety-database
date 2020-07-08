@@ -38,8 +38,12 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
+  def risk_level_set?
+    object.risk_level.present? || object.custom_risk_level.present?
+  end
+
   def risk_level_description
-    object.risk_level.to_s.presence || "Not set"
+    object.risk_level.presence || object.custom_risk_level.presence || "Not set"
   end
 
   def risk_and_issues_list(show_actions = false)
@@ -148,7 +152,7 @@ private
   end
 
   def risk_level_actions
-    if object.risk_level.present?
+    if risk_level_set?
       [href: h.investigation_risk_level_path(object), visually_hidden_text: "risk level", text: "Change"]
     else
       [href: h.investigation_risk_level_path(object), visually_hidden_text: "risk level", text: "Set"]

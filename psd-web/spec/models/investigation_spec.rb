@@ -101,4 +101,57 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       expect(investigation).to be_invalid
     end
   end
+
+  describe "risk_level validity" do
+    context "when the risk level is a standard level" do
+      let(:investigation) { build_stubbed(:allegation, risk_level: Investigation::STANDARD_RISK_LEVELS.first) }
+
+      it "does not contain validation errors for the attribute" do
+        investigation.validate
+        expect(investigation.errors.full_messages_for(:risk_level)).to be_empty
+      end
+    end
+
+    context "when the risk level is not a standard level" do
+      let(:investigation) { build_stubbed(:allegation, risk_level: "random value") }
+
+      it "contains validation errors for the attribute" do
+        investigation.validate
+        expect(investigation.errors.full_messages_for(:risk_level))
+          .to eq ["Risk level does not belong to the list of standard risk levels"]
+      end
+    end
+
+    context "when the risk level is not set" do
+      let(:investigation) { build_stubbed(:allegation, risk_level: nil) }
+
+      it "does not contain validation errors for the attribute" do
+        investigation.validate
+        expect(investigation.errors.full_messages_for(:risk_level)).to be_empty
+      end
+    end
+  end
+
+  describe "custom_risk_level validity" do
+    context "when the risk_level is also set" do
+      let(:investigation) do
+        build_stubbed(:allegation, custom_risk_level: "Custom level", risk_level: Investigation::STANDARD_RISK_LEVELS.first)
+      end
+
+      it "contains validation errors for the attribute" do
+        investigation.validate
+        expect(investigation.errors.full_messages_for(:custom_risk_level))
+          .to eq ["Custom risk level cannot be set when there is a standard risk level"]
+      end
+    end
+
+    context "when the risk level is not set" do
+      let(:investigation) { build_stubbed(:allegation, custom_risk_level: "Custom level", risk_level: nil) }
+
+      it "does not contain validation errors for the attribute" do
+        investigation.validate
+        expect(investigation.errors.full_messages_for(:custom_risk_level)).to be_empty
+      end
+    end
+  end
 end
