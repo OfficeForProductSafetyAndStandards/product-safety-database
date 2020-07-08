@@ -280,8 +280,6 @@ en:
               blank: "Enter a valid product category"
             hazard_type:
               blank: "Enter the primary hazard"
-            risk_level:
-              inclusion: "Risk level does not belong to the list of standard risk levels"
             custom_risk_level:
               present: "Custom risk level cannot be set when there is a standard risk level"
         product:

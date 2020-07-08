@@ -31,7 +31,6 @@ class Investigation < ApplicationRecord
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
-  validates :risk_level, inclusion: { in: Investigation.risk_levels.keys }, allow_nil: true
   validates :custom_risk_level, absence: true, if: -> { risk_level.present? }
 
   after_update :create_audit_activity_for_status,
