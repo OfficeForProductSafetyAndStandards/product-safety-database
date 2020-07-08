@@ -17,7 +17,6 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
     let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
     let(:investigation) { create(:enquiry, risk_level: previous_level, custom_risk_level: previous_custom) }
-    let(:risk_levels) { Investigation.risk_levels.keys }
 
     before do
       AddTeamToAnInvestigation.call!(current_user: user,
@@ -47,8 +46,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     end
 
     context "when the previous risk level and the new risk level are the same" do
-      let(:previous_level) { risk_levels.first }
-      let(:new_level) { risk_levels.first }
+      let(:previous_level) { "high" }
+      let(:new_level) { "high" }
 
       it "succeeds" do
         expect(result).to be_success
@@ -75,7 +74,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
       let(:previous_level) { nil }
 
       context "with a different new risk level" do
-        let(:new_level) { risk_levels.first }
+        let(:new_level) { "high" }
 
         it "succeeds" do
           expect(result).to be_success
@@ -101,7 +100,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
             name: creator_team.name,
             investigation: investigation,
             update_verb: "set",
-            level: new_level
+            level: "High risk"
           )
         end
 
@@ -110,7 +109,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         end
 
         it "sets the updated risk level in the result context" do
-          expect(result.updated_risk_level).to eq new_level
+          expect(result.updated_risk_level).to eq "High risk"
         end
       end
 
@@ -210,8 +209,8 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
           expect(result.change_action).to eq :removed
         end
 
-        it "does not set any updated risk level in the result context" do
-          expect(result.updated_risk_level).to be_nil
+        it "sets the updated risk level as not set the result context" do
+          expect(result.updated_risk_level).to eq "Not set"
         end
 
         it "sends an email for the removal" do
@@ -220,7 +219,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
             name: creator_team.name,
             investigation: investigation,
             update_verb: "removed",
-            level: nil
+            level: "Not set"
           )
         end
       end

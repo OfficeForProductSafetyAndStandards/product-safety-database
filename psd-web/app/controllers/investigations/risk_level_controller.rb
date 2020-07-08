@@ -30,7 +30,7 @@ module Investigations
 
       flash[:success] = I18n.t(".success.#{result.change_action}",
                                scope: "investigations.risk_level",
-                               level: @investigation.risk_level_description.downcase)
+                               level: result.updated_risk_level.downcase)
     end
   end
 end

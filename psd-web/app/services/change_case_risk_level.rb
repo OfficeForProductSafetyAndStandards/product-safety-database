@@ -18,7 +18,7 @@ class ChangeCaseRiskLevel
       create_audit_activity_for_risk_level_update
     end
 
-    context.updated_risk_level = investigation.risk_level_description
+    context.updated_risk_level = investigation.decorate.risk_level_description
     send_notification_email
   end
 
