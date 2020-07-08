@@ -59,17 +59,17 @@ private
 
     result = UpdateCorrectiveAction.call!(
       corrective_action: @corrective_action,
-      corrective_actions_params: corrective_actions_params,
+      corrective_action_params: corrective_action_params,
       user: current_user
     )
-    return redirect_to [@investigation, result.corrective_action] if result.success?
+    return redirect_to investigation_action_path(@investigation, result.corrective_action) if result.success?
 
     render [@investigation, @corrective_action]
   end
 
 private
 
-  def corrective_actions_params
+  def corrective_action_params
     params.require(:corrective_action).permit(
       :product_id,
       :business_id,
@@ -79,7 +79,9 @@ private
       :related_file,
       :measure_type,
       :duration,
-      :geographic_scope
+      :geographic_scope,
+      :file,
+      date_decided: [:day, :month, :year]
     )
   end
 end
