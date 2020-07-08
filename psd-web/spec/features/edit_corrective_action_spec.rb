@@ -40,18 +40,18 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       visit "/cases/#{investigation.pretty_id}/corrective-actions/#{corrective_action.id}"
 
       click_link "Edit corrective action"
-      ap corrective_action
-      fill_in "Summary",        with: new_summary
-      fill_in "Day",            with: new_date_decided.day
-      fill_in "Month",          with: new_date_decided.month
-      fill_in "Year",           with: new_date_decided.year
-      select product_two.name,  from: "Product"
-      select new_legislation,   from: "Under which legislation?"
-      select business_two.trading_name, from: "Business"
+
+      fill_in "Summary",                    with: new_summary
+      fill_in "Day",                        with: new_date_decided.day
+      fill_in "Month",                      with: new_date_decided.month
+      fill_in "Year",                       with: new_date_decided.year
+      select product_two.name,              from: "Product"
+      select new_legislation,               from: "Under which legislation?"
+      select business_two.trading_name,     from: "Business"
+      select new_geographic_scope,          from: "What is the geographic scope of the action?"
+      fill_in "Further details (optional)", with: new_details
       choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
       choose CorrectiveAction.human_attribute_name("duration.#{new_duration}")
-      select new_geographic_scope, from: "What is the geographic scope of the action?"
-      fill_in "Further details (optional)", with: new_details
 
       click_on "Update corrective action"
 
