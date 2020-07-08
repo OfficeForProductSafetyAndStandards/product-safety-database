@@ -3,6 +3,11 @@ module PageExpectations
     expect(page).to have_current_path("/")
   end
 
+  def expect_to_be_on_cases_search_results_page(search_term:)
+    expect(page).to have_current_path("/cases/search", ignore_query: true)
+    expect(page).to have_h1(search_term)
+  end
+
   # Cases pages
   def expect_to_be_on_case_page(case_id: nil)
     if case_id
@@ -42,6 +47,36 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
     expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
+  end
+
+  def expect_to_view_supporting_information_table
+    within page.first("table") do
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: email.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceEmail")
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: phone_call.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondencePhone call")
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: meeting.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceMeeting")
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: corrective_action.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.supporting_information_type)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: test_result.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+    end
   end
 
   def expect_to_be_on_enter_image_details_page
@@ -87,6 +122,11 @@ module PageExpectations
   def expect_to_be_on_add_supporting_information_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information/new")
     expect(page).to have_selector("h1", text: "What type of information are you adding?")
+  end
+
+  def expect_to_be_on_case_actions_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/actions")
+    expect(page).to have_selector("h1", text: "Select an action")
   end
 
   def expect_to_be_on_add_correspondence_page
@@ -291,9 +331,14 @@ module PageExpectations
     expect(page).to have_link("Back", href: "/products/#{product.id}#attachments")
   end
 
-  def expect_to_be_on_product_page
-    expect(page).to have_current_path("/products/#{product.id}")
-    expect(page).to have_selector("h1", text: product.name)
+  def expect_to_be_on_product_page(product_id:, product_name:)
+    expect(page).to have_current_path("/products/#{product_id}")
+    expect(page).to have_selector("h1", text: product_name)
+  end
+
+  def expect_to_be_on_edit_product_page(product_id: nil, product_name: nil)
+    expect(page).to have_current_path("/products/#{product_id}/edit")
+    expect(page).to have_selector("h1", text: product_name)
   end
 
   # Shared pages across different flows

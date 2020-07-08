@@ -1,0 +1,30 @@
+<% page_heading = "Select an action" %>
+<% page_title(page_heading, errors: @actions_form.errors.any?) %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= error_summary @actions_form.errors %>
+    <%= form_with local: true, url: investigation_actions_path(@investigation) do |form| %>
+      <%= render "form_components/govuk_radios",
+        form: form,
+        key: :investigation_action,
+        items: radio_items_from_hash(@actions_form.actions),
+        fieldset: {
+        legend: {
+          text: page_heading,
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      } %>
+      <%= govukButton(text: "Continue") %>
+    <% end %>
+  </div>
+</div>
