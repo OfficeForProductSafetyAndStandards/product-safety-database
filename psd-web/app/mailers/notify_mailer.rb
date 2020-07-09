@@ -163,12 +163,9 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   def case_risk_level_updated(email:, name:, investigation:, update_verb:, level:)
     set_template(TEMPLATES[:case_risk_level_updated])
-
-    verb_with_level = case update_verb
-                      when "set" then "set to #{level.downcase}"
-                      when "changed" then "changed to #{level.downcase}"
-                      when "removed" then "removed"
-                      end
+    verb_with_level = I18n.t(update_verb,
+                             level: level.downcase,
+                             scope: "mail.case_risk_level_updated.verb_with_level")
 
     set_personalisation(
       verb_with_level: verb_with_level,

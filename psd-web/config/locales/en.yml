@@ -32,6 +32,11 @@
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
   mail:
+    case_risk_level_updated:
+      verb_with_level:
+        set: "set to %{level}"
+        changed: "changed to %{level}"
+        removed: "removed"
     team_added_to_case:
       message_from: "Message from %{user_name}:"
     team_removed_from_case:
