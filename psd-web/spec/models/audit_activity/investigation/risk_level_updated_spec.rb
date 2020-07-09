@@ -15,7 +15,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
   describe ".create_for!" do
     let(:previous_risk) { "low" }
-    let(:new_risk) { nil }
+    let(:new_risk) { "other" }
     let(:previous_custom) { nil }
     let(:new_custom) { "Custom risk" }
 
@@ -49,7 +49,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
       context "with an update on custom risk level" do
         let(:previous_risk) { nil }
-        let(:new_risk) { nil }
+        let(:new_risk) { "other" }
         let(:previous_custom) { nil }
         let(:new_custom) { "Custom risk" }
 
@@ -74,8 +74,8 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
       end
 
       context "with an update on custom risk level" do
-        let(:previous_risk) { nil }
-        let(:new_risk) { nil }
+        let(:previous_risk) { "other" }
+        let(:new_risk) { "other" }
         let(:previous_custom) { "mild risk" }
         let(:new_custom) { "Custom risk" }
 
