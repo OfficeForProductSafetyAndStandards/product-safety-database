@@ -1,16 +1,16 @@
-/* ==========================================================================
-   #MENU
-
-   Inspired by the HMCTS menu: https://github.com/hmcts/frontend/blob/master/src/components/hmcts-menu/_menu.scss
-   ========================================================================== */
+// ==========================================================================
+//   #MENU
+//
+//   Inspired by the HMCTS menu:
+//   https://github.com/hmcts/frontend/blob/master/src/components///hmcts-menu/_menu.scss
+//   ==========================================================================
 
 .app-menu {
   display: inline-block;
   position: relative;
 }
 
-/* TOGGLE BUTTON */
-
+// TOGGLE BUTTON
 .app-menu__toggle-button {
   display: inline-block;
   margin-right: govuk-spacing(2);
@@ -25,6 +25,7 @@
 .app-menu__toggle-button {
   margin-bottom: govuk-spacing(1);
   margin-right: 0;
+
   &:after {
     background-repeat: no-repeat;
     background-image: url(#{$app-images-path}icon-arrow-white-down.svg);
@@ -46,6 +47,7 @@
 .app-menu__toggle-button--secondary {
   margin-bottom: govuk-spacing(1);
   margin-right: 0;
+
   &:after {
     background-image: url(#{$app-images-path}icon-arrow-black-down.svg);
   }
@@ -57,8 +59,7 @@
   }
 }
 
-/* MENU ITEM */
-
+// MENU ITEM
 .app-menu__item {
   display: inline-block;
   margin-right: govuk-spacing(2);
@@ -71,7 +72,7 @@
 
 .app-menu [role=menuitem] {
   @include govuk-font(19);
-  background-color: govuk-colour("light-grey", $legacy: "grey-3");
+  background-color: govuk-colour("light-grey");
   border: none;
   box-sizing: border-box;
   display: block;
@@ -85,25 +86,24 @@
   &:link,
   &:visited {
     text-decoration: none;
-    color:  govuk-colour("black");
+    color: govuk-colour("black");
   }
 
   &:hover {
-    background-color: govuk-colour("mid-grey", $legacy: "grey-2");
+    background-color: govuk-colour("mid-grey");
   }
 
   &:focus {
-    outline: 3px solid #ffbf47;
+    outline: 3px solid $govuk-focus-colour;
     outline-offset: 0;
     position: relative;
     z-index: 10;
   }
 }
 
-/* MENU WRAPPER */
-
+// MENU WRAPPER
 .app-menu__wrapper {
-  font-size: 0; /* Hide whitespace between elements */
+  font-size: 0; // Hide whitespace between elements
 }
 
 .app-menu__wrapper--right {

@@ -43,7 +43,7 @@ Menu.prototype.addMenuLinksFromDataAttributes = function () {
   }
 
   this.$menu = document.createElement('div')
-  this.$menu.setAttribute('class', 'hmcts-menu__wrapper hmcts-menu__wrapper--right')
+  this.$menu.setAttribute('class', 'app-menu__wrapper app-menu__wrapper--right')
   this.$menu.setAttribute('role', 'menu')
 
   for (var item of items) {
@@ -51,7 +51,7 @@ Menu.prototype.addMenuLinksFromDataAttributes = function () {
     itemLink.setAttribute('href', item.href)
     itemLink.setAttribute('role', 'menuitem')
     itemLink.setAttribute('data-module', 'govuk-button')
-    itemLink.setAttribute('class', 'hmcts-menu__item app-button--case-bar-secondary')
+    itemLink.setAttribute('class', 'app-menu__item app-button--case-bar-secondary')
     itemLink.textContent = item.text
 
     this.$menu.appendChild(itemLink)
@@ -141,7 +141,7 @@ Menu.prototype.convertLinkToButton = function () {
 
   this.$button = document.createElement('button')
   this.$button.textContent = linkButton.textContent
-  this.$button.setAttribute('class', 'govuk-button app-button--case-bar-secondary hmcts-menu__toggle-button hmcts-menu__toggle-button--secondary')
+  this.$button.setAttribute('class', 'govuk-button app-button--case-bar-secondary app-menu__toggle-button app-menu__toggle-button--secondary')
   this.$button.setAttribute('aria-expanded', 'false')
   this.$button.setAttribute('aria-haspopup', 'true')
   this.$button.addEventListener('click', this.menuButtonClicked.bind(this))
