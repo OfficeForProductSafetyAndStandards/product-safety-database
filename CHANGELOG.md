@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 2020-07-03
+## 2020-07-10
 - Added the ability to set and update the risk level for the cases.
 
 ## 2020-06-26
