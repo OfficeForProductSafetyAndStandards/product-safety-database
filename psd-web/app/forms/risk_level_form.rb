@@ -8,7 +8,7 @@ class RiskLevelForm
   attribute :custom_risk_level, :string, default: nil
 
   validates_inclusion_of :risk_level, in: Investigation.risk_levels.values, if: -> { risk_level.present? }
-  validates_presence_of :custom_risk_level, if: -> { risk_level == Investigation.risk_levels[:other] && custom_risk_level.blank? }
+  validates_presence_of :custom_risk_level, if: -> { risk_level == Investigation.risk_levels[:other] }
 
   def custom_risk_level
     super&.downcase&.squish

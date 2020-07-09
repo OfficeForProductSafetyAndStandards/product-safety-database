@@ -3,7 +3,6 @@
 # risk level and custom risk level, providing information about what action
 # (if any) will be resulting from the change.
 class Investigation::RiskLevelChange
-
   def initialize(investigation)
     self.investigation = investigation
   end
