@@ -122,7 +122,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     expect_to_be_on_change_risk_level_page(case_id: investigation.pretty_id)
     expect(page).to have_checked_field("High risk")
     choose("Other")
-    fill_in "Custom risk level", with: "Low risk"
+    fill_in "Custom risk level", with: "Low"
     click_button "Set risk level"
 
     expect_confirmation_banner("Case risk level changed to low risk")
