@@ -18,13 +18,13 @@ module Investigations
       result = ChangeCaseRiskLevel.call!(
         @risk_level_form.attributes.merge(investigation: @investigation, user: current_user)
       )
-      success_flash_message(result)
+      set_success_flash_message(result)
       redirect_to investigation_path(@investigation)
     end
 
   private
 
-    def success_flash_message(result)
+    def set_success_flash_message(result)
       return if result.change_action.blank?
 
       flash[:success] = I18n.t(".success.#{result.change_action}",
