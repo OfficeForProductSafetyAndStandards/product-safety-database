@@ -69,8 +69,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
 
       it "generates an activity entry with the changes" do
-        activity_timeline_entry = investigation.activities.order(:created_at).find_by!(type: "AuditActivity::CorrectiveAction::Update")
-        byebug
+        update_corrective_action
+
+        activity_timeline_entry = investigation.activities.reload.order(:created_at).find_by!(type: "AuditActivity::CorrectiveAction::Update")
         expect(activity_timeline_entry).to have_attributes({})
       end
     end
