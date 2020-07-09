@@ -98,10 +98,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       end
     end
 
-    context "when the custom risk level is set" do
-      let(:investigation) { create(:allegation, custom_risk_level: "Custom risk") }
+    context "when the risk level is set to other" do
+      let(:investigation) { create(:allegation, risk_level: "other", custom_risk_level: "Custom risk") }
 
-      it "displays the risk level" do
+      it "displays the custom risk level" do
         expect(risk_level_description).to eq "Custom risk"
       end
     end

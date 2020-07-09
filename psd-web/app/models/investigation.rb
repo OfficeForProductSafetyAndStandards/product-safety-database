@@ -15,10 +15,11 @@ class Investigation < ApplicationRecord
   }
 
   enum risk_level: {
-    serious: 10,
-    high: 20,
-    medium: 30,
-    low: 40,
+    serious: "serious",
+    high: "high",
+    medium: "medium",
+    low: "low",
+    other: "other"
   }
 
   before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
@@ -31,7 +32,8 @@ class Investigation < ApplicationRecord
   validates :description, length: { maximum: 10_000 }
   validates :non_compliant_reason, length: { maximum: 10_000 }
   validates :hazard_description, length: { maximum: 10_000 }
-  validates :custom_risk_level, absence: true, if: -> { risk_level.present? }
+  validates :custom_risk_level, absence: true, if: -> { risk_level != "other" }
+  validates :custom_risk_level, presence: true, if: -> { risk_level == "other" }
 
   after_update :create_audit_activity_for_status,
                :create_audit_activity_for_visibility,

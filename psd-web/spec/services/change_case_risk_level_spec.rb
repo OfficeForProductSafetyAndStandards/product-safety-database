@@ -139,9 +139,11 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     end
 
     context "when the custom risk level was previously set" do
+      let(:previous_level) { "other" }
       let(:previous_custom) { "Custom level" }
 
-      context "with a different new risk level" do
+      context "with a different custom risk level" do
+        let(:new_level) { "other" }
         let(:new_custom) { "New custom level" }
 
         it "succeeds" do
@@ -200,7 +202,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
           activity = investigation.reload.activities.first
           expect(activity).to be_a(AuditActivity::Investigation::RiskLevelUpdated)
           expect(activity.metadata).to include(
-            "updates" => { "custom_risk_level" => [previous_custom, new_custom] },
+            "updates" => { "custom_risk_level" => [previous_custom, new_custom], "risk_level" => [previous_level, new_level] },
             "update_verb" => "removed"
           )
         end

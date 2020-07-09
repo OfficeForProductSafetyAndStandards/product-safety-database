@@ -281,7 +281,8 @@ en:
             hazard_type:
               blank: "Enter the primary hazard"
             custom_risk_level:
-              present: "Custom risk level cannot be set when there is a standard risk level"
+              present: "Custom risk level must be blank when risk level is not 'other'"
+              blank: "Custom risk level must be present when risk level is 'other'"
         product:
           attributes:
             product_category:

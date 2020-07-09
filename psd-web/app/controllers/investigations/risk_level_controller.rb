@@ -15,10 +15,9 @@ module Investigations
       @risk_level_form = RiskLevelForm.new(params.require(:investigation).permit(:risk_level, :custom_risk_level))
       return render :show unless @risk_level_form.valid?
 
-      result = ChangeCaseRiskLevel.call!(investigation: @investigation,
-                                         user: current_user,
-                                         risk_level: @risk_level_form.risk_level.presence,
-                                         custom_risk_level: @risk_level_form.custom_risk_level.presence)
+      result = ChangeCaseRiskLevel.call!(
+        @risk_level_form.attributes.merge(investigation: @investigation, user: current_user)
+      )
       success_flash_message(result)
       redirect_to investigation_path(@investigation)
     end
