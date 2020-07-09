@@ -10,10 +10,6 @@ class RiskLevelForm
   validates_inclusion_of :risk_level, in: Investigation.risk_levels.values, if: -> { risk_level.present? }
   validates_presence_of :custom_risk_level, if: -> { risk_level == Investigation.risk_levels[:other] }
 
-  def custom_risk_level
-    super&.downcase&.squish
-  end
-
   def attributes
     if STANDARD_LEVELS.include?(computed_custom_risk_level)
       {
@@ -23,7 +19,7 @@ class RiskLevelForm
     else
       {
         risk_level: computed_risk_level,
-        custom_risk_level: risk_level_other? ? computed_custom_risk_level : nil
+        custom_risk_level: risk_level_other? ? custom_risk_level : nil
       }
 
     end
