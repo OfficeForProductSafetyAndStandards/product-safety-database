@@ -11,14 +11,11 @@ class ChangeCaseRiskLevel
 
     investigation.assign_attributes(risk_level: risk_level.presence, custom_risk_level: custom_risk_level.presence)
 
-    changes = investigation.changes
-
-    risk_level_change = Investigation::RiskLevelChange.new(investigation, changes)
+    risk_level_change = Investigation::RiskLevelChange.new(investigation)
     context.change_action = risk_level_change.change_action
     return unless change_action
 
     ActiveRecord::Base.transaction do
-
       investigation.save!
       create_audit_activity_for_risk_level_update
     end

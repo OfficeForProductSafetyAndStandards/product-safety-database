@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Investigation::RiskLevelChange do
   describe "#change_action" do
     subject(:change_action) do
-      described_class.new(investigation, new_level, new_custom).change_action
+      described_class.new(investigation).change_action
     end
 
     let(:current_level) { nil }
