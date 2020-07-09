@@ -106,8 +106,10 @@
   font-size: 0; // Hide whitespace between elements
 }
 
-.app-menu__wrapper--right {
-  right: 0;
+@include govuk-media-query($from: tablet) {
+  .app-menu__wrapper--right {
+    right: 0;
+  }
 }
 
 .app-menu [role=menu] {
