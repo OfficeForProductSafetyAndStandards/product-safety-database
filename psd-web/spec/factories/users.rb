@@ -7,7 +7,7 @@ end
 FactoryBot.define do
   factory :user do
     name { Faker::Name.name }
-    email
+    email { generate(:email) }
     organisation
     password { "2538fhdkvuULE36f" }
     password_confirmation(&:password)
