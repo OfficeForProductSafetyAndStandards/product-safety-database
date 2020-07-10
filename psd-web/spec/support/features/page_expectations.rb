@@ -49,6 +49,36 @@ module PageExpectations
     expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
+  def expect_to_view_supporting_information_table
+    within page.first("table") do
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: email.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceEmail")
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: email.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: phone_call.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondencePhone call")
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: phone_call.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: meeting.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: "CorrespondenceMeeting")
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: meeting.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: corrective_action.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.supporting_information_type)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: corrective_action.date_added)
+
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell a", text: test_result.supporting_information_title)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.supporting_information_type)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_of_activity)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+      expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
+    end
+  end
+
   def expect_to_be_on_enter_image_details_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
     expect(page).to have_selector("h3", text: "Image details")
