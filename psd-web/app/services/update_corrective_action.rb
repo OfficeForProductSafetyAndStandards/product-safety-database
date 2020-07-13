@@ -3,9 +3,7 @@ class UpdateCorrectiveAction
   delegate :user, :corrective_action, :corrective_action_params, to: :context
 
   def call
-    context.fail!(error: "No corractive action supplied") unless corrective_action.is_a?(CorrectiveAction)
-    context.fail!(error: "No corrective action params supplied") unless corrective_action_params
-    context.fail!(error: "No user supplied") unless user.is_a?(User)
+    validate_inputs!
 
     corrective_action.date_decided = nil
     corrective_action.date_decided_day = nil
@@ -21,9 +19,7 @@ class UpdateCorrectiveAction
 
     old_document = corrective_action.documents.first
 
-    if corrective_action.invalid?
-      context.fail!
-    end
+    context.fail! if corrective_action.invalid?
 
     corrective_action.transaction do
       corrective_action_changes = corrective_action.changes.any?
@@ -44,6 +40,12 @@ class UpdateCorrectiveAction
   end
 
 private
+
+  def validate_inputs!
+    context.fail!(error: "No corractive action supplied") unless corrective_action.is_a?(CorrectiveAction)
+    context.fail!(error: "No corrective action params supplied") unless corrective_action_params
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
+  end
 
   def create_audit_activity_for_corrective_action_update
     metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action)
