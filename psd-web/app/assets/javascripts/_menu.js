@@ -60,6 +60,8 @@ Menu.prototype.addMenuLinksFromDataAttributes = function () {
   this.$menu.addEventListener('keydown', this.menuItemKeyedDown.bind(this))
 
   this.$module.appendChild(this.$menu)
+
+  document.addEventListener('click', this.documentClicked.bind(this))
 }
 
 Menu.prototype.toggle = function () {
@@ -74,6 +76,12 @@ Menu.prototype.toggle = function () {
 
 Menu.prototype.menuButtonClicked = function () {
   this.toggle()
+}
+
+Menu.prototype.documentClicked = function(event) {
+  if (!this.$module.contains(event.target)) {
+    this.hideMenu()
+  }
 }
 
 Menu.prototype.menuButtonKeyedDown = function (event) {
