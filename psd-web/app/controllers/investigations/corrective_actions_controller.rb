@@ -82,8 +82,8 @@ private
       :measure_type,
       :duration,
       :geographic_scope,
-      file: [:file, :description],
-      date_decided: [:day, :month, :year]
+      file: %i[file description],
+      date_decided: %i[day month year]
     )
   end
 end
