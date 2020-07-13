@@ -110,6 +110,21 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         }.to change(corrective_action, :date_decided).from(old_date_decided).to(new_date_decided)
       end
 
+      describe "notifications" do
+        let(:activity)      { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update") }
+        let(:body)          { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." }
+        let(:email_subject) { "Corrective action edited for #{investigation.case_type.upcase_first}" }
+        let(:notifier) { instance_spy(NotifyMailer) }
+
+        it "notifies the owner team" do
+          update_corrective_action
+
+          expect(notifier)
+            .to have_received(:investigation_updated)
+                  .with(investigation.pretty_id, user.name, user.email, body, email_subject)
+        end
+      end
+
       context "with a new file" do
         it "stored the new file with the description", :aggregate_failures do
           update_corrective_action

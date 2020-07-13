@@ -5,10 +5,8 @@ class UpdateCorrectiveAction
   def call
     validate_inputs!
     clear_decided_date_to_trigger_date_validation
-
-    corrective_action.set_dates_from_params(corrective_action_params)
-    corrective_action.assign_attributes(corrective_action_params.except(:date_decided))
-
+    fetch_new_file_params
+    set_new_attributes
     context.fail! if corrective_action.invalid?
 
     corrective_action.transaction do
@@ -25,7 +23,7 @@ class UpdateCorrectiveAction
 
       return unless corrective_action_changes || document_changed || document_changed_description_changed
 
-      create_audit_activity_for_corrective_action_update
+      send_notification_email(create_audit_activity_for_corrective_action_update!)
     end
   end
 
@@ -46,6 +44,7 @@ private
   def new_file_params
     @new_file_params ||= corrective_action_params.delete(:file)
   end
+  alias_method :fetch_new_file_params, :new_file_params
 
   def validate_inputs!
     context.fail!(error: "No corractive action supplied") unless corrective_action.is_a?(CorrectiveAction)
@@ -53,7 +52,7 @@ private
     context.fail!(error: "No user supplied") unless user.is_a?(User)
   end
 
-  def create_audit_activity_for_corrective_action_update
+  def create_audit_activity_for_corrective_action_update!
     metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action)
 
     AuditActivity::CorrectiveAction::Update.create!(
@@ -79,5 +78,28 @@ private
     corrective_action.date_decided_day = nil
     corrective_action.date_decided_month = nil
     corrective_action.date_decided_year = nil
+  end
+
+  def set_new_attributes
+    corrective_action.set_dates_from_params(corrective_action_params)
+    corrective_action.assign_attributes(corrective_action_params.except(:date_decided))
+  end
+
+  def investigation
+    corrective_action.investigation
+  end
+
+  def send_notification_email(activity)
+    activity.entities_to_notify.each do |recipient|
+      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
+
+      NotifyMailer.investigation_updated(
+        test_result.investigation.pretty_id,
+        recipient.name,
+        email,
+        "#{activity.source.show(recipient)} edited a corrective action on the #{investigation.case_type}.",
+        "Corrective action edited for #{corrective_action.investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
   end
 end
