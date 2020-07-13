@@ -23,8 +23,8 @@ Menu.prototype.addMenuLinksFromDataAttributes = function () {
   while (true) {
     var itemKeyPrefix = 'item-' + (itemCount + 1)
 
-    var itemHrefKey = itemKeyPrefix + '-href'
-    var itemTextKey = itemKeyPrefix + '-text'
+    var itemHrefKey = itemKeyPrefix + 'Href'
+    var itemTextKey = itemKeyPrefix + 'Text'
 
     if (this.$module.dataset[itemHrefKey] && this.$module.dataset[itemTextKey]) {
       items.push({
