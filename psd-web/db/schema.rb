@@ -178,8 +178,6 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
-    t.uuid "owner_id"
-    t.string "owner_type"
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
@@ -187,7 +185,6 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
-    t.index ["owner_type", "owner_id"], name: "index_investigations_on_owner_type_and_owner_id"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end
@@ -266,19 +263,6 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
     t.index ["product_id"], name: "index_tests_on_product_id"
-  end
-
-  create_table "user_activities", force: :cascade do |t|
-    t.string "action"
-    t.string "controller"
-    t.datetime "created_at", null: false
-    t.string "fullpath"
-    t.string "method"
-    t.string "organisation_id"
-    t.jsonb "payload"
-    t.string "team_id"
-    t.datetime "updated_at", null: false
-    t.string "user_id"
   end
 
   create_table "user_roles", force: :cascade do |t|
