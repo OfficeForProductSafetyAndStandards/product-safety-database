@@ -71,9 +71,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with the required parameters" do
-
       context "when no changes have been made" do
-        let(:corrective_action_params) {
+        let(:corrective_action_params) do
           ActionController::Parameters.new(
             summary: corrective_action.summary,
             date_decided_day: corrective_action.date_decided.day,
@@ -86,7 +85,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
             geographic_scope: corrective_action.geographic_scope,
             file: { description: corrective_action.documents.first.metadata[:description] }
           ).permit!
-        }
+        end
 
         it "does not change corrective action" do
           expect { update_corrective_action }.not_to change(corrective_action, :attributes)
