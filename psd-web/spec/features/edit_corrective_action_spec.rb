@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_antivirus do
   include_context "with corrective action setup for updates"
 
   before do

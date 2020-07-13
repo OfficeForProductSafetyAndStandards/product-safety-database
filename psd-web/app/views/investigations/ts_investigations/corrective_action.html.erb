@@ -1,0 +1,27 @@
+<%= render "repeatable_info",
+           title: "Record corrective action",
+           model: @corrective_action,
+           scope: :corrective_action,
+           other_text: "Are there other actions to report?",
+           hide_break: false,
+           further_key: :further_corrective_action do |form| %>
+
+  <%= render "investigations/record_corrective_actions/form",
+             form: form,
+             corrective_action: @corrective_action,
+             investigation: @investigation,
+             file_blob: @file_blob,
+             allow_product_linking: false,
+             allow_business_linking: false %>
+
+  <% file_field = capture do %>
+    <%= render "related_attachment_fields", form: form, file_blob: @file_blob, attachment_name: :file %>
+  <% end %>
+  <%= render "form_components/govuk_radios",
+             form: form,
+             key: :related_file,
+             fieldset: { legend: { text: "Are there any files related to the action?", classes: "govuk-fieldset__legend--m" } },
+             items: [{ text: "Yes", value: "Yes", conditional: { html: file_field } },
+                     { text: "No", value: "No" }]
+  %>
+<% end %>

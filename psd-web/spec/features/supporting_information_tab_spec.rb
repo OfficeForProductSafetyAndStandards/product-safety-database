@@ -30,7 +30,7 @@ RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :wit
       click_on "Sort"
       within page.first("table") do
         sorted_titles = find_all("tr.govuk-table__row td.govuk-table__cell a").map(&:text)
-        expected_titles = ["Corrective action", "Email correspondence", "Meeting correspondence", "Passed test: product name", "Phone call correspondence"]
+        expected_titles = ["Corrective action", "Email correspondence", "Meeting correspondence", "Passed test: #{product.name}", "Phone call correspondence"]
         expect(sorted_titles).to eq expected_titles
       end
     end
