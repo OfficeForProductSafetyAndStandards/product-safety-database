@@ -4,20 +4,10 @@ class UpdateCorrectiveAction
 
   def call
     validate_inputs!
-
-    corrective_action.date_decided = nil
-    corrective_action.date_decided_day = nil
-    corrective_action.date_decided_month = nil
-    corrective_action.date_decided_year = nil
-
-    new_file_params      = corrective_action_params.delete(:file)
-    new_file             = new_file_params[:file]
-    new_file_description = new_file_params[:description]
+    clear_decided_date_to_trigger_date_validation
 
     corrective_action.set_dates_from_params(corrective_action_params)
     corrective_action.assign_attributes(corrective_action_params.except(:date_decided))
-
-    old_document = corrective_action.documents.first
 
     context.fail! if corrective_action.invalid?
 
@@ -40,6 +30,22 @@ class UpdateCorrectiveAction
   end
 
 private
+
+  def old_document
+    @old_document ||= corrective_action.documents.first
+  end
+
+  def new_file_description
+    @new_file_description ||= new_file_params[:description]
+  end
+
+  def new_file
+    @new_file ||= new_file_params[:file]
+  end
+
+  def new_file_params
+    @new_file_params ||= corrective_action_params.delete(:file)
+  end
 
   def validate_inputs!
     context.fail!(error: "No corractive action supplied") unless corrective_action.is_a?(CorrectiveAction)
@@ -66,5 +72,12 @@ private
 
     old_document.purge
     corrective_action.documents.attach(new_file).first
+  end
+
+  def clear_decided_date_to_trigger_date_validation
+    corrective_action.date_decided = nil
+    corrective_action.date_decided_day = nil
+    corrective_action.date_decided_month = nil
+    corrective_action.date_decided_year = nil
   end
 end
