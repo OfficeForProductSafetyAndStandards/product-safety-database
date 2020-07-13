@@ -48,7 +48,7 @@ private
   def create_audit_activity_for_corrective_action_update
     metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action)
 
-    context.activity = AuditActivity::CorrectiveAction::Update.create!(
+    AuditActivity::CorrectiveAction::Update.create!(
       source: UserSource.new(user: user),
       investigation: corrective_action.investigation,
       product: corrective_action.product,
