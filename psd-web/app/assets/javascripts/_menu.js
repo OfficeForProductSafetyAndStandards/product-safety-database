@@ -78,7 +78,7 @@ Menu.prototype.menuButtonClicked = function () {
   this.toggle()
 }
 
-Menu.prototype.documentClicked = function(event) {
+Menu.prototype.documentClicked = function (event) {
   if (!this.$module.contains(event.target)) {
     this.hideMenu()
   }
