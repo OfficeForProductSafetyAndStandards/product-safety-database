@@ -119,7 +119,7 @@ Menu.prototype.focusPrevious = function (currentLink) {
   if (previousLink) {
     previousLink.focus()
   } else {
-    // focus the last lank
+    // focus the last link
     var menuLinks = this.$menu.querySelectorAll('a')
     menuLinks[menuLinks.length - 1].focus()
   }
