@@ -101,4 +101,75 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       expect(investigation).to be_invalid
     end
   end
+
+  describe "custom_risk_level validity" do
+    let(:investigation) do
+      build_stubbed(:allegation, custom_risk_level: custom_risk_level, risk_level: risk_level)
+    end
+
+    context "with a custom risk level" do
+      let(:custom_risk_level) { "Custom level" }
+
+      context "when the risk_level is also set" do
+        let(:risk_level) { "low" }
+
+        it "contains validation errors for the attribute" do
+          investigation.validate
+          expect(investigation.errors.full_messages_for(:custom_risk_level))
+            .to eq ["Custom risk level must be blank when risk level is not 'other'"]
+        end
+      end
+
+      context "when the risk_level is set to 'other'" do
+        let(:risk_level) { "other" }
+
+        it "does not contain validation errors for the attribute" do
+          investigation.validate
+          expect(investigation.errors.full_messages_for(:custom_risk_level)).to be_empty
+        end
+      end
+
+      context "when the risk level is not set" do
+        let(:risk_level) { nil }
+
+        it "contains validation errors for the attribute" do
+          investigation.validate
+          expect(investigation.errors.full_messages_for(:custom_risk_level))
+            .to eq ["Custom risk level must be blank when risk level is not 'other'"]
+        end
+      end
+    end
+
+    context "without a custom risk level" do
+      let(:custom_risk_level) { nil }
+
+      context "when the risk_level is set" do
+        let(:risk_level) { "low" }
+
+        it "does not contain validation errors for the attribute" do
+          investigation.validate
+          expect(investigation.errors.full_messages_for(:custom_risk_level)).to be_empty
+        end
+      end
+
+      context "when the risk_level is set to 'other'" do
+        let(:risk_level) { "other" }
+
+        it "contains validation errors for the attribute" do
+          investigation.validate
+          expect(investigation.errors.full_messages_for(:custom_risk_level))
+            .to eq ["Custom risk level must be present when risk level is 'other'"]
+        end
+      end
+
+      context "when the risk level is not set" do
+        let(:risk_level) { nil }
+
+        it "does not contain validation errors for the attribute" do
+          investigation.validate
+          expect(investigation.errors.full_messages_for(:custom_risk_level)).to be_empty
+        end
+      end
+    end
+  end
 end

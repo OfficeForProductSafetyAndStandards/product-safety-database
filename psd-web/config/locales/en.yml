@@ -32,6 +32,11 @@
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
   mail:
+    case_risk_level_updated:
+      verb_with_level:
+        set: "set to %{level}"
+        changed: "changed to %{level}"
+        removed: "removed"
     team_added_to_case:
       message_from: "Message from %{user_name}:"
     team_removed_from_case:
@@ -74,6 +79,22 @@ en:
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "Coronavirus status updated on %{case_type}"
+    risk_level:
+      show:
+        title:
+          set: "Set case risk level"
+          change: "Change case risk level"
+        submit_button: "Set risk level"
+        legend: "Case risk level"
+        levels:
+          serious: "Serious risk"
+          high: "High risk"
+          medium: "Medium risk"
+          low: "Low risk"
+      success:
+        set: "Case risk level set to %{level}"
+        changed: "Case risk level changed to %{level}"
+        removed: "Case risk level removed"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
@@ -91,6 +112,11 @@ en:
         body:
           true: "The case is related to the coronavirus outbreak."
           false: "The case is not related to the coronavirus outbreak."
+      risk_level_updated:
+        title:
+          set: "Case risk level set to %{level}"
+          changed: "Case risk level changed to %{level}"
+          removed: "Case risk level removed"
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
@@ -180,6 +206,12 @@ en:
               not_whitelisted: "The email address is not recognised. Check you’ve entered it correctly, or email %{opss_enquiries_email} to add it to the approved list."
               already_in_team: "%{email} is already a member of %{team}"
               existing_user: "You cannot invite this person to join your team because they are already a member of another team. Contact %{opss_enquiries_email} if the person’s team needs to be changed."
+        risk_level_form:
+          attributes:
+            risk_level:
+              not_allowed: "Invalid option"
+            custom_risk_level:
+              blank: "Set a risk level"
         supporting_information_type_form:
           attributes:
             type:
@@ -253,6 +285,9 @@ en:
               blank: "Enter a valid product category"
             hazard_type:
               blank: "Enter the primary hazard"
+            custom_risk_level:
+              present: "Custom risk level must be blank when risk level is not 'other'"
+              blank: "Custom risk level must be present when risk level is 'other'"
         product:
           attributes:
             product_category:

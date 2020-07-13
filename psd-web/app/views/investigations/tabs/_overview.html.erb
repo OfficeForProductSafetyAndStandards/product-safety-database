@@ -23,11 +23,9 @@
       <%= @investigation.product_summary_list %>
     <% end %>
 
-    <% if @investigation.display_risk_and_issues_list? %>
-      <%= govuk_hr %>
-      <h2 class="govuk-heading-m"><%= "Risks and issues" %></h2>
-      <%= @investigation.risk_and_issues_list %>
-    <% end %>
+    <%= govuk_hr %>
+    <h2 class="govuk-heading-m"><%= "Risks and issues" %></h2>
+    <%= @investigation.risk_and_issues_list(policy(@investigation).update?) %>
 
     <% if @investigation.complainant %>
       <%= govuk_hr %>
