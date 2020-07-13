@@ -498,4 +498,14 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{case_id}/meetings/confirmation")
     expect_page_to_have_h1("Confirm meeting details")
   end
+
+  def expect_to_be_on_set_risk_level_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/edit-risk-level")
+    expect_page_to_have_h1("Set case risk level")
+  end
+
+  def expect_to_be_on_change_risk_level_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/edit-risk-level")
+    expect_page_to_have_h1("Change case risk level")
+  end
 end
