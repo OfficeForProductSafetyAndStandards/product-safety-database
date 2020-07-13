@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_02_155305) do
+ActiveRecord::Schema.define(version: 2020_07_08_184946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
 
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
+  create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -171,6 +172,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.string "complainant_reference"
     t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
+    t.string "custom_risk_level"
     t.date "date_received"
     t.text "description"
     t.text "hazard_description"
@@ -182,9 +184,11 @@ ActiveRecord::Schema.define(version: 2020_07_02_155305) do
     t.string "product_category"
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
+    t.enum "risk_level", as: "risk_levels"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
+    t.index ["custom_risk_level"], name: "index_investigations_on_custom_risk_level"
     t.index ["pretty_id"], name: "index_investigations_on_pretty_id", unique: true
     t.index ["updated_at"], name: "index_investigations_on_updated_at"
   end

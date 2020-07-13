@@ -3,16 +3,17 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
   TEMPLATES =
     {
-      reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
-      investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
-      investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
-      alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
-      welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
-      invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
-      expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
       account_locked: "0a78e692-977e-4ca7-94e9-9de64ebd8a5d",
+      alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
+      case_risk_level_updated: "66c2f2dd-f3a1-4ef1-a9cc-a99a1b7dff22",
+      expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
+      investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
+      investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
+      invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
+      reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
       team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
-      team_deleted_from_case: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1"
+      team_deleted_from_case: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
+      welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -158,5 +159,23 @@ class NotifyMailer < GovukNotifyRails::Mailer
     )
 
     mail(to: to_email)
+  end
+
+  def case_risk_level_updated(email:, name:, investigation:, update_verb:, level:)
+    set_template(TEMPLATES[:case_risk_level_updated])
+    verb_with_level = I18n.t(update_verb,
+                             level: level.downcase,
+                             scope: "mail.case_risk_level_updated.verb_with_level")
+
+    set_personalisation(
+      verb_with_level: verb_with_level,
+      name: name,
+      case_type: investigation.case_type.to_s.downcase,
+      case_title: investigation.decorate.title,
+      case_id: investigation.pretty_id,
+      investigation_url: investigation_url(pretty_id: investigation.pretty_id)
+    )
+
+    mail(to: email)
   end
 end

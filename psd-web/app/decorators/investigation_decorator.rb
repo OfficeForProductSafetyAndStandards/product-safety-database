@@ -38,13 +38,28 @@ class InvestigationDecorator < ApplicationDecorator
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
-  def display_risk_and_issues_list?
-    object.hazard_type.present? || object.non_compliant_reason.present?
+  def risk_level_set?
+    object.risk_level.present? || object.custom_risk_level.present?
   end
 
-  def risk_and_issues_list
+  def risk_level_description
+    if object.risk_level.present? && !object.other?
+      I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")
+    elsif object.custom_risk_level.present?
+      object.custom_risk_level
+    else
+      "Not set"
+    end
+  end
+
+  def risk_and_issues_list(show_actions = false)
     hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
     rows = [
+      {
+        key: { text: "Case risk level" },
+        value: { text: risk_level_description },
+        actions: show_actions ? risk_level_actions : []
+      },
       object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
       object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
     ]
@@ -140,5 +155,13 @@ private
 
   def should_display_received_by?
     false
+  end
+
+  def risk_level_actions
+    if risk_level_set?
+      [href: h.investigation_risk_level_path(object), text: "Change", visually_hidden_text: "risk level"]
+    else
+      [href: h.investigation_risk_level_path(object), text: "Set", visually_hidden_text: "risk level"]
+    end
   end
 end
