@@ -1,6 +1,8 @@
 class ChangeCaseRiskLevel
   include Interactor
 
+  AUDIT_ACTIVITY_CLASS = AuditActivity::Investigation::RiskLevelUpdated
+
   delegate :investigation, :risk_level, :custom_risk_level, :user, :change_action, :updated_risk_level, to: :context
 
   def call
@@ -26,10 +28,10 @@ class ChangeCaseRiskLevel
 private
 
   def create_audit_activity_for_risk_level_update
-    AuditActivity::Investigation::RiskLevelUpdated.create_for!(
-      investigation,
-      update_verb: change_action,
-      source: UserSource.new(user: user)
+    AUDIT_ACTIVITY_CLASS.create!(
+      source: UserSource.new(user: user),
+      investigation: investigation,
+      metadata: AUDIT_ACTIVITY_CLASS.build_metadata(investigation, change_action)
     )
   end
 

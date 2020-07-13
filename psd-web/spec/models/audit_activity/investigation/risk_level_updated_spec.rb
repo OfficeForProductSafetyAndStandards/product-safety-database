@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_elasticsearch do
-  subject(:audit_activity) { described_class.create_for!(investigation, update_verb: update_verb, source: source) }
+  subject(:audit_activity) { described_class.create(investigation: investigation, metadata: metadata) }
 
-  let(:user) { create(:user) }
-  let(:source) { UserSource.new(user: user) }
+  let(:metadata) { described_class.build_metadata(investigation, update_verb) }
+  let(:update_verb) { "changed" }
   let(:previous_risk) { nil }
   let(:previous_custom) { nil }
   let(:new_risk) { nil }
@@ -13,7 +13,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
   before { investigation.update!(risk_level: new_risk, custom_risk_level: new_custom) }
 
-  describe ".create_for!" do
+  describe ".build_metadata" do
     let(:previous_risk) { "low" }
     let(:new_risk) { "other" }
     let(:previous_custom) { nil }
@@ -21,18 +21,18 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
     let(:update_verb) { "changed" }
 
-    it "creates an audit activity reflecting the change action and value updates" do
-      expect(audit_activity).to have_attributes(
-        source: source,
-        investigation: investigation,
-        metadata: { "update_verb" => update_verb,
-                    "updates" => { "risk_level" => [previous_risk, new_risk],
-                                   "custom_risk_level" => [previous_custom, new_custom] } }
+    it "generates a hash with metadata for the activity" do
+      expect(metadata).to eq(
+        update_verb: update_verb,
+        updates: { "risk_level" => [previous_risk, new_risk],
+                   "custom_risk_level" => [previous_custom, new_custom] }
       )
     end
   end
 
   describe "#title" do
+    let(:user) { build_stubbed(:user) }
+
     context "when the update_verb is 'set'" do
       let(:update_verb) { "set" }
 

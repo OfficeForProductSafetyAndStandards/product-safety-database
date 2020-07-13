@@ -3,18 +3,10 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
   SUBTITLE_SLUG = "Risk level changed".freeze
 
   def self.from(*)
-    raise "Deprecated - use .create_for! instead"
+    raise "Deprecated - use ChangeCaseRiskLevel.call instead"
   end
 
-  def self.create_for!(investigation, update_verb:, source:)
-    create!(
-      source: source,
-      investigation: investigation,
-      metadata: build_metadata(investigation, update_verb)
-    )
-  end
-
-  private_class_method def self.build_metadata(investigation, update_verb)
+  def self.build_metadata(investigation, update_verb)
     updated_values = investigation.previous_changes.slice(:risk_level, :custom_risk_level)
     {
       updates: updated_values,
