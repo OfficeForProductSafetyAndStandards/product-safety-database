@@ -1,0 +1,46 @@
+<% page_heading = @investigation.risk_level_set? ? t(".title.change") : t(".title.set") %>
+<% page_title page_heading, errors: @risk_level_form.errors.any? %>
+<% content_for :after_header do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l">
+      <%= page_heading %>
+    </h1>
+    <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put do |form| %>
+      <%= error_summary @risk_level_form.errors %>
+
+      <%- custom = capture do %>
+        <%= render "form_components/govuk_input",
+                   key: :custom_risk_level,
+                   form: form,
+                   classes: "govuk-!-width-one-third",
+                   label: { text: "Custom risk level", classes: "govuk-visually-hidden" } %>
+      <% end %>
+
+      <% radio_items = (Investigation.risk_levels.keys - ["other"]).map do |level|
+          { text: t(".levels.#{level}"), value: level }
+         end
+         radio_items.push(text: "Other", value: "other", conditional: { html: custom })
+         radio_items.push divider: "or"
+         radio_items.push(text: "Not set", value: "")
+      %>
+
+      <%= render "form_components/govuk_radios", form: form, key: :risk_level,
+                 fieldset: { legend: { text: t(".legend"), isPageHeading: false } },
+                 items: radio_items %>
+
+      <div class="govuk-form-group">
+        <%= govukButton(text: t(".submit_button")) %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
+    <% end %>
+  </div>
+</div>
