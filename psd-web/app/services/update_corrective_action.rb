@@ -47,8 +47,20 @@ private
   alias_method :fetch_new_file_params, :new_file_params
 
   def validate_inputs!
+    validate_corrective_action!
+    validate_corrective_action_params!
+    validate_user!
+  end
+
+  def validate_corrective_action!
     context.fail!(error: "No corractive action supplied") unless corrective_action.is_a?(CorrectiveAction)
+  end
+
+  def validate_corrective_action_params!
     context.fail!(error: "No corrective action params supplied") unless corrective_action_params
+  end
+
+  def validate_user!
     context.fail!(error: "No user supplied") unless user.is_a?(User)
   end
 
