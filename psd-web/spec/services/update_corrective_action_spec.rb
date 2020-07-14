@@ -12,7 +12,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   end
 
   let(:user)             { create(:user) }
-  let(:investigation)    { create(:allegation, creator: user) }
+  let(:case_creator)     { create(:user, team: user.team) }
+  let(:investigation)    { create(:allegation, creator: case_creator) }
   let(:product)          { create(:product) }
   let(:business)         { create(:business) }
   let(:old_date_decided) { Time.zone.today }
@@ -111,17 +112,19 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
 
       describe "notifications" do
-        let(:activity)      { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update") }
-        let(:body)          { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." }
-        let(:email_subject) { "Corrective action edited for #{investigation.case_type.upcase_first}" }
-        let(:notifier) { instance_spy(NotifyMailer) }
+        let(:activity)       { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update") }
+        let(:body)           { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." }
+        let(:email_subject)  { "Corrective action edited for #{investigation.case_type.upcase_first}" }
+        let(:mailer)         { double(deliver_later: nil) } # rubocop:disable RSpec/VerifiedDoubles
 
         it "notifies the owner team" do
+          allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
+
           update_corrective_action
 
-          expect(notifier)
+          expect(NotifyMailer)
             .to have_received(:investigation_updated)
-                  .with(investigation.pretty_id, user.name, user.email, body, email_subject)
+                  .with(investigation.pretty_id, case_creator.name, case_creator.email, body, email_subject)
         end
       end
 

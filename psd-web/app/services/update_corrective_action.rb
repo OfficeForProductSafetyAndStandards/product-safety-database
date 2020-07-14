@@ -94,7 +94,7 @@ private
       email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
 
       NotifyMailer.investigation_updated(
-        test_result.investigation.pretty_id,
+        corrective_action.investigation.pretty_id,
         recipient.name,
         email,
         "#{activity.source.show(recipient)} edited a corrective action on the #{investigation.case_type}.",
