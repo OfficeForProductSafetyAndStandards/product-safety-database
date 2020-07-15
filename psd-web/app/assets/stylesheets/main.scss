@@ -3,6 +3,8 @@ $govuk-global-styles: true;
 $govuk-assets-path: '~govuk-frontend/govuk/assets/';
 @import "~govuk-frontend/govuk/all";
 
+$app-images-path: "../images/";
+
 $hmcts-page-width: $govuk-page-width;
 $hmcts-gutter: $govuk-gutter;
 $hmcts-gutter-half: $govuk-gutter-half;
@@ -11,7 +13,6 @@ $hmcts-images-path: '~@hmcts/frontend/assets/images/';
 @import "~@hmcts/frontend/components/hmcts-badge/badge";
 @import "~@hmcts/frontend/components/hmcts-banner/banner";
 @import "~@hmcts/frontend/components/hmcts-identity-bar/identity-bar";
-@import "~@hmcts/frontend/components/hmcts-menu/menu";
 @import "~@hmcts/frontend/components/hmcts-sub-navigation/sub-navigation";
 
 
@@ -47,6 +48,7 @@ $hmcts-images-path: '~@hmcts/frontend/assets/images/';
 @import "stylesheets/shared";
 @import "stylesheets/timeline";
 @import "stylesheets/psd_header";
+@import "stylesheets/menu";
 
 // Pages
 @import "stylesheets/investigation";
