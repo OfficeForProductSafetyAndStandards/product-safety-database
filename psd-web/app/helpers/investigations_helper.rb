@@ -310,4 +310,85 @@ module InvestigationsHelper
 
     rows
   end
+
+  def add_new_menu_data_attributes(investigation)
+    supporting_information_types = [
+      {
+        path: new_investigation_activity_comment_path(investigation),
+        text: "Comment"
+      },
+      {
+        path: new_investigation_corrective_action_path(investigation),
+        text: "Corrective action"
+      },
+      {
+        path: new_investigation_correspondence_path(investigation),
+        text: "Correspondence"
+      },
+      {
+        path: new_investigation_new_path(investigation),
+        text: "Image"
+      },
+      {
+        path: new_investigation_test_result_path(investigation),
+        text: "Test result"
+      },
+      {
+        path: new_investigation_new_path(investigation),
+        text: "Other document or attachment"
+      }
+
+    ]
+
+    data_attributes = {}
+
+    supporting_information_types.each_with_index do |supporting_information_type, index|
+      data_attributes["item-#{index + 1}-text"] = supporting_information_type[:text]
+      data_attributes["item-#{index + 1}-href"] = supporting_information_type[:path]
+    end
+
+    data_attributes
+  end
+
+  def actions_menu_data_attributes(investigation)
+    actions = []
+
+    if policy(investigation).change_owner_or_status?
+
+      case_status = investigation.is_closed? ? "closed" : "open"
+      visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
+
+      actions << {
+        path: status_investigation_path(@investigation),
+        text: I18n.t("change_case_status.#{case_status}", scope: "forms.investigation_actions.actions")
+      }
+
+      actions << {
+        path: new_investigation_ownership_path(@investigation),
+        text: I18n.t(:change_case_owner, scope: "forms.investigation_actions.actions")
+      }
+
+      actions << {
+        path: visibility_investigation_path(@investigation),
+        text: I18n.t("change_case_visibility.#{visibility_status}", scope: "forms.investigation_actions.actions")
+      }
+    end
+
+    if policy(investigation).send_email_alert?
+
+      actions << {
+        path: new_investigation_alert_path(@investigation),
+        text: I18n.t(:send_email_alert, scope: "forms.investigation_actions.actions")
+      }
+    end
+
+    data_attributes = {}
+
+    actions.each_with_index do |supporting_information_type, index|
+      data_attributes["item-#{index + 1}-text"] = supporting_information_type[:text]
+      data_attributes["item-#{index + 1}-href"] = supporting_information_type[:path]
+    end
+
+    data_attributes
+  end
 end
