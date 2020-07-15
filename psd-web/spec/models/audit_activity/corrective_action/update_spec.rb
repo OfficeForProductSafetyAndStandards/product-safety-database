@@ -4,6 +4,8 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
   include_context "with corrective action setup for updates"
 
   describe ".build_metadata" do
+    let!(:old_attchment) { corrective_action.documents.first }
+
     before do
       corrective_action.update!(
         summary: new_summary,
@@ -21,7 +23,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
     end
 
     it "has all the updated metadata" do
-      expect(described_class.build_metadata(corrective_action))
+      expect(described_class.build_metadata(corrective_action, old_attchment))
         .to eq(corrective_action_id: corrective_action.id, updates: corrective_action.previous_changes)
     end
   end
