@@ -128,6 +128,26 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         end
       end
 
+      context "with no previously attached file" do
+        let(:corrective_action) do
+          create(
+            :corrective_action,
+            investigation: investigation,
+            date_decided: old_date_decided,
+            product: product,
+            business: business
+          )
+        end
+
+        it "stored the new file with the description", :aggregate_failures do
+          update_corrective_action
+
+          document = corrective_action.documents.first
+          expect(document.filename.to_s).to eq("corrective_action.txt")
+          expect(document.metadata[:description]).to eq(new_file_description)
+        end
+      end
+
       context "with a new file" do
         it "stored the new file with the description", :aggregate_failures do
           update_corrective_action

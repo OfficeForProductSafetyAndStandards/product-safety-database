@@ -81,7 +81,7 @@ private
   def replace_attached_file_if_necessary(corrective_action, old_document, new_file)
     return old_document unless new_file
 
-    old_document.purge
+    old_document&.purge
     corrective_action.documents.attach(new_file).first
   end
 
