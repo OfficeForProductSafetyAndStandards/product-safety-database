@@ -23,7 +23,7 @@ class UpdateCorrectiveAction
 
       return unless corrective_action_changes || document_changed || document_changed_description_changed
 
-      send_notification_email(create_audit_activity_for_corrective_action_update!)
+      send_notification_email(create_audit_activity_for_corrective_action_update!(old_document))
     end
   end
 
@@ -64,8 +64,8 @@ private
     context.fail!(error: "No user supplied") unless user.is_a?(User)
   end
 
-  def create_audit_activity_for_corrective_action_update!
-    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action)
+  def create_audit_activity_for_corrective_action_update!(old_document)
+    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, old_document)
 
     AuditActivity::CorrectiveAction::Update.create!(
       source: UserSource.new(user: user),

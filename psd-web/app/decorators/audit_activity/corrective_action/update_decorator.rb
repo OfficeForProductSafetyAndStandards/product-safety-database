@@ -26,4 +26,12 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < ::ActivityDecorator
   def new_geographic_scope
     metadata.dig("updates", "geographic_scope", 1)
   end
+
+  def new_filename
+    metadata.dig("updates", "filename", 1)
+  end
+
+  def new_file_description
+    metadata.dig("updates", "file_description", 1)
+  end
 end
