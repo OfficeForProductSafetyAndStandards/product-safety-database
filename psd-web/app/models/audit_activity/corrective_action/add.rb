@@ -19,7 +19,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     if attachment.attached?
       attachment.blob.attachments
         .find_by(record_type: "CorrectiveAction")
-        .record
+        &.record
     end
   end
 

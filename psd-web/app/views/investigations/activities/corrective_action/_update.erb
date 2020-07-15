@@ -2,26 +2,36 @@
 
   <p>Changes:</p>
 
-  <% byebug %>
-
-  <% if activity.new_date_of_test %>
-    Added: <b><%= activity.new_date_of_test.to_s(:govuk) %></b><br>
-  <% end %>
-
-  <% if activity.new_result %>
-    Result: <b><%= activity.new_result %></b><br>
-  <% end %>
-
-  <% if activity.new_details %>
-    Further details: <b><%= activity.new_details %></b><br>
+  <% if activity.new_date_decided %>
+    Date of action: <b><%= activity.new_date_decided %></b><br>
   <% end %>
 
   <% if activity.new_legislation %>
     Legislation: <b><%= activity.new_legislation %></b><br>
   <% end %>
 
-  <% if activity.new_product %>
-    Product: <%= link_to activity.new_product.name, activity.new_product %><br>
+  <% if activity.product_updated? %>
+    Product: <%= link_to activity.product.name, activity.product %><br>
+  <% end %>
+
+  <% if activity.business_updated? %>
+    Business: <%= link_to activity.business.trading_name, activity.business %><br>
+  <% end %>
+
+  <% if activity.new_measure_type %>
+    Type of action: <b><%= activity.new_measure_type %></b><br>
+  <% end %>
+
+  <% if activity.new_duration %>
+    Duration: <b><%= activity.new_duration %></b><br>
+  <% end %>
+
+  <% if activity.new_geographic_scope %>
+    Scope: <b><%= activity.new_geographic_scope %></b><br>
+  <% end %>
+
+  <% if activity.new_details %>
+    Details: <b><%= activity.new_details %></b><br>
   <% end %>
 
   <% if activity.new_filename %>
@@ -33,4 +43,4 @@
   <% end %>
 </div>
 
-<%= link_to "View corrective action", investigation_action_path(activity.investigation, activity.metadata["test_result_id"]) %>
+<%= link_to "View corrective action", investigation_action_path(activity.investigation, activity.metadata["corrective_action_id"]) %>

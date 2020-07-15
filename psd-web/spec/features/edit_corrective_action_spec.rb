@@ -48,18 +48,14 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_on "Update corrective action"
 
-      expect(page).to have_summary_item(key: "Date of action",      value: new_date_decided.to_s(:govuk))
-      expect(page).to have_summary_item(key: "Product",             value: product_two.name)
-      expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
-      expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
-      expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
-      expect(page).to have_summary_item(key: "Scope",               value: new_geographic_scope)
-      expect(page).to have_summary_item(key: "Other details",       value: new_details)
+      expect_to_be_on_corrective_action_summary_page
 
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
-      expect(page).to have_css("asdasd")
+      click_link "View corrective action"
+
+      expect_to_be_on_corrective_action_summary_page
     end
   end
 end

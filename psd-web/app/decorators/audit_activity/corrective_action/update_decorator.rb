@@ -1,4 +1,4 @@
-class AuditActivity::CorrectiveAction::UpdateDecorator < ::ActivityDecorator
+class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::CorrectiveAction::BaseDecorator
   def new_summary
     metadata.dig("updates", "summary", 1)
   end
@@ -33,5 +33,13 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < ::ActivityDecorator
 
   def new_file_description
     metadata.dig("updates", "file_description", 1)
+  end
+
+  def product_updated?
+    metadata.dig("updates", "product_id", 1)
+  end
+
+  def business_updated?
+    metadata.dig("updates", "business_id", 1)
   end
 end
