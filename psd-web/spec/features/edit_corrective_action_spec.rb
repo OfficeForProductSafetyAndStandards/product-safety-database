@@ -55,6 +55,11 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
       expect(page).to have_summary_item(key: "Scope",               value: new_geographic_scope)
       expect(page).to have_summary_item(key: "Other details",       value: new_details)
+
+      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link "Activity"
+
+      expect(page).to have_css("asdasd")
     end
   end
 end

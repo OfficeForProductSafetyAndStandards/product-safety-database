@@ -1,0 +1,36 @@
+<div class="govuk-body">
+
+  <p>Changes:</p>
+
+  <% byebug %>
+
+  <% if activity.new_date_of_test %>
+    Added: <b><%= activity.new_date_of_test.to_s(:govuk) %></b><br>
+  <% end %>
+
+  <% if activity.new_result %>
+    Result: <b><%= activity.new_result %></b><br>
+  <% end %>
+
+  <% if activity.new_details %>
+    Further details: <b><%= activity.new_details %></b><br>
+  <% end %>
+
+  <% if activity.new_legislation %>
+    Legislation: <b><%= activity.new_legislation %></b><br>
+  <% end %>
+
+  <% if activity.new_product %>
+    Product: <%= link_to activity.new_product.name, activity.new_product %><br>
+  <% end %>
+
+  <% if activity.new_filename %>
+    Attached: <b><%= activity.new_filename %></b><br>
+  <% end %>
+
+  <% if activity.new_file_description %>
+    Attachment description: <b><%= activity.new_file_description %></b><br>
+  <% end %>
+</div>
+
+<%= link_to "View corrective action", investigation_action_path(activity.investigation, activity.metadata["test_result_id"]) %>
