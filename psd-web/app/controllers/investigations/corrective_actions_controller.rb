@@ -47,7 +47,7 @@ private
   end
 
   def edit
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
     authorize @investigation, :view_non_protected_details?
     @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
     @file_blob = @corrective_action.documents_blobs.first || @corrective_action.documents_blobs.new
