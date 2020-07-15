@@ -10,46 +10,20 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
   let(:team)          { create(:team) }
   let(:creator)       { create(:user, organisation: organisation, team: team) }
   let(:products)      { [] }
+  let(:risk_level)    { :serious }
   let(:coronavirus_related) { false }
-  let(:investigation) { create(:allegation, :reported_unsafe_and_non_compliant, products: products, coronavirus_related: coronavirus_related, creator: creator) }
+  let(:investigation) do
+    create(:allegation,
+           :reported_unsafe_and_non_compliant,
+           products: products,
+           coronavirus_related: coronavirus_related,
+           creator: creator,
+           risk_level: risk_level)
+  end
 
   before do
     ChangeCaseOwner.call!(investigation: investigation, user: creator, owner: user)
     create(:complainant, investigation: investigation)
-  end
-
-  describe "#display_risk_and_issues_list?" do
-    context "when the investigation has no hazard or compliance information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: nil, non_compliant_reason: nil)
-      end
-
-      it { is_expected.not_to be_display_risk_and_issues_list }
-    end
-
-    context "when the investigation has a hazard information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: "Chemical", non_compliant_reason: nil)
-      end
-
-      it { is_expected.to be_display_risk_and_issues_list }
-    end
-
-    context "when the investigation has compliance information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: nil, non_compliant_reason: "Explosive!")
-      end
-
-      it { is_expected.to be_display_risk_and_issues_list }
-    end
-
-    context "when the investigation has both hazard and compliance information" do
-      let(:investigation) do
-        create(:enquiry, hazard_type: "Chemical", non_compliant_reason: "Explosive!")
-      end
-
-      it { is_expected.to be_display_risk_and_issues_list }
-    end
   end
 
   describe "#display_product_summary_list?" do
@@ -81,6 +55,10 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       expect(risk_and_issues_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
     end
 
+    it "displays the text associated to the risk level" do
+      expect(risk_and_issues_list).to summarise("Case risk level", text: "Serious risk")
+    end
+
     context "without hazard_type" do
       let(:risk_and_issues_list) { Capybara.string(decorated_investigation.risk_and_issues_list) }
 
@@ -98,6 +76,42 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
       before { investigation.non_compliant_reason = nil }
 
       it { expect(risk_and_issues_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
+    end
+
+    context "without risk level" do
+      let(:risk_level) { nil }
+
+      it "displays risk level as not set" do
+        expect(risk_and_issues_list).to summarise("Case risk level", text: "Not set")
+      end
+    end
+  end
+
+  describe "#risk_level_description" do
+    let(:risk_level_description) { decorated_investigation.risk_level_description }
+
+    context "when the risk level is set" do
+      let(:investigation) { create(:allegation, risk_level: :high) }
+
+      it "displays the risk level text corresponding to the risk level" do
+        expect(risk_level_description).to eq "High risk"
+      end
+    end
+
+    context "when the risk level is set to other" do
+      let(:investigation) { create(:allegation, risk_level: "other", custom_risk_level: "Custom risk") }
+
+      it "displays the custom risk level" do
+        expect(risk_level_description).to eq "Custom risk"
+      end
+    end
+
+    context "when the risk level and the custom risk level are not set" do
+      let(:investigation) { create(:allegation, risk_level: nil, custom_risk_level: nil) }
+
+      it "displays 'Not set'" do
+        expect(risk_level_description).to eq "Not set"
+      end
     end
   end
 

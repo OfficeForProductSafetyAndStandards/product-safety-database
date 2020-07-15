@@ -16,12 +16,11 @@ module InvestigationElasticsearch
     end
 
     def as_indexed_json(*)
-      as_json(
+      data = as_json(
         only: %i[description
                  hazard_type
                  product_category
                  is_closed
-                 owner_id
                  type
                  updated_at
                  created_at
@@ -29,7 +28,7 @@ module InvestigationElasticsearch
                  hazard_description
                  non_compliant_reason
                  coronavirus_related],
-        methods: %i[title creator_id],
+        methods: %i[title creator_id owner_id],
         include: {
           documents: {
             only: [],
@@ -62,6 +61,7 @@ module InvestigationElasticsearch
           }
         }
       )
+      data
     end
 
     def self.highlighted_fields
