@@ -23,6 +23,10 @@
     </div>
 
     <%= govukSummaryList(rows: corrective_action_summary_list_rows(@corrective_action)) %>
+
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Edit corrective action", edit_investigation_action_path(@investigation, @corrective_action), class: "govuk-link" %></p>
+    <% end %>
   </div>
 
   <% if @corrective_action.documents.any? %>
@@ -39,9 +43,5 @@
 
       <% end %>
     </div>
-  <% end %>
-
-  <% if policy(@investigation).update? %>
-    <p class="govuk-body"><%= link_to "Edit corrective action", edit_investigation_action_path(@investigation, @corrective_action), class: "govuk-link" %></p>
   <% end %>
 </div>
