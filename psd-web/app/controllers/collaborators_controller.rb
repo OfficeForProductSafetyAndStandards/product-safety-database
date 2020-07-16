@@ -10,7 +10,7 @@ class CollaboratorsController < ApplicationController
   def new
     authorize @investigation, :manage_collaborators?
 
-    @edit_access_collaboration = @investigation.edit_access_collaborations.new
+    @form = AddTeamToCaseForm.new
 
     @teams = teams_without_access
   end
@@ -18,20 +18,22 @@ class CollaboratorsController < ApplicationController
   def create
     authorize @investigation, :manage_collaborators?
 
-    result = AddTeamToAnInvestigation.call(
-      params.require(:collaboration_access_edit).permit(:collaborator_id, :include_message, :message).merge({
+    @form = AddTeamToCaseForm.new(params.require(:add_team_to_case_form).permit(:team_id, :message, :include_message))
+
+    unless @form.valid?
+      @teams = teams_without_access
+      return render(:new, status: :unprocessable_entity)
+    end
+
+    AddTeamToCase.call!(
+      @form.attributes.merge({
         investigation: @investigation,
-        current_user: current_user
+        team: @form.team,
+        user: current_user
       })
     )
 
-    if result.success?
-      redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{result.edit_access_collaboration.collaborator.name} added to the case" }
-    else
-      @teams = teams_without_access
-      @edit_access_collaboration = result.edit_access_collaboration
-      render "collaborators/new"
-    end
+    redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{@form.team.name} added to the case" }
   end
 
   def edit

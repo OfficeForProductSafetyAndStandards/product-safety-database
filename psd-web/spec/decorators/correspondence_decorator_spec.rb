@@ -13,11 +13,10 @@ RSpec.describe CorrespondenceDecorator, :with_stubbed_elasticsearch, :with_stubb
       let(:viewing_user) { user }
 
       before do
-        AddTeamToAnInvestigation.call!(
-          current_user: user,
+        AddTeamToCase.call!(
+          user: user,
           investigation: investigation,
-          collaborator_id: user.team,
-          include_message: false
+          team: viewing_user.team
         )
       end
 

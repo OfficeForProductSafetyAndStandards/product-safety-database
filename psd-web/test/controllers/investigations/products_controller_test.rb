@@ -6,7 +6,6 @@ class Investigations::ProductsControllerTest < ActionDispatch::IntegrationTest
     @investigation = load_case(:one)
     @investigation.edit_access_collaborations.create!(
       collaborator: teams(:southampton_team),
-      include_message: false,
       added_by_user: users(:southampton)
     )
     @investigation.creator_user = users(:southampton)
