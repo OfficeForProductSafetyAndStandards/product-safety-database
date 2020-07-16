@@ -16,10 +16,7 @@ class UpdateCorrectiveAction
       document = replace_attached_file_if_necessary(corrective_action, old_document, new_file)
 
       document_changed = (document != old_document)
-      document_changed_description_changed = (document.blob.metadata[:description] != new_file_description)
-
-      document.blob.metadata[:description] = new_file_description
-      document.blob.save!
+      document_changed_description_changed = update_document_description!(document, new_file_description) if document
 
       return unless corrective_action_changes || document_changed || document_changed_description_changed
 
@@ -28,6 +25,14 @@ class UpdateCorrectiveAction
   end
 
 private
+
+  def update_document_description!(document, new_file_description)
+    document_changed_description_changed = (document.blob.metadata[:description] != new_file_description)
+    document.blob.metadata[:description] = new_file_description
+    document.blob.save!
+
+    document_changed_description_changed
+  end
 
   def old_document
     @old_document ||= corrective_action.documents.first

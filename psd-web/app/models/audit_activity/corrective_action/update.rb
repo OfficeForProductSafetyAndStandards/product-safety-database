@@ -4,11 +4,11 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
 
     current_attachment = corrective_action.documents.first
 
-    if previous_attachment.filename != current_attachment.filename
+    if previous_attachment && (previous_attachment.filename != current_attachment.filename)
       updated_values["filename"] = [previous_attachment.filename, corrective_action.documents.first.filename]
     end
 
-    if previous_attachment.metadata[:description] != current_attachment.metadata[:description]
+    if previous_attachment && (previous_attachment.metadata[:description] != current_attachment.metadata[:description])
       updated_values["file_description"] = [previous_attachment.metadata[:description], current_attachment.metadata[:description]]
     end
 

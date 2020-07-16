@@ -146,6 +146,14 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           expect(document.filename.to_s).to eq("corrective_action.txt")
           expect(document.metadata[:description]).to eq(new_file_description)
         end
+
+        context "when not adding a new file" do
+          before { corrective_action_params[:file].delete(:file) }
+
+          it "stored the new file with the description", :aggregate_failures do
+            expect { update_corrective_action }.not_to raise_error
+          end
+        end
       end
 
       context "with a new file" do
