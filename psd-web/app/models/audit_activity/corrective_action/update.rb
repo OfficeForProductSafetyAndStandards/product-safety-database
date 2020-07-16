@@ -1,7 +1,6 @@
 class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction::Base
   def self.build_metadata(corrective_action, previous_attachment)
     updated_values = corrective_action.previous_changes
-
     current_attachment = corrective_action.documents.first
 
     if previous_attachment && (previous_attachment.filename != current_attachment.filename)
@@ -13,5 +12,13 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
     end
 
     { corrective_action_id: corrective_action.id, updates: updated_values }
+  end
+
+  def title(_user)
+    "Corrective action"
+  end
+
+  def subtitle_slug
+    "Edited"
   end
 end

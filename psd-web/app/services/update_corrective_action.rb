@@ -5,26 +5,32 @@ class UpdateCorrectiveAction
   def call
     validate_inputs!
     clear_decided_date_to_trigger_date_validation
+    store_previous_document
     fetch_new_file_params
     set_new_attributes
     context.fail! if corrective_action.invalid?
 
     corrective_action.transaction do
+      document = replace_attached_file_if_necessary(corrective_action, previous_document, new_file)
+      byebug
       corrective_action_changes = corrective_action.changes.except(:date_decided_day, :date_decided_month, :date_decided_year).any?
       corrective_action.save!
 
-      document = replace_attached_file_if_necessary(corrective_action, old_document, new_file)
-
-      document_changed = (document != old_document)
+      document_changed = (document != previous_document)
       document_changed_description_changed = update_document_description!(document, new_file_description) if document
 
       return unless corrective_action_changes || document_changed || document_changed_description_changed
 
-      send_notification_email(create_audit_activity_for_corrective_action_update!(old_document))
+      send_notification_email(create_audit_activity_for_corrective_action_update!(previous_document))
     end
   end
 
 private
+
+  def previous_document
+    @previous_document ||= corrective_action.documents.first
+  end
+  alias_method :store_previous_document, :previous_document
 
   def update_document_description!(document, new_file_description)
     document_changed_description_changed = (document.blob.metadata[:description] != new_file_description)
@@ -86,7 +92,7 @@ private
   def replace_attached_file_if_necessary(corrective_action, old_document, new_file)
     return old_document unless new_file
 
-    old_document&.purge
+    corrective_action.documents.detach
     corrective_action.documents.attach(new_file).first
   end
 
