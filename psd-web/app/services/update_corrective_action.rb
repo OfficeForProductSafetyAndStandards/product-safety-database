@@ -47,7 +47,7 @@ private
   end
 
   def new_file_params
-    @new_file_params ||= corrective_action_params.delete(:file)
+    @new_file_params ||= corrective_action_params.delete(:file) || {}
   end
   alias_method :fetch_new_file_params, :new_file_params
 

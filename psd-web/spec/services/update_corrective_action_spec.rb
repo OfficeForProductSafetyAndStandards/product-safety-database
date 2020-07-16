@@ -143,10 +143,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
             duration: corrective_action.duration,
             details: corrective_action.details,
             measure_type: corrective_action.measure_type,
-            file: {
-              file: fixture_file_upload(file_fixture("corrective_action.txt")),
-              description: new_file_description
-            }
+            related_file: corrective_action.related_file
           ).permit!
         end
 
