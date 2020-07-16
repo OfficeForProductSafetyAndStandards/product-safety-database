@@ -128,6 +128,33 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         end
       end
 
+      context "with no changes" do
+        before { corrective_action.documents.detach }
+
+        let(:corrective_action_params) do
+          ActionController::Parameters.new(
+            date_decided: {
+              year: corrective_action.date_decided.year,
+              month: corrective_action.date_decided.month,
+              day: corrective_action.date_decided.day
+            },
+            summary: corrective_action.summary,
+            legislation: corrective_action.legislation,
+            duration: corrective_action.duration,
+            details: corrective_action.details,
+            measure_type: corrective_action.measure_type,
+            file: {
+              file: fixture_file_upload(file_fixture("corrective_action.txt")),
+              description: new_file_description
+            }
+          ).permit!
+        end
+
+        it "does not create an audit activity" do
+          expect { update_corrective_action }.not_to change(corrective_action.investigation.activities, :count)
+        end
+      end
+
       context "with no previously attached file" do
         let(:corrective_action) do
           create(

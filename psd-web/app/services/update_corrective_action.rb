@@ -10,7 +10,7 @@ class UpdateCorrectiveAction
     context.fail! if corrective_action.invalid?
 
     corrective_action.transaction do
-      corrective_action_changes = corrective_action.changes.any?
+      corrective_action_changes = corrective_action.changes.except(:date_decided_day, :date_decided_month, :date_decided_year).any?
       corrective_action.save!
 
       document = replace_attached_file_if_necessary(corrective_action, old_document, new_file)
