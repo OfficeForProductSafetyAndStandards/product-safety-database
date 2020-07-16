@@ -8,10 +8,6 @@ RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_elastics
   let(:rationale) { "Test rationale" }
   let(:user) { create(:user) }
 
-  before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: owner, user: user)
-  end
-
   describe ".build_metadata" do
     let(:result) { described_class.build_metadata(owner, rationale) }
 

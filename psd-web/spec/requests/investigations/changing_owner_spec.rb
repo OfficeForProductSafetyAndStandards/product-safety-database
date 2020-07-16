@@ -19,10 +19,6 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
     )
   end
 
-  before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user_from_owner_team.team, user: user_from_owner_team)
-  end
-
   context "when the user is from the case owner’s team" do
     before do
       sign_in user_from_owner_team
