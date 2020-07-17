@@ -12,7 +12,7 @@ class UpdateCorrectiveAction
 
     corrective_action.transaction do
       document = replace_attached_file_if_necessary(corrective_action, previous_document, new_file)
-      byebug
+
       corrective_action_changes = corrective_action.changes.except(:date_decided_day, :date_decided_month, :date_decided_year).any?
       corrective_action.save!
 

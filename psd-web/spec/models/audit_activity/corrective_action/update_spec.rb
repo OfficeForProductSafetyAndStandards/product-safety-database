@@ -4,9 +4,16 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
   include_context "with corrective action setup for updates"
 
   describe ".build_metadata" do
-    let!(:old_attchment) { corrective_action.documents.first }
+    let!(:old_attachment)  { corrective_action.documents.first }
+    let!(:old_description) { old_attachment.metadata[:description] }
+    let!(:old_filename)    { old_attachment.filename }
+    let(:new_description)  { "new description" }
+    let!(:new_filename)    { "new_filename" }
 
     before do
+      old_attachment.blob.metadata[:description] = new_description
+      old_attachment.filename = new_filename
+      old_attachment.blob.save!
       corrective_action.update!(
         summary: new_summary,
         date_decided_day: new_date_decided.day,
@@ -23,8 +30,13 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
     end
 
     it "has all the updated metadata" do
-      expect(described_class.build_metadata(corrective_action, old_attchment))
-        .to eq(corrective_action_id: corrective_action.id, updates: corrective_action.previous_changes)
+      expect(described_class.build_metadata(corrective_action, old_attachment))
+        .to eq(corrective_action_id: corrective_action.id,
+               updates: corrective_action.previous_changes.merge(
+                 file_description: [old_description, new_description],
+                 filename: [old_filename.to_s, new_filename]
+               )
+              )
     end
   end
 end
