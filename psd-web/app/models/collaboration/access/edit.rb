@@ -3,12 +3,6 @@ class Collaboration < ApplicationRecord
     class Edit < Access
       belongs_to :added_by_user, class_name: :User, optional: true
 
-      validates :message, presence: true, if: :include_message,     on: :add_editor
-      validates :added_by_user_id, presence: true,                  on: :add_editor
-      validates :include_message, inclusion: { in: [true, false] }, on: :add_editor
-
-      attribute :include_message, :boolean, default: nil
-
       def own!(_investigation)
         destroy!
         collaborator.own!(investigation)

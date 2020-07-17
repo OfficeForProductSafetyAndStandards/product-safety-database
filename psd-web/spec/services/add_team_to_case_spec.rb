@@ -1,0 +1,121 @@
+require "rails_helper"
+
+RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+  # Create the case before running tests so that we can check which emails are sent by the service
+  let!(:investigation) { create(:allegation) }
+  let(:user) { create(:user) }
+  let(:team) { create(:team, name: "Testing team") }
+  let(:message) { "Thanks for collaborating." }
+
+  describe ".call" do
+    context "with no parameters" do
+      let(:result) { described_class.call }
+
+      it "returns a failure" do
+        expect(result).to be_failure
+      end
+    end
+
+    context "with no investigation parameter" do
+      let(:result) { described_class.call(team: team, user: user) }
+
+      it "returns a failure" do
+        expect(result).to be_failure
+      end
+    end
+
+    context "with no user parameter" do
+      let(:result) { described_class.call(team: team, investigation: investigation) }
+
+      it "returns a failure" do
+        expect(result).to be_failure
+      end
+    end
+
+    context "with no team parameter" do
+      let(:result) { described_class.call(investigation: investigation, user: user) }
+
+      it "returns a failure" do
+        expect(result).to be_failure
+      end
+    end
+
+    context "with required parameters" do
+      let(:result) do
+        described_class.call(
+          team: team,
+          message: message,
+          investigation: investigation,
+          user: user
+        )
+      end
+
+      it "succeeds" do
+        expect(result).to be_a_success
+      end
+
+      it "returns the collaborator" do
+        expect(result.collaboration).to have_attributes(
+          collaborator: team,
+          added_by_user: user,
+          investigation: investigation,
+          message: message
+        )
+      end
+
+      context "when the team has an email address" do
+        it "notifies the team", :aggregate_failures do
+          result
+          email = delivered_emails.last
+          expect(email.recipient).to eq(team.email)
+          expect(email.action_name).to eq("team_added_to_case_email")
+        end
+      end
+
+      context "when the team does not have an email address" do
+        let(:team) { create(:team, team_recipient_email: nil) }
+        let!(:active_team_user) { create(:user, :activated, team: team, organisation: team.organisation) }
+        let!(:inactive_team_user) { create(:user, :inactive, team: team, organisation: team.organisation) }
+
+        before { result }
+
+        it "notifies the team's activated users", :aggregate_failures do
+          email = delivered_emails.last
+          expect(email.recipient).to eq(active_team_user.email)
+          expect(email.action_name).to eq("team_added_to_case_email")
+        end
+
+        it "does not notify the team's inactive users" do
+          expect(delivered_emails.collect(&:recipient)).not_to include(inactive_team_user.email)
+        end
+      end
+
+      it "adds an audit activity record" do
+        result
+        last_added_activity = investigation.activities.order(:id).first
+
+        aggregate_failures do
+          expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
+          expect(last_added_activity.title(nil)).to eql("Testing team added to allegation")
+          expect(last_added_activity.source.user_id).to eql(user.id)
+        end
+      end
+
+      context "when the team has already been added to the case" do
+        before { result }
+
+        it "does not create a new collaboration record" do
+          expect { result }.not_to change(investigation.collaborations, :count)
+        end
+
+        it "does not send an email" do
+          expect { result }.not_to change(delivered_emails, :count)
+        end
+
+        it "does not create an audit activity record" do
+          expect { result }.not_to change(investigation.activities, :count)
+        end
+      end
+    end
+  end
+end

@@ -4,7 +4,6 @@ FactoryBot.define do
     association :collaborator, factory: :team
 
     factory :collaboration_edit_access, parent: :collaboration, class: "Collaboration::Access::Edit" do
-      include_message { "false" }
       association :added_by_user, factory: :user
     end
     factory :read_only_collaboration, parent: :collaboration, class: "Collaboration::Access::ReadOnly"

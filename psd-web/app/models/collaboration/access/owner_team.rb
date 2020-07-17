@@ -2,9 +2,11 @@ class Collaboration < ApplicationRecord
   class Access < Collaboration
     class OwnerTeam < Owner
       def swap_to_edit_access!
-        investigation.edit_access_collaborations.create!(collaborator: collaborator)
-        destroy!
-        investigation.owner_user_collaboration&.destroy!
+        transaction do
+          destroy!
+          investigation.owner_user_collaboration&.destroy!
+          investigation.edit_access_collaborations.create!(collaborator: collaborator)
+        end
       end
     end
   end

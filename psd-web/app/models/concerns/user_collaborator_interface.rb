@@ -7,7 +7,10 @@ module UserCollaboratorInterface
 
   # Do not use on its own. Use ChangeCaseOwner service class
   def own!(investigation)
+    investigation.owner_user_collaboration&.destroy!
     investigation.create_owner_user_collaboration!(collaborator: self)
+
+    investigation.owner_team_collaboration&.destroy!
     investigation.create_owner_team_collaboration!(collaborator: team)
   end
 

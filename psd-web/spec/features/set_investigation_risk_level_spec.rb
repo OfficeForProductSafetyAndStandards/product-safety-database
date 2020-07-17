@@ -7,7 +7,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
 
   before do
-    AddTeamToAnInvestigation.call!(current_user: user, investigation: investigation, collaborator_id: team_with_access.id, include_message: false)
+    AddTeamToCase.call!(user: user, investigation: investigation, team: team_with_access)
     sign_in(user)
     delivered_emails.clear
   end

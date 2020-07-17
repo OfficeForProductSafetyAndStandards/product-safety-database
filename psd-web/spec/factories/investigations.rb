@@ -111,11 +111,10 @@ FactoryBot.define do
       end
 
       Array.wrap(evaluator.edit_access_teams).each do |edit_access_team|
-        AddTeamToAnInvestigation.call!(
+        AddTeamToCase.call!(
           investigation: investigation,
-          current_user: investigation.creator_user,
-          include_message: false,
-          collaborator_id: edit_access_team.id
+          user: investigation.creator_user,
+          team: edit_access_team
         )
       end
     end

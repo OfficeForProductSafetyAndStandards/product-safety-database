@@ -19,10 +19,9 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
     let(:investigation) { create(:enquiry, risk_level: previous_level, custom_risk_level: previous_custom) }
 
     before do
-      AddTeamToAnInvestigation.call!(current_user: user,
-                                     investigation: investigation,
-                                     collaborator_id: team_with_access.id,
-                                     include_message: false)
+      AddTeamToCase.call!(user: user,
+                          investigation: investigation,
+                          team: team_with_access)
     end
 
     context "with no investigation parameter" do
