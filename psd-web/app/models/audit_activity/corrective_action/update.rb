@@ -2,7 +2,7 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
   def self.build_metadata(corrective_action, previous_attachment)
     updated_values = corrective_action.previous_changes
 
-    old_file_description = previous_attachment&.blob&.previous_changes&.dig(:metadata, :description)
+    old_file_description = previous_attachment&.blob&.previous_changes&.dig(:metadata, 0, :description)
     old_filename = previous_attachment&.blob&.previous_changes&.dig(:filename, 0)
 
     current_attachment = corrective_action.documents.first
