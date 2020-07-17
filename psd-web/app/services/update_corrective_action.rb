@@ -7,25 +7,27 @@ class UpdateCorrectiveAction
     clear_decided_date_to_trigger_date_validation
     store_previous_document
     fetch_new_file_params
-    set_new_attributes
-    context.fail! if corrective_action.invalid?
+    set_new_attributes_and_validate!
 
     corrective_action.transaction do
       document = replace_attached_file_if_necessary(corrective_action, previous_document, new_file)
 
-      corrective_action_changes = corrective_action.changes.except(:date_decided_day, :date_decided_month, :date_decided_year).any?
       corrective_action.save!
 
       document_changed = (document != previous_document)
       document_changed_description_changed = update_document_description!(document, new_file_description) if document
 
-      return unless corrective_action_changes || document_changed || document_changed_description_changed
+      return unless any_changes?(document_changed, document_changed_description_changed)
 
       send_notification_email(create_audit_activity_for_corrective_action_update!(previous_document))
     end
   end
 
 private
+
+  def any_changes?(document_changed, document_changed_description_changed)
+    corrective_action_changes? || document_changed || document_changed_description_changed
+  end
 
   def previous_document
     @previous_document ||= corrective_action.documents.first
@@ -103,9 +105,11 @@ private
     corrective_action.date_decided_year = nil
   end
 
-  def set_new_attributes
+  def set_new_attributes_and_validate!
     corrective_action.set_dates_from_params(corrective_action_params)
     corrective_action.assign_attributes(corrective_action_params.except(:date_decided))
+
+    context.fail! if corrective_action.invalid?
   end
 
   def investigation
@@ -124,5 +128,9 @@ private
         "Corrective action edited for #{corrective_action.investigation.case_type.upcase_first}"
       ).deliver_later
     end
+  end
+
+  def corrective_action_changes?
+    corrective_action.previous_changes.except(:date_decided_day, :date_decided_month, :date_decided_year).any?
   end
 end

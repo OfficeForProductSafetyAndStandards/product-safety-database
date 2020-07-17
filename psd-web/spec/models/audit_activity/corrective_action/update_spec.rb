@@ -35,8 +35,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
                updates: corrective_action.previous_changes.merge(
                  file_description: [old_description, new_description],
                  filename: [old_filename.to_s, new_filename]
-               )
-              )
+               ))
     end
   end
 end
