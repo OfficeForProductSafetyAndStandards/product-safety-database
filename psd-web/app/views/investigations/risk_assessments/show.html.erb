@@ -1,0 +1,63 @@
+<% page_heading = "Risk assessment" %>
+<% page_title page_heading %>
+
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
+    href: investigation_supporting_information_index_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">Risk assessment</span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @risk_assessment.created_at %>
+      </p>
+    </div>
+
+    <%= govukSummaryList(rows:
+      [
+        {
+          key: {
+            text: "Date of assessment"
+          },
+          value: {
+            text: @risk_assessment.assessed_on.to_s(:govuk)
+          }
+        },
+        {
+          key: {
+            text: "Risk level"
+          },
+          value: {
+            text: @risk_assessment.risk_level_description
+          }
+        },
+        {
+          key: {
+            text: "Assessed by"
+          },
+          value: {
+            text: risk_assessed_by(@risk_assessment)
+          }
+        },
+        {
+          key: {
+            text: "Product".pluralize(@risk_assessment.products.count) + " assessed"
+          },
+          value: {
+            text: safe_join(@risk_assessment.products.collect {|p| link_to(p.name, p) }, tag.br)
+
+          }
+        }
+      ]
+    ) %>
+  </div>
+</div>

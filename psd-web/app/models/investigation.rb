@@ -89,6 +89,8 @@ class Investigation < ApplicationRecord
   has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
   has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
+  has_many :risk_assessments
+
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
 

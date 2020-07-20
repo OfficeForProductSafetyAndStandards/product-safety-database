@@ -1,0 +1,107 @@
+<% page_heading =  "Add risk assessment" %>
+<%= page_title page_heading, errors: @risk_assessment_form.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: investigation_supporting_information_index_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+      <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessments_path, method: :post, builder: ApplicationFormBuilder) do |form| %>
+
+        <%= error_summary @risk_assessment_form.errors %>
+        <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+        <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+        <%= form.govuk_date_input :assessed_on, legend: "Date of assessment" %>
+
+        <%- custom = capture do %>
+          <%= render "form_components/govuk_input",
+            key: :custom_risk_level,
+            form: form,
+            classes: "govuk-!-width-one-third",
+            label: { text: "Custom risk level", classes: "govuk-visually-hidden" } %>
+        <% end %>
+
+        <% radio_items = (Investigation.risk_levels.keys - ["other"]).map do |level|
+            { text: t("investigations.risk_level.show.levels.#{level}"), value: level }
+           end
+           radio_items.push(text: "Other", value: "other", conditional: { html: custom })
+           radio_items.push divider: "or"
+           radio_items.push(text: "Not set", value: "")
+        %>
+
+        <%= form.govuk_radios :risk_level,
+          legend: "What was the risk level?",
+          items: radio_items
+        %>
+
+
+        <%- teams_html = capture do %>
+          <%= render "components/govuk_select",
+            id: :assessed_by_team_id,
+            name: :assessed_by_team_id,
+            label: { text: "Choose team" },
+            items: @other_teams
+             %>
+        <% end %>
+
+        <%- businesses_html = capture do %>
+          <%= render "components/govuk_select",
+            id: :assessed_by_team_id,
+            name: :assessed_by_team_id,
+            label: { text: "Choose business" },
+            items: @businesses
+             %>
+        <% end %>
+
+        <%- someone_else_html = capture do %>
+          <%= render "components/govuk_input",
+            id: :assessed_by_other,
+            name: :assessed_by_other,
+            label: { text: "Organisation name" }
+             %>
+        <% end %>
+
+        <% assessed_by_radio_items = []
+
+          assessed_by_radio_items.push(text: "Me or my team", value: :my_team)
+          assessed_by_radio_items.push(text: "Trading standards or another market surveilance authority", value: :another_team, conditional: { html: teams_html })
+          assessed_by_radio_items.push(text: "A business related to the case", value: :business, conditional: { html: businesses_html })
+          assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: { html: someone_else_html })
+
+        %>
+
+        <%= form.govuk_radios :assessed_by,
+          legend: "Who completed the assessment?",
+          items: assessed_by_radio_items
+        %>
+
+        <%= form.govuk_checkboxes :product_ids,
+          legend: "Which products were assessed?",
+          items: @products
+        %>
+
+        <%= form.govuk_file_upload :risk_assessment_file,
+          hint: "This should usually be a PDF export from the RAPEX assessment tool",
+          label: "Upload the risk assessment"
+        %>
+
+        <%= form.govuk_text_area :details,
+          label: "Further details (optional)"
+        %>
+
+        <%= govukButton(text: "Add risk assessment") %>
+      <% end %>
+
+    </div>
+  </div>
+
+
+

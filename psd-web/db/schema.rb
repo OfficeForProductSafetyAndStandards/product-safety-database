@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_08_184946) do
+ActiveRecord::Schema.define(version: 2020_07_20_145553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -233,6 +233,29 @@ ActiveRecord::Schema.define(version: 2020_07_08_184946) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "risk_assessed_products", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "product_id", null: false
+    t.integer "risk_assessment_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["risk_assessment_id", "product_id"], name: "index_risk_assessed_products", unique: true
+  end
+
+  create_table "risk_assessments", force: :cascade do |t|
+    t.uuid "added_by_team_id", null: false
+    t.uuid "added_by_user_id", null: false
+    t.integer "assessed_by_business_id"
+    t.text "assessed_by_other"
+    t.uuid "assessed_by_team_id"
+    t.date "assessed_on", null: false
+    t.datetime "created_at", null: false
+    t.text "custom_risk_level"
+    t.text "details"
+    t.integer "investigation_id", null: false
+    t.enum "risk_level", as: "risk_levels"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sources", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -340,6 +363,13 @@ ActiveRecord::Schema.define(version: 2020_07_08_184946) do
   add_foreign_key "corrective_actions", "products"
   add_foreign_key "correspondences", "investigations"
   add_foreign_key "locations", "businesses"
+  add_foreign_key "risk_assessed_products", "products"
+  add_foreign_key "risk_assessed_products", "risk_assessments"
+  add_foreign_key "risk_assessments", "businesses", column: "assessed_by_business_id"
+  add_foreign_key "risk_assessments", "investigations"
+  add_foreign_key "risk_assessments", "teams", column: "added_by_team_id"
+  add_foreign_key "risk_assessments", "teams", column: "assessed_by_team_id"
+  add_foreign_key "risk_assessments", "users", column: "added_by_user_id"
   add_foreign_key "tests", "investigations"
   add_foreign_key "tests", "products"
   add_foreign_key "users", "teams"
