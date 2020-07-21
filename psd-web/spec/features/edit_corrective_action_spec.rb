@@ -38,7 +38,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       select business_two.trading_name,     from: "Business"
       select new_geographic_scope,          from: "What is the geographic scope of the action?"
       fill_in "Further details (optional)", with: new_details
-      choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
+      choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "corrective_action_measure_type_mandatory" : "corrective_action_measure_type_voluntary"
       choose CorrectiveAction.human_attribute_name("duration.#{new_duration}")
 
       find("details > summary", text: "Replace this file").click
