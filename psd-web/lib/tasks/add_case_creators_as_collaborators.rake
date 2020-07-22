@@ -13,7 +13,7 @@ task add_case_creators_as_collaborators: :environment do
       count += 1
 
       puts "Adding #{creator_team.name} as a collaborator to case #{investigation.pretty_id}"
-      investigation.edit_collaborations.create!(collaborator: creator_team, added_by_user: creator_user)
+      investigation.edit_access_collaborations.create!(collaborator: creator_team, added_by_user: creator_user)
     end
   end
 

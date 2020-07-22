@@ -72,7 +72,6 @@ class Investigation < ApplicationRecord
   has_many :read_only_collaborations, class_name: "Collaboration::Access::ReadOnly"
   has_many :teams_with_read_only_access, through: :read_only_collaborations, source: :collaborator, source_type: "Team"
 
-  has_many :edit_collaborations,      class_name: "Collaboration::Access::Edit"
   has_many :collaboration_accesses,   class_name: "Collaboration::Access"
   has_many :teams_with_access, lambda {
     select("teams.*, CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END").distinct.joins(:collaborations).order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name")).references(:collaborations)

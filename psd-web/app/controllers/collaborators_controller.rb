@@ -39,7 +39,7 @@ class CollaboratorsController < ApplicationController
   def edit
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaboration_accesses.find(params[:id])
+    @collaboration = @investigation.collaborations.edit_and_read_only.find(params[:id])
     @collaborator = @collaboration.collaborator
     @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
   end
@@ -47,7 +47,7 @@ class CollaboratorsController < ApplicationController
   def update
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaboration_accesses.find(params[:id])
+    @collaboration = @investigation.collaborations.edit_and_read_only.find(params[:id])
     @collaborator = @collaboration.collaborator
     @edit_form = EditInvestigationCollaboratorForm.new(edit_params
       .merge(investigation: @investigation, team: @collaborator, user: current_user))
@@ -72,7 +72,7 @@ private
   end
 
   def team_ids_with_access
-    @investigation.edit_collaborations.where(collaborator_type: "Team").pluck(:collaborator_id)
+    @investigation.collaboration_accesses.where(collaborator_type: "Team").pluck(:collaborator_id)
   end
 
   def edit_params
