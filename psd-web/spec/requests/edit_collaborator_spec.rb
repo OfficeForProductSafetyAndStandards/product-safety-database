@@ -15,6 +15,18 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
     sign_in user
   end
 
+  context "when editing" do
+    context "with owner collaboration", :with_errors_rendered do
+      before do
+        get edit_investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id)
+      end
+
+      it "responds with a 404 (not found) status" do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   context "when deleting" do
     let(:permission_level) { EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE }
     let(:message) { "" }
@@ -53,6 +65,16 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
       it "is not successful" do
         do_request
         expect(response).to render_template("collaborators/edit")
+      end
+    end
+
+    context "with owner collaboration", :with_errors_rendered do
+      before do
+        put investigation_collaborator_path(investigation.pretty_id, investigation.owner_team_collaboration.id), params: params
+      end
+
+      it "responds with a 404 (not found) status" do
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

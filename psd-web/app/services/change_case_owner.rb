@@ -21,8 +21,8 @@ class ChangeCaseOwner
       investigation.reload # force cached associations to be reloaded
 
       old_collaboration = investigation
-                            .collaboration_accesses
-                            .where(type: ["Collaboration::Access::Edit", "Collaboration::Access::ReadOnly"])
+                            .collaborations
+                            .edit_and_read_only
                             .find_by(collaborator: owner.team)
 
       (old_collaboration || owner).own!(investigation)
