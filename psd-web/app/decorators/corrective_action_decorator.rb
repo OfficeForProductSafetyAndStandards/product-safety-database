@@ -35,4 +35,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def duration
     object.duration.upcase_first
   end
+
+  def has_document?
+    documents.count.positive?
+  end
 end
