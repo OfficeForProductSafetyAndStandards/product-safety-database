@@ -1,5 +1,4 @@
 module RiskAssessmentHelper
-
   def risk_assessed_by(risk_assessment)
     if risk_assessment.assessed_by_team
       link_to risk_assessment.assessed_by_team.name, risk_assessment.assessed_by_team
@@ -9,5 +8,4 @@ module RiskAssessmentHelper
       risk_assessment.assessed_by_other
     end
   end
-
 end

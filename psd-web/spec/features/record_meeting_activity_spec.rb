@@ -67,7 +67,7 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
 
     click_button "Continue"
 
-    expect_to_be_on_supporting_information_page
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
 
     click_link "Activity"
 
@@ -148,7 +148,7 @@ RSpec.feature "Recording a meeting on a case", :with_stubbed_elasticsearch, :wit
 
     click_button "Continue"
 
-    expect_to_be_on_supporting_information_page
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
   end
 
   def expect_case_activity_page_to_show_restricted_information

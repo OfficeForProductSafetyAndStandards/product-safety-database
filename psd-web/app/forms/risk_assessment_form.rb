@@ -54,19 +54,17 @@ class RiskAssessmentForm
     super(DateParser.new(assessed_on).date)
   end
 
-  private
+private
 
   def at_least_one_product_associated
-    return if product_ids.to_a.length > 0
+    return unless product_ids.to_a.empty?
 
     errors.add(:product_ids, I18n.t("product_ids.blank", scope: "activemodel.errors.models.risk_assessment_form.attributes"))
   end
-
 
   # def completed_by_is_present?
   #   return if completed_by_team_id.presence || completed_by_business_id.presence || completed_by_other.presence
 
   #   errors.add(:completed_by, I18n.t("completed_by.blank", scope: "activemodel.errors.models.risk_assessment_form.attributes"))
   # end
-
 end

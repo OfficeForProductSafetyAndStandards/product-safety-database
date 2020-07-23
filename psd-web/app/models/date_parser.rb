@@ -4,7 +4,6 @@
 # If the date is invalid, or any parts are missing, then
 # the input date is returned as a struct
 class DateParser
-
   def initialize(date)
     @date = date
   end
@@ -12,7 +11,7 @@ class DateParser
   def date
     return if @date.nil?
 
-    if Date === @date
+    if @date.is_a?(Date)
       parsed_date = @date
     elsif @date[:year].present? && @date[:month].present? && @date[:day].present?
       begin
@@ -29,7 +28,7 @@ class DateParser
     parsed_date
   end
 
-  private
+private
 
   def struct_from_hash
     OpenStruct.new(year: @date[:year], month: @date[:month], day: @date[:day])

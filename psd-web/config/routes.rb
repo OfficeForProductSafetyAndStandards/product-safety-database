@@ -121,7 +121,7 @@ Rails.application.routes.draw do
       resource :comment, only: %i[create new]
     end
 
-    resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: [:new, :create, :show]
+    resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: %i[new create show]
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
       member do

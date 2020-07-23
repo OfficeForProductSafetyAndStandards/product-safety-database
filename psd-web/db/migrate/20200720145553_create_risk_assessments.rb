@@ -32,8 +32,7 @@ class CreateRiskAssessments < ActiveRecord::Migration[5.2]
 
       add_foreign_key :risk_assessed_products, :risk_assessments
       add_foreign_key :risk_assessed_products, :products
-      add_index :risk_assessed_products, [:risk_assessment_id, :product_id], unique: true, name: "index_risk_assessed_products"
-
+      add_index :risk_assessed_products, %i[risk_assessment_id product_id], unique: true, name: "index_risk_assessed_products"
     end
   end
 end

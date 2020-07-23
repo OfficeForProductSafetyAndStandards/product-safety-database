@@ -13,17 +13,15 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <span class="govuk-caption-l">Risk assessment</span>
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">
-        Added <%= @risk_assessment.created_at %>
+        Added <%= @risk_assessment.created_at.to_s(:govuk) %>
       </p>
     </div>
 
-    <%= govukSummaryList(rows:
-      [
+    <% rows = [
         {
           key: {
             text: "Date of assessment"
@@ -57,7 +55,25 @@
 
           }
         }
-      ]
-    ) %>
+      ] %>
+
+      <% if @risk_assessment.details.present? %>
+        <% rows << {
+          key: {
+            text: "Further details"
+          },
+          value: {
+            text: @risk_assessment.details
+          }
+        } %>
+      <% end %>
+
+    <%= govukSummaryList(rows: rows) %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Attachment</h2>
+    <p class="govuk-body"><%= link_to @risk_assessment.risk_assessment_file.filename, @risk_assessment.risk_assessment_file, class: "govuk-link" %></p>
+
+    <%= document_placeholder(@risk_assessment.risk_assessment_file) %>
   </div>
 </div>

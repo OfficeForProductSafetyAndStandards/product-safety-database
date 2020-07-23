@@ -1,10 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-
   let(:risk_assessment_file) { Rails.root + "test/fixtures/files/new_risk_assessment.txt" }
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
-  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team) }
+  let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team, name: "Jo Bloggs") }
 
   let(:product1) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }
@@ -61,9 +60,26 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_summary_item(key: "Risk level",          value: "Serious risk")
     expect(page).to have_summary_item(key: "Assessed by",         value: "MyCouncil Trading Standards")
     expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X")
+    expect(page).to have_summary_item(key: "Further details", value: "Products risk-assessed in response to incident.")
 
-    expect(page).to have_text("old_risk_assessment.txt")
-    expect(page).to have_text("Products risk-assessed in response to incident.")
+    expect(page).to have_text("new_risk_assessment.txt")
+
+    click_link "Back to allegation"
+
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Activity"
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("Risk assessment")
+    expect(page).to have_text("Added by Jo Bloggs")
+
+    expect(page).to have_text("Date of assessment: 3 April 2020")
+    expect(page).to have_text("Risk level: Serious risk")
+    expect(page).to have_text("Assessed by: MyCouncil Trading Standards")
+    expect(page).to have_text("Product assessed: MyBrand washing machine model X")
+    expect(page).to have_text("Further details: Products risk-assessed in response to incident.")
+
+    expect(page).to have_link("View risk assessment")
   end
-
 end

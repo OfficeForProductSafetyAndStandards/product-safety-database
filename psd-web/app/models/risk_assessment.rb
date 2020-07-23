@@ -1,5 +1,4 @@
 class RiskAssessment < ApplicationRecord
-
   belongs_to :investigation
 
   belongs_to :assessed_by_team, class_name: :Team, optional: true
@@ -11,6 +10,8 @@ class RiskAssessment < ApplicationRecord
   has_many :risk_assessed_products
   has_many :products, through: :risk_assessed_products
 
+  has_one_attached :risk_assessment_file
+
   enum risk_level: {
     serious: "serious",
     high: "high",
@@ -18,5 +19,4 @@ class RiskAssessment < ApplicationRecord
     low: "low",
     other: "other"
   }
-
 end

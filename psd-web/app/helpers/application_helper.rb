@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   def page_title(title, errors: false)
     title = "Error: #{title}" if errors
     content_for(:page_title, title)

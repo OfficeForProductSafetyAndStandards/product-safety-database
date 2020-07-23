@@ -1,6 +1,5 @@
 class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   def govuk_date_input(attribute, legend:)
-
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -8,49 +7,52 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     @template.render "components/govuk_date_input",
-      id: "#{attribute}-fieldset",
-      errorMessage: error_message,
-      fieldset: {
-        legend: {
-          classes: "govuk-fieldset__legend--m",
-          text: legend
-        }
-      },
-      items: [
-        {
-          classes: "govuk-input--width-2",
-          label: "Day",
-          id: attribute,
-          name: "#{input_name(attribute)}[day]",
-          value: object.public_send(attribute)&.day
-        },
-        {
-          classes: "govuk-input--width-2",
-          label: "Month",
-          name: "#{input_name(attribute)}[month]",
-          value: object.public_send(attribute)&.month
-        },
-        {
-          classes: "govuk-input--width-4",
-          label: "Year",
-          name: "#{input_name(attribute)}[year]",
-          value: object.public_send(attribute)&.year
-        }
-      ]
+                     id: "#{attribute}-fieldset",
+                     errorMessage: error_message,
+                     fieldset: {
+                       legend: {
+                         classes: "govuk-fieldset__legend--m",
+                         text: legend
+                       }
+                     },
+                     items: [
+                       {
+                         classes: "govuk-input--width-2",
+                         label: "Day",
+                         id: attribute,
+                         name: "#{input_name(attribute)}[day]",
+                         value: object.public_send(attribute)&.day
+                       },
+                       {
+                         classes: "govuk-input--width-2",
+                         label: "Month",
+                         name: "#{input_name(attribute)}[month]",
+                         value: object.public_send(attribute)&.month
+                       },
+                       {
+                         classes: "govuk-input--width-4",
+                         label: "Year",
+                         name: "#{input_name(attribute)}[year]",
+                         value: object.public_send(attribute)&.year
+                       }
+                     ]
   end
 
   def govuk_text_area(attribute, label:)
     @template.render "components/govuk_textarea",
-      label: {
-        text: "Further details (optional)",
-        classes: "govuk-label--m"
-      },
-      name: input_name(attribute),
-      id: attribute,
-      value: object.public_send(attribute)
+                     label: {
+                       text: label,
+                       classes: "govuk-label--m"
+                     },
+                     name: input_name(attribute),
+                     id: attribute,
+                     value: object.public_send(attribute)
   end
 
   def govuk_file_upload(attribute, label:, hint: nil)
+    # Set the form's enctype attribute to multipart/form-data so that the file
+    # will get uploaded.
+    self.multipart = true
 
     if object.errors.include?(attribute)
       error_message = {
@@ -88,16 +90,17 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       item[:name] = "#{input_name(attribute)}[]"
       # item[:value] = "1"
 
-      if index == 0
-        # First item should have the ID of the attribute, so that it gets
-        # focused when the error message anchor link is clicked.
-        item[:id] = attribute.to_s
-      else
-        item[:id] = "#{attribute}-#{index}"
-      end
+      item[:id] = if index.zero?
+                    # First item should have the ID of the attribute, so that it gets
+                    # focused when the error message anchor link is clicked.
+                    attribute.to_s
+                  else
+                    "#{attribute}-#{index}"
+                  end
     end
 
     @template.govukCheckboxes(
+      errorMessage: error_message,
       items: @items,
       fieldset: {
         legend: {
@@ -109,7 +112,6 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def govuk_radios(attribute, legend:, items:)
-
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -118,36 +120,34 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     @items = items
 
-
     # Set item as checked if the value matches the method from the model
     @items.each_with_index do |item, index|
       item[:checked] = true if object.public_send(attribute) == item[:value].to_s
 
-      if index == 0
-        # First item should have the ID of the attribute, so that it gets
-        # focused when the error message anchor link is clicked.
-        item[:id] = attribute.to_s
-      else
-        item[:id] = "#{attribute}-#{index}"
-      end
+      item[:id] = if index.zero?
+                    # First item should have the ID of the attribute, so that it gets
+                    # focused when the error message anchor link is clicked.
+                    attribute.to_s
+                  else
+                    "#{attribute}-#{index}"
+                  end
     end
 
     @template.render "components/govuk_radios",
-      name: input_name(attribute),
-      errorMessage: error_message,
-      items: @items,
-      fieldset: {
-        legend: {
-          text: legend,
-          classes: "govuk-fieldset__legend--m"
-        }
-      }
+                     name: input_name(attribute),
+                     errorMessage: error_message,
+                     items: @items,
+                     fieldset: {
+                       legend: {
+                         text: legend,
+                         classes: "govuk-fieldset__legend--m"
+                       }
+                     }
   end
 
-  private
+private
 
   def input_name(attribute)
     "#{@object_name}[#{attribute}]"
   end
-
 end

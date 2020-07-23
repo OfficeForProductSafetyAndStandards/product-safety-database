@@ -1,6 +1,5 @@
 # Based on https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/components/fieldset/template.njk
 module GovukFieldsetHelper
-
   def govukFieldset(classes: "", describedBy: "", legend: {}, attributes: {}, &block)
     tag.fieldset class: "govuk-fieldset" do
       legend = capture do
