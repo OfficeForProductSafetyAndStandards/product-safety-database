@@ -7,10 +7,16 @@ class UpdateCorrectiveAction
     clear_decided_date_to_trigger_date_validation
     store_previous_document
     fetch_new_file_params
+    # byebug
     set_new_attributes_and_validate!
 
     corrective_action.transaction do
-      document = replace_attached_file_if_necessary(corrective_action, previous_document, new_file)
+      # byebug
+      if corrective_action.related_file_changed? && corrective_action.related_file?
+        document = replace_attached_file_if_necessary(corrective_action, previous_document, new_file)
+      elsif corrective_action.related_file_changed? && !corrective_action.related_file?
+        corrective_action.documents.detach
+      end
 
       corrective_action.save!
 

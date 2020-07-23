@@ -11,7 +11,7 @@ FactoryBot.define do
     duration { CorrectiveAction::DURATION_TYPES.sample }
     geographic_scope { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
     details { Faker::Lorem.sentence }
-    related_file { "No" }
+    related_file { false }
 
     transient do
       date_decided { Faker::Date.backward(days: 14) }

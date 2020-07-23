@@ -5,7 +5,7 @@ class CorrectiveAction < ApplicationRecord
   MEASURE_TYPES = %w[mandatory voluntary].freeze
   DURATION_TYPES = %w[permanent temporary unknown].freeze
 
-  attribute :related_file
+  attribute :related_file, :boolean
 
   belongs_to :investigation
   belongs_to :business, optional: true
@@ -19,7 +19,7 @@ class CorrectiveAction < ApplicationRecord
   validates :summary, presence: { message: "Enter a summary of the corrective action" }
   validate :date_decided_cannot_be_in_the_future
   validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
-  validates :related_file, presence: { message: "Select whether you want to upload a related file" }
+  validates :related_file, exclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
 
   validates :measure_type, presence: true
@@ -47,7 +47,7 @@ private
   end
 
   def related_file_attachment_validation
-    if related_file == "Yes" && documents.attachments.empty?
+    if related_file? && documents.attachments.empty?
       errors.add(:base, :file_missing, message: "Provide a related file or select no")
     end
   end

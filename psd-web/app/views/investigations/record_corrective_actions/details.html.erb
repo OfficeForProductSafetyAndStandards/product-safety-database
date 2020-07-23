@@ -35,7 +35,7 @@
                  fieldset: { legend: { text: "Are there any files related to the action?",
                    classes: "govuk-fieldset__legend--m" } },
                  items: [{ text: "Yes", value: "Yes", conditional: { html: file_field } },
-                         { text: "No", value: "No" }]
+                         { text: "No", value: "off" }]
       %>
 
       <%= govukButton(text: "Continue") %>

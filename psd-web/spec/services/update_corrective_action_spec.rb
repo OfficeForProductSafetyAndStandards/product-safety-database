@@ -17,6 +17,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:product)          { create(:product) }
   let(:business)         { create(:business) }
   let(:old_date_decided) { Time.zone.today }
+  let(:related_file)     { "Yes" }
   let(:corrective_action) do
     create(
       :corrective_action,
@@ -32,6 +33,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:corrective_action_params) do
     ActionController::Parameters.new(
       date_decided: { year: new_date_decided.year, month: new_date_decided.month, day: new_date_decided.day },
+      related_file: related_file,
       file: {
         file: fixture_file_upload(file_fixture("corrective_action.txt")),
         description: new_file_description
@@ -125,6 +127,14 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           expect(NotifyMailer)
             .to have_received(:investigation_updated)
                   .with(investigation.pretty_id, case_creator.name, case_creator.email, body, email_subject)
+        end
+
+        context "when removing the previously attached file" do
+          let(:related_file) { "off" }
+
+          it "removes the related file" do
+            expect { update_corrective_action }.to change(corrective_action.documents, :any?).from(true).to(false)
+          end
         end
       end
 
