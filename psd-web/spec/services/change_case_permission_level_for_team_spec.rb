@@ -1,13 +1,16 @@
 require "rails_helper"
 
-RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe ChangeCasePermissionLevelForTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation) }
+  let!(:investigation) { create(:allegation, creator: user, read_only_teams: read_only_teams) }
 
   let(:user) { create(:user) }
-  let(:team) { create(:team, name: "Testing team") }
   let(:message) { "Thanks for collaborating." }
-  let(:collaboration_class) { Collaboration::Access::Edit }
+  let(:new_collaboration_class) { Collaboration::Access::Edit }
+
+  let(:team) { create(:team, name: "Testing team") }
+  let(:read_only_teams) { [team] }
+  let(:existing_collaboration) { investigation.read_only_collaborations.last }
 
   describe ".call" do
     context "with no parameters" do
@@ -18,8 +21,8 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
       end
     end
 
-    context "with no investigation parameter" do
-      let(:result) { described_class.call(team: team, user: user) }
+    context "with no existing_collaboration parameter" do
+      let(:result) { described_class.call(new_collaboration_class: new_collaboration_class, user: user) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -27,15 +30,15 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(team: team, investigation: investigation) }
+      let(:result) { described_class.call(existing_collaboration: existing_collaboration, new_collaboration_class: new_collaboration_class) }
 
       it "returns a failure" do
         expect(result).to be_failure
       end
     end
 
-    context "with no team parameter" do
-      let(:result) { described_class.call(investigation: investigation, user: user) }
+    context "with no new_collaboration_class parameter" do
+      let(:result) { described_class.call(existing_collaboration: existing_collaboration, user: user) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -45,10 +48,9 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
     context "with required parameters" do
       let(:result) do
         described_class.call(
-          team: team,
+          existing_collaboration: existing_collaboration,
           message: message,
-          investigation: investigation,
-          collaboration_class: collaboration_class,
+          new_collaboration_class: new_collaboration_class,
           user: user
         )
       end
@@ -57,7 +59,12 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
         expect(result).to be_a_success
       end
 
-      it "returns the collaborator" do
+      it "destroys the old collaboration", :aggregate_failures do
+        result
+        expect(investigation.reload.read_only_collaborations.count).to eq(0)
+      end
+
+      it "returns the new collaboration" do
         expect(result.collaboration).to have_attributes(
           collaborator: team,
           added_by_user: user,
@@ -67,7 +74,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
       end
 
       context "when adding with edit permissions" do
-        let(:collaboration_class) { Collaboration::Access::Edit }
+        let(:new_collaboration_class) { Collaboration::Access::Edit }
 
         it "creates an edit collaboration" do
           expect(result.collaboration).to be_a(Collaboration::Access::Edit)
@@ -75,7 +82,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
       end
 
       context "when adding with view only permissions" do
-        let(:collaboration_class) { Collaboration::Access::ReadOnly }
+        let(:new_collaboration_class) { Collaboration::Access::ReadOnly }
 
         it "creates a read only collaboration" do
           expect(result.collaboration).to be_a(Collaboration::Access::ReadOnly)
@@ -87,7 +94,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
           result
           email = delivered_emails.last
           expect(email.recipient).to eq(team.email)
-          expect(email.action_name).to eq("team_added_to_case_email")
+          expect(email.action_name).to eq("case_permission_changed_for_team")
         end
       end
 
@@ -101,7 +108,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
         it "notifies the team's activated users", :aggregate_failures do
           email = delivered_emails.last
           expect(email.recipient).to eq(active_team_user.email)
-          expect(email.action_name).to eq("team_added_to_case_email")
+          expect(email.action_name).to eq("case_permission_changed_for_team")
         end
 
         it "does not notify the team's inactive users" do
@@ -113,26 +120,10 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
         result
         last_added_activity = investigation.activities.order(:id).first
 
-        expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
-        expect(last_added_activity.title(nil)).to eql("Testing team added to allegation")
+        expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamPermissionChanged)
+        expect(last_added_activity.title(nil)).to eql("Testing team's case permission level changed")
         expect(last_added_activity.source.user_id).to eql(user.id)
         expect(last_added_activity.metadata).to be_present
-      end
-
-      context "when the team has already been added to the case" do
-        before { result }
-
-        it "does not create a new collaboration record" do
-          expect { result }.not_to change(investigation.collaborations, :count)
-        end
-
-        it "does not send an email" do
-          expect { result }.not_to change(delivered_emails, :count)
-        end
-
-        it "does not create an audit activity record" do
-          expect { result }.not_to change(investigation.activities, :count)
-        end
       end
     end
   end

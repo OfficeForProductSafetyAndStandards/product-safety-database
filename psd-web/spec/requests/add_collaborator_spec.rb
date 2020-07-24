@@ -17,7 +17,8 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
              add_team_to_case_form: {
                include_message: "true",
                message: message,
-               team_id: other_team.id
+               team_id: other_team.id,
+               permission_level: "edit"
              }
            }
     end
@@ -90,8 +91,8 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
            }
     end
 
-    it "redirects back to the 'teams added to case' page" do
-      expect(response).to redirect_to(investigation_collaborators_path(investigation))
+    it "returns an error" do
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 

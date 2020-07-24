@@ -107,14 +107,20 @@ FactoryBot.define do
 
     after(:create) do |investigation, evaluator|
       Array.wrap(evaluator.read_only_teams).each do |read_only_team|
-        investigation.read_only_collaborations.create!(collaborator: read_only_team)
+        AddTeamToCase.call!(
+          investigation: investigation,
+          user: investigation.creator_user,
+          team: read_only_team,
+          collaboration_class: Collaboration::Access::ReadOnly
+        )
       end
 
       Array.wrap(evaluator.edit_access_teams).each do |edit_access_team|
         AddTeamToCase.call!(
           investigation: investigation,
           user: investigation.creator_user,
-          team: edit_access_team
+          team: edit_access_team,
+          collaboration_class: Collaboration::Access::Edit
         )
       end
     end

@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
-  let(:investigation) { create(:allegation) }
+  let!(:investigation) { create(:allegation, edit_access_teams: [team_with_access]) }
   let(:creator_team) { investigation.creator_user.team }
   let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
 
   before do
-    AddTeamToCase.call!(user: user, investigation: investigation, team: team_with_access)
     sign_in(user)
     delivered_emails.clear
   end
