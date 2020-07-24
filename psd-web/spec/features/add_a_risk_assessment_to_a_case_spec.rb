@@ -3,12 +3,33 @@ require "rails_helper"
 RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:risk_assessment_file) { Rails.root + "test/fixtures/files/new_risk_assessment.txt" }
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
+
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team, name: "Jo Bloggs") }
 
   let(:product1) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }
 
-  let(:investigation) { create(:allegation, products: [product1, product2], creator: user) }
+  let(:business1) { create(:business, trading_name: "MyBrand Inc" )}
+  let(:business2) { create(:business, trading_name: "MyBrand Distributors" )}
+
+  let(:investigation) {
+    create(:allegation, products: [product1, product2],
+      investigation_businesses:
+      [
+        build(:investigation_business, business: business1),
+        build(:investigation_business, business: business2)
+      ],
+      creator: user
+    )
+  }
+
+  let(:investigation_with_no_businesses) { create(:allegation, products: [product1, product2], creator: user) }
+
+  let(:investigation_with_single_product) { create(:allegation, products: [product1], creator: user) }
+
+  before do
+    create(:team, name: "OtherCouncil Trading Standards")
+  end
 
   scenario "Adding a risk assessment to a case with a multiple products (with validation errors)" do
     sign_in(user)
@@ -22,6 +43,17 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     click_button "Continue"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_select("Choose team",
+      options: ["", "OtherCouncil Trading Standards"],
+      selected: []
+    )
+
+    expect(page).to have_select("Choose business",
+      options: ["","MyBrand Distributors","MyBrand Inc"],
+      selected: []
+    )
+
     click_button "Add risk assessment"
 
     expect(page).to have_text("Enter the date of the assessment")
@@ -81,5 +113,24 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_text("Further details: Products risk-assessed in response to incident.")
 
     expect(page).to have_link("View risk assessment")
+  end
+
+  scenario "Adding a risk assessment to a case with no associated businesses" do
+    sign_in(user)
+
+    visit "/cases/#{investigation_with_no_businesses.pretty_id}/risk-assessments/new"
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_no_businesses.pretty_id)
+
+    expect(page).not_to have_field("A business related to the case")
+    expect(page).not_to have_select("Choose business")
+  end
+
+  scenario "Adding a risk assessment to a case with a single product associated" do
+    sign_in(user)
+
+    visit "/cases/#{investigation_with_single_product.pretty_id}/risk-assessments/new"
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
+
+    expect(page).not_to have_css('fieldset', text: "Which products were assessed?")
   end
 end
