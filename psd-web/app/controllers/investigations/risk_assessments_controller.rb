@@ -8,7 +8,6 @@ module Investigations
       @other_teams = other_teams
       @businesses = businesses
       @products = products
-
     end
 
     def create

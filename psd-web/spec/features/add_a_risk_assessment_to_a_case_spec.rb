@@ -9,19 +9,18 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
   let(:product1) { create(:product_washing_machine, name: "MyBrand washing machine model X") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand washing machine model Y") }
 
-  let(:business1) { create(:business, trading_name: "MyBrand Inc" )}
-  let(:business2) { create(:business, trading_name: "MyBrand Distributors" )}
+  let(:business1) { create(:business, trading_name: "MyBrand Inc") }
+  let(:business2) { create(:business, trading_name: "MyBrand Distributors") }
 
-  let(:investigation) {
+  let(:investigation) do
     create(:allegation, products: [product1, product2],
-      investigation_businesses:
+                        investigation_businesses:
       [
         build(:investigation_business, business: business1),
         build(:investigation_business, business: business2)
       ],
-      creator: user
-    )
-  }
+                        creator: user)
+  end
 
   let(:investigation_with_no_businesses) { create(:allegation, products: [product1, product2], creator: user) }
 
@@ -45,14 +44,12 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_select("Choose team",
-      options: ["", "OtherCouncil Trading Standards"],
-      selected: []
-    )
+                                options: ["", "OtherCouncil Trading Standards"],
+                                selected: [])
 
     expect(page).to have_select("Choose business",
-      options: ["","MyBrand Distributors","MyBrand Inc"],
-      selected: []
-    )
+                                options: ["", "MyBrand Distributors", "MyBrand Inc"],
+                                selected: [])
 
     click_button "Add risk assessment"
 
@@ -263,7 +260,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     visit "/cases/#{investigation_with_single_product.pretty_id}/risk-assessments/new"
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
-    expect(page).not_to have_css('fieldset', text: "Which products were assessed?")
+    expect(page).not_to have_css("fieldset", text: "Which products were assessed?")
 
     expect(page).to have_text("Product assessed")
     expect(page).to have_text("MyBrand washing machine model X")
@@ -288,6 +285,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
-    expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X")
+    expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X")
   end
 end

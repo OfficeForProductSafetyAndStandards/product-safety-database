@@ -6,7 +6,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       }
     end
 
-    hint = {text: hint} if hint
+    hint = { text: hint } if hint
 
     input_classes = " govuk-input--error" if object.errors.include?(attribute)
 
