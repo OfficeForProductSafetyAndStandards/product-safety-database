@@ -1,14 +1,19 @@
 class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
-  def govuk_date_input(attribute, legend:)
+  def govuk_date_input(attribute, legend:, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
       }
     end
 
+    hint = {text: hint} if hint
+
+    input_classes = " govuk-input--error" if object.errors.include?(attribute)
+
     @template.render "components/govuk_date_input",
                      id: "#{attribute}-fieldset",
                      errorMessage: error_message,
+                     hint: hint,
                      fieldset: {
                        legend: {
                          classes: "govuk-fieldset__legend--m",
@@ -17,20 +22,20 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      },
                      items: [
                        {
-                         classes: "govuk-input--width-2",
+                         classes: "govuk-input--width-2#{input_classes}",
                          label: "Day",
                          id: attribute,
                          name: "#{input_name(attribute)}[day]",
                          value: object.public_send(attribute)&.day
                        },
                        {
-                         classes: "govuk-input--width-2",
+                         classes: "govuk-input--width-2#{input_classes}",
                          label: "Month",
                          name: "#{input_name(attribute)}[month]",
                          value: object.public_send(attribute)&.month
                        },
                        {
-                         classes: "govuk-input--width-4",
+                         classes: "govuk-input--width-4#{input_classes}",
                          label: "Year",
                          name: "#{input_name(attribute)}[year]",
                          value: object.public_send(attribute)&.year

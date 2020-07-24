@@ -179,6 +179,10 @@ en:
           attributes:
             assessed_on:
               blank: Enter the date of the assessment
+              in_future: Date of assessment must be today or in the past
+              too_old: Date of assessment must be on or after 1 January 1970
+              must_be_real: Date of assessment must be a real date
+              incomplete: Date of assessment must include a %{missing_date_parts}
             risk_level:
               blank: Select the risk level
             assessed_by:

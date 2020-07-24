@@ -19,7 +19,7 @@
         <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
         <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-        <%= form.govuk_date_input :assessed_on, legend: "Date of assessment" %>
+        <%= form.govuk_date_input :assessed_on, legend: "Date of assessment", hint: "For example, 31 1 2020" %>
 
         <%- custom = capture do %>
           <%= render "form_components/govuk_input",

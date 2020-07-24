@@ -28,6 +28,13 @@ class RiskAssessmentForm
   validates :assessed_by, presence: true
   validate :at_least_one_product_associated
 
+  validates :assessed_on,
+            real_date: true,
+            complete_date: true
+
+  validate :assessed_on_cannot_be_in_future
+  validate :assessed_on_cannot_be_older_than_1970
+
   def risk_levels
     {
       serious: "serious",
@@ -46,7 +53,6 @@ class RiskAssessmentForm
     end
   end
 
-
   # Expects either a date object, or a hash containing
   # year, month and day, for example:
   #
@@ -57,15 +63,22 @@ class RiskAssessmentForm
 
 private
 
+  def assessed_on_cannot_be_in_future
+    if assessed_on.is_a?(Date) && assessed_on > Date.today
+
+      errors.add(:assessed_on, :in_future)
+    end
+  end
+
+  def assessed_on_cannot_be_older_than_1970
+    if assessed_on.is_a?(Date) && assessed_on < Date.parse("1970-01-01")
+      errors.add(:assessed_on, :too_old)
+    end
+  end
+
   def at_least_one_product_associated
     return unless product_ids.to_a.empty?
 
-    errors.add(:product_ids, I18n.t("product_ids.blank", scope: "activemodel.errors.models.risk_assessment_form.attributes"))
+    errors.add(:product_ids, :blank)
   end
-
-  # def completed_by_is_present?
-  #   return if completed_by_team_id.presence || completed_by_business_id.presence || completed_by_other.presence
-
-  #   errors.add(:completed_by, I18n.t("completed_by.blank", scope: "activemodel.errors.models.risk_assessment_form.attributes"))
-  # end
 end
