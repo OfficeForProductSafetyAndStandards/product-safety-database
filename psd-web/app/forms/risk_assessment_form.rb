@@ -38,13 +38,14 @@ class RiskAssessmentForm
     }
   end
 
-  def assessed_by=(assessed_by_option)
-    if assessed_by_option == "my_team"
-      self.assessed_by_team_id = current_user.team_id
+  def assessed_by_team_id
+    if assessed_by == "my_team"
+      current_user.team_id
+    else
+      super
     end
-
-    super(assessed_by_option)
   end
+
 
   # Expects either a date object, or a hash containing
   # year, month and day, for example:

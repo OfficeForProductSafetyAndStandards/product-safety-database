@@ -3,11 +3,12 @@ module Investigations
     def new
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
 
+      @risk_assessment_form = RiskAssessmentForm.new
+
       @other_teams = other_teams
       @businesses = businesses
       @products = products
 
-      @risk_assessment_form = RiskAssessmentForm.new
     end
 
     def create
@@ -22,7 +23,8 @@ module Investigations
         result = AddRiskAssessmentToCase.call!(
           @risk_assessment_form.attributes.merge({
             investigation: @investigation,
-            user: current_user
+            user: current_user,
+            assessed_by_team_id: @risk_assessment_form.assessed_by_team_id
           })
         )
 
@@ -62,7 +64,11 @@ module Investigations
     def products
       @investigation.products
       .pluck(:name, :id).collect do |row|
-        { text: row[0], value: row[1] }
+        {
+          text: row[0],
+          value: row[1],
+          checked: @risk_assessment_form.product_ids.to_a.include?(row[1])
+        }
       end
     end
 

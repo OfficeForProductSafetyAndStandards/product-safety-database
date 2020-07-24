@@ -115,6 +115,138 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_link("View risk assessment")
   end
 
+  scenario "Adding a risk assessment done by another team" do
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/risk-assessments/new"
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
+
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "Serious risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "Trading standards or another market surveilance authority"
+      select "OtherCouncil Trading Standards", from: "Choose team"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      check "MyBrand washing machine model X"
+    end
+
+    attach_file "Upload the risk assessment", risk_assessment_file
+    click_button "Add risk assessment"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Assessed by", value: "OtherCouncil Trading Standards")
+
+    click_link "Back to allegation"
+
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Activity"
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("Assessed by: OtherCouncil Trading Standards")
+  end
+
+  scenario "Adding a risk assessment done by a business associated with the case" do
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/risk-assessments/new"
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
+
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "Serious risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "A business related to the case"
+      select "MyBrand Inc", from: "Choose business"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      check "MyBrand washing machine model X"
+    end
+
+    attach_file "Upload the risk assessment", risk_assessment_file
+    click_button "Add risk assessment"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Assessed by", value: "MyBrand Inc")
+
+    click_link "Back to allegation"
+
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Activity"
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("Assessed by: MyBrand Inc")
+  end
+
+  scenario "Adding a risk assessment done by someone else" do
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/risk-assessments/new"
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
+
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "Someone else"
+      fill_in "Organisation name", with: "RiskAssessmentsRUs"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      check "MyBrand washing machine model X"
+    end
+
+    click_button "Add risk assessment"
+
+    within_fieldset("What was the risk level?") do
+      choose "Serious risk"
+    end
+
+    # Check that field retains value when there’s a validation error
+    expect(page).to have_field("Organisation name", with: "RiskAssessmentsRUs")
+
+    attach_file "Upload the risk assessment", risk_assessment_file
+
+    click_button "Add risk assessment"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Assessed by", value: "RiskAssessmentsRUs")
+
+    click_link "Back to allegation"
+
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Activity"
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("Assessed by: RiskAssessmentsRUs")
+  end
+
   scenario "Adding a risk assessment to a case with no associated businesses" do
     sign_in(user)
 
@@ -132,5 +264,30 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
     expect(page).not_to have_css('fieldset', text: "Which products were assessed?")
+
+    expect(page).to have_text("Product assessed")
+    expect(page).to have_text("MyBrand washing machine model X")
+
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "High risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "Me or my team"
+    end
+
+    attach_file "Upload the risk assessment", risk_assessment_file
+
+    click_button "Add risk assessment"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
+
+    expect(page).to have_summary_item(key: "Product assessed",    value: "MyBrand washing machine model X")
   end
 end

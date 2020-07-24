@@ -46,7 +46,7 @@
         <%- teams_html = capture do %>
           <%= render "components/govuk_select",
             id: :assessed_by_team_id,
-            name: :assessed_by_team_id,
+            name: "risk_assessment_form[assessed_by_team_id]",
             label: { text: "Choose team" },
             items: @other_teams
              %>
@@ -55,7 +55,7 @@
         <%- businesses_html = capture do %>
           <%= render "components/govuk_select",
             id: :assessed_by_business_id,
-            name: :assessed_by_business_id,
+            name: "risk_assessment_form[assessed_by_business_id]",
             label: { text: "Choose business" },
             items: @businesses
              %>
@@ -64,8 +64,9 @@
         <%- someone_else_html = capture do %>
           <%= render "components/govuk_input",
             id: :assessed_by_other,
-            name: :assessed_by_other,
-            label: { text: "Organisation name" }
+            name: "risk_assessment_form[assessed_by_other]",
+            label: { text: "Organisation name" },
+            value: @risk_assessment_form.assessed_by_other
              %>
         <% end %>
 
@@ -89,6 +90,11 @@
             items: @products
           %>
         <% else %>
+
+          <h2 class="govuk-heading-m">Product assessed</h2>
+
+          <p class="govuk-body"><%= link_to("Test product name", product_path(@products.first[:value])) %></p>
+
           <%= form.fields_for :product_ids do |field| %>
             <%= field.hidden_field nil, value: @products.first[:value] %>
           <% end %>

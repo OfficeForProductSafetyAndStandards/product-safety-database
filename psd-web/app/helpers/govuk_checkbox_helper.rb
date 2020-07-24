@@ -47,7 +47,12 @@ module GovukCheckboxHelper
         items.each do |item|
           item_html = capture do
             tag.div class: "govuk-checkboxes__item" do
-              concat tag.input class: "govuk-checkboxes__input", id: item[:id], name: item[:name], type: "checkbox", value: item[:value]
+              concat tag.input class: "govuk-checkboxes__input",
+                id: item[:id],
+                name: item[:name],
+                type: "checkbox",
+                value: item[:value],
+                checked: item[:checked]
 
               concat govukLabel(
                 classes: "govuk-checkboxes__label",

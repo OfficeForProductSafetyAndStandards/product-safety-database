@@ -14,9 +14,9 @@ class AddRiskAssessmentToCase
       assessed_on: assessed_on,
       risk_level: risk_level,
       custom_risk_level: custom_risk_level.presence,
-      assessed_by_team_id: assessed_by_team_id,
-      assessed_by_business_id: assessed_by_business_id,
-      assessed_by_other: assessed_by_other,
+      assessed_by_team_id: assessed_by_team_id.presence,
+      assessed_by_business_id: assessed_by_business_id.presence,
+      assessed_by_other: assessed_by_other.presence,
       details: details,
       product_ids: product_ids
     )
