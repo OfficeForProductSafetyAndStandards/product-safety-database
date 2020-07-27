@@ -93,7 +93,7 @@
 
           <h2 class="govuk-heading-m">Product assessed</h2>
 
-          <p class="govuk-body"><%= link_to("Test product name", product_path(@products.first[:value])) %></p>
+          <p class="govuk-body"><%= @products.first[:text] %></p>
 
           <%= form.fields_for :product_ids do |field| %>
             <%= field.hidden_field nil, value: @products.first[:value] %>
