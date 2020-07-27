@@ -9,26 +9,26 @@ class DateParser
   end
 
   def date
-    return if @date.nil?
+    return nil if @date.nil?
+    return @date if @date.is_a?(Date)
+    return nil if @date[:year].blank? && @date[:month].blank? && @date[:day].blank?
 
-    if @date.is_a?(Date)
-      parsed_date = @date
-    elsif @date[:year].present? && @date[:month].present? && @date[:day].present?
+    if numeric?(@date[:year]) && numeric?(@date[:month]) && numeric?(@date[:day])
       begin
-        parsed_date = Date.new(@date[:year].to_i, @date[:month].to_i, @date[:day].to_i)
+        Date.new(@date[:year].to_i, @date[:month].to_i, @date[:day].to_i)
       rescue ArgumentError
-        parsed_date = struct_from_hash
+        struct_from_hash
       end
-    elsif @date[:year].present? || @date[:month].present? || @date[:day].present?
-      parsed_date = struct_from_hash
     else
-      parsed_date = nil
+      struct_from_hash
     end
-
-    parsed_date
   end
 
 private
+
+  def numeric?(string)
+    string.to_s.strip.scan(/^[\d]+$/).any?
+  end
 
   def struct_from_hash
     OpenStruct.new(year: @date[:year], month: @date[:month], day: @date[:day])
