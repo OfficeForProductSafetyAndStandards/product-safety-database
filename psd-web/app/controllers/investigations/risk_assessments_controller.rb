@@ -47,6 +47,7 @@ module Investigations
 
     def other_teams
       [{ text: "", value: "" }] + Team
+        .order(:name)
         .where.not(id: current_user.team_id)
         .pluck(:name, :id).collect do |row|
                                     { text: row[0], value: row[1] }
@@ -55,6 +56,7 @@ module Investigations
 
     def businesses
       [{ text: "", value: "" }] + @investigation.businesses
+      .reorder(:trading_name)
       .pluck(:trading_name, :id).collect do |row|
         { text: row[0], value: row[1] }
       end
