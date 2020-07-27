@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: 48132fd966a3b528b10a3fe48046eb723132f008
-  tag: 0.6.8
+  revision: d1a8d9a819fd54f70a1653ded7e619298dea3c7a
+  branch: master
   specs:
     govuk-design-system-rails (0.6.8)
 
