@@ -106,7 +106,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_select(attribute, label:, items:)
+  def govuk_select(attribute, label:, items:, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -114,6 +114,8 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     end
 
     @items = items
+
+    hint = { text: hint } if hint
 
     # Set item as selected if the value matches the method from the model
     @items.each_with_index do |item, index|
@@ -124,11 +126,12 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       id: attribute.to_s,
       name: input_name(attribute),
       label: { text: label },
+      hint: hint,
       items: @items,
       errorMessage: error_message
   end
 
-  def govuk_checkboxes(attribute, legend:, items:)
+  def govuk_checkboxes(attribute, legend:, items:, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -153,9 +156,12 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                   end
     end
 
+    hint = { text: hint } if hint
+
     @template.govukCheckboxes(
       errorMessage: error_message,
       items: @items,
+      hint: hint,
       fieldset: {
         legend: {
           html: legend,

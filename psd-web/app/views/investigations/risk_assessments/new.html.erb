@@ -45,7 +45,10 @@
         <% end %>
 
         <%- businesses_html = capture do %>
-          <%= form.govuk_select :assessed_by_business_id, label: "Choose business", items: @businesses %>
+          <%= form.govuk_select :assessed_by_business_id,
+            label: "Choose business",
+            hint: safe_join(["If the business isn’t listed, you should ", link_to("add it to the case", new_investigation_business_path(@investigation)), " first."]),
+            items: @businesses %>
         <% end %>
 
         <%- someone_else_html = capture do %>
@@ -69,6 +72,7 @@
         <% if @products.length > 1 %>
           <%= form.govuk_checkboxes :product_ids,
             legend: "Which products were assessed?",
+            hint: "You must choose at least one. Only products already added to the case are listed.",
             items: @products
           %>
         <% else %>
