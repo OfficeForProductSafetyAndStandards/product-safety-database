@@ -4,8 +4,10 @@ class ConvertActivityMetadataForTeamsOnCase < ActiveRecord::Migration[5.2]
       team_name = activity.attributes["title"].match(/(.*) added to/).captures.first.strip
       team = Team.find_by!(name: team_name)
 
+      collaboration = activity.collaborations.find(type: "Collaboration::Access::Edit", collaborator_type: "Team", collaborator_id: team.id)
+
       activity.update!(
-        metadata: activity.class.build_metadata(team, "edit", activity.body),
+        metadata: activity.class.build_metadata(collaboration, activity.body),
         body: nil,
         title: nil
       )
