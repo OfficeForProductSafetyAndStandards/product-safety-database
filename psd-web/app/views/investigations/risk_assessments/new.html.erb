@@ -24,7 +24,8 @@
         <%- custom = capture do %>
           <%= form.govuk_input :custom_risk_level,
             label: "Other risk level",
-            label_classes: "govuk-visually-hidden"
+            label_classes: "govuk-visually-hidden",
+            classes: "govuk-input--width-20"
           %>
         <% end %>
 
@@ -69,20 +70,20 @@
           items: assessed_by_radio_items
         %>
 
-        <% if @products.length > 1 %>
+        <% if @risk_assessment_form.products.length > 1 %>
           <%= form.govuk_checkboxes :product_ids,
             legend: "Which products were assessed?",
             hint: "You must choose at least one. Only products already added to the case are listed.",
-            items: @products
+            items: @risk_assessment_form.products
           %>
         <% else %>
 
           <h2 class="govuk-heading-m">Product assessed</h2>
 
-          <p class="govuk-body"><%= @products.first[:text] %></p>
+          <p class="govuk-body"><%= @risk_assessment_form.products.first[:text] %></p>
 
           <%= form.fields_for :product_ids do |field| %>
-            <%= field.hidden_field nil, value: @products.first[:value] %>
+            <%= field.hidden_field nil, value: @risk_assessment_form.products.first[:value] %>
           <% end %>
         <% end %>
 

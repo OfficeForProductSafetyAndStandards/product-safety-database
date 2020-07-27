@@ -3,11 +3,9 @@ module Investigations
     def new
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
 
-      @risk_assessment_form = RiskAssessmentForm.new
+      @risk_assessment_form = RiskAssessmentForm.new(investigation: @investigation)
 
-      @products = products
-
-      return render "no_products" if @products.length.zero?
+      return render "no_products" if @risk_assessment_form.products.length.zero?
 
       @other_teams = other_teams
       @businesses = businesses
@@ -34,7 +32,6 @@ module Investigations
       else
         @other_teams = other_teams
         @businesses = businesses
-        @products = products
 
         render :new
       end

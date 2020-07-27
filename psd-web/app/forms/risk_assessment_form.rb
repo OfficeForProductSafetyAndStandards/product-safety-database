@@ -51,6 +51,16 @@ class RiskAssessmentForm
     }
   end
 
+  def products
+    investigation.products
+    .pluck(:name, :id).collect do |row|
+      {
+        text: row[0],
+        value: row[1]
+      }
+    end
+  end
+
   def assessed_by_team_id
     if assessed_by == "my_team"
       current_user.team_id

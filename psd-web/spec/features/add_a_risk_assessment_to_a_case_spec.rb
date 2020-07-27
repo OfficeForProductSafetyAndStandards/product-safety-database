@@ -145,7 +145,10 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_text("Enter other risk level")
     expect(page).to have_text("Select trading standards or another market surveilance authority")
 
-    fill_in "Other risk level", with: "Medium-high risk"
+    within_fieldset("What was the risk level?") do
+      fill_in "Other", with: "Medium-high risk"
+    end
+
     select "OtherCouncil Trading Standards", from: "Choose team"
 
     attach_file "Upload the risk assessment", risk_assessment_file
