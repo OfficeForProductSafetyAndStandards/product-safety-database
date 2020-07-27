@@ -105,6 +105,7 @@ private
 
   def initialize_date(key, required)
     self.class.add_date_key(key, required)
+
     date = self[key]
     if date.present? && get_date_components(key).all?(&:blank?)
       set_day(key, date.day)
@@ -129,6 +130,7 @@ private
 
   def date_from_components
     self.class.get_date_keys.each do |key, required|
+      byebug
       prepare_for_validation(key, required)
       missing_date_components = get_missing_date_components(key)
 
@@ -142,6 +144,7 @@ private
         end
       when 0
         if self[key].blank?
+          byebug
           errors.add(key, :invalid)
           errors.add(day_symbol(key), "")
           errors.add(month_symbol(key), "")

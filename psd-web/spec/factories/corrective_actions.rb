@@ -20,7 +20,7 @@ FactoryBot.define do
 
     trait :with_file do
       with_antivirus_checked_document
-      related_file { "Yes" }
+      related_file { true }
     end
   end
 end

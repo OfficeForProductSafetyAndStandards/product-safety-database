@@ -17,7 +17,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:product)          { create(:product) }
   let(:business)         { create(:business) }
   let(:old_date_decided) { Time.zone.today }
-  let(:related_file)     { "Yes" }
+  let(:related_file)     { true }
   let(:corrective_action) do
     create(
       :corrective_action,
@@ -86,7 +86,11 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
             details: corrective_action.details,
             measure_type: corrective_action.measure_type,
             geographic_scope: corrective_action.geographic_scope,
-            file: { description: corrective_action.documents.first.metadata[:description] }
+            related_file: corrective_action.related_file,
+            file: {
+              file: [corrective_action.documents.first.blob],
+              description: corrective_action.documents.first.metadata[:description]
+            }
           ).permit!
         end
 
