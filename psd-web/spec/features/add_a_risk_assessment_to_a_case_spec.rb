@@ -26,6 +26,9 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
   let(:investigation_with_single_product) { create(:allegation, products: [product1], creator: user) }
 
+  let(:investigation_with_no_products) { create(:allegation, products: [], creator: user) }
+
+
   before do
     create(:team, name: "OtherCouncil Trading Standards")
   end
@@ -308,5 +311,14 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
     expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X")
+  end
+
+  scenario "Attempting to add a risk assessment to a case with no associated products" do
+    sign_in(user)
+
+    visit "/cases/#{investigation_with_no_products.pretty_id}/risk-assessments/new"
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_no_products.pretty_id)
+
+    expect(page).to have_text("You need to add a product to the case before you can add a risk assessment.")
   end
 end

@@ -5,9 +5,12 @@ module Investigations
 
       @risk_assessment_form = RiskAssessmentForm.new
 
+      @products = products
+
+      return render "no_products" if @products.length.zero?
+
       @other_teams = other_teams
       @businesses = businesses
-      @products = products
     end
 
     def create
