@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-07-27
+- Added the ability to add a team as a collaborator to a case with view only permissions.
+
 ## 2020-07-10
 - Added the ability to set and update the risk level for the cases.
 
