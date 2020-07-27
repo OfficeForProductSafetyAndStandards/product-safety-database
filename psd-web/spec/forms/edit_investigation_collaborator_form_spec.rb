@@ -86,6 +86,14 @@ RSpec.describe EditInvestigationCollaboratorForm, :with_elasticsearch, :with_stu
           end
         end
 
+        context "when collaborator is the case owner" do
+          let(:params_team) { investigation.owner_team }
+
+          it "raises exception" do
+            expect { form.save! }.to raise_error(ActiveRecord::RecordNotFound)
+          end
+        end
+
         shared_examples "unsuccessful save" do
           it "returns false" do
             expect(form.save!).to be false

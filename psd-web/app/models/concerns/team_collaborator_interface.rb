@@ -19,7 +19,8 @@ module TeamCollaboratorInterface
 
   # Do not use on its own. Use ChangeCaseOwner service class
   def own!(investigation)
-    investigation.create_owner_team_collaboration!(collaborator: self)
     investigation.owner_user_collaboration&.destroy!
+    investigation.owner_team_collaboration&.destroy!
+    investigation.create_owner_team_collaboration!(collaborator: self)
   end
 end

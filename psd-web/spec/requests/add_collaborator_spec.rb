@@ -14,10 +14,10 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             collaboration_access_edit: {
+             add_team_to_case_form: {
                include_message: "true",
                message: message,
-               collaborator_id: other_team.id
+               team_id: other_team.id
              }
            }
     end
@@ -49,10 +49,10 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             collaboration_access_edit: {
+             add_team_to_case_form: {
                include_message: "true",
                message: "",
-               collaborator_id: ""
+               team_id: ""
              }
            }
     end
@@ -72,7 +72,6 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
           create(
             :collaboration_edit_access,
             collaborator: existing_collaborator_team,
-            include_message: false,
             added_by_user: user
           )
         ]
@@ -84,9 +83,9 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
 
       post investigation_collaborators_path(investigation.pretty_id),
            params: {
-             collaboration_access_edit: {
+             add_team_to_case_form: {
                include_message: "false",
-               collaborator_id: existing_collaborator_team.id
+               team_id: existing_collaborator_team.id
              }
            }
     end

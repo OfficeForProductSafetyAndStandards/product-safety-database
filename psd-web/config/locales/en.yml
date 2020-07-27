@@ -200,6 +200,14 @@ en:
             risk_assessment_file:
               blank: You must upload the risk assessment
 
+        add_team_to_case_form:
+          attributes:
+            team_id:
+              blank: "Select a team to add to the case"
+            message:
+              blank: Enter a message to the team
+            include_message:
+              inclusion: "Select whether you want to include a message"
         change_case_owner_form:
           attributes:
             owner_id:
@@ -265,14 +273,6 @@ en:
               blank: "Enter date of the test request"
               invalid: "Enter a real date of the test request"
               date_missing_component: "Enter date of the test request and include a %{missing_components}"
-        collaboration/access/edit:
-          attributes:
-            collaborator:
-              required: "Select a team to add to the case"
-            message:
-              blank: Enter a message to the team
-            include_message:
-              inclusion: "Select whether you want to include a message"
         comment_activity:
           attributes:
             body:

@@ -157,6 +157,18 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
             expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).twice
           end
         end
+
+        context "when the new owner is the same as the creator" do
+          let(:new_owner) { creator.team }
+
+          before { result }
+
+          it "creates a new owner collaboration and retains the creator", :aggregate_failures do
+            expect(investigation.creator_team_collaboration.collaborator).to eq(creator.team)
+            expect(investigation.owner_team_collaboration.collaborator).to eq(new_owner)
+            expect(investigation.owner_user_collaboration).to be_nil
+          end
+        end
       end
 
       describe "adding old owner as collaborator" do

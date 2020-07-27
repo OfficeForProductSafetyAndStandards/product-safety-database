@@ -84,7 +84,8 @@ ActiveRecord::Schema.define(version: 2020_07_20_145553) do
     t.text "message"
     t.string "type", null: false
     t.datetime "updated_at", null: false
-    t.index ["investigation_id", "collaborator_type"], name: "index_collaborations_on_investigation_id_and_collaborator_type", unique: true, where: "((collaborator_type)::text = 'Collaboration::Access::OwnerTeam'::text)"
+    t.index ["investigation_id", "collaborator_id"], name: "index_collaborations_on_investigation_id_and_collaborator_id", unique: true, where: "(((type)::text <> 'Collaboration::CreatorTeam'::text) AND ((type)::text <> 'Collaboration::CreatorUser'::text))"
+    t.index ["investigation_id", "collaborator_type"], name: "index_collaborations_on_investigation_id_and_collaborator_type", unique: true, where: "((type)::text = 'Collaboration::Access::OwnerTeam'::text)"
     t.index ["investigation_id"], name: "index_collaborations_on_investigation_id"
   end
 
