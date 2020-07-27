@@ -44,14 +44,40 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def govuk_text_area(attribute, label:)
+
+    if object.errors.include?(attribute)
+      error_message = {
+        text: object.errors.full_messages_for(attribute).first
+      }
+    end
+
     @template.render "components/govuk_textarea",
                      label: {
                        text: label,
                        classes: "govuk-label--m"
                      },
                      name: input_name(attribute),
-                     id: attribute,
-                     value: object.public_send(attribute)
+                     id: attribute.to_s,
+                     value: object.public_send(attribute),
+                     errorMessage: error_message
+  end
+
+  def govuk_input(attribute, label:)
+
+    if object.errors.include?(attribute)
+      error_message = {
+        text: object.errors.full_messages_for(attribute).first
+      }
+    end
+
+    @template.render "components/govuk_input",
+                     label: {
+                       text: label
+                     },
+                     name: input_name(attribute),
+                     id: attribute.to_s,
+                     value: object.public_send(attribute),
+                     errorMessage: error_message
   end
 
   def govuk_file_upload(attribute, label:, hint: nil)
@@ -77,6 +103,28 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
         classes: "govuk-label--m"
       }
     )
+  end
+
+  def govuk_select(attribute, label:, items:)
+    if object.errors.include?(attribute)
+      error_message = {
+        text: object.errors.full_messages_for(attribute).first
+      }
+    end
+
+    @items = items
+
+    # Set item as selected if the value matches the method from the model
+    @items.each_with_index do |item, index|
+      item[:selected] = true if object.public_send(attribute).to_s == (item[:value].to_s)
+    end
+
+    @template.render "components/govuk_select",
+      id: attribute.to_s,
+      name: input_name(attribute),
+      label: { text: label },
+      items: @items,
+      errorMessage: error_message
   end
 
   def govuk_checkboxes(attribute, legend:, items:)

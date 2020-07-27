@@ -44,30 +44,15 @@
 
 
         <%- teams_html = capture do %>
-          <%= render "components/govuk_select",
-            id: :assessed_by_team_id,
-            name: "risk_assessment_form[assessed_by_team_id]",
-            label: { text: "Choose team" },
-            items: @other_teams
-             %>
+          <%= form.govuk_select :assessed_by_team_id, label: "Choose team", items: @other_teams %>
         <% end %>
 
         <%- businesses_html = capture do %>
-          <%= render "components/govuk_select",
-            id: :assessed_by_business_id,
-            name: "risk_assessment_form[assessed_by_business_id]",
-            label: { text: "Choose business" },
-            items: @businesses
-             %>
+          <%= form.govuk_select :assessed_by_business_id, label: "Choose business", items: @businesses %>
         <% end %>
 
         <%- someone_else_html = capture do %>
-          <%= render "components/govuk_input",
-            id: :assessed_by_other,
-            name: "risk_assessment_form[assessed_by_other]",
-            label: { text: "Organisation name" },
-            value: @risk_assessment_form.assessed_by_other
-             %>
+          <%= form.govuk_input :assessed_by_other, label: "Organisation name" %>
         <% end %>
 
         <% assessed_by_radio_items = []

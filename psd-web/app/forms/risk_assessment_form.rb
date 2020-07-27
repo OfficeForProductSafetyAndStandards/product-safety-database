@@ -28,6 +28,10 @@ class RiskAssessmentForm
   validates :assessed_by, presence: true
   validate :at_least_one_product_associated
 
+  validates :assessed_by_team_id, presence: true, if: -> { assessed_by == "another_team" }
+  validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
+  validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
+
   validates :assessed_on,
             real_date: true,
             complete_date: true

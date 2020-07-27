@@ -45,11 +45,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     expect(page).to have_select("Choose team",
                                 options: ["", "OtherCouncil Trading Standards"],
-                                selected: [])
+                                selected: [""])
 
     expect(page).to have_select("Choose business",
                                 options: ["", "MyBrand Distributors", "MyBrand Inc"],
-                                selected: [])
+                                selected: [""])
 
     click_button "Add risk assessment"
 
@@ -130,14 +130,19 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     within_fieldset("Who completed the assessment?") do
       choose "Trading standards or another market surveilance authority"
-      select "OtherCouncil Trading Standards", from: "Choose team"
     end
 
     within_fieldset("Which products were assessed?") do
       check "MyBrand washing machine model X"
     end
 
+
+    click_button "Add risk assessment"
+
+    expect(page).to have_text("Select trading standards or another market surveilance authority")
+    select "OtherCouncil Trading Standards", from: "Choose team"
     attach_file "Upload the risk assessment", risk_assessment_file
+
     click_button "Add risk assessment"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
@@ -172,14 +177,19 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     within_fieldset("Who completed the assessment?") do
       choose "A business related to the case"
-      select "MyBrand Inc", from: "Choose business"
     end
 
     within_fieldset("Which products were assessed?") do
       check "MyBrand washing machine model X"
     end
 
+    click_button "Add risk assessment"
+
+    expect(page).to have_text("Select business related to the case")
+    select "MyBrand Inc", from: "Choose business"
+
     attach_file "Upload the risk assessment", risk_assessment_file
+
     click_button "Add risk assessment"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
@@ -210,7 +220,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     within_fieldset("Who completed the assessment?") do
       choose "Someone else"
-      fill_in "Organisation name", with: "RiskAssessmentsRUs"
     end
 
     within_fieldset("Which products were assessed?") do
@@ -223,12 +232,20 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
       choose "Serious risk"
     end
 
+    click_button "Add risk assessment"
+
+    expect(page).to have_text("Enter organisation name")
+    fill_in "Organisation name", with: "RiskAssessmentsRUs"
+
+    click_button "Add risk assessment"
+
     # Check that field retains value when there’s a validation error
     expect(page).to have_field("Organisation name", with: "RiskAssessmentsRUs")
 
-    attach_file "Upload the risk assessment", risk_assessment_file
 
+    attach_file "Upload the risk assessment", risk_assessment_file
     click_button "Add risk assessment"
+
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
