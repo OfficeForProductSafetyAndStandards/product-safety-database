@@ -22,11 +22,10 @@
         <%= form.govuk_date_input :assessed_on, legend: "Date of assessment", hint: "For example, 31 1 2020" %>
 
         <%- custom = capture do %>
-          <%= render "form_components/govuk_input",
-            key: :custom_risk_level,
-            form: form,
-            classes: "govuk-!-width-one-third",
-            label: { text: "Custom risk level", classes: "govuk-visually-hidden" } %>
+          <%= form.govuk_input :custom_risk_level,
+            label: "Other risk level",
+            label_classes: "govuk-visually-hidden"
+          %>
         <% end %>
 
         <% radio_items = (Investigation.risk_levels.keys - ["other"]).map do |level|

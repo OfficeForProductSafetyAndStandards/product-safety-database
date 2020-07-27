@@ -185,6 +185,8 @@ en:
               incomplete: Date of assessment must include a %{missing_date_parts}
             risk_level:
               blank: Select the risk level
+            custom_risk_level:
+              blank: "Enter other risk level"
             assessed_by:
               blank: Select who completed the assessment
             assessed_by_team_id:
@@ -197,6 +199,7 @@ en:
               blank: You must choose at least one product
             risk_assessment_file:
               blank: You must upload the risk assessment
+
         change_case_owner_form:
           attributes:
             owner_id:

@@ -62,7 +62,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      errorMessage: error_message
   end
 
-  def govuk_input(attribute, label:)
+  def govuk_input(attribute, label:, label_classes: nil)
 
     if object.errors.include?(attribute)
       error_message = {
@@ -72,7 +72,8 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     @template.render "components/govuk_input",
                      label: {
-                       text: label
+                       text: label,
+                       classes: label_classes.to_s
                      },
                      name: input_name(attribute),
                      id: attribute.to_s,

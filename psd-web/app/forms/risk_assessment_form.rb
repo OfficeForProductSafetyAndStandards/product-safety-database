@@ -32,6 +32,8 @@ class RiskAssessmentForm
   validates :assessed_by_business_id, presence: true, if: -> { assessed_by == "business" }
   validates :assessed_by_other, presence: true, if: -> { assessed_by == "other" }
 
+  validates :custom_risk_level, presence: true, if: -> { risk_level.to_s == "other" }
+
   validates :assessed_on,
             real_date: true,
             complete_date: true

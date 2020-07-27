@@ -112,7 +112,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_link("View risk assessment")
   end
 
-  scenario "Adding a risk assessment done by another team" do
+  scenario "Adding a risk assessment done by another team with non-standard risk level" do
     sign_in(user)
 
     visit "/cases/#{investigation.pretty_id}/risk-assessments/new"
@@ -125,7 +125,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     end
 
     within_fieldset("What was the risk level?") do
-      choose "Serious risk"
+      choose "Other"
+      # free text field left blank to test validation
     end
 
     within_fieldset("Who completed the assessment?") do
@@ -136,11 +137,14 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
       check "MyBrand washing machine model X"
     end
 
-
     click_button "Add risk assessment"
 
+    expect(page).to have_text("Enter other risk level")
     expect(page).to have_text("Select trading standards or another market surveilance authority")
+
+    fill_in "Other risk level", with: "Medium-high risk"
     select "OtherCouncil Trading Standards", from: "Choose team"
+
     attach_file "Upload the risk assessment", risk_assessment_file
 
     click_button "Add risk assessment"
@@ -157,6 +161,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
     expect(page).to have_text("Assessed by: OtherCouncil Trading Standards")
+    expect(page).to have_text("Risk level: Medium-high risk")
   end
 
   scenario "Adding a risk assessment done by a business associated with the case" do
