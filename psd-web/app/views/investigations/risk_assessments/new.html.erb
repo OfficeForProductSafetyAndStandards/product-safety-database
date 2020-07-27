@@ -33,8 +33,6 @@
             { text: t("investigations.risk_level.show.levels.#{level}"), value: level }
            end
            radio_items.push(text: "Other", value: "other", conditional: { html: custom })
-           radio_items.push divider: "or"
-           radio_items.push(text: "Not set", value: "")
         %>
 
         <%= form.govuk_radios :risk_level,
