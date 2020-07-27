@@ -42,14 +42,14 @@
 
 
         <%- teams_html = capture do %>
-          <%= form.govuk_select :assessed_by_team_id, label: "Choose team", items: @other_teams %>
+          <%= form.govuk_select :assessed_by_team_id, label: "Choose team", items: @risk_assessment_form.other_teams %>
         <% end %>
 
         <%- businesses_html = capture do %>
           <%= form.govuk_select :assessed_by_business_id,
             label: "Choose business",
             hint: safe_join(["If the business isn’t listed, you should ", link_to("add it to the case", new_investigation_business_path(@investigation)), " first."]),
-            items: @businesses %>
+            items: @risk_assessment_form.businesses %>
         <% end %>
 
         <%- someone_else_html = capture do %>
@@ -60,7 +60,7 @@
 
           assessed_by_radio_items.push(text: "Me or my team", value: :my_team)
           assessed_by_radio_items.push(text: "Trading standards or another market surveilance authority", value: :another_team, conditional: { html: teams_html })
-          assessed_by_radio_items.push(text: "A business related to the case", value: :business, conditional: { html: businesses_html }) unless @businesses.length == 1
+          assessed_by_radio_items.push(text: "A business related to the case", value: :business, conditional: { html: businesses_html }) unless @risk_assessment_form.businesses.length == 1
           assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: { html: someone_else_html })
 
         %>

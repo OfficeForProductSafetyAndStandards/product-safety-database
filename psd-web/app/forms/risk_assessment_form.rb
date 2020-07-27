@@ -61,6 +61,24 @@ class RiskAssessmentForm
     end
   end
 
+  def other_teams
+    [{ text: "", value: "" }] +
+    Team
+      .order(:name)
+      .where.not(id: current_user.team_id)
+      .pluck(:name, :id).collect do |row|
+        { text: row[0], value: row[1] }
+      end
+  end
+
+  def businesses
+    [{ text: "", value: "" }] + investigation.businesses
+      .reorder(:trading_name)
+      .pluck(:trading_name, :id).collect do |row|
+        { text: row[0], value: row[1] }
+      end
+  end
+
   def assessed_by_team_id
     if assessed_by == "my_team"
       current_user.team_id
