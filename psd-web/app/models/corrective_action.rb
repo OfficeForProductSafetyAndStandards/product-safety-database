@@ -25,4 +25,10 @@ private
   def create_audit_activity
     AuditActivity::CorrectiveAction::Add.from(self)
   end
+
+  def related_file_attachment_validation
+    if related_file && documents.attachments.empty?
+      errors.add(:base, :file_missing, message: "Provide a related file or select no")
+    end
+  end
 end

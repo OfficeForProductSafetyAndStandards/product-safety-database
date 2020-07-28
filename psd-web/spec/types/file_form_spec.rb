@@ -8,10 +8,8 @@ RSpec.describe FileForm do
   describe "#cast" do
     let(:file) do
       {
-        file: {
-          file: fixture_file_upload(file_fixture("corrective_action.txt")),
-          description: new_file_description
-        }
+        file: fixture_file_upload(file_fixture("corrective_action.txt")),
+        description: new_file_description
       }
     end
 

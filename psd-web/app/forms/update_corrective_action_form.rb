@@ -16,16 +16,13 @@ class UpdateCorrectiveActionForm
   attribute :date_decided_day
   attribute :date_decided_month
   attribute :date_decided_year
+  attribute :file, :file_form
 
   def initialize(corrective_action_params)
     super
     trim_line_endings(:summary, :details)
     initialize_date(:date_decided, true)
     set_dates_from_params(corrective_action_params)
-  end
-
-  def file=(file_and_description)
-    ap file_and_description
   end
 
   def [](key)
@@ -36,8 +33,13 @@ class UpdateCorrectiveActionForm
     public_send("#{key}=", value)
   end
 
-  private
+private
 
   attr_accessor :corrective_action, :corrective_action_params
 
+  def related_file_attachment_validation
+    if related_file && file.file.nil?
+      errors.add(:base, :file_missing, message: "Provide a related file or select no")
+    end
+  end
 end
