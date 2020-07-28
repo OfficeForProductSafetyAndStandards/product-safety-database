@@ -18,11 +18,26 @@ class UpdateCorrectiveActionForm
   attribute :date_decided_year
   attribute :file, :file_form
 
+  delegate :description, to: :file, prefix: true
+
   def initialize(corrective_action_params)
     super
     trim_line_endings(:summary, :details)
     initialize_date(:date_decided, true)
     set_dates_from_params(corrective_action_params)
+  end
+
+  def attributes
+    {
+      summary: summary,
+      legislation: legislation,
+      measure_type: measure_type,
+      duration: duration,
+      geographic_scope: geographic_scope,
+      details: details,
+      date_decided: date_decided,
+      documents: [file.file]
+    }
   end
 
   def [](key)

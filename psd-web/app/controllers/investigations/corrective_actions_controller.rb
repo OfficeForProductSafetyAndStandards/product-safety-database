@@ -17,14 +17,20 @@ class Investigations::CorrectiveActionsController < ApplicationController
     authorize @investigation, :update?
     corrective_action = @investigation.corrective_actions.find(params[:id])
 
-    service_form = UpdateCorrectiveActionForm.new(corrective_action, corrective_action_params)
+    service_form = UpdateCorrectiveActionForm.new(corrective_action_params)
 
     if service_form.invalid?
       @corrective_action = corrective_action.decorate
       return render :edit
     end
 
-    result = UpdateCorrectiveAction.call(corrective_action: service_form.corrective_action, user: current_user)
+    corrective_action.assign_attributes(service_form.attributes)
+
+    result = UpdateCorrectiveAction.call(
+      corrective_action: corrective_action,
+      file_description: service_form,
+      user: current_user
+    )
     return redirect_to investigation_action_path(@investigation, result.corrective_action) if result.success?
 
     @corrective_action = corrective_action.decorate

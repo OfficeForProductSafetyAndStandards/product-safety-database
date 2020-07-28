@@ -4,7 +4,7 @@ class UpdateCorrectiveAction
 
   def call
     validate_inputs!
-    clear_decided_date_to_trigger_date_validation
+
     store_previous_document
     fetch_new_file_params
 
@@ -94,27 +94,6 @@ private
       title: nil,
       body: nil,
     )
-  end
-
-  def replace_attached_file_if_necessary(corrective_action, old_document, new_file)
-    return old_document unless new_file
-
-    corrective_action.documents.detach
-    corrective_action.documents.attach(new_file).first
-  end
-
-  def clear_decided_date_to_trigger_date_validation
-    corrective_action.date_decided = nil
-    corrective_action.date_decided_day = nil
-    corrective_action.date_decided_month = nil
-    corrective_action.date_decided_year = nil
-  end
-
-  def set_new_attributes_and_validate!
-    corrective_action.set_dates_from_params(corrective_action_params)
-    corrective_action.assign_attributes(corrective_action_params.except(:date_decided))
-
-    context.fail! if corrective_action.invalid?
   end
 
   def investigation
