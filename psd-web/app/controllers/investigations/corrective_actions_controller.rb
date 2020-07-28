@@ -8,7 +8,7 @@ class Investigations::CorrectiveActionsController < ApplicationController
   def edit
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
     authorize @investigation, :update?
-    @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
+    @corrective_action = @investigation.corrective_actions.find!(params[:id]).decorate
     @file_blob = @corrective_action.documents_blobs.first || @corrective_action.documents_blobs.new
   end
 
