@@ -4,19 +4,11 @@ class UpdateCorrectiveAction
 
   def call
     validate_inputs!
-
     corrective_action.transaction do
-
-      if corrective_action.related_file_changed? && !corrective_action.related_file?
-        corrective_action.documents.detach
-      elsif corrective_action.related_file_changed?
-        document = replace_attached_file_if_necessary(corrective_action, previous_document, new_file)
-      end
-
       corrective_action.save!
-
+      document = corrective_action.documents.first
       document_changed = (document != previous_document)
-      document_changed_description_changed = update_document_description!(document, new_file_description) if document
+      document_changed_description_changed = update_document_description!(document, file_description) if document
 
       return unless any_changes?(document_changed, document_changed_description_changed)
 
@@ -31,7 +23,7 @@ private
   end
 
   def previous_document
-    @previous_document ||= corrective_action.documents.first
+    @previous_document ||= previous_documents.first
   end
   alias_method :store_previous_document, :previous_document
 

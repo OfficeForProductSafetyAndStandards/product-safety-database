@@ -47,7 +47,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       fill_in "Attachment description", with: "New test result"
 
       click_on "Update corrective action"
-      save_and_open_page
+
       expect_to_be_on_corrective_action_summary_page
 
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"

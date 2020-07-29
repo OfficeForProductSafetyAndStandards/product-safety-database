@@ -6,8 +6,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   subject(:update_corrective_action) do
     described_class.call(
       corrective_action: corrective_action,
+      previous_documents: new_documents,
+      file_description: new_file_description,
       user: user,
-      corrective_action_params: corrective_action_params
     )
   end
 
@@ -30,16 +31,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   end
   let(:new_date_decided) { (old_date_decided - 1.day).to_date }
   let(:new_file_description) { "new corrective action file description" }
-  let(:corrective_action_params) do
-    ActionController::Parameters.new(
-      date_decided: { year: new_date_decided.year, month: new_date_decided.month, day: new_date_decided.day },
-      related_file: related_file,
-      file: {
-        file: fixture_file_upload(file_fixture("corrective_action.txt")),
-        description: new_file_description
-      }
-    ).permit!
-  end
+  let(:new_documents) { [fixture_file_upload(file_fixture("corrective_action.txt"))] }
 
   describe "#call" do
     context "with no parameters" do
@@ -53,46 +45,19 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         {
           corrective_action: corrective_action,
           user: user,
-          corrective_action_params: {}
+          previous_documents: {},
+          file_description: new_file_description
         }
       end
 
       it { expect(described_class.call(params.except(:corrective_action))).to be_a_failure }
-      it { expect(described_class.call(params.except(:corrective_action_params))).to be_a_failure }
       it { expect(described_class.call(params.except(:user))).to be_a_failure }
-    end
-
-    context "with required parameters that trigger a validation error" do
-      before do
-        corrective_action_params[:date_decided][:day] = ""
-      end
-
-      it "returns a failure", :aggregate_failures do
-        expect(update_corrective_action).to be_a_failure
-        expect(corrective_action.errors.full_messages_for(:date_decided)).to eq(["Enter date the corrective action was decided and include a day"])
-      end
     end
 
     context "with the required parameters" do
       context "when no changes have been made" do
-        let(:corrective_action_params) do
-          ActionController::Parameters.new(
-            summary: corrective_action.summary,
-            date_decided_day: corrective_action.date_decided.day,
-            date_decided_month: corrective_action.date_decided.month,
-            date_decided_year: corrective_action.date_decided.year,
-            legislation: corrective_action.legislation,
-            duration: corrective_action.duration,
-            details: corrective_action.details,
-            measure_type: corrective_action.measure_type,
-            geographic_scope: corrective_action.geographic_scope,
-            related_file: corrective_action.related_file,
-            file: {
-              file: [corrective_action.documents.first.blob],
-              description: corrective_action.documents.first.metadata[:description]
-            }
-          ).permit!
-        end
+        let(:new_documents) { corrective_action.documents }
+        let(:new_file_description) { new_documents.first.metadata[:description] }
 
         it "does not change corrective action" do
           expect { update_corrective_action }.not_to change(corrective_action, :attributes)
