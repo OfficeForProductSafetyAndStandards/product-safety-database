@@ -1,16 +1,12 @@
 class UpdateCorrectiveAction
   include Interactor
-  delegate :user, :corrective_action, :corrective_action_params, to: :context
+  delegate :user, :corrective_action, :previous_documents, :file_description, to: :context
 
   def call
     validate_inputs!
 
-    store_previous_document
-    fetch_new_file_params
-
-    set_new_attributes_and_validate!
-
     corrective_action.transaction do
+
       if corrective_action.related_file_changed? && !corrective_action.related_file?
         corrective_action.documents.detach
       elsif corrective_action.related_file_changed?
@@ -47,35 +43,13 @@ private
     document_changed_description_changed
   end
 
-  def old_document
-    @old_document ||= corrective_action.documents.first
-  end
-
-  def new_file_description
-    @new_file_description ||= new_file_params[:description]
-  end
-
-  def new_file
-    @new_file ||= new_file_params[:file]
-  end
-
-  def new_file_params
-    @new_file_params ||= corrective_action_params.delete(:file) || {}
-  end
-  alias_method :fetch_new_file_params, :new_file_params
-
   def validate_inputs!
     validate_corrective_action!
-    validate_corrective_action_params!
     validate_user!
   end
 
   def validate_corrective_action!
     context.fail!(error: "No corractive action supplied") unless corrective_action.is_a?(CorrectiveAction)
-  end
-
-  def validate_corrective_action_params!
-    context.fail!(error: "No corrective action params supplied") unless corrective_action_params
   end
 
   def validate_user!

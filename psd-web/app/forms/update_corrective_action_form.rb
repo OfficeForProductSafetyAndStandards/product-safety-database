@@ -2,6 +2,7 @@ class UpdateCorrectiveActionForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Validations::Callbacks
+  include ActiveModel::Serialization
   include SanitizationHelper
   include CorrectiveActionValidation
   include DateConcern
@@ -12,10 +13,12 @@ class UpdateCorrectiveActionForm
   attribute :duration
   attribute :geographic_scope
   attribute :details
-  attribute :date_decided
+  attribute :date_decided, :date_form
   attribute :date_decided_day
   attribute :date_decided_month
   attribute :date_decided_year
+  attribute :product_id, :integer
+  attribute :business_id, :integer
   attribute :file, :file_form
 
   delegate :description, to: :file, prefix: true
@@ -27,17 +30,12 @@ class UpdateCorrectiveActionForm
     set_dates_from_params(corrective_action_params)
   end
 
+  def documents
+    [file.file]
+  end
+
   def attributes
-    {
-      summary: summary,
-      legislation: legislation,
-      measure_type: measure_type,
-      duration: duration,
-      geographic_scope: geographic_scope,
-      details: details,
-      date_decided: date_decided,
-      documents: [file.file]
-    }
+    super.except("file")
   end
 
   def [](key)
