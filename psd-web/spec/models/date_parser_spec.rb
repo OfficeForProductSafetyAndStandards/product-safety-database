@@ -21,6 +21,19 @@ RSpec.describe DateParser do
     it { is_expected.to eql(OpenStruct.new(year: "2020", month: "1", day: "32")) }
   end
 
+  context "when given a hash containing a large day" do
+    let(:input) { { year: "1", month: "1", day: "11111110110" } }
+
+    it { is_expected.to eql(OpenStruct.new(year: "1", month: "1", day: "11111110110")) }
+  end
+
+  context "when given a hash containing a large year" do
+    let(:input) { { year: "11111110110", month: "1", day: "1" } }
+
+    it { is_expected.to eql(Date.new(11111110110, 1, 1,)) }
+  end
+
+
   context "when given a hash containing non-numeric strings" do
     let(:input) { { year: "2020", month: "1", day: "20?" } }
 

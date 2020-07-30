@@ -16,7 +16,7 @@ class DateParser
     if numeric?(@date[:year]) && numeric?(@date[:month]) && numeric?(@date[:day])
       begin
         Date.new(@date[:year].to_i, @date[:month].to_i, @date[:day].to_i)
-      rescue ArgumentError
+      rescue ArgumentError, RangeError
         struct_from_hash
       end
     else
