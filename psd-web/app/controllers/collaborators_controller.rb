@@ -18,7 +18,7 @@ class CollaboratorsController < ApplicationController
   def create
     authorize @investigation, :manage_collaborators?
 
-    @form = AddTeamToCaseForm.new(params.require(:add_team_to_case_form).permit(:team_id, :message, :include_message))
+    @form = AddTeamToCaseForm.new(params.require(:add_team_to_case_form).permit(:team_id, :permission_level, :message, :include_message))
 
     unless @form.valid?
       @teams = teams_without_access
@@ -26,11 +26,11 @@ class CollaboratorsController < ApplicationController
     end
 
     AddTeamToCase.call!(
-      @form.attributes.merge({
-        investigation: @investigation,
-        team: @form.team,
-        user: current_user
-      })
+      investigation: @investigation,
+      collaboration_class: @form.collaboration_class,
+      user: current_user,
+      team: @form.team,
+      message: @form.message
     )
 
     redirect_to investigation_collaborators_path(@investigation), flash: { success: "#{@form.team.name} added to the case" }
@@ -39,24 +39,42 @@ class CollaboratorsController < ApplicationController
   def edit
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaborations.edit_and_read_only.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
-    @edit_form = EditInvestigationCollaboratorForm.new(permission_level: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT)
+
+    @edit_form = EditCaseCollaboratorForm.new(collaboration: @collaboration)
   end
 
   def update
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaborations.edit_and_read_only.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
-    @edit_form = EditInvestigationCollaboratorForm.new(edit_params
-      .merge(investigation: @investigation, team: @collaborator, user: current_user))
-    if @edit_form.save!
-      flash[:success] = "#{@collaborator.name} has been removed from the case"
-      redirect_to investigation_collaborators_path(@investigation)
+
+    @edit_form = EditCaseCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))
+
+    return render :edit, status: :bad_request unless @edit_form.valid?
+
+    if @edit_form.delete?
+      RemoveTeamFromCase.call!(
+        collaboration: @collaboration,
+        user: current_user,
+        message: @edit_form.message
+      )
+
+      flash[:success] = "#{@collaborator.display_name} has been removed from the case"
     else
-      render "edit"
+      ChangeCasePermissionLevelForTeam.call!(
+        existing_collaboration: @collaboration,
+        user: current_user,
+        new_collaboration_class: @edit_form.new_collaboration_class,
+        message: @edit_form.message
+      )
+
+      flash[:success] = "#{@collaborator.display_name}'s case permission level has been changed"
     end
+
+    redirect_to investigation_collaborators_path(@investigation)
   end
 
 private
@@ -76,6 +94,6 @@ private
   end
 
   def edit_params
-    params.require(:edit_investigation_collaborator_form).permit(:permission_level, :include_message, :message)
+    params.require(:edit_case_collaborator_form).permit(:permission_level, :include_message, :message)
   end
 end

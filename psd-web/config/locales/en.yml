@@ -41,6 +41,12 @@ en:
       message_from: "Message from %{user_name}:"
     team_removed_from_case:
       message_from: "Message from %{user_name}:"
+    case_permission_changed_for_team:
+      message_from: "Message from %{user_name}:"
+      permission:
+        edit: "edit full case"
+        readonly: "view full case"
+
   why_reporting_form:
     no_checkboxes_selected: "Choose at least one option"
     mutually_exclusive_checkboxes_selected: "A product cannot be unsafe or non-compliant, and also safe and compliant"
@@ -117,6 +123,23 @@ en:
           set: "Case risk level set to %{level}"
           changed: "Case risk level changed to %{level}"
           removed: "Case risk level removed"
+      team_added:
+        permission:
+          edit: "edit full case"
+          readonly: "view full case"
+        title: "%{team_name} added to %{case_type}"
+        subtitle: "Team added by %{user_name}, %{date}"
+        body: "Permission level given: %{permission}."
+      team_deleted:
+        title: "%{team_name} removed from %{case_type}"
+        subtitle: "Team removed by %{user_name}, %{date}"
+      team_permission_changed:
+        permission:
+          edit: "edit full case"
+          readonly: "view full case"
+        title: "%{team_name}'s case permission level changed"
+        subtitle: "Case permissions updated by %{user_name}, %{date}"
+        body: "Permission level changed to '%{new_permission}' from '%{old_permission}'."
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
@@ -208,6 +231,8 @@ en:
               blank: Enter a message to the team
             include_message:
               inclusion: "Select whether you want to include a message"
+            permission_level:
+              blank: "Select the permission level the team should have"
         change_case_owner_form:
           attributes:
             owner_id:
@@ -221,7 +246,7 @@ en:
           attributes:
             action:
               blank: "Select an action"
-        edit_investigation_collaborator_form:
+        edit_case_collaborator_form:
           attributes:
             include_message:
               inclusion: "Select whether you want to include a message"
@@ -255,6 +280,9 @@ en:
               blank: "Enter the primary hazard"
 
   activerecord:
+    models:
+      collaboration/access/edit: "edit"
+      collaboration/access/read_only: "readonly"
     errors:
       models:
         test:

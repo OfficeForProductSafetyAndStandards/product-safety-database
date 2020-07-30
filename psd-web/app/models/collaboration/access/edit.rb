@@ -7,6 +7,10 @@ class Collaboration < ApplicationRecord
         destroy!
         collaborator.own!(investigation)
       end
+
+      def self.changeable?
+        true
+      end
     end
   end
 end

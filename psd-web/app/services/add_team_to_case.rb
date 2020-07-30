@@ -1,7 +1,7 @@
 class AddTeamToCase
   include Interactor
 
-  delegate :collaboration, :user, :investigation, :team, :message, to: :context
+  delegate :collaboration, :user, :investigation, :team, :collaboration_class, :message, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -9,14 +9,18 @@ class AddTeamToCase
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     begin
-      context.collaboration = investigation.edit_access_collaborations.create!(
-        collaborator: team,
-        added_by_user: user,
-        message: message
-      )
+      ActiveRecord::Base.transaction do
+        context.collaboration = collaboration_class.create!(
+          investigation: investigation,
+          collaborator: team,
+          added_by_user: user,
+          message: message
+        )
+
+        create_activity_for_team_added!
+      end
 
       send_notification_email
-      create_activity
     rescue ActiveRecord::RecordNotUnique
       # Collaborator already added, so return successful but without notifying the team
       # or creating an audit log.
@@ -33,16 +37,27 @@ private
 
   def send_notification_email
     entities_to_notify.each do |entity|
-      NotifyMailer.team_added_to_case_email(collaboration, to_email: entity.email).deliver_later
+      NotifyMailer.team_added_to_case_email(
+        investigation: investigation,
+        team: team,
+        added_by_user: user,
+        message: message,
+        to_email: entity.email
+      ).deliver_later
     end
   end
 
-  def create_activity
-    AuditActivity::Investigation::TeamAdded.create!(
+  def activity_class
+    AuditActivity::Investigation::TeamAdded
+  end
+
+  def create_activity_for_team_added!
+    metadata = activity_class.build_metadata(collaboration, message)
+
+    activity_class.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
-      title: "#{team.name} added to #{investigation.case_type.downcase}",
-      body: collaboration.message.to_s
+      metadata: metadata
     )
   end
 end

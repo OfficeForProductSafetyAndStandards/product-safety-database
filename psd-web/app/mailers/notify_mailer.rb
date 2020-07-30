@@ -13,6 +13,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
       team_added_to_case: "f16c2c44-a473-4550-a48a-ac50ef208d5c",
       team_deleted_from_case: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
+      case_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
     }.freeze
 
@@ -105,19 +106,19 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: user.email)
   end
 
-  def team_added_to_case_email(collaboration, to_email:)
+  def team_added_to_case_email(investigation:, team:, added_by_user:, message:, to_email:)
     set_template(TEMPLATES[:team_added_to_case])
 
-    user_name = collaboration.added_by_user.decorate.display_name(viewer: collaboration.collaborator)
+    user_name = added_by_user.decorate.display_name(viewer: team)
 
-    optional_message = if collaboration.message.present?
+    optional_message = if message.present?
                          [
                            I18n.t(
                              :message_from,
                              user_name: user_name,
                              scope: "mail.team_added_to_case"
                            ),
-                           inset_text_for_notify(collaboration.message)
+                           inset_text_for_notify(message)
                          ].join("\n\n")
                        else
                          ""
@@ -126,7 +127,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_personalisation(
       updater_name: user_name,
       optional_message: optional_message,
-      investigation_url: investigation_url(collaboration.investigation)
+      investigation_url: investigation_url(investigation)
     )
 
     mail(to: to_email)
@@ -156,6 +157,37 @@ class NotifyMailer < GovukNotifyRails::Mailer
       case_id: investigation.pretty_id,
       updater_name: user_name,
       optional_message: optional_message,
+    )
+
+    mail(to: to_email)
+  end
+
+  def case_permission_changed_for_team(message:, investigation:, team:, user:, to_email:, old_permission:, new_permission:)
+    set_template(TEMPLATES[:case_permission_changed_for_team])
+
+    user_name = user.decorate.display_name(viewer: team)
+
+    optional_message = if message.present?
+                         [
+                           I18n.t(
+                             :message_from,
+                             user_name: user_name,
+                             scope: "mail.case_permission_changed_for_team"
+                           ),
+                           inset_text_for_notify(message)
+                         ].join("\n\n")
+                       else
+                         ""
+                       end
+
+    set_personalisation(
+      case_type: investigation.case_type.to_s.downcase,
+      case_title: investigation.decorate.title,
+      case_id: investigation.pretty_id,
+      updater_name: user_name,
+      optional_message: optional_message,
+      old_permission: I18n.t(".permission.#{old_permission}", scope: "mail.case_permission_changed_for_team"),
+      new_permission: I18n.t(".permission.#{new_permission}", scope: "mail.case_permission_changed_for_team")
     )
 
     mail(to: to_email)

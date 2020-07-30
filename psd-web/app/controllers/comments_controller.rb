@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
   before_action :set_investigation
 
   def create
-    @comment = @investigation.activities.new(comment_activity_params)
+    @comment = Activity.new(comment_activity_params)
     @comment.investigation = @investigation
     @comment.source = UserSource.new(user: current_user)
 
@@ -22,7 +22,7 @@ class CommentsController < ApplicationController
   end
 
   def new
-    @comment = @investigation.activities.new
+    @comment = Activity.new(investigation: @investigation)
   end
 
 private

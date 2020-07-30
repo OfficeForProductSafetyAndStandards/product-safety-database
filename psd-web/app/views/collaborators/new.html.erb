@@ -17,8 +17,6 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <p class="govuk-body">The team will be able to view and edit all case details. They cannot add or remove teams or close the case.</p>
-
     <%= form_with model: @form, url: investigation_collaborators_path(@investigation), method: :post do |form| %>
 
       <% team_select_items = [{text: "", value: ""}] + @teams.map { |team| { text: team.name, value: team.id, selected: (team.id == @form.team_id) } } %>
@@ -43,6 +41,37 @@
       %>
 
       <p class="govuk-body">We’ll email the team to let them know they’ve been added to the case.</p>
+
+      <%= render "form_components/govuk_radios",
+        form: form,
+        key: :permission_level,
+        classes: "",
+        fieldset: {
+          legend: {
+            text: "Permission level",
+            is_page_heading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: [
+          {
+            id: "permission_level",
+            text: "View full case",
+            value: Collaboration::Access::ReadOnly.model_name.human,
+            hint: {
+              text: "View full case details including correspondence",
+            }
+          },
+          {
+            id: "permission_level_edit",
+            text: "Edit full case",
+            value: Collaboration::Access::Edit.model_name.human,
+            hint: {
+              text: "View and edit all case details. Cannot add or remove teams or close the case.",
+            }
+          }
+        ]
+      %>
 
       <% message_html = capture do %>
         <%= render "form_components/govuk_textarea",

@@ -1,6 +1,9 @@
 class Collaboration < ApplicationRecord
   class Access < Collaboration
-    class Owner < Edit; end
-    attribute :include_message, :boolean, default: false
+    class Owner < Edit
+      def self.changeable?
+        false
+      end
+    end
   end
 end

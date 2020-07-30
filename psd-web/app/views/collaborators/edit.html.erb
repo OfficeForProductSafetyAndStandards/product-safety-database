@@ -34,19 +34,28 @@
         items: [
           {
             id: "permission_level",
-            text: "Edit full case",
-            value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_EDIT,
+            text: "View full case",
+            value: Collaboration::Access::ReadOnly.model_name.human,
             hint: {
               text: "View full case details including correspondence",
             }
           },
-          {key: "or", divider: "or"},
           {
+            id: "permission_level_edit",
+            text: "Edit full case",
+            value: Collaboration::Access::Edit.model_name.human,
+            hint: {
+              text: "View and edit all case details. Cannot add or remove teams or close the case.",
+            }
+          },
+          { key: "or", divider: "or" },
+          {
+            id: "permission_level_delete",
             text: "Remove #{@collaborator.name} from the case",
             hint: {
               text: remove_hint
             },
-            value: EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE
+            value: EditCaseCollaboratorForm::PERMISSION_LEVEL_DELETE
           }
         ]
       %>

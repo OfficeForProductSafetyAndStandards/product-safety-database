@@ -16,7 +16,8 @@ RSpec.describe CorrespondenceDecorator, :with_stubbed_elasticsearch, :with_stubb
         AddTeamToCase.call!(
           user: user,
           investigation: investigation,
-          team: viewing_user.team
+          team: viewing_user.team,
+          collaboration_class: Collaboration::Access::Edit
         )
       end
 
