@@ -9,7 +9,7 @@ class AddTeamToCaseForm
 
   validates_presence_of :team_id
   validates_presence_of :permission_level
-  validate :permission_level_valid?
+  validate :permission_level_valid?, if: -> { permission_level.present? }
   validates :message, presence: true, if: :include_message
   validates :include_message, inclusion: { in: [true, false] }
 
