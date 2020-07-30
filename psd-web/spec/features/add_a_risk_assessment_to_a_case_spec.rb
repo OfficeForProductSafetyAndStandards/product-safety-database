@@ -28,7 +28,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
   let(:investigation_with_no_products) { create(:allegation, products: [], creator: user) }
 
-
   before do
     create(:team, name: "OtherCouncil Trading Standards")
   end
@@ -250,13 +249,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     click_button "Add risk assessment"
 
-    # Check that field retains value when there’s a validation error
+    # Check that field retains value when there's a validation error
     expect(page).to have_field("Organisation name", with: "RiskAssessmentsRUs")
-
 
     attach_file "Upload the risk assessment", risk_assessment_file
     click_button "Add risk assessment"
-
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 

@@ -44,7 +44,6 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def govuk_text_area(attribute, label:)
-
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -63,7 +62,6 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def govuk_input(attribute, label:, label_classes: nil, classes: nil)
-
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -119,17 +117,17 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     hint = { text: hint } if hint
 
     # Set item as selected if the value matches the method from the model
-    @items.each_with_index do |item, index|
-      item[:selected] = true if object.public_send(attribute).to_s == (item[:value].to_s)
+    @items.each_with_index do |item, _index|
+      item[:selected] = true if object.public_send(attribute).to_s == item[:value].to_s
     end
 
     @template.render "components/govuk_select",
-      id: attribute.to_s,
-      name: input_name(attribute),
-      label: { text: label },
-      hint: hint,
-      items: @items,
-      errorMessage: error_message
+                     id: attribute.to_s,
+                     name: input_name(attribute),
+                     label: { text: label },
+                     hint: hint,
+                     items: @items,
+                     errorMessage: error_message
   end
 
   def govuk_checkboxes(attribute, legend:, items:, hint: nil)
@@ -160,17 +158,17 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     hint = { text: hint } if hint
 
     @template.render "components/govuk_checkboxes",
-      id: attribute.to_s,
-      errorMessage: error_message,
-      name: input_name(attribute),
-      hint: hint,
-      items: @items,
-      fieldset: {
-        legend: {
-          html: legend,
-          classes: "govuk-fieldset__legend--m"
-        }
-      }
+                     id: attribute.to_s,
+                     errorMessage: error_message,
+                     name: input_name(attribute),
+                     hint: hint,
+                     items: @items,
+                     fieldset: {
+                       legend: {
+                         html: legend,
+                         classes: "govuk-fieldset__legend--m"
+                       }
+                     }
   end
 
   def govuk_radios(attribute, legend:, items:)

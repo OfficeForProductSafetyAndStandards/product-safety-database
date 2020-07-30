@@ -70,5 +70,4 @@ private
     end
     entities.uniq - [context.user]
   end
-
 end

@@ -63,12 +63,12 @@ class RiskAssessmentForm
 
   def other_teams
     [{ text: "", value: "" }] +
-    Team
-      .order(:name)
-      .where.not(id: current_user.team_id)
-      .pluck(:name, :id).collect do |row|
-        { text: row[0], value: row[1] }
-      end
+      Team
+        .order(:name)
+        .where.not(id: current_user.team_id)
+        .pluck(:name, :id).collect do |row|
+          { text: row[0], value: row[1] }
+        end
   end
 
   def businesses
@@ -98,7 +98,7 @@ class RiskAssessmentForm
 private
 
   def assessed_on_cannot_be_in_future
-    if assessed_on.is_a?(Date) && assessed_on > Date.today
+    if assessed_on.is_a?(Date) && assessed_on > Time.zone.today
 
       errors.add(:assessed_on, :in_future)
     end

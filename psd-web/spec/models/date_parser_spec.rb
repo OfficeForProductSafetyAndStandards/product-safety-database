@@ -30,9 +30,8 @@ RSpec.describe DateParser do
   context "when given a hash containing a large year" do
     let(:input) { { year: "11111110110", month: "1", day: "1" } }
 
-    it { is_expected.to eql(Date.new(11111110110, 1, 1,)) }
+    it { is_expected.to eql(Date.new(11_111_110_110, 1, 1,)) }
   end
-
 
   context "when given a hash containing non-numeric strings" do
     let(:input) { { year: "2020", month: "1", day: "20?" } }

@@ -1,4 +1,4 @@
-# Validate that the date isn’t missing a day, month or year
+# Validate that the date isn't missing a day, month or year
 #
 # This assumes that any non-complete date is something other than a Date object (which can only
 # represent complete dates) and which implements day, month and year methods. For example, this

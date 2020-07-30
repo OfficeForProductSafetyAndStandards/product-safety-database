@@ -39,7 +39,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
     "activity_table_cell_with_link"
   end
 
-  private
+private
 
   def product_names
     object.products.collect(&:name).to_sentence
