@@ -3,9 +3,11 @@ require "rails_helper"
 RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation) }
+
   let(:user) { create(:user) }
   let(:team) { create(:team, name: "Testing team") }
   let(:message) { "Thanks for collaborating." }
+  let(:collaboration_class) { Collaboration::Access::Edit }
 
   describe ".call" do
     context "with no parameters" do
@@ -46,6 +48,7 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
           team: team,
           message: message,
           investigation: investigation,
+          collaboration_class: collaboration_class,
           user: user
         )
       end
@@ -61,6 +64,22 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
           investigation: investigation,
           message: message
         )
+      end
+
+      context "when adding with edit permissions" do
+        let(:collaboration_class) { Collaboration::Access::Edit }
+
+        it "creates an edit collaboration" do
+          expect(result.collaboration).to be_a(Collaboration::Access::Edit)
+        end
+      end
+
+      context "when adding with view only permissions" do
+        let(:collaboration_class) { Collaboration::Access::ReadOnly }
+
+        it "creates a read only collaboration" do
+          expect(result.collaboration).to be_a(Collaboration::Access::ReadOnly)
+        end
       end
 
       context "when the team has an email address" do
@@ -90,15 +109,15 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
         end
       end
 
-      it "adds an audit activity record" do
+      it "adds an audit activity record", :aggregate_failures do
         result
         last_added_activity = investigation.activities.order(:id).first
 
-        aggregate_failures do
-          expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
-          expect(last_added_activity.title(nil)).to eql("Testing team added to allegation")
-          expect(last_added_activity.source.user_id).to eql(user.id)
-        end
+        expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
+        expect(last_added_activity.source.user_id).to eql(user.id)
+        expect(last_added_activity.metadata).to be_present
+
+        expect(last_added_activity.decorate.title(nil)).to eql("Testing team added to allegation")
       end
 
       context "when the team has already been added to the case" do

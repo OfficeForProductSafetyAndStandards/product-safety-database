@@ -7,6 +7,12 @@ RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_elasticsearch, :w
   let(:team) { investigation.owner_team }
   let(:user) { investigation.owner_user }
 
+  describe ".changeable?" do
+    it "returns false" do
+      expect(described_class).not_to be_changeable
+    end
+  end
+
   describe "#swap_to_edit_access!" do
     context "when the previous owner was a user" do
       it "swaps the current collaboration to be an editor", :aggregate_failures do

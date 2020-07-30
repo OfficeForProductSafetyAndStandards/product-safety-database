@@ -1,6 +1,14 @@
 class AuditActivity::Investigation::TeamAdded < AuditActivity::Investigation::Base
-  def subtitle(viewer)
-    "Team added by #{source&.show(viewer)}, #{pretty_date_stamp}"
+  def self.build_metadata(collaboration, message)
+    team = collaboration.collaborator
+    {
+      team: {
+        id: team.id,
+        name: team.display_name
+      },
+      permission: collaboration.model_name.human,
+      message: message
+    }
   end
 
 private

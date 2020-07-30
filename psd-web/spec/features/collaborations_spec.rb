@@ -19,6 +19,6 @@ RSpec.describe "Collaborations", :with_stubbed_elasticsearch, :with_stubbed_mail
     expect(page).to have_css("table tbody tr:nth-child(2) td:nth-child(2)", text: "Edit full case")
 
     expect(page).to have_css("table tbody tr:nth-child(3) th:nth-child(1)", text: read_only_team.name)
-    expect(page).to have_css("table tbody tr:nth-child(3) td:nth-child(2)", text: "Read only case")
+    expect(page).to have_css("table tbody tr:nth-child(3) td:nth-child(2)", text: "View full case")
   end
 end

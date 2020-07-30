@@ -28,12 +28,12 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
   end
 
   context "when deleting" do
-    let(:permission_level) { EditInvestigationCollaboratorForm::PERMISSION_LEVEL_DELETE }
+    let(:permission_level) { EditCaseCollaboratorForm::PERMISSION_LEVEL_DELETE }
     let(:message) { "" }
     let(:include_message) { "false" }
 
     let(:params) do
-      { edit_investigation_collaborator_form: {
+      { edit_case_collaborator_form: {
         permission_level: permission_level,
         message: message,
         include_message: include_message,
