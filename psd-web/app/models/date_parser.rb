@@ -26,6 +26,8 @@ class DateParser
 
 private
 
+  # Checks that the string contains only digits (once leading/trailing whitespace is snipped)
+  # as otherwise `to_i` can return expected results, eg `"2??9".to_i == 2`
   def numeric?(string)
     string.to_s.strip.scan(/^[\d]+$/).any?
   end
