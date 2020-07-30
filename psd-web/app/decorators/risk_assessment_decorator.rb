@@ -12,7 +12,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    "Assessment: #{I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")}"
+    "Assessment: #{object.custom_risk_level.presence || I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")}"
   end
 
   def show_path
