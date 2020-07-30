@@ -12,7 +12,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    "Assessment: #{object.custom_risk_level.presence || I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")}"
+    "#{product_names}: #{object.custom_risk_level.presence || I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")}"
   end
 
   def show_path
@@ -37,5 +37,11 @@ class RiskAssessmentDecorator < ApplicationDecorator
 
   def activity_cell_partial(_viewing_user)
     "activity_table_cell_with_link"
+  end
+
+  private
+
+  def product_names
+    object.products.collect(&:name).to_sentence
   end
 end
