@@ -159,17 +159,18 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     hint = { text: hint } if hint
 
-    @template.govukCheckboxes(
+    @template.render "components/govuk_checkboxes",
+      id: attribute.to_s,
       errorMessage: error_message,
-      items: @items,
+      name: input_name(attribute),
       hint: hint,
+      items: @items,
       fieldset: {
         legend: {
           html: legend,
           classes: "govuk-fieldset__legend--m"
         }
       }
-    )
   end
 
   def govuk_radios(attribute, legend:, items:)
