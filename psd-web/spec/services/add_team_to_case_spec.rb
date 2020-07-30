@@ -114,9 +114,10 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
         last_added_activity = investigation.activities.order(:id).first
 
         expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamAdded)
-        expect(last_added_activity.title(nil)).to eql("Testing team added to allegation")
         expect(last_added_activity.source.user_id).to eql(user.id)
         expect(last_added_activity.metadata).to be_present
+
+        expect(last_added_activity.decorate.title(nil)).to eql("Testing team added to allegation")
       end
 
       context "when the team has already been added to the case" do

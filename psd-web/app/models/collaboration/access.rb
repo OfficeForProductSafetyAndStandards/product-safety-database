@@ -6,7 +6,7 @@ class Collaboration < ApplicationRecord
     require_dependency "collaboration/access/owner_user"
     require_dependency "collaboration/access/read_only"
 
-    def self.can_be_changed
+    def self.changeable
       where(type: changeable_classes.map(&:to_s))
     end
 
@@ -19,12 +19,12 @@ class Collaboration < ApplicationRecord
         .order(Arel.sql("CASE collaborations.type WHEN 'Collaboration::Access::OwnerTeam' THEN 1 ELSE 2 END, teams.name"))
     end
 
-    def can_be_changed?
-      self.class.can_be_changed?
+    def changeable?
+      self.class.changeable?
     end
 
     def self.changeable_classes
-      descendants.select(&:can_be_changed?)
+      descendants.select(&:changeable?)
     end
   end
 end

@@ -1,7 +1,7 @@
 class Collaboration < ApplicationRecord
   class Access < Collaboration
     class Owner < Edit
-      def self.can_be_changed?
+      def self.changeable?
         false
       end
     end

@@ -97,7 +97,7 @@ RSpec.describe EditCaseCollaboratorForm, :with_elasticsearch, :with_stubbed_mail
   describe "#delete?" do
     context "when permission_level is delete" do
       it "returns true" do
-        expect(form.delete?).to be true
+        expect(form).to be_delete
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe EditCaseCollaboratorForm, :with_elasticsearch, :with_stubbed_mail
       let(:permission_level) { Collaboration::Access::Edit.model_name.human }
 
       it "returns false" do
-        expect(form.delete?).to be false
+        expect(form).not_to be_delete
       end
     end
   end

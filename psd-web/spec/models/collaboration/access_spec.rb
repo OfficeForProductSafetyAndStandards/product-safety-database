@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Collaboration::Access, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  describe ".can_be_changed" do
+  describe ".changeable" do
     before do
       create(:allegation, edit_access_teams: [create(:team)], read_only_teams: [create(:team)])
     end
 
-    it "returns only the records of subclasses where #can_be_changed? is true (i.e. not Owner)" do
-      expect(described_class.can_be_changed.count).to eq(2)
+    it "returns only the records of subclasses where #changeable? is true (i.e. not Owner)" do
+      expect(described_class.changeable.count).to eq(2)
     end
   end
 

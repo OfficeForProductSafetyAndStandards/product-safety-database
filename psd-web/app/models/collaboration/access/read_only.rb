@@ -3,7 +3,7 @@ class Collaboration < ApplicationRecord
     class ReadOnly < Access
       belongs_to :added_by_user, class_name: :User, optional: true
 
-      def self.can_be_changed?
+      def self.changeable?
         true
       end
     end

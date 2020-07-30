@@ -5,7 +5,7 @@ class RemoveTeamFromCase
 
   def call
     context.fail!(error: "No collaboration supplied") unless collaboration.is_a?(Collaboration::Access)
-    context.fail!(error: "Collaboration type cannot be removed") unless collaboration.can_be_changed?
+    context.fail!(error: "Collaboration type cannot be removed") unless collaboration.changeable?
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     ActiveRecord::Base.transaction do

@@ -13,22 +13,6 @@ class AuditActivity::Investigation::TeamPermissionChanged < AuditActivity::Inves
     }
   end
 
-  def title(_viewer)
-    I18n.t(".title", scope: self.class.i18n_scope, team_name: metadata["team"]["name"])
-  end
-
-  def subtitle(viewer)
-    I18n.t(".subtitle", scope: self.class.i18n_scope, user_name: source&.show(viewer), date: pretty_date_stamp)
-  end
-
-  def new_permission
-    I18n.t(".permission.#{metadata['permission']['new']}", scope: self.class.i18n_scope)
-  end
-
-  def old_permission
-    I18n.t(".permission.#{metadata['permission']['old']}", scope: self.class.i18n_scope)
-  end
-
 private
 
   # This is handled by ChangeCasePermissionLevelForTeam, but this override is

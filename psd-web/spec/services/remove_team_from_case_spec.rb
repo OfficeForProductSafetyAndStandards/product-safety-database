@@ -86,9 +86,10 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_elasticse
         last_added_activity = investigation.activities.order(:id).first
 
         expect(last_added_activity).to be_a(AuditActivity::Investigation::TeamDeleted)
-        expect(last_added_activity.title(nil)).to eql("Testing team removed from allegation")
         expect(last_added_activity.source.user_id).to eql(user.id)
         expect(last_added_activity.metadata).to be_present
+
+        expect(last_added_activity.decorate.title(nil)).to eql("Testing team removed from allegation")
       end
     end
   end

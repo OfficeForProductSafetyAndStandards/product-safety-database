@@ -5,8 +5,8 @@ class ChangeCasePermissionLevelForTeam
 
   def call
     context.fail!(error: "No existing collaboration supplied") unless existing_collaboration.is_a?(Collaboration::Access)
-    context.fail!(error: "New collaboration class must be a changeable type") unless new_collaboration_class&.can_be_changed?
-    context.fail!(error: "Existing collaboration type cannot be changed") unless existing_collaboration.can_be_changed?
+    context.fail!(error: "New collaboration class must be a changeable type") unless new_collaboration_class&.changeable?
+    context.fail!(error: "Existing collaboration type cannot be changed") unless existing_collaboration.changeable?
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     ActiveRecord::Base.transaction do

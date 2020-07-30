@@ -7,9 +7,9 @@ RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_elasticsearch, :w
   let(:team) { investigation.owner_team }
   let(:user) { investigation.owner_user }
 
-  describe ".can_be_changed?" do
+  describe ".changeable?" do
     it "returns false" do
-      expect(described_class.can_be_changed?).to be false
+      expect(described_class).not_to be_changeable
     end
   end
 

@@ -8,7 +8,7 @@ class Collaboration < ApplicationRecord
         collaborator.own!(investigation)
       end
 
-      def self.can_be_changed?
+      def self.changeable?
         true
       end
     end

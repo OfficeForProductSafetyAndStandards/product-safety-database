@@ -39,7 +39,7 @@ class CollaboratorsController < ApplicationController
   def edit
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaboration_accesses.can_be_changed.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
 
     @edit_form = EditCaseCollaboratorForm.new(collaboration: @collaboration)
@@ -48,7 +48,7 @@ class CollaboratorsController < ApplicationController
   def update
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaboration_accesses.can_be_changed.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
     @collaborator = @collaboration.collaborator
 
     @edit_form = EditCaseCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))

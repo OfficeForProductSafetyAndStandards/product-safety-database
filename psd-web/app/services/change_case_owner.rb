@@ -22,7 +22,7 @@ class ChangeCaseOwner
 
       old_collaboration = investigation
                             .collaboration_accesses
-                            .can_be_changed
+                            .changeable
                             .find_by(collaborator: owner.team)
 
       (old_collaboration || owner).own!(investigation)
