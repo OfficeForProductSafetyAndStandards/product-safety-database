@@ -15,7 +15,7 @@ RSpec.describe DateParser do
     it { is_expected.to eql(Date.new(2020, 1, 20)) }
   end
 
-  context "when given ha ash containing invalid year, month and day numbers" do
+  context "when given a hash containing invalid year, month and day numbers" do
     let(:input) { { year: "2020", month: "1", day: "32" } }
 
     it { is_expected.to eql(OpenStruct.new(year: "2020", month: "1", day: "32")) }
