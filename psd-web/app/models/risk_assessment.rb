@@ -12,7 +12,6 @@ class RiskAssessment < ApplicationRecord
 
   has_one_attached :risk_assessment_file
 
-
   validates :assessed_on, presence: true
 
   validate :assessed_on_cannot_be_in_future
@@ -25,12 +24,10 @@ class RiskAssessment < ApplicationRecord
   validates :custom_risk_level, presence: true, if: -> { other? }
   validates :custom_risk_level, absence: true, unless: -> { other? }
 
-
   # Exactly 1 of team, business or "other" required
   validates :assessed_by_business, absence: true, if: -> { assessed_by_team }
   validates :assessed_by_other, presence: true, if: -> { assessed_by_team.nil? && assessed_by_business.nil? }
   validates :assessed_by_other, absence: true, if: -> { assessed_by_team || assessed_by_business }
-
 
   enum risk_level: {
     serious: "serious",
@@ -60,5 +57,4 @@ private
 
     errors.add(:products, :blank)
   end
-
 end

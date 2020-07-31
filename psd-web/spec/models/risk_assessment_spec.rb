@@ -1,10 +1,7 @@
 require "rails_helper"
 
 RSpec.describe RiskAssessment, type: :model do
-
-
   describe "validations" do
-
     let(:risk_assessment) do
       described_class.new(
         investigation: investigation,
@@ -32,7 +29,6 @@ RSpec.describe RiskAssessment, type: :model do
     let(:custom_risk_level) { nil }
     let(:products) { [build(:product)] }
 
-
     context "with all required attributes" do
       it "is valid" do
         expect(risk_assessment).to be_valid
@@ -44,7 +40,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid", :aggregate_failures do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:risk_level]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:risk_level]).to eql([{ error: :blank }])
       end
     end
 
@@ -54,7 +50,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:custom_risk_level]).to eql([{error: :present}])
+        expect(risk_assessment.errors.details[:custom_risk_level]).to eql([{ error: :present }])
       end
     end
 
@@ -63,7 +59,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:investigation]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:investigation]).to eql([{ error: :blank }])
       end
     end
 
@@ -72,7 +68,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:added_by_user]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:added_by_user]).to eql([{ error: :blank }])
       end
     end
 
@@ -81,7 +77,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:added_by_team]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:added_by_team]).to eql([{ error: :blank }])
       end
     end
 
@@ -92,7 +88,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_by_other]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:assessed_by_other]).to eql([{ error: :blank }])
       end
     end
 
@@ -103,7 +99,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_by_business]).to eql([{error: :present}])
+        expect(risk_assessment.errors.details[:assessed_by_business]).to eql([{ error: :present }])
       end
     end
 
@@ -114,7 +110,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_by_other]).to eql([{error: :present}])
+        expect(risk_assessment.errors.details[:assessed_by_other]).to eql([{ error: :present }])
       end
     end
 
@@ -125,7 +121,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_by_other]).to eql([{error: :present}])
+        expect(risk_assessment.errors.details[:assessed_by_other]).to eql([{ error: :present }])
       end
     end
 
@@ -134,7 +130,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:products]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:products]).to eql([{ error: :blank }])
       end
     end
 
@@ -143,7 +139,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_on]).to eql([{error: :blank}])
+        expect(risk_assessment.errors.details[:assessed_on]).to eql([{ error: :blank }])
       end
     end
 
@@ -152,7 +148,7 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_on]).to eql([{error: :in_future}])
+        expect(risk_assessment.errors.details[:assessed_on]).to eql([{ error: :in_future }])
       end
     end
 
@@ -161,9 +157,8 @@ RSpec.describe RiskAssessment, type: :model do
 
       it "is not valid" do
         expect(risk_assessment).not_to be_valid
-        expect(risk_assessment.errors.details[:assessed_on]).to eql([{error: :too_old}])
+        expect(risk_assessment.errors.details[:assessed_on]).to eql([{ error: :too_old }])
       end
     end
-
   end
 end
