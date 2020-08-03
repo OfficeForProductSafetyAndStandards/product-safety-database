@@ -493,7 +493,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strong_migrations (0.7.0)
+    strong_migrations (0.7.1)
       activerecord (>= 5)
     temple (0.8.2)
     term-ansicolor (1.7.1)
@@ -609,7 +609,7 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets (= 3.7.2)
   sprockets-rails
-  strong_migrations (= 0.7.0)
+  strong_migrations (= 0.7.1)
   validate_email (~> 0.1)
   webmock
   webpacker (~> 5.1.1)
