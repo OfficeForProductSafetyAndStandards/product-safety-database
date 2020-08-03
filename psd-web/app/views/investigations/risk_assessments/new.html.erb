@@ -58,8 +58,8 @@
 
         <% assessed_by_radio_items = []
 
-          assessed_by_radio_items.push(text: "Me or my team", value: :my_team)
-          assessed_by_radio_items.push(text: "Trading standards or another market surveilance authority", value: :another_team, conditional: { html: teams_html })
+          assessed_by_radio_items.push(text: current_user.team.name, value: :my_team)
+          assessed_by_radio_items.push(text: "Another team or market surveilance authority", value: :another_team, conditional: { html: teams_html })
           assessed_by_radio_items.push(text: "A business related to the case", value: :business, conditional: { html: businesses_html }) unless @risk_assessment_form.businesses.length == 1
           assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: { html: someone_else_html })
 

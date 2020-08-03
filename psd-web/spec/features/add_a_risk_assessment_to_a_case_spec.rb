@@ -72,7 +72,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     end
 
     within_fieldset("Who completed the assessment?") do
-      choose "Me or my team"
+      choose "MyCouncil Trading Standards"
     end
 
     within_fieldset("Which products were assessed?") do
@@ -132,7 +132,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     end
 
     within_fieldset("Who completed the assessment?") do
-      choose "Trading standards or another market surveilance authority"
+      choose "Another team or market surveilance authority"
     end
 
     within_fieldset("Which products were assessed?") do
@@ -301,7 +301,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     end
 
     within_fieldset("Who completed the assessment?") do
-      choose "Me or my team"
+      choose "MyCouncil Trading Standards"
     end
 
     attach_file "Upload the risk assessment", risk_assessment_file
