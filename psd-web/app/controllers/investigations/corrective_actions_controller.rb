@@ -26,12 +26,9 @@ module Investigations
 
       corrective_action = @investigation.corrective_actions.find(params[:id])
 
-      previous_documents = corrective_action.documents
       result = UpdateCorrectiveAction.call(
         corrective_action: corrective_action,
         corrective_action_params: corrective_action_params,
-        new_file: corrective_action_params.dig(:file),
-        new_file_description: previous_documents,
         user: current_user
       )
       return redirect_to investigation_action_path(@investigation, result.corrective_action) if result.success?
