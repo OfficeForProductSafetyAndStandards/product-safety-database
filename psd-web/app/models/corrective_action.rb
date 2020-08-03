@@ -6,7 +6,6 @@ class CorrectiveAction < ApplicationRecord
   include SanitizationHelper
 
   attribute :related_file, :boolean
-  include CorrectiveActionValidation
 
   date_attribute :date_decided
 
