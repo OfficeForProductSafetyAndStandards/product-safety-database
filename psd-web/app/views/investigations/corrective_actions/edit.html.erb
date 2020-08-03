@@ -14,6 +14,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_action_path(@investigation, @corrective_action) do |form| %>
       <%= render "form_components/govuk_error_summary", form: form %>
+
       <%= render "investigations/record_corrective_actions/form",
                  form: form,
                  allow_product_linking: true,
@@ -25,13 +26,14 @@
       <% file_field = capture do %>
         <%= render partial: "related_attachment_fields", collection: @corrective_action.documents_blobs, as: :file_blob, locals: { form: form, file_blob: @file_blob, attachment_name: :file } %>
       <% end %>
+      <%= form.hidden_field :related_file, value: nil %>
       <%= render "form_components/govuk_radios",
                  form: form,
                  key: :related_file,
                  fieldset: { legend: { text: "Are there any files related to the action?",
                    classes: "govuk-fieldset__legend--m" } },
-                 items: [{ text: "Yes", value: "Yes", conditional: { html: file_field }, checked: @corrective_action.has_document? },
-                         { text: "No", value: "off", checked: !@corrective_action.has_document? }]
+                 items: [{ text: "Yes", value: "Yes", conditional: { html: file_field } },
+                         { text: "No", value: "off" } ]
       %>
 
       <%= govukButton text: "Update corrective action" %>

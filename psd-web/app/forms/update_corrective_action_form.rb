@@ -20,6 +20,10 @@ class UpdateCorrectiveActionForm
   attribute :product_id, :integer
   attribute :business_id, :integer
   attribute :file, :file_form
+  attribute :created_at, :time
+  attribute :updated_at, :time
+  attribute :investigation_id, :integer
+  attribute :id
 
   delegate :description, to: :file, prefix: true
 

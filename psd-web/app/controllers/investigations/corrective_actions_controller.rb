@@ -1,5 +1,9 @@
 module Investigations
   class CorrectiveActionsController < ApplicationController
+    include FileConcern
+    set_attachment_names :file
+    set_file_params_key :corrective_action
+
     def show
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       authorize @investigation, :view_non_protected_details?
@@ -10,28 +14,24 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       authorize @investigation, :update?
       @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
+
+      @service_form = UpdateCorrectiveActionForm.new(@corrective_action.attributes)
+
       @file_blob = @corrective_action.documents_blobs.first || @corrective_action.documents_blobs.new
     end
 
     def update
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize @investigation, :update?
+
       corrective_action = @investigation.corrective_actions.find(params[:id])
 
       previous_documents = corrective_action.documents
-      service_form = UpdateCorrectiveActionForm.new(corrective_action_params)
-
-      if service_form.invalid?
-        @corrective_action = corrective_action.decorate
-        return render :edit
-      end
-
-      corrective_action.assign_attributes(service_form.serializable_hash(methods: :documents))
-
       result = UpdateCorrectiveAction.call(
         corrective_action: corrective_action,
-        previous_documents: previous_documents,
-        file_description: service_form.file_description,
+        corrective_action_params: corrective_action_params,
+        new_file: corrective_action_params.dig(:file),
+        new_file_description: previous_documents,
         user: current_user
       )
       return redirect_to investigation_action_path(@investigation, result.corrective_action) if result.success?

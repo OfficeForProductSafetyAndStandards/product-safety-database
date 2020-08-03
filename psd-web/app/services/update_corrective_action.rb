@@ -1,38 +1,77 @@
 class UpdateCorrectiveAction
   include Interactor
-  delegate :user, :corrective_action, :previous_documents, :file_description, to: :context
+  delegate :user, :corrective_action, :corrective_action_params, to: :context
 
   def call
     validate_inputs!
+
+    corrective_action.date_decided = nil
+    corrective_action.date_decided_day = nil
+    corrective_action.date_decided_month = nil
+    corrective_action.date_decided_year = nil
+    corrective_action.assign_attributes(corrective_action_params.except(:file, :date_decided))
+    corrective_action.set_dates_from_params(corrective_action_params)
+
+    @previous_attachment = corrective_action.documents.first
+
+    context.fail! if corrective_action.invalid?
+
+    # ap corrective_action_params
+    # ap @previous_attachment
+
+    new_file = corrective_action_params.dig("file", "file")
+
     corrective_action.transaction do
+      replace_attached_file if new_file
+
+      break if no_changes?
+
       corrective_action.save!
-      document = corrective_action.documents.first
-      document_changed = (document != previous_document)
-      document_changed_description_changed = update_document_description!(document, file_description) if document
+      update_document_description
+      create_audit_activity_for_corrective_action_updated
+      # document_changed_description_changed = update_document_description!(document, file_description) if document
 
-      return unless any_changes?(document_changed, document_changed_description_changed)
+      # return unless any_changes?(document_changed, document_changed_description_changed)
 
-      send_notification_email(create_audit_activity_for_corrective_action_update!(previous_document))
+      # send_notification_email(create_audit_activity_for_corrective_action_update!(previous_document))
     end
   end
 
-private
+  private
 
-  def any_changes?(document_changed, document_changed_description_changed)
-    corrective_action_changes? || document_changed || document_changed_description_changed
+  def no_changes?
+    !any_changes?
   end
 
-  def previous_document
-    @previous_document ||= previous_documents.first
+  def any_changes?
+    new_file || corrective_action.changes.except(:date_year, :date_month, :date_day).keys.any? || file_description_changed?
   end
-  alias_method :store_previous_document, :previous_document
 
-  def update_document_description!(document, new_file_description)
-    document_changed_description_changed = (document.blob.metadata[:description] != new_file_description)
+  def new_file
+    corrective_action_params.dig(:file, :file)
+  end
+
+  def new_file_description
+    corrective_action_params.dig(:file, :description)
+  end
+
+  def file_description_changed?
+    new_file_description != @previous_attachment&.metadata[:description]
+  end
+
+  def replace_attached_file
+    corrective_action.documents.detach
+    corrective_action.documents.attach(new_file)
+  end
+
+  # The document description is currently saved within the `metadata` JSON
+  # on the 'blob' record. The CorrectiveAction model allows multiple
+  # documents to be attached, but in practice the interfaces only allows one
+  # at a time.
+  def update_document_description
+    document = corrective_action.documents.first
     document.blob.metadata[:description] = new_file_description
-    document.blob.save!
-
-    document_changed_description_changed
+    document.blob.save
   end
 
   def validate_inputs!
@@ -46,6 +85,20 @@ private
 
   def validate_user!
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+  end
+
+  def create_audit_activity_for_corrective_action_updated
+    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, @previous_document)
+
+    AuditActivity::CorrectiveAction::Update.create!(
+      source: UserSource.new(user: user),
+      investigation: corrective_action.investigation,
+      product: corrective_action.product,
+      business: corrective_action.business,
+      metadata: metadata,
+      title: nil,
+      body: nil,
+    )
   end
 
   def create_audit_activity_for_corrective_action_update!(old_document)
