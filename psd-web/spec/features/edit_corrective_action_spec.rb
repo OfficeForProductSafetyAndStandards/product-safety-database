@@ -41,6 +41,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "corrective_action_measure_type_mandatory" : "corrective_action_measure_type_voluntary"
       choose CorrectiveAction.human_attribute_name("duration.#{new_duration}")
 
+      choose "corrective_action_related_file_yes"
       find("details > summary", text: "Replace this file").click
 
       attach_file "Upload a file", Rails.root + "spec/fixtures/files/corrective_action.txt"
