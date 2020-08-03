@@ -16,28 +16,23 @@ class UpdateCorrectiveAction
 
     context.fail! if corrective_action.invalid?
 
-    # ap corrective_action_params
-    # ap @previous_attachment
-
     new_file = corrective_action_params.dig("file", "file")
 
     corrective_action.transaction do
+      corrective_action.documents.detach unless corrective_action.related_file
       replace_attached_file if new_file
 
       break if no_changes?
 
       corrective_action.save!
       update_document_description
-      create_audit_activity_for_corrective_action_updated
-      # document_changed_description_changed = update_document_description!(document, file_description) if document
+      actvity = create_audit_activity_for_corrective_action_updated(@previous_attachment)
 
-      # return unless any_changes?(document_changed, document_changed_description_changed)
-
-      # send_notification_email(create_audit_activity_for_corrective_action_update!(previous_document))
+      send_notification_email(actvity)
     end
   end
 
-  private
+private
 
   def no_changes?
     !any_changes?
@@ -56,7 +51,7 @@ class UpdateCorrectiveAction
   end
 
   def file_description_changed?
-    new_file_description != @previous_attachment&.metadata[:description]
+    new_file_description != @previous_attachment&.metadata&.dig(:description)
   end
 
   def replace_attached_file
@@ -70,6 +65,9 @@ class UpdateCorrectiveAction
   # at a time.
   def update_document_description
     document = corrective_action.documents.first
+
+    return unless document
+
     document.blob.metadata[:description] = new_file_description
     document.blob.save
   end
@@ -87,8 +85,8 @@ class UpdateCorrectiveAction
     context.fail!(error: "No user supplied") unless user.is_a?(User)
   end
 
-  def create_audit_activity_for_corrective_action_updated
-    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, @previous_document)
+  def create_audit_activity_for_corrective_action_updated(previous_document)
+    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, previous_document)
 
     AuditActivity::CorrectiveAction::Update.create!(
       source: UserSource.new(user: user),

@@ -116,10 +116,11 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           end
 
           context "when removing the previously attached file" do
-            let(:related_file) { "off" }
+            before { corrective_action_params[:related_file] = "off" }
 
             it "removes the related file" do
-              expect { update_corrective_action }.to change(corrective_action.documents, :any?).from(true).to(false)
+              expect { update_corrective_action }
+                .to change(corrective_action.reload.documents, :any?).from(true).to(false)
             end
           end
         end
