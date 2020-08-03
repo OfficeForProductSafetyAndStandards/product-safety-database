@@ -23,8 +23,8 @@ class UpdateCorrectiveAction
 
       corrective_action.save!
 
-      update_document_description
-      actvity = create_audit_activity_for_corrective_action_updated(@previous_attachment)
+      update_document_description!
+      actvity = create_audit_activity_for_corrective_action_updated!(@previous_attachment)
 
       send_notification_email(actvity)
     end
@@ -67,7 +67,7 @@ private
     return unless document
 
     document.blob.metadata[:description] = new_file_description
-    document.blob.save
+    document.blob.save!
   end
 
   def validate_inputs!
@@ -83,22 +83,8 @@ private
     context.fail!(error: "No user supplied") unless user.is_a?(User)
   end
 
-  def create_audit_activity_for_corrective_action_updated(previous_document)
+  def create_audit_activity_for_corrective_action_updated!(previous_document)
     metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, previous_document)
-
-    AuditActivity::CorrectiveAction::Update.create!(
-      source: UserSource.new(user: user),
-      investigation: corrective_action.investigation,
-      product: corrective_action.product,
-      business: corrective_action.business,
-      metadata: metadata,
-      title: nil,
-      body: nil,
-    )
-  end
-
-  def create_audit_activity_for_corrective_action_update!(old_document)
-    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, old_document)
 
     AuditActivity::CorrectiveAction::Update.create!(
       source: UserSource.new(user: user),
