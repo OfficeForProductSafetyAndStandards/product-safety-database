@@ -1,10 +1,9 @@
 class CorrectiveAction < ApplicationRecord
-  DURATION_TYPES = %w[permanent temporary unknown].freeze
-  MEASURE_TYPES = %w[mandatory voluntary].freeze
-
   include DateConcern
   include SanitizationHelper
 
+  DURATION_TYPES = %w[permanent temporary unknown].freeze
+  MEASURE_TYPES = %w[mandatory voluntary].freeze
   attribute :related_file, :boolean
 
   date_attribute :date_decided
