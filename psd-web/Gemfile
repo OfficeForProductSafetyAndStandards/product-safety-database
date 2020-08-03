@@ -39,7 +39,7 @@ gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
 gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
-gem "strong_migrations", "0.7.0"
+gem "strong_migrations", "0.7.1"
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.1.1"
 gem "wicked"
