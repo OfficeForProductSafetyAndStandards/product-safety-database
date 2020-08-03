@@ -201,6 +201,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with a new file" do
+      before { corrective_action_params[:file][:file] = new_document }
+
       it "stored the new file with the description", :aggregate_failures do
         update_corrective_action
 

@@ -16,15 +16,13 @@ class UpdateCorrectiveAction
 
     context.fail! if corrective_action.invalid?
 
-    new_file = corrective_action_params.dig("file", "file")
-
     corrective_action.transaction do
       corrective_action.documents.detach unless corrective_action.related_file
-      replace_attached_file if new_file
-
-      break if no_changes?
+      replace_attached_file              if new_file
+      break                              if no_changes?
 
       corrective_action.save!
+
       update_document_description
       actvity = create_audit_activity_for_corrective_action_updated(@previous_attachment)
 
