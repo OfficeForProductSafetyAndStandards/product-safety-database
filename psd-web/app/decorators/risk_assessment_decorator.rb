@@ -12,7 +12,7 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    "#{product_names}: #{object.custom_risk_level.presence || I18n.t(".investigations.risk_level.show.levels.#{object.risk_level}")}"
+    "#{risk_level_description}: #{products_description}"
   end
 
   def show_path
@@ -41,7 +41,11 @@ class RiskAssessmentDecorator < ApplicationDecorator
 
 private
 
-  def product_names
-    object.products.collect(&:name).to_sentence
+  def products_description
+    if object.products.size > 1
+      h.pluralize(object.products.size, "product")
+    else
+      object.products.first.name
+    end
   end
 end
