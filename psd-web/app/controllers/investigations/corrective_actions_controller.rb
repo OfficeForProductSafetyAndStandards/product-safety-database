@@ -15,8 +15,6 @@ module Investigations
       authorize @investigation, :update?
       @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
 
-      @service_form = UpdateCorrectiveActionForm.new(@corrective_action.attributes)
-
       @file_blob = @corrective_action.documents_blobs.first || @corrective_action.documents_blobs.new
     end
 

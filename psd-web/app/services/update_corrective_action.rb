@@ -61,7 +61,7 @@ private
   # on the 'blob' record. The CorrectiveAction model allows multiple
   # documents to be attached, but in practice the interfaces only allows one
   # at a time.
-  def update_document_description
+  def update_document_description!
     document = corrective_action.documents.first
 
     return unless document
