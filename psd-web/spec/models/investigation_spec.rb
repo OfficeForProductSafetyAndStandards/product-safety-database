@@ -52,7 +52,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     before do
       owner.update!(name: "z to ensure the sorting is correct")
       [team_a, team_b].each do |team|
-        AddTeamToCase.call(user: user, investigation: investigation, team: team)
+        AddTeamToCase.call(user: user, investigation: investigation, team: team, collaboration_class: Collaboration::Access::Edit)
       end
     end
 

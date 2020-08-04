@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Investigation::Base
-  def self.i18n_scope
-    model_name.i18n_key.to_s.split("/")
-  end
-
   def self.from(investigation)
     super(investigation, I18n.t(".title.#{investigation.coronavirus_related?}", scope: i18n_scope), I18n.t(".body.#{investigation.coronavirus_related?}", scope: i18n_scope))
   end

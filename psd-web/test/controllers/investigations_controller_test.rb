@@ -13,10 +13,12 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     users(:southampton_bob).own!(@investigation_one)
     @investigation_one.creator_user = users(:southampton)
     @investigation_one.save
-    @investigation_one.edit_access_collaborations.create!(
-      collaborator: teams(:opss_enforcement),
-      added_by_user: users(:southampton_bob),
-      include_message: false
+
+    AddTeamToCase.call!(
+      investigation: @investigation_one,
+      team: teams(:opss_enforcement),
+      collaboration_class: Collaboration::Access::Edit,
+      user: users(:southampton_bob)
     )
 
     @investigation_two = load_case(:two)

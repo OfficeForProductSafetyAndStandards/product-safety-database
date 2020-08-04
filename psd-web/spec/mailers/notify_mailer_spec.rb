@@ -62,36 +62,21 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   end
 
   describe "#team_added_to_case_email" do
-    subject(:mail) { described_class.team_added_to_case_email(edit_access_collaboration, to_email: "test@example.com") }
+    subject(:mail) { described_class.team_added_to_case_email(investigation: investigation, team: team, added_by_user: user, message: message, to_email: "test@example.com") }
 
-    let(:user_team) { create(:team, name: "User Team") }
-    let(:added_by_user) { create(:user, name: "Bob Jones", team: user_team) }
-    let(:collaborator_team) { create(:team, name: "Collaborator Team") }
-    let(:edit_access_collaboration) { create(:collaboration_edit_access, message: message, added_by_user: added_by_user, collaborator: collaborator_team) }
+    let(:investigation) { create(:allegation, creator: user) }
+    let(:user) { create(:user, :activated, name: "Bob Jones") }
+    let(:team) { create(:team) }
 
     context "with a message" do
       let(:message) { "Thanks for collaborating!" }
 
-      context "when the user is on another team" do
-        it "sets the personalisation" do
-          expect(mail.govuk_notify_personalisation).to eql(
-            updater_name: "Bob Jones (User Team)",
-            optional_message: "Message from Bob Jones (User Team):\n\n^ Thanks for collaborating!",
-            investigation_url: investigation_url(edit_access_collaboration.investigation)
-          )
-        end
-      end
-
-      context "when the user is on the same team" do
-        let(:collaborator_team) { user_team }
-
-        it "sets the personalisation" do
-          expect(mail.govuk_notify_personalisation).to eql(
-            updater_name: "Bob Jones",
-            optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
-            investigation_url: investigation_url(edit_access_collaboration.investigation)
-          )
-        end
+      it "sets the personalisation" do
+        expect(mail.govuk_notify_personalisation).to eql(
+          updater_name: "Bob Jones (#{user.team.name})",
+          optional_message: "Message from Bob Jones (#{user.team.name}):\n\n^ Thanks for collaborating!",
+          investigation_url: investigation_url(investigation)
+        )
       end
     end
 
@@ -100,9 +85,9 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
 
       it "sets the personalisation" do
         expect(mail.govuk_notify_personalisation).to eql(
-          updater_name: "Bob Jones (User Team)",
+          updater_name: "Bob Jones (#{user.team.name})",
           optional_message: "",
-          investigation_url: investigation_url(edit_access_collaboration.investigation)
+          investigation_url: investigation_url(investigation)
         )
       end
     end
@@ -130,26 +115,12 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
     context "with a message" do
       let(:message) { "Thanks for collaborating!" }
 
-      context "when the user is on another team" do
-        it "sets the personalisation" do
-          expect_personalisation_to_include_case_attributes
-          expect(mail.govuk_notify_personalisation).to include(
-            updater_name: "Bob Jones (User Team)",
-            optional_message: "Message from Bob Jones (User Team):\n\n^ Thanks for collaborating!",
-          )
-        end
-      end
-
-      context "when the user is on the same team" do
-        let(:team_to_be_deleted) { user_team }
-
-        it "sets the personalisation" do
-          expect_personalisation_to_include_case_attributes
-          expect(mail.govuk_notify_personalisation).to include(
-            updater_name: "Bob Jones",
-            optional_message: "Message from Bob Jones:\n\n^ Thanks for collaborating!",
-          )
-        end
+      it "sets the personalisation" do
+        expect_personalisation_to_include_case_attributes
+        expect(mail.govuk_notify_personalisation).to include(
+          updater_name: "Bob Jones (User Team)",
+          optional_message: "Message from Bob Jones (User Team):\n\n^ Thanks for collaborating!",
+        )
       end
     end
 
@@ -164,13 +135,63 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
         )
       end
     end
+  end
 
-    def expect_personalisation_to_include_case_attributes
-      expect(mail.govuk_notify_personalisation).to include(
-        case_type: case_type,
-        case_title: case_title,
-        case_id: investigation.pretty_id,
+  describe "#case_permission_changed_for_team" do
+    subject(:mail) do
+      described_class.case_permission_changed_for_team(
+        investigation: investigation,
+        team: team,
+        user: user,
+        message: message,
+        to_email: "test@example.com",
+        old_permission: old_permission,
+        new_permission: new_permission
       )
     end
+
+    let(:investigation) { create(:allegation, creator: user) }
+    let(:case_type) { investigation.case_type.to_s.downcase }
+    let(:case_title) { investigation.decorate.title }
+    let(:user) { create(:user, :activated, name: "Bob Jones") }
+    let(:team) { create(:team) }
+    let(:old_permission) { "readonly" }
+    let(:new_permission) { "edit" }
+
+    context "with a message" do
+      let(:message) { "Thanks for collaborating!" }
+
+      it "sets the personalisation" do
+        expect_personalisation_to_include_case_attributes
+        expect(mail.govuk_notify_personalisation).to include(
+          updater_name: "Bob Jones (#{user.team.name})",
+          optional_message: "Message from Bob Jones (#{user.team.name}):\n\n^ Thanks for collaborating!",
+          old_permission: "view full case",
+          new_permission: "edit full case"
+        )
+      end
+    end
+
+    context "with no message" do
+      let(:message) { nil }
+
+      it "sets the personalisation" do
+        expect_personalisation_to_include_case_attributes
+        expect(mail.govuk_notify_personalisation).to include(
+          updater_name: "Bob Jones (#{user.team.name})",
+          optional_message: "",
+          old_permission: "view full case",
+          new_permission: "edit full case"
+        )
+      end
+    end
+  end
+
+  def expect_personalisation_to_include_case_attributes
+    expect(mail.govuk_notify_personalisation).to include(
+      case_type: case_type,
+      case_title: case_title,
+      case_id: investigation.pretty_id,
+    )
   end
 end
