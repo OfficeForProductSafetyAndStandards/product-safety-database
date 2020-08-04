@@ -42,9 +42,5 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
                  filename: [old_filename.to_s, new_filename]
                ))
     end
-
-    context "when changing the documents blob description" do
-
-    end
   end
 end
