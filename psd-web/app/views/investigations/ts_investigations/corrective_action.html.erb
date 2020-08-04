@@ -21,7 +21,7 @@
              form: form,
              key: :related_file,
              fieldset: { legend: { text: "Are there any files related to the action?", classes: "govuk-fieldset__legend--m" } },
-             items: [{ text: "Yes", value: "Yes", conditional: { html: file_field } },
+             items: [{ text: "Yes", value: "true", conditional: { html: file_field } },
                      { text: "No", value: "off" }]
   %>
 <% end %>
