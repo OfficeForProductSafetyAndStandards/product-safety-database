@@ -145,7 +145,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     fill_in "Further details (optional)", with: details
 
     within_fieldset "Are there any files related to the action?" do
-      choose "Yes"
+      choose "corrective_action_related_file_yes"
     end
 
     attach_file "Upload a file", file
