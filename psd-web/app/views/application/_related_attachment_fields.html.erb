@@ -21,7 +21,7 @@
         <%= subform.file_field :file, class: "govuk-file-upload", id: "attachment-file-input" %>
       <% end %>
 
-      <% if file_blob.present? %>
+      <% if file_blob.persisted? %>
         <p id="current-attachment-details">
           Currently selected file:
           <%= link_to file_blob.filename, file_blob, target: "_blank", rel: 'noopener' %>
