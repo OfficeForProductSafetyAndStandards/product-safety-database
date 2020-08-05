@@ -1,14 +1,9 @@
 class UpdateCorrectiveAction
   include Interactor
   delegate :user, :corrective_action, :corrective_action_params, to: :context
-
+  delegate :investigation, to: :corrective_action
   def call
     validate_inputs!
-
-    corrective_action.date_decided = nil
-    corrective_action.date_decided_day = nil
-    corrective_action.date_decided_month = nil
-    corrective_action.date_decided_year = nil
     corrective_action.assign_attributes(corrective_action_params.except(:file, :date_decided))
     corrective_action.set_dates_from_params(corrective_action_params)
 
@@ -88,7 +83,7 @@ private
 
     AuditActivity::CorrectiveAction::Update.create!(
       source: UserSource.new(user: user),
-      investigation: corrective_action.investigation,
+      investigation: investigation,
       product: corrective_action.product,
       business: corrective_action.business,
       metadata: metadata,
@@ -97,25 +92,21 @@ private
     )
   end
 
-  def investigation
-    corrective_action.investigation
-  end
-
   def send_notification_email(activity)
-    activity.entities_to_notify.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
+    entities_to_notify.each do |recipient|
       NotifyMailer.investigation_updated(
-        corrective_action.investigation.pretty_id,
+        investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "#{activity.source.show(recipient)} edited a corrective action on the #{investigation.case_type}.",
-        "Corrective action edited for #{corrective_action.investigation.case_type.upcase_first}"
+        "Corrective action edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end
   end
 
-  def corrective_action_changes?
-    corrective_action.previous_changes.except(:date_decided_day, :date_decided_month, :date_decided_year).any?
+  def entities_to_notify
+    User
+      .where(team_id: investigation.teams_with_access.map(&:id))
+      .where.not(id: user.id)
   end
 end

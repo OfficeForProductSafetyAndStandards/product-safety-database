@@ -14,6 +14,17 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:user)             { create(:user) }
   let(:case_creator)     { create(:user, team: user.team) }
   let(:investigation)    { create(:allegation, creator: case_creator) }
+  let(:editor_team)      do
+    create(:team).tap do |t|
+      AddTeamToCase.call!(
+        investigation: investigation,
+        team: t,
+        collaboration_class: Collaboration::Access::Edit,
+        user: user
+      )
+    end
+  end
+  let(:case_editor)      { create(:user, team: editor_team) }
   let(:product)          { create(:product) }
   let(:business)         { create(:business) }
   let(:old_date_decided) { Time.zone.today }
@@ -101,27 +112,32 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
         describe "notifications" do
           let(:activity)       { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update") }
-          let(:body)           { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." }
+          let(:body)           { ->(user) { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." } }
           let(:email_subject)  { "Corrective action edited for #{investigation.case_type.upcase_first}" }
           let(:mailer)         { double(deliver_later: nil) } # rubocop:disable RSpec/VerifiedDoubles
 
-          it "notifies the owner team" do
-            allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
+          context "when updated by a user in the owning team" do
+            before { case_editor }
 
-            update_corrective_action
+            it "notifies the team member except the corrective action creator", :aggregate_failures do
+              allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
 
-            expect(NotifyMailer)
-              .to have_received(:investigation_updated)
-                    .with(investigation.pretty_id, case_creator.name, case_creator.email, body, email_subject)
-          end
+              update_corrective_action
 
-          context "when removing the previously attached file" do
-            before { corrective_action_params[:related_file] = "off" }
-
-            it "removes the related file" do
-              expect { update_corrective_action }
-                .to change(corrective_action.reload.documents, :any?).from(true).to(false)
+              expect(NotifyMailer).to have_received(:investigation_updated)
+                                        .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
+              expect(NotifyMailer).to have_received(:investigation_updated)
+                                        .with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
             end
+          end
+        end
+
+        context "when removing the previously attached file" do
+          before { corrective_action_params[:related_file] = "off" }
+
+          it "removes the related file" do
+            expect { update_corrective_action }
+              .to change(corrective_action.reload.documents, :any?).from(true).to(false)
           end
         end
       end
