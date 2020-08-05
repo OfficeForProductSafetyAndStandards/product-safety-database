@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include_context "with corrective action setup for updates"
 
   describe ".build_metadata" do
@@ -8,7 +8,6 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
     let!(:old_description) { old_attachment.metadata[:description] }
     let!(:old_filename)    { old_attachment.filename }
     let(:new_description)  { "new description" }
-    let!(:new_filename)    { "new_filename" }
     let(:expected_corrective_action_changes) do
       corrective_action
         .previous_changes
@@ -16,8 +15,8 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
     end
 
     before do
-      old_attachment.blob.metadata[:description] = new_description
-      old_attachment.filename = new_filename
+      old_attachment.blob.metadata[:description] = old_description
+      old_attachment.blob.metadata[:filename] = old_attachment.filename
       old_attachment.blob.save!
       corrective_action.update!(
         summary: new_summary,
@@ -32,6 +31,12 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
         measure_type: new_measure_type,
         duration: new_duration
       )
+
+      corrective_action.documents.detach
+      new_blob = corrective_action.documents.attach(new_file).first.blob
+      new_blob.metadata[:description] = new_description
+      new_blob.metadata[:filename] = new_blob.filename
+      new_blob.save!
     end
 
     it "has all the updated metadata" do
@@ -39,7 +44,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
         .to eq(corrective_action_id: corrective_action.id,
                updates: expected_corrective_action_changes.merge(
                  file_description: [old_description, new_description],
-                 filename: [old_filename.to_s, new_filename]
+                 filename: [old_filename.to_s, corrective_action.documents.first.filename.to_s]
                ))
     end
   end
