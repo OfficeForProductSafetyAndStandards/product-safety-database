@@ -59,15 +59,14 @@ private
   end
 
   def entities_to_notify
-    entities = []
-    investigation.teams_with_access.each do |team|
-      if team.team_recipient_email.present?
-        entities << team
-      else
-        users_from_team = team.users.active
-        entities.concat(users_from_team)
-      end
+    if investigation.owner_user && investigation.owner_user == user
+      []
+    elsif investigation.owner_user
+      [investigation.owner_user]
+    elsif investigation.owner_team.team_recipient_email.present?
+      [investigation.owner_team]
+    else
+      investigation.owner_team.users.active
     end
-    entities.uniq - [context.user]
   end
 end
