@@ -9,11 +9,10 @@ class UpdateCorrectiveAction
 
     @previous_attachment = corrective_action.documents.first
 
-    context.fail! if corrective_action.invalid?
-
     corrective_action.transaction do
       corrective_action.documents.detach unless corrective_action.related_file
       replace_attached_file              if new_file
+      context.fail!                      if corrective_action.invalid?
       break                              if no_changes?
 
       corrective_action.save!
@@ -32,7 +31,7 @@ private
   end
 
   def any_changes?
-    new_file || corrective_action.changes.except(:date_year, :date_month, :date_day).keys.any? || file_description_changed?
+    new_file || corrective_action.changes.except(:date_decided_year, :date_decided_month, :date_decided_day, :related_file).any? || file_description_changed?
   end
 
   def new_file
@@ -44,6 +43,9 @@ private
   end
 
   def file_description_changed?
+    old_file_description = @previous_attachment&.metadata&.dig(:description)
+    return false if new_file_description.blank? && old_file_description.blank?
+
     new_file_description != @previous_attachment&.metadata&.dig(:description)
   end
 
@@ -106,6 +108,7 @@ private
 
   def entities_to_notify
     User
+      .active
       .where(team_id: investigation.teams_with_access.map(&:id))
       .where.not(id: user.id)
   end

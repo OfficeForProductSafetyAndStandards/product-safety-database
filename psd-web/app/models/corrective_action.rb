@@ -48,7 +48,7 @@ private
 
   def related_file_attachment_validation
     if related_file && documents.attachments.empty?
-      errors.add(:base, :file_missing, message: "Provide a related file or select no")
+      errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
     end
   end
 end

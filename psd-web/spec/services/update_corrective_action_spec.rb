@@ -115,19 +115,23 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           let(:body)           { ->(user) { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." } }
           let(:email_subject)  { "Corrective action edited for #{investigation.case_type.upcase_first}" }
           let(:mailer)         { double(deliver_later: nil) } # rubocop:disable RSpec/VerifiedDoubles
+          let(:inactive_user)  { create(:user, team: user.team) }
 
           context "when updated by a user in the owning team" do
-            before { case_editor }
+            before do
+              case_editor && inactive_user
+              allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
+            end
 
             it "notifies the team member except the corrective action creator", :aggregate_failures do
-              allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
-
               update_corrective_action
 
               expect(NotifyMailer).to have_received(:investigation_updated)
                                         .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
               expect(NotifyMailer).to have_received(:investigation_updated)
                                         .with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
+              expect(NotifyMailer).to have_received(:investigation_updated)
+                                        .with(investigation.pretty_id, inactive_user.name, inactive_user.email, body[inactive_user], email_subject)
             end
           end
         end
