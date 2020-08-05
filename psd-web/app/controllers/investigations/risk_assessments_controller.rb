@@ -3,6 +3,8 @@ module Investigations
     def new
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
 
+      authorize @investigation, :update?
+
       @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
 
       return render "no_products" if @risk_assessment_form.products.length.zero?
@@ -10,6 +12,8 @@ module Investigations
 
     def create
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+
+      authorize @investigation, :update?
 
       @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
 
