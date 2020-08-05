@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
 
+  rescue_from ActionController::RoutingError, with: :render_404_page
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
 
   def set_current_user
