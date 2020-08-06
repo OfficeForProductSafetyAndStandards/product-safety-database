@@ -11,8 +11,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     )
   end
 
-  let(:user)             { create(:user) }
-  let(:case_creator)     { create(:user, team: user.team) }
+  let(:user)             { create(:user, :activated) }
+  let(:case_creator)     { create(:user, :activated, team: user.team) }
   let(:investigation)    { create(:allegation, creator: case_creator) }
   let(:editor_team)      do
     create(:team).tap do |t|
@@ -24,12 +24,12 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       )
     end
   end
-  let(:case_editor)      { create(:user, team: editor_team) }
+  let(:case_editor)      { create(:user, :activated, team: editor_team) }
   let(:product)          { create(:product) }
   let(:business)         { create(:business) }
   let(:old_date_decided) { Time.zone.today }
   let(:related_file)     { true }
-  let(:corrective_action) do
+  let!(:corrective_action) do
     create(
       :corrective_action,
       :with_file,
@@ -110,9 +110,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           }.to change(corrective_action, :date_decided).from(old_date_decided).to(new_date_decided)
         end
 
-        describe "notifications" do
+        describe "notifications", :with_test_queue_adapter do
           let(:activity)       { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update") }
-          let(:body)           { ->(user) { "#{activity.source.show(user)} edited a corrective action on the #{investigation.case_type}." } }
+          let(:body)           { ->(u) { "#{UserSource.new(user: user).show(u)} edited a corrective action on the #{investigation.case_type}." } }
           let(:email_subject)  { "Corrective action edited for #{investigation.case_type.upcase_first}" }
           let(:mailer)         { double(deliver_later: nil) } # rubocop:disable RSpec/VerifiedDoubles
           let(:inactive_user)  { create(:user, team: user.team) }
@@ -120,18 +120,19 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           context "when updated by a user in the owning team" do
             before do
               case_editor && inactive_user
-              allow(NotifyMailer).to receive(:investigation_updated).and_return(mailer)
             end
 
             it "notifies the team member except the corrective action creator", :aggregate_failures do
-              update_corrective_action
+              expect { update_corrective_action }
+                .to have_enqueued_mail(NotifyMailer, :investigation_updated)
+                      .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
+                .and have_enqueued_mail(NotifyMailer, :investigation_updated).with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
+            end
 
-              expect(NotifyMailer).to have_received(:investigation_updated)
-                                        .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
-              expect(NotifyMailer).to have_received(:investigation_updated)
-                                        .with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
-              expect(NotifyMailer).to have_received(:investigation_updated)
-                                        .with(investigation.pretty_id, inactive_user.name, inactive_user.email, body[inactive_user], email_subject)
+            it "does not notify inactive users" do
+              expect { update_corrective_action }
+                .not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+                      .with(investigation.pretty_id, inactive_user.name, inactive_user.email, body[inactive_user], email_subject)
             end
           end
         end
