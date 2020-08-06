@@ -118,21 +118,33 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           let(:inactive_user)  { create(:user, team: user.team) }
 
           context "when updated by a user in the owning team" do
-            before do
-              case_editor && inactive_user
+            before { case_editor && inactive_user }
+
+            context "when the owner team has a team inbox email" do # rubocop:disable RSpec/NestedGroups
+              it "notifies the team member except the corrective action creator", :aggregate_failures do
+                expect { update_corrective_action }
+                  .to have_enqueued_mail(NotifyMailer, :investigation_updated)
+                        .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
+                  .and have_enqueued_mail(NotifyMailer, :investigation_updated)
+                        .with(investigation.pretty_id, investigation.owner_team.name, investigation.owner_team.email, body[investigation.owner_team], email_subject)
+              end
             end
 
-            it "notifies the team member except the corrective action creator", :aggregate_failures do
-              expect { update_corrective_action }
-                .to have_enqueued_mail(NotifyMailer, :investigation_updated)
-                      .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
-                .and have_enqueued_mail(NotifyMailer, :investigation_updated).with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
-            end
+            context "when the owner team does not have a team inbox email" do # rubocop:disable RSpec/NestedGroups
+              before { investigation.owner_team.update!(email: nil) }
 
-            it "does not notify inactive users" do
-              expect { update_corrective_action }
-                .not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
-                      .with(investigation.pretty_id, inactive_user.name, inactive_user.email, body[inactive_user], email_subject)
+              it "notifies the team member except the corrective action creator", :aggregate_failures do
+                expect { update_corrective_action }
+                  .to have_enqueued_mail(NotifyMailer, :investigation_updated)
+                        .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
+                        .and have_enqueued_mail(NotifyMailer, :investigation_updated).with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
+              end
+
+              it "does not notify inactive users" do
+                expect { update_corrective_action }
+                  .not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+                            .with(investigation.pretty_id, inactive_user.name, inactive_user.email, body[inactive_user], email_subject)
+              end
             end
           end
         end
