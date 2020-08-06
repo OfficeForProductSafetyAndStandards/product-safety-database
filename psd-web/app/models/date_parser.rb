@@ -18,7 +18,7 @@ class DateParser
       nil
     end
 
-    return nil if date_values.any?(&:blank?)
+    return nil if date_values.all?(&:blank?)
     return struct_from_hash if date_values.any?(&:blank?)
 
     begin
