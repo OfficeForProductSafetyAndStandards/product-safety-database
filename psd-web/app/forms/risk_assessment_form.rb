@@ -5,7 +5,7 @@ class RiskAssessmentForm
   attribute :investigation
   attribute :current_user
 
-  attribute :assessed_on
+  attribute :assessed_on, :govuk_date
   attribute :risk_level
   attribute :custom_risk_level
 
@@ -85,14 +85,6 @@ class RiskAssessmentForm
     else
       super
     end
-  end
-
-  # Expects either a date object, or a hash containing
-  # year, month and day, for example:
-  #
-  # {year: "2019", month: "01", day: "20"}
-  def assessed_on=(assessed_on)
-    super(DateParser.new(assessed_on).date)
   end
 
 private
