@@ -28,12 +28,10 @@ private
 
   def send_notification_email
     context.activity.entities_to_notify.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "Product was removed from the #{investigation.case_type} by #{context.activity.source.show(recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
