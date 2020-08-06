@@ -4,10 +4,9 @@ class UpdateCorrectiveAction
   delegate :investigation, to: :corrective_action
   def call
     validate_inputs!
-    corrective_action.assign_attributes(corrective_action_params.except(:file, :date_decided))
-    corrective_action.set_dates_from_params(corrective_action_params)
-
-    @previous_attachment = corrective_action.documents.first
+    assign_attributes
+    set_dates_from_params
+    store_previous_attachment
 
     corrective_action.transaction do
       corrective_action.documents.detach unless corrective_action.related_file
@@ -18,13 +17,26 @@ class UpdateCorrectiveAction
       corrective_action.save!
 
       update_document_description!
-      actvity = create_audit_activity_for_corrective_action_updated!(@previous_attachment)
+      actvity = create_audit_activity_for_corrective_action_updated!(previous_attachment)
 
       send_notification_email(actvity)
     end
   end
 
 private
+
+  def assign_attributes
+    corrective_action.assign_attributes(corrective_action_params.except(:file, :date_decided))
+  end
+
+  def set_dates_from_params
+    corrective_action.set_dates_from_params(corrective_action_params)
+  end
+
+  def previous_attachment
+    @previous_attachment ||= corrective_action.documents.first
+  end
+  alias_method :store_previous_attachment, :previous_attachment
 
   def no_changes?
     !any_changes?
