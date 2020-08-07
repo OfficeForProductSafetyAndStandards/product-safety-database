@@ -77,6 +77,10 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
     context "with the required parameters" do
       context "when no changes have been made" do
+        shared_examples "it does not create an audit log" do
+          specify { expect { update_corrective_action }.not_to change(corrective_action.investigation.activities, :count) }
+        end
+
         it "does not change corrective action" do
           expect { update_corrective_action }.not_to change(corrective_action, :attributes)
         end
@@ -91,6 +95,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           it "does not change the attached document's metadata" do
             expect { update_corrective_action }.not_to change(corrective_action.documents.first, :metadata)
           end
+
+          include_examples "it does not create an audit log"
         end
 
         context "with no documents attached" do
@@ -99,10 +105,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           it "does not change the attached document's" do
             expect { update_corrective_action }.not_to change(corrective_action.documents, :empty?)
           end
-        end
 
-        it "does not create an audit log" do
-          expect { update_corrective_action }.not_to change(corrective_action.investigation.activities, :count)
+          include_examples "it does not create an audit log"
         end
       end
 
