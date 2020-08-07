@@ -77,18 +77,28 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
     context "with the required parameters" do
       context "when no changes have been made" do
-        let(:new_file_description) { corrective_action.documents.first.metadata[:description] }
-
         it "does not change corrective action" do
           expect { update_corrective_action }.not_to change(corrective_action, :attributes)
         end
 
-        it "does not change the attached document" do
-          expect { update_corrective_action }.not_to change(corrective_action.documents, :first)
+        context "with documents attached" do
+          let(:new_file_description) { corrective_action.documents.first.metadata.fetch(:description) }
+
+          it "does not change the attached document" do
+            expect { update_corrective_action }.not_to change(corrective_action.documents, :first)
+          end
+
+          it "does not change the attached document's metadata" do
+            expect { update_corrective_action }.not_to change(corrective_action.documents.first, :metadata)
+          end
         end
 
-        it "does not change the attached document's metadata" do
-          expect { update_corrective_action }.not_to change(corrective_action.documents.first, :metadata)
+        context "with no documents attached" do
+          before { corrective_action.documents.detach }
+
+          it "does not change the attached document's" do
+            expect { update_corrective_action }.not_to change(corrective_action.documents, :empty?)
+          end
         end
 
         it "does not create an audit log" do
@@ -154,6 +164,11 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           it "removes the related file" do
             expect { update_corrective_action }
               .to change(corrective_action.reload.documents, :any?).from(true).to(false)
+          end
+
+          it "creates an audit log" do
+            expect { update_corrective_action }
+              .to change(investigation.activities.where(type: "AuditActivity::CorrectiveAction::Update"), :count).from(0).to(1)
           end
         end
       end
