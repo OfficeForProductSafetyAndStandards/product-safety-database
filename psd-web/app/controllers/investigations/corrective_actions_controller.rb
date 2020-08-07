@@ -11,11 +11,12 @@ module Investigations
     end
 
     def edit
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-      authorize @investigation, :update?
-      @corrective_action = @investigation.corrective_actions.find(params[:id]).decorate
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      authorize investigation, :update?
+      @corrective_action = investigation.corrective_actions.find(params[:id]).decorate
 
       @file_blob = @corrective_action.documents_blobs.first
+      @investigation = investigation.decorate
     end
 
     def update
