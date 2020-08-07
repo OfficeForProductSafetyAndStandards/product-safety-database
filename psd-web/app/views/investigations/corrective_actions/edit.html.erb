@@ -35,8 +35,8 @@
                  key: :related_file,
                  fieldset: { legend: { text: "Are there any files related to the action?",
                    classes: "govuk-fieldset__legend--m" } },
-                 items: [{ text: "Yes", value: "Yes", conditional: { html: file_field }, checked: @corrective_action.related_file? },
-                         { text: "No", value: "off", checked: !@corrective_action.related_file? } ]
+                 items: [{ text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action.file_attached? },
+                         { text: "No", value: "off", checked: !@corrective_action.file_attached? } ]
       %>
 
       <%= govukButton text: "Update corrective action" %>

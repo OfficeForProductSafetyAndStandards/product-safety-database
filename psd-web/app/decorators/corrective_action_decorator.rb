@@ -36,7 +36,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
     object.duration.upcase_first
   end
 
-  def related_file?
+  def file_attached?
     documents.any?
   end
 end
