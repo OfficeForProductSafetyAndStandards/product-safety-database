@@ -40,6 +40,8 @@
 
   <% if activity.new_filename %>
     Attached: <b><%= activity.new_filename %></b><br>
+  <% elsif activity.old_filename %>
+    Attachment removed: <b><%= activity.old_filename %></b><br>
   <% end %>
 
   <% if activity.new_file_description %>

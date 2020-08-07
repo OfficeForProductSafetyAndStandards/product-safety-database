@@ -6,8 +6,7 @@ class UpdateCorrectiveAction
     validate_inputs!
     assign_attributes
     set_dates_from_params
-    store_previous_attachment
-
+    @previous_attachment = corrective_action.documents.first
     corrective_action.transaction do
       corrective_action.documents.detach unless corrective_action.related_file
       replace_attached_file              if new_file
@@ -17,7 +16,8 @@ class UpdateCorrectiveAction
       corrective_action.save!
 
       update_document_description!
-      actvity = create_audit_activity_for_corrective_action_updated!(previous_attachment)
+
+      actvity = create_audit_activity_for_corrective_action_updated!(@previous_attachment)
 
       send_notification_email(actvity)
     end
@@ -33,17 +33,16 @@ private
     corrective_action.set_dates_from_params(corrective_action_params)
   end
 
-  def previous_attachment
-    @previous_attachment ||= corrective_action.documents.first
-  end
-  alias_method :store_previous_attachment, :previous_attachment
-
   def no_changes?
     !any_changes?
   end
 
   def any_changes?
-    new_file || corrective_action.changes.except(:date_decided_year, :date_decided_month, :date_decided_day, :related_file).any? || file_description_changed?
+    file_changed? || corrective_action.changes.except(:date_decided_year, :date_decided_month, :date_decided_day, :related_file).any? || file_description_changed?
+  end
+
+  def file_changed?
+    [new_file, @previous_attachment].compact.any?
   end
 
   def new_file
@@ -51,7 +50,10 @@ private
   end
 
   def new_file_description
-    corrective_action_params.dig(:file, :description)
+    description = corrective_action_params.dig(:file, :description)
+    return nil if description.blank?
+
+    description
   end
 
   def file_description_changed?

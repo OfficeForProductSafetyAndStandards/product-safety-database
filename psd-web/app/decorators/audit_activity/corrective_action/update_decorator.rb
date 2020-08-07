@@ -31,6 +31,10 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     metadata.dig("updates", "filename", 1)
   end
 
+  def old_filename
+    metadata.dig("updates", "filename", 0)
+  end
+
   def new_file_description
     metadata.dig("updates", "file_description", 1)
   end
@@ -41,5 +45,9 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
 
   def business_updated?
     metadata.dig("updates", "business_id", 1)
+  end
+
+  def related_file?
+    documents.any?
   end
 end
