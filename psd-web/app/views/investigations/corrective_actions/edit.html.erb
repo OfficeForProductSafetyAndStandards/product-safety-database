@@ -1,4 +1,5 @@
-<% page_title "Edit corrective action" %>
+<% page_heading = "Edit corrective action" %>
+<% page_title page_heading %>
 
 <% content_for :back_link do %>
   <%= govukBackLink(
@@ -13,6 +14,9 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_action_path(@investigation, @corrective_action) do |form| %>
       <%= render "form_components/govuk_error_summary", form: form %>
+
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
       <%= render "investigations/record_corrective_actions/form",
                  form: form,
