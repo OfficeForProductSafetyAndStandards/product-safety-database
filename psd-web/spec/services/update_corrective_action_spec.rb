@@ -78,7 +78,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     context "with the required parameters" do
       context "when no changes have been made" do
         shared_examples "it does not create an audit log" do
-          specify { expect { update_corrective_action }.not_to change(corrective_action.investigation.activities, :count) }
+          specify { expect { update_corrective_action }.not_to change(corrective_action.investigation.activities.where(type: "AuditActivity::CorrectiveAction::Update"), :count) }
         end
 
         it "does not change corrective action" do

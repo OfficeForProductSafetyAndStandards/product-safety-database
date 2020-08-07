@@ -42,6 +42,8 @@ private
   end
 
   def file_changed?
+    return false if new_file.nil? && corrective_action.related_file?
+
     [new_file, @previous_attachment].compact.any?
   end
 
