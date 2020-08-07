@@ -67,8 +67,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         {
           corrective_action: corrective_action,
           user: user,
-          previous_documents: {},
-          file_description: new_file_description
+          file: { description: new_file_description }
         }
       end
 

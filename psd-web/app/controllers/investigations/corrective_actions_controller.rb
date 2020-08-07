@@ -20,19 +20,20 @@ module Investigations
     end
 
     def update
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize @investigation, :update?
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :update?
 
-      corrective_action = @investigation.corrective_actions.find(params[:id])
+      corrective_action = investigation.corrective_actions.find(params[:id])
 
       result = UpdateCorrectiveAction.call(
         corrective_action: corrective_action,
         corrective_action_params: corrective_action_params,
         user: current_user
       )
-      return redirect_to investigation_action_path(@investigation, result.corrective_action) if result.success?
+      return redirect_to investigation_action_path(investigation, result.corrective_action) if result.success?
 
       @corrective_action = corrective_action.decorate
+      @investigation = investigation.decorate
       render :edit
     end
 
