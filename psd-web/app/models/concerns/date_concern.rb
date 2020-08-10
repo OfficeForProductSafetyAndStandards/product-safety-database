@@ -105,7 +105,8 @@ private
 
   def initialize_date(key, required)
     self.class.add_date_key(key, required)
-    date = self[key]
+
+    date = public_send(key)
     if date.present? && get_date_components(key).all?(&:blank?)
       set_day(key, date.day)
       set_month(key, date.month)

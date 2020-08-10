@@ -113,7 +113,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     end
 
     expect(page).to have_field("What is the geographic scope of the action?", with: geographic_scope)
-    expect(page).to have_selector("#conditional-corrective_action_related_file_yes a", text: File.basename(file))
+    expect(page).to have_selector("#conditional-corrective_action_related_file_true a", text: File.basename(file))
     expect(page).to have_field("Attachment description", with: /#{Regexp.escape(file_description)}/)
   end
 

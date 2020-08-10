@@ -5,6 +5,7 @@ class CommentsController < ApplicationController
     @comment = Activity.new(comment_activity_params)
     @comment.investigation = @investigation
     @comment.source = UserSource.new(user: current_user)
+    @investigation = @investigation.decorate
 
     respond_to do |format|
       if @comment.save
@@ -22,15 +23,15 @@ class CommentsController < ApplicationController
   end
 
   def new
-    @comment = Activity.new(investigation: @investigation)
+    @comment = @investigation.activities.new
+    @investigation = @investigation.decorate
   end
 
 private
 
   def set_investigation
-    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize investigation, :show?
-    @investigation = investigation.decorate
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :show?
   end
 
   def comment_activity_params

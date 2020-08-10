@@ -19,7 +19,7 @@ module CorrectiveActionsConcern
 
   def set_attachment
     @file_blob, * = load_file_attachments
-    if @file_blob && @corrective_action.related_file == "Yes"
+    if @file_blob && @corrective_action.related_file?
       @corrective_action.documents.attach(@file_blob)
     end
   end
@@ -46,7 +46,8 @@ module CorrectiveActionsConcern
       :related_file,
       :measure_type,
       :duration,
-      :geographic_scope
+      :geographic_scope,
+      date_decided: %i[day month year]
     )
   end
 

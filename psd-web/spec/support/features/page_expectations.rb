@@ -90,6 +90,16 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Record corrective action")
   end
 
+  def expect_to_be_on_corrective_action_summary_page
+    expect(page).to have_summary_item(key: "Date of action",      value: new_date_decided.to_s(:govuk))
+    expect(page).to have_summary_item(key: "Product",             value: product_two.name)
+    expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
+    expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
+    expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
+    expect(page).to have_summary_item(key: "Scope",               value: new_geographic_scope)
+    expect(page).to have_summary_item(key: "Other details",       value: new_details)
+  end
+
   def expect_to_be_on_confirmation_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective_actions/confirmation")
     expect(page).to have_selector("h1", text: "Confirm corrective action details")

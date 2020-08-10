@@ -25,6 +25,19 @@
                  file_blob: @file_blob,
                  allow_product_linking: true,
                  allow_business_linking: true %>
+
+      <% file_field = capture do %>
+        <%= render "related_attachment_fields", form: form, file_blob: @file_blob, attachment_name: :file %>
+      <% end %>
+      <%= render "form_components/govuk_radios",
+                 form: form,
+                 key: :related_file,
+                 fieldset: { legend: { text: "Are there any files related to the action?",
+                   classes: "govuk-fieldset__legend--m" } },
+                 items: [{ text: "Yes", value: "true", conditional: { html: file_field } },
+                         { text: "No", value: "off" }]
+      %>
+
       <%= govukButton(text: "Continue") %>
     </div>
   </div>

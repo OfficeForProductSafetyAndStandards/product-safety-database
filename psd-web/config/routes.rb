@@ -157,7 +157,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :actions, controller: "investigations/corrective_actions", only: :show, path: "corrective-actions"
+    resources :actions, controller: "investigations/corrective_actions", only: %i[show edit update], path: "corrective-actions"
   end
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do

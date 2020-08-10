@@ -1,0 +1,52 @@
+<div class="govuk-body">
+
+  <p>Corrective action updated:</p>
+
+  <% if activity.new_summary %>
+    Summary: <b><%= activity.new_summary %></b><br>
+  <% end %>
+
+  <% if activity.new_date_decided %>
+    Date of action: <b><%= activity.new_date_decided %></b><br>
+  <% end %>
+
+  <% if activity.new_legislation %>
+    Legislation: <b><%= activity.new_legislation %></b><br>
+  <% end %>
+
+  <% if activity.product_updated? %>
+    Product: <%= link_to activity.product.name, activity.product %><br>
+  <% end %>
+
+  <% if activity.business_updated? %>
+    Business: <%= link_to activity.business.trading_name, activity.business %><br>
+  <% end %>
+
+  <% if activity.new_measure_type %>
+    Type of action: <b><%= activity.new_measure_type %></b><br>
+  <% end %>
+
+  <% if activity.new_duration %>
+    Duration: <b><%= activity.new_duration %></b><br>
+  <% end %>
+
+  <% if activity.new_geographic_scope %>
+    Scope: <b><%= activity.new_geographic_scope %></b><br>
+  <% end %>
+
+  <% if activity.new_details %>
+    Details: <b><%= activity.new_details %></b><br>
+  <% end %>
+
+  <% if activity.new_filename %>
+    Attached: <b><%= activity.new_filename %></b><br>
+  <% elsif activity.old_filename %>
+    Attachment removed: <b><%= activity.old_filename %></b><br>
+  <% end %>
+
+  <% if activity.new_file_description %>
+    Attachment description: <b><%= activity.new_file_description %></b><br>
+  <% end %>
+</div>
+
+<%= link_to "View corrective action", investigation_action_path(activity.investigation, activity.metadata["corrective_action_id"]) %>

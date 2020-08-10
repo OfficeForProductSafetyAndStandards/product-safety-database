@@ -452,7 +452,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Year", with: with[:date].year
     select with[:legislation], from: "Under which legislation?"
     fill_in "Further details (optional)", with: with[:details]
-    choose "corrective_action_related_file_yes"
+    choose "corrective_action_related_file_true"
+
     attach_file "corrective_action[file][file]", with[:file]
     fill_in "Attachment description", with: with[:file_description]
     choose "corrective_action_measure_type_#{with[:measure_type]}"
