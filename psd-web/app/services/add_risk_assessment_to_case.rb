@@ -63,7 +63,7 @@ private
       []
     elsif investigation.owner_user
       [investigation.owner_user]
-    elsif investigation.owner_team.team_recipient_email.present?
+    elsif investigation.owner_team.email.present?
       [investigation.owner_team]
     else
       investigation.owner_team.users.active
