@@ -162,7 +162,7 @@ GEM
       activesupport (> 3)
       elasticsearch (> 1)
       hashie
-    elasticsearch-rails (6.0.0)
+    elasticsearch-rails (7.1.0)
     elasticsearch-transport (6.8.2)
       faraday (~> 1)
       multi_json
@@ -557,7 +557,7 @@ DEPENDENCIES
   draper
   elasticsearch (= 6.8.2)
   elasticsearch-model (= 6.0.0)
-  elasticsearch-rails (= 6.0.0)
+  elasticsearch-rails (= 7.1.0)
   factory_bot_rails
   faker
   govuk-design-system-rails!
