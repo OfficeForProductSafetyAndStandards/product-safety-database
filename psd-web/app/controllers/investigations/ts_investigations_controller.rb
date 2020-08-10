@@ -166,7 +166,7 @@ private
     @corrective_action.set_dates_from_params(params[:corrective_action])
     @corrective_action.product = @product
     @file_blob, * = load_file_attachments :corrective_action
-    if @file_blob && @corrective_action.related_file == "Yes"
+    if @file_blob && @corrective_action.related_file?
       @corrective_action.documents.attach(@file_blob)
     end
     set_repeat_step(:corrective_action)

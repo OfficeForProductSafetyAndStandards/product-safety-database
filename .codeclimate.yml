@@ -6,6 +6,7 @@ exclude_patterns:
 - "psd-web/app/assets/10-million-password-list-top-1000000.txt"
 - "infrastructure/"
 - "docker/"
+- "psd-web/app/services/update_corrective_action.rb"
 checks:
   return-statements:
     enabled: true

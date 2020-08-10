@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveActionDecorator do
+RSpec.describe CorrectiveActionDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject { corrective_action.decorate }
 
   let(:corrective_action) { CorrectiveAction.new }

@@ -25,7 +25,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   let(:duration) { CorrectiveAction::DURATION_TYPES.sample }
   let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
   let(:details) { Faker::Lorem.sentence }
-  let(:related_file) { "No" }
+  let(:related_file) { false }
   let(:investigation) { build(:allegation) }
 
   describe "#valid?" do

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :product do
-    name { "product name" }
+    name { Faker::Commerce.product_name }
     description { "product description" }
     category { Rails.application.config.product_constants["product_category"].sample }
     product_type { "product_type" }

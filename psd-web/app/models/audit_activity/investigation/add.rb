@@ -31,7 +31,7 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
 
   # title may change after investigation was created, so we retrieve from the
   # metadata stored at the time of creation
-  def title(_user)
+  def title(_user = nil)
     return self[:title] if self[:title] # older activities stored this in the database
 
     "#{investigation.case_type.titleize} logged: #{metadata['investigation']['title']}"
