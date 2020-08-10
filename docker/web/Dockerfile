@@ -20,8 +20,6 @@ RUN gem install bundler:2.0.2
 
 WORKDIR /psd
 
-COPY ./psd-web .
-
 COPY ./docker/web/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]

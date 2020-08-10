@@ -23,7 +23,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         BRANCH: master
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_create staging
 
     - name: Initiate Staging deployment status
@@ -31,7 +31,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
 
         # URL where the deployment progress can be tracked. Exported for future steps.
         log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/actions?query=branch%3Amaster+workflow%3ADeploy")
@@ -56,8 +56,8 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        chmod +x ./psd-web/deploy.sh
-        ./psd-web/deploy.sh
+        chmod +x ./deploy.sh
+        ./deploy.sh
         cf7 logout
 
     - name: Update Staging deployment status (success)
@@ -67,7 +67,7 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         environment_url=https://staging.product-safety-database.service.gov.uk/
         gh_deploy_success staging $LOG_URL $environment_url
 
@@ -78,7 +78,7 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_failure staging $LOG_URL
 
     - name: Create GitHub deployment for Production
@@ -86,7 +86,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         BRANCH: master
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_create production
 
     - name: Initiate Production deployment status
@@ -95,7 +95,7 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_initiate production $LOG_URL
 
     - name: Deploy to production
@@ -115,7 +115,7 @@ jobs:
         cf7 api api.london.cloud.service.gov.uk
         cf7 auth
         cf7 target -o 'beis-opss' -s $SPACE
-        ./psd-web/deploy.sh
+        ./deploy.sh
         cf7 logout
 
     - name: Update Production deployment status (success)
@@ -125,7 +125,7 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         environment_url=https://www.product-safety-database.service.gov.uk/
         gh_deploy_success production $LOG_URL $environment_url
 
@@ -136,7 +136,7 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_failure production $LOG_URL
 
     - name: Alert team via Slack of deployment failure

@@ -10,7 +10,7 @@ fi
 
 DOMAIN=london.cloudapps.digital
 
-MANIFEST_FILE=./psd-web/manifest.review.yml
+MANIFEST_FILE=./manifest.review.yml
 
 if [ -z "$DB_NAME" ]
 then
@@ -25,7 +25,7 @@ cf7 create-service postgres small-10 $DB_NAME -c '{"enable_extensions": ["pgcryp
 # Wait until db is prepared, might take up to 10 minutes
 until cf7 service $DB_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
 
-cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/psd-web/env/
+cp -a ${PWD-.}/infrastructure/env/. ${PWD-.}/env/
 
 if [ -z "$WEB_MAX_THREADS" ]
 then
@@ -41,4 +41,4 @@ fi
 cf7 push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS
 
 # Remove the copied infrastructure env files to clean up
-rm -fR ${PWD-.}/psd-web/env/
+rm -fR ${PWD-.}/env/

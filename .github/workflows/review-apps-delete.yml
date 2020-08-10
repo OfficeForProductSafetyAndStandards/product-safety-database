@@ -39,5 +39,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_deactivate_dangling review-app-$PR_NUMBER

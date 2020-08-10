@@ -2,9 +2,9 @@ version: 1
 
 update_configs:
   - package_manager: "javascript"
-    directory: "/psd-web"
+    directory: "/"
     update_schedule: "live"
 
   - package_manager: "ruby:bundler"
-    directory: "/psd-web"
+    directory: "/"
     update_schedule: "live"

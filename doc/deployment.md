@@ -11,13 +11,13 @@ The `master` branch represents our staging and production environments. Anything
 
 ### Review applications
 
-In order to make the PR review process fast and independent, it is possible to create a short lived environment for a given change. In order to create your environment, run `APP_NAME=ticket-123 ./psd-web/deploy-review.sh`, where `ticket-123` is desired name of review app.
+In order to make the PR review process fast and independent, it is possible to create a short lived environment for a given change. In order to create your environment, run `APP_NAME=ticket-123 ./deploy-review.sh`, where `ticket-123` is desired name of review app.
 
 By default, the database is shared, but it can be overriden by setting the `DB_NAME` env variable. This will create a new database instance, however this can take several minutes.
 
 #### Custom environment variables in review application
 
-Variables used by `psd-web/deploy-review.sh` can be overriden. To do so, create `.github/workflows/overrides/branch-name.env` file, where branch-name is name of branch used for PR. Define variables in this file:
+Variables used by `deploy-review.sh` can be overriden. To do so, create `.github/workflows/overrides/branch-name.env` file, where branch-name is name of branch used for PR. Define variables in this file:
 
 ```
 export DB_NAME=psd-db-custom-db
@@ -156,7 +156,7 @@ Start by setting up the following credentials:
 
 Once all the credentials are created, the app can be deployed using:
 
-    SPACE=<<space>> ./psd-web/deploy.sh
+    SPACE=<<space>> ./deploy.sh
 
 ### GOV.UK Platform as a Service
 

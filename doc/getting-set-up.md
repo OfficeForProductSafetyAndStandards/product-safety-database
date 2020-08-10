@@ -29,9 +29,9 @@ docker-compose build antivirus
 
 The application is written in Ruby using the Rails framework.
 
-You need to install the right version of Ruby - see [Gemfile](./psd-web/Gemfile). To do this, you could use either [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv) – these allow you to have multiple different versions of Ruby installed at the same time.
+You need to install the right version of Ruby - see [Gemfile](./Gemfile). To do this, you could use either [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv) – these allow you to have multiple different versions of Ruby installed at the same time.
 
-Once you’ve installed the right version of Ruby, you can install the Ruby gem dependencies by running this command from `psd-web`:
+Once you’ve installed the right version of Ruby, you can install the Ruby gem dependencies by running this command:
 
 ```bash
 bundle install
@@ -42,11 +42,11 @@ bundle install
 
 Node modules are used for front-end dependencies (CSS, javascript and images).
 
-First install the right version of node using [node version manager](https://github.com/nvm-sh/nvm#installing-and-updating) (nvm). The current version used is specified in the [package.json](./psd-web/package.json) file.
+First install the right version of node using [node version manager](https://github.com/nvm-sh/nvm#installing-and-updating) (nvm). The current version used is specified in the [package.json](./package.json) file.
 
 Then install [yarn](https://classic.yarnpkg.com/en/docs/install)
 
-Once these are both installed, run this command from within `psd-web`:
+Once these are both installed, run this command:
 
 ```bash
 yarn install
@@ -56,7 +56,7 @@ to install npm dependencies.
 
 ### 4. Configure your local environment
 
-Some settings are configured within a hidden file called `.env.development` (within the `psd-web` folder). You will need to create this - you can copy the example in [`.env.development.example`](./psd-web/.env.development.example):
+Some settings are configured within a hidden file called `.env.development`. You will need to create this - you can copy the example in [`.env.development.example`](./.env.development.example):
 
 ```bash
 cp .env.development.example .env.development
@@ -85,7 +85,7 @@ To compile the front-end assets (and have them re-compile as you make changes), 
 bundle exec bin/webpack-dev-server
 ```
 
-Start the application (from `psd-web`):
+Start the application:
 
 ```bash
 bundle exec bin/rails server
@@ -94,7 +94,7 @@ bundle exec bin/sidekiq
 
 ## Running the tests
 
-Copy the file in the `psd-web` directory called `.env.test.example` to `.env.test`, and modify as appropriate.
+Copy the file called `.env.test.example` to `.env.test`, and modify as appropriate.
 
 New tests are written in RSpec. There should be a feature spec covering new user journeys, and unit testing of all code components.
 
