@@ -134,6 +134,20 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
             before { case_editor && inactive_user }
 
             context "when the owner team has a team inbox email" do # rubocop:disable RSpec/NestedGroups
+              context "when the case is assigned to a team" do # rubocop:disable RSpec/NestedGroups
+                let(:case_owner) { create(:team) }
+
+                before do
+                  ChangeCaseOwner.call!(investigation: investigation, owner: case_owner, user: user, old_owner: user)
+                end
+
+                it "notifies the team" do
+                  expect { update_corrective_action }
+                    .to have_enqueued_mail(NotifyMailer, :investigation_updated)
+                          .with(investigation.pretty_id, investigation.owner_team.name, investigation.owner_team.email, body[investigation.owner_team], email_subject)
+                end
+              end
+
               it "notifies the team member except the corrective action creator", :aggregate_failures do
                 expect { update_corrective_action }
                   .to have_enqueued_mail(NotifyMailer, :investigation_updated)

@@ -124,7 +124,7 @@ private
 
   def entities_to_notify
     return [] if user == investigation.owner_user
-    return [investigation.owner_user, investigation.owner_team] if investigation.owner_team.email?
+    return [investigation.owner_user, investigation.owner_team].compact if investigation.owner_team.email?
 
     investigation.owner_team.users.active.where.not(id: user.id)
   end
