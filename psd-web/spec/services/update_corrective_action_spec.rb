@@ -148,9 +148,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
               it "notifies the team member except the corrective action creator", :aggregate_failures do
                 expect { update_corrective_action }
-                  .to have_enqueued_mail(NotifyMailer, :investigation_updated)
-                        .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
-                        .and have_enqueued_mail(NotifyMailer, :investigation_updated).with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
+                  .not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
               end
 
               it "does not notify inactive users" do

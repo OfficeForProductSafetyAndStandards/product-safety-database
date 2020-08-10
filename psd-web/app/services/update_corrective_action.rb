@@ -126,9 +126,6 @@ private
     return [] if user == investigation.owner_user
     return [investigation.owner_user, investigation.owner_team] if investigation.owner_team.email?
 
-    User
-      .active
-      .where(team_id: investigation.teams_with_access.map(&:id))
-      .where.not(id: user.id)
+    investigation.owner_team.users.active.where.not(id: user.id)
   end
 end
