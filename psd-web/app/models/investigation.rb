@@ -88,6 +88,8 @@ class Investigation < ApplicationRecord
   has_one :owner_team, through: :owner_team_collaboration, dependent: :destroy, source_type: "Team", source: :collaborator
   has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
+  has_many :risk_assessments
+
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
 
@@ -125,7 +127,7 @@ class Investigation < ApplicationRecord
   end
 
   def supporting_information
-    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product)).sort_by(&:created_at).reverse
+    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product) + risk_assessments).sort_by(&:created_at).reverse
   end
 
   def status

@@ -1,0 +1,79 @@
+<% page_heading = "Risk assessment" %>
+<% page_title page_heading %>
+
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
+    href: investigation_supporting_information_index_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <div class="app-meta-area">
+      <p class="govuk-body govuk-hint">
+        Added <%= @risk_assessment.created_at.to_s(:govuk) %>
+      </p>
+    </div>
+
+    <% rows = [
+        {
+          key: {
+            text: "Date of assessment"
+          },
+          value: {
+            text: @risk_assessment.assessed_on.to_s(:govuk)
+          }
+        },
+        {
+          key: {
+            text: "Risk level"
+          },
+          value: {
+            text: @risk_assessment.risk_level_description
+          }
+        },
+        {
+          key: {
+            text: "Assessed by"
+          },
+          value: {
+            text: risk_assessed_by(@risk_assessment)
+          }
+        },
+        {
+          key: {
+            text: "Product".pluralize(@risk_assessment.products.count) + " assessed"
+          },
+          value: {
+            text: safe_join(@risk_assessment.products.collect {|p| link_to(p.name, p) }, tag.br)
+
+          }
+        }
+      ] %>
+
+      <% if @risk_assessment.details.present? %>
+        <% rows << {
+          key: {
+            text: "Further details"
+          },
+          value: {
+            text: @risk_assessment.details
+          }
+        } %>
+      <% end %>
+
+    <%= govukSummaryList(rows: rows) %>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Attachment</h2>
+    <p class="govuk-body"><%= link_to @risk_assessment.risk_assessment_file.filename, @risk_assessment.risk_assessment_file, class: "govuk-link" %></p>
+
+    <%= document_placeholder(@risk_assessment.risk_assessment_file) %>
+  </div>
+</div>

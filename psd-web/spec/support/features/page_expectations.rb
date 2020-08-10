@@ -124,8 +124,8 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Add a team to the case")
   end
 
-  def expect_to_be_on_supporting_information_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
+  def expect_to_be_on_supporting_information_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/supporting-information")
     expect(page).to have_selector("h1", text: "Supporting information")
   end
 
@@ -517,5 +517,14 @@ module PageExpectations
   def expect_to_be_on_change_risk_level_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/edit-risk-level")
     expect_page_to_have_h1("Change case risk level")
+  end
+
+  def expect_to_be_on_add_risk_assessment_for_a_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/new")
+    expect_page_to_have_h1("Add risk assessment")
+  end
+
+  def expect_to_be_on_risk_assessement_for_a_case_page(case_id:)
+    expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+/)
   end
 end

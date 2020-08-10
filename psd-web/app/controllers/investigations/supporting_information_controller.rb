@@ -34,6 +34,8 @@ module Investigations
         redirect_to new_investigation_new_path(@investigation)
       when "testing_result"
         redirect_to new_investigation_test_result_path(@investigation)
+      when "risk_assessment"
+        redirect_to new_investigation_risk_assessment_path(@investigation)
       end
     end
 

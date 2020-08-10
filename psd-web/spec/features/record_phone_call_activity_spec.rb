@@ -77,7 +77,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_confirm_phone_call_details_page
     click_button "Continue"
 
-    expect_to_be_on_supporting_information_page
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -137,7 +137,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_confirm_phone_call_details_page_to_show_entered_information(name: name, phone: phone, date: date, summary: summary, notes: notes)
     click_button "Continue"
 
-    expect_to_be_on_supporting_information_page
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)

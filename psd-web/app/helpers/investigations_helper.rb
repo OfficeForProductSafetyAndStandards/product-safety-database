@@ -334,6 +334,10 @@ module InvestigationsHelper
         text: "Test result"
       },
       {
+        path: new_investigation_risk_assessment_path(investigation),
+        text: "Risk assessment"
+      },
+      {
         path: new_investigation_new_path(investigation),
         text: "Other document or attachment"
       }
