@@ -53,13 +53,12 @@ jobs:
 
     - uses: actions/cache@v1
       with:
-        path: psd-web/vendor/bundle
+        path: vendor/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
           ${{ runner.os }}-gems-
 
     - name: Install RubyGems
-      working-directory: psd-web
       run: |
         gem install bundler --no-doc
         bundle config path vendor/bundle
@@ -79,19 +78,16 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install Node.js dependencies
-      working-directory: psd-web
       run: yarn install
 
     - name: Prepare database
-      working-directory: psd-web
       run: bin/rails db:create db:schema:load
 
     - name: Run Minitest test suite without system tests
-      working-directory: psd-web
       run: bundle exec rake test:without_system_tests
 
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
         name: capybara screenshots
-        path: psd-web/screenshots
+        path: screenshots

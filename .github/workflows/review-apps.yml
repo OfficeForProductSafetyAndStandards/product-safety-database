@@ -18,7 +18,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         BRANCH: ${{ github.head_ref }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_create review-app-${PR_NUMBER}
 
     - name: Initiate deployment status
@@ -26,7 +26,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
 
         # URL where the deployment progress can be tracked. Exported for future steps.
         log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/pull/$PR_NUMBER/checks")
@@ -56,9 +56,9 @@ jobs:
         export APP_NAME=psd-pr-$PR_NUMBER
         export DB_NAME=psd-db-pr-$PR_NUMBER
         echo "Deploying review app. If fails, use command below to deploy manually:"
-        echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /psd-web/deploy-review.sh"
+        echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /deploy-review.sh"
 
-        ./psd-web/deploy-review.sh
+        ./deploy-review.sh
         cf7 logout
 
     - name: Update deployment status (success)
@@ -68,7 +68,7 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
 
         environment_url=https://psd-pr-${PR_NUMBER}.london.cloudapps.digital/
 
@@ -81,5 +81,5 @@ jobs:
         DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
         LOG_URL: ${{ env.LOG_URL }}
       run: |
-        source psd-web/deploy-github-functions.sh
+        source deploy-github-functions.sh
         gh_deploy_failure review-app-${PR_NUMBER} $LOG_URL

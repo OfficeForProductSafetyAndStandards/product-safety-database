@@ -1,12 +1,12 @@
 exclude_patterns:
-- "psd-web/db/"
-- "psd-web/test/"
-- "psd-web/spec/"
-- "psd-web/config/initializers/sidekiq.rb"
-- "psd-web/app/assets/10-million-password-list-top-1000000.txt"
+- "db/"
+- "test/"
+- "spec/"
+- "config/initializers/sidekiq.rb"
+- "app/assets/10-million-password-list-top-1000000.txt"
 - "infrastructure/"
 - "docker/"
-- "psd-web/app/services/update_corrective_action.rb"
+- "app/services/update_corrective_action.rb"
 checks:
   return-statements:
     enabled: true
