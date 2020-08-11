@@ -1,0 +1,12 @@
+<%= render "form_components/govuk_checkboxes",
+           form: form,
+           key: :risk_level,
+           classes: "govuk-checkboxes--small",
+           items: [
+             {
+               key: "serious_and_high_risk_level_only",
+               value: "yes",
+               unchecked_value: "no",
+               text: t(:serious_and_high_risk_level_only, scope: "cases.filters")
+             }
+           ] %>

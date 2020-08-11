@@ -27,6 +27,10 @@ module InvestigationsHelper
       must_filters[:must] << { term: { coronavirus_related: true } }
     end
 
+    if params[:serious_and_high_risk_level_only] == "yes"
+      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
+    end
+
     must_filters
   end
 
@@ -184,6 +188,7 @@ module InvestigationsHelper
       :created_by_someone_else,
       :created_by_someone_else_id,
       :coronavirus_related_only,
+      :serious_and_high_risk_level_only,
       owner_team_with_key[0],
       creator_team_with_key[0]
     )

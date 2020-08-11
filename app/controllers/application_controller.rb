@@ -79,7 +79,8 @@ class ApplicationController < ActionController::Base
         status_open: s[:status_open],
         sort_by: s[:sort_by],
         status_closed: s[:status_closed],
-        coronavirus_related_only: s[:coronavirus_related_only]
+        coronavirus_related_only: s[:coronavirus_related_only],
+        serious_and_high_risk_level_only: s[:serious_and_high_risk_level_only]
       }
     else
       {}
