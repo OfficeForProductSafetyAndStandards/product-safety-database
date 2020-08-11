@@ -58,6 +58,16 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
         expect(result).to be_success
       end
 
+      context "when the new owner is a read only team on the case" do
+        let(:new_owner) { create(:team) }
+
+        before do
+          AddTeamToCase.call!(investigation: investigation, user: investigation.owner_user, team: new_owner, collaboration_class: Collaboration::Access::ReadOnly)
+        end
+
+        specify { expect(result).to be_success }
+      end
+
       context "when the new owner is the same as the old owner" do
         let(:new_owner) { old_owner }
 
