@@ -128,7 +128,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   scenario "Filtering by risk-level cases only" do
     check "Serious and high risk cases only"
     click_on "Apply filters"
-    expect(page.find_field("Serious and high risk cases only")).to be_checked
+    expect(page).to have_checked_field("Serious and high risk cases only")
 
     expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
     expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
