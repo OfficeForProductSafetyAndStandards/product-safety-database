@@ -1,7 +1,7 @@
 <%= render "form_components/govuk_checkboxes",
            form: form,
-           key: :coronavirus_related,
            classes: "govuk-checkboxes--small",
+           key: :base,
            items: [
              {
                key: "coronavirus_related_only",
@@ -15,5 +15,4 @@
                unchecked_value: "no",
                text: t(:serious_and_high_risk_level_only, scope: "cases.filters")
              }
-
            ] %>
