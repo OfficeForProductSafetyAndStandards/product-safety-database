@@ -143,6 +143,7 @@ en:
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
+      serious_and_high_risk_level_only: "Serious and high risk cases only"
   errors:
     format: "%{message}"
     messages:
