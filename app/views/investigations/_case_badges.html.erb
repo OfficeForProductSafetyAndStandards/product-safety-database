@@ -1,18 +1,59 @@
-<% if investigation.coronavirus_related? %>
-  <%= render "components/hmcts_badge",
-    text: t(:coronavirus_related, scope: "case.badges"),
-    classes: "app-badge--coronavirus #{local_assigns[:classes]}"
-  %>
+<% badges = [] %>
+<% badges << capture do %>
+  <% if investigation.coronavirus_related? %>
+    <%= render "components/hmcts_badge",
+               text: t(:coronavirus_related, scope: "case.badges"),
+               classes: "app-badge--coronavirus #{local_assigns[:classes]}"
+    %>
+  <% end %>
 <% end %>
-<% if investigation.is_closed? %>
-  <%= render "components/hmcts_badge",
-    text: t(:closed, scope: "case.badges"),
-    classes: "app-badge--closed #{local_assigns[:classes]}"
-  %>
+<% badges << capture do %>
+  <% if investigation.risk_level&.serious? %>
+    <%= render "components/hmcts_badge",
+               text: t(:risk_level_serious, scope: "case.badges"),
+               classes: "app-badge--risky #{local_assigns[:classes]}"
+    %>
+  <% end %>
 <% end %>
-<% if investigation.is_private? %>
-  <%= render "components/hmcts_badge",
-    text: t(:restricted, scope: "case.badges"),
-    classes: "app-badge--restricted #{local_assigns[:classes]}"
-  %>
+<% badges << capture do %>
+  <% if investigation.risk_level&.high? %>
+    <%= render "components/hmcts_badge",
+               text: t(:risk_level_high, scope: "case.badges"),
+               classes: "app-badge--risky #{local_assigns[:classes]}"
+    %>
+  <% end %>
+<% end %>
+<% badges << capture do %>
+  <% if investigation.is_closed? %>
+    <%= render "components/hmcts_badge",
+               text: t(:closed, scope: "case.badges"),
+               classes: "app-badge--closed #{local_assigns[:classes]}"
+    %>
+  <% end %>
+<% end %>
+<% badges << capture do %>
+  <% if investigation.is_private? %>
+    <%= render "components/hmcts_badge",
+               text: t(:restricted, scope: "case.badges"),
+               classes: "app-badge--restricted #{local_assigns[:classes]}"
+    %>
+  <% end %>
+<% end %>
+
+<% badges.compact! %>
+
+<% if local_assigns[:split_badges_in_rows_of_two] && badges.size > 2 %>
+  <% badges.in_groups_of(2) do |grouped_badge| %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <% grouped_badge.each do |badge| %>
+          <%= badge %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <% badges.each do |badge| %>
+    <%= badge %>
+  <% end %>
 <% end %>

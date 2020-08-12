@@ -132,6 +132,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
     expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
+    expect(page).to have_css(".app-badge--risky", text: "Serious risk case")
 
     expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
     expect(page).not_to have_listed_case(investigation.pretty_id)

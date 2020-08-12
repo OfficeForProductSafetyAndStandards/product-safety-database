@@ -61,6 +61,8 @@ en:
       coronavirus_related: "COVID-19 related case"
       closed: "Closed case"
       restricted: "Restricted case"
+      risk_level_high: "High risk case"
+      risk_level_serious: "Serious risk case"
     coronavirus_related:
       true: "Coronavirus related case"
       false: "Not a coronavirus related case"

@@ -28,24 +28,25 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     click_set_risk_level_link
 
     expect_to_be_on_set_risk_level_page(case_id: investigation.pretty_id)
-    choose "Medium risk"
+    choose "Serious risk"
     click_button "Set risk level"
 
-    expect_confirmation_banner("Case risk level set to medium risk")
+    expect_confirmation_banner("Case risk level set to serious risk")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
-    expect(page).to have_summary_item(key: "Case risk level", value: "Medium risk")
+    expect(page).to have_summary_item(key: "Case risk level", value: "Serious risk")
+    expect(page).to have_css(".app-badge--risky", text: "Serious risk case")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_css("h3", text: "Case risk level set to medium risk")
+    expect(page).to have_css("h3", text: "Case risk level set to serious risk")
 
     # Teams/users with access receive an email with the update
     email = delivered_emails.last
     expect(email.recipient).to eq creator_team.team_recipient_email
     expect(email.personalization).to include(
       name: creator_team.name,
-      verb_with_level: "set to medium risk",
+      verb_with_level: "set to serious risk",
     )
   end
 
