@@ -2,19 +2,22 @@ require "rails_helper"
 
 RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:other_organisation) { create(:organisation) }
-  let(:organisation) { create(:organisation) }
-  let(:team) { create(:team, organisation: organisation) }
-  let(:other_team) { create(:team, organisation: organisation, name: "other team") }
-  let(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
+
+  let(:organisation)          { create(:organisation) }
+  let(:team)                  { create(:team, organisation: organisation) }
+  let(:other_team)            { create(:team, organisation: organisation, name: "other team") }
+  let(:user)                  { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
+  let(:other_user_same_team)  { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, team: other_team) }
 
-  let!(:investigation) { create(:allegation, creator: user) }
-  let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team) }
+  let!(:investigation)                       { create(:allegation, creator: user) }
+  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
-  let!(:other_team_investigation) { create(:allegation, creator: other_user_other_team) }
+  let!(:other_team_investigation)            { create(:allegation, creator: other_user_other_team) }
 
-  let!(:coronavirus_investigation) { create(:allegation, creator: user, coronavirus_related: true) }
+  let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
+  let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
+  let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
 
   let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, team: team) }
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team: team) }
@@ -116,6 +119,21 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     expect(page).to have_listed_case(coronavirus_investigation.pretty_id)
 
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+  end
+
+  scenario "Filtering by risk-level cases only" do
+    check "Serious and high risk cases only"
+    click_on "Apply filters"
+    expect(page).to have_checked_field("Serious and high risk cases only")
+
+    expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
+    expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
+
+    expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
     expect(page).not_to have_listed_case(investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)

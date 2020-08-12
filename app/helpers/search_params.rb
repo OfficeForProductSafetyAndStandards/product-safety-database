@@ -24,7 +24,8 @@ class SearchParams
                 :sort,
                 :status_open,
                 :status_closed,
-                :coronavirus_related_only
+                :coronavirus_related_only,
+                :serious_and_high_risk_level_only
 
   attr_writer :sort_by
 
