@@ -527,4 +527,13 @@ module PageExpectations
   def expect_to_be_on_risk_assessement_for_a_case_page(case_id:)
     expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+/)
   end
+
+  def expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id:, risk_assessment_id: nil)
+    if risk_assessment_id
+      expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/#{risk_assessment_id}/update-case-risk-level")
+    else
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+\/update\-case\-risk\-level/)
+    end
+    expect_page_to_have_h1("Case risk level")
+  end
 end

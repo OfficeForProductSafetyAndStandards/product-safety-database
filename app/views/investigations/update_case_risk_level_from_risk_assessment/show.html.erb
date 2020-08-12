@@ -1,0 +1,41 @@
+<% page_heading = "Case risk level" %>
+<% page_title page_heading %>
+
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_supporting_information_index_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= error_summary @update_risk_level_from_risk_assessment_form.errors %>
+
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <p class="govuk-body">The risk assessment says the level of risk is <strong><%= @risk_assessment.risk_level_description.downcase %></strong>.</p>
+
+    <p class="govuk-body">You can give the case a different risk level to the one it received in a risk assessment. You might want to do this if levels were different in each assessment, or if the assessment was provided by a third party.</p>
+
+    <%= form_with model: @update_risk_level_from_risk_assessment_form, url: investigation_risk_assessment_update_case_risk_level_path(@investigation, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true} do |form| %>
+
+      <%= form.govuk_radios(:update_case_risk_level_to_match_investigation, legend: "Would you like to match the case risk level to the risk assessment level?", items: [
+        {
+          value: "true",
+          text: safe_join(["Yes, set the case risk level to ", tag.strong(@risk_assessment.risk_level_description.downcase)])
+        },
+        {
+          value: "false",
+          text: "No, do not set the case risk level"
+        }
+      ]) %>
+
+      <%= govukButton(text: "Set risk level") %>
+    <% end %>
+
+  </div>
+</div>
