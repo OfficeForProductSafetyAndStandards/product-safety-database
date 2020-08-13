@@ -129,12 +129,6 @@ class InvestigationDecorator < ApplicationDecorator
     object.owner&.decorate
   end
 
-  def risk_level
-    return if self[:risk_level].blank?
-
-    @risk_level ||= ActiveSupport::StringInquirer.new(self[:risk_level])
-  end
-
 private
 
   def category
