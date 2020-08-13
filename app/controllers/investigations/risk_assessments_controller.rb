@@ -29,7 +29,11 @@ module Investigations
           })
         )
 
-        redirect_to investigation_risk_assessment_path(@investigation, result.risk_assessment)
+        if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
+          redirect_to investigation_risk_assessment_path(@investigation, result.risk_assessment)
+        else
+          redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
+        end
       else
         render :new
       end

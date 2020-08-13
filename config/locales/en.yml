@@ -224,6 +224,10 @@ en:
             risk_assessment_file:
               blank: You must upload the risk assessment
 
+        update_risk_level_from_risk_assessment_form:
+          attributes:
+            update_case_risk_level_to_match_investigation:
+              inclusion: Select if you would like to match the case risk level to the risk assessment level
         add_team_to_case_form:
           attributes:
             team_id:
