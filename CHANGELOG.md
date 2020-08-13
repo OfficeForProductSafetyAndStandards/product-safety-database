@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-08-13
+- Added a follow-up question when adding a risk assessment, asking users whether the case risk level should be updated to match.
+
 ## 2020-07-27
 - Added the ability to add a team as a collaborator to a case with view only permissions.
 
