@@ -24,7 +24,7 @@
         count: @investigation.risk_assessments.count,
         add_risk_assessment_href: new_investigation_risk_assessment_path(@investigation.pretty_id),
         supporting_information_href: investigation_supporting_information_index_path(@investigation.pretty_id),
-        risk_assessment_href: (@investigation.risk_assessments.any? ? investigation_risk_assessment_path(@investigation.pretty_id, @investigation.risk_assessments.first.id) : nil),
+        risk_assessment_href: (@investigation.risk_assessments.count == 1 ? investigation_risk_assessment_path(@investigation.pretty_id, @investigation.risk_assessments.first) : nil),
         risk_assessment_risk_levels: to_sentence(@investigation.risk_assessment_risk_levels.collect {|desc| tag.strong(desc.downcase) })
       ) %>
     </div>

@@ -11,7 +11,7 @@ module Investigations
     end
 
     def create
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
 
       authorize @investigation, :update?
 
@@ -35,14 +35,16 @@ module Investigations
           redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
         end
       else
+        @investigation = @investigation.decorate
         render :new
       end
     end
 
     def show
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
 
       @risk_assessment = @investigation.risk_assessments.find(params[:id]).decorate
+      @investigation = @investigation.decorate
     end
 
   private
