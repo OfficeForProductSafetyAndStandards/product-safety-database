@@ -34,7 +34,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     expect_confirmation_banner("Case risk level set to serious risk")
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
     expect(page).to have_summary_item(key: "Case risk level", value: "Serious risk")
-    expect(page).to have_css(".app-badge--risky", text: "Serious risk case")
+    expect(page).to have_css(".app-badge--risk-serious", text: "Serious risk case")
 
     # Risk level change reflected in audit activity log
     click_link "Activity"
