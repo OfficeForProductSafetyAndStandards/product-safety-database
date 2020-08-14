@@ -2,6 +2,21 @@ require "rails_helper"
 
 RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let!(:investigation) { create(:allegation, edit_access_teams: [team_with_access]) }
+
+  let!(:investigation_with_serious_risk_assessment) do
+    create(:allegation, edit_access_teams: [team_with_access], risk_assessments: [
+      create(:risk_assessment, risk_level: "serious")
+    ])
+  end
+
+  let!(:investigation_with_multiple_risk_assessments) do
+    create(:allegation, edit_access_teams: [team_with_access], risk_assessments: [
+      create(:risk_assessment, risk_level: "serious"),
+      create(:risk_assessment, risk_level: "high"),
+      create(:risk_assessment, risk_level: "other", custom_risk_level: "urgent")
+    ])
+  end
+
   let(:creator_team) { investigation.creator_user.team }
   let(:team_with_access) { create(:team, name: "Team with access", team_recipient_email: nil) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: team_with_access) }
@@ -20,7 +35,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     end
   end
 
-  scenario "Setting risk level for an investigation" do
+  scenario "Setting risk level for an investigation with no risk assessments added" do
     visit "/cases/#{investigation.pretty_id}"
 
     # Set risk level for first time
@@ -29,6 +44,9 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
 
     expect_to_be_on_set_risk_level_page(case_id: investigation.pretty_id)
     choose "Serious risk"
+
+    expect(page).to have_text("This case does not have a risk assessment. You may want to add a risk assessment before setting the case risk level.")
+
     click_button "Set risk level"
 
     expect_confirmation_banner("Case risk level set to serious risk")
@@ -48,6 +66,18 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
       name: creator_team.name,
       verb_with_level: "set to serious risk",
     )
+  end
+
+  scenario "Setting risk level on a case with an existing 'serious' risk assessment" do
+    visit "/cases/#{investigation_with_serious_risk_assessment.pretty_id}/edit-risk-level"
+
+    expect(page).to have_content("This case has 1 risk assessment added, assessing the risk as serious risk.")
+  end
+
+  scenario "Setting risk level on a case with multiple risk assessments" do
+    visit "/cases/#{investigation_with_multiple_risk_assessments.pretty_id}/edit-risk-level"
+
+    expect(page).to have_content("This case has 3 risk assessments added, assessing the risk as serious risk, high risk and urgent.")
   end
 
   scenario "Changing risk level for an investigation" do

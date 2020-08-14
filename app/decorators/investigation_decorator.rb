@@ -1,6 +1,6 @@
 class InvestigationDecorator < ApplicationDecorator
   delegate_all
-  decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities
+  decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities, :risk_assessments
 
   PRODUCT_DISPLAY_LIMIT = 6
 
@@ -22,6 +22,10 @@ class InvestigationDecorator < ApplicationDecorator
 
   def display_product_summary_list?
     products.any?
+  end
+
+  def risk_assessment_risk_levels
+    risk_assessments.collect(&:risk_level_description).uniq
   end
 
   def product_summary_list
