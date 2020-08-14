@@ -14,6 +14,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
   let(:investigation) do
     create(:allegation, products: [product1, product2],
+                        risk_level: nil,
                         investigation_businesses:
       [
         build(:investigation_business, business: business1),
@@ -25,6 +26,8 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
   let(:investigation_with_no_businesses) { create(:allegation, products: [product1, product2], creator: user) }
 
   let(:investigation_with_single_product) { create(:allegation, products: [product1], creator: user) }
+
+  let(:investigation_with_serious_risk_level) { create(:allegation, products: [product1], creator: user, risk_level: :serious) }
 
   let(:investigation_with_no_products) { create(:allegation, products: [], creator: user) }
 
@@ -85,6 +88,20 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     click_button "Add risk assessment"
 
+    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_content("The risk assessment says the level of risk is serious risk.")
+
+    click_button "Set risk level"
+
+    expect(page).to have_content("Select if you would like to match the case risk level to the risk assessment level")
+
+    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
+      choose("Yes, set the case risk level to serious risk")
+    end
+
+    click_button "Set risk level"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Date of assessment",  value: "3 April 2020")
@@ -102,9 +119,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
+    expect(page).to have_text("Case risk level set to serious risk")
+    expect(page).to have_text("Risk level changed by Jo Bloggs")
+
     expect(page).to have_text("Risk assessment")
     expect(page).to have_text("Added by Jo Bloggs")
-
     expect(page).to have_text("Date of assessment: 3 April 2020")
     expect(page).to have_text("Risk level: Serious risk")
     expect(page).to have_text("Assessed by: MyCouncil Trading Standards")
@@ -154,6 +173,14 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     click_button "Add risk assessment"
 
+    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
+
+    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
+      choose("No, do not set the case risk level")
+    end
+
+    click_button "Set risk level"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Assessed by", value: "OtherCouncil Trading Standards")
@@ -201,6 +228,14 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     attach_file "Upload the risk assessment", risk_assessment_file
 
     click_button "Add risk assessment"
+
+    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
+
+    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
+      choose("No, do not set the case risk level")
+    end
+
+    click_button "Set risk level"
 
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
@@ -255,6 +290,14 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     attach_file "Upload the risk assessment", risk_assessment_file
     click_button "Add risk assessment"
 
+    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation.pretty_id)
+
+    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
+      choose("No, do not set the case risk level")
+    end
+
+    click_button "Set risk level"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Assessed by", value: "RiskAssessmentsRUs")
@@ -308,9 +351,47 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     click_button "Add risk assessment"
 
+    expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id: investigation_with_single_product.pretty_id)
+
+    within_fieldset("Would you like to match the case risk level to the risk assessment level?") do
+      choose("No, do not set the case risk level")
+    end
+
+    click_button "Set risk level"
+
     expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_single_product.pretty_id)
 
     expect(page).to have_summary_item(key: "Product assessed", value: "MyBrand washing machine model X")
+  end
+
+  scenario "Adding a risk assessment to a case where the assessed risk level matches the existing case risk level" do
+    sign_in(user)
+
+    visit "/cases/#{investigation_with_serious_risk_level.pretty_id}/risk-assessments/new"
+
+    expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation_with_serious_risk_level.pretty_id)
+
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "Serious risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "MyCouncil Trading Standards"
+    end
+
+    attach_file "Upload the risk assessment", risk_assessment_file
+
+    click_button "Add risk assessment"
+
+    # Skip the 'Case risk level' page as it already matches
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation_with_serious_risk_level.pretty_id)
   end
 
   scenario "Attempting to add a risk assessment to a case with no associated products" do

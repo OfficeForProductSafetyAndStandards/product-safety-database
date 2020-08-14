@@ -121,7 +121,9 @@ Rails.application.routes.draw do
       resource :comment, only: %i[create new]
     end
 
-    resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: %i[new create show]
+    resources :risk_assessments, controller: "investigations/risk_assessments", path: "risk-assessments", only: %i[new create show] do
+      resource :update_case_risk_level, only: %i[show update], path: "update-case-risk-level", controller: "investigations/update_case_risk_level_from_risk_assessment"
+    end
 
     resources :products, only: %i[new create index], controller: "investigations/products" do
       member do
