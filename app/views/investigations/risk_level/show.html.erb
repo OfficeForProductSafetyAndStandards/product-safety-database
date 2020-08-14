@@ -14,6 +14,21 @@
     <h1 class="govuk-heading-l">
       <%= page_heading %>
     </h1>
+
+    <p class="govuk-body">The case risk level will usually match the risk assessment.</p>
+
+    <p class="govuk-body">It can differ from risk assessments if necessary - such as when there are conflicting assessments, or where the assessment was provided by a third party.</p>
+
+    <div class="govuk-inset-text">
+      <%= t(".risk_assessment_details_for_case_html",
+        count: @investigation.risk_assessments.count,
+        add_risk_assessment_href: new_investigation_risk_assessment_path(@investigation.pretty_id),
+        supporting_information_href: investigation_supporting_information_index_path(@investigation.pretty_id),
+        risk_assessment_href: (@investigation.risk_assessments.count == 1 ? investigation_risk_assessment_path(@investigation.pretty_id, @investigation.risk_assessments.first) : nil),
+        risk_assessment_risk_levels: to_sentence(@investigation.risk_assessment_risk_levels.collect {|desc| tag.strong(desc.downcase) })
+      ) %>
+    </div>
+
     <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put do |form| %>
       <%= error_summary @risk_level_form.errors %>
 
