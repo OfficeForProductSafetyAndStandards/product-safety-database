@@ -11,3 +11,15 @@
   border-color: $coronavirus-colour;
   color: govuk-colour("white");
 }
+
+.app-badge--risk-serious {
+  background-color: govuk-colour("white");
+  border-color: $govuk-error-colour;
+  color: $govuk-error-colour;
+}
+
+.app-badge--risk-high {
+  background-color: govuk-colour("white");
+  border-color: $govuk-text-colour;
+  color: $govuk-text-colour;
+}

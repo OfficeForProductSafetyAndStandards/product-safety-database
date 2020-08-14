@@ -152,6 +152,6 @@ module Investigations::DisplayTextHelper
   end
 
   def has_badges?(investigation)
-    investigation.is_private? || investigation.is_closed? || investigation.coronavirus_related?
+    investigation.is_private? || investigation.is_closed? || investigation.coronavirus_related? || investigation.serious? || investigation.high?
   end
 end
