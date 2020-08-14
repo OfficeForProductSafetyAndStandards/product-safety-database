@@ -1,0 +1,41 @@
+module Investigations
+  class UpdateCaseRiskLevelFromRiskAssessmentController < ApplicationController
+    def show
+      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
+      authorize @investigation, :update?
+
+      @risk_assessment = @investigation.risk_assessments.find(params[:risk_assessment_id]).decorate
+
+      @update_risk_level_from_risk_assessment_form = UpdateRiskLevelFromRiskAssessmentForm.new
+    end
+
+    def update
+      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
+
+      authorize @investigation, :update?
+
+      @risk_assessment = @investigation.risk_assessments.find(params[:risk_assessment_id]).decorate
+
+      @update_risk_level_from_risk_assessment_form = UpdateRiskLevelFromRiskAssessmentForm.new(form_params)
+
+      return render :show unless @update_risk_level_from_risk_assessment_form.valid?
+
+      if @update_risk_level_from_risk_assessment_form.update_case_risk_level_to_match_investigation
+        ChangeCaseRiskLevel.call!(
+          investigation: @investigation,
+          user: current_user,
+          risk_level: @risk_assessment.risk_level,
+          custom_risk_level: @risk_assessment.custom_risk_level
+        )
+      end
+
+      redirect_to investigation_risk_assessment_path(@investigation, @risk_assessment)
+    end
+
+  private
+
+    def form_params
+      params.fetch(:update_risk_level_from_risk_assessment_form, {}).permit(:update_case_risk_level_to_match_investigation)
+    end
+  end
+end
