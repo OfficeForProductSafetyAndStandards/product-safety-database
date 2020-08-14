@@ -17,13 +17,12 @@ RSpec.shared_context "with Elasticsearch", shared_context: :metadata do
 
   def create_elasticsearch_indices!
     elasticsearch_models.each do |model|
-      model.__elasticsearch__.create_index!
-      model.__elasticsearch__.refresh_index!
+      model.__elasticsearch__.import force: true, refresh: :wait
     end
   end
 
   def elasticsearch_models
-    ActiveRecord::Base.descendants.select { |model| model.respond_to?(:__elasticsearch__) && !model.superclass.respond_to?(:__elasticsearch__) }
+    [Investigation, Product, Business]
   end
 
   before do
