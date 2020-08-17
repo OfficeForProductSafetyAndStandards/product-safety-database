@@ -63,10 +63,16 @@ class InvestigationDecorator < ApplicationDecorator
         key: { text: "Case risk level" },
         value: { text: risk_level_description },
         actions: show_actions ? risk_level_actions : []
-      },
-      object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
-      object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
-    ]
+      }]
+
+    if object.hazard_type.present?
+      rows << { key: { text: "Hazards" }, value: { text: hazards }, actions: [] }
+    end
+
+    if object.non_compliant_reason.present?
+      rows << { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] }
+    end
+
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
