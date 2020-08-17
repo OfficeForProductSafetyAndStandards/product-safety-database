@@ -41,7 +41,7 @@ gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/spro
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "0.7.1"
 gem "validate_email", "~> 0.1"
-gem "webpacker", "~> 5.1.1"
+gem "webpacker", "~> 5.2.0"
 gem "wicked"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.0", require: "govuk_design_system"
