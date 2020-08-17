@@ -6,7 +6,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
-  let(:summary) { Faker::Lorem.sentence }
+  let(:summary) { Rails.application.config.corrective_action_constants["geographic_scope"] }
   let(:date) { Date.parse("2020-05-01") }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:details) { "Urgent action following consumer reports" }
@@ -135,7 +135,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def fill_and_submit_form
-    fill_in "Summary", with: summary
+    choose summary
     fill_in "Day",     with: date.day   if date
     fill_in "Month",   with: date.month if date
     fill_in "Year",    with: date.year  if date
