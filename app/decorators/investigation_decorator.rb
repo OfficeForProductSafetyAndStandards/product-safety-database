@@ -63,7 +63,29 @@ class InvestigationDecorator < ApplicationDecorator
         key: { text: "Case risk level" },
         value: { text: risk_level_description },
         actions: show_actions ? risk_level_actions : []
-      }]
+      }
+    ]
+
+    if risk_assessments.any?
+
+      most_recent_risk_assessment = risk_assessments.max_by(&:assessed_on)
+
+      risk_assessments_html = h.safe_join([
+        h.tag.p(h.pluralize(object.risk_assessments.size, "risk assessment"), class: "govuk-body"),
+        h.tag.p("#{object.risk_assessments.size == 1 ? 'Completed' : 'Most recent'} by #{h.risk_assessed_by(most_recent_risk_assessment)} on #{most_recent_risk_assessment.assessed_on.to_s(:govuk)}", class: "govuk-body"),
+        h.tag.p("Assessed risk: #{most_recent_risk_assessment.risk_level_description}", class: "govuk-body")
+      ])
+
+    else
+      risk_assessments_html = "No risk assessments"
+    end
+
+    rows << {
+      key: { text: "Risk assessment".pluralize(object.risk_assessments.size) },
+      value: {
+        text: risk_assessments_html.html_safe
+      }
+    }
 
     if object.hazard_type.present?
       rows << { key: { text: "Hazards" }, value: { text: hazards }, actions: [] }
