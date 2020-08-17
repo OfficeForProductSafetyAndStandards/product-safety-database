@@ -76,15 +76,29 @@ class InvestigationDecorator < ApplicationDecorator
         h.tag.p("Assessed risk: #{most_recent_risk_assessment.risk_level_description}", class: "govuk-body")
       ])
 
+      risk_assessment_href = if object.risk_assessments.size == 1
+                               h.investigation_risk_assessment_path(object.pretty_id, most_recent_risk_assessment.id)
+                             else
+                               h.investigation_supporting_information_index_path(object.pretty_id)
+                             end
+
+      risk_assessment_action = {
+        text: "View",
+        visually_hidden_text: h.pluralize(risk_assessments.size, "risk assessment"),
+        href: risk_assessment_href
+      }
+
     else
       risk_assessments_html = "No risk assessments"
+      risk_assessment_action = { text: "Add", visually_hidden_text: "risk assessement", href: h.new_investigation_risk_assessment_path(object.pretty_id) }
     end
 
     rows << {
       key: { text: "Risk assessment".pluralize(object.risk_assessments.size) },
       value: {
         text: risk_assessments_html.html_safe
-      }
+      },
+      actions: [risk_assessment_action]
     }
 
     if object.hazard_type.present?
