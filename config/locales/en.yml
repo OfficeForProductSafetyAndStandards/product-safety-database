@@ -92,6 +92,10 @@ en:
         title:
           set: "Set case risk level"
           change: "Change case risk level"
+        risk_assessment_details_for_case_html:
+          zero: This case does not have a risk assessment. You may want to <a class="govuk-link" href="%{add_risk_assessment_href}">add a risk assessment</a> before setting the case risk level.
+          one: This case has <a class="govuk-link" href="%{risk_assessment_href}">1 risk assessment</a> added, assessing the risk as %{risk_assessment_risk_levels}.
+          other:  This case has <a class="govuk-link" href="%{supporting_information_href}">%{count} risk assessments</a> added, assessing the risk as %{risk_assessment_risk_levels}.
         submit_button: "Set risk level"
         legend: "Case risk level"
         levels:

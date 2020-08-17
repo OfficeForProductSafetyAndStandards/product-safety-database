@@ -1,6 +1,7 @@
 .app-badge--owner,
 .app-badge--restricted,
-.app-badge--closed {
+.app-badge--closed,
+.app-badge--risk-high {
   border-color: $govuk-secondary-text-colour;
   color: $govuk-secondary-text-colour;
 }
@@ -16,10 +17,4 @@
   background-color: govuk-colour("white");
   border-color: $govuk-error-colour;
   color: $govuk-error-colour;
-}
-
-.app-badge--risk-high {
-  background-color: govuk-colour("white");
-  border-color: $govuk-secondary-text-colour;
-  color: $govuk-secondary-text-colour;
 }
