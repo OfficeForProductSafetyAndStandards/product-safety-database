@@ -50,6 +50,7 @@ module Investigations
         :measure_type,
         :duration,
         :geographic_scope,
+        :other_action,
         file: %i[file description],
         date_decided: %i[day month year]
       )

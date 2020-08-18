@@ -1,15 +1,13 @@
 <%= render "form_components/govuk_radios",
            form: form,
-           key: :summary,
-           fieldset: { legend: { text: "Summary",
-             classes: "govuk-fieldset__legend--m" } },
+           key: :action,
+           fieldset: { legend: { text: "Action", classes: "govuk-fieldset__legend--m" } },
            items: corrective_action_summary_radio_items(form) %>
 
 <%= render "form_components/govuk_date_input",
            form: form,
            key: :date_decided,
-           fieldset: { legend: { classes: "govuk-fieldset__legend--m",
-             text: "What date did the action come in to effect?" } },
+           fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "What date did the action come in to effect?" } },
            hint: { text: "This may be in the future. For example, 12 7 2019." } %>
 
 <% if allow_product_linking %>

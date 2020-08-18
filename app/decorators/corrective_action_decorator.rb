@@ -47,4 +47,10 @@ class CorrectiveActionDecorator < ApplicationDecorator
 
     other_action.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
+
+  def page_title
+    return action if other_action.nil?
+
+    other_action
+  end
 end

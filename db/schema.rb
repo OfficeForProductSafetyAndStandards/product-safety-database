@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_18_154423) do
+ActiveRecord::Schema.define(version: 2020_08_18_175133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2020_08_18_154423) do
   end
 
   create_table "corrective_actions", id: :serial, force: :cascade do |t|
+    t.string "action", default: "other", null: false
     t.integer "business_id"
     t.datetime "created_at", null: false
     t.date "date_decided"
@@ -122,9 +123,8 @@ ActiveRecord::Schema.define(version: 2020_08_18_154423) do
     t.integer "investigation_id"
     t.string "legislation"
     t.string "measure_type"
-    t.string "other_action"
+    t.text "other_action"
     t.integer "product_id"
-    t.text "summary"
     t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_corrective_actions_on_business_id"
     t.index ["investigation_id"], name: "index_corrective_actions_on_investigation_id"
