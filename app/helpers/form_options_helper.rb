@@ -17,9 +17,21 @@ module FormOptionsHelper
     Rails.application.config.corrective_action_constants["geographic_scope"]
   end
 
-  def corrective_action_summary_radio_items
-    Rails.application
-           .config
-           .corrective_action_constants["summary"].map { |summary| { text: summary.upcase_first, value: summary } }
+  def corrective_action_summary_radio_items(form)
+    items = Rails.application
+              .config
+              .corrective_action_constants["summary"].map { |summary| { text: summary.upcase_first, value: summary } }
+    items << {
+      text: "Other",
+      value: "other",
+      conditional: {
+        html: form.govuk_text_area(
+          :other_action,
+          label: "Other action",
+          label_classes: "govuk-visually-hidden"
+        )
+      }
+    }
+    items
   end
 end

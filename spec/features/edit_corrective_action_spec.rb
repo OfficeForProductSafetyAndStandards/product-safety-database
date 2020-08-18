@@ -14,7 +14,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_link "Edit corrective action"
 
-      expect(page).to have_field("Summary", with: corrective_action.summary)
+      within_fieldset("Summary") { expect(page).to have_checked_field(corrective_action.summary) }
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
       expect(page).to have_field("Month",   with: corrective_action.date_decided.month)
       expect(page).to have_field("Year",    with: corrective_action.date_decided.year)
@@ -29,7 +29,11 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       document = corrective_action.documents_blobs.first
       expect(page).to have_link(document.filename.to_s)
 
-      fill_in "Summary",                    with: new_summary
+      within_fieldset("Summary") do
+        choose "Other"
+        fill_in "corrective_action[other_action]", with: Faker::Hipster.paragraph(sentence_count: 3)
+      end
+
       fill_in "Day",                        with: new_date_decided.day
       fill_in "Month",                      with: new_date_decided.month
       fill_in "Year",                       with: new_date_decided.year
@@ -50,6 +54,8 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       click_on "Update corrective action"
 
       expect_to_be_on_corrective_action_summary_page
+
+      expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
 
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"

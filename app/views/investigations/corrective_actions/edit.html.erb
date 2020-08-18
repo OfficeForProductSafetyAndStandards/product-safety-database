@@ -12,7 +12,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_action_path(@investigation, @corrective_action) do |form| %>
+    <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_action_path(@investigation, @corrective_action), builder: ApplicationFormBuilder do |form| %>
       <%= render "form_components/govuk_error_summary", form: form %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
