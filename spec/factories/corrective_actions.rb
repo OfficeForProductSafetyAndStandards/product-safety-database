@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :corrective_action do
     association :investigation, factory: :allegation
     product
-    summary { Rails.application.config.corrective_action_constants["summary"].sample }
+    summary { Rails.application.config.corrective_action_constants["actions"].sample }
     date_decided_day { date_decided.day }
     date_decided_month { date_decided.month }
     date_decided_year { date_decided.year }

@@ -18,7 +18,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
     )
   end
 
-  let(:summary) { Faker::Lorem.sentence }
+  let(:summary) { Rails.application.config.corrective_action_constants["actions"].sample }
   let(:date_decided) { Faker::Date.backward(days: 14) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
@@ -40,6 +40,14 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
 
       it "returns false" do
         expect(corrective_action).not_to be_valid
+      end
+    end
+
+    context 'when summary is set to \other"' do
+      before { corrective_action.summary = "other" }
+
+      context "with blank other_action" do
+        it { is_expected.to be_invalid }
       end
     end
 

@@ -28,7 +28,8 @@ class CorrectiveAction < ApplicationRecord
   validates :duration, inclusion: { in: DURATION_TYPES }, if: -> { duration.present? }
   validates :geographic_scope, presence: true
   validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
-  validates :summary, inclusion: { in: Rails.application.config.corrective_action_constants["summary"] }, unless: -> { summary == "other" }
+  validates :summary, inclusion: { in: Rails.application.config.corrective_action_constants["actions"] }, unless: -> { summary == "other" }
+  validates :other_action, presence: true, if: -> { summary == "other" }
 
   validates :summary, length: { maximum: 10_000 }
   validates :details, length: { maximum: 50_000 }
