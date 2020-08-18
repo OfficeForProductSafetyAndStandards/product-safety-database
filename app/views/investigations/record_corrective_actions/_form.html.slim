@@ -1,8 +1,10 @@
-= render "form_components/govuk_input",
-         key: :summary,
+= render "form_components/govuk_radios",
          form: form,
-         classes: "govuk-!-width-three-quarters",
-         label: { text: "Summary", classes: "govuk-label--m" }
+         key: :summary,
+         fieldset: { legend: { text: "Summary",
+                               classes: "govuk-fieldset__legend--m" } },
+         items: corrective_action_summary_radio_items
+
 = render "form_components/govuk_date_input",
          form: form,
          key: :date_decided,

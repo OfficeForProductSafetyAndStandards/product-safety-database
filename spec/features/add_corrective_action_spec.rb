@@ -6,7 +6,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
-  let(:summary) { Rails.application.config.corrective_action_constants["geographic_scope"] }
+  let(:summary) { Rails.application.config.corrective_action_constants["summary"].sample }
   let(:date) { Date.parse("2020-05-01") }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:details) { "Urgent action following consumer reports" }
@@ -98,7 +98,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_form_to_show_input_data
-    expect(page).to have_field("Summary", with: summary)
+    within_fieldset "Summary" do
+      expect(page).to have_checked_field(summary)
+    end
+
     expect(page).to have_field("Day", with: date.day)
     expect(page).to have_field("Month", with: date.month)
     expect(page).to have_field("Year", with: date.year)

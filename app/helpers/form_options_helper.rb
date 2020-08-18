@@ -16,4 +16,10 @@ module FormOptionsHelper
   def corrective_action_geographic_scope
     Rails.application.config.corrective_action_constants["geographic_scope"]
   end
+
+  def corrective_action_summary_radio_items
+    Rails.application
+           .config
+           .corrective_action_constants["summary"].map { |summary| { text: summary.upcase_first, value: summary } }
+  end
 end
