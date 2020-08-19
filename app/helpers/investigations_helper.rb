@@ -253,6 +253,85 @@ module InvestigationsHelper
     all_past_owners || []
   end
 
+  def risks_and_issues_rows(investigation, user)
+    risk_level_row = {
+      key: {
+        text: t(:key, scope: "investigations.overview.case_risk_level")
+      },
+      value: { text: investigation.risk_level_description }
+    }
+
+    if policy(investigation).update?(user: user)
+      risk_level_row[:actions] = { items: [
+        href: investigation_risk_level_path(investigation),
+        text: t(
+          (investigation.risk_level ? :change : :set),
+          scope: "investigations.overview.case_risk_level.action"
+        ),
+        visuallyHiddenText: t(:visually_hidden_text, scope: "investigations.overview.case_risk_level")
+      ] }
+    end
+
+    most_recent_risk_assessment = investigation.risk_assessments.max_by(&:assessed_on)
+
+    risk_assessment_row = {
+      key: {
+        text: t(:key,
+                scope: "investigations.overview.risk_assessments",
+                count: investigation.risk_assessments.count)
+      },
+      value: {
+        text: t(:value_html,
+                scope: "investigations.overview.risk_assessments",
+                count: investigation.risk_assessments.count,
+                assessed_by: (most_recent_risk_assessment ? risk_assessed_by(most_recent_risk_assessment) : ""),
+                assessed_on: (most_recent_risk_assessment ? most_recent_risk_assessment.assessed_on.to_s(:govuk) : ""),
+                assessed_risk: (most_recent_risk_assessment ? most_recent_risk_assessment.risk_level_description : ""))
+      }
+    }
+
+    if policy(investigation).update?(user: user)
+
+      risk_assessment_href =
+        case investigation.risk_assessments.count
+        when 0
+          new_investigation_risk_assessment_path(investigation.pretty_id)
+        when 1
+          investigation_risk_assessment_path(investigation.pretty_id, most_recent_risk_assessment.id)
+        else
+          investigation_supporting_information_index_path(investigation.pretty_id)
+        end
+
+      risk_assessment_row[:actions] = {
+        items: [
+          {
+            text: t(:action, scope: "investigations.overview.risk_assessments", count: investigation.risk_assessments.count),
+            visuallyHiddenText: t(:visually_hidden_text, scope: "investigations.overview.risk_assessments", count: investigation.risk_assessments.count),
+            href: risk_assessment_href
+          }
+        ]
+      }
+    end
+
+    rows = [risk_level_row, risk_assessment_row]
+
+    if investigation.hazard_type.present?
+      rows << {
+        key: { text: t(:key, scope: "investigations.overview.hazards") },
+        value: { text: simple_format([investigation.hazard_type, investigation.hazard_description].join("\n\n")) }
+      }
+    end
+
+    if investigation.non_compliant_reason.present?
+      rows << {
+        key: { text: t(:key, scope: "investigations.overview.compliance") },
+        value: { text: simple_format(investigation.non_compliant_reason) }
+      }
+    end
+
+    rows
+  end
+
   # This builds an array from an investigation which can then
   # be passed as a `rows` argument to the govukSummaryList() helper.
   def about_the_case_rows(investigation, user)

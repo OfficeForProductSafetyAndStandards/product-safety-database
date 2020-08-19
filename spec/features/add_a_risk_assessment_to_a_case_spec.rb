@@ -43,14 +43,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     expect(page).to have_summary_item(key: "Risk assessments", value: "No risk assessments")
 
-    click_link "Supporting information"
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-
-    click_link "Add new"
-    expect_to_be_on_add_supporting_information_page
-
-    choose "Risk assessment"
-    click_button "Continue"
+    click_link "Add risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
 

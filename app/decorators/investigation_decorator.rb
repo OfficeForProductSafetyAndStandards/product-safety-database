@@ -8,14 +8,6 @@ class InvestigationDecorator < ApplicationDecorator
     user_title
   end
 
-  def hazard_description
-    h.simple_format(object.hazard_description)
-  end
-
-  def non_compliant_reason
-    h.simple_format(object.non_compliant_reason)
-  end
-
   def description
     h.simple_format(object.description)
   end
@@ -54,63 +46,6 @@ class InvestigationDecorator < ApplicationDecorator
     else
       "Not set"
     end
-  end
-
-  def risk_and_issues_list(show_actions = false)
-    hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
-    rows = [
-      {
-        key: { text: "Case risk level" },
-        value: { text: risk_level_description },
-        actions: show_actions ? risk_level_actions : []
-      }
-    ]
-
-    if risk_assessments.any?
-
-      most_recent_risk_assessment = risk_assessments.max_by(&:assessed_on)
-
-      risk_assessments_html = h.safe_join([
-        h.tag.p(h.pluralize(object.risk_assessments.size, "risk assessment"), class: "govuk-body"),
-        h.tag.p("#{object.risk_assessments.size == 1 ? 'Completed' : 'Most recent'} by #{h.risk_assessed_by(most_recent_risk_assessment)} on #{most_recent_risk_assessment.assessed_on.to_s(:govuk)}", class: "govuk-body"),
-        h.tag.p("Assessed risk: #{most_recent_risk_assessment.risk_level_description}", class: "govuk-body")
-      ])
-
-      risk_assessment_href = if object.risk_assessments.size == 1
-                               h.investigation_risk_assessment_path(object.pretty_id, most_recent_risk_assessment.id)
-                             else
-                               h.investigation_supporting_information_index_path(object.pretty_id)
-                             end
-
-      risk_assessment_action = {
-        text: "View",
-        visually_hidden_text: h.pluralize(risk_assessments.size, "risk assessment"),
-        href: risk_assessment_href
-      }
-
-    else
-      risk_assessments_html = "No risk assessments"
-      risk_assessment_action = { text: "Add", visually_hidden_text: "risk assessement", href: h.new_investigation_risk_assessment_path(object.pretty_id) }
-    end
-
-    rows << {
-      key: { text: "Risk assessment".pluralize(object.risk_assessments.size) },
-      value: {
-        text: risk_assessments_html.html_safe
-      },
-      actions: [risk_assessment_action]
-    }
-
-    if object.hazard_type.present?
-      rows << { key: { text: "Hazards" }, value: { text: hazards }, actions: [] }
-    end
-
-    if object.non_compliant_reason.present?
-      rows << { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] }
-    end
-
-    rows.compact!
-    h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
   def source_details_summary_list(view_protected_details = false)
@@ -203,11 +138,11 @@ private
     false
   end
 
-  def risk_level_actions
-    if risk_level_set?
-      [href: h.investigation_risk_level_path(object), text: "Change", visually_hidden_text: "risk level"]
-    else
-      [href: h.investigation_risk_level_path(object), text: "Set", visually_hidden_text: "risk level"]
-    end
-  end
+  # def risk_level_actions
+  #   if risk_level_set?
+  #     [href: h.investigation_risk_level_path(object), text: "Change", visually_hidden_text: "risk level"]
+  #   else
+  #     [href: h.investigation_risk_level_path(object), text: "Set", visually_hidden_text: "risk level"]
+  #   end
+  # end
 end
