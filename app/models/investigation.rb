@@ -90,6 +90,11 @@ class Investigation < ApplicationRecord
 
   has_many :risk_assessments
 
+  # All sub-classes share this policy class
+  def self.policy_class
+    InvestigationPolicy
+  end
+
   def initialize(*args)
     raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
 
