@@ -6,7 +6,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
-  let(:summary) { Rails.application.config.corrective_action_constants["summary"].sample }
+  let(:summary) { CorrectiveAction.actions.values.sample }
   let(:date) { Date.parse("2020-05-01") }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:details) { "Urgent action following consumer reports" }
@@ -86,7 +86,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_confirmation_page_to_show_entered_data
-    expect(page).to have_summary_item(key: "Summary", value: summary)
+    expect(page).to have_summary_item(key: "Action", value: summary)
     expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Legislation", value: legislation)
     expect(page).to have_summary_item(key: "Details", value: details)

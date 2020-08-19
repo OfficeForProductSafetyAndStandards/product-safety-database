@@ -41,7 +41,8 @@ module CorrectiveActionsConcern
       :product_id,
       :business_id,
       :legislation,
-      :summary,
+      :action,
+      :other_action,
       :details,
       :related_file,
       :measure_type,
@@ -53,7 +54,7 @@ module CorrectiveActionsConcern
 
   def corrective_action_file_metadata
     get_attachment_metadata_params(:file).merge(
-      title: @corrective_action.summary,
+      title: @corrective_action.action,
       other_type: "Corrective action document",
       document_type: :other
     )
