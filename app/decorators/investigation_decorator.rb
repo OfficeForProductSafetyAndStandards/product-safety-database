@@ -137,12 +137,4 @@ private
   def should_display_received_by?
     false
   end
-
-  # def risk_level_actions
-  #   if risk_level_set?
-  #     [href: h.investigation_risk_level_path(object), text: "Change", visually_hidden_text: "risk level"]
-  #   else
-  #     [href: h.investigation_risk_level_path(object), text: "Set", visually_hidden_text: "risk level"]
-  #   end
-  # end
 end
