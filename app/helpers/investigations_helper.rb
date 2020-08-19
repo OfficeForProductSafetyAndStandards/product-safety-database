@@ -290,7 +290,7 @@ module InvestigationsHelper
       }
     }
 
-    if policy(investigation).update?(user: user)
+    if policy(investigation).update?(user: user) || most_recent_risk_assessment
 
       risk_assessment_href =
         case investigation.risk_assessments.count
