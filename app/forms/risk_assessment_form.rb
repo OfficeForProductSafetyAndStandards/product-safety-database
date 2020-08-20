@@ -80,10 +80,22 @@ class RiskAssessmentForm
       end
   end
 
+  def assessed_by_business_id
+    if assessed_by == "business"
+      super
+    end
+  end
+
   def assessed_by_team_id
     if assessed_by == "my_team"
       current_user.team_id
-    else
+    elsif assessed_by == "another_team"
+      super
+    end
+  end
+
+  def assessed_by_other
+    if assessed_by == "other"
       super
     end
   end

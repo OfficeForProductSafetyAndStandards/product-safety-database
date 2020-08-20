@@ -66,7 +66,7 @@ module Investigations
 
       @risk_assessment_form = RiskAssessmentForm.new(
         @risk_assessment.attributes.symbolize_keys.slice(
-          :assessed_on, :risk_level, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details
+          :assessed_on, :risk_level, :custom_risk_level, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details
         ).merge({
           current_user: current_user,
           investigation: @investigation,
@@ -78,6 +78,35 @@ module Investigations
 
       @risk_assessment = @risk_assessment.decorate
       @investigation = @investigation.decorate
+    end
+
+    def update
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+
+      authorize @investigation, :update?
+
+      @risk_assessment = @investigation.risk_assessments.find(params[:id])
+
+      @risk_assessment_form = RiskAssessmentForm.new(
+        current_user: current_user,
+        investigation: @investigation,
+        risk_assessment_file: @risk_assessment.risk_assessment_file
+      )
+
+      @risk_assessment_form.attributes = risk_assessment_params
+
+      if @risk_assessment_form.valid?
+        result = UpdateRiskAssessment.call!(
+          @risk_assessment_form.attributes.merge({
+            risk_assessment: @risk_assessment
+          })
+        )
+
+        redirect_to investigation_risk_assessment_path(@investigation, result.risk_assessment)
+      else
+        @investigation = @investigation.decorate
+        render :edit
+      end
     end
 
   private

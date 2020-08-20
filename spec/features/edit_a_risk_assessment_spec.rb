@@ -56,5 +56,47 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_elasticsearch
     end
 
     expect(page).to have_text("new_risk_assessment.txt")
+
+    # Update some of the fields to include a validation error
+    within_fieldset("What was the risk level?") do
+      choose "Other"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "Someone else"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      uncheck "Teddy Bear"
+    end
+
+    click_button "Update risk assessment"
+
+    # Validation errors
+    expect(page).to have_text("Enter other risk level")
+    expect(page).to have_text("You must choose at least one product")
+    expect(page).to have_text("Enter organisation name")
+
+    # Fix validation errors
+    within_fieldset("What was the risk level?") do
+      choose "Other"
+      fill_in "Other", with: "Medium-high risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      fill_in "Organisation name", with: "RiskAssessmentsRUs"
+    end
+
+    within_fieldset("Which products were assessed?") do
+      check "Doll"
+    end
+
+    click_button "Update risk assessment"
+
+    expect_to_be_on_risk_assessement_for_a_case_page(case_id: investigation.pretty_id, risk_assessment_id: risk_assessment.id)
+
+    expect(page).to have_summary_item(key: "Risk level",          value: "Medium-high risk")
+    expect(page).to have_summary_item(key: "Assessed by",         value: "RiskAssessmentsRUs")
+    expect(page).to have_summary_item(key: "Product assessed",    value: "Doll")
   end
 end
