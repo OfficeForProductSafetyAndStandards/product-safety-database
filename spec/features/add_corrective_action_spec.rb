@@ -6,7 +6,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
-  let(:action) { (CorrectiveAction.actions.values - %w(Other)).sample }
+  let(:action) { (CorrectiveAction.actions.values - %w[Other]).sample }
   let(:date) { Date.parse("2020-05-01") }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:details) { "Urgent action following consumer reports" }
