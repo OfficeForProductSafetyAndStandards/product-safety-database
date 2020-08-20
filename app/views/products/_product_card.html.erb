@@ -1,0 +1,18 @@
+<div class="govuk-grid-row psd-product-card">
+  <div class="govuk-grid-column-one-half">
+    <span class="govuk-caption-m govuk-!-font-size-16">
+      Product
+    </span>
+    <span><%= link_to product.name, product %></span>
+  </div>
+  <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-one-half">
+      <span class="govuk-caption-m govuk-!-font-size-16">Type</span>
+      <span class="govuk-!-font-weight-regular"><%= product.product_type %></span>
+    </div>
+    <div class="govuk-grid-column-one-half">
+      <span class="govuk-caption-m govuk-!-font-size-16">Origin</span>
+      <span class="govuk-!-font-weight-regular"><%= country_from_code product.country_of_origin %></span>
+    </div>
+  </div>
+</div>
