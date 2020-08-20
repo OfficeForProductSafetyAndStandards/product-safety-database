@@ -6,7 +6,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
-  let(:summary) { CorrectiveAction.actions.values.sample }
+  let(:action) { (CorrectiveAction.actions.values - %w(Other)).sample }
   let(:date) { Date.parse("2020-05-01") }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:details) { "Urgent action following consumer reports" }
@@ -86,7 +86,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_confirmation_page_to_show_entered_data
-    expect(page).to have_summary_item(key: "Action", value: summary)
+    expect(page).to have_summary_item(key: "Action", value: CorrectiveAction.actions[action])
     expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
     expect(page).to have_summary_item(key: "Legislation", value: legislation)
     expect(page).to have_summary_item(key: "Details", value: details)
@@ -98,8 +98,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_form_to_show_input_data
-    within_fieldset "Summary" do
-      expect(page).to have_checked_field(summary)
+    within_fieldset "Action" do
+      expect(page).to have_checked_field(action)
     end
 
     expect(page).to have_field("Day", with: date.day)
@@ -122,7 +122,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
   def expect_case_activity_page_to_show_entered_data
     expect(page).to have_selector("h1", text: "Activity")
-    item = page.find("h3", text: summary).find(:xpath, "..")
+    item = page.find("h3", text: action).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{legislation}")
     expect(item).to have_text("Date came into effect: #{date.strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
@@ -138,7 +138,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def fill_and_submit_form
-    choose summary
+    choose action
     fill_in "Day",     with: date.day   if date
     fill_in "Month",   with: date.month if date
     fill_in "Year",    with: date.year  if date

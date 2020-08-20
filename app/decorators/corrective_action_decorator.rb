@@ -11,7 +11,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    summary
+    page_title
   end
 
   def date_of_activity
@@ -49,8 +49,6 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def page_title
-    return action if other_action.nil?
-
-    other_action
+    CorrectiveAction.actions[other? ? other_action : action]
   end
 end
