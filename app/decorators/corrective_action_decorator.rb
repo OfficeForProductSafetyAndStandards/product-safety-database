@@ -11,7 +11,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    page_title
+    CorrectiveAction.actions[other? ? other_action : action]
   end
 
   def date_of_activity
@@ -46,9 +46,5 @@ class CorrectiveActionDecorator < ApplicationDecorator
     return false if other_action.nil?
 
     other_action.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
-  end
-
-  def page_title
-    CorrectiveAction.actions[other? ? other_action : action]
   end
 end
