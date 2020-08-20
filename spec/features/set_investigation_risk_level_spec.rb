@@ -31,7 +31,7 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
 
     scenario "they cannot set the risk level for the case" do
       visit "/cases/#{investigation.pretty_id}"
-      expect(risk_level_actions_in_overview).not_to have_link(text: "Set")
+      expect(page).not_to have_link("Set risk level")
     end
   end
 
@@ -165,16 +165,11 @@ RSpec.feature "Setting risk level for an investigation", :with_stubbed_elasticse
     expect(find_field("Low risk")).to be_checked
   end
 
-  def risk_level_actions_in_overview
-    page.find("dt", text: "Case risk level", exact_text: true)
-        .sibling("dd", class: "govuk-summary-list__actions")
-  end
-
   def click_change_risk_level_link
-    risk_level_actions_in_overview.click_link "Change"
+    click_link "Change risk level"
   end
 
   def click_set_risk_level_link
-    risk_level_actions_in_overview.click_link "Set"
+    click_link "Set risk level"
   end
 end
