@@ -106,7 +106,7 @@ en:
           other: View
         visually_hidden_text:
           zero: risk assessment
-          one: risk aseessment
+          one: risk assessment
           other: risk assessments
       hazards:
         key: Hazards
