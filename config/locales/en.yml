@@ -79,6 +79,39 @@ en:
       title: "Title"
 
   investigations:
+    overview:
+      case_risk_level:
+        key: Case risk level
+        action:
+          change: Change
+          set: Set
+        visually_hidden_text: risk level
+      risk_assessments:
+        key:
+          one: Risk assessment
+          other: Risk assessments
+        value_html:
+          zero: No risk assessments
+          one: |
+            <p class="govuk-body">1 risk assessment</p>
+            <p class="govuk-body">Completed by %{assessed_by} on %{assessed_on}</p>
+            <p class="govuk-body">Assessed risk: %{assessed_risk}</p>
+          other: |
+            <p class="govuk-body">%{count} risk assessments</p>
+            <p class="govuk-body">Most recent by %{assessed_by} on %{assessed_on}</p>
+            <p class="govuk-body">Assessed risk: %{assessed_risk}</p>
+        action:
+          zero: Add
+          one: View
+          other: View
+        visually_hidden_text:
+          zero: risk assessment
+          one: risk aseessment
+          other: risk assessments
+      hazards:
+        key: Hazards
+      compliance:
+        key: Compliance
     coronavirus_related:
       show:
         title: "Is the case related to the coronavirus outbreak?"
