@@ -6,6 +6,10 @@
     Summary: <b><%= activity.new_summary %></b><br>
   <% end %>
 
+  <% if activity.new_action %>
+    Action: <b><%= activity.new_action %></b><br>
+  <% end %>
+
   <% if activity.new_date_decided %>
     Date of action: <b><%= activity.new_date_decided %></b><br>
   <% end %>

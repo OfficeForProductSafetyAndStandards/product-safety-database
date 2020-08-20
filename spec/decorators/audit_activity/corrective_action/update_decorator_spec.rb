@@ -13,7 +13,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
       corrective_action: corrective_action,
       user: user,
       corrective_action_params: ActionController::Parameters.new(
-        summary: new_summary,
+        action: new_summary,
         date_decided_day: new_date_decided.day,
         date_decided_month: new_date_decided.month,
         date_decided_year: new_date_decided.year,
@@ -30,7 +30,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
     )
   end
 
-  it { expect(decorated_activity.new_summary).to eq(new_summary) }
+  it { expect(decorated_activity.new_action).to eq(CorrectiveAction.actions[new_summary]) }
   it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_s(:govuk)) }
   it { expect(decorated_activity.new_legislation).to eq(new_legislation) }
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
