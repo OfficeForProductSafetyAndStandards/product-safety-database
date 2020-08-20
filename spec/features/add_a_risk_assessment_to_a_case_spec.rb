@@ -38,13 +38,12 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
   scenario "Adding a risk assessment to a case with a multiple products (with validation errors)" do
     sign_in(user)
 
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
+    visit "/cases/#{investigation.pretty_id}"
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    click_link "Add new"
-    expect_to_be_on_add_supporting_information_page
+    expect(page).to have_summary_item(key: "Risk assessments", value: "No risk assessments")
 
-    choose "Risk assessment"
-    click_button "Continue"
+    click_link "Add risk assessment"
 
     expect_to_be_on_add_risk_assessment_for_a_case_page(case_id: investigation.pretty_id)
 
@@ -115,6 +114,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     click_link "Back to allegation"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Overview"
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Risk assessment", value: "1 risk assessment\nCompleted by MyCouncil Trading Standards on 3 April 2020\nAssessed risk: Serious risk")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -188,6 +192,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     click_link "Back to allegation"
 
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_link "Overview"
+    expect_to_be_on_case_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_summary_item(key: "Risk assessment", value: "1 risk assessment\nCompleted by OtherCouncil Trading Standards on 3 April 2020\nAssessed risk: Medium-high risk")
 
     click_link "Activity"
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
