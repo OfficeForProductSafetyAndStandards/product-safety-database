@@ -69,6 +69,10 @@
       <% end %>
 
     <%= govukSummaryList(rows: rows) %>
+
+    <% if policy(@investigation).update? %>
+      <p class="govuk-body"><%= link_to "Edit risk assessment", edit_investigation_risk_assessment_path(@investigation, @risk_assessment), class: "govuk-link" %></p>
+    <% end %>
   </div>
   <div class="govuk-grid-column-one-third">
     <h2 class="govuk-heading-m">Attachment</h2>

@@ -47,6 +47,39 @@ module Investigations
       @investigation = @investigation.decorate
     end
 
+    def edit
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+
+      authorize @investigation, :update?
+
+      @risk_assessment = @investigation.risk_assessments.find(params[:id])
+
+      assessed_by = if @risk_assessment.assessed_by_team == current_user.team
+                      "my_team"
+                    elsif @risk_assessment.assessed_by_team
+                      "another_team"
+                    elsif @risk_assessment.assessed_by_business
+                      "business"
+                    else
+                      "other"
+                    end
+
+      @risk_assessment_form = RiskAssessmentForm.new(
+        @risk_assessment.attributes.symbolize_keys.slice(
+          :assessed_on, :risk_level, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details
+        ).merge({
+          current_user: current_user,
+          investigation: @investigation,
+          assessed_by: assessed_by,
+          product_ids: @risk_assessment.product_ids,
+          risk_assessment_file: @risk_assessment.risk_assessment_file
+        })
+      )
+
+      @risk_assessment = @risk_assessment.decorate
+      @investigation = @investigation.decorate
+    end
+
   private
 
     def risk_assessment_params

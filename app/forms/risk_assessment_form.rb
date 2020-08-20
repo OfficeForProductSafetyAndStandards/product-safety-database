@@ -56,7 +56,8 @@ class RiskAssessmentForm
     .pluck(:name, :id).collect do |row|
       {
         text: row[0],
-        value: row[1]
+        value: row[1],
+        checked: product_ids.to_a.include?(row[1])
       }
     end
   end
