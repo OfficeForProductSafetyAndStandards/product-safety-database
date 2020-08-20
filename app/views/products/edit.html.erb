@@ -1,0 +1,22 @@
+<%= page_title "Edit product", errors: @product.object.errors.any? %>
+<% content_for :after_header do %>
+  <%= link_to "Back to product", @product, class: "govuk-back-link" %>
+<% end %>
+
+<%= form_with model: @product.object, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+    </div>
+  </div>
+
+  <%= render "product_heading", product: @product %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form", form: form, product: @product, countries: @countries, search: false %>
+    </div>
+  </div>
+<% end %>
+
+

@@ -8,14 +8,6 @@ class InvestigationDecorator < ApplicationDecorator
     user_title
   end
 
-  def hazard_description
-    h.simple_format(object.hazard_description)
-  end
-
-  def non_compliant_reason
-    h.simple_format(object.non_compliant_reason)
-  end
-
   def description
     h.simple_format(object.description)
   end
@@ -54,21 +46,6 @@ class InvestigationDecorator < ApplicationDecorator
     else
       "Not set"
     end
-  end
-
-  def risk_and_issues_list(show_actions = false)
-    hazards = h.simple_format([hazard_type, object.hazard_description].join("\n\n"))
-    rows = [
-      {
-        key: { text: "Case risk level" },
-        value: { text: risk_level_description },
-        actions: show_actions ? risk_level_actions : []
-      },
-      object.hazard_type.present? ? { key: { text: "Hazards" }, value: { text: hazards }, actions: [] } : nil,
-      object.non_compliant_reason.present? ? { key: { text: "Compliance" }, value: { text: non_compliant_reason }, actions: [] } : nil,
-    ]
-    rows.compact!
-    h.render "components/govuk_summary_list", rows: rows, classes: "govuk-summary-list--no-border"
   end
 
   def source_details_summary_list(view_protected_details = false)
@@ -159,13 +136,5 @@ private
 
   def should_display_received_by?
     false
-  end
-
-  def risk_level_actions
-    if risk_level_set?
-      [href: h.investigation_risk_level_path(object), text: "Change", visually_hidden_text: "risk level"]
-    else
-      [href: h.investigation_risk_level_path(object), text: "Set", visually_hidden_text: "risk level"]
-    end
   end
 end

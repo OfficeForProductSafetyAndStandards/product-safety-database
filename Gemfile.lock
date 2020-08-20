@@ -439,7 +439,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scout_apm (2.6.8)
+    scout_apm (2.6.9)
       parser
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
@@ -474,7 +474,7 @@ GEM
     slim_lint (0.20.1)
       rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-    solargraph (0.39.14)
+    solargraph (0.39.15)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -524,7 +524,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.2.0)
+    webpacker (5.2.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -617,7 +617,7 @@ DEPENDENCIES
   strong_migrations (= 0.7.1)
   validate_email (~> 0.1)
   webmock
-  webpacker (~> 5.2.0)
+  webpacker (~> 5.2.1)
   wicked
   will_paginate (~> 3.3)
 

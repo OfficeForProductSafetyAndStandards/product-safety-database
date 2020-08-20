@@ -1,0 +1,43 @@
+<%= page_title "Products" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if params[:q].present? %>
+      <span class="govuk-caption-l">Product search results</span>
+    <% end %>
+    <h1 class="govuk-heading-l">
+      <% if params[:q].present? %>
+        <%= params[:q] %>
+        <span class="govuk-caption-m"><% "#{@products.count} #{'result'.pluralize(@products.count)}" %></span>
+      <% else %>
+        Products
+      <% end %>
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-2">
+    <div class="govuk-!-margin-bottom-0">
+      <%= form_with(model: @search, scope: "", url: products_path, method: :get) do |form| %>
+        <%= form.hidden_field :sort, value: "relevance" %>
+
+        <div class="search-box">
+          <%= render "form_components/govuk_input",
+            key: :q,
+            form: form,
+            label: {
+              text: "Keywords",
+              classes: "govuk-label--s"
+            } %>
+          <%= form.submit "Search", name: nil, class: "search-box--submit" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-three-quarters">
+    <%= render "table", products: @products %>
+    <%= will_paginate @products %>
+  </div>
+</div>

@@ -40,53 +40,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
-  describe "#risk_and_issues_list" do
-    let(:risk_and_issues_list) { decorated_investigation.risk_and_issues_list }
-
-    it "displays the hazard type" do
-      expect(risk_and_issues_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_type)}/)
-    end
-
-    it "displays the hazard description" do
-      expect(risk_and_issues_list).to summarise("Hazards", text: /#{Regexp.escape(investigation.hazard_description)}/)
-    end
-
-    it "displays the compliance reason" do
-      expect(risk_and_issues_list).to summarise("Compliance", text: /#{Regexp.escape(investigation.non_compliant_reason)}/)
-    end
-
-    it "displays the text associated to the risk level" do
-      expect(risk_and_issues_list).to summarise("Case risk level", text: "Serious risk")
-    end
-
-    context "without hazard_type" do
-      let(:risk_and_issues_list) { Capybara.string(decorated_investigation.risk_and_issues_list) }
-
-      before do
-        investigation.hazard_type = nil
-        investigation.hazard_description = nil
-      end
-
-      it { expect(risk_and_issues_list).not_to have_css("dt.govuk-summary-list__key", text: "Hazards") }
-    end
-
-    context "without non_compliant_reason" do
-      let(:risk_and_issues_list) { Capybara.string(decorated_investigation.risk_and_issues_list) }
-
-      before { investigation.non_compliant_reason = nil }
-
-      it { expect(risk_and_issues_list).not_to have_css("dt.govuk-summary-list__key", text: "Compliance") }
-    end
-
-    context "without risk level" do
-      let(:risk_level) { nil }
-
-      it "displays risk level as not set" do
-        expect(risk_and_issues_list).to summarise("Case risk level", text: "Not set")
-      end
-    end
-  end
-
   describe "#risk_level_description" do
     let(:risk_level_description) { decorated_investigation.risk_level_description }
 
@@ -172,10 +125,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     }
   end
 
-  describe "#hazard_description" do
-    include_examples "a formated text", :investigation, :hazard_description
-  end
-
   describe "#source_details_summary_list" do
     let(:view_protected_details) { true }
     let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details) }
@@ -219,10 +168,6 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
     def expect_to_display_protect_details_message
       expect(source_details_summary_list).to summarise("Contact details", text: /Only teams added to the case can view allegation contact details/)
     end
-  end
-
-  describe "#non_compliant_reason" do
-    include_examples "a formated text", :investigation, :non_compliant_reason
   end
 
   describe "#description" do
