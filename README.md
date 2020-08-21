@@ -1,4 +1,4 @@
-# Product safety database
+# Product safety database (trigger build)
 
 Built by the [Office for Product Safety and Standards](https://www.gov.uk/government/organisations/office-for-product-safety-and-standards)
 
