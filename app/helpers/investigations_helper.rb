@@ -284,7 +284,7 @@ module InvestigationsHelper
         text: t(:value_html,
                 scope: "investigations.overview.risk_assessments",
                 count: investigation.risk_assessments.count,
-                assessed_by: (most_recent_risk_assessment ? risk_assessed_by(most_recent_risk_assessment) : ""),
+                assessed_by: (most_recent_risk_assessment ? risk_assessed_by(team: most_recent_risk_assessment.assessed_by_team, business: most_recent_risk_assessment.assessed_by_business, other: most_recent_risk_assessment.assessed_by_other) : ""),
                 assessed_on: (most_recent_risk_assessment ? most_recent_risk_assessment.assessed_on.to_s(:govuk) : ""),
                 assessed_risk: (most_recent_risk_assessment ? most_recent_risk_assessment.risk_level_description : ""))
       }

@@ -98,11 +98,19 @@ module Investigations
       if @risk_assessment_form.valid?
         result = UpdateRiskAssessment.call!(
           @risk_assessment_form.attributes.merge({
-            risk_assessment: @risk_assessment
+            risk_assessment: @risk_assessment,
+            custom_risk_level: @risk_assessment_form.custom_risk_level,
+            user: current_user
           })
         )
 
-        redirect_to investigation_risk_assessment_path(@investigation, result.risk_assessment)
+        if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
+
+          redirect_to investigation_risk_assessment_path(@investigation, result.risk_assessment)
+        else
+          redirect_to investigation_risk_assessment_update_case_risk_level_path(@investigation, result.risk_assessment)
+        end
+
       else
         @investigation = @investigation.decorate
         render :edit

@@ -51,6 +51,13 @@ class RiskAssessmentForm
     }
   end
 
+  # Ignore custom risk level value if risk_level isn't other
+  def custom_risk_level
+    return nil if risk_level.to_s != "other"
+
+    super
+  end
+
   def products
     investigation.products
     .pluck(:name, :id).collect do |row|
