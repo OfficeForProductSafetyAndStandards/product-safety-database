@@ -6,7 +6,6 @@ class UpdateRiskAssessment
 
   delegate :investigation, to: :risk_assessment
 
-
   def call
     @previous_product_ids = risk_assessment.product_ids
     ActiveRecord::Base.transaction do
