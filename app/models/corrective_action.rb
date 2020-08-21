@@ -41,7 +41,7 @@ class CorrectiveAction < ApplicationRecord
   validates :geographic_scope, presence: true
   validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
   validates :action, inclusion: { in: actions.keys }
-  validates :other_action, presence: true, length: { maximum: 50_000 }, if: -> { action == "other" }
+  validates :other_action, presence: true, length: { maximum: 10_000 }, if: -> { action == "other" }
 
   validates :details, length: { maximum: 50_000 }
 
