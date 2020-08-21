@@ -16,7 +16,7 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
            product: product_one,
            business: business_one)
   end
-  let(:new_summary)          { ((CorrectiveAction.actions.keys - %W[Other #{corrective_action.action}])).sample }
+  let(:new_summary)          { ((CorrectiveAction.actions.keys - %W[other #{corrective_action.action}])).sample }
   let(:new_date_decided)     { corrective_action.date_decided - 1.day }
   let(:new_legislation)      { (Rails.application.config.legislation_constants["legislation"] - [corrective_action.legislation]).sample }
   let(:new_duration)         { (CorrectiveAction::DURATION_TYPES - [corrective_action.duration]).sample }
