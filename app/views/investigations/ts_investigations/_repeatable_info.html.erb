@@ -1,6 +1,6 @@
 <% page_heading = title %>
 <% page_title page_heading, errors: model.errors.any? %>
-<% cope ||= nil %>
+<% scope ||= nil %>
 <%= form_with model: model, scope: scope, url: wizard_path, method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
