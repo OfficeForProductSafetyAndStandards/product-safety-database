@@ -3,7 +3,7 @@
 = page_title page_heading, errors: model.errors.any?
 
 - scope ||= nil
-= form_with model: model, scope: scope, url: wizard_path, method: :put, local: true do |form|
+= form_with model: model, scope: scope, url: wizard_path, method: :put, local: true, builder: ApplicationFormBuilder do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
       = render "form_components/govuk_error_summary", form: form

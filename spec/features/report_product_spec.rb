@@ -33,7 +33,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   let(:corrective_actions) do
     action = lambda {
       {
-        summary: Faker::Lorem.sentence,
+        action: "other",
+        other_action: Faker::Lorem.sentence,
         date: Faker::Date.backward(days: 14),
         legislation: Rails.application.config.legislation_constants["legislation"].sample,
         details: Faker::Lorem.sentence,
@@ -131,8 +132,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_record_corrective_action_page
 
-        corrective_actions.each do |action|
-          fill_in_record_corrective_action_page(with: action)
+        corrective_actions.each do |corrective_action_attributes|
+          fill_in_record_corrective_action_page(with: corrective_action_attributes)
           expect_to_be_on_record_corrective_action_page
         end
 
@@ -355,7 +356,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def expect_case_activity_page_to_show_corrective_action(action)
-    item = page.find("h3", text: action[:summary]).find(:xpath, "..")
+    item = page.find("h3", text: action[:other_action]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
@@ -446,7 +447,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_record_corrective_action_page(with:)
-    fill_in "Summary", with: with[:summary]
+    within_fieldset("Action") do
+      choose "Other"
+      fill_in "Other action", with: with[:other_action]
+    end
     fill_in "Day", with: with[:date].day
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
