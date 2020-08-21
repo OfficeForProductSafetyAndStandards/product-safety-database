@@ -100,16 +100,6 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
     metadata["details"].presence
   end
 
-  def assessed_by_name
-    if metadata["assessed_by_team_id"]
-      Team.find(metadata["assessed_by_team_id"])&.name
-    elsif metadata["assessed_by_business_id"]
-      Business.find(metadata["assessed_by_business_id"])&.trading_name
-    else
-      metadata["assessed_by_other"]
-    end
-  end
-
   # Do not send investigation_updated mail when test result updated. This
   # overrides inherited functionality in the Activity model :(
   def notify_relevant_users; end
