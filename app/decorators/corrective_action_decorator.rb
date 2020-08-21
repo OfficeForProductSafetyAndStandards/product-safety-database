@@ -11,7 +11,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    CorrectiveAction.actions[other? ? other_action : action]
+    other? ? other_action : CorrectiveAction.actions[action]
   end
 
   def date_of_activity

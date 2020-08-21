@@ -1,5 +1,5 @@
 RSpec.shared_context "with all types of supporting information", :with_stubbed_antivirus do
-  let!(:corrective_action) { create(:corrective_action, :with_file, action: "Other", other_action: "Corrective Action", owner_id: user.id, investigation: investigation).decorate }
+  let!(:corrective_action) { create(:corrective_action, :with_file, action: "other", other_action: "Corrective action", owner_id: user.id, investigation: investigation).decorate }
   let!(:email)             { create(:correspondence_email, overview: "Email correspondence", investigation: investigation).decorate }
   let!(:phone_call)        { create(:correspondence_phone_call, overview: "Phone call correspondence", investigation: investigation).decorate }
   let!(:meeting)           { create(:correspondence_meeting, overview: "Meeting correspondence", investigation: investigation).decorate }
