@@ -1,7 +1,7 @@
 <%= render "form_components/govuk_radios",
            form: form,
            key: :action,
-           fieldset: { legend: { text: "Action", classes: "govuk-fieldset__legend--m" } },
+           fieldset: { legend: { text: "What action is being taken?", classes: "govuk-fieldset__legend--m" } },
            items: corrective_action_summary_radio_items(form) %>
 
 <%= render "form_components/govuk_date_input",

@@ -98,7 +98,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_form_to_show_input_data
-    within_fieldset "Action" do
+    within_fieldset "What action is being taken?" do
       expect(page).to have_checked_field(action)
     end
 

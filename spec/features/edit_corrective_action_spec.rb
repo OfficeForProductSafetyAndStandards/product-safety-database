@@ -14,7 +14,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_link "Edit corrective action"
 
-      within_fieldset("Action") { expect(page).to have_checked_field(corrective_action.decorate.supporting_information_title) }
+      within_fieldset("What action is being taken?") { expect(page).to have_checked_field(corrective_action.decorate.supporting_information_title) }
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
       expect(page).to have_field("Month",   with: corrective_action.date_decided.month)
       expect(page).to have_field("Year",    with: corrective_action.date_decided.year)
@@ -29,7 +29,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       document = corrective_action.documents_blobs.first
       expect(page).to have_link(document.filename.to_s)
 
-      within_fieldset("Action") do
+      within_fieldset("What action is being taken?") do
         choose "Other"
         fill_in "corrective_action[other_action]", with: Faker::Hipster.paragraph(sentence_count: 3)
       end
@@ -60,7 +60,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       click_link "Edit corrective action"
 
       new_action = (CorrectiveAction.actions.values - %w[Other]).sample
-      within_fieldset("Action") do
+      within_fieldset("What action is being taken?") do
         choose new_action
       end
 
