@@ -17,7 +17,7 @@
         <span class="govuk-hint">
           There are no products on this case.
           <br />
-          = link_to "Add a product", new_investigation_product_path(investigation)
+          <%= link_to "Add a product", new_investigation_product_path(investigation) %>
           to record a corrective action.
         </span>
       <% elsif  investigation.products.size == 1 %>
