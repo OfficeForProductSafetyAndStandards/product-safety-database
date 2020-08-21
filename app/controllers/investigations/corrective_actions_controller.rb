@@ -44,7 +44,7 @@ module Investigations
         :product_id,
         :business_id,
         :legislation,
-        :summary,
+        :action,
         :details,
         :related_file,
         :measure_type,

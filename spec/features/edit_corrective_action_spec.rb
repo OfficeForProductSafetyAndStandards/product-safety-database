@@ -57,10 +57,22 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
 
+      click_link "Edit corrective action"
+
+      new_action = (CorrectiveAction.actions.values - %w[Other]).sample
+      within_fieldset("Action") do
+        choose new_action
+      end
+
+      click_on "Update corrective action"
+
+      expect_to_be_on_corrective_action_summary_page
+      expect(page).to have_css("h1.govuk-heading-m", text: new_action)
+
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
-      click_link "View corrective action"
+      page.first("a", text: "View corrective action").click
 
       expect_to_be_on_corrective_action_summary_page
     end
