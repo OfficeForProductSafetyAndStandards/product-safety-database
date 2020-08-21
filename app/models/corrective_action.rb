@@ -16,16 +16,16 @@ class CorrectiveAction < ApplicationRecord
   date_attribute :date_decided
 
   enum action: {
-    ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on the marketing of the product and any accompanying measures",
-    destruction_of_the_product: "Destruction of the product",
-    import_rejected_at_border: "Import rejected at border",
-    making_the_marketing_of_the_product_subject_to_prior_conditions: "Making the marketing of the product subject to prior conditions",
-    marking_the_product_with_appropriate_warnings_on_the_risks: "Marking the product with appropriate warnings on the risks",
-    recall_of_the_product_from_end_users: "Recall of the product from end users",
-    temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban on the supply, offer to supply and display of the product",
-    warning_consumers_of_the_risks: "Warning consumers of the risks",
-    withdrawal_of_the_product_from_the_market: "Withdrawal of the product from the market",
-    other: "Other"
+    ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures),
+    destruction_of_the_product: I18n.t(:destruction_of_the_product),
+    import_rejected_at_border: I18n.t(:import_rejected_at_border),
+    making_the_marketing_of_the_product_subject_to_prior_conditions: I18n.t(:making_the_marketing_of_the_product_subject_to_prior_conditions),
+    marking_the_product_with_appropriate_warnings_on_the_risks: I18n.t(:marking_the_product_with_appropriate_warnings_on_the_risks),
+    recall_of_the_product_from_end_users: I18n.t(:recall_of_the_product_from_end_users),
+    temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: I18n.t(:temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product),
+    warning_consumers_of_the_risks: I18n.t(:warning_consumers_of_the_risks),
+    withdrawal_of_the_product_from_the_market: I18n.t(:withdrawal_of_the_product_from_the_market),
+    other: I18n.t(:other)
   }
 
   before_validation { trim_line_endings(:other_action, :details) }

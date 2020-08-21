@@ -53,7 +53,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
     end
 
     context "with other_action longer than 10,000 characters" do
-      let(:action) { "Other" }
+      let(:action) { "other" }
       let(:other_action) { Faker::Lorem.characters(number: 10_001) }
 
       it "returns false" do
