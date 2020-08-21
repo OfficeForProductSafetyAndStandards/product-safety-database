@@ -4,7 +4,8 @@
 <%= form_with model: model, scope: scope, url: wizard_path, method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= error_summary(model.errors) %>
+
       <span class="govuk-caption-l">
         Report an unsafe or non-compliant product
       </span>

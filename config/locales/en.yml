@@ -366,6 +366,10 @@ en:
             geographic_scope:
               blank: "You must state the geographic scope of the action"
               inclusion: "You must state the geographic scope of the action"
+            action:
+              inclusion: "Select type of corrective action"
+            other_action:
+              blank: "Enter type of corrective action"
         alert:
           attributes:
             summary:

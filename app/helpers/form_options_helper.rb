@@ -23,7 +23,7 @@ module FormOptionsHelper
 
       if value == "other"
         item[:conditional] = {
-          html: form.govuk_text_area(:other_action, label: "Other action", label_classes: "govuk-visually-hidden")
+          html: form.govuk_input(:other_action, label: "Other action", label_classes: "govuk-visually-hidden")
         }
       end
 
