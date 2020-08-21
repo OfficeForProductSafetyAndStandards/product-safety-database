@@ -10,10 +10,9 @@
       </span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
       <%= yield(form) %>
-      <% unless  do %>
-        <hr  class="govuk-section-break#{' govuk-section-break--visible govuk-section-break--m' unless hide_break}" />
-        govuk-section-break
-      <%= end %>
+
+      <hr  class="govuk-section-break#{' govuk-section-break--visible govuk-section-break--m' unless hide_break}" />
+
       <%= render "form_components/govuk_radios",
                  form: form,
                  key: further_key,
