@@ -108,7 +108,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_select(attribute, label:, items:, hint: nil)
+  def govuk_select(attribute, label:, label_classes: nil, items:, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -127,7 +127,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     @template.render "components/govuk_select",
                      id: attribute.to_s,
                      name: input_name(attribute),
-                     label: { text: label },
+                     label: { text: label, classes: label_classes.to_s },
                      hint: hint,
                      items: @items,
                      errorMessage: error_message
