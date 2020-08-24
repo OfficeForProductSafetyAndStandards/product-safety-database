@@ -12,9 +12,11 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
       :assessed_by_business_id,
       :assessed_by_other,
       :details
-    ).merge({
-      product_ids: [previous_product_ids, risk_assessment.product_ids]
-    })
+    )
+
+    if previous_product_ids.sort != risk_assessment.product_ids.sort
+      updates[:product_ids] = [previous_product_ids, risk_assessment.product_ids]
+    end
 
     current_attachment_filename = risk_assessment.risk_assessment_file.filename
 
