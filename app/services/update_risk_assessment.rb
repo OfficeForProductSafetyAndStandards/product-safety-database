@@ -7,9 +7,12 @@ class UpdateRiskAssessment
   delegate :investigation, to: :risk_assessment
 
   def call
+    context.fail!(error: "No risk assessment supplied") unless risk_assessment.is_a?(RiskAssessment)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
+
     @previous_product_ids = risk_assessment.product_ids
     ActiveRecord::Base.transaction do
-      risk_assessment.update!({
+      risk_assessment.attributes = {
         assessed_on: assessed_on,
         risk_level: risk_level,
         custom_risk_level: custom_risk_level.presence,
@@ -18,7 +21,12 @@ class UpdateRiskAssessment
         assessed_by_other: assessed_by_other.presence,
         details: details,
         product_ids: product_ids
-      })
+      }
+
+      break if no_changes?
+
+      risk_assessment.save!
+
       create_audit_activity
       send_notification_email
     end
@@ -26,14 +34,22 @@ class UpdateRiskAssessment
 
 private
 
+  def no_changes?
+    !risk_assessment.changed?
+  end
+
   def create_audit_activity
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.create!(
-      source: UserSource.new(user: user),
+      source: user_source,
       investigation: investigation,
       metadata: audit_activity_metadata,
       title: nil,
       body: nil
     )
+  end
+
+  def user_source
+    @user_source ||= UserSource.new(user: user)
   end
 
   def audit_activity_metadata
@@ -51,7 +67,7 @@ private
         investigation.pretty_id,
         recipient.name,
         email,
-        "#{context.activity.source.show(recipient)} edited a corrective action on the #{investigation.case_type}.",
+        "#{user_source.show(recipient)} edited a risk assessment on the #{investigation.case_type}.",
         "Risk assessment edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end
