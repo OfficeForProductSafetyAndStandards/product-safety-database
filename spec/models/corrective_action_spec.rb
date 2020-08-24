@@ -14,7 +14,8 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       geographic_scope: geographic_scope,
       details: details,
       related_file: related_file,
-      investigation: investigation
+      investigation: investigation,
+      product: create(:product)
     )
   end
 
