@@ -11,6 +11,8 @@ class UpdateRiskAssessment
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     @previous_product_ids = risk_assessment.product_ids
+    @previous_attachment_filename = risk_assessment.risk_assessment_file.filename
+
     ActiveRecord::Base.transaction do
       risk_assessment.attributes = {
         assessed_on: assessed_on,
@@ -22,6 +24,10 @@ class UpdateRiskAssessment
         details: details,
         product_ids: product_ids
       }
+
+      if risk_assessment_file
+        risk_assessment.risk_assessment_file = risk_assessment_file
+      end
 
       break if no_changes?
 
@@ -55,7 +61,8 @@ private
   def audit_activity_metadata
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.build_metadata(
       risk_assessment: risk_assessment,
-      previous_product_ids: @previous_product_ids
+      previous_product_ids: @previous_product_ids,
+      previous_attachment_filename: @previous_attachment_filename
     )
   end
 

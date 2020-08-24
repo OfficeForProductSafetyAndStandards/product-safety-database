@@ -3,20 +3,28 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
     raise "Deprecated - use AddRiskAssessmentToCase.call instead"
   end
 
-  def self.build_metadata(risk_assessment:, previous_product_ids:)
+  def self.build_metadata(risk_assessment:, previous_product_ids:, previous_attachment_filename:)
+    updates = risk_assessment.previous_changes.slice(
+      :assessed_on,
+      :risk_level,
+      :custom_risk_level,
+      :assessed_by_team_id,
+      :assessed_by_business_id,
+      :assessed_by_other,
+      :details
+    ).merge({
+      product_ids: [previous_product_ids, risk_assessment.product_ids]
+    })
+
+    current_attachment_filename = risk_assessment.risk_assessment_file.filename
+
+    if previous_attachment_filename != current_attachment_filename
+      updates["filename"] = [previous_attachment_filename, current_attachment_filename]
+    end
+
     {
       risk_assessment_id: risk_assessment.id,
-      updates: risk_assessment.previous_changes.slice(
-        :assessed_on,
-        :risk_level,
-        :custom_risk_level,
-        :assessed_by_team_id,
-        :assessed_by_business_id,
-        :assessed_by_other,
-        :details
-      ).merge({
-        product_ids: [previous_product_ids, risk_assessment.product_ids]
-      })
+      updates: updates
     }
   end
 
@@ -38,6 +46,10 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
 
   def new_risk_level
     updates["risk_level"]&.second
+  end
+
+  def new_filename
+    updates["filename"]&.second
   end
 
   def new_assessed_by_team

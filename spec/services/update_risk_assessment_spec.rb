@@ -18,6 +18,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
            assessed_by_business: nil,
            assessed_by_other: nil,
            details: "More details",
+           risk_assessment_file: Rack::Test::UploadedFile.new("test/fixtures/files/old_risk_assessment.txt"),
            products: [product1])
   end
 
@@ -58,7 +59,8 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
           assessed_by_business_id: assessed_by_business_id,
           assessed_by_other: assessed_by_other,
           details: details,
-          product_ids: product_ids
+          product_ids: product_ids,
+          risk_assessment_file: risk_assessment_file
         )
       end
 
@@ -71,7 +73,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         let(:assessed_by_other) { nil }
         let(:details) { "More details" }
         let(:product_ids) { [product1.id] }
-
+        let(:risk_assessment_file) { nil }
         let(:updated_at) { 1.hour.ago }
 
         before do
@@ -100,6 +102,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         let(:assessed_by_other) { "OtherBusiness Ltd" }
         let(:details) { "Updated details" }
         let(:product_ids) { [product2.id] }
+        let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
 
         it "updates the risk assessment", :aggregate_failures do
           update_risk_assessment
@@ -131,8 +134,9 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
               "assessed_by_team_id" => [user.team.id, nil],
               "assessed_on" => %w[2019-01-01 2020-01-02],
               "details" => ["More details", "Updated details"],
+              "filename" => ["old_risk_assessment.txt", "new_risk_assessment.txt"],
               "product_ids" => [[product1.id], [product2.id]],
-              "risk_level" => %w[low serious]
+              "risk_level" => %w[low serious],
             }
           })
         end
