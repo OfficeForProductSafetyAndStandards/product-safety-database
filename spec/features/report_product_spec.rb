@@ -447,7 +447,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_record_corrective_action_page(with:)
-    within_fieldset("Action") do
+    within_fieldset("What action is being taken?") do
       choose "Other"
       fill_in "Other action", with: with[:other_action]
     end
@@ -456,12 +456,22 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Year", with: with[:date].year
     select with[:legislation], from: "Under which legislation?"
     fill_in "Further details (optional)", with: with[:details]
-    choose "corrective_action_related_file_true"
 
-    attach_file "corrective_action[file][file]", with[:file]
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+    end
+
+    attach_file "Upload a file", with[:file], visible: false
     fill_in "Attachment description", with: with[:file_description]
-    choose "corrective_action_measure_type_#{with[:measure_type]}"
-    choose "corrective_action_duration_#{with[:duration]}"
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose with[:measure_type] == "mandatory" ? "Yes" : "No, it’s voluntary"
+    end
+
+    within_fieldset "How long will the corrective action be in place?" do
+      choose with[:duration].titleize
+    end
+
     select with[:geographic_scope], from: "What is the geographic scope of the action?"
 
     choose "corrective_action_further_corrective_action_yes"
@@ -481,7 +491,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Year", with: with[:date].year
     choose with[:result]
     fill_in "Further details", with: with[:details]
-    attach_file "test[file][file]", with[:file]
+    find(".govuk-details__summary-text", text: "Replace this file").click
+    attach_file "Upload a file", with[:file]
     choose "test_further_test_results_yes"
     click_button "Continue"
   end

@@ -42,10 +42,15 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       select business_two.trading_name,     from: "Business"
       select new_geographic_scope,          from: "What is the geographic scope of the action?"
       fill_in "Further details (optional)", with: new_details
-      choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "corrective_action_measure_type_mandatory" : "corrective_action_measure_type_voluntary"
+      within_fieldset "Is the corrective action mandatory?" do
+        choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
+      end
       choose CorrectiveAction.human_attribute_name("duration.#{new_duration}")
 
-      choose "corrective_action_related_file_true"
+      within_fieldset "Are there any files related to the action?" do
+        choose "Yes"
+      end
+
       find("details > summary", text: "Replace this file").click
 
       attach_file "Upload a file", Rails.root + "spec/fixtures/files/corrective_action.txt"

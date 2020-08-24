@@ -31,11 +31,11 @@
       <% end %>
 
       <%= form.govuk_radios :related_file,
-        legend: "Are there any files related to the action?",
-        items: [
-          { text: "Yes", value: "true", conditional: { html: file_field }},
-          { text: "No", value: "off"}
-        ]
+         legend: "Are there any files related to the action?",
+         items: [
+           { text: "Yes", value: "true", conditional: { html: file_field }},
+           { text: "No", value: "off"}
+         ]
       %>
 
       <%= govukButton(text: "Continue") %>
