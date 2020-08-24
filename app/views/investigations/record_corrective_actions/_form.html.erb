@@ -1,14 +1,10 @@
-<%= render "form_components/govuk_radios",
-           form: form,
-           key: :action,
-           fieldset: { legend: { text: "What action is being taken?", classes: "govuk-fieldset__legend--m" } },
-           items: corrective_action_summary_radio_items(form) %>
+<%= form.govuk_radios :action,
+  legend: "What action is being taken?",
+  items: corrective_action_summary_radio_items(form) %>
 
-<%= render "form_components/govuk_date_input",
-           form: form,
-           key: :date_decided,
-           fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "What date did the action come in to effect?" } },
-           hint: { text: "This may be in the future. For example, 12 7 2019." } %>
+<%= form.govuk_date_input :date_decided,
+  legend: "What date did the action come in to effect?",
+  hint: "This may be in the future. For example, 12 7 2019." %>
 
 <% if allow_product_linking %>
   <%= render "components/govuk_fieldset", legend: { text: "Which product is subject to action?", classes: "govuk-fieldset__legend--m" } do %>
@@ -21,34 +17,23 @@
           to record a corrective action.
         </span>
       <% elsif  investigation.products.size == 1 %>
-        <%= render "form_components/govuk_input",
-                   key: :product_name,
-                   form: form,
-                   attributes: { disabled: true },
-                   classes: "govuk-!-width-two-thirds",
-                   value: investigation.products.first.name,
-                   label: { text: "Product name", classes: "govuk-visually-hidden" } %>
+        <p class="govuk-body"><%= investigation.products.first.name %></p>
         <%= form.hidden_field :product_id, value: investigation.products.first.id %>
       <% else %>
-        <%= render "form_components/govuk_select",
-                   key: :product_id,
-                   form: form,
-                   show_all_values: true,
-                   items: investigation.products.map { |product| { text: product.name, value: product.id } },
-                   is_autocomplete: true,
-                   hint: { text: "Only products already added to the case are listed." },
-                   label: { text: "Product", classes: "govuk-visually-hidden" } %>
+
+        <%= form.govuk_select :product_id,
+          label: "Product",
+          label_classes: "govuk-visually-hidden",
+          items: [{text: "", value: ""}] + investigation.products.map { |product| { text: product.name, value: product.id }},
+          hint: "Only products already added to the case are listed."
+        %>
       <% end %>
     </div>
   <% end %>
 <% end %>
-<%= render "form_components/govuk_select",
-           choices: relevant_legislation,
-           key: :legislation,
-           form: form,
-           is_autocomplete: true,
-           show_all_values: true,
-           label: { text: "Under which legislation?", classes: "govuk-label--m" }
+<%= form.govuk_select :legislation,
+  items: [{text: "", value: ""}] + relevant_legislation.collect {|legislation| { text: legislation, value: legislation}},
+  label: "Under which legislation?"
 %>
 <% if allow_business_linking %>
   <%= render "components/govuk_fieldset", legend: { text: "Which business is responsible?", classes: "govuk-fieldset__legend--m" } do %>
@@ -56,44 +41,40 @@
       <% if investigation.businesses.empty? %>
         <span class="govuk-hint">There are no businesses associated with this case.</span>
       <% else %>
-        <%= render "form_components/govuk_select",
-                   key: :business_id,
-                   form: form,
-                   show_all_values: true,
-                   items: investigation.businesses.map { |business| { text: business.trading_name, value: business.id } },
-                   hint: { text: "Only businesses already added to the case are listed." },
-                   is_autocomplete: true,
-                   label: { text: "Business", classes: "govuk-visually-hidden" } %>
+        <%= form.govuk_select :business_id,
+          label: "Business",
+          label_classes: "govuk-visually-hidden",
+          hint: "Only businesses already added to the case are listed.",
+          items: [{text: "", value: ""}] + investigation.businesses.map { |business| { text: business.trading_name, value: business.id } }
+        %>
       <% end %>
     </div>
   <% end %>
 <% end %>
 
-<%= render "form_components/govuk_radios",
-           form: form,
-           key: :measure_type,
-           fieldset: { legend: { text: "Is the corrective action mandatory?", classes: "govuk-fieldset__legend--m" } },
-           items: [{ text: "Yes", value: "mandatory" },
-                   { text: "No, it’s voluntary", value: "voluntary" }] %>
-<%= render "form_components/govuk_radios",
-           form: form,
-           key: :duration,
-           fieldset: { legend: { text: "How long will the corrective action be in place?", classes: "govuk-fieldset__legend--m" } },
-           items: [{ text: CorrectiveAction.human_attribute_name("duration.permanent"), value: "permanent" },
-                   { text: CorrectiveAction.human_attribute_name("duration.temporary"), value: "temporary" },
-                   { text: CorrectiveAction.human_attribute_name("duration.unknown"), value: "unknown" }] %>
+<%= form.govuk_radios :measure_type,
+  legend: "Is the corrective action mandatory?",
+  items: [
+    { text: "Yes", value: "mandatory" },
+    { text: "No, it’s voluntary", value: "voluntary" }
+  ]
+%>
 
-<%= render "form_components/govuk_select",
-           choices: corrective_action_geographic_scope,
-           key: :geographic_scope,
-           form: form,
-           is_autocomplete: true,
-           show_all_values: true,
-           label: { text: "What is the geographic scope of the action?", classes: "govuk-label--m" } %>
+<%= form.govuk_radios :duration,
+  legend: "How long will the corrective action be in place?",
+  items: [
+    { text: CorrectiveAction.human_attribute_name("duration.permanent"), value: "permanent" },
+    { text: CorrectiveAction.human_attribute_name("duration.temporary"), value: "temporary" },
+    { text: CorrectiveAction.human_attribute_name("duration.unknown"), value: "unknown" }
+  ]
+%>
 
-<%= render "form_components/govuk_textarea",
-           key: :details,
-           form: form,
-           attributes: { maxlength: 50_000 },
-           label: { text: "Further details (optional)", classes: "govuk-label--m" },
-           hint: { text: "If you have more information about a corrective action, add it here." } %>
+<%= form.govuk_select :geographic_scope,
+  label: "What is the geographic scope of the action?",
+  items: [{text: "", value: ""}] + corrective_action_geographic_scope.collect {|geographic_scope| { text: geographic_scope, value: geographic_scope } }
+%>
+
+<%= form.govuk_text_area :details,
+  label: "Further details (optional)",
+  hint: "If you have more information about a corrective action, add it here."
+%>
