@@ -199,4 +199,86 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
       end
     end
   end
+
+  describe "attributes" do
+    describe "#custom_risk_level" do
+      let(:custom_risk_level) { "Medium risk" }
+
+      context "when risk_level is set to :other" do
+        let(:risk_level) { :other }
+
+        it "returns the value set" do
+          expect(form.custom_risk_level).to eq "Medium risk"
+        end
+      end
+
+      context "when risk_level is not set to :other" do
+        let(:risk_level) { :serious }
+
+        it "always returns nil" do
+          expect(form.custom_risk_level).to be nil
+        end
+      end
+    end
+
+    describe "#assessed_by_business_id" do
+      let(:assessed_by_business_id) { "123" }
+
+      context "when assessed_by is set to 'business'" do
+        let(:assessed_by) { "business" }
+
+        it "returns the value set" do
+          expect(form.assessed_by_business_id).to eq "123"
+        end
+      end
+
+      context "when assessed_by is set another option" do
+        let(:assessed_by) { "my_team" }
+
+        it "always returns nil" do
+          expect(form.assessed_by_business_id).to be nil
+        end
+      end
+    end
+
+    describe "#assessed_by_team_id" do
+      let(:assessed_by_team_id) { "123" }
+
+      context "when assessed_by is set to 'another_team'" do
+        let(:assessed_by) { "another_team" }
+
+        it "returns the value set" do
+          expect(form.assessed_by_team_id).to eq "123"
+        end
+      end
+
+      context "when assessed_by is set another option" do
+        let(:assessed_by) { "business" }
+
+        it "always returns nil" do
+          expect(form.assessed_by_team_id).to be nil
+        end
+      end
+    end
+
+    describe "#assessed_by_other" do
+      let(:assessed_by_other) { "Another Org Ltd" }
+
+      context "when assessed_by is set to 'other'" do
+        let(:assessed_by) { "other" }
+
+        it "returns the value set" do
+          expect(form.assessed_by_other).to eq "Another Org Ltd"
+        end
+      end
+
+      context "when assessed_by is set another option" do
+        let(:assessed_by) { "business" }
+
+        it "always returns nil" do
+          expect(form.assessed_by_other).to be nil
+        end
+      end
+    end
+  end
 end
