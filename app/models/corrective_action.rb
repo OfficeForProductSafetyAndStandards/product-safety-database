@@ -9,7 +9,7 @@ class CorrectiveAction < ApplicationRecord
 
   belongs_to :investigation
   belongs_to :business, optional: true
-  belongs_to :product, optional: true
+  belongs_to :product
 
   has_many_attached :documents
 
@@ -44,8 +44,6 @@ class CorrectiveAction < ApplicationRecord
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: -> { action == "other" }
 
   validates :details, length: { maximum: 50_000 }
-
-  validates :product_id, presence: true
 
   after_create :create_audit_activity
 
