@@ -351,8 +351,8 @@ en:
               blank: "Enter a comment"
         corrective_action:
           attributes:
-            product_id:
-              blank: "Select the product the corrective action relates to"
+            product:
+              required: "Select the product the corrective action relates to"
             date_decided:
               blank: "Enter date the corrective action was decided"
               invalid: "Enter a real date when the corrective action was decided"
