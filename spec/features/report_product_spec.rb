@@ -491,7 +491,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Year", with: with[:date].year
     choose with[:result]
     fill_in "Further details", with: with[:details]
-    find(".govuk-details__summary-text", text: "Replace this file").click
     attach_file "Upload a file", with[:file]
     choose "test_further_test_results_yes"
     click_button "Continue"
