@@ -2,7 +2,7 @@
 
 one:
   date_decided: 2018-11-15
-  summary: Corrective action one
+  action: destruction_of_the_product
   details: Details for corrective action one
   legislation: General Product Safety Regulations 2005
   investigation: one
@@ -11,7 +11,7 @@ one:
 
 two:
   date_decided: 2018-11-16
-  summary: Corrective action two
+  action: import_rejected_at_border
   details: Details for corrective action two
   legislation: Recreational Craft Regulations 2017
   investigation: two

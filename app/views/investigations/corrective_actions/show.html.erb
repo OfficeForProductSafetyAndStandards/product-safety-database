@@ -1,4 +1,4 @@
-<% page_heading = @corrective_action.summary %>
+<% page_heading = @corrective_action.supporting_information_title %>
 <% page_title page_heading %>
 
 <% content_for :back_link do %>
@@ -14,7 +14,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">Corrective action</span>
-    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+    <h1 class="<%= @corrective_action.display_medium_title_text_size? ? "govuk-heading-m" : "govuk-heading-l" %>"><%= page_heading %></h1>
 
     <div class="app-meta-area">
       <p class="govuk-body govuk-hint">

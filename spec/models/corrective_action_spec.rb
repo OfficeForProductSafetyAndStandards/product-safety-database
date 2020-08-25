@@ -4,7 +4,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   subject(:corrective_action) do
     build(
       :corrective_action,
-      summary: summary,
+      action: action,
       date_decided_day: date_decided ? date_decided.day : nil,
       date_decided_month: date_decided ? date_decided.month : nil,
       date_decided_year: date_decided ? date_decided.year : nil,
@@ -14,11 +14,13 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       geographic_scope: geographic_scope,
       details: details,
       related_file: related_file,
-      investigation: investigation
+      investigation: investigation,
+      product: create(:product)
     )
   end
 
-  let(:summary) { Faker::Lorem.sentence }
+  let(:action) { (described_class.actions.values - %w[Other]).sample }
+  let(:other_action) { nil }
   let(:date_decided) { Faker::Date.backward(days: 14) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
@@ -36,15 +38,24 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
     end
 
     context "with blank summary" do
-      let(:summary) { nil }
+      let(:action) { nil }
 
       it "returns false" do
         expect(corrective_action).not_to be_valid
       end
     end
 
-    context "with summary longer than 10,000 characters" do
-      let(:summary) { Faker::Lorem.characters(number: 10_001) }
+    context 'when summary is set to "other"' do
+      before { corrective_action.action = "other" }
+
+      context "with blank other_action" do
+        it { is_expected.to be_invalid }
+      end
+    end
+
+    context "with other_action longer than 10,000 characters" do
+      let(:action) { "other" }
+      let(:other_action) { Faker::Lorem.characters(number: 10_001) }
 
       it "returns false" do
         expect(corrective_action).not_to be_valid

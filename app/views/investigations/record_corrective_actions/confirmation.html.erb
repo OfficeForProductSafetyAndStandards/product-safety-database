@@ -15,11 +15,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
     <% rows = [
       {
-        key: { text: "Summary" },
-        value: { text: @corrective_action.summary }
+        key: { text: "Action" },
+        value: { text: @corrective_action.supporting_information_title }
       },
       {
         key: { text: "Date of action" },
@@ -35,48 +34,48 @@
       }
     ]
 
-      if @corrective_action.business
+    if @corrective_action.business
+      rows << {
+        key: { text: "Business" },
+        value: { text: @corrective_action.business.trading_name }
+      }
+    end
+
+    rows += [
+      {
+        key: { text: "Type of measure" },
+        value: { text: CorrectiveAction.human_attribute_name("measure_type.#{@corrective_action.measure_type}") }
+      },
+      {
+        key: { text: "Duration of action" },
+        value: { text: CorrectiveAction.human_attribute_name("duration.#{@corrective_action.duration}") }
+      },
+      {
+        key: { text: "Geographic scope" },
+        value: { text: @corrective_action.geographic_scope }
+      }
+    ]
+
+    if @corrective_action.details.present?
+      rows << {
+        key: { text: "Details" },
+        value: { text: @corrective_action.details }
+      }
+    end
+
+    if @file_blob
+      rows << {
+        key: { text: "Attachment" },
+        value: { text: @file_blob.filename }
+      }
+
+      if @file_blob.metadata[:description].present?
         rows << {
-          key: { text: "Business" },
-          value: { text: @corrective_action.business.trading_name }
+          key: { text: "Attachment description" },
+          value: { text: @file_blob.metadata[:description] }
         }
       end
-
-      rows += [
-        {
-          key: { text: "Type of measure" },
-          value: { text: CorrectiveAction.human_attribute_name("measure_type.#{@corrective_action.measure_type}") }
-        },
-        {
-          key: { text: "Duration of action" },
-          value: { text: CorrectiveAction.human_attribute_name("duration.#{@corrective_action.duration}") }
-        },
-        {
-          key: { text: "Geographic scope" },
-          value: { text: @corrective_action.geographic_scope }
-        }
-      ]
-
-      if @corrective_action.details.present?
-        rows << {
-          key: { text: "Details" },
-          value: { text: @corrective_action.details }
-        }
-      end
-
-      if @file_blob
-        rows << {
-          key: { text: "Attachment" },
-          value: { text: @file_blob.filename }
-        }
-
-        if @file_blob.metadata[:description].present?
-          rows << {
-            key: { text: "Attachment description" },
-            value: { text: @file_blob.metadata[:description] }
-          }
-        end
-      end
+    end
     %>
 
     <%= govukSummaryList(rows: rows) %>

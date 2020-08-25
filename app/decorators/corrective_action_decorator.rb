@@ -2,6 +2,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   delegate_all
   include SupportingInformationHelper
 
+  MEDIUM_TITLE_TEXT_SIZE_THRESHOLD = 62
+
   def details
     return if object.details.blank?
 
@@ -9,7 +11,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    summary
+    other? ? other_action : CorrectiveAction.actions[action]
   end
 
   def date_of_activity
@@ -38,5 +40,11 @@ class CorrectiveActionDecorator < ApplicationDecorator
 
   def file_attached?
     documents.any?
+  end
+
+  def display_medium_title_text_size?
+    return false if other_action.nil?
+
+    other_action.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
 end
