@@ -196,6 +196,13 @@ class Investigation < ApplicationRecord
     # To be implemented by children
   end
 
+  def categories
+    ([product_category] + products.map(&:categories)).tap do |c|
+      c.uniq!
+      c.compact!
+    end
+  end
+
 private
 
   def create_audit_activity_for_status

@@ -172,4 +172,10 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
     end
   end
+
+  describe "#categories" do
+    context "when no products" do
+      specify { expect(investigation.categories).to eq([investigation.product_category]) }
+    end
+  end
 end
