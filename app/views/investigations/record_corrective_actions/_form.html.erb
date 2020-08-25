@@ -26,15 +26,21 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
           label: "Product",
           label_classes: "govuk-visually-hidden",
           items: [{text: "", value: ""}] + investigation.products.map { |product| { text: product.name, value: product.id }},
-          hint: "Only products already added to the case are listed."
+         hint: "Only products already added to the case are listed."
         %>
       <% end %>
     </div>
   <% end %>
 <% end %>
-<%= form.govuk_select :legislation,
-  items: [{text: "", value: ""}] + relevant_legislation.collect {|legislation| { text: legislation, value: legislation}},
-  label: "Under which legislation?"
+
+<%= render "form_components/govuk_select",
+  choices: relevant_legislation,
+  key: :legislation,
+  form: form,
+  is_autocomplete: true,
+  show_all_values: true,
+  label: { text: "Under which legislation?", classes: "govuk-label--m" }
+
 %>
 <% if allow_business_linking %>
   <%= render "components/govuk_fieldset", legend: { text: "Which business is responsible?", classes: "govuk-fieldset__legend--m" } do %>
