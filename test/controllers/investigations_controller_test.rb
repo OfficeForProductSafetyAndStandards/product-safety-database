@@ -74,36 +74,6 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to investigation_path(investigation)
   end
 
-  test "should set description" do
-    old_description = "old"
-    new_description = "description"
-
-    investigation = Investigation::Allegation.new(description: old_description, reported_reason: Investigation.reported_reasons[:unsafe])
-    CreateCase.call(investigation: investigation, user: @user)
-
-    investigation_status = -> { Investigation.find(investigation.id).description }
-    assert_changes investigation_status, from: old_description, to: new_description do
-      patch edit_summary_investigation_url(investigation),
-            params: {
-              investigation: {
-                description: new_description
-              }
-            }
-    end
-    assert_redirected_to investigation_path(investigation)
-  end
-
-  test "should require description to not be empty" do
-    patch edit_summary_investigation_url(@investigation_one),
-          params: {
-            investigation: {
-              description: ""
-            }
-          },
-          headers: { "HTTP_REFERER": "/cases/1111-1111/edit_summary" }
-    assert_includes(CGI.unescapeHTML(response.body), "Description cannot be blank")
-  end
-
   test "status filter should be defaulted to open" do
     get investigations_path
     assert_not_includes(response.body, @investigation_three.pretty_id)

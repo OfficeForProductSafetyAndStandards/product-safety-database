@@ -104,7 +104,7 @@ Rails.application.routes.draw do
       get :visibility
       patch :visibility
       get :edit_summary
-      patch :edit_summary
+      patch :update_summary
       get :created
     end
 

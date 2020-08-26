@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show status visibility edit_summary created]
+  before_action :set_investigation, only: %i[show status visibility created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -75,10 +75,36 @@ class InvestigationsController < ApplicationController
   end
 
   # GET /cases/1/edit_summary
-  # PATCH /cases/1/edit_summary
   def edit_summary
+    @investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:pretty_id]).decorate
     authorize @investigation, :update?
-    update
+
+    @form = ChangeCaseSummaryForm.new(summary: @investigation.object.description)
+  end
+
+  # PATCH /cases/1/edit_summary
+  def update_summary
+    @investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:pretty_id]).decorate
+    authorize @investigation, :update?
+
+    @form = ChangeCaseSummaryForm.new(params.require(:change_case_summary_form).permit(:summary))
+
+    unless @form.valid?
+      return respond_to do |format|
+        format.html { render :edit_summary, status: :unprocessable_entity }
+        format.json { render json: @form.errors, status: :unprocessable_entity }
+      end
+    end
+
+    ChangeCaseSummary.call!(investigation: @investigation.object, summary: @form.summary, user: current_user)
+
+    respond_to do |format|
+      format.html do
+        redirect_to investigation_path(@investigation),
+                    flash: { success: "#{@investigation.case_type.upcase_first} was successfully updated" }
+      end
+      format.json { render :show, status: :ok, location: @investigation }
+    end
   end
 
   def created
