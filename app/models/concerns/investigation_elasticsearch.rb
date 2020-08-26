@@ -55,7 +55,8 @@ module InvestigationElasticsearch
             only: %i[details result legislation]
           },
           corrective_actions: {
-            only: %i[details action other_action legislation]
+            methods: :action_label,
+            only: %i[details other_action legislation]
           },
           alerts: {
             only: %i[description summary]

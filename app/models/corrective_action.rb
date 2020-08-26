@@ -47,6 +47,10 @@ class CorrectiveAction < ApplicationRecord
 
   after_create :create_audit_activity
 
+  def action_label
+    self.class.actions[action]
+  end
+
 private
 
   def date_decided_cannot_be_in_the_future
