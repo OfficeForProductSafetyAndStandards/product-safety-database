@@ -87,6 +87,7 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   def create
     if records_saved?
+      @investigation.__elasticsearch__.index_document
       redirect_to created_investigation_path(@investigation)
     else
       render_wizard
