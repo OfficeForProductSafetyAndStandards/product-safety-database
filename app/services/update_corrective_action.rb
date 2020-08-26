@@ -20,6 +20,7 @@ class UpdateCorrectiveAction
       actvity = create_audit_activity_for_corrective_action_updated!(@previous_attachment)
 
       send_notification_email(actvity)
+      investigation.__elasticsearch__.index_document
     end
   end
 
