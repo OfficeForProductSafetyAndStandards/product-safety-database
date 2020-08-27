@@ -1,14 +1,12 @@
 class ChangeCaseSummary
   include Interactor
 
-  delegate :investigation, :summary, :old_summary, :user, to: :context
+  delegate :investigation, :summary, :user, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No summary supplied") unless summary.is_a?(String)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-
-    context.old_summary = investigation.description
 
     investigation.assign_attributes(description: summary)
     return if investigation.changes.none?
@@ -24,7 +22,7 @@ class ChangeCaseSummary
 private
 
   def create_audit_activity_for_case_summary_changed
-    metadata = activity_class.build_metadata(summary, old_summary)
+    metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
       source: UserSource.new(user: user),

@@ -3,12 +3,11 @@ class AuditActivity::Investigation::UpdateSummary < AuditActivity::Investigation
     raise "Deprecated - use ChangeCaseSummary.call instead"
   end
 
-  def self.build_metadata(new_summary, old_summary)
+  def self.build_metadata(investigation)
+    updated_values = investigation.previous_changes.slice(:description)
+
     {
-      summary: {
-        old: old_summary,
-        new: new_summary
-      }
+      updates: updated_values
     }
   end
 
@@ -17,7 +16,7 @@ class AuditActivity::Investigation::UpdateSummary < AuditActivity::Investigation
   end
 
   def new_summary
-    metadata["summary"]["new"]
+    metadata["updates"]["description"].second
   end
 
 private

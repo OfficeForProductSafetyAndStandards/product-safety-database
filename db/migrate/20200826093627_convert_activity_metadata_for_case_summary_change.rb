@@ -3,8 +3,15 @@ class ConvertActivityMetadataForCaseSummaryChange < ActiveRecord::Migration[5.2]
     AuditActivity::Investigation::UpdateSummary.all.each do |activity|
       new_summary = activity.attributes["body"]
 
+      # We need to construct the Hash manually because we can't retrospectively create ActiveRecord dirty models easily
+      metadata = {
+        updates: {
+          "description" => [nil, new_summary]
+        }
+      }
+
       activity.update!(
-        metadata: activity.class.build_metadata(new_summary, nil),
+        metadata: metadata,
         body: nil,
         title: nil
       )
@@ -15,7 +22,7 @@ class ConvertActivityMetadataForCaseSummaryChange < ActiveRecord::Migration[5.2]
     AuditActivity::Investigation::UpdateSummary.all.each do |activity|
       activity.update!(
         metadata: nil,
-        body: activity.metadata["summary"]["new"],
+        body: activity.metadata["updates"]["description"].second,
         title: "#{activity.investigation.case_type.upcase_first} summary updated"
       )
     end

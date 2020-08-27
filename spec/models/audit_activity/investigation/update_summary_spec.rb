@@ -3,18 +3,23 @@ require "rails_helper"
 RSpec.describe AuditActivity::Investigation::UpdateSummary, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:activity) { described_class.create(investigation: investigation, metadata: metadata) }
 
-  let(:investigation) { create(:allegation) }
+  let(:investigation) { create(:allegation, description: old_summary) }
   let(:new_summary) { "new summary" }
   let(:old_summary) { "old summary" }
 
-  let(:metadata) { described_class.build_metadata(new_summary, old_summary) }
+  before do
+    # Investigation changes must be saved for the metadata to build correctly
+    investigation.description = new_summary
+    investigation.save!
+  end
+
+  let(:metadata) { described_class.build_metadata(investigation) }
 
   describe ".build_metadata" do
     it "returns a Hash of the arguments" do
       expect(metadata).to eq({
-        summary: {
-          new: new_summary,
-          old: old_summary
+        updates: {
+          "description" => ["old summary", "new summary"]
         }
       })
     end
