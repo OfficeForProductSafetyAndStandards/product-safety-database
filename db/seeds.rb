@@ -438,7 +438,7 @@ if run_seeds
   if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations"))
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
-    # $ cf7 env REVIEW_APP_NAME
+    # $ cf env REVIEW_APP_NAME
     #
     # {
     #   "organisations": [
