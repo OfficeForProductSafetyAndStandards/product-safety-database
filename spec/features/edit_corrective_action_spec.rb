@@ -72,7 +72,12 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       click_on "Update corrective action"
 
       expect_to_be_on_corrective_action_summary_page
-      expect(page).to have_css("h1.govuk-heading-m", text: new_action)
+
+      if new_action.length > CorrectiveActionDecorator::MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
+        expect(page).to have_css("h1.govuk-heading-m", text: new_action)
+      else
+        expect(page).to have_css("h1.govuk-heading-l", text: new_action)
+      end
 
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
