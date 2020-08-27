@@ -1,5 +1,4 @@
 class Investigations::SummaryController < ApplicationController
-
   # GET /cases/1/summary/edit
   def edit
     investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:investigation_pretty_id])

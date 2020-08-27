@@ -72,7 +72,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_elasticsearch, :with_test_queue_
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Investigation::UpdateSummary)
         expect(activity.source.user).to eq(user)
-        expect(activity.metadata).to eq({"updates"=>{"description"=>["Old summary", "New summary"]}})
+        expect(activity.metadata).to eq({ "updates" => { "description" => ["Old summary", "New summary"] } })
       end
 
       context "when the user is the case owner" do

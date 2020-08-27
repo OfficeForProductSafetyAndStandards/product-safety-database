@@ -4,6 +4,7 @@ RSpec.describe AuditActivity::Investigation::UpdateSummary, :with_stubbed_elasti
   subject(:activity) { described_class.create(investigation: investigation, metadata: metadata) }
 
   let(:investigation) { create(:allegation, description: old_summary) }
+  let(:metadata) { described_class.build_metadata(investigation) }
   let(:new_summary) { "new summary" }
   let(:old_summary) { "old summary" }
 
@@ -12,8 +13,6 @@ RSpec.describe AuditActivity::Investigation::UpdateSummary, :with_stubbed_elasti
     investigation.description = new_summary
     investigation.save!
   end
-
-  let(:metadata) { described_class.build_metadata(investigation) }
 
   describe ".build_metadata" do
     it "returns a Hash of the arguments" do
