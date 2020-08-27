@@ -10,10 +10,11 @@ class ChangeCaseSummary
 
     context.old_summary = investigation.description
 
-    return if old_summary == summary
+    investigation.assign_attributes(description: summary)
+    return if investigation.changes.none?
 
     ActiveRecord::Base.transaction do
-      investigation.update!(description: summary)
+      investigation.save!
       create_audit_activity_for_case_summary_changed
     end
 
