@@ -19,7 +19,7 @@
                title: "Edit #{@investigation.case_type} summary" %>
 
     <%= form_with(model: @form,
-                  url: update_summary_investigation_path(@investigation),
+                  url: investigation_summary_path(@investigation),
                   method: :patch,
                   builder: ApplicationFormBuilder) do |form| %>
 

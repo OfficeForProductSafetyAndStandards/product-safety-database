@@ -538,6 +538,6 @@ module PageExpectations
   end
 
   def expect_to_be_on_case_summary_edit_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/edit_summary")
+    expect(page).to have_current_path("/cases/#{case_id}/summary/edit")
   end
 end

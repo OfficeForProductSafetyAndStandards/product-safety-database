@@ -74,39 +74,6 @@ class InvestigationsController < ApplicationController
     update
   end
 
-  # GET /cases/1/edit_summary
-  def edit_summary
-    @investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:pretty_id]).decorate
-    authorize @investigation, :update?
-
-    @form = ChangeCaseSummaryForm.new(summary: @investigation.object.description)
-  end
-
-  # PATCH /cases/1/edit_summary
-  def update_summary
-    @investigation = Investigation.includes(:teams_with_edit_access).find_by!(pretty_id: params[:pretty_id]).decorate
-    authorize @investigation, :update?
-
-    @form = ChangeCaseSummaryForm.new(params.require(:change_case_summary_form).permit(:summary))
-
-    unless @form.valid?
-      return respond_to do |format|
-        format.html { render :edit_summary, status: :unprocessable_entity }
-        format.json { render json: @form.errors, status: :unprocessable_entity }
-      end
-    end
-
-    ChangeCaseSummary.call!(investigation: @investigation.object, summary: @form.summary, user: current_user)
-
-    respond_to do |format|
-      format.html do
-        redirect_to investigation_path(@investigation),
-                    flash: { success: "#{@investigation.case_type.upcase_first} was successfully updated" }
-      end
-      format.json { render :show, status: :ok, location: @investigation }
-    end
-  end
-
   def created
     authorize @investigation, :view_non_protected_details?
   end

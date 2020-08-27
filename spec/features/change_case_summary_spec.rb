@@ -8,7 +8,6 @@ RSpec.feature "Changing the case summary", :with_elasticsearch, :with_stubbed_ma
   scenario "user on same team as case owner" do
     sign_in user
     visit investigation_path(investigation)
-    expect(page).to have_link("Change summary", href: "/cases/#{investigation.pretty_id}/edit_summary")
 
     click_link "Change summary"
 
