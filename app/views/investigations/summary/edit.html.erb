@@ -2,7 +2,7 @@
 
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
+    text: "Back to #{@investigation.pretty_description.downcase}",
     href: investigation_path(@investigation)
   ) %>
 <% end %>
