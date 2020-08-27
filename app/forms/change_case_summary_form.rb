@@ -4,6 +4,5 @@ class ChangeCaseSummaryForm
 
   attribute :summary
 
-  validates_presence_of :summary
-  validates :summary, length: { maximum: 10_000 }
+  validates :summary, presence: true, length: { maximum: 10_000 }
 end

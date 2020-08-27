@@ -29,15 +29,15 @@ RSpec.describe ChangeCaseSummaryForm do
     end
 
     context "when no summary is supplied" do
-      let(:summary) { nil }
+      let(:summary) { " " }
 
-      include_examples "invalid form", [:summary, "Summary cannot be blank"]
+      include_examples "invalid form", [:summary, "Enter the case summary"]
     end
 
     context "when summary is too long" do
       let(:summary) { rand(36**10_001).to_s(36) }
 
-      include_examples "invalid form", [:summary, "Summary is too long (maximum is 10000 characters)"]
+      include_examples "invalid form", [:summary, "Summary must be 10,000 characters or fewer"]
     end
   end
 end

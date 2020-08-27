@@ -16,7 +16,7 @@ RSpec.feature "Changing the case summary", :with_elasticsearch, :with_stubbed_ma
     click_on "Update summary"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Summary cannot be blank"
+    expect(page).to have_error_summary "Enter the case summary"
 
     fill_in "Edit summary", with: "new summary"
     click_on "Update summary"
