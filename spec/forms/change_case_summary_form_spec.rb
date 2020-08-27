@@ -12,7 +12,7 @@ RSpec.describe ChangeCaseSummaryForm do
 
     it "does not contain error messages" do
       form.validate
-      expect(form.errors.full_messages).to be_empty
+      expect(form.errors).to be_empty
     end
 
     shared_examples_for "invalid form" do |*errors|
