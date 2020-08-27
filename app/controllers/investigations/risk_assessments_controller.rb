@@ -96,19 +96,12 @@ module Investigations
       @risk_assessment_form.attributes = risk_assessment_params
 
       if @risk_assessment_form.valid?
-        result = UpdateRiskAssessment.call!({
-          risk_assessment: @risk_assessment,
-          risk_level: @risk_assessment_form.risk_level,
-          custom_risk_level: @risk_assessment_form.custom_risk_level,
-          assessed_on: @risk_assessment_form.assessed_on,
-          assessed_by_team_id: @risk_assessment_form.assessed_by_team_id,
-          assessed_by_business_id: @risk_assessment_form.assessed_by_business_id,
-          assessed_by_other: @risk_assessment_form.assessed_by_other,
-          details: @risk_assessment_form.details,
-          product_ids: @risk_assessment_form.product_ids,
-          risk_assessment_file: @risk_assessment_form.risk_assessment_file,
-          user: current_user
-        })
+        result = UpdateRiskAssessment.call!(
+          @risk_assessment_form.serializable_hash.merge({
+            risk_assessment: @risk_assessment,
+            user: current_user
+          })
+        )
 
         if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
 

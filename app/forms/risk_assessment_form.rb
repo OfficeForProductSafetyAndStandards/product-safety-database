@@ -1,6 +1,7 @@
 class RiskAssessmentForm
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   attribute :investigation
   attribute :current_user
