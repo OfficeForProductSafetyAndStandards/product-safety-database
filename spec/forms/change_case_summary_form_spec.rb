@@ -35,7 +35,7 @@ RSpec.describe ChangeCaseSummaryForm do
     end
 
     context "when summary is too long" do
-      let(:summary) { rand(36**10_001).to_s(36) }
+      let(:summary) { rand(36**20_000).to_s(36) }
 
       include_examples "invalid form", [:summary, "Summary must be 10,000 characters or fewer"]
     end
