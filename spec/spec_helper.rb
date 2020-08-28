@@ -4,7 +4,7 @@ require "webmock/rspec"
 
 if ENV["CI"]
   require "coveralls"
-  Coveralls.wear_merged!
+  Coveralls.wear_merged! :rails
 end
 
 RSpec.configure do |config|

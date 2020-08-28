@@ -3,7 +3,7 @@ require File.expand_path("../config/environment", __dir__)
 
 if ENV["CI"]
   require "coveralls"
-  Coveralls.wear_merged!
+  Coveralls.wear_merged! :rails
 end
 require "rails/test_help"
 require "rspec/mocks/standalone"
