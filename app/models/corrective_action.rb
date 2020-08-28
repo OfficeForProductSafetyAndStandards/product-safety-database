@@ -44,7 +44,6 @@ class CorrectiveAction < ApplicationRecord
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
 
-
   validates :details, length: { maximum: 50_000 }
 
   after_create :create_audit_activity
