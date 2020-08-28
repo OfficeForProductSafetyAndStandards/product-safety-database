@@ -117,11 +117,18 @@ jobs:
         name: capybara screenshots
         path: tmp/capybara
 
+    - name: debug
+      run: ls -la coverage/
+
+    - name: debug 2
+      run: pwd
+
     - name: Report test coverage to Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         parallel: true
+        debug: true
 
   finish:
     needs: ruby
@@ -132,4 +139,3 @@ jobs:
       with:
         github-token: ${{ secrets.github_token }}
         parallel-finished: true
-        debug: true
