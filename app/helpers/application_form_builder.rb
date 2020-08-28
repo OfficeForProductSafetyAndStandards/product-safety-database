@@ -61,7 +61,8 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      name: input_name(attribute),
                      id: attribute.to_s,
                      value: object.public_send(attribute),
-                     errorMessage: error_message
+                     errorMessage: error_message,
+                     attributes: attributes
   end
 
   def govuk_input(attribute, label:, label_classes: nil, classes: nil)
