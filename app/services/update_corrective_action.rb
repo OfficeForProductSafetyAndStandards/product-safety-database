@@ -21,6 +21,7 @@ class UpdateCorrectiveAction
 
       send_notification_email(actvity)
 
+      # trigger re-index of to for the model to pick up children relationships saved after the model
       investigation.reload.__elasticsearch__.index_document
     end
   end
