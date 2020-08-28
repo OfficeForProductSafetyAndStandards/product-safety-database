@@ -1,0 +1,37 @@
+<%= page_title "Update summary", errors: @form.errors.any? %>
+
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <%= error_summary @form.errors %>
+
+    <%= render "minimal_investigation_heading",
+               investigation: @investigation,
+               title: "Edit #{@investigation.case_type} summary" %>
+
+    <%= form_with(model: @form,
+                  url: investigation_summary_path(@investigation),
+                  method: :patch,
+                  builder: ApplicationFormBuilder) do |form| %>
+
+      <%= form.govuk_text_area(:summary,
+                               label: "Edit summary",
+                               label_class: "govuk-visually-hidden",
+                               attributes: { maxlength: 10_000 }) %>
+
+      <div class="govuk-form-group">
+        <%= form.submit "Update summary", class: "govuk-button" %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

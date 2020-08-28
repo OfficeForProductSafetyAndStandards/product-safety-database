@@ -43,7 +43,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      ]
   end
 
-  def govuk_text_area(attribute, label:)
+  def govuk_text_area(attribute, label:, label_class: "govuk-label--m", attributes: {})
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -53,12 +53,13 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     @template.render "components/govuk_textarea",
                      label: {
                        text: label,
-                       classes: "govuk-label--m"
+                       classes: label_class
                      },
                      name: input_name(attribute),
                      id: attribute.to_s,
                      value: object.public_send(attribute),
-                     errorMessage: error_message
+                     errorMessage: error_message,
+                     attributes: attributes
   end
 
   def govuk_input(attribute, label:, label_classes: nil, classes: nil)

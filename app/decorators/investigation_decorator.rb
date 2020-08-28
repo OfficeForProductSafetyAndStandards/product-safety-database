@@ -115,10 +115,6 @@ private
   def category
     @category ||= \
       begin
-        categories = [object.product_category]
-        categories += products.map(&:category)
-        categories.uniq!
-        categories.compact!
         if categories.size == 1
           h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
         else

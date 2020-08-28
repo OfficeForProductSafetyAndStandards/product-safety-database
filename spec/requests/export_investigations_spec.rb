@@ -71,6 +71,23 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
+      it "exports categories" do
+        product_category = Faker::Hipster.word
+        category = Faker::Hipster.word
+        create(:allegation, product_category: product_category, products: [create(:product, category: category)])
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        categories_cell_title = exported_data.cell(1, 6)
+        categories_cell_content = exported_data.cell(2, 6)
+
+        aggregate_failures "categories cells values" do
+          expect(categories_cell_title).to eq "Product_Category"
+          expect(categories_cell_content).to eq "#{product_category}, #{category}"
+        end
+      end
+
       it "exports owner team and user" do
         user = create(:user)
         team = create(:team)

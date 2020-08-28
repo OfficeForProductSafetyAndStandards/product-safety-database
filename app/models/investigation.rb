@@ -22,7 +22,7 @@ class Investigation < ApplicationRecord
     other: "other"
   }
 
-  before_validation { trim_line_endings(:user_title, :description, :non_compliant_reason, :hazard_description) }
+  before_validation { trim_line_endings(:user_title, :non_compliant_reason, :hazard_description) }
 
   validates :type, presence: true # Prevent saving instances of Investigation; must use a subclass instead
 
@@ -36,8 +36,7 @@ class Investigation < ApplicationRecord
   validates :custom_risk_level, presence: true, if: -> { risk_level == "other" }
 
   after_update :create_audit_activity_for_status,
-               :create_audit_activity_for_visibility,
-               :create_audit_activity_for_summary
+               :create_audit_activity_for_visibility
 
   default_scope { order(updated_at: :desc) }
 
@@ -196,6 +195,13 @@ class Investigation < ApplicationRecord
     # To be implemented by children
   end
 
+  def categories
+    ([product_category] + products.map(&:category)).tap do |c|
+      c.uniq!
+      c.compact!
+    end
+  end
+
 private
 
   def create_audit_activity_for_status
@@ -207,14 +213,6 @@ private
   def create_audit_activity_for_visibility
     if saved_changes.key?(:is_private) || visibility_rationale.present?
       AuditActivity::Investigation::UpdateVisibility.from(self)
-    end
-  end
-
-  def create_audit_activity_for_summary
-    # TODO: User.current check is here to avoid triggering activity and emails from migrations
-    # Can be safely removed once the migration PopulateAssigneeAndDescription has run
-    if saved_changes.key?(:description) && User.current
-      AuditActivity::Investigation::UpdateSummary.from(self)
     end
   end
 

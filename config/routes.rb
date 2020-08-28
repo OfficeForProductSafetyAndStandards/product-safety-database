@@ -103,10 +103,10 @@ Rails.application.routes.draw do
       patch :status
       get :visibility
       patch :visibility
-      get :edit_summary
-      patch :edit_summary
       get :created
     end
+
+    resource :summary, only: %i[edit update], controller: "investigations/summary"
 
     resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
 
