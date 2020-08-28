@@ -6,6 +6,8 @@ require "coveralls/rake/task"
 
 Rails.application.load_tasks
 
+Coveralls::RakeTask.new
+
 desc "Dump the database schema"
 task "db:schema:dump": "strong_migrations:alphabetize_columns"
 

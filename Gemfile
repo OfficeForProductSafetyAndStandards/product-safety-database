@@ -70,6 +70,8 @@ group :development, :test do
   gem "sass-rails", "~> 6.0"
   gem "sassc"
   gem "scss_lint-govuk"
+  gem "simplecov"
+  gem "simplecov-console"
   gem "slim_lint", "0.20.1"
   gem "solargraph"
   gem "spring"

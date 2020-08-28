@@ -2,6 +2,7 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
 
 if ENV["CI"]
+  require "simplecov"
   require "coveralls"
   Coveralls.wear_merged! :rails
 end
