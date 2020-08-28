@@ -12,7 +12,7 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       investigation.title,
       investigation.type,
       investigation.description,
-      investigation.product_category_with_products_categories,
+      investigation.categories.join(", "),
       investigation.hazard_type,
       investigation.coronavirus_related?,
       investigation.owner_team&.name,
