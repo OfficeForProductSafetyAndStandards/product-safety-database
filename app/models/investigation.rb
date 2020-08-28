@@ -197,7 +197,7 @@ class Investigation < ApplicationRecord
   end
 
   def categories
-    ([product_category] + products.map(&:categories)).tap do |c|
+    ([product_category] + products.map(&:category)).tap do |c|
       c.uniq!
       c.compact!
     end
