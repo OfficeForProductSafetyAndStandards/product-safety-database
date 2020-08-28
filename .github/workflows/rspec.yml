@@ -13,6 +13,7 @@ env:
   PSD_HOST: example.com
   EMAIL_WHITELIST_ENABLED: false
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
+  COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   ruby:
