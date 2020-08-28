@@ -45,6 +45,19 @@ jobs:
       matrix:
         # Each group of tests affected by the following tags will run in a different job in parallel.
         rspec-tag: ["type:feature", "~type:feature"]
+        rspec-dir:
+          - spec:decorators
+          - spec:features
+          - spec:forms
+          - spec:helpers
+          - spec:jobs
+          - spec:mailers
+          - spec:models
+          - spec:policies
+          - spec:requests
+          - spec:services
+          - spec:tasks
+          - spec:validators
 
     steps:
     - uses: actions/checkout@v1
@@ -97,7 +110,7 @@ jobs:
 
     - name: Run Specs
       run: |
-        bundle exec rspec spec --tag ${{ matrix.rspec-tag }}
+        bin/rails spec ${{ matrix.rspec-dir }}
 
     - uses: actions/upload-artifact@v1
       if: failure()
@@ -109,4 +122,15 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: ${{ matrix.rspec-dir }}
         parallel: true
+
+  finish:
+    needs: ruby
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
