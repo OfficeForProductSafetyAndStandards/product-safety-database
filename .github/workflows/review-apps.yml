@@ -36,10 +36,11 @@ jobs:
 
     - name: Install cf client
       env:
-        CF_CLI_VERSION: 7.0.0-beta.28
+        CF_CLI_VERSION: v7
       run: |
-        curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C /tmp
-        sudo cp /tmp/cf7 /usr/local/bin/cf7
+        mkdir -p $GITHUB_WORKSPACE/bin
+        curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+        echo "::add-path::$GITHUB_WORKSPACE/bin"
 
     - name: Deploy
       env:
@@ -50,16 +51,16 @@ jobs:
         WEB_MAX_THREADS: 5
         WORKER_MAX_THREADS: 10
       run: |
-        cf7 api api.london.cloud.service.gov.uk
-        cf7 auth
-        cf7 target -o 'beis-opss' -s $SPACE
+        cf api api.london.cloud.service.gov.uk
+        cf auth
+        cf target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
         export DB_NAME=psd-db-pr-$PR_NUMBER
         echo "Deploying review app. If fails, use command below to deploy manually:"
         echo "DB_NAME=$DB_NAME APP_NAME=$APP_NAME /deploy-review.sh"
 
         ./deploy-review.sh
-        cf7 logout
+        cf logout
 
     - name: Update deployment status (success)
       if: success()
