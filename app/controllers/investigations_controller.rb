@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show status visibility edit_summary created]
+  before_action :set_investigation, only: %i[show status visibility created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -71,13 +71,6 @@ class InvestigationsController < ApplicationController
   # PATCH /cases/1/visibility
   def visibility
     authorize @investigation, :change_owner_or_status?
-    update
-  end
-
-  # GET /cases/1/edit_summary
-  # PATCH /cases/1/edit_summary
-  def edit_summary
-    authorize @investigation, :update?
     update
   end
 

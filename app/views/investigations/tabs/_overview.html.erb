@@ -14,7 +14,7 @@
     <p class="govuk-body"><%= @investigation.description %></p>
 
     <% if policy(@investigation).update? %>
-      <p class="govuk-body"><%= link_to "Change summary", edit_summary_investigation_path(@investigation), class: "govuk-link" %></p>
+      <p class="govuk-body"><%= link_to "Change summary", edit_investigation_summary_path(@investigation), class: "govuk-link" %></p>
     <% end %>
 
     <% if @investigation.display_product_summary_list? %>

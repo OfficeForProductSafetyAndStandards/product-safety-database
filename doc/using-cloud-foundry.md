@@ -7,13 +7,13 @@ Please take a look into github actions in `.github/workflows` to see how deploym
 #### Login to CF Api
 
 ```
-cf7 login -a api.london.cloud.service.gov.uk -u some@email.com
+cf login -a api.london.cloud.service.gov.uk -u some@email.com
 ```
 
 #### SSH to service and run rails console
 
 ```
-cf7 ssh APP-NAME
+cf ssh APP-NAME
 
 cd app && export $(./env/get-env-from-vcap.sh) && /tmp/lifecycle/launcher /home/vcap/app 'rails c' ''
 ```
@@ -21,23 +21,23 @@ cd app && export $(./env/get-env-from-vcap.sh) && /tmp/lifecycle/launcher /home/
 #### List apps
 
 ```
-cf7 apps
+cf apps
 ```
 
 #### Show app details
 
 ```
-cf7 app APP-NAME
+cf app APP-NAME
 ```
 
 #### Show app env
 
 ```
-cf7 env APP-NAME
+cf env APP-NAME
 ```
 
 #### List services
 
 ```
-cf7 apps
+cf apps
 ```
