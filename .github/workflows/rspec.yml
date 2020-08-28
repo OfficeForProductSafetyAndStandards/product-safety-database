@@ -44,7 +44,6 @@ jobs:
       fail-fast: false
       matrix:
         # Each group of tests affected by the following tags will run in a different job in parallel.
-        rspec-tag: ["type:feature", "~type:feature"]
         rspec-dir:
           - spec:decorators
           - spec:features
