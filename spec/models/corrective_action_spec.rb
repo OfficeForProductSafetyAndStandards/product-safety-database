@@ -5,6 +5,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
     build(
       :corrective_action,
       action: action,
+      other_action: other_action,
       date_decided_day: date_decided ? date_decided.day : nil,
       date_decided_month: date_decided ? date_decided.month : nil,
       date_decided_year: date_decided ? date_decided.year : nil,
@@ -37,7 +38,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       end
     end
 
-    context "with blank summary" do
+    context "with blank action" do
       let(:action) { nil }
 
       it "returns false" do
@@ -45,28 +46,28 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       end
     end
 
-    context 'when summary is set to "other"' do
-      before { corrective_action.action = "other" }
+    context "when action is not 'other' and other_action is not blank" do
+      let(:other_action) { Faker::Lorem.characters(number: 10_000) }
+
+      it "is not valid with an error message for the other_action field", :aggregate_failures do
+        expect(corrective_action).to be_invalid
+        expect(corrective_action.errors.full_messages_for(:other_action)).to eq(["Other action must be blank"])
+      end
+    end
+
+    context "when choosing other" do
+      let(:action) { "other" }
 
       context "with blank other_action" do
         it { is_expected.to be_invalid }
       end
-    end
 
-    context "with other_action longer than 10,000 characters" do
-      let(:action) { "other" }
-      let(:other_action) { Faker::Lorem.characters(number: 10_001) }
+      context "with other_action longer than 10,000 characters" do
+        let(:other_action) { Faker::Lorem.characters(number: 10_001) }
 
-      it "returns false" do
-        expect(corrective_action).not_to be_valid
-      end
-    end
-
-    context "with blank details" do
-      let(:details) { nil }
-
-      it "returns true" do
-        expect(corrective_action).to be_valid
+        it "returns false" do
+          expect(corrective_action).not_to be_valid
+        end
       end
     end
 
