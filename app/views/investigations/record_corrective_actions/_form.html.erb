@@ -49,10 +49,10 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
         <span class="govuk-hint">There are no businesses associated with this case.</span>
       <% else %>
         <%= form.govuk_select :business_id,
-          label: "Business",
-          label_classes: "govuk-visually-hidden",
-          hint: "Only businesses already added to the case are listed.",
-          items: [{text: "", value: ""}] + investigation.businesses.map { |business| { text: business.trading_name, value: business.id } }
+            label: "Business",
+            label_classes: "govuk-visually-hidden",
+            hint: "Only businesses already added to the case are listed.",
+            items: [{text: "", value: ""}] + investigation.businesses.map { |business| { text: business.trading_name, value: business.id } }
         %>
       <% end %>
     </div>
@@ -60,26 +60,28 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
 <% end %>
 
 <%= form.govuk_radios :measure_type,
-  legend: "Is the corrective action mandatory?",
-  items: [
-    { text: "Yes", value: "mandatory" },
-    { text: "No, it’s voluntary", value: "voluntary" }
-  ]
+   legend: "Is the corrective action mandatory?",
+   items: [
+     { text: "Yes", value: "mandatory" },
+     { text: "No, it’s voluntary", value: "voluntary" }
+   ]
 %>
 
 <%= form.govuk_radios :duration,
-  legend: "How long will the corrective action be in place?",
-  items: [
-    { text: CorrectiveAction.human_attribute_name("duration.permanent"), value: "permanent" },
-    { text: CorrectiveAction.human_attribute_name("duration.temporary"), value: "temporary" },
-    { text: CorrectiveAction.human_attribute_name("duration.unknown"), value: "unknown" }
-  ]
+ legend: "How long will the corrective action be in place?",
+ items: [
+   { text: CorrectiveAction.human_attribute_name("duration.permanent"), value: "permanent" },
+   { text: CorrectiveAction.human_attribute_name("duration.temporary"), value: "temporary" },
+   { text: CorrectiveAction.human_attribute_name("duration.unknown"), value: "unknown" }
+ ]
 %>
 
 <%= form.govuk_select :geographic_scope,
-  label: "What is the geographic scope of the action?",
-  items: [{text: "", value: ""}] + corrective_action_geographic_scope.collect {|geographic_scope| { text: geographic_scope, value: geographic_scope } }
+         label: "What is the geographic scope of the action?",
+         label_classes: "govuk-label govuk-label--m",
+         items: [{text: "", value: ""}] + corrective_action_geographic_scope.collect {|geographic_scope| { text: geographic_scope, value: geographic_scope } }
 %>
+
 
 <%= form.govuk_text_area :details,
   label: "Further details (optional)",
