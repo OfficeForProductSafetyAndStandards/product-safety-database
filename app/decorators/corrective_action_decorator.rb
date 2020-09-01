@@ -11,7 +11,9 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    other? ? other_action : CorrectiveAction.actions[action]
+    action_name = other? ? other_action : CorrectiveAction.actions[action]
+
+    "#{h.truncate(action_name)}: #{product.name}"
   end
 
   def date_of_activity
