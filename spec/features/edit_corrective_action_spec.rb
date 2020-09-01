@@ -14,7 +14,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_link "Edit corrective action"
 
-      within_fieldset("What action is being taken?") { expect(page).to have_checked_field(corrective_action.decorate.supporting_information_title) }
+      within_fieldset("What action is being taken?") { expect(page).to have_checked_field(CorrectiveAction.actions[corrective_action.action]) }
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
       expect(page).to have_field("Month",   with: corrective_action.date_decided.month)
       expect(page).to have_field("Year",    with: corrective_action.date_decided.year)

@@ -22,6 +22,10 @@ class CorrectiveActionDecorator < ApplicationDecorator
     h.simple_format(object.details)
   end
 
+  def page_title
+    other? ? other_action : CorrectiveAction.actions[action]
+  end
+
   def supporting_information_title
     action_name = other? ? other_action : TRUNCATED_ACTION_MAP[action.to_sym]
 

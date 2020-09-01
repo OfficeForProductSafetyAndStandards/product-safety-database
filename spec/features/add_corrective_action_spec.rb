@@ -6,7 +6,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
 
-  let(:action) { (CorrectiveAction.actions.values - %w[Other]).sample }
+  let(:action_key) { (CorrectiveAction.actions.keys - %w[other]).sample }
+  let(:action) { CorrectiveAction.actions[action_key] }
   let(:date) { Date.parse("2020-05-01") }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:details) { "Urgent action following consumer reports" }
@@ -122,7 +123,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
   def expect_case_activity_page_to_show_entered_data
     expect(page).to have_selector("h1", text: "Activity")
-    item = page.find("h3", text: action).find(:xpath, "..")
+    corrective_action_title = "#{CorrectiveActionDecorator::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}"
+    item = page.find("h3", text: corrective_action_title).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{legislation}")
     expect(item).to have_text("Date came into effect: #{date.strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
