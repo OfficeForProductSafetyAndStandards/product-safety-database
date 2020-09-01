@@ -1,5 +1,4 @@
 class CorrectiveActionDecorator < ApplicationDecorator
-
   TRUNCATED_ACTION_MAP = {
     ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on marketing",
     destruction_of_the_product: "Destruction of product",
