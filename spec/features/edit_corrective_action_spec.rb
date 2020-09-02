@@ -14,7 +14,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_link "Edit corrective action"
 
-      expect(page).to have_field("Summary", with: corrective_action.summary)
+      within_fieldset("What action is being taken?") { expect(page).to have_checked_field(CorrectiveAction.actions[corrective_action.action]) }
       expect(page).to have_field("Day",     with: corrective_action.date_decided.day)
       expect(page).to have_field("Month",   with: corrective_action.date_decided.month)
       expect(page).to have_field("Year",    with: corrective_action.date_decided.year)
@@ -29,7 +29,11 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       document = corrective_action.documents_blobs.first
       expect(page).to have_link(document.filename.to_s)
 
-      fill_in "Summary",                    with: new_summary
+      within_fieldset("What action is being taken?") do
+        choose "Other"
+        fill_in "corrective_action[other_action]", with: Faker::Hipster.paragraph(sentence_count: 3)
+      end
+
       fill_in "Day",                        with: new_date_decided.day
       fill_in "Month",                      with: new_date_decided.month
       fill_in "Year",                       with: new_date_decided.year
@@ -38,10 +42,15 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       select business_two.trading_name,     from: "Business"
       select new_geographic_scope,          from: "What is the geographic scope of the action?"
       fill_in "Further details (optional)", with: new_details
-      choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "corrective_action_measure_type_mandatory" : "corrective_action_measure_type_voluntary"
+      within_fieldset "Is the corrective action mandatory?" do
+        choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
+      end
       choose CorrectiveAction.human_attribute_name("duration.#{new_duration}")
 
-      choose "corrective_action_related_file_true"
+      within_fieldset "Are there any files related to the action?" do
+        choose "Yes"
+      end
+
       find("details > summary", text: "Replace this file").click
 
       attach_file "Upload a file", Rails.root + "spec/fixtures/files/corrective_action.txt"
@@ -51,10 +60,29 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       expect_to_be_on_corrective_action_summary_page
 
+      expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
+
+      click_link "Edit corrective action"
+
+      new_action = (CorrectiveAction.actions.values - %w[Other]).sample
+      within_fieldset("What action is being taken?") do
+        choose new_action
+      end
+
+      click_on "Update corrective action"
+
+      expect_to_be_on_corrective_action_summary_page
+
+      if new_action.length > CorrectiveActionDecorator::MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
+        expect(page).to have_css("h1.govuk-heading-m", text: new_action)
+      else
+        expect(page).to have_css("h1.govuk-heading-l", text: new_action)
+      end
+
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
-      click_link "View corrective action"
+      page.first("a", text: "View corrective action").click
 
       expect_to_be_on_corrective_action_summary_page
     end

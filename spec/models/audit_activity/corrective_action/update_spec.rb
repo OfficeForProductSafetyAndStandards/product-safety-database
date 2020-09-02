@@ -19,7 +19,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
       old_attachment.blob.metadata[:filename] = old_attachment.filename
       old_attachment.blob.save!
       corrective_action.update!(
-        summary: new_summary,
+        action: new_summary,
         date_decided_day: new_date_decided.day,
         date_decided_month: new_date_decided.month,
         date_decided_year: new_date_decided.year,

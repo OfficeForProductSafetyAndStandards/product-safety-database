@@ -16,4 +16,18 @@ module FormOptionsHelper
   def corrective_action_geographic_scope
     Rails.application.config.corrective_action_constants["geographic_scope"]
   end
+
+  def corrective_action_summary_radio_items(form)
+    CorrectiveAction.actions.map do |value, text|
+      item = { text: text, value: value }
+
+      if value == "other"
+        item[:conditional] = {
+          html: form.govuk_input(:other_action, label: "Other action", label_classes: "govuk-visually-hidden")
+        }
+      end
+
+      item
+    end
+  end
 end

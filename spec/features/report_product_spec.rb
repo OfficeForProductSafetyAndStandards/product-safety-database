@@ -33,7 +33,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   let(:corrective_actions) do
     action = lambda {
       {
-        summary: Faker::Lorem.sentence,
+        action: "other",
+        other_action: Faker::Lorem.sentence,
         date: Faker::Date.backward(days: 14),
         legislation: Rails.application.config.legislation_constants["legislation"].sample,
         details: Faker::Lorem.sentence,
@@ -131,8 +132,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_record_corrective_action_page
 
-        corrective_actions.each do |action|
-          fill_in_record_corrective_action_page(with: action)
+        corrective_actions.each do |corrective_action_attributes|
+          fill_in_record_corrective_action_page(with: corrective_action_attributes)
           expect_to_be_on_record_corrective_action_page
         end
 
@@ -355,7 +356,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def expect_case_activity_page_to_show_corrective_action(action)
-    item = page.find("h3", text: action[:summary]).find(:xpath, "..")
+    item = page.find("h3", text: action[:other_action]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
@@ -446,18 +447,31 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_record_corrective_action_page(with:)
-    fill_in "Summary", with: with[:summary]
+    within_fieldset("What action is being taken?") do
+      choose "Other"
+      fill_in "Other action", with: with[:other_action]
+    end
     fill_in "Day", with: with[:date].day
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     select with[:legislation], from: "Under which legislation?"
     fill_in "Further details (optional)", with: with[:details]
-    choose "corrective_action_related_file_true"
 
-    attach_file "corrective_action[file][file]", with[:file]
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+    end
+
+    attach_file "Upload a file", with[:file], visible: false
     fill_in "Attachment description", with: with[:file_description]
-    choose "corrective_action_measure_type_#{with[:measure_type]}"
-    choose "corrective_action_duration_#{with[:duration]}"
+
+    within_fieldset "Is the corrective action mandatory?" do
+      choose with[:measure_type] == "mandatory" ? "Yes" : "No, it’s voluntary"
+    end
+
+    within_fieldset "How long will the corrective action be in place?" do
+      choose with[:duration].titleize
+    end
+
     select with[:geographic_scope], from: "What is the geographic scope of the action?"
 
     choose "corrective_action_further_corrective_action_yes"
@@ -477,7 +491,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Year", with: with[:date].year
     choose with[:result]
     fill_in "Further details", with: with[:details]
-    attach_file "test[file][file]", with[:file]
+    attach_file "Upload a file", with[:file]
     choose "test_further_test_results_yes"
     click_button "Continue"
   end

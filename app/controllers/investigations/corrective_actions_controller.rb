@@ -44,12 +44,13 @@ module Investigations
         :product_id,
         :business_id,
         :legislation,
-        :summary,
+        :action,
         :details,
         :related_file,
         :measure_type,
         :duration,
         :geographic_scope,
+        :other_action,
         file: %i[file description],
         date_decided: %i[day month year]
       )

@@ -87,6 +87,8 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   def create
     if records_saved?
+      # trigger re-index of to for the model to pick up children relationships saved after the model
+      @investigation.__elasticsearch__.index_document
       redirect_to created_investigation_path(@investigation)
     else
       render_wizard

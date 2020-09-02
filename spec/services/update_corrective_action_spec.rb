@@ -29,6 +29,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:business)         { create(:business) }
   let(:old_date_decided) { Time.zone.today }
   let(:related_file)     { true }
+  let(:other_action)     { nil }
+  let(:action)           { (CorrectiveAction.actions.values - %w[Other]).sample }
   let!(:corrective_action) do
     create(
       :corrective_action,
@@ -36,7 +38,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       investigation: investigation,
       date_decided: old_date_decided,
       product: product,
-      business: business
+      business: business,
+      action: action,
+      other_action: other_action
     )
   end
 
@@ -46,14 +50,19 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       date_decided_month: corrective_action.date_decided.month,
       date_decided_year: corrective_action.date_decided.year,
       related_file: "Yes",
+      other_action: new_other_action,
+      action: new_action,
       file: {
         description: new_file_description
       }
     }
   end
+
   let(:new_date_decided) { (old_date_decided - 1.day).to_date }
   let(:new_file_description) { "new corrective action file description" }
   let(:new_document) { fixture_file_upload(file_fixture("corrective_action.txt")) }
+  let(:new_action) { (CorrectiveAction.actions.values - %W[Other #{corrective_action.action}]).sample }
+  let(:new_other_action) { corrective_action.other_action }
 
   describe "#call" do
     context "with no parameters" do
@@ -77,6 +86,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
     context "with the required parameters" do
       context "when no changes have been made" do
+        let(:new_action) { corrective_action.action }
+
         shared_examples "it does not create an audit log" do
           specify { expect { update_corrective_action }.not_to change(corrective_action.investigation.activities.where(type: "AuditActivity::CorrectiveAction::Update"), :count) }
         end
@@ -200,7 +211,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
             month: corrective_action.date_decided.month,
             year: corrective_action.date_decided.year,
           },
-          summary: corrective_action.summary,
+          action: corrective_action.action,
           legislation: corrective_action.legislation,
           duration: corrective_action.duration,
           details: corrective_action.details,
@@ -222,7 +233,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           investigation: investigation,
           date_decided: old_date_decided,
           product: product,
-          business: business
+          business: business,
+          action: action,
+          other_action: other_action
         )
       end
 
@@ -233,7 +246,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
             month: corrective_action.date_decided.month,
             year: corrective_action.date_decided.year,
           },
-          summary: corrective_action.summary,
+          action: new_action,
           legislation: corrective_action.legislation,
           duration: corrective_action.duration,
           details: corrective_action.details,
@@ -292,6 +305,18 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
       activity_timeline_entry = investigation.activities.reload.order(:created_at).find_by!(type: "AuditActivity::CorrectiveAction::Update")
       expect(activity_timeline_entry).to have_attributes({})
+    end
+
+    context "when the action was previously Other" do
+      let(:action)       { "other" }
+      let(:other_action) { "Other action that should be cleared up once changed to a listed action" }
+      let(:new_action)   { attributes_for(:corrective_action)[:action] }
+
+      it "does clean the other_action field" do
+        expect { update_corrective_action }.to change(corrective_action, :other_action)
+                .from("Other action that should be cleared up once changed to a listed action").to(nil)
+                .and change(corrective_action, :action).from("other").to(new_action)
+      end
     end
   end
 end

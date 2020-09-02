@@ -4,7 +4,8 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   subject(:corrective_action) do
     build(
       :corrective_action,
-      summary: summary,
+      action: action,
+      other_action: other_action,
       date_decided_day: date_decided ? date_decided.day : nil,
       date_decided_month: date_decided ? date_decided.month : nil,
       date_decided_year: date_decided ? date_decided.year : nil,
@@ -14,11 +15,13 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       geographic_scope: geographic_scope,
       details: details,
       related_file: related_file,
-      investigation: investigation
+      investigation: investigation,
+      product: create(:product)
     )
   end
 
-  let(:summary) { Faker::Lorem.sentence }
+  let(:action) { (described_class.actions.values - %w[Other]).sample }
+  let(:other_action) { nil }
   let(:date_decided) { Faker::Date.backward(days: 14) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
@@ -35,27 +38,36 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       end
     end
 
-    context "with blank summary" do
-      let(:summary) { nil }
+    context "with blank action" do
+      let(:action) { nil }
 
       it "returns false" do
         expect(corrective_action).not_to be_valid
       end
     end
 
-    context "with summary longer than 10,000 characters" do
-      let(:summary) { Faker::Lorem.characters(number: 10_001) }
+    context "when action is not 'other' and other_action is not blank" do
+      let(:other_action) { Faker::Lorem.characters(number: 10_000) }
 
-      it "returns false" do
-        expect(corrective_action).not_to be_valid
+      it "is not valid with an error message for the other_action field", :aggregate_failures do
+        expect(corrective_action).to be_invalid
+        expect(corrective_action.errors.full_messages_for(:other_action)).to eq(["Other action must be blank"])
       end
     end
 
-    context "with blank details" do
-      let(:details) { nil }
+    context "when choosing other" do
+      let(:action) { "other" }
 
-      it "returns true" do
-        expect(corrective_action).to be_valid
+      context "with blank other_action" do
+        it { is_expected.to be_invalid }
+      end
+
+      context "with other_action longer than 10,000 characters" do
+        let(:other_action) { Faker::Lorem.characters(number: 10_001) }
+
+        it "returns false" do
+          expect(corrective_action).not_to be_valid
+        end
       end
     end
 

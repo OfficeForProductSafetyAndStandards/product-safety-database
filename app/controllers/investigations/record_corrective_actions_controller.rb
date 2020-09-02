@@ -31,6 +31,8 @@ class Investigations::RecordCorrectiveActionsController < ApplicationController
     respond_to do |format|
       update_attachment
       if corrective_action_saved?
+        # trigger re-index of to for the model to pick up children relationships saved after the model
+        @investigation.__elasticsearch__.index_document
         format.html { redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "Corrective action was successfully recorded." } }
         format.json { render :show, status: :created, location: @corrective_action }
       else

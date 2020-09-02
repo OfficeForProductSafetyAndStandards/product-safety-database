@@ -20,6 +20,9 @@ class UpdateCorrectiveAction
       actvity = create_audit_activity_for_corrective_action_updated!(@previous_attachment)
 
       send_notification_email(actvity)
+
+      # trigger re-index of to for the model to pick up children relationships saved after the model
+      investigation.reload.__elasticsearch__.index_document
     end
   end
 
@@ -27,6 +30,7 @@ private
 
   def assign_attributes
     corrective_action.assign_attributes(corrective_action_params.except(:file, :date_decided))
+    corrective_action.other_action = nil unless corrective_action.other?
   end
 
   def set_dates_from_params
