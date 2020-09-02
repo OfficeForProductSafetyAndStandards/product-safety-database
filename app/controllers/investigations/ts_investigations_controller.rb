@@ -72,7 +72,11 @@ class Investigations::TsInvestigationsController < ApplicationController
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
     when :corrective_action, *other_information_types
+
       return redirect_to next_wizard_path unless @repeat_step
+    when :risk_assessments
+      @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
+      render "investigations/risk_assessments/new"
     end
     # Preventing repeat step radio button from inheriting previous value
     clear_repeat_step
@@ -302,7 +306,7 @@ private
   end
 
   def other_information_types
-    %i[test_results risk_assessments product_images evidence_images other_files]
+    %i[test_results product_images evidence_images other_files]
   end
 
   def store_selected_businesses
