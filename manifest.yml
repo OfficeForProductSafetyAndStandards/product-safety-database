@@ -43,4 +43,4 @@ applications:
       health-check-type: process
       instances: ((worker-instances))
       memory: ((worker-memory))
-      disk_quota:  ((worker-disk-quota))
+      disk_quota: ((worker-disk-quota))
