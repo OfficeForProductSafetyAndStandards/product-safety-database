@@ -72,7 +72,7 @@ module Investigations
           investigation: @investigation,
           assessed_by: assessed_by,
           product_ids: @risk_assessment.product_ids,
-          risk_assessment_file: @risk_assessment.risk_assessment_file
+          old_file: @risk_assessment.risk_assessment_file
         })
       )
 
@@ -90,7 +90,7 @@ module Investigations
       @risk_assessment_form = RiskAssessmentForm.new(
         current_user: current_user,
         investigation: @investigation,
-        risk_assessment_file: @risk_assessment.risk_assessment_file
+        old_file: @risk_assessment.risk_assessment_file
       )
 
       @risk_assessment_form.attributes = risk_assessment_params

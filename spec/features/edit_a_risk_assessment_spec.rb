@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Editing a risk assessment on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-  let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
+  let(:risk_assessment_file_path) { Rails.root + "test/fixtures/files/new_risk_assessment.txt" }
+  let(:risk_assessment_file) { Rack::Test::UploadedFile.new(risk_assessment_file_path) }
 
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }
@@ -73,6 +74,11 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_elasticsearch
 
     within_fieldset("Which products were assessed?") do
       uncheck "Teddy Bear"
+    end
+
+    within_fieldset("Upload the risk assessment") do
+      find("span", text: "Replace this file").click
+      attach_file "Select file", risk_assessment_file_path
     end
 
     click_button "Update risk assessment"

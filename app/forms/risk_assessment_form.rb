@@ -17,6 +17,7 @@ class RiskAssessmentForm
 
   attribute :product_ids
 
+  attribute :old_file
   attribute :risk_assessment_file
 
   attribute :details
@@ -24,7 +25,7 @@ class RiskAssessmentForm
   validates :assessed_on, presence: true
   validates :risk_level, presence: true
 
-  validates :risk_assessment_file, presence: true
+  validates :risk_assessment_file, presence: true, unless: -> { old_file.present? }
 
   validates :assessed_by, presence: true
   validate :at_least_one_product_associated

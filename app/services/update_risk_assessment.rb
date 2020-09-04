@@ -25,7 +25,7 @@ class UpdateRiskAssessment
         product_ids: product_ids
       }
 
-      if risk_assessment_file != risk_assessment.risk_assessment_file
+      if risk_assessment_file && (risk_assessment_file != risk_assessment.risk_assessment_file)
         risk_assessment.risk_assessment_file.detach
         risk_assessment.risk_assessment_file.attach(risk_assessment_file)
       end

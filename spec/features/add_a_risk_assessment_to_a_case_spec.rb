@@ -63,6 +63,12 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_text("You must choose at least one product")
     expect(page).to have_text("You must upload the risk assessment")
 
+    attach_file "Upload the risk assessment", risk_assessment_file
+
+    click_button "Add risk assessment"
+
+    expect(page).not_to have_text("You must upload the risk assessment")
+
     within_fieldset("Date of assessment") do
       fill_in("Day", with: "3")
       fill_in("Month", with: "4")

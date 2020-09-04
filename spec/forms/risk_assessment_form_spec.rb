@@ -15,6 +15,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
   let(:custom_risk_level) { "" }
   let(:product_ids) { [create(:product).id] }
   let(:details) { "" }
+  let(:old_file) { nil }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
 
   let(:form) do
@@ -29,6 +30,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
       risk_level: risk_level,
       custom_risk_level: custom_risk_level,
       product_ids: product_ids,
+      old_file: old_file,
       risk_assessment_file: risk_assessment_file,
       details: details
     )
@@ -196,6 +198,24 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
 
       it "is not valid" do
         expect(form).not_to be_valid
+      end
+    end
+
+    context "with no risk_assessment_file" do
+      let(:risk_assessment_file) { nil }
+
+      context "when old_file is not present" do
+        it "is not valid" do
+          expect(form).not_to be_valid
+        end
+      end
+
+      context "when old_file is present" do
+        let(:old_file) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
       end
     end
   end

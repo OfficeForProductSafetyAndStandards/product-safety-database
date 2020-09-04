@@ -66,12 +66,12 @@
   <% end %>
 <% end %>
 
-<% if form.object.risk_assessment_file&.attached? %>
+<% if form.object.old_file.present? %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Upload the risk assessment</legend>
     <p id="current-attachment-details">
       Currently selected file:
-      <%= link_to form.object.risk_assessment_file.filename, form.object.risk_assessment_file.blob, target: "_blank", rel: 'noopener' %>
+      <%= link_to form.object.old_file.filename, form.object.old_file.blob, target: "_blank", rel: 'noopener' %>
     </p>
 
     <%= govukDetails(summaryText: "Replace this file") do %>
