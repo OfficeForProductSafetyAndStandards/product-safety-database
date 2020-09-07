@@ -1,0 +1,15 @@
+<% page_heading = "Risk assessment details" %>
+<%= render "repeatable_info",
+           title: page_heading,
+           scope: :file,
+           model: @risk_assessment_form,
+           other_text: "Are there other risk assessments to report?",
+           further_key: :further_risk_assessments,
+           hide_break: true do |form| %>
+  <%= render "investigations/risk_assessments/form_fields",
+             form: form,
+             risk_assessment_form: @risk_assessment_form,
+             investigation: @investigation,
+             page_heading: page_heading
+  %>
+<% end %>

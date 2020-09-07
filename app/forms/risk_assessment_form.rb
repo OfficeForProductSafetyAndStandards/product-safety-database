@@ -84,7 +84,7 @@ class RiskAssessmentForm
   def businesses
     [{ text: "", value: "" }] + investigation.businesses
       .reorder(:trading_name)
-      .pluck(:trading_name, :id).collect do |row|
+      .pluck(:trading_name, :id).map do |row|
         { text: row[0], value: row[1] }
       end
   end

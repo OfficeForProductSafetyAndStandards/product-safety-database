@@ -29,7 +29,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :set_investigation, only: %i[show create update]
   before_action :set_selected_businesses, only: %i[show update], if: -> { step == :which_businesses }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
-  before_action :set_business, only: %i[show update], if: -> { step == :business }
+  before_action :set_business, only: %i[show update], if: -> { step.in?([:business, :risk_assessments]) }
   before_action :set_skip_step,
                 only: %i[update],
                 if: lambda {
@@ -71,13 +71,15 @@ class Investigations::TsInvestigationsController < ApplicationController
     case step
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
-    when :corrective_action, *other_information_types
-
+    when :corrective_action, *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
     when :risk_assessments
       @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
-      render "investigations/risk_assessments/new"
+
+      @investigation = @investigation.decorate
+      return redirect_to next_wizard_path unless @repeat_step
     end
+
     # Preventing repeat step radio button from inheriting previous value
     clear_repeat_step
     render_wizard
@@ -203,6 +205,7 @@ private
     session.delete :product
     session.delete :other_business_type
     session.delete :further_corrective_action
+    session.delete :risk_assessments
     other_information_types.each do |type|
       session.delete further_key(type)
     end
@@ -306,7 +309,7 @@ private
   end
 
   def other_information_types
-    %i[test_results product_images evidence_images other_files]
+    %i[test_results product_images risk_assessments evidence_images other_files]
   end
 
   def store_selected_businesses
