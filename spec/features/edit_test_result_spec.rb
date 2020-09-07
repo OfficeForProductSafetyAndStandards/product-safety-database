@@ -82,7 +82,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
   scenario "Editing test result as another user" do
     sign_in(other_user)
-    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}/edit"
-    expect(page).to have_h1("Access denied")
+    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
+    expect(page).not_to have_link("Edit test result")
   end
 end
