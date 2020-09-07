@@ -61,6 +61,6 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def display_medium_title_text_size?
-    supporting_information_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
+    page_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
 end

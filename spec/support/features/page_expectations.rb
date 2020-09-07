@@ -524,8 +524,16 @@ module PageExpectations
     expect_page_to_have_h1("Add risk assessment")
   end
 
-  def expect_to_be_on_risk_assessement_for_a_case_page(case_id:)
-    expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+/)
+  def expect_to_be_on_risk_assessement_for_a_case_page(case_id:, risk_assessment_id: nil)
+    if risk_assessment_id
+      expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/#{risk_assessment_id}")
+    else
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+/)
+    end
+  end
+
+  def expect_to_be_on_edit_risk_assessement_page(case_id:, risk_assessment_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/#{risk_assessment_id}/edit")
   end
 
   def expect_to_be_on_update_case_risk_level_from_risk_assessment_page(case_id:, risk_assessment_id: nil)

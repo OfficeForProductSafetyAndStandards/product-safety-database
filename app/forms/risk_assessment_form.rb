@@ -1,6 +1,7 @@
 class RiskAssessmentForm
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   attribute :investigation
   attribute :current_user
@@ -16,6 +17,7 @@ class RiskAssessmentForm
 
   attribute :product_ids
 
+  attribute :old_file
   attribute :risk_assessment_file
 
   attribute :details
@@ -23,7 +25,7 @@ class RiskAssessmentForm
   validates :assessed_on, presence: true
   validates :risk_level, presence: true
 
-  validates :risk_assessment_file, presence: true
+  validates :risk_assessment_file, presence: true, unless: -> { old_file.present? }
 
   validates :assessed_by, presence: true
   validate :at_least_one_product_associated
@@ -51,12 +53,20 @@ class RiskAssessmentForm
     }
   end
 
+  # Ignore custom risk level value if risk_level isn't other
+  def custom_risk_level
+    return nil if risk_level.to_s != "other"
+
+    super
+  end
+
   def products
     investigation.products
     .pluck(:name, :id).collect do |row|
       {
         text: row[0],
-        value: row[1]
+        value: row[1],
+        checked: product_ids.to_a.include?(row[1])
       }
     end
   end
@@ -79,10 +89,22 @@ class RiskAssessmentForm
       end
   end
 
+  def assessed_by_business_id
+    if assessed_by == "business"
+      super
+    end
+  end
+
   def assessed_by_team_id
     if assessed_by == "my_team"
       current_user.team_id
-    else
+    elsif assessed_by == "another_team"
+      super
+    end
+  end
+
+  def assessed_by_other
+    if assessed_by == "other"
       super
     end
   end
