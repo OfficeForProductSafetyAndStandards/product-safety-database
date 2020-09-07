@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let(:other_user) { create(:user, :activated) }
   let(:product1) { create(:product_washing_machine, name: "MyBrand red washing machine") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand blue washing machine") }
   let(:investigation) { create(:allegation, products: [product1, product2], creator: user) }
@@ -77,5 +78,11 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
       expect(page).to have_link("test_result_2.txt")
     end
+  end
+
+  scenario "Editing test result as another user" do
+    sign_in(other_user)
+    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}/edit"
+    expect(page).to have_h1("Access denied")
   end
 end
