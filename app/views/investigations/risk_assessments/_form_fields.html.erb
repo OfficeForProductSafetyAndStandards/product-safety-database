@@ -29,10 +29,11 @@ radio_items.push(text: "Other", value: "other", conditional: { html: custom })
 <% end %>
 
 <%- businesses_html = capture do %>
+  <% hint = investigation.new_record? ? nil : safe_join(["If the business isn’t listed, you should ", link_to("add it to the case", new_investigation_business_path(investigation)), " first."]) %>
   <%= form.govuk_select :assessed_by_business_id,
      label: "Choose business",
-     hint: safe_join(["If the business isn’t listed, you should ", link_to("add it to the case", new_investigation_business_path(investigation)), " first."]),
-   items: risk_assessment_form.businesses %>
+     hint:  hint,
+     items: risk_assessment_form.businesses %>
 <% end %>
 
 <%- someone_else_html = capture do %>
@@ -49,15 +50,15 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
 %>
 
 <%= form.govuk_radios :assessed_by,
-   legend: "Who completed the assessment?",
-   items: assessed_by_radio_items
+ legend: "Who completed the assessment?",
+ items: assessed_by_radio_items
 %>
 
 <% if risk_assessment_form.products.length > 1 %>
   <%= form.govuk_checkboxes :product_ids,
-    legend: "Which products were assessed?",
-    hint: "You must choose at least one. Only products already added to the case are listed.",
-    items: risk_assessment_form.products
+     legend: "Which products were assessed?",
+     hint: "You must choose at least one. Only products already added to the case are listed.",
+     items: risk_assessment_form.products
   %>
 <% else %>
 

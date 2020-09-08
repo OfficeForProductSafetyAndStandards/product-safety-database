@@ -27,6 +27,22 @@
           { key: "other_files",
             text: "Other files",
             hint: { text: "Any other relevant files, such as compliance certificates or declarations of conformity" } }]
+      = form.fields_for :products do |products_form|
+        = products_form.hidden_field :batch_number
+        = products_form.hidden_field :category
+        = products_form.hidden_field :country_of_origin
+        = products_form.hidden_field :description
+        = products_form.hidden_field :name
+        = products_form.hidden_field :product_code
+        = products_form.hidden_field :product_type
+        = products_form.hidden_field :webpage
+
+      = form.fields_for :investigation_businesses do |investigation_businesses_form|
+        = investigation_businesses_form.fields_for :business do |business_form|
+          = business_form.hidden_field :company_number
+          = business_form.hidden_field :legal_name
+          = business_form.hidden_field :trading_name
+
       = form.submit "Continue", class: "govuk-button"
 
 / declarations of conformity

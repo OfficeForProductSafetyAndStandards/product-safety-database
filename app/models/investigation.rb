@@ -89,6 +89,7 @@ class Investigation < ApplicationRecord
 
   has_many :risk_assessments
 
+  accepts_nested_attributes_for :products, :investigation_businesses
   # All sub-classes share this policy class
   def self.policy_class
     InvestigationPolicy
