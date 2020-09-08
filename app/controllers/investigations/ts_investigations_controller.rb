@@ -79,7 +79,6 @@ class Investigations::TsInvestigationsController < ApplicationController
       return redirect_to next_wizard_path unless @repeat_step
     when :risk_assessments
       @investigation.products.new(@product.attributes)
-      byebug
       @investigation.investigation_businesses.new(business: @business)
       @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
 
