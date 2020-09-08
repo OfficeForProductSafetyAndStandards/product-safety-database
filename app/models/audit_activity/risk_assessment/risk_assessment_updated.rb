@@ -43,7 +43,10 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
   end
 
   def new_assessed_on
-    updates["assessed_on"]&.second
+    date = updates["assessed_on"]&.second
+    return nil unless date
+
+    Date.parse(date)
   end
 
   def new_risk_level

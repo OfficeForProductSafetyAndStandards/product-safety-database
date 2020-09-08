@@ -63,6 +63,12 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_elasticsearch
 
     expect(page).to have_text("new_risk_assessment.txt")
 
+    # Update the date assessed to test activity rendering
+    within_fieldset("Date of assessment") do
+      fill_in "Day", with: "10"
+      fill_in "Month", with: "2"
+    end
+
     # Update some of the fields to include a validation error
     within_fieldset("What was the risk level?") do
       choose "Other"
