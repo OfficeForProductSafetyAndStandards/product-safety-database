@@ -21,19 +21,60 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
     ).risk_assessment
   end
 
-  before do
-    UpdateRiskAssessment.call!(
-      risk_assessment: risk_assessment,
-      user: user,
-      assessed_on: new_date,
-      assessed_by_team_id: user.team.id,
-      risk_level: "serious",
-      details: "Test 2",
-      product_ids: investigation.product_ids
-    )
+  describe ".build_metadata" do
+    subject(:metadata) { described_class.build_metadata(risk_assessment: risk_assessment, previous_product_ids: investigation.product_ids, attachment_changed: attachment_changed, previous_attachment_filename: previous_attachment_filename) }
+
+    context "when the attachment has not changed" do
+      let(:attachment_changed) { false }
+      let(:previous_attachment_filename) { nil }
+
+      before { risk_assessment.update(assessed_on: new_date) }
+
+      it "builds a list of changes" do
+        expect(metadata).to eq({
+          risk_assessment_id: risk_assessment.id,
+          updates: {
+            "assessed_on" => [date, new_date]
+          }
+        })
+      end
+    end
+
+    context "when the attachment has changed" do
+      let(:attachment_changed) { true }
+      let(:new_file) { fixture_file_upload(file_fixture("new_risk_assessment.txt")) }
+      let(:previous_attachment_filename) { "risk_assessment.txt" }
+
+      before do
+        risk_assessment.risk_assessment_file.detach
+        risk_assessment.risk_assessment_file.attach(new_file)
+        risk_assessment.save
+      end
+
+      it "builds a list of changes" do
+        expect(metadata).to eq({
+          risk_assessment_id: risk_assessment.id,
+          updates: {
+            "filename" => ["risk_assessment.txt", "new_risk_assessment.txt"]
+          }
+        })
+      end
+    end
   end
 
   describe "#new_assessed_on" do
+    before do
+      UpdateRiskAssessment.call!(
+        risk_assessment: risk_assessment,
+        user: user,
+        assessed_on: new_date,
+        assessed_by_team_id: user.team.id,
+        risk_level: "serious",
+        details: "Test 2",
+        product_ids: investigation.product_ids
+      )
+    end
+
     context "when the date has changed" do
       it "returns a Date object" do
         expect(activity.new_assessed_on).to be_a(Date)

@@ -3,7 +3,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
     raise "Deprecated - use UpdateRiskAssessment.call instead"
   end
 
-  def self.build_metadata(risk_assessment:, previous_product_ids:, previous_attachment_filename:)
+  def self.build_metadata(risk_assessment:, previous_product_ids:, attachment_changed:, previous_attachment_filename:)
     updates = risk_assessment.previous_changes.slice(
       :assessed_on,
       :risk_level,
@@ -18,9 +18,8 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
       updates[:product_ids] = [previous_product_ids, risk_assessment.product_ids]
     end
 
-    current_attachment_filename = risk_assessment.risk_assessment_file.filename
-
-    if previous_attachment_filename != current_attachment_filename
+    if attachment_changed
+      current_attachment_filename = risk_assessment.risk_assessment_file.filename
       updates["filename"] = [previous_attachment_filename, current_attachment_filename]
     end
 

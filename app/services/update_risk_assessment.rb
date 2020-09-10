@@ -25,7 +25,7 @@ class UpdateRiskAssessment
         product_ids: product_ids
       }
 
-      if risk_assessment_file && (risk_assessment_file != risk_assessment.risk_assessment_file)
+      if risk_assessment_file
         risk_assessment.risk_assessment_file.detach
         risk_assessment.risk_assessment_file.attach(risk_assessment_file)
       end
@@ -42,7 +42,7 @@ class UpdateRiskAssessment
 private
 
   def no_changes?
-    !risk_assessment.changed?
+    !risk_assessment.changed? && !risk_assessment_file
   end
 
   def create_audit_activity
@@ -63,6 +63,7 @@ private
     AuditActivity::RiskAssessment::RiskAssessmentUpdated.build_metadata(
       risk_assessment: risk_assessment,
       previous_product_ids: @previous_product_ids,
+      attachment_changed: risk_assessment_file.present?,
       previous_attachment_filename: @previous_attachment_filename
     )
   end
