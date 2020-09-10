@@ -28,7 +28,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
       let(:attachment_changed) { false }
       let(:previous_attachment_filename) { nil }
 
-      before { risk_assessment.update(assessed_on: new_date) }
+      before { risk_assessment.update!(assessed_on: new_date) }
 
       it "builds a list of changes" do
         expect(metadata).to eq({
@@ -48,7 +48,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
       before do
         risk_assessment.risk_assessment_file.detach
         risk_assessment.risk_assessment_file.attach(new_file)
-        risk_assessment.save
+        risk_assessment.save!
       end
 
       it "builds a list of changes" do
