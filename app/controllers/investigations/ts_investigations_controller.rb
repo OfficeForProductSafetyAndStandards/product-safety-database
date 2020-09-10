@@ -27,7 +27,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :set_countries, only: %i[show create update]
   before_action :set_product, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
-  before_action :set_selected_businesses, only: %i[show update], if: -> { step == :which_businesses }
+  before_action :set_selected_businesses, only: %i[show update], if: -> { step.in?([:risk_assessments, :which_businesses]) }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
   before_action :set_business, only: %i[show update], if: -> { step.in?([:business, :risk_assessments, :other_information]) }
   before_action :set_skip_step,
@@ -54,6 +54,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
   before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
   after_action  :store_investigation, only: :update, if: -> { %i[why_reporting coronavirus].include?(step) }
+  after_action  :store_risk_assessment, only: :update, if: -> { step == :risk_assessments }
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_business, only: %i[update], if: -> { step == :business }
@@ -78,9 +79,7 @@ class Investigations::TsInvestigationsController < ApplicationController
     when :corrective_action, *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
     when :risk_assessments
-      @investigation.products.new(@product.attributes)
-      @investigation.investigation_businesses.new(business: @business)
-      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
+      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_ssession, product: @product)
 
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
@@ -211,7 +210,7 @@ private
     session.delete :product
     session.delete :other_business_type
     session.delete :further_corrective_action
-    session.delete :risk_assessments
+
     other_information_types.each do |type|
       session.delete further_key(type)
     end
@@ -222,6 +221,7 @@ private
     session.delete :file
     session[:selected_businesses] = []
     session[:businesses] = []
+    session[:risk_assessment_form] = {}
   end
 
   def store_investigation
@@ -249,7 +249,7 @@ private
     end
 
     return {} if params[:investigation].blank?
-    Rails.logger.ap step
+
     case step
     when :coronavirus
       params.require(:investigation).permit(:coronavirus_related)
@@ -299,6 +299,10 @@ private
   def corrective_action_session_params
     # TODO: PSD-980 use this to retrieve a corrective action for editing eg for browser back button
     {}
+  end
+
+  def risk_assessment_form_session_params
+    session[:risk_assessment_form]
   end
 
   def test_session_params
@@ -372,6 +376,13 @@ private
     if repeat_step_valid?(@investigation)
       session[further_key(step)] = @repeat_step
     end
+  end
+
+  def store_risk_assessment
+    return if @skip_step
+    byebug
+    session[:risk_assessment_form] = @risk_assessment_form&.attributes
+    ap session[:risk_assessment_form]
   end
 
   def repeat_step_valid?(model)
@@ -515,9 +526,15 @@ private
       end
     when :risk_assessments
       @risk_assessment_form = TradingStandardRiskAssessmentForm.new(
-        trading_standard_risk_assessment_form_params
-          .merge(current_user: current_user, investigation: @investigation)
+        risk_assessment_step_params
+          .merge(
+            current_user: current_user,
+            investigation: @investigation,
+            businesses: businesses_from_ssession,
+            product: @product
+          )
       )
+      byebug
       @investigation = @investigation.decorate
       return false if @risk_assessment_form.invalid?
     when :corrective_action
@@ -536,8 +553,17 @@ private
     @investigation.errors.empty? && @product.errors.empty?
   end
 
+  def risk_assessment_step_params
+    risk_assessment_form_session_params
+          .merge(trading_standard_risk_assessment_form_params)
+  end
+
   def trading_standard_risk_assessment_form_params
     params.require(:trading_standard_risk_assessment_form).permit(:details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
+  end
+
+  def businesses_from_ssession
+    session[:businesses].reduce([]) { |acc, item| acc << item[:business] && acc }
   end
 
   def assigns_why_reporting_from_form(why_reporting_form)
@@ -563,6 +589,24 @@ private
     # activity title generation
     @investigation.products << @product
     CreateCase.call(investigation: @investigation, user: current_user)
+    byebug
+    risk_assessment_form = TradingStandardRiskAssessmentForm.new(
+      risk_assessment_form_session_params
+        .merge(
+          current_user: current_user,
+          investigation: @investigation,
+          businesses: businesses_from_ssession,
+          product: @product
+        )
+    )
+
+    AddRiskAssessmentToCase.call!(
+      risk_assessment_form.attributes.merge(
+        investigation: @investigation,
+        user: current_user,
+        assessed_by_team_id: risk_assessment_form.assessed_by_team_id
+      )
+    )
 
     save_businesses
     save_corrective_actions

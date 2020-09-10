@@ -3,7 +3,7 @@ class RiskAssessmentForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  EMPTY_PROMPT_OPTION = [{ text: "", value: "" }].freeze
+  EMPTY_PROMPT_OPTION = [{ text: "", value: "" }.freeze].freeze
 
   attribute :investigation
   attribute :current_user
@@ -74,7 +74,7 @@ class RiskAssessmentForm
   end
 
   def other_teams
-    EMPTY_PROMPT_OPTION +
+    EMPTY_PROMPT_OPTION.deep_dup +
       Team
         .order(:name)
         .where.not(id: current_user.team_id)
@@ -84,7 +84,7 @@ class RiskAssessmentForm
   end
 
   def businesses
-    EMPTY_PROMPT_OPTION + investigation.businesses
+    EMPTY_PROMPT_OPTION.deep_dup + investigation.businesses
       .reorder(:trading_name)
       .pluck(:trading_name, :id).map do |row|
         { text: row[0], value: row[1] }
