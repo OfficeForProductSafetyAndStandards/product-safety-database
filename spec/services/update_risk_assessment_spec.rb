@@ -8,6 +8,14 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
 
   let(:investigation) { create(:allegation) }
 
+  let(:assessed_on) { Date.parse("2019-01-01") }
+  let(:risk_level) { :low }
+  let(:custom_risk_level) { nil }
+  let(:assessed_by_team_id) { user.team.id }
+  let(:assessed_by_business_id) { nil }
+  let(:assessed_by_other) { nil }
+  let(:details) { "More details" }
+
   let(:risk_assessment) do
     create(:risk_assessment,
            investigation: investigation,
@@ -63,6 +71,8 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
           risk_assessment_file: risk_assessment_file
         )
       end
+
+      let(:activity_entry) { risk_assessment.investigation.activities.where(type: AuditActivity::RiskAssessment::RiskAssessmentUpdated.to_s).order(:created_at).last }
 
       context "when no changes have been made" do
         let(:assessed_on) { Date.parse("2019-01-01") }
@@ -125,8 +135,6 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         it "creates an activity entry" do
           update_risk_assessment
 
-          activity_entry = risk_assessment.investigation.activities.where(type: AuditActivity::RiskAssessment::RiskAssessmentUpdated.to_s).order(:created_at).last
-
           expect(activity_entry.metadata).to eql({
             "risk_assessment_id" => risk_assessment.id,
             "updates" => {
@@ -150,6 +158,22 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
             "User 2 (Team 2) edited a risk assessment on the allegation.",
             "Risk assessment edited for Allegation"
           )
+        end
+      end
+
+      context "when only the file has changed" do
+        let(:product_ids) { [product1.id] }
+        let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
+
+        before { update_risk_assessment }
+
+        it "creates an activity entry" do
+          expect(activity_entry.metadata).to eql({
+            "risk_assessment_id" => risk_assessment.id,
+            "updates" => {
+              "filename" => ["old_risk_assessment.txt", "new_risk_assessment.txt"],
+            }
+          })
         end
       end
     end
