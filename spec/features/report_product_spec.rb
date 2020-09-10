@@ -497,10 +497,20 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_risk_assessment_details_page(with:)
-    attach_file "file[file][file]", with[:file]
-    fill_in "Title", with: with[:title]
-    fill_in "Description", with: with[:description]
-    choose "file_further_risk_assessments_yes"
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose "High risk"
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "A business related to the case"
+    end
+
     click_button "Continue"
   end
 

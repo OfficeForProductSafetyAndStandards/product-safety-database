@@ -12,6 +12,6 @@ class TradingStandardRiskAssessmentForm < RiskAssessmentForm
   end
 
   def business
-    investigation.businesses.first
+    investigation.investigation_businesses.first.business
   end
 end

@@ -513,6 +513,13 @@ private
       if @business.errors.any? || @business.contacts_have_errors? || @business.locations_have_errors?
         return false
       end
+    when :risk_assessments
+      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(
+        trading_standard_risk_assessment_form_params
+          .merge(current_user: current_user, investigation: @investigation)
+      )
+      @investigation = @investigation.decorate
+      return false if @risk_assessment_form.invalid?
     when :corrective_action
       return false if @corrective_action.errors.any?
     when :test_results
@@ -527,6 +534,10 @@ private
       end
     end
     @investigation.errors.empty? && @product.errors.empty?
+  end
+
+  def trading_standard_risk_assessment_form_params
+    params.require(:trading_standard_risk_assessment_form).permit(:details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
   end
 
   def assigns_why_reporting_from_form(why_reporting_form)
