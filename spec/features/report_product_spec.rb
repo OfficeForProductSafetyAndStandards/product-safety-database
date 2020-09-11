@@ -509,6 +509,15 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     within_fieldset("Who completed the assessment?") do
       choose "A business related to the case"
+      select business_details[:retailer][:trading_name]
+    end
+
+    expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
+
+    attach_file "trading_standard_risk_assessment_form[risk_assessment_file]", with[:file]
+
+    within_fieldset("Are there other risk assessments to report?") do
+      choose "Yes"
     end
 
     click_button "Continue"

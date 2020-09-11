@@ -3,7 +3,7 @@ class TradingStandardRiskAssessmentForm < RiskAssessmentForm
   attribute :product
 
   def products
-    EMPTY_PROMPT_OPTION.deep_dup + [{ text: product.name, value: product.name }]
+    [{ text: product.name, value: product.name }]
   end
 
   def businesses_select_items

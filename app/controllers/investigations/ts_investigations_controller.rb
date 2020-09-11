@@ -79,7 +79,7 @@ class Investigations::TsInvestigationsController < ApplicationController
     when :corrective_action, *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
     when :risk_assessments
-      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_ssession, product: @product)
+      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
 
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
@@ -221,7 +221,7 @@ private
     session.delete :file
     session[:selected_businesses] = []
     session[:businesses] = []
-    session[:risk_assessment_form] = {}
+    session[:risk_assessments] = []
   end
 
   def store_investigation
@@ -371,13 +371,6 @@ private
     end
   end
 
-  def store_risk_assessment
-    return if @skip_step
-    byebug
-    session[:risk_assessment_form] = @risk_assessment_form&.attributes
-    ap session[:risk_assessment_form]
-  end
-
   def repeat_step_valid?(model)
     if @repeat_step.nil?
       further_page_type = to_item_text(step)
@@ -385,6 +378,12 @@ private
       return false
     end
     true
+  end
+
+  def corrective_action_valid?
+    @corrective_action.valid?
+    repeat_step_valid?(@corrective_action)
+    @corrective_action.errors.empty?
   end
 
   def store_corrective_action
@@ -400,10 +399,10 @@ private
     session[further_key(step)] = @repeat_step
   end
 
-  def corrective_action_valid?
-    @corrective_action.valid?
-    repeat_step_valid?(@corrective_action)
-    @corrective_action.errors.empty?
+  def store_risk_assessment
+    return if @skip_step
+
+    session[:risk_assessments] << @risk_assessment_form.attributes
   end
 
   def store_test
@@ -519,15 +518,15 @@ private
       end
     when :risk_assessments
       @risk_assessment_form = TradingStandardRiskAssessmentForm.new(
-        risk_assessment_step_params
+        trading_standard_risk_assessment_form_params
           .merge(
             current_user: current_user,
             investigation: @investigation,
-            businesses: businesses_from_ssession,
+            businesses: businesses_from_session,
             product: @product
           )
       )
-      byebug
+
       @investigation = @investigation.decorate
       return false if @risk_assessment_form.invalid?
     when :corrective_action
@@ -546,16 +545,11 @@ private
     @investigation.errors.empty? && @product.errors.empty?
   end
 
-  def risk_assessment_step_params
-    risk_assessment_form_session_params
-          .merge(trading_standard_risk_assessment_form_params)
-  end
-
   def trading_standard_risk_assessment_form_params
     params.require(:trading_standard_risk_assessment_form).permit(:details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
   end
 
-  def businesses_from_ssession
+  def businesses_from_session
     session[:businesses].reduce([]) { |acc, item| acc << item[:business] && acc }
   end
 
@@ -581,28 +575,13 @@ private
     # Product must be added before investigation is saved for correct audit
     # activity title generation
     @investigation.products << @product
-    CreateCase.call(investigation: @investigation, user: current_user)
-    byebug
-    risk_assessment_form = TradingStandardRiskAssessmentForm.new(
-      risk_assessment_form_session_params
-        .merge(
-          current_user: current_user,
-          investigation: @investigation,
-          businesses: businesses_from_ssession,
-          product: @product
-        )
-    )
 
-    AddRiskAssessmentToCase.call!(
-      risk_assessment_form.attributes.merge(
-        investigation: @investigation,
-        user: current_user,
-        assessed_by_team_id: risk_assessment_form.assessed_by_team_id
-      )
-    )
+    CreateCase.call(investigation: @investigation, user: current_user)
+
 
     save_businesses
     save_corrective_actions
+    save_risk_assessments
     save_test_results
     save_product_files
     save_files
@@ -630,6 +609,24 @@ private
         attach_blobs_to_list(file_blob, action_record.documents)
       end
       @investigation.corrective_actions << action_record
+    end
+  end
+
+  def save_risk_assessments
+    session[:risk_assessments].each do |risk_assessment_form_attributes|
+      risk_assessment_form = TradingStandardRiskAssessmentForm.new(risk_assessment_form_attributes)
+      if risk_assessment_form.invalid?
+        raise ActiveRecord::Invalid, "Risk assessment invalid"
+      end
+
+      AddRiskAssessmentToCase.call!(
+        risk_assessment_form.attributes.merge(
+          investigation: @investigation,
+          user: current_user,
+          assessed_by_team_id: risk_assessment_form.assessed_by_team_id,
+          product_ids: [@product.id]
+        )
+      )
     end
   end
 
