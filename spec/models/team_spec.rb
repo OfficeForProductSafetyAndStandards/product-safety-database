@@ -51,4 +51,39 @@ RSpec.describe Team do
       end
     end
   end
+
+  describe ".not_deleted" do
+    it "returns only teams without deleted timestamp" do
+      create(:team, :deleted)
+      not_deleted_team = create(:team)
+
+      expect(described_class.not_deleted.to_a).to eq [not_deleted_team]
+    end
+  end
+
+  describe "#mark_as_deleted!" do
+    it "sets the team 'deleted_at' timestamp to the current time" do
+      team = create(:team)
+      freeze_time do
+        expect { team.mark_as_deleted! }.to change { team.deleted_at }.from(nil).to(Time.current)
+      end
+    end
+
+    it "does not change the flag if was already enabled" do
+      team = create(:team, :deleted)
+      expect { team.mark_as_deleted! }.not_to change(team, :deleted_at)
+    end
+  end
+
+  describe "#deleted?" do
+    it "returns true for teams with deleted timestamp" do
+      team = create(:team, :deleted)
+      expect(team).to be_deleted
+    end
+
+    it "returns false for teams without deleted timestamp" do
+      team = create(:team)
+      expect(team).not_to be_deleted
+    end
+  end
 end

@@ -12,6 +12,20 @@ class Team < ApplicationRecord
     all.includes(:organisation)
   end
 
+  def self.not_deleted
+    where(deleted_at: nil)
+  end
+
+  def deleted?
+    deleted_at.present?
+  end
+
+  def mark_as_deleted!
+    return if deleted?
+
+    update!(deleted_at: Time.current)
+  end
+
   def display_name(*)
     name
   end

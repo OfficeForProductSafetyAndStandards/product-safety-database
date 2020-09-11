@@ -1,97 +1,194 @@
 require "rails_helper"
 
 RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+  let(:team) { create(:team) }
+  let(:new_team) { create(:team) }
+
+  let(:team_user) { create(:user, :activated, :team_admin, team: team, organisation: team.organisation) }
+  let(:new_team_user) { create(:user, :activated, :team_admin, team: new_team, organisation: new_team.organisation) }
+  let(:deleting_user) { team_user }
+
+  let(:team_case) { create(:allegation, creator: team_user) }
+
+  def delete_team
+    described_class.call!(team: team, new_team: new_team, user: deleting_user)
+  end
 
   it "marks the team as deleted" do
-  end
-
-  context "when the team has users" do
-    it "migrates the users to the new team" do
-    end
-
-    it "retains the users' roles in the new team" do
-    end
-
-    it "sends a confirmation email to each affected user" do
-    end
-
-    context "when a user is attributed to historic activity on a case" do
-      it "retains the user attribution" do
-      end
+    freeze_time do
+      expect { delete_team }.to change { team.deleted_at }.from(nil).to(Time.zone.now)
     end
   end
 
-  context "when the team has created a case" do
-    it "retains the team as the case creator" do
+  it "migrates the users to the new team" do
+    expect { delete_team }.to change { team_user.team }.from(team).to(new_team)
+  end
+
+  it "retains the users' roles in the new team" do
+    expect { delete_team }.not_to change { team_user.is_team_admin? }
+  end
+
+  it "sends a confirmation email to each affected user", :aggregate_failures do
+    delete_team
+    mail = delivered_emails.last
+    expect(mail.recipient).to eq(team_user.email)
+    expect(mail.action_name).to eq("team_deleted")
+    expect(mail.personalization[:name]).to eq(team_user.name)
+    expect(mail.personalization[:deleting_user_name]).to eq(deleting_user.name)
+  end
+
+  context "when a user is attributed to historic activity on a case" do
+    it "retains the user attribution" do
+      activity = team_case.activities.find_by!(type: team_case.case_created_audit_activity_class.to_s)
+      expect { delete_team }.not_to change { activity.source.user }
     end
   end
 
   context "when a user on the team has created a case" do
     it "retains the user as the case creator" do
+      expect { delete_team }.not_to change { team_case.creator_user }
+    end
+
+    it "retains the team as the case creator" do
+      expect { delete_team }.not_to change { team_case.creator_team }
     end
   end
 
   context "when the team is the owner of a case" do
+    before do
+      ChangeCaseOwner.call!(
+        investigation: team_case,
+        owner: team,
+        user: team_user
+      )
+    end
+
     it "transfers ownership of the case to the new team" do
+      expect { delete_team }.to change { team_case.owner }.from(team).to(new_team)
     end
 
     it "adds activity showing the case ownership changed to the new team" do
+      delete_team
+      activity = team_case.activities.find_by!(type: AuditActivity::Investigation::UpdateOwner.to_s)
+      expect(activity.owner).to eq(new_team)
     end
 
     it "adds activity showing the old team removed from the case" do
+      delete_team
+      activity = team_case.activities.find_by!(type: AuditActivity::Investigation::TeamDeleted.to_s)
+      expect(activity.team).to eq(team)
     end
 
-    it "does not send notification e-mails" do
+    it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
+      expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+      expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
     end
 
-    it "removes the previous collaborator access from the new team" do
+    context "when the new team was already a collaborator on the case" do
+      before do
+        AddTeamToCase.call!(
+          investigation: team_case,
+          user: team_user,
+          team: new_team,
+          collaboration_class: Collaboration::Access::ReadOnly
+        )
+      end
+
+      it "removes the previous collaborator access from the new team" do
+        expect { delete_team }.to change { team_case.teams_with_read_only_access.count }.from(1).to(0)
+      end
     end
   end
 
   context "when a user in the team is the owner of a case" do
     it "retains the ownership of the case with the same user in the new team" do
+      expect { delete_team }.not_to change { team_case.owner }
     end
 
     it "updates the owner team to the user's new team" do
+      expect { delete_team }.to change { team_case.owner_team }.from(team).to(new_team)
+    end
+  end
+
+  context "when the team is a collaborator on a case owned by the new team" do
+    let(:new_team_case) { create(:allegation, creator: new_team_user, read_only_teams: [team]) }
+
+    it "removes the team from the case" do
+      expect { delete_team }.to change { new_team_case.teams_with_read_only_access }.from([team]).to([])
+    end
+
+    it "adds activity showing the old team removed from the case" do
+      delete_team
+      activity = new_team_case.activities.find_by!(type: AuditActivity::Investigation::TeamDeleted.to_s)
+      expect(activity.team).to eq(team)
+    end
+
+    it "does not change the new team's access level on the case" do
+      expect { delete_team }.not_to change { new_team_case.owner_team }
+    end
+
+    it "does not send notification e-mails", :with_test_queue_adapter do
+      expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
     end
   end
 
   context "when the team is a collaborator on a case owned by another team" do
+    let(:other_team_case) { create(:allegation, read_only_teams: read_only_teams, edit_access_teams: edit_access_teams) }
+    let(:read_only_teams) { [team] }
+    let(:edit_access_teams) { nil }
+
     it "adds activity showing the old team removed from the case" do
+      delete_team
+      activity = other_team_case.activities.find_by!(type: AuditActivity::Investigation::TeamDeleted.to_s)
+      expect(activity.team).to eq(team)
     end
 
-    it "does not send notification e-mails" do
+    it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
+      expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_added_to_case_email)
+      expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
+      expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :case_permission_changed_for_team)
     end
 
     context "when the new team is not already a collaborator on the case" do
-      it "adds activity showing the new team added to the case" do
+      it "adds the new team to the case with the same access level as the old team" do
+        expect { delete_team }.to change { other_team_case.teams_with_read_only_access }.from([team]).to([new_team])
       end
 
-      it "retains the old team's access level to the case" do
+      it "adds activity showing the new team added to the case" do
+        delete_team
+        activity = other_team_case.activities.find_by!(type: AuditActivity::Investigation::TeamAdded.to_s)
+        expect(activity.team).to eq(new_team)
       end
     end
 
     context "when the new team is already a collaborator on the case" do
+      let(:read_only_teams) { [team, new_team] }
+
       it "does not add activity showing the new team added to the case" do
+        expect { delete_team }.not_to change { other_team_case.activities.where(type: AuditActivity::Investigation::TeamAdded.to_s).count }
       end
 
       context "when the new team has the same level of access to the case as the old team" do
         it "does not change the new team's access level on the case" do
+          expect { delete_team }.not_to change { other_team_case.teams_with_read_only_access.where(id: team.id).count }
         end
       end
 
       context "when the new team has read-only access to the case but the old team had edit access" do
+        let(:read_only_teams) { [new_team] }
+        let(:edit_access_teams) { [team] }
+
         it "does not change the new team's access level on the case" do
+          expect { delete_team }.not_to change { other_team_case.teams_with_read_only_access.where(id: team.id).count }
         end
       end
 
       context "when the new team has edit access to the case but the old team had read-only access" do
-        it "does not change the new team's access level on the case" do
-        end
-      end
+        let(:read_only_teams) { [team] }
+        let(:edit_access_teams) { [new_team] }
 
-      context "when the new team is the owner of the case" do
         it "does not change the new team's access level on the case" do
+          expect { delete_team }.not_to change { other_team_case.teams_with_read_only_access.where(id: team.id).count }
         end
       end
     end
