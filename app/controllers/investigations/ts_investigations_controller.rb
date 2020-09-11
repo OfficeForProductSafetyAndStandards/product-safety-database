@@ -256,13 +256,6 @@ private
     when :reference_number
       params[:investigation][:complainant_reference] = nil unless params[:investigation][:has_complainant_reference] == "Yes"
       params.require(:investigation).permit(:complainant_reference)
-    when :other_information
-      params.require(:investigation).permit(
-        products_attributes: [
-          :batch_number, :category, :country_of_origin, :description, :name, :product_type, :product_code, :webpage
-        ],
-        investigation_businesses_attributes: %i[company_number legal_name trading_name]
-      )
     else
       {}
     end
@@ -338,8 +331,8 @@ private
       session[:businesses] = []
     else
       businesses = which_businesses_params
-                     .select { |relationship, selected| relationship != "other" && selected == "1" }
-                     .keys
+                       .select { |relationship, selected| relationship != "other" && selected == "1" }
+                       .keys
       businesses << which_businesses_params[:other_business_type] if which_businesses_params[:other] == "1"
       session[:businesses] = businesses.map { |type| { type: type, business: nil } }
     end
@@ -688,10 +681,10 @@ private
     return {} if params[:test].blank?
 
     params.require(:test)
-      .permit(:product_id,
-              :legislation,
-              :result,
-              :details)
+        .permit(:product_id,
+                :legislation,
+                :result,
+                :details)
   end
 
   def test_file_metadata
