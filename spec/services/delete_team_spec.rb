@@ -18,9 +18,6 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
     context "when a user is attributed to historic activity on a case" do
       it "retains the user attribution" do
       end
-
-      it "displays the user's new team name" do
-      end
     end
   end
 
@@ -38,43 +35,16 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
     it "transfers ownership of the case to the new team" do
     end
 
+    it "adds activity showing the case ownership changed to the new team" do
+    end
+
     it "adds activity showing the old team removed from the case" do
     end
 
     it "does not send notification e-mails" do
     end
 
-    context "when the new team is not already a collaborator on the case" do
-      it "adds activity showing the new team added to the case" do
-      end
-
-      it "retains the old team's access level to the case" do
-      end
-    end
-
-    context "when the new team is already a collaborator on the case" do
-      it "does not add activity showing the new team added to the case" do
-      end
-
-      context "when the new team has the same level of access to the case as the old team" do
-        it "does not change the new team's access level on the case" do
-        end
-      end
-
-      context "when the new team has read-only access to the case but the old team had edit access" do
-        it "does not change the new team's access level on the case" do
-        end
-      end
-
-      context "when the new team has edit access to the case but the old team had read-only access" do
-        it "does not change the new team's access level on the case" do
-        end
-      end
-
-      context "when the new team is the owner of the case" do
-        it "does not change the new team's access level on the case" do
-        end
-      end
+    it "removes the previous collaborator access from the new team" do
     end
   end
 
