@@ -36,6 +36,9 @@ Style/TrailingCommaInArguments:
 Rails/HelperInstanceVariable:
   Enabled: false
 
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
 RSpec/NestedGroups:
   Max: 6
 

@@ -72,7 +72,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
 
       it "marks the team as deleted" do
         freeze_time do
-          expect { delete_team }.to change { team.deleted_at }.from(nil).to(Time.zone.now)
+          expect { delete_team }.to change(team, :deleted_at).from(nil).to(Time.zone.now)
         end
       end
 
@@ -81,7 +81,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
       end
 
       it "retains the users' roles in the new team" do
-        expect { delete_team }.not_to change { team_user.is_team_admin? }
+        expect { delete_team }.not_to change(team_user, :is_team_admin?)
       end
 
       it "sends a confirmation email to each affected user", :aggregate_failures do
@@ -102,11 +102,11 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
 
       context "when a user on the team has created a case" do
         it "retains the user as the case creator" do
-          expect { delete_team }.not_to change { team_case.creator_user }
+          expect { delete_team }.not_to change(team_case, :creator_user)
         end
 
         it "retains the team as the case creator" do
-          expect { delete_team }.not_to change { team_case.creator_team }
+          expect { delete_team }.not_to change(team_case, :creator_team)
         end
       end
 
@@ -152,7 +152,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
 
       context "when a user in the team is the owner of a case" do
         it "retains the ownership of the case with the same user in the new team" do
-          expect { delete_team }.not_to change { team_case.owner }
+          expect { delete_team }.not_to change(team_case, :owner)
         end
 
         it "updates the owner team to the user's new team" do
@@ -174,7 +174,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         end
 
         it "does not change the new team's access level on the case" do
-          expect { delete_team }.not_to change { new_team_case.owner_team }
+          expect { delete_team }.not_to change(new_team_case, :owner_team)
         end
 
         it "does not send notification e-mails", :with_test_queue_adapter do

@@ -74,7 +74,6 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
         end
       end
 
-
       context "when the new owner is a read only team on the case" do
         let(:new_owner) { create(:team) }
 

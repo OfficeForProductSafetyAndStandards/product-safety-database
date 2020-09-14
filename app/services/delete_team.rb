@@ -23,6 +23,7 @@ private
   def remove_team_as_owner_from_cases
     team.owner_collaborations.each do |collaboration|
       next change_case_owner(collaboration) if collaboration.investigation.owner == team # Team is the ultimate owner
+
       collaboration.update!(collaborator_id: new_team.id) # User on the team is the ultimate owner
     end
   end
