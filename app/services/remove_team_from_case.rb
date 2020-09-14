@@ -13,7 +13,7 @@ class RemoveTeamFromCase
       create_audit_activity_for_team_deleted!
     end
 
-    send_notification_email
+    send_notification_email unless context.silent
   end
 
 private

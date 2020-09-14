@@ -1,29 +1,19 @@
 class Team < ApplicationRecord
+  include Deletable
   include TeamCollaboratorInterface
 
   belongs_to :organisation
   has_many :users, dependent: :restrict_with_exception
 
   has_many :collaborations, dependent: :destroy, as: :collaborator
+  has_many :collaboration_accesses, class_name: "Collaboration::Access", as: :collaborator
+
+  has_many :owner_collaborations, class_name: "Collaboration::Access::OwnerTeam", as: :collaborator
 
   validates :name, presence: true
 
   def self.all_with_organisation
     all.includes(:organisation)
-  end
-
-  def self.not_deleted
-    where(deleted_at: nil)
-  end
-
-  def deleted?
-    deleted_at.present?
-  end
-
-  def mark_as_deleted!
-    return if deleted?
-
-    update!(deleted_at: Time.current)
   end
 
   def display_name(*)
