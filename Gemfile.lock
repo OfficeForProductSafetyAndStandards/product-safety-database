@@ -545,7 +545,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-pg_enum (~> 1.1)
   awesome_print (~> 1.8)
-  aws-sdk-s3 (= 1.79.1)
+  aws-sdk-s3 (~> 1.79)
   axlsx!
   brakeman (~> 4.9)
   byebug (~> 11.1)
