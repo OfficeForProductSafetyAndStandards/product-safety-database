@@ -5,7 +5,7 @@ class DeleteTeam
 
   def call
     context.fail!(error: "No team supplied") unless team.is_a?(Team)
-    context.fail!(error: "No new team supplied") unless new_team.is_a?(Team)
+    context.fail!(error: "No new team supplied to absorb cases and users") unless new_team.is_a?(Team)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
     context.fail!(error: "Team cannot already be deleted") if team.deleted?
     context.fail!(error: "New team cannot already be deleted") if new_team.deleted?
@@ -22,14 +22,14 @@ private
 
   def remove_team_as_owner_from_cases
     team.owner_collaborations.each do |collaboration|
-      next change_case_owner(collaboration.investigation) if collaboration.investigation.owner == team # Team is the ultimate owner
+      next change_case_owner(collaboration) if collaboration.investigation.owner == team # Team is the ultimate owner
       collaboration.update!(collaborator_id: new_team.id) # User on the team is the ultimate owner
     end
   end
 
-  def change_case_owner(investigation)
+  def change_case_owner(collaboration)
     ChangeCaseOwner.call!(
-      investigation: investigation,
+      investigation: collaboration.investigation,
       owner: new_team,
       user: user,
       rationale: change_case_owner_rationale,
@@ -39,9 +39,7 @@ private
 
   def remove_team_as_collaborator_from_cases
     team.collaboration_accesses.changeable.each do |collaboration|
-      investigation = collaboration.investigation
-      add_new_team_to_case(investigation, collaboration.class) unless new_team_already_collaborating?(investigation)
-
+      add_new_team_to_case(collaboration) unless new_team_already_collaborating?(collaboration.investigation)
       remove_team_from_case(collaboration)
     end
   end
@@ -50,11 +48,11 @@ private
     investigation.collaboration_accesses.find_by(collaborator_id: new_team.id).present?
   end
 
-  def add_new_team_to_case(investigation, collaboration_class)
+  def add_new_team_to_case(collaboration)
     AddTeamToCase.call!(
-      investigation: investigation,
+      investigation: collaboration.investigation,
       team: new_team,
-      collaboration_class: collaboration_class,
+      collaboration_class: collaboration.class,
       user: user,
       message: add_remove_team_message,
       silent: true
