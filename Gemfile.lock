@@ -202,7 +202,7 @@ GEM
       concurrent-ruby (~> 1.0)
     interactor (3.1.2)
     jaro_winkler (1.5.4)
-    jbuilder (2.10.0)
+    jbuilder (2.10.1)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     jquery-rails (4.3.5)
@@ -568,7 +568,7 @@ DEPENDENCIES
   govuk-design-system-rails!
   govuk_notify_rails (~> 2.1)
   interactor (~> 3.1)
-  jbuilder (~> 2.1)
+  jbuilder (~> 2.10)
   launchy (~> 2.5)
   listen (~> 3.2)
   lograge (~> 0.11)
