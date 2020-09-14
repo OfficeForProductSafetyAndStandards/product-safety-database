@@ -60,8 +60,6 @@ group :development do
   gem "pry-byebug", "~> 3.9"
   gem "pry-doc", "~> 1.1"
   gem "ruby-debug-ide", "~> 0.7"
-  gem "simplecov", "~> 0.19"
-  gem "simplecov-console", "~> 0.7"
   gem "solargraph", "~> 0.39"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
@@ -84,6 +82,8 @@ group :test do
   gem "rubocop-performance", "~> 1.7"
   gem "rubocop-rspec", "~> 1.39", require: false
   gem "scss_lint-govuk", "~> 0.2"
+  gem "simplecov", "~> 0.19"
+  gem "simplecov-console", "~> 0.7"
   gem "slim_lint", "~> 0.20"
   gem "webmock", "~> 3.8"
 end
