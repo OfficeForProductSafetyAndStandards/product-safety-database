@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "~> 2.6.6"
 
-gem "will_paginate", "~> 3.3" # Must be laoded before elasticsearch gems
+gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum"
 gem "aws-sdk-s3", "1.79.1"
