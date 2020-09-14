@@ -52,7 +52,6 @@ group :development do
   gem "awesome_print", "~> 1.8", require: "ap"
   gem "brakeman", "~> 4.9"
   gem "byebug", "~> 11.1"
-  gem "coveralls", "~> 0.7"
   gem "debase", "~> 0.2"
   gem "dotenv-rails", "~> 2.7"
   gem "listen", "~> 3.2"
@@ -71,6 +70,7 @@ end
 group :test do
   gem "capybara", "~> 3.33"
   gem "capybara-screenshot", "~> 1.0"
+  gem "coveralls", "~> 0.7"
   gem "database_cleaner", "~> 1.8"
   gem "factory_bot_rails", "~> 6.1"
   gem "faker", "~> 2.13"
