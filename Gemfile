@@ -32,6 +32,8 @@ gem "redis-rails", "~> 5.0"
 gem "request_store", "~> 1.5"
 gem "rest-client", "~> 2.1"
 gem "rubyzip", "~> 1.3"
+gem "sass-rails", "~> 6.0"
+gem "sassc", "~> 2.4"
 gem "scout_apm", "~> 2.6"
 gem "sentry-raven", "~> 3.0"
 gem "sidekiq", "5.2.9" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
@@ -45,20 +47,33 @@ gem "webpacker", "~> 5.2"
 gem "wicked", "~> 1.3"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.0", require: "govuk_design_system"
-group :development, :test do
+
+group :development do
   gem "awesome_print", "~> 1.8", require: "ap"
   gem "brakeman", "~> 4.9"
   gem "byebug", "~> 11.1"
-  gem "capybara", "~> 3.33"
-  gem "coveralls", "~> 0.7"
   gem "debase", "~> 0.2"
   gem "dotenv-rails", "~> 2.7"
-  gem "factory_bot_rails", "~> 6.1"
   gem "listen", "~> 3.2"
   gem "m", "~> 1.5"
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
   gem "pry-doc", "~> 1.1"
+  gem "ruby-debug-ide", "~> 0.7"
+  gem "solargraph", "~> 0.39"
+  gem "spring", "~> 2.1"
+  gem "spring-commands-rspec", "~> 1.0"
+end
+
+group :test do
+  gem "capybara", "~> 3.33"
+  gem "capybara-screenshot", "~> 1.0"
+  gem "coveralls", "~> 0.7"
+  gem "database_cleaner", "~> 1.8"
+  gem "factory_bot_rails", "~> 6.1"
+  gem "faker", "~> 2.13"
+  gem "launchy", "~> 2.5"
+  gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.8"
   gem "rspec-mocks", "~> 3.9"
   gem "rspec-rails", "~> 4.0"
@@ -66,23 +81,9 @@ group :development, :test do
   gem "rubocop-govuk", "~> 3.16"
   gem "rubocop-performance", "~> 1.7"
   gem "rubocop-rspec", "~> 1.39", require: false
-  gem "ruby-debug-ide", "~> 0.7"
-  gem "sass-rails", "~> 6.0"
-  gem "sassc", "~> 2.4"
   gem "scss_lint-govuk", "~> 0.2"
   gem "simplecov", "~> 0.19"
   gem "simplecov-console", "~> 0.7"
   gem "slim_lint", "~> 0.20"
-  gem "solargraph", "~> 0.39"
-  gem "spring", "~> 2.1"
-  gem "spring-commands-rspec", "~> 1.0"
   gem "webmock", "~> 3.8"
-end
-
-group :test do
-  gem "capybara-screenshot", "~> 1.0"
-  gem "database_cleaner", "~> 1.8"
-  gem "faker", "~> 2.13"
-  gem "launchy", "~> 2.5"
-  gem "rails-controller-testing", "~> 1.0"
 end
