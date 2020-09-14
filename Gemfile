@@ -84,5 +84,5 @@ group :test do
   gem "simplecov", "~> 0.19"
   gem "simplecov-console", "~> 0.7"
   gem "slim_lint", "~> 0.20"
-  gem "webmock", "~> 3.8"
+  gem "webmock", "~> 3.9"
 end
