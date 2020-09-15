@@ -33,23 +33,23 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :set_skip_step,
                 only: %i[update],
                 if: lambda {
-    %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
-  }
+                  %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
+                }
   before_action :set_corrective_action, only: %i[show update], if: -> { step == :corrective_action }
   # There is no set_other_information because there is no validation on the page so there is no need to set the model
   before_action :set_test, only: %i[show update], if: -> { step == :test_results }
   before_action :set_file,
                 only: %i[show update],
                 if: lambda {
-    %i[risk_assessments product_images evidence_images other_files].include? step
-  }
+                  %i[risk_assessments product_images evidence_images other_files].include? step
+                }
   before_action :set_repeat_step, only: %i[show update], if: -> { step == :has_corrective_action }
   # This needs to be first to prevent other models from saving
   before_action :store_repeat_step,
                 only: %i[update],
                 if: lambda {
-    %i[has_corrective_action risk_assessments product_images evidence_images other_files].include? step
-  }
+                  %i[has_corrective_action risk_assessments product_images evidence_images other_files].include? step
+                }
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
   before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
@@ -64,15 +64,11 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_file,
                 only: %i[update],
                 if: lambda {
-    %i[risk_assessments product_images evidence_images other_files].include? step
-  }
+                  %i[risk_assessments product_images evidence_images other_files].include? step
+                }
 
   # GET /xxx/step
   def show
-
-    # @investigation.products.new(@product.attributes)
-    # @investigation.investigation_businesses.new(business: @business)
-
     case step
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
@@ -84,7 +80,6 @@ class Investigations::TsInvestigationsController < ApplicationController
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
     end
-
     # Preventing repeat step radio button from inheriting previous value
     clear_repeat_step
     render_wizard
@@ -138,8 +133,8 @@ private
   def set_selected_businesses
     if params.key?(:businesses)
       @selected_businesses = which_businesses_params
-                               .select { |key, selected| key != :other_business_type && selected == "1" }
-                               .keys
+                                 .select { |key, selected| key != :other_business_type && selected == "1" }
+                                 .keys
       @other_business_type = which_businesses_params[:other_business_type]
     else
       @selected_businesses = session[:selected_businesses]
@@ -210,7 +205,6 @@ private
     session.delete :product
     session.delete :other_business_type
     session.delete :further_corrective_action
-
     other_information_types.each do |type|
       session.delete further_key(type)
     end
@@ -286,7 +280,8 @@ private
   end
 
   def business_session_params
-    session[:businesses].first[:business] || {}
+    # TODO: PSD-980 use this to retrieve a business for editing eg for browser back button
+    {}
   end
 
   def corrective_action_session_params
@@ -331,8 +326,8 @@ private
       session[:businesses] = []
     else
       businesses = which_businesses_params
-                       .select { |relationship, selected| relationship != "other" && selected == "1" }
-                       .keys
+                     .select { |relationship, selected| relationship != "other" && selected == "1" }
+                     .keys
       businesses << which_businesses_params[:other_business_type] if which_businesses_params[:other] == "1"
       session[:businesses] = businesses.map { |type| { type: type, business: nil } }
     end
@@ -577,7 +572,6 @@ private
     @investigation.products << @product
 
     CreateCase.call(investigation: @investigation, user: current_user)
-
 
     save_businesses
     save_corrective_actions

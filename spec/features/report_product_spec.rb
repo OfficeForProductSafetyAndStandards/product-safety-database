@@ -520,6 +520,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       choose "Yes"
     end
 
+    attach_file "file[file][file]", with[:file]
+    fill_in "Title", with: with[:title]
+    fill_in "Description", with: with[:description]
+
+    choose "file_further_risk_assessments_yes"
     click_button "Continue"
   end
 
