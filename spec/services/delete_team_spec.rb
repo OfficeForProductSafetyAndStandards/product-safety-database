@@ -84,15 +84,6 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         expect { delete_team }.not_to change(team_user, :is_team_admin?)
       end
 
-      it "sends a confirmation email to each affected user", :aggregate_failures do
-        delete_team
-        mail = delivered_emails.last
-        expect(mail.recipient).to eq(team_user.email)
-        expect(mail.action_name).to eq("team_deleted")
-        expect(mail.personalization[:name]).to eq(team_user.name)
-        expect(mail.personalization[:deleting_user_name]).to eq(deleting_user.name)
-      end
-
       context "when a user is attributed to historic activity on a case" do
         it "retains the user attribution" do
           activity = team_case.activities.find_by!(type: team_case.case_created_audit_activity_class.to_s)
