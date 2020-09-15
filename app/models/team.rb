@@ -12,10 +12,6 @@ class Team < ApplicationRecord
 
   validates :name, presence: true
 
-  def self.all_with_organisation
-    all.includes(:organisation)
-  end
-
   def display_name(*)
     name
   end

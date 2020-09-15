@@ -1,23 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Team do
-  describe ".all_with_organisation" do
-    before { create_list(:team, 3) }
-
-    let(:owners) { described_class.all_with_organisation }
-
-    it "retrieves all teams" do
-      expect(owners.length).to eq(3)
-    end
-
-    it "includes associations needed for display_name" do
-      owners.length
-      expect(lambda {
-        owners.map(&:display_name)
-      }).to not_talk_to_db
-    end
-  end
-
   describe ".get_visible_teams" do
     before do
       allow(Rails.application.config).to receive(:team_names).and_return(
