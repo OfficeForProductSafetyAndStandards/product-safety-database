@@ -1,6 +1,10 @@
 class TradingStandardRiskAssessmentForm < RiskAssessmentForm
   attribute :businesses, :business_list
-  attribute :product
+
+  def product=(product)
+    self.product_ids = [product.id]
+    @product = product
+  end
 
   def products
     [{ text: product.name, value: product.name }]
@@ -11,4 +15,8 @@ class TradingStandardRiskAssessmentForm < RiskAssessmentForm
                             .sort_by(&:trading_name)
                             .map { |business| { text: business.trading_name, value: business.trading_name } }
   end
+
+private
+
+  attr_reader :product
 end

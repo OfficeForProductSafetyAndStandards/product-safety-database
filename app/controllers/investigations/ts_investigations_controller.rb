@@ -36,19 +36,20 @@ class Investigations::TsInvestigationsController < ApplicationController
                   %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
                 }
   before_action :set_corrective_action, only: %i[show update], if: -> { step == :corrective_action }
+  before_action :set_risk_assessment_form, only: %i[show update], if: -> { step == :risk_assessments }
   # There is no set_other_information because there is no validation on the page so there is no need to set the model
   before_action :set_test, only: %i[show update], if: -> { step == :test_results }
   before_action :set_file,
                 only: %i[show update],
                 if: lambda {
-                  %i[risk_assessments product_images evidence_images other_files].include? step
+                  %i[product_images evidence_images other_files].include? step
                 }
   before_action :set_repeat_step, only: %i[show update], if: -> { step == :has_corrective_action }
   # This needs to be first to prevent other models from saving
   before_action :store_repeat_step,
                 only: %i[update],
                 if: lambda {
-                  %i[has_corrective_action risk_assessments product_images evidence_images other_files].include? step
+                  %i[has_corrective_action product_images evidence_images other_files].include? step
                 }
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
@@ -64,7 +65,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_file,
                 only: %i[update],
                 if: lambda {
-                  %i[risk_assessments product_images evidence_images other_files].include? step
+                  %i[product_images evidence_images other_files].include? step
                 }
 
   # GET /xxx/step
@@ -75,8 +76,6 @@ class Investigations::TsInvestigationsController < ApplicationController
     when :corrective_action, *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
     when :risk_assessments
-      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
-
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
     end
@@ -167,6 +166,12 @@ private
                    when nil
                      session[repeat_step_key]
                    end
+  end
+
+  def set_risk_assessment_form
+    @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
+    @file_blob, * = load_file_attachments :trading_standard_risk_assessment_form
+    set_repeat_step(:trading_standard_risk_assessment_form)
   end
 
   def set_corrective_action
@@ -397,7 +402,18 @@ private
   def store_risk_assessment
     return if @skip_step
 
-    session[:risk_assessments] << @risk_assessment_form.attributes
+    if @risk_assessment_form.valid? && @file_blob
+      update_blob_metadata @file_blob
+      @file_blob.save
+    end
+
+    session[:risk_assessments] << {
+      risk_assessment: @risk_assessment_form.attributes.except("risk_assessment_file"),
+      file_blob_id: @file_blob&.id
+    }
+
+    session.delete :file
+    session[further_key(step)] = @repeat_step
   end
 
   def store_test
@@ -431,6 +447,8 @@ private
       end
       session.delete :file
     end
+  rescue
+    beybug
   end
 
   def file_valid?
@@ -512,6 +530,7 @@ private
         return false
       end
     when :risk_assessments
+      byebug
       @risk_assessment_form = TradingStandardRiskAssessmentForm.new(
         trading_standard_risk_assessment_form_params
           .merge(
@@ -607,17 +626,17 @@ private
   end
 
   def save_risk_assessments
-    session[:risk_assessments].each do |risk_assessment_form_attributes|
-      risk_assessment_form = TradingStandardRiskAssessmentForm.new(risk_assessment_form_attributes)
-      if risk_assessment_form.invalid?
-        raise ActiveRecord::Invalid, "Risk assessment invalid"
-      end
-
+    session[:risk_assessments].each do |session_risk_assessment|
+      risk_assessment_form = TradingStandardRiskAssessmentForm.new(
+        session_risk_assessment[:risk_assessment]
+      )
+      @investigation.businessess.find_by(risk_assessment_form.detect { |b| b.tradding_name ==  risk_assessment_form.})
       AddRiskAssessmentToCase.call!(
         risk_assessment_form.attributes.merge(
           investigation: @investigation,
           user: current_user,
           assessed_by_team_id: risk_assessment_form.assessed_by_team_id,
+          risk_assessment_file: ActiveStorage::Blob.find_by(id: session_risk_assessment[:file_blob_id]),
           product_ids: [@product.id]
         )
       )
