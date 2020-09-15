@@ -5,6 +5,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_elasticsearch, :with_stub
   let(:team)           { create(:team, name: "Southampton Trading Standards", team_recipient_email: "enquiries@southampton.gov.uk") }
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, read_only_teams: read_only_team, creator: user) }
+  let!(:deleted_team)  { create(:team, :deleted) }
 
   before do
     read_only_team.update!(name: "Birmingham Trading Standards")
@@ -45,6 +46,10 @@ RSpec.feature "Adding a team to a case", :with_stubbed_elasticsearch, :with_stub
     expect(page).to have_selector("a", text: "Select a team to add to the case")
     expect(page).to have_selector("a", text: "Select the permission level the team should have")
     expect(page).to have_selector("a", text: "Select whether you want to include a message")
+
+    # Check deleted teams are not listed
+    expect(page).to have_css("#team option[value=\"#{team.id}\"]")
+    expect(page).not_to have_css("#team option[value=\"#{deleted_team.id}\"]")
 
     select "Southampton Trading Standards", from: "Choose team"
     choose "Edit full case"
