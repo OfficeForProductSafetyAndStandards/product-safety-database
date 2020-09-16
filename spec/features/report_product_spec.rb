@@ -69,7 +69,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       {
         file: Rails.root + "test/fixtures/files/new_risk_assessment.txt",
         title: Faker::Lorem.sentence,
-        description: Faker::Lorem.paragraph
+        description: Faker::Lorem.paragraph,
+        risk_level: RiskAssessment.risk_levels.values.sample.titleize,
+        business_type: business_details.keys.sample
       }
     }
 
@@ -186,7 +188,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         click_link "Supporting information (5)"
 
-        risk_assessments.each { |assessment| expect_case_supporting_information_page_to_show(file_description: assessment[:title]) }
+        risk_assessments.each do |assessment|
+          expect_case_supporting_information_page_to_show(assessment)
+        end
 
         click_link "Activity"
 
@@ -337,9 +341,14 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(section.find("dt", text: "Contact")).to have_sibling("dd", text: expected_contact)
   end
 
-  def expect_case_supporting_information_page_to_show(file_description:)
-    expect(page).to have_selector("h1", text: "Supporting information")
-    expect(page).to have_selector("h2", text: file_description)
+  def expect_case_supporting_information_page_to_show(assessment_attributes)
+    expect(page).to have_css("h1", text: "Supporting information")
+
+    if assessment_attributes[:risk_level] != "Other"
+      expect(page).to have_link("#{assessment_attributes[:risk_level]} risk: #{product_details[:name]}")
+    else
+      expect(page).to have_link("#{assessment_attributes[:risk_level]}: #{product_details[:name]}")
+    end
   end
 
   def expect_case_activity_page_to_show_allegation_logged
@@ -368,6 +377,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_risk_assessment(assessment)
     expect(page).to have_selector("h1", text: "Activity")
+    save_and_open_page
     item = page.find("h3", text: assessment[:title]).find(:xpath, "..")
     expect(item).to have_selector("p", text: assessment[:description])
   end
@@ -504,12 +514,16 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     within_fieldset("What was the risk level?") do
-      choose "High risk"
+      choose with[:risk_level]
+      if with[:risk_level] == "Other"
+        with[:custom_risk_level] = Faker::Hipster.sentence
+        fill_in "Enter other risk level", with: with[:custom_risk_level]
+      end
     end
 
     within_fieldset("Who completed the assessment?") do
       choose "A business related to the case"
-      select business_details[:retailer][:trading_name]
+      select business_details[with[:business_type]][:trading_name]
     end
 
     expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])

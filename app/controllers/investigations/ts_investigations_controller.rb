@@ -6,7 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include FileConcern
   include FlowWithCoronavirusForm
-  set_attachment_names :file
+  set_attachment_names :file, :risk_assessment_file
   set_file_params_key :file
 
   steps :coronavirus,
@@ -170,7 +170,6 @@ private
 
   def set_risk_assessment_form
     @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
-    @file_blob, * = load_file_attachments :trading_standard_risk_assessment_form
     set_repeat_step(:trading_standard_risk_assessment_form)
   end
 
@@ -402,17 +401,11 @@ private
   def store_risk_assessment
     return if @skip_step
 
-    if @risk_assessment_form.valid? && @file_blob
-      update_blob_metadata @file_blob
-      @file_blob.save
-    end
+    attributes = @risk_assessment_form.attributes
+    attributes.delete("risk_assessment_file")
 
-    session[:risk_assessments] << {
-      risk_assessment: @risk_assessment_form.attributes.except("risk_assessment_file"),
-      file_blob_id: @file_blob&.id
-    }
+    session[:risk_assessments] << { risk_assessment: attributes, file_blob_id: @file_blob&.id }
 
-    session.delete :file
     session[further_key(step)] = @repeat_step
   end
 
@@ -530,7 +523,6 @@ private
         return false
       end
     when :risk_assessments
-      byebug
       @risk_assessment_form = TradingStandardRiskAssessmentForm.new(
         trading_standard_risk_assessment_form_params
           .merge(
@@ -541,7 +533,22 @@ private
           )
       )
 
+
+
       @investigation = @investigation.decorate
+
+      if (file = trading_standard_risk_assessment_form_params[:risk_assessment_file])
+        @file_blob = ActiveStorage::Blob.create_after_upload!(
+          io:           file,
+          filename:     file.original_filename,
+          content_type: file.content_type,
+          metadata: {
+            created_by: current_user.id
+          }
+        )
+      end
+
+      @file_blob
       return false if @risk_assessment_form.invalid?
     when :corrective_action
       return false if @corrective_action.errors.any?
@@ -630,13 +637,19 @@ private
       risk_assessment_form = TradingStandardRiskAssessmentForm.new(
         session_risk_assessment[:risk_assessment]
       )
-      @investigation.businessess.find_by(risk_assessment_form.detect { |b| b.tradding_name ==  risk_assessment_form.})
+
+      business = @investigation
+        .businesses
+        .find_by(risk_assessment_form.businesses.detect { |b| b.trading_name == risk_assessment_form.assessed_by })
+
+      risk_assessment_form.assessed_by_business_id = business.id
+      blob = ActiveStorage::Blob.find(session_risk_assessment[:file_blob_id])
       AddRiskAssessmentToCase.call!(
         risk_assessment_form.attributes.merge(
           investigation: @investigation,
           user: current_user,
           assessed_by_team_id: risk_assessment_form.assessed_by_team_id,
-          risk_assessment_file: ActiveStorage::Blob.find_by(id: session_risk_assessment[:file_blob_id]),
+          risk_assessment_file: blob,
           product_ids: [@product.id]
         )
       )
