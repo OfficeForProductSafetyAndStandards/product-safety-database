@@ -19,51 +19,51 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (5.2.4.3)
-      actionpack (= 5.2.4.3)
+    actioncable (5.2.4.4)
+      actionpack (= 5.2.4.4)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
-    actionmailer (5.2.4.3)
-      actionpack (= 5.2.4.3)
-      actionview (= 5.2.4.3)
-      activejob (= 5.2.4.3)
+    actionmailer (5.2.4.4)
+      actionpack (= 5.2.4.4)
+      actionview (= 5.2.4.4)
+      activejob (= 5.2.4.4)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 2.0)
-    actionpack (5.2.4.3)
-      actionview (= 5.2.4.3)
-      activesupport (= 5.2.4.3)
+    actionpack (5.2.4.4)
+      actionview (= 5.2.4.4)
+      activesupport (= 5.2.4.4)
       rack (~> 2.0, >= 2.0.8)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (5.2.4.3)
-      activesupport (= 5.2.4.3)
+    actionview (5.2.4.4)
+      activesupport (= 5.2.4.4)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    activejob (5.2.4.3)
-      activesupport (= 5.2.4.3)
+    activejob (5.2.4.4)
+      activesupport (= 5.2.4.4)
       globalid (>= 0.3.6)
-    activemodel (5.2.4.3)
-      activesupport (= 5.2.4.3)
+    activemodel (5.2.4.4)
+      activesupport (= 5.2.4.4)
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (5.2.4.3)
-      activemodel (= 5.2.4.3)
-      activesupport (= 5.2.4.3)
+    activerecord (5.2.4.4)
+      activemodel (= 5.2.4.4)
+      activesupport (= 5.2.4.4)
       arel (>= 9.0)
     activerecord-pg_enum (1.1.0)
       activerecord (>= 4.1.0)
       activesupport
       pg
-    activestorage (5.2.4.3)
-      actionpack (= 5.2.4.3)
-      activerecord (= 5.2.4.3)
+    activestorage (5.2.4.4)
+      actionpack (= 5.2.4.4)
+      activerecord (= 5.2.4.4)
       marcel (~> 0.3.1)
-    activesupport (5.2.4.3)
+    activesupport (5.2.4.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
@@ -75,7 +75,7 @@ GEM
     ast (2.4.1)
     awesome_print (1.8.0)
     aws-eventstream (1.1.0)
-    aws-partitions (1.359.0)
+    aws-partitions (1.368.0)
     aws-sdk-core (3.105.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -84,7 +84,7 @@ GEM
     aws-sdk-kms (1.37.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.79.1)
+    aws-sdk-s3 (1.80.0)
       aws-sdk-core (~> 3, >= 3.104.3)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -202,7 +202,7 @@ GEM
       concurrent-ruby (~> 1.0)
     interactor (3.1.2)
     jaro_winkler (1.5.4)
-    jbuilder (2.10.0)
+    jbuilder (2.10.1)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     jquery-rails (4.3.5)
@@ -234,7 +234,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.6.0)
+    loofah (2.7.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     m (1.5.1)
@@ -279,7 +279,7 @@ GEM
     pry-doc (1.1.0)
       pry (~> 0.11)
       yard (~> 0.9.11)
-    public_suffix (4.0.5)
+    public_suffix (4.0.6)
     puma (4.3.6)
       nio4r (~> 2.0)
     pundit (2.1.0)
@@ -295,18 +295,18 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rails (5.2.4.3)
-      actioncable (= 5.2.4.3)
-      actionmailer (= 5.2.4.3)
-      actionpack (= 5.2.4.3)
-      actionview (= 5.2.4.3)
-      activejob (= 5.2.4.3)
-      activemodel (= 5.2.4.3)
-      activerecord (= 5.2.4.3)
-      activestorage (= 5.2.4.3)
-      activesupport (= 5.2.4.3)
+    rails (5.2.4.4)
+      actioncable (= 5.2.4.4)
+      actionmailer (= 5.2.4.4)
+      actionpack (= 5.2.4.4)
+      actionview (= 5.2.4.4)
+      activejob (= 5.2.4.4)
+      activemodel (= 5.2.4.4)
+      activerecord (= 5.2.4.4)
+      activestorage (= 5.2.4.4)
+      activesupport (= 5.2.4.4)
       bundler (>= 1.3.0)
-      railties (= 5.2.4.3)
+      railties (= 5.2.4.4)
       sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
@@ -329,9 +329,9 @@ GEM
       rails (>= 5.0, < 7)
       remotipart (~> 1.3)
       sassc-rails (>= 1.3, < 3)
-    railties (5.2.4.3)
-      actionpack (= 5.2.4.3)
-      activesupport (= 5.2.4.3)
+    railties (5.2.4.4)
+      actionpack (= 5.2.4.4)
+      activesupport (= 5.2.4.4)
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
@@ -494,7 +494,7 @@ GEM
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.1)
+    sprockets-rails (3.2.2)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -520,7 +520,7 @@ GEM
       mail (>= 2.2.5)
     warden (1.2.8)
       rack (>= 2.0.6)
-    webmock (3.8.3)
+    webmock (3.9.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -529,7 +529,7 @@ GEM
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
-    websocket-driver (0.7.2)
+    websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     wicked (1.3.4)
@@ -543,82 +543,80 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-pg_enum
-  awesome_print
-  aws-sdk-s3 (= 1.79.1)
+  activerecord-pg_enum (~> 1.1)
+  awesome_print (~> 1.8)
+  aws-sdk-s3 (~> 1.80)
   axlsx!
-  brakeman
-  byebug
-  capybara
-  capybara-screenshot
+  brakeman (~> 4.9)
+  byebug (~> 11.1)
+  capybara (~> 3.33)
+  capybara-screenshot (~> 1.0)
   caxlsx_rails (~> 0.6.2)
-  cf-app-utils
-  coveralls
-  database_cleaner
-  debase
-  devise
-  devise-encryptable
-  dotenv-rails
-  draper
-  elasticsearch (~> 6.8.2)
+  cf-app-utils (~> 0.6)
+  coveralls (~> 0.7)
+  database_cleaner (~> 1.8)
+  debase (~> 0.2)
+  devise (~> 4.7)
+  devise-encryptable (~> 0.2)
+  dotenv-rails (~> 2.7)
+  draper (~> 4.0)
+  elasticsearch (~> 6.8)
   elasticsearch-model (~> 6.1)
   elasticsearch-rails (~> 6.1)
-  factory_bot_rails
-  faker
+  factory_bot_rails (~> 6.1)
+  faker (~> 2.13)
   govuk-design-system-rails!
-  govuk_notify_rails (= 2.1.2)
-  interactor
-  jbuilder
-  launchy
-  listen
-  lograge (= 0.11.2)
-  m
-  mini_magick (= 4.10.1)
-  pg
-  pghero
-  pry
-  pry-byebug
-  pry-doc
-  puma
-  pundit
-  rack (~> 2.2.3)
+  govuk_notify_rails (~> 2.1)
+  interactor (~> 3.1)
+  jbuilder (~> 2.10)
+  launchy (~> 2.5)
+  listen (~> 3.2)
+  lograge (~> 0.11)
+  m (~> 1.5)
+  mini_magick (~> 4.10)
+  pg (~> 1.2)
+  pghero (~> 2.7)
+  pry (~> 0.13)
+  pry-byebug (~> 3.9)
+  pry-doc (~> 1.1)
+  puma (~> 4.3)
+  pundit (~> 2.1)
+  rack (~> 2.2)
   rails (~> 5.2)
-  rails-controller-testing
+  rails-controller-testing (~> 1.0)
   rails_admin (~> 2.0)
-  redcarpet
-  redis-rails
-  request_store (= 1.5.0)
-  rest-client (= 2.1.0)
-  roo
-  rspec-mocks
-  rspec-rails
-  rubocop
-  rubocop-govuk (~> 3.16.0)
-  rubocop-performance
+  redcarpet (~> 3.5)
+  redis-rails (~> 5.0)
+  request_store (~> 1.5)
+  rest-client (~> 2.1)
+  roo (~> 2.8)
+  rspec-mocks (~> 3.9)
+  rspec-rails (~> 4.0)
+  rubocop (~> 0.85)
+  rubocop-govuk (~> 3.16)
+  rubocop-performance (~> 1.7)
   rubocop-rspec (~> 1.39)
-  ruby-debug-ide
-  rubyzip
+  ruby-debug-ide (~> 0.7)
   sass-rails (~> 6.0)
-  sassc
-  scout_apm
-  scss_lint-govuk
+  scout_apm (~> 2.6)
+  scss_lint-govuk (~> 0.2)
   sentry-raven (~> 3.0)
   sidekiq (= 5.2.9)
   sidekiq-cron (~> 1.2)
-  simplecov
-  simplecov-console
-  slim-rails
-  slim_lint (= 0.20.1)
-  solargraph
-  spring
-  spring-commands-rspec
+  simplecov (~> 0.19)
+  simplecov-console (~> 0.7)
+  slim-rails (~> 3.2)
+  slim_lint (~> 0.20)
+  solargraph (~> 0.39)
+  spring (~> 2.1)
+  spring-commands-rspec (~> 1.0)
   sprockets (= 3.7.2)
   sprockets-rails
-  strong_migrations (= 0.7.1)
+  strong_migrations (~> 0.7)
   validate_email (~> 0.1)
-  webmock
-  webpacker (~> 5.2.1)
-  wicked
+  webmock (~> 3.9)
+  webpacker (~> 5.2)
+  wicked (~> 1.3)
   will_paginate (~> 3.3)
 
 RUBY VERSION
