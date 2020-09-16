@@ -69,7 +69,7 @@ group :test do
   gem "coveralls", "~> 0.7"
   gem "database_cleaner", "~> 1.8"
   gem "factory_bot_rails", "~> 6.1"
-  gem "faker", "~> 2.13"
+  gem "faker", "~> 2.14"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.8"
