@@ -60,7 +60,7 @@ module BusinessesHelper
   end
 
   def set_business
-    @business = Business.find(params[:id]).decorate
+    @business = Business.find(params[:id])
   end
 
 private

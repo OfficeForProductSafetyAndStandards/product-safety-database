@@ -48,7 +48,6 @@ gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk
 
 group :development do
   gem "awesome_print", "~> 1.8", require: "ap"
-  gem "brakeman", "~> 4.9"
   gem "byebug", "~> 11.1"
   gem "debase", "~> 0.2"
   gem "dotenv-rails", "~> 2.7"

@@ -18,7 +18,9 @@ class BusinessesController < ApplicationController
 
   # GET /businesses/1
   # GET /businesses/1.json
-  def show; end
+  def show
+    @business = @business.decorate
+  end
 
   # GET /businesses/1/edit
   def edit
