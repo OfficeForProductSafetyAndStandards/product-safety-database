@@ -21,12 +21,7 @@ class Investigations::ProjectController < ApplicationController
 
   # POST /xxx
   def create
-    if @investigation.valid?
-      CreateCase.call(investigation: @investigation, user: current_user)
-      redirect_to investigation_path(@investigation), flash: { success: "Project was successfully created" }
-    else
-      render_wizard
-    end
+    create!
   end
 
   # PATCH/PUT /xxx
@@ -36,13 +31,22 @@ class Investigations::ProjectController < ApplicationController
     session[model_key] = @investigation.attributes
 
     if step == steps.last
-      create
+      create!
     else
       redirect_to next_wizard_path
     end
   end
 
 private
+
+  def create!
+    if @investigation.valid?
+      CreateCase.call(investigation: @investigation, user: current_user)
+      redirect_to investigation_path(@investigation), flash: { success: "Project was successfully created" }
+    else
+      render_wizard
+    end
+  end
 
   def investigation_session_params
     session[model_key] || {}
