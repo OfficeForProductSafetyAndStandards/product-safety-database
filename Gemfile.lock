@@ -93,7 +93,6 @@ GEM
     backport (1.1.2)
     bcrypt (3.1.13)
     benchmark (0.1.0)
-    brakeman (4.9.1)
     builder (3.2.4)
     byebug (11.1.3)
     capybara (3.33.0)
@@ -547,7 +546,6 @@ DEPENDENCIES
   awesome_print (~> 1.8)
   aws-sdk-s3 (~> 1.80)
   axlsx!
-  brakeman (~> 4.9)
   byebug (~> 11.1)
   capybara (~> 3.33)
   capybara-screenshot (~> 1.0)
