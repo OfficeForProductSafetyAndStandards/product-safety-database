@@ -57,7 +57,7 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v1
       with:
-        node-version: 10.20.x
+        node-version: 12.18.x
 
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
