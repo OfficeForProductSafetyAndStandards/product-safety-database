@@ -82,7 +82,7 @@ module FileConcern
   def update_blob_metadata(blob, metadata)
     return unless blob
 
-    blob.metadata.update!(metadata)
+    blob.metadata.update(metadata)
     blob.metadata["updated"] = Time.zone.now
   end
 
