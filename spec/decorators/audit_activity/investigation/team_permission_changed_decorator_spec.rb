@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::TeamPermissionChangedDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:activity) do
-    AuditActivity::Investigation::TeamPermissionChanged.create(
+    AuditActivity::Investigation::TeamPermissionChanged.create!(
       investigation: investigation,
       metadata: described_class.build_metadata(team, old_permission, new_permission, message),
       source: UserSource.new(user: user)

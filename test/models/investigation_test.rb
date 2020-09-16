@@ -38,7 +38,7 @@ class InvestigationTest < ActiveSupport::TestCase
     @investigation = create_new_case
     assert_difference "Activity.count" do
       @investigation.is_closed = !@investigation.is_closed
-      @investigation.save
+      @investigation.save!
     end
   end
 

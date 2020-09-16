@@ -2,7 +2,7 @@ class AuditActivity::Business::Base < AuditActivity::Base
   belongs_to :business
 
   private_class_method def self.from(business, investigation, title, body)
-    create(
+    create!(
       body: body,
       source: UserSource.new(user: User.current),
       investigation: investigation,

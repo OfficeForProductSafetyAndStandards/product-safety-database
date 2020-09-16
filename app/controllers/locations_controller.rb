@@ -58,7 +58,7 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.json
   def destroy
-    @location.destroy
+    @location.destroy!
     respond_to do |format|
       format.html do
         redirect_to business_url(@location.business, anchor: "locations"),
@@ -76,7 +76,7 @@ private
 
   def create_location
     business = Business.find(params[:business_id])
-    @location = business.locations.create(location_params)
+    @location = business.locations.create!(location_params)
     @location.source = UserSource.new(user: current_user)
   end
 

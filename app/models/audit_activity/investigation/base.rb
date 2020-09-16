@@ -4,7 +4,7 @@ class AuditActivity::Investigation::Base < AuditActivity::Base
   end
 
   private_class_method def self.from(investigation, title = nil, body = nil, metadata = nil)
-    create(
+    create!(
       source: UserSource.new(user: User.current),
       investigation: investigation,
       title: title,

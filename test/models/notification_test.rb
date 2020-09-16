@@ -51,9 +51,9 @@ class NotificationTest < ActiveSupport::TestCase
     @investigation.update!(creator_user: users(:southampton))
     users(:southampton).own!(@investigation)
     mock_investigation_updated(who_will_be_notified: [users(:southampton), users(:southampton_bob)].map(&:email))
-    @investigation.update(is_closed: !@investigation.is_closed)
+    @investigation.update!(is_closed: !@investigation.is_closed)
     assert_equal 0, @number_of_notifications
-    @investigation.update(is_closed: !@investigation.is_closed)
+    @investigation.update!(is_closed: !@investigation.is_closed)
     assert_equal 0, @number_of_notifications
   end
 
@@ -62,9 +62,9 @@ class NotificationTest < ActiveSupport::TestCase
     users(:southampton_bob).own!(@investigation)
     @investigation.reload
     mock_investigation_updated(who_will_be_notified: [users(:southampton_bob).email])
-    @investigation.update(is_closed: !@investigation.is_closed)
+    @investigation.update!(is_closed: !@investigation.is_closed)
     assert_equal 1, @number_of_notifications
-    @investigation.update(is_closed: !@investigation.is_closed)
+    @investigation.update!(is_closed: !@investigation.is_closed)
     assert_equal 2, @number_of_notifications
   end
 

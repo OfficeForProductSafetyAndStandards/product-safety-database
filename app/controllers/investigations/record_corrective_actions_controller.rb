@@ -73,12 +73,12 @@ private
   def corrective_action_saved?
     return false unless corrective_action_valid?
 
-    @corrective_action.save
+    @corrective_action.save!
   end
 
   def save_attachment
     if @corrective_action.related_file?
-      @file_blob.save if @file_blob
+      @file_blob.save! if @file_blob
     elsif @file_blob
       @file_blob.purge
     end

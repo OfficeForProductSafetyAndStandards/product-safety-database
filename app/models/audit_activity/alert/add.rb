@@ -3,7 +3,7 @@ class AuditActivity::Alert::Add < AuditActivity::Base
   belongs_to :investigation
 
   def self.from(alert)
-    create(
+    create!(
       title: "Product safety alert sent",
       body: build_body(alert),
       source: UserSource.new(user: User.current),

@@ -370,7 +370,7 @@ private
 
     if @corrective_action.valid? && @file_blob
       update_blob_metadata @file_blob, corrective_action_file_metadata
-      @file_blob.save if @file_blob
+      @file_blob.save! if @file_blob
     end
     session[:corrective_actions] << { corrective_action: @corrective_action.attributes, file_blob_id: @file_blob&.id }
     session.delete :file
@@ -388,7 +388,7 @@ private
 
     if test_valid? && @file_blob
       update_blob_metadata @file_blob, test_file_metadata
-      @file_blob.save if @file_blob
+      @file_blob.save! if @file_blob
       session[:test_results] << { test: @test.attributes, file_blob_id: @file_blob&.id }
       session.delete :file
       session[further_key(step)] = @repeat_step
@@ -406,7 +406,7 @@ private
 
     if file_valid?
       update_blob_metadata @file_blob, get_attachment_metadata_params(:file)
-      @file_blob.save
+      @file_blob.save!
       if step == :product_images
         session[:product_files] << @file_blob.id
       else
@@ -527,7 +527,7 @@ private
   def records_saved?
     return false unless records_valid?
 
-    @product.save
+    @product.save!
 
     # Product must be added before investigation is saved for correct audit
     # activity title generation

@@ -17,7 +17,7 @@ FactoryBot.define do
         metadata: {
           title: evaluator.document_title,
           description: evaluator.document_description,
-          updated: Time.now.iso8601
+          updated: Time.zone.now.iso8601
         }
       )
 
@@ -39,7 +39,7 @@ FactoryBot.define do
           safe: true,
           created_by: evaluator.owner_id,
           title: evaluator.document_title,
-          updated: Time.now.iso8601
+          updated: Time.zone.now.iso8601
         }
       )
 

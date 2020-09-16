@@ -12,7 +12,7 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     @investigation_one.created_at = Time.zone.parse("2014-07-11 21:00")
     users(:southampton_bob).own!(@investigation_one)
     @investigation_one.creator_user = users(:southampton)
-    @investigation_one.save
+    @investigation_one.save!
 
     AddTeamToCase.call!(
       investigation: @investigation_one,
@@ -24,21 +24,21 @@ class InvestigationsControllerTest < ActionDispatch::IntegrationTest
     @investigation_two = load_case(:two)
     @investigation_two.created_at = Time.zone.parse("2015-07-11 21:00")
     @user.own!(@investigation_two)
-    @investigation_two.save
+    @investigation_two.save!
 
     @investigation_three = load_case(:three)
     @non_opss_user.own!(@investigation_three)
-    @investigation_three.save
+    @investigation_three.save!
 
     @investigation_no_products = load_case(:no_products)
     @non_opss_user.own!(@investigation_no_products)
-    @investigation_no_products.save
+    @investigation_no_products.save!
 
     # The updated_at values must be set separately in order to be respected
     @investigation_one.updated_at = Time.zone.parse("2017-07-11 21:00")
-    @investigation_one.save
+    @investigation_one.save!
     @investigation_two.updated_at = Time.zone.parse("2016-07-11 21:00")
-    @investigation_two.save
+    @investigation_two.save!
 
     Investigation.import refresh: true, force: true
   end

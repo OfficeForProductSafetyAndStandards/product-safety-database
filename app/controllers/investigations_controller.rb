@@ -64,14 +64,14 @@ class InvestigationsController < ApplicationController
   # PATCH /cases/1/status
   def status
     authorize @investigation, :change_owner_or_status?
-    update
+    update!
   end
 
   # GET /cases/1/visibility
   # PATCH /cases/1/visibility
   def visibility
     authorize @investigation, :change_owner_or_status?
-    update
+    update!
   end
 
   def created

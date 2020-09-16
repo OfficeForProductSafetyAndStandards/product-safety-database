@@ -82,8 +82,8 @@ module FileConcern
   def update_blob_metadata(blob, metadata)
     return unless blob
 
-    blob.metadata.update(metadata)
-    blob.metadata["updated"] = Time.current
+    blob.metadata.update!(metadata)
+    blob.metadata["updated"] = Time.zone.now
   end
 
   def validate_blob_size(blob, errors, blob_display_name)
@@ -103,7 +103,7 @@ module FileConcern
 
       attachments = documents.attach(blob)
       attachment = attachments.last
-      attachment.blob.save
+      attachment.blob.save!
     end
   end
 
@@ -112,6 +112,6 @@ module FileConcern
 
     attachment_slot.detach if attachment_slot.attached?
     attachment_slot.attach(blob)
-    attachment_slot.blob.save
+    attachment_slot.blob.save!
   end
 end

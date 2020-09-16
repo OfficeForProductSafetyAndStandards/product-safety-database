@@ -30,7 +30,7 @@ module SecondaryAuthenticationConcern
     return false if get_secondary_authentication_datetime.nil?
 
     last_otp_time = get_secondary_authentication_datetime
-    (last_otp_time + SecondaryAuthentication::TIMEOUTS[current_operation].seconds) > Time.now.utc
+    (last_otp_time + SecondaryAuthentication::TIMEOUTS[current_operation].seconds) > Time.zone.now.utc
   end
 
   # can be overrided for actions which require
@@ -56,6 +56,6 @@ module SecondaryAuthenticationConcern
     return if cookies.signed["two-factor-#{user_id_for_secondary_authentication}"].nil?
 
     timestamp = cookies.signed["two-factor-#{user_id_for_secondary_authentication}"].to_i
-    Time.zone.at(timestamp).to_datetime
+    Time.zone.at(timestamp)
   end
 end

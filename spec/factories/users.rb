@@ -18,7 +18,7 @@ FactoryBot.define do
     hash_iterations { 27_500 }
     mobile_number { "07700 900 982" }
     mobile_number_verified { true }
-    direct_otp_sent_at { Time.current }
+    direct_otp_sent_at { Time.zone.now }
     direct_otp { "12345" }
     team { create(:team, organisation: organisation) }
 
@@ -35,7 +35,7 @@ FactoryBot.define do
     end
 
     trait :deleted do
-      deleted_at { Time.current }
+      deleted_at { Time.zone.now }
     end
 
     trait :inactive do

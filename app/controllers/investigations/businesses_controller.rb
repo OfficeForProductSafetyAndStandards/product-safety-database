@@ -50,7 +50,7 @@ class Investigations::BusinessesController < ApplicationController
         assign_type
         redirect_to next_wizard_path
       else
-        create
+        create!
       end
     else
       render_wizard

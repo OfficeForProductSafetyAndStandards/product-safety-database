@@ -65,7 +65,7 @@ class ActiveSupport::TestCase
 
   def load_case(key)
     investigation = investigations(key)
-    investigation.save
+    investigation.save!
     Investigation.import force: true, refresh: :wait_for
     investigation
   end

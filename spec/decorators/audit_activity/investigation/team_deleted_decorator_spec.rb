@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::TeamDeletedDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   subject(:activity) do
-    AuditActivity::Investigation::TeamDeleted.create(
+    AuditActivity::Investigation::TeamDeleted.create!(
       investigation: investigation,
       metadata: described_class.build_metadata(team, message),
       source: UserSource.new(user: user)

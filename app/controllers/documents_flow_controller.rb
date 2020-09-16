@@ -24,7 +24,7 @@ class DocumentsFlowController < ApplicationController
     update_blob_metadata(@file_blob, get_attachment_metadata_params(:file))
     return render step unless file_valid?
 
-    @file_blob.save
+    @file_blob.save!
     return redirect_to next_wizard_path unless step == steps.last
 
     attach_blobs_to_list(@file_blob, file_collection)
