@@ -38,7 +38,7 @@ class Investigations::CreationFlowController < ApplicationController
   def update
     if investigation_valid?
       if step == steps.last
-        create!
+        create
       else
         assign_type if step == :about_enquiry
         redirect_to next_wizard_path

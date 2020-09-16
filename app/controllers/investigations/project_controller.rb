@@ -36,7 +36,7 @@ class Investigations::ProjectController < ApplicationController
     session[model_key] = @investigation.attributes
 
     if step == steps.last
-      create!
+      create
     else
       redirect_to next_wizard_path
     end
