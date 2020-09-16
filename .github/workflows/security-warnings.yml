@@ -1,0 +1,18 @@
+name: Security warnings
+
+on: [push]
+
+jobs:
+  ruby:
+    name: Brakeman
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.x
+    - name: Install brakeman
+      run: gem install brakeman
+    - name: Run brakeman
+      run: brakeman
