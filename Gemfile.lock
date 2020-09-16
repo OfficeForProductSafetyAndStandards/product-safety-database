@@ -598,7 +598,6 @@ DEPENDENCIES
   rubocop-rspec (~> 1.39)
   ruby-debug-ide (~> 0.7)
   sass-rails (~> 6.0)
-  sassc (~> 2.4)
   scout_apm (~> 2.6)
   scss_lint-govuk (~> 0.2)
   sentry-raven (~> 3.0)

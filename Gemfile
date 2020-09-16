@@ -32,7 +32,6 @@ gem "redis-rails", "~> 5.0"
 gem "request_store", "~> 1.5"
 gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
-gem "sassc", "~> 2.4"
 gem "scout_apm", "~> 2.6"
 gem "sentry-raven", "~> 3.0"
 gem "sidekiq", "5.2.9" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
