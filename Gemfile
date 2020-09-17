@@ -5,7 +5,7 @@ ruby "~> 2.6.6"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.1"
-gem "aws-sdk-s3", "~> 1.80"
+gem "aws-sdk-s3", "~> 1.81"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils", "~> 0.6"
@@ -48,7 +48,6 @@ gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk
 
 group :development do
   gem "awesome_print", "~> 1.8", require: "ap"
-  gem "brakeman", "~> 4.9"
   gem "byebug", "~> 11.1"
   gem "debase", "~> 0.2"
   gem "dotenv-rails", "~> 2.7"
@@ -69,7 +68,7 @@ group :test do
   gem "coveralls", "~> 0.7"
   gem "database_cleaner", "~> 1.8"
   gem "factory_bot_rails", "~> 6.1"
-  gem "faker", "~> 2.13"
+  gem "faker", "~> 2.14"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.8"
