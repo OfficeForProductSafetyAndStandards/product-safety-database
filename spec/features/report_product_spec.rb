@@ -380,7 +380,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     if assessment[:risk_level] != "Other"
       expect(page).to have_css(".govuk-body", text: /Risk level: #{assessment[:risk_level]} risk/)
     else
-      expect(page).to have_css(".govuk-body", text: /Risk level: #{assessment[:custom_risk_level]}/)
+      expect(page).to have_css(".govuk-body", text: /Risk level: #{Regexp.escape(assessment[:custom_risk_level])}/)
     end
   end
 
