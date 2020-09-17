@@ -27,18 +27,14 @@ class Investigations::CreationFlowController < ApplicationController
 
   # POST /xxx
   def create
-    if investigation_saved?
-      redirect_to investigation_path(@investigation), flash: { success: success_message }
-    else
-      render_wizard
-    end
+    create!
   end
 
   # PATCH/PUT /xxx
   def update
     if investigation_valid?
       if step == steps.last
-        create
+        create!
       else
         assign_type if step == :about_enquiry
         redirect_to next_wizard_path
@@ -49,6 +45,14 @@ class Investigations::CreationFlowController < ApplicationController
   end
 
 private
+
+  def create!
+    if investigation_saved?
+      redirect_to investigation_path(@investigation), flash: { success: success_message }
+    else
+      render_wizard
+    end
+  end
 
   def model_key
     # This needs to be defined by any controller that inherits from this class.

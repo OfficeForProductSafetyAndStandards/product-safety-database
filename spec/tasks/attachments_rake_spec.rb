@@ -10,7 +10,7 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
       filename: filename,
       content_type: "application/txt"
     )
-    obj.save
+    obj.save!
   end
 
   context "with investigation attachments pointing to an activity attachment" do
@@ -37,7 +37,7 @@ RSpec.describe "rake attachments:delete_activities_from_investigations", :with_s
       investigation.documents.attach(correspondence.email_file.blob)
       investigation.documents.attach(corrective_action.documents.first.blob)
       investigation.products = [product]
-      investigation.save
+      investigation.save!
     end
 
     # rubocop:disable RSpec/ExampleLength

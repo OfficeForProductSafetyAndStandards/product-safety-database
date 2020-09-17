@@ -58,7 +58,7 @@ private
   end
 
   def save_attachments
-    @transcript_blob.save if @transcript_blob
-    @related_attachment_blob.save if @related_attachment_blob
+    @transcript_blob.save! if @transcript_blob
+    @related_attachment_blob.save! if @related_attachment_blob
   end
 end

@@ -11,7 +11,7 @@ namespace :data_import do
       reference = report.xpath("reference").text
       unless imported_reports_contains_reference(previously_imported_reports, reference)
         import_report(report)
-        RapexImport.create(reference: reference)
+        RapexImport.create!(reference: reference)
       end
     end
   end

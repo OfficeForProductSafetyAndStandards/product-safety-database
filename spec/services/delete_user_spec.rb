@@ -46,7 +46,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           expect {
             delete_call
             user.reload
-          }.to change(user, :deleted_at).from(nil).to(Time.current)
+          }.to change(user, :deleted_at).from(nil).to(Time.zone.now)
         end
       end
 

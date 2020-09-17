@@ -52,7 +52,7 @@ class ContactsController < ApplicationController
   # DELETE /contacts/1
   # DELETE /contacts/1.json
   def destroy
-    @contact.destroy
+    @contact.destroy!
     respond_to do |format|
       format.html do
         redirect_to business_url(@contact.business, anchor: "contacts"),
@@ -70,7 +70,7 @@ private
 
   def create_contact
     business = Business.find(params[:business_id])
-    @contact = business.contacts.create(contact_params)
+    @contact = business.contacts.create!(contact_params)
     @contact.source = UserSource.new(user: current_user)
   end
 

@@ -46,7 +46,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
     within ".psd-case-card" do
       expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
     end
-    investigation.update(is_private: true)
+    investigation.update!(is_private: true)
     visit "/businesses/#{business_one.id}"
     within ".psd-case-card" do
       expect(page).to have_css("span", text: "Allegation restricted")

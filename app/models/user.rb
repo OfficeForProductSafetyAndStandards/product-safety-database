@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   attribute :skip_password_validation, :boolean, default: false
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
-  attribute :invited_at, :datetime, default: -> { Time.current }
+  attribute :invited_at, :datetime, default: -> { Time.zone.now }
 
   # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
   # and who have accepted the user declaration
@@ -118,7 +118,7 @@ class User < ApplicationRecord
   def mark_as_deleted!
     return if deleted?
 
-    update!(deleted_at: Time.current)
+    update!(deleted_at: Time.zone.now)
   end
 
   # BEGIN: place devise overriden method calls bellow
@@ -128,7 +128,7 @@ class User < ApplicationRecord
   def send_unlock_instructions
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
     self.unlock_token = enc
-    save(validate: false)
+    save!(validate: false)
     reset_password_token = set_reset_password_token
     NotifyMailer.account_locked(
       self,
@@ -148,7 +148,7 @@ class User < ApplicationRecord
   def unlock_access!
     self.locked_at = nil
     self.unlock_token = nil
-    save(validate: false)
+    save!(validate: false)
   end
 
   # Devise::Models::Authenticatable
@@ -168,7 +168,7 @@ class User < ApplicationRecord
 private
 
   def lock_two_factor!
-    update_column(:second_factor_attempts_locked_at, Time.current)
+    update_column(:second_factor_attempts_locked_at, Time.zone.now)
   end
 
   def unlock_two_factor!
@@ -178,7 +178,7 @@ private
   def two_factor_lock_expired?
     return true if second_factor_attempts_locked_at.nil?
 
-    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.current
+    (second_factor_attempts_locked_at + TWO_FACTOR_LOCK_TIME) < Time.zone.now
   end
 
   def send_reset_password_instructions_notification(token)

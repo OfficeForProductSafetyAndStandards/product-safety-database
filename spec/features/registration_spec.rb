@@ -19,7 +19,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
     expect(page).to have_title("Invite a team member")
 
     wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
-    travel_to(Time.now.utc + wait_time.seconds) do
+    travel_to(Time.zone.now.utc + wait_time.seconds) do
       visit "/teams/#{team.id}/invitations/new"
 
       enter_secondary_authentication_code(admin.reload.direct_otp)

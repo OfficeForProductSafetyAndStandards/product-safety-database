@@ -5,7 +5,7 @@ class AuditActivity::Test::Base < AuditActivity::Base
   validates :product, presence: true
 
   private_class_method def self.from(test, title)
-    activity = create(
+    activity = create!(
       body: build_body(test),
       title: title,
       source: UserSource.new(user: User.current),

@@ -9,7 +9,7 @@ def create_blob(filename, title: nil, description: nil)
     metadata: {
       title: title || filename,
       description: description,
-      updated: Time.now.iso8601
+      updated: Time.zone.now.iso8601
     }
   )
 end

@@ -6,7 +6,7 @@ class AuditActivity::CorrectiveAction::Base < AuditActivity::Base
   belongs_to :product, class_name: "::Product"
 
   private_class_method def self.from(corrective_action)
-    activity = create(
+    activity = create!(
       title: corrective_action.decorate.supporting_information_title,
       body: build_body(corrective_action),
       source: UserSource.new(user: User.current),

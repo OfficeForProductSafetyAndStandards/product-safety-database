@@ -72,7 +72,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
       let!(:existing_user) { create(:user, email: email, team: existing_user_team, invitation_token: invitation_token, invited_at: invited_at) }
       let(:existing_user_team) { team }
       let(:invitation_token) { "test" }
-      let(:invited_at) { Time.current }
+      let(:invited_at) { Time.zone.now }
 
       context "with email parameter" do
         let(:params) { { email: email, team: team } }
@@ -129,7 +129,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         context "when the existing user was invited less than an hour ago" do
-          let(:invited_at) { Time.current - 10.minutes }
+          let(:invited_at) { Time.zone.now - 10.minutes }
 
           it "does not update the user's invited_at" do
             expect { result }.not_to change(existing_user, :invited_at)
@@ -137,7 +137,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         context "when the existing user was invited more than an hour ago" do
-          let(:invited_at) { Time.current - 2.hours }
+          let(:invited_at) { Time.zone.now - 2.hours }
 
           it "updates the user's invited_at" do
             expect { result }.to change(existing_user, :invited_at)

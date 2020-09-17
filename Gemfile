@@ -74,10 +74,10 @@ group :test do
   gem "roo", "~> 2.8"
   gem "rspec-mocks", "~> 3.9"
   gem "rspec-rails", "~> 4.0"
-  gem "rubocop", "~> 0.85"
-  gem "rubocop-govuk", "~> 3.16"
-  gem "rubocop-performance", "~> 1.7"
-  gem "rubocop-rspec", "~> 1.39", require: false
+  gem "rubocop", "~> 0.87"
+  gem "rubocop-govuk", "~> 3.17"
+  gem "rubocop-performance", "~> 1.8"
+  gem "rubocop-rspec", "~> 1.42", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "simplecov", "~> 0.19"
   gem "simplecov-console", "~> 0.7"

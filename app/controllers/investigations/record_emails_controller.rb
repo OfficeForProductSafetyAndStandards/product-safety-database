@@ -69,7 +69,7 @@ private
   end
 
   def save_attachments
-    @email_file_blob.save if @email_file_blob
-    @email_attachment_blob.save if @email_attachment_blob
+    @email_file_blob.save! if @email_file_blob
+    @email_attachment_blob.save! if @email_attachment_blob
   end
 end

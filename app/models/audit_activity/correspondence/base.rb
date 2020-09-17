@@ -2,7 +2,7 @@ class AuditActivity::Correspondence::Base < AuditActivity::Base
   belongs_to :correspondence
 
   private_class_method def self.from(correspondence, investigation, body = nil)
-    create(
+    create!(
       body: body || sanitize_text(correspondence.details),
       source: UserSource.new(user: User.current),
       investigation: investigation,

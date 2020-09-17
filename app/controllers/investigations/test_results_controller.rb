@@ -19,7 +19,7 @@ class Investigations::TestResultsController < ApplicationController
     session[test_result_session_key] = @test_result.attributes
     update_attachment
     if test_result_valid?
-      @file_blob.save if @file_blob
+      @file_blob.save! if @file_blob
       redirect_to confirm_investigation_test_results_path(@investigation)
     else
       render :new

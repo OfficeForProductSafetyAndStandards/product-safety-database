@@ -50,6 +50,6 @@ private
   end
 
   def save_attachments
-    @transcript_blob.save if @transcript_blob
+    @transcript_blob.save! if @transcript_blob
   end
 end

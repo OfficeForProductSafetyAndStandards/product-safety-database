@@ -3,7 +3,7 @@ class AuditActivity::Document::Base < AuditActivity::Base
   with_attachments attachment: "document"
 
   private_class_method def self.from(document, investigation, title)
-    activity = create(
+    activity = create!(
       body: sanitize_text(document.metadata[:description]),
       source: UserSource.new(user: User.current),
       investigation: investigation,

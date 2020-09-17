@@ -79,7 +79,7 @@ private
   def update_document_description
     document = test_result.documents.first
     document.blob.metadata[:description] = new_file_description
-    document.blob.save
+    document.blob.save!
   end
 
   def send_notification_email

@@ -18,7 +18,7 @@ RSpec.describe User do
 
     describe "invited_at" do
       it "is generated on instantiation" do
-        expect(user.invited_at).to be_within(1.second).of(Time.current)
+        expect(user.invited_at).to be_within(1.second).of(Time.zone.now)
       end
     end
   end
@@ -228,7 +228,7 @@ RSpec.describe User do
     it "sets the user 'deleted_at' timestamp to the current time" do
       user = create(:user)
       freeze_time do
-        expect { user.mark_as_deleted! }.to change { user.deleted_at }.from(nil).to(Time.current)
+        expect { user.mark_as_deleted! }.to change { user.deleted_at }.from(nil).to(Time.zone.now)
       end
     end
 

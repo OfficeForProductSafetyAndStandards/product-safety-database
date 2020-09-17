@@ -29,12 +29,7 @@ class Investigations::BusinessesController < ApplicationController
 
   def create
     authorize @investigation, :update?
-    if @business.save
-      @investigation.add_business(@business, session[:type])
-      redirect_to_investigation_businesses_tab success: "Business was successfully created."
-    else
-      render_wizard
-    end
+    create!
   end
 
   # This action is used for the edit flow
@@ -50,7 +45,7 @@ class Investigations::BusinessesController < ApplicationController
         assign_type
         redirect_to next_wizard_path
       else
-        create
+        create!
       end
     else
       render_wizard
@@ -71,6 +66,15 @@ class Investigations::BusinessesController < ApplicationController
   end
 
 private
+
+  def create!
+    if @business.save
+      @investigation.add_business(@business, session[:type])
+      redirect_to_investigation_businesses_tab success: "Business was successfully created."
+    else
+      render_wizard
+    end
+  end
 
   def set_investigation_business
     @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)
