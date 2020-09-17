@@ -347,7 +347,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     if assessment_attributes[:risk_level] != "Other"
       expect(page).to have_link("#{assessment_attributes[:risk_level]} risk: #{product_details[:name]}")
     else
-      expect(page).to have_link("#{assessment_attributes[:risk_level]}: #{product_details[:name]}")
+      expect(page).to have_link("#{assessment_attributes[:custom_risk_level]}: #{product_details[:name]}")
     end
   end
 
@@ -377,9 +377,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_risk_assessment(assessment)
     expect(page).to have_selector("h1", text: "Activity")
-    save_and_open_page
-    item = page.find("h3", text: assessment[:title]).find(:xpath, "..")
-    expect(item).to have_selector("p", text: assessment[:description])
+    if assessment[:risk_level] != "Other"
+      expect(page).to have_css(".govuk-body", text: /Risk level: #{assessment[:risk_level]} risk/)
+    else
+      expect(page).to have_css(".govuk-body", text: /Risk level: #{assessment[:custom_risk_level]}/)
+    end
   end
 
   def expect_case_activity_page_to_show_test_result(test)
@@ -517,7 +519,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       choose with[:risk_level]
       if with[:risk_level] == "Other"
         with[:custom_risk_level] = Faker::Hipster.sentence
-        fill_in "Enter other risk level", with: with[:custom_risk_level]
+        fill_in "Other risk level", with: with[:custom_risk_level]
       end
     end
 
