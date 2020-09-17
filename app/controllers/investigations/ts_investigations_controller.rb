@@ -27,9 +27,9 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :set_countries, only: %i[show create update]
   before_action :set_product, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
-  before_action :set_selected_businesses, only: %i[show update], if: -> { step.in?([:risk_assessments, :which_businesses]) }
+  before_action :set_selected_businesses, only: %i[show update], if: -> { step.in?(%i[risk_assessments which_businesses]) }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
-  before_action :set_business, only: %i[show update], if: -> { step.in?([:business, :risk_assessments, :other_information]) }
+  before_action :set_business, only: %i[show update], if: -> { step.in?(%i[business risk_assessments other_information]) }
   before_action :set_skip_step,
                 only: %i[update],
                 if: lambda {
@@ -440,8 +440,7 @@ private
       end
       session.delete :file
     end
-  rescue
-    beybug
+  rescue StandardError
   end
 
   def file_valid?
@@ -533,14 +532,12 @@ private
           )
       )
 
-
-
       @investigation = @investigation.decorate
 
       if (file = trading_standard_risk_assessment_form_params[:risk_assessment_file])
         @file_blob = ActiveStorage::Blob.create_after_upload!(
-          io:           file,
-          filename:     file.original_filename,
+          io: file,
+          filename: file.original_filename,
           content_type: file.content_type,
           metadata: {
             created_by: current_user.id
@@ -548,7 +545,6 @@ private
         )
       end
 
-      @file_blob
       return false if @risk_assessment_form.invalid?
     when :corrective_action
       return false if @corrective_action.errors.any?
