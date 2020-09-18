@@ -19,7 +19,7 @@
         <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
         <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-        <%= render "form_fields", form: form, risk_assessment_form: @risk_assessment_form %>
+        <%= render "form_fields", form: form, risk_assessment_form: @risk_assessment_form, investigation: @investigation %>
 
         <%= govukButton(text: "Update risk assessment") %>
       <% end %>
