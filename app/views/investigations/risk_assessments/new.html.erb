@@ -15,6 +15,10 @@
 
       <%= form_with(model: @risk_assessment_form, local: true, url: investigation_risk_assessments_path, method: :post, builder: ApplicationFormBuilder, html: {novalidate: true}) do |form| %>
 
+        <%= error_summary risk_assessment_form.errors %>
+        <span class="govuk-caption-l"><%= investigation.pretty_description %></span>
+        <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
         <%= render 'investigations/risk_assessments/form_fields', risk_assessment_form: @risk_assessment_form, investigation: @investigation, page_heading: page_heading, form: form %>
         <%= govukButton(text: "Add risk assessment") %>
       <% end %>
