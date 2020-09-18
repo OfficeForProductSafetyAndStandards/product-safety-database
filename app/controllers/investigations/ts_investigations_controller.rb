@@ -32,25 +32,25 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :set_business, only: %i[show update], if: -> { step.in?(%i[business risk_assessments other_information]) }
   before_action :set_skip_step,
                 only: %i[update],
-                  if: lambda {
-                    %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
-                  }
+                if: lambda {
+                      %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
+                    }
   before_action :set_corrective_action, only: %i[show update], if: -> { step == :corrective_action }
   before_action :set_risk_assessment_form, only: %i[show update], if: -> { step == :risk_assessments }
   # There is no set_other_information because there is no validation on the page so there is no need to set the model
   before_action :set_test, only: %i[show update], if: -> { step == :test_results }
   before_action :set_file,
                 only: %i[show update],
-                  if: lambda {
-                    %i[product_images evidence_images other_files].include? step
-                  }
+                if: lambda {
+                      %i[product_images evidence_images other_files].include? step
+                    }
   before_action :set_repeat_step, only: %i[show update], if: -> { step == :has_corrective_action }
   # This needs to be first to prevent other models from saving
   before_action :store_repeat_step,
                 only: %i[update],
-                  if: lambda {
-                    %i[has_corrective_action product_images evidence_images other_files].include? step
-                  }
+                if: lambda {
+                      %i[has_corrective_action product_images evidence_images other_files].include? step
+                    }
   before_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
   before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
@@ -64,9 +64,9 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_test, only: %i[update], if: -> { step == :test_results }
   before_action :store_file,
                 only: %i[update],
-                  if: lambda {
-                    %i[product_images evidence_images other_files].include? step
-                  }
+                if: lambda {
+                      %i[product_images evidence_images other_files].include? step
+                    }
 
   # GET /xxx/step
   def show
