@@ -5,6 +5,11 @@
            other_text: "Are there other risk assessments to report?",
            further_key: :further_risk_assessments,
            hide_break: true do |form| %>
+
+  <%= error_summary @risk_assessment_form.errors %>
+  <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+  <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
   <%= render "investigations/risk_assessments/form_fields",
              form: form,
              risk_assessment_form: @risk_assessment_form,
