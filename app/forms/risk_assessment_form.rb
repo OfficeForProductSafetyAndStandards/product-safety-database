@@ -83,7 +83,7 @@ class RiskAssessmentForm
         end
   end
 
-  def businesses
+  def businesses_select_items
     EMPTY_PROMPT_OPTION.deep_dup + investigation.businesses
       .reorder(:trading_name)
       .pluck(:trading_name, :id).map do |row|
