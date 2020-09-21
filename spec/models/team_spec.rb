@@ -48,7 +48,7 @@ RSpec.describe Team do
     it "sets the team 'deleted_at' timestamp to the current time" do
       team = create(:team)
       freeze_time do
-        expect { team.mark_as_deleted! }.to change { team.deleted_at }.from(nil).to(Time.current)
+        expect { team.mark_as_deleted! }.to change { team.deleted_at }.from(nil).to(Time.zone.now)
       end
     end
 

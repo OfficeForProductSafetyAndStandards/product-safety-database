@@ -14,6 +14,6 @@ module Deletable
   def mark_as_deleted!
     return if deleted?
 
-    update!(deleted_at: Time.current)
+    update!(deleted_at: Time.zone.now)
   end
 end

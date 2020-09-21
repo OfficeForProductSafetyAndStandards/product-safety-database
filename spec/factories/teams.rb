@@ -5,7 +5,7 @@ FactoryBot.define do
     organisation
 
     trait :deleted do
-      deleted_at { Time.current }
+      deleted_at { Time.zone.now }
     end
   end
 end
