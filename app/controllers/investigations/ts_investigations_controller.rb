@@ -632,12 +632,16 @@ private
         session_risk_assessment[:risk_assessment]
       )
 
-      business = @investigation
-        .businesses
-        .find_by(risk_assessment_form.businesses.detect { |b| b.trading_name == risk_assessment_form.assessed_by })
+      if risk_assessment_form.assessed_by == "business"
+        business = @investigation
+          .businesses
+          .find_by(risk_assessment_form.businesses.detect { |b| b.trading_name == risk_assessment_form.assessed_by })
 
-      risk_assessment_form.assessed_by_business_id = business.id
+        risk_assessment_form.assessed_by_business_id = business.id
+      end
+
       blob = ActiveStorage::Blob.find(session_risk_assessment[:file_blob_id])
+
       AddRiskAssessmentToCase.call!(
         risk_assessment_form.attributes.merge(
           investigation: @investigation,
