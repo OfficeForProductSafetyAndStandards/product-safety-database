@@ -401,10 +401,11 @@ private
   def store_risk_assessment
     return if @skip_step
 
-    attributes = @risk_assessment_form.attributes
-    attributes.delete("risk_assessment_file")
-
-    session[:risk_assessments] << { risk_assessment: attributes, file_blob_id: @file_blob&.id }
+    if @risk_assessment_form.valid?
+      attributes = @risk_assessment_form.attributes
+      attributes.delete("risk_assessment_file")
+      session[:risk_assessments] << { risk_assessment: attributes, file_blob_id: @file_blob&.id }
+    end
 
     session[further_key(step)] = @repeat_step
   end
@@ -640,7 +641,7 @@ private
         risk_assessment_form.assessed_by_business_id = business.id
       end
 
-      blob = ActiveStorage::Blob.find(session_risk_assessment[:file_blob_id])
+      blob = ActiveStorage::Blob.find_by(id: session_risk_assessment[:file_blob_id])
 
       AddRiskAssessmentToCase.call!(
         risk_assessment_form.attributes.merge(

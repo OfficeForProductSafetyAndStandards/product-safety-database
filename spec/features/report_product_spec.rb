@@ -155,6 +155,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_risk_assessment_details_page
 
+        # trigger validation to verify state in session is cleaned up correctly
+        click_on "Continue"
+
         risk_assessments.each do |assessment|
           fill_in_risk_assessment_details_page(with: assessment)
           expect_to_be_on_risk_assessment_details_page
