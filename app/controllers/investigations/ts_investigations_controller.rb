@@ -330,8 +330,8 @@ private
       session[:businesses] = []
     else
       businesses = which_businesses_params
-                     .select { |relationship, selected| relationship != "other" && selected == "1" }
-                     .keys
+                       .select { |relationship, selected| relationship != "other" && selected == "1" }
+                       .keys
       businesses << which_businesses_params[:other_business_type] if which_businesses_params[:other] == "1"
       session[:businesses] = businesses.map { |type| { type: type, business: nil } }
     end

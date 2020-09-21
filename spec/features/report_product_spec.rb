@@ -525,10 +525,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     within_fieldset("Who completed the assessment?") do
       choose "A business related to the case"
-      # save_and_open_page
-      # byebug
-      choose user.team.name
-      # business_details[with[:business_type]][:trading_name]
+      business_details[with[:business_type]][:trading_name]
     end
 
     expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
