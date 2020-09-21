@@ -189,6 +189,7 @@ Rails.application.routes.draw do
     get :terms_and_conditions, path: "terms-and-conditions"
     get :privacy_notice, path: "privacy-notice"
     get :about
+    get :accessibility
   end
 
   match "/404", to: "errors#not_found", via: :all
