@@ -23,3 +23,11 @@ cf run-task psd-web "export \$(./env/get-env-from-vcap.sh) && ID=<user ID> rake 
 ```
 
 Where `EMAIL` or `ID` is the e-mail address or ID of the user to be deleted. Task name can be set to anything you like.
+
+## Deleting a Team
+
+```bash
+cf run-task psd-web "export \$(./env/get-env-from-vcap.sh) && ID=<id> NEW_TEAM_ID=<id> EMAIL=<email address> rake team:delete" --name <task name>
+```
+
+Case collaborations and users which belong to the team identified by `ID` will be migrated to another team identified by `NEW_TEAM`. The user identified by `EMAIL` will be attributed to the change on all relevant audit activity.
