@@ -8,8 +8,6 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:new_team_user) { create(:user, :activated, :team_admin, team: new_team, organisation: new_team.organisation) }
   let(:deleting_user) { create(:user) }
 
-  let(:team_case) { create(:allegation, creator: team_user) }
-
   describe ".call" do
     subject(:result) { delete_team }
 
@@ -52,6 +50,7 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
     end
 
     context "with required parameters" do
+      let!(:team_case) { create(:allegation, creator: team_user) }
       let(:deleting_user) { team_user }
 
       context "when the team is already deleted" do
@@ -114,10 +113,11 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           expect { delete_team }.to change { team_case.reload.owner }.from(team).to(new_team)
         end
 
-        it "adds activity showing the case ownership changed to the new team" do
+        it "adds activity showing the case ownership changed to the new team", :aggregate_failures do
           delete_team
           activity = team_case.activities.find_by!(type: AuditActivity::Investigation::UpdateOwner.to_s)
           expect(activity.owner).to eq(new_team)
+          expect(activity.body).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously owned this case.")
         end
 
         it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
@@ -149,6 +149,18 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         it "updates the owner team to the user's new team" do
           expect { delete_team }.to change { team_case.reload.owner_team }.from(team).to(new_team)
         end
+
+        it "adds activity showing the case ownership changed to the new team", :aggregate_failures do
+          delete_team
+          activity = team_case.activities.find_by!(type: AuditActivity::Investigation::UpdateOwner.to_s)
+          expect(activity.owner).to eq(new_team)
+          expect(activity.body).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously owned this case.")
+        end
+
+        it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
+          expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
+        end
       end
 
       context "when the team is a collaborator on a case owned by the new team" do
@@ -158,10 +170,11 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           expect { delete_team }.to change { new_team_case.reload.teams_with_read_only_access }.from([team]).to([])
         end
 
-        it "adds activity showing the old team removed from the case" do
+        it "adds activity showing the old team removed from the case", :aggregate_failures do
           delete_team
           activity = new_team_case.activities.find_by!(type: AuditActivity::Investigation::TeamDeleted.to_s)
           expect(activity.team).to eq(team)
+          expect(activity.metadata["message"]).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously had access to this case.")
         end
 
         it "does not change the new team's access level on the case" do
@@ -178,10 +191,11 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
         let(:read_only_teams) { [team] }
         let(:edit_access_teams) { nil }
 
-        it "adds activity showing the old team removed from the case" do
+        it "adds activity showing the old team removed from the case", :aggregate_failures do
           delete_team
           activity = other_team_case.activities.find_by!(type: AuditActivity::Investigation::TeamDeleted.to_s)
           expect(activity.team).to eq(team)
+          expect(activity.metadata["message"]).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously had access to this case.")
         end
 
         it "does not send notification e-mails", :with_test_queue_adapter, :aggregate_failures do
@@ -195,10 +209,11 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
             expect { delete_team }.to change { other_team_case.reload.teams_with_read_only_access }.from([team]).to([new_team])
           end
 
-          it "adds activity showing the new team added to the case" do
+          it "adds activity showing the new team added to the case", :aggregate_failures do
             delete_team
             activity = other_team_case.activities.find_by!(type: AuditActivity::Investigation::TeamAdded.to_s)
             expect(activity.team).to eq(new_team)
+            expect(activity.metadata["message"]).to eq("#{team.name} was merged into #{new_team.name} by #{deleting_user.name} (#{deleting_user.team.name}). #{team.name} previously had access to this case.")
           end
         end
 

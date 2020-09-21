@@ -22,13 +22,13 @@ private
 
   def remove_team_as_owner_from_cases
     team.owner_collaborations.each do |collaboration|
-      next change_case_owner(collaboration) if collaboration.investigation.owner == team # Team is the ultimate owner
+      next change_case_owner_to_new_team(collaboration) if collaboration.investigation.owner == team # Team is the ultimate owner
 
-      collaboration.update!(collaborator_id: new_team.id) # User on the team is the ultimate owner
+      change_case_owner_team(collaboration) # User on the team is the ultimate owner
     end
   end
 
-  def change_case_owner(collaboration)
+  def change_case_owner_to_new_team(collaboration)
     ChangeCaseOwner.call!(
       investigation: collaboration.investigation,
       owner: new_team,
@@ -36,6 +36,24 @@ private
       rationale: change_case_owner_rationale,
       silent: true
     )
+  end
+
+  def change_case_owner_team(collaboration)
+    collaboration.update!(collaborator_id: new_team.id)
+
+    metadata = update_owner_activity_class.build_metadata(new_team, change_case_owner_rationale)
+
+    update_owner_activity_class.create!(
+      source: UserSource.new(user: user),
+      investigation: collaboration.investigation,
+      title: nil,
+      body: nil,
+      metadata: metadata
+    )
+  end
+
+  def update_owner_activity_class
+    AuditActivity::Investigation::UpdateOwner
   end
 
   def remove_team_as_collaborator_from_cases
@@ -70,11 +88,11 @@ private
   end
 
   def change_case_owner_rationale
-    "#{team_display_name} was merged into #{new_team_display_name} by #{user_display_name}. #{team_display_name} previously owned this case."
+    I18n.t("delete_team.change_case_owner_rationale", team: team_display_name, new_team: new_team_display_name, user: user_display_name)
   end
 
   def add_remove_team_message
-    "#{team_display_name} was merged into #{new_team_display_name} by #{user_display_name}. #{team_display_name} previously had access to this case."
+    I18n.t("delete_team.add_remove_team_message", team: team_display_name, new_team: new_team_display_name, user: user_display_name)
   end
 
   def team_display_name

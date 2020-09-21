@@ -56,6 +56,9 @@ en:
     safe_and_compliant: "Product reported because it is safe and compliant."
   invite_user_to_team:
     invite_sent: "Invite sent to %{email}"
+  delete_team:
+    change_case_owner_rationale: "%{team} was merged into %{new_team} by %{user}. %{team} previously owned this case."
+    add_remove_team_message: "%{team} was merged into %{new_team} by %{user}. %{team} previously had access to this case."
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
