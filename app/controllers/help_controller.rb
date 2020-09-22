@@ -11,6 +11,8 @@ class HelpController < ApplicationController
 
   def about; end
 
+  def accessibility; end
+
   def hide_nav?
     !(current_user.present? && current_user.has_accepted_declaration)
   end
