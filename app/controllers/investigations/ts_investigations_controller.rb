@@ -402,8 +402,10 @@ private
     return if @skip_step
 
     if @risk_assessment_form.valid?
-      attributes = @risk_assessment_form.attributes
-      attributes.delete("risk_assessment_file")
+      attributes = @risk_assessment_form
+                     .attributes
+                     .except("risk_assessment_file", "further_risk_assessments")
+
       session[:risk_assessments] << { risk_assessment: attributes, file_blob_id: @file_blob&.id }
     end
 
@@ -545,7 +547,10 @@ private
         )
       end
 
-      return false if @risk_assessment_form.invalid?
+      risk_assessment_form_valid = @risk_assessment_form.invalid?
+      reapeat_step_valid = !repeat_step_valid?(@risk_assessment_form)
+
+      return false if risk_assessment_form_valid || reapeat_step_valid
     when :corrective_action
       return false if @corrective_action.errors.any?
     when :test_results
@@ -563,7 +568,7 @@ private
   end
 
   def trading_standard_risk_assessment_form_params
-    params.require(:trading_standard_risk_assessment_form).permit(:details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
+    params.require(:trading_standard_risk_assessment_form).permit(:further_risk_assessments, :details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
   end
 
   def businesses_from_session

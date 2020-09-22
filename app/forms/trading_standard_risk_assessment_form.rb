@@ -1,5 +1,6 @@
 class TradingStandardRiskAssessmentForm < RiskAssessmentForm
   attribute :businesses, :business_list
+  attribute :further_risk_assessments
 
   def product=(product)
     self.product_ids = [product.id]
