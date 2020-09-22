@@ -1,9 +1,9 @@
 namespace :team do
   desc "Marks the given team as deleted, assigning their cases and users to another team"
   task delete: :environment do
-    team = Team.find(ENV.fetch("ID", nil))
-    new_team = Team.find(ENV.fetch("NEW_TEAM_ID", nil))
-    user = User.find_by!(email: ENV.fetch("EMAIL", nil))
+    team = Team.find(ENV.fetch("ID"))
+    new_team = Team.find(ENV.fetch("NEW_TEAM_ID"))
+    user = User.find_by!(email: ENV.fetch("EMAIL"))
 
     result = DeleteTeam.call(team: team, new_team: new_team, user: user)
 

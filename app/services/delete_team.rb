@@ -7,8 +7,8 @@ class DeleteTeam
     context.fail!(error: "No team supplied") unless team.is_a?(Team)
     context.fail!(error: "No new team supplied to absorb cases and users") unless new_team.is_a?(Team)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-    context.fail!(error: "Team cannot already be deleted") if team.deleted?
-    context.fail!(error: "New team cannot already be deleted") if new_team.deleted?
+    context.fail!(error: "Team is already deleted") if team.deleted?
+    context.fail!(error: "New team cannot be deleted") if new_team.deleted?
 
     ActiveRecord::Base.transaction do
       team.mark_as_deleted!
@@ -22,13 +22,13 @@ private
 
   def remove_team_as_owner_from_cases
     team.owner_collaborations.each do |collaboration|
-      next change_case_owner_to_new_team(collaboration) if collaboration.investigation.owner == team # Team is the ultimate owner
+      next change_case_ownership_when_owner_is_team(collaboration) if collaboration.investigation.owner == team
 
-      change_case_owner_team(collaboration) # User on the team is the ultimate owner
+      change_case_ownership_when_owner_is_user_on_team(collaboration)
     end
   end
 
-  def change_case_owner_to_new_team(collaboration)
+  def change_case_ownership_when_owner_is_team(collaboration)
     ChangeCaseOwner.call!(
       investigation: collaboration.investigation,
       owner: new_team,
@@ -38,7 +38,8 @@ private
     )
   end
 
-  def change_case_owner_team(collaboration)
+  # In this case we want to retain the user as the owner, but change the OwnerTeam collaboration.
+  def change_case_ownership_when_owner_is_user_on_team(collaboration)
     collaboration.update!(collaborator_id: new_team.id)
 
     metadata = update_owner_activity_class.build_metadata(new_team, change_case_owner_rationale)
@@ -64,7 +65,7 @@ private
   end
 
   def new_team_already_collaborating?(investigation)
-    investigation.collaboration_accesses.find_by(collaborator_id: new_team.id).present?
+    investigation.collaboration_accesses.where(collaborator_id: new_team.id).exists?
   end
 
   def add_new_team_to_case(collaboration)

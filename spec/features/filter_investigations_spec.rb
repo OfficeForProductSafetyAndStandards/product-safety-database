@@ -35,17 +35,15 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
-    expect(page).to have_css("#case_owner_is_someone_else_id option[value=\"#{team.id}\"]")
-    expect(page).to have_css("#case_owner_is_someone_else_id option[value=\"#{other_team.id}\"]")
-    expect(page).to have_css("#case_owner_is_someone_else_id option[value=\"#{another_active_user.id}\"]")
-    expect(page).not_to have_css("#case_owner_is_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
-    expect(page).not_to have_css("#case_owner_is_someone_else_id option[value=\"#{other_deleted_team.id}\"]")
+    within_fieldset("Case owner") do
+      expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])
+      expect(page).not_to have_select("Name", with_options: [another_inactive_user.name, other_deleted_team.name])
+    end
 
-    expect(page).to have_css("#created_by_someone_else_id option[value=\"#{team.id}\"]")
-    expect(page).to have_css("#created_by_someone_else_id option[value=\"#{other_team.id}\"]")
-    expect(page).to have_css("#created_by_someone_else_id option[value=\"#{another_active_user.id}\"]")
-    expect(page).not_to have_css("#created_by_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
-    expect(page).not_to have_css("#created_by_someone_else_id option[value=\"#{other_deleted_team.id}\"]")
+    within_fieldset("Created by") do
+      expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])
+      expect(page).not_to have_select("Name", with_options: [another_inactive_user.name, other_deleted_team.name])
+    end
   end
 
   scenario "no filters applied shows all cases" do

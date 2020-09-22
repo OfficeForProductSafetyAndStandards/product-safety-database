@@ -48,8 +48,8 @@ RSpec.feature "Adding a team to a case", :with_stubbed_elasticsearch, :with_stub
     expect(page).to have_selector("a", text: "Select whether you want to include a message")
 
     # Check deleted teams are not listed
-    expect(page).to have_css("#team option[value=\"#{team.id}\"]")
-    expect(page).not_to have_css("#team option[value=\"#{deleted_team.id}\"]")
+    expect(page).to have_select("Choose team", with_options: [team.name])
+    expect(page).not_to have_select("Choose team", with_options: [deleted_team.name])
 
     select "Southampton Trading Standards", from: "Choose team"
     choose "Edit full case"
