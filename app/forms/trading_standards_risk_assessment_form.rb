@@ -1,4 +1,4 @@
-class TradingStandardRiskAssessmentForm < RiskAssessmentForm
+class TradingStandardsRiskAssessmentForm < RiskAssessmentForm
   attribute :businesses, :business_list
   attribute :further_risk_assessments
 

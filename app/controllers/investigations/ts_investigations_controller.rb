@@ -169,8 +169,8 @@ private
   end
 
   def set_risk_assessment_form
-    @risk_assessment_form = TradingStandardRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
-    set_repeat_step(:trading_standard_risk_assessment_form)
+    @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
+    set_repeat_step(:trading_standards_risk_assessment_form)
   end
 
   def set_corrective_action
@@ -524,8 +524,8 @@ private
         return false
       end
     when :risk_assessments
-      @risk_assessment_form = TradingStandardRiskAssessmentForm.new(
-        trading_standard_risk_assessment_form_params
+      @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(
+        trading_standards_risk_assessment_form_params
           .merge(
             current_user: current_user,
             investigation: @investigation,
@@ -536,7 +536,7 @@ private
 
       @investigation = @investigation.decorate
 
-      if (file = trading_standard_risk_assessment_form_params[:risk_assessment_file])
+      if (file = trading_standards_risk_assessment_form_params[:risk_assessment_file])
         @file_blob = ActiveStorage::Blob.create_after_upload!(
           io: file,
           filename: file.original_filename,
@@ -567,8 +567,8 @@ private
     @investigation.errors.empty? && @product.errors.empty?
   end
 
-  def trading_standard_risk_assessment_form_params
-    params.require(:trading_standard_risk_assessment_form).permit(:further_risk_assessments, :details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
+  def trading_standards_risk_assessment_form_params
+    params.require(:trading_standards_risk_assessment_form).permit(:further_risk_assessments, :details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
   end
 
   def businesses_from_session
@@ -634,7 +634,7 @@ private
 
   def save_risk_assessments
     session[:risk_assessments].each do |session_risk_assessment|
-      risk_assessment_form = TradingStandardRiskAssessmentForm.new(
+      risk_assessment_form = TradingStandardsRiskAssessmentForm.new(
         session_risk_assessment[:risk_assessment]
       )
 
