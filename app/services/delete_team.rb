@@ -40,6 +40,7 @@ private
 
   # In this case we want to retain the user as the owner, but change the OwnerTeam collaboration.
   def change_case_ownership_when_owner_is_user_on_team(collaboration)
+    collaboration.investigation.collaboration_accesses.changeable.where(collaborator: new_team).destroy_all
     collaboration.update!(collaborator_id: new_team.id)
 
     metadata = update_owner_activity_class.build_metadata(new_team, change_case_owner_rationale)
