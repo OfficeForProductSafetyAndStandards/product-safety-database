@@ -161,6 +161,25 @@ RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
           expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
           expect { delete_team }.not_to have_enqueued_mail(NotifyMailer, :team_deleted_from_case_email)
         end
+
+        context "when the new team is already a collaborator on the case" do
+          before do
+            AddTeamToCase.call!(
+              investigation: team_case,
+              user: team_user,
+              team: new_team,
+              collaboration_class: Collaboration::Access::ReadOnly
+            )
+          end
+
+          it "removes the new team's existing collaboration" do
+            expect { delete_team }.to change { team_case.teams_with_read_only_access.count }.from(1).to(0)
+          end
+
+          it "changes the case owner team to the new team" do
+            expect { delete_team }.to change { team_case.reload.owner_team }.from(team).to(new_team)
+          end
+        end
       end
 
       context "when the team is a collaborator on a case owned by the new team" do
