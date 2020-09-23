@@ -88,6 +88,28 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
+      it "exports the case risk level" do
+        investigation = create(:allegation)
+        ChangeCaseRiskLevel.call!(
+          investigation: investigation,
+          user:
+            user,
+          risk_level: (Investigation.risk_levels.values - %w[other]).sample
+        )
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        categories_cell_title = exported_data.cell(1, 9)
+        categories_cell_content = exported_data.cell(2, 9)
+
+        aggregate_failures "risk level cells values" do
+          expect(categories_cell_title).to eq "Risk_Level"
+          expect(categories_cell_content).to eq investigation.decorate.risk_level_description
+        end
+      end
+
       it "exports owner team and user" do
         user = create(:user)
         team = create(:team)
