@@ -43,7 +43,7 @@
       render "investigations/ownership/owner_selection",
              form: form,
              key: :select_other_team,
-             items: Team.all,
+             items: Team.not_deleted,
              label: "Select other team name",
              show_all_values: true
     end

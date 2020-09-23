@@ -20,7 +20,7 @@ class AddTeamToCase
         create_activity_for_team_added!
       end
 
-      send_notification_email
+      send_notification_email unless context.silent
     rescue ActiveRecord::RecordNotUnique
       # Collaborator already added, so return successful but without notifying the team
       # or creating an audit log.

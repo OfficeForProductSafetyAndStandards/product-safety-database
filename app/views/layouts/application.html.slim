@@ -95,6 +95,8 @@ html.govuk-template.app-html-class[lang="en"]
                           class: "govuk-footer__link govuk-!-margin-right-2",
                           target: "_blank"
               li.govuk-footer__inline-list-item
+                = link_to "Accessibility", help_accessibility_path, class: "govuk-footer__link govuk-!-margin-right-2"
+              li.govuk-footer__inline-list-item
                 - html = capture do
                   | Privacy policy
                   span.govuk-visually-hidden

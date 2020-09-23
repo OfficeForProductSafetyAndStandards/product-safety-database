@@ -86,7 +86,7 @@ private
   # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def teams_without_access
-    Team.where.not(id: team_ids_with_access).order(:name)
+    Team.not_deleted.where.not(id: team_ids_with_access).order(:name)
   end
 
   def team_ids_with_access

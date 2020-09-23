@@ -11,6 +11,10 @@ class AuditActivity::Investigation::TeamAdded < AuditActivity::Investigation::Ba
     }
   end
 
+  def team
+    Team.find(metadata["team"]["id"])
+  end
+
 private
 
   # This is handled by the AddTeamToCase service, but this override is required

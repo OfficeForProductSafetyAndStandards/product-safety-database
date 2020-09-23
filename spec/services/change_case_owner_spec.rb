@@ -58,6 +58,22 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
         expect(result).to be_success
       end
 
+      context "when the silent parameter is true", :with_test_queue_adapter do
+        let(:result) do
+          described_class.call(
+            investigation: investigation,
+            user: user,
+            owner: new_owner,
+            rationale: rationale,
+            silent: true
+          )
+        end
+
+        it "does not send any emails" do
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+        end
+      end
+
       context "when the new owner is a read only team on the case" do
         let(:new_owner) { create(:team) }
 
