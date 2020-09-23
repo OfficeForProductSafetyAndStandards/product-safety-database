@@ -12,6 +12,8 @@ class DateParser
     return nil if @date.nil?
     return @date if @date.is_a?(Date)
 
+    @date.symbolize_keys! if @date.respond_to?(:symbolize_keys!)
+
     date_values = @date.values_at(:year, :month, :day).map do |date_part|
       Integer(date_part)
     rescue StandardError
