@@ -19,8 +19,9 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
   let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
 
-  let!(:another_active_user) { create(:user, :activated, organisation: user.organisation, team: team) }
-  let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team: team) }
+  let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team: team) }
+  let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team: team) }
+  let!(:other_deleted_team)    { create(:team, :deleted) }
 
   let(:restricted_case_title) { "Restricted case title" }
   let(:restricted_case_team) { create(:team, organisation: other_organisation) }
@@ -33,12 +34,16 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     visit investigations_path
   end
 
-  scenario "selecting filters only shows other active users in the case owner and created by filters" do
-    expect(page).to have_css("#case_owner_is_someone_else_id option[value=\"#{another_active_user.id}\"]")
-    expect(page).not_to have_css("#case_owner_is_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
+  scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
+    within_fieldset("Case owner") do
+      expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])
+      expect(page).not_to have_select("Name", with_options: [another_inactive_user.name, other_deleted_team.name])
+    end
 
-    expect(page).to have_css("#created_by_someone_else_id option[value=\"#{another_active_user.id}\"]")
-    expect(page).not_to have_css("#created_by_someone_else_id option[value=\"#{another_inactive_user.id}\"]")
+    within_fieldset("Created by") do
+      expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])
+      expect(page).not_to have_select("Name", with_options: [another_inactive_user.name, other_deleted_team.name])
+    end
   end
 
   scenario "no filters applied shows all cases" do

@@ -1,23 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Team do
-  describe ".all_with_organisation" do
-    before { create_list(:team, 3) }
-
-    let(:owners) { described_class.all_with_organisation }
-
-    it "retrieves all teams" do
-      expect(owners.length).to eq(3)
-    end
-
-    it "includes associations needed for display_name" do
-      owners.length
-      expect(lambda {
-        owners.map(&:display_name)
-      }).to not_talk_to_db
-    end
-  end
-
   describe ".get_visible_teams" do
     before do
       allow(Rails.application.config).to receive(:team_names).and_return(
@@ -49,6 +32,41 @@ RSpec.describe Team do
       it "returns first important team" do
         expect(described_class.get_visible_teams(user).map(&:name)).to eq([important_team_names.first])
       end
+    end
+  end
+
+  describe ".not_deleted" do
+    it "returns only teams without deleted timestamp" do
+      create(:team, :deleted)
+      not_deleted_team = create(:team)
+
+      expect(described_class.not_deleted.to_a).to eq [not_deleted_team]
+    end
+  end
+
+  describe "#mark_as_deleted!" do
+    it "sets the team 'deleted_at' timestamp to the current time" do
+      team = create(:team)
+      freeze_time do
+        expect { team.mark_as_deleted! }.to change { team.deleted_at }.from(nil).to(Time.zone.now)
+      end
+    end
+
+    it "does not change the flag if was already enabled" do
+      team = create(:team, :deleted)
+      expect { team.mark_as_deleted! }.not_to change(team, :deleted_at)
+    end
+  end
+
+  describe "#deleted?" do
+    it "returns true for teams with deleted timestamp" do
+      team = create(:team, :deleted)
+      expect(team).to be_deleted
+    end
+
+    it "returns false for teams without deleted timestamp" do
+      team = create(:team)
+      expect(team).not_to be_deleted
     end
   end
 end

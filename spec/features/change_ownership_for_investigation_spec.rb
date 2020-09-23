@@ -9,15 +9,19 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team: team) }
   let!(:another_active_user_another_team) { create(:user, :activated, name: "another user in another team", organisation: user.organisation, team: create(:team)) }
   let!(:another_inactive_user_another_team) { create(:user, :inactive, organisation: user.organisation, team: create(:team)) }
+  let!(:deleted_team) { create(:team, :deleted) }
 
   before do
     sign_in(user)
     visit "/cases/#{investigation.pretty_id}/assign/new"
   end
 
-  scenario "does not show inactive users" do
+  scenario "does not show inactive users or teams" do
     expect(page).to have_css("#investigation_select_team_member option[value=\"#{another_active_user.id}\"]")
     expect(page).not_to have_css("#investigation_select_team_member option[value=\"#{another_inactive_user.id}\"]")
+
+    expect(page).to have_css("#investigation_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
+    expect(page).not_to have_css("#investigation_select_other_team option[value=\"#{deleted_team.id}\"]")
 
     expect(page).to have_css("#investigation_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
     expect(page).not_to have_css("#investigation_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")

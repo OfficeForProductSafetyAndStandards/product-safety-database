@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include Deletable
   include UserCollaboratorInterface
 
   INVITATION_EXPIRATION_DAYS = 14
@@ -44,10 +45,6 @@ class User < ApplicationRecord
   # and who have accepted the user declaration
   def self.active
     where(account_activated: true).not_deleted
-  end
-
-  def self.not_deleted
-    where(deleted_at: nil)
   end
 
   def self.current
@@ -107,18 +104,8 @@ class User < ApplicationRecord
     update has_viewed_introduction: true
   end
 
-  def deleted?
-    deleted_at.present?
-  end
-
   def invitation_expired?
     invited_at <= INVITATION_EXPIRATION_DAYS.days.ago
-  end
-
-  def mark_as_deleted!
-    return if deleted?
-
-    update!(deleted_at: Time.zone.now)
   end
 
   # BEGIN: place devise overriden method calls bellow

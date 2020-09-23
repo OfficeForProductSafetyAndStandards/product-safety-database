@@ -109,6 +109,23 @@ RSpec.describe AddTeamToCase, :with_stubbed_mailer, :with_stubbed_elasticsearch 
         end
       end
 
+      context "when the silent parameter is true", :with_test_queue_adapter do
+        let(:result) do
+          described_class.call(
+            team: team,
+            message: message,
+            investigation: investigation,
+            collaboration_class: collaboration_class,
+            user: user,
+            silent: true
+          )
+        end
+
+        it "does not send any emails" do
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :team_added_to_case_email)
+        end
+      end
+
       it "adds an audit activity record", :aggregate_failures do
         result
         last_added_activity = investigation.activities.order(:id).first

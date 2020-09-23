@@ -9,6 +9,10 @@ class AuditActivity::Investigation::TeamDeleted < AuditActivity::Investigation::
     }
   end
 
+  def team
+    Team.find(metadata["team"]["id"])
+  end
+
 private
 
   # This is handled by RemoveTeamFromCase, but this override is required to
