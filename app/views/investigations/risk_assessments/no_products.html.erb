@@ -4,7 +4,7 @@
   <%= govukBackLink(
     text: "Back",
     href: investigation_supporting_information_index_path(@investigation)
-  ) %>
+  ) unless @investigation.new_record? %>
 <% end %>
 
 <%= render "investigations/pages_top", investigation: @investigation %>
