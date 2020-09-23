@@ -15,7 +15,7 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       investigation.categories.join(", "),
       investigation.hazard_type,
       investigation.coronavirus_related?,
-      investigation.risk_level_description,
+      investigation.decorate.risk_level_description,
       investigation.owner_team&.name,
       investigation.owner_user&.name,
       investigation.creator_user&.name,

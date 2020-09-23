@@ -22,7 +22,7 @@ class InvestigationsController < ApplicationController
         @investigations = Investigation.eager_load(
           :complainant,
           :creator_user
-        ).where(id: @answer.results.map(&:_id)).decorate
+        ).where(id: @answer.results.map(&:_id))
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
