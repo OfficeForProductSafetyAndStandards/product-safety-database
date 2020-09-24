@@ -1,0 +1,135 @@
+<%= page_title "Record email", errors: @correspondence.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: new_investigation_correspondence_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with(model: @correspondence, local: true, url: investigation_emails_path, method: :post) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+
+      <h1 class="govuk-heading-l">Record email</h1>
+
+      <%= render "components/govuk_fieldset", legend: { text: "Email details", classes: "govuk-fieldset__legend--m" } do %>
+        <%= render "form_components/govuk_radios",
+                   form: form,
+                   key: :email_direction,
+                   fieldset: { label: { text: "Email direction", classes: "govuk-visually-hidden" } },
+                   classes: "govuk-radios--inline",
+                   items: Correspondence::Email.email_directions.map { |value, label| { text: label, value: value } } %>
+        <%= render "form_components/govuk_input",
+                   key: :correspondent_name,
+                   form: form,
+                   classes: "govuk-!-width-two-thirds",
+                   label: { text: "Name" } %>
+        <%= render "form_components/govuk_input",
+                   key: :email_address,
+                   form: form,
+                   classes: "govuk-!-width-two-thirds",
+                   label: { text: "Email address" } %>
+      <% end %>
+
+      <%= render "form_components/govuk_date_input",
+                 form: form,
+                 key: :correspondence_date,
+                 fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date sent" } } %>
+
+      <%= render "form_components/govuk_input",
+                 key: :overview,
+                 form: form,
+                 classes: "govuk-!-width-two-thirds",
+                 label: { text: "Summary", classes: "govuk-label--m" },
+                 hint: { text: "Give an overview of the email" } %>
+
+      <%= render "components/govuk_fieldset",
+                 legend: { text: "Email content", classes: "govuk-fieldset__legend--m" },
+                 describedBy: "email-content-hint" do %>
+
+        <span id="email-content-hint" class="govuk-hint">Upload the email as a file, or enter the subject and body below</span>
+
+        <% if @correspondence.new_record? && @correspondence.email_file.attached? %>
+          <%= hidden_field_tag :existing_email_file, @correspondence.email_file.signed_id %>
+        <% end %>
+
+        <div class="govuk-form-group">
+          <% if @correspondence.email_file.attached? %>
+            <p>
+              Currently selected file: <%= link_to @correspondence.email_file.filename, @correspondence.email_file, target: "_blank", rel: 'noopener' %><br>
+              Selecting a different one will replace it.
+            </p>
+          <% end %>
+          <%= form.label :email_file, "Upload a file", class: "govuk-label" %>
+          <%= form.file_field :email_file, class: "govuk-file-upload" %>
+        </div>
+
+        <%= render "form_components/govuk_input",
+                   key: :email_subject,
+                   form: form,
+                   classes: "govuk-!-width-two-thirds",
+                   label: { text: "Subject line" } %>
+        <%= render "form_components/govuk_textarea",
+                   key: :details,
+                   form: form,
+                   attributes: { maxlength: 50_000 },
+                   label: { text: "Body" } %>
+      <% end %>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Attachments
+        </legend>
+
+        <div class="govuk-body govuk-hint">
+          If you have multiple files, compress them in a zip
+        </div>
+
+        <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors) %>">
+
+          <% file_upload_field = capture do %>
+            <div class="govuk-form-group">
+              <%= form.label :email_attachment, "Upload a file", class: "govuk-label", for: "attachment-file-input" %>
+            </div>
+
+            <%= form.file_field :email_attachment, class: "govuk-file-upload", id: "attachment-file-input" %>
+          <% end %>
+
+          <% if @correspondence.new_record? && @correspondence.email_attachment.attached? %>
+            <%= hidden_field_tag :existing_email_attachment, @correspondence.email_attachment.signed_id %>
+          <% end %>
+
+          <% if @correspondence.email_attachment.attached? %>
+            <p id="current-attachment-details">
+              Currently selected file:
+              <%= link_to @correspondence.email_attachment.filename, @correspondence.email_attachment, target: "_blank", rel: 'noopener' %>
+            </p>
+
+            <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>
+          <% else %>
+            <%= file_upload_field %>
+          <% end %>
+
+          <div id="attachment-description">
+            <%= render "form_components/govuk_textarea",
+              key: :attachment_description,
+              value: @attachment_description,
+              form: form,
+              label: { text: "Attachment description" },
+              attributes: { maxlength: 10_000 }
+            %>
+          </div>
+        </div>
+      </fieldset>
+
+      <%= form.submit "Continue", class: "govuk-button" %>
+
+      <%= permission_notice(text: t("case.protected_details", data_type: "email correspondence")) %>
+    </div>
+  </div>
+<% end %>

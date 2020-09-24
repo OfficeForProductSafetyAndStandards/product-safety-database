@@ -147,7 +147,7 @@ Rails.application.routes.draw do
     resources :corrective_actions, controller: "investigations/record_corrective_actions", only: %i[show new create update]
 
     resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
-    resources :emails, controller: "investigations/record_emails", only: %i[show new create update]
+    resources :emails, controller: "investigations/record_emails", only: %i[new create]
     resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[show new create update]
     resources :meetings, controller: "investigations/record_meetings", only: %i[show new create update]
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
