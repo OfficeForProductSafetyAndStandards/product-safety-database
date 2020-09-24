@@ -40,6 +40,7 @@ gem "slim-rails", "~> 3.2"
 gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
+gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.2"
 gem "wicked", "~> 1.3"
