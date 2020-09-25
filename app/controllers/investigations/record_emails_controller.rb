@@ -67,10 +67,6 @@ class Investigations::RecordEmailsController < ApplicationController
 
 private
 
-  def audit_class
-    AuditActivity::Correspondence::AddEmail
-  end
-
   def email_correspondence_form_params
     params.require(:email_correspondence_form).permit(
       :correspondent_name,
