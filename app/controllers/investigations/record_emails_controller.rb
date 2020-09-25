@@ -47,23 +47,17 @@ class Investigations::RecordEmailsController < ApplicationController
 
     if @email_correspondence_form.valid?
 
-      @email = @investigation.emails.new(
+      result = AddEmailToCase.call(
         @email_correspondence_form.attributes.except(
-          "attachment_description",
           "existing_email_file_id",
           "existing_email_attachment_id"
-        )
+        ).merge({
+          investigation: @investigation,
+          user: current_user
+        })
       )
 
-      @email.save!
-
-      redirect_to investigation_email_path(@investigation.pretty_id, @email)
-
-      update_attachments
-
-      # TODO: refactor into a service class
-      AuditActivity::Correspondence::AddEmail.from(@email, @investigation)
-
+      redirect_to investigation_email_path(@investigation.pretty_id, result.email)
     else
       @investigation = @investigation.decorate
 
@@ -92,12 +86,5 @@ private
       :existing_email_file_id,
       correspondence_date: %i[day month year]
     )
-  end
-
-  def update_attachments
-    if @email.email_attachment.attached?
-      @email.email_attachment.blob.metadata[:description] = params[:email_correspondence_form][:attachment_description]
-      @email.email_attachment.blob.save!
-    end
   end
 end

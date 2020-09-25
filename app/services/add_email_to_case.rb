@@ -1,24 +1,28 @@
 class AddEmailToCase
   include Interactor
 
-  delegate :investigation, :user, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, to: :context
+  delegate :investigation, :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, :attachment_description, to: :context
 
   def call
-    context.email = @investigation.emails.new(
+    context.email = investigation.emails.new(
       correspondent_name: correspondent_name,
+      correspondence_date: correspondence_date,
       email_address: email_address,
       email_direction: email_direction,
       overview: overview,
       details: details,
-      email_subject: email_subject
+      email_subject: email_subject,
+      email_file: email_file,
+      email_attachment: email_attachment
     )
 
-    # TODO: refactor into model
-    @correspondence.set_dates_from_params(params[:correspondence_email])
-
-    # TODO: refactor into a service class
-    if !@correspondence.email_attachment.attached? && params[:existing_email_attachment]
-      @correspondence.email_attachment.attach(params[:existing_email_attachment])
+    # Update email attachment description
+    if email.email_attachment.attached? && attachment_description.present?
+      email.email_attachment.blob.metadata[:description] = attachment_description
+      email.email_attachment.blob.save!
     end
+
+    # TODO: refactor into this class
+    AuditActivity::Correspondence::AddEmail.from(email, investigation)
   end
 end
