@@ -1,7 +1,8 @@
 class Investigations::RecordEmailsController < ApplicationController
   def new
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    @correspondence = Correspondence::Email.new
+
+    @email_correspondence_form = EmailCorrespondenceForm.new
 
     @investigation = @investigation.decorate
   end
@@ -9,33 +10,62 @@ class Investigations::RecordEmailsController < ApplicationController
   def create
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
 
-    @correspondence = @investigation.emails.new(email_params)
+    @email_correspondence_form = EmailCorrespondenceForm.new
+    @email_correspondence_form.attributes = email_correspondence_form_params
 
-    # TODO: refactor into a service class
-    if !@correspondence.email_file.attached? && params[:existing_email_file]
-      @correspondence.email_file.attach(params[:existing_email_file])
+    if @email_correspondence_form.email_file.present? && @email_correspondence_form.existing_email_file_id.blank?
+
+      @email_correspondence_form.email_file = ActiveStorage::Blob.create_after_upload!(
+        io: @email_correspondence_form.email_file,
+        filename: @email_correspondence_form.email_file.original_filename,
+        content_type: @email_correspondence_form.email_file.content_type
+      )
+
+      @email_correspondence_form.existing_email_file_id = @email_correspondence_form.email_file.signed_id
+
+    elsif @email_correspondence_form.existing_email_file_id.present? && @email_correspondence_form.email_file.blank?
+
+      @email_correspondence_form.email_file = ActiveStorage::Blob.find_signed(@email_correspondence_form.existing_email_file_id)
+
     end
 
-    # TODO: refactor into a service class
-    if !@correspondence.email_attachment.attached? && params[:existing_email_attachment]
-      @correspondence.email_attachment.attach(params[:existing_email_attachment])
+    if @email_correspondence_form.email_attachment.present? && @email_correspondence_form.existing_email_attachment_id.blank?
+
+      @email_correspondence_form.email_attachment = ActiveStorage::Blob.create_after_upload!(
+        io: @email_correspondence_form.email_attachment,
+        filename: @email_correspondence_form.email_attachment.original_filename,
+        content_type: @email_correspondence_form.email_attachment.content_type
+      )
+
+      @email_correspondence_form.existing_email_attachment_id = @email_correspondence_form.email_attachment.signed_id
+
+    elsif @email_correspondence_form.email_attachment.blank? && @email_correspondence_form.existing_email_attachment_id.present?
+
+      @email_correspondence_form.email_attachment = ActiveStorage::Blob.find_signed(@email_correspondence_form.existing_email_attachment_id)
+
     end
 
-    # TODO: refactor into model
-    @correspondence.set_dates_from_params(params[:correspondence_email])
+    if @email_correspondence_form.valid?
 
-    if @correspondence.save
-      redirect_to investigation_email_path(@investigation.pretty_id, @correspondence)
+      @email = @investigation.emails.new(
+        @email_correspondence_form.attributes.except(
+          "attachment_description",
+          "existing_email_file_id",
+          "existing_email_attachment_id"
+        )
+      )
+
+      @email.save!
+
+      redirect_to investigation_email_path(@investigation.pretty_id, @email)
 
       update_attachments
 
       # TODO: refactor into a service class
-      AuditActivity::Correspondence::AddEmail.from(@correspondence, @investigation)
+      AuditActivity::Correspondence::AddEmail.from(@email, @investigation)
 
     else
       @investigation = @investigation.decorate
-
-      @attachment_description = params[:correspondence_email][:attachment_description]
 
       render :new
     end
@@ -47,8 +77,8 @@ private
     AuditActivity::Correspondence::AddEmail
   end
 
-  def email_params
-    params.require(:correspondence_email).permit(
+  def email_correspondence_form_params
+    params.require(:email_correspondence_form).permit(
       :correspondent_name,
       :email_address,
       :email_direction,
@@ -56,14 +86,18 @@ private
       :details,
       :email_subject,
       :email_file,
-      :email_attachment
+      :email_attachment,
+      :attachment_description,
+      :existing_email_attachment_id,
+      :existing_email_file_id,
+      correspondence_date: %i[day month year]
     )
   end
 
   def update_attachments
-    if @correspondence.email_attachment.attached?
-      @correspondence.email_attachment.blob.metadata[:description] = params[:correspondence_email][:attachment_description]
-      @correspondence.email_attachment.blob.save!
+    if @email.email_attachment.attached?
+      @email.email_attachment.blob.metadata[:description] = params[:email_correspondence_form][:attachment_description]
+      @email.email_attachment.blob.save!
     end
   end
 end

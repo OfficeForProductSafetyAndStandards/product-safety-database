@@ -45,7 +45,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     # Test required fields
     click_button "Continue"
 
-    expect(page).to have_error_summary "Correspondence date cannot be blank"
+    expect(page).to have_error_summary "Enter the date sent"
 
     within_fieldset "Email content" do
       expect(page).to have_content "Currently selected file: email_file.txt"
@@ -56,7 +56,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Correspondence date must include a month and year"
+    expect(page).to have_error_summary "Date sent must include a month and year"
 
     within_fieldset "Email content" do
       expect(page).to have_content "Currently selected file: email_file.txt"
@@ -126,7 +126,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     click_button "Continue"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Correspondence date cannot be blank"
+    expect(page).to have_error_summary "Enter the date sent"
 
     fill_in_record_email_form(name: name, email: email, date: date)
     fill_in_record_email_details_form(summary: summary, subject: email_subject, body: body)
