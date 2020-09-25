@@ -15,7 +15,8 @@ class Investigations::RecordEmailsController < ApplicationController
     @email_correspondence_form = EmailCorrespondenceForm.new
     @email_correspondence_form.attributes = email_correspondence_form_params
 
-    if @email_correspondence_form.email_file.present? && @email_correspondence_form.existing_email_file_id.blank?
+    # Upload file to S3 if present, so that it can persist even if validation fails
+    if @email_correspondence_form.email_file.present?
 
       @email_correspondence_form.email_file = ActiveStorage::Blob.create_after_upload!(
         io: @email_correspondence_form.email_file,
@@ -25,13 +26,16 @@ class Investigations::RecordEmailsController < ApplicationController
 
       @email_correspondence_form.existing_email_file_id = @email_correspondence_form.email_file.signed_id
 
+    # Lookup existing file using signed ID if present (for example if previously uploaded
+    # but validation failed)
     elsif @email_correspondence_form.existing_email_file_id.present? && @email_correspondence_form.email_file.blank?
 
       @email_correspondence_form.email_file = ActiveStorage::Blob.find_signed(@email_correspondence_form.existing_email_file_id)
 
     end
 
-    if @email_correspondence_form.email_attachment.present? && @email_correspondence_form.existing_email_attachment_id.blank?
+    # Upload file to S3 if present, so that it can persist even if validation fails
+    if @email_correspondence_form.email_attachment.present?
 
       @email_correspondence_form.email_attachment = ActiveStorage::Blob.create_after_upload!(
         io: @email_correspondence_form.email_attachment,
@@ -41,6 +45,8 @@ class Investigations::RecordEmailsController < ApplicationController
 
       @email_correspondence_form.existing_email_attachment_id = @email_correspondence_form.email_attachment.signed_id
 
+    # Lookup existing file using signed ID if present (for example if previously uploaded
+    # but validation failed)
     elsif @email_correspondence_form.email_attachment.blank? && @email_correspondence_form.existing_email_attachment_id.present?
 
       @email_correspondence_form.email_attachment = ActiveStorage::Blob.find_signed(@email_correspondence_form.existing_email_attachment_id)
