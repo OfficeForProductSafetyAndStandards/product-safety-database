@@ -1,6 +1,7 @@
 class Investigations::RecordEmailsController < ApplicationController
   def new
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :update?
 
     @email_correspondence_form = EmailCorrespondenceForm.new
 
@@ -9,6 +10,7 @@ class Investigations::RecordEmailsController < ApplicationController
 
   def create
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :update?
 
     @email_correspondence_form = EmailCorrespondenceForm.new
     @email_correspondence_form.attributes = email_correspondence_form_params
