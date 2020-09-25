@@ -4,6 +4,9 @@ class AddEmailToCase
   delegate :investigation, :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, :attachment_description, to: :context
 
   def call
+    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
+
     context.email = investigation.emails.new(
       correspondent_name: correspondent_name,
       correspondence_date: correspondence_date,
