@@ -6,7 +6,7 @@ namespace :data do
     require "active_storage/filename"
     include ActionView::Helpers::NumberHelper
 
-    extension_list_line_breakpoint = 12
+    extension_list_line_breakpoint = 10
 
     computed_stats = lambda { |entries|
       average_size = entries.map { |e| e[:size] }.instance_eval { reduce(:+) / size.to_f }
@@ -85,12 +85,19 @@ namespace :data do
       end
     }
 
+    extensions_count = statistics.flat_map(&:last).group_by(&:itself).each_with_object({}) { |(extension, extensions), hash| hash[extension] = extensions.size }
+    total_file = extensions_count.values.reduce(:+)
+
     table = TTY::Table.new(["Blob ID", "File name", "Associated records", "Average file size", "File extensions"], process_unique_file_extensions[statistics])
-
-
-    statistics.flat_map {|e| e.last }.group_by(&:itself).each_with_object({}) { |(extention, extensions), hash| hash[extension] = extensions.size }
-
     print table.render(:unicode, multiline: true, alignments: %i[center center center center left], padding: [2, 1])
+    puts ""
+
+    extensions_count = extensions_count.sort_by { |_extension, value| value  }.reverse
+
+    table = TTY::Table.new(%w[Extension count percentage], extensions_count.map { |k, v| [k, v, number_to_percentage((v / total_file.to_f) * 100)] })
+    print table.render(:unicode, multiline: true, alignments: %i[center center center], padding: [2, 1])
+    puts ""
+
     print "\n#{zip_file_count} zip files analysed.\n"
   end
 end
