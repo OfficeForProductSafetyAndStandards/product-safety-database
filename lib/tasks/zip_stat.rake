@@ -92,7 +92,7 @@ namespace :data do
     print table.render(:unicode, multiline: true, alignments: %i[center center center center left], padding: [2, 1])
     puts ""
 
-    extensions_count = extensions_count.sort_by { |_extension, value| value  }.reverse
+    extensions_count = extensions_count.sort_by { |_extension, value| value }.reverse
 
     table = TTY::Table.new(%w[Extension count percentage], extensions_count.map { |k, v| [k, v, number_to_percentage((v / total_file.to_f) * 100)] })
     print table.render(:unicode, multiline: true, alignments: %i[center center center], padding: [2, 1])
