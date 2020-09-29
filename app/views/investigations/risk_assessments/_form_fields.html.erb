@@ -2,21 +2,21 @@
 
 <%- custom = capture do %>
   <%= form.govuk_input :custom_risk_level,
-    label: "Other risk level",
-    label_classes: "govuk-visually-hidden",
-    classes: "govuk-input--width-20"
+   label: "Other risk level",
+   label_classes: "govuk-visually-hidden",
+   classes: "govuk-input--width-20"
   %>
 <% end %>
 
 <% radio_items = (Investigation.risk_levels.keys - ["other"]).map do |level|
-    { text: t("investigations.risk_level.show.levels.#{level}"), value: level }
-   end
-   radio_items.push(text: "Other", value: "other", conditional: { html: custom })
+  { text: t("investigations.risk_level.show.levels.#{level}"), value: level }
+end
+radio_items.push(text: "Other", value: "other", conditional: { html: custom })
 %>
 
 <%= form.govuk_radios :risk_level,
-  legend: "What was the risk level?",
-  items: radio_items
+ legend: "What was the risk level?",
+ items: radio_items
 %>
 
 
@@ -25,10 +25,12 @@
 <% end %>
 
 <%- businesses_html = capture do %>
+  <% hint = investigation.new_record? ? nil : safe_join(["If the business isn’t listed, you should ", link_to("add it to the case", new_investigation_business_path(investigation)), " first."]) %>
+
   <%= form.govuk_select :assessed_by_business_id,
-    label: "Choose business",
-    hint: safe_join(["If the business isn’t listed, you should ", link_to("add it to the case", new_investigation_business_path(@investigation)), " first."]),
-    items: risk_assessment_form.businesses %>
+     label: "Choose business",
+     hint:  hint,
+     items: risk_assessment_form.businesses_select_items %>
 <% end %>
 
 <%- someone_else_html = capture do %>
@@ -37,23 +39,23 @@
 
 <% assessed_by_radio_items = []
 
-  assessed_by_radio_items.push(text: current_user.team.name, value: :my_team)
-  assessed_by_radio_items.push(text: "Another team or market surveilance authority", value: :another_team, conditional: { html: teams_html })
-  assessed_by_radio_items.push(text: "A business related to the case", value: :business, conditional: { html: businesses_html }) unless risk_assessment_form.businesses.length == 1
-  assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: { html: someone_else_html })
+assessed_by_radio_items.push(text: current_user.team.name, value: :my_team)
+assessed_by_radio_items.push(text: "Another team or market surveilance authority", value: :another_team, conditional: { html: teams_html })
+assessed_by_radio_items.push(text: "A business related to the case", value: :business, conditional: { html: businesses_html }) unless risk_assessment_form.businesses_select_items.length == 1
+assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: { html: someone_else_html })
 
 %>
 
 <%= form.govuk_radios :assessed_by,
-  legend: "Who completed the assessment?",
-  items: assessed_by_radio_items
+ legend: "Who completed the assessment?",
+ items: assessed_by_radio_items
 %>
 
 <% if risk_assessment_form.products.length > 1 %>
   <%= form.govuk_checkboxes :product_ids,
-    legend: "Which products were assessed?",
-    hint: "You must choose at least one. Only products already added to the case are listed.",
-    items: risk_assessment_form.products
+     legend: "Which products were assessed?",
+     hint: "You must choose at least one. Only products already added to the case are listed.",
+     items: risk_assessment_form.products
   %>
 <% else %>
 
@@ -89,5 +91,5 @@
 <% end %>
 
 <%= form.govuk_text_area :details,
-  label: "Further details (optional)"
+   label: "Further details (optional)"
 %>

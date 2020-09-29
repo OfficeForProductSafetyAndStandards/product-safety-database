@@ -1,0 +1,31 @@
+<% page_heading = "Risk assessment details" %>
+
+<%= form_with model: @risk_assessment_form, url: wizard_path, method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary(@risk_assessment_form.errors) %>
+
+      <span class="govuk-caption-l">
+        Report an unsafe or non-compliant product
+      </span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+      <%= render "investigations/risk_assessments/form_fields",
+                 form: form,
+                 risk_assessment_form: @risk_assessment_form,
+                 investigation: @investigation,
+                 page_heading: page_heading
+      %>
+
+      <%= form.govuk_radios :further_risk_assessments,
+                 legend: "Are there other risk assessments to report?",
+                 items: [{ text: "Yes", value: "Yes", checked: @repeat_step },
+                         { text: "No", value: "No", checked: (@repeat_step == false) }] %>
+
+      <%= govukButton(text: "Continue") %>
+      <div class="govuk-body">
+        <%= form.submit "Skip this page", class: "button-link", role: "link" %>
+      </div>
+    </div>
+  </div>
+<% end %>

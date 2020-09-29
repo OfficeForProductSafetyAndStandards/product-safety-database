@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-09-23
+- Added case risk level to xls exports.
+
 ## 2020-08-13
 - Added a follow-up question when adding a risk assessment, asking users whether the case risk level should be updated to match.
 

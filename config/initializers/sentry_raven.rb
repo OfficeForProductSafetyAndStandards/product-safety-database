@@ -4,11 +4,9 @@
 Rails.application.configure do
   config.rails_activesupport_breadcrumbs = true
 
-  # Inject Sentry logger breadcrumbs
-  require "raven/breadcrumbs/logger"
-
   Raven.configure do |config|
     config.dsn = ENV["SENTRY_DSN"]
     config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
+    config.breadcrumbs_logger << :sentry_logger
   end
 end

@@ -4,10 +4,10 @@
   <%= govukBackLink(
     text: "Back",
     href: investigation_supporting_information_index_path(@investigation)
-  ) %>
+  ) unless @investigation.new_record? %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
+<%= render "investigations/pages_top", investigation: @investigation unless @investigation.new_record?  %>
 
 
   <div class="govuk-grid-row">
@@ -19,13 +19,9 @@
         <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
         <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-        <%= render "fields", form: form, risk_assessment_form: @risk_assessment_form %>
-
+        <%= render 'investigations/risk_assessments/form_fields', risk_assessment_form: @risk_assessment_form, investigation: @investigation, page_heading: page_heading, form: form %>
         <%= govukButton(text: "Add risk assessment") %>
       <% end %>
 
     </div>
   </div>
-
-
-

@@ -69,7 +69,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       {
         file: Rails.root + "test/fixtures/files/new_risk_assessment.txt",
         title: Faker::Lorem.sentence,
-        description: Faker::Lorem.paragraph
+        description: Faker::Lorem.paragraph,
+        risk_level: RiskAssessment.risk_levels.values.sample.titleize,
+        business_type: business_details.keys.sample
       }
     }
 
@@ -153,6 +155,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_risk_assessment_details_page
 
+        # trigger validation to verify state in session is cleaned up correctly
+        click_on "Continue"
+
         risk_assessments.each do |assessment|
           fill_in_risk_assessment_details_page(with: assessment)
           expect_to_be_on_risk_assessment_details_page
@@ -186,7 +191,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         click_link "Supporting information (5)"
 
-        risk_assessments.each { |assessment| expect_case_supporting_information_page_to_show(file_description: assessment[:title]) }
+        risk_assessments.each do |assessment|
+          expect_case_supporting_information_page_to_show(assessment)
+        end
 
         click_link "Activity"
 
@@ -337,9 +344,14 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(section.find("dt", text: "Contact")).to have_sibling("dd", text: expected_contact)
   end
 
-  def expect_case_supporting_information_page_to_show(file_description:)
-    expect(page).to have_selector("h1", text: "Supporting information")
-    expect(page).to have_selector("h2", text: file_description)
+  def expect_case_supporting_information_page_to_show(assessment_attributes)
+    expect(page).to have_css("h1", text: "Supporting information")
+
+    if assessment_attributes[:risk_level] != "Other"
+      expect(page).to have_link("#{assessment_attributes[:risk_level]} risk: #{product_details[:name]}")
+    else
+      expect(page).to have_link("#{assessment_attributes[:custom_risk_level]}: #{product_details[:name]}")
+    end
   end
 
   def expect_case_activity_page_to_show_allegation_logged
@@ -368,8 +380,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_risk_assessment(assessment)
     expect(page).to have_selector("h1", text: "Activity")
-    item = page.find("h3", text: assessment[:title]).find(:xpath, "..")
-    expect(item).to have_selector("p", text: assessment[:description])
+    if assessment[:risk_level] != "Other"
+      expect(page).to have_css(".govuk-body", text: /Risk level: #{assessment[:risk_level]} risk/)
+    else
+      expect(page).to have_css(".govuk-body", text: /Risk level: #{Regexp.escape(assessment[:custom_risk_level])}/)
+    end
   end
 
   def expect_case_activity_page_to_show_test_result(test)
@@ -497,10 +512,33 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_risk_assessment_details_page(with:)
-    attach_file "file[file][file]", with[:file]
-    fill_in "Title", with: with[:title]
-    fill_in "Description", with: with[:description]
-    choose "file_further_risk_assessments_yes"
+    within_fieldset("Date of assessment") do
+      fill_in("Day", with: "3")
+      fill_in("Month", with: "4")
+      fill_in("Year", with: "2020")
+    end
+
+    within_fieldset("What was the risk level?") do
+      choose with[:risk_level]
+      if with[:risk_level] == "Other"
+        with[:custom_risk_level] = Faker::Hipster.sentence
+        fill_in "Other risk level", with: with[:custom_risk_level]
+      end
+    end
+
+    within_fieldset("Who completed the assessment?") do
+      choose "A business related to the case"
+      select business_details[with[:business_type]][:trading_name]
+    end
+
+    expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
+
+    attach_file "trading_standards_risk_assessment_form[risk_assessment_file]", with[:file]
+
+    within_fieldset("Are there other risk assessments to report?") do
+      choose "Yes"
+    end
+
     click_button "Continue"
   end
 
