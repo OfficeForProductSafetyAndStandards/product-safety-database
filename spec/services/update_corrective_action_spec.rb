@@ -153,18 +153,30 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
                 end
 
                 it "notifies the team" do
-                  expect { update_corrective_action }
-                    .to have_enqueued_mail(NotifyMailer, :investigation_updated)
-                          .with(investigation.pretty_id, investigation.owner_team.name, investigation.owner_team.email, body[investigation.owner_team], email_subject)
+                  expect { update_corrective_action }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+                      investigation.pretty_id,
+                      investigation.owner_team.name,
+                      investigation.owner_team.email,
+                      body[investigation.owner_team],
+                      email_subject
+                    ]))
                 end
               end
 
               it "notifies the team member except the corrective action creator", :aggregate_failures do
-                expect { update_corrective_action }
-                  .to have_enqueued_mail(NotifyMailer, :investigation_updated)
-                        .with(investigation.pretty_id, case_creator.name, case_creator.email, body[case_creator], email_subject)
-                  .and have_enqueued_mail(NotifyMailer, :investigation_updated)
-                        .with(investigation.pretty_id, investigation.owner_team.name, investigation.owner_team.email, body[investigation.owner_team], email_subject)
+                expect { update_corrective_action }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+                  investigation.pretty_id,
+                  case_creator.name,
+                  case_creator.email,
+                  body[case_creator],
+                  email_subject
+                ])).and have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+                  investigation.pretty_id,
+                  investigation.owner_team.name,
+                  investigation.owner_team.email,
+                  body[investigation.owner_team],
+                  email_subject
+                ]))
               end
             end
 
@@ -172,14 +184,23 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
               before { investigation.owner_team.update!(email: nil) }
 
               it "notifies the team member except the corrective action creator", :aggregate_failures do
-                expect { update_corrective_action }
-                  .not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(investigation.pretty_id, case_editor.name, case_editor.email, body[case_editor], email_subject)
+                expect { update_corrective_action }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+                  investigation.pretty_id,
+                  case_editor.name,
+                  case_editor.email,
+                  body[case_editor],
+                  email_subject
+                ]))
               end
 
               it "does not notify inactive users" do
-                expect { update_corrective_action }
-                  .not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
-                            .with(investigation.pretty_id, inactive_user.name, inactive_user.email, body[inactive_user], email_subject)
+                expect { update_corrective_action }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+                  investigation.pretty_id,
+                  inactive_user.name,
+                  inactive_user.email,
+                  body[inactive_user],
+                  email_subject
+                ]))
               end
             end
           end
