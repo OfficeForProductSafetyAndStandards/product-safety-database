@@ -7,7 +7,7 @@ class AddEmailToCase
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    context.email = investigation.emails.new(
+    context.email = investigation.emails.create!(
       correspondent_name: correspondent_name,
       correspondence_date: correspondence_date,
       email_address: email_address,
