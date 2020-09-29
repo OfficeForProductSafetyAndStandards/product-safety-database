@@ -21,14 +21,8 @@ class EmailCorrespondenceForm
   attribute :existing_email_file_id
   attribute :existing_email_attachment_id
 
-  # # These reference the blobs themselves, so that the views can
-  # # retrieve the file names and links
-  # attribute :existing_email_file
-  # attribute :existing_email_attachment
-
-  validates :correspondence_date, presence: true
-
   validates :correspondence_date,
+            presence: true,
             real_date: true,
             complete_date: true
 
