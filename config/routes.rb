@@ -200,15 +200,15 @@ Rails.application.routes.draw do
 
   mount PgHero::Engine, at: "pghero"
   authenticated :user, ->(user) { user.is_opss? } do
-    root to: redirect("/cases")
+    root to: redirect("/cases"), as: "authenticated_opss_root"
   end
 
   authenticated :user, ->(user) { !user.is_opss? } do
-    root to: "homepage#non_opss"
+    root to: "homepage#non_opss", as: "authenticated_msa_root"
   end
 
   unauthenticated do
-    root to: "homepage#show"
+    root to: "homepage#show", as: "unauthenticated_root"
   end
   # Handle old post-login redirect URIs from previous implementation which are still bookmarked
   match "/sessions/signin", to: redirect("/"), via: %i[get post]
