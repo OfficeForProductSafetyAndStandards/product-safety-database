@@ -19,13 +19,18 @@ class AddEmailToCase
       email_attachment: email_attachment
     )
 
-    # Update email attachment description
     if email.email_attachment.attached? && attachment_description.present?
-      email.email_attachment.blob.metadata[:description] = attachment_description
-      email.email_attachment.blob.save!
+      update_attachment_description!
     end
 
     # TODO: refactor into this class
     AuditActivity::Correspondence::AddEmail.from(email, investigation)
+  end
+
+private
+
+  def update_attachment_description!
+    context.email.email_attachment.blob.metadata[:description] = attachment_description
+    context.email.email_attachment.blob.save!
   end
 end

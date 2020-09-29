@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
@@ -83,6 +83,32 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
         email = delivered_emails.last
         expect(email.recipient).to eq(team.email)
         expect(email.action_name).to eq("investigation_updated")
+      end
+    end
+
+    context "with an email file and an attachment" do
+      let(:result) do
+        described_class.call(
+          investigation: investigation,
+          user: user,
+          correspondence_date: Date.new(2020, 1, 2),
+          email_subject: "",
+          details: "",
+          email_file: Rack::Test::UploadedFile.new("spec/fixtures/files/email.txt"),
+          email_attachment: Rack::Test::UploadedFile.new("spec/fixtures/files/risk_assessment.txt"),
+          attachment_description: "Risk assessment"
+        )
+      end
+
+      it "attaches the files", :aggregate_failures do
+        expect(result).to be_success
+
+        expect(result.email.email_file.attached?).to be true
+        expect(result.email.email_file.filename).to eq "email.txt"
+
+        expect(result.email.email_attachment.attached?).to be true
+        expect(result.email.email_attachment.filename).to eq "risk_assessment.txt"
+        expect(result.email.email_attachment.metadata).to include({ description: "Risk assessment" })
       end
     end
   end
