@@ -1,8 +1,11 @@
 require "rails_helper"
 
-RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
-  let(:investigation) { create(:allegation, creator: creator) }
+RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+  # Create the case before running tests so that we can check which emails are sent by the service
+  let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
+
+  let(:team) { create(:team) }
 
   let(:user) { create(:user) }
   let(:creator) { user }
@@ -73,6 +76,13 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_test_queue_ada
         expect(activity.title(nil)).to be_nil
         expect(activity.body).to eq "Subject: **Re: safety issue**<br>Date sent: **02/01/2020**<br><br>Please call me."
         expect(activity.metadata).to be_nil
+      end
+
+      it "notifies the team", :aggregate_failures do
+        result
+        email = delivered_emails.last
+        expect(email.recipient).to eq(team.email)
+        expect(email.action_name).to eq("investigation_updated")
       end
     end
   end
