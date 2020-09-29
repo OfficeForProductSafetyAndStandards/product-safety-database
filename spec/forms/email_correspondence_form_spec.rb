@@ -59,6 +59,15 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
       end
     end
 
+    context "when a correspondence date is in the future" do
+      let(:correspondence_date) { { day: "1", month: "1", year: "2050" } }
+
+      it "is not valid and contains an error message", :aggregate_failures do
+        expect(form).not_to be_valid
+        expect(form.errors.details).to include({ correspondence_date: [{ error: :in_future }] })
+      end
+    end
+
     context "when both subject and body and email file are missing" do
       let(:email_file) { nil }
       let(:email_subject) { "" }

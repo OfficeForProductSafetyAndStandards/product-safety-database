@@ -28,9 +28,18 @@ class EmailCorrespondenceForm
 
   validate :validate_email_file_and_content
 
+  validate :correspondence_date_cannot_be_in_future
+
   def validate_email_file_and_content
     if email_file.nil? && existing_email_file_id.blank? && (email_subject.blank? || details.blank?)
       errors.add(:base, "Please provide either an email file or a subject and body")
+    end
+  end
+
+  def correspondence_date_cannot_be_in_future
+    if correspondence_date.is_a?(Date) && correspondence_date > Time.zone.today
+
+      errors.add(:correspondence_date, :in_future)
     end
   end
 end
