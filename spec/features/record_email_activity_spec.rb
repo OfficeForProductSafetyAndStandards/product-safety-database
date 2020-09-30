@@ -35,7 +35,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     expect_to_be_on_record_email_page
 
-    click_button "Continue"
+    click_button "Add email"
     expect(page).to have_error_summary "Please provide either an email file or a subject and body"
 
     within_fieldset "Email content" do
@@ -43,7 +43,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     end
 
     # Test required fields
-    click_button "Continue"
+    click_button "Add email"
 
     expect(page).to have_error_summary "Enter the date sent"
 
@@ -53,7 +53,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     # Test date validation
     fill_in "Day", with: "333"
-    click_button "Continue"
+    click_button "Add email"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Date sent must include a month and year"
@@ -65,7 +65,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     fill_in_record_email_form(name: name, email: email, date: date)
     fill_in "Summary", with: "Test summary"
 
-    click_button "Continue"
+    click_button "Add email"
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
     expect(page).to have_h1("Test summary")
@@ -123,7 +123,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
       fill_in "Attachment description", with: attachment_description
     end
 
-    click_button "Continue"
+    click_button "Add email"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date sent"
@@ -131,7 +131,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     fill_in_record_email_form(name: name, email: email, date: date)
     fill_in_record_email_details_form(summary: summary, subject: email_subject, body: body)
 
-    click_button "Continue"
+    click_button "Add email"
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
 
