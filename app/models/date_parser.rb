@@ -15,7 +15,7 @@ class DateParser
     @date.symbolize_keys! if @date.respond_to?(:symbolize_keys!)
 
     date_values = @date.values_at(:year, :month, :day).map do |date_part|
-      Integer(date_part)
+      Integer(date_part.delete_prefix("0"))
     rescue StandardError
       nil
     end
