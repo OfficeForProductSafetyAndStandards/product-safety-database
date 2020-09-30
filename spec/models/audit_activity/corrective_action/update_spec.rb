@@ -33,7 +33,8 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
       )
 
       corrective_action.documents.detach
-      new_blob = corrective_action.documents.attach(new_file).first.blob
+      corrective_action.documents.attach(new_file)
+      new_blob = corrective_action.documents.first.blob
       new_blob.metadata[:description] = new_description
       new_blob.metadata[:filename] = new_blob.filename
       new_blob.save!
