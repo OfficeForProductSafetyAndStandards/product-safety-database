@@ -11,10 +11,13 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
   let(:email) { Faker::Internet.safe_email }
   let(:date) { Date.parse("2020-02-01") }
 
-  let(:file) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
+  let(:file) { Rails.root.join("test/fixtures/files/email_file.txt") }
+
   let(:summary) { "Test summary" }
   let(:email_subject) { "Test subject" }
   let(:body) { "Test body" }
+  let(:attachment) { Rails.root.join("test/fixtures/files/attachment_filename.txt") }
+  let(:attachment_description) { "Test attachment description" }
 
   before { sign_in(user) }
 
@@ -32,68 +35,52 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     expect_to_be_on_record_email_page
 
-    # Test required fields
-    click_button "Continue"
+    click_button "Add email"
+    expect(page).to have_error_summary "Please provide either an email file or a subject and body"
 
-    expect(page).to have_error_messages
-    expect(page).to have_error_summary "Correspondence date cannot be blank"
+    within_fieldset "Email content" do
+      attach_file "Upload a file", file
+    end
+
+    # Test required fields
+    click_button "Add email"
+
+    expect(page).to have_error_summary "Enter the date sent"
+
+    within_fieldset "Email content" do
+      expect(page).to have_content "Currently selected file: email_file.txt"
+    end
 
     # Test date validation
     fill_in "Day", with: "333"
-    click_button "Continue"
+    click_button "Add email"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Correspondence date must include a month and year"
-
-    fill_in_record_email_form(name: name, email: email, date: date)
-
-    expect_to_be_on_record_email_details_page
-
-    # Test required fields
-    click_button "Continue"
-
-    expect(page).to have_error_summary "Please provide either an email file or a subject and body"
-
-    attach_file "correspondence_email[email_file][file]", file
-    click_button "Continue"
-
-    expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(email: email, date: date, file: file)
-
-    # Test edit details pages retain entered information
-    click_link "Edit details"
-
-    expect_to_be_on_record_email_page
-    expect_record_email_form_to_have_entered_information(name: name, email: email, date: date)
-
-    click_button "Continue"
-
-    expect_to_be_on_record_email_details_page
-    fill_in "Summary", with: "Test summary"
+    expect(page).to have_error_summary "Date sent must include a month and year"
 
     within_fieldset "Email content" do
-      expect(page).to have_css("a", text: File.basename(file))
+      expect(page).to have_content "Currently selected file: email_file.txt"
     end
 
-    click_button "Continue"
+    fill_in_record_email_form(name: name, email: email, date: date)
+    fill_in "Summary", with: "Test summary"
 
-    expect_to_be_on_confirm_email_details_page
-    click_button "Continue"
-
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-    click_on "Activity"
-
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
-
-    click_link "View email"
+    click_button "Add email"
 
     expect_to_be_on_email_page(case_id: investigation.pretty_id)
     expect(page).to have_h1("Test summary")
     expect(page).to have_summary_item(key: "Date of email", value: "1 February 2020")
     expect(page).to have_summary_item(key: "From", value: "#{name} (#{email})")
-    expect(page).to have_summary_item(key: "Email", value: "attachment_filename.txt (0 Bytes)")
+    expect(page).to have_summary_item(key: "Email", value: "email_file.txt (0 Bytes)")
+
+    click_link "Back to allegation"
+    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
+    click_on "Activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
 
     # Test that another user in a different organisation cannot see correspondence
     sign_out
@@ -116,7 +103,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
   end
 
-  scenario "with summary and subject and body" do
+  scenario "with summary and subject and body and attachment" do
     visit "/cases/#{investigation.pretty_id}/supporting-information"
     click_link "Add supporting information"
 
@@ -126,21 +113,34 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
     expect_to_be_on_add_correspondence_page
     choose "Record email"
-    click_button "Continue"
 
+    click_button "Continue"
     expect_to_be_on_record_email_page
+
+    # Upload file early to check it persists through validation errors
+    within_fieldset "Attachments" do
+      attach_file "Upload a file", attachment
+      fill_in "Attachment description", with: attachment_description
+    end
+
+    click_button "Add email"
+
+    expect(page).to have_error_messages
+    expect(page).to have_error_summary "Enter the date sent"
+
     fill_in_record_email_form(name: name, email: email, date: date)
-
-    expect_to_be_on_record_email_details_page
-
     fill_in_record_email_details_form(summary: summary, subject: email_subject, body: body)
-    click_button "Continue"
 
-    expect_to_be_on_confirm_email_details_page
-    expect_confirm_email_details_page_to_show_entered_information(email: email, date: date, summary: summary, subject: email_subject, body: body)
-    click_button "Continue"
+    click_button "Add email"
 
+    expect_to_be_on_email_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("attachment_filename.txt")
+    expect(page).to have_text("Test attachment description")
+
+    click_link "Back to allegation"
     expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -166,7 +166,6 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date
     fill_in "Year",  with: date.year  if date
-    click_button "Continue"
   end
 
   def fill_in_record_email_details_form(summary:, subject:, body:)

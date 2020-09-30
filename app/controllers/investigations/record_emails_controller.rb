@@ -1,75 +1,94 @@
-class Investigations::RecordEmailsController < Investigations::CorrespondenceController
-  set_file_params_key :correspondence_email
-  set_attachment_names :email_file, :email_attachment
+class Investigations::RecordEmailsController < ApplicationController
+  def new
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :update?
+
+    @email_correspondence_form = EmailCorrespondenceForm.new
+
+    @investigation = @investigation.decorate
+  end
+
+  def create
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :update?
+
+    @email_correspondence_form = EmailCorrespondenceForm.new
+    @email_correspondence_form.attributes = email_correspondence_form_params
+
+    # Upload file to S3 if present, so that it can persist even if validation fails
+    if @email_correspondence_form.email_file.present?
+
+      @email_correspondence_form.email_file = ActiveStorage::Blob.create_after_upload!(
+        io: @email_correspondence_form.email_file,
+        filename: @email_correspondence_form.email_file.original_filename,
+        content_type: @email_correspondence_form.email_file.content_type
+      )
+
+      @email_correspondence_form.existing_email_file_id = @email_correspondence_form.email_file.signed_id
+
+    # Lookup existing file using signed ID if present (for example if previously uploaded
+    # but validation failed)
+    elsif @email_correspondence_form.existing_email_file_id.present? && @email_correspondence_form.email_file.blank?
+
+      @email_correspondence_form.email_file = ActiveStorage::Blob.find_signed(@email_correspondence_form.existing_email_file_id)
+
+    end
+
+    # Upload file to S3 if present, so that it can persist even if validation fails
+    if @email_correspondence_form.email_attachment.present?
+
+      @email_correspondence_form.email_attachment = ActiveStorage::Blob.create_after_upload!(
+        io: @email_correspondence_form.email_attachment,
+        filename: @email_correspondence_form.email_attachment.original_filename,
+        content_type: @email_correspondence_form.email_attachment.content_type
+      )
+
+      @email_correspondence_form.existing_email_attachment_id = @email_correspondence_form.email_attachment.signed_id
+
+    # Lookup existing file using signed ID if present (for example if previously uploaded
+    # but validation failed)
+    elsif @email_correspondence_form.email_attachment.blank? && @email_correspondence_form.existing_email_attachment_id.present?
+
+      @email_correspondence_form.email_attachment = ActiveStorage::Blob.find_signed(@email_correspondence_form.existing_email_attachment_id)
+
+    end
+
+    if @email_correspondence_form.valid?
+
+      result = AddEmailToCase.call(
+        @email_correspondence_form.attributes.except(
+          "existing_email_file_id",
+          "existing_email_attachment_id"
+        ).merge({
+          investigation: @investigation,
+          user: current_user
+        })
+      )
+
+      redirect_to investigation_email_path(@investigation.pretty_id, result.email)
+    else
+      @investigation = @investigation.decorate
+
+      render :new
+    end
+  end
 
 private
 
-  def audit_class
-    AuditActivity::Correspondence::AddEmail
-  end
-
-  def model_class
-    Correspondence::Email
-  end
-
-  def common_file_metadata
-    {
-      title: correspondence_params["overview"]
-    }
-  end
-
-  def email_file_metadata
-    get_attachment_metadata_params(:email_file)
-        .merge(common_file_metadata)
-        .merge(
-          description: "Original email as a file"
-        )
-  end
-
-  def email_attachment_metadata
-    get_attachment_metadata_params(:email_attachment)
-        .merge(common_file_metadata)
-  end
-
-  def request_params
-    return {} if params[correspondence_params_key].blank?
-
-    params.require(correspondence_params_key).permit(
+  def email_correspondence_form_params
+    params.require(:email_correspondence_form).permit(
       :correspondent_name,
       :email_address,
       :email_direction,
       :overview,
       :details,
       :email_subject,
-      :attachment_description
+      :email_file,
+      :email_attachment,
+      :attachment_description,
+      :existing_email_attachment_id,
+      :existing_email_file_id,
+      correspondence_date: %i[day month year]
     )
-  end
-
-  def set_attachments
-    @email_file_blob, @email_attachment_blob = load_file_attachments
-  end
-
-  def update_attachments
-    update_blob_metadata @email_file_blob, email_file_metadata
-    update_blob_metadata @email_attachment_blob, email_attachment_metadata
-  end
-
-  def correspondence_valid?
-    @correspondence.validate(step || steps.last)
-    @correspondence.validate_email_file_and_content(@email_file_blob) if step == :content
-    validate_blob_size(@email_file_blob, @correspondence.errors, "email file")
-    validate_blob_size(@email_attachment_blob, @correspondence.errors, "email attachment")
-    Rails.logger.error "#{__method__}: correspondence has errors: #{@correspondence.errors.full_messages}" if @correspondence.errors.any?
-    @correspondence.errors.empty?
-  end
-
-  def attach_files
-    attach_blob_to_attachment_slot(@email_file_blob, @correspondence.email_file)
-    attach_blob_to_attachment_slot(@email_attachment_blob, @correspondence.email_attachment)
-  end
-
-  def save_attachments
-    @email_file_blob.save! if @email_file_blob
-    @email_attachment_blob.save! if @email_attachment_blob
   end
 end
