@@ -1,6 +1,6 @@
 .govuk-grid-column-one-quarter class="govuk-!-margin-bottom-2"
   div class="govuk-!-margin-bottom-0"
-    = form_with(model: search, scope: "", url: investigations_search_path, method: :get) do |form|
+    = form_with(model: search, scope: "", url: investigations_search_path, method: :get, local: true) do |form|
 
       .search-box
         = render "form_components/govuk_input",

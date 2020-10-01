@@ -18,7 +18,8 @@
 
     <%= form_with(
           model: @comment,
-          url: investigation_activity_comment_path(@investigation)
+          url: investigation_activity_comment_path(@investigation),
+          local: true
         ) do |form| %>
       <%= render "form_components/govuk_textarea",
                  key: :body,
