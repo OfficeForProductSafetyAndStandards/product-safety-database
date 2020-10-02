@@ -106,6 +106,5 @@ module FileConcern
 
     attachment_slot.detach if attachment_slot.attached?
     attachment_slot.attach(blob)
-    attachment_slot.blob.save!
   end
 end
