@@ -40,7 +40,7 @@ RSpec.describe "User requests new secondary authentication code", type: :request
     end
 
     context "with an user session" do
-      subject(:request_code) { post new_resend_secondary_authentication_code_path }
+      subject(:request_code) { post resend_secondary_authentication_code_path }
 
       let(:user) { create(:user, :activated) }
 
@@ -58,6 +58,8 @@ RSpec.describe "User requests new secondary authentication code", type: :request
       it "sends the code to the user by sms" do
         request_code
 
+        perform_enqueued_jobs
+
         expect(notify_stub).to have_received(:send_sms).with(
           hash_including(phone_number: user.mobile_number, personalisation: { code: user.reload.direct_otp })
         )
@@ -72,7 +74,7 @@ RSpec.describe "User requests new secondary authentication code", type: :request
 
     context "with an user session corresponding to an user who haven't verified their mobile number" do
       subject(:request_code) do
-        post new_resend_secondary_authentication_code_path, params: { user: { mobile_number: mobile_number } }
+        post resend_secondary_authentication_code_path, params: { user: { mobile_number: mobile_number } }
       end
 
       let(:user) { create(:user, mobile_number_verified: false) }
@@ -123,6 +125,8 @@ RSpec.describe "User requests new secondary authentication code", type: :request
 
         it "sends the code to the user by sms" do
           request_code
+
+          perform_enqueued_jobs
 
           expect(notify_stub).to have_received(:send_sms).with(
             hash_including(phone_number: user.mobile_number, personalisation: { code: user.reload.direct_otp })

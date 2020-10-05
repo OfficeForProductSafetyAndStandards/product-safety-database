@@ -49,7 +49,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       click_button "Continue"
 
       expect_to_be_on_complainant_details_page
-      enter_contact_details(contact_details)
+      enter_contact_details(**contact_details)
 
       expect_to_be_on_enquiry_details_page
       fill_in_new_enquiry_details(with: enquiry_details)
@@ -60,7 +60,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       expect_page_to_have_h1("Overview")
 
       expect_details_on_summary_page
-      expect_protected_details_on_summary_page(contact_details)
+      expect_protected_details_on_summary_page(**contact_details)
 
       click_on "Activity"
       expect_details_on_activity_page(contact_details, enquiry_details)
@@ -75,7 +75,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       visit "/cases/#{investigation.pretty_id}"
 
       expect_details_on_summary_page
-      expect_protected_details_not_on_summary_page(contact_details)
+      expect_protected_details_not_on_summary_page(**contact_details)
 
       click_on "Activity"
 
@@ -90,7 +90,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       visit "/cases/#{investigation.pretty_id}"
 
       expect_details_on_summary_page
-      expect_protected_details_on_summary_page(contact_details)
+      expect_protected_details_on_summary_page(**contact_details)
 
       click_on "Activity"
 

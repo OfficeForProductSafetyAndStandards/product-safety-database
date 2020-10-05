@@ -48,8 +48,4 @@ private
   def attach_files
     attach_blob_to_attachment_slot(@transcript_blob, @correspondence.transcript)
   end
-
-  def save_attachments
-    @transcript_blob.save! if @transcript_blob
-  end
 end

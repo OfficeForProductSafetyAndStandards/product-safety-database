@@ -106,13 +106,13 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         it "sends a notification email to the case owner" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
             test_result.investigation.pretty_id,
             "Test team 1",
             "test-team@example.com",
             "User 2 (Test team 2) edited a test result on the allegation.",
             "Test result edited for Allegation"
-          )
+          ]))
         end
       end
 

@@ -21,7 +21,7 @@
 
     <p class="govuk-body">You can give the case a different risk level to the one it received in a risk assessment. You might want to do this if levels were different in each assessment, or if the assessment was provided by a third party.</p>
 
-    <%= form_with model: @update_risk_level_from_risk_assessment_form, url: investigation_risk_assessment_update_case_risk_level_path(@investigation, @risk_assessment), method: :patch, builder: ApplicationFormBuilder, html: {novalidate: true} do |form| %>
+    <%= form_with model: @update_risk_level_from_risk_assessment_form, url: investigation_risk_assessment_update_case_risk_level_path(@investigation, @risk_assessment), method: :patch, local: true, builder: ApplicationFormBuilder, html: {novalidate: true} do |form| %>
 
       <%= form.govuk_radios(:update_case_risk_level_to_match_investigation, legend: "Would you like to match the case risk level to the risk assessment level?", items: [
         {

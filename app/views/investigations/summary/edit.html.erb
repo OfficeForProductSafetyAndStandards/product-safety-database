@@ -21,7 +21,8 @@
     <%= form_with(model: @form,
                   url: investigation_summary_path(@investigation),
                   method: :patch,
-                  builder: ApplicationFormBuilder) do |form| %>
+                  builder: ApplicationFormBuilder,
+                  local: true) do |form| %>
 
       <%= form.govuk_text_area(:summary,
                                label: "Edit summary",
