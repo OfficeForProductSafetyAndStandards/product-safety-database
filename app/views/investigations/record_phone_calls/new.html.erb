@@ -1,4 +1,4 @@
-<%= page_title "Record phone call", errors: @correspondence.errors.any? %>
+<%= page_title "Record phone call", errors: @correspondence_form.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
@@ -8,7 +8,7 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(model: @correspondence, local: true, url: investigation_phone_calls_path(@investigation), local: true, buildler: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
+<%= form_with(model: @correspondence_form, local: true, url: investigation_phone_calls_path(@investigation), builder: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= render "form_components/govuk_error_summary", form: form %>
@@ -34,44 +34,39 @@
         </div>
       <% end %>
 
-      <%= render "form_components/govuk_date_input",
-                 form: form,
-                 key: :correspondence_date,
-                 fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date of call" } } %>
+      <%= form.govuk_date_input :correspondence_date, legend: "Date of call" %>
+      <%#= render "form_components/govuk_date_input",
+      form: form,
+      key: :correspondence_date,
+      fieldset: { legend: { classes: "govuk-fieldset__legend--m", text: "Date of call" } } %>
 
 
-
-      <%= render "form_components/govuk_input",
-                 key: :overview,
-                 form: form,
-                 classes: "govuk-!-width-two-thirds",
-                 label: { text: "Summary", classes: "govuk-label--m" },
-                 hint: { text: "Give an overview of the phone call" } %>
-
+      <%= form.govuk_input :overview, classes: "govuk-!-width-two-thirds", label: "Summary", label_classes: "govuk-label--m", hint: "Give an overview of the phone call" %>
+      <!--
+           <%= render "form_components/govuk_input",
+           key: :overview,
+           form: form,
+           classes: "govuk-!-width-two-thirds",
+           label: { text: "Summary", classes: "govuk-label--m" },
+           hint: { text: "Give an overview of the phone call" } %>
+      -->
       <%= render "components/govuk_fieldset",
                  legend: { text: "Details", classes: "govuk-fieldset__legend--m" },
                  describedBy: "details-hint" do %>
         <span id="details-hint" class="govuk-hint govuk-!-width-full">Upload the transcript if you have one, or enter notes below</span>
 
-        <%= form.fields_for :transcript do |subform| %>
-          <div class="govuk-form-group">
-            <% if @transcript_blob %>
-              <p>
-                Currently selected file: <%= link_to @transcript_blob.filename, @transcript_blob, target: "_blank", rel: 'noopener' %><br>]
-                Selecting a different one will replace it.
-              </p>
-            <% end %>
+        <div class="govuk-form-group">
+          <% if @transcript_blob %>
+            <p>
+              Currently selected file: <%= link_to @transcript_blob.filename, @transcript_blob, target: "_blank", rel: 'noopener' %><br>]
+              Selecting a different one will replace it.
+            </p>
+          <% end %>
 
-            <%= subform.label :file, "Upload a file", class: "govuk-label" %>
-            <%= subform.file_field :file, class: "govuk-file-upload" %>
-          </div>
-        <% end %>
+          <%= form.govuk_file_upload :transcript, label: "Upload a file", label_classes: "govuk-label", classes: "govuk-file-upload" %>
+        </div>
 
-        <%= render "form_components/govuk_textarea",
-                   key: :details,
-                   form: form,
-                   attributes: { maxlength: 50_000 },
-                   label: { text: "Notes", classes: "govuk-!-width-two-thirds" } %>
+        <%= form.govuk_text_area :details, label: "Notes", label_classes: "govuk-!-width-two-thirds", attributes: { maxlength: 50_000 } %>
 
       <% end %>
 
