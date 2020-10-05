@@ -38,7 +38,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
     # Test date validation
     fill_in "Day", with: "333"
-    click_button "Continue"
+    save_and_open_page
+
+    # byebug
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Correspondence date must include a month and year"
