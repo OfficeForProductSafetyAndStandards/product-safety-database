@@ -72,7 +72,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
     end
 
     context "when searching on an investigation's correspondence" do
-      let!(:correspondence) { create(:correspondence, investigation: investigation) }
+      let!(:correspondence) { create(:email, investigation: investigation) }
 
       context "when searching for the overview" do
         let(:query) { correspondence.overview }

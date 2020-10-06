@@ -1,4 +1,8 @@
 class Correspondence::PhoneCall < Correspondence
+  include DateConcern
+
+  date_attribute :correspondence_date
+
   has_one_attached :transcript
 
   def validate_transcript_and_content(file_blob)

@@ -73,6 +73,62 @@ class Investigations::RecordEmailsController < ApplicationController
     end
   end
 
+  def edit
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :update?
+
+    @email = @investigation.emails.find(params[:id])
+
+    @email_correspondence_form = EmailCorrespondenceForm.new(
+      @email.attributes.symbolize_keys.slice(
+        :correspondent_name,
+        :email_address,
+        :email_direction,
+        :overview,
+        :details,
+        :email_subject,
+        :attachment_description,
+        :correspondence_date
+      ).merge({
+        email_file: @email.email_file.try(:blob),
+        email_attachment: @email.email_attachment.try(:blob),
+        existing_email_attachment_id: @email.email_attachment.try(:blob).try(:id),
+        existing_email_file_id: @email.email_file.try(:blob).try(:id)
+      })
+    )
+
+    @investigation = @investigation.decorate
+  end
+
+  def update
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :update?
+
+    @email = @investigation.emails.find(params[:id])
+
+    @email_correspondence_form = EmailCorrespondenceForm.new
+    @email_correspondence_form.attributes = email_correspondence_form_params
+
+    if @email_correspondence_form.valid?
+
+      result = UpdateEmail.call(
+        @email_correspondence_form.attributes.except(
+          "existing_email_file_id",
+          "existing_email_attachment_id"
+        ).merge({
+          email: @email,
+          user: current_user
+        })
+      )
+
+      redirect_to investigation_email_path(@investigation.pretty_id, result.email)
+    else
+      @investigation = @investigation.decorate
+
+      render :edit
+    end
+  end
+
 private
 
   def email_correspondence_form_params

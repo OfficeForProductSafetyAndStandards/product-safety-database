@@ -18,15 +18,6 @@ FactoryBot.define do
     end
   end
 
-  factory :correspondence_email, class: "Correspondence::Email", parent: :correspondence do
-    after(:build) do |correspondence, evaluator|
-      correspondence.email_file.attach(
-        io: File.open(evaluator.correspondence_file),
-        filename: "email correspondence/"
-      )
-    end
-  end
-
   factory :correspondence_meeting, class: "Correspondence::Meeting", parent: :correspondence do
     after(:build) do |correspondence, evaluator|
       correspondence.transcript.attach(

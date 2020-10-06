@@ -1,4 +1,8 @@
 class Correspondence::Meeting < Correspondence
+  include DateConcern
+
+  date_attribute :correspondence_date
+
   has_one_attached :transcript
   has_one_attached :related_attachment
 
