@@ -45,7 +45,7 @@
         <span id="details-hint" class="govuk-hint govuk-!-width-full">Upload the transcript if you have one, or enter notes below</span>
 
         <div class="govuk-form-group">
-
+          <%= form.hidden_field :existing_transcript_file_id %>
           <% file_upload_field = capture do %>
             <%= form.govuk_file_upload :transcript,
                label: "Upload a file",
@@ -54,10 +54,10 @@
             %>
           <% end %>
 
-          <% if form.object.transcript&.attached? %>
+          <% if form.object.transcript.present? %>
             <p id="current-attachment-details">
               Currently selected file:
-              <%= link_to form.object.transcript.filename, form.object.transcript, target: "_blank", rel: 'noopener' %>
+              <%= link_to form.object.transcript.original_filename, form.object.transcript.path, target: "_blank", rel: 'noopener' %>
             </p>
 
             <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>

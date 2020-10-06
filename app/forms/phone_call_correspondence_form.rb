@@ -15,6 +15,25 @@ class PhoneCallCorrespondenceForm
   attribute :overview
   attribute :details
   attribute :transcript
+  attribute :existing_transcript_file_id
+
+  def cache_file!
+    return if transcript.blank?
+
+    blob = ActiveStorage::Blob.create_after_upload!(
+      io: transcript,
+      filename: transcript.original_filename,
+      content_type: transcript.content_type
+    )
+
+    self.existing_transcript_file_id = blob.id
+  end
+
+  def load_transcript_file
+    if existing_transcript_file_id.present? && transcript.nil?
+      self.transcript = ActiveStorage::Blob.find_signed(existing_transcript_file_id)
+    end
+  end
 
 private
 

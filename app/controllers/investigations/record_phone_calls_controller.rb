@@ -12,15 +12,25 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     authorize investigation, :update?
 
     @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
-    @correspondence = investigation.phone_calls.new(@correspondence_form.attributes)
+
+    @correspondence_form.cache_file!
+
+    @correspondence_form.load_transcript_file
+
+
 
     @investigation = investigation.decorate
 
     return render :new unless @correspondence_form.valid?
 
-    @correspondence.save!
+    result = AddPhoneCallToCase.call!(
+      @correspondence_form
+        .attributes
+        .except("existing_transcript_file_id")
+        .merge(investigation: investigation, user: current_user)
+    )
 
-    redirect_to investigation_phone_call_path(@investigation.pretty_id, @correspondence.id)
+    redirect_to investigation_phone_call_path(@investigation.pretty_id, result.correspondence)
   end
 
 private
@@ -32,6 +42,7 @@ private
       :overview,
       :details,
       :transcript,
+      :existing_transcript_file_id,
       correspondence_date: %i[day month year]
     )
   end
