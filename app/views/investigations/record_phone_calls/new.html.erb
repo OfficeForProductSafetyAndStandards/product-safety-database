@@ -11,7 +11,8 @@
 <%= form_with(model: @correspondence_form, local: true, url: investigation_phone_calls_path(@investigation), builder: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+
+      <%= error_summary(@correspondence_form.errors) %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
 
@@ -21,17 +22,8 @@
                  legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" } do %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <%= render "form_components/govuk_input",
-                       key: :correspondent_name,
-                       form: form,
-                       label: { text: "Name" } %>
-            <%= render "form_components/govuk_input",
-                       key: :phone_number,
-                       form: form,
-                       label: { text: "Phone number" },
-                       hint: { text: "Please include any dialing codes etc" } %>
-          </div>
-        </div>
+            <%= form.govuk_input :correspondent_name, label: "Name" %>
+            <%= form.govuk_input :phone_number, label: "Phone number", hint: "Please include any dialing codes etc" %>
       <% end %>
 
       <%= form.govuk_date_input :correspondence_date, legend: "Date of call" %>
