@@ -56,7 +56,6 @@ end
 group :development do
   gem "awesome_print", "~> 1.8", require: "ap"
   gem "byebug", "~> 11.1"
-  gem "debase", "~> 0.2"
   gem "listen", "~> 3.2"
   gem "m", "~> 1.5"
   gem "ruby-debug-ide", "~> 0.7"
