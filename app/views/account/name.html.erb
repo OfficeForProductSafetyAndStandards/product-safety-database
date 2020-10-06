@@ -11,7 +11,7 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <%= form_with model: @user, url: account_name_path, method: :patch do |form| %>
+    <%= form_with model: @user, url: account_name_path, method: :patch, local: true do |form| %>
 
       <%= render "form_components/govuk_input",
         key: :name,

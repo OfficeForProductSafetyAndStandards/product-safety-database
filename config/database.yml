@@ -12,6 +12,7 @@ test:
   database: psd_test
 
 production:
+  adapter: postgresql
   url: <%= ENV['RAILS_DATABASE_URL'] %>
   connect_timeout: 2
   variables:

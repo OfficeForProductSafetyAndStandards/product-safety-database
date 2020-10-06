@@ -58,7 +58,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       click_button "Continue"
 
       expect_to_be_on_allegation_complainant_details_page
-      enter_contact_details(contact_details)
+      enter_contact_details(**contact_details)
 
       expect_to_be_on_allegation_details_page
       click_button "Create allegation"
@@ -68,27 +68,27 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       expect(page).to have_summary_error("Enter the primary hazard")
       expect(page).to have_summary_error("Enter a valid product category")
 
-      enter_allegation_details(allegation_details)
+      enter_allegation_details(**allegation_details)
 
       expect_confirmation_banner("Allegation was successfully created")
 
       expect_page_to_have_h1("Overview")
 
       expect_details_on_summary_page
-      expect_protected_details_on_summary_page(contact_details)
+      expect_protected_details_on_summary_page(**contact_details)
 
       click_link "Products (0)"
       click_link "Add product"
 
       expect(page).to have_css(".govuk-heading-m", text: "Add product")
 
-      enter_product_details(product_details)
+      enter_product_details(**product_details)
 
       expect_confirmation_banner("Product was successfully created.")
 
       click_link "Products (1)"
 
-      expect_page_to_show_entered_product_details(product_details)
+      expect_page_to_show_entered_product_details(**product_details)
 
       click_link "Activity"
       expect_details_on_activity_page(contact_details, allegation_details)
@@ -103,7 +103,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       visit "/cases/#{investigation.pretty_id}"
 
       expect_details_on_summary_page
-      expect_protected_details_not_on_summary_page(contact_details)
+      expect_protected_details_not_on_summary_page(**contact_details)
 
       click_link "Activity"
 
@@ -118,7 +118,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       visit "/cases/#{investigation.pretty_id}"
 
       expect_details_on_summary_page
-      expect_protected_details_on_summary_page(contact_details)
+      expect_protected_details_on_summary_page(**contact_details)
 
       click_link "Activity"
 

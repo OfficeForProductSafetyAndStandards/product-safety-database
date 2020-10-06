@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   before_action :has_viewed_introduction
   before_action :set_cache_headers
 
-  helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user
+  helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user, :root_path_for
 
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
 
@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
 
     items = []
     unless current_user.is_opss?
-      items.push text: "Home", href: root_path, active: params[:controller] == "homepage"
+      items.push text: "Home", href: authenticated_opss_root_path, active: params[:controller] == "homepage"
     end
     items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators/)
     items.push text: "Businesses", href: businesses_path, active: params[:controller].start_with?("businesses")
@@ -109,11 +109,15 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || root_path
+    stored_location_for(resource) || root_path_for(resource)
   end
 
   def after_sign_out_path_for(*)
-    root_path
+    unauthenticated_root_path
+  end
+
+  def root_path_for(resource)
+    resource.is_opss? ? authenticated_opss_root_path : authenticated_msa_root_path
   end
 
 private

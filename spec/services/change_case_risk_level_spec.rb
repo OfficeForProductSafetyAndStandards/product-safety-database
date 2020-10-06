@@ -90,13 +90,13 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         end
 
         it "sends an email for the risk level being set" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(a_hash_including(args: [
             email: creator_team.team_recipient_email,
             name: creator_team.name,
             investigation: investigation,
             update_verb: "set",
             level: "High risk"
-          )
+          ]))
         end
 
         it "sets a change action in the result context" do
@@ -162,13 +162,13 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         end
 
         it "sends an email for the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(a_hash_including(args: [
             email: creator_team.team_recipient_email,
             name: creator_team.name,
             investigation: investigation,
             update_verb: "changed",
             level: new_custom
-          )
+          ]))
         end
 
         it "sets a change action in the result context" do
@@ -211,13 +211,13 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_elasticsearch, :with_test_queu
         end
 
         it "sends an email for the removal" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(a_hash_including(args: [
             email: creator_team.team_recipient_email,
             name: creator_team.name,
             investigation: investigation,
             update_verb: "removed",
             level: "Not set"
-          )
+          ]))
         end
       end
     end

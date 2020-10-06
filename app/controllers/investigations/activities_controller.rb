@@ -1,7 +1,6 @@
 module Investigations
   class ActivitiesController < ApplicationController
     include ActionView::Helpers::SanitizeHelper
-    include LoadHelper
 
     def show
       set_investigation_with_associations
@@ -26,12 +25,14 @@ module Investigations
                          .find_by!(pretty_id: params[:investigation_pretty_id])
 
       authorize investigation, :view_non_protected_details?
+
+      preload_activities(investigation)
+
       @investigation = investigation.decorate
-      preload_activities
     end
 
-    def preload_activities
-      @activities = @investigation.activities.eager_load(:source)
+    def preload_activities(investigation)
+      @activities = investigation.activities.eager_load(:source)
       preload_manually(
         @activities.select { |a| a.respond_to?("attachment") },
         [{ attachment_attachment: :blob }]
@@ -48,6 +49,10 @@ module Investigations
         @activities.select { |a| a.respond_to?("correspondence") },
         [:correspondence]
       )
+    end
+
+    def preload_manually(records, associations)
+      ActiveRecord::Associations::Preloader.new.preload(records, associations)
     end
   end
 end

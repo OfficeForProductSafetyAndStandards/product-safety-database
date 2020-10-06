@@ -98,13 +98,7 @@ module FileConcern
   end
 
   def attach_blobs_to_list(*blobs, documents)
-    blobs.each do |blob|
-      next unless blob
-
-      attachments = documents.attach(blob)
-      attachment = attachments.last
-      attachment.blob.save!
-    end
+    blobs.compact.each { |blob| documents.attach(blob) }
   end
 
   def attach_blob_to_attachment_slot(blob, attachment_slot)
@@ -112,6 +106,5 @@ module FileConcern
 
     attachment_slot.detach if attachment_slot.attached?
     attachment_slot.attach(blob)
-    attachment_slot.blob.save!
   end
 end

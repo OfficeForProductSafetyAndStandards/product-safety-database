@@ -20,7 +20,7 @@
         li tested a product and shared the results
 
       = link_to "Get started",
-                root_path,
+                root_path_for(current_user),
                 class: "govuk-button app-button--inverted app-button--l \
                         govuk-!-margin-right-3 govuk-!-margin-bottom-3",
                 role: "button",

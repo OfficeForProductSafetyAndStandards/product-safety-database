@@ -29,5 +29,5 @@
             | Job title or role description
           td.govuk-table__cell
             = @contact.job_title
-= form_with url: business_contact_path(@business, @contact), method: :delete do |form|
+= form_with url: business_contact_path(@business, @contact), method: :delete, local: true do |form|
     = form.submit "Remove contact", class: "govuk-button govuk-button--warning"
