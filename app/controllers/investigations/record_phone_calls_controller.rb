@@ -12,12 +12,8 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     authorize investigation, :update?
 
     @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
-
     @correspondence_form.cache_file!
-
     @correspondence_form.load_transcript_file
-
-
 
     @investigation = investigation.decorate
 
