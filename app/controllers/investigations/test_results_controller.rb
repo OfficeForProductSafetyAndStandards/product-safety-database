@@ -1,6 +1,6 @@
 class Investigations::TestResultsController < ApplicationController
   include FileConcern
-  set_attachment_names :file
+  set_attachment_names :test_result_file
   set_file_params_key :test_result
 
   def new
@@ -42,6 +42,8 @@ class Investigations::TestResultsController < ApplicationController
     update_attachment
     if test_result_saved?
       session[test_result_session_key] = nil
+      initialize_file_attachments
+
       redirect_to investigation_supporting_information_index_path(@investigation),
                   flash: {
                     success: "#{@test_result.pretty_name.capitalize} was successfully recorded."
@@ -73,8 +75,8 @@ class Investigations::TestResultsController < ApplicationController
     result = UpdateTestResult.call(
       test_result: @test_result,
       new_attributes: test_result_attributes,
-      new_file: params[:test_result][:file][:file],
-      new_file_description: params[:test_result][:file][:description],
+      new_file: params[:test_result][:test_result_file][:file],
+      new_file_description: params[:test_result][:test_result_file][:description],
       user: current_user
     )
 

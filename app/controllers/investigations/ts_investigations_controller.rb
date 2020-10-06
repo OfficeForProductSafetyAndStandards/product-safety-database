@@ -6,7 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include FileConcern
   include FlowWithCoronavirusForm
-  set_attachment_names :file, :risk_assessment_file
+  set_attachment_names :file, :test_result_file, :risk_assessment_file
   set_file_params_key :file
 
   steps :coronavirus,
@@ -188,7 +188,19 @@ private
     @test = @investigation.tests.build(test_params)
     @test.set_dates_from_params(params[:test])
     @test.product = @product
-    @file_blob, * = load_file_attachments :test
+
+    attachment_params = get_attachment_params(:test_result_file, :test)
+
+    if (file = attachment_params[:file])
+      @file_blob = ActiveStorage::Blob.create_after_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type,
+        metadata: get_attachment_metadata_params_from_attachment_params(attachment_params)
+      )
+      @file_blob.analyze_later
+    end
+
     @test.documents.attach(@file_blob) if @file_blob
     set_repeat_step(:test)
   end
@@ -419,7 +431,7 @@ private
       update_blob_metadata @file_blob, test_file_metadata
       @file_blob.save! if @file_blob
       session[:test_results] << { test: @test.attributes, file_blob_id: @file_blob&.id }
-      session.delete :file
+      session.delete :test_result_file
       session[further_key(step)] = @repeat_step
     end
   end
@@ -545,6 +557,7 @@ private
             created_by: current_user.id
           }
         )
+        @file_blob.analyze_later
       end
 
       risk_assessment_form_valid = @risk_assessment_form.invalid?
