@@ -26,7 +26,7 @@ class PhoneCallCorrespondenceForm
       content_type: transcript.content_type
     )
 
-    self.existing_transcript_file_id = blob.id
+    self.existing_transcript_file_id = blob.signed_id
   end
 
   def load_transcript_file

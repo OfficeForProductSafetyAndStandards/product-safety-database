@@ -111,13 +111,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_record_phone_call_details_page
 
     fill_in_record_phone_call_details_form(summary: summary, notes: notes)
-    click_button "Continue"
+    click_button "Add phone call"
 
-    expect_to_be_on_confirm_phone_call_details_page
-    expect_confirm_phone_call_details_page_to_show_entered_information(name: name, phone: phone, date: date, summary: summary, notes: notes)
-    click_button "Continue"
-
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -146,18 +142,6 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
   def fill_in_record_phone_call_details_form(summary:, notes:)
     fill_in "Summary", with: summary if summary
     fill_in "Notes", with: notes if notes
-  end
-
-  def expect_confirm_phone_call_details_page_to_show_entered_information(name:, phone:, date:, file: nil, summary: nil, notes: nil)
-    expect(page.find("dt", text: "Call with")).to have_sibling("dd", text: "#{name} (#{phone})")
-    expect(page.find("dt", text: "Date")).to have_sibling("dd", text: date.strftime("%d/%m/%Y"))
-
-    if file
-      expect(page.find("dt", text: "Attachments")).to have_sibling("dd", text: File.basename(file))
-    else
-      expect(page.find("dt", text: "Summary")).to have_sibling("dd", text: summary)
-      expect(page.find("dt", text: "Content")).to have_sibling("dd", text: notes)
-    end
   end
 
   def expect_record_phone_call_form_to_have_entered_information(name:, phone:, date:)
