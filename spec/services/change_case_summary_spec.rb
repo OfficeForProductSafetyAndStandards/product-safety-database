@@ -97,13 +97,13 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_elasticsearch, :with_test_queue_
         before { ChangeCaseOwner.call!(investigation: investigation, owner: user_same_team, user: user) }
 
         it "sends an email to the user" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
             investigation.pretty_id,
             user_same_team.name,
             user_same_team.email,
             "Enquiry summary was updated by #{user.name}.",
             expected_email_subject
-          )
+          ]))
         end
       end
 
@@ -115,13 +115,13 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_elasticsearch, :with_test_queue_
           before { ChangeCaseOwner.call!(investigation: investigation, owner: user_other_team, user: user) }
 
           it "sends an email to the user" do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
               investigation.pretty_id,
               user_other_team.name,
               user_other_team.email,
               "Enquiry summary was updated by #{user.name} (#{user.team.name}).",
               expected_email_subject
-            )
+            ]))
           end
         end
 
@@ -129,13 +129,13 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_elasticsearch, :with_test_queue_
           before { ChangeCaseOwner.call!(investigation: investigation, owner: other_team, user: user) }
 
           it "sends an email to the team email" do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
               investigation.pretty_id,
               other_team.name,
               other_team.email,
               "Enquiry summary was updated by #{user.name} (#{user.team.name}).",
               expected_email_subject
-            )
+            ]))
           end
 
           context "when the owner team does not have an email address" do
@@ -145,13 +145,13 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_elasticsearch, :with_test_queue_
             before { create(:user, team: other_team, organisation: other_team.organisation) }
 
             it "sends an email to each of the team's active users" do
-              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
                 investigation.pretty_id,
                 user_other_team.name,
                 user_other_team.email,
                 "Enquiry summary was updated by #{user.name} (#{user.team.name}).",
                 expected_email_subject
-              )
+              ]))
             end
           end
         end

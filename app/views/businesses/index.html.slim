@@ -13,7 +13,7 @@
 .govuk-grid-row
   .govuk-grid-column-one-quarter class="govuk-!-margin-bottom-2"
     div class="govuk-!-margin-bottom-0"
-      = form_with(model: @search, scope: "", url: businesses_path, method: :get) do |form|
+      = form_with(model: @search, scope: "", url: businesses_path, method: :get, local: true) do |form|
         .search-box
           = form.hidden_field :sort, value: "relevance"
           = render "form_components/govuk_input",

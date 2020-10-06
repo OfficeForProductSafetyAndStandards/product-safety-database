@@ -37,10 +37,13 @@ class DocumentsController < ApplicationController
 
   # DELETE /documents/1
   def destroy
-    @file.destroy!
+    ActiveRecord::Base.transaction do
+      AuditActivity::Document::Destroy.from(@file.blob, @parent) if @parent.is_a? Investigation
+      @file.destroy!
+    end
+
     return redirect_to @parent, flash: { success: "File was successfully removed" } unless @parent.is_a? Investigation
 
-    AuditActivity::Document::Destroy.from(@file.blob, @parent)
     redirection_path = @file.image? ? investigation_images_path(@parent) : investigation_supporting_information_index_path(@parent)
     redirect_to redirection_path, flash: { success: "File was successfully removed" }
   end

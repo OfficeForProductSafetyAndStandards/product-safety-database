@@ -77,13 +77,13 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
           end
 
           it "sends a notification email to the case owner" do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
               investigation.pretty_id,
               owner.name,
               owner.email,
               "Product was added to the allegation by #{user.name}.",
               "Allegation updated"
-            )
+            ]))
           end
         end
       end
@@ -111,13 +111,13 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
             before { create(:user, team: owner) }
 
             it "sends an email to all active users on the team" do
-              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
                 investigation.pretty_id,
                 active_user_owner_team.name,
                 active_user_owner_team.email,
                 "Product was added to the allegation by #{user.name} (#{user.team.name}).",
                 "Allegation updated"
-              )
+              ]))
             end
           end
 
@@ -125,13 +125,13 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
             let(:team_recipient_email) { Faker::Internet.email }
 
             it "sends a notification email to the team email" do
-              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
                 investigation.pretty_id,
                 owner.name,
                 owner.team_recipient_email,
                 "Product was added to the allegation by #{user.name} (#{user.team.name}).",
                 "Allegation updated"
-              )
+              ]))
             end
           end
         end

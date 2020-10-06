@@ -56,9 +56,4 @@ private
     attach_blob_to_attachment_slot(@transcript_blob, @correspondence.transcript)
     attach_blob_to_attachment_slot(@related_attachment_blob, @correspondence.related_attachment)
   end
-
-  def save_attachments
-    @transcript_blob.save! if @transcript_blob
-    @related_attachment_blob.save! if @related_attachment_blob
-  end
 end

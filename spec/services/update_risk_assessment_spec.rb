@@ -151,13 +151,13 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         # rubocop:enable RSpec/ExampleLength
 
         it "sends a notification email to the case owner" do
-          expect { update_risk_assessment }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
+          expect { update_risk_assessment }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
             risk_assessment.investigation.pretty_id,
             investigation.owner_user.name,
             investigation.owner_user.email,
             "User 2 (Team 2) edited a risk assessment on the allegation.",
             "Risk assessment edited for Allegation"
-          )
+          ]))
         end
       end
 
