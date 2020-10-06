@@ -8,13 +8,19 @@ class Investigations::RecordPhoneCallsController < ApplicationController
   end
 
   def create
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+
     @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
-    @correspondence = Correspondence::PhoneCall.new(@correspondence_form.attributes)
-    @correspondence.save!
+    @correspondence = investigation.phone_calls.new(@correspondence_form.attributes)
+
+    @investigation = investigation.decorate
 
     return render :new unless @correspondence_form.valid?
 
-    redirect_to @correspondence
+    @correspondence.save!
+
+    redirect_to investigation_phone_call_path(@investigation.pretty_id, @correspondence.id)
   end
 
 private
@@ -25,8 +31,8 @@ private
       :phone_number,
       :overview,
       :details,
-      :correspondence_date,
-      transcript: []
+      :transcript,
+      correspondence_date: %i[day month year]
     )
   end
 end

@@ -2,6 +2,11 @@ class PhoneCallCorrespondenceForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
+  validates :correspondence_date,
+            presence: true,
+            real_date: true,
+            complete_date: true
+
   validate :validate_transcript_and_content
 
   attribute :correspondence_date, :govuk_date
@@ -13,8 +18,8 @@ class PhoneCallCorrespondenceForm
 
 private
 
-  def validate_transcript_and_content(file_blob)
-    if file_blob.nil? && (overview.empty? || details.empty?)
+  def validate_transcript_and_content
+    if transcript.nil? && (overview.empty? || details.empty?)
       errors.add(:base, "Please provide either a transcript or complete the summary and notes fields")
     end
   end

@@ -336,6 +336,13 @@ en:
               must_be_real: Date sent must be a real date
               incomplete: Date sent must include a %{missing_date_parts}
               in_future: Date sent must be today or in the past
+        phone_call_correspondence_form:
+          attributes:
+            correspondence_date:
+              blank: Enter the date of call
+              must_be_real: Date of call must be a real date
+              incomplete: Date of call must include a %{missing_date_parts}
+              in_future: Date of call must be today or in the past
 
   activerecord:
     models:
