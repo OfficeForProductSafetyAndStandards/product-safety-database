@@ -54,15 +54,12 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   let(:test_results) do
     [
-      {
-        legislation: Rails.application.config.legislation_constants["legislation"].sample,
-        date: Faker::Date.backward(days: 14),
-        result: %w[Pass Fail].sample,
-        details: Faker::Lorem.sentence,
-        file: Rails.root + "test/fixtures/files/test_result.txt"
-      }
+      generate_test_result,
+      generate_test_result
     ]
   end
+
+  let(:incomplete_test_result) { generate_test_result }
 
   let(:risk_assessments) do
     assessment = lambda {
@@ -79,6 +76,16 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       assessment.call,
       assessment.call
     ]
+  end
+
+  def generate_test_result
+    {
+      legislation: Rails.application.config.legislation_constants["legislation"].sample,
+      date: Faker::Date.backward(days: 14),
+      result: %w[Pass Fail].sample,
+      details: Faker::Lorem.sentence,
+      file: Rails.root + "test/fixtures/files/test_result.txt"
+    }
   end
 
   context "when signed in as a non-OPSS user" do
@@ -151,7 +158,15 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           expect_to_be_on_test_result_details_page
         end
 
-        skip_page
+        # Test recall of information when there is an error - particularly attachments
+        incomplete_test_data = incomplete_test_result.slice(:legislation, :date, :details, :file)
+
+        fill_in_test_results_page(with: incomplete_test_data)
+        expect_to_be_on_test_result_details_page
+        expect_test_result_page_to_show_entered_information(incomplete_test_data)
+        expect(page).to have_error_summary "Select result of the test"
+
+        fill_in_test_results_page(with: incomplete_test_result, add_another: false)
 
         expect_to_be_on_risk_assessment_details_page
 
@@ -189,7 +204,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
         expect_case_businesses_page_to_show(label: "Advertiser", business: business_details[:advertiser])
 
-        click_link "Supporting information (5)"
+        click_link "Supporting information (7)"
 
         risk_assessments.each do |assessment|
           expect_case_supporting_information_page_to_show(assessment)
@@ -201,7 +216,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_case_activity_page_to_show_allegation_logged
         expect_case_activity_page_to_show_product_added
         corrective_actions.each { |action| expect_case_activity_page_to_show_corrective_action(action) }
-        test_results.each { |test| expect_case_activity_page_to_show_test_result(test) }
+        (test_results + [incomplete_test_result]).each { |test| expect_case_activity_page_to_show_test_result(test) }
         risk_assessments.each { |assessment| expect_case_activity_page_to_show_risk_assessment(assessment) }
       end
     end
@@ -308,6 +323,19 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
   end
 
+  def expect_test_result_page_to_show_entered_information(details)
+    expect(page).to have_field("Against which legislation?", with: details[:legislation])
+    expect(page).to have_field("Day", with: details[:date].day)
+    expect(page).to have_field("Month", with: details[:date].month)
+    expect(page).to have_field("Year", with: details[:date].year)
+    within_fieldset("What was the result?") do
+      expect(page).to have_checked_field(details[:result]) if details[:result]
+    end
+    within_fieldset "Test report attachment" do
+      expect(page).to have_text("Currently selected file: #{File.basename(details[:file])}")
+    end
+  end
+
   def expect_case_details_page_to_show_entered_information
     expect(page).to have_text("#{product_details[:name]}, #{product_details[:type]} – #{hazard_type.downcase} hazard")
     expect(page).to have_text("Product reported because it is unsafe and non-compliant.")
@@ -389,9 +417,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_test_result(test)
     expect(page).to have_selector("h1", text: "Activity")
-    item = page.find("h3", text: "#{test[:result]}ed test").find(:xpath, "..")
+    item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
     expect(item).to have_text("Test date: #{test[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end
 
@@ -499,15 +528,19 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     click_button "Continue"
   end
 
-  def fill_in_test_results_page(with:)
+  def fill_in_test_results_page(with:, add_another: true)
     select with[:legislation], from: "Against which legislation?"
     fill_in "Day", with: with[:date].day
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
-    choose with[:result]
+    choose with[:result] if with[:result]
     fill_in "Further details", with: with[:details]
-    attach_file "Upload a file", with[:file]
-    choose "test_further_test_results_yes"
+
+    unless page.has_text?("Currently selected file")
+      attach_file "Upload a file", with[:file]
+    end
+
+    choose(add_another ? "test_further_test_results_yes" : "test_further_test_results_no")
     click_button "Continue"
   end
 

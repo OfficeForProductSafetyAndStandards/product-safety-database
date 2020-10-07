@@ -199,6 +199,9 @@ private
         metadata: get_attachment_metadata_params_from_attachment_params(attachment_params)
       )
       @file_blob.analyze_later
+      session[:test_result_file] = @file_blob.id
+    elsif session[:test_result_file].present?
+      @file_blob = ActiveStorage::Blob.find_by(id: session[:test_result_file])
     end
 
     @test.documents.attach(@file_blob) if @file_blob
@@ -229,6 +232,8 @@ private
     session[:files] = []
     session[:product_files] = []
     session.delete :file
+    session.delete :test_result_file
+    session.delete :risk_assessment_file
     session[:selected_businesses] = []
     session[:businesses] = []
     session[:risk_assessments] = []
