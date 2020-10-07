@@ -1,0 +1,41 @@
+<% if !activity.can_display_all_data?(current_user) %>
+  <%= render "restricted", activity: activity %>
+<% else %>
+
+
+  <div class="govuk-body">
+
+    <p>Changes:</p>
+
+    <% if activity.new_summary %>
+      Summary: <b><%= activity.new_summary %></b><br>
+    <% end %>
+
+    <% if activity.new_correspondence_date %>
+      Date of email: <b><%= activity.new_correspondence_date.to_s(:govuk) %></b><br>
+    <% end %>
+
+    <% if activity.new_correspondent_name %>
+      Contact: <b><%= activity.new_correspondent_name %></b><br>
+    <% end %>
+
+    <% if activity.new_email_address %>
+      Email address: <b><%= activity.new_email_address %></b><br>
+    <% end %>
+
+    <% if activity.new_details %>
+      Email: <b><%= format_with_line_breaks(activity.new_new_details) %></b><br>
+    <% end %>
+
+    <% if activity.new_email_file %>
+      Email: <b><%= activity.new_email_file %></b><br>
+    <% end %>
+
+    <%= activity.metadata.inspect %>
+
+
+  </div>
+
+  <%= link_to "View email", investigation_email_path(activity.investigation, activity.email_id) %>
+
+<% end %>

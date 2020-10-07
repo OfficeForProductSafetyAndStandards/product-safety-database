@@ -63,7 +63,7 @@
       <% elsif activity.is_a?(AuditActivity::CorrectiveAction::Add) && activity.corrective_action %>
         <%=  link_to "View corrective action", investigation_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
 
-      <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) %>
+      <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) && activity.correspondence %>
         <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link" %>
 
       <% elsif activity.is_a?(AuditActivity::Correspondence::AddPhoneCall) %>
