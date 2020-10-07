@@ -38,7 +38,7 @@ class PhoneCallCorrespondenceForm
 private
 
   def validate_transcript_and_content
-    if transcript.nil? && (overview.empty? || details.empty?)
+    if transcript.nil? & (overview.blank? || details.blank?)
       errors.add(:base, "Please provide either a transcript or complete the summary and notes fields")
     end
   end

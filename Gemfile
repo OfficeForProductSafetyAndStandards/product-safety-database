@@ -51,11 +51,11 @@ group :development, :test do
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
   gem "pry-doc", "~> 1.1"
+  gem "awesome_print", "~> 1.8", require: "ap"
+  gem "byebug", "~> 11.1"
 end
 
 group :development do
-  gem "awesome_print", "~> 1.8", require: "ap"
-  gem "byebug", "~> 11.1"
   gem "debase", "~> 0.2"
   gem "listen", "~> 3.2"
   gem "m", "~> 1.5"

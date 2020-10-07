@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_test_queue_adapter do
-  include ActionDispatch::TestProcess::FixtureFile
+  include ActiveSupport::Testing::FileFixtures
 
   subject(:update_corrective_action) do
     described_class.call(
