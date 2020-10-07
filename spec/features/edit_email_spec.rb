@@ -28,7 +28,12 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
     )
   end
 
-  before { sign_in(user) }
+  before do
+    email.email_attachment.blob.metadata[:description] = "Safety document"
+    email.email_attachment.blob.save!
+
+    sign_in(user)
+  end
 
   scenario "Editing an email" do
     visit "/cases/#{investigation.pretty_id}/emails/#{email.id}"
@@ -66,7 +71,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
 
     within_fieldset "Attachments" do
       expect(page).to have_text("Currently selected file: attachment_filename.txt")
-      expect(page).to have_field("Attachment description", text: "")
+      expect(page).to have_field("Attachment description", text: "Safety document")
     end
 
     # Change some values to introduce a validation error

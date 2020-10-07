@@ -31,8 +31,13 @@
       Email: <b><%= activity.new_email_file %></b><br>
     <% end %>
 
-    <%= activity.metadata.inspect %>
+    <% if activity.new_email_attachment %>
+      Email attachment: <b><%= activity.new_email_attachment %></b><br>
+    <% end %>
 
+    <% if activity.new_attachment_description %>
+      Attachment description: <b><%= activity.new_attachment_description %></b><br>
+    <% end %>
 
   </div>
 

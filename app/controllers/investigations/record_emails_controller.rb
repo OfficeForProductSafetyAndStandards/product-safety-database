@@ -87,13 +87,13 @@ class Investigations::RecordEmailsController < ApplicationController
         :overview,
         :details,
         :email_subject,
-        :attachment_description,
         :correspondence_date
       ).merge({
         email_file: @email.email_file.try(:blob),
         email_attachment: @email.email_attachment.try(:blob),
         existing_email_attachment_id: @email.email_attachment.try(:blob).try(:id),
-        existing_email_file_id: @email.email_file.try(:blob).try(:id)
+        existing_email_file_id: @email.email_file.try(:blob).try(:id),
+        attachment_description: @email.email_attachment.try(:metadata).to_h["description"]
       })
     )
 

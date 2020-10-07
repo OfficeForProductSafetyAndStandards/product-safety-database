@@ -10,7 +10,7 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
   let(:creator) { user }
   let(:owner) { user }
 
-  let(:email) do
+  let!(:email) do
     create(:email,
            investigation: investigation,
            correspondence_date: Date.new(2019, 1, 1),
@@ -19,7 +19,13 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
            email_address: "jones@example.com",
            email_direction: "inbound",
            email_subject: "Re: safety issue",
-           email_file: Rack::Test::UploadedFile.new("spec/fixtures/files/email.txt"))
+           email_file: Rack::Test::UploadedFile.new("spec/fixtures/files/email.txt"),
+           email_attachment: Rack::Test::UploadedFile.new("spec/fixtures/files/email_attachment.txt"))
+  end
+
+  before do
+    email.email_attachment.blob.metadata[:description] = ""
+    email.email_attachment.blob.save!
   end
 
   describe ".call" do
@@ -58,6 +64,7 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
       let(:email_file) { nil }
       let(:email_subject) { "Re: safety issue" }
       let(:overview) { nil }
+      let(:attachment_description) { "" }
 
       let(:result) do
         described_class.call(
@@ -72,6 +79,7 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
           email_file: email_file,
           email_subject: email_subject,
           overview: overview,
+          attachment_description: attachment_description
         )
       end
 
@@ -126,8 +134,10 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
         # rubocop:enable RSpec/ExampleLength
       end
 
-      context "when a new email file has been uploaded" do
+      context "when a new email and attachment files have been uploaded" do
         let(:email_file) { Rack::Test::UploadedFile.new("spec/fixtures/files/email2.txt") }
+        let(:email_attachment) { Rack::Test::UploadedFile.new("spec/fixtures/files/risk_assessment.txt") }
+        let(:attachment_description) { "Risk assessment" }
 
         it "detaches the old file and attaches the new one", :aggregate_failures do
           expect(result).to be_success
@@ -141,7 +151,9 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
           expect(activity_entry.metadata).to eql({
             "email_id" => email.id,
             "updates" => {
-              "email_filename" => ["email.txt", "email2.txt"]
+              "email_filename" => ["email.txt", "email2.txt"],
+              "email_attachment_filename" => ["email_attachment.txt", "risk_assessment.txt"],
+              "attachment_description" => ["", "Risk assessment"]
             }
           })
         end

@@ -8,6 +8,8 @@ class UpdateEmail
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     @previous_email_filename = email.email_file.try(:filename)
+    @previous_email_attachment_filename = email.email_attachment.try(:filename)
+    @previous_attachment_description = email.email_attachment.try(:metadata).to_h["description"]
 
     ActiveRecord::Base.transaction do
       email.attributes = {
@@ -17,10 +19,16 @@ class UpdateEmail
         email_direction: email_direction,
         overview: overview,
         details: details,
-        email_subject: email_subject,
-        email_file: email_file,
-        email_attachment: email_attachment
+        email_subject: email_subject
       }
+
+      if email_file
+        email.email_file.attach(email_file)
+      end
+
+      if email_attachment
+        email.email_attachment.attach(email_attachment)
+      end
 
       break if no_changes?
 
@@ -37,7 +45,7 @@ class UpdateEmail
 private
 
   def no_changes?
-    !email.changed? && !email_file
+    !email.changed? && !email_file && (attachment_description == @previous_attachment_description.to_s)
   end
 
   def update_attachment_description!
@@ -63,7 +71,10 @@ private
     AuditActivity::Correspondence::EmailUpdated.build_metadata(
       email: email,
       email_changed: email_file.present?,
-      previous_email_filename: @previous_email_filename
+      previous_email_filename: @previous_email_filename,
+      email_attachment_changed: email_attachment.present?,
+      previous_email_attachment_filename: @previous_email_attachment_filename,
+      previous_attachment_description: @previous_attachment_description
     )
   end
 end
