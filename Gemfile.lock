@@ -433,8 +433,6 @@ GEM
       rubocop
     rubocop-rspec (1.42.0)
       rubocop (>= 0.87.0)
-    ruby-debug-ide (0.7.2)
-      rake (>= 0.8.1)
     ruby-progressbar (1.10.1)
     rubyzip (1.3.0)
     safe_yaml (1.0.5)
@@ -621,7 +619,6 @@ DEPENDENCIES
   rubocop-govuk (~> 3.17)
   rubocop-performance (~> 1.8)
   rubocop-rspec (~> 1.42)
-  ruby-debug-ide (~> 0.7)
   sass-rails (~> 6.0)
   scout_apm (~> 2.6)
   scss_lint-govuk (~> 0.2)

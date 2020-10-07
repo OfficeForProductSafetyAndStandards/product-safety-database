@@ -59,7 +59,6 @@ group :development do
   gem "byebug", "~> 11.1"
   gem "listen", "~> 3.2"
   gem "m", "~> 1.5"
-  gem "ruby-debug-ide", "~> 0.7"
   gem "solargraph", "~> 0.39"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
