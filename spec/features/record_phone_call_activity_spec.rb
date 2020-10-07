@@ -31,7 +31,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_record_phone_call_page
 
     # Test required fields
-    click_on "Add phone call"
+    click_button "Add phone call"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date of call"
@@ -52,7 +52,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
 
     expect(page).to have_error_summary "Please provide either a transcript or complete the summary and notes fields"
 
-    attach_file "phone_call_correspondence_form[transcript]", file
+    attach_file "Upload a file", file
     click_button "Add phone call"
 
     expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
