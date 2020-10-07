@@ -26,4 +26,4 @@
               role: "button"
 
     div
-      = link_to "Home", root_path, class: "govuk-link app-block-link govuk-body"
+      = link_to "Home", root_path_for(current_user), class: "govuk-link app-block-link govuk-body"

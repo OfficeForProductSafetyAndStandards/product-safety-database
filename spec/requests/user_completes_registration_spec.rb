@@ -65,7 +65,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
 
       it "redirects to the homepage" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(authenticated_msa_root_path)
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
 
       it "redirects to the homepage" do
         get complete_registration_user_path(user.id, invitation: user.invitation_token)
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(authenticated_msa_root_path)
       end
     end
 
@@ -139,8 +139,8 @@ RSpec.describe "User completes registration", type: :request, with_stubbed_notif
             .and_return(false)
         end
 
-        it "redirects to the two factor authentication path" do
-          expect(response).to redirect_to(root_path)
+        it "redirects to the root path" do
+          expect(response).to redirect_to(authenticated_msa_root_path)
         end
       end
 

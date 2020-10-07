@@ -27,7 +27,7 @@
 #   'true': 'foo'
 #
 # To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
+# available at https://guides.rubyonrails.org/i18n.html.
 
 en:
   enquiries_email: "opss.enquiries@beis.gov.uk"
@@ -329,6 +329,13 @@ en:
           attributes:
             hazard_type:
               blank: "Enter the primary hazard"
+        email_correspondence_form:
+          attributes:
+            correspondence_date:
+              blank: Enter the date sent
+              must_be_real: Date sent must be a real date
+              incomplete: Date sent must include a %{missing_date_parts}
+              in_future: Date sent must be today or in the past
 
   activerecord:
     models:

@@ -82,7 +82,8 @@
 
     <%= form_with model: @corrective_action,
       url: investigation_corrective_actions_path(@investigation),
-      method: :post do |form| %>
+      method: :post,
+      local: true do |form| %>
       <%= govukButton(text:"Continue") %>
       <%= link_to "Edit details", previous_wizard_path, class: "govuk-link psd-block-link" %>
     <% end %>

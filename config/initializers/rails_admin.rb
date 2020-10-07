@@ -85,7 +85,7 @@ RailsAdmin.config do |config|
   end
   config.authorize_with do |_controller|
     if !current_user.is_superuser?
-      redirect_to main_app.root_path
+      redirect_to main_app.unauthenticated_root_path
     end
   end
 

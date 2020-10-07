@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Home page", :with_elasticsearch, type: :feature do
   context "when user is signed out" do
     scenario "shows the home page" do
-      visit root_path
+      visit unauthenticated_root_path
 
       expect(page).not_to have_css(".psd-header .govuk-phase-banner__content__tag")
       expect(page).to have_css(".govuk-phase-banner")
@@ -113,7 +113,7 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
 
         context "when the user has previously viewed the introduction" do
           scenario "shows the non-OPSS home page" do
-            expect(page).to have_current_path(root_path)
+            expect(page).to have_current_path(authenticated_msa_root_path)
             expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
             expect(page).to have_link("Your cases")

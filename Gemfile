@@ -1,11 +1,11 @@
 source "https://rubygems.org"
 
-ruby "~> 2.6.6"
+ruby "~> 2.7.1"
 
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.1"
-gem "aws-sdk-s3", "~> 1.81"
+gem "aws-sdk-s3", "~> 1.83"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils", "~> 0.6"
@@ -22,10 +22,10 @@ gem "lograge", "~> 0.11"
 gem "mini_magick", "~> 4.10"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.7"
-gem "puma", "~> 4.3"
+gem "puma", "~> 5.0"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2"
-gem "rails", "~> 5.2"
+gem "rails", "~> 6.0"
 gem "rails_admin", "~> 2.0"
 gem "redcarpet", "~> 3.5"
 gem "redis-rails", "~> 5.0"
@@ -45,7 +45,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.2"
 gem "wicked", "~> 1.3"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.0", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.1", require: "govuk_design_system"
 
 group :development, :test do
   gem "dotenv-rails", "~> 2.7"
@@ -57,7 +57,6 @@ end
 group :development do
   gem "awesome_print", "~> 1.8", require: "ap"
   gem "byebug", "~> 11.1"
-  gem "debase", "~> 0.2"
   gem "listen", "~> 3.2"
   gem "m", "~> 1.5"
   gem "ruby-debug-ide", "~> 0.7"

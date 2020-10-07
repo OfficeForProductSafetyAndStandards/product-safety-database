@@ -7,7 +7,7 @@ module TestHelpers
     end
 
     def sign_in(user = users(:opss))
-      visit root_path
+      visit unauthenticated_root_path
       click_on "Sign in to your account"
 
       fill_in "Email address", with: user.email

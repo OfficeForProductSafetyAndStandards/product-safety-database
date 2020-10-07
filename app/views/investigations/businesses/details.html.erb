@@ -11,6 +11,7 @@
 <%= form_with(model: @business,
               url: wizard_path,
               method: :put,
+              local: true,
               html: { autocomplete: :off }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
