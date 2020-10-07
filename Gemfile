@@ -47,12 +47,12 @@ gem "wicked", "~> 1.3"
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.1", require: "govuk_design_system"
 
 group :development, :test do
+  gem "awesome_print", "~> 1.8", require: "ap"
+  gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.7"
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
   gem "pry-doc", "~> 1.1"
-  gem "awesome_print", "~> 1.8", require: "ap"
-  gem "byebug", "~> 11.1"
 end
 
 group :development do

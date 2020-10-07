@@ -5,7 +5,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
 
   subject(:form) { described_class.new(params) }
 
-  let(:params) {
+  let(:params) do
     {
       correspondence_date: correspondence_date,
       correspondent_name: Faker::Name.name,
@@ -15,7 +15,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
       transcript: transcript,
       existing_transcript_file_id: existing_transcript_file_id
     }
-  }
+  end
   let(:existing_transcript_file_id) { nil }
   let(:transcript) { Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt")) }
   let(:overview) { Faker::Hipster.paragraph }

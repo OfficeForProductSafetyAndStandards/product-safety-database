@@ -18,7 +18,7 @@ class Activity < ApplicationRecord
   end
 
   # Can be overridden by child classes but sometimes need to pass in user
-  def title(_user)
+  def title(_user = nil)
     super()
   end
 
