@@ -1,8 +1,8 @@
 # Product safety database
 
-Built by the [Office for Product Safety and Standards](https://www.gov.uk/government/organisations/office-for-product-safety-and-standards)
+Built by the [Office for Product Safety and Standards](https://www.gov.uk/government/organisations/office-for-product-safety-and-standards).
 
-For enquiries, contact [opss.enquiries@beis.gov.uk](opss.enquiries@beis.gov.uk)
+For enquiries, contact [opss.enquiries@beis.gov.uk](opss.enquiries@beis.gov.uk).
 
 ![](https://github.com/UKGovernmentBEIS/beis-opss-psd/workflows/RSpec%20test%20suite/badge.svg?branch=master)
 ![](https://github.com/UKGovernmentBEIS/beis-opss-psd/workflows/Minitest%20test%20suite/badge.svg?branch=master)
