@@ -145,6 +145,7 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
           expect(email.email_file.filename).to eq "email2.txt"
         end
 
+        # rubocop:disable RSpec/ExampleLength
         it "creates an activity entry" do
           result
 
@@ -157,6 +158,7 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
             }
           })
         end
+        # rubocop:enable RSpec/ExampleLength
       end
     end
   end
