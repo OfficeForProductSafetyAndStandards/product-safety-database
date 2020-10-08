@@ -8,6 +8,14 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     activity.attach_blob(correspondence.transcript.blob, :attachment) if correspondence.transcript.attached?
   end
 
+  def self.build_metadata
+    {
+      correspondence: {
+
+      }
+    }
+  end
+
   def self.build_body(correspondence)
     output = ""
     output += build_correspondent_details correspondence
