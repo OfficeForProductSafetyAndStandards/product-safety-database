@@ -27,7 +27,7 @@ jobs:
       id: retrieve-pull-requests
       run: |
         # Gets open PR numbers and builds the review app name for each PR. Returns an array.
-        active_prs=(`curl -H "Accept: application/vnd.github.groot-preview+json" https://api.github.com/repos/UKGovernmentBEIS/beis-opss-psd/pulls | jq -r '.[] | "psd-pr-\(.number)"'`)
+        active_prs=(`curl -H "Accept: application/vnd.github.groot-preview+json" https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls | jq -r '.[] | "psd-pr-\(.number)"'`)
 
         # Makes the active prs list available for further steps
         echo "::set-output name=ACTIVE_PRS::${active_prs[@]}"
