@@ -1,14 +1,11 @@
 require "rails_helper"
 
 RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
-  let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
+  let!(:investigation) { create(:allegation) }
   let(:product) { create(:product_washing_machine) }
 
-  let(:team) { create(:team) }
-
-  let(:user) { create(:user) }
-  let(:creator) { user }
-  let(:owner) { user }
+  let(:team) { create(:team, name: "Team 2") }
+  let(:user) { create(:user, name: "User 2", team: team) }
 
   let!(:email) do
     create(:email,
@@ -132,6 +129,16 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
           })
         end
         # rubocop:enable RSpec/ExampleLength
+
+        it "notifies the team", :aggregate_failures do
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+            investigation.pretty_id,
+            investigation.owner_user.name,
+            investigation.owner_user.email,
+            "User 2 (Team 2) edited an email on the allegation.",
+            "Email edited for Allegation"
+          ]))
+        end
       end
 
       context "when a new email and attachment files have been uploaded" do
