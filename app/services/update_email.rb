@@ -3,6 +3,8 @@ class UpdateEmail
 
   delegate :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, :attachment_description, to: :context
 
+  delegate :investigation, to: :email
+
   def call
     context.fail!(error: "No email supplied") unless email.is_a?(Correspondence::Email)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
@@ -39,6 +41,7 @@ class UpdateEmail
       end
 
       create_audit_activity
+      send_notification_email
     end
   end
 
@@ -76,5 +79,26 @@ private
       previous_email_attachment_filename: @previous_email_attachment_filename,
       previous_attachment_description: @previous_attachment_description
     )
+  end
+
+  def send_notification_email
+    entities_to_notify.each do |recipient|
+      email_address = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
+
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        email_address,
+        "#{user_source.show(recipient)} edited an email on the #{investigation.case_type}.",
+        "Email edited for #{investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
+  end
+
+  def entities_to_notify
+    return [] if user == investigation.owner_user
+    return [investigation.owner_user, investigation.owner_team].compact if investigation.owner_team.email?
+
+    investigation.owner_team.users.active.where.not(id: user.id)
   end
 end
