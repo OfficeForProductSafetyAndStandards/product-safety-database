@@ -16,6 +16,9 @@ class EmailCorrespondenceForm
   attribute :email_attachment
   attribute :attachment_description
 
+  attribute :email_file_action
+  attribute :email_attachment_action
+
   # These reference the signed IDs of Blobs that have already
   # been uploaded, submitted via hidden fields
   attribute :existing_email_file_id

@@ -67,6 +67,10 @@ class Investigations::RecordEmailsController < ApplicationController
 
       redirect_to investigation_email_path(@investigation.pretty_id, result.email)
     else
+
+      @email_correspondence_form.email_file_action = "keep" if @email_correspondence_form.email_file.present?
+      @email_correspondence_form.email_attachment_action = "keep" if @email_correspondence_form.email_attachment.present?
+
       @investigation = @investigation.decorate
 
       render :new

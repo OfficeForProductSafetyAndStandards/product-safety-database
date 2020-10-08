@@ -26,76 +26,45 @@
   hint: "Give an overview of the email",
   classes: "govuk-!-width-two-thirds" %>
 
+<% email_upload_field = capture do %>
+  <%= form.govuk_file_upload :email_file,
+    label: (form.object.email_file.present? ? "Select replacement file" : "Upload a file"),
+    label_classes: "govuk-label--x"
+  %>
+<% end %>
+
 <%= render "components/govuk_fieldset",
            legend: { text: "Email content", classes: "govuk-fieldset__legend--m" },
            describedBy: "email-content-hint" do %>
-
   <span id="email-content-hint" class="govuk-hint">Upload the email as a file, or enter the subject and body below</span>
 
+  <% if form.object.email_file.present? %>
+    <%= form.govuk_radios :email_file_action,
+      legend: "Email file actions",
+      legend_classes: "govuk-visually-hidden",
+      classes: "govuk-radios--small govuk-radios--conditional",
+      items: [
+      {
+        text: safe_join(["Keep file: ", link_to(form.object.email_file.filename, form.object.email_file, target: "_blank", rel: 'noopener')]),
+        value: :keep
+      },
+      {
+        text: "Remove file",
+        value: :remove
+      },
+      {
+        text: "Upload a replacement file",
+        value: :replace,
+        conditional: {
+          html: email_upload_field
+        }
+      }
 
-    <div class="govuk-form-group">
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-<!--           <h1 class="govuk-fieldset__heading">
-            Filter
-          </h1>
- -->        </legend>
-        <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="changed-name1" name="changed-name" type="radio" value="month" selected>
-            <label class="govuk-label govuk-radios__label" for="changed-name1">
-              Keep file: <%= link_to form.object.email_file.filename, form.object.email_file, target: "_blank", rel: 'noopener' %>
-            </label>
-          </div>
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="changed-name" name="changed-name" type="radio" value="month">
-            <label class="govuk-label govuk-radios__label" for="changed-name">
-              Remove file
-            </label>
-          </div>
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="changed-name-2" name="changed-name" type="radio" value="year" data-aria-controls="conditional-contact-2">
-            <label class="govuk-label govuk-radios__label" for="changed-name-2">
-              Upload a replacement file
-            </label>
-          </div>
-
-          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
-            <%= form.govuk_file_upload :email_file,
-                label: "Select replacement file",
-                label_classes: "govuk-label--x"
-              %>
-          </div>
-
-        </div>
-
-      </fieldset>
-    </div>
-<!--
-
-  <% email_upload_field = capture do %>
-
-
-
-
-
+    ] %>
+  <% else %>
+    <%= email_upload_field %>
   <% end %>
 
-  <%= form.hidden_field :existing_email_file_id %>
-
-  <div class="govuk-form-group">
-    <% if form.object.email_file.present? %>
-      <p>
-        Currently selected file: <%= link_to form.object.email_file.filename, form.object.email_file, target: "_blank", rel: 'noopener' %><br>
-      </p>
-
-      <%= govukDetails(summaryText: "Remove or replace this file", html: email_upload_field) %>
-    <% else %>
-      <%= email_upload_field %>
-    <% end %>
-
-  </div>
- -->
   <%= form.govuk_input :email_subject,
     label: "Subject line",
     classes: "govuk-!-width-two-thirds" %>
@@ -128,12 +97,29 @@
     <%= form.hidden_field :existing_email_attachment_id  %>
 
     <% if form.object.email_attachment.present? %>
-      <p id="current-attachment-details">
-        Currently selected file:
-        <%= link_to form.object.email_attachment.filename, form.object.email_attachment, target: "_blank", rel: 'noopener' %>
-      </p>
 
-      <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>
+      <%= form.govuk_radios :email_attachment_action,
+        legend: "Email attachment action",
+        legend_classes: "govuk-visually-hidden",
+        classes: "govuk-radios--small govuk-radios--conditional",
+        items: [
+        {
+          text: safe_join(["Keep file: ", link_to(form.object.email_attachment.filename, form.object.email_file, target: "_blank", rel: 'noopener')]),
+          value: :keep
+        },
+        {
+          text: "Remove file",
+          value: :remove
+        },
+        {
+          text: "Upload a replacement file",
+          value: :replace,
+          conditional: {
+            html: file_upload_field
+          }
+        }
+
+      ] %>
     <% else %>
       <%= file_upload_field %>
     <% end %>
