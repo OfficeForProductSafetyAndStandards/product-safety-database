@@ -436,6 +436,25 @@ module PageExpectations
     expect(page).to have_selector("h1", text: business_name)
   end
 
+  def expect_to_be_on_add_business_to_location_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/locations/new")
+    expect(page).to have_h1("Add location")
+  end
+
+  def expect_to_be_on_edit_location_for_a_business_page(business_id:, location_id: nil)
+    if location_id
+      expect(page).to have_current_path("/businesses/#{business_id}/locations/#{location_id}/edit")
+    else
+      expect(page).to have_current_path(/\/businesses\/#{business_id}\/locations\/\d+\/edit/)
+    end
+    expect(page).to have_h1("Edit location")
+  end
+
+  def expect_to_be_on_remove_location_for_a_business_page(business_id:, location_id: nil)
+    expect(page).to have_current_path("/businesses/#{business_id}/locations/#{location_id}/remove")
+    expect(page).to have_h1("Remove location")
+  end
+
   def expect_teams_tables_to_contain(expected_teams)
     teams_table = page.find(:table, "Teams added to the case")
 
