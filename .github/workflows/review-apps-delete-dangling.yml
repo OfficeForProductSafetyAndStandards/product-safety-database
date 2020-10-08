@@ -5,9 +5,12 @@ on:
     - cron: "0 1 * * *" # Every night at 1am
 
 jobs:
-  cleanup_reviewapp:
+  cleanup_dangling_reviewapps:
     name: Delete dangling review apps
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     env:
       SPACE: int
       CF_USERNAME: ${{ secrets.PaaSUsernameInt }}
