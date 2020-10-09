@@ -1,27 +1,17 @@
 require "rails_helper"
 
 RSpec.describe PhoneCallCorrespondenceForm do
-  include ActionDispatch::TestProcess::FixtureFile
+  include_context "phone call correspondence setup"
 
   subject(:form) { described_class.new(params) }
 
-  let(:params) do
-    {
-      correspondence_date: correspondence_date,
-      correspondent_name: Faker::Name.name,
-      phone_number: Faker::PhoneNumber.phone_number,
-      overview: overview,
-      details: details,
-      transcript: transcript,
-      existing_transcript_file_id: existing_transcript_file_id
-    }
-  end
   let(:existing_transcript_file_id) { nil }
-  let(:transcript) { Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt")) }
-  let(:overview) { Faker::Hipster.paragraph }
-  let(:details) { Faker::Hipster.paragraph }
   let(:correspondence_date) { { "day" => day, "month" => "1", "year" => "2020" } }
   let(:day) { "1" }
+
+  before do
+    params[:existing_transcript_file_id] = existing_transcript_file_id
+  end
 
   describe "validations" do
     it "has a valid test set up" do

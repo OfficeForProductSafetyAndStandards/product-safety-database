@@ -1,28 +1,13 @@
 require "rails_helper"
 
 RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include ActionDispatch::TestProcess::FixtureFile
+  include_context "phone call correspondence setup"
 
   subject(:result) { described_class.call(params) }
 
-  let(:user)                { create :user }
-  let(:investigation)       { create :allegation }
-  let(:phone_number)        { Faker::PhoneNumber.phone_number }
-  let(:correspondence_date) { Date.parse("1-1-2020") }
-  let(:correspondent_name)  { Faker::Name.name }
-  let(:overview)            { Faker::Hipster.paragraph }
-  let(:details)             { Faker::Hipster.paragraph }
-  let(:params) do
-    {
-      investigation: investigation,
-      user: user,
-      transcript: Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt")),
-      correspondence_date: correspondence_date,
-      phone_number: phone_number,
-      correspondent_name: correspondent_name,
-      overview: overview,
-      details: details
-    }
+  before do
+    params[:investigation] = investigation
+    params[:user]          = user
   end
 
   describe "#call" do
@@ -52,11 +37,10 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_ma
       )
     end
 
-    it "creates an audit log" do
-      expect(result.correspondence.activity).to have_attributes(
-        body: "Call with: **#{correspondent_name}** (#{phone_number})<br>Date: **01/01/2020**<br>Attached: phone\\_call\\_transcript.txt<br><br>#{details}",
-        investigation_id: investigation.id)
-      expect(result.correspondence.activity.title).to eq(overview)
+    it "creates an audit log", :aggregate_failures do
+      expect(result.correspondence.activity.investigation).to eq(investigation)
+      expect(result.correspondence.activity.source.user).to eq(user)
+      expect(result.correspondence.activity.correspondence).to eq(result.correspondence)
     end
   end
 end

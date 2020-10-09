@@ -1,15 +1,16 @@
 <h3 class="govuk-heading-s">summary of the phone call</h3>
 
 <p class="govuk-body-s timeline-details">
-  Phone call by <%= activity.subtitle(current_user) %>
+  <%= activity.phone_call_by(current_user) %>
 </p>
 
 <p class="govuk-body">
-  <% if correspondence.correspondent_name.present? %>
-    Call with: <%= Activity.sanitize_text correspondence.correspondent_name %>
-  <% end %>
-
-  <% if activity.correspondence.phone_number.present? %>
-    <%= %> activity.correspondence.phone_number.yield_self { |s| correspondence.correspondent_name.present? ? "(#{s})"  : s} %>
+  <%= correspondence.correspondent_name %>
+  <%= activity.phone_number %>
+  <%= activity.correspondence_date %>
+  <%= activity.attached %>
+  <% if activity.correspondence.details.present? %>
+    <br />
+    <%= activity.correspondence.details %>
   <% end %>
 </p>
