@@ -105,8 +105,8 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Confirm corrective action details")
   end
 
-  def expect_to_be_on_investigation_products_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
+  def expect_to_be_on_investigation_products_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/products")
     expect(page).to have_selector("h1", text: "Products")
   end
 
