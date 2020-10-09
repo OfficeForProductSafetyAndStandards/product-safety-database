@@ -45,31 +45,28 @@
       <%= link_to form.object.email_attachment.filename, form.object.email_attachment, target: "_blank", rel: 'noopener' %>
     </p>
 
-    <%= govukDetails(summaryText: "Replace or remove file") do %>
-
-      <%= form.govuk_radios :email_file_action,
-        legend: "Email file actions",
-        legend_classes: "govuk-visually-hidden",
-        classes: "govuk-radios--small govuk-radios--conditional",
-        items: [
-        {
-          text: "Keep file",
-          value: :keep
-        },
-        {
-          text: "Remove file",
-          value: :remove
-        },
-        {
-          text: "Upload a replacement file",
-          value: :replace,
-          conditional: {
-            html: email_upload_field
-          }
+    <%= form.govuk_radios :email_file_action,
+      legend: "Replace or remove file",
+      legend_classes: "govuk-fieldset__legend--s",
+      classes: "govuk-radios--small govuk-radios--conditional",
+      items: [
+      {
+        text: "Keep file",
+        value: :keep
+      },
+      {
+        text: "Remove file",
+        value: :remove
+      },
+      {
+        text: "Upload a replacement file",
+        value: :replace,
+        conditional: {
+          html: email_upload_field
         }
+      }
 
-      ] %>
-    <% end %>
+    ] %>
   <% else %>
     <%= email_upload_field %>
   <% end %>
@@ -112,30 +109,28 @@
         <%= link_to form.object.email_attachment.filename, form.object.email_attachment, target: "_blank", rel: 'noopener' %>
       </p>
 
-      <%= govukDetails(summaryText: "Replace or remove file") do %>
-        <%= form.govuk_radios :email_attachment_action,
-          legend: "Email attachment action",
-          legend_classes: "govuk-visually-hidden",
-          classes: "govuk-radios--small govuk-radios--conditional",
-          items: [
-          {
-            text: "Keep file",
-            value: :keep
-          },
-          {
-            text: "Remove file",
-            value: :remove
-          },
-          {
-            text: "Upload a replacement file",
-            value: :replace,
-            conditional: {
-              html: file_upload_field
-            }
+      <%= form.govuk_radios :email_attachment_action,
+        legend: "Replace or remove email attachment",
+        legend_classes: "govuk-fieldset__legend--s",
+        classes: "govuk-radios--small govuk-radios--conditional",
+        items: [
+        {
+          text: "Keep file",
+          value: :keep
+        },
+        {
+          text: "Remove file",
+          value: :remove
+        },
+        {
+          text: "Upload a replacement file",
+          value: :replace,
+          conditional: {
+            html: file_upload_field
           }
+        }
 
-        ] %>
-      <% end %>
+      ] %>
     <% else %>
       <%= file_upload_field %>
     <% end %>
