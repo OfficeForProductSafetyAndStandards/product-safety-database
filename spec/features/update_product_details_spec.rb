@@ -18,6 +18,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     sign_in(user)
 
     visit "/products/#{product.id}"
+    expect_to_be_on_product_page(product_id: product.id, product_name: "MyBrand washing machine")
 
     click_link "Edit details"
 
