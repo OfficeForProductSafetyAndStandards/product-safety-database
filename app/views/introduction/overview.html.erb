@@ -1,0 +1,22 @@
+<%= page_title "Overview" %>
+<% content_for :after_header do %>
+  <%= render "skip_introduction" %>
+<% end %>
+
+<div class="app-inverted app-inverted--card">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l app-heading-l--inverted">
+        Report, track and share product safety information
+      </h1>
+      <p class="govuk-body-l app-body-l--inverted">
+        The Product safety database (PSD) has been developed with Trading Standards, the Office for Product Safety and Standards (OPSS), and other market surveillance authorities (MSAs).
+      </p>
+      <%= govukButton(
+        text: "Continue",
+        href: introduction_report_products_path,
+        classes: "app-button--inverted app-button--l govuk-!-margin-bottom-0"
+      ) %>
+    </div>
+  </div>
+</div>
