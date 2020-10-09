@@ -1,0 +1,53 @@
+<%= page_title "Home Page" %>
+<%= render "homepage/coronavirus_banner" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l">Product safety database</h1>
+
+    <p class="govuk-body-l">
+      Report, track and share product safety information.
+    </p>
+    <%= govukButton(
+      text:"Open a new case",
+      href: new_ts_investigation_path,
+      classes: "govuk-button--start",
+    ) %>
+  </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-top-0">
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">
+      <%= link_to "Your cases",
+        investigations_path(case_owner_is_me: "checked"),
+        class: "govuk-link govuk-link--no-visited-state"
+      %>
+    </h2>
+
+    <p class="govuk-body">Cases you own or created.</p>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">
+      <%= link_to "All cases",
+        investigations_path,
+        class: "govuk-link govuk-link--no-visited-state"
+      %>
+    </h2>
+
+    <p class="govuk-body">All cases in the Product safety database.</p>
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">
+      <%= link_to "How to use the Product safety database",
+        help_about_path,
+        class: "govuk-link govuk-link--no-visited-state"
+      %>
+    </h2>
+
+    <p class="govuk-body">How and when to use this service.</p>
+  </div>
+</div>
