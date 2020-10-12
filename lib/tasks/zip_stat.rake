@@ -66,8 +66,8 @@ namespace :data do
               files[blob.id] << { name: File.basename(entry.name), size: entry.size } unless entry.name_is_directory?
             end
           end
-        rescue Zip::GPFBit3Error =>
-          Rails.logger.warn "Skipping #{blob.filename}: malformed zip"
+        rescue Zip::GPFBit3Error => e
+          Rails.logger.warn "Skipping #{blob.filename}: malformed zip - error: #{e.message}"
         end
         statistics << computed_stats[files[blob.id]]
                         .unshift(blob.filename)
