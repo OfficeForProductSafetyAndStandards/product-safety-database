@@ -14,6 +14,14 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     sign_in user
     visit "/cases/#{investigation.pretty_id}/products/new"
 
+    click_button "Save product"
+
+    # Expected validation errors
+    expect(page).to have_error_messages
+    expect(page).to have_text("Name cannot be blank")
+    expect(page).to have_text("Category cannot be blank")
+    expect(page).to have_text("Product type cannot be blank")
+
     select product.category, from: "Product category"
 
     fill_in "Product type", with: product.product_type
@@ -28,7 +36,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
 
     click_on "Save product"
 
-    expect_to_be_on_investigation_products_page
+    expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
 
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product name")

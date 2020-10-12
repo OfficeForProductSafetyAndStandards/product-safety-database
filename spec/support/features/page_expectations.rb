@@ -105,13 +105,18 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Confirm corrective action details")
   end
 
-  def expect_to_be_on_investigation_products_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
+  def expect_to_be_on_investigation_products_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/products")
     expect(page).to have_selector("h1", text: "Products")
   end
 
   def expect_to_be_on_case_products_page
     expect(page).to have_selector("h1", text: "Products")
+  end
+
+  def expect_to_be_on_remove_product_from_case_page(case_id:, product_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/products/#{product_id}/remove")
+    expect(page).to have_selector("h2", text: "Remove product")
   end
 
   def expect_to_be_on_teams_page(case_id:)
@@ -453,6 +458,21 @@ module PageExpectations
   def expect_to_be_on_remove_location_for_a_business_page(business_id:, location_id: nil)
     expect(page).to have_current_path("/businesses/#{business_id}/locations/#{location_id}/remove")
     expect(page).to have_h1("Remove location")
+  end
+
+  def expect_to_be_on_add_contact_to_a_business_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/contacts/new")
+    expect(page).to have_h1("Add contact")
+  end
+
+  def expect_to_be_on_edit_business_contact_page(business_id:, contact_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/contacts/#{contact_id}/edit")
+    expect(page).to have_h1("Edit contact")
+  end
+
+  def expect_to_be_on_remove_contact_for_a_business_page(business_id:, contact_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/contacts/#{contact_id}/remove")
+    expect(page).to have_h1("Remove contact")
   end
 
   def expect_teams_tables_to_contain(expected_teams)
