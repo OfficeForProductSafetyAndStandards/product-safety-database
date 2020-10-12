@@ -26,8 +26,12 @@ namespace :data do
       else
         associated_to_investigation_record_attachement ||= blob.attachments.detect { |attachment| attachment.respond_to?(:investigation_id) || attachment }
 
-        if associated_to_investigation_record_attachement
+        if associated_to_investigation_record_attachement && associated_to_investigation_record_attachement.record.respond_to?(:investigation)
           stats << "case: #{associated_to_investigation_record_attachement.record.investigation.pretty_id}"
+        elsif associated_to_investigation_record_attachement && associated_to_investigation_record_attachement.record.respond_to?(:investigations)
+          stats << associated_to_investigation_record_attachement.record.investigations.map do |i|
+            "case: #{i.pretty_id}"
+          end
         end
       end
 
