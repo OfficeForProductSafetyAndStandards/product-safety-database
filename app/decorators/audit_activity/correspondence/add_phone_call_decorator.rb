@@ -1,15 +1,10 @@
 module AuditActivity
   module Correspondence
     class AddPhoneCallDecorator < AuditActivity::Correspondence::BaseDecorator
-
-      def title(_viewing_user)
-        "summary of the phone call"
-      end
-
       def phone_call_by(viewing_user)
         return if correspondence.correspondent_name.blank?
 
-        Activity.sanitize_text("#{subtitle(viewing_user)}")
+        Activity.sanitize_text(subtitle(viewing_user))
       end
 
       def phone_number

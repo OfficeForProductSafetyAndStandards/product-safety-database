@@ -1,9 +1,16 @@
 <p class="govuk-body">
-  Call with: <strong><%= activity.correspondence.correspondent_name %></strong> <%= activity.phone_number %>
-  <br />
+  <% if activity.correspondence.correspondent_name.present? %>
+    Call with: <strong><%= activity.correspondence.correspondent_name %></strong> <%= activity.phone_number %>
+    <br />
+  <% end %>
   Date: <strong><%= activity.correspondence_date %></strong>
   <br />
-  <%= activity.attached %>
+
+  <% if activity.correspondence.transcript.present? %>
+    <%= Activity.sanitize_text(activity.attached) %>
+    <br />
+  <% end %>
+
   <% if activity.correspondence.details.present? %>
     <br />
     <%= activity.correspondence.details %>
