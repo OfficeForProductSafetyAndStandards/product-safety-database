@@ -1,6 +1,4 @@
-# rubocop:disable Rails/ApplicationRecord
-class Activity < ActiveRecord::Base; end
-# rubocop:enable Rails/ApplicationRecord
+class Activity < ApplicationRecord; end
 
 class RenameUpdateAssigneActivities < ActiveRecord::Migration[5.2]
   def up

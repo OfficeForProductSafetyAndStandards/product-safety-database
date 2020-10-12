@@ -29,7 +29,7 @@
       ) %>
     </div>
 
-    <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put do |form| %>
+    <%= form_with scope: :investigation, model: @risk_level_form, url: investigation_risk_level_path(@investigation), method: :put, local: true do |form| %>
       <%= error_summary @risk_level_form.errors %>
 
       <%- custom = capture do %>

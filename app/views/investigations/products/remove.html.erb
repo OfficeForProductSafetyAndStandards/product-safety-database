@@ -8,7 +8,7 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(url: unlink_investigation_product_path(@investigation), method: :delete) do |form| %>
+<%= form_with(url: unlink_investigation_product_path(@investigation), method: :delete, local: true) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-m">Remove product</h2>

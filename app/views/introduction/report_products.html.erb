@@ -1,0 +1,32 @@
+<%= page_title "Report products" %>
+<% content_for :after_header do %>
+  <%= render "skip_introduction" %>
+<% end %>
+
+<div class="app-inverted app-inverted--card">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l app-heading-l--inverted">
+        The Product safety database replaces the EU’s RAPEX and ICSMS systems
+      </h1>
+      <p class="govuk-body-l app-body-l--inverted govuk-!-margin-bottom-3">
+        You must use the database to tell OPSS immediately about corrective actions that have been or will be taken because a product is:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet govuk-body-l app-body-l--inverted">
+        <li>unsafe (according to the General Product Safety Regulations 2005)</li>
+        <li>poses a serious risk (as determined by a risk assessment)</li>
+      </ul>
+
+      <p class="govuk-body-l app-body-l--inverted">
+        You should use the database to report products that do not comply with relevant product safety legislation as soon as possible.
+      </p>
+
+      <%= govukButton(
+        text: "Continue",
+        href: introduction_track_investigations_path,
+        classes: "app-button--inverted app-button--l govuk-!-margin-bottom-0"
+      ) %>
+    </div>
+  </div>
+</div>

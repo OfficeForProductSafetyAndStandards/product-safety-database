@@ -88,13 +88,13 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
       end
 
       it "sends a notification email to the case creator" do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_created).with(
+        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_created).with(a_hash_including(args: [
           kind_of(String),
           user.name,
           user.email,
           "test enquiry title",
           "enquiry"
-        )
+        ]))
       end
     end
   end

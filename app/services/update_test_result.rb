@@ -22,7 +22,9 @@ class UpdateTestResult
 
     test_result.attributes = new_attributes.except(:date)
 
-    @previous_attachment = test_result.documents.first
+    blob = test_result.documents.first.blob
+    context.previous_attachment_filename = blob.filename
+    context.previous_attachment_description = blob.metadata[:description]
 
     test_result.transaction do
       replace_attached_file_with(new_file) if new_file
@@ -55,11 +57,11 @@ private
   end
 
   def file_description_changed?
-    new_file_description != @previous_attachment.metadata[:description]
+    new_file_description != context.previous_attachment_description
   end
 
   def create_audit_activity_for_test_result_updated
-    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, @previous_attachment)
+    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, context.previous_attachment_filename, context.previous_attachment_description)
 
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
       source: UserSource.new(user: user),

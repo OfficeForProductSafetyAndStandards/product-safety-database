@@ -17,7 +17,7 @@
 
     <h1 class="govuk-heading-l"><%= title %></h1>
 
-    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put do |form| %>
+    <%= form_with model: @edit_form, url: investigation_collaborator_path(@investigation, @collaboration), method: :put, local: true do |form| %>
 
       <% remove_hint = @investigation.is_private? ? "Will not be able to view case details as it is restricted" :  "Will have default view rights"%>
       <%= render "form_components/govuk_radios",

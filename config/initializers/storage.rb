@@ -5,4 +5,5 @@ Rails.application.config.document_analyzers = Rails.application.config.active_st
 Rails.application.config.document_analyzers.append AntiVirusAnalyzer
 # MasterAnalyzer is the only one that we pass to active_storage
 Rails.application.config.active_storage.analyzers = [MasterAnalyzer]
-Rails.application.config.active_storage.queue = ENV["SIDEKIQ_QUEUE"] || "psd"
+Rails.application.config.active_storage.queues.analysis = ENV["SIDEKIQ_QUEUE"] || "psd"
+Rails.application.config.active_storage.queues.purge    = :active_storage_purge

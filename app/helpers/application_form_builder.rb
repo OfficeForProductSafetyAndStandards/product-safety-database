@@ -65,18 +65,21 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      attributes: attributes
   end
 
-  def govuk_input(attribute, label:, label_classes: nil, classes: nil)
+  def govuk_input(attribute, label:, label_classes: nil, classes: nil, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
       }
     end
 
+    hint = { text: hint } if hint
+
     @template.render "components/govuk_input",
                      label: {
                        text: label,
                        classes: label_classes.to_s
                      },
+                     hint: hint,
                      name: input_name(attribute),
                      id: attribute.to_s,
                      classes: classes,

@@ -54,7 +54,7 @@ private
     if session[:secondary_authentication_redirect_to]
       redirect_to session.delete(:secondary_authentication_redirect_to)
     else
-      redirect_to root_path
+      redirect_to root_path_for(current_user)
     end
   end
 

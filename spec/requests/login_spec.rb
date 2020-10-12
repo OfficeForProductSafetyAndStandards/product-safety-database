@@ -9,7 +9,7 @@ RSpec.describe "Login", type: :request do
   end
 
   context "with an old bookmarked URL" do
-    it { expect(get("/sessions/signin")).to redirect_to(root_path) }
+    it { expect(get("/sessions/signin")).to redirect_to(unauthenticated_root_path) }
   end
 
   describe "a user without a mobile number", :with_stubbed_mailer, :with_stubbed_notify do

@@ -8,8 +8,10 @@ class Correspondence::Email < Correspondence
     inbound: "From"
   }
 
-  def validate_email_file_and_content(file_blob)
-    if file_blob.nil? && (email_subject.empty? || details.empty?)
+  validate :validate_email_file_and_content
+
+  def validate_email_file_and_content
+    if !email_file.attached? && (email_subject.blank? || details.blank?)
       errors.add(:base, "Please provide either an email file or a subject and body")
     end
   end
