@@ -30,13 +30,12 @@ jobs:
     - name: Initiate Staging deployment status
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
-        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
       run: |
         source deploy-github-functions.sh
 
         # URL where the deployment progress can be tracked. Exported for future steps.
         log_url=$(echo "https://github.com/$GITHUB_REPOSITORY/actions?query=branch%3Amaster+workflow%3ADeploy")
-        echo "::set-env name=LOG_URL::$log_url"
+        echo "LOG_URL=$log_url" >> $GITHUB_ENV
 
         gh_deploy_initiate staging $log_url
 
@@ -67,8 +66,6 @@ jobs:
       if: success()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
-        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
-        LOG_URL: ${{ env.LOG_URL }}
       run: |
         source deploy-github-functions.sh
         environment_url=https://staging.product-safety-database.service.gov.uk/
@@ -78,8 +75,6 @@ jobs:
       if: failure()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
-        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
-        LOG_URL: ${{ env.LOG_URL }}
       run: |
         source deploy-github-functions.sh
         gh_deploy_failure staging $LOG_URL
@@ -95,8 +90,6 @@ jobs:
     - name: Initiate Production deployment status
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
-        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
-        LOG_URL: ${{ env.LOG_URL }}
       run: |
         source deploy-github-functions.sh
         gh_deploy_initiate production $LOG_URL
@@ -127,8 +120,6 @@ jobs:
       if: success()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
-        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
-        LOG_URL: ${{ env.LOG_URL }}
       run: |
         source deploy-github-functions.sh
         environment_url=https://www.product-safety-database.service.gov.uk/
@@ -138,8 +129,6 @@ jobs:
       if: failure()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
-        DEPLOY_STATUSES_URL: ${{ env.DEPLOY_STATUSES_URL }}
-        LOG_URL: ${{ env.LOG_URL }}
       run: |
         source deploy-github-functions.sh
         gh_deploy_failure production $LOG_URL
@@ -147,7 +136,6 @@ jobs:
     - name: Alert team via Slack of deployment failure
       if: failure()
       env:
-        LOG_URL: ${{ env.LOG_URL }}
         SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
       run: |
         curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"deploybot\", \"text\": \"Deploy has failed!\n\nSee $LOG_URL\", \"icon_emoji\": \":fire:\"}" $SLACK_WEBHOOK
