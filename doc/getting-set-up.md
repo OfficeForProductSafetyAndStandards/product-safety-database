@@ -102,12 +102,6 @@ New tests are written in RSpec. There should be a feature spec covering new user
 bundle exec rspec
 ```
 
-There is also a legacy test suite written with Minitest. This is deprecated and tests are being gradually moved over to RSpec. To run it:
-
-```bash
-bin/rails test
-```
-
 You can run the Ruby linting with `bin/rubocop`. Running this with the `-a` flag set will cause Rubocop to attempt to fix as many of the issues as it can.
 
 You can run the Slim linting with `bin/slim-lint app`.
