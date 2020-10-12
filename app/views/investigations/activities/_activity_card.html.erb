@@ -1,6 +1,6 @@
 <%
-  restricted = !activity.can_display_all_data?(current_user)
-  title = restricted ? activity.restricted_title(current_user) : activity.title(current_user)
+restricted = !activity.can_display_all_data?(current_user)
+title = restricted ? activity.restricted_title(current_user) : activity.title(current_user)
 %>
 
 <li>

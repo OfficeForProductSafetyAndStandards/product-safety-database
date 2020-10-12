@@ -1,13 +1,15 @@
-g<h3 class="govuk-heading-s">summary of the phone call</h3>
-
 <p class="govuk-body">
-  <%= activity.phone_number %>
+  Call with: <strong><%= activity.correspondence.correspondent_name %></strong> <%= activity.phone_number %>
   <br />
-  <strong><%= activity.correspondence_date %></strong>
+  Date: <strong><%= activity.correspondence_date %></strong>
   <br />
   <%= activity.attached %>
   <% if activity.correspondence.details.present? %>
     <br />
     <%= activity.correspondence.details %>
   <% end %>
+
+</p>
+<p class="govuk-body">
+  <%=  link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link" %>
 </p>

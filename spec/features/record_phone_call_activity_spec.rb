@@ -157,7 +157,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
   def expect_case_activity_page_to_show_entered_information(user_name:, name:, phone:, date:, file: nil, summary: nil, notes: nil)
     item = page.find("p", text: "Phone call by #{user_name}").find(:xpath, "..")
     expect(item).to have_text("Call with: #{name} (#{phone})")
-    expect(item).to have_text("Date: #{date.strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Date: #{date.to_s(:govuk)}")
 
     if file
       expect(item).to have_text("Attached: #{File.basename(file)}")
