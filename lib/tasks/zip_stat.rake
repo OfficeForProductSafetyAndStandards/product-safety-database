@@ -17,19 +17,19 @@ namespace :data do
     compute_associated_record = lambda do |blob|
       stats = []
 
-      if (investigation_attachement = blob.attachments.detect { |attachment| attachment.record.is_a?(Investigation) })
-        investigation = investigation_attachement.record
+      if (investigation_attachment = blob.attachments.detect { |attachment| attachment.record.is_a?(Investigation) })
+        investigation = investigation_attachment.record
       end
 
       if investigation
         stats << "case: #{investigation.pretty_id}"
       else
-        associated_to_investigation_record_attachement ||= blob.attachments.detect { |attachment| attachment.respond_to?(:investigation_id) || attachment }
+        associated_to_investigation_record_attachment ||= blob.attachments.detect { |attachment| attachment.respond_to?(:investigation_id) || attachment }
 
-        if associated_to_investigation_record_attachement && associated_to_investigation_record_attachement.record.respond_to?(:investigation)
-          stats << "case: #{associated_to_investigation_record_attachement.record.investigation.pretty_id}"
-        elsif associated_to_investigation_record_attachement && associated_to_investigation_record_attachement.record.respond_to?(:investigations)
-          stats << associated_to_investigation_record_attachement.record.investigations.map do |i|
+        if associated_to_investigation_record_attachment && associated_to_investigation_record_attachment.record.respond_to?(:investigation)
+          stats << "case: #{associated_to_investigation_record_attachment.record.investigation.pretty_id}"
+        elsif associated_to_investigation_record_attachment && associated_to_investigation_record_attachment.record.respond_to?(:investigations)
+          stats << associated_to_investigation_record_attachment.record.investigations.map do |i|
             "case: #{i.pretty_id}"
           end
         end
@@ -60,10 +60,14 @@ namespace :data do
       while (blob, zip_file = queue.pop)
         Rails.logger.info "Scanning file for #{blob.filename} with id: #{blob.id} - queue size: #{queue.size}"
         files = Hash.new([])
-        Zip::InputStream.open(StringIO.new(zip_file)) do |input_stream|
-          while (entry = input_stream.get_next_entry)
-            files[blob.id] << { name: File.basename(entry.name), size: entry.size } unless entry.name_is_directory?
+        begin
+          Zip::InputStream.open(StringIO.new(zip_file)) do |input_stream|
+            while (entry = input_stream.get_next_entry)
+              files[blob.id] << { name: File.basename(entry.name), size: entry.size } unless entry.name_is_directory?
+            end
           end
+        rescue Zip::GPFBit3Error => e
+          Rails.logger.warn "Skipping #{blob.filename}: malformed zip - error: #{e.message}"
         end
         statistics << computed_stats[files[blob.id]]
                         .unshift(blob.filename)
