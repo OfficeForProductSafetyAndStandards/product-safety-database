@@ -20,7 +20,8 @@ class AddPhoneCallToCase
       AuditActivity::Correspondence::AddPhoneCall.create!(
         source: UserSource.new(user: user),
         investigation: investigation,
-        correspondence: correspondence
+        correspondence: correspondence,
+        metadata: AuditActivity::Correspondence::AddPhoneCall.build_metadata
       )
     end
   end

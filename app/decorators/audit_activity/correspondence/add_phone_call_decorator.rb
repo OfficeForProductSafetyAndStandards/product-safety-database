@@ -4,7 +4,7 @@ module AuditActivity
       def phone_call_by(viewing_user)
         return if correspondence.correspondent_name.blank?
 
-        Activity.sanitize_text("Phone call by #{subtitle(viewing_user)}")
+        Activity.sanitize_text("#{subtitle(viewing_user)}")
       end
 
       def phone_number
@@ -20,6 +20,7 @@ module AuditActivity
       end
 
       def attached
+        return if correspondence.transcript.blank?
         "Attached: #{correspondence.transcript_blob.filename}"
       end
     end

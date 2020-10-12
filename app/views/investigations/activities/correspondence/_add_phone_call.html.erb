@@ -1,13 +1,10 @@
-<h3 class="govuk-heading-s">summary of the phone call</h3>
-
-<p class="govuk-body-s timeline-details">
-  <%= activity.phone_call_by(current_user) %>
-</p>
+g<h3 class="govuk-heading-s">summary of the phone call</h3>
 
 <p class="govuk-body">
-  <%= correspondence.correspondent_name %>
   <%= activity.phone_number %>
-  <%= activity.correspondence_date %>
+  <br />
+  <strong><%= activity.correspondence_date %></strong>
+  <br />
   <%= activity.attached %>
   <% if activity.correspondence.details.present? %>
     <br />

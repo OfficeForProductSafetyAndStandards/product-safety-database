@@ -116,6 +116,8 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
 
+    save_and_open_page
+
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, summary: summary, notes: notes)
 
