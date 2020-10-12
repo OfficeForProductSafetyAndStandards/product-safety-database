@@ -35,8 +35,7 @@ namespace :data do
         end
       end
 
-      blob.attachments.map do |
-attachment|
+      blob.attachments.map do |attachment|
         stats << [attachment.record_type, attachment.record_id].join(" - ")
       end
 
