@@ -15,6 +15,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
   let!(:other_team_investigation)            { create(:allegation, creator: other_user_other_team) }
 
+  let!(:closed_investigation) { create(:allegation, :closed) }
+  let!(:project) { create(:project) }
+  let!(:enquiry) { create(:enquiry) }
+
   let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
   let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
   let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
@@ -46,11 +50,52 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     end
   end
 
-  scenario "no filters applied shows all cases" do
+  scenario "no filters applied shows all open cases" do
     expect(page).to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
+
+    expect(page).not_to have_listed_case(closed_investigation.pretty_id)
+
+    within_fieldset "Status" do
+      expect(page).to have_checked_field("Open")
+      expect(page).to have_unchecked_field("Closed")
+    end
+  end
+
+  scenario "filtering for both open and closed cases" do
+    within_fieldset "Status" do
+      check "Closed"
+    end
+    click_button "Apply filters"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(closed_investigation.pretty_id)
+  end
+
+  scenario "filtering only closed cases" do
+    within_fieldset "Status" do
+      uncheck "Open"
+      check "Closed"
+    end
+    click_button "Apply filters"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(closed_investigation.pretty_id)
+  end
+
+  scenario "filtering for projects and enquiries" do
+    within_fieldset "Type" do
+      uncheck "Allegation"
+      check "Enquiry"
+      check "Project"
+    end
+    click_button "Apply filters"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(project.pretty_id)
+    expect(page).to have_listed_case(enquiry.pretty_id)
   end
 
   scenario "filtering cases where the user is the owner" do
