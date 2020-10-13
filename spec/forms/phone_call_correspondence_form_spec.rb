@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PhoneCallCorrespondenceForm do
-  include_context "phone call correspondence setup"
+  include_context "with phone call correspondence setup"
 
   subject(:form) { described_class.new(params) }
 

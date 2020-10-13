@@ -1,4 +1,4 @@
-RSpec.shared_context "phone call correspondence setup" do
+RSpec.shared_context "with phone call correspondence setup" do
   include ActionDispatch::TestProcess::FixtureFile
 
   let(:user)                { create :user }
