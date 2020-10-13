@@ -7,7 +7,7 @@
   <br />
 
   <% if activity.correspondence.transcript.present? %>
-    <%= Activity.sanitize_text(activity.attached) %>
+    <%= activity.attached %>
     <br />
   <% end %>
 

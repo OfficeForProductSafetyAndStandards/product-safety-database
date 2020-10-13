@@ -3,6 +3,10 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
   with_attachments transcript: "transcript"
   belongs_to :correspondence, class_name: "Correspondence::PhoneCall"
 
+  def title(_viewing_user)
+    correspondence.overview
+  end
+
   def self.build_metadata
     {}
   end
