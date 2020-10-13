@@ -42,5 +42,13 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_ma
       expect(result.correspondence.activity.source.user).to eq(user)
       expect(result.correspondence.activity.correspondence).to eq(result.correspondence)
     end
+
+    it "notifies the relevant users", :with_test_queue_adapter do
+      allow(NotifyMailer).to receive(:investigation_updated).and_return(instance_double("mailer", deliver_later: nil))
+
+      result
+
+      expect(NotifyMailer).to have_received(:investigation_updated).with(investigation.pretty_id, investigation.owner.name, investigation.owner.email, "Phone call details added to the Allegation by #{result.correspondence.activity.source.show}.", "Allegation updated")
+    end
   end
 end
