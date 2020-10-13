@@ -18,6 +18,10 @@ RSpec.describe PhoneCallCorrespondenceForm do
       expect(form).to be_valid
     end
 
+    it_behaves_like "it does not allow an incomplete", :correspondence_date
+    it_behaves_like "it does not allow malformed dates", :correspondence_date
+    it_behaves_like "it does not allow dates in the future", :correspondence_date
+
     describe "#validate_transcript_and_content" do
       context "when no transcript is uploaded" do
         let(:transcript) { nil }

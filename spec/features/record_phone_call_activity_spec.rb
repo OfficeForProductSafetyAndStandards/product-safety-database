@@ -43,6 +43,16 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Date of call must include a month and year"
 
+    future_date = 1.day.from_now
+    fill_in "Day", with: future_date.day
+    fill_in "Month", with: future_date.month
+    fill_in "Year", with: future_date.year
+    click_on "Add phone call"
+
+    expect(page).to have_error_messages
+    expect(page).to have_error_summary "Date of call must be today or in the past"
+    # End test date validation
+
     fill_in_record_phone_call_form(name: name, phone: phone, date: date)
 
     expect_to_be_on_record_phone_call_details_page

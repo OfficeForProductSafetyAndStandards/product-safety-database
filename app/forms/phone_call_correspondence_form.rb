@@ -5,7 +5,8 @@ class PhoneCallCorrespondenceForm
   validates :correspondence_date,
             presence: true,
             real_date: true,
-            complete_date: true
+            complete_date: true,
+            in_future: true
 
   validate :validate_transcript_and_content
 
