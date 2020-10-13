@@ -43,7 +43,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
     context "when the attachment has changed" do
       let(:attachment_changed) { true }
       let(:new_file) { fixture_file_upload(file_fixture("files/new_risk_assessment.txt")) }
-      let(:previous_attachment_filename) { "risk_assessment.txt" }
+      let(:previous_attachment_filename) { "files/risk_assessment.txt" }
 
       before do
         risk_assessment.risk_assessment_file.detach
