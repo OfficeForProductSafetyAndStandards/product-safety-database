@@ -24,6 +24,8 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       click_button "Continue"
 
       expect_to_be_on_record_test_result_page
+      expect_test_result_form_to_be_blank
+
       click_button "Continue"
 
       expect(page).to have_summary_error("Enter date of the test")
@@ -67,6 +69,9 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
 
       expect(page).to have_text("test_result.txt")
+
+      visit "/cases/#{investigation.pretty_id}/test-results/new"
+      expect_test_result_form_to_be_blank
     end
   end
 
@@ -91,6 +96,22 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     end
     click_button "Continue"
     expect(page).to have_css("h1", text: "Confirm test result details")
+  end
+
+  def expect_test_result_form_to_be_blank
+    expect(page).to have_field("Against which legislation?", with: nil)
+    expect(page.find_field("Day").text).to be_blank
+    expect(page.find_field("Month").text).to be_blank
+    expect(page.find_field("Year").text).to be_blank
+    within_fieldset("What was the result?") do
+      expect(page).not_to have_checked_field("Pass")
+      expect(page).not_to have_checked_field("Fail")
+      expect(page).not_to have_checked_field("Other")
+    end
+    within_fieldset "Test report attachment" do
+      expect(page.find_field("Upload a file").value).to be_blank
+      expect(page.find_field("Attachment description").text).to be_blank
+    end
   end
 
   def expect_test_result_form_to_show_input_data(legislation:, date:)

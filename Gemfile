@@ -22,7 +22,7 @@ gem "lograge", "~> 0.11"
 gem "mini_magick", "~> 4.10"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.7"
-gem "puma", "~> 4.3"
+gem "puma", "~> 5.0"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2"
 gem "rails", "~> 6.0"
@@ -40,6 +40,7 @@ gem "slim-rails", "~> 3.2"
 gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
+gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.2"
 gem "wicked", "~> 1.3"
@@ -56,10 +57,10 @@ group :development, :test do
 end
 
 group :development do
-  gem "debase", "~> 0.2"
+  gem "awesome_print", "~> 1.8", require: "ap"
+  gem "byebug", "~> 11.1"
   gem "listen", "~> 3.2"
   gem "m", "~> 1.5"
-  gem "ruby-debug-ide", "~> 0.7"
   gem "solargraph", "~> 0.39"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
