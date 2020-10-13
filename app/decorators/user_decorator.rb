@@ -14,7 +14,7 @@ class UserDecorator < Draper::Decorator
 
   # viewer could be a Team or User
   def display_name(viewer:)
-    suffix = " (#{team.name})" unless viewer.in_same_team_as?(team)
+    suffix = " (#{team.name})" if team != viewer&.team
     "#{name}#{suffix}#{deleted_suffix}"
   end
 
