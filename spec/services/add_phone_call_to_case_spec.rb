@@ -48,7 +48,7 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_ma
 
       result
 
-      expect(NotifyMailer).to have_received(:investigation_updated).with(investigation.pretty_id, investigation.owner.name, investigation.owner.email, "Phone call details added to the Allegation by #{result.correspondence.activity.source.show}.", "Allegation updated")
+      expect(NotifyMailer).to have_received(:investigation_updated).with(investigation.pretty_id, investigation.owner_team.name, investigation.owner_team.email, "Phone call details added to the Allegation by #{result.correspondence.activity.source.show}.", "Allegation updated")
     end
   end
 end

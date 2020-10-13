@@ -15,13 +15,12 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
     "Phone call added"
   end
 
-  def email_update_text(viewer = nil)
-    "Phone call details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
-  end
-
 private
 
   def subtitle_slug
     "Phone call"
   end
+
+  # no-op sending of email is done by the service AddPhoneCallToCase
+  def notify_relevant_users; end
 end
