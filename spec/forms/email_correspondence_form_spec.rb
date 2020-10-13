@@ -41,7 +41,7 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
       end
     end
 
-    it_behaves_like "it does not allow an incomplete"
+    it_behaves_like "it does not allow an incomplete", :correspondence_date
     it_behaves_like "it does not allow malformed dates", :correspondence_date
     it_behaves_like "it does not allow dates in the future", :correspondence_date
 
