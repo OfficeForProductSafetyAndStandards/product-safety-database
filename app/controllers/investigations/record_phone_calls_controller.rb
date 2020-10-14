@@ -1,51 +1,45 @@
-class Investigations::RecordPhoneCallsController < Investigations::CorrespondenceController
-  set_attachment_names :transcript
-  set_file_params_key :correspondence_phone_call
+class Investigations::RecordPhoneCallsController < ApplicationController
+  def new
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+
+    @correspondence_form = PhoneCallCorrespondenceForm.new
+    @investigation = investigation.decorate
+  end
+
+  def create
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+
+    @correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
+    @correspondence_form.cache_file!
+    @correspondence_form.load_transcript_file
+
+    @investigation = investigation.decorate
+
+    return render :new unless @correspondence_form.valid?
+
+    result = AddPhoneCallToCase.call!(
+      @correspondence_form
+        .attributes
+        .except("existing_transcript_file_id")
+        .merge(investigation: investigation, user: current_user)
+    )
+
+    redirect_to investigation_phone_call_path(@investigation.pretty_id, result.correspondence)
+  end
 
 private
 
-  def audit_class
-    AuditActivity::Correspondence::AddPhoneCall
-  end
-
-  def model_class
-    Correspondence::PhoneCall
-  end
-
-  def file_metadata
-    get_attachment_metadata_params(:transcript).merge(
-      title: correspondence_params["overview"],
-      description: "Call transcript"
-    )
-  end
-
-  def request_params
-    return {} if params[correspondence_params_key].blank?
-
-    params.require(correspondence_params_key).permit(
+  def phone_call_params
+    params.require(:phone_call_correspondence_form).permit(
       :correspondent_name,
       :phone_number,
       :overview,
-      :details
+      :details,
+      :transcript,
+      :existing_transcript_file_id,
+      correspondence_date: %i[day month year]
     )
-  end
-
-  def set_attachments
-    @transcript_blob, * = load_file_attachments
-  end
-
-  def update_attachments
-    update_blob_metadata @transcript_blob, file_metadata
-  end
-
-  def correspondence_valid?
-    @correspondence.validate(step || steps.last)
-    @correspondence.validate_transcript_and_content(@transcript_blob) if step == :content
-    validate_blob_size(@transcript_blob, @correspondence.errors, "file")
-    @correspondence.errors.empty?
-  end
-
-  def attach_files
-    attach_blob_to_attachment_slot(@transcript_blob, @correspondence.transcript)
   end
 end

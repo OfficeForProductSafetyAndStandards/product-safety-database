@@ -515,10 +515,6 @@ module PageExpectations
     expect(page).to have_selector("legend", text: "Details")
   end
 
-  def expect_to_be_on_confirm_phone_call_details_page
-    expect_page_to_have_h1("Confirm phone call details")
-  end
-
   def expect_to_be_on_record_email_page
     expect_page_to_have_h1("Record email")
     expect(page).to have_selector("legend", text: "Email details")

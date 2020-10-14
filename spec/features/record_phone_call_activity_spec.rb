@@ -31,53 +31,43 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_record_phone_call_page
 
     # Test required fields
-    click_button "Continue"
+    click_button "Add phone call"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Correspondence date cannot be blank"
+    expect(page).to have_error_summary "Enter the date of call"
 
     # Test date validation
     fill_in "Day", with: "333"
-    click_button "Continue"
+    click_on "Add phone call"
 
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Correspondence date must include a month and year"
+    expect(page).to have_error_summary "Date of call must include a month and year"
+
+    future_date = 1.day.from_now
+    fill_in "Day", with: future_date.day
+    fill_in "Month", with: future_date.month
+    fill_in "Year", with: future_date.year
+    click_on "Add phone call"
+
+    expect(page).to have_error_messages
+    expect(page).to have_error_summary "Date of call must be today or in the past"
+    # End test date validation
 
     fill_in_record_phone_call_form(name: name, phone: phone, date: date)
 
     expect_to_be_on_record_phone_call_details_page
 
     # Test required fields
-    click_button "Continue"
+    click_button "Add phone call"
 
     expect(page).to have_error_summary "Please provide either a transcript or complete the summary and notes fields"
 
-    attach_file "correspondence_phone_call[transcript][file]", file
-    click_button "Continue"
+    attach_file "Upload a file", file
+    click_button "Add phone call"
 
-    expect_to_be_on_confirm_phone_call_details_page
-    expect_confirm_phone_call_details_page_to_show_entered_information(name: name, phone: phone, date: date, file: file)
+    expect_to_be_on_phone_call_page(case_id: investigation.pretty_id)
 
-    # Test edit details pages retain entered information
-    click_link "Edit details"
-
-    expect_to_be_on_record_phone_call_page
-    expect_record_phone_call_form_to_have_entered_information(name: name, phone: phone, date: date)
-
-    click_button "Continue"
-
-    expect_to_be_on_record_phone_call_details_page
-
-    within_fieldset "Details" do
-      expect(page).to have_css("a", text: File.basename(file))
-    end
-
-    click_button "Continue"
-
-    expect_to_be_on_confirm_phone_call_details_page
-    click_button "Continue"
-
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -131,13 +121,9 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     expect_to_be_on_record_phone_call_details_page
 
     fill_in_record_phone_call_details_form(summary: summary, notes: notes)
-    click_button "Continue"
+    click_button "Add phone call"
 
-    expect_to_be_on_confirm_phone_call_details_page
-    expect_confirm_phone_call_details_page_to_show_entered_information(name: name, phone: phone, date: date, summary: summary, notes: notes)
-    click_button "Continue"
-
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
+    click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
@@ -161,24 +147,11 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date
     fill_in "Year",  with: date.year  if date
-    click_button "Continue"
   end
 
   def fill_in_record_phone_call_details_form(summary:, notes:)
     fill_in "Summary", with: summary if summary
     fill_in "Notes", with: notes if notes
-  end
-
-  def expect_confirm_phone_call_details_page_to_show_entered_information(name:, phone:, date:, file: nil, summary: nil, notes: nil)
-    expect(page.find("dt", text: "Call with")).to have_sibling("dd", text: "#{name} (#{phone})")
-    expect(page.find("dt", text: "Date")).to have_sibling("dd", text: date.strftime("%d/%m/%Y"))
-
-    if file
-      expect(page.find("dt", text: "Attachments")).to have_sibling("dd", text: File.basename(file))
-    else
-      expect(page.find("dt", text: "Summary")).to have_sibling("dd", text: summary)
-      expect(page.find("dt", text: "Content")).to have_sibling("dd", text: notes)
-    end
   end
 
   def expect_record_phone_call_form_to_have_entered_information(name:, phone:, date:)
@@ -192,7 +165,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ela
   def expect_case_activity_page_to_show_entered_information(user_name:, name:, phone:, date:, file: nil, summary: nil, notes: nil)
     item = page.find("p", text: "Phone call by #{user_name}").find(:xpath, "..")
     expect(item).to have_text("Call with: #{name} (#{phone})")
-    expect(item).to have_text("Date: #{date.strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Date: #{date.to_s(:govuk)}")
 
     if file
       expect(item).to have_text("Attached: #{File.basename(file)}")
