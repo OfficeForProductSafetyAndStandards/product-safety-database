@@ -15,6 +15,12 @@ RSpec.describe DateParser do
     it { is_expected.to eql(Date.new(2020, 1, 20)) }
   end
 
+  context "when given a hash containing a valid year, month and day and one is an integer" do
+    let(:input) { { year: 2020, month: "1 ", day: "20 " } }
+
+    it { is_expected.to eql(Date.new(2020, 1, 20)) }
+  end
+
   context "when given a hash containing a month and day with leading zeros" do
     let(:input) { { year: "2020", month: "01", day: "09" } }
 
