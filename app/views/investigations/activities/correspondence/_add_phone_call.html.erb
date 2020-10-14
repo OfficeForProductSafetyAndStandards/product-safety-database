@@ -1,0 +1,22 @@
+<p class="govuk-body">
+  <% if activity.correspondence.correspondent_name.present? %>
+    Call with: <strong><%= activity.correspondence.correspondent_name %></strong> <%= activity.phone_number %>
+    <br />
+  <% end %>
+  Date: <strong><%= activity.correspondence_date %></strong>
+  <br />
+
+  <% if activity.correspondence.transcript.present? %>
+    <%= activity.attached %>
+    <br />
+  <% end %>
+
+  <% if activity.correspondence.details.present? %>
+    <br />
+    <%= activity.correspondence.details %>
+  <% end %>
+
+</p>
+<p class="govuk-body">
+  <%=  link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link" %>
+</p>

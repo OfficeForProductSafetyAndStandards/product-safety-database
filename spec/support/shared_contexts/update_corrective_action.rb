@@ -28,5 +28,5 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
     (Rails.application.config.corrective_action_constants["geographic_scope"] - [corrective_action.geographic_scope]).sample
   end
   let(:new_file_description) { "new corrective action file description" }
-  let(:new_file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
+  let(:new_file) { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
 end

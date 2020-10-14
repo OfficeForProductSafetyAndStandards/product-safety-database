@@ -87,7 +87,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      errorMessage: error_message
   end
 
-  def govuk_file_upload(attribute, label:, hint: nil, label_classes: nil)
+  def govuk_file_upload(attribute, label:, hint: nil, label_classes: nil, classes: nil)
     # Set the form's enctype attribute to multipart/form-data so that the file
     # will get uploaded.
     self.multipart = true
@@ -102,6 +102,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       id: attribute,
       name: input_name(attribute),
       errorMessage: error_message,
+      classes: classes,
       hint: {
         text: hint
       },

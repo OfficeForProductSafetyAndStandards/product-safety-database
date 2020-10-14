@@ -1,5 +1,6 @@
 class ChangeCaseRiskLevel
   include Interactor
+  include EntitiesToNotify
 
   AUDIT_ACTIVITY_CLASS = AuditActivity::Investigation::RiskLevelUpdated
 
@@ -33,19 +34,6 @@ private
       investigation: investigation,
       metadata: AUDIT_ACTIVITY_CLASS.build_metadata(investigation, change_action)
     )
-  end
-
-  def entities_to_notify
-    entities = []
-    investigation.teams_with_access.each do |team|
-      if team.team_recipient_email.present?
-        entities << team
-      else
-        users_from_team = team.users.active
-        entities.concat(users_from_team)
-      end
-    end
-    entities.uniq - [context.user]
   end
 
   def send_notification_email
