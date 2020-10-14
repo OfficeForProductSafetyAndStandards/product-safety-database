@@ -78,7 +78,7 @@ RSpec.describe InviteUserToTeamForm do
     end
 
     context "with an existing user" do
-      let(:user_trait) { :psd_user }
+      let(:user_trait) { nil }
       let(:user_team) { create(:team) }
       let(:user_email) { email }
 
