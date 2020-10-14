@@ -146,7 +146,5 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
         expect(policy.view_protected_details?).to be false
       end
     end
-
   end
-
 end

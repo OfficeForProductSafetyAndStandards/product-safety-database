@@ -217,23 +217,19 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       before do
         AuditActivity::Investigation::UpdateOwner.create!(
           investigation: investigation,
-          metadata: {"owner_id" => past_owner.id}
+          metadata: { "owner_id" => past_owner.id }
         )
       end
 
-      it "should return the previous owner" do
+      it "returns the previous owner" do
         expect(investigation.past_owners).to eq [past_owner]
       end
     end
 
     context "when there are no previous owners" do
-
-      it "should return an empty list" do
+      it "returns an empty list" do
         expect(investigation.past_owners).to eq []
       end
-
     end
-
-
   end
 end
