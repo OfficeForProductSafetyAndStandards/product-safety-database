@@ -6,7 +6,7 @@ class PhoneCallCorrespondenceForm
             presence: true,
             real_date: true,
             complete_date: true,
-            in_future: true
+            not_in_future: true
 
   validate :validate_transcript_and_content
 
@@ -21,13 +21,13 @@ class PhoneCallCorrespondenceForm
   def cache_file!
     return if transcript.blank?
 
-    blob = ActiveStorage::Blob.create_after_upload!(
+    self.transcript = ActiveStorage::Blob.create_after_upload!(
       io: transcript,
       filename: transcript.original_filename,
       content_type: transcript.content_type
     )
 
-    self.existing_transcript_file_id = blob.signed_id
+    self.existing_transcript_file_id = transcript.signed_id
   end
 
   def load_transcript_file

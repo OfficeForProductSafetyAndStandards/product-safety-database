@@ -1,5 +1,6 @@
 class AddPhoneCallToCase
   include Interactor
+  include EntitiesToNotify
 
   delegate :activity, :investigation, :correspondence, :user, :transcript, :correspondence_date, :correspondent_name, :overview, :details, :phone_number, to: :context
 
@@ -29,19 +30,6 @@ class AddPhoneCallToCase
   end
 
 private
-
-  def entities_to_notify
-    entities = []
-    investigation.teams_with_access.each do |team|
-      if team.email.present?
-        entities << team
-      else
-        users_from_team = team.users.active
-        entities.concat(users_from_team)
-      end
-    end
-    entities.uniq - [context.user]
-  end
 
   def send_notification_email
     entities_to_notify.each do |entity|

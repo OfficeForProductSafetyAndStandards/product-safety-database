@@ -51,7 +51,7 @@
           <% if form.object.transcript.present? %>
             <p id="current-attachment-details">
               Currently selected file:
-              <%= link_to form.object.transcript.original_filename, form.object.transcript.path, target: "_blank", rel: 'noopener' %>
+              <%= link_to form.object.transcript.filename, url_for(form.object.transcript), target: "_blank", rel: 'noopener' %>
             </p>
 
             <%= govukDetails(summaryText: "Replace this file", html: file_upload_field) %>
