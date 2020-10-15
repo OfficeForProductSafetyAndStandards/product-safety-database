@@ -40,9 +40,9 @@ class RiskAssessmentForm
 
   validates :assessed_on,
             real_date: true,
-            complete_date: true
+            complete_date: true,
+            not_in_future: true
 
-  validate :assessed_on_cannot_be_in_future
   validate :assessed_on_cannot_be_older_than_1970
 
   def risk_levels
@@ -112,13 +112,6 @@ class RiskAssessmentForm
   end
 
 private
-
-  def assessed_on_cannot_be_in_future
-    if assessed_on.is_a?(Date) && assessed_on > Time.zone.today
-
-      errors.add(:assessed_on, :in_future)
-    end
-  end
 
   def assessed_on_cannot_be_older_than_1970
     if assessed_on.is_a?(Date) && assessed_on < Date.parse("1970-01-01")
