@@ -2,12 +2,10 @@ require "rails_helper"
 
 RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_errors_rendered, type: :feature do
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, user_role, team: team, has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
   let(:email) { Faker::Internet.safe_email }
 
   context "when the user is not a team admin" do
-    let(:user_role) { :psd_user }
-
     before do
       sign_in(user)
     end
@@ -19,7 +17,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   end
 
   context "when the user is a team admin" do
-    let(:user_role) { :team_admin }
+    let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true) }
 
     before do
       sign_in(user)
@@ -91,7 +89,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   end
 
   context "when the user is a team admin that needs secondary authentication for the invitation", :with_2fa, :with_stubbed_notify do
-    let(:user_role) { :team_admin }
+    let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true) }
 
     before do
       travel_to(4.hours.ago) do

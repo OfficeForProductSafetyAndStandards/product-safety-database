@@ -32,7 +32,7 @@ if run_seeds
     team: team,
   )
 
-  %i[opss_user psd_user user].each do |role|
+  %i[opss_user user].each do |role|
     UserRole.create!(user: user, name: role)
   end
 
@@ -459,7 +459,6 @@ if run_seeds
     #               "password_confirmation": "super secret",
     #               "user_roles_attributes": [
     #                { "name": "team_admin" },
-    #                { "name": "psd_user" }
     #               ]
     #              }
     #           ]
@@ -516,10 +515,10 @@ if run_seeds
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 
-    %i[opss_user psd_user user].each do |role|
+    %i[opss_user user].each do |role|
       UserRole.create!(user: user1, name: role)
     end
-    %i[team_admin opss_user psd_user user].each do |role|
+    %i[team_admin opss_user user].each do |role|
       UserRole.create!(user: user2, name: role)
     end
 

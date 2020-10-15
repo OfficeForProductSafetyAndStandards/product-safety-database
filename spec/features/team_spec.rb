@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearch, type: :feature do
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, :psd_user, team: team, has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
 
   let!(:another_active_user) { create(:user, :activated, email: "active.sameteam@example.com", organisation: user.organisation, team: team, has_viewed_introduction: true) }
   let!(:another_inactive_user) { create(:user, email: "inactive.sameteam@example.com", invited_at: 1.year.ago, organisation: user.organisation, team: team) }

@@ -20,9 +20,10 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
     let(:has_accepted_declaration) { true }
     let(:has_viewed_introduction) { true }
     let(:user_state) { :activated }
+    let(:user) { create(:user, user_state, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction) }
 
     before do
-      sign_in(create(:user, user_state, role, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction))
+      sign_in user
     end
 
     def expect_small_beta_phase_banner
@@ -38,7 +39,7 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
     end
 
     context "with OPSS user role" do
-      let(:role) { :opss_user }
+      let(:user) { create(:user, :opss_user, user_state, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction) }
 
       context "when the user has not previously accepted the declaration" do
         let(:has_accepted_declaration) { false }
@@ -74,8 +75,6 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
     end
 
     context "without OPSS user role" do
-      let(:role) { :psd_user }
-
       context "when the user has not previously accepted the declaration or viewed the introduction" do
         let(:has_accepted_declaration) { false }
         let(:has_viewed_introduction) { false }

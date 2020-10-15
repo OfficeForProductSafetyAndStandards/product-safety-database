@@ -23,7 +23,7 @@ FactoryBot.define do
     team { create(:team, organisation: organisation) }
 
     transient do
-      roles { [:psd_user] }
+      roles { [] }
     end
 
     trait :activated do
@@ -58,25 +58,19 @@ FactoryBot.define do
 
     trait :team_admin do
       transient do
-        roles { %i[psd_user team_admin] }
+        roles { %i[team_admin] }
       end
     end
 
     trait :psd_admin do
       transient do
-        roles { %i[psd_user psd_admin] }
-      end
-    end
-
-    trait :psd_user do
-      transient do
-        roles { [:psd_user] }
+        roles { %i[psd_admin] }
       end
     end
 
     trait :opss_user do
       transient do
-        roles { %i[psd_user opss_user] }
+        roles { %i[opss_user] }
       end
     end
 

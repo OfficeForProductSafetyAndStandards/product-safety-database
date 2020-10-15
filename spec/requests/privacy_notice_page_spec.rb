@@ -8,7 +8,7 @@ RSpec.describe "Privacy notice page", type: :request do
     end
 
     context "when signed in as a non-OPSS user, having not accepted to the declaration or viewed the introduction" do
-      let(:user) { create(:user, :psd_user, has_accepted_declaration: false, has_viewed_introduction: false) }
+      let(:user) { create(:user, has_accepted_declaration: false, has_viewed_introduction: false) }
 
       it "renders the template" do
         expect(response).to render_template(:privacy_notice)
@@ -16,7 +16,7 @@ RSpec.describe "Privacy notice page", type: :request do
     end
 
     context "when signed in as a non-OPSS user, having accepted the declaration but not yet viewed the introduction" do
-      let(:user) { create(:user, :psd_user, has_accepted_declaration: true, has_viewed_introduction: false) }
+      let(:user) { create(:user, has_accepted_declaration: true, has_viewed_introduction: false) }
 
       it "renders the template" do
         expect(response).to render_template(:privacy_notice)
