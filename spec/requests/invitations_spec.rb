@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbed_notify, :with_errors_rendered, type: :request do
   let(:team) { create(:team) }
-  let(:user) { create(:user, user_role, :activated, has_viewed_introduction: true, team: user_team) }
-  let(:user_role) { :team_admin }
+  let(:user) { create(:user, :team_admin, :activated, has_viewed_introduction: true, team: user_team) }
   let(:user_team) { team }
   let(:invite_double) { instance_double(InviteUserToTeam, user: instance_double(User, email: "test@example.com")) }
 
@@ -17,7 +16,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
     end
 
     context "when the user is not a team admin" do
-      let(:user_role) { :psd_user }
+      let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
       it "shows an error message" do
         expect(response).to render_template("errors/forbidden")
@@ -44,7 +43,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
     end
 
     context "when the user is not a team admin" do
-      let(:user_role) { :psd_user }
+      let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
       it "shows an error message" do
         post team_invitations_path(team), params: params
@@ -104,7 +103,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
   end
 
   describe "#resend" do
-    let(:existing_user) { create(:user, :psd_user, :inactive, team: existing_user_team) }
+    let(:existing_user) { create(:user, :inactive, team: existing_user_team) }
     let(:existing_user_team) { user_team }
 
     it "requires secondary authentication", :with_2fa do
@@ -113,7 +112,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
     end
 
     context "when the user is not a team admin" do
-      let(:user_role) { :psd_user }
+      let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 
       it "shows an error message" do
         put resend_team_invitation_path(team, existing_user)

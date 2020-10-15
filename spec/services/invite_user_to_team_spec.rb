@@ -6,8 +6,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
 
     let(:email) { Faker::Internet.safe_email }
     let(:team) { create(:team) }
-    let(:inviting_user) { create(:user, :activated, inviting_user_role, team: team) }
-    let(:inviting_user_role) { :psd_user }
+    let(:inviting_user) { create(:user, :activated, team: team) }
 
     context "when there is no existing user" do
       let(:params) { { email: email, team: team } }
@@ -25,7 +24,6 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         expect(result.user).to be_a(User)
       end
 
-      # rubocop:disable RSpec/ExampleLength
       it "sets the correct user properties", :aggregate_failures do
         expect(result.user).to have_attributes(
           email: email,
@@ -34,11 +32,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
           invited_at: kind_of(Time),
           team: team
         )
-
-        expect(result.user.user_roles.length).to eq(1)
-        expect(result.user).to be_is_psd_user
       end
-      # rubocop:enable RSpec/ExampleLength
 
       it "enqueues the SendUserInvitationJob with the new user ID", :aggregate_failures do
         expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
@@ -58,7 +52,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         context "when the inviting_user is an OPSS user" do
-          let(:inviting_user_role) { :opss_user }
+          let(:inviting_user) { create(:user, :activated, :opss_user, team: team) }
 
           it "gives the invited user the opss_user role" do
             result

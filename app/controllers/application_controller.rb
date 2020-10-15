@@ -28,8 +28,6 @@ class ApplicationController < ActionController::Base
 
   def authorize_user
     return unless user_signed_in?
-
-    raise Pundit::NotAuthorizedError unless current_user.is_psd_user?
   end
 
   def has_accepted_declaration
