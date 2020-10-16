@@ -105,13 +105,18 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Confirm corrective action details")
   end
 
-  def expect_to_be_on_investigation_products_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products")
+  def expect_to_be_on_investigation_products_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/products")
     expect(page).to have_selector("h1", text: "Products")
   end
 
   def expect_to_be_on_case_products_page
     expect(page).to have_selector("h1", text: "Products")
+  end
+
+  def expect_to_be_on_remove_product_from_case_page(case_id:, product_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/products/#{product_id}/remove")
+    expect(page).to have_selector("h2", text: "Remove product")
   end
 
   def expect_to_be_on_teams_page(case_id:)
@@ -137,6 +142,11 @@ module PageExpectations
   def expect_to_be_on_case_actions_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/actions")
     expect(page).to have_selector("h1", text: "Select an action")
+  end
+
+  def expect_to_be_on_change_case_status_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/status")
+    expect(page).to have_h1("Status information")
   end
 
   def expect_to_be_on_add_correspondence_page
@@ -445,6 +455,40 @@ module PageExpectations
     expect(page).to have_selector("h1", text: business_name)
   end
 
+  def expect_to_be_on_add_business_to_location_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/locations/new")
+    expect(page).to have_h1("Add location")
+  end
+
+  def expect_to_be_on_edit_location_for_a_business_page(business_id:, location_id: nil)
+    if location_id
+      expect(page).to have_current_path("/businesses/#{business_id}/locations/#{location_id}/edit")
+    else
+      expect(page).to have_current_path(/\/businesses\/#{business_id}\/locations\/\d+\/edit/)
+    end
+    expect(page).to have_h1("Edit location")
+  end
+
+  def expect_to_be_on_remove_location_for_a_business_page(business_id:, location_id: nil)
+    expect(page).to have_current_path("/businesses/#{business_id}/locations/#{location_id}/remove")
+    expect(page).to have_h1("Remove location")
+  end
+
+  def expect_to_be_on_add_contact_to_a_business_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/contacts/new")
+    expect(page).to have_h1("Add contact")
+  end
+
+  def expect_to_be_on_edit_business_contact_page(business_id:, contact_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/contacts/#{contact_id}/edit")
+    expect(page).to have_h1("Edit contact")
+  end
+
+  def expect_to_be_on_remove_contact_for_a_business_page(business_id:, contact_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/contacts/#{contact_id}/remove")
+    expect(page).to have_h1("Remove contact")
+  end
+
   def expect_teams_tables_to_contain(expected_teams)
     teams_table = page.find(:table, "Teams added to the case")
 
@@ -483,10 +527,6 @@ module PageExpectations
   def expect_to_be_on_record_phone_call_details_page
     expect_page_to_have_h1("Record phone call")
     expect(page).to have_selector("legend", text: "Details")
-  end
-
-  def expect_to_be_on_confirm_phone_call_details_page
-    expect_page_to_have_h1("Confirm phone call details")
   end
 
   def expect_to_be_on_record_email_page

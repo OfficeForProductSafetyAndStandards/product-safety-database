@@ -72,48 +72,12 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
     end
 
     # Assessment date
-    context "with no assessment date specified" do
-      let(:assessment_date) { { day: "", month: "", year: "" } }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
-    context "with a partial assessment date" do
-      let(:assessment_date) { { day: "1", month: "12", year: "" } }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
-    context "with an assessment date that isn't a real date" do
-      let(:assessment_date) { { day: "99", month: "12", year: "2020" } }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
+    it_behaves_like "it does not allow an incomplete", :assessment_date, :assessed_on
+    it_behaves_like "it does not allow malformed dates", :assessment_date, :assessed_on
+    it_behaves_like "it does not allow dates in the future", :assessment_date, :assessed_on
 
     context "with an assessment date that isn't numerical" do
       let(:assessment_date) { { day: "x", month: "12", year: "2020" } }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
-    context "with an assessment date that is in the future" do
-      let(:assessment_date) { { day: "1", month: "1", year: "2050" } }
-
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
-    context "with an assessment date that is before 1970" do
-      let(:assessment_date) { { day: "31", month: "12", year: "1969" } }
 
       it "is not valid" do
         expect(form).not_to be_valid

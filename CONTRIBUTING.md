@@ -31,7 +31,6 @@ In order to propose a change to the codebase, you can open a pull request on Git
 
 ## Style guide
 1. Prioritise readability.
-1. The minitest suite is deprecated - use RSpec for new tests, and remove redundant tests from the old test suite when possible.
 1. All new code must be supported by a feature spec and relevant unit specs. Write a new feature spec if one does not already exist.
 1. Feature specs should only cover "happy path" scenarios and some basic error states. Edge cases and exhaustive error testing should be performed in the relevant unit tests.
 1. Use full paths in feature specs - not Rails URL helpers - in order to test the full stack from the user's perspective.
