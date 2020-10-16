@@ -13,6 +13,24 @@ RSpec.describe PhoneCallCorrespondenceForm do
     params[:existing_transcript_file_id] = existing_transcript_file_id
   end
 
+  describe ".from", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+    let(:correspondence_date) { Date.current }
+    let(:phone_call) { AddPhoneCallToCase.call!(investigation: investigation, user: user, **params).correspondence }
+
+    it "creates a valid form object" do
+      expect(described_class.from(phone_call))
+        .to have_attributes(
+              correspondence_date: DateParser.new(correspondence_date).date,
+              correspondent_name: correspondent_name,
+              phone_number: phone_number,
+              overview: overview,
+              details: details,
+              transcript: transcript,
+              id: phone_call.id
+            )
+    end
+  end
+
   describe "validations" do
     it "has a valid test set up" do
       expect(form).to be_valid

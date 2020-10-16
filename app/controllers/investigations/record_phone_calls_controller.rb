@@ -29,6 +29,15 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     redirect_to investigation_phone_call_path(@investigation.pretty_id, result.correspondence)
   end
 
+  def edit
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+
+    @phone_call = Correspondence::PhoneCall.find(params[:id]).decorate
+    @correspondence_form = PhoneCallCorrespondenceForm.from(phone_call)
+    @investigation = investigation.decorate
+  end
+
 private
 
   def phone_call_params

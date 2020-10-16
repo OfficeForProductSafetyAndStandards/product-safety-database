@@ -17,6 +17,13 @@ class PhoneCallCorrespondenceForm
   attribute :details
   attribute :transcript
   attribute :existing_transcript_file_id
+  attribute :id
+
+  def self.from(phone_call)
+    form = new(phone_call.attributes.slice(:contact_method))
+    form.correspondence_date = phone_call.correspondence_date
+    form
+  end
 
   def cache_file!
     return if transcript.blank?
