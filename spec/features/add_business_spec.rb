@@ -101,6 +101,12 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect_to_be_on_remove_business_page
     click_button "Remove business"
     expect_confirmation_banner("Business was successfully removed.")
+
+    # Check that adding and removing the business was recorded in the
+    # activity log for the investigation.
+    click_link "Activity"
+    expect(page).to have_text("Removed: #{trading_name}")
+    expect(page).to have_text("Business added")
   end
 
   scenario "Not being able to add a business to another team’s case" do

@@ -95,11 +95,6 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
           expect(created_user.invitation_token.length).to be > 1
         end
 
-        it "adds the psd_user role to the user" do
-          result
-          expect(created_user).to be_is_psd_user
-        end
-
         it "adds the team_admin role to the user" do
           result
           expect(created_user).to be_is_team_admin

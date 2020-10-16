@@ -3,6 +3,6 @@ FactoryBot.define do
     name { "source name" }
   end
   factory :user_source, class: "UserSource" do
-    user { create(:user, :psd_user) }
+    user { create(:user) }
   end
 end

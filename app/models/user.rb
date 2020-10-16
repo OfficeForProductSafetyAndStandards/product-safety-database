@@ -63,10 +63,6 @@ class User < ApplicationRecord
     super.to_s
   end
 
-  def is_psd_user?
-    has_role? :psd_user
-  end
-
   def is_psd_admin?
     has_role? :psd_admin
   end

@@ -43,7 +43,7 @@ module Investigations
       )
       preload_manually(
         @activities.select { |a| a.respond_to?("transcript") },
-        [{ transcript_attachment: :blob }, { related_attachment_attachment: :blob }]
+        [{ transcript_attachment: :blob }]
       )
       preload_manually(
         @activities.select { |a| a.respond_to?("correspondence") },

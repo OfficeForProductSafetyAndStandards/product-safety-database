@@ -16,7 +16,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
     end
 
     context "when logged in as a normal user" do
-      let(:user) { create(:user, :activated, :psd_user, :viewed_introduction) }
+      let(:user) { create(:user, :activated, :viewed_introduction) }
 
       it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
         get investigations_path format: :xlsx

@@ -89,7 +89,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   context "when signed in as a non-OPSS user" do
-    let(:user) { create(:user, :activated, :viewed_introduction, :psd_user).decorate }
+    let(:user) { create(:user, :activated, :viewed_introduction).decorate }
 
     before { sign_in user }
 

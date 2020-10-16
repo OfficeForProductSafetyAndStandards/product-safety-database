@@ -7,7 +7,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
   let(:user) { create(:user) }
   let(:date) { Time.zone.today }
   let(:new_date) { Time.zone.today - 10.days }
-  let(:file) { fixture_file_upload(file_fixture("risk_assessment.txt")) }
+  let(:file) { fixture_file_upload(file_fixture("files/risk_assessment.txt")) }
   let(:risk_assessment) do
     AddRiskAssessmentToCase.call!(
       investigation: investigation,
@@ -42,7 +42,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
 
     context "when the attachment has changed" do
       let(:attachment_changed) { true }
-      let(:new_file) { fixture_file_upload(file_fixture("new_risk_assessment.txt")) }
+      let(:new_file) { fixture_file_upload(file_fixture("files/new_risk_assessment.txt")) }
       let(:previous_attachment_filename) { "risk_assessment.txt" }
 
       before do
