@@ -97,7 +97,9 @@ class Investigations::RecordEmailsController < ApplicationController
         email_attachment: @email.email_attachment.try(:blob),
         existing_email_attachment_id: @email.email_attachment.try(:blob).try(:id),
         existing_email_file_id: @email.email_file.try(:blob).try(:id),
-        attachment_description: @email.email_attachment.try(:metadata).to_h["description"]
+        attachment_description: @email.email_attachment.try(:metadata).to_h["description"],
+        email_file_action: "keep",
+        email_attachment_action: "keep"
       })
     )
 
@@ -148,6 +150,8 @@ private
       :attachment_description,
       :existing_email_attachment_id,
       :existing_email_file_id,
+      :email_file_action,
+      :email_attachment_action,
       correspondence_date: %i[day month year]
     )
   end

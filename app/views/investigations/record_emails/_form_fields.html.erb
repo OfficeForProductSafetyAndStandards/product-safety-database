@@ -42,8 +42,10 @@
 
     <p class="govuk-body">
       Currently selected file:
-      <%= link_to form.object.email_attachment.filename, form.object.email_attachment, target: "_blank", rel: 'noopener' %>
+      <%= link_to form.object.email_file.filename, form.object.email_file, target: "_blank", rel: 'noopener' %>
     </p>
+
+    <%= form.hidden_field :existing_email_file_id  %>
 
     <%= form.govuk_radios :email_file_action,
       legend: "Replace or remove file",
