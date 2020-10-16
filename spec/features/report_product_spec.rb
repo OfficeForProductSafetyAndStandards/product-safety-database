@@ -437,7 +437,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     select with[:country_of_origin], from: "Country of origin" if with[:country_of_origin]
     fill_in "Product type",               with: with[:type]
     fill_in "Product name",               with: with[:name]
-    fill_in "Barcodes",   with: with[:barcode] if with[:barcode]
+    fill_in "Barcodes", with: with[:barcode] if with[:barcode]
     fill_in "Webpage",                    with: with[:webpage] if with[:webpage]
     fill_in "Description of product",     with: with[:description] if with[:description]
     click_button "Continue"
