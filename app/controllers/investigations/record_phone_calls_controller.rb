@@ -33,9 +33,10 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :update?
 
-    @phone_call = Correspondence::PhoneCall.find(params[:id]).decorate
+    phone_call           = Correspondence::PhoneCall.find(params[:id])
     @correspondence_form = PhoneCallCorrespondenceForm.from(phone_call)
-    @investigation = investigation.decorate
+    @investigation       = investigation.decorate
+    @phone_call          = phone_call.decorate
   end
 
 private

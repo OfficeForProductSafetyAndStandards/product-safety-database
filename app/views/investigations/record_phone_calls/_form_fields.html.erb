@@ -4,8 +4,7 @@
 
 <h1 class="govuk-heading-l">Record phone call</h1>
 
-<%= render "components/govuk_fieldset",
-           legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" } do %>
+<%= render "components/govuk_fieldset", legend: { text: "Who was the call with?", classes: "govuk-fieldset__legend--m" } do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <%= form.govuk_input :correspondent_name, label: "Name" %>

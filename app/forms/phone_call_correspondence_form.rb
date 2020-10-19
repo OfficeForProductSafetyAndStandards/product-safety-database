@@ -19,10 +19,18 @@ class PhoneCallCorrespondenceForm
   attribute :existing_transcript_file_id
   attribute :id
 
+  ATTRIBUTES_FROM_PHONE_CALL = %w[
+    correspondence_date
+    correspondent_name
+    details
+    id
+    phone_number
+    overview
+    transcript
+  ].freeze
+
   def self.from(phone_call)
-    form = new(phone_call.attributes.slice(:contact_method))
-    form.correspondence_date = phone_call.correspondence_date
-    form
+    new(phone_call.serializable_hash(only: ATTRIBUTES_FROM_PHONE_CALL, methods: :transcript))
   end
 
   def cache_file!
@@ -41,6 +49,10 @@ class PhoneCallCorrespondenceForm
     if existing_transcript_file_id.present? && transcript.nil?
       self.transcript = ActiveStorage::Blob.find_signed(existing_transcript_file_id)
     end
+  end
+
+  def persisted?
+    id.present?
   end
 
 private
