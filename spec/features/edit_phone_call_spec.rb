@@ -16,6 +16,16 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     expect(page).to have_title("Edit phone call: #{correspondence.title}")
 
+    within_fieldset("Who was the call with?") do
+      expect(page).to have_field("Name",         with: correspondence.correspondent_name)
+      expect(page).to have_field("Phone number", with: correspondence.phone_number)
+    end
+    expect(page).to have_field("Day",          with: correspondence.correspondence_date.day)
+    expect(page).to have_field("Month",        with: correspondence.correspondence_date.month)
+    expect(page).to have_field("Year",         with: correspondence.correspondence_date.year)
+    expect(page).to have_field("Summary",      with: correspondence.overview)
+    expect(page).to have_field("Notes",        with: "\r\n" + correspondence.details, type: "textarea")
+    expect(page).to have_link(correspondence.transcript_blob.filename.to_s)
 
   end
 end
