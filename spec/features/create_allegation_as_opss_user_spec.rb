@@ -140,7 +140,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     select country_of_origin, from: "Country of origin"
     fill_in "Product type",               with: type
     fill_in "Product name",               with: name
-    fill_in "Barcodes",                   with: barcode
+    fill_in "Other product identifiers",                   with: barcode
     fill_in "Webpage",                    with: webpage
     fill_in "Description of product",     with: description
     click_button "Save product"
@@ -150,7 +150,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
     expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
-    expect(page.find("dt", text: "Barcodes")).to have_sibling("dd", text: barcode)
+    expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: barcode)
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)

@@ -30,17 +30,17 @@
   hint: { text: "Include brand, model name and model number – information that will help others identify the product. For example, ‘Inotech respirator face mask (FFP), 795487’." } %>
 
 <%= render "form_components/govuk_input",
-  key: :product_code,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Barcodes", classes: label_class },
-  hint: { text: "Enter any known UPC, EAN or other product identification codes. Separate multiple codes with a comma." } %>
-
-<%= render "form_components/govuk_input",
   key: :batch_number,
   form: form,
   classes: "app-!-max-width-one-half",
   label: { text: "Batch number", classes: label_class } %>
+
+<%= render "form_components/govuk_textarea",
+  key: :product_code,
+  form: form,
+  classes: "app-!-max-width-one-half",
+  label: { text: "Other product identifiers", classes: label_class },
+  hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." } %>
 
 <%= render "form_components/govuk_input",
   key: :webpage,
