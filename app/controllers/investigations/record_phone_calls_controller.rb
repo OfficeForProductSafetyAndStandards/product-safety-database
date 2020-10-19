@@ -39,6 +39,25 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     @phone_call          = phone_call.decorate
   end
 
+  def update
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+
+    correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
+    correspondence_form.cache_file!
+    correspondence_form.load_transcript_file
+
+    phone_call = Correspondence::PhoneCall.find(params[:id])
+    result = EditPhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
+
+    return redirect_to investigation_phone_call_path(investigation, phone_call) if result.success?
+
+    @investigation       = investigation.decorate
+    @phone_call          = phone_call.decorate
+    @correspondence_form = correspondence_form
+    render :edit
+  end
+
 private
 
   def phone_call_params

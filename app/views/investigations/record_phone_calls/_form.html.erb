@@ -1,10 +1,10 @@
-<%= form_with(model: @correspondence_form, local: true, url: investigation_phone_calls_path(@investigation), builder: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
+<%= form_with(model: correspondence_form, local: true, url: url, builder: ApplicationFormBuilder, html: { novalidate: true }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= error_summary(@correspondence_form.errors) %>
+      <%= error_summary(correspondence_form.errors) %>
 
-      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <span class="govuk-caption-l"><%= investigation.pretty_description %></span>
 
       <h1 class="govuk-heading-l">Record phone call</h1>
 

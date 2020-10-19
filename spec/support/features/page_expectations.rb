@@ -588,4 +588,18 @@ module PageExpectations
   def expect_to_be_on_case_summary_edit_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/summary/edit")
   end
+
+  def expect_case_activity_page_to_show_entered_information(user_name:, name:, phone:, date:, file: nil, summary: nil, notes: nil)
+    item = page.find("p", text: "Phone call by #{user_name}").find(:xpath, "..")
+    expect(item).to have_text("Call with: #{name} (#{phone})")
+    expect(item).to have_text("Date: #{date.to_s(:govuk)}")
+
+    if file
+      expect(item).to have_text("Attached: #{File.basename(file)}")
+      expect(item).to have_link("View phone call")
+    else
+      expect(item).to have_text(summary)
+      expect(item).to have_text(notes)
+    end
+  end
 end

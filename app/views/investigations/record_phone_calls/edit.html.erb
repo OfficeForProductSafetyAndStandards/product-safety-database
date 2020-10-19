@@ -3,7 +3,7 @@
 
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
+    text: "Back to #{@investigation.pretty_description.downcase}",
     href: investigation_supporting_information_index_path(@investigation)
   ) %>
 <% end %>
@@ -23,6 +23,6 @@
     </div>
 
 
-    <%= render 'investigations/record_phone_calls/form', correspondence_form: @correspondence_form %>
+    <%= render 'investigations/record_phone_calls/form', correspondence_form: @correspondence_form, investigation: @investigation, url: investigation_phone_call_path(@investigation, @phone_call) %>
   </div>
 </div>
