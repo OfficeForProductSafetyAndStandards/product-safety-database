@@ -414,6 +414,9 @@ en:
           attributes:
             product_category:
               blank: "Enter a valid product category"
+            gtin:
+              invalid: "Enter a valid barcode number"
+              wrong_length: "Enter a valid barcode number"
         user:
           attributes:
             mobile_number:

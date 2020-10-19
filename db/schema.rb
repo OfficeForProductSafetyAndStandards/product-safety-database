@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_15_114750) do
+ActiveRecord::Schema.define(version: 2020_10_19_145332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -222,6 +222,7 @@ ActiveRecord::Schema.define(version: 2020_10_15_114750) do
     t.string "country_of_origin"
     t.datetime "created_at", null: false
     t.text "description"
+    t.string "gtin", limit: 13
     t.string "name"
     t.string "product_code"
     t.string "product_type"

@@ -30,6 +30,14 @@
   hint: { text: "Include brand, model name and model number – information that will help others identify the product. For example, ‘Inotech respirator face mask (FFP), 795487’." } %>
 
 <%= render "form_components/govuk_input",
+  key: :gtin,
+  form: form,
+  classes: "app-!-max-width-one-half",
+  label: { text: "Barcode number (GTIN, EAN or UPC)", classes: label_class },
+  hint: {text: "Normally 13 digits, although older products may have a 12 digit number"} %>
+
+
+<%= render "form_components/govuk_input",
   key: :batch_number,
   form: form,
   classes: "app-!-max-width-one-half",

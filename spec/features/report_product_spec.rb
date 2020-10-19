@@ -350,6 +350,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_case_products_page_to_show(info:)
     expect(page).to have_selector("h2", text: info[:name])
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
+    expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin]) if info[:gtin]
     expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
     expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: info[:type])
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
@@ -437,6 +438,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     select with[:country_of_origin], from: "Country of origin" if with[:country_of_origin]
     fill_in "Product type",               with: with[:type]
     fill_in "Product name",               with: with[:name]
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:gtin]
     fill_in "Other product identifiers", with: with[:barcode] if with[:barcode]
     fill_in "Webpage",                    with: with[:webpage] if with[:webpage]
     fill_in "Description of product",     with: with[:description] if with[:description]

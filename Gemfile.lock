@@ -104,6 +104,7 @@ GEM
     aws-sigv4 (1.2.2)
       aws-eventstream (~> 1, >= 1.0.2)
     backport (1.1.2)
+    barkick (0.1.0)
     bcrypt (3.1.16)
     benchmark (0.1.0)
     builder (3.2.4)
@@ -571,6 +572,7 @@ DEPENDENCIES
   awesome_print (~> 1.8)
   aws-sdk-s3 (~> 1.83)
   axlsx!
+  barkick (~> 0.1)
   byebug (~> 11.1)
   capybara (~> 3.33)
   capybara-screenshot (~> 1.0)

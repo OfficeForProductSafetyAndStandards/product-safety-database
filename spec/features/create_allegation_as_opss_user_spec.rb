@@ -140,7 +140,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     select country_of_origin, from: "Country of origin"
     fill_in "Product type",               with: type
     fill_in "Product name",               with: name
-    fill_in "Other product identifiers",                   with: barcode
+    fill_in "Other product identifiers", with: barcode
     fill_in "Webpage",                    with: webpage
     fill_in "Description of product",     with: description
     click_button "Save product"
