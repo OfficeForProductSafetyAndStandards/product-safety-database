@@ -22,7 +22,7 @@ class EditPhoneCall
         source: UserSource.new(user: user),
         investigation: correspondence.investigation,
         correspondence: correspondence,
-        metadata: AuditActivity::Correspondence::PhoneCallUpdated.build_qmetadata(correspondence)
+        metadata: AuditActivity::Correspondence::PhoneCallUpdated.build_metadata(correspondence)
       )
 
       send_notification_email
