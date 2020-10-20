@@ -49,6 +49,8 @@ FactoryBot.define do
   end
 
   factory :correspondence_phone_call, class: "Correspondence::PhoneCall", parent: :correspondence do
+    correspondence_date { Faker::Date.backward(days: 14) }
+
     after(:build) do |correspondence, evaluator|
       correspondence.transcript.attach(
         io: File.open(evaluator.correspondence_file),
