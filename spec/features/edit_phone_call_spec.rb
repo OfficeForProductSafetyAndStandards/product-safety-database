@@ -5,13 +5,6 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
   let!(:correspondence) { AddPhoneCallToCase.call!(investigation: investigation, user: user, **params).correspondence.decorate }
 
-  let(:new_correspondent_name)  { Faker::Movies::Hobbit.character }
-  let(:new_phone_number)        { Faker::PhoneNumber.phone_number }
-  let(:new_correspondence_date) { 2.days.ago.to_date }
-  let(:new_overview)            { Faker::Hipster.sentence }
-  let(:new_details)             { Faker::Hipster.sentence }
-  let(:new_transcript)          { file_fixture("files/new_phone_call_transcript.txt") }
-
   before { sign_in investigation.owner_user }
 
   it "allows to edit the phone call record" do
@@ -79,7 +72,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
     expect(item).to have_text("Phone number: #{new_phone_number}")
     expect(item).to have_text("Date of call: #{new_correspondence_date.to_s(:govuk)}")
     expect(item).to have_text("Summary: #{new_overview}")
-    expect(item).to have_link(new_transcript.basename)
+    expect(item).to have_link(new_transcript.basename.to_s)
     expect(item).to have_text("Notes: #{new_details}")
   end
 end

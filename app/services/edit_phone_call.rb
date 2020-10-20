@@ -6,7 +6,7 @@ class EditPhoneCall
 
   def call
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-    context.fail!(error: "No phone supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
+    context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
 
     Correspondence.transaction do
       context.correspondence.update!(
@@ -48,6 +48,6 @@ private
   end
 
   def email_update_text
-    "Phone call details added to the #{investigation.case_type.upcase_first} by #{activity.source.show}."
+    "Phone call details updated on the #{investigation.case_type.upcase_first} by #{activity.source.show}."
   end
 end
