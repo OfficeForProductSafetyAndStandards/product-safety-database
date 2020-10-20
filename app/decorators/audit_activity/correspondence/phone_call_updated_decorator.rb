@@ -11,7 +11,7 @@ module AuditActivity
 
       def new_correspondence_date
         Date.parse(metadata.dig("updates", "correspondence_date", 1)).to_s(:govuk)
-      rescue StandardError # rubocop:disable Style/SuppressedException
+      rescue StandardError # rubocop:disable Lint/SuppressedException
       end
 
       def new_summary
