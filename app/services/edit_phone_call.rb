@@ -18,11 +18,11 @@ class EditPhoneCall
         details: details
       )
 
-      context.activity = AuditActivity::Correspondence::PhoneCallEdited.create!(
+      context.activity = AuditActivity::Correspondence::PhoneCallUpdated.create!(
         source: UserSource.new(user: user),
         investigation: correspondence.investigation,
         correspondence: correspondence,
-        metadata: AuditActivity::Correspondence::PhoneCallEdited.build_metadata
+        metadata: AuditActivity::Correspondence::PhoneCallUpdated.build_metadata(correspondence)
       )
 
       send_notification_email

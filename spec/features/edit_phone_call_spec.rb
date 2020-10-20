@@ -70,10 +70,16 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
-    save_and_open_page
 
-    # expect_case_activity_page_to_show_entered_information(user_name: user.name, name: new_correspondent_name, phone: new_phone_number, date: new_correspondence_date, file: new_transcript)
+    activity = correspondence.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
 
+    item = page.find("p.govuk-body-s", text: activity.subtitle(investigation.owner_user)).sibling("div.govuk-body")
 
+    expect(item).to have_text("Name: #{new_correspondent_name}")
+    expect(item).to have_text("Phone number: #{new_phone_number}")
+    expect(item).to have_text("Date of call: #{new_correspondence_date.to_s(:govuk)}")
+    expect(item).to have_text("Summary: #{new_overview}")
+    expect(item).to have_link(new_transcript.basename)
+    expect(item).to have_text("Notes: #{new_details}")
   end
 end

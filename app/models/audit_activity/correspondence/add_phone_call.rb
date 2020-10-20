@@ -3,7 +3,7 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
   with_attachments transcript: "transcript"
   belongs_to :correspondence, class_name: "Correspondence::PhoneCall"
 
-  def title(_viewing_user)
+  def title(_viewing_user = nil)
     correspondence.overview
   end
 

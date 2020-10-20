@@ -1,22 +1,35 @@
+<div class="govuk-body">
+
+  <% if activity.new_correspondent_name %>
+    Name: <strong><%= activity.new_correspondent_name %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_phone_number %>
+    Phone number: <strong><%= activity.new_phone_number %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_correspondence_date %>
+    Date of call: <strong><%= activity.new_correspondence_date %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_summary %>
+    Summary: <strong><%= activity.new_summary %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_transcript %>
+    Transcript: <strong><%= link_to activity.new_transcript, url_for(activity.correspondence.transcript) %></strong>
+    <br />
+  <% end %>
+
+  <% if activity.new_notes %>
+    Notes: <strong><%= activity.new_notes %></strong>
+    <br />
+  <% end %>
+</div>
 <p class="govuk-body">
-  <% if activity.correspondence.correspondent_name.present? %>
-    Call with: <strong><%= activity.correspondence.correspondent_name %></strong> <%= activity.phone_number %>
-    <br />
-  <% end %>
-  Date: <strong><%= activity.correspondence_date %></strong>
-  <br />
-
-  <% if activity.correspondence.transcript.present? %>
-    <%= activity.attached %>
-    <br />
-  <% end %>
-
-  <% if activity.correspondence.details.present? %>
-    <br />
-    <%= activity.correspondence.details %>
-  <% end %>
-
-</p>
-<p class="govuk-body">
-  <%=  link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link" %>
+  <%= link_to "View phone call", investigation_phone_call_path(activity.correspondence.investigation, activity.correspondence), class: "govuk-link" %>
 </p>
