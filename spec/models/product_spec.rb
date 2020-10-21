@@ -41,7 +41,7 @@ RSpec.describe Product do
       end
 
       it "gets converted to a 13 digit code on validation", :aggregate_failures do
-        product.valid?
+        expect(product).to be_valid
         expect(product.gtin13).to eq "0012345678912"
       end
     end
@@ -51,8 +51,8 @@ RSpec.describe Product do
         product.gtin13 = "0012345678912 "
       end
 
-      it "gets its trailing space removed on validation" do
-        product.valid?
+      it "gets its trailing space removed on validation", :aggregate_failures do
+        expect(product).to be_valid
         expect(product.gtin13).to eq "0012345678912"
       end
     end
@@ -62,8 +62,8 @@ RSpec.describe Product do
         product.gtin13 = "00016000275263"
       end
 
-      it "gets converted to a 13 digit code on validation" do
-        product.valid?
+      it "gets converted to a 13 digit code on validation", :aggregate_failures do
+        expect(product).to be_valid
         expect(product.gtin13).to eq "0016000275263"
       end
     end
