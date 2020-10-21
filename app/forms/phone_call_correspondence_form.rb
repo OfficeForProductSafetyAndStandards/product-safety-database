@@ -30,7 +30,14 @@ class PhoneCallCorrespondenceForm
   ].freeze
 
   def self.from(phone_call)
-    new(phone_call.serializable_hash(only: ATTRIBUTES_FROM_PHONE_CALL, methods: :transcript))
+    new(phone_call.serializable_hash(only: ATTRIBUTES_FROM_PHONE_CALL, methods: :transcript)).tap do |form|
+      form.existing_transcript_file_id = phone_call.transcript.signed_id
+    end
+  end
+
+  def initialize(*args)
+    super
+    details.strip!
   end
 
   def cache_file!

@@ -14,6 +14,18 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     expect(page).to have_title("Edit phone call: #{correspondence.title}")
 
+    # Test update without changing anything
+    # there was a problem with the audit log and transcript
+    click_on "Update phone call"
+    click_on "Back to allegation: #{investigation.pretty_id}"
+    click_on "Activity"
+
+    expect(page).not_to have_css("p.govuk-body-s", text: /Phone call updated by/)
+
+    visit "/cases/#{investigation.pretty_id}/phone-calls/#{correspondence.id}"
+
+    click_on "Edit phone call"
+
     within_fieldset("Who was the call with?") do
       expect(page).to have_field("Name",         with: correspondence.correspondent_name)
       expect(page).to have_field("Phone number", with: correspondence.phone_number)
@@ -28,7 +40,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
     expect(page).to have_field("Summary", with: correspondence.overview)
 
     within_fieldset("Details") do
-      expect(page).to have_field("Notes", with: "\r\n" + correspondence.details, type: "textarea")
+      expect(page).to have_field("Notes", with: "\r\n" + correspondence.details)
       expect(page).to have_link(correspondence.transcript_blob.filename.to_s)
     end
 

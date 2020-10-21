@@ -9,7 +9,7 @@ class EditPhoneCall
     context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
 
     Correspondence.transaction do
-      context.correspondence.update!(
+      correspondence.assign_attributes(
         transcript: transcript,
         correspondence_date: correspondence_date,
         phone_number: phone_number,
@@ -17,6 +17,10 @@ class EditPhoneCall
         overview: overview,
         details: details
       )
+
+      return unless correspondence.has_changes_to_save?
+
+      correspondence.save!
 
       context.activity = AuditActivity::Correspondence::PhoneCallUpdated.create!(
         source: UserSource.new(user: user),
