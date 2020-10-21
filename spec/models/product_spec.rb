@@ -9,7 +9,7 @@ RSpec.describe Product do
         product.gtin = ""
       end
 
-      it "gets converted to nil on validation" do
+      it "gets converted to nil on validation", :aggregate_failures do
         expect(product).to be_valid
         expect(product.gtin).to be_nil
       end
@@ -40,7 +40,7 @@ RSpec.describe Product do
         product.gtin = "012345678912"
       end
 
-      it "gets converted to a 13 digit code on validation" do
+      it "gets converted to a 13 digit code on validation", :aggregate_failures do
         product.valid?
         expect(product.gtin).to eq "0012345678912"
       end
