@@ -4,7 +4,7 @@ FactoryBot.define do
     description { "product description" }
     category { Rails.application.config.product_constants["product_category"].sample }
     product_type { "product_type" }
-    gtin { "9781529034528" }
+    gtin { "9781529034523" }
 
     factory :product_iphone do
       product_code { 234 }
