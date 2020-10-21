@@ -15,7 +15,7 @@ applications:
   timeout: 180
   services:
     - ((psd-db-name))
-    - psd-elasticsearch
+    - psd-elasticsearch-7
     - psd-queue
     - psd-session
     - opss-log-drain
