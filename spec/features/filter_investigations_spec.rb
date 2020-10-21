@@ -212,7 +212,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   describe "sorting" do
     let(:default_filtered_cases) { Investigation.where(is_closed: false) }
-    let(:case_ids) { default_filtered_cases.order(updated_at: :desc) }
+    let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
     def select_sorting_option(option)
       within_fieldset("Sort by") { choose(option) }
@@ -221,7 +221,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     context "with no sort by option selected" do
       it "shows results by most recently updated" do
-        expect(page).to list_cases_in_order(case_ids)
+        expect(page).to list_cases_in_order(cases)
       end
     end
 
@@ -229,27 +229,27 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Most recently updated") }
 
       it "shows results by most recently updated" do
-        expect(page).to list_cases_in_order(case_ids)
+        expect(page).to list_cases_in_order(cases)
       end
     end
 
     context "with sort by least recently updated option selected" do
-      let(:case_ids) { default_filtered_cases.order(updated_at: :asc) }
+      let(:cases) { default_filtered_cases.order(updated_at: :asc) }
 
       before { select_sorting_option("Least recently updated") }
 
       it "shows results by least recently updated" do
-        expect(page).to list_cases_in_order(case_ids)
+        expect(page).to list_cases_in_order(cases)
       end
     end
 
     context "with sort by most recently created option selected" do
-      let(:case_ids) { default_filtered_cases.order(created_at: :desc) }
+      let(:cases) { default_filtered_cases.order(created_at: :desc) }
 
       before { select_sorting_option("Most recently created") }
 
       it "shows results by most recently created" do
-        expect(page).to list_cases_in_order(case_ids)
+        expect(page).to list_cases_in_order(cases)
       end
     end
   end
