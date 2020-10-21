@@ -7,12 +7,12 @@ namespace :products do
 
     Product
       .where.not(product_code: [nil, ""])
-      .where(gtin: nil)
+      .where(gtin13: nil)
       .find_each do |product|
       gtin = Barkick::GTIN.new(product.product_code)
 
       if gtin.valid?
-        product.gtin = gtin.gtin13.to_s
+        product.gtin13 = gtin.gtin13.to_s
         product.product_code = nil
         product.save!
 

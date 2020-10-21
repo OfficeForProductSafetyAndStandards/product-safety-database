@@ -7,7 +7,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product type" }, value: { text: product_type } },
-      { key: { text: "Barcode number" }, value: { text: gtin } },
+      { key: { text: "Barcode number" }, value: { text: gtin13 } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Batch number" }, value: { text: batch_number } },
       { key: { text: "Webpage" }, value: { text: object.webpage } },

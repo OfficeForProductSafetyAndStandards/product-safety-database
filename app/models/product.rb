@@ -7,15 +7,15 @@ class Product < ApplicationRecord
 
   before_validation { trim_line_endings(:description) }
 
-  before_validation { convert_gtin_to_13_digits(:gtin) }
-  before_validation { nilify_blanks(:gtin) }
+  before_validation { convert_gtin_to_13_digits(:gtin13) }
+  before_validation { nilify_blanks(:gtin13) }
 
   validates :category, presence: true
   validates :product_type, presence: true
   validates :name, presence: true
   validates :description, length: { maximum: 10_000 }
 
-  validates :gtin, gtin: true, allow_nil: true, length: { is: 13 }
+  validates :gtin13, gtin: true, allow_nil: true, length: { is: 13 }
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 

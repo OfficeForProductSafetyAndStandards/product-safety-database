@@ -222,7 +222,7 @@ ActiveRecord::Schema.define(version: 2020_10_19_145332) do
     t.string "country_of_origin"
     t.datetime "created_at", null: false
     t.text "description"
-    t.string "gtin", limit: 13
+    t.string "gtin13", limit: 13
     t.string "name"
     t.string "product_code"
     t.string "product_type"
