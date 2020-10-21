@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe GtinValidator do
-
   subject(:record) do
     Class.new {
       include ActiveModel::Validations
@@ -36,7 +35,7 @@ RSpec.describe GtinValidator do
 
     it "is not valid and adds an error", :aggregate_failures do
       expect(record).not_to be_valid
-      expect(record.errors.details[:gtin]).to eq [{error: :invalid}]
+      expect(record.errors.details[:gtin]).to eq [{ error: :invalid }]
     end
   end
 
@@ -45,7 +44,7 @@ RSpec.describe GtinValidator do
 
     it "is not valid and adds an error", :aggregate_failures do
       expect(record).not_to be_valid
-      expect(record.errors.details[:gtin]).to eq [{error: :invalid}]
+      expect(record.errors.details[:gtin]).to eq [{ error: :invalid }]
     end
   end
 
@@ -57,5 +56,4 @@ RSpec.describe GtinValidator do
       expect(record).to be_valid
     end
   end
-
 end
