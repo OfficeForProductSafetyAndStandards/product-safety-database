@@ -38,8 +38,6 @@ class Investigation < ApplicationRecord
   after_update :create_audit_activity_for_status,
                :create_audit_activity_for_visibility
 
-  default_scope { order(updated_at: :desc) }
-
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products
 
