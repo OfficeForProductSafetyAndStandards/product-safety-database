@@ -19,10 +19,7 @@ class InvestigationsController < ApplicationController
         authorize Investigation, :export?
 
         @answer = search_for_investigations
-        @investigations = Investigation.eager_load(
-          :complainant,
-          :creator_user
-        ).where(id: @answer.results.map(&:_id))
+        @investigations = @answer.records(includes: %i[complainant creator_user])
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
