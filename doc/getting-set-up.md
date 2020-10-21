@@ -14,7 +14,7 @@ cd beis-opss-psd
 The application requires several backing services to run. Install these:
 
 * [Redis](https://redis.io/download)
-* [PostgreSQL](https://www.postgresql.org/download/)
+* [PostgreSQL](https://www.postgresql.org/download/) - version 11 (you can also install this via Docker, see below)
 * [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/install-elasticsearch.html) - version 6 (you can also install this via Docker, see below)
 
 ### 1.1 Install supporting services via Docker
