@@ -37,7 +37,7 @@ class PhoneCallCorrespondenceForm
 
   def initialize(*args)
     super
-    details.strip!
+    details&.strip!
   end
 
   def cache_file!
