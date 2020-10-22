@@ -4,16 +4,16 @@ class ProductDecorator < ApplicationDecorator
 
   def summary_list
     rows = [
-      { key: { text: "Product brand" }, value: { text: object.brand } },
-      { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product type" }, value: { text: product_type } },
+      { key: { text: "Product brand" }, value: { text: object.brand } },
+      { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
-      { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Batch number" }, value: { text: batch_number } },
+      { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Webpage" }, value: { text: object.webpage } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
-      { key: { text: "Description" }, value: { text: description } }
+      { key: { text: "Description" }, value: { text: description } },
+      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } }
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
