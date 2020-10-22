@@ -8,13 +8,15 @@ class EditPhoneCall
     check_valid_arguments!
 
     correspondence.assign_attributes(
-      transcript: transcript,
       correspondence_date: correspondence_date,
       phone_number: phone_number,
       correspondent_name: correspondent_name,
       overview: overview,
       details: details
     )
+    if transcript
+      correspondence.transcript.attach(transcript)
+    end
 
     return unless correspondence.has_changes_to_save?
 

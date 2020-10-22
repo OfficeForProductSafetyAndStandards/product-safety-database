@@ -8,9 +8,7 @@ class AuditActivity::Correspondence::PhoneCallUpdated < AuditActivity::Correspon
   def self.build_metadata(correspondence)
     updates = correspondence.previous_changes
     updates["transcript"] = correspondence.attachment_changes["transcript"].blob.filename
-    {
-      updates: updates
-    }
+    { updates: updates }
   end
 
   def restricted_title(_user)

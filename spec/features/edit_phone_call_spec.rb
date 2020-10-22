@@ -44,6 +44,14 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
       expect(page).to have_link(correspondence.transcript_blob.filename.to_s)
     end
 
+    page.first("details summary span", text: "Replace this file").click
+    attach_file "Upload a file", new_transcript
+    click_on "Update phone call"
+
+    expect(page).to have_summary_item(key: "Transcript", value: "#{new_transcript.basename} (30 Bytes)")
+
+    click_on "Edit phone call"
+
     within_fieldset("Who was the call with?") do
       fill_in "Name",         with: new_correspondent_name
       fill_in "Phone number", with: new_phone_number
