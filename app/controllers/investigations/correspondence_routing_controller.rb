@@ -12,8 +12,6 @@ module Investigations
       case correspondence_type_form.type
       when "email"
         redirect_to new_investigation_email_path(@investigation)
-      when "meeting"
-        redirect_to new_investigation_meeting_path(@investigation)
       when "phone_call"
         redirect_to new_investigation_phone_call_path(@investigation)
       end
