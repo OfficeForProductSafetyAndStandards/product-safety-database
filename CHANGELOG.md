@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 2020-10-22
+- Removed the ability to record meetings as correspondence on a case, due to very low usage of the feature.
 - Added a new optional "Brand" field for products, so that this can be captured separately from the product name.
 
 ## 2020-10-21
