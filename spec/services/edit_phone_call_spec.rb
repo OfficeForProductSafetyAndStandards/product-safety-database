@@ -73,11 +73,11 @@ RSpec.describe EditPhoneCall, :with_stubbed_elasticsearch, :with_stubbed_mailer,
       end
 
       it "notifies the relevant users", :with_test_queue_adapter do
-        expect { described_class.call(**params) }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
           investigation.pretty_id,
           investigation.owner_team.name,
           investigation.owner_team.email,
-          "Phone call details updated on the Allegation by #{result.correspondence.activities.find_by!(type: 'AuditActivity::Correspondence::PhoneCallUpdated').source.show}.",
+          "Phone call details updated on the Allegation by #{UserSource.new(user: user_same_team).show}.",
           "Allegation updated"
         ]))
       end
