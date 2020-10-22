@@ -25,6 +25,19 @@ RSpec.describe PhoneCallCorrespondenceForm do
           details: details, transcript: phone_call.transcript, id: phone_call.id
         )
     end
+
+    context "when no transcript added to the correspondence" do
+      let(:transcript) { nil }
+
+      it "creates a valid form object" do
+        expect(described_class.from(phone_call))
+          .to have_attributes(
+            correspondence_date: DateParser.new(correspondence_date).date,
+            correspondent_name: correspondent_name, phone_number: phone_number, overview: overview,
+            details: details, transcript: phone_call.transcript, id: phone_call.id
+          )
+      end
+    end
   end
 
   describe "validations" do
