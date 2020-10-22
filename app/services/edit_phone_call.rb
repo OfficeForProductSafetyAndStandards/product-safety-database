@@ -14,13 +14,14 @@ class EditPhoneCall
       overview: overview,
       details: details
     )
-    if transcript
-      correspondence.transcript.attach(transcript)
-    end
 
-    return unless correspondence.has_changes_to_save?
+    return unless correspondence.has_changes_to_save? || (correspondence.transcript_blob != transcript)
 
     Correspondence.transaction do
+      if transcript
+        correspondence.transcript.attach(transcript)
+      end
+
       correspondence.save!
       create_audit_activity
       send_notification_email

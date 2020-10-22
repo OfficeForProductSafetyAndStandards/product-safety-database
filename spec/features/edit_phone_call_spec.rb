@@ -50,6 +50,15 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     expect(page).to have_summary_item(key: "Transcript", value: "#{new_transcript.basename} (30 Bytes)")
 
+    click_on "Back to allegation: #{investigation.pretty_id}"
+    click_on "Activity"
+
+    activity = correspondence.activities.order(created_at: :desc).find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
+    item = page.find("p.govuk-body-s", text: activity.subtitle(investigation.owner_user)).sibling("div.govuk-body")
+    expect(item).to have_link(new_transcript.basename.to_s)
+
+    item = page.find("p.govuk-body-s", text: activity.subtitle(investigation.owner_user)).sibling("p.govuk-body")
+    item.find("a", text: "View phone call").click
     click_on "Edit phone call"
 
     within_fieldset("Who was the call with?") do
@@ -65,12 +74,7 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     fill_in "Summary", with: new_overview
 
-    within_fieldset("Details") do
-      fill_in "Notes", with: new_details
-
-      page.first("details summary span", text: "Replace this file").click
-      attach_file "Upload a file", new_transcript
-    end
+    within_fieldset("Details") { fill_in "Notes", with: new_details }
 
     click_on "Update phone call"
 
@@ -83,16 +87,16 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
+    # expect(item).to have_link(new_transcript.basename.to_s)
 
     activity = correspondence.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
 
-    item = page.find("p.govuk-body-s", text: activity.subtitle(investigation.owner_user)).sibling("div.govuk-body")
+    item = page.all("p.govuk-body-s", text: activity.subtitle(investigation.owner_user)).first.sibling("div.govuk-body")
 
     expect(item).to have_text("Name: #{new_correspondent_name}")
     expect(item).to have_text("Phone number: #{new_phone_number}")
     expect(item).to have_text("Date of call: #{new_correspondence_date.to_s(:govuk)}")
     expect(item).to have_text("Summary: #{new_overview}")
-    expect(item).to have_link(new_transcript.basename.to_s)
     expect(item).to have_text("Notes: #{new_details}")
   end
 end

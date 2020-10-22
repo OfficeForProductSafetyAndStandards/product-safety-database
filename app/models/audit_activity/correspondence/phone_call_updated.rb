@@ -7,7 +7,11 @@ class AuditActivity::Correspondence::PhoneCallUpdated < AuditActivity::Correspon
 
   def self.build_metadata(correspondence)
     updates = correspondence.previous_changes
-    updates["transcript"] = correspondence.attachment_changes["transcript"].blob.filename
+
+    if correspondence.attachment_changes.any?
+      updates["transcript"] = correspondence.attachment_changes["transcript"].blob.filename
+    end
+
     { updates: updates }
   end
 
