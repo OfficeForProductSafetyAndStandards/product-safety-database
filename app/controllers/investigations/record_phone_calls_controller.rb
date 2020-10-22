@@ -43,18 +43,21 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :update?
 
-    correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params)
+    phone_call = Correspondence::PhoneCall.find(params[:id])
+    correspondence_form = PhoneCallCorrespondenceForm.new(phone_call_params.merge(id: phone_call.id))
     correspondence_form.cache_file!
     correspondence_form.load_transcript_file
 
-    phone_call = Correspondence::PhoneCall.find(params[:id])
-    result = EditPhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
+    if correspondence_form.valid?
+      result = EditPhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
 
-    return redirect_to investigation_phone_call_path(investigation, phone_call) if result.success?
+      return redirect_to investigation_phone_call_path(investigation, phone_call) if result.success?
+    end
 
     @investigation       = investigation.decorate
     @phone_call          = phone_call.decorate
     @correspondence_form = correspondence_form
+
     render :edit
   end
 
