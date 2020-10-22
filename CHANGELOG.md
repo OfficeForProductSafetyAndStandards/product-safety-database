@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-10-21
+- Added a new optional "Barcode" field to products which is validated and standardised as a 13 digit Global Trade Item Number (GTIN). The existing "Barcode or serial number" field has been renamed to "Other product identifiers", and any existing valid barcodes have been moved to the new field.
+
 ## 2020-09-23
 - Added case risk level to xls exports.
 
