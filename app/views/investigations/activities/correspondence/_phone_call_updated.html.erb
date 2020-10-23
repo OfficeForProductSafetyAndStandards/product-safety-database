@@ -25,7 +25,7 @@
     <br />
   <% end %>
 
-  <% if activity.new_notes %>
+  <% if activity.new_notes.present? %>
     Notes: <strong><%= activity.new_notes %></strong>
     <br />
   <% end %>

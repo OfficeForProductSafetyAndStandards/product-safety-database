@@ -1,11 +1,11 @@
-class EditPhoneCall
+class UpdatePhoneCall
   include Interactor
   include EntitiesToNotify
 
   delegate :activity, :correspondence, :user, :transcript, :correspondence_date, :correspondent_name, :overview, :details, :phone_number, to: :context
 
   def call
-    check_valid_arguments!
+    require_user_and_phone_call!
 
     correspondence.assign_attributes(
       correspondence_date: correspondence_date,
@@ -15,7 +15,7 @@ class EditPhoneCall
       details: details
     )
 
-    return unless correspondence.has_changes_to_save? || (correspondence.transcript_blob != transcript)
+    return unless no_changes?
 
     Correspondence.transaction do
       if transcript
@@ -59,8 +59,12 @@ private
     "Phone call details updated on the #{investigation.case_type.upcase_first} by #{activity.source.show}."
   end
 
-  def check_valid_arguments!
+  def require_user_and_phone_call!
     context.fail!(error: "No user supplied") unless user.is_a?(User)
     context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
+  end
+
+  def no_changes?
+    correspondence.has_changes_to_save? || (correspondence.transcript_blob != transcript)
   end
 end

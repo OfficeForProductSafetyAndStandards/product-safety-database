@@ -54,7 +54,7 @@
 
       <% end %>
 
-      <%= form.submit form.object.persisted? ? "Update phone call" : "Add phone call", class: "govuk-button" %>
+      <%= govukButton text: form.object.persisted? ? "Update phone call" : "Add phone call" %>
     </div>
   </div>
 <% end %>
