@@ -5,7 +5,8 @@ class UpdatePhoneCall
   delegate :activity, :correspondence, :user, :transcript, :correspondence_date, :correspondent_name, :overview, :details, :phone_number, to: :context
 
   def call
-    require_user_and_phone_call!
+    context.fail!(error: "No user supplied") unless user.is_a?(User)
+    context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
 
     correspondence.assign_attributes(
       correspondence_date: correspondence_date,
@@ -57,11 +58,6 @@ private
 
   def email_update_text
     "Phone call details updated on the #{investigation.case_type.upcase_first} by #{activity.source.show}."
-  end
-
-  def require_user_and_phone_call!
-    context.fail!(error: "No user supplied") unless user.is_a?(User)
-    context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
   end
 
   def any_changes?

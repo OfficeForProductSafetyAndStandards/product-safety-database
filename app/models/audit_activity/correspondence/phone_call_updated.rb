@@ -1,6 +1,10 @@
 class AuditActivity::Correspondence::PhoneCallUpdated < AuditActivity::Correspondence::Base
   belongs_to :correspondence, class_name: "Correspondence::PhoneCall"
 
+  def self.from(*)
+    raise "Deprecated - no longer supported"
+  end
+
   def title(_viewing_user = nil)
     correspondence.overview
   end
