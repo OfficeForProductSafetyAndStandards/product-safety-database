@@ -2,7 +2,7 @@
 applications:
 - name: ((app-name))
   buildpacks:
-    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.25
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.26
   path: .
   stack: cflinuxfs3
   routes:
@@ -15,7 +15,7 @@ applications:
   timeout: 180
   services:
     - ((psd-db-name))
-    - psd-elasticsearch
+    - psd-elasticsearch-7
     - psd-queue
     - psd-session
     - opss-log-drain

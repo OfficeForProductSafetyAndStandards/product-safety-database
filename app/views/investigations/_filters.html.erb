@@ -1,0 +1,66 @@
+<div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-2">
+  <div class="govuk-!-margin-bottom-0">
+    <%= form_with(model: search, scope: "", url: investigations_search_path, method: :get, local: true) do |form| %>
+
+      <div class="search-box">
+        <%= render "form_components/govuk_input",
+          key: :q,
+          form: form,
+          label: { text: "Keywords", classes: "govuk-label--s" }
+        %>
+        <%= form.submit "Search", name: nil, class: "search-box--submit" %>
+      </div>
+
+      <%= govukSkipLink(text: "Skip to results", href: "#results") %>
+
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      <%= render "investigations/coronavirus_and_risk_level_checkbox", form: form %>
+      <%= render "form_components/govuk_checkboxes",
+        form: form,
+        key: :case_owner,
+        classes: "govuk-checkboxes--small",
+        fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
+        items: case_owner_is(form)
+      %>
+      <%= render "form_components/govuk_checkboxes",
+        form: form,
+        key: :created_by,
+        classes: "govuk-checkboxes--small",
+        fieldset: { legend: { text: "Created by", classes: "govuk-fieldset__legend--s" } },
+        items: created_by(form)
+      %>
+      <%= render "form_components/govuk_checkboxes",
+        form: form,
+        key: :type,
+        classes: "govuk-checkboxes--small",
+        fieldset: { legend: { text: "Type", classes: "govuk-fieldset__legend--s" } },
+        items: [{ key: "allegation", value: "checked", unchecked_value: "unchecked", text: "Allegation" },
+               { key: "enquiry", value: "checked", unchecked_value: "unchecked", text: "Enquiry" },
+               { key: "project", value: "checked", unchecked_value: "unchecked", text: "Project" }]
+      %>
+      <%= render "form_components/govuk_checkboxes",
+        form: form,
+        key: :status,
+        classes: "govuk-checkboxes--small",
+        fieldset: { legend: { text: "Status", classes: "govuk-fieldset__legend--s" } },
+        items: [{ key: "status_open", value: "checked", unchecked_value: "unchecked", text: "Open" },
+               { key: "status_closed", value: "checked", unchecked_value: "unchecked", text: "Closed" }]
+      %>
+
+      <% if submitted_from == "investigation_listing" %>
+        <%= form.hidden_field :override_sort_by, value: SearchParams::RELEVANT %>
+      <% end %>
+
+      <%= render "form_components/govuk_radios",
+        form: form,
+        key: :sort_by,
+        classes: "govuk-radios--small",
+        fieldset: { legend: { text: "Sort by", classes: "govuk-fieldset__legend--s" } },
+        items: search.sort_by_items(with_relevant_option: show_relevancy_radion_option)
+      %>
+
+      <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

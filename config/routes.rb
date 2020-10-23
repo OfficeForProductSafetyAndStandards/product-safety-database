@@ -149,7 +149,6 @@ Rails.application.routes.draw do
     resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
     resources :emails, controller: "investigations/record_emails", only: %i[new create]
     resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create], path: "phone-calls"
-    resources :meetings, controller: "investigations/record_meetings", only: %i[show new create update]
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
 
     resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do

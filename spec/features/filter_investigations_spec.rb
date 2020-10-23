@@ -33,6 +33,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:restricted_case) { create(:allegation, creator: restricted_case_team_user, is_private: true, description: restricted_case_title).decorate }
 
   before do
+    other_team_investigation.touch # Tests sort order
     Investigation.import refresh: :wait_for
     sign_in(user)
     visit investigations_path
@@ -207,5 +208,49 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     click_on "Search"
 
     expect(page).not_to have_link(restricted_case.title, href: "/cases/#{restricted_case.pretty_id}")
+  end
+
+  describe "sorting" do
+    let(:default_filtered_cases) { Investigation.where(is_closed: false) }
+    let(:cases) { default_filtered_cases.order(updated_at: :desc) }
+
+    def select_sorting_option(option)
+      within_fieldset("Sort by") { choose(option) }
+      click_button "Apply filters"
+    end
+
+    context "with no sort by option selected" do
+      it "shows results by most recently updated" do
+        expect(page).to list_cases_in_order(cases)
+      end
+    end
+
+    context "with sort by most recently updated option selected" do
+      before { select_sorting_option("Most recently updated") }
+
+      it "shows results by most recently updated" do
+        expect(page).to list_cases_in_order(cases)
+      end
+    end
+
+    context "with sort by least recently updated option selected" do
+      let(:cases) { default_filtered_cases.order(updated_at: :asc) }
+
+      before { select_sorting_option("Least recently updated") }
+
+      it "shows results by least recently updated" do
+        expect(page).to list_cases_in_order(cases)
+      end
+    end
+
+    context "with sort by most recently created option selected" do
+      let(:cases) { default_filtered_cases.order(created_at: :desc) }
+
+      before { select_sorting_option("Most recently created") }
+
+      it "shows results by most recently created" do
+        expect(page).to list_cases_in_order(cases)
+      end
+    end
   end
 end

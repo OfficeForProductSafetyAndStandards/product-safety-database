@@ -11,6 +11,10 @@ RSpec.describe ProductDecorator do
     let(:summary_list) { decorated_product.summary_list }
 
     context "when displaying the product summary" do
+      it "displays the brand" do
+        expect(summary_list).to summarise("Product brand", text: product.brand)
+      end
+
       it "displays the Product name" do
         expect(summary_list).to summarise("Product name", text: product.name)
       end
@@ -20,7 +24,11 @@ RSpec.describe ProductDecorator do
       end
 
       it "displays the Barcode" do
-        expect(summary_list).to summarise("Barcode or serial number", text: product.product_code)
+        expect(summary_list).to summarise("Barcode", text: product.gtin13)
+      end
+
+      it "displays the other product identifiers" do
+        expect(summary_list).to summarise("Other product identifiers", text: product.product_code)
       end
 
       it "displays the Batch number" do
