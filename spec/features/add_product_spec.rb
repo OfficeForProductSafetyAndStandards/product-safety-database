@@ -28,6 +28,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     select product.category, from: "Product category"
 
     fill_in "Product type", with: product.product_type
+    fill_in "Product brand", with: "MyBrand"
     fill_in "Product name", with: product.name
     fill_in "Barcode number (GTIN, EAN or UPC)", with: "9781529034523"
     fill_in "Other product identifiers", with: product.product_code
@@ -43,6 +44,8 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
 
+    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product brand")
+    expect(page).to have_css("dd.govuk-summary-list__value", text: "MyBrand")
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product name")
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.name)
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Category")

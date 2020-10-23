@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_19_145332) do
+ActiveRecord::Schema.define(version: 2020_10_22_112023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -218,6 +218,7 @@ ActiveRecord::Schema.define(version: 2020_10_19_145332) do
 
   create_table "products", id: :serial, force: :cascade do |t|
     t.string "batch_number"
+    t.text "brand"
     t.string "category"
     t.string "country_of_origin"
     t.datetime "created_at", null: false
