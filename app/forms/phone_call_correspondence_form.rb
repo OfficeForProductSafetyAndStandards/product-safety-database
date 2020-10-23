@@ -36,7 +36,8 @@ class PhoneCallCorrespondenceForm
 
   def initialize(*args)
     super
-    details&.strip!
+
+    strip_line_feed_from_textarea
   end
 
   def cache_file!
@@ -67,5 +68,9 @@ private
     if transcript.nil? & (overview.blank? || details.blank?)
       errors.add(:base, "Please provide either a transcript or complete the summary and notes fields")
     end
+  end
+
+  def strip_line_feed_from_textarea
+    details&.strip!
   end
 end
