@@ -28,9 +28,9 @@ RSpec.describe DateParser do
   end
 
   context "when given a hash containing a negative year" do
-    let(:input) { { year: "-2020", month: "1", day: "32" } }
+    let(:input) { { year: "2020", month: "-2", day: "30" } }
 
-    it { is_expected.to eq(OpenStruct.new(year: "-2020", month: "1", day: "32")) }
+    it { is_expected.to eq(OpenStruct.new(year: "2020", month: "-2", day: "30")) }
   end
 
   context "when given a hash containing invalid year, month and day numbers" do
