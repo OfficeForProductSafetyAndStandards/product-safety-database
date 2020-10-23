@@ -13,6 +13,12 @@ module SanitizationHelper
     end
   end
 
+  def trim_whitespace(*keys)
+    keys.each do |key|
+      write_attribute(key, read_attribute(key)&.strip)
+    end
+  end
+
   def convert_gtin_to_13_digits(*keys)
     keys.each do |key|
       gtin = Barkick::GTIN.new(read_attribute(key)&.strip)

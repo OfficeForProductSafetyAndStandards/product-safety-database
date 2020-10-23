@@ -23,11 +23,19 @@
   hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
 
 <%= render "form_components/govuk_input",
+  key: :brand,
+  form: form,
+  classes: "app-!-max-width-one-half",
+  label: { text: "Product brand", classes: label_class },
+  hint: { text: "For example, ‘Dyson’ or ‘Sony’" } %>
+
+
+<%= render "form_components/govuk_input",
   key: :name,
   form: form,
   classes: "app-!-max-width-three-quarters",
   label: { text: "Product name", classes: label_class },
-  hint: { text: "Include brand, model name and model number – information that will help others identify the product. For example, ‘Inotech respirator face mask (FFP), 795487’." } %>
+  hint: { text: "Include model name and model number, for example ‘Playstation 5’. If you suspect the product is counterfeit, add ‘Counterfeit’ before the name, for example ‘Counterfeit Playstion 5’." } %>
 
 <%= render "form_components/govuk_input",
   key: :gtin13,

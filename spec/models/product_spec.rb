@@ -68,4 +68,28 @@ RSpec.describe Product do
       end
     end
   end
+
+  describe "brand field" do
+    context "when setting an empty string" do
+      before do
+        product.brand = " "
+      end
+
+      it "gets converted to nil on validation", :aggregate_failures do
+        expect(product).to be_valid
+        expect(product.brand).to be_nil
+      end
+    end
+
+    context "when setting as a non-empty string" do
+      before do
+        product.brand = " MyBrand "
+      end
+
+      it "is valid and whitespace is trimmed", :aggregate_failures do
+        expect(product).to be_valid
+        expect(product.brand).to eq "MyBrand"
+      end
+    end
+  end
 end

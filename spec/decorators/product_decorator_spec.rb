@@ -11,6 +11,10 @@ RSpec.describe ProductDecorator do
     let(:summary_list) { decorated_product.summary_list }
 
     context "when displaying the product summary" do
+      it "displays the brand" do
+        expect(summary_list).to summarise("Product brand", text: product.brand)
+      end
+
       it "displays the Product name" do
         expect(summary_list).to summarise("Product name", text: product.name)
       end

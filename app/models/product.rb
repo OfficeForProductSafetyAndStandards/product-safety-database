@@ -8,7 +8,8 @@ class Product < ApplicationRecord
   before_validation { trim_line_endings(:description) }
 
   before_validation { convert_gtin_to_13_digits(:gtin13) }
-  before_validation { nilify_blanks(:gtin13) }
+  before_validation { trim_whitespace(:brand) }
+  before_validation { nilify_blanks(:gtin13, :brand) }
 
   validates :category, presence: true
   validates :product_type, presence: true
