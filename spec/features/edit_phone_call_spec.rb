@@ -87,7 +87,6 @@ RSpec.feature "Edit a phone call correspondence", :with_stubbed_elasticsearch, :
 
     click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
-    # expect(item).to have_link(new_transcript.basename.to_s)
 
     activity = correspondence.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated")
 
