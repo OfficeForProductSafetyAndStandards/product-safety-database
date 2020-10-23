@@ -15,7 +15,7 @@ class UpdatePhoneCall
       details: details
     )
 
-    return unless no_changes?
+    return unless any_changes?
 
     Correspondence.transaction do
       if transcript
@@ -64,7 +64,7 @@ private
     context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
   end
 
-  def no_changes?
+  def any_changes?
     correspondence.has_changes_to_save? || (correspondence.transcript_blob != transcript)
   end
 end
