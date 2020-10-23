@@ -1,0 +1,16 @@
+<%= page_title "New business", errors: @business.errors.any? %>
+<% content_for :after_header do %>
+  <%= link_to "Back to list", businesses_path, class: "govuk-back-link" %>
+<% end %>
+
+<%= form_with(model: @business, local: true, html: { autocomplete: :off }) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+      <h1 class="govuk-heading-l">
+        New business
+      </h1>
+      <%= render "businesses/form", form: form, business: @business, countries: @countries %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,45 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+
+    <h2 class="govuk-heading-m">Locations</h2>
+
+    <p class="govuk-body">
+      <%= link_to "Add location", new_business_location_path(@business), class: "govuk-link" %>
+    </p>
+
+    <hr class="govuk-section-break govuk-section-break--m">
+
+    <% if @business.locations.any? %>
+      <% @business.locations.each do |location| %>
+        <table class="govuk-table" style="margin-bottom: 0">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header govuk-!-width-one-third" scope="row">
+              <%= location.name %>
+            </th>
+            <td class="govuk-table__cell govuk-!-width-one-half">
+              <%= location.summary %>
+            </td>
+            <td class="govuk-table__cell">
+              <%= location.phone_number %>
+            </td>
+          </tr>
+        </table>
+
+        <p class="govuk-body">
+          <%= link_to "Edit location",
+            edit_business_location_path(@business, location),
+            class: "govuk-link psd-block-link"
+          %>
+
+          <%= link_to "Remove location",
+            remove_business_location_path(@business, location),
+            class: "govuk-link psd-block-link"
+          %>
+        </p>
+      <% end %>
+
+    <% else %>
+      <p class="govuk-body">No locations</p>
+    <% end %>
+  </div>
+</div>
