@@ -1,0 +1,9 @@
+<% businesses.each do |search_result| %>
+  <%= render "business_card", business: search_result %>
+<% end %>
+
+<% if businesses.empty? %>
+  <p class="govuk-!-font-weight-bold">
+    No businesses found.
+  </p>
+<% end %>
