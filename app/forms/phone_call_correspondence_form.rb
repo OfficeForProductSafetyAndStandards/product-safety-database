@@ -26,7 +26,6 @@ class PhoneCallCorrespondenceForm
     id
     phone_number
     overview
-    transcript
   ].freeze
 
   def self.from(phone_call)
