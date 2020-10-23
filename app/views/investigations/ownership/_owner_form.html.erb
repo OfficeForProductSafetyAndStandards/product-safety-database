@@ -1,0 +1,72 @@
+<%= form_with(scope: :investigation, model: investigation, method: :put, url: wizard_path, local: true) do |form| %>
+  <%= render "form_components/govuk_error_summary", form: form %>
+  <%= yield %>
+
+  <% items = investigation.important_owner_people.map do |user|
+    { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
+  end %>
+
+  <% someone_in_your_team = capture do %>
+    <%= render "investigations/ownership/owner_selection",
+      form: form,
+      key: :select_team_member,
+      items: User.get_team_members(user: current_user),
+      label: "Select team member",
+      show_all_values: true
+    %>
+  <% end %>
+
+  <% items.push text: "Someone in your team",
+               value: "someone_in_your_team",
+               conditional: { html: someone_in_your_team } %>
+
+  <% if @suggested_previous_owners.present? %>
+    <% previous_owners = capture do %>
+      <%= render "investigations/ownership/owner_selection",
+               form: form,
+               key: :select_previous_owner,
+               items: @suggested_previous_owners,
+               label: "Select previously assigned person or team",
+               show_all_values: true
+      %>
+    <% end %>
+    <% items.push text: "Previously assigned", value: "previous_owners", conditional: { html: previous_owners } %>
+
+    <% items.push divider: "Teams" %>
+
+    <% teams = investigation.important_owner_teams.map do |team|
+      { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
+    end %>
+    <% items.concat teams %>
+
+    <% other_teams = capture do %>
+      <%= render "investigations/ownership/owner_selection",
+        form: form,
+        key: :select_other_team,
+        items: Team.not_deleted,
+        label: "Select other team name",
+        show_all_values: true
+      %>
+    <% end %>
+    <% items.push text: "Other team", value: "other_team", conditional: { html: other_teams } %>
+
+    <% items.push divider: "or" %>
+
+    <% someone_else = capture do %>
+      <%= render "investigations/ownership/owner_selection",
+        form: form,
+        key: :select_someone_else,
+        items: User.active,
+        label: "Select other user"
+      %>
+    <% end %>
+    <% items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else } %>
+  <% end %>
+
+  <%= render "form_components/govuk_radios", form: form, key: :owner_id, items: items %>
+
+  <div class="govuk-form-group">
+    <%= form.submit "Continue", class: "govuk-button" %>
+    <p><%= link_to "Cancel", investigation_path(investigation), class: "psd-block-link" %></p>
+  </div>
+<% end %>
