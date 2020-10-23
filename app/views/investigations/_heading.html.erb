@@ -1,0 +1,27 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if params[:q].present? %>
+      <span class="govuk-caption-l">
+        Case search results
+      </span>
+    <% end %>
+    <h1 class="govuk-heading-l">
+      <% if params[:q].present? %>
+        <%= params[:q] %>
+        <span class="govuk-caption-m">
+          <%= "#{answer.results.count} #{'result'.pluralize(answer.results.count)}" %>
+        </span>
+      <% else %>
+        Cases
+      <% end %>
+    </h1>
+  </div>
+
+  <div class="govuk-grid-column-one-third" style="text-align:right">
+    <%= link_to "Open a new case",
+      current_user.is_opss? ? new_investigation_path : new_ts_investigation_path,
+      class: "govuk-button govuk-!-margin-bottom-3",
+      role: "button"
+    %>
+  </div>
+</div>
