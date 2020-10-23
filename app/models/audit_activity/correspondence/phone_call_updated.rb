@@ -25,6 +25,6 @@ private
     "Phone call updated"
   end
 
-  # no-op sending of email is done by the service AddPhoneCallToCase
+  # no-op sending of email is done by the service UpdatePhoneCall
   def notify_relevant_users; end
 end
