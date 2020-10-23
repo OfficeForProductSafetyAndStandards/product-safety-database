@@ -49,7 +49,7 @@ class Investigations::RecordPhoneCallsController < ApplicationController
     correspondence_form.load_transcript_file
 
     if correspondence_form.valid?
-      result = EditPhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
+      result = UpdatePhoneCall.call(correspondence_form.attributes.merge(correspondence: phone_call, user: current_user))
 
       return redirect_to investigation_phone_call_path(investigation, phone_call) if result.success?
     end
