@@ -18,7 +18,7 @@ class UpdatePhoneCall
     return unless any_changes?
 
     Correspondence.transaction do
-      if transcript
+      if transcript && correspondence.transcript_blob != transcript
         correspondence.transcript.attach(transcript)
       end
 
