@@ -1,14 +1,16 @@
 RSpec.shared_context "with phone call correspondence setup" do
   include ActionDispatch::TestProcess::FixtureFile
 
-  let(:user)                { create :user }
-  let(:investigation)       { create :allegation }
-  let(:phone_number)        { Faker::PhoneNumber.phone_number }
-  let(:correspondence_date) { Date.parse("1-1-2020") }
-  let(:correspondent_name)  { Faker::Name.name }
-  let(:overview)            { Faker::Hipster.paragraph }
-  let(:details)             { Faker::Hipster.paragraph }
-  let(:transcript)          { Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt")) }
+  let(:team_recipient_email) { Faker::Internet.safe_email }
+  let(:team)                 { create :team, team_recipient_email: team_recipient_email }
+  let(:user)                 { create :user, :activated, team: team }
+  let(:investigation)        { create :allegation, creator: user }
+  let(:phone_number)         { Faker::PhoneNumber.phone_number }
+  let(:correspondence_date)  { Date.parse("1-1-2020") }
+  let(:correspondent_name)   { Faker::Name.name }
+  let(:overview)             { Faker::Hipster.paragraph }
+  let(:details)              { Faker::Hipster.paragraph }
+  let(:transcript)           { Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt")) }
 
   let(:params) do
     {

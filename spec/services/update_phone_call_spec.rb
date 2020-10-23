@@ -72,14 +72,32 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_elasticsearch, :with_stubbed_maile
         expect(activity.correspondence).to eq(result.correspondence)
       end
 
-      it "notifies the relevant users", :with_test_queue_adapter do
-        expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
-          investigation.pretty_id,
-          investigation.owner_team.name,
-          investigation.owner_team.email,
-          "Phone call details updated on the Allegation by #{UserSource.new(user: user_same_team).show}.",
-          "Allegation updated"
-        ]))
+      describe "notifications" do
+        context "with a team email" do
+          it "notifies the relevant users", :with_test_queue_adapter do
+            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+              investigation.pretty_id,
+              investigation.owner_team.name,
+              investigation.owner_team.email,
+              "Phone call details updated on the Allegation by #{UserSource.new(user: user_same_team).show}.",
+              "Allegation updated"
+            ]))
+          end
+        end
+
+        context "with no team email" do
+          let(:team_recipient_email) { nil }
+
+          it "notifies the relevant users", :with_test_queue_adapter do
+            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+              investigation.pretty_id,
+              investigation.owner_user.name,
+              investigation.owner_user.email,
+              "Phone call details updated on the Allegation by #{UserSource.new(user: user_same_team).show}.",
+              "Allegation updated"
+            ]))
+          end
+        end
       end
     end
   end
