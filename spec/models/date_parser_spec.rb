@@ -27,7 +27,7 @@ RSpec.describe DateParser do
     it { is_expected.to eql(Date.new(2020, 1, 9)) }
   end
 
-  context "when given a hash containing a negative year" do
+  context "when given a hash containing a negative month" do
     let(:input) { { year: "2020", month: "-2", day: "30" } }
 
     it { is_expected.to eq(OpenStruct.new(year: "2020", month: "-2", day: "30")) }
