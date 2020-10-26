@@ -1,18 +1,19 @@
 module AuditActivity
   module Correspondence
     class PhoneCallUpdatedDecorator < AuditActivity::Correspondence::BaseDecorator
-      REMOVED = "Removed".freeze
+      REMOVED = "removed".freeze
+      EMPTY_ENQUIRY = ActiveSupport::StringInquirer.new("").freeze
 
       def new_correspondent_name
-        return if metadata.dig("updates", "correspondent_name").blank?
+        return EMPTY_ENQUIRY if metadata.dig("updates", "correspondent_name").blank?
 
-        metadata.dig("updates", "correspondent_name", 1).presence || REMOVED
+        updated_text_for("correspondent_name")
       end
 
       def new_phone_number
-        return if metadata.dig("updates", "phone_number").blank?
+        return EMPTY_ENQUIRY if metadata.dig("updates", "phone_number").blank?
 
-        metadata.dig("updates", "phone_number", 1).presence || REMOVED
+        updated_text_for("phone_number")
       end
 
       def new_correspondence_date
@@ -21,9 +22,9 @@ module AuditActivity
       end
 
       def new_summary
-        return if metadata.dig("updates", "overview").blank?
+        return EMPTY_ENQUIRY if metadata.dig("updates", "overview").blank?
 
-        metadata.dig("updates", "overview", 1).presence || REMOVED
+        updated_text_for("overview")
       end
 
       def new_transcript
@@ -31,9 +32,15 @@ module AuditActivity
       end
 
       def new_notes
-        return if metadata.dig("updates", "details").blank?
+        return EMPTY_ENQUIRY if metadata.dig("updates", "details").blank?
 
-        metadata.dig("updates", "details", 1).presence || REMOVED
+        updated_text_for("details")
+      end
+
+    private
+
+      def updated_text_for(attribute)
+        ActiveSupport::StringInquirer.new(metadata.dig("updates", attribute, 1).presence || REMOVED)
       end
     end
   end

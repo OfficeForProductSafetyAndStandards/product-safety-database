@@ -1,12 +1,20 @@
 <div class="govuk-body">
 
-  <% if activity.new_correspondent_name %>
-    Name: <strong><%= activity.new_correspondent_name %></strong>
+  <% if activity.new_correspondent_name.present? %>
+    <% if activity.new_correspondent_name.removed? %>
+      Name: <%= activity.new_correspondent_name.titleize %>
+    <% else %>
+      Name: <strong><%= activity.new_correspondent_name %></strong>
+    <% end %>
     <br />
   <% end %>
 
-  <% if activity.new_phone_number %>
-    Phone number: <strong><%= activity.new_phone_number %></strong>
+  <% if activity.new_phone_number.present? %>
+    <% if activity.new_phone_number.removed? %>
+      Phone number: <%= activity.new_phone_number.titleize %>
+    <% else  %>
+      Phone number: <strong><%= activity.new_phone_number %></strong>
+    <% end %>
     <br />
   <% end %>
 
@@ -15,8 +23,12 @@
     <br />
   <% end %>
 
-  <% if activity.new_summary %>
-    Summary: <strong><%= activity.new_summary %></strong>
+  <% if activity.new_summary.present? %>
+    <% if activity.new_summary.removed? %>
+      Summary: <%= activity.new_summary.titleize %>
+    <% else %>
+      Summary: <strong><%= activity.new_summary %></strong>
+    <% end %>
     <br />
   <% end %>
 
@@ -26,7 +38,11 @@
   <% end %>
 
   <% if activity.new_notes.present? %>
-    Notes: <strong><%= activity.new_notes %></strong>
+    <% if activity.new_notes.removed? %>
+      Notes: <%= activity.new_notes.titleize %>
+    <% else %>
+      Notes: <strong><%= activity.new_notes %></strong>
+      <% end %>
     <br />
   <% end %>
 </div>

@@ -4,7 +4,7 @@ RSpec.shared_examples "with removed field" do |attribute, let_variable|
     let(:"new_#{let_variable || attribute}") { "" }
 
     it "returns an empty string" do
-      expect(decorator.public_send("new_#{attribute}")).to eq(nil)
+      expect(decorator.public_send("new_#{attribute}")).to be_empty
     end
   end
 
@@ -12,7 +12,7 @@ RSpec.shared_examples "with removed field" do |attribute, let_variable|
     let(:"new_#{let_variable || attribute}") { "" }
 
     it "shows the value has removed" do
-      expect(decorator.public_send("new_#{attribute}")).to eq("Removed")
+      expect(decorator.public_send("new_#{attribute}")).to be_removed
     end
   end
 end
