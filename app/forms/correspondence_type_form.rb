@@ -4,7 +4,6 @@ class CorrespondenceTypeForm
 
   AVAILABLE_TYPES = {
     email: "Record email",
-    meeting: "Record meeting",
     phone_call: "Record phone call"
   }.freeze
 

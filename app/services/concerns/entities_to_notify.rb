@@ -1,7 +1,7 @@
 module EntitiesToNotify
   extend ActiveSupport::Concern
 
-  def entities_to_notify
+  def email_recipients_for_team_with_access
     entities = []
     investigation.teams_with_access.each do |team|
       if team.team_recipient_email.present?

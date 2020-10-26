@@ -57,5 +57,6 @@
 
     <%= permission_notice(text: t("case.protected_details", data_type: "phone call correspondence")) %>
 
+    <%= link_to_if policy(@investigation).update?, "Edit phone call", edit_investigation_phone_call_path(@investigation, @phone_call), class: "govuk-link" %>
   </div>
 </div>

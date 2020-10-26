@@ -20,7 +20,7 @@ fi
 # Delete the old app. previously we replaced it but this caused issues with race conditions and re-binding databases when migrations were added
 cf delete -f -r $APP_NAME
 
-cf create-service postgres small-10 $DB_NAME -c '{"enable_extensions": ["pgcrypto"]}'
+cf create-service postgres tiny-unencrypted-11 $DB_NAME -c '{"enable_extensions": ["pgcrypto"]}'
 
 # Wait until db is prepared, might take up to 10 minutes
 until cf service $DB_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done

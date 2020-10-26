@@ -37,14 +37,6 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
       end
     end
 
-    context "when adding a meeting" do
-      let(:type) { "meeting" }
-
-      it "redirects to new meeting page" do
-        expect(response).to redirect_to(new_investigation_meeting_path(investigation))
-      end
-    end
-
     context "when adding a phone call" do
       let(:type) { "phone_call" }
 

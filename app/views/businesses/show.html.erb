@@ -1,0 +1,37 @@
+<%= page_title "Business - #{@business.trading_name}" %>
+
+<% content_for :after_header do %>
+  <%= render "breadcrumbs_navigation", breadcrumbs: @breadcrumbs %>
+<% end %>
+
+<%= render "business_heading", business: @business %>
+
+<%= render "components/govuk_tabs",
+  items: [
+    {
+      id: "full-detail",
+      label: "Full detail",
+      panel: { html: render("businesses/tabs/details") }
+    },
+    {
+      id: "locations",
+      label: "Locations (#{@business.locations.count})",
+      panel: { html: render("businesses/tabs/locations") }
+    },
+    {
+      id: "contacts",
+      label: "Contacts (#{@business.contacts.count})",
+      panel: { html: render("businesses/tabs/contacts") }
+    },
+    {
+      id: "attachments",
+      label: "Attachments (#{@business.documents.count})",
+      panel: { html: render("businesses/tabs/attachments") }
+    },
+    {
+      id: "cases",
+      label: "Cases",
+      panel: { html: render("businesses/tabs/cases") }
+    }
+  ]
+%>

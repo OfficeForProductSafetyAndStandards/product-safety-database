@@ -1,0 +1,46 @@
+<%= page_title "Businesses" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <% if params[:q].present? %>
+      <span class="govuk-caption-l">
+        Business search results
+      </span>
+    <% end %>
+
+    <h1 class="govuk-heading-l">
+      <% if params[:q].present? %>
+        <%= params[:q] %>
+        <span class="govuk-caption-m">
+          <%= "#{@businesses.count} #{'result'.pluralize(@businesses.count)}" %>
+        </span>
+      <% else %>
+        Businesses
+      <% end %>
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-quarter govuk-!-margin-bottom-2">
+    <div class="govuk-!-margin-bottom-0">
+      <%= form_with(model: @search, scope: "", url: businesses_path, method: :get, local: true) do |form| %>
+
+        <div class="search-box">
+          <%= form.hidden_field :sort, value: "relevance" %>
+          <%= render "form_components/govuk_input",
+            key: :q,
+            form: form,
+            label: { text: "Keywords", classes: "govuk-label--s" }
+          %>
+          <%= form.submit "Search", name: nil, class: "search-box--submit" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-three-quarters">
+    <%= render "table", businesses: @businesses %>
+    <%= will_paginate @businesses %>
+  </div>
+</div>

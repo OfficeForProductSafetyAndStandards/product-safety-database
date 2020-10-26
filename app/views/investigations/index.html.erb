@@ -1,0 +1,29 @@
+<%= page_title "Cases" %>
+
+<%= render 'investigations/heading', answer: @answer %>
+<div class="govuk-grid-row">
+  <%= render 'investigations/filters',
+    search: @search,
+    show_relevancy_radion_option: false,
+    submitted_from: "investigation_listing"
+  %>
+
+  <div id="results" class="govuk-grid-column-three-quarters">
+    <% if @investigations.any? %>
+      <%= render partial: "investigations/table",
+        collection: @investigations,
+        as: :investigation,
+        locals: { sorted_by: query_params[:sort_by] }
+      %>
+      <%= will_paginate @investigations %>
+
+      <% if policy(Investigation).export? %>
+        <%= link_to "Export as spreadsheet", investigations_path(format: :xlsx, params: export_params) %>
+      <% end %>
+    <% else %>
+      <div class="govuk-heading-l" style="text-align:center">
+        No results
+      </div>
+    <% end %>
+  </div>
+</div>
