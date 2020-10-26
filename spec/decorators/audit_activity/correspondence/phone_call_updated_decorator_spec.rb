@@ -38,7 +38,7 @@ RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_s
       expect(decorator.new_correspondent_name).to eq(new_correspondent_name)
     end
 
-    include_examples "with removed field", :new_correspondent_name
+    include_examples "with removed field", :correspondent_name
   end
 
   describe "#new_phone_number" do
@@ -46,7 +46,7 @@ RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_s
       expect(decorator.new_phone_number).to eq(new_phone_number)
     end
 
-    include_examples "with removed field", :new_phone_number
+    include_examples "with removed field", :phone_number
   end
 
   describe "#new_summary" do
@@ -54,7 +54,7 @@ RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_s
       expect(decorator.new_summary).to eq(new_overview)
     end
 
-    include_examples "with removed field", :new_summary, :new_overview
+    include_examples "with removed field", :summary, :overview
   end
 
   describe "#new_notes" do
@@ -62,6 +62,6 @@ RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_s
       expect(decorator.new_notes).to eq(new_details)
     end
 
-    include_examples "with removed field", :new_notes, :new_details
+    include_examples "with removed field", :notes, :details
   end
 end

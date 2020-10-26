@@ -4,10 +4,14 @@ module AuditActivity
       REMOVED = "Removed".freeze
 
       def new_correspondent_name
+        return if metadata.dig("updates", "correspondent_name").blank?
+
         metadata.dig("updates", "correspondent_name", 1).presence || REMOVED
       end
 
       def new_phone_number
+        return if metadata.dig("updates", "phone_number").blank?
+
         metadata.dig("updates", "phone_number", 1).presence || REMOVED
       end
 
@@ -17,6 +21,8 @@ module AuditActivity
       end
 
       def new_summary
+        return if metadata.dig("updates", "overview").blank?
+
         metadata.dig("updates", "overview", 1).presence || REMOVED
       end
 
@@ -25,6 +31,8 @@ module AuditActivity
       end
 
       def new_notes
+        return if metadata.dig("updates", "details").blank?
+
         metadata.dig("updates", "details", 1).presence || REMOVED
       end
     end
