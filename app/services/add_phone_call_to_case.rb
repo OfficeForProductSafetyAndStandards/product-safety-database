@@ -32,7 +32,7 @@ class AddPhoneCallToCase
 private
 
   def send_notification_email
-    entities_to_notify.each do |entity|
+    email_recipients_for_team_with_access.each do |entity|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         entity.name,
