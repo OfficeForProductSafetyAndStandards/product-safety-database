@@ -52,6 +52,57 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_elasticsearch, :with_stubbed_maile
       end
     end
 
+    context "when non of attributes has changed" do
+      let(:transcript) { phone_call.transcript_blob }
+
+      let(:params) do
+        {
+          user: user_same_team,
+          investigation: investigation,
+          correspondence: phone_call,
+          correspondence_date: correspondence_date,
+          correspondent_name: correspondent_name,
+          phone_number: phone_number,
+          transcript: transcript,
+          overview: overview,
+          details: details
+        }
+      end
+
+      context "when the transcript has not changed" do
+        it "does not change the phone call" do
+          expect { result }.not_to change(phone_call, :reload)
+        end
+
+        it "does not change the phone call transcript" do
+          expect { result }.not_to change(phone_call, :transcript_blob)
+        end
+
+        it "does not create an audit log" do
+          expect { result }.not_to change(AuditActivity::Correspondence::PhoneCallUpdated, :count)
+        end
+      end
+
+      context "when the transcript has changed" do
+        let(:new_file) { Rack::Test::UploadedFile.new(new_transcript) }
+        let(:transcript) do
+          ActiveStorage::Blob.create_after_upload!(
+            io: new_file,
+            filename: new_file.original_filename,
+            content_type: new_file.content_type
+          )
+        end
+
+        it "does not change the phone call" do
+          expect { result }.not_to change(phone_call, :reload)
+        end
+
+        it "does create an audit log" do
+          expect { result }.to change(AuditActivity::Correspondence::PhoneCallUpdated, :count)
+        end
+      end
+    end
+
     context "when supplied with the correct informations" do
       it "updates the correspondence", :aggregate_failures do
         expect(result.correspondence)
