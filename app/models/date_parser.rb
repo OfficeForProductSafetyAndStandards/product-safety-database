@@ -22,6 +22,7 @@ class DateParser
 
     return nil if date_values.all?(&:blank?)
     return struct_from_hash if date_values.any?(&:blank?)
+    return struct_from_hash if date_values[1].negative? || date_values[2].negative?
 
     begin
       Date.new(*date_values)

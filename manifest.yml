@@ -2,7 +2,7 @@
 applications:
 - name: ((app-name))
   buildpacks:
-    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.25
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.26
   path: .
   stack: cflinuxfs3
   routes:
@@ -15,7 +15,7 @@ applications:
     - psd-auth-env
     - psd-aws-env
     - psd-database
-    - psd-elasticsearch
+    - psd-elasticsearch-7
     - psd-email-whitelist-env
     - psd-health-env
     - psd-notify-env

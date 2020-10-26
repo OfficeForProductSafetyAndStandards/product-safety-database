@@ -1,14 +1,8 @@
+# Recording of meeting correspondence is deprecated - existing data is still supported
 class Correspondence::Meeting < Correspondence
   include DateConcern
-
-  date_attribute :correspondence_date
-
   has_one_attached :transcript
   has_one_attached :related_attachment
 
-  def validate_transcript_and_content(file_blob)
-    if file_blob.nil? && (overview.empty? || details.empty?)
-      errors.add(:base, "Please provide either a transcript or complete the summary and notes fields")
-    end
-  end
+  date_attribute :correspondence_date
 end

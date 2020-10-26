@@ -319,4 +319,6 @@ Devise.setup do |config|
   # config.otp_length = 5  # TOTP code length
 end
 
-DeviseController.include NoSecondaryNav
+ActiveSupport.on_load(:devise_controller) do
+  DeviseController.include NoSecondaryNav
+end

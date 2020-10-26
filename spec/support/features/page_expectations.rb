@@ -251,10 +251,6 @@ module PageExpectations
     expect(page).to have_current_path(/\/cases\/#{case_id}\/phone-calls\/[\d]+/)
   end
 
-  def expect_to_be_on_meeting_page(case_id:)
-    expect(page).to have_current_path(/\/cases\/#{case_id}\/meetings\/[\d]+/)
-  end
-
   # Open a case flow
   def expect_to_be_on_new_case_page
     expect(page).to have_current_path("/cases/new")
@@ -541,21 +537,6 @@ module PageExpectations
 
   def expect_to_be_on_confirm_email_details_page
     expect_page_to_have_h1("Confirm email details")
-  end
-
-  def expect_to_be_on_record_meeting_context_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/meetings/context")
-    expect_page_to_have_h1("Record meeting")
-  end
-
-  def expect_to_be_on_record_meeting_content_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/meetings/content")
-    expect_page_to_have_h1("Record meeting")
-  end
-
-  def expect_to_be_on_confirm_meeting_details_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/meetings/confirmation")
-    expect_page_to_have_h1("Confirm meeting details")
   end
 
   def expect_to_be_on_set_risk_level_page(case_id:)
