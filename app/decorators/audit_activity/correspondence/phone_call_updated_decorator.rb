@@ -1,12 +1,14 @@
 module AuditActivity
   module Correspondence
     class PhoneCallUpdatedDecorator < AuditActivity::Correspondence::BaseDecorator
+      REMOVED = "Removed".freeze
+
       def new_correspondent_name
-        metadata.dig("updates", "correspondent_name", 1)
+        metadata.dig("updates", "correspondent_name", 1).presence || REMOVED
       end
 
       def new_phone_number
-        metadata.dig("updates", "phone_number", 1)
+        metadata.dig("updates", "phone_number", 1).presence || REMOVED
       end
 
       def new_correspondence_date
@@ -15,7 +17,7 @@ module AuditActivity
       end
 
       def new_summary
-        metadata.dig("updates", "overview", 1)
+        metadata.dig("updates", "overview", 1).presence || REMOVED
       end
 
       def new_transcript
@@ -23,7 +25,7 @@ module AuditActivity
       end
 
       def new_notes
-        metadata.dig("updates", "details", 1)
+        metadata.dig("updates", "details", 1).presence || REMOVED
       end
     end
   end
