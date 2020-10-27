@@ -88,14 +88,6 @@ class User < ApplicationRecord
     active.where.not(id: user_ids_to_exclude).eager_load(:organisation, :team)
   end
 
-  def self.get_team_members(user:)
-    users = [].to_set
-    user.team.users.active.find_each do |team_member|
-      users << team_member
-    end
-    users
-  end
-
   def has_viewed_introduction!
     update has_viewed_introduction: true
   end
