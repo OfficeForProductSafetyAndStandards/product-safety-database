@@ -136,26 +136,9 @@ class Investigation < ApplicationRecord
     is_closed? ? "Closed" : "Open"
   end
 
-  def important_owner_people
-    people = [].to_set
-    people << owner if owner.is_a? User
-    people << User.current
-    people
-  end
-
   def past_owners
     activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
     activities.map(&:owner)
-  end
-
-  def important_owner_teams
-    teams = [User.current.team].to_set
-
-    Team.get_visible_teams(User.current).each do |team|
-      teams << team
-    end
-    teams << owner if owner.is_a? Team
-    teams
   end
 
   def enquiry?

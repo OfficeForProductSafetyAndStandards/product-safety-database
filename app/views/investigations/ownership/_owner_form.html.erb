@@ -2,15 +2,17 @@
   <%= render "form_components/govuk_error_summary", form: form %>
   <%= yield %>
 
-  <% items = investigation.important_owner_people.map do |user|
-    { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
-  end %>
+  <%
+    items = @selectable_users.map do |user|
+      { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
+    end
+  %>
 
   <% someone_in_your_team = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,
       key: :select_team_member,
-      items: User.get_team_members(user: current_user),
+      items: @team_members,
       label: "Select team member",
       show_all_values: true
     %>
@@ -35,16 +37,18 @@
 
   <% items.push divider: "Teams" %>
 
-  <% teams = investigation.important_owner_teams.map do |team|
-    { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
-  end %>
+  <%
+    teams = @selectable_teams.map do |team|
+      { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
+    end
+  %>
   <% items.concat teams %>
 
   <% other_teams = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,
       key: :select_other_team,
-      items: Team.not_deleted,
+      items: @other_teams,
       label: "Select other team name",
       show_all_values: true
     %>
@@ -57,7 +61,7 @@
     <%= render "investigations/ownership/owner_selection",
       form: form,
       key: :select_someone_else,
-      items: User.active,
+      items: @other_users,
       label: "Select other user"
     %>
   <% end %>

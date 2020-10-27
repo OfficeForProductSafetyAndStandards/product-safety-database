@@ -22,7 +22,6 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
   context "when the user is from the case owner’s team" do
     before do
       sign_in user_from_owner_team
-      User.current = user_from_owner_team
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
             investigation: {
