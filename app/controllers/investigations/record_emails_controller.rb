@@ -131,6 +131,11 @@ class Investigations::RecordEmailsController < ApplicationController
     else
       @investigation = @investigation.decorate
 
+      @email_correspondence_form.email_file =  @email.email_file.try(:blob)
+      @email_correspondence_form.email_attachment = @email.email_attachment.try(:blob)
+      @email_correspondence_form.existing_email_attachment_id =  @email.email_attachment.try(:blob).try(:id)
+      @email_correspondence_form.existing_email_file_id = @email.email_file.try(:blob).try(:id)
+
       render :edit
     end
   end

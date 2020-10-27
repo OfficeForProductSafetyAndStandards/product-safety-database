@@ -72,6 +72,10 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
     within_fieldset "Attachments" do
       expect(page).to have_text("Currently selected file: attachment_filename.txt")
       expect(page).to have_field("Attachment description", text: "Safety document")
+
+      within_fieldset "Replace or remove email attachment" do
+        expect(page).to have_checked_field("Keep file")
+      end
     end
 
     # Change some values to introduce a validation error
@@ -96,7 +100,12 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
 
     # Change some more values and the attached file
     within_fieldset "Attachments" do
-      attach_file "Upload a file", replacement_file
+
+      within_fieldset "Replace or remove email attachment" do
+        choose "Upload a replacement file"
+        attach_file "Upload a file", replacement_file
+      end
+
       fill_in "Attachment description", with: "Manufacturer safety document"
     end
 

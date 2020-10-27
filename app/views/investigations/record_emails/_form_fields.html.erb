@@ -41,7 +41,7 @@
   <% if form.object.email_file.present? %>
 
     <p class="govuk-body">
-      Currently selected file:
+      Current file:
       <%= link_to form.object.email_file.filename, form.object.email_file, target: "_blank", rel: 'noopener' %>
     </p>
 
@@ -107,7 +107,7 @@
     <% if form.object.email_attachment.present? %>
 
       <p class="govuk-body">
-        Currently selected file:
+        Currently attached file:
         <%= link_to form.object.email_attachment.filename, form.object.email_attachment, target: "_blank", rel: 'noopener' %>
       </p>
 
