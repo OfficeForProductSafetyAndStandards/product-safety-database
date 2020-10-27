@@ -246,13 +246,6 @@ module InvestigationsHelper
     [team.id] + team.users.map(&:id)
   end
 
-  def suggested_previous_owners(investigation)
-    all_past_owners = investigation.past_owners
-    return [] if all_past_owners.empty? || all_past_owners == [current_user]
-
-    all_past_owners || []
-  end
-
   def risks_and_issues_rows(investigation, user)
     risk_level_row = {
       key: {
