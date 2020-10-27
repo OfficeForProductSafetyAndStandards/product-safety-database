@@ -136,11 +136,6 @@ class Investigation < ApplicationRecord
     is_closed? ? "Closed" : "Open"
   end
 
-  def past_owners
-    activities = AuditActivity::Investigation::UpdateOwner.where(investigation_id: id)
-    activities.map(&:owner)
-  end
-
   def enquiry?
     is_a?(Investigation::Enquiry)
   end

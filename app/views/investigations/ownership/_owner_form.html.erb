@@ -22,19 +22,6 @@
                value: "someone_in_your_team",
                conditional: { html: someone_in_your_team } %>
 
-  <% if @suggested_previous_owners.present? %>
-    <% previous_owners = capture do %>
-      <%= render "investigations/ownership/owner_selection",
-               form: form,
-               key: :select_previous_owner,
-               items: @suggested_previous_owners,
-               label: "Select previously assigned person or team",
-               show_all_values: true
-      %>
-    <% end %>
-    <% items.push text: "Previously assigned", value: "previous_owners", conditional: { html: previous_owners } %>
-  <% end %>
-
   <% items.push divider: "Teams" %>
 
   <%
