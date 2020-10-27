@@ -75,7 +75,7 @@ private
 
   def get_potential_assignees
     @selectable_users = [@investigation.owner_user&.object, current_user].uniq.compact
-    @team_members = User.get_team_members(user: current_user)
+    @team_members = current_user.team.users.active
     @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team&.object].flatten.uniq.compact
     @other_teams = Team.not_deleted
     @other_users = User.active
