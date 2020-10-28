@@ -174,38 +174,34 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#categories" do
-    let(:product_category) { Faker::Hipster.word }
-
     before do
-      investigation.product_category = product_category
+      investigation.product_category = "Gadgets"
     end
 
     context "when no products" do
-      specify { expect(investigation.categories).to eq([product_category]) }
+      specify { expect(investigation.categories).to eq(%w[Gadgets]) }
     end
 
     context "with products" do
-      let(:product_one) { create(:product, category: Faker::Hipster.word) }
-      let(:product_two) { create(:product, category: Faker::Hipster.word) }
+      let(:product_one) { create(:product, category: "Lifts") }
+      let(:product_two) { create(:product, category: "Machinery") }
 
       before do
         investigation.products << product_one << product_two
       end
 
-      specify { expect(investigation.categories).to eq([product_category, product_one.category, product_two.category]) }
+      specify { expect(investigation.categories).to eq(%w[Gadgets Lifts Machinery]) }
 
       context "when a product does not have a category" do
         before { product_one.category = nil }
 
-        specify { expect(investigation.categories).to eq([product_category, product_two.category]) }
+        specify { expect(investigation.categories).to eq(%w[Gadgets Machinery]) }
       end
 
       context "when a products have the same category" do
-        before do
-          product_one.category = product_two.category
-        end
+        let(:product_one) { create(:product, category: "Gadgets") }
 
-        specify { expect(investigation.categories).to eq([product_category, product_two.category]) }
+        specify { expect(investigation.categories).to eq(%w[Gadgets Machinery]) }
       end
     end
   end
