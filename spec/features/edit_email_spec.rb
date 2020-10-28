@@ -70,7 +70,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
     end
 
     within_fieldset "Attachments" do
-      expect(page).to have_text("Currently selected file: attachment_filename.txt")
+      expect(page).to have_text("Currently attached file: attachment_filename.txt")
       expect(page).to have_field("Attachment description", text: "Safety document")
 
       within_fieldset "Replace or remove email attachment" do
@@ -83,6 +83,16 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
       fill_in "Day", with: "32"
     end
 
+    # Also select a replacement attachment file and attachment description
+    within_fieldset "Attachments" do
+      within_fieldset "Replace or remove email attachment" do
+        choose "Upload a replacement file"
+        attach_file "Upload a file", replacement_file
+      end
+
+      fill_in "Attachment description", with: "Manufacturer safety document"
+    end
+
     click_button "Update email"
 
     expect(page).to have_text("Date sent must be a real date")
@@ -92,23 +102,22 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
       expect(page).to have_field("Day", with: "32")
     end
 
+    # Attachments radio should still be selected as "Upload a replacement file"
+    # but contain a link to the previous-uploaded replacement file
+    within_fieldset "Attachments" do
+      within_fieldset "Replace or remove email attachment" do
+        expect(page).to have_checked_field("Upload a replacement file")
+        expect(page).to have_text("email_attachment.txt")
+      end
+    end
+
     # Fix the validation error
     within_fieldset "Date sent" do
       fill_in "Day", with: "02"
       fill_in "Month", with: "4 "
     end
 
-    # Change some more values and the attached file
-    within_fieldset "Attachments" do
-
-      within_fieldset "Replace or remove email attachment" do
-        choose "Upload a replacement file"
-        attach_file "Upload a file", replacement_file
-      end
-
-      fill_in "Attachment description", with: "Manufacturer safety document"
-    end
-
+    # Also update another field
     fill_in "Summary", with: "Note received from manufacturer"
 
     click_button "Update email"
@@ -122,5 +131,24 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
 
     expect(page).to have_text("email_attachment.txt")
     expect(page).to have_text("Manufacturer safety document")
+  end
+
+  scenario "Removing attachment from an email" do
+    visit "/cases/#{investigation.pretty_id}/emails/#{email.id}"
+
+    click_link "Edit email"
+    expect_to_be_on_edit_email_page(case_id: investigation.pretty_id, email_id: email.id)
+
+    within_fieldset "Attachments" do
+      within_fieldset "Replace or remove email attachment" do
+        choose "Remove file"
+      end
+    end
+
+    click_button "Update email"
+
+    expect_to_be_on_email_page(case_id: investigation.pretty_id, email_id: email.id)
+
+    expect(page).not_to have_text("attachment_filename.txt")
   end
 end

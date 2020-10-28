@@ -336,6 +336,10 @@ en:
               must_be_real: Date sent must be a real date
               incomplete: Date sent must include a %{missing_date_parts}
               in_future: Date sent must be today or in the past
+            email_file:
+              blank: Select a replacement file
+            email_attachment:
+              blank: Select a replacement email attachment file
         phone_call_correspondence_form:
           attributes:
             correspondence_date:

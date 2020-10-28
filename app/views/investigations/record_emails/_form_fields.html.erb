@@ -27,10 +27,18 @@
   classes: "govuk-!-width-two-thirds" %>
 
 <% email_upload_field = capture do %>
-  <%= form.govuk_file_upload :email_file,
-    label: (form.object.email_file.present? ? "Select replacement file" : "Upload a file"),
-    label_classes: "govuk-label--x"
-  %>
+
+  <% if form.object.email_file_id.present? %>
+    <p class="govuk-body">Currently selected file: <%= link_to form.object.cached_email_file.filename, form.object.cached_email_file, class: "govuk-link" %></p>
+    <%= form.hidden_field :email_file_id %>
+  <% end %>
+
+  <% if @email.new_record? || !form.object.email_file_id.present? %>
+    <%= form.govuk_file_upload :email_file,
+      label: (form.object.email_file.present? ? "Select replacement file" : "Upload a file"),
+      label_classes: "govuk-label--x"
+    %>
+  <% end %>
 <% end %>
 
 <%= render "components/govuk_fieldset",
@@ -38,11 +46,11 @@
            describedBy: "email-content-hint" do %>
   <span id="email-content-hint" class="govuk-hint">Upload the email as a file, or enter the subject and body below</span>
 
-  <% if form.object.email_file.present? %>
+  <% if email.email_file.present? %>
 
     <p class="govuk-body">
       Current file:
-      <%= link_to form.object.email_file.filename, form.object.email_file, target: "_blank", rel: 'noopener' %>
+      <%= link_to email.email_file.filename, email.email_file, target: "_blank", rel: 'noopener' %>
     </p>
 
     <%= form.hidden_field :existing_email_file_id  %>
@@ -97,18 +105,24 @@
   <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors) %>">
 
     <% file_upload_field = capture do %>
-      <%= form.govuk_file_upload :email_attachment,
-        label: "Upload a file"
-      %>
+
+      <% if form.object.email_attachment_id.present? %>
+        <p class="govuk-body">Currently selected attachment: <%= link_to form.object.cached_email_attachment.filename, form.object.cached_email_attachment, class: "govuk-link" %></p>
+        <%= form.hidden_field :email_attachment_id %>
+      <% end %>
+
+      <% if @email.new_record? || !form.object.email_attachment_id.present? %>
+        <%= form.govuk_file_upload :email_attachment,
+          label: "Upload a file"
+        %>
+      <% end %>
     <% end %>
 
-    <%= form.hidden_field :existing_email_attachment_id  %>
-
-    <% if form.object.email_attachment.present? %>
+    <% if email.email_attachment.present? %>
 
       <p class="govuk-body">
         Currently attached file:
-        <%= link_to form.object.email_attachment.filename, form.object.email_attachment, target: "_blank", rel: 'noopener' %>
+        <%= link_to email.email_attachment.filename, email.email_attachment, target: "_blank", rel: 'noopener' %>
       </p>
 
       <%= form.govuk_radios :email_attachment_action,
@@ -137,7 +151,7 @@
       <%= file_upload_field %>
     <% end %>
 
-    <div id="attachment-description">
+    <div>
       <%= form.govuk_text_area :attachment_description,
         label: "Attachment description",
         label_classes: "",
