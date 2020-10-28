@@ -13,4 +13,15 @@ module EntitiesToNotify
     end
     entities.uniq - [context.user]
   end
+
+  # Notify the case owner, unless it is the same user/team performing the change
+  def email_recipients_for_case_owner
+    entities = [investigation.owner] - [user, user.team]
+
+    entities.map { |entity|
+      return entity.users.active if entity.is_a?(Team) && !entity.email
+
+      entity
+    }.flatten.uniq
+  end
 end
