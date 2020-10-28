@@ -12,6 +12,10 @@ class DateParser
     return nil if @date.nil?
     return @date if @date.is_a?(Date)
 
+    if @date.is_a?(String)
+      return Date.parse(@date) rescue Date::Error nil # rubocop:disable Style/RescueModifier
+    end
+
     @date.symbolize_keys! if @date.respond_to?(:symbolize_keys!)
 
     date_values = @date.values_at(:year, :month, :day).map do |date_part|
