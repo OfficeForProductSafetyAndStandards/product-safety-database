@@ -114,8 +114,4 @@ private
   def build_breadcrumbs
     @breadcrumbs = build_breadcrumb_structure
   end
-
-  def set_suggested_previous_owners
-    @suggested_previous_owners = suggested_previous_owners(@investigation)
-  end
 end

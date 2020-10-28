@@ -1,7 +1,7 @@
 class UpdateEmail
   include Interactor
 
-  delegate :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file, :email_attachment, :attachment_description, to: :context
+  delegate :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file_action, :email_attachment_action, :email_file, :email_attachment, :email_file_id, :email_attachment_id, :attachment_description, to: :context
 
   delegate :investigation, to: :email
 
@@ -24,12 +24,24 @@ class UpdateEmail
         email_subject: email_subject
       }
 
-      if email_file
+      if email_file_action == "remove"
+        email.email_file.detach
+      elsif email_file_action == "keep"
+        # Don't attach file if even it's present
+      elsif email_file
         email.email_file.attach(email_file)
+      elsif email_file_id
+        email.email_file.attach(ActiveStorage::Blob.find_signed(email_file_id))
       end
 
-      if email_attachment
+      if email_attachment_action == "remove"
+        email.email_attachment.detach
+      elsif email_attachment_action == "keep"
+        # Don't attach file if even it's present
+      elsif email_attachment
         email.email_attachment.attach(email_attachment)
+      elsif email_attachment_id
+        email.email_attachment.attach(ActiveStorage::Blob.find_signed(email_attachment_id))
       end
 
       break if no_changes?
@@ -48,7 +60,10 @@ class UpdateEmail
 private
 
   def no_changes?
-    !email.changed? && !email_file && (attachment_description == @previous_attachment_description.to_s)
+    !email.changed? &&
+      (email_file_action == "keep" || (!email_file && !email_file_id)) &&
+      (email_attachment_action == "keep" || (!email_attachment || !email_attachment_id)) &&
+      (attachment_description == @previous_attachment_description.to_s)
   end
 
   def update_attachment_description!
