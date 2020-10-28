@@ -95,8 +95,20 @@ class EmailCorrespondenceForm
 private
 
   def validate_email_file_and_content
-    if id.nil? && email_file.nil? && email_file_id.nil? && (email_subject.blank? || details.blank?)
+    if email_subject_or_body_missing && email_file_removed_or_missing
       errors.add(:base, "Please provide either an email file or a subject and body")
     end
+  end
+
+  def email_file_removed_or_missing
+    email_file_action == "remove" || email_file_missing
+  end
+
+  def email_subject_or_body_missing
+    email_subject.blank? || details.blank?
+  end
+
+  def email_file_missing
+    email_file.nil? && email_file_id.nil?
   end
 end
