@@ -1,5 +1,6 @@
 class AddProductToCase
   include Interactor
+  include EntitiesToNotify
 
   delegate :product, :investigation, :user, to: :context
 
@@ -27,7 +28,7 @@ private
   end
 
   def send_notification_email
-    context.activity.entities_to_notify.each do |recipient|
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
