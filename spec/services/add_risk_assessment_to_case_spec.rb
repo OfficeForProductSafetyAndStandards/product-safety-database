@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddRiskAssessmentToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe AddRiskAssessmentToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
@@ -39,6 +39,14 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_elasticsearch, :with_stubb
     end
 
     context "with required parameters" do
+      def expected_email_subject
+        "Allegation updated"
+      end
+
+      def expected_email_body(name)
+        "Risk assessment was added to the #{investigation.case_type} by #{name}."
+      end
+
       let(:assessment_date) { Time.zone.today }
 
       let(:result) do
@@ -74,33 +82,6 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_elasticsearch, :with_stubb
         expect(risk_assessment.added_by_team).to eq user.team
       end
 
-      context "when the team has an email address" do
-        it "notifies the team", :aggregate_failures do
-          result
-          email = delivered_emails.last
-          expect(email.recipient).to eq(team.email)
-          expect(email.action_name).to eq("investigation_updated")
-        end
-      end
-
-      context "when the team does not have an email address" do
-        let(:team) { create(:team, team_recipient_email: nil) }
-        let!(:active_team_user) { create(:user, :activated, team: team, organisation: team.organisation) }
-        let!(:inactive_team_user) { create(:user, :inactive, team: team, organisation: team.organisation) }
-
-        before { result }
-
-        it "notifies the team's activated users", :aggregate_failures do
-          email = delivered_emails.last
-          expect(email.recipient).to eq(active_team_user.email)
-          expect(email.action_name).to eq("investigation_updated")
-        end
-
-        it "does not notify the team's inactive users" do
-          expect(delivered_emails.collect(&:recipient)).not_to include(inactive_team_user.email)
-        end
-      end
-
       it "adds an audit activity record", :aggregate_failures do
         result
         last_added_activity = investigation.activities.order(:id).first
@@ -111,6 +92,8 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_elasticsearch, :with_stubb
 
         expect(last_added_activity.decorate.title(nil)).to eql("Risk assessment")
       end
+
+      it_behaves_like "sends notification to case owner"
     end
   end
 end
