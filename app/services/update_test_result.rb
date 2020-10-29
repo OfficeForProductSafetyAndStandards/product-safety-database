@@ -9,7 +9,7 @@ class UpdateTestResult
     context.fail!(error: "No new attributes supplied") unless new_attributes
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    context.investigation = test_result.investigation
+    context.investigation = test_result.investigation.reload
 
     # These are all currently required to make sure that the validation is
     # triggered if the date fields are blank (otherwise existing date is used).
