@@ -3,13 +3,12 @@ class UpdateTestResult
   include EntitiesToNotify
 
   delegate :test_result, :user, :new_attributes, :new_file, :new_file_description, :investigation, to: :context
+  delegate :investigation, to: :test_result
 
   def call
     context.fail!(error: "No test result supplied") unless test_result.is_a?(Test::Result)
     context.fail!(error: "No new attributes supplied") unless new_attributes
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-
-    context.investigation = test_result.investigation.reload
 
     # These are all currently required to make sure that the validation is
     # triggered if the date fields are blank (otherwise existing date is used).
