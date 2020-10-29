@@ -38,9 +38,12 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_ma
     end
 
     it "creates an audit log", :aggregate_failures do
-      expect(result.correspondence.activity.investigation).to eq(investigation)
-      expect(result.correspondence.activity.source.user).to eq(user)
-      expect(result.correspondence.activity.correspondence).to eq(result.correspondence)
+      result
+      activity = result.correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall")
+
+      expect(activity.investigation).to eq(investigation)
+      expect(activity.source.user).to eq(user)
+      expect(activity.correspondence).to eq(result.correspondence)
     end
 
     it "notifies the relevant users", :with_test_queue_adapter do
@@ -48,7 +51,7 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_ma
         investigation.pretty_id,
         investigation.owner_team.name,
         investigation.owner_team.email,
-        "Phone call details added to the Allegation by #{result.correspondence.activity.source.show}.",
+        "Phone call details added to the Allegation by #{result.correspondence.activities.find_by!(type: 'AuditActivity::Correspondence::AddPhoneCall').source.show}.",
         "Allegation updated"
       ]))
     end

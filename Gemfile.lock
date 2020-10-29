@@ -291,7 +291,7 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (4.0.6)
-    puma (5.0.3)
+    puma (5.0.4)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -465,14 +465,14 @@ GEM
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
-    simplecov (0.19.0)
+    simplecov (0.19.1)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-console (0.7.2)
       ansi
       simplecov
       terminal-table
-    simplecov-html (0.12.2)
+    simplecov-html (0.12.3)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
