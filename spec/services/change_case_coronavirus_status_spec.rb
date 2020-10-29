@@ -51,7 +51,7 @@ RSpec.describe ChangeCaseCoronavirusStatus, :with_stubbed_elasticsearch, :with_t
       end
 
       it "does not set the updated status in the result context" do
-        expect(result.updated_coronavirus_status).to be_nil
+        expect(result.changes_made).to be false
       end
     end
 
@@ -157,7 +157,7 @@ RSpec.describe ChangeCaseCoronavirusStatus, :with_stubbed_elasticsearch, :with_t
       end
 
       it "sets the updated coronavirus status in the result context" do
-        expect(result.updated_coronavirus_status).to eq new_status
+        expect(result.changes_made).to be true
       end
     end
   end

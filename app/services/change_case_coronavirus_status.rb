@@ -9,6 +9,8 @@ class ChangeCaseCoronavirusStatus
     context.fail!(error: "No coronavirus status supplied") if status.nil?
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
+    context.changes_made = false
+
     investigation.assign_attributes(coronavirus_related: status)
     return if investigation.changes.none?
 
@@ -19,7 +21,7 @@ class ChangeCaseCoronavirusStatus
 
     send_notification_email
 
-    context.updated_coronavirus_status = status
+    context.changes_made = true
   end
 
 private

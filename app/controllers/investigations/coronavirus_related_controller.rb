@@ -15,7 +15,7 @@ module Investigations
 
       result = ChangeCaseCoronavirusStatus.call!(investigation: @investigation, status: @coronavirus_related_form.coronavirus_related, user: current_user)
 
-      if result.updated_coronavirus_status
+      if result.changes_made
         flash[:success] = I18n.t(".success", scope: "investigations.coronavirus_related", case_type: @investigation.case_type)
       end
 
