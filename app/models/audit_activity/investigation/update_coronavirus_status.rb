@@ -1,19 +1,30 @@
 class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Investigation::Base
-  def self.from(investigation)
-    super(investigation, I18n.t(".title.#{investigation.coronavirus_related?}", scope: i18n_scope), I18n.t(".body.#{investigation.coronavirus_related?}", scope: i18n_scope))
+  def self.from(*)
+    raise "Deprecated - use ChangeCaseCoronavirusStatus.call instead"
   end
 
-  def email_update_text(viewer = nil)
-    I18n.t(
-      ".email_update_text.#{investigation.coronavirus_related?}",
-      scope: self.class.i18n_scope,
-      case_type: investigation.case_type.upcase_first,
-      name: source&.show(viewer),
-      pretty_id: investigation.pretty_id
-    )
+  def self.build_metadata(investigation)
+    updated_values = investigation.previous_changes.slice(:coronavirus_related)
+
+    {
+      updates: updated_values
+    }
   end
 
-  def email_subject_text
-    I18n.t(".email_subject_text", scope: self.class.i18n_scope, case_type: investigation.case_type.downcase)
+  def title(*)
+    I18n.t(".title.#{new_status}", scope: self.class.i18n_scope)
   end
+
+  def body
+    I18n.t(".body.#{new_status}", scope: self.class.i18n_scope)
+  end
+
+  def new_status
+    metadata["updates"]["coronavirus_related"].second
+  end
+
+private
+
+  # Do not send investigation_updated mail. This is handled by the ChangeCaseCoronavirusStatus service
+  def notify_relevant_users; end
 end
