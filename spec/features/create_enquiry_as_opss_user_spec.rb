@@ -112,8 +112,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_about_enquiry_page
 
         fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
-
-        expect(page).to have_summary_error("Date received must be today or in the past")
+        expect(page).to have_summary_error("Date received of enquiry must be today or in the past")
       end
     end
 
