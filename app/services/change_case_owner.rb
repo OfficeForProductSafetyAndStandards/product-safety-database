@@ -9,6 +9,8 @@ class ChangeCaseOwner
     context.fail!(error: "No owner supplied") unless owner.is_a?(User) || owner.is_a?(Team)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
+    investigation.reload # force cached associations to be reloaded
+
     context.old_owner = investigation.owner
 
     return if old_owner == owner
@@ -18,7 +20,6 @@ class ChangeCaseOwner
         investigation.owner_team_collaboration.swap_to_edit_access!
       end
 
-      investigation.reload # force cached associations to be reloaded
 
       old_collaboration = investigation
                             .collaboration_accesses
