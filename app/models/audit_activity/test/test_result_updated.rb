@@ -68,13 +68,13 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
       end
   end
 
-  # Do not send investigation_updated mail when test result updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
-
 private
 
   def updates
     metadata["updates"]
   end
+
+  # Do not send investigation_updated mail when test result updated. This
+  # overrides inherited functionality in the Activity model :(
+  def notify_relevant_users; end
 end
