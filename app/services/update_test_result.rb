@@ -89,12 +89,10 @@ private
 
   def send_notification_email
     email_recipients_for_case_owner.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
       NotifyMailer.investigation_updated(
         test_result.investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "#{context.activity.source.show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later
