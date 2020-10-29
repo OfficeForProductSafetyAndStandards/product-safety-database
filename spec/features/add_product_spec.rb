@@ -24,6 +24,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_text("Category cannot be blank")
     expect(page).to have_text("Product type cannot be blank")
     expect(page).to have_text("Enter a valid barcode number")
+    expect(page).to have_text("You must state whether the product is a counterfeit")
 
     select product.category, from: "Product category"
 
@@ -35,6 +36,9 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     fill_in "Batch number", with: product.batch_number
     fill_in "Webpage", with: product.webpage
 
+
+    choose "Yes"
+
     select product.country_of_origin, from: "Country of origin"
 
     fill_in "Description of product", with: product.description
@@ -45,6 +49,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).not_to have_error_messages
 
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product brand")
+    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Counterfeit")
     expect(page).to have_css("dd.govuk-summary-list__value", text: "MyBrand")
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product name")
     expect(page).to have_css("dd.govuk-summary-list__value", text: product.name)

@@ -425,6 +425,8 @@ en:
               blank: "Custom risk level must be present when risk level is 'other'"
         product:
           attributes:
+            authenticity:
+              inclusion: "You must state whether the product is a counterfeit"
             product_category:
               blank: "Enter a valid product category"
             gtin13:
@@ -452,6 +454,13 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  product:
+    attributes:
+      authenticities:
+        counterfeit: "Counterfeit"
+        genuine: "Genuine"
+        unsure: "Unsure"
+        not_provided: "Not provided"
   corrective_action:
     attributes:
       actions:

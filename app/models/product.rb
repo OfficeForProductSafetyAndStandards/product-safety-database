@@ -11,11 +11,18 @@ class Product < ApplicationRecord
   before_validation { trim_whitespace(:brand) }
   before_validation { nilify_blanks(:gtin13, :brand) }
 
+  enum authenticity: {
+    counterfeit: I18n.t(:counterfeit, scope: %i[product attributes authenticities]),
+    genuine: I18n.t(:genuine, scope: %i[product attributes authenticities]),
+    unsure: I18n.t(:unsure, scope: %i[product attributes authenticities]),
+    missing: I18n.t(:not_provided, scope: %i[product attributes authenticities])
+  }
+
   validates :category, presence: true
   validates :product_type, presence: true
   validates :name, presence: true
   validates :description, length: { maximum: 10_000 }
-
+  validates :authenticity, inclusion: { in: authenticities.keys }
   validates :gtin13, gtin: true, allow_nil: true, length: { is: 13 }
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")

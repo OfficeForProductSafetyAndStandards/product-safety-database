@@ -2,85 +2,87 @@
 <% # Ideally the width class should affect the input only, not the whole form group, but we're limited by MSPSDS-1045 %>
 
 <% product_category_classes = ["app-!-autocomplete--max-width-three-quarters",
-  ("govuk-form-group--error" if product.errors[:category].any?)] %>
+                               ("govuk-form-group--error" if product.errors[:category].any?)] %>
 
 <%= render "form_components/govuk_select",
-  formGroup: { classes: product_category_classes },
-  choices: product_categories,
-  key: :category,
-  form: form,
-  show_all_values: true,
-  aria_describedby: "report-product-category-hint",
-  is_autocomplete: true,
-  label: { text: "Product category", classes: label_class },
-  hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" } %>
+           formGroup: { classes: product_category_classes },
+           choices: product_categories,
+           key: :category,
+           form: form,
+           show_all_values: true,
+           aria_describedby: "report-product-category-hint",
+           is_autocomplete: true,
+           label: { text: "Product category", classes: label_class },
+           hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" } %>
 
 <%= render "form_components/govuk_input",
-  key: :product_type,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Product type", classes: label_class },
-  hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
+           key: :product_type,
+           form: form,
+           classes: "app-!-max-width-one-half",
+           label: { text: "Product type", classes: label_class },
+           hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
+
+<%= form.govuk_radios :authenticity, legend: "Is the product a suspected counterfeit?", items: items_for_authenticity(form) %>
 
 <%= render "form_components/govuk_input",
-  key: :brand,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Product brand", classes: label_class },
-  hint: { text: "For example, ‘Dyson’ or ‘Sony’" } %>
-
-
-<%= render "form_components/govuk_input",
-  key: :name,
-  form: form,
-  classes: "app-!-max-width-three-quarters",
-  label: { text: "Product name", classes: label_class },
-  hint: { text: "Include model name and model number, for example ‘Playstation 5’. If you suspect the product is counterfeit, add ‘Counterfeit’ before the name, for example ‘Counterfeit Playstion 5’." } %>
-
-<%= render "form_components/govuk_input",
-  key: :gtin13,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Barcode number (GTIN, EAN or UPC)", classes: label_class },
-  hint: {text: "Normally 13 digits, although older products may have a 12 digit number"} %>
+           key: :brand,
+           form: form,
+           classes: "app-!-max-width-one-half",
+           label: { text: "Product brand", classes: label_class },
+           hint: { text: "For example, ‘Dyson’ or ‘Sony’" } %>
 
 
 <%= render "form_components/govuk_input",
-  key: :batch_number,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Batch number", classes: label_class } %>
+           key: :name,
+           form: form,
+           classes: "app-!-max-width-three-quarters",
+           label: { text: "Product name", classes: label_class },
+           hint: { text: "Include model name and model number, for example ‘Playstation 5’. If you suspect the product is counterfeit, add ‘Counterfeit’ before the name, for example ‘Counterfeit Playstion 5’." } %>
+
+<%= render "form_components/govuk_input",
+           key: :gtin13,
+           form: form,
+           classes: "app-!-max-width-one-half",
+           label: { text: "Barcode number (GTIN, EAN or UPC)", classes: label_class },
+           hint: {text: "Normally 13 digits, although older products may have a 12 digit number"} %>
+
+
+<%= render "form_components/govuk_input",
+           key: :batch_number,
+           form: form,
+           classes: "app-!-max-width-one-half",
+           label: { text: "Batch number", classes: label_class } %>
 
 <%= render "form_components/govuk_textarea",
-  key: :product_code,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Other product identifiers", classes: label_class },
-  hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." } %>
+           key: :product_code,
+           form: form,
+           classes: "app-!-max-width-one-half",
+           label: { text: "Other product identifiers", classes: label_class },
+           hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." } %>
 
 <%= render "form_components/govuk_input",
-  key: :webpage,
-  form: form,
-  classes: "app-!-max-width-three-quarters",
-  label: { text: "Webpage", classes: label_class },
-  hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" } %>
+           key: :webpage,
+           form: form,
+           classes: "app-!-max-width-three-quarters",
+           label: { text: "Webpage", classes: label_class },
+           hint: { text: "The manufacturer’s page for the product, or a link to where it can be bought" } %>
 
 <%= render "form_components/govuk_select",
-  form: form,
-  key: :country_of_origin,
-  formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
-  items: countries.map { |country| { text: country[0], value: country[1] } },
-  include_blank: true,
-  id: "location-autocomplete",
-  label: { text: "Country of origin", classes: label_class },
-  hint: { text: "Where the product was manufactured" } %>
+           form: form,
+           key: :country_of_origin,
+           formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
+           items: countries.map { |country| { text: country[0], value: country[1] } },
+           include_blank: true,
+           id: "location-autocomplete",
+           label: { text: "Country of origin", classes: label_class },
+           hint: { text: "Where the product was manufactured" } %>
 
 <%= render "form_components/govuk_textarea",
-  key: :description,
-  form: form,
-  attributes: { maxlength: 10_000 },
-  classes: "app-!-max-width-three-quarters",
-  label: { text: "Description of product", classes: label_class },
-  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents." } %>
+           key: :description,
+           form: form,
+           attributes: { maxlength: 10_000 },
+           classes: "app-!-max-width-three-quarters",
+           label: { text: "Description of product", classes: label_class },
+           hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents." } %>
 
 <%= form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button" %>

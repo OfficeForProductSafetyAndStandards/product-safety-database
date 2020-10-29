@@ -5,7 +5,7 @@ FactoryBot.define do
     category { Rails.application.config.product_constants["product_category"].sample }
     product_type { "product_type" }
     gtin13 { "9781529034523" }
-
+    authenticity { Product.authenticities.keys.sample }
     factory :product_iphone do
       product_code { 234 }
       name { "iPhone XS MAX" }

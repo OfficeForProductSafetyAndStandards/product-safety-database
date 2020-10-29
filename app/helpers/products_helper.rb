@@ -6,7 +6,7 @@ module ProductsHelper
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
     params.require(:product).permit(
-      :brand, :name, :product_type, :category, :product_code, :webpage, :description, :batch_number, :country_of_origin, :gtin13
+      :brand, :name, :product_type, :category, :product_code, :webpage, :description, :batch_number, :country_of_origin, :gtin13, :authenticity
     )
   end
 
@@ -82,6 +82,14 @@ module ProductsHelper
 
   def set_product
     @product = Product.find(params[:id]).decorate
+  end
+
+  def items_for_authenticity(_form)
+    [
+      { text: "Yes",    value: :counterfeit },
+      { text: "No",     value: :genuine },
+      { text: "Unsure", value: :unsure },
+    ]
   end
 
 private
