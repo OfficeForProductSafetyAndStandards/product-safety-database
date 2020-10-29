@@ -83,7 +83,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_elasticsearch, :with_test_queue_
         expect(activity.metadata).to eq({ "updates" => { "description" => ["Old summary", "New summary"] } })
       end
 
-      it_behaves_like "sends notification to case owner"
+      it_behaves_like "a service which notifies the case owner"
     end
   end
 end

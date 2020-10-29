@@ -82,7 +82,7 @@ RSpec.describe ChangeCaseCoronavirusStatus, :with_stubbed_elasticsearch, :with_t
         )
       end
 
-      it_behaves_like "sends notification to case owner"
+      it_behaves_like "a service which notifies the case owner"
 
       it "sets the updated coronavirus status in the result context" do
         expect(result.changes_made).to be true

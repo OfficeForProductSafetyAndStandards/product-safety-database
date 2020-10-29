@@ -105,7 +105,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
           expect(activity_timeline_entry.attachment.blob).to eq(test_result.documents.first.blob)
         end
 
-        it_behaves_like "sends notification to case owner"
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when just the file attachment description is changed" do
@@ -147,7 +147,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
           })
         end
 
-        it_behaves_like "sends notification to case owner"
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when there are no changes" do

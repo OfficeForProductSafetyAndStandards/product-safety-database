@@ -149,7 +149,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           "#{name} edited a corrective action on the allegation."
         end
 
-        it_behaves_like "sends notification to case owner"
+        it_behaves_like "a service which notifies the case owner"
 
         context "when removing the previously attached file" do
           before { corrective_action_params[:related_file] = "off" }

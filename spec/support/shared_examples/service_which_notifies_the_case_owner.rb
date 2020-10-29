@@ -1,4 +1,4 @@
-RSpec.shared_examples "sends notification to case owner" do
+RSpec.shared_examples "a service which notifies the case owner" do
   context "when the user is the case owner" do
     before { ChangeCaseOwner.call!(investigation: investigation, owner: user, user: user) }
 

@@ -93,7 +93,7 @@ RSpec.describe AddRiskAssessmentToCase, :with_stubbed_elasticsearch, :with_stubb
         expect(last_added_activity.decorate.title(nil)).to eql("Risk assessment")
       end
 
-      it_behaves_like "sends notification to case owner"
+      it_behaves_like "a service which notifies the case owner"
     end
   end
 end

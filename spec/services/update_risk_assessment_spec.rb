@@ -158,7 +158,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
           "#{name} edited a risk assessment on the allegation."
         end
 
-        it_behaves_like "sends notification to case owner"
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when only the file has changed" do

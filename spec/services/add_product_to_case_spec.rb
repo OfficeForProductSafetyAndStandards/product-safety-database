@@ -70,7 +70,7 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
         expect(activity.title(nil)).to eq(product.name)
       end
 
-      it_behaves_like "sends notification to case owner"
+      it_behaves_like "a service which notifies the case owner"
     end
   end
 end

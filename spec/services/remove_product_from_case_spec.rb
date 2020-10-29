@@ -70,7 +70,7 @@ RSpec.describe RemoveProductFromCase, :with_stubbed_elasticsearch, :with_test_qu
         expect(activity.title(nil)).to eq("Removed: #{product.name}")
       end
 
-      it_behaves_like "sends notification to case owner"
+      it_behaves_like "a service which notifies the case owner"
     end
   end
 end
