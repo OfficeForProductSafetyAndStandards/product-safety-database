@@ -1,7 +1,10 @@
 class UpdateCorrectiveAction
   include Interactor
+  include EntitiesToNotify
+
   delegate :user, :corrective_action, :corrective_action_params, to: :context
   delegate :investigation, to: :corrective_action
+
   def call
     validate_inputs!
     assign_attributes
@@ -14,12 +17,9 @@ class UpdateCorrectiveAction
       break                              if no_changes?
 
       corrective_action.save!
-
       update_document_description!
-
-      actvity = create_audit_activity_for_corrective_action_updated!(@previous_attachment)
-
-      send_notification_email(actvity)
+      create_audit_activity_for_corrective_action_updated!(@previous_attachment)
+      send_notification_email
 
       # trigger re-index of to for the model to pick up children relationships saved after the model
       investigation.reload.__elasticsearch__.index_document
@@ -114,22 +114,15 @@ private
     )
   end
 
-  def send_notification_email(activity)
-    entities_to_notify.each do |recipient|
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{activity.source.show(recipient)} edited a corrective action on the #{investigation.case_type}.",
+        "#{user.decorate.display_name(viewer: recipient)} edited a corrective action on the #{investigation.case_type}.",
         "Corrective action edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end
-  end
-
-  def entities_to_notify
-    return [] if user == investigation.owner_user
-    return [investigation.owner_user, investigation.owner_team].compact if investigation.owner_team.email?
-
-    investigation.owner_team.users.active.where.not(id: user.id)
   end
 end
