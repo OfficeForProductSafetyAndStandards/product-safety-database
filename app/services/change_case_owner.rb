@@ -20,7 +20,6 @@ class ChangeCaseOwner
         investigation.owner_team_collaboration.swap_to_edit_access!
       end
 
-
       old_collaboration = investigation
                             .collaboration_accesses
                             .changeable
