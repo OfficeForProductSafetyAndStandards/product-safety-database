@@ -1,5 +1,6 @@
 class UpdateRiskAssessment
   include Interactor
+  include EntitiesToNotify
 
   delegate :risk_assessment, :user, :assessed_on, :risk_level, :custom_risk_level,
            :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :product_ids, :risk_assessment_file, to: :context
@@ -69,23 +70,14 @@ private
   end
 
   def send_notification_email
-    entities_to_notify.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "#{user_source.show(recipient)} edited a risk assessment on the #{investigation.case_type}.",
         "Risk assessment edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end
-  end
-
-  def entities_to_notify
-    return [] if user == investigation.owner_user
-    return [investigation.owner_user, investigation.owner_team].compact if investigation.owner_team.email?
-
-    investigation.owner_team.users.active.where.not(id: user.id)
   end
 end
