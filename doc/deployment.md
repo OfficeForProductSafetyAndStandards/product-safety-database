@@ -63,8 +63,8 @@ To create an Elasticsearch instance for the current space:
 To create a redis instance for the current space.
 
     cf marketplace -s redis
-    cf create-service redis tiny-3.2 psd-queue
-    cf create-service redis tiny-3.2 psd-session
+    cf create-service redis tiny-5.x psd-queue
+    cf create-service redis tiny-5.x psd-session
 
 The current worker (sidekiq), which uses `psd-queue` only works with an unclustered instance of redis.
 
