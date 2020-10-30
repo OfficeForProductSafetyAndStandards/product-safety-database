@@ -111,7 +111,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_about_enquiry_page
 
         fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
-        expect(page).to have_summary_error("Date received of enquiry must be today or in the past")
+        expect(page).to have_summary_error("Date enquiry received must be today or in the past")
       end
     end
 
@@ -210,7 +210,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
   def check_invalid_date
     fill_in_when_and_how_was_it_received(received_type: "Other", day: "", month: "", year: date.year, other_received_type: other_received_type)
     expect(page).to have_error_messages
-    expect(page).to have_error_summary "Date received of enquiry must include a day and month"
+    expect(page).to have_error_summary "Date enquiry received must include a day and month"
   end
 
   def check_the_other_received_type_field_has_retained_its_value
