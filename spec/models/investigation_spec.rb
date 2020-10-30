@@ -174,7 +174,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#categories" do
-    let(:product_category) { Faker::Hipster.word }
+    let(:product_category) { Faker::Hipster.unique.word }
 
     before do
       investigation.product_category = product_category
@@ -185,8 +185,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     end
 
     context "with products" do
-      let(:product_one) { create(:product, category: Faker::Hipster.word) }
-      let(:product_two) { create(:product, category: Faker::Hipster.word) }
+      let(:product_one) { create(:product, category: Faker::Hipster.unique.word) }
+      let(:product_two) { create(:product, category: Faker::Hipster.unique.word) }
 
       before do
         investigation.products << product_one << product_two
