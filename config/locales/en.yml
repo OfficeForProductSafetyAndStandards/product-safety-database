@@ -242,6 +242,16 @@ en:
   activemodel:
     errors:
       models:
+        product_form:
+          attributes:
+            authenticity:
+              inclusion: "You must state whether the product is a counterfeit"
+            product_category:
+              blank: "Enter a valid product category"
+            gtin13:
+              invalid: "Enter a valid barcode number"
+              wrong_length: "Enter a valid barcode number"
+
         risk_assessment_form:
           attributes:
             assessed_on:
@@ -423,15 +433,6 @@ en:
             custom_risk_level:
               present: "Custom risk level must be blank when risk level is not 'other'"
               blank: "Custom risk level must be present when risk level is 'other'"
-        product:
-          attributes:
-            authenticity:
-              inclusion: "You must state whether the product is a counterfeit"
-            product_category:
-              blank: "Enter a valid product category"
-            gtin13:
-              invalid: "Enter a valid barcode number"
-              wrong_length: "Enter a valid barcode number"
         user:
           attributes:
             mobile_number:
