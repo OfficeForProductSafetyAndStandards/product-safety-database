@@ -70,7 +70,6 @@ RSpec.shared_examples "a service which notifies the case owner" do
           create(:user, :inactive, team: other_team, organisation: other_team.organisation)
           create(:user, :deleted, team: other_team, organisation: other_team.organisation)
         end
-        
 
         it "sends an email to each of the team's active users" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
