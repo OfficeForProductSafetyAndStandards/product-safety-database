@@ -7,36 +7,40 @@
 
     <p>Changes:</p>
 
-    <% if activity.new_summary %>
-      Summary: <b><%= activity.new_summary %></b><br>
+    <% if activity.new_overview %>
+      Summary: <%= updated_field(activity.new_overview) %><br>
     <% end %>
 
     <% if activity.new_correspondence_date %>
-      Date of email: <b><%= activity.new_correspondence_date.to_s(:govuk) %></b><br>
+      Date of email: <%= updated_field(activity.new_correspondence_date.to_s(:govuk)) %><br>
     <% end %>
 
     <% if activity.new_correspondent_name %>
-      Contact: <b><%= activity.new_correspondent_name %></b><br>
+      Contact: <%= updated_field(activity.new_correspondent_name) %><br>
     <% end %>
 
     <% if activity.new_email_address %>
-      Email address: <b><%= activity.new_email_address %></b><br>
+      Email address: <%= updated_field(activity.new_email_address) %><br>
+    <% end %>
+
+    <% if activity.new_email_subject %>
+      Subject: <%= updated_field(activity.new_email_subject) %><br>
     <% end %>
 
     <% if activity.new_details %>
-      Email: <b><%= format_with_line_breaks(activity.new_new_details) %></b><br>
+      Email: <%= format_with_line_breaks(activity.new_details) %><br>
     <% end %>
 
     <% if activity.new_email_file %>
-      Email: <b><%= activity.new_email_file %></b><br>
+      Email: <%= updated_field(activity.new_email_file) %><br>
     <% end %>
 
     <% if activity.new_email_attachment %>
-      Email attachment: <b><%= activity.new_email_attachment %></b><br>
+      Email attachment: <%= updated_field(activity.new_email_attachment) %><br>
     <% end %>
 
     <% if activity.new_attachment_description %>
-      Attachment description: <b><%= activity.new_attachment_description %></b><br>
+      Attachment description: <%= updated_field(activity.new_attachment_description) %><br>
     <% end %>
 
   </div>

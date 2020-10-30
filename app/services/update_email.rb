@@ -61,8 +61,8 @@ private
 
   def no_changes?
     !email.changed? &&
-      (email_file_action == "keep" || (!email_file && !email_file_id)) &&
-      (email_attachment_action == "keep" || (!email_attachment || !email_attachment_id)) &&
+      (email_file_action == "keep" || !email.email_file.attached?) &&
+      (email_attachment_action == "keep" || !email.email_attachment.attached?) &&
       (attachment_description == @previous_attachment_description.to_s)
   end
 

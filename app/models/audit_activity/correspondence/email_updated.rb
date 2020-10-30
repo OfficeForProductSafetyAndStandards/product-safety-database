@@ -15,16 +15,20 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
     updated_values["email_address"]
   end
 
-  def new_summary
-    updated_values["summary"]
+  def new_overview
+    updated_values["overview"]
   end
 
   def new_details
-    updated_values["detail"]
+    updated_values["details"]
   end
 
   def new_email_file
     updated_values["email_filename"]
+  end
+
+  def new_email_subject
+    updated_values["email_subject"]
   end
 
   def new_email_attachment
