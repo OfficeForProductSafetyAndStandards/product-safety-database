@@ -80,7 +80,12 @@ RSpec.describe ProductForm do
     end
   end
 
-  describe "authenticty validation" do
+  describe "authenticity validation" do
+    before { form.authenticity = "invalid authenticity" }
 
+    it "is invalid", :aggregate_failures do
+      expect(form).not_to be_valid
+      expect(form.errors.full_messages_for(:authenticity)).to eq ["You must state whether the product is a counterfeit"]
+    end
   end
 end
