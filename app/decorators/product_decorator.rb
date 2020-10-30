@@ -6,6 +6,7 @@ class ProductDecorator < ApplicationDecorator
     rows = [
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product type" }, value: { text: product_type } },
+      { key: { text: "Counterfeit" }, value: { text: authenticity } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
@@ -17,6 +18,10 @@ class ProductDecorator < ApplicationDecorator
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
+  end
+
+  def authenticity
+    I18n.t(object.authenticity, scope: Product.model_name.i18n_key)
   end
 
   def description

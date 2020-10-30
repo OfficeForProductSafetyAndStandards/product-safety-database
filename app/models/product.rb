@@ -6,13 +6,11 @@ class Product < ApplicationRecord
   include SanitizationHelper
 
   enum authenticity: {
-    counterfeit: I18n.t(:counterfeit, scope: %i[product attributes authenticities]),
-    genuine: I18n.t(:genuine, scope: %i[product attributes authenticities]),
-    unsure: I18n.t(:unsure, scope: %i[product attributes authenticities]),
-    missing: I18n.t(:not_provided, scope: %i[product attributes authenticities])
+    "counterfeit" => "counterfeit",
+    "genuine" => "genuine",
+    "unsure" => "unsure",
+    "missing" => "missing"
   }
-
-
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 

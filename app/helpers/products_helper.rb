@@ -68,12 +68,13 @@ module ProductsHelper
   end
 
   def create_product
-    if params[:product].present?
-      @product = Product.new(product_params)
-      @product.source = UserSource.new(user: current_user)
-    else
-      @product = Product.new
-    end
+
+    # if params[:product].present?
+    #   @product = Product.new(product_params)
+    #   @product.source = UserSource.new(user: current_user)
+    # else
+    #   @product = Product.new
+    # end
   end
 
   def set_countries

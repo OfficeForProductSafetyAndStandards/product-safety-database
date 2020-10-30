@@ -456,12 +456,11 @@ en:
           temporary: "Temporarily"
           unknown: "Unknown"
   product:
-    attributes:
-      authenticities:
-        counterfeit: "Counterfeit"
-        genuine: "Genuine"
-        unsure: "Unsure"
-        not_provided: "Not provided"
+    counterfeit: "Counterfeit"
+    genuine: "Genuine"
+    unsure: "Unsure"
+    missing: "Not provided"
+
   corrective_action:
     attributes:
       actions:

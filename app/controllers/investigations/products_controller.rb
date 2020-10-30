@@ -15,21 +15,24 @@ class Investigations::ProductsController < ApplicationController
   # GET /cases/1/products/new
   def new
     authorize @investigation, :update?
-    excluded_product_ids = @investigation.products.map(&:id)
-    @products = advanced_product_search(@product, excluded_product_ids)
+    @product_form = ProductForm.new
   end
 
   # POST /cases/1/products
   def create
     authorize @investigation, :update?
+
+    @product_form = ProductForm.new(product_params)
+
     respond_to do |format|
-      if @product.valid?
-        AddProductToCase.call(investigation: @investigation, product: @product, user: current_user)
+      if @product_form.valid?
+        AddProductToCase.call!(
+          @product_form.serializable_hash.merge(investigation: @investigation, user: current_user)
+        )
         format.html { redirect_to_investigation_products_tab success: "Product was successfully created." }
         format.json { render :show, status: :created, location: @investigation }
       else
         set_countries
-        @products = advanced_product_search(@product, @investigation.products.map(&:id))
         format.html { render :new }
         format.json { render json: @product.errors, status: :unprocessable_entity }
       end

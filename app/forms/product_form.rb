@@ -2,6 +2,7 @@ class ProductForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Validations::Callbacks
+  include ActiveModel::Serialization
   include SanitizationHelper
 
   attribute :authenticity

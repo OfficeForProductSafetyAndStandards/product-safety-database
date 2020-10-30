@@ -2,25 +2,53 @@ class AddProductToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :product, :investigation, :user, to: :context
+  delegate :authenticity,
+           :batch_number,
+           :brand,
+           :country_of_origin,
+           :description,
+           :gtin13,
+           :name,
+           :product_code,
+           :product_type,
+           :webpage,
+           :investigation,
+           :category,
+           :user,
+           :product,
+           to: :context
 
   def call
-    context.fail!(error: "No product supplied") unless product.is_a?(Product)
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.products << product
+    Product.transaction do
+      context.product = investigation.products.create!(
+        authenticity: authenticity,
+        batch_number: batch_number,
+        brand: brand,
+        country_of_origin: country_of_origin,
+        description: description,
+        gtin13: gtin13,
+        name: name,
+        product_code: product_code,
+        product_type: product_type,
+        category: category,
+        webpage: webpage,
+        source: build_user_source
+      )
 
-    context.activity = create_audit_activity_for_product_added
+      context.activity = create_audit_activity_for_product_added
 
-    send_notification_email
+      send_notification_email
+    end
   end
 
 private
 
   def create_audit_activity_for_product_added
     AuditActivity::Product::Add.create!(
-      source: UserSource.new(user: user),
+      source: build_user_source,
       investigation: investigation,
       title: product.name,
       product: product
@@ -37,5 +65,9 @@ private
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
+  end
+
+  def build_user_source
+    UserSource.new(user: user)
   end
 end
