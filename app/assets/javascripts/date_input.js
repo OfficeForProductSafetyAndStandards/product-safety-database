@@ -11,7 +11,7 @@ function dateInput (id) {
     }
 
     const currentDate = new Date()
-    var dateYesterday = new Date(currentDate.getTime())
+    const dateYesterday = new Date(currentDate.getTime())
 
     const element = document.getElementById(id)
     const day = element.querySelector("input[name*='day']")

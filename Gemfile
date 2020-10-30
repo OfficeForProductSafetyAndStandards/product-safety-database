@@ -35,7 +35,7 @@ gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
 gem "scout_apm", "~> 2.6"
 gem "sentry-raven", "~> 3.1"
-gem "sidekiq", "5.2.9" # Required version until GOV.UK PaaS upgrades Redis to 4.0.0
+gem "sidekiq", "~> 6.1"
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails", "~> 3.2"
 gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
@@ -75,7 +75,7 @@ group :test do
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.8"
-  gem "rspec-mocks", "~> 3.9"
+  gem "rspec-mocks", "~> 3.10"
   gem "rspec-rails", "~> 4.0"
   gem "rubocop", "~> 0.87"
   gem "rubocop-govuk", "~> 3.17"
