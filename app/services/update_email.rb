@@ -1,5 +1,6 @@
 class UpdateEmail
   include Interactor
+  include EntitiesToNotify
 
   delegate :user, :email, :correspondence_date, :correspondent_name, :email_address, :email_direction, :overview, :details, :email_subject, :email_file_action, :email_attachment_action, :email_file, :email_attachment, :email_file_id, :email_attachment_id, :attachment_description, to: :context
 
@@ -99,23 +100,14 @@ private
   end
 
   def send_notification_email
-    entities_to_notify.each do |recipient|
-      email_address = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
-        email_address,
+        recipient.email,
         "#{user_source.show(recipient)} edited an email on the #{investigation.case_type}.",
         "Email edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end
-  end
-
-  def entities_to_notify
-    return [] if user == investigation.owner_user
-    return [investigation.owner_user, investigation.owner_team].compact if investigation.owner_team.email?
-
-    investigation.owner_team.users.active.where.not(id: user.id)
   end
 end

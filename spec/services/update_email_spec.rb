@@ -56,8 +56,10 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
       let(:correspondent_name) { "Mr Jones" }
       let(:details) { "Please call me." }
       let(:email_address) { "jones@example.com" }
+      let(:email_attachment_action) { "keep" }
       let(:email_attachment) { nil }
       let(:email_direction) { "inbound" }
+      let(:email_file_action) { "keep" }
       let(:email_file) { nil }
       let(:email_subject) { "Re: safety issue" }
       let(:overview) { nil }
@@ -71,8 +73,10 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
           correspondent_name: correspondent_name,
           details: details,
           email_address: email_address,
+          email_attachment_action: email_attachment_action,
           email_attachment: email_attachment,
           email_direction: email_direction,
+          email_file_action: email_file_action,
           email_file: email_file,
           email_subject: email_subject,
           overview: overview,
@@ -130,18 +134,20 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
         end
         # rubocop:enable RSpec/ExampleLength
 
-        it "notifies the team", :aggregate_failures do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
-            investigation.pretty_id,
-            investigation.owner_user.name,
-            investigation.owner_user.email,
-            "User 2 (Team 2) edited an email on the allegation.",
-            "Email edited for Allegation"
-          ]))
+        def expected_email_subject
+          "Email edited for Allegation"
         end
+
+        def expected_email_body(name)
+          "#{name} edited an email on the allegation."
+        end
+
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when a new email and attachment files have been uploaded" do
+        let(:email_file_action) { "replace" }
+        let(:email_attachment_action) { "replace" }
         let(:email_file) { Rack::Test::UploadedFile.new("spec/fixtures/files/email2.txt") }
         let(:email_attachment) { Rack::Test::UploadedFile.new("spec/fixtures/files/risk_assessment.txt") }
         let(:attachment_description) { "Risk assessment" }
