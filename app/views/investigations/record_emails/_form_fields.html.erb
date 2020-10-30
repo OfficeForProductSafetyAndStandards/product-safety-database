@@ -53,7 +53,7 @@
       <%= link_to email.email_file.filename, email.email_file, target: "_blank", rel: 'noopener' %>
     </p>
 
-    <%= form.hidden_field :existing_email_file_id  %>
+    <%= form.hidden_field :email_file_id  %>
 
     <%= form.govuk_radios :email_file_action,
       legend: "Replace or remove file",
