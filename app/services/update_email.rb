@@ -48,7 +48,7 @@ class UpdateEmail
 
       email.save!
 
-      if email.email_attachment.attached? && attachment_description.present?
+      if email.email_attachment.attached?
         update_attachment_description!
       end
 
