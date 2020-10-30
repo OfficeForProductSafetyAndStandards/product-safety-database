@@ -76,6 +76,7 @@ private
       source: user_source,
       investigation: email.investigation,
       metadata: audit_activity_metadata,
+      correspondence: email,
       title: nil,
       body: nil
     )

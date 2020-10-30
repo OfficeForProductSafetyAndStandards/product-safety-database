@@ -1,6 +1,8 @@
 class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
+  belongs_to :correspondence, class_name: "Correspondence::Email"
+
   def title(_viewing_user = nil)
-    email&.overview.presence || "Email"
+    correspondence&.overview&.presence || "Email"
   end
 
   def restricted_title(_user)
@@ -45,10 +47,6 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
 
   def new_attachment_description
     updated_values["attachment_description"]
-  end
-
-  def email
-    @email ||= Correspondence::Email.find(email_id)
   end
 
   def self.from(*)
