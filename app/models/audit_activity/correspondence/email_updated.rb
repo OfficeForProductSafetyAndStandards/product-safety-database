@@ -1,4 +1,13 @@
 class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
+
+  def title(_viewing_user = nil)
+    email&.overview.presence || "Email"
+  end
+
+  def restricted_title(_user)
+    "Email"
+  end
+
   def email_id
     metadata["email_id"]
   end
@@ -39,6 +48,10 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
     updated_values["attachment_description"]
   end
 
+  def email
+    @email ||= Correspondence::Email.find(email_id)
+  end
+
   def self.from(*)
     raise "Deprecated - use UpdateEmail.call instead"
   end
@@ -75,6 +88,10 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
   end
 
 private
+
+  def subtitle_slug
+    "Email updated"
+  end
 
   def updated_values
     @updated_values ||= metadata["updates"].transform_values(&:second)
