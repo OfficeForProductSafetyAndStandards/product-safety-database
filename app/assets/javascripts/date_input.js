@@ -3,7 +3,7 @@ import $ from 'jquery'
 function dateInput (idPrefix) {
   $(document).ready(() => {
     const currentDate = new Date()
-    var dateYesterday = new Date(currentDate.getTime())
+    const dateYesterday = new Date(currentDate.getTime())
 
     // This sets the date to the previous day, since setting
     // the date to 0 sets the date to the last day of the
