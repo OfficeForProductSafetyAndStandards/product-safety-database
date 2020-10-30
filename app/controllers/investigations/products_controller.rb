@@ -5,7 +5,6 @@ class Investigations::ProductsController < ApplicationController
 
   before_action :set_investigation
   before_action :set_product, only: %i[link remove unlink]
-  before_action :create_product, only: %i[new create]
   before_action :set_countries, only: %i[new]
 
   def index
