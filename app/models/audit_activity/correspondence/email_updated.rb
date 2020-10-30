@@ -1,5 +1,4 @@
 class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
-
   def title(_viewing_user = nil)
     email&.overview.presence || "Email"
   end
