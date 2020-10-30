@@ -47,12 +47,10 @@ private
 
   def send_notification_email
     email_recipients_for_case_owner.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "Risk assessment was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later

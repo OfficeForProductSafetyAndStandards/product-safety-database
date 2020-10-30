@@ -3,13 +3,12 @@ class UpdateTestResult
   include EntitiesToNotify
 
   delegate :test_result, :user, :new_attributes, :new_file, :new_file_description, :investigation, to: :context
+  delegate :investigation, to: :test_result
 
   def call
     context.fail!(error: "No test result supplied") unless test_result.is_a?(Test::Result)
     context.fail!(error: "No new attributes supplied") unless new_attributes
     context.fail!(error: "No user supplied") unless user.is_a?(User)
-
-    context.investigation = test_result.investigation
 
     # These are all currently required to make sure that the validation is
     # triggered if the date fields are blank (otherwise existing date is used).
@@ -89,12 +88,10 @@ private
 
   def send_notification_email
     email_recipients_for_case_owner.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
       NotifyMailer.investigation_updated(
         test_result.investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "#{context.activity.source.show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later
