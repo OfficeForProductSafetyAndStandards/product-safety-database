@@ -17,14 +17,14 @@ Menu.prototype.init = function () {
 }
 
 Menu.prototype.addMenuLinksFromDataAttributes = function () {
-  var items = []
-  var itemCount = 0
+  const items = []
+  let itemCount = 0
 
   while (true) {
-    var itemKeyPrefix = 'item-' + (itemCount + 1)
+    const itemKeyPrefix = 'item-' + (itemCount + 1)
 
-    var itemHrefKey = itemKeyPrefix + 'Href'
-    var itemTextKey = itemKeyPrefix + 'Text'
+    const itemHrefKey = itemKeyPrefix + 'Href'
+    const itemTextKey = itemKeyPrefix + 'Text'
 
     if (this.$module.dataset[itemHrefKey] && this.$module.dataset[itemTextKey]) {
       items.push({
@@ -46,8 +46,8 @@ Menu.prototype.addMenuLinksFromDataAttributes = function () {
   this.$menu.setAttribute('class', 'app-menu__wrapper app-menu__wrapper--right')
   this.$menu.setAttribute('role', 'menu')
 
-  for (var item of items) {
-    var itemLink = document.createElement('a')
+  for (const item of items) {
+    const itemLink = document.createElement('a')
     itemLink.setAttribute('href', item.href)
     itemLink.setAttribute('role', 'menuitem')
     itemLink.setAttribute('data-module', 'govuk-button')
@@ -114,19 +114,19 @@ Menu.prototype.menuItemKeyedDown = function (event) {
 }
 
 Menu.prototype.focusPrevious = function (currentLink) {
-  var previousLink = currentLink.previousSibling
+  const previousLink = currentLink.previousSibling
 
   if (previousLink) {
     previousLink.focus()
   } else {
     // focus the last link
-    var menuLinks = this.$menu.querySelectorAll('a')
+    const menuLinks = this.$menu.querySelectorAll('a')
     menuLinks[menuLinks.length - 1].focus()
   }
 }
 
 Menu.prototype.focusNext = function (currentLink) {
-  var nextLink = currentLink.nextSibling
+  const nextLink = currentLink.nextSibling
 
   if (nextLink) {
     nextLink.focus()
@@ -145,7 +145,7 @@ Menu.prototype.hideMenu = function () {
 }
 
 Menu.prototype.convertLinkToButton = function () {
-  var linkButton = this.$module.querySelector('.govuk-button')
+  const linkButton = this.$module.querySelector('.govuk-button')
 
   this.$button = document.createElement('button')
   this.$button.textContent = linkButton.textContent
@@ -160,7 +160,7 @@ Menu.prototype.convertLinkToButton = function () {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  var $menus = document.querySelectorAll('[data-module="app-menu"]')
+  const $menus = document.querySelectorAll('[data-module="app-menu"]')
   nodeListForEach($menus, function ($menu) {
     new Menu($menu).init()
   })
