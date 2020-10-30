@@ -14,8 +14,7 @@ class Investigations::RecordEmailsController < ApplicationController
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize @investigation, :update?
 
-    @email_correspondence_form = EmailCorrespondenceForm.new
-    @email_correspondence_form.attributes = email_correspondence_form_params
+    @email_correspondence_form = EmailCorrespondenceForm.new(email_correspondence_form_params)
 
     if @email_correspondence_form.valid?
 
