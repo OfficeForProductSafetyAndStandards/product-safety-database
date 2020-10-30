@@ -123,7 +123,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user, new_file_description: "Updated description") }
-        let(:activity_timeline_entry) { test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last }
+        let(:activity_timeline_entry) { test_result.investigation.activities.where(type: "AuditActivity::Test::TestResultUpdated").order(:created_at).last }
 
         before do
           document = test_result.documents.first
