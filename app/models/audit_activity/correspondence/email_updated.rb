@@ -33,12 +33,20 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
     updated_values["details"]
   end
 
+  def email_file_changed?
+    updated_values.key?("email_filename")
+  end
+
   def new_email_file
     updated_values["email_filename"]
   end
 
   def new_email_subject
     updated_values["email_subject"]
+  end
+
+  def email_attachment_changed?
+    updated_values.key?("email_attachment_filename")
   end
 
   def new_email_attachment
@@ -74,7 +82,7 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
 
     new_email_attachment_description = email.email_attachment.try(:metadata).to_h["description"].to_s
 
-    if previous_attachment_description != new_email_attachment_description
+    if previous_attachment_description.to_s != new_email_attachment_description.to_s
       updates[:attachment_description] = [previous_attachment_description, new_email_attachment_description]
     end
 

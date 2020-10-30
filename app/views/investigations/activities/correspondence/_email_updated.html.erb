@@ -31,11 +31,11 @@
       Email: <%= format_with_line_breaks(activity.new_details) %><br>
     <% end %>
 
-    <% if activity.new_email_file %>
+    <% if activity.email_file_changed? %>
       Email: <%= updated_field(activity.new_email_file) %><br>
     <% end %>
 
-    <% if activity.new_email_attachment %>
+    <% if activity.email_attachment_changed? %>
       Email attachment: <%= updated_field(activity.new_email_attachment) %><br>
     <% end %>
 

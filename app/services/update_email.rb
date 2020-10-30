@@ -61,8 +61,9 @@ private
 
   def no_changes?
     !email.changed? &&
-      (email_file_action == "keep" || !email.email_file.attached?) &&
-      (email_attachment_action == "keep" || !email.email_attachment.attached?) &&
+      (email_file_action == "keep" || (
+        email_file_action.nil? && !email.email_file.attached?)) &&
+      (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
       (attachment_description == @previous_attachment_description.to_s)
   end
 
@@ -89,9 +90,9 @@ private
   def audit_activity_metadata
     AuditActivity::Correspondence::EmailUpdated.build_metadata(
       email: email,
-      email_changed: email_file.present?,
+      email_changed: (email_file.present? || email_file_action == "remove"),
       previous_email_filename: @previous_email_filename,
-      email_attachment_changed: email_attachment.present?,
+      email_attachment_changed: (email_attachment.present? || email_attachment_action == "remove"),
       previous_email_attachment_filename: @previous_email_attachment_filename,
       previous_attachment_description: @previous_attachment_description
     )
