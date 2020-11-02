@@ -11,12 +11,11 @@ private
   end
 
   def model_params
-    %i[user_title description date_received received_type coronavirus_related]
+    [:user_title, :description, :received_type, :coronavirus_related, date_received: %i[day month year]]
   end
 
   def set_investigation
     @investigation = Investigation::Enquiry.new(investigation_params).build_owner_collaborations_from(current_user)
-    @investigation.set_dates_from_params(params[:enquiry])
   end
 
   def assign_type

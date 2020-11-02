@@ -355,6 +355,14 @@ en:
       collaboration/access/read_only: "readonly"
     errors:
       models:
+        investigation/enquiry:
+          attributes:
+            date_received:
+              blank: Enter the date the enquiry was received
+              must_be_real: Date enquiry received must be a real date
+              incomplete: Date enquiry received must include a %{missing_date_parts}
+              in_future: Date enquiry received must be today or in the past
+
         test:
           attributes:
             product:
