@@ -173,6 +173,34 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
         end
         # rubocop:enable RSpec/ExampleLength
       end
+
+      context "when the email and attachments are removed" do
+        let(:email_file_action) { "remove" }
+        let(:email_attachment_action) { "remove" }
+        let(:email_file) { nil }
+        let(:email_attachment) { nil }
+
+        it "detaches the old files", :aggregate_failures do
+          expect(result).to be_success
+
+          expect(email.email_file.attached?).to be false
+          expect(email.email_attachment.attached?).to be false
+        end
+
+        # rubocop:disable RSpec/ExampleLength
+        it "creates an activity entry" do
+          result
+
+          expect(activity_entry.metadata).to eql({
+            "email_id" => email.id,
+            "updates" => {
+              "email_filename" => ["email.txt", nil],
+              "email_attachment_filename" => ["email_attachment.txt", nil]
+            }
+          })
+        end
+        # rubocop:enable RSpec/ExampleLength
+      end
     end
   end
 end
