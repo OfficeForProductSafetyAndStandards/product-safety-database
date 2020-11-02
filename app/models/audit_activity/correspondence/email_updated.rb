@@ -73,7 +73,7 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondenc
     )
 
     if email_changed
-      updates[:email_filename] = [previous_email_filename, email.email_file.try(:filename)]
+      updates[:email_filename] = [previous_email_filename, email.email_file&.filename]
     end
 
     if email_attachment_changed
