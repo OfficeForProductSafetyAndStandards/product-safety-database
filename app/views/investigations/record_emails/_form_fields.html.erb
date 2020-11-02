@@ -109,11 +109,9 @@
         <%= form.hidden_field :email_attachment_id %>
       <% end %>
 
-      <% if @email.new_record? || !form.object.email_attachment_id.present? %>
-        <%= form.govuk_file_upload :email_attachment,
-          label: "Upload a file"
-        %>
-      <% end %>
+      <%= form.govuk_file_upload :email_attachment,
+        label: ((form.object.email_attachment.present? || form.object.email_attachment_id.present?) ? "Select replacement file" : "Upload a file")
+      %>
     <% end %>
 
     <% if email.email_attachment.present? %>
