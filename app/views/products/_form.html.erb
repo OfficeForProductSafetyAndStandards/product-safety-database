@@ -10,6 +10,7 @@
            key: :category,
            form: form,
            show_all_values: true,
+           id: "category",
            aria_describedby: "report-product-category-hint",
            is_autocomplete: true,
            label: { text: "Product category", classes: label_class },
@@ -18,6 +19,7 @@
 <%= render "form_components/govuk_input",
            key: :product_type,
            form: form,
+           id: "product_type",
            classes: "app-!-max-width-one-half",
            label: { text: "Product type", classes: label_class },
            hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
@@ -37,6 +39,7 @@
            form: form,
            classes: "app-!-max-width-three-quarters",
            label: { text: "Product name", classes: label_class },
+           id: "name",
            hint: { text: "Include model name and model number, for example ‘Playstation 5’. If you suspect the product is counterfeit, add ‘Counterfeit’ before the name, for example ‘Counterfeit Playstion 5’." } %>
 
 <%= render "form_components/govuk_input",
