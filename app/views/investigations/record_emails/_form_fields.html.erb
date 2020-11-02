@@ -33,12 +33,10 @@
     <%= form.hidden_field :email_file_id %>
   <% end %>
 
-  <% if @email.new_record? || !form.object.email_file_id.present? %>
-    <%= form.govuk_file_upload :email_file,
-      label: (form.object.email_file.present? ? "Select replacement file" : "Upload a file"),
-      label_classes: "govuk-label--x"
-    %>
-  <% end %>
+  <%= form.govuk_file_upload :email_file,
+    label: ((form.object.email_file.present? || form.object.email_file_id.present?) ? "Select replacement file" : "Upload a file"),
+    label_classes: "govuk-label--x"
+  %>
 <% end %>
 
 <%= render "components/govuk_fieldset",
