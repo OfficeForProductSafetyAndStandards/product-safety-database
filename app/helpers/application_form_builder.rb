@@ -1,5 +1,5 @@
 class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
-  def govuk_date_input(attribute, legend:, hint: nil)
+  def govuk_date_input(attribute, legend:, hint: nil, classes: "govuk-fieldset__legend--m")
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -16,7 +16,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      hint: hint,
                      fieldset: {
                        legend: {
-                         classes: "govuk-fieldset__legend--m",
+                         classes: classes,
                          text: legend
                        }
                      },
