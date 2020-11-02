@@ -77,7 +77,7 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondenc
     end
 
     if email_attachment_changed
-      updates[:email_attachment_filename] = [previous_email_attachment_filename, email.email_attachment.try(:filename)]
+      updates[:email_attachment_filename] = [previous_email_attachment_filename, email.email_attachment&.filename]
     end
 
     new_email_attachment_description = email.email_attachment.try(:metadata).to_h["description"].to_s
