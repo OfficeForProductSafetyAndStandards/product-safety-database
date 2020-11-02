@@ -1,4 +1,4 @@
-class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Base
+class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondence::Base
   belongs_to :correspondence, class_name: "Correspondence::Email"
 
   def title(_viewing_user = nil)
