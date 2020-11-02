@@ -5,7 +5,7 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team, name: "Team 2") }
-  let(:user) { create(:user, name: "User 2", team: team) }
+  let(:user) { create(:user, :activated, name: "User 2", team: team) }
 
   let!(:email) do
     create(:email,
