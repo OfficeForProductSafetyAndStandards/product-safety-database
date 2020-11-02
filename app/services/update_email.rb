@@ -65,7 +65,7 @@ private
       (email_file_action == "keep" || (
         email_file_action.nil? && !email.email_file.attached?)) &&
       (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
-      (attachment_description == @previous_attachment_description.to_s)
+      (!email.email_attachment.attached? || (attachment_description == @previous_attachment_description.to_s))
   end
 
   def update_attachment_description!
