@@ -131,6 +131,17 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_elasticse
 
     expect(page).to have_text("email_attachment.txt")
     expect(page).to have_text("Manufacturer safety document")
+
+    # Test that another user in a different organisation cannot see correspondence activity
+    sign_out
+
+    sign_in(other_user_different_org)
+
+    visit "/cases/#{investigation.pretty_id}/activity"
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_text("Email updated by #{user.name}")
+    expect(page).to have_text("Only teams added to the case can view correspondence")
   end
 
   scenario "Removing attachment from an email" do
