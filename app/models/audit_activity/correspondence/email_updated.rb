@@ -101,4 +101,7 @@ private
   def updated_values
     @updated_values ||= metadata["updates"].transform_values(&:second)
   end
+
+  # no-op sending of email is done by the service UpdateEmail
+  def notify_relevant_users; end
 end
