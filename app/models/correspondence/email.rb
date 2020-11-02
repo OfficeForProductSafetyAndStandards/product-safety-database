@@ -1,10 +1,7 @@
 class Correspondence::Email < Correspondence
-  include DateConcern
   has_one_attached :email_file
   has_one_attached :email_attachment
   attribute :email_direction
-
-  date_attribute :correspondence_date
 
   enum email_direction: {
     outbound: "To",

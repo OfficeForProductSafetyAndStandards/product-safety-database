@@ -234,8 +234,17 @@ module PageExpectations
     end
   end
 
-  def expect_to_be_on_email_page(case_id:)
-    expect(page).to have_current_path(/\/cases\/#{case_id}\/emails\/[\d]+/)
+  def expect_to_be_on_email_page(case_id:, email_id: nil)
+    if email_id
+      expect(page).to have_current_path("/cases/#{case_id}/emails/#{email_id}")
+    else
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/emails\/[\d]+/)
+    end
+  end
+
+  def expect_to_be_on_edit_email_page(case_id:, email_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/emails/#{email_id}/edit")
+    expect(page).to have_h1("Edit email")
   end
 
   def expect_to_be_on_phone_call_page(case_id:)

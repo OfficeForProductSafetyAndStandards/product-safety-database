@@ -12,8 +12,8 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
       email_direction: email_direction,
       email_file: email_file,
       email_subject: email_subject,
-      existing_email_attachment_id: existing_email_attachment_id,
-      existing_email_file_id: existing_email_file_id,
+      email_attachment_id: email_attachment_id,
+      email_file_id: email_file_id,
       overview: overview
     )
   end
@@ -27,8 +27,8 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
   let(:email_direction) { nil }
   let(:email_file) { nil }
   let(:email_subject) { "" }
-  let(:existing_email_attachment_id) { nil }
-  let(:existing_email_file_id) { nil }
+  let(:email_attachment_id) { nil }
+  let(:email_file_id) { nil }
   let(:overview) { nil }
 
   describe "validations" do
