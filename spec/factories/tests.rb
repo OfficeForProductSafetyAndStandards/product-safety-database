@@ -5,6 +5,8 @@ FactoryBot.define do
     date_year   { date&.year }
     details     { Faker::Hipster.sentence }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
+    product
+    investigation { create(:allegation) }
 
     documents { [Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")] }
 

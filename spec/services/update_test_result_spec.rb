@@ -20,7 +20,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
     end
 
     context "with required parameters that trigger a validation error" do
-      let(:test_result) { build(:test_result) }
+      let!(:test_result) { create(:test_result) }
       let(:user) { create(:user, :activated) }
       let(:new_attributes) do
         ActionController::Parameters.new({
@@ -41,35 +41,34 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
     end
 
     context "with required parameters" do
-      let(:editing_user_team) { create(:team, name: "Test team 2") }
-      let(:user) { create(:user, :activated, name: "User 2", team: editing_user_team) }
-      let(:product) { create(:product) }
-      let(:owner_team) do
-        create(:team,
-               name: "Test team 1",
-               team_recipient_email: "test-team@example.com")
+      def expected_email_subject
+        "Test result edited for Allegation"
       end
-      let(:investigation) { create(:allegation) }
 
-      before do
-        ChangeCaseOwner.call!(investigation: investigation, owner: owner_team, user: user)
+      def expected_email_body(name)
+        "#{name} edited a test result on the allegation."
+      end
+
+      let(:user) { create(:user, :activated) }
+      let(:investigation) { create(:allegation) }
+      let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }
+      let(:details) { "Test details" }
+
+      # Test::Result.create triggers callbacks which generate activity and
+      # emails. Create before running tests so that we can check which emails
+      # are sent by the service
+      let!(:test_result) do
+        create(:test_result,
+               investigation: investigation,
+               legislation: legislation,
+               details: details,
+               result: :failed)
       end
 
       context "when there are changes to the metadata" do
-        let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }
         let(:updated_legislation) { Rails.application.config.legislation_constants["legislation"].last }
-
-        let(:details) { "Test details" }
         let(:updated_details) { "Updated test details" }
 
-        let(:test_result) do
-          create(:test_result,
-                 investigation: investigation,
-                 legislation: legislation,
-                 details: details,
-                 product: product,
-                 result: :failed)
-        end
         let(:new_attributes) do
           ActionController::Parameters.new({
             legislation: updated_legislation,
@@ -82,6 +81,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
             }
           }).permit!
         end
+
         let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }
 
         let(:expected_metadata) do
@@ -105,23 +105,10 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
           expect(activity_timeline_entry.attachment.blob).to eq(test_result.documents.first.blob)
         end
 
-        it "sends a notification email to the case owner" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
-            test_result.investigation.pretty_id,
-            "Test team 1",
-            "test-team@example.com",
-            "User 2 (Test team 2) edited a test result on the allegation.",
-            "Test result edited for Allegation"
-          ]))
-        end
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when just the file attachment description is changed" do
-        let(:test_result) do
-          create(:test_result,
-                 investigation: investigation,
-                 product: product)
-        end
         let(:new_attributes) do
           ActionController::Parameters.new({
             legislation: test_result.legislation,
@@ -136,22 +123,21 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user, new_file_description: "Updated description") }
+        let(:activity_timeline_entry) { test_result.investigation.activities.where(type: "AuditActivity::Test::TestResultUpdated").order(:created_at).last }
 
         before do
           document = test_result.documents.first
-
           document.blob.update!(metadata: document.blob.metadata.merge!({ description: "Previous description" }))
-          result
         end
 
         it "updates the description of the attached file" do
+          result
           test_result.reload
           expect(test_result.documents.first.blob.metadata[:description]).to eq "Updated description"
         end
 
         it "generates an activity entry with the changes" do
-          activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
-
+          result
           expect(activity_timeline_entry.metadata).to eq({
             "test_result_id" => test_result.id,
             "updates" => {
@@ -159,19 +145,12 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
             }
           })
         end
+
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when there are no changes" do
-        let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }
         let(:updated_at) { 1.hour.ago }
-        let(:test_result) do
-          create(:test_result,
-                 investigation: create(:allegation),
-                 legislation: legislation,
-                 details: "Test details",
-                 product: product,
-                 result: :failed)
-        end
         let(:new_attributes) do
           ActionController::Parameters.new({
             legislation: legislation,
@@ -184,6 +163,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
             }
           }).permit!
         end
+
         let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }
 
         before do
