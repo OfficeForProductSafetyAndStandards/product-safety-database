@@ -3,7 +3,6 @@ class Product < ApplicationRecord
   include Documentable
   include Searchable
   include AttachmentConcern
-  include SanitizationHelper
 
   enum authenticity: {
     "counterfeit" => "counterfeit",

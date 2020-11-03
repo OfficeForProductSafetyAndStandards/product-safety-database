@@ -81,7 +81,7 @@ module ProductsHelper
       { text: "No",     value: :genuine },
       { text: "Unsure", value: :unsure },
     ]
-    items << { text: "Not provided", value: :missing } if form.object.authenticity.inquiry.missing?
+    items << { text: "Not provided", value: :missing } if form.object.authenticity.nil?
     items
   end
 
