@@ -24,7 +24,9 @@ class ProductsController < ApplicationController
   end
 
   # GET /products/1/edit
-  def edit; end
+  def edit
+    @product_form = ProductForm.from(Product.find(params[:id]))
+  end
 
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json

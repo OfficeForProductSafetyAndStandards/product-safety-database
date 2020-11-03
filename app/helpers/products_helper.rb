@@ -75,12 +75,23 @@ module ProductsHelper
     @product = Product.find(params[:id]).decorate
   end
 
-  def items_for_authenticity(_form)
-    [
+  def items_for_authenticity(form)
+    items = [
       { text: "Yes",    value: :counterfeit },
       { text: "No",     value: :genuine },
       { text: "Unsure", value: :unsure },
     ]
+    items << { text: "Not provided", value: :missing } if form.object.authenticity.inquiry.missing?
+    items
+  end
+
+  def options_for_country_of_origin(countries, product_form)
+    countries.map do |country|
+      text = country[0]
+      option = { text: text, value: country[1] }
+      option[:selected] = true if product_form.country_of_origin == text
+      option
+    end
   end
 
 private

@@ -74,7 +74,7 @@
            form: form,
            key: :country_of_origin,
            formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
-           items: countries.map { |country| { text: country[0], value: country[1] } },
+           items: options_for_country_of_origin(countries, product_form),
            include_blank: true,
            id: "location-autocomplete",
            label: { text: "Country of origin", classes: label_class },

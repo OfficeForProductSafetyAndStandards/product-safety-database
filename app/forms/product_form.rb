@@ -5,6 +5,7 @@ class ProductForm
   include ActiveModel::Serialization
   include SanitizationHelper
 
+  attribute :id
   attribute :authenticity
   attribute :batch_number
   attribute :brand
@@ -16,6 +17,7 @@ class ProductForm
   attribute :product_code
   attribute :product_type
   attribute :webpage
+  attribute :created_at, :datetime
 
   before_validation { trim_line_endings(:description) }
   before_validation { convert_gtin_to_13_digits(:gtin13) }
@@ -28,4 +30,8 @@ class ProductForm
   validates :product_type, presence: true
   validates :name, presence: true
   validates :description, length: { maximum: 10_000 }
+
+  def self.from(product)
+    new(product.serializable_hash(except: %i[updated_at]))
+  end
 end
