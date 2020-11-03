@@ -60,6 +60,7 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
 
       it "creates an audit activity", :aggregate_failures do
         result
+        product = investigation.products.first
         activity = investigation.reload.activities.first
         expect(activity).to be_a(AuditActivity::Product::Add)
         expect(activity.source.user).to eq(user)
