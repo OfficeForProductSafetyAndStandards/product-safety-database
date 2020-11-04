@@ -6,8 +6,7 @@ default: &default
   public_root_path: public
   public_output_path: packs
   cache_path: tmp/cache/webpacker
-  check_yarn_integrity: false
-  webpack_compile_output: false
+  webpack_compile_output: true
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
@@ -17,7 +16,7 @@ default: &default
   cache_manifest: false
 
   # Extract and emit a css file
-  extract_css: true
+  extract_css: false
 
   static_assets_extensions:
     - .jpg
@@ -55,12 +54,12 @@ development:
   # Reference: https://webpack.js.org/configuration/dev-server/
   dev_server:
     https: false
-    host: 0.0.0.0
+    host: localhost
     port: 3035
-    public: 0.0.0.0:3035
+    public: localhost:3035
     hmr: false
     # Inline should be set to true if using HMR
-    inline: false # https://github.com/rails/webpacker/issues/1019#issuecomment-407164478
+    inline: true
     overlay: true
     compress: true
     disable_host_check: true
@@ -69,7 +68,6 @@ development:
     headers:
       'Access-Control-Allow-Origin': '*'
     watch_options:
-      poll: true
       ignored: '**/node_modules/**'
 
 
