@@ -77,13 +77,19 @@ module ProductsHelper
 
   def items_for_authenticity(form)
     items = [
-      { text: "Yes",    value: :counterfeit },
-      { text: "No",     value: :genuine },
-      { text: "Unsure", value: :unsure },
+      { text: "Yes",    value: "counterfeit" },
+      { text: "No",     value: "genuine" },
+      { text: "Unsure", value: "unsure" },
     ]
 
     if form.object.authenticity.nil? || form.object.authenticity.inquiry.missing?
-      items << { text: "Not provided", value: :missing }
+      items << { text: "Not provided", value: "missing" }
+    end
+
+    if form.object.authenticity.present?
+      items.each do |item|
+        item[:selected] = true if item[:value] == form.object.authenticity
+      end
     end
 
     items
