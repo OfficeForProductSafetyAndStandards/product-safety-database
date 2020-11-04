@@ -2,7 +2,7 @@
 <% # Ideally the width class should affect the input only, not the whole form group, but we're limited by MSPSDS-1045 %>
 
 <% product_category_classes = ["app-!-autocomplete--max-width-three-quarters",
-                               ("govuk-form-group--error" if product_form.errors[:category].any?)] %>
+  ("govuk-form-group--error" if product_form.errors[:category].any?)] %>
 
 <%= render "form_components/govuk_select",
            formGroup: { classes: product_category_classes },
