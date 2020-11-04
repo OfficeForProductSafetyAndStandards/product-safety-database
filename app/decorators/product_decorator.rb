@@ -6,7 +6,7 @@ class ProductDecorator < ApplicationDecorator
     rows = [
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product type" }, value: { text: product_type } },
-      { key: { text: "Counterfeit" }, value: { text: authenticity } },
+      { key: { text: "Product authenticity" }, value: { text: authenticity } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
