@@ -43,7 +43,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch do
     expect(page).to have_select("Product category", selected: product.category)
     expect(page).to have_field("Product type", with: product.product_type)
 
-    within_fieldset "Is the product a suspected counterfeit?" do
+    within_fieldset "Is the product counterfeit?" do
       expect(page).to have_checked_field("Not provided")
     end
 
@@ -59,7 +59,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch do
     select new_product_category, from: "Product category"
     fill_in "Product type", with: new_product_type
 
-    within_fieldset "Is the product a suspected counterfeit?" do
+    within_fieldset "Is the product counterfeit?" do
       choose counterfeit_anwser(new_authenticity)
     end
 

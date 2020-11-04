@@ -24,7 +24,7 @@
            label: { text: "Product type", classes: label_class },
            hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
 
-<%= form.govuk_radios :authenticity, legend: "Is the product a suspected counterfeit?", items: items_for_authenticity(form) %>
+<%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(form) %>
 
 <%= render "form_components/govuk_input",
            key: :brand,
