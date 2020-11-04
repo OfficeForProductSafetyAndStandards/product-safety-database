@@ -34,4 +34,10 @@ class ProductForm
   def self.from(product)
     new(product.serializable_hash(except: %i[updated_at]))
   end
+
+  def authenticity_not_provided?
+    return false if id.nil?
+
+    authenticity.nil? || authenticity.inquiry.missing?
+  end
 end

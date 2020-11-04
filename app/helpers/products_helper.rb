@@ -75,18 +75,16 @@ module ProductsHelper
     @product = Product.find(params[:id]).decorate
   end
 
-  def items_for_authenticity(form)
+  def items_for_authenticity(product_form)
     items = [
       { text: "Yes",    value: "counterfeit" },
       { text: "No",     value: "genuine" },
       { text: "Unsure", value: "unsure" },
     ]
 
-    items << { text: "Not provided", value: "missing" } if form.object.authenticity_not_provided?
+    items << { text: "Not provided", value: "missing" } if product_form.authenticity_not_provided?
 
-    items.each { |item| item[:selected] = true if item[:value] == form.object.authenticity } if form.object.authenticity.present?
-
-    items
+    set_selected_authenticity_option(items, product_form)
   end
 
   def options_for_country_of_origin(countries, product_form)
@@ -99,6 +97,18 @@ module ProductsHelper
   end
 
 private
+
+  def set_selected_authenticity_option(items, product_form)
+    if product_form.authenticity.present?
+      items.each do |item|
+        next if item[:value].inquiry.missing? && product_form.id.nil?
+
+        item[:selected] = true if item[:value] == product_form.authenticity
+      end
+    end
+
+    items
+  end
 
   def have_excluded_id(excluded_ids)
     {
