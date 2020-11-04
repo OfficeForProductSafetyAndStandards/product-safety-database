@@ -26,4 +26,8 @@ class Product < ApplicationRecord
   def pretty_description
     "Product: #{name}"
   end
+
+  def authenticity_not_provided?
+    authenticity.nil? || authenticity.inquiry.missing?
+  end
 end

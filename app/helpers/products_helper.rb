@@ -82,15 +82,9 @@ module ProductsHelper
       { text: "Unsure", value: "unsure" },
     ]
 
-    if form.object.authenticity.nil? || form.object.authenticity.inquiry.missing?
-      items << { text: "Not provided", value: "missing" }
-    end
+    items << { text: "Not provided", value: "missing" } if form.object.authenticity_not_provided?
 
-    if form.object.authenticity.present?
-      items.each do |item|
-        item[:selected] = true if item[:value] == form.object.authenticity
-      end
-    end
+    items.each { |item| item[:selected] = true if item[:value] == form.object.authenticity } if form.object.authenticity.present?
 
     items
   end
