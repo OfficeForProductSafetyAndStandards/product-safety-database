@@ -38,7 +38,7 @@ gem "sentry-raven", "~> 3.1"
 gem "sidekiq", "~> 6.1"
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails", "~> 3.2"
-gem "sprockets", "3.7.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
+gem "sprockets", "4.0.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
 gem "tty-table", require: false
