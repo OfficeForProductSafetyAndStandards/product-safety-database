@@ -23,7 +23,7 @@ if run_seeds
   organisation = Organisation.create!(name: "Seed Organisation")
   team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation)
 
-  user = User.create!(
+  user = User.find_by(email: "seed_user@example.com") || User.create!(
     name: "Seed User",
     email: "seed_user@example.com",
     password: "testpassword",
@@ -33,7 +33,7 @@ if run_seeds
   )
 
   %i[opss_user user].each do |role|
-    UserRole.create!(user: user, name: role)
+    UserRole.find_or_create_by!(user: user, name: role)
   end
 
   # First investigation
