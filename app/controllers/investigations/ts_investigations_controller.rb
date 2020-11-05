@@ -24,6 +24,7 @@ class Investigations::TsInvestigationsController < ApplicationController
         :other_files,
         :reference_number
 
+  before_action :redirect_to_first_step_if_wizard_not_started, if: -> { step && (step != steps.first) }
   before_action :set_countries, only: %i[show create update]
   before_action :set_product, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
@@ -120,6 +121,10 @@ class Investigations::TsInvestigationsController < ApplicationController
   end
 
 private
+
+  def redirect_to_first_step_if_wizard_not_started
+    redirect_to action: :new unless session[:investigation]
+  end
 
   def set_product
     @product = Product.new(product_step_params)
