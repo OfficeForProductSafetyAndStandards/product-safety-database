@@ -44,7 +44,7 @@ RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_a
         "Product was added to the allegation by #{name}."
       end
 
-      let(:result) { described_class.call(investigation: investigation, product: product, user: user, **attributes) }
+      let(:result) { described_class.call(investigation: investigation, user: user, **attributes) }
 
       it "returns success" do
         expect(result).to be_success
