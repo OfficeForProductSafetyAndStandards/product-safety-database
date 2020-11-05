@@ -84,6 +84,8 @@ module ProductsHelper
 
     items << { text: "Not provided", value: "missing" } if product_form.authenticity_not_provided?
 
+    return items if product_form.authenticity.blank?
+
     set_selected_authenticity_option(items, product_form)
   end
 
@@ -99,15 +101,15 @@ module ProductsHelper
 private
 
   def set_selected_authenticity_option(items, product_form)
-    if product_form.authenticity.present?
-      items.each do |item|
-        next if item[:value].inquiry.missing? && product_form.id.nil?
+    items.each do |item|
+      next if skip_selected_item_for_selected_option?(item, product_form)
 
-        item[:selected] = true if item[:value] == product_form.authenticity
-      end
+      item[:selected] = true if item[:value] == product_form.authenticity
     end
+  end
 
-    items
+  def skip_selected_item_for_selected_option?(item, product_form)
+    item[:value].inquiry.missing? && product_form.id.nil?
   end
 
   def have_excluded_id(excluded_ids)
