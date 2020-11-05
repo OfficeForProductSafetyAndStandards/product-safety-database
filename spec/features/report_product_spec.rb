@@ -229,6 +229,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           name: Faker::Lorem.sentence,
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
+          authenticity: "Yes"
         }
       end
 
@@ -439,7 +440,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     select with[:category],                      from: "Product category"
     select with[:country_of_origin],             from: "Country of origin" if with[:country_of_origin]
     fill_in "Product type",                      with: with[:type]
-    choose with[:authenticity]
+
+    within_fieldset("Is the product counterfeit?") do
+      choose with[:authenticity]
+    end
+
     fill_in "Product name",                      with: with[:name]
     fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:gtin13]
     fill_in "Other product identifiers",         with: with[:barcode] if with[:barcode]

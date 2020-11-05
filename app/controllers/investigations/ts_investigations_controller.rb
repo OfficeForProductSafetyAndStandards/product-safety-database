@@ -560,7 +560,7 @@ private
             current_user: current_user,
             investigation: @investigation,
             businesses: businesses_from_session,
-            product: ProductForm.new(product_params)
+            product: ProductForm.new(product_step_params)
           )
       )
 
@@ -625,9 +625,8 @@ private
 
     # Product must be added before investigation is saved for correct audit
     # activity title generation
-    # @investigation.products << @product
+    @product = @investigation.products.build(product_step_params)
     CreateCase.call(investigation: @investigation, user: current_user)
-    AddProductToCase.call!(product_step_params.merge(investigation: @investigation, user: current_user))
 
     save_businesses
     save_corrective_actions
