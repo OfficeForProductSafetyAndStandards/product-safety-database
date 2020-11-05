@@ -100,6 +100,9 @@ jobs:
       run: |
         bundle exec rspec spec --tag ${{ matrix.rspec-tag }}
 
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
