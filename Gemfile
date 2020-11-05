@@ -68,7 +68,6 @@ end
 group :test do
   gem "capybara", "~> 3.33"
   gem "capybara-screenshot", "~> 1.0"
-  gem "coveralls", "~> 0.7"
   gem "database_cleaner", "~> 1.8"
   gem "factory_bot_rails", "~> 6.1"
   gem "faker", "~> 2.14"
@@ -82,8 +81,9 @@ group :test do
   gem "rubocop-performance", "~> 1.8"
   gem "rubocop-rspec", "~> 1.42", require: false
   gem "scss_lint-govuk", "~> 0.2"
-  gem "simplecov", "~> 0.19"
+  gem "simplecov"
   gem "simplecov-console", "~> 0.7"
+  gem "simplecov-lcov"
   gem "slim_lint", "~> 0.20"
   gem "webmock", "~> 3.9"
 end
