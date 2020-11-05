@@ -52,7 +52,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     fill_in "Product type", with: new_product_type
 
     within_fieldset "Is the product counterfeit?" do
-      choose counterfeit_anwser(new_authenticity)
+      choose counterfeit_answer(new_authenticity)
     end
 
     fill_in "Product brand",            with: new_brand
