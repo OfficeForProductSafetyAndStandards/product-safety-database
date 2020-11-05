@@ -127,8 +127,8 @@ private
     redirect_to action: :new unless session[:investigation]
   end
 
-  def set_product
-    @product = Product.new(product_step_params)
+  def product
+    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash)
   end
 
   def set_investigation
@@ -175,7 +175,6 @@ private
   end
 
   def set_risk_assessment_form
-    product = ProductForm.new(product_step_params)
     @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(
       current_user: current_user,
       investigation: @investigation,
@@ -188,7 +187,7 @@ private
   def set_corrective_action
     @corrective_action = @investigation.corrective_actions.build(corrective_action_params)
     @corrective_action.set_dates_from_params(params[:corrective_action])
-    @corrective_action.product = @product
+    @corrective_action.product = product
     @file_blob, * = load_file_attachments :corrective_action
     if @file_blob && @corrective_action.related_file?
       @corrective_action.documents.attach(@file_blob)
