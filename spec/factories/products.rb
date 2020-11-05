@@ -7,6 +7,7 @@ FactoryBot.define do
     gtin13 { "9781529034523" }
     authenticity { Product.authenticities.keys.sample }
     batch_number { "123123123" }
+    brand { Faker::Company.name }
 
     factory :product_iphone do
       product_code { 234 }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Editing a product", :with_stubbed_elasticsearch do
+RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_form_helper do
   let(:product_code)      { Faker::Barcode.issn }
   let(:webpage)           { Faker::Internet.url }
   let(:user)              { create(:user, :activated, has_viewed_introduction: true) }
@@ -29,14 +29,6 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch do
 
   before { sign_in user }
 
-  def counterfeit_anwser(authenticity)
-    case authenticity
-    when "counterfeit" then "Yes"
-    when "genuine"     then "No"
-    when "unsure"      then "Unsure"
-    when "missing"     then "Not provided"
-    end
-  end
   it "allows to edit a product" do
     visit "/products/#{product.id}/edit"
 
@@ -76,7 +68,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch do
 
     expect(page).to have_summary_item(key: "Category",                  value: new_product_category)
     expect(page).to have_summary_item(key: "Product type",              value: new_product_type)
-    expect(page).to have_summary_item(key: "Counterfeit",               value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
     expect(page).to have_summary_item(key: "Product name",              value: new_name)
     expect(page).to have_summary_item(key: "Barcode number",            value: new_gtin13)

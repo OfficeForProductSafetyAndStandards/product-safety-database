@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_product_form_helper do
   let(:user)          { create(:user, :activated) }
   let(:investigation) { create(:enquiry, creator: user) }
-  let(:product)       { create(:product_iphone) }
+  let(:attributes)    { attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample) }
   let(:other_user)    { create(:user, :activated) }
 
   before do
@@ -26,49 +26,40 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_text("Enter a valid barcode number")
     expect(page).to have_text("You must state whether the product is a counterfeit")
 
-    select product.category, from: "Product category"
+    select attributes[:category], from: "Product category"
 
-    fill_in "Product type", with: product.product_type
-    fill_in "Product brand", with: "MyBrand"
-    fill_in "Product name", with: product.name
-    fill_in "Barcode number (GTIN, EAN or UPC)", with: "9781529034523"
-    fill_in "Other product identifiers", with: product.product_code
-    fill_in "Batch number", with: product.batch_number
-    fill_in "Webpage", with: product.webpage
+    fill_in "Product type",                      with: attributes[:product_type]
+    fill_in "Product brand",                     with: attributes[:brand]
+    fill_in "Product name",                      with: attributes[:name]
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:gtin13]
+    fill_in "Other product identifiers",         with: attributes[:product_code]
+    fill_in "Batch number",                      with: attributes[:batch_number]
+    fill_in "Webpage",                           with: attributes[:webpage]
 
-    choose "Yes"
+    within_fieldset("Is the product counterfeit?") do
+      choose counterfeit_answer(attributes[:authenticity])
+    end
 
-    select product.country_of_origin, from: "Country of origin"
+    select attributes[:country_of_origin], from: "Country of origin"
 
-    fill_in "Description of product", with: product.description
+    fill_in "Description of product", with: attributes[:description]
 
     click_on "Save product"
 
     expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
 
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product brand")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: "MyBrand")
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product name")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.name)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Counterfeit")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: "Counterfeit")
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Category")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.category)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Product type")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.product_type)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Barcode number")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: "9781529034523")
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Other product identifiers")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.product_code)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Batch number")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.batch_number)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Webpage")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.webpage)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Country of origin")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.country_of_origin)
-    expect(page).to have_css("dt.govuk-summary-list__key",   text: "Description")
-    expect(page).to have_css("dd.govuk-summary-list__value", text: product.description)
+    expect(page).to have_summary_item(key: "Product brand",             value: attributes[:brand])
+    expect(page).to have_summary_item(key: "Product name",              value: attributes[:name])
+    expect(page).to have_summary_item(key: "Category",                  value: attributes[:category])
+    expect(page).to have_summary_item(key: "Product type",              value: attributes[:product_type])
+    expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(attributes[:authenticity], scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Barcode number",            value: attributes[:gin13])
+    expect(page).to have_summary_item(key: "Other product identifiers", value: attributes[:product_code])
+    expect(page).to have_summary_item(key: "Batch number",              value: attributes[:batch_number])
+    expect(page).to have_summary_item(key: "Webpage",                   value: attributes[:webpage])
+    expect(page).to have_summary_item(key: "Country of origin",         value: attributes[:country])
+    expect(page).to have_summary_item(key: "Description",               value: attributes[:description])
   end
 
   scenario "Not being able to add a product to another team’s case" do
