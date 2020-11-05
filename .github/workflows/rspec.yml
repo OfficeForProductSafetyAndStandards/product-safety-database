@@ -1,6 +1,6 @@
 name: RSpec test suite
 
-on: ["push", "pull_request"]
+on: [push]
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
@@ -100,25 +100,8 @@ jobs:
       run: |
         bundle exec rspec spec --tag ${{ matrix.rspec-tag }}
 
-    - name: Submit coverage report to Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        flag-name: run-${{ matrix.rspec-tag }}
-        parallel: true
-
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
         name: capybara screenshots
         path: tmp/capybara
-
-  finish:
-    needs: ruby
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        parallel-finished: true
