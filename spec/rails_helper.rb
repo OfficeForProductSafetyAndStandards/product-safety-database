@@ -2,7 +2,7 @@
 
 require "simplecov"
 
-# Output coverage in LCOV format for Coveralls in CI environment
+# Output coverage in LCOV format for CodeCov in CI environment
 if ENV["CI"]
   require "simplecov-lcov"
   SimpleCov::Formatter::LcovFormatter.config do |c|
