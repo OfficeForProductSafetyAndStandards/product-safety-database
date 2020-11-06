@@ -111,6 +111,7 @@ private
   def authenticity_selected?(item, product_form)
     item[:value] == product_form.authenticity
   end
+
   def skip_selected_item_for_selected_option?(item, product_form)
     item[:value].inquiry.missing? && product_form.id.nil?
   end
