@@ -39,7 +39,7 @@ jobs:
       run: |
         mkdir -p $GITHUB_WORKSPACE/bin
         curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
-        echo "::add-path::$GITHUB_WORKSPACE/bin"
+        echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
     - name: Deploy
       env:
