@@ -23,38 +23,6 @@ module ProductsHelper
     { created_at: :desc }
   end
 
-  # If the user supplies a barcode then just return that.
-  # Otherwise use the general query param
-  def advanced_product_search(product, excluded_ids = [])
-    if product.product_code.present?
-      search_for_product_code(product.product_code, excluded_ids)
-    else
-      possible_search_fields = {
-        "name": product.name,
-        "category": product.category
-      }
-      used_search_fields = possible_search_fields.reject { |_, value| value.blank? }
-      fuzzy_match = used_search_fields.map do |field, value|
-        {
-          match: {
-            "#{field}": {
-              query: value,
-              fuzziness: "AUTO"
-            }
-          }
-        }
-      end
-      Product.search(query: {
-        bool: {
-          should: fuzzy_match,
-          must_not: have_excluded_id(excluded_ids)
-        }
-      })
-        .paginate(per_page: SUGGESTED_PRODUCTS_LIMIT)
-        .records
-    end
-  end
-
   def search_for_product_code(product_code, excluded_ids)
     match_product_code = { match: { product_code: product_code } }
     Product.search(query: {
