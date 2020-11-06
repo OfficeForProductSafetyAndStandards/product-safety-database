@@ -5,7 +5,7 @@ class AddAuthenticitiesEnumToProducts < ActiveRecord::Migration[6.0]
         dir.up { execute "CREATE TYPE authenticities AS ENUM ('counterfeit', 'genuine', 'unsure', 'missing');" }
         dir.down { execute "DROP TYPE IF EXISTS authenticities;" }
       end
-      add_column :products, :authenticity, :authenticities, default: "missing"
+      add_column :products, :authenticity, :authenticities
     end
   end
 end

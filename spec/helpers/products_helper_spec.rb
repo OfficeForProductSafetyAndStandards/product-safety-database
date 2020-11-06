@@ -35,15 +35,15 @@ RSpec.describe ProductsHelper, :with_stubbed_elasticsearch do
       it "has selected the current authenticity" do
         expect(helper.items_for_authenticity(product_form)).to include(text: "No", value: "genuine", selected: true)
       end
-    end
 
-    context "when the product has an authenticity set to missing" do
-      let(:authenticity) { Product.authenticities[:missing] }
+      context "when the product has an authenticity set to missing" do
+        let(:authenticity) { Product.authenticities[:missing] }
 
-      before { product.save! }
+        before { product.save! }
 
-      it "has the not provided option" do
-        expect(helper.items_for_authenticity(product_form)).to include(text: "Not provided", value: "missing", selected: true)
+        it "has the not provided option" do
+          expect(helper.items_for_authenticity(product_form)).to include(text: "Not provided", value: "missing", selected: true)
+        end
       end
     end
   end

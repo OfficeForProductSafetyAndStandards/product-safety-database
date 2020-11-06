@@ -218,7 +218,7 @@ ActiveRecord::Schema.define(version: 2020_10_29_150751) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
-    t.enum "authenticity", default: "missing", as: "authenticities"
+    t.enum "authenticity", as: "authenticities"
     t.string "batch_number"
     t.text "brand"
     t.string "category"
