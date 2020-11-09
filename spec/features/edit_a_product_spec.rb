@@ -8,7 +8,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:country_of_origin) { "France" }
   let(:product) do
     create(:product,
-           authenticity: Product.authenticities[:missing],
+           authenticity: nil,
            brand: brand,
            product_code: product_code,
            webpage: webpage,
@@ -30,13 +30,19 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   before { sign_in user }
 
   it "allows to edit a product" do
+    visit "/products/#{product.id}"
+
+    expect(page).to have_summary_item(key: "Product authenticity", value: "Not provided")
+
     visit "/products/#{product.id}/edit"
 
     expect(page).to have_select("Product category", selected: product.category)
     expect(page).to have_field("Product type", with: product.product_type)
 
     within_fieldset "Is the product counterfeit?" do
-      expect(page).to have_checked_field("Not provided")
+      expect(page).not_to have_checked_field("Yes")
+      expect(page).not_to have_checked_field("No")
+      expect(page).not_to have_checked_field("Unsure")
     end
 
     expect(page).to have_field("Product brand",            with: product.brand)
