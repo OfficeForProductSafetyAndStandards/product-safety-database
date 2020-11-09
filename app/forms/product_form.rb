@@ -38,6 +38,6 @@ class ProductForm
   def authenticity_not_provided?
     return false if id.nil?
 
-    authenticity.nil? || authenticity.inquiry.missing?
+    authenticity.nil?
   end
 end

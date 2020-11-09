@@ -88,4 +88,22 @@ RSpec.describe ProductForm do
       expect(form.errors.full_messages_for(:authenticity)).to eq ["You must state whether the product is a counterfeit"]
     end
   end
+
+  describe "#authenticity_not_provided?" do
+    context "when it is a new object" do
+      it { is_expected.not_to be_authenticity_not_provided }
+    end
+
+    context "when it an existing product", :with_stubbed_elasticsearch do
+      subject(:form) { described_class.from(create(:product, authenticity: nil)) }
+
+      context "when no authenticity was given" do
+        it { is_expected.to be_authenticity_not_provided }
+      end
+
+      context "when an authenticity was given" do
+        it { is_expected.not_to be_authenticity_not_provided }
+      end
+    end
+  end
 end
