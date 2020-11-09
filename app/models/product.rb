@@ -21,8 +21,4 @@ class Product < ApplicationRecord
   has_many :tests, dependent: :destroy
 
   has_one :source, as: :sourceable, dependent: :destroy
-
-  def pretty_description
-    "Product: #{name}"
-  end
 end
