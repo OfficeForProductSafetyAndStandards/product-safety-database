@@ -50,8 +50,6 @@ module ProductsHelper
       { text: "Unsure", value: "unsure" },
     ]
 
-    items << { text: "Not provided", value: "missing" } if product_form.authenticity_not_provided?
-
     return items if product_form.authenticity.blank?
 
     set_selected_authenticity_option(items, product_form)

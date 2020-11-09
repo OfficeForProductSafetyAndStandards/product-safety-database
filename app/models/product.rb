@@ -7,8 +7,7 @@ class Product < ApplicationRecord
   enum authenticity: {
     "counterfeit" => "counterfeit",
     "genuine" => "genuine",
-    "unsure" => "unsure",
-    "missing" => "missing"
+    "unsure" => "unsure"
   }
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")

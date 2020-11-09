@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2020_10_29_150751) do
   enable_extension "plpgsql"
 
   # These are custom enum types that must be created before they can be used in the schema definition
-  create_enum "authenticities", ["counterfeit", "genuine", "unsure", "missing"]
+  create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
 
