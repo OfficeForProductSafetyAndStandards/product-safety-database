@@ -54,6 +54,11 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_select("Country of origin",       selected: "France")
     expect(page).to have_field("Description of product",   with: "\r\n" + product.description)
 
+    click_on "Save product"
+
+    expect(page).to have_error_messages
+    expect(page).to have_error_summary "You must state whether the product is a counterfeit"
+
     select new_product_category, from: "Product category"
     fill_in "Product type", with: new_product_type
 
