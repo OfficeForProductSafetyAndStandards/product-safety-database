@@ -21,7 +21,7 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def authenticity
-    I18n.t(object.authenticity || Product.authenticities["missing"], scope: Product.model_name.i18n_key)
+    I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key)
   end
 
   def description
