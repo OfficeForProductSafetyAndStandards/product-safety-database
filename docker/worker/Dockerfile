@@ -1,8 +1,6 @@
-FROM ruby:2.5.7
+FROM ruby:2.7.2
 
 WORKDIR /psd
-
-COPY ./psd-web .
 
 COPY ./docker/worker/docker-entrypoint.sh /
 
