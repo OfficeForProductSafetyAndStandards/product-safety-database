@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_form_helper do
+RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_form_helper, :with_stubbed_antivirus do
   let(:product_code)      { Faker::Barcode.issn }
   let(:webpage)           { Faker::Internet.url }
   let(:user)              { create(:user, :activated, has_viewed_introduction: true) }
@@ -88,5 +88,26 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_summary_item(key: "Webpage",                   value: new_webpage)
     expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
     expect(page).to have_summary_item(key: "Description",               value: new_description)
+  end
+
+  scenario "upload an document" do
+    visit "/products/#{product.id}"
+
+    click_on "Attachments"
+    click_on "Add attachment"
+
+    attach_file file_fixture("files/corrective_action.txt")
+    click_on "Upload"
+
+    document_title       = Faker::Hipster.word
+    document_description = Faker::Hipster.sentence
+    fill_in "Document title", with: document_title
+    fill_in "Description",    with: document_description
+
+    click_on "Save attachment"
+    click_on "Attachments (1)"
+
+    expect(page).to have_css("h2.govuk-heading-m", text: document_title)
+    expect(page).to have_css("p", text: document_description)
   end
 end
