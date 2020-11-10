@@ -1,22 +1,20 @@
-<%= page_title "Edit product", errors: @product.object.errors.any? %>
+<%= page_title "Edit product", errors: @product_form.errors.any? %>
 <% content_for :after_header do %>
-  <%= link_to "Back to product", @product, class: "govuk-back-link" %>
+  <%= link_to "Back to product", product_path(@product_form.id), class: "govuk-back-link" %>
 <% end %>
 
-<%= form_with model: @product.object, local: true do |form| %>
+<%= form_with model: @product_form, scope: :product, url: product_path(@product_form.id), method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= error_summary @product_form.errors %>
     </div>
   </div>
 
-  <%= render "product_heading", product: @product %>
+  <%= render "product_heading", product_form: @product_form %>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= render "form", form: form, product: @product, countries: @countries, search: false %>
+      <%= render "form", form: form, product_form: @product_form, countries: @countries, search: false %>
     </div>
   </div>
 <% end %>
-
-

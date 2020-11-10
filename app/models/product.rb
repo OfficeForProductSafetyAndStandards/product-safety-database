@@ -3,20 +3,12 @@ class Product < ApplicationRecord
   include Documentable
   include Searchable
   include AttachmentConcern
-  include SanitizationHelper
 
-  before_validation { trim_line_endings(:description) }
-
-  before_validation { convert_gtin_to_13_digits(:gtin13) }
-  before_validation { trim_whitespace(:brand) }
-  before_validation { nilify_blanks(:gtin13, :brand) }
-
-  validates :category, presence: true
-  validates :product_type, presence: true
-  validates :name, presence: true
-  validates :description, length: { maximum: 10_000 }
-
-  validates :gtin13, gtin: true, allow_nil: true, length: { is: 13 }
+  enum authenticity: {
+    "counterfeit" => "counterfeit",
+    "genuine" => "genuine",
+    "unsure" => "unsure"
+  }
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
@@ -29,8 +21,4 @@ class Product < ApplicationRecord
   has_many :tests, dependent: :destroy
 
   has_one :source, as: :sourceable, dependent: :destroy
-
-  def pretty_description
-    "Product: #{name}"
-  end
 end
