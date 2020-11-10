@@ -5,6 +5,10 @@ RSpec.describe ProductDecorator do
 
   let(:product) { build(:product) }
 
+  describe "#pretty_description" do
+    specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
+  end
+
   describe "#summary_list" do
     include CountriesHelper
 
