@@ -26,7 +26,7 @@ RSpec.describe InviteUserToTeamForm do
       it "populates an error message" do
         form.validate
         errors.each do |property, message|
-          expect(form.errors.full_messages_for(property)).to eq([message])
+          expect(form.errors.full_messages_for(property)).to eq([message].flatten)
         end
       end
     end
@@ -63,17 +63,29 @@ RSpec.describe InviteUserToTeamForm do
       end
     end
 
-    context "when whitelisted email is supplied with whitelisting enabled" do
+    context "with whitelisting enabled" do
       let(:email) { "test@beis.gov.uk" }
 
       before { set_whitelisting_enabled(true) }
 
       include_examples "valid form"
 
-      context "when the supplied email is uppercased" do
+      context "when whitelisted email is supplied and uppercased" do
         let(:email) { "test@BEIS.gov.uk" }
 
         include_examples "valid form"
+      end
+
+      context "when incorrectly formatted email is supplied" do
+        let(:email) { "an.onymous:sheffield.gov.uk" }
+
+        include_examples "invalid form", [
+          :email,
+          [
+            "Enter an email address in the correct format, like name@example.com",
+            "The email address is not recognised. Check you’ve entered it correctly, or email opss.enquiries@beis.gov.uk to add it to the approved list."
+          ]
+        ]
       end
     end
 
