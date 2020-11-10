@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_product_form_helper do
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:contact_details) do
     {
@@ -25,7 +25,8 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       type: Faker::Appliance.equipment,
       webpage: Faker::Internet.url,
       country_of_origin: Country.all.sample.first,
-      description: Faker::Lorem.sentence
+      description: Faker::Lorem.sentence,
+      authenticity: Product.authenticities.keys.without("missing").sample
     }
   end
 
@@ -135,20 +136,22 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
-    select category, from: "Product category"
-    select country_of_origin, from: "Country of origin"
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
+    select category,                      from: "Product category"
+    select country_of_origin,             from: "Country of origin"
     fill_in "Product type",               with: type
+    within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
     fill_in "Product name",               with: name
-    fill_in "Other product identifiers", with: barcode
+    fill_in "Other product identifiers",  with: barcode
     fill_in "Webpage",                    with: webpage
     fill_in "Description of product",     with: description
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
     expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: type)
+    expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
     expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: barcode)
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)

@@ -10,7 +10,10 @@ module DocumentsHelper
     @parent ||= Investigation.find_by!(pretty_id: params[:allegation_id]) if params[:allegation_id]
     @parent ||= Investigation.find_by!(pretty_id: params[:project_id]) if params[:project_id]
     @parent ||= Investigation.find_by!(pretty_id: params[:inquiry]) if params[:inquiry]
-    @parent ||= Product.find(params[:product_id]) if params[:product_id]
+    if params[:product_id]
+      @parent ||= Product.find(params[:product_id])
+      @product_form = ProductForm.from(@parent)
+    end
     @parent ||= Business.find(params[:business_id]) if params[:business_id]
   end
 

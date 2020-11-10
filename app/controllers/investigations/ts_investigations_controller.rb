@@ -26,7 +26,6 @@ class Investigations::TsInvestigationsController < ApplicationController
 
   before_action :redirect_to_first_step_if_wizard_not_started, if: -> { step && (step != steps.first) }
   before_action :set_countries, only: %i[show create update]
-  before_action :set_product, only: %i[show create update]
   before_action :set_investigation, only: %i[show create update]
   before_action :set_selected_businesses, only: %i[show update], if: -> { step.in?(%i[risk_assessments which_businesses]) }
   # There is no set_pending_businesses because the business is recovered from the session in set_business
@@ -52,7 +51,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                 if: lambda {
                       %i[has_corrective_action product_images evidence_images other_files].include? step
                     }
-  before_action :store_product, only: %i[update], if: -> { step == :product }
+  after_action :store_product, only: %i[update], if: -> { step == :product }
   before_action :store_investigation, only: %i[update], if: -> { %i[coronavirus why_reporting reference_number].include? step }
   before_action :set_new_why_reporting_form, only: %i[show], if: -> { step == :why_reporting }
   after_action  :store_investigation, only: :update, if: -> { %i[why_reporting coronavirus].include?(step) }
@@ -72,6 +71,8 @@ class Investigations::TsInvestigationsController < ApplicationController
   # GET /xxx/step
   def show
     case step
+    when :product
+      @product_form = ProductForm.new
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
     when :corrective_action, *other_information_types.without(:risk_assessments)
@@ -126,8 +127,8 @@ private
     redirect_to action: :new unless session[:investigation]
   end
 
-  def set_product
-    @product = Product.new(product_step_params)
+  def product
+    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash)
   end
 
   def set_investigation
@@ -174,14 +175,19 @@ private
   end
 
   def set_risk_assessment_form
-    @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(current_user: current_user, investigation: @investigation, businesses: businesses_from_session, product: @product)
+    @risk_assessment_form = TradingStandardsRiskAssessmentForm.new(
+      current_user: current_user,
+      investigation: @investigation,
+      businesses: businesses_from_session,
+      product: product
+    )
     set_repeat_step(:trading_standards_risk_assessment_form)
   end
 
   def set_corrective_action
     @corrective_action = @investigation.corrective_actions.build(corrective_action_params)
     @corrective_action.set_dates_from_params(params[:corrective_action])
-    @corrective_action.product = @product
+    @corrective_action.product = product
     @file_blob, * = load_file_attachments :corrective_action
     if @file_blob && @corrective_action.related_file?
       @corrective_action.documents.attach(@file_blob)
@@ -192,7 +198,7 @@ private
   def set_test
     @test = @investigation.tests.build(test_params)
     @test.set_dates_from_params(params[:test])
-    @test.product = @product
+    @test.build_product(product_step_params)
 
     attachment_params = get_attachment_params(:test_result_file, :test)
 
@@ -249,8 +255,8 @@ private
   end
 
   def store_product
-    if @product.valid?(step)
-      session[:product] = @product.attributes
+    if @product_form.valid?
+      session[:product] = @product_form.serializable_hash
     end
   end
 
@@ -534,7 +540,8 @@ private
     when :coronavirus
       return assigns_coronavirus_related_from_form(@investigation, @coronavirus_related_form)
     when :product
-      @product.validate
+      @product_form = ProductForm.new(product_step_params)
+      return @product_form.valid?
     when :why_reporting
       return assigns_why_reporting_from_form(why_reporting_form)
     when :which_businesses
@@ -552,7 +559,7 @@ private
             current_user: current_user,
             investigation: @investigation,
             businesses: businesses_from_session,
-            product: @product
+            product: ProductForm.new(product_step_params)
           )
       )
 
@@ -587,7 +594,7 @@ private
         @has_reference_number = reference_number_params[:has_complainant_reference]
       end
     end
-    @investigation.errors.empty? && @product.errors.empty?
+    @investigation.errors.empty?
   end
 
   def trading_standards_risk_assessment_form_params
@@ -615,11 +622,9 @@ private
   def records_saved?
     return false unless records_valid?
 
-    @product.save!
-
     # Product must be added before investigation is saved for correct audit
     # activity title generation
-    @investigation.products << @product
+    @product = @investigation.products.build(product_step_params)
     CreateCase.call(investigation: @investigation, user: current_user)
 
     save_businesses

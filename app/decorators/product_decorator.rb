@@ -2,10 +2,15 @@ class ProductDecorator < ApplicationDecorator
   delegate_all
   decorates_association :investigations
 
+  def pretty_description
+    "Product: #{name}"
+  end
+
   def summary_list
     rows = [
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product type" }, value: { text: product_type } },
+      { key: { text: "Product authenticity" }, value: { text: authenticity } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
@@ -17,6 +22,10 @@ class ProductDecorator < ApplicationDecorator
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
+  end
+
+  def authenticity
+    I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key)
   end
 
   def description
