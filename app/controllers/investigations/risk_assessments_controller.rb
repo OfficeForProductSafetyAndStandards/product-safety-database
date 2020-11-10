@@ -15,9 +15,12 @@ module Investigations
 
       authorize @investigation, :update?
 
-      @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
+      @risk_assessment_form = RiskAssessmentForm.new(
+        risk_assessment_params.merge(current_user: current_user, investigation: @investigation)
+      )
 
-      @risk_assessment_form.attributes = risk_assessment_params
+      @risk_assessment_form.cache_file!
+      @risk_assessment_form.load_risk_assessment_file
 
       if @risk_assessment_form.valid?
 

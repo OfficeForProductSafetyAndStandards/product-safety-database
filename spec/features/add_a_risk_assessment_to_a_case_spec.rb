@@ -55,7 +55,11 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
                                 options: ["", "MyBrand Distributors", "MyBrand Inc"],
                                 selected: [""])
 
+    attach_file "Upload the risk assessment", risk_assessment_file
+
     click_button "Add risk assessment"
+
+    save_and_open_page
 
     expect(page).to have_text("Enter the date of the assessment")
     expect(page).to have_text("Select the risk level")
