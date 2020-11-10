@@ -102,7 +102,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           type: Faker::Appliance.equipment,
           webpage: Faker::Internet.url,
           country_of_origin: Country.all.sample.first,
-          description: Faker::Lorem.sentence
+          description: Faker::Lorem.sentence,
+          authenticity: "Yes"
         }
       end
       let(:coronavirus) { false }
@@ -164,6 +165,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         fill_in_test_results_page(with: incomplete_test_data)
         expect_to_be_on_test_result_details_page
         expect_test_result_page_to_show_entered_information(incomplete_test_data)
+
         expect(page).to have_error_summary "Select result of the test"
 
         fill_in_test_results_page(with: incomplete_test_result, add_another: false)
@@ -227,6 +229,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           name: Faker::Lorem.sentence,
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
+          authenticity: "Yes"
         }
       end
 
@@ -434,14 +437,19 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def fill_in_product_page(with:)
-    select with[:category],          from: "Product category"
-    select with[:country_of_origin], from: "Country of origin" if with[:country_of_origin]
-    fill_in "Product type",               with: with[:type]
-    fill_in "Product name",               with: with[:name]
+    select with[:category],                      from: "Product category"
+    select with[:country_of_origin],             from: "Country of origin" if with[:country_of_origin]
+    fill_in "Product type",                      with: with[:type]
+
+    within_fieldset("Is the product counterfeit?") do
+      choose with[:authenticity]
+    end
+
+    fill_in "Product name",                      with: with[:name]
     fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:gtin13]
-    fill_in "Other product identifiers", with: with[:barcode] if with[:barcode]
-    fill_in "Webpage",                    with: with[:webpage] if with[:webpage]
-    fill_in "Description of product",     with: with[:description] if with[:description]
+    fill_in "Other product identifiers",         with: with[:barcode] if with[:barcode]
+    fill_in "Webpage",                           with: with[:webpage] if with[:webpage]
+    fill_in "Description of product",            with: with[:description] if with[:description]
     click_button "Continue"
   end
 

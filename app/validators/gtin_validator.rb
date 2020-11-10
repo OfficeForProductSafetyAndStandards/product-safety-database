@@ -13,7 +13,8 @@ class GtinValidator < ActiveModel::EachValidator
     end
 
     unless gtin.valid?
-      record.errors.add(attribute, :invalid)
+
+      record.errors.add(attribute, :invalid) unless record.errors.of_kind?(attribute, :wrong_length)
     end
   end
 end

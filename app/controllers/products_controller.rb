@@ -24,20 +24,27 @@ class ProductsController < ApplicationController
   end
 
   # GET /products/1/edit
-  def edit; end
+  def edit
+    @product_form = ProductForm.from(Product.find(params[:id]))
+  end
 
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
-      if @product.update(product_params)
+      product = Product.find(params[:id])
+      @product_form = ProductForm.from(product)
+      @product_form.attributes = product_params
+
+      if @product_form.valid?
         format.html do
-          redirect_to product_path(@product), flash: { success: "Product was successfully updated." }
+          product.update!(@product_form.serializable_hash)
+          redirect_to product_path(product), flash: { success: "Product was successfully updated." }
         end
-        format.json { render :show, status: :ok, location: @product }
+        format.json { render :show, status: :ok, location: product }
       else
         format.html { render :edit }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.json { render json: product.errors, status: :unprocessable_entity }
       end
     end
   end
