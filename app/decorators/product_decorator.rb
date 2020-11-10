@@ -2,6 +2,10 @@ class ProductDecorator < ApplicationDecorator
   delegate_all
   decorates_association :investigations
 
+  def pretty_description
+    "Product: #{name}"
+  end
+
   def summary_list
     rows = [
       { key: { text: "Category" }, value: { text: category } },
