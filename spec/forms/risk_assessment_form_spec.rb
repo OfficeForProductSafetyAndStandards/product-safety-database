@@ -18,8 +18,8 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
   let(:old_file) { nil }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
 
-  let(:form) do
-    described_class.new(
+  let(:params) {
+    {
       investigation: investigation,
       current_user: user,
       assessed_on: assessment_date,
@@ -33,8 +33,10 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
       old_file: old_file,
       risk_assessment_file: risk_assessment_file,
       details: details
-    )
-  end
+    }
+  }
+
+  let(:form) { described_class.new(params) }
 
   describe "validations" do
     context "with valid attributes" do
@@ -261,6 +263,53 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
 
         it "always returns nil" do
           expect(form.assessed_by_other).to be nil
+        end
+      end
+    end
+  end
+
+  describe "#cache_file!" do
+    context "when a transcript file is not provided" do
+      let(:risk_assessment_file) { nil }
+
+      it "does not create a blob" do
+        expect { form.cache_file! }.not_to change { ActiveStorage::Blob.count }
+      end
+    end
+
+    context "when a transcript file is provided" do
+      it "does not create a blob" do
+        expect { form.cache_file! }.to change { ActiveStorage::Blob.count }.by(1)
+      end
+
+      it "set existing_transcript_file_id" do
+        expect { form.cache_file! }.to change(form, :existing_risk_assessment_file_file_id).from(nil).to(instance_of(String))
+      end
+    end
+  end
+
+  describe "#load_transcript_file " do
+    let(:previous_form) do
+      described_class.new(params.merge(risk_assessment_file: Rack::Test::UploadedFile.new(file_fixture("files/risk_assessment.txt"))))
+    end
+
+    before { previous_form.cache_file! }
+
+    context "when no transcript is uploaded" do
+      let(:risk_assessment_file) { nil }
+
+      it "does not set the transcript" do
+        expect { form.load_risk_assessment_file }.not_to change(form, :risk_assessment_file)
+      end
+
+      context "when no new transcript has been uploaded" do
+        before do
+          params[:existing_risk_assessment_file_file_id] = previous_form.existing_risk_assessment_file_file_id
+        end
+
+        it "loads the file blob" do
+          expect { form.load_risk_assessment_file }
+            .to change(form, :risk_assessment_file).from(nil).to(instance_of(ActiveStorage::Blob))
         end
       end
     end
