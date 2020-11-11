@@ -3,15 +3,15 @@ class FixOldCategory < ActiveRecord::Migration[6.0]
     old_to_new_category_map = {
       ["Low Voltage Equipment (inc. plugs & sockets)",
        "White Goods",
-       "Small Electronics"] => "Electrical appliances and equipment",
+       "Small Electronics",
+       "Alarms"] => "Electrical appliances and equipment",
       ["Baby/Children's Products"] => "Childcare articles and children's equipment",
       ["Other Product Type"] => "Other",
       ["Furniture & Furnishings"] => "Furniture",
       ["Clothing (inc. baby)"] => "Clothing, textiles and fashion items",
       ["Personal Protective Equipment (PPE)."] => "Personal protective equipment (PPE)",
       ["Measuring Instruments (inc. pressure)"] => "Measuring instruments",
-      %w[Lasers] => "Laser pointers",
-      %w[Alarms] => "Other"
+      %w[Lasers] => "Laser pointers"
     }
     safety_assured do
       reversible do |dir|
