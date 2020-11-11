@@ -2,11 +2,12 @@ class RiskAssessmentForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  include UploadedFile
 
   EMPTY_PROMPT_OPTION = [{ text: "", value: "" }.freeze].freeze
 
   attribute :investigation
-  attribute :current_user
+  attribute :user
 
   attribute :assessed_on, :govuk_date
   attribute :risk_level
@@ -46,23 +47,12 @@ class RiskAssessmentForm
 
   validate :assessed_on_cannot_be_older_than_1970
 
-  def cache_file!
-    return if risk_assessment_file.blank?
+  # def load_risk_assessment_file
 
-    self.risk_assessment_file = ActiveStorage::Blob.create_after_upload!(
-      io: risk_assessment_file,
-      filename: risk_assessment_file.original_filename,
-      content_type: risk_assessment_file.content_type
-    )
-
-    self.existing_risk_assessment_file_file_id = risk_assessment_file.signed_id
-  end
-
-  def load_risk_assessment_file
-    if existing_risk_assessment_file_file_id.present? && risk_assessment_file.nil?
-      self.risk_assessment_file = ActiveStorage::Blob.find_signed(existing_risk_assessment_file_file_id)
-    end
-  end
+  #   if existing_risk_assessment_file_file_id.present? && risk_assessment_file.nil?
+  #     self.risk_assessment_file = ActiveStorage::Blob.find_signed(existing_risk_assessment_file_file_id)
+  #   end
+  # end
 
   def risk_levels
     {
@@ -96,7 +86,7 @@ class RiskAssessmentForm
     EMPTY_PROMPT_OPTION.deep_dup +
       Team
         .order(:name)
-        .where.not(id: current_user.team_id)
+        .where.not(id: user.team_id)
         .pluck(:name, :id).collect do |row|
           { text: row[0], value: row[1] }
         end
@@ -118,7 +108,7 @@ class RiskAssessmentForm
 
   def assessed_by_team_id
     if assessed_by == "my_team"
-      current_user.team_id
+      user.team_id
     elsif assessed_by == "another_team"
       super
     end

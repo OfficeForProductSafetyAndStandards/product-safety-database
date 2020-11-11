@@ -2,8 +2,9 @@ class AddRiskAssessmentToCase
   include Interactor
   include EntitiesToNotify
 
+  delegate :serialised_form_attributes, to: :context
   delegate :investigation, :user, :assessed_on, :risk_level, :custom_risk_level,
-           :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :product_ids, :risk_assessment_file, :risk_assessment, to: :context
+           :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details, :product_ids, :risk_assessment_file, :risk_assessment, to: :serialised_form_attributes
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -42,7 +43,7 @@ private
   end
 
   def audit_activity_metadata
-    AuditActivity::RiskAssessment::RiskAssessmentAdded.build_metadata(risk_assessment)
+    AuditActivity::RiskAssessment::RiskAssessmentAdded.build_metadata(context.risk_assessment)
   end
 
   def send_notification_email

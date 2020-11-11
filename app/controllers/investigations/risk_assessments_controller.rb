@@ -5,7 +5,7 @@ module Investigations
 
       authorize @investigation, :update?
 
-      @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
+      @risk_assessment_form = RiskAssessmentForm.new(user: current_user, investigation: @investigation)
 
       return render "no_products" if @risk_assessment_form.products.length.zero?
     end
@@ -16,22 +16,15 @@ module Investigations
       authorize @investigation, :update?
 
       @risk_assessment_form = RiskAssessmentForm.new(
-        risk_assessment_params.merge(current_user: current_user, investigation: @investigation)
+        risk_assessment_params.merge(user: current_user, investigation: @investigation)
       )
 
-      @risk_assessment_form.cache_file!
-      @risk_assessment_form.load_risk_assessment_file
+      result = CreateRiskAssessment.call(
+        form: @risk_assessment_form,
+        files_to_cache: :risk_assessment_file
+      )
 
-      if @risk_assessment_form.valid?
-
-        result = AddRiskAssessmentToCase.call!(
-          @risk_assessment_form.attributes.merge({
-            investigation: @investigation,
-            user: current_user,
-            assessed_by_team_id: @risk_assessment_form.assessed_by_team_id
-          })
-        )
-
+      if result.success?
         if (result.risk_assessment.risk_level == @investigation.risk_level) && (result.risk_assessment.custom_risk_level == @investigation.custom_risk_level)
           redirect_to investigation_risk_assessment_path(@investigation, result.risk_assessment)
         else
