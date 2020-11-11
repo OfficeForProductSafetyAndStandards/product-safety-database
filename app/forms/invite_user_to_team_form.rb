@@ -34,6 +34,9 @@ private
 
   def email_domain_must_be_whitelisted
     address = Mail::Address.new(email)
+  rescue Mail::Field::IncompleteParseError
+    # This error will be thrown when an email address is incorrectly formatted. The form will be invalid based on that so no need to do add error here.
+  else
     errors.add(:email, :not_whitelisted, opss_enquiries_email: opss_enquiries_email) unless whitelisted_domains.include?(address.domain.to_s.downcase)
   end
 
