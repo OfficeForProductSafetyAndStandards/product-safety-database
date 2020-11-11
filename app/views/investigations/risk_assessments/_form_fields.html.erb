@@ -84,7 +84,7 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
     <% end %>
   </fieldset>
 <% else %>
-  <%= form.hidden_field :existing_transcript_file_id %>
+  <%= form.hidden_field :existing_risk_assessment_file_file_id %>
   <% file_upload_field = capture do %>
     <%= form.govuk_file_upload :risk_assessment_file,
         label: "Upload the risk assessment",
