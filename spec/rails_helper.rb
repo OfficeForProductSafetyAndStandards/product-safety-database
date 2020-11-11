@@ -10,11 +10,12 @@ if ENV["CI"]
     c.single_report_path = "coverage/lcov.info"
   end
   SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
+
+  SimpleCov.start "rails" do
+    enable_coverage :branch
+  end
 end
 
-SimpleCov.start "rails" do
-  enable_coverage :branch
-end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
