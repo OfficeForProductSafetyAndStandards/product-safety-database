@@ -122,7 +122,19 @@ module Investigations
   private
 
     def risk_assessment_params
-      params.require(:risk_assessment_form).permit(:details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
+      params.require(:risk_assessment_form).permit(
+        :details,
+        :risk_level,
+        :risk_assessment_file,
+        :assessed_by,
+        :assessed_by_team_id,
+        :assessed_by_business_id,
+        :assessed_by_other,
+        :custom_risk_level,
+        :existing_risk_assessment_file_file_id,
+        assessed_on: %i[day month year],
+        product_ids: []
+      )
     end
   end
 end
