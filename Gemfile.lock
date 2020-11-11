@@ -97,7 +97,7 @@ GEM
     aws-sdk-kms (1.39.0)
       aws-sdk-core (~> 3, >= 3.109.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.83.2)
+    aws-sdk-s3 (1.84.1)
       aws-sdk-core (~> 3, >= 3.109.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -559,7 +559,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-pg_enum (~> 1.1)
   awesome_print (~> 1.8)
-  aws-sdk-s3 (~> 1.83)
+  aws-sdk-s3 (~> 1.84)
   axlsx!
   barkick (~> 0.1)
   byebug (~> 11.1)
