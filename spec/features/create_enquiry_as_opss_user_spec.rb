@@ -228,7 +228,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     click_button "Create enquiry"
 
     expect(page).to have_error_messages
-    errors_list = page.find('.govuk-error-summary__list').all('li')
+    errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Description cannot be blank"
     expect(errors_list[1].text).to eq "User title cannot be blank"
   end
