@@ -529,7 +529,20 @@ if run_seeds
     product = i.products.first
     Correspondence::Email.create!("correspondence_date" => 20.days.ago, "correspondent_name" => "John Doe", "details" => "Body", "email_address" => "john@doe.com", "email_direction" => "outbound", "email_subject" => "Subject about investigation", "investigation" => i, "overview" => "Some email about investigation", "created_at" => 1.day.ago)
 
-    CorrectiveAction.create!("date_decided" => 30.days.ago, "details" => "Some corrective action", "duration" => "permanent", "geographic_scope" => "Regional", "investigation" => i, "legislation" => "Merchant Shipping (Marine Equipment) Regulations 2016", "measure_type" => "mandatory", "product" => product, "other_action" => "First corrective action", "related_file" => "No", "created_at" => 2.days.ago)
+    CorrectiveAction.create!(
+      date_decided: rand(1..30).days.ago,
+      details: "Some corrective action",
+      duration: CorrectiveAction::DURATION_TYPES.sample,
+      geographic_scope: "Regional",
+      investigation: i,
+      legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
+      measure_type: CorrectiveAction::MEASURE_TYPES.sample,
+      product: product,
+      action: "other",
+      other_action: "First corrective action",
+      related_file: false,
+      created_at: 2.days.ago
+    )
 
     result = Test::Result.new("date" => 15.days.ago, "details" => "Test results", "investigation" => i, "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", "product" => product, "result" => "failed", "created_at" => 3.days.ago)
     result.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
