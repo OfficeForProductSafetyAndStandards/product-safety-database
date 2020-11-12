@@ -18,7 +18,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
   let(:old_file) { nil }
   let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
 
-  let(:params) {
+  let(:params) do
     {
       investigation: investigation,
       current_user: user,
@@ -34,7 +34,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
       risk_assessment_file: risk_assessment_file,
       details: details
     }
-  }
+  end
 
   let(:form) { described_class.new(params) }
 
