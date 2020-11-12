@@ -28,10 +28,11 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
       click_button "Continue"
 
-      expect(page).to have_summary_error("Enter date of the test")
-      expect(page).to have_summary_error("Select the legislation that relates to this test")
-      expect(page).to have_summary_error("Select result of the test")
-      expect(page).to have_summary_error("Provide the test results file")
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "Select the legislation that relates to this test"
+      expect(errors_list[1].text).to eq "Enter date of the test"
+      expect(errors_list[2].text).to eq "Select result of the test"
+      expect(errors_list[3].text).to eq "Provide the test results file"
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file)

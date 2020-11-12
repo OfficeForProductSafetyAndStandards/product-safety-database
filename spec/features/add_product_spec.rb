@@ -20,11 +20,12 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
 
     # Expected validation errors
     expect(page).to have_error_messages
-    expect(page).to have_text("Name cannot be blank")
-    expect(page).to have_text("Category cannot be blank")
-    expect(page).to have_text("Product type cannot be blank")
-    expect(page).to have_text("Enter a valid barcode number")
-    expect(page).to have_text("You must state whether the product is a counterfeit")
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Category cannot be blank"
+    expect(errors_list[1].text).to eq "Product type cannot be blank"
+    expect(errors_list[2].text).to eq "You must state whether the product is a counterfeit"
+    expect(errors_list[3].text).to eq "Name cannot be blank"
+    expect(errors_list[4].text).to eq "Enter a valid barcode number"
 
     select attributes[:category], from: "Product category"
 

@@ -57,11 +57,12 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     click_button "Add risk assessment"
 
-    expect(page).to have_text("Enter the date of the assessment")
-    expect(page).to have_text("Select the risk level")
-    expect(page).to have_text("Select who completed the assessment")
-    expect(page).to have_text("You must choose at least one product")
-    expect(page).to have_text("You must upload the risk assessment")
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Enter the date of the assessment"
+    expect(errors_list[1].text).to eq "Select the risk level"
+    expect(errors_list[2].text).to eq "Select who completed the assessment"
+    expect(errors_list[3].text).to eq "You must choose at least one product"
+    expect(errors_list[4].text).to eq "You must upload the risk assessment"
 
     attach_file "Upload the risk assessment", risk_assessment_file
 
