@@ -57,7 +57,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "",
@@ -72,7 +72,7 @@ if run_seeds
 
   product.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Second investigation
   investigation = Investigation::Allegation.new(
@@ -97,7 +97,7 @@ if run_seeds
 
   investigation.documents.attach(create_blob("putty 2.jpg"))
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   blob = create_blob("putty.jpg", title: "Crazy Geezer's putty world", description: "Top")
   investigation.documents.attach(blob)
@@ -118,7 +118,7 @@ if run_seeds
     webpage: "www.amazon.com"
   )
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Third investigation
   investigation = Investigation::Allegation.new(
@@ -141,7 +141,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "Unknown",
@@ -158,7 +158,7 @@ if run_seeds
 
   product.documents.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Fourth investigation
   investigation = Investigation::Allegation.new(
@@ -181,7 +181,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "Batch 105R sold between February and May 2018",
@@ -196,7 +196,7 @@ if run_seeds
 
   product.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Fifth investigation
   investigation = Investigation::Allegation.new(
@@ -221,7 +221,7 @@ if run_seeds
 
   investigation.documents.attach(create_blob("2019-w6_27550-1f.jpg"))
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "",
@@ -236,7 +236,7 @@ if run_seeds
 
   product.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Sixth investigation
   investigation = Investigation::Allegation.new(
@@ -259,7 +259,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "",
@@ -275,7 +275,7 @@ if run_seeds
   product.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
   product.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   business = Business.new(
     trading_name: "ABC toys",
@@ -328,7 +328,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "8710447348123 (LynxThe Golden Year); 8710522349168 (Lynx Black)",
@@ -346,7 +346,7 @@ if run_seeds
   product.documents.attach(create_blob("2019-w6_27526-3f.jpg", title: "Lynx instructions"))
   product.documents.attach(create_blob("2019-w6_27526-4f.jpg", title: "images of product"))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Eighth investigation
   investigation = Investigation::Allegation.new(
@@ -369,7 +369,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "X00076P3WF",
@@ -386,7 +386,7 @@ if run_seeds
   product.documents.attach(create_blob("2019-w3_27167-1f.jpg", title: "label"))
   product.documents.attach(create_blob("2019-w3_27167-2f.jpg", title: "stickers and serial"))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   Test::Result.new(
     legislation: "Electrical Equipment (Safety) Regulations 2016",
@@ -418,7 +418,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call(investigation: investigation, user: user)
+  CreateCase.call!(investigation: investigation, user: user)
 
   product = Product.create!(
     batch_number: "3105 & 1109",
@@ -430,10 +430,9 @@ if run_seeds
     product_type: "Babies' clothing set",
     webpage: ""
   )
-
   product.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
-  AddProductToCase.call(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations"))
     # The structure is as follows:
