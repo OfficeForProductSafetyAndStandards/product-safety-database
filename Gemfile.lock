@@ -97,7 +97,7 @@ GEM
     aws-sdk-kms (1.39.0)
       aws-sdk-core (~> 3, >= 3.109.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.83.2)
+    aws-sdk-s3 (1.84.1)
       aws-sdk-core (~> 3, >= 3.109.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -229,7 +229,7 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.2.1)
+    listen (3.3.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.11.2)
@@ -342,7 +342,7 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     rake (13.0.1)
-    rb-fsevent (0.10.3)
+    rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.5.0)
@@ -462,7 +462,7 @@ GEM
     simplecov (0.19.1)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
-    simplecov-console (0.7.2)
+    simplecov-console (0.8.0)
       ansi
       simplecov
       terminal-table
@@ -510,7 +510,7 @@ GEM
     strong_migrations (0.7.2)
       activerecord (>= 5)
     temple (0.8.2)
-    terminal-table (1.8.0)
+    terminal-table (2.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -559,7 +559,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-pg_enum (~> 1.1)
   awesome_print (~> 1.8)
-  aws-sdk-s3 (~> 1.83)
+  aws-sdk-s3 (~> 1.84)
   axlsx!
   barkick (~> 0.1)
   byebug (~> 11.1)
@@ -582,7 +582,7 @@ DEPENDENCIES
   interactor (~> 3.1)
   jbuilder (~> 2.10)
   launchy (~> 2.5)
-  listen (~> 3.2)
+  listen (~> 3.3)
   lograge (~> 0.11)
   m (~> 1.5)
   mini_magick (~> 4.11)
@@ -615,7 +615,7 @@ DEPENDENCIES
   sidekiq (~> 6.1)
   sidekiq-cron (~> 1.2)
   simplecov
-  simplecov-console (~> 0.7)
+  simplecov-console (~> 0.8)
   simplecov-lcov
   slim-rails (~> 3.2)
   slim_lint (~> 0.20)
