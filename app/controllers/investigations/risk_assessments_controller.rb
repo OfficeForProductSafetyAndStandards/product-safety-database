@@ -57,15 +57,6 @@ module Investigations
 
       @risk_assessment = @investigation.risk_assessments.find(params[:id])
 
-      assessed_by = if @risk_assessment.assessed_by_team == current_user.team
-                      "my_team"
-                    elsif @risk_assessment.assessed_by_team
-                      "another_team"
-                    elsif @risk_assessment.assessed_by_business
-                      "business"
-                    else
-                      "other"
-                    end
       @risk_assessment_form = RiskAssessmentForm.new(
         @risk_assessment.serializable_hash(
           only: %i[assessed_on risk_level custom_risk_level assessed_by_team_id assessed_by_business_id assessed_by_other details]
@@ -135,6 +126,18 @@ module Investigations
         assessed_on: %i[day month year],
         product_ids: []
       )
+    end
+
+    def assessed_by
+      if @risk_assessment.assessed_by_team == current_user.team
+        "my_team"
+      elsif @risk_assessment.assessed_by_team
+        "another_team"
+      elsif @risk_assessment.assessed_by_business
+        "business"
+      else
+        "other"
+      end
     end
   end
 end
