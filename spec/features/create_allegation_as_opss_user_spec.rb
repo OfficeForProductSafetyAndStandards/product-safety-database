@@ -66,7 +66,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_to_be_on_allegation_details_page
 
-      errors_list = page.find('.govuk-error-summary__list').all('li')
+      errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Description cannot be blank"
       expect(errors_list[1].text).to eq "Enter a valid product category"
       expect(errors_list[2].text).to eq "Enter the primary hazard"
