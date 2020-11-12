@@ -1,4 +1,5 @@
 class InvestigationDecorator < ApplicationDecorator
+  include FormatedDescription
   delegate_all
   decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities, :risk_assessments
 
@@ -6,10 +7,6 @@ class InvestigationDecorator < ApplicationDecorator
 
   def title
     user_title
-  end
-
-  def description
-    h.simple_format(object.description)
   end
 
   def display_product_summary_list?

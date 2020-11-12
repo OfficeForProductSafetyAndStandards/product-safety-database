@@ -59,6 +59,7 @@ RSpec.describe ProductDecorator do
 
   describe "#description" do
     include_examples "a formated text", :product, :description
+    include_examples "with a blank description", :product, :decorated_product
   end
 
   describe "#product_type_and_category_label" do
