@@ -60,14 +60,13 @@ module Investigations
       @risk_assessment_form = RiskAssessmentForm.new(
         @risk_assessment.serializable_hash(
           only: %i[assessed_on risk_level custom_risk_level assessed_by_team_id assessed_by_business_id assessed_by_other details]
+        ).merge(
+          current_user: current_user,
+          investigation: @investigation,
+          assessed_by: assessed_by,
+          product_ids: @risk_assessment.product_ids,
+          old_file: @risk_assessment.risk_assessment_file_blob
         )
-          .merge(
-            current_user: current_user,
-            investigation: @investigation,
-            assessed_by: assessed_by,
-            product_ids: @risk_assessment.product_ids,
-            old_file: @risk_assessment.risk_assessment_file_blob
-          )
       )
 
       @risk_assessment = @risk_assessment.decorate
