@@ -82,7 +82,7 @@ group :test do
   gem "rubocop-rspec", "~> 1.42", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "simplecov"
-  gem "simplecov-console", "~> 0.7"
+  gem "simplecov-console", "~> 0.8"
   gem "simplecov-lcov"
   gem "slim_lint", "~> 0.20"
   gem "webmock", "~> 3.9"
