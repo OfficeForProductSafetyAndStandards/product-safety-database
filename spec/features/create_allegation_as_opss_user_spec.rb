@@ -65,9 +65,11 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       click_button "Create allegation"
 
       expect_to_be_on_allegation_details_page
-      expect(page).to have_summary_error("Description cannot be blank")
-      expect(page).to have_summary_error("Enter the primary hazard")
-      expect(page).to have_summary_error("Enter a valid product category")
+
+      errors_list = page.find(".govuk-error-summary__list").all("li")
+      expect(errors_list[0].text).to eq "Description cannot be blank"
+      expect(errors_list[1].text).to eq "Enter a valid product category"
+      expect(errors_list[2].text).to eq "Enter the primary hazard"
 
       enter_allegation_details(**allegation_details)
 
