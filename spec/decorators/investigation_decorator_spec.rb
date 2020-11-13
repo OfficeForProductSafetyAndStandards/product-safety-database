@@ -172,6 +172,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   describe "#description" do
     include_examples "a formated text", :investigation, :description
+    include_examples "with a blank description", :investigation, :decorated_investigation
   end
 
   describe "#products_list" do
