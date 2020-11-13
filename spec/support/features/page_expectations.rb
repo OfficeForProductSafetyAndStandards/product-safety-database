@@ -139,6 +139,16 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "What type of information are you adding?")
   end
 
+  def expect_to_be_on_add_attachment_to_a_case_upload_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
+    expect(page).to have_h1("Add attachment")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_case_metadata_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
+    expect(page).to have_h1("Add attachment")
+  end
+
   def expect_to_be_on_case_actions_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/actions")
     expect(page).to have_selector("h1", text: "Select an action")
@@ -366,6 +376,16 @@ module PageExpectations
     expect(page).to have_selector("h1", text: product_name)
   end
 
+  def expect_to_be_on_add_attachment_to_a_product_upload_page(product_id:)
+    expect(page).to have_current_path("/products/#{product_id}/documents/new/upload")
+    expect(page).to have_h1("Add attachment")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_product_metadata_page(product_id:)
+    expect(page).to have_current_path("/products/#{product_id}/documents/new/metadata")
+    expect(page).to have_h1("Add attachment")
+  end
+
   # Shared pages across different flows
   def expect_to_be_on_coronavirus_page(path)
     expect(page).to have_current_path(path)
@@ -468,6 +488,16 @@ module PageExpectations
   def expect_to_be_on_remove_location_for_a_business_page(business_id:, location_id: nil)
     expect(page).to have_current_path("/businesses/#{business_id}/locations/#{location_id}/remove")
     expect(page).to have_h1("Remove location")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_business_upload_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/documents/new/upload")
+    expect(page).to have_h1("Add attachment")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_business_metadata_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/documents/new/metadata")
+    expect(page).to have_h1("Add attachment")
   end
 
   def expect_to_be_on_add_contact_to_a_business_page(business_id:)
