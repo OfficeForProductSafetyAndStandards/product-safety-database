@@ -586,7 +586,7 @@ private
   end
 
   def trading_standards_risk_assessment_form_params
-    params.require(:trading_standards_risk_assessment_form).permit(:further_risk_assessments, :details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
+    params.require(:trading_standards_risk_assessment_form).permit(:further_risk_assessments, :details, :risk_level, :existing_risk_assessment_file_file_id, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
   end
 
   def businesses_from_session

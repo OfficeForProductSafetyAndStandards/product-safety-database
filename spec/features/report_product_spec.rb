@@ -585,7 +585,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
 
-    page.find("details summary span.govuk-details__summary-text", text: "Replace this file").click
+    if page.has_css?("details summary span.govuk-details__summary-text", text: "Replace this file")
+      page.find("details summary span.govuk-details__summary-text", text: "Replace this file").click
+    end
     attach_file "Upload the risk assessment", with[:file]
 
     within_fieldset("Are there other risk assessments to report?") do
