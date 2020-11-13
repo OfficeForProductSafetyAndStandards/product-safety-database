@@ -175,6 +175,15 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         # trigger validation to verify state in session is cleaned up correctly
         click_on "Continue"
 
+        within_fieldset("Date of assessment") do
+          fill_in("Year", with: "2020")
+        end
+
+        attach_file "Upload the risk assessment", risk_assessments.first[:file]
+        click_on "Continue"
+
+        expect(page).to have_link risk_assessments.first[:file].basename.to_s
+
         risk_assessments.each do |assessment|
           fill_in_risk_assessment_details_page(with: assessment)
           expect_to_be_on_risk_assessment_details_page
@@ -576,7 +585,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     expect(page.find(".govuk-heading-m")).to have_sibling("p.govuk-body", text: product_details[:name])
 
-    attach_file "trading_standards_risk_assessment_form[risk_assessment_file]", with[:file]
+    page.find("details summary span.govuk-details__summary-text", text: "Replace this file").click
+    attach_file "Upload the risk assessment", with[:file]
 
     within_fieldset("Are there other risk assessments to report?") do
       choose "Yes"
