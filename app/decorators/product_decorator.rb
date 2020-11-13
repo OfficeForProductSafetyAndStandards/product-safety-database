@@ -1,4 +1,5 @@
 class ProductDecorator < ApplicationDecorator
+  include FormattedDescription
   delegate_all
   decorates_association :investigations
 
@@ -26,10 +27,6 @@ class ProductDecorator < ApplicationDecorator
 
   def authenticity
     I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key)
-  end
-
-  def description
-    h.simple_format(object.description)
   end
 
   def product_type_and_category_label
