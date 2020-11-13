@@ -513,6 +513,16 @@ if run_seeds
       team: operational_support,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+    user3 = User.create!(
+      name: "TS User",
+      email: "ts_user@example.com",
+      password: "testpassword",
+      password_confirmation: "testpassword",
+      organisation: organisation,
+      mobile_number_verified: true,
+      team: enforcement,
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+    )
 
     %i[opss_user user].each do |role|
       UserRole.create!(user: user1, name: role)
