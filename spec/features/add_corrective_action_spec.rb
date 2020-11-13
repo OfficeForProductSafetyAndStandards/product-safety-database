@@ -41,6 +41,17 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect_to_be_on_record_corrective_action_for_case_page
     expect(page).not_to have_error_messages
 
+    click_button "Continue"
+    expect(page).to have_error_messages
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Select type of corrective action"
+    expect(errors_list[1].text).to eq "Enter date the corrective action was decided"
+    expect(errors_list[2].text).to eq "Select the legislation relevant to the corrective action"
+    expect(errors_list[3].text).to eq "You must state whether the action is mandatory or voluntary"
+    expect(errors_list[4].text).to eq "You must state how long the action will be in place"
+    expect(errors_list[5].text).to eq "You must state the geographic scope of the action"
+    expect(errors_list[6].text).to eq "Select whether you want to upload a related file"
+
     fill_and_submit_form
 
     expect_to_be_on_confirmation_page

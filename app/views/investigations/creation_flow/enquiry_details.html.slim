@@ -5,7 +5,7 @@
 = form_with model: @investigation, scope: :enquiry, local: true, url: wizard_path, method: :put do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
-      = render "form_components/govuk_error_summary", form: form
+      = error_summary(@investigation.errors, %i[description user_title])
       h1.govuk-heading-l
         = @page_title
       fieldset.govuk-fieldset

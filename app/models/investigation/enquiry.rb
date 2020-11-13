@@ -1,6 +1,6 @@
 class Investigation < ApplicationRecord
   class Enquiry < Investigation
-    validates :user_title, :description, presence: true, on: :enquiry_details
+    validates :description, :user_title, presence: true, on: :enquiry_details
     validates :date_received,
               presence: true,
               real_date: true,

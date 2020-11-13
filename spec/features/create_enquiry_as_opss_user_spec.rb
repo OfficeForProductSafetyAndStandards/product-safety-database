@@ -18,6 +18,13 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       file: Rails.root + "test/fixtures/files/testImage.png",
     }
   end
+  let(:blank_enquiry_details) do
+    {
+      enquiry_description: nil,
+      enquiry_title: nil,
+      file: nil,
+    }
+  end
 
   let(:user) { create(:user, :activated, :opss_user) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
@@ -57,6 +64,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       enter_contact_details(**contact_details)
 
       expect_to_be_on_enquiry_details_page
+
+      check_cannot_be_blank_errors
+
       fill_in_new_enquiry_details(with: enquiry_details)
       click_button "Create enquiry"
 
@@ -211,6 +221,16 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in_when_and_how_was_it_received(received_type: "Other", day: "", month: "", year: date.year, other_received_type: other_received_type)
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Date enquiry received must include a day and month"
+  end
+
+  def check_cannot_be_blank_errors
+    fill_in_new_enquiry_details(with: blank_enquiry_details)
+    click_button "Create enquiry"
+
+    expect(page).to have_error_messages
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Description cannot be blank"
+    expect(errors_list[1].text).to eq "User title cannot be blank"
   end
 
   def check_the_other_received_type_field_has_retained_its_value
