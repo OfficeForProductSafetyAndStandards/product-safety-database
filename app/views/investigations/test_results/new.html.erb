@@ -14,7 +14,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= error_summary(@test_result.errors, %i[legislation date result base])%>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>

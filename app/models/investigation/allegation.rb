@@ -1,6 +1,6 @@
 class Investigation < ApplicationRecord
   class Allegation < Investigation
-    validates :description, :hazard_type, :product_category, presence: true, on: :allegation_details
+    validates :description, :product_category, :hazard_type, presence: true, on: :allegation_details
 
     index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "investigations"].join("_")
 
