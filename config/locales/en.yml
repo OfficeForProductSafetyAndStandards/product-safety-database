@@ -477,6 +477,7 @@ en:
   coronavirus_related_form:
     inclusion: "Select whether or not the case is related to the coronavirus outbreak"
   enter_email_address: "Enter your email address"
+  file_added: "File has been added to the %{type}"
   otp_code:
     blank: "Enter the security code"
     too_short: "You haven’t entered enough numbers"

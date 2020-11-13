@@ -30,6 +30,7 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
     fill_and_submit_attachment_details_page
 
     expect_to_be_on_images_page
+    expect_confirmation_banner("File has been added to the allegation")
 
     expect_case_images_page_to_show_entered_information
 
