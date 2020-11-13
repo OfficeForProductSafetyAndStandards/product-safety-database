@@ -29,6 +29,8 @@ class DocumentsFlowController < ApplicationController
 
     attach_blobs_to_list(@file_blob, file_collection)
 
+    flash[:success] = t(:file_added, type: @parent.model_name.human.downcase)
+
     return redirect_to(@parent) unless @parent.is_a?(Investigation)
 
     AuditActivity::Document::Add.from(@file_blob, @parent)
