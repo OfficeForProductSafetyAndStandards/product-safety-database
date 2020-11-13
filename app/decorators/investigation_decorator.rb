@@ -1,5 +1,5 @@
 class InvestigationDecorator < ApplicationDecorator
-  include FormatedDescription
+  include FormattedDescription
   delegate_all
   decorates_associations :complainant, :documents_attachments, :creator_user, :owner_user, :owner_team, :activities, :risk_assessments
 

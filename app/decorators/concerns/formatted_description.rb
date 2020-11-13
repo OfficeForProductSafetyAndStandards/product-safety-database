@@ -1,4 +1,4 @@
-module FormatedDescription
+module FormattedDescription
   extend ActiveSupport::Concern
 
   def description

@@ -1,5 +1,5 @@
 class ProductDecorator < ApplicationDecorator
-  include FormatedDescription
+  include FormattedDescription
   delegate_all
   decorates_association :investigations
 
