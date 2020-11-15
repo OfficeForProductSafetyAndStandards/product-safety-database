@@ -3,7 +3,7 @@
 <%= form_with model: @risk_assessment_form, url: wizard_path, method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@risk_assessment_form.errors) %>
+      <%= error_summary(@risk_assessment_form.errors, %i[assessed_on risk_level custom_risk_level assessed_by product_ids risk_assessment_file]) %>
 
       <span class="govuk-caption-l">
         Report an unsafe or non-compliant product
