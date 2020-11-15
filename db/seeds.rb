@@ -485,8 +485,10 @@ if run_seeds
     end
   else
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
+    trading_standards = Organisation.create!(name: "Trading Standards")
     enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
     operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
+    ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards)
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
@@ -513,14 +515,14 @@ if run_seeds
       team: operational_support,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
-    user3 = User.create!(
+    User.create!(
       name: "TS User",
       email: "ts_user@example.com",
       password: "testpassword",
       password_confirmation: "testpassword",
-      organisation: organisation,
+      organisation: trading_standards,
       mobile_number_verified: true,
-      team: enforcement,
+      team: ts_team,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 
