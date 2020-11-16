@@ -15,7 +15,7 @@ class UpdateRiskAssessment
     @previous_attachment_filename = risk_assessment.risk_assessment_file.filename
 
     ActiveRecord::Base.transaction do
-      risk_assessment.attributes = {
+      risk_assessment.assign_attributes(
         assessed_on: assessed_on,
         risk_level: risk_level,
         custom_risk_level: custom_risk_level.presence,
@@ -24,7 +24,7 @@ class UpdateRiskAssessment
         assessed_by_other: assessed_by_other.presence,
         details: details,
         product_ids: product_ids
-      }
+      )
 
       if risk_assessment_file
         risk_assessment.risk_assessment_file.detach
