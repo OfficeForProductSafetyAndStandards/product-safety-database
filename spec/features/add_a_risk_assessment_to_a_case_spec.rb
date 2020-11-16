@@ -68,6 +68,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
 
     click_button "Add risk assessment"
 
+    expect(page).to have_css("#current-attachment-details a", text: risk_assessment_file.basename.to_s)
     expect(page).not_to have_text("You must upload the risk assessment")
 
     within_fieldset("Date of assessment") do
@@ -87,8 +88,6 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     within_fieldset("Which products were assessed?") do
       check "MyBrand washing machine model X"
     end
-
-    attach_file "Upload the risk assessment", risk_assessment_file
 
     fill_in("Further details (optional)", with: "Products risk-assessed in response to incident.")
 
