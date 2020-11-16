@@ -17,4 +17,10 @@ environment.loaders.get('sass').use.splice(-1, 0, {
   loader: 'resolve-url-loader'
 })
 
+environment.config.node = {
+  global: false,
+  __filename: false,
+  __dirname: false,
+}
+
 module.exports = environment
