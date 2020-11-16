@@ -141,7 +141,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
-    fill_in "Product type",               with: type
+    fill_in "Product sub-category",               with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
     fill_in "Product name",               with: name
     fill_in "Other product identifiers",  with: barcode
@@ -152,7 +152,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
   def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
-    expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: type)
+    expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
     expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: barcode)

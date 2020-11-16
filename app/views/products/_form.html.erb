@@ -21,7 +21,7 @@
   form: form,
   id: "subcategory",
   classes: "app-!-max-width-one-half",
-  label: { text: "Product type", classes: label_class },
+  label: { text: "Product sub-category", classes: label_class },
   hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" } %>
 
 <%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>

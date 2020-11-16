@@ -63,8 +63,8 @@ RSpec.describe ProductDecorator do
   end
 
   describe "#subcategory_and_category_label" do
-    context "when both the product type and and category are present" do
-      it "combines product type and product category" do
+    context "when both the Product sub-category and and category are present" do
+      it "combines Product sub-category and product category" do
         expect(decorated_product.subcategory_and_category_label)
           .to eq("#{product.subcategory} (#{product.category.downcase})")
       end
@@ -79,10 +79,10 @@ RSpec.describe ProductDecorator do
       end
     end
 
-    context "when only the product type is present" do
+    context "when only the Product sub-category is present" do
       before { product.category = nil }
 
-      it "returns only the product type" do
+      it "returns only the Product sub-category" do
         expect(decorated_product.subcategory_and_category_label)
           .to eq(product.subcategory)
       end

@@ -126,7 +126,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Cuts",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -149,7 +149,7 @@ if run_seeds
     description: "",
     product_code: "Unknown",
     name: "RXF 36 and RXF 34 Air Mountain Bike Front Forks",
-    category: "Other Product Type",
+    category: "Other Product sub-category",
     subcategory: "Bike Suspension Fork",
     webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791"
   )
@@ -166,7 +166,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Chemical",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -189,7 +189,7 @@ if run_seeds
     description: "",
     product_code: "749266006615",
     name: "Fogbuster Lens Cleaner",
-    category: "Other Product Type",
+    category: "Other Product sub-category",
     subcategory: "Swim goggles lens cleaner",
     webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/"
   )
@@ -204,7 +204,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Fire",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -313,7 +313,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Fire",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
