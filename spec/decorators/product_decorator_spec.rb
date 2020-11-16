@@ -5,6 +5,10 @@ RSpec.describe ProductDecorator do
 
   let(:product) { build(:product) }
 
+  describe "#pretty_description" do
+    specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
+  end
+
   describe "#summary_list" do
     include CountriesHelper
 
@@ -21,6 +25,10 @@ RSpec.describe ProductDecorator do
 
       it "displays the Category" do
         expect(summary_list).to summarise("Category", text: product.category)
+      end
+
+      it "displays product authenticity" do
+        expect(summary_list).to summarise("Product authenticity", text: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
       end
 
       it "displays the Barcode" do
@@ -51,6 +59,7 @@ RSpec.describe ProductDecorator do
 
   describe "#description" do
     include_examples "a formated text", :product, :description
+    include_examples "with a blank description", :product, :decorated_product
   end
 
   describe "#product_type_and_category_label" do

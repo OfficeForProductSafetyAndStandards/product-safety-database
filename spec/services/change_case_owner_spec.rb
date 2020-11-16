@@ -205,7 +205,7 @@ RSpec.describe ChangeCaseOwner, :with_stubbed_elasticsearch, :with_test_queue_ad
 
           it "creates proper collaboration" do
             result
-            expect(investigation.teams_with_edit_access).to eq([creator_team, investigation.owner_team])
+            expect(investigation.teams_with_edit_access).to contain_exactly(creator_team, investigation.owner_team)
           end
         end
 

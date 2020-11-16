@@ -19,7 +19,7 @@ class InvestigationsController < ApplicationController
         authorize Investigation, :export?
 
         @answer = search_for_investigations
-        @investigations = @answer.records(includes: %i[complainant creator_user])
+        @investigations = @answer.records(includes: %i[complainant creator_user products owner_team owner_user])
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
@@ -113,9 +113,5 @@ private
 
   def build_breadcrumbs
     @breadcrumbs = build_breadcrumb_structure
-  end
-
-  def set_suggested_previous_owners
-    @suggested_previous_owners = suggested_previous_owners(@investigation)
   end
 end

@@ -4,7 +4,7 @@
 = form_with model: @investigation, scope: :allegation, local: true, url: wizard_path, method: :put do |form|
   .govuk-grid-row
     .govuk-grid-column-two-thirds-from-desktop
-      = render "form_components/govuk_error_summary", form: form
+      = error_summary(@investigation.errors, %i[description product_category hazard_type])
       h1.govuk-heading-l = @page_title
 
       = render "form_components/govuk_textarea",

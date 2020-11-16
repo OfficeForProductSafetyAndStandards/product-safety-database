@@ -5,6 +5,9 @@ FactoryBot.define do
     category { Rails.application.config.product_constants["product_category"].sample }
     product_type { "product_type" }
     gtin13 { "9781529034523" }
+    authenticity { Product.authenticities.keys.sample }
+    batch_number { "123123123" }
+    brand { Faker::Company.name }
 
     factory :product_iphone do
       product_code { 234 }
@@ -34,7 +37,7 @@ FactoryBot.define do
     end
 
     factory :product_washing_machine do
-      product_code { Faker::Number.number(digits: 10) }
+      product_code { Faker::Number.number(digits: 10).to_s }
       name { Faker::Lorem.sentence }
       product_type { "Washing machine" }
       category { "Electrical appliances and equipment" }

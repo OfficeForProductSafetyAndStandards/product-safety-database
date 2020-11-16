@@ -68,4 +68,10 @@ RSpec.describe DateParser do
 
     it { is_expected.to be_nil }
   end
+
+  context "when given a string" do
+    let(:input) { "2020-10-02" }
+
+    it { is_expected.to eq(Date.new(2020, 10, 2)) }
+  end
 end

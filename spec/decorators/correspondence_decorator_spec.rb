@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CorrespondenceDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  subject { build(:correspondence_email, investigation: investigation).decorate }
+  subject { build(:email, investigation: investigation).decorate }
 
   let(:user)          { create(:user) }
   let(:investigation) { create(:allegation) }

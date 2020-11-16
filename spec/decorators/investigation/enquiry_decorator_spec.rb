@@ -6,7 +6,7 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_elasticsearch, :wi
   subject(:decorated_investigation) { investigation.decorate }
 
   let(:user)          { build_stubbed(:user) }
-  let(:investigation) { create(:enquiry, date_received_year: 2020, date_received_month: 1, date_received_day: 1) }
+  let(:investigation) { create(:enquiry) }
 
   before do
     create(:complainant, investigation: investigation)

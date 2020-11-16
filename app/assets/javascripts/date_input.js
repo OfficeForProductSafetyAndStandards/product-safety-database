@@ -1,9 +1,22 @@
 import $ from 'jquery'
 
-function dateInput (idPrefix) {
+function dateInput (id) {
   $(document).ready(() => {
+    const setDateInput = (date) => {
+      return () => {
+        day.value = date.getDate()
+        month.value = date.getMonth() + 1
+        year.value = date.getFullYear()
+      }
+    }
+
     const currentDate = new Date()
-    var dateYesterday = new Date(currentDate.getTime())
+    const dateYesterday = new Date(currentDate.getTime())
+
+    const element = document.getElementById(id)
+    const day = element.querySelector("input[name*='day']")
+    const month = element.querySelector("input[name*='month']")
+    const year = element.querySelector("input[name*='year']")
 
     // This sets the date to the previous day, since setting
     // the date to 0 sets the date to the last day of the
@@ -12,22 +25,8 @@ function dateInput (idPrefix) {
 
     const today = document.getElementById('today')
     const yesterday = document.getElementById('yesterday')
-    today.onclick = function setDateToToday () {
-      const day = document.getElementById(`${idPrefix}[day]`)
-      day.value = currentDate.getDate()
-      const month = document.getElementById(`${idPrefix}[month]`)
-      month.value = currentDate.getMonth() + 1
-      const year = document.getElementById(`${idPrefix}[year]`)
-      year.value = currentDate.getFullYear()
-    }
-    yesterday.onclick = function setDateToYesterday () {
-      const day = document.getElementById(`${idPrefix}[day]`)
-      day.value = dateYesterday.getDate()
-      const month = document.getElementById(`${idPrefix}[month]`)
-      month.value = dateYesterday.getMonth() + 1
-      const year = document.getElementById(`${idPrefix}[year]`)
-      year.value = dateYesterday.getFullYear()
-    }
+    today.onclick = setDateInput(currentDate)
+    yesterday.onclick = setDateInput(dateYesterday)
   })
 }
 

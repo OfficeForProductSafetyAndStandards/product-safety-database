@@ -1,5 +1,6 @@
 class ChangeCaseSummary
   include Interactor
+  include EntitiesToNotify
 
   delegate :investigation, :summary, :user, to: :context
 
@@ -38,7 +39,7 @@ private
   end
 
   def send_notification_email
-    entities_to_notify.each do |recipient|
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
@@ -47,17 +48,6 @@ private
         "#{investigation.case_type.upcase_first} summary updated"
       ).deliver_later
     end
-  end
-
-  # Notify the case owner, unless it is the same user/team performing the change
-  def entities_to_notify
-    entities = [investigation.owner] - [user, user.team]
-
-    entities.map { |entity|
-      return entity.users.active if entity.is_a?(Team) && !entity.email
-
-      entity
-    }.flatten.uniq
   end
 
   def email_body(viewer = nil)

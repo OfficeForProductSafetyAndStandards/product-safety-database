@@ -56,7 +56,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     context "with the required parameters" do
-      let(:update_risk_assessment) do
+      let(:result) do
         described_class.call(
           risk_assessment: risk_assessment,
           user: user,
@@ -93,13 +93,13 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         end
 
         it "does not generate an activity entry" do
-          update_risk_assessment
+          result
 
           expect(risk_assessment.investigation.activities.where(type: AuditActivity::RiskAssessment::RiskAssessmentUpdated.to_s)).to eq []
         end
 
         it "does not send any case updated emails" do
-          expect { update_risk_assessment }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
+          expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
         end
       end
 
@@ -115,7 +115,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
 
         it "updates the risk assessment", :aggregate_failures do
-          update_risk_assessment
+          result
 
           expect(risk_assessment.assessed_on).to eq(Date.parse("2020-01-02"))
           expect(risk_assessment.risk_level).to eq("serious")
@@ -126,14 +126,14 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         end
 
         it "updates the products associated with the risk assessment" do
-          update_risk_assessment
+          result
 
           expect(risk_assessment.products).to eq([product2])
         end
 
         # rubocop:disable RSpec/ExampleLength
         it "creates an activity entry" do
-          update_risk_assessment
+          result
 
           expect(activity_entry.metadata).to eql({
             "risk_assessment_id" => risk_assessment.id,
@@ -150,22 +150,22 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_
         end
         # rubocop:enable RSpec/ExampleLength
 
-        it "sends a notification email to the case owner" do
-          expect { update_risk_assessment }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
-            risk_assessment.investigation.pretty_id,
-            investigation.owner_user.name,
-            investigation.owner_user.email,
-            "User 2 (Team 2) edited a risk assessment on the allegation.",
-            "Risk assessment edited for Allegation"
-          ]))
+        def expected_email_subject
+          "Risk assessment edited for Allegation"
         end
+
+        def expected_email_body(name)
+          "#{name} edited a risk assessment on the allegation."
+        end
+
+        it_behaves_like "a service which notifies the case owner"
       end
 
       context "when only the file has changed" do
         let(:product_ids) { [product1.id] }
         let(:risk_assessment_file) { Rack::Test::UploadedFile.new("test/fixtures/files/new_risk_assessment.txt") }
 
-        before { update_risk_assessment }
+        before { result }
 
         it "creates an activity entry" do
           expect(activity_entry.metadata).to eql({

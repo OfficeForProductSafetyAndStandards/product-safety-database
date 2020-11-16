@@ -1,7 +1,7 @@
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
-Sidekiq::Web.set :session_secret, Rails.application.credentials[:secret_key_base]
+Sidekiq::Web.set :session_secret, Rails.application.secret_key_base
 
 if Rails.env.production?
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
@@ -147,8 +147,8 @@ Rails.application.routes.draw do
     resources :corrective_actions, controller: "investigations/record_corrective_actions", only: %i[show new create update]
 
     resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
-    resources :emails, controller: "investigations/record_emails", only: %i[new create]
-    resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create], path: "phone-calls"
+    resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
+    resources :phone_calls, controller: "investigations/record_phone_calls", only: %i[new create edit update], path: "phone-calls"
     resources :alerts, controller: "investigations/alerts", only: %i[show new create update]
 
     resources :test_results, controller: "investigations/test_results", only: %i[new show edit update create], path: "test-results" do

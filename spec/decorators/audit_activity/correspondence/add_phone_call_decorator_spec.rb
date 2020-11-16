@@ -3,16 +3,17 @@ require "rails_helper"
 RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include_context "with phone call correspondence setup"
 
-  subject(:decorated_activity) { correspondence.activity.decorate }
+  subject(:decorated_activity) { activity.decorate }
 
   let!(:correspondence) { AddPhoneCallToCase.call!(params.merge(investigation: investigation, user: user)).correspondence }
   let(:reporting_user)  { user }
   let(:viewing_user)    { create(:user) }
+  let(:activity) { correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall") }
 
   describe "#phone_call_by" do
     it {
       expect(decorated_activity.phone_call_by(viewing_user))
-        .to eq("Phone call by #{correspondence.activity.source.show(viewing_user)}, #{correspondence.activity.created_at.to_s(:govuk)}")
+        .to eq("Phone call by #{activity.source.show(viewing_user)}, #{activity.created_at.to_s(:govuk)}")
     }
   end
 

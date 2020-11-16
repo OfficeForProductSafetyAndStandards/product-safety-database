@@ -21,6 +21,7 @@ class RiskAssessmentForm
 
   attribute :old_file
   attribute :risk_assessment_file
+  attribute :existing_risk_assessment_file_file_id
 
   attribute :details
 
@@ -44,6 +45,24 @@ class RiskAssessmentForm
             not_in_future: true
 
   validate :assessed_on_cannot_be_older_than_1970
+
+  def cache_file!
+    return if risk_assessment_file.blank?
+
+    self.risk_assessment_file = ActiveStorage::Blob.create_after_upload!(
+      io: risk_assessment_file,
+      filename: risk_assessment_file.original_filename,
+      content_type: risk_assessment_file.content_type
+    )
+
+    self.existing_risk_assessment_file_file_id = risk_assessment_file.signed_id
+  end
+
+  def load_risk_assessment_file
+    if existing_risk_assessment_file_file_id.present? && risk_assessment_file.nil?
+      self.risk_assessment_file = ActiveStorage::Blob.find_signed(existing_risk_assessment_file_file_id)
+    end
+  end
 
   def risk_levels
     {

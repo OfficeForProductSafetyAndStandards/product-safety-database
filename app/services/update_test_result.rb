@@ -1,7 +1,9 @@
 class UpdateTestResult
   include Interactor
+  include EntitiesToNotify
 
-  delegate :test_result, :user, :new_attributes, :new_file, :new_file_description, to: :context
+  delegate :test_result, :user, :new_attributes, :new_file, :new_file_description, :investigation, to: :context
+  delegate :investigation, to: :test_result
 
   def call
     context.fail!(error: "No test result supplied") unless test_result.is_a?(Test::Result)
@@ -85,13 +87,11 @@ private
   end
 
   def send_notification_email
-    context.activity.entities_to_notify.each do |recipient|
-      email = recipient.is_a?(Team) ? recipient.team_recipient_email : recipient.email
-
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         test_result.investigation.pretty_id,
         recipient.name,
-        email,
+        recipient.email,
         "#{context.activity.source.show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later

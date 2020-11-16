@@ -174,7 +174,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
   end
 
   describe "#categories" do
-    let(:product_category) { Faker::Hipster.word }
+    let(:product_category) { Faker::Hipster.unique.word }
 
     before do
       investigation.product_category = product_category
@@ -185,8 +185,8 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     end
 
     context "with products" do
-      let(:product_one) { create(:product, category: Faker::Hipster.word) }
-      let(:product_two) { create(:product, category: Faker::Hipster.word) }
+      let(:product_one) { create(:product, category: Faker::Hipster.unique.word) }
+      let(:product_two) { create(:product, category: Faker::Hipster.unique.word) }
 
       before do
         investigation.products << product_one << product_two
@@ -206,29 +206,6 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
         end
 
         specify { expect(investigation.categories).to eq([product_category, product_two.category]) }
-      end
-    end
-  end
-
-  describe "#past_owners" do
-    context "when there is a previous owner" do
-      let(:past_owner) { create(:team) }
-
-      before do
-        AuditActivity::Investigation::UpdateOwner.create!(
-          investigation: investigation,
-          metadata: { "owner_id" => past_owner.id }
-        )
-      end
-
-      it "returns the previous owner" do
-        expect(investigation.past_owners).to eq [past_owner]
-      end
-    end
-
-    context "when there are no previous owners" do
-      it "returns an empty list" do
-        expect(investigation.past_owners).to eq []
       end
     end
   end

@@ -19,7 +19,8 @@ module Investigations::EnquiryHelper
   def other_type(form)
     render "form_components/govuk_input",
            key: :other_received_type,
+           value: params.dig(:enquiry, :other_received_type),
            form: form,
-           label: { text: "" }
+           label: { text: "Other received type", classes: "govuk-visually-hidden" }
   end
 end

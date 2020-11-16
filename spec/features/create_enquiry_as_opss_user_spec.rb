@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:date) { Faker::Date.backward(days: 14) }
   let(:received_type) { "enquiry_received_type_email" }
+  let(:other_received_type) { Faker::Hipster.word }
   let(:contact_details) do
     {
       contact_name: Faker::Name.name,
@@ -15,6 +16,13 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       enquiry_description: Faker::Lorem.paragraph,
       enquiry_title: Faker::Name.name,
       file: Rails.root + "test/fixtures/files/testImage.png",
+    }
+  end
+  let(:blank_enquiry_details) do
+    {
+      enquiry_description: nil,
+      enquiry_title: nil,
+      file: nil,
     }
   end
 
@@ -41,6 +49,10 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       click_button "Continue"
 
       expect_to_be_on_about_enquiry_page
+
+      check_invalid_date
+      check_the_other_received_type_field_has_retained_its_value
+
       fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
       click_button "Continue"
 
@@ -52,6 +64,9 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
       enter_contact_details(**contact_details)
 
       expect_to_be_on_enquiry_details_page
+
+      check_cannot_be_blank_errors
+
       fill_in_new_enquiry_details(with: enquiry_details)
       click_button "Create enquiry"
 
@@ -106,8 +121,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_about_enquiry_page
 
         fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
-
-        expect(page).to have_summary_error("Date received must be today or in the past")
+        expect(page).to have_summary_error("Date enquiry received must be today or in the past")
       end
     end
 
@@ -186,11 +200,14 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     click_button "Continue"
   end
 
-  def fill_in_when_and_how_was_it_received(received_type:, day:, month:, year:)
+  def fill_in_when_and_how_was_it_received(received_type:, day:, month:, year:, other_received_type: nil)
     fill_in "Day", with: day
     fill_in "Month", with: month
     fill_in "Year", with: year
     choose received_type
+    if received_type == "Other"
+      fill_in "Other received type", with: other_received_type
+    end
     click_button "Continue"
   end
 
@@ -198,5 +215,25 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "enquiry_description", with: with[:enquiry_description]
     fill_in "enquiry_user_title", with: with[:enquiry_title]
     attach_file "enquiry_attachment_file", with[:file]
+  end
+
+  def check_invalid_date
+    fill_in_when_and_how_was_it_received(received_type: "Other", day: "", month: "", year: date.year, other_received_type: other_received_type)
+    expect(page).to have_error_messages
+    expect(page).to have_error_summary "Date enquiry received must include a day and month"
+  end
+
+  def check_cannot_be_blank_errors
+    fill_in_new_enquiry_details(with: blank_enquiry_details)
+    click_button "Create enquiry"
+
+    expect(page).to have_error_messages
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Description cannot be blank"
+    expect(errors_list[1].text).to eq "User title cannot be blank"
+  end
+
+  def check_the_other_received_type_field_has_retained_its_value
+    expect(page).to have_field("Other received type", with: other_received_type)
   end
 end

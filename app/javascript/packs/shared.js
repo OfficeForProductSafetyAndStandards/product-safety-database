@@ -1,4 +1,7 @@
 // JS
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
 import Rails from 'rails-ujs'
 import GOVUKFrontend from 'govuk-frontend'
 

@@ -2,7 +2,7 @@
 applications:
 - name: ((app-name))
   buildpacks:
-    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.26
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.27
   path: .
   stack: cflinuxfs3
   routes:
@@ -20,10 +20,10 @@ applications:
     - psd-health-env
     - psd-notify-env
     - psd-pghero-env
-    - psd-queue
+    - psd-queue-5
     - psd-rails-env
     - psd-sentry-env
-    - psd-session
+    - psd-session-5
     - psd-sidekiq-env
     - psd-two-factor-auth-env
     - psd-web-scout-env

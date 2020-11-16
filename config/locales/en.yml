@@ -59,6 +59,11 @@ en:
   delete_team:
     change_case_owner_rationale: "%{team} was merged into %{new_team} by %{user}. %{team} previously owned this case."
     add_remove_team_message: "%{team} was merged into %{new_team} by %{user}. %{team} previously had access to this case."
+  change_case_coronavirus_status:
+    email_subject_text: "Coronavirus status updated on %{case_type}"
+    email_update_text:
+      false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
+      true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -150,10 +155,6 @@ en:
     investigation:
       coronavirus_related: Case is related to the coronavirus outbreak.
       update_coronavirus_status:
-        email_subject_text: "Coronavirus status updated on %{case_type}"
-        email_update_text:
-          false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
-          true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
         title:
           true: "Status updated: coronavirus related"
           false: "Status updated: not coronavirus related"
@@ -241,6 +242,16 @@ en:
   activemodel:
     errors:
       models:
+        product_form:
+          attributes:
+            authenticity:
+              inclusion: "You must state whether the product is a counterfeit"
+            product_category:
+              blank: "Enter a valid product category"
+            gtin13:
+              invalid: "Enter a valid barcode number"
+              wrong_length: "Enter a valid barcode number"
+
         risk_assessment_form:
           attributes:
             assessed_on:
@@ -336,6 +347,10 @@ en:
               must_be_real: Date sent must be a real date
               incomplete: Date sent must include a %{missing_date_parts}
               in_future: Date sent must be today or in the past
+            email_file:
+              blank: Select a replacement file
+            email_attachment:
+              blank: Select a replacement email attachment file
         phone_call_correspondence_form:
           attributes:
             correspondence_date:
@@ -350,6 +365,14 @@ en:
       collaboration/access/read_only: "readonly"
     errors:
       models:
+        investigation/enquiry:
+          attributes:
+            date_received:
+              blank: Enter the date the enquiry was received
+              must_be_real: Date enquiry received must be a real date
+              incomplete: Date enquiry received must include a %{missing_date_parts}
+              in_future: Date enquiry received must be today or in the past
+
         test:
           attributes:
             product:
@@ -410,13 +433,6 @@ en:
             custom_risk_level:
               present: "Custom risk level must be blank when risk level is not 'other'"
               blank: "Custom risk level must be present when risk level is 'other'"
-        product:
-          attributes:
-            product_category:
-              blank: "Enter a valid product category"
-            gtin13:
-              invalid: "Enter a valid barcode number"
-              wrong_length: "Enter a valid barcode number"
         user:
           attributes:
             mobile_number:
@@ -439,6 +455,12 @@ en:
           permanent: "Permanently"
           temporary: "Temporarily"
           unknown: "Unknown"
+  product:
+    counterfeit: "Counterfeit"
+    genuine: "Genuine"
+    unsure: "Unsure"
+    missing: "Not provided"
+
   corrective_action:
     attributes:
       actions:
@@ -455,6 +477,7 @@ en:
   coronavirus_related_form:
     inclusion: "Select whether or not the case is related to the coronavirus outbreak"
   enter_email_address: "Enter your email address"
+  file_added: "File has been added to the %{type}"
   otp_code:
     blank: "Enter the security code"
     too_short: "You haven’t entered enough numbers"
