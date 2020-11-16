@@ -68,27 +68,7 @@ assessed_by_radio_items.push(text: "Someone else", value: :other, conditional: {
   <% end %>
 <% end %>
 
-<% if form.object.old_file.present? %>
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Upload the risk assessment</legend>
-    <p id="current-attachment-details">
-      Currently selected file:
-      <%= link_to form.object.old_file.filename, form.object.old_file.blob, target: "_blank", rel: 'noopener' %>
-    </p>
-
-    <%= govukDetails(summaryText: "Replace this file") do %>
-      <%= form.govuk_file_upload :risk_assessment_file,
-        label: "Select file",
-        label_classes: "govuk-label--s"
-      %>
-    <% end %>
-  </fieldset>
-<% else %>
-  <%= form.govuk_file_upload :risk_assessment_file,
-    label: "Upload the risk assessment",
-    label_classes: "govuk-label--m"
-  %>
-<% end %>
+<%= render "upload_file_component", form: form, old_file: form.object.old_file, field_name: :risk_assessment_file, legend: "Upload the risk assessment", label: "Upload the risk assessment" %>
 
 <%= form.govuk_text_area :details,
    label: "Further details (optional)"

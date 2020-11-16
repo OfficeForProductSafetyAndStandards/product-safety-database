@@ -15,9 +15,12 @@ module Investigations
 
       authorize @investigation, :update?
 
-      @risk_assessment_form = RiskAssessmentForm.new(current_user: current_user, investigation: @investigation)
+      @risk_assessment_form = RiskAssessmentForm.new(
+        risk_assessment_params.merge(current_user: current_user, investigation: @investigation)
+      )
 
-      @risk_assessment_form.attributes = risk_assessment_params
+      @risk_assessment_form.cache_file!
+      @risk_assessment_form.load_risk_assessment_file
 
       if @risk_assessment_form.valid?
 
@@ -54,26 +57,16 @@ module Investigations
 
       @risk_assessment = @investigation.risk_assessments.find(params[:id])
 
-      assessed_by = if @risk_assessment.assessed_by_team == current_user.team
-                      "my_team"
-                    elsif @risk_assessment.assessed_by_team
-                      "another_team"
-                    elsif @risk_assessment.assessed_by_business
-                      "business"
-                    else
-                      "other"
-                    end
-
       @risk_assessment_form = RiskAssessmentForm.new(
-        @risk_assessment.attributes.symbolize_keys.slice(
-          :assessed_on, :risk_level, :custom_risk_level, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :details
-        ).merge({
+        @risk_assessment.serializable_hash(
+          only: %i[assessed_on risk_level custom_risk_level assessed_by_team_id assessed_by_business_id assessed_by_other details]
+        ).merge(
           current_user: current_user,
           investigation: @investigation,
           assessed_by: assessed_by,
           product_ids: @risk_assessment.product_ids,
-          old_file: @risk_assessment.risk_assessment_file
-        })
+          old_file: @risk_assessment.risk_assessment_file_blob
+        )
       )
 
       @risk_assessment = @risk_assessment.decorate
@@ -90,7 +83,7 @@ module Investigations
       @risk_assessment_form = RiskAssessmentForm.new(
         current_user: current_user,
         investigation: @investigation,
-        old_file: @risk_assessment.risk_assessment_file
+        old_file: @risk_assessment.risk_assessment_file_blob
       )
 
       @risk_assessment_form.attributes = risk_assessment_params
@@ -119,7 +112,31 @@ module Investigations
   private
 
     def risk_assessment_params
-      params.require(:risk_assessment_form).permit(:details, :risk_level, :risk_assessment_file, :assessed_by, :assessed_by_team_id, :assessed_by_business_id, :assessed_by_other, :custom_risk_level, assessed_on: %i[day month year], product_ids: [])
+      params.require(:risk_assessment_form).permit(
+        :details,
+        :risk_level,
+        :risk_assessment_file,
+        :assessed_by,
+        :assessed_by_team_id,
+        :assessed_by_business_id,
+        :assessed_by_other,
+        :custom_risk_level,
+        :existing_risk_assessment_file_file_id,
+        assessed_on: %i[day month year],
+        product_ids: []
+      )
+    end
+
+    def assessed_by
+      if @risk_assessment.assessed_by_team == current_user.team
+        "my_team"
+      elsif @risk_assessment.assessed_by_team
+        "another_team"
+      elsif @risk_assessment.assessed_by_business
+        "business"
+      else
+        "other"
+      end
     end
   end
 end
