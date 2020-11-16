@@ -7,7 +7,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     create(:product,
            name: "MyBrand washing machine",
            category: "Electrical appliances and equipment",
-           product_type: "washing machine",
+           subcategory: "washing machine",
            product_code: "MBWM01",
            batch_number: "Batches 0001 to 0231",
            webpage: "http://example.com/mybrand/washing-machines",

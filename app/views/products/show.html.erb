@@ -9,8 +9,8 @@
     <span class="govuk-caption-l">Product</span>
     <h1 class="govuk-heading-l"><%= @product.name %></h1>
 
-    <% if @product.product_type_and_category_label.present? %>
-      <p class="govuk-body-l"><%= @product.product_type_and_category_label %></p>
+    <% if @product.subcategory_and_category_label.present? %>
+      <p class="govuk-body-l"><%= @product.subcategory_and_category_label %></p>
     <% end %>
 
     <p class="govuk-caption-m">

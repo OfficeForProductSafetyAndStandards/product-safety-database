@@ -15,7 +15,7 @@ class ProductForm
   attribute :gtin13
   attribute :name
   attribute :product_code
-  attribute :product_type
+  attribute :subcategory
   attribute :webpage
   attribute :created_at, :datetime
 
@@ -27,7 +27,7 @@ class ProductForm
   validates :gtin13, allow_nil: true, length: { is: 13 }, gtin: true
   validates :authenticity, inclusion: { in: Product.authenticities.keys }
   validates :category, presence: true
-  validates :product_type, presence: true
+  validates :subcategory, presence: true
   validates :name, presence: true
   validates :description, length: { maximum: 10_000 }
 

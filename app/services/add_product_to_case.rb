@@ -10,7 +10,7 @@ class AddProductToCase
            :gtin13,
            :name,
            :product_code,
-           :product_type,
+           :subcategory,
            :webpage,
            :investigation,
            :category,
@@ -32,7 +32,7 @@ class AddProductToCase
         gtin13: gtin13,
         name: name,
         product_code: product_code,
-        product_type: product_type,
+        subcategory: subcategory,
         category: category,
         webpage: webpage,
         source: build_user_source

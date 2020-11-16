@@ -22,14 +22,14 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Category cannot be blank"
-    expect(errors_list[1].text).to eq "Product type cannot be blank"
+    expect(errors_list[1].text).to eq "Subcategory type cannot be blank"
     expect(errors_list[2].text).to eq "You must state whether the product is a counterfeit"
     expect(errors_list[3].text).to eq "Name cannot be blank"
     expect(errors_list[4].text).to eq "Enter a valid barcode number"
 
     select attributes[:category], from: "Product category"
 
-    fill_in "Product type",                      with: attributes[:product_type]
+    fill_in "Product type",                      with: attributes[:subcategory]
     fill_in "Product brand",                     with: attributes[:brand]
     fill_in "Product name",                      with: attributes[:name]
     fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:gtin13]
@@ -53,7 +53,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_summary_item(key: "Product brand",             value: attributes[:brand])
     expect(page).to have_summary_item(key: "Product name",              value: attributes[:name])
     expect(page).to have_summary_item(key: "Category",                  value: attributes[:category])
-    expect(page).to have_summary_item(key: "Product type",              value: attributes[:product_type])
+    expect(page).to have_summary_item(key: "Product type",              value: attributes[:subcategory])
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(attributes[:authenticity], scope: Product.model_name.i18n_key))
     expect(page).to have_summary_item(key: "Barcode number",            value: attributes[:gin13])
     expect(page).to have_summary_item(key: "Other product identifiers", value: attributes[:product_code])

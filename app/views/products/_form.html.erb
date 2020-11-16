@@ -17,12 +17,12 @@
   hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" } %>
 
 <%= render "form_components/govuk_input",
-  key: :product_type,
+  key: :subcategory,
   form: form,
-  id: "product_type",
+  id: "subcategory",
   classes: "app-!-max-width-one-half",
   label: { text: "Product type", classes: label_class },
-  hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
+  hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" } %>
 
 <%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
 
