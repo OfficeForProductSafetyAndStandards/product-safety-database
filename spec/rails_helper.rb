@@ -11,6 +11,8 @@ if ENV["CI"]
   end
   SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
 
+end
+unless ENV["COVERAGE"] == "false"
   SimpleCov.start "rails" do
     enable_coverage :branch
   end
