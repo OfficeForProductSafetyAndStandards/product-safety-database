@@ -30,7 +30,7 @@
   key: :brand,
   form: form,
   classes: "app-!-max-width-one-half",
-  label: { text: "Product brand", classes: label_class },
+  label: { text: "Product brand (if branded)", classes: label_class },
   hint: { text: "For example, ‘Dyson’ or ‘Sony’" } %>
 
 
@@ -40,7 +40,7 @@
   classes: "app-!-max-width-three-quarters",
   label: { text: "Product name", classes: label_class },
   id: "name",
-  hint: { text: "Include model name and model number, for example ‘Playstation 5’. If you suspect the product is counterfeit, add ‘Counterfeit’ before the name, for example ‘Counterfeit Playstion 5’." } %>
+  hint: { text: "Include model name and model number, for example ‘Playstation 5’." } %>
 
 <%= render "form_components/govuk_input",
   key: :gtin13,
