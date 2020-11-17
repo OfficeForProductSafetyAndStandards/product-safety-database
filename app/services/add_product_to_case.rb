@@ -22,11 +22,13 @@ class AddProductToCase
            :number_of_affected_units,
            :exact_units,
            :approx_units,
+           :when_placed_on_market,
            to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+    when_placed_on_market = context.when_placed_on_market
 
     Product.transaction do
       context.product = investigation.products.create!(
@@ -45,13 +47,15 @@ class AddProductToCase
         webpage: webpage,
         source: build_user_source,
         affected_units_status: affected_units_status,
-        number_of_affected_units: number_of_affected_units
+        number_of_affected_units: number_of_affected_units,
+        when_placed_on_market: when_placed_on_market
       )
 
       context.activity = create_audit_activity_for_product_added
 
       send_notification_email
     end
+
   end
 
 private

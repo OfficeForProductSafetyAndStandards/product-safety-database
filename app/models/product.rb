@@ -23,6 +23,12 @@ class Product < ApplicationRecord
     "markings_unknown" => "markings_unknown"
   }
 
+  enum when_placed_on_market: {
+    "before_2021" => "before_2021",
+    "on_or_after_2021" => "on_or_after_2021",
+    "unknown" => "unknown"
+  }
+
   MARKINGS = %w[UKCA UKNI CE].freeze
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")

@@ -42,6 +42,10 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     fill_in "Batch number",                      with: attributes[:batch_number]
     fill_in "Webpage",                           with: attributes[:webpage]
 
+    within_fieldset("Was the product placed on the market before 1 January 2021?") do
+      choose when_placed_on_market_answer(attributes[:when_placed_on_market])
+    end
+
     within_fieldset("Is the product counterfeit?") do
       choose counterfeit_answer(attributes[:authenticity])
     end
@@ -87,6 +91,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_summary_item(key: "Webpage",                   value: attributes[:webpage])
     expect(page).to have_summary_item(key: "Country of origin",         value: attributes[:country])
     expect(page).to have_summary_item(key: "Description",               value: attributes[:description])
+    expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key))
   end
 
   scenario "Not being able to add a product to another team’s case" do

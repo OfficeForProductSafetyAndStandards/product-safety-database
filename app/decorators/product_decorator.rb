@@ -21,7 +21,8 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Webpage" }, value: { text: object.webpage } },
       { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } }
+      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
+      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } }
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
@@ -31,8 +32,12 @@ class ProductDecorator < ApplicationDecorator
     I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key)
   end
 
-  def subcategory_and_category_label
-    product_and_category = [subcategory.presence, category.presence].compact
+  def when_placed_on_market
+    I18n.t(object.when_placed_on_market || :missing, scope: Product.model_name.i18n_key)
+  end
+
+  def product_type_and_category_label
+    product_and_category = [product_type.presence, category.presence].compact
 
     if product_and_category.length > 1
       "#{product_and_category.first} (#{product_and_category.last.downcase})"

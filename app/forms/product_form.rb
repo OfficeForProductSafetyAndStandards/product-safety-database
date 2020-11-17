@@ -25,6 +25,7 @@ class ProductForm
 
   attr_accessor :approx_units
   attr_accessor :exact_units
+  attribute :when_placed_on_market
 
   before_validation { trim_line_endings(:description) }
   before_validation { convert_gtin_to_13_digits(:gtin13) }
@@ -39,6 +40,7 @@ class ProductForm
   validates :affected_units_status, inclusion: { in: Product.affected_units_statuses.keys }
   validates :approx_units, presence: true, if: -> { affected_units_status == "approx" }
   validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
+  validates :when_placed_on_market, presence: true
   validates :description, length: { maximum: 10_000 }
 
   validates :has_markings, inclusion: { in: Product.has_markings.keys }
