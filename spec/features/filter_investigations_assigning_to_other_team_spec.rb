@@ -32,7 +32,7 @@ RSpec.feature "Filtering cases", :with_elasticsearch, :with_stubbed_mailer, type
         it "does not show the newly created case assigned to another team" do
           ap opss_user.team.name
           ap ts_user.team.name
-          byebug
+          # byebug
           expect(page).not_to have_listed_case(investigation)
         end
       end
