@@ -4,6 +4,7 @@
            scope: :corrective_action,
            other_text: "Are there other actions to report?",
            hide_break: false,
+           error_order: %i[action date_decided legislation measure_type duration geographic_scope related_file further_corrective_action],
            further_key: :further_corrective_action do |form| %>
 
   <%= render "investigations/record_corrective_actions/form",
