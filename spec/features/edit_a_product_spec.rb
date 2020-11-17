@@ -19,7 +19,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_brand)             { Faker::Hipster.word }
   let(:new_description)       { Faker::Hipster.sentence }
   let(:new_product_category)  { (Rails.application.config.product_constants["product_category"] - [product.category]).sample }
-  let(:new_subcategory)      { Faker::Hipster.word }
+  let(:new_subcategory) { Faker::Hipster.word }
   let(:new_gtin13)            { Faker::Barcode.ean(13) }
   let(:new_authenticity)      { (Product.authenticities.keys - [product.authenticity]).sample }
   let(:new_batch_number)      { Faker::Number.number(digits: 10) }
@@ -77,8 +77,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     click_on "Save product"
 
-    expect(page).to have_summary_item(key: "Category",                  value: new_product_category)
-    expect(page).to have_summary_item(key: "Product sub-category",              value: new_subcategory)
+    expect(page).to have_summary_item(key: "Category", value: new_product_category)
+    expect(page).to have_summary_item(key: "Product sub-category", value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
     expect(page).to have_summary_item(key: "Product name",              value: new_name)

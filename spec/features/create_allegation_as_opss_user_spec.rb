@@ -141,7 +141,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
-    fill_in "Product sub-category",               with: type
+    fill_in "Product sub-category", with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
     fill_in "Product name",               with: name
     fill_in "Other product identifiers",  with: barcode

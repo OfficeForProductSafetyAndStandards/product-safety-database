@@ -448,7 +448,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_product_page(with:)
     select with[:category],                      from: "Product category"
     select with[:country_of_origin],             from: "Country of origin" if with[:country_of_origin]
-    fill_in "Product sub-category",                      with: with[:type]
+    fill_in "Product sub-category", with: with[:type]
 
     within_fieldset("Is the product counterfeit?") do
       choose with[:authenticity]
