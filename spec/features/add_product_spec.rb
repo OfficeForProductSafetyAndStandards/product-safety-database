@@ -22,7 +22,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Category cannot be blank"
-    expect(errors_list[1].text).to eq "Subcategory type cannot be blank"
+    expect(errors_list[1].text).to eq "Subcategory cannot be blank"
     expect(errors_list[2].text).to eq "You must state whether the product is a counterfeit"
     expect(errors_list[3].text).to eq "Name cannot be blank"
     expect(errors_list[4].text).to eq "Enter a valid barcode number"
