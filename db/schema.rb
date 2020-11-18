@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_10_124109) do
+ActiveRecord::Schema.define(version: 2020_11_16_115921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -228,7 +228,7 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
     t.string "gtin13", limit: 13
     t.string "name"
     t.string "product_code"
-    t.string "product_type"
+    t.string "subcategory"
     t.datetime "updated_at", null: false
     t.string "webpage"
   end

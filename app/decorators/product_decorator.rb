@@ -10,7 +10,7 @@ class ProductDecorator < ApplicationDecorator
   def summary_list
     rows = [
       { key: { text: "Category" }, value: { text: category } },
-      { key: { text: "Product type" }, value: { text: product_type } },
+      { key: { text: "Product sub-category" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
@@ -29,8 +29,8 @@ class ProductDecorator < ApplicationDecorator
     I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key)
   end
 
-  def product_type_and_category_label
-    product_and_category = [product_type.presence, category.presence].compact
+  def subcategory_and_category_label
+    product_and_category = [subcategory.presence, category.presence].compact
 
     if product_and_category.length > 1
       "#{product_and_category.first} (#{product_and_category.last.downcase})"

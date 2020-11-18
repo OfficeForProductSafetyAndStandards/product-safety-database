@@ -66,7 +66,7 @@ if run_seeds
     product_code: "NO.DY807",
     name: "Pretty",
     category: "Toys",
-    product_type: "Plastic doll",
+    subcategory: "Plastic doll",
     webpage: ""
   )
 
@@ -114,7 +114,7 @@ if run_seeds
     product_code: "Unknown",
     name: "Crazy Geezer's Putty World",
     category: "Toys",
-    product_type: "Putty",
+    subcategory: "Putty",
     webpage: "www.amazon.com"
   )
 
@@ -126,7 +126,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Cuts",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -149,8 +149,8 @@ if run_seeds
     description: "",
     product_code: "Unknown",
     name: "RXF 36 and RXF 34 Air Mountain Bike Front Forks",
-    category: "Other Product Type",
-    product_type: "Bike Suspension Fork",
+    category: "Other Product sub-category",
+    subcategory: "Bike Suspension Fork",
     webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791"
   )
 
@@ -166,7 +166,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Chemical",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -189,8 +189,8 @@ if run_seeds
     description: "",
     product_code: "749266006615",
     name: "Fogbuster Lens Cleaner",
-    category: "Other Product Type",
-    product_type: "Swim goggles lens cleaner",
+    category: "Other Product sub-category",
+    subcategory: "Swim goggles lens cleaner",
     webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/"
   )
 
@@ -204,7 +204,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Fire",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -230,7 +230,7 @@ if run_seeds
     product_code: "8719202753615",
     name: "H&S Collection: Let it snow",
     category: Rails.application.config.product_constants["product_category"].sample,
-    product_type: "Tree shaped candle",
+    subcategory: "Tree shaped candle",
     webpage: "https://www2.hm.com/en_gb/index.html"
   )
 
@@ -268,7 +268,7 @@ if run_seeds
     product_code: "",
     name: "Funny Musical Instrument Set",
     category: Rails.application.config.product_constants["product_category"].sample,
-    product_type: "Musical toy",
+    subcategory: "Musical toy",
     webpage: ""
   )
 
@@ -313,7 +313,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Fire",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -337,7 +337,7 @@ if run_seeds
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
     name: "Lynx Shower speaker with USB charger",
     category: Rails.application.config.product_constants["product_category"].sample,
-    product_type: "Shower speaker with USB charger",
+    subcategory: "Shower speaker with USB charger",
     webpage: ""
   )
 
@@ -378,7 +378,7 @@ if run_seeds
     product_code: "PN 2124531316474, TJ-65-195334",
     name: "Batterytec Battery charger",
     category: "Small electronics",
-    product_type: "Replacement AC/DC adaptor",
+    subcategory: "Replacement AC/DC adaptor",
     webpage: ""
   )
 
@@ -427,7 +427,7 @@ if run_seeds
     product_code: "",
     name: "Creaciones Gavidia Babies' clothing set",
     category: "Clothing (including baby)",
-    product_type: "Babies' clothing set",
+    subcategory: "Babies' clothing set",
     webpage: ""
   )
   product.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
