@@ -44,7 +44,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_product_code)      { Faker::Barcode.issn }
   let(:new_webpage)           { Faker::Internet.url }
   let(:new_country_of_origin) { "South Korea" }
-  let(:new_when_placed_on_market)  { (Product.when_placed_on_markets.keys - [product.when_placed_on_market]).sample }
+  let(:new_when_placed_on_market) { (Product.when_placed_on_markets.keys - [product.when_placed_on_market]).sample }
 
   before { sign_in user }
 

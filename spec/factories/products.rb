@@ -11,7 +11,7 @@ FactoryBot.define do
     affected_units_status { "unknown" }
     has_markings { Product.has_markings.keys.sample }
     markings { [Product::MARKINGS.sample] }
-    when_placed_on_market { 'before_2021' }
+    when_placed_on_market { "before_2021" }
 
     factory :product_iphone do
       product_code { 234 }
