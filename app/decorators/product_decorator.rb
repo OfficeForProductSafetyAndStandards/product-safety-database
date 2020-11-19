@@ -36,8 +36,8 @@ class ProductDecorator < ApplicationDecorator
     I18n.t(object.when_placed_on_market || :missing, scope: Product.model_name.i18n_key)
   end
 
-  def product_type_and_category_label
-    product_and_category = [product_type.presence, category.presence].compact
+  def subcategory_and_category_label
+    product_and_category = [subcategory.presence, category.presence].compact
 
     if product_and_category.length > 1
       "#{product_and_category.first} (#{product_and_category.last.downcase})"
