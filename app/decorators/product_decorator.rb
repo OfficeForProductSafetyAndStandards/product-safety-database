@@ -9,6 +9,7 @@ class ProductDecorator < ApplicationDecorator
 
   def summary_list
     rows = [
+      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
@@ -21,8 +22,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Webpage" }, value: { text: object.webpage } },
       { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
-      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } }
+      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } }
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
