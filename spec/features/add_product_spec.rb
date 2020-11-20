@@ -31,6 +31,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(errors_list[4].text).to eq "You must state how many units are affected"
     expect(errors_list[5].text).to eq "Name cannot be blank"
     expect(errors_list[6].text).to eq "Enter a valid barcode number"
+    expect(errors_list[7].text).to eq "Select yes if the product was placed on the market before 1 January 2021"
 
     select attributes[:category], from: "Product category"
 
