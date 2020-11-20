@@ -359,6 +359,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Test result details")
   end
 
+  def expect_to_be_on_product_image_page
+    expect(page).to have_current_path("/ts_investigation/product_images")
+    expect(page).to have_selector("h1", text: "Upload a product image")
+  end
+
   # Product pages
   def expect_to_be_on_remove_attachment_from_product_confirmation_page
     expect(page).to have_current_path("/products/#{product.id}/documents/#{document.id}/remove")

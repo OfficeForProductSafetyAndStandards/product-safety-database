@@ -107,6 +107,20 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         }
       end
       let(:coronavirus) { false }
+      let(:product_images) do
+        image = lambda {
+          {
+            file: Rails.root + "test/fixtures/files/testImage.png",
+            title: Faker::Lorem.sentence,
+            description: Faker::Lorem.paragraph
+          }
+        }
+
+        [
+          image.call,
+          image.call
+        ]
+      end
 
       scenario "not coronavirus-related" do
         visit new_ts_investigation_path
@@ -187,6 +201,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         risk_assessments.each do |assessment|
           fill_in_risk_assessment_details_page(with: assessment)
           expect_to_be_on_risk_assessment_details_page
+        end
+
+        skip_page
+
+        expect_to_be_on_product_image_page
+
+        # trigger validation to verify errors are handled correctly
+        click_on "Continue"
+
+        product_images.each do |product_image|
+          fill_in_product_image_page(with: product_image)
+          expect_to_be_on_product_image_page
         end
 
         skip_page
@@ -544,6 +570,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_other_information_page(test_results: true, risk_assessments: true)
     check "Test results" if test_results
     check "Risk assessments" if risk_assessments
+    check "Product images" if product_images
     click_button "Continue"
   end
 
@@ -591,6 +618,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     attach_file "Upload the risk assessment", with[:file]
 
     within_fieldset("Are there other risk assessments to report?") do
+      choose "Yes"
+    end
+
+    click_button "Continue"
+  end
+
+  def fill_in_product_image_page(with:)
+    attach_file "Upload a file", with[:file]
+    fill_in "Title", with: with[:title]
+    fill_in "Description", with: with[:description]
+
+    within_fieldset("Are there other product images to report?") do
       choose "Yes"
     end
 
