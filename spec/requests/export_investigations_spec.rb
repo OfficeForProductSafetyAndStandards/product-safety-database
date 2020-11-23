@@ -135,6 +135,53 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
           expect(exported_data.cell(3, 11)).to eq user.name
         end
       end
+
+      it "exports created_at and updated_at" do
+        investigation = create(:allegation)
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 20)).to eq "Created_At"
+          expect(exported_data.cell(1, 21)).to eq "Updated_At"
+          expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+          expect(exported_data.cell(2, 20)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(2, 21)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+        end
+      end
+
+      context 'when investigation has close investigation activity' do
+        it "exports closing date in date_closed column" do
+          investigation = create(:allegation)
+          investigation.activities.create(title: "Allegation closed", type: AuditActivity::Investigation::UpdateStatus)
+
+          Investigation.import refresh: true, force: true
+
+          get investigations_path format: :xlsx
+
+          aggregate_failures do
+            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 22)).to eq investigation.closing_activity.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          end
+        end
+      end
+
+      context 'when investigation does not have a close investigation activity' do
+        it "exports nil in date_closed column" do
+          investigation = create(:allegation)
+
+          Investigation.import refresh: true, force: true
+
+          get investigations_path format: :xlsx
+
+          aggregate_failures do
+            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 22)).to eq nil
+          end
+        end
+      end
     end
   end
   # rubocop:enable RSpec/ExampleLength

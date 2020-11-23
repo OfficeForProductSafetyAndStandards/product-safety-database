@@ -17,5 +17,9 @@ class Investigation < ApplicationRecord
     def case_created_audit_activity_class
       AuditActivity::Investigation::AddAllegation
     end
+
+    def closing_activity
+      activities.where(title: "Allegation closed").last
+    end
   end
 end
