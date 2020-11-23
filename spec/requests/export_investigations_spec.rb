@@ -152,10 +152,10 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
-      context 'when investigation has close investigation activity' do
+      context "when investigation has close investigation activity" do
         it "exports closing date in date_closed column" do
           investigation = create(:allegation)
-          investigation.activities.create(title: "Allegation closed", type: AuditActivity::Investigation::UpdateStatus)
+          investigation.activities.create!(title: "Allegation closed", type: AuditActivity::Investigation::UpdateStatus)
 
           Investigation.import refresh: true, force: true
 
@@ -168,9 +168,9 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
-      context 'when investigation does not have a close investigation activity' do
+      context "when investigation does not have a close investigation activity" do
         it "exports nil in date_closed column" do
-          investigation = create(:allegation)
+          create(:allegation)
 
           Investigation.import refresh: true, force: true
 
