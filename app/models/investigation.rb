@@ -178,6 +178,10 @@ class Investigation < ApplicationRecord
     end
   end
 
+  def closing_activity
+    activities.where(type: "AuditActivity::Investigation::UpdateStatus").last if is_closed?
+  end
+
 private
 
   def create_audit_activity_for_status

@@ -146,7 +146,6 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         aggregate_failures do
           expect(exported_data.cell(1, 20)).to eq "Created_At"
           expect(exported_data.cell(1, 21)).to eq "Updated_At"
-          expect(exported_data.cell(1, 22)).to eq "Date_Closed"
           expect(exported_data.cell(2, 20)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
           expect(exported_data.cell(2, 21)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
         end
@@ -155,12 +154,11 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       context "when investigation has close investigation activity" do
         context "when investigation is an allegation" do
           it "exports closing date in date_closed column" do
-            investigation = create(:allegation)
+            investigation = create(:allegation, is_closed: true)
             investigation.activities.create!(title: "Allegation closed", type: AuditActivity::Investigation::UpdateStatus)
 
             Investigation.import refresh: true, force: true
-
-            get investigations_path format: :xlsx
+            get investigations_path, params: { status_closed: "checked", status_open: "checked", format: :xlsx }
 
             aggregate_failures do
               expect(exported_data.cell(1, 22)).to eq "Date_Closed"
@@ -171,12 +169,12 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
         context "when investigation is a project" do
           it "exports closing date in date_closed column" do
-            investigation = create(:project)
+            investigation = create(:project, is_closed: true)
             investigation.activities.create!(title: "Project closed", type: AuditActivity::Investigation::UpdateStatus)
 
             Investigation.import refresh: true, force: true
 
-            get investigations_path format: :xlsx
+            get investigations_path, params: { status_closed: "checked", status_open: "checked", format: :xlsx }
 
             aggregate_failures do
               expect(exported_data.cell(1, 22)).to eq "Date_Closed"
@@ -187,12 +185,12 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
         context "when investigation is an enquiry" do
           it "exports closing date in date_closed column" do
-            investigation = create(:enquiry)
+            investigation = create(:enquiry, is_closed: true)
             investigation.activities.create!(title: "Enquiry closed", type: AuditActivity::Investigation::UpdateStatus)
 
             Investigation.import refresh: true, force: true
 
-            get investigations_path format: :xlsx
+            get investigations_path, params: { status_closed: "checked", status_open: "checked", format: :xlsx }
 
             aggregate_failures do
               expect(exported_data.cell(1, 22)).to eq "Date_Closed"
@@ -208,7 +206,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           Investigation.import refresh: true, force: true
 
-          get investigations_path format: :xlsx
+          get investigations_path, params: { status_closed: "checked", status_open: "checked", format: :xlsx }
 
           aggregate_failures do
             expect(exported_data.cell(1, 22)).to eq "Date_Closed"
