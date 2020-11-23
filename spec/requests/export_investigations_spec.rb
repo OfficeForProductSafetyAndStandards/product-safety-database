@@ -153,17 +153,51 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       context "when investigation has close investigation activity" do
-        it "exports closing date in date_closed column" do
-          investigation = create(:allegation)
-          investigation.activities.create!(title: "Allegation closed", type: AuditActivity::Investigation::UpdateStatus)
+        context "when investigation is an allegation" do
+          it "exports closing date in date_closed column" do
+            investigation = create(:allegation)
+            investigation.activities.create!(title: "Allegation closed", type: AuditActivity::Investigation::UpdateStatus)
 
-          Investigation.import refresh: true, force: true
+            Investigation.import refresh: true, force: true
 
-          get investigations_path format: :xlsx
+            get investigations_path format: :xlsx
 
-          aggregate_failures do
-            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 22)).to eq investigation.closing_activity.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+            aggregate_failures do
+              expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+              expect(exported_data.cell(2, 22)).to eq investigation.closing_activity.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+            end
+          end
+        end
+
+        context "when investigation is a project" do
+          it "exports closing date in date_closed column" do
+            investigation = create(:project)
+            investigation.activities.create!(title: "Project closed", type: AuditActivity::Investigation::UpdateStatus)
+
+            Investigation.import refresh: true, force: true
+
+            get investigations_path format: :xlsx
+
+            aggregate_failures do
+              expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+              expect(exported_data.cell(2, 22)).to eq investigation.closing_activity.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+            end
+          end
+        end
+
+        context "when investigation is an enquiry" do
+          it "exports closing date in date_closed column" do
+            investigation = create(:enquiry)
+            investigation.activities.create!(title: "Enquiry closed", type: AuditActivity::Investigation::UpdateStatus)
+
+            Investigation.import refresh: true, force: true
+
+            get investigations_path format: :xlsx
+
+            aggregate_failures do
+              expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+              expect(exported_data.cell(2, 22)).to eq investigation.closing_activity.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+            end
           end
         end
       end
