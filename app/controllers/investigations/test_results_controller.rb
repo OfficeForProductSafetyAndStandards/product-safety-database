@@ -103,6 +103,7 @@ private
   end
 
   def build_test_result_from_params
+    @test_result_form = TestResultForm.new(test_params)
     test_result = @investigation.test_results.build(test_params)
     test_result.set_dates_from_params(params[:test_result])
     test_result
