@@ -46,6 +46,7 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
                 investigation: { is_closed: "false", status_rationale: "Test" }
               }
       end
+
       it "updates the investigation and redirects to the investigation page" do
         aggregate_failures do
           expect(investigation.reload.is_closed).to be false
