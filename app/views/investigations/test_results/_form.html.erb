@@ -16,51 +16,48 @@
         <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
       <%= render "form_components/govuk_select",
-        key: :product_id,
-        form: form,
-        show_all_values: true,
-        items: investigation.products.map { |product| { text: product.name, value: product.id } },
-        is_autocomplete: true,
-        hint: { html: span_html },
-        label: { text: "Which product was tested?", classes: "govuk-label--m" }
+                 key: :product_id,
+                 form: form,
+                 show_all_values: true,
+                 items: investigation.products.map { |product| { text: product.name, value: product.id } },
+                 is_autocomplete: true,
+                 hint: { html: span_html },
+                 label: { text: "Which product was tested?", classes: "govuk-label--m" }
       %>
     <% end %>
   </div>
 <% end %>
 
 <%= render "form_components/govuk_select",
-  key: :legislation,
-  form: form,
-  choices: relevant_legislation,
-  show_all_values: true,
-  is_autocomplete: true,
-  hint: { text: "Select the relevant legislation from the list." },
-  label: { text: "Against which legislation?", classes: "govuk-label--m" } %>
+           key: :legislation,
+           form: form,
+           choices: relevant_legislation,
+           show_all_values: true,
+           is_autocomplete: true,
+           hint: { text: "Select the relevant legislation from the list." },
+           label: { text: "Against which legislation?", classes: "govuk-label--m" } %>
 
 <%= form.govuk_input :standard_product_was_tested_against, hint: "For example, EN71. Use comma to separate multiple standards.", label: "Which standard was the product tested against?" %>
 
-<%= render "form_components/govuk_date_input",
-  form: form,
-  key: :date,
-  fieldset: { legend: { classes: "govuk-fieldset__legend--m",
-  text: "Date of test" } },
-  hint: { text: "For example, 12 7 2019" } %>
+<%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
 <%= render "form_components/govuk_radios",
-  form: form,
-  key: :result,
-  fieldset: { legend: { text: "What was the result?", classes: "govuk-fieldset__legend--m" } },
-  items: Test::Result.results.map { |result, label| { text: label, value: result } }
+           form: form,
+           key: :result,
+           fieldset: { legend: { text: "What was the result?", classes: "govuk-fieldset__legend--m" } },
+           items: Test::Result.results.map { |result, label| { text: label, value: result } }
 %>
 
 <%= render "form_components/govuk_textarea",
-  key: :details,
-  form: form,
-  attributes: { maxlength: 50_000 },
-  label: { text: "Further details", classes: "govuk-label--m" } %>
+           key: :details,
+           form: form,
+           attributes: { maxlength: 50_000 },
+           label: { text: "Further details", classes: "govuk-label--m" } %>
 
 <%= render "related_attachment_fields",
-  form: form,
-  file_blob: @file_blob,
-  attachment_name: :test_result_file,
-  title: "Test report attachment" %>
+           form: form,
+           file_blob: @file_blob,
+           attachment_name: :document,
+           title: "Test report attachment",
+           multiple: true
+%>
