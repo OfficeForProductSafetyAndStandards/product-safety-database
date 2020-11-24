@@ -274,7 +274,7 @@ GEM
     pastel (0.8.0)
       tty-color (~> 0.5)
     pg (1.2.3)
-    pghero (2.7.2)
+    pghero (2.7.3)
       activerecord (>= 5)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -523,7 +523,7 @@ GEM
       pastel (~> 0.8)
       strings (~> 0.2.0)
       tty-screen (~> 0.8)
-    tzinfo (1.2.7)
+    tzinfo (1.2.8)
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
