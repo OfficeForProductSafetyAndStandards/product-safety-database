@@ -135,6 +135,51 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
           expect(exported_data.cell(3, 11)).to eq user.name
         end
       end
+
+      it "exports created_at and updated_at" do
+        investigation = create(:allegation)
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 20)).to eq "Date_Created"
+          expect(exported_data.cell(1, 21)).to eq "Last_Updated"
+          expect(exported_data.cell(2, 20)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(2, 21)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+        end
+      end
+
+      context "when investigation is open" do
+        it 'date_closed column is empty' do
+          investigation = create(:allegation)
+
+          Investigation.import refresh: true, force: true
+
+          get investigations_path format: :xlsx
+
+          aggregate_failures do
+            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 22)).to eq nil
+          end
+        end
+      end
+
+      context "when investigation is closed" do
+        it 'date_closed column is empty' do
+          investigation = create(:allegation, is_closed: true, date_closed: Date.yesterday)
+
+          Investigation.import refresh: true, force: true
+
+          get investigations_path, params: { status_closed: "checked", format: :xlsx }
+
+          aggregate_failures do
+            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 22)).to eq Date.yesterday.strftime("%Y-%m-%d %H:%M:%S %z")
+          end
+        end
+      end
     end
   end
   # rubocop:enable RSpec/ExampleLength
