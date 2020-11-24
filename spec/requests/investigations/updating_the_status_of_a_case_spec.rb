@@ -30,12 +30,10 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
     end
 
     context "when status is changed to closed" do
-      it "updates the investigation and redirects to the investigation page" do
-        aggregate_failures do
-          expect(investigation.reload.is_closed).to be true
-          expect(investigation.date_closed).not_to be nil
-          expect(response).to redirect_to(investigation_path(investigation))
-        end
+      it "updates the investigation and redirects to the investigation page", :aggregate_failures do
+        expect(investigation.reload.is_closed).to be true
+        expect(investigation.date_closed).not_to be nil
+        expect(response).to redirect_to(investigation_path(investigation))
       end
     end
 
@@ -47,12 +45,10 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
               }
       end
 
-      it "updates the investigation and redirects to the investigation page" do
-        aggregate_failures do
-          expect(investigation.reload.is_closed).to be false
-          expect(investigation.date_closed).to be nil
-          expect(response).to redirect_to(investigation_path(investigation))
-        end
+      it "updates the investigation and redirects to the investigation page", :aggregate_failures do
+        expect(investigation.reload.is_closed).to be false
+        expect(investigation.date_closed).to be nil
+        expect(response).to redirect_to(investigation_path(investigation))
       end
     end
   end

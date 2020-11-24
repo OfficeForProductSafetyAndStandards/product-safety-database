@@ -152,8 +152,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       context "when investigation is open" do
-        it 'date_closed column is empty' do
-          investigation = create(:allegation)
+        it "date_closed column is empty" do
+          create(:allegation)
 
           Investigation.import refresh: true, force: true
 
@@ -167,8 +167,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       context "when investigation is closed" do
-        it 'date_closed column is empty' do
-          investigation = create(:allegation, is_closed: true, date_closed: Date.yesterday)
+        it "date_closed column is empty" do
+          create(:allegation, is_closed: true, date_closed: Date.yesterday)
 
           Investigation.import refresh: true, force: true
 
