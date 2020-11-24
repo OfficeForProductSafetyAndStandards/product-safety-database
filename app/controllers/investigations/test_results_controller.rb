@@ -1,20 +1,16 @@
 class Investigations::TestResultsController < ApplicationController
-  include FileConcern
-  set_attachment_names :test_result_file
-  set_file_params_key :test_result
-
   def new
     @investigation = investigation_from_params
     authorize @investigation, :update?
-    @test_result = build_test_result_from_params
-    attach_file_from_params
+    @test_result_form = build_test_result_from_params
   end
 
   def create_draft
     @investigation = investigation_from_params
     authorize @investigation, :update?
-    @test_result = build_test_result_from_params
-    attach_file_from_params
+    @test_result_form = build_test_result_from_params
+    @test_result_form.cache_files!
+    @test_result_form.load_documents_files
 
     session[test_result_session_key] = @test_result.attributes
     update_attachment
@@ -103,10 +99,7 @@ private
   end
 
   def build_test_result_from_params
-    @test_result_form = TestResultForm.new(test_params)
-    test_result = @investigation.test_results.build(test_params)
-    test_result.set_dates_from_params(params[:test_result])
-    test_result
+    TestResultForm.new(test_params)
   end
 
   def test_params
