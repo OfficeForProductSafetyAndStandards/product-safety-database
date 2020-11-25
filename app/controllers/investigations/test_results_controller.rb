@@ -39,7 +39,7 @@ class Investigations::TestResultsController < ApplicationController
   def edit
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :update?
-    @test_result_form = investigation.test_results.find(params[:id])
+    @test_result_form = TestResultForm.from(investigation.test_results.find(params[:id]))
     @investigation = investigation.decorate
   end
 

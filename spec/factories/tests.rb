@@ -6,11 +6,12 @@ FactoryBot.define do
     product
     investigation { create(:allegation) }
 
-    documents { [Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")] }
+    document { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
   end
 
   factory :test_result, class: "Test::Result", parent: :test do
     result { Test::Result.results[:passed] }
+    standards_product_was_tested_against { [] }
   end
 
   factory :test_request, class: "Test::Request", parent: :test do

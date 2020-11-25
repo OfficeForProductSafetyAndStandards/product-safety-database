@@ -4,6 +4,7 @@ class TestResultForm
   include ActiveModel::Serialization
   include SanitizationHelper
 
+  attribute :id
   attribute :date, :govuk_date
   attribute :details
   attribute :legislation
@@ -22,6 +23,16 @@ class TestResultForm
             real_date: true,
             complete_date: true,
             not_in_future: true
+
+  ATTRIBUTES_FROM_TEST_RESULT = %i[
+    id date details legislation result standards_product_was_tested_against product_id
+  ].freeze
+
+  def self.from(test_result)
+    new(test_result.serializable_hash(only: ATTRIBUTES_FROM_TEST_RESULT)).tap do |test_result_form|
+      test_result_form.existing_document_file_id = test_result.document.signed_id
+    end
+  end
 
   def initialize(*args)
     super

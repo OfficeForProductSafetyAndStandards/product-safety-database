@@ -17,6 +17,20 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
 
   before { investigation }
 
+  describe ".from", :with_stubbed_antivirus do
+    let(:test_result) { create(:test_result) }
+    let(:expected_attributes) do
+      test_result
+        .serializable_hash(only: described_class::ATTRIBUTES_FROM_TEST_RESULT)
+        .merge(existing_document_file_id: test_result.document.signed_id)
+    end
+
+    it "serialises the active record object to a form correctly", :aggregate_failures do
+      form = described_class.from(test_result)
+      expect(form).to have_attributes(expected_attributes)
+    end
+  end
+
   describe "validations" do
     it { is_expected.to validate_length_of(:details).is_at_most(50_000) }
     it { is_expected.to validate_inclusion_of(:legislation).in_array(Rails.application.config.legislation_constants["legislation"]).with_message("Select the legislation that relates to this test") }
