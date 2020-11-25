@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_160042) do
+ActiveRecord::Schema.define(version: 2020_11_25_171036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   # These are custom enum types that must be created before they can be used in the schema definition
+  create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
@@ -219,7 +220,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_160042) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
-    t.string "affected_units_status"
+    t.enum "affected_units_status", as: "affected_units_statuses"
     t.enum "authenticity", as: "authenticities"
     t.string "batch_number"
     t.text "brand"
