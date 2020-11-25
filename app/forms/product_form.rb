@@ -18,6 +18,8 @@ class ProductForm
   attribute :subcategory
   attribute :webpage
   attribute :created_at, :datetime
+  attribute :affected_units_status
+  attribute :number_of_affected_units
 
   before_validation { trim_line_endings(:description) }
   before_validation { convert_gtin_to_13_digits(:gtin13) }
