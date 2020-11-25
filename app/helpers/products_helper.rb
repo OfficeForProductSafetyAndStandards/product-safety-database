@@ -57,8 +57,8 @@ module ProductsHelper
 
   def items_for_affected_units(product_form, form)
     items = [
-      { text: "Exact number known",       value: "exact", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?", label_classes: "govuk-visually-hidden") } },
-      { text: "Approximate number known", value: "approx", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?", label_classes: "govuk-visually-hidden") } },
+      { text: "Exact number known",       value: "exact", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?") } },
+      { text: "Approximate number known", value: "approx", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?") } },
       { text: "Unknown",                  value: "unknown" },
       { text: "Not relevant",             value: "not_relevant" }
     ]

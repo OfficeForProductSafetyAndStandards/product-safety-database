@@ -31,7 +31,7 @@ class ProductForm
   validates :category, presence: true
   validates :subcategory, presence: true
   validates :name, presence: true
-  validates :affected_units_status, presence: true
+  validates :affected_units_status, inclusion: { in: Product.affected_units_statuses.keys }
   validates :number_of_affected_units, presence: true, if: -> { affected_units_status == "approx" || affected_units_status == "exact" }
   validates :description, length: { maximum: 10_000 }
 
