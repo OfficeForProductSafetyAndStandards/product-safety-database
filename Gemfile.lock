@@ -179,7 +179,7 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
-    faker (2.14.0)
+    faker (2.15.1)
       i18n (>= 1.6, < 2)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
@@ -578,7 +578,7 @@ DEPENDENCIES
   elasticsearch-model (~> 7.1)
   elasticsearch-rails (~> 7.1)
   factory_bot_rails (~> 6.1)
-  faker (~> 2.14)
+  faker (~> 2.15)
   govuk-design-system-rails!
   govuk_notify_rails (~> 2.1)
   interactor (~> 3.1)
