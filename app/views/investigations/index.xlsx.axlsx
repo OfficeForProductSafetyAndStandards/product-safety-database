@@ -3,7 +3,8 @@ book = xlsx_package.workbook
 book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
   sheet_investigations.add_row %w[ID Status Title Type Description Product_Category Hazard_Type Coronavirus_Related
                                   Risk_Level Case_Owner_Team Case_Owner_User Source Complainant_Type
-                                  Products Businesses Activities Correspondences Corrective_Actions Tests]
+                                  Products Businesses Activities Correspondences Corrective_Actions Tests
+                                  Date_Created Last_Updated Date_Closed]
   @investigations.each do |investigation|
     complainant = investigation.complainant
     sheet_investigations.add_row [
@@ -25,7 +26,10 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       @activity_counts[investigation.id] || 0,
       @correspondence_counts[investigation.id] || 0,
       @corrective_action_counts[investigation.id] || 0,
-      @test_counts[investigation.id] || 0
+      @test_counts[investigation.id] || 0,
+      investigation.created_at,
+      investigation.updated_at,
+      investigation.date_closed
     ], types: :text
   end
 end
