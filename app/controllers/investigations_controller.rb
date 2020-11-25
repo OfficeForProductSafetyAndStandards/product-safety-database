@@ -61,6 +61,7 @@ class InvestigationsController < ApplicationController
   # PATCH /cases/1/status
   def status
     authorize @investigation, :change_owner_or_status?
+    @investigation.date_closed = update_params[:is_closed] == "true" ? Date.current : nil
     update!
   end
 

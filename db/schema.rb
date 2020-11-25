@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_16_115921) do
+ActiveRecord::Schema.define(version: 2020_11_24_121612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 2020_11_16_115921) do
     t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
     t.string "custom_risk_level"
+    t.datetime "date_closed"
     t.date "date_received"
     t.text "description"
     t.text "hazard_description"
