@@ -1,5 +1,6 @@
 class ProductDecorator < ApplicationDecorator
   include FormattedDescription
+  include ActionView::Helpers::TextHelper
   delegate_all
   decorates_association :investigations
 
@@ -43,9 +44,9 @@ class ProductDecorator < ApplicationDecorator
   def units_affected
     case object.affected_units_status
     when "exact"
-      "#{object.affected_units_status} units"
+      pluralize(object.number_of_affected_units, 'unit')
     when "approx"
-      "#{object.number_of_affected_units} units approximately"
+      pluralize(object.number_of_affected_units, 'unit') + " approximately"
     when "unknown"
       "Unknown"
     when "not_relevant"

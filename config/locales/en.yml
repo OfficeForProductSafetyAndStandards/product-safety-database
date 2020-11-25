@@ -251,6 +251,10 @@ en:
             gtin13:
               invalid: "Enter a valid barcode number"
               wrong_length: "Enter a valid barcode number"
+            affected_units_status:
+              blank: "You must state how many units are affected"
+            number_of_affected_units:
+              blank: "Give the number of units affected"
 
         risk_assessment_form:
           attributes:
