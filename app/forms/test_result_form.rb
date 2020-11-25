@@ -2,15 +2,31 @@ class TestResultForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  include SanitizationHelper
 
   attribute :date, :govuk_date
   attribute :details
   attribute :legislation
   attribute :result
-  attribute :standard_product_was_tested_against, :comma_separated_list
+  attribute :standards_product_was_tested_against, :comma_separated_list
   attribute :product_id
   attribute :document, :file_field
   attribute :existing_document_file_id
+
+  validates :details, length: { maximum: 50_000 }
+  validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
+  validates :result, inclusion: { in: Test::Result.results.keys }
+  validates :document, presence: true
+  validates :date,
+            presence: true,
+            real_date: true,
+            complete_date: true,
+            not_in_future: true
+
+  def initialize(*args)
+    super
+    trim_line_endings(:details)
+  end
 
   def cache_file!
     return if document.blank?

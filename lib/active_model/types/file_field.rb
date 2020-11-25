@@ -3,6 +3,7 @@ module ActiveModel
     class FileField < ActiveRecord::Type::Value
       def cast(value)
         return value if value.is_a?(ActiveStorage::Blob)
+        return nil if value.nil?
         return nil unless value.key?(:file)
 
         ::FileField.new(value)

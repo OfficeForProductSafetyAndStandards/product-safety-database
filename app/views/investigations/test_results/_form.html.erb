@@ -37,7 +37,7 @@
            hint: { text: "Select the relevant legislation from the list." },
            label: { text: "Against which legislation?", classes: "govuk-label--m" } %>
 
-<%= form.govuk_input :standard_product_was_tested_against, hint: "For example, EN71. Use comma to separate multiple standards.", label: "Which standard was the product tested against?" %>
+<%= form.govuk_input :standards_product_was_tested_against, hint: "For example, EN71. Use comma to separate multiple standards.", label: "Which standard was the product tested against?" %>
 
 <%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
@@ -58,6 +58,5 @@
            form: form,
            file_blob: @file_blob,
            attachment_name: :document,
-           title: "Test report attachment",
-           multiple: true
+           title: "Test report attachment"
 %>

@@ -242,6 +242,18 @@ en:
   activemodel:
     errors:
       models:
+        test_result_form:
+          attributes:
+            legislation:
+              inclusion: "Select the legislation that relates to this test"
+            result:
+              inclusion: "Select result of the test"
+            document:
+              blank: "Provide the test results file"
+            date:
+              blank: "Enter date of the test"
+              invalid: "Enter a real date of the test"
+              date_missing_component: "Enter date of the test and include a %{missing_components}"
         product_form:
           attributes:
             authenticity:
@@ -383,12 +395,6 @@ en:
           attributes:
             product:
               required: "Select the product which was tested"
-        test/result:
-          attributes:
-            date:
-              blank: "Enter date of the test"
-              invalid: "Enter a real date of the test"
-              date_missing_component: "Enter date of the test and include a %{missing_components}"
         test/request:
           attributes:
             date:

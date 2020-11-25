@@ -1,19 +1,32 @@
 require "rails_helper"
 
-RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer, type: :model do
   subject(:form) { described_class.new(params) }
 
   let(:document) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
   let(:document_description) { Faker::Hipster.sentence }
+  let(:date) { { day: "1", month: "1", year: "2020" } }
   let(:params) do
-    attributes_for(:test_result).except(:documents).tap do |attributes|
+    attributes_for(:test_result).except(:documents, :date).tap do |attributes|
       attributes[:document] = { file: document, description: document_description }
+      attributes[:date] = date
     end
   end
 
   let(:investigation) { params.delete(:investigation) }
 
   before { investigation }
+
+  describe "validations" do
+    it { is_expected.to validate_length_of(:details).is_at_most(50_000) }
+    it { is_expected.to validate_inclusion_of(:legislation).in_array(Rails.application.config.legislation_constants["legislation"]).with_message("Select the legislation that relates to this test") }
+    it { is_expected.to validate_inclusion_of(:result).in_array(Test::Result.results.keys).with_message("Select result of the test") }
+    it { is_expected.to validate_presence_of(:document).with_message("Provide the test results file") }
+
+    it_behaves_like "it does not allow dates in the future", :date
+    it_behaves_like "it does not allow malformed dates", :date
+    it_behaves_like "it does not allow an incomplete", :date
+  end
 
   describe "#cache_files" do
     it "chaches the documents files" do

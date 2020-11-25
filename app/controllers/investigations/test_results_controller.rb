@@ -13,49 +13,34 @@ class Investigations::TestResultsController < ApplicationController
     @test_result_form.cache_file!
     @test_result_form.load_document_file
 
+    @investigation = investigation.decorate
     return render :new if @test_result_form.invalid?
 
-    result = AddTestResultToInvestigation.call(@test_result_form.serializable_hash.merge(investigation: investigation, user: current_user))
+    service_attributes = @test_result_form
+                           .serializable_hash
+                           .merge(investigation: investigation, user: current_user)
+
+    result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
       redirect_to investigation_test_result_path(investigation, result.test_result)
     else
-      @investigation = investigation.decorate
       render :new
     end
   end
 
-  # def create
-  #   @investigation = investigation_from_params
-  #   authorize @investigation, :update?
-  #   @test_result = build_test_result_from_params
-  #   attach_file_from_params
-
-  #   update_attachment
-  #   if test_result_saved?
-  #     session[test_result_session_key] = nil
-  #     initialize_file_attachments
-
-  #     redirect_to investigation_supporting_information_index_path(@investigation),
-  #                 flash: {
-  #                   success: "#{@test_result.pretty_name.capitalize} was successfully recorded."
-  #                 }
-  #   else
-  #     render :new
-  #   end
-  # end
-
   def show
-    @investigation = investigation_from_params
-    authorize @investigation, :view_non_protected_details?
-    @test_result = @investigation.test_results.find(params[:id]).decorate
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :view_non_protected_details?
+    @test_result = investigation.test_results.find(params[:id]).decorate
+    @investigation = investigation.decorate
   end
 
   def edit
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
-    @test_result = @investigation.test_results.find(params[:id])
-    @file_blob = @test_result.documents.first.blob
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+    @test_result_form = investigation.test_results.find(params[:id])
+    @investigation = investigation.decorate
   end
 
   def update
@@ -91,10 +76,10 @@ private
       :legislation,
       :product_id,
       :result,
-      :standard_product_was_tested_against,
+      :standards_product_was_tested_against,
       :test_result_file,
       date: %i[day month year],
-      document: [:description, file: []]
+      document: %i[description file]
     )
   end
 end

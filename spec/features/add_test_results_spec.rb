@@ -26,7 +26,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect_to_be_on_record_test_result_page
       expect_test_result_form_to_be_blank
 
-      click_button "Continue"
+      click_button "Add test result"
 
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Select the legislation that relates to this test"
@@ -37,9 +37,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file)
 
-      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
-
-      click_on "Edit details"
+      click_on "Edit test result"
 
       expect_to_be_on_record_test_result_page
 
@@ -95,8 +93,10 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       attach_file file
       fill_in "Attachment description", with: "test result file"
     end
-    click_button "Continue"
-    expect(page).to have_css("h1", text: "Confirm test result details")
+
+    click_button "Add test result"
+
+    expect(page).to have_css("h1", text: "#{test_result.titleize}ed test: #{product.name}")
   end
 
   def expect_test_result_form_to_be_blank
@@ -126,14 +126,5 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     within_fieldset "Test report attachment" do
       expect(page).to have_field("Attachment description", with: "\r\ntest result file")
     end
-  end
-
-  def expect_test_result_confirmation_page_to_show_entered_data(legislation:, date:, test_result:)
-    expect(page).to have_css("h1", text: "Confirm test result details")
-    expect(page).to have_summary_table_item(key: "Legislation", value: legislation)
-    expect(page).to have_summary_table_item(key: "Test date", value: date.strftime("%d/%m/%Y"))
-    expect(page).to have_summary_table_item(key: "Test result", value: test_result)
-    expect(page).to have_summary_table_item(key: "Attachment", value: File.basename(file))
-    expect(page).to have_summary_table_item(key: "Attachment description", value: "test result file")
   end
 end

@@ -298,6 +298,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.string "legislation"
     t.integer "product_id"
     t.string "result"
+    t.string "standards_product_was_tested_against", array: true
     t.string "type"
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"

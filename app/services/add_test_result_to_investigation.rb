@@ -2,7 +2,7 @@ class AddTestResultToInvestigation
   include Interactor
   include EntitiesToNotify
 
-  delegate :user, :investigation, :document, :date, :details, :legislation, :result, :standard_product_was_tested_against, :product_id, to: :context
+  delegate :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -10,9 +10,9 @@ class AddTestResultToInvestigation
 
     Test::Result.transaction do
       context.test_result = investigation.test_results.create!(
-        date: date, details: details, legislation: legislation, result: result, standard_product_was_tested_against: standard_product_was_tested_against, product_id: product_id
+        date: date, details: details, legislation: legislation, result: result, standards_product_was_tested_against: standards_product_was_tested_against, product_id: product_id
       )
-      context.test_result.attach(documents)
+      context.test_result.document.attach(document.file)
       context.activity = create_audit_activity
     end
   end

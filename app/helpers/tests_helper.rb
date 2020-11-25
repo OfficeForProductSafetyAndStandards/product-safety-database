@@ -26,11 +26,8 @@ module TestsHelper
       }
     end
 
-    test_result.documents.each do |document|
-      attachment_description = document.blob.metadata["description"]
-
-      next if attachment_description.blank?
-
+    attachment_description = test_result.document.blob.metadata["description"]
+    if attachment_description.present?
       rows << {
         key: { text: "Attachment description" },
         value: { text: attachment_description }
