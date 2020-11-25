@@ -26,7 +26,7 @@
 
 <%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
 
-<%= form.govuk_radios :affected_units_status, legend: "Which standard was the product tested against?", items: items_for_affected_units(product_form, form) %>
+<%= form.govuk_radios :affected_units_status, legend: "Add 'how many units are affected?", items: items_for_affected_units(product_form, form) %>
 
 <%= render "form_components/govuk_input",
   key: :brand,
