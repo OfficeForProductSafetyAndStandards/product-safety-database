@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_24_121612) do
+ActiveRecord::Schema.define(version: 2020_11_25_160042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_121612) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
+    t.string "affected_units_status"
     t.enum "authenticity", as: "authenticities"
     t.string "batch_number"
     t.text "brand"
@@ -228,6 +229,7 @@ ActiveRecord::Schema.define(version: 2020_11_24_121612) do
     t.text "description"
     t.string "gtin13", limit: 13
     t.string "name"
+    t.integer "number_of_affected_units"
     t.string "product_code"
     t.string "subcategory"
     t.datetime "updated_at", null: false
