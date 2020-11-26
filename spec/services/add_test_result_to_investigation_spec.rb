@@ -1,8 +1,12 @@
 require "rails_helper"
 
-RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+  let(:team)                                 { create(:team) }
+  let(:read_only_teams)                      { [team] }
   let(:user)                                 { create(:user) }
-  let(:investigation)                        { create :allegation }
+  let(:creator)                              { user }
+  let(:owner)                                { user }
+  let!(:investigation)                       { create :allegation, creator: creator, owner_team: team, owner_user: nil }
   let(:file)                                 { ActiveStorage::Blob.create_after_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
   let(:file_description)                     { Faker::Hipster.sentence }
   let(:document)                             { instance_double(FileField, file: file, description: file_description) }
@@ -26,6 +30,14 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
     }
   end
 
+  def expected_email_body(user_name)
+    "Test result was added to the #{investigation.case_type} by #{user_name}."
+  end
+
+  def expected_email_subject
+    "#{investigation.case_type.upcase_first} updated"
+  end
+
   describe "when provided with a user and an investigation" do
     let(:command) { described_class.call(params) }
 
@@ -45,5 +57,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
       expect(audit.source.user).to eq(user)
       expect(audit.metadata["test_result_id"]).to eq(test_result.id)
     end
+
+    it_behaves_like "a service which notifies the case owner"
   end
 end

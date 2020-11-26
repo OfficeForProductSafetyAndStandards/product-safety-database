@@ -19,6 +19,7 @@ class AddTestResultToInvestigation
       )
       context.test_result.document.attach(document.file)
       create_audit_activity
+      email_recipients_for_case_owner
     end
   end
 
@@ -26,23 +27,26 @@ private
 
   def create_audit_activity
     AuditActivity::Test::Result.create!(
-      source: UserSource.new(user: user),
+      source: source,
       investigation: investigation,
       product: context.test_result.product,
       metadata: AuditActivity::Test::Result.build_metadata(context.test_result)
     )
   end
 
-  def notify_relevant_users
+  def email_recipients_for_case_owner
+    email_recipients_for_team_with_access.each do |entity|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        entity.name,
+        entity.email,
+        "Test result was added to the #{investigation.case_type} by #{source.show(entity)}.",
+        "#{investigation.case_type.upcase_first} updated"
+      ).deliver_later
+    end
+  end
 
-    # email_recipients_for_team_with_access.each do |recipient|
-    #   NotifyMailer.investigation_updated(
-    #     investigation.pretty_id,
-    #     entity.name,
-    #     entity.email,
-    #     email_update_text,
-    #     activity.email_subject_text
-    #   ).deliver_later
-    # end
+  def source
+    @source ||= UserSource.new(user: user)
   end
 end
