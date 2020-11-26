@@ -26,7 +26,8 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       webpage: Faker::Internet.url,
       country_of_origin: Country.all.sample.first,
       description: Faker::Lorem.sentence,
-      authenticity: Product.authenticities.keys.without("missing").sample
+      authenticity: Product.authenticities.keys.without("missing").sample,
+      affected_units_status: 'not_relevant'
     }
   end
 
@@ -138,11 +139,12 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
     fill_in "Product sub-category", with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
+    within_fieldset("How many units are affected?") { choose affected_units_status_answer(affected_units_status) }
     fill_in "Product name",               with: name
     fill_in "Other product identifiers",  with: barcode
     fill_in "Webpage",                    with: webpage
@@ -150,7 +152,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:)
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
     expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
@@ -159,6 +161,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
+    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "Not relevant")
   end
 
   def expect_details_on_summary_page

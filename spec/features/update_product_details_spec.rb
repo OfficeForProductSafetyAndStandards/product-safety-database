@@ -11,7 +11,8 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
            product_code: "MBWM01",
            batch_number: "Batches 0001 to 0231",
            webpage: "http://example.com/mybrand/washing-machines",
-           description: "White with chrome buttons")
+           description: "White with chrome buttons",
+           affected_units_status: 'not_relevant')
   end
 
   scenario "Updating a product" do
@@ -39,6 +40,9 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     fill_in "Batch number", with: "Batches 0005 to 1023"
     fill_in "Webpage", with: "http://example.com/mybrand/dishwashers"
     fill_in "Description of product", with: "White with chrome handle"
+    within_fieldset("How many units are affected?") do
+      choose 'Unknown'
+    end
 
     click_button "Save product"
 
@@ -53,5 +57,6 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     expect(page).to have_summary_item(key: "Batch number", value: "Batches 0005 to 1023")
     expect(page).to have_summary_item(key: "Webpage", value: "http://example.com/mybrand/dishwashers")
     expect(page).to have_summary_item(key: "Description", value: "White with chrome handle")
+    expect(page).to have_summary_item(key: "Units affected", value: "Unknown")
   end
 end
