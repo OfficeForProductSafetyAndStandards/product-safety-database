@@ -9,6 +9,38 @@ RSpec.describe ProductDecorator do
     specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
   end
 
+  describe "#units_affected" do
+    context "when affected_units_status is `exact`" do
+      it 'returns correct units affected string' do
+        product.affected_units_status = "exact"
+        product.number_of_affected_units = 12
+        expect(decorated_product.units_affected).to eq "12 units"
+      end
+    end
+
+    context "when affected_units_status is `approx`" do
+      it 'returns correct units affected string' do
+        product.affected_units_status = "approx"
+        product.number_of_affected_units = 12
+        expect(decorated_product.units_affected).to eq "12 units approximately"
+      end
+    end
+
+    context "when affected_units_status is `unknown`" do
+      it 'returns correct units affected string' do
+        product.affected_units_status = "unknown"
+        expect(decorated_product.units_affected).to eq "Unknown"
+      end
+    end
+
+    context "when affected_units_status is `not_relevant`" do
+      it 'returns correct units affected string' do
+        product.affected_units_status = "not_relevant"
+        expect(decorated_product.units_affected).to eq "Not relevant"
+      end
+    end
+  end
+
   describe "#summary_list" do
     include CountriesHelper
 
