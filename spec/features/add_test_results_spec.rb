@@ -37,17 +37,19 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       fill_in "Further details", with: "Test result includes certificate of conformity"
       fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file)
 
-      click_on "Edit test result"
+      # click_on "Edit test result"
 
-      expect_to_be_on_record_test_result_page
+      # save_and_open_page
 
-      expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
+      # expect_to_be_on_record_test_result_page
 
-      click_button "Continue"
+      # expect_test_result_form_to_show_input_data(legislation: legislation, date: date)
 
-      expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+      # click_button "Continue"
 
-      click_button "Continue"
+      # expect_test_result_confirmation_page_to_show_entered_data(legislation: legislation, date: date, test_result: "Passed")
+
+      # click_button "Continue"
 
       expect_confirmation_banner("Test result was successfully recorded.")
       expect_page_to_have_h1("Supporting information")
@@ -95,8 +97,6 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     end
 
     click_button "Add test result"
-
-    expect(page).to have_css("h1", text: "#{test_result.titleize}ed test: #{product.name}")
   end
 
   def expect_test_result_form_to_be_blank

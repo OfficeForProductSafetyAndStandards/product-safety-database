@@ -10,16 +10,31 @@ class AddTestResultToInvestigation
 
     Test::Result.transaction do
       context.test_result = investigation.test_results.create!(
-        date: date, details: details, legislation: legislation, result: result, standards_product_was_tested_against: standards_product_was_tested_against, product_id: product_id
+        date: date,
+        details: details,
+        legislation: legislation,
+        result: result,
+        standards_product_was_tested_against: standards_product_was_tested_against,
+        product_id: product_id
       )
       context.test_result.document.attach(document.file)
-      context.activity = create_audit_activity
+      create_audit_activity
     end
   end
 
 private
 
   def create_audit_activity
+    AuditActivity::Test::Result.create!(
+      source: UserSource.new(user: user),
+      investigation: investigation,
+      product: context.test_result.product,
+      metadata: AuditActivity::Test::Result.build_metadata(context.test_result)
+    )
+  end
+
+  def notify_relevant_users
+
     # email_recipients_for_team_with_access.each do |recipient|
     #   NotifyMailer.investigation_updated(
     #     investigation.pretty_id,

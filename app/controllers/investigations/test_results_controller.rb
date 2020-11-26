@@ -23,7 +23,8 @@ class Investigations::TestResultsController < ApplicationController
     result = AddTestResultToInvestigation.call(service_attributes)
 
     if result.success?
-      redirect_to investigation_test_result_path(investigation, result.test_result)
+      flash_message = "#{result.test_result.pretty_name.capitalize} was successfully recorded."
+      redirect_to investigation_supporting_information_index_path(investigation), flash: { success: flash_message }
     else
       render :new
     end
@@ -40,6 +41,7 @@ class Investigations::TestResultsController < ApplicationController
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :update?
     @test_result_form = TestResultForm.from(investigation.test_results.find(params[:id]))
+    @test_result_form.load_document_file
     @investigation = investigation.decorate
   end
 
