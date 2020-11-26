@@ -103,7 +103,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           webpage: Faker::Internet.url,
           country_of_origin: Country.all.sample.first,
           description: Faker::Lorem.sentence,
-          authenticity: "Yes"
+          authenticity: "Yes",
+          affected_units_status: "Unknown"
         }
       end
       let(:coronavirus) { false }
@@ -264,7 +265,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           name: Faker::Lorem.sentence,
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
-          authenticity: "Yes"
+          authenticity: "Yes",
+          affected_units_status: "Unknown"
         }
       end
 
@@ -481,6 +483,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     within_fieldset("Is the product counterfeit?") do
       choose with[:authenticity]
+    end
+
+    within_fieldset("How many units are affected?") do
+      choose with[:affected_units_status]
     end
 
     fill_in "Product name",                      with: with[:name]
