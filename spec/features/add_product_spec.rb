@@ -48,7 +48,8 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     within_fieldset("How many units are affected?") do
       choose affected_units_status_answer(attributes[:affected_units_status])
       if attributes[:affected_units_status] == "approx" || attributes[:affected_units_status] == "exact"
-        fill_in "How many units?", with: "10"
+        field = attributes[:affected_units_status] == "exact" ? all("#number_of_affected_units").first : all("#number_of_affected_units").last
+        field.set("10")
       end
     end
 

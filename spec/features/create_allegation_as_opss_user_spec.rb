@@ -92,7 +92,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       click_link "Products (1)"
 
-      expect_page_to_show_entered_product_details(**product_details)
+      expect_page_to_show_entered_product_details(**product_details.except(:affected_units_status))
 
       click_link "Activity"
       expect_details_on_activity_page(contact_details, allegation_details)
