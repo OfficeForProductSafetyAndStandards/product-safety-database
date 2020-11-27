@@ -23,7 +23,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_subcategory) { Faker::Hipster.word }
   let(:new_gtin13)            { Faker::Barcode.ean(13) }
   let(:new_authenticity)      { (Product.authenticities.keys - [product.authenticity]).sample }
-  let(:new_affected_units_status)      { "not_relevant" }
+  let(:new_affected_units_status) { "not_relevant" }
   let(:new_batch_number)      { Faker::Number.number(digits: 10) }
   let(:new_product_code)      { Faker::Barcode.issn }
   let(:new_webpage)           { Faker::Internet.url }

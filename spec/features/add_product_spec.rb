@@ -7,7 +7,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample,
                                     affected_units_status: Product.affected_units_statuses.keys.sample)
   end
-  let(:other_user)    { create(:user, :activated) }
+  let(:other_user) { create(:user, :activated) }
 
   before do
     ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
@@ -47,8 +47,8 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
 
     within_fieldset("How many units are affected?") do
       choose affected_units_status_answer(attributes[:affected_units_status])
-      if (attributes[:affected_units_status] == 'approx' || attributes[:affected_units_status] == 'exact')
-        fill_in "How many units?", with: '10'
+      if attributes[:affected_units_status] == "approx" || attributes[:affected_units_status] == "exact"
+        fill_in "How many units?", with: "10"
       end
     end
 

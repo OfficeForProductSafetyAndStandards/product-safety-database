@@ -60,8 +60,8 @@ module ProductsHelper
       { text: "Exact number known",       value: "exact", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?") } },
       { text: "Approximate number known", value: "approx", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?") } },
       { text: "Unknown",                  value: "unknown" },
-      { divider: 'or' },
-      { text: "Not relevant",             value: "not_relevant" }
+      { divider: "or" },
+      { text: "Not relevant", value: "not_relevant" }
     ]
 
     return items if product_form.affected_units_status.blank?

@@ -27,7 +27,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       country_of_origin: Country.all.sample.first,
       description: Faker::Lorem.sentence,
       authenticity: Product.authenticities.keys.without("missing").sample,
-      affected_units_status: 'not_relevant'
+      affected_units_status: "not_relevant"
     }
   end
 
@@ -152,7 +152,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
     expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))

@@ -44,9 +44,9 @@ class ProductDecorator < ApplicationDecorator
   def units_affected
     case object.affected_units_status
     when "exact"
-      pluralize(object.number_of_affected_units, 'unit')
+      pluralize(object.number_of_affected_units, "unit")
     when "approx"
-      pluralize(object.number_of_affected_units, 'unit') + " approximately"
+      pluralize(object.number_of_affected_units, "unit") + " approximately"
     when "unknown"
       "Unknown"
     when "not_relevant"

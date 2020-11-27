@@ -12,7 +12,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
            batch_number: "Batches 0001 to 0231",
            webpage: "http://example.com/mybrand/washing-machines",
            description: "White with chrome buttons",
-           affected_units_status: 'not_relevant')
+           affected_units_status: "not_relevant")
   end
 
   scenario "Updating a product" do
@@ -41,7 +41,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     fill_in "Webpage", with: "http://example.com/mybrand/dishwashers"
     fill_in "Description of product", with: "White with chrome handle"
     within_fieldset("How many units are affected?") do
-      choose 'Unknown'
+      choose "Unknown"
     end
 
     click_button "Save product"
