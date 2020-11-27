@@ -697,9 +697,12 @@ private
   end
 
   def save_product_files
+    # Obtain updated product state before attaching files to ensure changes are saved immediately
+    @product.reload
+
     session[:product_files].each do |file_blob_id|
       file_blob = ActiveStorage::Blob.find_by(id: file_blob_id)
-      attach_blobs_to_list(file_blob, @product.documents)
+      @product.documents.attach(file_blob)
     end
   end
 
