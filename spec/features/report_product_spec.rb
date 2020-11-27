@@ -234,7 +234,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         click_link "Products (1)"
 
         expect_to_be_on_case_products_page
-        expect_case_products_page_to_show(info: product_details)
+        expect_case_products_page_to_show(info: product_details, images: product_images)
 
         click_link "Businesses (2)"
 
@@ -350,7 +350,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         click_link "Products (1)"
 
         expect_to_be_on_case_products_page
-        expect_case_products_page_to_show(info: product_details)
+        expect_case_products_page_to_show(info: product_details, images: [])
 
         click_link "Activity"
 
@@ -385,16 +385,19 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Not a coronavirus related case")
   end
 
-  def expect_case_products_page_to_show(info:)
-    expect(page).to have_selector("h2", text: info[:name])
-    expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
-    expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
-    expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
-    expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: info[:type])
-    expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
-    expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
-    expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin]) if info[:country_of_origin]
-    expect(page.find("dt", text: "Description")).to have_sibling("dd", text: info[:description]) if info[:description]
+  def expect_case_products_page_to_show(info:, images:)
+    within page.find(".product-summary") do
+      expect(page).to have_selector("h2", text: info[:name])
+      expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
+      expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
+      expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
+      expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: info[:type])
+      expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
+      expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
+      expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin]) if info[:country_of_origin]
+      expect(page.find("dt", text: "Description")).to have_sibling("dd", text: info[:description]) if info[:description]
+      expect(page).to have_css("img[alt=\"#{images.first[:title]}\"]") unless images.empty?
+    end
   end
 
   def expect_case_businesses_page_to_show(label:, business:)
