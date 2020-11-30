@@ -128,7 +128,7 @@ private
   end
 
   def product
-    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash)
+    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash.except("exact_units", "approx_units"))
   end
 
   def set_investigation
@@ -304,7 +304,7 @@ private
   end
 
   def product_step_params
-    product_session_params.merge(product_request_params).symbolize_keys
+    product_session_params.merge(product_request_params).symbolize_keys.except(:exact_units, :approx_units)
   end
 
   def business_step_params
