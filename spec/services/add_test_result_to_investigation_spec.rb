@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:user)                                 { create(:user, :activated) }
-  let(:other_user_same_team) {}
   let!(:investigation)                       { create :allegation, creator: user }
 
   let(:file)                                 { ActiveStorage::Blob.create_after_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
@@ -28,8 +27,8 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
     }
   end
 
-  def expected_email_body(user_name)
-    "Test result was added to the #{investigation.case_type} by #{user_name}."
+  def expected_email_body(user, viewing_user)
+    "Test result was added to the #{investigation.case_type} by #{UserSource.new(user: user).show(viewing_user)}."
   end
 
   def expected_email_subject
@@ -57,10 +56,12 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
     end
 
     shared_examples "a service which notifies teams with access" do
-      let(:team_with_edit_access)                { create(:team) }
-      let(:user_with_edit_access)                { create(:user, :activated, team: team_with_readonly_access) }
-      let(:team_with_readonly_access)            { create(:team) }
-      let(:user_with_readonly_access)            { create(:user, :activated, team: team_with_readonly_access) }
+      let(:team_with_edit_access_email)     { Faker::Internet.unique.safe_email }
+      let(:team_with_readonly_access_email) { Faker::Internet.unique.safe_email }
+      let(:team_with_edit_access)           { create(:team, team_recipient_email: team_with_edit_access_email) }
+      let(:team_with_readonly_access)       { create(:team, team_recipient_email: team_with_readonly_access_email) }
+      let(:user_with_edit_access)           { create(:user, :activated, team: team_with_readonly_access) }
+      let(:user_with_readonly_access)       { create(:user, :activated, team: team_with_readonly_access) }
 
       before do
         AddTeamToCase.call!(
@@ -78,32 +79,66 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
       end
 
       context "when the user is the owner" do
-        let(:expected_edit_notification_args) do
-          [
-            investigation.pretty_id,
-            user_with_edit_access.name,
-            user_with_edit_access.email,
-            expected_email_body(user.name),
-            expected_email_subject
-          ]
+        context "when the team has team recipient email" do
+          let(:expected_edit_notification_args) do
+            [
+              investigation.pretty_id,
+              team_with_edit_access.name,
+              team_with_edit_access.email,
+              expected_email_body(user, team_with_edit_access),
+              expected_email_subject
+            ]
+          end
+
+          let(:expected_readonly_notification_args) do
+            [
+              investigation.pretty_id,
+              team_with_readonly_access.name,
+              team_with_readonly_access.email,
+              expected_email_body(user, team_with_readonly_access),
+              expected_email_subject
+            ]
+          end
+
+          it "notifies the teams with a read only or edit access to the case", :aggregate_failures do
+            expect { result }
+              .to  have_enqueued_mail(NotifyMailer, :investigation_updated)
+                     .with(a_hash_including(args: expected_edit_notification_args))
+                     .and have_enqueued_mail(NotifyMailer, :investigation_updated)
+                            .with(a_hash_including(args: expected_readonly_notification_args))
+          end
         end
 
-        let(:expected_readonly_notification_args) do
-          [
-            investigation.pretty_id,
-            user_with_readonly_access.name,
-            user_with_readonly_access.email,
-            expected_email_body(user.name),
-            expected_email_subject
-          ]
-        end
+        context "when the team does not have a team recipient email" do
+          let(:team_with_edit_access_email)     { nil }
+          let(:team_with_readonly_access_email) { nil }
+          let(:expected_edit_notification_args) do
+            [
+              investigation.pretty_id,
+              user_with_edit_access.name,
+              user_with_edit_access.email,
+              expected_email_body(user, user_with_edit_access),
+              expected_email_subject
+            ]
+          end
 
-        it "notifies the teams with a read only or edit access to the case", :aggregate_failures do
-          expect { result }
-            .to  have_enqueued_mail(NotifyMailer, :investigation_updated)
-                   .with(a_hash_including(args: expected_edit_notification_args))
-            .and have_enqueued_mail(NotifyMailer, :investigation_updated)
-                   .with(a_hash_including(args: expected_readonly_notification_args))
+          let(:expected_readonly_notification_args) do
+            [
+              investigation.pretty_id,
+              user_with_readonly_access.name,
+              user_with_readonly_access.email,
+              expected_email_body(user, user_with_readonly_access),
+              expected_email_subject
+            ]
+          end
+
+          it "notifies the teams with a read only or edit access to the case", :aggregate_failures do
+            expect { result }
+              .to  have_enqueued_mail(NotifyMailer, :investigation_updated)
+                     .with(a_hash_including(args: expected_edit_notification_args))
+                     .and have_enqueued_mail(NotifyMailer, :investigation_updated)
+                            .with(a_hash_including(args: expected_readonly_notification_args))
+          end
         end
       end
     end

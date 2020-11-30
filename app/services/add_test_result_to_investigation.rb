@@ -36,7 +36,6 @@ private
 
   def email_team_with_access(investigation, user)
     email_recipients_for_team_with_access(investigation, user).each do |entity|
-      ap entity
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         entity.name,
