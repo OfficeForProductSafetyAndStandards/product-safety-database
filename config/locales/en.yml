@@ -253,8 +253,10 @@ en:
               wrong_length: "Enter a valid barcode number"
             affected_units_status:
               inclusion: "You must state how many units are affected"
-            number_of_affected_units:
-              blank: "Give the number of units affected"
+            approx_units:
+              not_a_number: "Give the number of units affected"
+            exact_units:
+              not_a_number: "Give the number of units affected"
 
         risk_assessment_form:
           attributes:
