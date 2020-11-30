@@ -35,7 +35,7 @@ class ProductForm
   validates :name, presence: true
   validates :affected_units_status, inclusion: { in: Product.affected_units_statuses.keys }
   validates :approx_units, numericality: true, if: -> { affected_units_status.inquiry.approx? }
-  validates :exact_units, numericality: true, if: -> { affected_units_status.inquiry.exact?  }
+  validates :exact_units, numericality: true, if: -> { affected_units_status.inquiry.exact? }
   validates :description, length: { maximum: 10_000 }
 
   def self.from(product)
@@ -50,17 +50,17 @@ class ProductForm
 
   def approx_units
     if persisted?
-      number_of_affected_units if affected_units_status == 'approx'
+      number_of_affected_units if affected_units_status == "approx"
     else
-      attributes['approx_units']
+      attributes["approx_units"]
     end
   end
 
   def exact_units
     if persisted?
-      number_of_affected_units if affected_units_status == 'exact'
+      number_of_affected_units if affected_units_status == "exact"
     else
-      attributes['exact_units']
+      attributes["exact_units"]
     end
   end
 end

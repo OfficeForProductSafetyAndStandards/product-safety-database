@@ -66,8 +66,8 @@ private
   end
 
   def attributes_to_update
-    number_of_affected_units = product_params['exact_units'] if product_params['affected_units_status'] == 'exact'
-    number_of_affected_units = product_params['approx_units'] if product_params['affected_units_status'] == 'approx'
+    number_of_affected_units = product_params["exact_units"] if product_params["affected_units_status"] == "exact"
+    number_of_affected_units = product_params["approx_units"] if product_params["affected_units_status"] == "approx"
 
     {
       authenticity: @product_form.authenticity,

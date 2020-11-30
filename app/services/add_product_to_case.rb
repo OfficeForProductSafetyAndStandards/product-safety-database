@@ -74,8 +74,8 @@ private
   end
 
   def calculate_number_of_affected_units
-    return exact_units if affected_units_status == 'exact'
-    return approx_units if affected_units_status == 'approx'
+    return exact_units if affected_units_status == "exact"
+    return approx_units if affected_units_status == "approx"
   end
 
   def build_user_source
