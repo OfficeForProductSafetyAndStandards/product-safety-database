@@ -109,7 +109,7 @@ GEM
     benchmark (0.1.0)
     builder (3.2.4)
     byebug (11.1.3)
-    capybara (3.33.0)
+    capybara (3.34.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -230,7 +230,7 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.3.1)
+    listen (3.3.3)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.11.2)
@@ -461,15 +461,17 @@ GEM
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
-    simplecov (0.19.1)
+    simplecov (0.20.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
     simplecov-console (0.8.0)
       ansi
       simplecov
       terminal-table
     simplecov-html (0.12.3)
     simplecov-lcov (0.8.0)
+    simplecov_json_formatter (0.1.2)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -565,7 +567,7 @@ DEPENDENCIES
   axlsx!
   barkick (~> 0.1)
   byebug (~> 11.1)
-  capybara (~> 3.33)
+  capybara (~> 3.34)
   capybara-screenshot (~> 1.0)
   caxlsx_rails (~> 0.6.2)
   cf-app-utils (~> 0.6)
