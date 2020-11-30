@@ -9,7 +9,6 @@ class ProductDecorator < ApplicationDecorator
 
   def summary_list
     rows = [
-      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
@@ -17,6 +16,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Units affected" }, value: { text: units_affected } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
+      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
       { key: { text: "Batch number" }, value: { text: batch_number } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
