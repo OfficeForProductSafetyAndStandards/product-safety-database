@@ -20,6 +20,8 @@ class ProductForm
   attribute :created_at, :datetime
   attribute :affected_units_status
   attribute :number_of_affected_units
+  attribute :approx_units
+  attribute :exact_units
 
   before_validation { trim_line_endings(:description) }
   before_validation { convert_gtin_to_13_digits(:gtin13) }
@@ -32,7 +34,8 @@ class ProductForm
   validates :subcategory, presence: true
   validates :name, presence: true
   validates :affected_units_status, inclusion: { in: Product.affected_units_statuses.keys }
-  validates :number_of_affected_units, presence: true, if: -> { affected_units_status == "approx" || affected_units_status == "exact" }
+  validates :approx_units, presence: true, if: -> { affected_units_status == "approx" }
+  validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
   validates :description, length: { maximum: 10_000 }
 
   def self.from(product)
@@ -43,5 +46,13 @@ class ProductForm
     return false if id.nil?
 
     authenticity.nil?
+  end
+
+  def approx_units
+    number_of_affected_units if affected_units_status == 'approx'
+  end
+
+  def exact_units
+    number_of_affected_units if affected_units_status == 'exact'
   end
 end

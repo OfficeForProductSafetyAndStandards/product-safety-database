@@ -18,6 +18,8 @@ class AddProductToCase
            :product,
            :affected_units_status,
            :number_of_affected_units,
+           :exact_units,
+           :approx_units,
            to: :context
 
   def call
@@ -39,7 +41,7 @@ class AddProductToCase
         webpage: webpage,
         source: build_user_source,
         affected_units_status: affected_units_status,
-        number_of_affected_units: number_of_affected_units
+        number_of_affected_units: calculate_number_of_affected_units
       )
 
       context.activity = create_audit_activity_for_product_added
@@ -69,6 +71,11 @@ private
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
+  end
+
+  def calculate_number_of_affected_units
+    return exact_units if affected_units_status == 'exact'
+    return approx_units if affected_units_status == 'approx'
   end
 
   def build_user_source

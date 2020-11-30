@@ -6,7 +6,7 @@ module ProductsHelper
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
     params.require(:product).permit(
-      :brand, :name, :subcategory, :category, :product_code, :webpage, :description, :batch_number, :country_of_origin, :gtin13, :authenticity, :affected_units_status, :number_of_affected_units
+      :brand, :name, :subcategory, :category, :product_code, :webpage, :description, :batch_number, :country_of_origin, :gtin13, :authenticity, :affected_units_status, :number_of_affected_units, :exact_units, :approx_units
     )
   end
 
@@ -57,8 +57,8 @@ module ProductsHelper
 
   def items_for_affected_units(product_form, form)
     items = [
-      { text: "Exact number known",       value: "exact", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?") } },
-      { text: "Approximate number known", value: "approx", conditional: { html: form.govuk_input(:number_of_affected_units, label: "How many units?") } },
+      { text: "Exact number known",       value: "exact", conditional: { html: form.govuk_input(:exact_units, label: "How many units?") } },
+      { text: "Approximate number known", value: "approx", conditional: { html: form.govuk_input(:approx_units, label: "How many units?") } },
       { text: "Unknown",                  value: "unknown" },
       { divider: "or" },
       { text: "Not relevant", value: "not_relevant" }
