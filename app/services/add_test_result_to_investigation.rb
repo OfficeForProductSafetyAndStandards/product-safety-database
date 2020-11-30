@@ -19,7 +19,7 @@ class AddTestResultToInvestigation
       )
       context.test_result.document.attach(document.file)
       create_audit_activity
-      email_recipients_for_case_owner
+      email_team_with_access(investigation, user)
     end
   end
 
@@ -34,8 +34,9 @@ private
     )
   end
 
-  def email_recipients_for_case_owner
-    email_recipients_for_team_with_access.each do |entity|
+  def email_team_with_access(investigation, user)
+    email_recipients_for_team_with_access(investigation, user).each do |entity|
+      ap entity
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         entity.name,
