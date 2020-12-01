@@ -36,6 +36,7 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
     it { is_expected.to validate_inclusion_of(:legislation).in_array(Rails.application.config.legislation_constants["legislation"]).with_message("Select the legislation that relates to this test") }
     it { is_expected.to validate_inclusion_of(:result).in_array(Test::Result.results.keys).with_message("Select result of the test") }
     it { is_expected.to validate_presence_of(:document).with_message("Provide the test results file") }
+    it { is_expected.to validate_presence_of(:product_id).with_message("Select the product which was tested").on(:create_with_product) }
 
     it_behaves_like "it does not allow dates in the future", :date
     it_behaves_like "it does not allow malformed dates", :date

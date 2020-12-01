@@ -14,7 +14,7 @@ class Investigations::TestResultsController < ApplicationController
     @test_result_form.load_document_file
 
     @investigation = investigation.decorate
-    return render :new if @test_result_form.invalid?
+    return render :new if @test_result_form.invalid?(:create_with_product)
 
     service_attributes = @test_result_form
                            .serializable_hash

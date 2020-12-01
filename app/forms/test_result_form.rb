@@ -18,6 +18,7 @@ class TestResultForm
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
   validates :result, inclusion: { in: Test::Result.results.keys }
   validates :document, presence: true
+  validates :product_id, presence: true, on: :create_with_product
   validates :date,
             presence: true,
             real_date: true,
