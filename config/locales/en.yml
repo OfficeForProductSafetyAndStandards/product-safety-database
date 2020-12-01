@@ -244,6 +244,8 @@ en:
       models:
         test_result_form:
           attributes:
+            product_id:
+              blank: "Select the product which was tested"
             legislation:
               inclusion: "Select the legislation that relates to this test"
             result:
@@ -391,10 +393,6 @@ en:
               incomplete: Date enquiry received must include a %{missing_date_parts}
               in_future: Date enquiry received must be today or in the past
 
-        test:
-          attributes:
-            product:
-              required: "Select the product which was tested"
         test/request:
           attributes:
             date:

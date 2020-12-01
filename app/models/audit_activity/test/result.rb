@@ -7,7 +7,7 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     raise "Deprecated - use UpdateRiskAssessment.call instead"
   end
 
-  def title(_viewing_user)
+  def title(_viewing_user = nil)
     test_result.decorate.title
   end
 
@@ -18,7 +18,7 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   # way to retrieve this is by relying upon our current behaviour of attaching the
   # same actual file to all of the AuditActivity, Investigation and Test records.
   def test_result
-    Test::Result.find_by(metadata["result_result_id"])
+    @test_result ||= Test::Result.find(metadata["test_result_id"])
   end
 
 private

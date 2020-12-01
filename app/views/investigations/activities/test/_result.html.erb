@@ -5,9 +5,11 @@
   <br />
   Attached: <strong><%= link_to activity.test_result.document.filename, url_for(activity.test_result.document) %></strong>
   <br />
-  Details: <%= activity.test_result.details %>
   <br />
-
+  <%= activity.test_result.details %>
+  <br />
+  <br />
+  Product: <%= link_to activity.product.name, activity.product, class: "govuk-link psd-block-link" %>
+  <br />
   <%= link_to "View test result", investigation_test_result_path(activity.investigation, activity.test_result), class: "govuk-link psd-block-link" %>
-  <%= link_to "View product details", product_path(activity.product_id), class: "govuk-link psd-block-link" %>
 </div>

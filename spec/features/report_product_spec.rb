@@ -464,7 +464,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
-    expect(item).to have_text("Test date: #{test[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Test date: #{test[:date].to_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end
@@ -597,7 +597,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       attach_file "Upload a file", with[:file]
     end
 
-    choose(add_another ? "test_further_test_results_yes" : "test_further_test_results_no")
+    within_fieldset("Are there other test results to report?") do
+      choose(add_another ? "Yes" : "No")
+    end
     click_button "Continue"
   end
 
