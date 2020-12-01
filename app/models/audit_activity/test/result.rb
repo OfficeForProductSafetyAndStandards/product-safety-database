@@ -4,7 +4,7 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   end
 
   def self.from(_test_result)
-    raise "Deprecated - use UpdateRiskAssessment.call instead"
+    raise "Deprecated - use AddTestResultToInvestigation.call instead"
   end
 
   def title(_viewing_user = nil)
