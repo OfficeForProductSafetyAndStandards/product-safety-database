@@ -79,6 +79,7 @@ private
       :product_id,
       :result,
       :standards_product_was_tested_against,
+      :existing_document_file_id,
       :test_result_file,
       date: %i[day month year],
       document: %i[description file]

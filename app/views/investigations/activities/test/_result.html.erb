@@ -1,0 +1,13 @@
+<div class="govuk-body">
+  Legislation: <strong><%= activity.test_result.legislation %></strong>
+  <br />
+  Test date: <strong><%= activity.test_result.date.to_s(:govuk) %></strong>
+  <br />
+  Attached: <strong><%= link_to activity.test_result.document.filename, url_for(activity.test_result.document) %></strong>
+  <br />
+  Details: <%= activity.test_result.details %>
+  <br />
+
+  <%= link_to "View test result", investigation_test_result_path(activity.investigation, activity.test_result), class: "govuk-link psd-block-link" %>
+  <%= link_to "View product details", product_path(activity.product_id), class: "govuk-link psd-block-link" %>
+</div>

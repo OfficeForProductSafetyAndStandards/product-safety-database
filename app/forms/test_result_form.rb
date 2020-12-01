@@ -42,13 +42,14 @@ class TestResultForm
   def cache_file!
     return if document.blank?
 
-    blob = ActiveStorage::Blob.create_after_upload!(
+    self.document = ActiveStorage::Blob.create_after_upload!(
       io: document.file,
       filename: document.original_filename,
-      content_type: document.content_type
+      content_type: document.content_type,
+      metadata: { description: document.description }
     )
 
-    self.existing_document_file_id = blob.signed_id
+    self.existing_document_file_id = document.signed_id
   end
 
   def load_document_file

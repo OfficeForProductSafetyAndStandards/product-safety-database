@@ -7,25 +7,19 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     raise "Deprecated - use UpdateRiskAssessment.call instead"
   end
 
-  # def self.date_label
-  #   "Test date"
-  # end
+  def title(_viewing_user)
+    test_result.decorate.title
+  end
 
-  # def email_update_text(viewer = nil)
-  #   "Test result was added to the #{investigation.case_type} by #{source&.show(viewer)}."
-  # end
-
-  # # Returns the actual Test::Result record.
-  # #
-  # # This is a hack, as there is currently no direct association between the
-  # # AuditActivity record and the test result record it is about. So the only
-  # # way to retrieve this is by relying upon our current behaviour of attaching the
-  # # same actual file to all of the AuditActivity, Investigation and Test records.
-  # def test_result
-  #   attachment.blob.attachments
-  #     .find_by(record_type: "Test")
-  #     &.record
-  # end
+  # Returns the actual Test::Result record.
+  #
+  # This is a hack, as there is currently no direct association between the
+  # AuditActivity record and the test result record it is about. So the only
+  # way to retrieve this is by relying upon our current behaviour of attaching the
+  # same actual file to all of the AuditActivity, Investigation and Test records.
+  def test_result
+    Test::Result.find_by(metadata["result_result_id"])
+  end
 
 private
 

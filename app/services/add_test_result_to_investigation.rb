@@ -17,7 +17,8 @@ class AddTestResultToInvestigation
         standards_product_was_tested_against: standards_product_was_tested_against,
         product_id: product_id
       )
-      context.test_result.document.attach(document.file)
+
+      context.test_result.document.attach(document)
       create_audit_activity
       email_team_with_access(investigation, user)
     end

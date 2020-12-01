@@ -54,6 +54,7 @@
            attributes: { maxlength: 50_000 },
            label: { text: "Further details", classes: "govuk-label--m" } %>
 
+<%= form.hidden_field :existing_document_file_id %>
 <%= render "related_attachment_fields",
            form: form,
            file_blob: @file_blob,

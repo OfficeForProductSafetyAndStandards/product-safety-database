@@ -43,10 +43,6 @@
         <%= markdown simple_format(activity.body) %>
       <% end %>
 
-      <% if activity.product_id && !activity.is_a?(AuditActivity::Test::Result) %>
-        <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link" %>
-      <% end %>
-
       <% if activity.business_id %>
         <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
       <% end %>
