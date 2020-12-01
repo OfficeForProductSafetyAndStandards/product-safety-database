@@ -14,6 +14,10 @@ module TestsHelper
         value: { text: test_result.legislation }
       },
       {
+        key: { text: "Standards" },
+        value: { text: test_result.standards_product_was_tested_against }
+      },
+      {
         key: { text: "Result" },
         value: { text: test_result.result.upcase_first }
       }

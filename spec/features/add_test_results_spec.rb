@@ -35,7 +35,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
       expect(errors_list[3].text).to eq "Provide the test results file"
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
-      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file)
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file, standards: "EN71, EN73")
 
       expect_confirmation_banner("Test result was successfully recorded.")
       expect_page_to_have_h1("Supporting information")
@@ -51,6 +51,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
 
       expect(page).to have_summary_item(key: "Date of test", value: "1 January 2020")
       expect(page).to have_summary_item(key: "Legislation", value: "General Product Safety Regulations 2005")
+      expect(page).to have_summary_item(key: "Standards", value: "EN71, EN73")
       expect(page).to have_summary_item(key: "Result", value: "Passed")
       expect(page).to have_summary_item(key: "Further details", value: "Test result includes certificate of conformity")
       expect(page).to have_summary_item(key: "Attachment description", value: "test result file")
@@ -69,11 +70,12 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     expect(page).not_to have_link("Add supporting information")
   end
 
-  def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:)
+  def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:, standards:)
     select legislation, from: "Against which legislation?"
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date
     fill_in "Year",  with: date.year  if date
+    fill_in "Which standard was the product tested against?", with: standards
     within_fieldset "What was the result?" do
       choose test_result
     end
