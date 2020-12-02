@@ -49,7 +49,7 @@ class ProductForm
   end
 
   def approx_units
-    if attributes['id']
+    if attributes["id"]
       number_of_affected_units if affected_units_status == "approx"
     else
       attributes["approx_units"]
@@ -57,7 +57,7 @@ class ProductForm
   end
 
   def exact_units
-    if attributes['id']
+    if attributes["id"]
       number_of_affected_units if affected_units_status == "exact"
     else
       attributes["exact_units"]
