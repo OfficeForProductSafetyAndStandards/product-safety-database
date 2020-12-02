@@ -44,9 +44,9 @@ class ProductDecorator < ApplicationDecorator
   def units_affected
     case object.affected_units_status
     when "exact"
-      I18n.t(".product.exact_units", count: object.number_of_affected_units )
+      I18n.t(".product.exact_units", count: object.number_of_affected_units)
     when "approx"
-      I18n.t(".product.approx_units", count: object.number_of_affected_units )
+      I18n.t(".product.approx_units", count: object.number_of_affected_units)
     when "unknown"
       I18n.t(".product.unknown")
     when "not_relevant"
