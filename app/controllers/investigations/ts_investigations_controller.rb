@@ -308,8 +308,8 @@ private
   end
 
   def build_product_params
-    number_of_affected_units = product_request_params["exact_units"] if product_request_params["affected_units_status"] == "exact"
-    number_of_affected_units = product_request_params["approx_units"] if product_request_params["affected_units_status"] == "approx"
+    product_session_params['number_of_affected_units'] = product_session_params["exact_units"] if product_session_params["affected_units_status"] == "exact"
+    product_session_params['number_of_affected_units'] = product_session_params["approx_units"] if product_session_params["affected_units_status"] == "approx"
     product_session_params.merge(product_request_params).symbolize_keys.except(:exact_units, :approx_units)
   end
 
