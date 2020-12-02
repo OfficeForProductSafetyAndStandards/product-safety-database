@@ -5,9 +5,9 @@ class UpdateTestResult
   delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, to: :context
 
   def call
-    context.fail!(error: "No test result supplied") unless test_result.is_a?(Test::Result)
+    context.fail!(error: "No test result supplied")   unless test_result.is_a?(Test::Result)
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
-    context.fail!(error: "No user supplied") unless user.is_a?(User)
+    context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
     test_result.assign_attributes(
       date: date,
