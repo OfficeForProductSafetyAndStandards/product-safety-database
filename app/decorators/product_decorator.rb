@@ -1,6 +1,5 @@
 class ProductDecorator < ApplicationDecorator
   include FormattedDescription
-  include ActionView::Helpers::TextHelper
   delegate_all
   decorates_association :investigations
 
