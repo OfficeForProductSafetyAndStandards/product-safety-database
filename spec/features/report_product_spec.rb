@@ -104,7 +104,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           country_of_origin: Country.all.sample.first,
           description: Faker::Lorem.sentence,
           authenticity: "Yes",
-          affected_units_status: "Unknown"
+          affected_units_status: "Approximate number known",
+          number_of_affected_units: 22
         }
       end
       let(:coronavirus) { false }
@@ -487,6 +488,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     within_fieldset("How many units are affected?") do
       choose with[:affected_units_status]
+      find("#approx_units").set(with[:number_of_affected_units])
     end
 
     fill_in "Product name",                      with: with[:name]

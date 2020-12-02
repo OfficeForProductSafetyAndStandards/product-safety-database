@@ -27,7 +27,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       country_of_origin: Country.all.sample.first,
       description: Faker::Lorem.sentence,
       authenticity: Product.authenticities.keys.without("missing").sample,
-      affected_units_status: "not_relevant"
+      affected_units_status: "approx"
     }
   end
 
@@ -144,7 +144,10 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     select country_of_origin,             from: "Country of origin"
     fill_in "Product sub-category", with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
-    within_fieldset("How many units are affected?") { choose affected_units_status_answer(affected_units_status) }
+    within_fieldset("How many units are affected?") do
+      choose affected_units_status_answer(affected_units_status)
+      find("#approx_units").set(21)
+    end
     fill_in "Product name",               with: name
     fill_in "Other product identifiers",  with: barcode
     fill_in "Webpage",                    with: webpage
@@ -161,7 +164,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
-    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "Not relevant")
+    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21 units approximately")
   end
 
   def expect_details_on_summary_page

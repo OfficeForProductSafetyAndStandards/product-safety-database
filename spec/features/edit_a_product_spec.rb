@@ -9,7 +9,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:product) do
     create(:product,
            authenticity: nil,
-           affected_units_status: nil,
+           affected_units_status: 'exact',
+           number_of_affected_units: 1000,
            brand: brand,
            product_code: product_code,
            webpage: webpage,
@@ -23,7 +24,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_subcategory) { Faker::Hipster.word }
   let(:new_gtin13)            { Faker::Barcode.ean(13) }
   let(:new_authenticity)      { (Product.authenticities.keys - [product.authenticity]).sample }
-  let(:new_affected_units_status) { "not_relevant" }
+  let(:new_affected_units_status) { "approx" }
+  let(:new_number_of_affected_units) { 14 }
   let(:new_batch_number)      { Faker::Number.number(digits: 10) }
   let(:new_product_code)      { Faker::Barcode.issn }
   let(:new_webpage)           { Faker::Internet.url }
@@ -70,6 +72,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     within_fieldset("How many units are affected?") do
       choose affected_units_status_answer(new_affected_units_status)
+      find("#approx_units").set(new_number_of_affected_units)
     end
 
     fill_in "Product brand",            with: new_brand
@@ -86,7 +89,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
     expect(page).to have_summary_item(key: "Product sub-category", value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
-    expect(page).to have_summary_item(key: "Units affected",            value: affected_units_status_answer(new_affected_units_status))
+    expect(page).to have_summary_item(key: "Units affected",            value: '14 units approximately')
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
     expect(page).to have_summary_item(key: "Product name",              value: new_name)
     expect(page).to have_summary_item(key: "Barcode number",            value: new_gtin13)
