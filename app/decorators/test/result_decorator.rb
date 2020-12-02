@@ -42,7 +42,7 @@ class Test < ApplicationRecord
     end
 
     def standards_product_was_tested_against
-      object.standards_product_was_tested_against.join(", ")
+      object.standards_product_was_tested_against&.join(", ")
     end
   end
 end

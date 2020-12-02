@@ -46,22 +46,29 @@ class Investigations::TestResultsController < ApplicationController
   end
 
   def update
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
 
-    @test_result = @investigation.test_results.find(params[:id])
+    test_result = investigation.test_results.find(params[:id])
+    @test_result_form = TestResultForm.from(test_result)
+    @test_result_form.assign_attributes(test_result_params)
+    @test_result_form.cache_file!
+    @test_result_form.load_document_file
+
+    if @test_result_form.invalid?(:create_with_product)
+      @investigation = investigation.decorate
+      return render :edit
+    end
 
     result = UpdateTestResult.call(
-      test_result: @test_result,
-      new_attributes: test_result_attributes,
-      new_file: params[:test_result][:test_result_file][:file],
-      new_file_description: params[:test_result][:test_result_file][:description],
-      user: current_user
+      @test_result_form.serializable_hash
+        .merge(test_result: test_result, investigation: investigation, user: current_user)
     )
 
     if result.success?
-      redirect_to investigation_test_result_path(@investigation, @test_result)
+      redirect_to investigation_test_result_path(investigation, test_result)
     else
+      @investigation = investigation.decorate
       render "edit"
     end
   end
