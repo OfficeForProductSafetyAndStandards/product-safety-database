@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.text "description"
     t.string "gtin13", limit: 13
     t.string "name"
-    t.integer "number_of_affected_units"
+    t.text "number_of_affected_units"
     t.string "product_code"
     t.string "subcategory"
     t.datetime "updated_at", null: false

@@ -14,7 +14,7 @@ RSpec.describe ProductDecorator do
       it "returns correct units affected string" do
         product.affected_units_status = "exact"
         product.number_of_affected_units = 12
-        expect(decorated_product.units_affected).to eq "12 units"
+        expect(decorated_product.units_affected).to eq "12"
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe ProductDecorator do
       it "returns correct units affected string" do
         product.affected_units_status = "approx"
         product.number_of_affected_units = 12
-        expect(decorated_product.units_affected).to eq "12 units approximately"
+        expect(decorated_product.units_affected).to eq "12"
       end
     end
 

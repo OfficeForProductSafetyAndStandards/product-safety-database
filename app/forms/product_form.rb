@@ -35,8 +35,8 @@ class ProductForm
   validates :subcategory, presence: true
   validates :name, presence: true
   validates :affected_units_status, inclusion: { in: Product.affected_units_statuses.keys }
-  validates :approx_units, numericality: true, if: -> { affected_units_status == "approx" }
-  validates :exact_units, numericality: true, if: -> { affected_units_status == "exact" }
+  validates :approx_units, presence: true, if: -> { affected_units_status == "approx" }
+  validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
   validates :description, length: { maximum: 10_000 }
 
   def self.from(product)
