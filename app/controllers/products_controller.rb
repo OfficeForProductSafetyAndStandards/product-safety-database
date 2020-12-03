@@ -38,7 +38,7 @@ class ProductsController < ApplicationController
 
       if @product_form.valid?
         format.html do
-          product.update!(attributes_to_update)
+          product.update!(@product_form.serializable_hash)
           redirect_to product_path(product), flash: { success: "Product was successfully updated." }
         end
         format.json { render :show, status: :ok, location: product }
@@ -63,26 +63,5 @@ private
 
   def build_breadcrumbs
     @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
-  end
-
-  def attributes_to_update
-    number_of_affected_units = product_params["exact_units"] if product_params["affected_units_status"] == "exact"
-    number_of_affected_units = product_params["approx_units"] if product_params["affected_units_status"] == "approx"
-
-    {
-      authenticity: @product_form.authenticity,
-      batch_number: @product_form.batch_number,
-      brand: @product_form.brand,
-      country_of_origin: @product_form.country_of_origin,
-      description: @product_form.description,
-      gtin13: @product_form.gtin13,
-      name: @product_form.name,
-      product_code: @product_form.product_code,
-      subcategory: @product_form.subcategory,
-      category: @product_form.category,
-      webpage: @product_form.webpage,
-      affected_units_status: @product_form.affected_units_status,
-      number_of_affected_units: number_of_affected_units
-    }
   end
 end

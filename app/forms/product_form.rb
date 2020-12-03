@@ -20,8 +20,9 @@ class ProductForm
   attribute :created_at, :datetime
   attribute :affected_units_status
   attribute :number_of_affected_units
-  attribute :approx_units
-  attribute :exact_units
+
+  attr_accessor :approx_units
+  attr_accessor :exact_units
 
   before_validation { trim_line_endings(:description) }
   before_validation { convert_gtin_to_13_digits(:gtin13) }
@@ -39,28 +40,28 @@ class ProductForm
   validates :description, length: { maximum: 10_000 }
 
   def self.from(product)
-    new(product.serializable_hash(except: %i[updated_at]))
+    new(product.serializable_hash(except: %i[updated_at])).tap do |product_form|
+      if product.affected_units_status.inquiry.approx?
+        product_form.approx_units = product.number_of_affected_units
+      elsif product.affected_units_status.inquiry.exact?
+        product_form.exact_units = product.number_of_affected_units
+      end
+    end
+  end
+
+  def number_of_affected_units
+    return if affected_units_status.blank?
+
+    if affected_units_status.inquiry.exact?
+      exact_units
+    elsif affected_units_status.inquiry.approx?
+      approx_units
+    end
   end
 
   def authenticity_not_provided?
     return false if id.nil?
 
     authenticity.nil?
-  end
-
-  def approx_units
-    if attributes["id"]
-      number_of_affected_units if affected_units_status == "approx"
-    else
-      attributes["approx_units"]
-    end
-  end
-
-  def exact_units
-    if attributes["id"]
-      number_of_affected_units if affected_units_status == "exact"
-    else
-      attributes["exact_units"]
-    end
   end
 end
