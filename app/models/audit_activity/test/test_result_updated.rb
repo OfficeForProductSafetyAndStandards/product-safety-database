@@ -3,25 +3,11 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
     raise "Deprecated - use UpdateTestResult.call instead"
   end
 
-  def self.build_metadata(test_result)
-    updated_values = test_result
-      .previous_changes.slice(:result, :details, :legislation, :date, :product_id)
+  def self.build_metadata(test_result, changes)
+    updated_values = changes.except(:document, :date)
 
-    current_attachment = test_result.document
-
-    if test_result.document_blob.previous_changes.any?
-      previous_attachment_filename = test_result.document_blob.previous_changes.dig("filename", 1)
-      previous_attachment_description = test_result.document_blob.previous_changes.dig("metadata", 1, "description")
-
-      if previous_attachment_filename != current_attachment.filename
-        updated_values["filename"] = [previous_attachment_filename, test_result.document.filename]
-      end
-
-      if previous_attachment_description != current_attachment.metadata[:description]
-        updated_values["file_description"] = [previous_attachment_description, current_attachment.metadata[:description]]
-      end
-    end
-
+    updated_values[:filename] = changes.dig("document")&.map { |d| d.filename.to_s }
+    updated_values[:date] = changes.dig("date")&.map { |date| date.to_s(:govuk) }
     { test_result_id: test_result.id, updates: updated_values }
   end
 

@@ -2,7 +2,7 @@ class UpdateTestResult
   include Interactor
   include EntitiesToNotify
 
-  delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, to: :context
+  delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, :changes, to: :context
 
   def call
     context.fail!(error: "No test result supplied")   unless test_result.is_a?(Test::Result)
@@ -21,7 +21,7 @@ class UpdateTestResult
     test_result.transaction do
       test_result.document.attach(document)
 
-      break if no_changes?
+      break if changes.none?
 
       if test_result.save
         create_audit_activity_for_test_result_updated
@@ -48,16 +48,13 @@ private
   end
 
   def create_audit_activity_for_test_result_updated
-    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result)
+    metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, changes)
 
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
       source: UserSource.new(user: user),
       investigation: test_result.investigation,
       product: test_result.product,
-      metadata: metadata,
-      title: nil,
-      body: nil,
-      attachment: test_result.document_blob
+      metadata: metadata
     )
   end
 

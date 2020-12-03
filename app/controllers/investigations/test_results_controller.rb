@@ -62,7 +62,12 @@ class Investigations::TestResultsController < ApplicationController
 
     result = UpdateTestResult.call(
       @test_result_form.serializable_hash
-        .merge(test_result: test_result, investigation: investigation, user: current_user)
+        .merge(
+          test_result: test_result,
+          investigation: investigation,
+          user: current_user,
+          changes: @test_result_form.changes
+        )
     )
 
     if result.success?

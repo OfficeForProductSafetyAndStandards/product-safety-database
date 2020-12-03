@@ -2,17 +2,26 @@ class TestResultForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  include ActiveModel::Dirty
   include SanitizationHelper
 
-  attribute :id
+  attribute :id, :integer
   attribute :date, :govuk_date
   attribute :details
   attribute :legislation
   attribute :result
   attribute :standards_product_was_tested_against, :comma_separated_list
-  attribute :product_id
+  attribute :product_id, :integer
   attribute :document, :file_field
   attribute :existing_document_file_id
+
+  define_attribute_methods :date, :govuk_date
+  define_attribute_methods :details
+  define_attribute_methods :legislation
+  define_attribute_methods :result
+  define_attribute_methods :standards_product_was_tested_against, :comma_separated_list
+  define_attribute_methods :product_id
+  define_attribute_methods :document, :file_field
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
@@ -32,6 +41,8 @@ class TestResultForm
   def self.from(test_result)
     new(test_result.serializable_hash(only: ATTRIBUTES_FROM_TEST_RESULT)).tap do |test_result_form|
       test_result_form.existing_document_file_id = test_result.document.signed_id
+      test_result_form.load_document_file
+      test_result_form.changes_applied
     end
   end
 

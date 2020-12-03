@@ -11,20 +11,35 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:new_details)                              { Faker::Hipster.sentence }
   let(:new_legislation)                          { (Rails.application.config.legislation_constants["legislation"] - [test_result.legislation]).sample }
   let(:new_date)                                 { test_result.date - 2.days }
-  let(:new_standards_product_was_tested_against) { Faker::Hipster.word }
-  let(:new_document)                             { file_fixture("files/new_test_result.txt") }
+  let(:new_standards_product_was_tested_against) { Faker::Hipster.words }
+  let(:new_document)                             { ActiveStorage::Blob.create_after_upload!(io: File.open(file_fixture("files/new_test_result.txt")), filename: "new_test_result.txt") }
+  let(:new_result) { "failed" }
   let(:new_attributes) do
     {
       details: new_details,
       legislation: new_legislation,
       date: new_date,
+      result: new_result,
       product_id: product.id,
       standards_product_was_tested_against: new_standards_product_was_tested_against,
       document: new_document
     }
   end
+  let(:changes) do
+    {
+      details: [test_result.details, new_details],
+      legislation: [test_result.legislation, new_legislation],
+      date: [test_result.date, new_date],
+      result: [test_result.result, new_result],
+      standards_product_was_tested_against: [
+        test_result.standards_product_was_tested_against,
+        new_standards_product_was_tested_against
+      ],
+      document: [test_result.document, new_document]
+    }
+  end
 
-  let(:params) { new_attributes.merge(test_result: test_result, user: user, investigation: investigation) }
+  let(:params) { new_attributes.merge(test_result: test_result, user: user, investigation: investigation, changes: changes) }
 
   describe ".call" do
     context "with a missing parameters" do
@@ -57,14 +72,6 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       end
     end
 
-    context "with required parameters that trigger a validation error" do
-      let(:new_legislation) { "" }
-
-      it "returns a failure" do
-        expect(result).to be_failure
-      end
-    end
-
     context "with required parameters" do
       def expected_email_subject
         "Test result edited for Allegation"
@@ -75,82 +82,29 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       end
 
       context "when there are changes to the metadata" do
-        let(:updated_legislation) { Rails.application.config.legislation_constants["legislation"].last }
-        let(:updated_details) { "Updated test details" }
-
-        let(:new_attributes) do
-          {
-            legislation: updated_legislation,
-            details: updated_details,
-            result: test_result.result,
-            date: test_result.date,
-            product_id: test_result.product_id,
-            standards_product_was_tested_against: [],
-            document: test_result.document_blob.reload
-          }
-        end
-
-        let(:result) { described_class.call!(new_attributes.merge(test_result: test_result, user: user, investigation: investigation)) }
-
-        let(:expected_metadata) do
-          {
-            "test_result_id" => test_result.id,
-            "updates" => {
-              "legislation" => [legislation, updated_legislation],
-              "details" => [details, updated_details]
-            }
-          }
+        let(:expected_metadata_changes) do
+          changes.except(:document).stringify_keys.merge(
+            "filename": [
+              test_result.document.filename.to_s,
+              new_document.filename.to_s
+            ],
+            "file_description": [
+              test_result.document.metadata.dig("description"),
+              new_document.metadata.dig("description")
+            ]
+          )
         end
 
         it "updates the model and creates an activity log entry", :aggregate_failures do
           result
-          expect(test_result.reload.details).to eq updated_details
-          expect(test_result.reload.legislation).to eq updated_legislation
+
+          test_result.reload
+          expect(test_result).to have_attributes(new_attributes.except(:document))
 
           activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
 
-          expect(activity_timeline_entry.metadata).to eq(expected_metadata)
-          expect(activity_timeline_entry.attachment.blob).to eq(test_result.document.blob)
-        end
-
-        it_behaves_like "a service which notifies the case owner"
-      end
-
-      context "when just the file attachment description is changed" do
-        let(:new_attributes) do
-          {
-            legislation: test_result.legislation,
-            details: test_result.details,
-            result: test_result.result,
-            date: test_result.date,
-            product_id: product_id,
-            standards_product_was_tested_against: test_result.standards_product_was_tested_against
-          }
-        end
-
-        let(:result) do
-          described_class.call(
-            new_attributes
-              .merge(test_result: test_result, user: user, investigation: investigation)
-          )
-        end
-
-        let(:activity_timeline_entry) { test_result.investigation.activities.where(type: "AuditActivity::Test::TestResultUpdated").order(:created_at).last }
-
-        before do
-          test_result_document_blob.update!(metadata: document.blob.metadata.merge!({ description: "Previous description" }))
-        end
-
-        it "updates the description of the attached file" do
-          result
-          test_result.reload
-          expect(test_result.documents.first.blob.metadata[:description]).to eq "Updated description"
-        end
-
-        it "generates an activity entry with the changes" do
-          result
           expect(activity_timeline_entry.metadata)
-            .to eq("test_result_id" => test_result.id, "updates" => { "file_description" => ["Previous description", "Updated description"] })
+            .to eq("test_result_id" => test_result.id, "udpates" => expected_metadata_changes)
         end
 
         it_behaves_like "a service which notifies the case owner"
