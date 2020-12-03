@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
+  create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -230,7 +231,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.text "description"
     t.string "gtin13", limit: 13
     t.string "name"
-    t.integer "number_of_affected_units"
+    t.text "number_of_affected_units"
     t.string "product_code"
     t.string "subcategory"
     t.datetime "updated_at", null: false
