@@ -89,7 +89,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
     expect(page).to have_summary_item(key: "Product sub-category", value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
-    expect(page).to have_summary_item(key: "Units affected",            value: "14 units approximately")
+    expect(page).to have_summary_item(key: "Units affected",            value: "14")
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
     expect(page).to have_summary_item(key: "Product name",              value: new_name)
     expect(page).to have_summary_item(key: "Barcode number",            value: new_gtin13)

@@ -59,6 +59,6 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     expect(page).to have_summary_item(key: "Batch number", value: "Batches 0005 to 1023")
     expect(page).to have_summary_item(key: "Webpage", value: "http://example.com/mybrand/dishwashers")
     expect(page).to have_summary_item(key: "Description", value: "White with chrome handle")
-    expect(page).to have_summary_item(key: "Units affected", value: "2 units approximately")
+    expect(page).to have_summary_item(key: "Units affected", value: "2")
   end
 end

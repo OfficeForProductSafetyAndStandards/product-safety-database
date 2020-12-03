@@ -164,7 +164,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
-    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21 units approximately")
+    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21")
   end
 
   def expect_details_on_summary_page

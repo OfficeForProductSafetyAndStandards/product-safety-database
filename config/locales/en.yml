@@ -469,12 +469,6 @@ en:
     unknown: "Unknown"
     not_relevant: "Not relevant"
     not_provided: "Not provided"
-    exact_units:
-      one: "1 unit"
-      other: "%{count} units"
-    approx_units:
-      one: "1 unit approximately"
-      other: "%{count} units approximately"
 
   corrective_action:
     attributes:
