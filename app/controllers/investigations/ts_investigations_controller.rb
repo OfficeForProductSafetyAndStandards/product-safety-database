@@ -128,7 +128,7 @@ private
   end
 
   def product
-    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash.except("exact_units", "approx_units"))
+    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash)
   end
 
   def set_investigation
@@ -198,7 +198,7 @@ private
   def set_test
     @test = @investigation.tests.build(test_params)
     @test.set_dates_from_params(params[:test])
-    @test.build_product(build_product_params)
+    @test.build_product(product_step_params)
 
     attachment_params = get_attachment_params(:test_result_file, :test)
 
@@ -305,12 +305,6 @@ private
 
   def product_step_params
     product_session_params.merge(product_request_params).symbolize_keys
-  end
-
-  def build_product_params
-    product_session_params["number_of_affected_units"] = product_session_params["exact_units"] if product_session_params["affected_units_status"] == "exact"
-    product_session_params["number_of_affected_units"] = product_session_params["approx_units"] if product_session_params["affected_units_status"] == "approx"
-    product_session_params.merge(product_request_params).symbolize_keys.except(:exact_units, :approx_units)
   end
 
   def business_step_params
@@ -618,7 +612,7 @@ private
 
     # Product must be added before investigation is saved for correct audit
     # activity title generation
-    @product = @investigation.products.build(build_product_params)
+    @product = @investigation.products.build(product_step_params)
     CreateCase.call(investigation: @investigation, user: current_user)
     save_businesses
     save_corrective_actions
