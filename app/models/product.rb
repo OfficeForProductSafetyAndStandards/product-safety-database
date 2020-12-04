@@ -10,6 +10,13 @@ class Product < ApplicationRecord
     "unsure" => "unsure"
   }
 
+  enum affected_units_status: {
+    "exact" => "exact",
+    "approx" => "approx",
+    "unknown" => "unknown",
+    "not_relevant" => "not_relevant"
+  }
+
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
   has_many_attached :documents

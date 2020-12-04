@@ -8,6 +8,7 @@ FactoryBot.define do
     authenticity { Product.authenticities.keys.sample }
     batch_number { "123123123" }
     brand { Faker::Company.name }
+    affected_units_status { "unknown" }
 
     factory :product_iphone do
       product_code { 234 }

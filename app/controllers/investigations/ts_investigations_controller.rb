@@ -614,7 +614,6 @@ private
     # activity title generation
     @product = @investigation.products.build(product_step_params)
     CreateCase.call(investigation: @investigation, user: current_user)
-
     save_businesses
     save_corrective_actions
     save_risk_assessments

@@ -12,6 +12,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product sub-category" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
+      { key: { text: "Units affected" }, value: { text: units_affected } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
@@ -36,6 +37,21 @@ class ProductDecorator < ApplicationDecorator
       "#{product_and_category.first} (#{product_and_category.last.downcase})"
     else
       product_and_category.first
+    end
+  end
+
+  def units_affected
+    case object.affected_units_status
+    when "exact"
+      object.number_of_affected_units
+    when "approx"
+      object.number_of_affected_units
+    when "unknown"
+      I18n.t(".product.unknown")
+    when "not_relevant"
+      I18n.t(".product.not_relevant")
+    else
+      I18n.t(".product.not_provided")
     end
   end
 end

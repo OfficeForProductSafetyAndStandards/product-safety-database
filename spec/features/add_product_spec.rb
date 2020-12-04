@@ -3,8 +3,11 @@ require "rails_helper"
 RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_product_form_helper do
   let(:user)          { create(:user, :activated) }
   let(:investigation) { create(:enquiry, creator: user) }
-  let(:attributes)    { attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample) }
-  let(:other_user)    { create(:user, :activated) }
+  let(:attributes)    do
+    attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample,
+                                    affected_units_status: Product.affected_units_statuses.keys.sample)
+  end
+  let(:other_user) { create(:user, :activated) }
 
   before do
     ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
@@ -24,8 +27,9 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(errors_list[0].text).to eq "Category cannot be blank"
     expect(errors_list[1].text).to eq "Subcategory cannot be blank"
     expect(errors_list[2].text).to eq "You must state whether the product is a counterfeit"
-    expect(errors_list[3].text).to eq "Name cannot be blank"
-    expect(errors_list[4].text).to eq "Enter a valid barcode number"
+    expect(errors_list[3].text).to eq "You must state how many units are affected"
+    expect(errors_list[4].text).to eq "Name cannot be blank"
+    expect(errors_list[5].text).to eq "Enter a valid barcode number"
 
     select attributes[:category], from: "Product category"
 
@@ -39,6 +43,12 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
 
     within_fieldset("Is the product counterfeit?") do
       choose counterfeit_answer(attributes[:authenticity])
+    end
+
+    within_fieldset("How many units are affected?") do
+      choose affected_units_status_answer(attributes[:affected_units_status])
+      find("#exact_units").set(10) if attributes[:affected_units_status] == "exact"
+      find("#approx_units").set(10) if attributes[:affected_units_status] == "approx"
     end
 
     select attributes[:country_of_origin], from: "Country of origin"
