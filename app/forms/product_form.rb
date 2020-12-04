@@ -41,9 +41,9 @@ class ProductForm
 
   def self.from(product)
     new(product.serializable_hash(except: %i[updated_at])).tap do |product_form|
-      if product.affected_units_status.inquiry.approx?
+      if product.affected_units_status == Product.affected_units_statuses["approx"]
         product_form.approx_units = product.number_of_affected_units
-      elsif product.affected_units_status.inquiry.exact?
+      elsif product.affected_units_status == Product.affected_units_statuses["exact"]
         product_form.exact_units = product.number_of_affected_units
       end
     end

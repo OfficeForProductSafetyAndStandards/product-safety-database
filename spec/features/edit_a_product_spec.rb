@@ -16,6 +16,16 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            webpage: webpage,
            country_of_origin: country_of_origin)
   end
+  let(:product_with_no_affected_units_status) do
+    create(:product,
+           authenticity: nil,
+           affected_units_status: nil,
+           number_of_affected_units: nil,
+           brand: brand,
+           product_code: product_code,
+           webpage: webpage,
+           country_of_origin: country_of_origin)
+  end
 
   let(:new_name)              { Faker::Commerce.product_name }
   let(:new_brand)             { Faker::Hipster.word }
@@ -57,6 +67,73 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_field("Webpage",                  with: product.webpage)
     expect(page).to have_select("Country of origin",       selected: "France")
     expect(page).to have_field("Description of product",   with: "\r\n" + product.description)
+
+    click_on "Save product"
+
+    expect(page).to have_error_messages
+    expect(page).to have_error_summary "You must state whether the product is a counterfeit"
+
+    select new_product_category, from: "Product category"
+    fill_in "Product sub-category", with: new_subcategory
+
+    within_fieldset "Is the product counterfeit?" do
+      choose counterfeit_answer(new_authenticity)
+    end
+
+    within_fieldset("How many units are affected?") do
+      choose affected_units_status_answer(new_affected_units_status)
+      find("#approx_units").set(new_number_of_affected_units)
+    end
+
+    fill_in "Product brand",            with: new_brand
+    fill_in "Product name",             with: new_name
+    fill_in "Barcode number",           with: new_gtin13
+    fill_in "Batch number",             with: new_batch_number
+    fill_in "Other product identifier", with: new_product_code
+    fill_in "Webpage",                  with: new_webpage
+    select new_country_of_origin,       from: "Country of origin"
+    fill_in "Description of product",   with: new_description
+
+    click_on "Save product"
+
+    expect(page).to have_summary_item(key: "Category", value: new_product_category)
+    expect(page).to have_summary_item(key: "Product sub-category", value: new_subcategory)
+    expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Units affected",            value: "something like 23")
+    expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
+    expect(page).to have_summary_item(key: "Product name",              value: new_name)
+    expect(page).to have_summary_item(key: "Barcode number",            value: new_gtin13)
+    expect(page).to have_summary_item(key: "Batch number",              value: new_batch_number)
+    expect(page).to have_summary_item(key: "Other product identifiers", value: new_product_code)
+    expect(page).to have_summary_item(key: "Webpage",                   value: new_webpage)
+    expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
+    expect(page).to have_summary_item(key: "Description",               value: new_description)
+  end
+
+  it "allows to edit a product without an affected_units_status" do
+    visit "/products/#{product_with_no_affected_units_status.id}"
+
+    expect(page).to have_summary_item(key: "Product authenticity", value: "Not provided")
+
+    visit "/products/#{product_with_no_affected_units_status.id}/edit"
+
+    expect(page).to have_select("Product category", selected: product_with_no_affected_units_status.category)
+    expect(page).to have_field("Product sub-category", with: product_with_no_affected_units_status.subcategory)
+
+    within_fieldset "Is the product counterfeit?" do
+      expect(page).not_to have_checked_field("Yes")
+      expect(page).not_to have_checked_field("No")
+      expect(page).not_to have_checked_field("Unsure")
+    end
+
+    expect(page).to have_field("Product brand",            with: product_with_no_affected_units_status.brand)
+    expect(page).to have_field("Product name",             with: product_with_no_affected_units_status.name)
+    expect(page).to have_field("Barcode number",           with: product_with_no_affected_units_status.gtin13)
+    expect(page).to have_field("Batch number",             with: product_with_no_affected_units_status.batch_number)
+    expect(page).to have_field("Other product identifier", with: "\r\n" + product_with_no_affected_units_status.product_code)
+    expect(page).to have_field("Webpage",                  with: product_with_no_affected_units_status.webpage)
+    expect(page).to have_select("Country of origin",       selected: "France")
+    expect(page).to have_field("Description of product",   with: "\r\n" + product_with_no_affected_units_status.description)
 
     click_on "Save product"
 
