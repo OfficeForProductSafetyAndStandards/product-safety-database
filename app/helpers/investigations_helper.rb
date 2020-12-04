@@ -306,7 +306,16 @@ module InvestigationsHelper
       }
     end
 
-    rows = [risk_level_row, risk_assessment_row]
+    validated_row = {
+      key: { text: 'Risk level validated' },
+      value: { text: 'LOL NO M8' },
+      actions: { items: [
+        href: '/',
+        text: "This is where the link will go"
+      ]}
+    }
+
+    rows = [risk_level_row, validated_row, risk_assessment_row]
 
     if investigation.hazard_type.present?
       rows << {
