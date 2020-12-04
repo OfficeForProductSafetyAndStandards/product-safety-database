@@ -310,7 +310,7 @@ module InvestigationsHelper
       key: { text: 'Risk level validated' },
       value: { text: 'LOL NO M8' },
       actions: { items: [
-        href: '/',
+        href: edit_investigation_risk_validations_path(investigation.pretty_id),
         text: "This is where the link will go"
       ]}
     }
