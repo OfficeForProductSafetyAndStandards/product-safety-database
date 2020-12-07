@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_171036) do
+ActiveRecord::Schema.define(version: 2020_12_07_173507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.string "hazard_type"
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
+    t.boolean "is_risk_validated"
     t.text "non_compliant_reason"
     t.string "pretty_id", null: false
     t.string "product_category"
