@@ -2,6 +2,7 @@ class TestResultForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  include ActiveModel::Validations::Callbacks
   include ActiveModel::Dirty
   include SanitizationHelper
 
@@ -34,6 +35,8 @@ class TestResultForm
             complete_date: true,
             not_in_future: true
 
+  before_validation { trim_line_endings(:details) }
+
   ATTRIBUTES_FROM_TEST_RESULT = %i[
     id date details legislation result standards_product_was_tested_against product_id
   ].freeze
@@ -44,11 +47,6 @@ class TestResultForm
       test_result_form.load_document_file
       test_result_form.changes_applied
     end
-  end
-
-  def initialize(*args)
-    super
-    trim_line_endings(:details)
   end
 
   def cache_file!

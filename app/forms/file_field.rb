@@ -1,15 +1,14 @@
 class FileField
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include ActiveModel::Validations::Callbacks
+  include ActiveModel::Dirty
   include SanitizationHelper
 
   attribute :description
   attribute :file
 
-  delegate :original_filename, :content_type, to: :file
+  before_validation { trim_line_endings(:description) }
 
-  def initialize(*args)
-    super
-    trim_line_endings(:description)
-  end
+  delegate :original_filename, :content_type, to: :file
 end
