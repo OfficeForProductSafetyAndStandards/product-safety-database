@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 2020_12_18_123617) do
     t.string "hazard_type"
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
+    t.boolean "is_risk_validated"
     t.text "non_compliant_reason"
     t.string "pretty_id", null: false
     t.string "product_category"
