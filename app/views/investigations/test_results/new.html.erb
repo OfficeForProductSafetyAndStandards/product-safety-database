@@ -10,7 +10,7 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with model: @test_result, scope: :test_result, local: true, url: create_draft_investigation_test_results_path(@investigation.pretty_id), method: :put do |form| %>
+<%= form_with model: @test_result, scope: :test_result, local: true, builder: ApplicationFormBuilder, url: create_draft_investigation_test_results_path(@investigation.pretty_id), method: :put do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 

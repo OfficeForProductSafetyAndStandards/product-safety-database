@@ -15,47 +15,19 @@
         Only products already added to the case are listed.
         <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
-      <%= render "form_components/govuk_select",
-        key: :product_id,
-        form: form,
-        show_all_values: true,
-        items: investigation.products.map { |product| { text: product.name, value: product.id } },
-        is_autocomplete: true,
-        hint: { html: span_html },
-        label: { text: "Which product was tested?", classes: "govuk-label--m" }
-      %>
+      <%= form.govuk_autocomplete :product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.products.map { |product| { text: product.name, value: product.id } }, hint: span_html %>
     <% end %>
   </div>
 <% end %>
 
-<%= render "form_components/govuk_select",
-  key: :legislation,
-  form: form,
-  choices: relevant_legislation,
-  show_all_values: true,
-  is_autocomplete: true,
-  hint: { text: "Select the relevant legislation from the list." },
-  label: { text: "Against which legislation?", classes: "govuk-label--m" } %>
 
-<%= render "form_components/govuk_date_input",
-  form: form,
-  key: :date,
-  fieldset: { legend: { classes: "govuk-fieldset__legend--m",
-  text: "Date of test" } },
-  hint: { text: "For example, 12 7 2019" } %>
+<%= form.govuk_autocomplete(:legislation, label: "Against which legislation?", label_classes: "govuk-label--m", choices: relevant_legislation, hint: "Select the relevant legislation from the list.") %>
 
-<%= render "form_components/govuk_radios",
-  form: form,
-  key: :result,
-  fieldset: { legend: { text: "What was the result?", classes: "govuk-fieldset__legend--m" } },
-  items: Test::Result.results.map { |result, label| { text: label, value: result } }
-%>
+<%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
-<%= render "form_components/govuk_textarea",
-  key: :details,
-  form: form,
-  attributes: { maxlength: 50_000 },
-  label: { text: "Further details", classes: "govuk-label--m" } %>
+<%= form.govuk_radios :result, legend: "What was the result?", items: Test::Result.results.map { |result, label| { text: label, value: result } } %>
+
+<%= form.govuk_text_area :details, label: "Further details", attributes: { maxlength: 50_000 } %>
 
 <%= render "related_attachment_fields",
   form: form,
