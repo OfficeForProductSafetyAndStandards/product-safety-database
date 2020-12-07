@@ -10,7 +10,6 @@ class Investigations::TestResultsController < ApplicationController
     investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :update?
     @test_result_form = TestResultForm.new(test_result_params)
-    @test_result_form.cache_file!
     @test_result_form.load_document_file
 
     @investigation = investigation.decorate
@@ -50,9 +49,9 @@ class Investigations::TestResultsController < ApplicationController
     authorize investigation, :update?
 
     test_result = investigation.test_results.find(params[:id])
+
     @test_result_form = TestResultForm.from(test_result)
     @test_result_form.assign_attributes(test_result_params)
-    @test_result_form.cache_file!
     @test_result_form.load_document_file
 
     if @test_result_form.invalid?(:create_with_product)
@@ -60,13 +59,14 @@ class Investigations::TestResultsController < ApplicationController
       return render :edit
     end
 
+    changes = @test_result_form.changes.merge(document: @test_result_form.previous_changes)
     result = UpdateTestResult.call(
       @test_result_form.serializable_hash
         .merge(
           test_result: test_result,
           investigation: investigation,
           user: current_user,
-          changes: @test_result_form.changes
+          changes: changes
         )
     )
 
@@ -94,7 +94,7 @@ private
       :existing_document_file_id,
       :test_result_file,
       date: %i[day month year],
-      document: %i[description file]
+      document_form: %i[description file]
     )
   end
 end

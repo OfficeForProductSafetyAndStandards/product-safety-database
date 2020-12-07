@@ -13,16 +13,15 @@ class TestResultForm
   attribute :result
   attribute :standards_product_was_tested_against, :comma_separated_list
   attribute :product_id, :integer
-  attribute :document, :file_field
+  attribute :document
   attribute :existing_document_file_id
 
   define_attribute_methods :date, :govuk_date
   define_attribute_methods :details
   define_attribute_methods :legislation
   define_attribute_methods :result
-  define_attribute_methods :standards_product_was_tested_against, :comma_separated_list
+  define_attribute_methods :standards_product_was_tested_against
   define_attribute_methods :product_id
-  define_attribute_methods :document, :file_field
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
@@ -49,22 +48,26 @@ class TestResultForm
     end
   end
 
-  def cache_file!
-    return if document.blank?
-
-    self.document = ActiveStorage::Blob.create_after_upload!(
-      io: document.file,
-      filename: document.original_filename,
-      content_type: document.content_type,
-      metadata: { description: document.description }
-    )
-
-    self.existing_document_file_id = document.signed_id
-  end
-
   def load_document_file
     if existing_document_file_id.present? && document.nil?
       self.document = ActiveStorage::Blob.find_signed(existing_document_file_id)
+    end
+  end
+
+  def document_form=(document_params)
+    if document_params.key?(:file)
+      file = document_params[:file]
+      self.document = ActiveStorage::Blob.create_after_upload!(
+        io: file,
+        filename: file.original_filename,
+        content_type: file.content_type,
+        metadata: { description: document_params[:description] }
+      )
+
+      self.existing_document_file_id = document.signed_id
+    else
+      document.metadata[:description] = document_params[:description]
+      document.save!
     end
   end
 end

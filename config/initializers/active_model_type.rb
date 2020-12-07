@@ -1,9 +1,7 @@
 require "active_model/types/govuk_date"
 require "active_model/types/business_list"
 require "active_model/types/comma_separated_list"
-require "active_model/types/file_field"
 ActiveModel::Type.register(:govuk_date, ActiveModel::Types::GovUKDate)
 ActiveRecord::Type.register(:govuk_date, ActiveModel::Types::GovUKDate)
 ActiveModel::Type.register(:business_list, ActiveModel::Types::BusinessList)
 ActiveModel::Type.register(:comma_separated_list, ActiveModel::Types::CommaSeparatedList)
-ActiveModel::Type.register(:file_field, ActiveModel::Types::FileField)

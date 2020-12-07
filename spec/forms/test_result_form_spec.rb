@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer, type: :model do
+RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :model do
   subject(:form) { described_class.new(params) }
 
   let(:document) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
@@ -75,6 +75,28 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
           end
         end
       end
+    end
+  end
+
+  describe "when only changing the document's descrption" do
+    let(:test_result) { create(:test_result) }
+
+    subject(:form) do
+      test_result.document_blob
+      described_class.from(test_result)
+    end
+
+    before do
+      form.assign_attributes(existing_document_file_id: test_result.document.signed_id, document: { description: "new document description" })
+    end
+
+    it "contains the file changes" do
+
+      expect(form.changes)
+        .to eq({
+                 file: { description: [test_result.document.metadata[:description], "new document description"] }
+               }
+              )
     end
   end
 end
