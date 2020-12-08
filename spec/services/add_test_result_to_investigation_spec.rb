@@ -4,9 +4,8 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
   let(:user)                                 { create(:user, :activated) }
   let!(:investigation)                       { create :allegation, creator: user }
 
-  let(:file)                                 { ActiveStorage::Blob.create_after_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
+  let(:document)                             { ActiveStorage::Blob.create_after_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
   let(:file_description)                     { Faker::Hipster.sentence }
-  let(:document)                             { instance_double(FileField, file: file, description: file_description) }
   let(:date)                                 { Date.current }
   let(:details)                              { Faker::Hipster.sentence }
   let(:legislation)                          { Rails.application.config.legislation_constants["legislation"].sample }
@@ -44,7 +43,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
       expect(command.test_result).to have_attributes(
         date: date, details: details, legislation: legislation, result: "passed", product_id: product_id,
         standards_product_was_tested_against: standards_product_was_tested_against,
-        document_blob: document.file
+        document_blob: document
       )
     end
 
