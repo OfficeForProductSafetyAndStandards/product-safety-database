@@ -79,24 +79,22 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
   end
 
   describe "when only changing the document's descrption" do
-    let(:test_result) { create(:test_result) }
-
     subject(:form) do
       test_result.document_blob
       described_class.from(test_result)
     end
+
+    let(:test_result) { create(:test_result) }
 
     before do
       form.assign_attributes(existing_document_file_id: test_result.document.signed_id, document: { description: "new document description" })
     end
 
     it "contains the file changes" do
-
       expect(form.changes)
         .to eq({
-                 file: { description: [test_result.document.metadata[:description], "new document description"] }
-               }
-              )
+          file: { description: [test_result.document.metadata[:description], "new document description"] }
+        })
     end
   end
 end
