@@ -23,10 +23,11 @@ class Investigations::TestResultsController < ApplicationController
 
     if result.success?
       flash_message = "#{result.test_result.pretty_name.capitalize} was successfully recorded."
-      redirect_to investigation_supporting_information_index_path(investigation), flash: { success: flash_message }
-    else
-      render :new
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: flash_message }
     end
+
+    @investigation = investigation.decorate
+    render :new
   end
 
   def show
