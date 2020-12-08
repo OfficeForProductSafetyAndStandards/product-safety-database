@@ -29,7 +29,7 @@ class TestResultForm
             complete_date: true,
             not_in_future: true
 
-  before_validation { trim_line_endings(:details) }
+  before_validation { trim_line_endings(:details, :file_description) }
 
   ATTRIBUTES_FROM_TEST_RESULT = %i[
     id date details legislation result standards_product_was_tested_against product_id
@@ -46,6 +46,8 @@ class TestResultForm
   def load_document_file
     if existing_document_file_id.present? && document.nil?
       self.document = ActiveStorage::Blob.find_signed(existing_document_file_id)
+      self.filename = document.filename.to_s
+      self.file_description = document.metadata["description"]
     end
   end
 
@@ -58,13 +60,13 @@ class TestResultForm
         io: file,
         filename: file.original_filename,
         content_type: file.content_type,
-        metadata: { description: document_params[:description] }
+        metadata: { description: file_description }
       )
 
       self.existing_document_file_id = document.signed_id
     else
       self.file_description = document_params[:description]
-      document.metadata[:description] = document_params[:description]
+      document.metadata[:description] = file_description
       document.save!
     end
   end
