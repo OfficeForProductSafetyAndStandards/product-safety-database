@@ -15,13 +15,8 @@ class TestResultForm
   attribute :product_id, :integer
   attribute :document
   attribute :existing_document_file_id
-
-  define_attribute_methods :date, :govuk_date
-  define_attribute_methods :details
-  define_attribute_methods :legislation
-  define_attribute_methods :result
-  define_attribute_methods :standards_product_was_tested_against
-  define_attribute_methods :product_id
+  attribute :filename
+  attribute :file_description
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
@@ -57,6 +52,8 @@ class TestResultForm
   def document_form=(document_params)
     if document_params.key?(:file)
       file = document_params[:file]
+      self.filename = file.original_filename
+      self.file_description = document_params[:description]
       self.document = ActiveStorage::Blob.create_after_upload!(
         io: file,
         filename: file.original_filename,
@@ -66,6 +63,7 @@ class TestResultForm
 
       self.existing_document_file_id = document.signed_id
     else
+      self.file_description = document_params[:description]
       document.metadata[:description] = document_params[:description]
       document.save!
     end

@@ -4,10 +4,11 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   end
 
   def self.build_metadata(test_result, changes)
-    updated_values = changes.except(:document, :date)
+    updated_values = changes
 
     updated_values[:filename] = changes.dig("document")&.map { |d| d.filename.to_s }
-    updated_values[:date] = changes.dig("date")&.map { |date| date.to_s(:govuk) }
+    updated_values[:file_description] = changes.dig("document")&.map { |d| d.metadata.dig("description") }
+
     { test_result_id: test_result.id, updates: updated_values }
   end
 

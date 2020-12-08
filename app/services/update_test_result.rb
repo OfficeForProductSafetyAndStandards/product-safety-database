@@ -34,19 +34,6 @@ class UpdateTestResult
 
 private
 
-  def replace_attached_file_with(new_file)
-    test_result.documents.detach
-    test_result.documents.attach(new_file)
-  end
-
-  def no_changes?
-    !any_changes?
-  end
-
-  def any_changes?
-    test_result.changes.keys.any? || document.previous_changes.any?
-  end
-
   def create_audit_activity_for_test_result_updated
     metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, changes)
 

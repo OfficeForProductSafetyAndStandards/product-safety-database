@@ -59,23 +59,18 @@ class Investigations::TestResultsController < ApplicationController
       return render :edit
     end
 
-    changes = @test_result_form.changes.merge(document: @test_result_form.previous_changes)
     result = UpdateTestResult.call(
       @test_result_form.serializable_hash
-        .merge(
-          test_result: test_result,
-          investigation: investigation,
-          user: current_user,
-          changes: changes
-        )
+        .merge(test_result: test_result,
+               investigation: investigation,
+               user: current_user,
+               changes: @test_result_form.changes)
     )
 
-    if result.success?
-      redirect_to investigation_test_result_path(investigation, test_result)
-    else
-      @investigation = investigation.decorate
-      render "edit"
-    end
+    return redirect_to investigation_test_result_path(investigation, test_result) if result.success?
+
+    @investigation = investigation.decorate
+    render "edit"
   end
 
 private
