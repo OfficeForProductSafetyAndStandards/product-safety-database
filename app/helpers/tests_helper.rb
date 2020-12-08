@@ -12,16 +12,19 @@ module TestsHelper
       {
         key: { text: "Legislation" },
         value: { text: test_result.legislation }
-      },
-      {
-        key: { text: "Standards" },
-        value: { text: test_result.standards_product_was_tested_against }
-      },
-      {
-        key: { text: "Result" },
-        value: { text: test_result.result.upcase_first }
       }
     ]
+    if test_result.standards_product_was_tested_against.present?
+      rows << {
+        key: { text: "Standards" },
+        value: { text: test_result.standards_product_was_tested_against }
+      }
+    end
+
+    rows << {
+      key: { text: "Result" },
+      value: { text: test_result.result.upcase_first }
+    }
 
     if test_result.details.present?
       rows << {

@@ -48,6 +48,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
       # Change some of the fields
       select "Consumer Protection Act 1987", from: "Against which legislation?"
+      fill_in "Which standard was the product tested against?", with: "EN72,EN73"
 
       within_fieldset "Date of test" do
         fill_in "Day",   with: "2"
@@ -71,11 +72,23 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
       expect(page).to have_summary_item(key: "Date of test", value: "2 June 2019")
       expect(page).to have_summary_item(key: "Legislation", value: "Consumer Protection Act 1987")
+      expect(page).to have_summary_item(key: "Standards", value: "EN72, EN73")
       expect(page).to have_summary_item(key: "Result", value: "Failed")
       expect(page).to have_summary_item(key: "Further details", value: "Final result")
       expect(page).to have_summary_item(key: "Attachment description", value: "Final test result certificate")
 
       expect(page).to have_link("test_result_2.txt")
+
+      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link "Activity"
+
+      activity_card_body = page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, "..")
+      expect(activity_card_body).to have_text("Date of test: 2 June 2019")
+      expect(activity_card_body).to have_text("Result: failed")
+      expect(activity_card_body).to have_text("Further details: Final result")
+      expect(activity_card_body).to have_text("Legislation: Consumer Protection Act 1987")
+      expect(activity_card_body).to have_text("Attached: test_result_2.txt")
+      expect(activity_card_body).to have_text("Attachment description: Final test result certificate")
     end
   end
 end
