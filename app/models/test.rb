@@ -1,6 +1,6 @@
 class Test < ApplicationRecord
   belongs_to :investigation
-  belongs_to :product
+  belongs_to :product, optional: false
 
   has_one_attached :document
 
