@@ -66,6 +66,8 @@ class TestResultForm
       self.existing_document_file_id = document.signed_id
     else
       self.file_description = document_params[:description]
+      return if document.nil?
+
       document.metadata[:description] = file_description
       document.save!
     end
