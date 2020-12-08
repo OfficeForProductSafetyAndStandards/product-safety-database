@@ -184,13 +184,14 @@ ActiveRecord::Schema.define(version: 2020_12_18_123617) do
     t.string "hazard_type"
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
-    t.boolean "is_risk_validated"
     t.text "non_compliant_reason"
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
     t.enum "risk_level", as: "risk_levels"
+    t.datetime "risk_validated_at"
+    t.string "risk_validated_by"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
