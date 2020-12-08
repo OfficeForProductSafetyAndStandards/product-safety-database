@@ -16,7 +16,6 @@
 
       <%= render "form_components/govuk_radios", form: form, key: :is_risk_validated,
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
-                 hint: { text: t(".hint") },
                  items: [{ text: "Yes", value: "true", id: "risk_validationd" },
                          { text: "No", value: "false" }] %>
 
