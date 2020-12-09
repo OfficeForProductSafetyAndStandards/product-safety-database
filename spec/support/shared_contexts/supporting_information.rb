@@ -7,6 +7,6 @@ RSpec.shared_context "with all types of supporting information", :with_stubbed_a
 
   let(:product)            { create(:product) }
   let!(:test_request)      { create(:test_request, product: product, investigation: investigation).decorate }
-  let!(:test_result)       { create(:test_result, product: product, investigation: investigation).decorate }
+  let!(:test_result)       { create(:test_result, product: product, investigation: investigation, result: :passed).decorate }
   # rubocop:enable RSpec/LetSetup
 end
