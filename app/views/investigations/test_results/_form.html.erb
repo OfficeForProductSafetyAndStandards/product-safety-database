@@ -31,8 +31,9 @@
 
 <%= form.hidden_field :existing_document_file_id %>
 <%= render "related_attachment_fields",
-         form: form,
-         file_blob: @test_result_form.document,
-         attachment_name: :document_form,
-         title: "Test report attachment"
+           form: form,
+           file_blob: @test_result_form.document,
+           attachment_name: :document_form,
+           title: "Test report attachment",
+           error_field: :document
 %>
