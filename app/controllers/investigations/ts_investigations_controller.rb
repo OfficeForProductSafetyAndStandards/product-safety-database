@@ -6,7 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include FileConcern
   include FlowWithCoronavirusForm
-  set_attachment_names :file, :test_result_file, :risk_assessment_file
+  set_attachment_names :file, :risk_assessment_file
   set_file_params_key :file
 
   steps :coronavirus,
@@ -197,7 +197,6 @@ private
 
   def set_test
     @test_result_form = TestResultForm.new(test_params)
-    @test_result_form.cache_file!
     @test_result_form.load_document_file
 
     set_repeat_step(:test_result)
@@ -227,7 +226,6 @@ private
     session[:files] = []
     session[:product_files] = []
     session.delete :file
-    session.delete :test_result_file
     session.delete :risk_assessment_file
     session[:selected_businesses] = []
     session[:businesses] = []
@@ -710,9 +708,8 @@ private
       :result,
       :standards_product_was_tested_against,
       :existing_document_file_id,
-      :test_result_file,
       date: %i[day month year],
-      document: %i[description file]
+      document_form: %i[description file]
     )
   end
 
