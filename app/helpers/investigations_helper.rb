@@ -306,11 +306,16 @@ module InvestigationsHelper
       }
     end
 
-    risk_validated_value = investigation.risk_validated_by ? "Validated by #{investigation.risk_validated_by} on #{investigation.risk_validated_at}" : "No"
-    risk_validated_link_text = investigation.risk_validated_by ? "" : "Validate"
+    risk_validated_value = if investigation.risk_validated_by
+                             t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at)
+                           else
+                             t("investigations.risk_validation.not_validated")
+                           end
+
+    risk_validated_link_text = investigation.risk_validated_by ? "" : t("investigations.risk_validation.validate")
 
     validated_row = {
-      key: { text: 'Risk level validated' },
+      key: { text: t("investigations.risk_validation.page_title") },
       value: { text: risk_validated_value },
       actions: { items: [
         href: edit_investigation_risk_validations_path(investigation.pretty_id),
