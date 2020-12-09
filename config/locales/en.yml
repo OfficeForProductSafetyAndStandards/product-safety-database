@@ -128,6 +128,12 @@ en:
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "Coronavirus status updated on %{case_type}"
+    risk_validation:
+      validate: "Validate"
+      not_validated: "No"
+      validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
+      page_title: "Risk level validated"
+      success_message: "Case risk level validated"
     risk_level:
       show:
         title:

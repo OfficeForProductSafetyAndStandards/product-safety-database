@@ -16,7 +16,7 @@ module Investigations
                                           user: current_user)
 
       if result.changes_made
-        flash[:success] = "Case risk level validated"
+        flash[:success] = t("investigations.risk_validation.success_message")
       end
 
       redirect_to investigation_path(@investigation)
@@ -29,14 +29,6 @@ module Investigations
     end
 
   private
-
-    def set_success_flash_message(result)
-      return if result.change_action.blank?
-
-      flash[:success] = I18n.t(".success.#{result.change_action}",
-                               scope: "investigations.risk_level",
-                               level: result.updated_risk_level.downcase)
-    end
 
     def is_risk_validated
       params.dig :investigation, :is_risk_validated
