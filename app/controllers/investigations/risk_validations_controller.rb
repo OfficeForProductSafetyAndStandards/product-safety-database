@@ -3,10 +3,10 @@ module Investigations
     include UrlHelper
     def update
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
-      #TODO authorize @investigation, :update?
+      # TODO: authorize @investigation, :update?
 
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated, risk_validated_by: current_user.team.name, risk_validated_at: Date.current)
-      
+
       return render :edit unless @risk_validation_form.valid?
 
       result = ChangeRiskValidation.call!(investigation: @investigation,
