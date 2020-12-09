@@ -21,10 +21,8 @@ class UpdateTestResult
     test_result.transaction do
       test_result.document.attach(document)
 
-      break if changes.none?
-
       if test_result.save
-        create_audit_activity_for_test_result_updated
+        create_audit_activity_for_test_result_updated if changes.any?
         send_notification_email
       else
         context.fail!
