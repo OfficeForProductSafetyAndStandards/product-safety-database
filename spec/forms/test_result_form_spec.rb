@@ -1,16 +1,16 @@
 require "rails_helper"
 
-RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :model do
+RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, type: :model do
   subject(:form) { described_class.new(params) }
 
-  let(:document) { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
+  let(:document)             { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
   let(:document_description) { Faker::Hipster.sentence }
-  let(:date) { { day: "1", month: "1", year: "2020" } }
+  let(:date_form_params)     { { day: "1", month: "1", year: "2020" } }
+  let(:document_form_params) { { file: document, description: document_description } }
   let(:params) do
-    attributes_for(:test_result).except(:documents, :date).tap do |attributes|
-      attributes[:document] = { file: document, description: document_description }
-      attributes[:date] = date
-    end
+    attributes_for(:test_result)
+      .except(:documents, :date)
+      .merge(document_form: document_form_params, date: date_form_params)
   end
 
   let(:investigation) { params.delete(:investigation) }
@@ -38,26 +38,31 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
     it { is_expected.to validate_presence_of(:document).with_message("Provide the test results file") }
     it { is_expected.to validate_presence_of(:product_id).with_message("Select the product which was tested").on(:create_with_product) }
 
-    it_behaves_like "it does not allow dates in the future", :date
-    it_behaves_like "it does not allow malformed dates", :date
-    it_behaves_like "it does not allow an incomplete", :date
+    it_behaves_like "it does not allow dates in the future", :date_form_params, :date
+    it_behaves_like "it does not allow malformed dates", :date_form_params, :date
+    it_behaves_like "it does not allow an incomplete", :date_form_params, :date
   end
 
-  describe "#cache_files" do
-    it "chaches the documents files" do
-      expect { form.cache_file! }.to change { ActiveStorage::Blob.count }.by(1)
-    end
+  describe "#product_form=" do
+    context "when uploading a file and a description" do
+      it "caches the documents files" do
+        expect { form }.to change { ActiveStorage::Blob.count }.by(1)
+      end
 
-    it "stores the blob signed id" do
-      expect { form.cache_file! }.to change(form, :existing_document_file_id).from(nil).to(instance_of(String))
+      it "assigns filename and file_description and existing_signed id" do
+        expect(form)
+          .to have_attributes(
+            filename: "test_result.txt",
+            file_description: document_description,
+            existing_document_file_id: instance_of(String)
+          )
+      end
     end
   end
 
   describe "#load_documents_files" do
     context "when a file was previously cached" do
-      let(:previous_form) { described_class.new(params) }
-
-      before { previous_form.cache_file! }
+      let!(:previous_form) { described_class.new(params) }
 
       context "when no document is uploaded" do
         before { params[:document].delete(:file) }

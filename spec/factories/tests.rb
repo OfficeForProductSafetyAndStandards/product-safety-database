@@ -10,7 +10,7 @@ FactoryBot.define do
   end
 
   factory :test_result, class: "Test::Result", parent: :test do
-    result { Test::Result.results[:passed] }
+    result { Test::Result.results.keys.sample }
     standards_product_was_tested_against { [] }
   end
 
