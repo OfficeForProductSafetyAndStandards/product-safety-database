@@ -320,7 +320,7 @@ module InvestigationsHelper
       actions: { items: [
         href: edit_investigation_risk_validations_path(investigation.pretty_id),
         text: risk_validated_link_text
-      ]}
+      ] }
     }
 
     rows = [risk_level_row, validated_row, risk_assessment_row]
