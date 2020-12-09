@@ -38,7 +38,7 @@ private
   end
 
   def activity_class
-    AuditActivity::Investigation::UpdateCoronavirusStatus
+    AuditActivity::Investigation::UpdateRiskLevelValidation
   end
 
   def update_risk_validation_attributes
