@@ -9,11 +9,13 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:test_result)                              { create(:test_result, investigation: investigation, product: product) }
 
   let(:new_details)                              { Faker::Hipster.sentence }
-  let(:new_legislation)                          { (Rails.application.config.legislation_constants["legislation"] - [test_result.legislation]).sample }
+  let(:new_legislation)                          do
+    (Rails.application.config.legislation_constants["legislation"] - [test_result.legislation]).sample
+  end
   let(:new_date)                                 { test_result.date - 2.days }
   let(:new_standards_product_was_tested_against) { Faker::Hipster.words }
   let(:new_document)                             { ActiveStorage::Blob.create_after_upload!(io: File.open(file_fixture("files/new_test_result.txt")), filename: "new_test_result.txt") }
-  let(:new_result) { "failed" }
+  let(:new_result)                               { (Test::Result.results.keys - [test_result.result]).sample }
   let(:new_attributes) do
     {
       details: new_details,
@@ -22,24 +24,21 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       result: new_result,
       product_id: product.id,
       standards_product_was_tested_against: new_standards_product_was_tested_against,
-      document: new_document
+      existing_document_file_id: new_document.signed_id
     }
   end
-  let(:changes) do
-    {
-      details: [test_result.details, new_details],
-      legislation: [test_result.legislation, new_legislation],
-      date: [test_result.date, new_date],
-      result: [test_result.result, new_result],
-      standards_product_was_tested_against: [
-        test_result.standards_product_was_tested_against,
-        new_standards_product_was_tested_against
-      ],
-      document: [test_result.document, new_document]
-    }
+  let(:test_result_form) { TestResultForm.from(test_result).tap { |form| form.assign_attributes(new_attributes) } }
+  let(:changes)          { test_result_form.changes }
+  let(:params) do
+    test_result_form
+      .serializable_hash
+      .merge(
+        test_result: test_result,
+        user: user,
+        investigation: investigation,
+        changes: changes
+      )
   end
-
-  let(:params) { new_attributes.merge(test_result: test_result, user: user, investigation: investigation, changes: changes) }
 
   describe ".call" do
     context "with a missing parameters" do
@@ -62,8 +61,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       end
 
       context "when missing the test result" do
-        let(:test_result)    { nil }
-        let(:new_attributes) { {} }
+        let(:params) { new_attributes.merge(user: user, investigation: investigation, changes: changes) }
 
         it "returns a failure indicating a test result was not supplied", :aggregate_failures do
           expect(result).to be_failure
@@ -80,31 +78,28 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       def expected_email_body(name)
         "#{name} edited a test result on the allegation."
       end
+      let!(:expected_changes_metadata) do
+        {
+          "test_result_id" => test_result.id,
+          "updates" => {
+            "date" => [test_result.date.to_s, new_date.to_s],
+            "details" => [test_result.details, new_details],
+            "result" => [test_result.result, new_result],
+            "legislation" => [test_result.legislation, new_legislation],
+            "standards_product_was_tested_against" => [
+              test_result.standards_product_was_tested_against, new_standards_product_was_tested_against
+            ]
+          }
+        }
+      end
+      let(:activity_timeline_entry) { test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last }
 
       context "when there are changes to the metadata" do
-        let(:expected_metadata_changes) do
-          changes.except(:document).stringify_keys.merge(
-            "filename": [
-              test_result.document.filename.to_s,
-              new_document.filename.to_s
-            ],
-            "file_description": [
-              test_result.document.metadata.dig("description"),
-              new_document.metadata.dig("description")
-            ]
-          )
-        end
-
         it "updates the model and creates an activity log entry", :aggregate_failures do
           result
-
           test_result.reload
-          expect(test_result).to have_attributes(new_attributes.except(:document))
-
-          activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
-
-          expect(activity_timeline_entry.metadata)
-            .to eq("test_result_id" => test_result.id, "udpates" => expected_metadata_changes)
+          expect(test_result).to have_attributes(new_attributes.except(:document, :existing_document_file_id))
+          expect(activity_timeline_entry.metadata).to eq(expected_changes_metadata)
         end
 
         it_behaves_like "a service which notifies the case owner"
@@ -114,7 +109,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
         let(:updated_at) { 1.hour.ago }
         let(:new_attributes) do
           {
-            legislation: legislation,
+            legislation: test_result.legislation,
             details: test_result.details,
             result: test_result.result,
             date: {
