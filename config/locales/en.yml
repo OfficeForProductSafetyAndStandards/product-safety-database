@@ -134,6 +134,8 @@ en:
       validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
       page_title: "Risk level validated"
       success_message: "Case risk level validated"
+      activity:
+        success: "Case risk level validated"
     risk_level:
       show:
         title:
