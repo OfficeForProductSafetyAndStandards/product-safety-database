@@ -9,7 +9,7 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
   let(:document_form_params) { { file: document, description: document_description } }
   let(:params) do
     attributes_for(:test_result)
-      .except(:documents, :date)
+      .except(:document, :date)
       .merge(document_form: document_form_params, date: date_form_params)
   end
 
@@ -62,44 +62,35 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
 
   describe "#load_documents_files" do
     context "when a file was previously cached" do
-      let!(:previous_form) { described_class.new(params) }
+      let(:previous_form) { described_class.new(params) }
 
       context "when no document is uploaded" do
-        before { params[:document].delete(:file) }
-
-        it "does not load the document file" do
-          expect { form.load_document_file }.not_to change(form, :document)
+        before do
+          document_form_params.delete(:file)
+          params[:existing_document_file_id] = previous_form.existing_document_file_id
         end
 
-        context "when no new document has been uploaded" do
-          before { params[:existing_document_file_id] = previous_form.existing_document_file_id }
-
-          it "loads the previously cached document" do
-            expect { form.load_document_file }
-              .to change(form, :document).from(nil).to(instance_of(ActiveStorage::Blob))
-          end
+        it "does not load the document file" do
+          expect(form.document).to eq(previous_form.document)
         end
       end
     end
   end
 
-  describe "when only changing the document's descrption" do
-    subject(:form) do
-      test_result.document_blob
-      described_class.from(test_result)
-    end
+  describe "when only changing the document's description" do
+    subject(:form) { described_class.from(test_result) }
 
     let(:test_result) { create(:test_result) }
+    let(:new_description) { "new document description" }
 
-    before do
-      form.assign_attributes(existing_document_file_id: test_result.document.signed_id, document: { description: "new document description" })
-    end
-
-    it "contains the file changes" do
+    it "contains the file changes", :aggregate_failures do
+      expect {
+        form.assign_attributes(document_form: { description: new_description })
+      }.to change(form.document, :metadata)
+             .from("identified" => true, "safe" => true, "analyzed" => true)
+             .to("identified" => true, "safe" => true, "analyzed" => true, "description" => new_description)
       expect(form.changes)
-        .to eq({
-          file: { description: [test_result.document.metadata[:description], "new document description"] }
-        })
+        .to eq("file_description" => [test_result.document.metadata["description"], new_description])
     end
   end
 end
