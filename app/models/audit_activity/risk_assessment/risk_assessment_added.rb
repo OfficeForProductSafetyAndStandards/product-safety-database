@@ -17,7 +17,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
     }
   end
 
-  def title(_ = nil)
+  def title(*)
     "Risk assessment"
   end
 
