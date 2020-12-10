@@ -307,7 +307,7 @@ module InvestigationsHelper
     end
 
     risk_validated_value = if investigation.risk_validated_by
-                             t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at)
+                             t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at.strftime("%d %B %Y"))
                            else
                              t("investigations.risk_validation.not_validated")
                            end
