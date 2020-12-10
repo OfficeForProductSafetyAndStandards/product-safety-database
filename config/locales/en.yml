@@ -248,6 +248,8 @@ en:
               blank: "Select the product which was tested"
             legislation:
               inclusion: "Select the legislation that relates to this test"
+            standards_product_was_tested_against:
+              blank: "Enter the standard the product was tested against"
             result:
               inclusion: "Select result of the test"
             document:

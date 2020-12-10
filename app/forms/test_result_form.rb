@@ -20,6 +20,7 @@ class TestResultForm
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
+  validates :standards_product_was_tested_against, presence: true
   validates :result, inclusion: { in: Test::Result.results.keys }
   validates :document, presence: true
   validates :product_id, presence: true, on: :create_with_product
