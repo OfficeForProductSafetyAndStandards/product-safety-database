@@ -67,7 +67,7 @@ GEM
     activerecord (6.0.3.4)
       activemodel (= 6.0.3.4)
       activesupport (= 6.0.3.4)
-    activerecord-pg_enum (1.1.0)
+    activerecord-pg_enum (1.2.0)
       activerecord (>= 4.1.0)
       activesupport
       pg
@@ -555,13 +555,13 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.25)
-    zeitwerk (2.4.1)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord-pg_enum (~> 1.1)
+  activerecord-pg_enum (~> 1.2)
   awesome_print (~> 1.8)
   aws-sdk-s3 (~> 1.86)
   axlsx!
