@@ -47,6 +47,10 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
     updates["file_description"]&.second
   end
 
+  def new_standards_product_was_tested_against
+    updates["standards_product_was_tested_against"]&.second
+  end
+
   def new_product
     @new_product ||=
       if updates["product_id"]

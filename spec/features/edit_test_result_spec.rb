@@ -84,9 +84,10 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
       activity_card_body = page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, "..")
       expect(activity_card_body).to have_text("Date of test: 2 June 2019")
+      expect(activity_card_body).to have_text("Legislation: Consumer Protection Act 1987")
+      expect(activity_card_body).to have_text("Standards: EN72, EN73")
       expect(activity_card_body).to have_text("Result: failed")
       expect(activity_card_body).to have_text("Further details: Final result")
-      expect(activity_card_body).to have_text("Legislation: Consumer Protection Act 1987")
       expect(activity_card_body).to have_text("Attached: test_result_2.txt")
       expect(activity_card_body).to have_text("Attachment description: Final test result certificate")
     end
