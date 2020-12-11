@@ -49,7 +49,7 @@ private
         test_result.investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{context.activity.source.show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
+        "#{UserSource.new(user: user).show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later
     end
