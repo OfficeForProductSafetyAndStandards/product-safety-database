@@ -4,7 +4,7 @@
          scope: :test_result,
          other_text: "Are there other test results to report?",
          hide_break: false,
-         error_order: %i[legislation date result base],
+         error_order: %i[legislation standards_product_was_tested_against date result base],
          further_key: :further_test_results do |form|
   = render "investigations/test_results/form",
            form: form,
