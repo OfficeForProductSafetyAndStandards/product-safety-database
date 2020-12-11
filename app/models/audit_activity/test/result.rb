@@ -26,4 +26,8 @@ private
   def subtitle_slug
     "Test result recorded"
   end
+
+  # Do not send investigation_updated mail when test result updated. This
+  # overrides inherited functionality in the Activity model :(
+  def notify_relevant_users; end
 end
