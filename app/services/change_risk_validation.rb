@@ -10,7 +10,7 @@ class ChangeRiskValidation
 
     context.changes_made = false
 
-    update_risk_validation_attributes
+    assign_risk_validation_attributes
     return if investigation.changes.none?
 
     ActiveRecord::Base.transaction do
@@ -41,7 +41,7 @@ private
     AuditActivity::Investigation::UpdateRiskLevelValidation
   end
 
-  def update_risk_validation_attributes
+  def assign_risk_validation_attributes
     if is_risk_validated
       investigation.assign_attributes(risk_validated_at: risk_validated_at, risk_validated_by: risk_validated_by)
     else
