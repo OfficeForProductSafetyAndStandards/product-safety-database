@@ -312,15 +312,10 @@ module InvestigationsHelper
                              t("investigations.risk_validation.not_validated")
                            end
 
-    risk_validated_link_text = investigation.risk_validated_by ? "" : t("investigations.risk_validation.validate")
-
     validated_row = {
       key: { text: t("investigations.risk_validation.page_title") },
       value: { text: risk_validated_value },
-      actions: { items: [
-        href: edit_investigation_risk_validations_path(investigation.pretty_id),
-        text: risk_validated_link_text
-      ] }
+      actions: risk_validation_actions(investigation, user)
     }
 
     rows = [risk_level_row, validated_row, risk_assessment_row]
@@ -340,6 +335,23 @@ module InvestigationsHelper
     end
 
     rows
+  end
+
+  def risk_validation_actions(investigation, user)
+    if @investigation.teams_with_access.include?(user.team)
+      {
+        items: [
+          href: edit_investigation_risk_validations_path(investigation.pretty_id),
+          text: risk_validated_link_text(investigation)
+        ]
+      }
+    else
+      {}
+    end
+  end
+
+  def risk_validated_link_text(investigation)
+    investigation.risk_validated_by ? "" : t("investigations.risk_validation.validate")
   end
 
   # This builds an array from an investigation which can then
