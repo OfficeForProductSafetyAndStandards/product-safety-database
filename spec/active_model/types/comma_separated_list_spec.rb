@@ -11,6 +11,14 @@ RSpec.describe ActiveModel::Types::CommaSeparatedList do
     end
   end
 
+  context "when passing a empty comma" do
+    let(:value) { "a string, , ," }
+
+    it "returns the an array with the passed in string" do
+      expect(type_caster.cast(value)).to eq(["a string"])
+    end
+  end
+
   context "when passing a string with commas separated values" do
     let(:value) { "a string, another string" }
 
