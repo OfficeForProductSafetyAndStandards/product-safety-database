@@ -5,6 +5,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
   let(:product1) { create(:product_washing_machine, name: "MyBrand red washing machine") }
   let(:product2) { create(:product_washing_machine, name: "MyBrand blue washing machine") }
   let(:investigation) { create(:allegation, products: [product1, product2], creator: user) }
+  let(:standards_product_was_tested_against) { [] }
 
   let(:test_result) do
     create(:test_result,
@@ -13,24 +14,28 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
            legislation: "General Product Safety Regulations 2005",
            date: Date.parse("2019-05-01"),
            result: :passed,
-           details: "Provisional")
+           details: "Provisional",
+           standards_product_was_tested_against: standards_product_was_tested_against)
+  end
+  def go_edit_test_result
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
+
+    click_link "Edit test result"
+
+    expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
+
+    # Check back link works
+    click_link "Back"
+    expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+    click_link "Edit test result"
   end
 
   scenario "Editing a test result (with validation errors)" do
     travel_to Date.parse("4 May 2020") do
-      sign_in(user)
 
-      visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
-
-      click_link "Edit test result"
-
-      expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
-
-      # Check back link works
-      click_link "Back"
-      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
-      click_link "Edit test result"
-
+      go_edit_test_result
       # Check that form is pre-filled with existing values
       expect(page).to have_field("Against which legislation?", with: "General Product Safety Regulations 2005")
       within_fieldset "Date of test" do
@@ -90,6 +95,17 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
       expect(activity_card_body).to have_text("Further details: Final result")
       expect(activity_card_body).to have_text("Attached: test_result_2.txt")
       expect(activity_card_body).to have_text("Attachment description: Final test result certificate")
+    end
+  end
+
+  context "with legacy test result" do
+    let(:standards_product_was_tested_against) { nil }
+
+    scenario "legacy test results with no standard tested against should enforce adding the standard" do
+      go_edit_test_result
+
+      click_button "Update test result"
+      expect(page).to have_error_summary "Enter the standard the product was tested against"
     end
   end
 end
