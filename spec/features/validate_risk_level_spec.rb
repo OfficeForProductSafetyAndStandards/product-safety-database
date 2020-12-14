@@ -13,7 +13,7 @@ RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, 
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-    click_on "Submit Button"
+    click_on "Continue"
 
     expect(page).to have_content("Select yes if you have validated the case risk level")
 
