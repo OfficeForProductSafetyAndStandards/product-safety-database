@@ -133,7 +133,8 @@ en:
       not_validated: "No"
       validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
       page_title: "Risk level validated"
-      success_message: "Case risk level validated"
+      validated_success_message: "Case risk level validated"
+      validation_removed_success_message: "Case risk level validation removed"
       activity:
         success: "Case risk level validated"
     risk_level:
