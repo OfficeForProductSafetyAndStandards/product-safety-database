@@ -8,11 +8,13 @@ module Investigations
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated, risk_validated_by: current_user.team.name, risk_validated_at: Date.current)
 
       return render :edit unless @risk_validation_form.valid?
-
+      #we need risk level validation rationale
       result = ChangeRiskValidation.call!(investigation: @investigation,
                                           is_risk_validated: @risk_validation_form.is_risk_validated,
                                           risk_validated_at: @risk_validation_form.risk_validated_at,
                                           risk_validated_by: @risk_validation_form.risk_validated_by,
+                                          risk_level_validation_rationale: @risk_validation_form.risk_level_validation_rationale,
+                                          previous_risk_validated_at: @investigation.risk_validated_at,
                                           user: current_user)
 
       if result.changes_made
