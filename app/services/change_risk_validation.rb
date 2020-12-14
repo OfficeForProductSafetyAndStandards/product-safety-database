@@ -28,13 +28,13 @@ private
 
   def create_audit_activity_for_risk_validation_changed
     # we need risk_validation_change_rationale
-    metadata = activity_class.build_metadata(investigation)
+    metadata = activity_class.build_metadata(investigation, risk_validation_change_rationale)
 
     activity_class.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
       title: nil,
-      body: sanitize_text(risk_validation_change_rationale),
+      body: nil,
       metadata: metadata
     )
   end

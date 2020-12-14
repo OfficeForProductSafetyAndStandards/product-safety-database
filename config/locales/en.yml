@@ -136,7 +136,8 @@ en:
       validated_success_message: "Case risk level validated"
       validation_removed_success_message: "Case risk level validation removed"
       activity:
-        success: "Case risk level validated"
+        added: "Case risk level validation added"
+        removed: "Case risk level validation removed"
     risk_level:
       show:
         title:
