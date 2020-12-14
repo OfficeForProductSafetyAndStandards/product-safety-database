@@ -351,7 +351,7 @@ module InvestigationsHelper
   end
 
   def risk_validated_link_text(investigation)
-    investigation.risk_validated_by ? "" : t("investigations.risk_validation.validate")
+    investigation.risk_validated_by ? "Change" : t("investigations.risk_validation.validate")
   end
 
   # This builds an array from an investigation which can then

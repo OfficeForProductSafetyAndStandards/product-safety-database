@@ -16,7 +16,8 @@ module Investigations
                                           user: current_user)
 
       if result.changes_made
-        flash[:success] = t("investigations.risk_validation.success_message")
+        success_message = @risk_validation_form.is_risk_validated ? "validated_success_message" : "validation_removed_success_message"
+        flash[:success] = t("investigations.risk_validation.#{success_message}")
       end
 
       redirect_to investigation_path(@investigation)
@@ -24,7 +25,8 @@ module Investigations
 
     def edit
       @investigation = Investigation.find_by(pretty_id: params["investigation_pretty_id"])
-      @risk_validation_form = RiskValidationForm.new(is_risk_validated: nil)
+      is_risk_validated = @investigation.risk_validated_by ? true : false
+      @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated)
       @breadcrumbs = build_back_link_to_case
     end
 
