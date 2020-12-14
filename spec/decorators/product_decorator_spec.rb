@@ -111,10 +111,10 @@ RSpec.describe ProductDecorator do
       end
     end
 
-    context "when only the Product sub-category is present" do
+    context "when only the Product subcategory is present" do
       before { product.category = nil }
 
-      it "returns only the Product sub-category" do
+      it "returns only the Product subcategory" do
         expect(decorated_product.subcategory_and_category_label)
           .to eq(product.subcategory)
       end

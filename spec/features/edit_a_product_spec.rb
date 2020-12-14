@@ -51,7 +51,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     visit "/products/#{product.id}/edit"
 
     expect(page).to have_select("Product category", selected: product.category)
-    expect(page).to have_field("Product sub-category", with: product.subcategory)
+    expect(page).to have_field("Product subcategory", with: product.subcategory)
 
     within_fieldset "Is the product counterfeit?" do
       expect(page).not_to have_checked_field("Yes")
@@ -74,7 +74,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_error_summary "You must state whether the product is a counterfeit"
 
     select new_product_category, from: "Product category"
-    fill_in "Product sub-category", with: new_subcategory
+    fill_in "Product subcategory", with: new_subcategory
 
     within_fieldset "Is the product counterfeit?" do
       choose counterfeit_answer(new_authenticity)
@@ -97,7 +97,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     click_on "Save product"
 
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
-    expect(page).to have_summary_item(key: "Product sub-category", value: new_subcategory)
+    expect(page).to have_summary_item(key: "Product subcategory", value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
     expect(page).to have_summary_item(key: "Units affected",            value: "something like 23")
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
@@ -118,7 +118,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     visit "/products/#{product_with_no_affected_units_status.id}/edit"
 
     expect(page).to have_select("Product category", selected: product_with_no_affected_units_status.category)
-    expect(page).to have_field("Product sub-category", with: product_with_no_affected_units_status.subcategory)
+    expect(page).to have_field("Product subcategory", with: product_with_no_affected_units_status.subcategory)
 
     within_fieldset "Is the product counterfeit?" do
       expect(page).not_to have_checked_field("Yes")
@@ -141,7 +141,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_error_summary "You must state whether the product is a counterfeit"
 
     select new_product_category, from: "Product category"
-    fill_in "Product sub-category", with: new_subcategory
+    fill_in "Product subcategory", with: new_subcategory
 
     within_fieldset "Is the product counterfeit?" do
       choose counterfeit_answer(new_authenticity)
@@ -164,7 +164,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     click_on "Save product"
 
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
-    expect(page).to have_summary_item(key: "Product sub-category", value: new_subcategory)
+    expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
     expect(page).to have_summary_item(key: "Units affected",            value: "something like 23")
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)

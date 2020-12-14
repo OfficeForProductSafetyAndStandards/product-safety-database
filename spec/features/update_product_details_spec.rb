@@ -27,7 +27,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     expect_to_be_on_edit_product_page(product_id: product.id, product_name: "MyBrand washing machine")
 
     expect(page).to have_field("Product category", with: "Electrical appliances and equipment")
-    expect(page).to have_field("Product sub-category", with: "washing machine")
+    expect(page).to have_field("Product subcategory", with: "washing machine")
     expect(page).to have_field("Product name", with: "MyBrand washing machine")
     expect(page).to have_field("Other product identifiers", text: "MBWM01")
     expect(page).to have_field("Batch number", with: "Batches 0001 to 0231")
@@ -35,7 +35,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
     expect(page).to have_field("Description of product", text: "White with chrome buttons")
 
     select "Kitchen / cooking accessories", from: "Product category"
-    fill_in "Product sub-category", with: "dishwasher"
+    fill_in "Product subcategory", with: "dishwasher"
     fill_in "Product name", with: "MyBrand dishwasher"
     fill_in "Other product identifiers", with: "MBDW01"
     fill_in "Batch number", with: "Batches 0005 to 1023"
@@ -54,7 +54,7 @@ RSpec.feature "Updating product details", :with_stubbed_mailer, :with_stubbed_el
 
     expect(page).to have_summary_item(key: "Product name", value: "MyBrand dishwasher")
     expect(page).to have_summary_item(key: "Category", value: "Kitchen / cooking accessories")
-    expect(page).to have_summary_item(key: "Product sub-category", value: "dishwasher")
+    expect(page).to have_summary_item(key: "Product subcategory", value: "dishwasher")
     expect(page).to have_summary_item(key: "Other product identifiers", value: "MBDW01")
     expect(page).to have_summary_item(key: "Batch number", value: "Batches 0005 to 1023")
     expect(page).to have_summary_item(key: "Webpage", value: "http://example.com/mybrand/dishwashers")
