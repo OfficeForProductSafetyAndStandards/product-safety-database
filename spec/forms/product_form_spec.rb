@@ -32,6 +32,15 @@ RSpec.describe ProductForm do
       end
     end
 
+    context "when setting a 8 digit UPC-A code" do
+      before { form.gtin13 = "01234567" }
+
+      it "accepts a 8 digit code", :aggregate_failures do
+        expect(form).to be_valid
+        expect(form.gtin13).to eq "01234567"
+      end
+    end
+
     context "when setting a 12 digit UPC-A code" do
       before { form.gtin13 = "012345678912" }
 
