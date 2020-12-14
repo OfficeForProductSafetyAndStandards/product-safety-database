@@ -3,17 +3,17 @@ module Investigations
     include UrlHelper
     def update
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
-      # TODO: authorize @investigation, :update?
 
-      @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated, risk_validated_by: current_user.team.name, risk_validated_at: Date.current)
+      @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated, risk_validated_by: current_user.team.name,
+                                                     risk_validated_at: Date.current, risk_validation_change_rationale: risk_validation_change_rationale)
 
       return render :edit unless @risk_validation_form.valid?
-      #we need risk level validation rationale
+
       result = ChangeRiskValidation.call!(investigation: @investigation,
                                           is_risk_validated: @risk_validation_form.is_risk_validated,
                                           risk_validated_at: @risk_validation_form.risk_validated_at,
                                           risk_validated_by: @risk_validation_form.risk_validated_by,
-                                          risk_level_validation_rationale: @risk_validation_form.risk_level_validation_rationale,
+                                          risk_validation_change_rationale: @risk_validation_form.risk_validation_change_rationale,
                                           previous_risk_validated_at: @investigation.risk_validated_at,
                                           user: current_user)
 
@@ -36,6 +36,10 @@ module Investigations
 
     def is_risk_validated
       params.dig :investigation, :is_risk_validated
+    end
+
+    def risk_validation_change_rationale
+      params.dig :investigation, :risk_validation_change_rationale
     end
   end
 end
