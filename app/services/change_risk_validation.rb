@@ -2,9 +2,10 @@ class ChangeRiskValidation
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :risk_validated_at, :risk_validated_by, :is_risk_validated, :user, to: :context
+  delegate :investigation, :risk_validated_at, :risk_validated_by, :is_risk_validated, :risk_validation_change_rationale, :user, to: :context
 
   def call
+    # we need risk_validation_change_rationale
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
@@ -26,13 +27,14 @@ class ChangeRiskValidation
 private
 
   def create_audit_activity_for_risk_validation_changed
+    # we need risk_validation_change_rationale
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
       title: nil,
-      body: nil,
+      body: sanitize_text(risk_validation_change_rationale),
       metadata: metadata
     )
   end
