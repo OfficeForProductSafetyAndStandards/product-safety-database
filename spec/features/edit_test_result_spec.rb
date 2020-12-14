@@ -17,6 +17,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
            details: "Provisional",
            standards_product_was_tested_against: standards_product_was_tested_against)
   end
+
   def go_edit_test_result
     sign_in(user)
 
@@ -34,7 +35,6 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
   scenario "Editing a test result (with validation errors)" do
     travel_to Date.parse("4 May 2020") do
-
       go_edit_test_result
       # Check that form is pre-filled with existing values
       expect(page).to have_field("Against which legislation?", with: "General Product Safety Regulations 2005")
