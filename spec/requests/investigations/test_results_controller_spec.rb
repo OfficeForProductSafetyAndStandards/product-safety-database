@@ -22,13 +22,13 @@ RSpec.describe Investigations::TestResultsController, type: :request, with_stubb
   before { sign_in user }
 
   context "when the AddTestResultToInvestigation.call is not successful" do
-    let(:service) {  double(AddTestResultToInvestigation, success?: false) }
+    let(:service) { instance_double(AddTestResultToInvestigation, success?: false) }
 
     before do
       allow(AddTestResultToInvestigation).to receive(:call).and_return(service)
     end
 
-    it "re-renders the form" do
+    it "re-renders the form", :aggregate_failures do
       expect {
         post investigation_test_results_path(investigation.pretty_id), params: { test_result: params }
       }.not_to change(Test::Result, :count)
