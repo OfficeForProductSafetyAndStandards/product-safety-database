@@ -12,8 +12,8 @@
       <%= form.hidden_field :product_id, value: @investigation.products.first.id %>
     <% else %>
       <% span_html = capture do %>
-      Only products already added to the case are listed.
-      <%= link_to "Add a product", new_investigation_product_path(investigation) %>
+        Only products already added to the case are listed.
+        <%= link_to "Add a product", new_investigation_product_path(investigation) %>
       <% end %>
       <%= form.govuk_autocomplete :product_id, label: "Which product was tested?", label_classes: "govuk-label--m", items: investigation.products.map { |product| { text: product.name, value: product.id } }, hint: span_html %>
     <% end %>
@@ -22,7 +22,7 @@
 
 
 <%= form.govuk_autocomplete(:legislation, label: "Against which legislation?", label_classes: "govuk-label--m", choices: relevant_legislation, hint: "Select the relevant legislation from the list.") %>
-<%= form.govuk_input :standards_product_was_tested_against, hint: "For example, EN71. Use comma to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
+<%= form.govuk_input :standards_product_was_tested_against, label_classes: "govuk-label--m", hint: "For example, EN71. Use comma to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
 <%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
 <%= form.govuk_radios :result, legend: "What was the result?", items: Test::Result.results.map { |result, label| { text: label, value: result } } %>
