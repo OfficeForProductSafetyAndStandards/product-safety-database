@@ -72,7 +72,7 @@ RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
 
     validation_link = page.find(:css, "a[href='/cases/#{investigation.pretty_id}/validate-risk-level/edit']")
-    expect(validation_link.text).to eq 'Change'
+    expect(validation_link.text).to eq "Change"
 
     validation_link.click
 
