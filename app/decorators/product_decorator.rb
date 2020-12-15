@@ -10,7 +10,7 @@ class ProductDecorator < ApplicationDecorator
   def summary_list
     rows = [
       { key: { text: "Category" }, value: { text: category } },
-      { key: { text: "Product sub-category" }, value: { text: subcategory } },
+      { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
       { key: { text: "Units affected" }, value: { text: units_affected } },
       { key: { text: "Product brand" }, value: { text: object.brand } },

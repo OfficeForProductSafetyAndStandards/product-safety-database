@@ -292,7 +292,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         click_button "Continue"
 
         expect_to_be_on_what_product_are_you_reporting_page
-        expect(page).to have_error_summary "Name cannot be blank", "Product sub-category cannot be blank", "Category cannot be blank"
+        expect(page).to have_error_summary "Name cannot be blank", "Product subcategory cannot be blank", "Category cannot be blank"
 
         fill_in_product_page(with: product_details)
 
@@ -396,7 +396,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
       expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
       expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
-      expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: info[:type])
+      expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: info[:type])
       expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
       expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
       expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin]) if info[:country_of_origin]
@@ -482,7 +482,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_product_page(with:)
     select with[:category],                      from: "Product category"
     select with[:country_of_origin],             from: "Country of origin" if with[:country_of_origin]
-    fill_in "Product sub-category", with: with[:type]
+    fill_in "Product subcategory", with: with[:type]
 
     within_fieldset("Is the product counterfeit?") do
       choose with[:authenticity]
