@@ -374,6 +374,10 @@ en:
               must_be_real: Date of call must be a real date
               incomplete: Date of call must include a %{missing_date_parts}
               in_future: Date of call must be today or in the past
+        risk_validation_form:
+          attributes:
+            risk_validation_change_rationale:
+              blank: Enter details
 
   activerecord:
     models:

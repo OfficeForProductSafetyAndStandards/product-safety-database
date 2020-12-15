@@ -5,7 +5,8 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
 
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated, risk_validated_by: current_user.team.name,
-                                                     risk_validated_at: Date.current, risk_validation_change_rationale: risk_validation_change_rationale)
+                                                     risk_validated_at: Date.current, risk_validation_change_rationale: risk_validation_change_rationale,
+                                                     previous_risk_validated_at: @investigation.risk_validated_at)
 
       return render :edit unless @risk_validation_form.valid?
 
@@ -14,7 +15,6 @@ module Investigations
                                           risk_validated_at: @risk_validation_form.risk_validated_at,
                                           risk_validated_by: @risk_validation_form.risk_validated_by,
                                           risk_validation_change_rationale: @risk_validation_form.risk_validation_change_rationale,
-                                          previous_risk_validated_at: @investigation.risk_validated_at,
                                           user: current_user)
 
       if result.changes_made
