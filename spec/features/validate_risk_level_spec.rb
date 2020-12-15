@@ -78,6 +78,14 @@ RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, 
 
     within_fieldset("Have you validated the case risk level?") do
       choose "No"
+    end
+
+    click_on "Continue"
+
+    expect(page).to have_content("Enter details")
+
+    within_fieldset("Have you validated the case risk level?") do
+      choose "No"
       fill_in "Why?", with: "Mistake made by team member"
     end
 
