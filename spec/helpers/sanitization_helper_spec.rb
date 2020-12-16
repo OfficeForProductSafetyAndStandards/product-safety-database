@@ -22,15 +22,15 @@ RSpec.describe SanitizationHelper do
     context "with a short code code" do
       let(:code) { "12" }
 
-      it "sucessfully set the gtin field" do
-        expect(model.gtin).to eq(nil)
+      it "does not convert the field" do
+        expect(model.gtin).to eq("12")
       end
     end
 
     context "with a nil code" do
       let(:code) { nil }
 
-      it "sucessfully set the gtin field" do
+      it "does not convert the field" do
         expect(model.gtin).to eq(nil)
       end
     end

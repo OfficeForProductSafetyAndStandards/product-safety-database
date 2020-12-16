@@ -31,8 +31,7 @@ module SanitizationHelper
         gtin = Barkick::GTIN.new(attribute(key)&.strip, type: :ean8) unless gtin.valid?
       end
 
-      code = gtin.valid? ? gtin.gtin13 : nil
-      write_attribute(key, code)
+      write_attribute(key, gtin.gtin13) if gtin.valid?
     end
   end
 end
