@@ -14,6 +14,18 @@ RSpec.describe GtinValidator do
     }.new
   end
 
+  context "with a valid 8 digits UPC-E" do
+    before { record.gtin = "02345673" }
+
+    it { is_expected.to be_valid }
+  end
+
+  context "with a valid 8 digits EAN8" do
+    before { record.gtin = "40123455" }
+
+    it { is_expected.to be_valid }
+  end
+
   context "with a valid 12 digit UPC-A number" do
     before { record.gtin = "012345678912" }
 
