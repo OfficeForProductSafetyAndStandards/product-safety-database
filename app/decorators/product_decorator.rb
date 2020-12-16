@@ -17,6 +17,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
       { key: { text: "Batch number" }, value: { text: batch_number } },
+      { key: { text: "Product marking" }, value: { text: markings } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Webpage" }, value: { text: object.webpage } },
       { key: { text: "Description" }, value: { text: description } },
@@ -53,5 +54,12 @@ class ProductDecorator < ApplicationDecorator
     else
       I18n.t(".product.not_provided")
     end
+  end
+
+  def markings
+    return I18n.t(".product.not_provided") unless object.markings
+    return I18n.t(".product.none") if object.markings.empty?
+
+    object.markings.join(", ")
   end
 end

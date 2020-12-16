@@ -17,6 +17,8 @@ class Product < ApplicationRecord
     "not_relevant" => "not_relevant"
   }
 
+  MARKINGS = %w[UKCA UKNI CE].freeze
+
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
   has_many_attached :documents

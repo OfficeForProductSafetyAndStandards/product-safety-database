@@ -26,6 +26,22 @@
 
 <%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
 
+<% file_field = capture do %>
+  <%= form.govuk_checkboxes :markings,
+                            legend: "Select product marking",
+                            legend_classes: "govuk-fieldset__legend--s",
+                            items: Product::MARKINGS.map { |value| { text: value, value: value} } %>
+<% end %>
+
+<%= form.govuk_radios :has_markings,
+  legend: "Does the product have UKCA, UKNI, or CE marking?",
+  items: [
+    { text: "Yes", value: "true", conditional: { html: file_field }, checked: @product_form.has_markings },
+    { text: "No", value: "false", checked: @product_form.has_markings == false }
+  ]
+%>
+
+
 <%= form.govuk_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
 
 <%= render "form_components/govuk_input",

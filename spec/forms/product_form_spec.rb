@@ -3,7 +3,15 @@ require "rails_helper"
 RSpec.describe ProductForm do
   subject(:form) { described_class.new(attributes) }
 
-  let(:attributes) { attributes_for(:product) }
+  let(:attributes) { attributes_for(:product, has_markings: false) }
+
+  describe ".from" do
+    let(:product) { build(:product_iphone) }
+
+    it "populates the has_markings attribute" do
+      expect(described_class.from(product).has_markings).to be true
+    end
+  end
 
   describe "gtin13 validations" do
     context "when setting an empty string" do
@@ -107,6 +115,66 @@ RSpec.describe ProductForm do
         let(:authenticity) { Product.authenticities.keys.sample }
 
         it { is_expected.not_to be_authenticity_not_provided }
+      end
+    end
+  end
+
+  describe "markings validations" do
+    let(:attributes) { attributes_for(:product).except(:markings) }
+
+    context "when the question has not been answered" do
+      it "is invalid", :aggregate_failures do
+        expect(form).not_to be_valid
+        expect(form.errors.full_messages_for(:has_markings)).to eq ["Select yes if the product has UKCA, UKNI or CE marking"]
+      end
+    end
+
+    context "when the product has markings" do
+      before { form.has_markings = true }
+
+      context "when no markings have been selected" do
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:markings)).to eq ["Select the product marking(s)"]
+        end
+      end
+
+      context "when invalid markings are supplied" do
+        before { form.markings = %w[invalid invalid2] }
+
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:markings)).to eq ["Select the product marking(s)"]
+        end
+      end
+
+      context "when valid markings have been supplied" do
+        before { form.markings = [Product::MARKINGS.sample, Product::MARKINGS.sample] }
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
+      end
+
+      context "when a mix of valid and invalid markings have been supplied" do
+        before { form.markings = [Product::MARKINGS.first, "invalid"] }
+
+        it "is invalid", :aggregate_failures do
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages_for(:markings)).to eq ["Select the product marking(s)"]
+        end
+      end
+
+      context "when duplicate marking values have been supplied" do
+        before { form.markings = [Product::MARKINGS.first, Product::MARKINGS.first] }
+
+        it "is valid" do
+          expect(form).to be_valid
+        end
+
+        it "de-duplicates the list" do
+          expect(form.markings).to eq([Product::MARKINGS.first])
+        end
       end
     end
   end

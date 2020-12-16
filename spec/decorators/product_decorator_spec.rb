@@ -75,6 +75,10 @@ RSpec.describe ProductDecorator do
         expect(summary_list).to summarise("Batch number", text: product.batch_number)
       end
 
+      it "displays the product marking" do
+        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
+      end
+
       it "displays the Webpage" do
         expect(summary_list).to summarise("Webpage", text: product.webpage)
       end
@@ -117,6 +121,32 @@ RSpec.describe ProductDecorator do
       it "returns only the Product subcategory" do
         expect(decorated_product.subcategory_and_category_label)
           .to eq(product.subcategory)
+      end
+    end
+  end
+
+  describe "#markings" do
+    context "when nil" do
+      before { product.markings = nil }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
+      end
+    end
+
+    context "when empty" do
+      before { product.markings = [] }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("None")
+      end
+    end
+
+    context "when not empty" do
+      before { product.markings = %w[UKCA UKNI CE] }
+
+      it "joins into a single String" do
+        expect(decorated_product.markings).to eq("UKCA, UKNI, CE")
       end
     end
   end

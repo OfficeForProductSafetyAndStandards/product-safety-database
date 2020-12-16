@@ -105,7 +105,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           description: Faker::Lorem.sentence,
           authenticity: "Yes",
           affected_units_status: "Approximate number known",
-          number_of_affected_units: 22
+          number_of_affected_units: 22,
+          has_markings: "Yes",
+          markings: [Product::MARKINGS.sample]
         }
       end
       let(:coronavirus) { false }
@@ -267,7 +269,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
           authenticity: "Yes",
-          affected_units_status: "Unknown"
+          affected_units_status: "Unknown",
+          has_markings: "No"
         }
       end
 
@@ -389,10 +392,13 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def expect_case_products_page_to_show(info:, images:)
+    expected_markings = info[:markings] ? info[:markings].join(", ") : "None"
+
     within page.find(".product-summary") do
       expect(page).to have_selector("h2", text: info[:name])
       expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
       expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
+      expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
       expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
       expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: info[:type])
       expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
@@ -484,6 +490,14 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     within_fieldset("Is the product counterfeit?") do
       choose with[:authenticity]
+    end
+
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      choose with[:has_markings]
+    end
+
+    within_fieldset("Select product marking") do
+      with[:markings].each { |marking| check(marking) } if (with[:has_markings] == "Yes") && with[:markings]
     end
 
     within_fieldset("How many units are affected?") do
