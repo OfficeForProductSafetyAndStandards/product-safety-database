@@ -27,11 +27,18 @@ RSpec.describe SanitizationHelper do
       end
     end
 
+    context "when setting a UPC-E code" do
+      let(:code) { "425261" }
+
+      it "sucessfully set the gtin field" do
+        expect(model.gtin).to eq("425261")
+      end
+    end
     context "when setting a 12 digit UPC-A code" do
       let(:code) { "012345678912" }
 
       it "sucessfully set the gtin field" do
-        expect(model.gtin).to eq("`0012345678912")
+        expect(model.gtin).to eq("0012345678912")
       end
     end
 
@@ -40,6 +47,14 @@ RSpec.describe SanitizationHelper do
 
       it "sucessfully set the gtin field" do
         expect(model.gtin).to eq("0012345678912")
+      end
+    end
+
+    context "when setting a 14 digit GTIN number" do
+      let(:code) { "00016000275263" }
+
+      it "gets converted to a 13 digit code on validation", :aggregate_failures do
+        expect(model.gtin).to eq("0016000275263")
       end
     end
   end
