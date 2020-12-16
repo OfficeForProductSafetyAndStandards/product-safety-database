@@ -35,8 +35,6 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
     click_on "Activity"
     expect(page).to have_content "Case risk level validation added"
 
-    email = delivered_emails.last
-
     expect_email_with_correct_details_to_be_set("has been validated")
   end
 
