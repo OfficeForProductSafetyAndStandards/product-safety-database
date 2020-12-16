@@ -19,21 +19,38 @@ RSpec.describe SanitizationHelper do
   describe "#convert_gtin_to_13_digits" do
     subject(:model) { model_class.new(gtin: code) }
 
-    context "with a valid ean13 code" do
-      let(:code) { "01234567" }
+    context "with a short code code" do
+      let(:code) { "12" }
 
       it "sucessfully set the gtin field" do
-        expect(model.gtin).to eq(code)
+        expect(model.gtin).to eq(nil)
+      end
+    end
+
+    context "with a nil code" do
+      let(:code) { nil }
+
+      it "sucessfully set the gtin field" do
+        expect(model.gtin).to eq(nil)
+      end
+    end
+
+    context "with a valid ean13 code" do
+      let(:code) { "978020137962" }
+
+      it "sucessfully set the gtin field" do
+        expect(model.gtin).to eq("0978020137962")
       end
     end
 
     context "when setting a UPC-E code" do
-      let(:code) { "425261" }
+      let(:code) { "02345673" }
 
       it "sucessfully set the gtin field" do
-        expect(model.gtin).to eq("425261")
+        expect(model.gtin).to eq("0023456000073")
       end
     end
+
     context "when setting a 12 digit UPC-A code" do
       let(:code) { "012345678912" }
 
