@@ -1,12 +1,16 @@
 require "rails_helper"
 
-RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
-  let(:investigation) { create(:project, creator: user) }
+RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+  let(:investigation) { create(:project, creator: creator_user) }
   let(:user) { create(:user, :activated) }
-  let(:other_user) { create(:user, :activated) }
+  let(:creator_user) { create(:user, :activated, team: user.team) }
+
+  before do
+    sign_in user
+    delivered_emails.clear
+  end
 
   scenario "validate the level" do
-    sign_in user
     visit investigation_path(investigation)
 
     validation_link = page.find(:css, "a[href='/cases/#{investigation.pretty_id}/validate-risk-level/edit']")
@@ -30,10 +34,13 @@ RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, 
 
     click_on "Activity"
     expect(page).to have_content "Case risk level validation added"
+
+    email = delivered_emails.last
+
+    expect_email_with_correct_details_to_be_set("has been validated")
   end
 
   scenario "do not validate the level" do
-    sign_in user
     visit investigation_path(investigation)
 
     validation_link = page.find(:css, "a[href='/cases/#{investigation.pretty_id}/validate-risk-level/edit']")
@@ -57,10 +64,13 @@ RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, 
 
     click_on "Activity"
     expect(page).not_to have_content "Case risk level validation added"
+
+    email = delivered_emails.last
+
+    expect(email.action_name).not_to eq "risk_validation_updated"
   end
 
   scenario "remove validation" do
-    sign_in user
     visit("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
     within_fieldset("Have you validated the case risk level?") do
@@ -99,5 +109,23 @@ RSpec.feature "Validate risk level", :with_elasticsearch, :with_stubbed_mailer, 
     click_on "Activity"
     expect(page).to have_content "Case risk level validation removed"
     expect(page).to have_content "Mistake made by team member"
+
+    expect_email_with_correct_details_to_be_set("has had validation removed")
+  end
+
+  def expect_email_with_correct_details_to_be_set(action)
+    email = delivered_emails.last
+
+    expect(email.recipient).to eq creator_user.team.email
+    expect(email.action_name).to eq "risk_validation_updated"
+    expect(email.personalization).to include(
+      name: creator_user.team.name,
+      case_title: investigation.user_title,
+      case_type: "project",
+      case_id: investigation.pretty_id,
+      updater_name: user.name,
+      updater_team_name: user.team.name,
+      action: action
+    )
   end
 end
