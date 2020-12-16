@@ -26,7 +26,7 @@
 
 <%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
 
-<% file_field = capture do %>
+<% product_marking_fields = capture do %>
   <%= form.govuk_checkboxes :markings,
                             legend: "Select product marking",
                             legend_classes: "govuk-fieldset__legend--s",
@@ -36,7 +36,7 @@
 <%= form.govuk_radios :has_markings,
   legend: "Does the product have UKCA, UKNI, or CE marking?",
   items: [
-    { text: "Yes", value: "true", conditional: { html: file_field }, checked: @product_form.has_markings },
+    { text: "Yes", value: "true", conditional: { html: product_marking_fields }, checked: @product_form.has_markings },
     { text: "No", value: "false", checked: @product_form.has_markings == false }
   ]
 %>
