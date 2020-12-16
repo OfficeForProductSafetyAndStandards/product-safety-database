@@ -22,11 +22,9 @@ RSpec.describe Investigations::TestResultsController, type: :request, with_stubb
   before { sign_in user }
 
   context "when the AddTestResultToInvestigation.call is not successful" do
-    let(:service) { instance_double(AddTestResultToInvestigation, success?: false) }
+    let(:service) { double(AddTestResultToInvestigation, "success?": false) } # rubocop:disable RSpec/VerifiedDoubles
 
-    before do
-      allow(AddTestResultToInvestigation).to receive(:call).and_return(service)
-    end
+    before { allow(AddTestResultToInvestigation).to receive(:call).and_return(service) }
 
     it "re-renders the form", :aggregate_failures do
       expect {
