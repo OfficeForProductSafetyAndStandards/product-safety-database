@@ -27,8 +27,7 @@ module Investigations
 
     def edit
       @investigation = Investigation.find_by(pretty_id: params["investigation_pretty_id"])
-      is_risk_validated = @investigation.risk_validated_by ? true : false
-      @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated)
+      @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated_value)
       @breadcrumbs = build_back_link_to_case
     end
 
@@ -40,6 +39,11 @@ module Investigations
 
     def risk_validation_change_rationale
       params.dig :investigation, :risk_validation_change_rationale
+    end
+
+    def is_risk_validated_value
+      return unless @investigation.activities.map(&:type).include? "AuditActivity::Investigation::UpdateRiskLevelValidation"
+      is_risk_validated = @investigation.risk_validated_by ? true : false
     end
   end
 end
