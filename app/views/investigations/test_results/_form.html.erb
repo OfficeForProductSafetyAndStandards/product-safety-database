@@ -22,7 +22,7 @@
 
 
 <%= form.govuk_autocomplete(:legislation, label: "Against which legislation?", label_classes: "govuk-label--m", choices: relevant_legislation, hint: "Select the relevant legislation from the list.") %>
-<%= form.govuk_input :standards_product_was_tested_against, label_classes: "govuk-label--m", hint: "For example, EN71. Use comma a to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
+<%= form.govuk_input :standards_product_was_tested_against, label_classes: "govuk-label--m", hint: "For example, EN71. Use a comma to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
 <%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
 <%= form.govuk_radios :result, legend: "What was the result?", items: Test::Result.results.map { |result, label| { text: label, value: result } } %>
