@@ -100,7 +100,7 @@
     If you have multiple files, compress them in a zip
   </div>
 
-  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors) %>">
+  <div class="govuk-form-group <%= "govuk-form-group--error" if file_validation_errors?(form.object.errors, attribute: :base) %>">
 
     <% file_upload_field = capture do %>
 

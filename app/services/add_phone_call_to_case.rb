@@ -25,14 +25,14 @@ class AddPhoneCallToCase
         metadata: AuditActivity::Correspondence::AddPhoneCall.build_metadata
       )
 
-      send_notification_email
+      send_notification_email(investigation, user)
     end
   end
 
 private
 
-  def send_notification_email
-    email_recipients_for_team_with_access.each do |entity|
+  def send_notification_email(investigation, user)
+    email_recipients_for_team_with_access(investigation, user).each do |entity|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         entity.name,
