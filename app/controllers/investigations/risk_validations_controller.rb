@@ -43,7 +43,7 @@ module Investigations
 
     def is_risk_validated_value
       return unless @investigation.activities.map(&:type).include? "AuditActivity::Investigation::UpdateRiskLevelValidation"
-      is_risk_validated = @investigation.risk_validated_by ? true : false
+      @investigation.risk_validated_by ? true : false
     end
   end
 end
