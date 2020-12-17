@@ -23,7 +23,7 @@ class ChangeCaseRiskLevel
     end
 
     context.updated_risk_level = investigation.decorate.risk_level_description
-    send_notification_email
+    send_notification_email(investigation, user)
   end
 
 private
@@ -36,8 +36,8 @@ private
     )
   end
 
-  def send_notification_email
-    email_recipients_for_team_with_access.each do |entity|
+  def send_notification_email(investigation, user)
+    email_recipients_for_team_with_access(investigation, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.case_risk_level_updated(
         email: email,

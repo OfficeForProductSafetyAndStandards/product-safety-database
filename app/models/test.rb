@@ -1,17 +1,8 @@
 class Test < ApplicationRecord
-  include DateConcern
-  include SanitizationHelper
-
   belongs_to :investigation
-  belongs_to :product
+  belongs_to :product, optional: false
 
-  has_many_attached :documents
-
-  date_attribute :date
-
-  before_validation { trim_line_endings(:details) }
-  validates :legislation, presence: { message: "Select the legislation that relates to this test" }
-  validates :details, length: { maximum: 50_000 }
+  has_one_attached :document
 
   def initialize(*args)
     raise "Cannot directly instantiate a Test record" if self.class == Test

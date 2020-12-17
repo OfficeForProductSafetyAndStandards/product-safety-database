@@ -388,13 +388,15 @@ if run_seeds
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
-  Test::Result.new(
-    legislation: "Electrical Equipment (Safety) Regulations 2016",
-    result: "other",
-    details: "Passed tests 1 to 4 and failed test 5",
-    date: "2018-03-31",
+  AddTestResultToInvestigation.call!(
     investigation: investigation,
-    product: product
+    user: user,
+    date: 2.days.ago.to_date,
+    legislation: Rails.application.config.legislation_constants["legislation"].sample,
+    details: "Passed tests 1 to 4 and failed test 5",
+    result: "passed",
+    product_id: product.id,
+    document: create_blob("test_result.txt", title: "test result")
   )
 
   # Ninth investigation
@@ -555,9 +557,19 @@ if run_seeds
       created_at: 2.days.ago
     )
 
-    result = Test::Result.new("date" => 15.days.ago, "details" => "Test results", "investigation" => i, "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", "product" => product, "result" => "failed", "created_at" => 3.days.ago)
-    result.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
-    result.save!
+    investigation = Investigation.order("RANDOM()").first
+    AddTestResultToInvestigation.call!(
+      "date" => 15.days.ago,
+      "details" => "Test results",
+      "investigation" => i,
+      "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
+      "product_id" => product.id,
+      "result" => "failed",
+      "created_at" => 3.days.ago,
+      document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
+      investigation: investigation,
+      user: investigation.owner_user
+    )
   end
 
   Investigation.__elasticsearch__.create_index! force: true

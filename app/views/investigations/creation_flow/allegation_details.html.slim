@@ -28,7 +28,7 @@
                is_autocomplete: true,
                label: { text: "Hazard type", classes: "govuk-label--m" }
 
-      .govuk-form-group class=("govuk-form-group--error" if file_validation_errors?(@investigation.errors))
+      .govuk-form-group class=("govuk-form-group--error" if file_validation_errors?(@investigation.errors, attribute: :base))
         = render "components/govuk_label",
                 text: "Are there any files or images related to the allegation?",
                 classes: "govuk-label--m",

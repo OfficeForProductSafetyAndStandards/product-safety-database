@@ -1,5 +1,5 @@
 <% if allow_product_linking %>
-  <div class="govuk-form-group <%= "govuk-form-group--error" if test_result.errors[:product].any? %>">
+  <div class="govuk-form-group <%= "govuk-form-group--error" if test_result_form.errors[:product].any? %>">
 
     <% if investigation.products.empty? %>
       <h2 class="govuk-heading-m">Which product was tested?</h2>
@@ -22,15 +22,18 @@
 
 
 <%= form.govuk_autocomplete(:legislation, label: "Against which legislation?", label_classes: "govuk-label--m", choices: relevant_legislation, hint: "Select the relevant legislation from the list.") %>
-
+<%= form.govuk_input :standards_product_was_tested_against, label_classes: "govuk-label--m", hint: "For example, EN71. Use a comma to separate multiple standards.", label: "Which standard was the product tested against?", value: form.object.standards_product_was_tested_against&.join(", ")  %>
 <%= form.govuk_date_input :date, legend: "Date of test", hint: "For example, 12 7 2019" %>
 
 <%= form.govuk_radios :result, legend: "What was the result?", items: Test::Result.results.map { |result, label| { text: label, value: result } } %>
 
 <%= form.govuk_text_area :details, label: "Further details", attributes: { maxlength: 50_000 } %>
 
+<%= form.hidden_field :existing_document_file_id %>
 <%= render "related_attachment_fields",
-  form: form,
-  file_blob: @file_blob,
-  attachment_name: :test_result_file,
-  title: "Test report attachment" %>
+           form: form,
+           file_blob: @test_result_form.document,
+           attachment_name: :document_form,
+           title: "Test report attachment",
+           error_field: :document
+%>
