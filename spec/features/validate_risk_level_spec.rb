@@ -10,7 +10,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
       sign_in user
       visit investigation_path(investigation)
 
-      expect(page).to_not have_link "Validate"
+      expect(page).not_to have_link "Validate"
     end
   end
 
