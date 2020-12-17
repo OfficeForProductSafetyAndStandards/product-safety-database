@@ -63,6 +63,10 @@ RSpec.describe ProductDecorator do
         expect(summary_list).to summarise("Product authenticity", text: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
       end
 
+      it "displays the product marking" do
+        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
+      end
+
       it "displays the Barcode" do
         expect(summary_list).to summarise("Barcode", text: product.gtin13)
       end
@@ -73,10 +77,6 @@ RSpec.describe ProductDecorator do
 
       it "displays the Batch number" do
         expect(summary_list).to summarise("Batch number", text: product.batch_number)
-      end
-
-      it "displays the product marking" do
-        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
       end
 
       it "displays the Webpage" do
