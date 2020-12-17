@@ -338,7 +338,7 @@ module InvestigationsHelper
   end
 
   def risk_validation_actions(investigation, user)
-    if @investigation.teams_with_access.include?(user.team)
+    if user.can_validate_risk_level?
       {
         items: [
           href: edit_investigation_risk_validations_path(investigation.pretty_id),
