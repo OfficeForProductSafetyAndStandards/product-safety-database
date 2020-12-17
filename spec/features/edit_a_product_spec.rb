@@ -95,6 +95,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     end
 
     within_fieldset("Select product marking") do
+      all('input[type=checkbox]').each { |checkbox| checkbox.uncheck }
       new_markings.each { |marking| check(marking) } if new_has_markings == "Yes"
     end
 
@@ -183,6 +184,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     end
 
     within_fieldset("Select product marking") do
+      all('input[type=checkbox]').each { |checkbox| checkbox.uncheck }
       new_markings.each { |marking| check(marking) } if new_has_markings == "Yes"
     end
 
