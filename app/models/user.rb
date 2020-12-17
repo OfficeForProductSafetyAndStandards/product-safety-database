@@ -79,6 +79,10 @@ class User < ApplicationRecord
     has_role? :superuser
   end
 
+  def can_validate_risk_level?
+    has_role? :risk_level_validator
+  end
+
   def has_completed_registration?
     encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
   end
