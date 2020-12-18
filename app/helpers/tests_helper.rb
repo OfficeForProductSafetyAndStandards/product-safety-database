@@ -33,7 +33,7 @@ module TestsHelper
       }
     end
 
-    attachment_description = test_result.document.blob.metadata["description"] if test_result.document.attached?
+    attachment_description = test_result.document.blob.metadata["description"]
     if attachment_description.present?
       rows << {
         key: { text: "Attachment description" },
