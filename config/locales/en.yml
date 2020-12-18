@@ -64,6 +64,10 @@ en:
     email_update_text:
       false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
       true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
+  change_risk_validation:
+    validated: "has been validated"
+    validation_removed: "has had validation removed"
+
   case:
     badges:
       coronavirus_related: "COVID-19 related case"

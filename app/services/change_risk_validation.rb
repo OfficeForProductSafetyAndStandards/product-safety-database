@@ -46,10 +46,10 @@ private
   def assign_risk_validation_attributes
     if is_risk_validated
       investigation.assign_attributes(risk_validated_at: risk_validated_at, risk_validated_by: risk_validated_by)
-      context.change_action = "has been validated"
+      context.change_action = I18n.t("change_risk_validation.validated")
     else
       investigation.assign_attributes(risk_validated_at: nil, risk_validated_by: nil)
-      context.change_action = "has had validation removed"
+      context.change_action = I18n.t("change_risk_validation.validation_removed")
     end
   end
 
