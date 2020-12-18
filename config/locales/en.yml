@@ -242,6 +242,23 @@ en:
   activemodel:
     errors:
       models:
+        test_result_form:
+          attributes:
+            product_id:
+              blank: "Select the product which was tested"
+            legislation:
+              inclusion: "Select the legislation that relates to this test"
+            standards_product_was_tested_against:
+              blank: "Enter the standard the product was tested against"
+            result:
+              inclusion: "Select result of the test"
+            document:
+              blank: "Provide the test results file"
+            date:
+              blank: Enter date of the test
+              must_be_real: Date sent must be a real date
+              incomplete: Date sent must include a %{missing_date_parts}
+              in_future: Date sent must be today or in the past
         product_form:
           attributes:
             authenticity:
@@ -378,17 +395,10 @@ en:
               must_be_real: Date enquiry received must be a real date
               incomplete: Date enquiry received must include a %{missing_date_parts}
               in_future: Date enquiry received must be today or in the past
-
-        test:
+        test/result:
           attributes:
             product:
               required: "Select the product which was tested"
-        test/result:
-          attributes:
-            date:
-              blank: "Enter date of the test"
-              invalid: "Enter a real date of the test"
-              date_missing_component: "Enter date of the test and include a %{missing_components}"
         test/request:
           attributes:
             date:

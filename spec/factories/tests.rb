@@ -1,22 +1,21 @@
 FactoryBot.define do
   factory :test do
-    date_day    { date&.day }
-    date_month  { date&.month }
-    date_year   { date&.year }
+    date        { 14.days.ago.to_date }
     details     { Faker::Hipster.sentence }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
     product
     investigation { create(:allegation) }
 
-    documents { [Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")] }
-
-    transient do
-      date { Faker::Date.backward(days: 14) }
+    document { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
+    after(:create) do |test_result|
+      test_result.document_blob.metadata["description"] = Faker::Hipster.sentence
+      test_result.document_blob.save!
     end
   end
 
   factory :test_result, class: "Test::Result", parent: :test do
-    result { Test::Result.results[:passed] }
+    result { Test::Result.results.keys.sample }
+    standards_product_was_tested_against { [] }
   end
 
   factory :test_request, class: "Test::Request", parent: :test do

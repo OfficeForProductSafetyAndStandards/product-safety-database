@@ -40,5 +40,9 @@ class Test < ApplicationRecord
     def activity_cell_partial(_viewing_user)
       "activity_table_cell_with_link"
     end
+
+    def standards_product_was_tested_against
+      object.standards_product_was_tested_against&.join(", ")
+    end
   end
 end

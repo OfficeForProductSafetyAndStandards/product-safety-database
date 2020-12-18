@@ -12,12 +12,19 @@ module TestsHelper
       {
         key: { text: "Legislation" },
         value: { text: test_result.legislation }
-      },
-      {
-        key: { text: "Result" },
-        value: { text: test_result.result.upcase_first }
       }
     ]
+    if test_result.standards_product_was_tested_against.present?
+      rows << {
+        key: { text: "Standards" },
+        value: { text: test_result.standards_product_was_tested_against }
+      }
+    end
+
+    rows << {
+      key: { text: "Result" },
+      value: { text: test_result.result.upcase_first }
+    }
 
     if test_result.details.present?
       rows << {
@@ -26,11 +33,8 @@ module TestsHelper
       }
     end
 
-    test_result.documents.each do |document|
-      attachment_description = document.blob.metadata["description"]
-
-      next if attachment_description.blank?
-
+    attachment_description = test_result.document.blob.metadata["description"]
+    if attachment_description.present?
       rows << {
         key: { text: "Attachment description" },
         value: { text: attachment_description }

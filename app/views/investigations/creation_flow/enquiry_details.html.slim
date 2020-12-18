@@ -31,7 +31,7 @@
       fieldset.govuk-fieldset
         legend.govuk-fieldset__legend.govuk-fieldset__legend--m
           | Are there any files or images related to the enquiry?
-        .govuk-form-group class=("govuk-form-group--error" if file_validation_errors?(@investigation.errors))
+        .govuk-form-group class=("govuk-form-group--error" if file_validation_errors?(@investigation.errors, attribute: :base))
           - if @file_blob.present?
             p#current-attachment-details
               ' Currently selected file:

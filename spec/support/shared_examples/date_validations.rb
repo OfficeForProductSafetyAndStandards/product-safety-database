@@ -1,5 +1,5 @@
 RSpec.shared_examples "it does not allow dates in the future" do |form_attribute, attribute|
-  let(form_attribute) { { day: "1", month: "1", year: 1.year.from_now.to_date.year } }
+  let(form_attribute) { { day: "1", month: "1", year: 1.year.from_now.to_date.year.to_s } }
 
   it "is not valid and contains an error message", :aggregate_failures do
     expect(form).not_to be_valid
