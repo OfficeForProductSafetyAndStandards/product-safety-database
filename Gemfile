@@ -81,9 +81,11 @@ group :test do
   gem "rubocop-performance", "~> 1.8"
   gem "rubocop-rspec", "~> 1.42", require: false
   gem "scss_lint-govuk", "~> 0.2"
+  gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.8"
   gem "simplecov-lcov"
   gem "slim_lint", "~> 0.20"
-  gem "webmock", "~> 3.10"
+  gem "super_diff"
+  gem "webmock", "~> 3.11"
 end
