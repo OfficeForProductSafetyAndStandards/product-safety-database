@@ -24,6 +24,6 @@ class AuditActivity::Investigation::UpdateRiskLevelValidation < AuditActivity::I
     metadata["rationale"]
   end
 
-  # Do not send investigation_updated mail. This is handled by the ChangeCaseRiskLevel service
+  # Do not send investigation_updated mail. This is handled by the ChangeRiskValidation service
   def notify_relevant_users; end
 end
