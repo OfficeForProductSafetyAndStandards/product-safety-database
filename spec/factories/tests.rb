@@ -7,6 +7,10 @@ FactoryBot.define do
     investigation { create(:allegation) }
 
     document { Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt") }
+    after(:create) do |test_result|
+      test_result.document_blob.metadata["description"] = Faker::Hipster.sentence
+      test_result.document_blob.save!
+    end
   end
 
   factory :test_result, class: "Test::Result", parent: :test do

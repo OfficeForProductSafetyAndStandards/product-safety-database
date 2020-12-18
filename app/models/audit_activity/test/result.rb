@@ -8,6 +8,8 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   end
 
   def title(_viewing_user = nil)
+    return super if metadata.nil?
+
     test_result.decorate.title
   end
 
@@ -18,6 +20,8 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   # way to retrieve this is by relying upon our current behaviour of attaching the
   # same actual file to all of the AuditActivity, Investigation and Test records.
   def test_result
+    return if metadata.nil?
+
     @test_result ||= Test::Result.find(metadata["test_result_id"])
   end
 

@@ -49,7 +49,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
       expect(page).to have_field("Further details", with: /\A\s*Provisional\z/)
 
       expect(page).to have_text("Currently selected file: test_result.txt")
-      expect(page).to have_field("Attachment description", with: /\A\s*\z/)
+      expect(page).to have_field("Attachment description", with: "\r\n" + test_result.document.metadata[:description])
 
       # Change some of the fields
       select "Consumer Protection Act 1987", from: "Against which legislation?"
