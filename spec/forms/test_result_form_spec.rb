@@ -88,8 +88,8 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
       expect {
         form.assign_attributes(document_form: { description: new_description })
       }.to change(form.document, :metadata)
-             .from("identified" => true, "safe" => true, "analyzed" => true)
-             .to("identified" => true, "safe" => true, "analyzed" => true, "description" => new_description)
+             .from("identified" => true, "description" => test_result.document.metadata[:description])
+             .to("identified" => true, "description" => new_description)
       expect(form.changes)
         .to eq("file_description" => [test_result.document.metadata["description"], new_description])
     end
