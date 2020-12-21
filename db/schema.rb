@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_12_16_144344) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -301,6 +300,7 @@ ActiveRecord::Schema.define(version: 2020_12_16_144344) do
     t.string "legislation"
     t.integer "product_id"
     t.string "result"
+    t.string "standards_product_was_tested_against", default: [], array: true
     t.string "type"
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"

@@ -81,6 +81,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def generate_test_result
     {
       legislation: Rails.application.config.legislation_constants["legislation"].sample,
+      standards_product_was_tested_against: "EN71, EN73",
       date: Faker::Date.backward(days: 14),
       result: %w[Pass Fail].sample,
       details: Faker::Lorem.sentence,
@@ -178,9 +179,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         end
 
         # Test recall of information when there is an error - particularly attachments
-        incomplete_test_data = incomplete_test_result.slice(:legislation, :date, :details, :file)
+        incomplete_test_data = incomplete_test_result.slice(:legislation, :date, :details, :file, :standards_product_was_tested_against)
 
         fill_in_test_results_page(with: incomplete_test_data)
+
         expect_to_be_on_test_result_details_page
         expect_test_result_page_to_show_entered_information(incomplete_test_data)
 
@@ -474,7 +476,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
-    expect(item).to have_text("Test date: #{test[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Test date: #{test[:date].to_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end
@@ -605,17 +607,24 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def fill_in_test_results_page(with:, add_another: true)
     select with[:legislation], from: "Against which legislation?"
+
+    fill_in "Which standard was the product tested against?", with: with[:standards_product_was_tested_against]
+
     fill_in "Day", with: with[:date].day
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     choose with[:result] if with[:result]
+
     fill_in "Further details", with: with[:details]
 
     unless page.has_text?("Currently selected file")
       attach_file "Upload a file", with[:file]
     end
 
-    choose(add_another ? "test_further_test_results_yes" : "test_further_test_results_no")
+    within_fieldset("Are there other test results to report?") do
+      choose(add_another ? "Yes" : "No")
+    end
+
     click_button "Continue"
   end
 

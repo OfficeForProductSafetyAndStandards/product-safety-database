@@ -3,24 +3,10 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
     raise "Deprecated - use UpdateTestResult.call instead"
   end
 
-  def self.build_metadata(test_result, previous_attachment_filename, previous_attachment_description)
-    updated_values = test_result
-      .previous_changes.slice(:result, :details, :legislation, :date, :product_id)
+  def self.build_metadata(test_result, changes)
+    updated_values = changes.except("document", "existing_document_file_id")
 
-    current_attachment = test_result.documents.first
-
-    if previous_attachment_filename != current_attachment.filename
-      updated_values["filename"] = [previous_attachment_filename, test_result.documents.first.filename]
-    end
-
-    if previous_attachment_description != current_attachment.metadata[:description]
-      updated_values["file_description"] = [previous_attachment_description, current_attachment.metadata[:description]]
-    end
-
-    {
-      test_result_id: test_result.id,
-      updates: updated_values
-    }
+    { test_result_id: test_result.id, updates: updated_values }
   end
 
   def title(_)
@@ -59,6 +45,10 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
 
   def new_file_description
     updates["file_description"]&.second
+  end
+
+  def new_standards_product_was_tested_against
+    updates["standards_product_was_tested_against"]&.second
   end
 
   def new_product
