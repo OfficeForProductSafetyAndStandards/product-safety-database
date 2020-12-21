@@ -63,7 +63,7 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
 
   describe "#risk_level_currently_validated?" do
     it "returns true if risk_validated_by is not nil" do
-      investigation.update(risk_validated_by: "Anyone")
+      investigation.update!(risk_validated_by: "Anyone")
       expect(investigation.risk_level_currently_validated?).to eq true
     end
 

@@ -126,11 +126,11 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     def expect_email_with_correct_details_to_be_set(action)
-      email = delivered_emails.select {|email| email.recipient == creator_user.team.email}.last
+      delivered_email = delivered_emails.reverse.find { |email| email.recipient == creator_user.team.email }
 
-      expect(email.recipient).to eq creator_user.team.email
-      expect(email.action_name).to eq "risk_validation_updated"
-      expect(email.personalization).to include(
+      expect(delivered_email.recipient).to eq creator_user.team.email
+      expect(delivered_email.action_name).to eq "risk_validation_updated"
+      expect(delivered_email.personalization).to include(
         name: creator_user.team.name,
         case_title: investigation.user_title,
         case_type: "project",
