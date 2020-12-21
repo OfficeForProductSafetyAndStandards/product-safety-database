@@ -2,7 +2,7 @@
 <% page_title page_heading, errors: @risk_validation_form.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back",
+    text: "Back to #{@investigation.type}: #{@investigation.pretty_id}",
     href: investigation_path(@investigation)
   ) %>
 <% end %>
