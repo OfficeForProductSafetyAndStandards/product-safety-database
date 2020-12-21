@@ -42,8 +42,8 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
       click_on "Continue"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-      expect(page).to have_content("Case risk level validated")
-      expect(page).to have_content("Validated by #{user.team.name} on #{investigation.risk_validated_at}")
+      expect(page).to have_css(".hmcts-banner__message", text: "Case risk level validated")
+      expect(page).to have_css(".govuk-summary-list__value", text: "Validated by #{user.team.name} on #{investigation.risk_validated_at}")
       expect(page).not_to have_link("Validate")
 
       click_on "Activity"
@@ -111,8 +111,8 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_link("Validate")
 
       click_on "Activity"
-      expect(page).to have_content "Case risk level validation removed"
-      expect(page).to have_content "Mistake made by team member"
+      expect(page).to have_css(".govuk-heading-s", text: "Case risk level validation removed")
+      expect(page).to have_css("p", text: "Mistake made by team member")
 
       expect_email_with_correct_details_to_be_set("has had validation removed")
     end
