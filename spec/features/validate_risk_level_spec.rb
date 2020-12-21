@@ -31,10 +31,6 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
     scenario "validate the level" do
       visit investigation_path(investigation)
 
-      validation_link = page.find(:css, "a[href='/cases/#{investigation.pretty_id}/validate-risk-level/edit']")
-
-      expect(validation_link.text).to eq "Validate"
-
       click_link "Validate"
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
@@ -58,10 +54,6 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
     scenario "do not validate the level" do
       visit investigation_path(investigation)
-
-      validation_link = page.find(:css, "a[href='/cases/#{investigation.pretty_id}/validate-risk-level/edit']")
-
-      expect(validation_link.text).to eq "Validate"
 
       click_link "Validate"
 

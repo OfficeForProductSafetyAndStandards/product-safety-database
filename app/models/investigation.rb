@@ -179,7 +179,7 @@ class Investigation < ApplicationRecord
   end
 
   def has_had_risk_level_validated_before?
-    activities.map(&:type).include? "AuditActivity::Investigation::UpdateRiskLevelValidation"
+    activities.where(type: "AuditActivity::Investigation::UpdateRiskLevelValidation").exists?
   end
 
   def risk_level_currently_validated?

@@ -13,7 +13,7 @@ class AuditActivity::Investigation::UpdateRiskLevelValidation < AuditActivity::I
   end
 
   def title(*)
-    if metadata["updates"]["risk_validated_at"].second
+    if metadata.dig("updates", "risk_validated_at", 1)
       I18n.t("investigations.risk_validation.activity.added")
     else
       I18n.t("investigations.risk_validation.activity.removed")

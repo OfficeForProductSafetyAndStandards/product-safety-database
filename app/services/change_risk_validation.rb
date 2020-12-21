@@ -31,8 +31,6 @@ private
     activity_class.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
-      title: nil,
-      body: nil,
       metadata: metadata
     )
   end

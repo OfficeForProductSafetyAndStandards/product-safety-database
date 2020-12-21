@@ -399,6 +399,8 @@ en:
           attributes:
             risk_validation_change_rationale:
               blank: Enter details
+            is_risk_validated:
+              inclusion:  "Select yes if you have validated the case risk level"
 
   activerecord:
     models:
