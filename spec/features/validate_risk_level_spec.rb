@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:investigation) { create(:project, creator: creator_user) }
   let(:user) { create(:user, :activated) }
-  let(:creator_user) { create(:user, :activated, team: user.team) }
+  let(:creator_user) { create(:user, :activated) }
 
   context "when user does not have `risk_level_validator` role" do
     it "does not show the validate button" do
@@ -16,6 +16,13 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
   context "when user has `risk_level_validator` role" do
     before do
+      AddTeamToCase.call!(
+        user: user,
+        investigation: investigation,
+        team: user.team,
+        collaboration_class: Collaboration::Access::Edit
+      )
+
       user.user_roles.create!(name: "risk_level_validator")
       sign_in user
       delivered_emails.clear
@@ -73,10 +80,6 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
       click_on "Activity"
       expect(page).not_to have_content "Case risk level validation added"
-
-      email = delivered_emails.last
-
-      expect(email.action_name).not_to eq "risk_validation_updated"
     end
 
     scenario "remove validation" do
@@ -123,7 +126,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     def expect_email_with_correct_details_to_be_set(action)
-      email = delivered_emails.last
+      email = delivered_emails.select {|email| email.recipient == creator_user.team.email}.last
 
       expect(email.recipient).to eq creator_user.team.email
       expect(email.action_name).to eq "risk_validation_updated"
