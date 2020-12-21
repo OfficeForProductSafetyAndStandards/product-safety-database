@@ -14,10 +14,18 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @risk_validation_form.errors %>
 
+      <% if @currently_not_validated %>
+        <% no_row = { text: "No", value: "false"} %>
+      <% else %>
+        <% no_row = { text: "No", value: "false", conditional: { html: form.govuk_text_area(:risk_validation_change_rationale, label: "Why?") } } %>
+      <% end %>
+
       <%= render "form_components/govuk_radios", form: form, key: :is_risk_validated,
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
-                 items: [{ text: "Yes", value: "true", id: "is_risk_validated" },
-                         { text: "No", value: "false", conditional: { html: form.govuk_text_area(:risk_validation_change_rationale, label: "Why?") } }] %>
+                 items: [
+                           { text: "Yes", value: "true", id: "is_risk_validated" },
+                           no_row
+                        ] %>
 
       <div class="govuk-form-group">
         <%= govukButton(text: t("Continue")) %>

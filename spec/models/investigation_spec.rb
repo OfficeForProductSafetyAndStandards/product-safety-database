@@ -61,6 +61,17 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
     end
   end
 
+  describe "#risk_level_currently_validated?" do
+    it "returns true if risk_validated_by is not nil" do
+      investigation.update(risk_validated_by: "Anyone")
+      expect(investigation.risk_level_currently_validated?).to eq true
+    end
+
+    it "returns false if risk_validated_by is nil" do
+      expect(investigation.risk_level_currently_validated?).to eq false
+    end
+  end
+
   describe "#owner_team" do
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }

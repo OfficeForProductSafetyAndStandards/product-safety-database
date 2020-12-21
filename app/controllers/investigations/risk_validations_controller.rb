@@ -27,6 +27,7 @@ module Investigations
 
     def edit
       @investigation = Investigation.find_by(pretty_id: params["investigation_pretty_id"])
+      @currently_not_validated = currently_not_validated?
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated_value)
       @breadcrumbs = build_back_link_to_case
     end
@@ -41,10 +42,14 @@ module Investigations
       params.dig :investigation, :risk_validation_change_rationale
     end
 
-    def is_risk_validated_value
-      return unless @investigation.activities.map(&:type).include? "AuditActivity::Investigation::UpdateRiskLevelValidation"
+    def currently_not_validated?
+      @investigation.has_had_risk_level_validated_before? && !@investigation.risk_level_currently_validated?
+    end
 
-      @investigation.risk_validated_by ? true : false
+    def is_risk_validated_value
+      return unless @investigation.has_had_risk_level_validated_before?
+
+      @investigation.risk_level_currently_validated?
     end
   end
 end
