@@ -52,7 +52,7 @@ private
   end
 
   def send_notification_email
-    email_recipients_for_team_with_access.each do |entity|
+    email_recipients_for_team_with_access(investigation, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.risk_validation_updated(
         email: email,
