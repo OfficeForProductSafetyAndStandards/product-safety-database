@@ -1,6 +1,7 @@
 class RiskValidationForm
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   attribute :is_risk_validated, :boolean, default: nil
   attribute :risk_validated_by, :string

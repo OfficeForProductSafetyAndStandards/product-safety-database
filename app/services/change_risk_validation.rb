@@ -21,8 +21,6 @@ class ChangeRiskValidation
     context.changes_made = true
 
     send_notification_email
-
-    investigation
   end
 
 private

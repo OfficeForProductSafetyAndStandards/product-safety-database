@@ -4,18 +4,13 @@ module Investigations
     def update
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
 
-      @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated, risk_validated_by: current_user.team.name,
+      @risk_validation_form = RiskValidationForm.new(is_risk_validated: investigation_params['is_risk_validated'], risk_validated_by: current_user.team.name,
                                                      risk_validated_at: Date.current, risk_validation_change_rationale: risk_validation_change_rationale,
                                                      previous_risk_validated_at: @investigation.risk_validated_at)
 
       return render :edit unless @risk_validation_form.valid?
-
-      result = ChangeRiskValidation.call!(investigation: @investigation,
-                                          is_risk_validated: @risk_validation_form.is_risk_validated,
-                                          risk_validated_at: @risk_validation_form.risk_validated_at,
-                                          risk_validated_by: @risk_validation_form.risk_validated_by,
-                                          risk_validation_change_rationale: @risk_validation_form.risk_validation_change_rationale,
-                                          user: current_user)
+      
+      result = ChangeRiskValidation.call!(@risk_validation_form.serializable_hash.merge(investigation: @investigation, user: current_user))
 
       if result.changes_made
         success_message = @risk_validation_form.is_risk_validated ? "validated_success_message" : "validation_removed_success_message"
@@ -34,8 +29,8 @@ module Investigations
 
   private
 
-    def is_risk_validated
-      params.dig :investigation, :is_risk_validated
+    def investigation_params
+      params.require(:investigation).permit(:is_risk_validated)
     end
 
     def risk_validation_change_rationale
