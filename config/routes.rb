@@ -144,7 +144,6 @@ Rails.application.routes.draw do
     resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
 
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
-    resources :corrective_actions, controller: "investigations/record_corrective_actions", only: %i[show new create update]
 
     resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
     resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
@@ -158,7 +157,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :actions, controller: "investigations/corrective_actions", only: %i[show edit update], path: "corrective-actions"
+    resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[new show create edit update], path: "corrective-actions"
   end
 
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do

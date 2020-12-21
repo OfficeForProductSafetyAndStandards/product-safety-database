@@ -86,7 +86,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_record_corrective_action_for_case_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective_actions/details")
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective-actions/new")
     expect(page).to have_selector("h1", text: "Record corrective action")
   end
 

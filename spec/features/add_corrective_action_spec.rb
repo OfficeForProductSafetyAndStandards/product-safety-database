@@ -157,6 +157,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     fill_in "Year",    with: date.year  if date
 
     select legislation, from: "Under which legislation?"
+    save_and_open_page
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+    end
 
     fill_in "Further details (optional)", with: details
 

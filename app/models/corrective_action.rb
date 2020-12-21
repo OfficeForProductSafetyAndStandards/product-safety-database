@@ -1,19 +1,14 @@
 class CorrectiveAction < ApplicationRecord
-  include DateConcern
   include SanitizationHelper
 
   MEASURE_TYPES = %w[mandatory voluntary].freeze
   DURATION_TYPES = %w[permanent temporary unknown].freeze
 
-  attribute :related_file, :boolean
-
   belongs_to :investigation
   belongs_to :business, optional: true
   belongs_to :product
 
-  has_many_attached :documents
-
-  date_attribute :date_decided
+  has_many_attached :document
 
   enum action: {
     ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures, scope: %i[corrective_action attributes actions]),
@@ -29,23 +24,6 @@ class CorrectiveAction < ApplicationRecord
   }
 
   before_validation { trim_line_endings(:other_action, :details) }
-  validate :date_decided_cannot_be_in_the_future
-  validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
-  validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
-  validate :related_file_attachment_validation
-
-  validates :measure_type, presence: true
-  validates :measure_type, inclusion: { in: MEASURE_TYPES }, if: -> { measure_type.present? }
-  validates :duration, presence: true
-  validates :duration, inclusion: { in: DURATION_TYPES }, if: -> { duration.present? }
-  validates :geographic_scope, presence: true
-  validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
-  validates :action, inclusion: { in: actions.keys }
-  validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
-  validates :other_action, absence: true, unless: :other?
-
-  validates :details, length: { maximum: 50_000 }
-
   after_create :create_audit_activity
 
   def action_label
@@ -64,9 +42,4 @@ private
     AuditActivity::CorrectiveAction::Add.from(self)
   end
 
-  def related_file_attachment_validation
-    if related_file && documents.attachments.empty?
-      errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
-    end
-  end
 end

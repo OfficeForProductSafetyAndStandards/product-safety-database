@@ -381,6 +381,27 @@ en:
               must_be_real: Date of call must be a real date
               incomplete: Date of call must include a %{missing_date_parts}
               in_future: Date of call must be today or in the past
+        corrective_action_form:
+          attributes:
+            product:
+              required: "Select the product the corrective action relates to"
+            date_decided:
+              blank: "Enter date the corrective action was decided"
+              invalid: "Enter a real date when the corrective action was decided"
+              date_missing_component: "Enter date the corrective action was decided and include a %{missing_components}"
+            measure_type:
+              blank: You must state whether the action is mandatory or voluntary
+              inclusion: "You must choose either mandatory or voluntary"
+            duration:
+              blank: "You must state how long the action will be in place"
+              inclusion: "You must choose one of Permanently, Temporarily or Unknown"
+            geographic_scope:
+              blank: "You must state the geographic scope of the action"
+              inclusion: "You must state the geographic scope of the action"
+            action:
+              inclusion: "Select type of corrective action"
+            other_action:
+              blank: "Enter type of corrective action"
 
   activerecord:
     models:
@@ -409,27 +430,6 @@ en:
           attributes:
             body:
               blank: "Enter a comment"
-        corrective_action:
-          attributes:
-            product:
-              required: "Select the product the corrective action relates to"
-            date_decided:
-              blank: "Enter date the corrective action was decided"
-              invalid: "Enter a real date when the corrective action was decided"
-              date_missing_component: "Enter date the corrective action was decided and include a %{missing_components}"
-            measure_type:
-              blank: You must state whether the action is mandatory or voluntary
-              inclusion: "You must choose either mandatory or voluntary"
-            duration:
-              blank: "You must state how long the action will be in place"
-              inclusion: "You must choose one of Permanently, Temporarily or Unknown"
-            geographic_scope:
-              blank: "You must state the geographic scope of the action"
-              inclusion: "You must state the geographic scope of the action"
-            action:
-              inclusion: "Select type of corrective action"
-            other_action:
-              blank: "Enter type of corrective action"
         alert:
           attributes:
             summary:

@@ -1,8 +1,36 @@
 module Investigations
   class CorrectiveActionsController < ApplicationController
-    include FileConcern
-    set_attachment_names :file
-    set_file_params_key :corrective_action
+    include CorrectiveActionsConcern
+
+    def new
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :view_non_protected_details?
+      @corrective_action_form = CorrectiveActionForm.new
+      @investigation = investigation.decorate
+    end
+
+    def create
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :view_non_protected_details?
+
+      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
+
+      @investigation = investigation.decorate
+      return render :new if @corrective_action_form.invalid?
+
+      result = AddCorrectiveActionToCase.call(
+        @corrective_action_form
+          .serializable_hash
+          .merge(user: current_user, investigation: investigation)
+      )
+
+      if result.success?
+        return redirect_to investigation_supporting_information_index_path(@investigation), flash: { success: "Corrective action was successfully recorded." }
+      end
+
+
+      render :new
+    end
 
     def show
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
@@ -51,7 +79,7 @@ module Investigations
         :duration,
         :geographic_scope,
         :other_action,
-        file: %i[file description],
+        file: %i[description file],
         date_decided: %i[day month year]
       )
     end
