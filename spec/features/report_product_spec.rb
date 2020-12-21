@@ -106,7 +106,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           authenticity: "Yes",
           affected_units_status: "Approximate number known",
           number_of_affected_units: 22,
-          has_markings: "Yes",
+          has_markings: "markings_yes",
           markings: [Product::MARKINGS.sample]
         }
       end
@@ -270,7 +270,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           type: Faker::Appliance.equipment,
           authenticity: "Yes",
           affected_units_status: "Unknown",
-          has_markings: "No"
+          has_markings: "markings_no"
         }
       end
 
@@ -392,7 +392,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def expect_case_products_page_to_show(info:, images:)
-    expected_markings = info[:markings] ? info[:markings].join(", ") : "None"
+    expected_markings = case info[:has_markings]
+                        when "markings_yes" then info[:markings].join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Not provided"
+                        end
 
     within page.find(".product-summary") do
       expect(page).to have_selector("h2", text: info[:name])
@@ -493,11 +497,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
-      choose with[:has_markings]
+      page.find("input[value='#{with[:has_markings]}']").choose
     end
 
     within_fieldset("Select product marking") do
-      with[:markings].each { |marking| check(marking) } if (with[:has_markings] == "Yes") && with[:markings]
+      with[:markings].each { |marking| check(marking) } if (with[:has_markings] == "markings_yes") && with[:markings]
     end
 
     within_fieldset("How many units are affected?") do

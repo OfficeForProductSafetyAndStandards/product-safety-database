@@ -3,15 +3,7 @@ require "rails_helper"
 RSpec.describe ProductForm do
   subject(:form) { described_class.new(attributes) }
 
-  let(:attributes) { attributes_for(:product, has_markings: false) }
-
-  describe ".from" do
-    let(:product) { build(:product_iphone) }
-
-    it "populates the has_markings attribute" do
-      expect(described_class.from(product).has_markings).to be true
-    end
-  end
+  let(:attributes) { attributes_for(:product) }
 
   describe "gtin13 validations" do
     context "when setting an empty string" do
@@ -119,10 +111,30 @@ RSpec.describe ProductForm do
     end
   end
 
+  describe "#markings=" do
+    context "when the value supplied is nil" do
+      it "sets the value to an empty array" do
+        form.markings = nil
+        expect(form.attributes["markings"]).to eq([])
+      end
+    end
+
+    context "when the value supplied is an Array" do
+      context "when the value contains duplicates" do
+        it "sets the value to an array with duplicates removed" do
+          form.markings = [1, 1, 2]
+          expect(form.attributes["markings"]).to eq([1, 2])
+        end
+      end
+    end
+  end
+
   describe "markings validations" do
-    let(:attributes) { attributes_for(:product).except(:markings) }
+    let(:attributes) { attributes_for(:product).except(:has_markings, :markings) }
 
     context "when the question has not been answered" do
+      before { form.has_markings = nil }
+
       it "is invalid", :aggregate_failures do
         expect(form).not_to be_valid
         expect(form.errors.full_messages_for(:has_markings)).to eq ["Select yes if the product has UKCA, UKNI or CE marking"]
@@ -130,7 +142,7 @@ RSpec.describe ProductForm do
     end
 
     context "when the product has markings" do
-      before { form.has_markings = true }
+      before { form.has_markings = "markings_yes" }
 
       context "when no markings have been selected" do
         it "is invalid", :aggregate_failures do

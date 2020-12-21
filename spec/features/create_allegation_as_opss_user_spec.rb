@@ -28,7 +28,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       description: Faker::Lorem.sentence,
       authenticity: Product.authenticities.keys.without("missing").sample,
       affected_units_status: "approx",
-      has_markings: %w[Yes No].sample,
+      has_markings: %w[Yes No Unknown].sample,
       markings: [Product::MARKINGS.sample]
     }
   end
@@ -167,7 +167,11 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
   end
 
   def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:)
-    expected_markings = has_markings == "Yes" ? markings.join(", ") : "None"
+    expected_markings = case has_markings
+                        when "Yes" then markings.join(", ")
+                        when "No" then "None"
+                        when "Unknown" then "Not provided"
+                        end
 
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
     expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: type)

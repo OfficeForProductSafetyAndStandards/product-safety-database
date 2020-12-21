@@ -20,7 +20,7 @@ class ProductForm
   attribute :created_at, :datetime
   attribute :affected_units_status
   attribute :number_of_affected_units
-  attribute :has_markings, :boolean
+  attribute :has_markings
   attribute :markings
 
   attr_accessor :approx_units
@@ -41,8 +41,8 @@ class ProductForm
   validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
   validates :description, length: { maximum: 10_000 }
 
-  validates :has_markings, inclusion: { in: [true, false] }
-  validate :markings_validity, if: -> { has_markings }
+  validates :has_markings, inclusion: { in: Product.has_markings.keys }
+  validate :markings_validity, if: -> { has_markings == "markings_yes" }
 
   def self.from(product)
     new(product.serializable_hash(except: %i[updated_at])).tap do |product_form|
@@ -51,8 +51,6 @@ class ProductForm
       elsif product.affected_units_status == Product.affected_units_statuses["exact"]
         product_form.exact_units = product.number_of_affected_units
       end
-
-      product_form.has_markings = product.markings.present?
     end
   end
 
@@ -73,18 +71,21 @@ class ProductForm
   end
 
   def markings=(value)
-    super(value ? value.uniq : nil)
+    value ||= []
+    super(value.uniq)
   end
 
   def markings
-    has_markings ? super : []
+    return [] unless has_markings == "markings_yes"
+
+    super
   end
 
 private
 
   def markings_validity
     if markings.blank? || !markings.all? { |value| Product::MARKINGS.include?(value) }
-      errors.add(:markings, :invalid)
+      errors.add(:markings, :blank)
     end
   end
 end

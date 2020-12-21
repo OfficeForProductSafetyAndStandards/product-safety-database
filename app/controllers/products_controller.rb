@@ -38,7 +38,7 @@ class ProductsController < ApplicationController
 
       if @product_form.valid?
         format.html do
-          product.update!(@product_form.serializable_hash(except: %i[has_markings]))
+          product.update!(@product_form.serializable_hash)
           redirect_to product_path(product), flash: { success: "Product was successfully updated." }
         end
         format.json { render :show, status: :ok, location: product }

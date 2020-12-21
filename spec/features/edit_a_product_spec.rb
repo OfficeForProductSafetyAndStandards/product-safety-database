@@ -14,7 +14,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            brand: brand,
            product_code: product_code,
            webpage: webpage,
-           country_of_origin: country_of_origin)
+           country_of_origin: country_of_origin,
+           has_markings: "markings_yes")
   end
   let(:product_with_no_affected_units_status) do
     create(:product,
@@ -24,7 +25,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            brand: brand,
            product_code: product_code,
            webpage: webpage,
-           country_of_origin: country_of_origin)
+           country_of_origin: country_of_origin,
+           has_markings: "markings_yes")
   end
 
   let(:new_name)              { Faker::Commerce.product_name }
@@ -34,7 +36,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_subcategory) { Faker::Hipster.word }
   let(:new_gtin13)            { Faker::Barcode.ean(13) }
   let(:new_authenticity)      { (Product.authenticities.keys - [product.authenticity]).sample }
-  let(:new_has_markings)      { %w[Yes No].sample }
+  let(:new_has_markings)      { Product.has_markings.keys.sample }
   let(:new_markings)          { [Product::MARKINGS.sample] }
   let(:new_affected_units_status) { "approx" }
   let(:new_number_of_affected_units) { "something like 23" }
@@ -91,12 +93,12 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     end
 
     within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
-      choose new_has_markings
+      page.find("input[value='#{new_has_markings}']").choose
     end
 
     within_fieldset("Select product marking") do
       all("input[type=checkbox]").each(&:uncheck)
-      new_markings.each { |marking| check(marking) } if new_has_markings == "Yes"
+      new_markings.each { |marking| check(marking) } if new_has_markings == "markings_yes"
     end
 
     within_fieldset("How many units are affected?") do
@@ -117,7 +119,11 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     expect_to_be_on_product_page(product_id: product.id, product_name: new_name)
 
-    expected_markings = new_has_markings == "Yes" ? new_markings.join(", ") : "None"
+    expected_markings = case new_has_markings
+                        when "markings_yes" then new_markings.join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Not provided"
+                        end
 
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
     expect(page).to have_summary_item(key: "Product subcategory", value: new_subcategory)
@@ -180,12 +186,12 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     end
 
     within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
-      choose new_has_markings
+      page.find("input[value='#{new_has_markings}']").choose
     end
 
     within_fieldset("Select product marking") do
       all("input[type=checkbox]").each(&:uncheck)
-      new_markings.each { |marking| check(marking) } if new_has_markings == "Yes"
+      new_markings.each { |marking| check(marking) } if new_has_markings == "markings_yes"
     end
 
     within_fieldset("How many units are affected?") do
@@ -206,7 +212,11 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     expect_to_be_on_product_page(product_id: product_with_no_affected_units_status.id, product_name: new_name)
 
-    expected_markings = new_has_markings == "Yes" ? new_markings.join(", ") : "None"
+    expected_markings = case new_has_markings
+                        when "markings_yes" then new_markings.join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Not provided"
+                        end
 
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
     expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)

@@ -308,7 +308,7 @@ private
   end
 
   def product_attributes
-    ProductForm.new(product_step_params).serializable_hash(except: %i[has_markings])
+    ProductForm.new(product_step_params).serializable_hash
   end
 
   def business_step_params

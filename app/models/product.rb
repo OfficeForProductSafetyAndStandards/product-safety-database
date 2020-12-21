@@ -17,6 +17,12 @@ class Product < ApplicationRecord
     "not_relevant" => "not_relevant"
   }
 
+  enum has_markings: {
+    "markings_yes" => "markings_yes",
+    "markings_no" => "markings_no",
+    "markings_unknown" => "markings_unknown"
+  }
+
   MARKINGS = %w[UKCA UKNI CE].freeze
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
@@ -30,4 +36,8 @@ class Product < ApplicationRecord
   has_many :tests, dependent: :destroy
 
   has_one :source, as: :sourceable, dependent: :destroy
+
+  def has_markings?
+    has_markings == "markings_yes"
+  end
 end

@@ -5,8 +5,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
   let(:investigation) { create(:enquiry, creator: user) }
   let(:attributes)    do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample,
-                                    affected_units_status: Product.affected_units_statuses.keys.sample,
-                                    has_markings: %w[Yes No].sample)
+                                    affected_units_status: Product.affected_units_statuses.keys.sample)
   end
   let(:other_user) { create(:user, :activated) }
 
@@ -48,11 +47,11 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     end
 
     within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
-      choose attributes[:has_markings]
+      page.find("input[value='#{attributes[:has_markings]}']").choose
     end
 
     within_fieldset("Select product marking") do
-      attributes[:markings].each { |marking| check(marking) } if attributes[:has_markings] == "Yes"
+      attributes[:markings].each { |marking| check(marking) } if attributes[:has_markings] == "markings_yes"
     end
 
     within_fieldset("How many units are affected?") do
@@ -70,7 +69,11 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
     expect(page).not_to have_error_messages
 
-    expected_markings = attributes[:has_markings] == "Yes" ? attributes[:markings].join(", ") : "None"
+    expected_markings = case attributes[:has_markings]
+                        when "markings_yes" then attributes[:markings].join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Not provided"
+                        end
 
     expect(page).to have_summary_item(key: "Product brand",             value: attributes[:brand])
     expect(page).to have_summary_item(key: "Product name",              value: attributes[:name])

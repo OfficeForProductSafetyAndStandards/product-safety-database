@@ -260,7 +260,7 @@ en:
             has_markings:
               inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
             markings:
-              invalid: "Select the product marking(s)"
+              blank: "Select the product marking(s)"
 
         risk_assessment_form:
           attributes:

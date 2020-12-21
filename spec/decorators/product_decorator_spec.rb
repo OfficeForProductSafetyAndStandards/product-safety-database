@@ -126,24 +126,27 @@ RSpec.describe ProductDecorator do
   end
 
   describe "#markings" do
-    context "when nil" do
-      before { product.markings = nil }
+    context "when has_markings == markings_unknown" do
+      before { product.has_markings = "markings_unknown" }
 
       it "returns a String" do
         expect(decorated_product.markings).to eq("Not provided")
       end
     end
 
-    context "when empty" do
-      before { product.markings = [] }
+    context "when has_markings == markings_no" do
+      before { product.has_markings = "markings_no" }
 
       it "returns a String" do
         expect(decorated_product.markings).to eq("None")
       end
     end
 
-    context "when not empty" do
-      before { product.markings = %w[UKCA UKNI CE] }
+    context "when has_markings == markings_yes" do
+      before do
+        product.has_markings = "markings_yes"
+        product.markings = %w[UKCA UKNI CE]
+      end
 
       it "joins into a single String" do
         expect(decorated_product.markings).to eq("UKCA, UKNI, CE")
