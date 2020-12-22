@@ -591,7 +591,7 @@ private
 
     # Product must be added before investigation is saved for correct audit
     # activity title generation
-    @product = @investigation.products.build(product_attributes)
+    @product = @investigation.products.build(product_session_params)
     CreateCase.call(investigation: @investigation, user: current_user)
     save_businesses
     save_corrective_actions

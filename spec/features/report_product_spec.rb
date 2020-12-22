@@ -98,7 +98,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       let(:product_details) do
         {
           name: Faker::Lorem.sentence,
-          barcode: Faker::Number.number(digits: 10),
+          gtin13: "7622210761231",
+          product_code: Faker::Number.number(digits: 10),
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
           webpage: Faker::Internet.url,
@@ -400,12 +401,22 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
                         when "markings_unknown" then "Not provided"
                         end
 
+    expected_authenticity = info[:authenticity] == "Yes" ? "Counterfeit" : "Genuine"
+
+    expected_units_affected = case info[:affected_units_status]
+                              when "Approximate number known" then info[:number_of_affected_units]
+                              when "Exact number known" then info[:number_of_affected_units]
+                              else info[:affected_units_status]
+                              end
+
     within page.find(".product-summary") do
       expect(page).to have_selector("h2", text: info[:name])
       expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
       expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
+      expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: expected_authenticity)
       expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
-      expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
+      expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: expected_units_affected)
+      expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:product_code]) if info[:product_code]
       expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: info[:type])
       expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
       expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
@@ -513,7 +524,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     fill_in "Product name",                      with: with[:name]
     fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:gtin13]
-    fill_in "Other product identifiers",         with: with[:barcode] if with[:barcode]
+    fill_in "Other product identifiers",         with: with[:product_code] if with[:product_code]
     fill_in "Webpage",                           with: with[:webpage] if with[:webpage]
     fill_in "Description of product",            with: with[:description] if with[:description]
     click_button "Continue"
