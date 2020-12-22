@@ -35,7 +35,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-      within_fieldset("Have you validated the case risk level?") do
+      within_fieldset("Has the case risk level been validated?") do
         choose "Yes"
       end
 
@@ -59,7 +59,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
       expect(page).to have_current_path("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-      within_fieldset("Have you validated the case risk level?") do
+      within_fieldset("Has the case risk level been validated?") do
         choose "No"
       end
 
@@ -77,7 +77,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
     scenario "remove validation" do
       visit("/cases/#{investigation.pretty_id}/validate-risk-level/edit")
 
-      within_fieldset("Have you validated the case risk level?") do
+      within_fieldset("Has the case risk level been validated?") do
         choose "Yes"
       end
 
@@ -90,7 +90,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
       validation_link.click
 
-      within_fieldset("Have you validated the case risk level?") do
+      within_fieldset("Has the case risk level been validated?") do
         choose "No"
       end
 
@@ -98,7 +98,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
 
       expect(page).to have_content("Enter details")
 
-      within_fieldset("Have you validated the case risk level?") do
+      within_fieldset("Has the case risk level been validated?") do
         choose "No"
         fill_in "Why?", with: "Mistake made by team member"
       end
