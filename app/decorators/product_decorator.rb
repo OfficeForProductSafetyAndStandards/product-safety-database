@@ -57,7 +57,7 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def markings
-    return I18n.t(".product.not_provided") if object.has_markings == "markings_unknown"
+    return I18n.t(".product.not_provided") if object.has_markings == "markings_unknown" || !object.markings
     return I18n.t(".product.none") if object.has_markings == "markings_no"
 
     object.markings.join(", ")

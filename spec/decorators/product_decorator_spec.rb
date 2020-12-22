@@ -152,5 +152,16 @@ RSpec.describe ProductDecorator do
         expect(decorated_product.markings).to eq("UKCA, UKNI, CE")
       end
     end
+
+    context "when has_markings and markings are nil" do
+      before do
+        product.has_markings = nil
+        product.markings = nil
+      end
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
+      end
+    end
   end
 end
