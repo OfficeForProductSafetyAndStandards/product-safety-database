@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_123617) do
+ActiveRecord::Schema.define(version: 2020_12_22_142417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 2020_12_18_123617) do
     t.text "details"
     t.string "duration"
     t.string "geographic_scope"
+    t.string "has_online_recall_information"
     t.integer "investigation_id"
     t.string "legislation"
     t.string "measure_type"

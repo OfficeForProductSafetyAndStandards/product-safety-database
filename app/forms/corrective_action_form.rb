@@ -2,6 +2,8 @@ class CorrectiveActionForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
+  include ActiveModel::Validations::Callbacks
+  include SanitizationHelper
 
   attribute :date_decided, :govuk_date
   attribute :product_id
@@ -39,8 +41,9 @@ class CorrectiveActionForm
   validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
-
   validates :details, length: { maximum: 50_000 }
+
+  before_validation { trim_line_endings(:other_action, :details) }
 
   def load_document_file
     if existing_document_file_id.present? && document.nil?
@@ -51,6 +54,8 @@ class CorrectiveActionForm
   end
 
   def file=(document_params)
+    return unless related_file
+
     if document_params.key?(:file)
       file = document_params[:file]
       self.filename = file.original_filename
@@ -81,7 +86,7 @@ private
   end
 
   def related_file_attachment_validation
-    if related_file && documents.attachments.empty?
+    if related_file && document.nil?
       errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
     end
   end

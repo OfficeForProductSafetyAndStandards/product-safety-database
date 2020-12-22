@@ -1,6 +1,6 @@
 class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Base
-  def self.from(corrective_action)
-    super(corrective_action)
+  def self.from(_corrective_action)
+    raise "Deprecated - use AddCorrectiveActionToCase.call instead"
   end
 
   def email_update_text(viewer = nil)

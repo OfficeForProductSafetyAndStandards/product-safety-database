@@ -45,7 +45,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def show_path
-    h.investigation_action_path(investigation, object)
+    h.investigation_corrective_action_path(investigation, object)
   end
 
   def measure_type

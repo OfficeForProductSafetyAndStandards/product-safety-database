@@ -73,6 +73,7 @@ module Investigations
         :business_id,
         :legislation,
         :action,
+        :has_online_recall_information,
         :details,
         :related_file,
         :measure_type,

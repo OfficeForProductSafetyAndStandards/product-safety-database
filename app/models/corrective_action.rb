@@ -23,23 +23,7 @@ class CorrectiveAction < ApplicationRecord
     other: I18n.t(:other, scope: %i[corrective_action attributes actions])
   }
 
-  before_validation { trim_line_endings(:other_action, :details) }
-  after_create :create_audit_activity
-
   def action_label
     self.class.actions[action]
   end
-
-private
-
-  def date_decided_cannot_be_in_the_future
-    if date_decided.present? && date_decided > Time.zone.today
-      errors.add(:date_decided, "The date of corrective action decision can not be in the future")
-    end
-  end
-
-  def create_audit_activity
-    AuditActivity::CorrectiveAction::Add.from(self)
-  end
-
 end
