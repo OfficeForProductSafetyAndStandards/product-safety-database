@@ -47,7 +47,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).not_to have_link("Validate")
 
       click_on "Activity"
-      expect(page).to have_content "Case risk level validation added"
+      expect(page).to have_content "Case risk level validated"
 
       expect_email_with_correct_details_to_be_set("has been validated")
     end
@@ -71,7 +71,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page).to have_link("Validate")
 
       click_on "Activity"
-      expect(page).not_to have_content "Case risk level validation added"
+      expect(page).not_to have_content "Case risk level validated"
     end
 
     scenario "remove validation" do
