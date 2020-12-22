@@ -54,36 +54,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     fill_and_submit_form
 
-    expect_to_be_on_confirmation_page
-    expect(page).not_to have_error_messages
-
-    expect_confirmation_page_to_show_entered_data
-
-    click_link "Edit details"
-
-    expect_form_to_show_input_data
-
-    click_button "Continue"
-
-    expect_confirmation_page_to_show_entered_data
-
-    click_button "Continue"
-
-    expect_to_be_on_supporting_information_page(case_id: investigation.pretty_id)
-    expect(page).not_to have_error_messages
-
-    click_link "Supporting information (1)"
-
-    expect_case_supporting_information_page_to_show_file
-
-    click_on "Activity"
-
-    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-
-    expect_case_activity_page_to_show_entered_data
-
-    click_link "View corrective action"
-
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
@@ -95,6 +65,18 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_summary_item(key: "Other details",       value: "Urgent action following consumer reports")
 
     expect(page).to have_link("old_risk_assessment.txt")
+
+    click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+
+    click_link "Supporting information (1)"
+
+    expect_case_supporting_information_page_to_show_file
+
+    click_on "Activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect_case_activity_page_to_show_entered_data
   end
 
   def expect_confirmation_page_to_show_entered_data
@@ -157,7 +139,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     fill_in "Year",    with: date.year  if date
 
     select legislation, from: "Under which legislation?"
-    save_and_open_page
+
     within_fieldset "Has the business responsible published product recall information online?" do
       choose "Yes"
     end

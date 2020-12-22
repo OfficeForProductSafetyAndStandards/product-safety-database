@@ -8,7 +8,7 @@ class CorrectiveAction < ApplicationRecord
   belongs_to :business, optional: true
   belongs_to :product
 
-  has_many_attached :document
+  has_one_attached :document
 
   enum action: {
     ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures, scope: %i[corrective_action attributes actions]),
