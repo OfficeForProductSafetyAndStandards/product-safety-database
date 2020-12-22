@@ -17,7 +17,7 @@
       <% if @currently_not_validated %>
         <% no_row = { text: "No", value: "false"} %>
       <% else %>
-        <% no_row = { text: "No", value: "false", conditional: { html: form.govuk_text_area(:risk_validation_change_rationale, label: "Why?") } } %>
+        <% no_row = { text: "No", value: "false", conditional: { html: form.govuk_text_area(:risk_validation_change_rationale, label: "Further details:", hint: "Tell us the reason in a few words") } } %>
       <% end %>
 
       <%= render "form_components/govuk_radios", form: form, key: :is_risk_validated,
