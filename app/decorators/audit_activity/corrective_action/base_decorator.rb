@@ -2,7 +2,7 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
   decorates_association :product, with: ProductDecorator
   decorates_association :business, with: BusinessDecorator
   delegate :name, to: :product, prefix: true
-  delegate :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
+  delegate :details, :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
 
   def trading_name
     corrective_action.business.trading_name
@@ -22,9 +22,5 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
 
   def document_filename
     corrective_action.document&.filename
-  end
-
-  def details
-    corrective_action.details
   end
 end

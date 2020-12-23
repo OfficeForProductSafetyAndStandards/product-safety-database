@@ -28,7 +28,6 @@ module Investigations
         return redirect_to investigation_corrective_action_path(@investigation, result.corrective_action), flash: { success: "Corrective action was successfully recorded." }
       end
 
-
       render :new
     end
 
@@ -80,7 +79,7 @@ module Investigations
         :duration,
         :geographic_scope,
         :other_action,
-        file: %i[description file],
+        file: %i[file description],
         date_decided: %i[day month year]
       )
     end
