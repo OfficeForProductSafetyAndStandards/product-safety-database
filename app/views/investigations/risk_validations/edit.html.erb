@@ -1,0 +1,36 @@
+<% page_heading = "Has the case risk level been validated?" %>
+<% page_title page_heading, errors: @risk_validation_form.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with scope: :investigation, model: @risk_validation_form, builder: ApplicationFormBuilder, url: investigation_risk_validations_path(@investigation), method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @risk_validation_form.errors %>
+
+      <% if @currently_not_validated %>
+        <% no_row = { text: "No", value: "false"} %>
+      <% else %>
+        <% no_row = { text: "No", value: "false", conditional: { html: form.govuk_text_area(:risk_validation_change_rationale, label: "Further details", hint: "Tell us the reason in a few words") } } %>
+      <% end %>
+
+      <%= render "form_components/govuk_radios", form: form, key: :is_risk_validated,
+                 fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
+                 items: [
+                           { text: "Yes", value: "true", id: "is_risk_validated" },
+                           no_row
+                        ] %>
+
+      <div class="govuk-form-group">
+        <%= govukButton(text: t("Continue")) %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
+    </div>
+  </div>
+<% end %>
