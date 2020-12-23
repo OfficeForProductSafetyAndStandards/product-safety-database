@@ -3,9 +3,7 @@ FactoryBot.define do
     association :investigation, factory: :allegation
     product
     action { (CorrectiveAction.actions.keys - %w[other]).sample }
-    date_decided_day { date_decided.day }
-    date_decided_month { date_decided.month }
-    date_decided_year { date_decided.year }
+    date_decided { Faker::Date.backward(days: 14)  }
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
     measure_type { CorrectiveAction::MEASURE_TYPES.sample }
     duration { CorrectiveAction::DURATION_TYPES.sample }
@@ -14,7 +12,6 @@ FactoryBot.define do
     related_file { false }
 
     transient do
-      date_decided { Faker::Date.backward(days: 14) }
       owner_id {}
     end
 
