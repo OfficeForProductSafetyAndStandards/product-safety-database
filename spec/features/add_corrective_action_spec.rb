@@ -119,7 +119,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     corrective_action_title = "#{CorrectiveActionDecorator::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}"
     item = page.find("h3", text: corrective_action_title).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{legislation}")
-    expect(item).to have_text("Date came into effect: #{date.strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Date came into effect: #{date.to_s(:govuk)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")

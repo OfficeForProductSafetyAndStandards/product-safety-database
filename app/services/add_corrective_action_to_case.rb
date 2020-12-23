@@ -31,8 +31,13 @@ private
 
   def create_audit_activity
     metadata = AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action)
-    AuditActivity::CorrectiveAction::Add.create(
-      investigation: investigation, business: business, product: product, source: UserSource(user: user)
+
+    AuditActivity::CorrectiveAction::Add.create!(
+      investigation: investigation,
+      business_id: business_id,
+      product_id: product_id,
+      source: UserSource.new(user: user),
+      metadata: metadata
     )
   end
 end
