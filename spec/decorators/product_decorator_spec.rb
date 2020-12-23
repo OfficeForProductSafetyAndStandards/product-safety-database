@@ -126,11 +126,19 @@ RSpec.describe ProductDecorator do
   end
 
   describe "#markings" do
+    context "when has_markings is nil" do
+      before { product.has_markings = nil }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
+      end
+    end
+
     context "when has_markings == markings_unknown" do
       before { product.has_markings = "markings_unknown" }
 
       it "returns a String" do
-        expect(decorated_product.markings).to eq("Not provided")
+        expect(decorated_product.markings).to eq("Unknown")
       end
     end
 

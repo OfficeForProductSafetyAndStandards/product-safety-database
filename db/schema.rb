@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_12_18_123617) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -229,7 +230,7 @@ ActiveRecord::Schema.define(version: 2020_12_18_123617) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "gtin13", limit: 13
-    t.enum "has_markings", default: "markings_unknown", as: "has_markings_values"
+    t.enum "has_markings", as: "has_markings_values"
     t.text "markings", array: true
     t.string "name"
     t.text "number_of_affected_units"

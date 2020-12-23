@@ -7,7 +7,7 @@ class AddMarkingsToProduct < ActiveRecord::Migration[6.0]
       end
 
       change_table :products, bulk: true do |t|
-        t.column :has_markings, :has_markings_values, default: "markings_unknown"
+        t.column :has_markings, :has_markings_values, default: nil
         t.column :markings, :text, array: true
       end
     end
