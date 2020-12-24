@@ -9,7 +9,6 @@ FactoryBot.define do
     duration { CorrectiveAction::DURATION_TYPES.sample }
     geographic_scope { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
     details { Faker::Lorem.sentence }
-    related_file { false }
 
     transient do
       owner_id {}
@@ -17,7 +16,6 @@ FactoryBot.define do
 
     trait :with_file do
       with_antivirus_checked_document
-      related_file { true }
     end
   end
 end

@@ -4,7 +4,7 @@
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
-    href: investigation_action_path(@investigation, @corrective_action)
+    href: investigation_corrective_action_path(@investigation, @corrective_action_form.id)
   ) %>
 <% end %>
 
@@ -12,8 +12,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_action_path(@investigation, @corrective_action), builder: ApplicationFormBuilder, local: true do |form| %>
-      <%= error_summary(@corrective_action.errors) %>
+    <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_action_path(@investigation, @corrective_action_form.id), method: :put, builder: ApplicationFormBuilder, local: true do |form| %>
+      <%= error_summary(@corrective_action_form.errors) %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
@@ -22,7 +22,7 @@
                  form: form,
                  allow_product_linking: true,
                  allow_business_linking: true,
-                 corrective_action: @corrective_action,
+                 corrective_action: @corrective_action_form,
                  investigation: @investigation
       %>
 
@@ -32,11 +32,11 @@
       <%= form.hidden_field :related_file, value: nil %>
 
       <%= form.govuk_radios :related_file,
-        legend: "Are there any files related to the action?",
-        items: [
-          { text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action.file_attached? },
-          { text: "No", value: "off", checked: !@corrective_action.file_attached? }
-        ]
+         legend: "Are there any files related to the action?",
+         items: [
+           { text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action_form.document.present? },
+           { text: "No", value: "off", checked: !@corrective_action_form.document.present? }
+         ]
       %>
 
       <%= govukButton text: "Update corrective action" %>

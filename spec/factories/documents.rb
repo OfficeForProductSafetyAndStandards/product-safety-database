@@ -43,7 +43,12 @@ FactoryBot.define do
         }
       )
 
-      model.documents.attach(file)
+      if model.respond_to?(:document)
+        model.document.attach(file)
+      else
+        model.documents.attach(file)
+      end
+
     end
   end
 end

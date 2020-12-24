@@ -3,11 +3,13 @@ class CorrectiveActionForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
   include ActiveModel::Validations::Callbacks
+  include ActiveModel::Dirty
   include SanitizationHelper
 
+  attribute :id
   attribute :date_decided, :govuk_date
-  attribute :product_id
-  attribute :business_id
+  attribute :product_id, :integer
+  attribute :business_id, :integer
   attribute :legislation
   attribute :action
   attribute :details
@@ -44,6 +46,29 @@ class CorrectiveActionForm
   validates :details, length: { maximum: 50_000 }
 
   before_validation { trim_line_endings(:other_action, :details) }
+  before_validation { clean_other_action }
+
+  ATTRIBUTES_FROM_CORRECTIVE_ACTION = %i[
+    id
+    date_decided
+    product_id
+    business_id
+    legislation
+    action
+    details
+    measure_type
+    duration
+    geographic_scope
+    other_action
+    has_online_recall_information
+  ].freeze
+
+  def self.from(corrective_action)
+    new(corrective_action.serializable_hash(only: ATTRIBUTES_FROM_CORRECTIVE_ACTION)).tap do |corrective_action_form|
+      corrective_action_form.load_document_file
+      corrective_action_form.changes_applied
+    end
+  end
 
   def load_document_file
     if existing_document_file_id.present? && document.nil?
@@ -89,5 +114,11 @@ private
     if related_file && document.nil?
       errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
     end
+  end
+
+  def clean_other_action
+    return if other?
+
+    self.other_action = nil
   end
 end

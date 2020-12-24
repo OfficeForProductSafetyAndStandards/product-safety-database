@@ -38,11 +38,12 @@ module Investigations
     end
 
     def edit
-      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize investigation, :update?
-      @corrective_action = investigation.corrective_actions.find(params[:id]).decorate
+      corrective_action = investigation.corrective_actions.find(params[:id])
+      @corrective_action_form = CorrectiveActionForm.from(corrective_action)
 
-      @file_blob = @corrective_action.documents_blobs.first
+      @file_blob = corrective_action.document_blob
       @investigation = investigation.decorate
     end
 
@@ -50,17 +51,26 @@ module Investigations
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize investigation, :update?
 
-      corrective_action = investigation.corrective_actions.find(params[:id])
+      corrective_action       = investigation.corrective_actions.find(params[:id])
+      @corrective_action_form = CorrectiveActionForm.from(corrective_action)
+      @investigation          = investigation.decorate
+
+      @corrective_action_form.assign_attributes(corrective_action_params)
+
+      return render :edit if @corrective_action_form.invalid?
 
       result = UpdateCorrectiveAction.call(
-        corrective_action: corrective_action,
-        corrective_action_params: corrective_action_params,
-        user: current_user
+        @corrective_action_form
+          .serializable_hash
+          .merge(
+            user: current_user,
+            corrective_action: corrective_action,
+            changes: @corrective_action_form.changes
+          )
       )
-      return redirect_to investigation_action_path(investigation, result.corrective_action) if result.success?
 
-      @corrective_action = corrective_action.decorate
-      @investigation = investigation.decorate
+      return redirect_to investigation_corrective_action_path(investigation, result.corrective_action) if result.success?
+
       render :edit
     end
 

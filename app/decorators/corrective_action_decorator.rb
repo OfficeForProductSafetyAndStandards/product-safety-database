@@ -57,7 +57,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def file_attached?
-    documents.any?
+    document.attached?
   end
 
   def display_medium_title_text_size?

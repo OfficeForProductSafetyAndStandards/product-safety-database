@@ -24,9 +24,12 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_select("What is the geographic scope of the action?", selected: corrective_action.geographic_scope)
       expect(page).to have_field("Further details (optional)", with: "\r\n#{corrective_action.details}", type: "textarea")
       measure_type = corrective_action.measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
-      expect(page).to have_checked_field(measure_type)
+
+      within_fieldset("Is the corrective action mandatory?") do
+        expect(page).to have_checked_field(measure_type)
+      end
       expect(page).to have_checked_field(CorrectiveAction.human_attribute_name("duration.#{corrective_action.duration}"))
-      document = corrective_action.documents_blobs.first
+      document = corrective_action.document_blob
       expect(page).to have_link(document.filename.to_s)
 
       within_fieldset("What action is being taken?") do
