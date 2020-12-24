@@ -115,7 +115,7 @@ RSpec.describe ProductForm do
     context "when the value supplied is nil" do
       it "sets the value to an empty array" do
         form.markings = nil
-        expect(form).to have_attributes("markings" => [])
+        expect(form.attributes["markings"]).to eq([])
       end
     end
 
@@ -123,7 +123,7 @@ RSpec.describe ProductForm do
       context "when the value contains duplicates" do
         it "sets the value to an array with duplicates removed" do
           form.markings = [1, 1, 2]
-          expect(form).to have_attributes("markings" => [1, 2])
+          expect(form.attributes["markings"]).to eq([1, 2])
         end
       end
     end
