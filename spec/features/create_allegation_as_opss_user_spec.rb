@@ -27,7 +27,9 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       country_of_origin: Country.all.sample.first,
       description: Faker::Lorem.sentence,
       authenticity: Product.authenticities.keys.without("missing").sample,
-      affected_units_status: "approx"
+      affected_units_status: "approx",
+      has_markings: %w[Yes No Unknown].sample,
+      markings: [Product::MARKINGS.sample]
     }
   end
 
@@ -139,11 +141,20 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:)
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
-    fill_in "Product sub-category", with: type
+    fill_in "Product subcategory", with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
+
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      choose has_markings
+    end
+
+    within_fieldset("Select product marking") do
+      markings.each { |marking| check(marking) } if has_markings == "Yes"
+    end
+
     within_fieldset("How many units are affected?") do
       choose affected_units_status_answer(affected_units_status)
       find("#approx_units").set(21)
@@ -155,10 +166,17 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:)
+    expected_markings = case has_markings
+                        when "Yes" then markings.join(", ")
+                        when "No" then "None"
+                        when "Unknown" then "Unknown"
+                        end
+
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
-    expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: type)
+    expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
+    expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
     expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: barcode)
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)

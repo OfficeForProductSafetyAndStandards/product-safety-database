@@ -1,16 +1,16 @@
 class AuditActivity::Test::Result < AuditActivity::Test::Base
-  def self.from(test)
-    result_text = test.result == "other" ? "Test result" : test.result.capitalize
-    title = "#{result_text} test: #{test.product.name}"
-    super(test, title)
+  def self.build_metadata(test_result)
+    { test_result_id: test_result.id }
   end
 
-  def self.date_label
-    "Test date"
+  def self.from(_test_result)
+    raise "Deprecated - use AddTestResultToInvestigation.call instead"
   end
 
-  def email_update_text(viewer = nil)
-    "Test result was added to the #{investigation.case_type} by #{source&.show(viewer)}."
+  def title(_viewing_user = nil)
+    return super if metadata.nil?
+
+    test_result.decorate.title
   end
 
   # Returns the actual Test::Result record.
@@ -20,9 +20,9 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
   # way to retrieve this is by relying upon our current behaviour of attaching the
   # same actual file to all of the AuditActivity, Investigation and Test records.
   def test_result
-    attachment.blob.attachments
-      .find_by(record_type: "Test")
-      &.record
+    return if metadata.nil?
+
+    @test_result ||= Test::Result.find(metadata["test_result_id"])
   end
 
 private
@@ -30,4 +30,8 @@ private
   def subtitle_slug
     "Test result recorded"
   end
+
+  # Do not send investigation_updated mail when test result updated. This
+  # overrides inherited functionality in the Activity model :(
+  def notify_relevant_users; end
 end

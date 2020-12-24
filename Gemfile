@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.86"
+gem "aws-sdk-s3", "~> 1.87"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "barkick", "~> 0.1"
 gem "caxlsx_rails", "~> 0.6.2"
@@ -60,7 +60,7 @@ end
 group :development do
   gem "listen", "~> 3.3"
   gem "m", "~> 1.5"
-  gem "solargraph", "~> 0.39"
+  gem "solargraph", "~> 0.40"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
@@ -81,9 +81,11 @@ group :test do
   gem "rubocop-performance", "~> 1.8"
   gem "rubocop-rspec", "~> 1.42", require: false
   gem "scss_lint-govuk", "~> 0.2"
+  gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.8"
   gem "simplecov-lcov"
   gem "slim_lint", "~> 0.20"
-  gem "webmock", "~> 3.10"
+  gem "super_diff"
+  gem "webmock", "~> 3.11"
 end

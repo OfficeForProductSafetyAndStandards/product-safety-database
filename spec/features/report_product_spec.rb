@@ -81,6 +81,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def generate_test_result
     {
       legislation: Rails.application.config.legislation_constants["legislation"].sample,
+      standards_product_was_tested_against: "EN71, EN73",
       date: Faker::Date.backward(days: 14),
       result: %w[Pass Fail].sample,
       details: Faker::Lorem.sentence,
@@ -97,7 +98,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       let(:product_details) do
         {
           name: Faker::Lorem.sentence,
-          barcode: Faker::Number.number(digits: 10),
+          gtin13: "7622210761231",
+          product_code: Faker::Number.number(digits: 10),
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
           webpage: Faker::Internet.url,
@@ -105,7 +107,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           description: Faker::Lorem.sentence,
           authenticity: "Yes",
           affected_units_status: "Approximate number known",
-          number_of_affected_units: 22
+          number_of_affected_units: 22,
+          has_markings: "markings_yes",
+          markings: [Product::MARKINGS.sample]
         }
       end
       let(:coronavirus) { false }
@@ -176,9 +180,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         end
 
         # Test recall of information when there is an error - particularly attachments
-        incomplete_test_data = incomplete_test_result.slice(:legislation, :date, :details, :file)
+        incomplete_test_data = incomplete_test_result.slice(:legislation, :date, :details, :file, :standards_product_was_tested_against)
 
         fill_in_test_results_page(with: incomplete_test_data)
+
         expect_to_be_on_test_result_details_page
         expect_test_result_page_to_show_entered_information(incomplete_test_data)
 
@@ -267,7 +272,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
           authenticity: "Yes",
-          affected_units_status: "Unknown"
+          affected_units_status: "Unknown",
+          has_markings: "markings_no"
         }
       end
 
@@ -290,7 +296,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         click_button "Continue"
 
         expect_to_be_on_what_product_are_you_reporting_page
-        expect(page).to have_error_summary "Name cannot be blank", "Product sub-category cannot be blank", "Category cannot be blank"
+        expect(page).to have_error_summary "Name cannot be blank", "Product subcategory cannot be blank", "Category cannot be blank"
 
         fill_in_product_page(with: product_details)
 
@@ -389,12 +395,29 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   end
 
   def expect_case_products_page_to_show(info:, images:)
+    expected_markings = case info[:has_markings]
+                        when "markings_yes" then info[:markings].join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Unknown"
+                        end
+
+    expected_authenticity = info[:authenticity] == "Yes" ? "Counterfeit" : "Genuine"
+
+    expected_units_affected = case info[:affected_units_status]
+                              when "Approximate number known" then info[:number_of_affected_units]
+                              when "Exact number known" then info[:number_of_affected_units]
+                              else info[:affected_units_status]
+                              end
+
     within page.find(".product-summary") do
       expect(page).to have_selector("h2", text: info[:name])
       expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
       expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
-      expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
-      expect(page.find("dt", text: "Product sub-category")).to have_sibling("dd", text: info[:type])
+      expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: expected_authenticity)
+      expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
+      expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: expected_units_affected)
+      expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: info[:product_code]) if info[:product_code]
+      expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: info[:type])
       expect(page.find("dt", text: "Category")).to have_sibling("dd", text: info[:category])
       expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
       expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin]) if info[:country_of_origin]
@@ -464,7 +487,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
-    expect(item).to have_text("Test date: #{test[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Test date: #{test[:date].to_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end
@@ -480,10 +503,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_product_page(with:)
     select with[:category],                      from: "Product category"
     select with[:country_of_origin],             from: "Country of origin" if with[:country_of_origin]
-    fill_in "Product sub-category", with: with[:type]
+    fill_in "Product subcategory", with: with[:type]
 
     within_fieldset("Is the product counterfeit?") do
       choose with[:authenticity]
+    end
+
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      page.find("input[value='#{with[:has_markings]}']").choose
+    end
+
+    within_fieldset("Select product marking") do
+      with[:markings].each { |marking| check(marking) } if (with[:has_markings] == "markings_yes") && with[:markings]
     end
 
     within_fieldset("How many units are affected?") do
@@ -493,7 +524,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     fill_in "Product name",                      with: with[:name]
     fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:gtin13]
-    fill_in "Other product identifiers",         with: with[:barcode] if with[:barcode]
+    fill_in "Other product identifiers",         with: with[:product_code] if with[:product_code]
     fill_in "Webpage",                           with: with[:webpage] if with[:webpage]
     fill_in "Description of product",            with: with[:description] if with[:description]
     click_button "Continue"
@@ -587,17 +618,24 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def fill_in_test_results_page(with:, add_another: true)
     select with[:legislation], from: "Against which legislation?"
+
+    fill_in "Which standard was the product tested against?", with: with[:standards_product_was_tested_against]
+
     fill_in "Day", with: with[:date].day
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     choose with[:result] if with[:result]
+
     fill_in "Further details", with: with[:details]
 
     unless page.has_text?("Currently selected file")
       attach_file "Upload a file", with[:file]
     end
 
-    choose(add_another ? "test_further_test_results_yes" : "test_further_test_results_no")
+    within_fieldset("Are there other test results to report?") do
+      choose(add_another ? "Yes" : "No")
+    end
+
     click_button "Continue"
   end
 

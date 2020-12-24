@@ -1,21 +1,21 @@
 <% page_title = "Edit test result" %>
-<%= page_title page_title, errors: @test_result.errors.any? %>
+<%= page_title page_title, errors: @test_result_form.errors.any? %>
 
 <% content_for :after_header do %>
-  <%= govukBackLink text: "Back", href:
-  investigation_test_result_path(@investigation, @test_result) %>
+<%= govukBackLink text: "Back", href:
+investigation_test_result_path(@investigation, @test_result_form.id) %>
 <% end %>
 
-<%= form_with model: @test_result, scope: :test_result, local: true, url: investigation_test_result_path(@investigation, @test_result), method: :patch, builder: ApplicationFormBuilder do |form| %>
+<%= form_with model: @test_result_form, scope: :test_result, local: true, url: investigation_test_result_path(@investigation, @test_result_form.id), method: :patch, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= error_summary(@test_result_form.errors, %i[legislation standards_product_was_tested_against date result base])%>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
-      <%= render "investigations/test_results/form", form: form, test_result: @test_result, investigation: @investigation, allow_product_linking: true %>
+      <%= render "investigations/test_results/form", form: form, test_result_form: @test_result_form, investigation: @investigation, allow_product_linking: true %>
 
       <%= govukButton text: "Update test result" %>
     </div>

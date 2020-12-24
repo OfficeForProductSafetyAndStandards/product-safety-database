@@ -151,6 +151,19 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
+      it "exports risk_validated_at" do
+        investigation = create(:allegation, risk_validated_at: Date.current)
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 23)).to eq "Date_Validated"
+          expect(exported_data.cell(2, 23)).to eq investigation.risk_validated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+        end
+      end
+
       context "when investigation is open" do
         it "date_closed column is empty" do
           create(:allegation)

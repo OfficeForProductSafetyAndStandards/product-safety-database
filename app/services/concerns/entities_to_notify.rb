@@ -1,7 +1,7 @@
 module EntitiesToNotify
   extend ActiveSupport::Concern
 
-  def email_recipients_for_team_with_access
+  def email_recipients_for_team_with_access(investigation, user_triggering_notifications)
     entities = []
     investigation.teams_with_access.each do |team|
       if team.team_recipient_email.present?
@@ -11,7 +11,7 @@ module EntitiesToNotify
         entities.concat(users_from_team)
       end
     end
-    entities.uniq - [context.user]
+    entities.uniq - [user_triggering_notifications]
   end
 
   # Notify the case owner, unless it is the same user/team performing the change

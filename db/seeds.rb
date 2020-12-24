@@ -67,7 +67,8 @@ if run_seeds
     name: "Pretty",
     category: "Toys",
     subcategory: "Plastic doll",
-    webpage: ""
+    webpage: "",
+    has_markings: "markings_unknown"
   )
 
   product.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
@@ -115,7 +116,8 @@ if run_seeds
     name: "Crazy Geezer's Putty World",
     category: "Toys",
     subcategory: "Putty",
-    webpage: "www.amazon.com"
+    webpage: "www.amazon.com",
+    has_markings: "markings_no"
   )
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
@@ -151,7 +153,9 @@ if run_seeds
     name: "RXF 36 and RXF 34 Air Mountain Bike Front Forks",
     category: "Other Product sub-category",
     subcategory: "Bike Suspension Fork",
-    webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791"
+    webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
@@ -191,7 +195,9 @@ if run_seeds
     name: "Fogbuster Lens Cleaner",
     category: "Other Product sub-category",
     subcategory: "Swim goggles lens cleaner",
-    webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/"
+    webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
@@ -231,7 +237,9 @@ if run_seeds
     name: "H&S Collection: Let it snow",
     category: Rails.application.config.product_constants["product_category"].sample,
     subcategory: "Tree shaped candle",
-    webpage: "https://www2.hm.com/en_gb/index.html"
+    webpage: "https://www2.hm.com/en_gb/index.html",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
@@ -269,7 +277,9 @@ if run_seeds
     name: "Funny Musical Instrument Set",
     category: Rails.application.config.product_constants["product_category"].sample,
     subcategory: "Musical toy",
-    webpage: ""
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
@@ -338,7 +348,9 @@ if run_seeds
     name: "Lynx Shower speaker with USB charger",
     category: Rails.application.config.product_constants["product_category"].sample,
     subcategory: "Shower speaker with USB charger",
-    webpage: ""
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2019-w6_27526-1f.jpg", title: "Lynx packaging"))
@@ -379,7 +391,9 @@ if run_seeds
     name: "Batterytec Battery charger",
     category: "Small electronics",
     subcategory: "Replacement AC/DC adaptor",
-    webpage: ""
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2019-w3_27167-3f.jpg", title: "packaging and product"))
@@ -388,13 +402,15 @@ if run_seeds
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
-  Test::Result.new(
-    legislation: "Electrical Equipment (Safety) Regulations 2016",
-    result: "other",
-    details: "Passed tests 1 to 4 and failed test 5",
-    date: "2018-03-31",
+  AddTestResultToInvestigation.call!(
     investigation: investigation,
-    product: product
+    user: user,
+    date: 2.days.ago.to_date,
+    legislation: Rails.application.config.legislation_constants["legislation"].sample,
+    details: "Passed tests 1 to 4 and failed test 5",
+    result: "passed",
+    product_id: product.id,
+    document: create_blob("test_result.txt", title: "test result")
   )
 
   # Ninth investigation
@@ -428,7 +444,9 @@ if run_seeds
     name: "Creaciones Gavidia Babies' clothing set",
     category: "Clothing (including baby)",
     subcategory: "Babies' clothing set",
-    webpage: ""
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
   product.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
@@ -555,9 +573,19 @@ if run_seeds
       created_at: 2.days.ago
     )
 
-    result = Test::Result.new("date" => 15.days.ago, "details" => "Test results", "investigation" => i, "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", "product" => product, "result" => "failed", "created_at" => 3.days.ago)
-    result.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
-    result.save!
+    investigation = Investigation.order("RANDOM()").first
+    AddTestResultToInvestigation.call!(
+      "date" => 15.days.ago,
+      "details" => "Test results",
+      "investigation" => i,
+      "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
+      "product_id" => product.id,
+      "result" => "failed",
+      "created_at" => 3.days.ago,
+      document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
+      investigation: investigation,
+      user: investigation.owner_user
+    )
   end
 
   Investigation.__elasticsearch__.create_index! force: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_25_171036) do
+ActiveRecord::Schema.define(version: 2020_12_18_123617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
+  create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
 
@@ -190,6 +191,8 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
     t.enum "risk_level", as: "risk_levels"
+    t.datetime "risk_validated_at"
+    t.string "risk_validated_by"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
@@ -229,6 +232,8 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "gtin13", limit: 13
+    t.enum "has_markings", as: "has_markings_values"
+    t.text "markings", array: true
     t.string "name"
     t.text "number_of_affected_units"
     t.string "product_code"
@@ -298,6 +303,7 @@ ActiveRecord::Schema.define(version: 2020_11_25_171036) do
     t.string "legislation"
     t.integer "product_id"
     t.string "result"
+    t.string "standards_product_was_tested_against", default: [], array: true
     t.string "type"
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
