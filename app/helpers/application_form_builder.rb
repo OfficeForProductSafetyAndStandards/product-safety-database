@@ -166,7 +166,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      is_autocomplete: true
   end
 
-  def govuk_checkboxes(attribute, legend:, items:, hint: nil)
+  def govuk_checkboxes(attribute, legend:, legend_classes: "govuk-fieldset__legend--m", items:, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -200,7 +200,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       fieldset: {
         legend: {
           html: legend,
-          classes: "govuk-fieldset__legend--m"
+          classes: legend_classes
         }
       }
     )

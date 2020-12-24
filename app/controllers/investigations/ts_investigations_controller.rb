@@ -128,7 +128,7 @@ private
   end
 
   def product
-    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash)
+    @product ||= Product.new(product_attributes)
   end
 
   def set_investigation
@@ -287,6 +287,10 @@ private
 
   def product_step_params
     product_session_params.merge(product_request_params).symbolize_keys
+  end
+
+  def product_attributes
+    ProductForm.new(product_step_params).serializable_hash
   end
 
   def business_step_params
@@ -587,7 +591,7 @@ private
 
     # Product must be added before investigation is saved for correct audit
     # activity title generation
-    @product = @investigation.products.build(product_step_params)
+    @product = @investigation.products.build(product_session_params)
     CreateCase.call(investigation: @investigation, user: current_user)
     save_businesses
     save_corrective_actions

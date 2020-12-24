@@ -3,6 +3,8 @@ class AddProductToCase
   include EntitiesToNotify
 
   delegate :authenticity,
+           :has_markings,
+           :markings,
            :batch_number,
            :brand,
            :country_of_origin,
@@ -29,6 +31,8 @@ class AddProductToCase
     Product.transaction do
       context.product = investigation.products.create!(
         authenticity: authenticity,
+        has_markings: has_markings,
+        markings: markings,
         batch_number: batch_number,
         brand: brand,
         country_of_origin: country_of_origin,

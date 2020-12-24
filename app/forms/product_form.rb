@@ -20,6 +20,8 @@ class ProductForm
   attribute :created_at, :datetime
   attribute :affected_units_status
   attribute :number_of_affected_units
+  attribute :has_markings
+  attribute :markings
 
   attr_accessor :approx_units
   attr_accessor :exact_units
@@ -38,6 +40,9 @@ class ProductForm
   validates :approx_units, presence: true, if: -> { affected_units_status == "approx" }
   validates :exact_units, presence: true, if: -> { affected_units_status == "exact" }
   validates :description, length: { maximum: 10_000 }
+
+  validates :has_markings, inclusion: { in: Product.has_markings.keys }
+  validate :markings_validity, if: -> { has_markings == "markings_yes" }
 
   def self.from(product)
     new(product.serializable_hash(except: %i[updated_at])).tap do |product_form|
@@ -63,5 +68,24 @@ class ProductForm
     return false if id.nil?
 
     authenticity.nil?
+  end
+
+  def markings=(value)
+    value ||= []
+    super(value.uniq)
+  end
+
+  def markings
+    return [] unless has_markings == "markings_yes"
+
+    super
+  end
+
+private
+
+  def markings_validity
+    if markings.blank? || !markings.all? { |value| Product::MARKINGS.include?(value) }
+      errors.add(:markings, :blank)
+    end
   end
 end

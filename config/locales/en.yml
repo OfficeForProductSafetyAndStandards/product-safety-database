@@ -288,6 +288,10 @@ en:
               not_a_number: "Give the number of units affected"
             exact_units:
               not_a_number: "Give the number of units affected"
+            has_markings:
+              inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
+            markings:
+              blank: "Select the product marking(s)"
 
         risk_assessment_form:
           attributes:
@@ -499,6 +503,7 @@ en:
     unknown: "Unknown"
     not_relevant: "Not relevant"
     not_provided: "Not provided"
+    none: "None"
 
   corrective_action:
     attributes:

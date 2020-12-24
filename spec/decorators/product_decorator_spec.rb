@@ -63,6 +63,10 @@ RSpec.describe ProductDecorator do
         expect(summary_list).to summarise("Product authenticity", text: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
       end
 
+      it "displays the product marking" do
+        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
+      end
+
       it "displays the Barcode" do
         expect(summary_list).to summarise("Barcode", text: product.gtin13)
       end
@@ -117,6 +121,54 @@ RSpec.describe ProductDecorator do
       it "returns only the Product subcategory" do
         expect(decorated_product.subcategory_and_category_label)
           .to eq(product.subcategory)
+      end
+    end
+  end
+
+  describe "#markings" do
+    context "when has_markings is nil" do
+      before { product.has_markings = nil }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
+      end
+    end
+
+    context "when has_markings == markings_unknown" do
+      before { product.has_markings = "markings_unknown" }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Unknown")
+      end
+    end
+
+    context "when has_markings == markings_no" do
+      before { product.has_markings = "markings_no" }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("None")
+      end
+    end
+
+    context "when has_markings == markings_yes" do
+      before do
+        product.has_markings = "markings_yes"
+        product.markings = %w[UKCA UKNI CE]
+      end
+
+      it "joins into a single String" do
+        expect(decorated_product.markings).to eq("UKCA, UKNI, CE")
+      end
+    end
+
+    context "when has_markings and markings are nil" do
+      before do
+        product.has_markings = nil
+        product.markings = nil
+      end
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
       end
     end
   end

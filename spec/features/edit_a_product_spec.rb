@@ -14,7 +14,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            brand: brand,
            product_code: product_code,
            webpage: webpage,
-           country_of_origin: country_of_origin)
+           country_of_origin: country_of_origin,
+           has_markings: "markings_yes")
   end
   let(:product_with_no_affected_units_status) do
     create(:product,
@@ -24,7 +25,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            brand: brand,
            product_code: product_code,
            webpage: webpage,
-           country_of_origin: country_of_origin)
+           country_of_origin: country_of_origin,
+           has_markings: "markings_yes")
   end
 
   let(:new_name)              { Faker::Commerce.product_name }
@@ -34,6 +36,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_subcategory) { Faker::Hipster.word }
   let(:new_gtin13)            { Faker::Barcode.ean(13) }
   let(:new_authenticity)      { (Product.authenticities.keys - [product.authenticity]).sample }
+  let(:new_has_markings)      { Product.has_markings.keys.sample }
+  let(:new_markings)          { [Product::MARKINGS.sample] }
   let(:new_affected_units_status) { "approx" }
   let(:new_number_of_affected_units) { "something like 23" }
   let(:new_batch_number)      { Faker::Number.number(digits: 10) }
@@ -59,6 +63,14 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
       expect(page).not_to have_checked_field("Unsure")
     end
 
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      expect(page).to have_checked_field("Yes")
+    end
+
+    within_fieldset("Select product marking") do
+      product.markings.each { |marking| expect(page).to have_checked_field(marking) }
+    end
+
     expect(page).to have_field("Product brand",            with: product.brand)
     expect(page).to have_field("Product name",             with: product.name)
     expect(page).to have_field("Barcode number",           with: product.gtin13)
@@ -80,6 +92,15 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
       choose counterfeit_answer(new_authenticity)
     end
 
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      page.find("input[value='#{new_has_markings}']").choose
+    end
+
+    within_fieldset("Select product marking") do
+      all("input[type=checkbox]").each(&:uncheck)
+      new_markings.each { |marking| check(marking) } if new_has_markings == "markings_yes"
+    end
+
     within_fieldset("How many units are affected?") do
       choose affected_units_status_answer(new_affected_units_status)
       find("#approx_units").set(new_number_of_affected_units)
@@ -96,9 +117,18 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     click_on "Save product"
 
+    expect_to_be_on_product_page(product_id: product.id, product_name: new_name)
+
+    expected_markings = case new_has_markings
+                        when "markings_yes" then new_markings.join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Not provided"
+                        end
+
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
     expect(page).to have_summary_item(key: "Product subcategory", value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
     expect(page).to have_summary_item(key: "Units affected",            value: "something like 23")
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
     expect(page).to have_summary_item(key: "Product name",              value: new_name)
@@ -126,6 +156,14 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
       expect(page).not_to have_checked_field("Unsure")
     end
 
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      expect(page).to have_checked_field("Yes")
+    end
+
+    within_fieldset("Select product marking") do
+      product_with_no_affected_units_status.markings.each { |marking| expect(page).to have_checked_field(marking) }
+    end
+
     expect(page).to have_field("Product brand",            with: product_with_no_affected_units_status.brand)
     expect(page).to have_field("Product name",             with: product_with_no_affected_units_status.name)
     expect(page).to have_field("Barcode number",           with: product_with_no_affected_units_status.gtin13)
@@ -147,6 +185,15 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
       choose counterfeit_answer(new_authenticity)
     end
 
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      page.find("input[value='#{new_has_markings}']").choose
+    end
+
+    within_fieldset("Select product marking") do
+      all("input[type=checkbox]").each(&:uncheck)
+      new_markings.each { |marking| check(marking) } if new_has_markings == "markings_yes"
+    end
+
     within_fieldset("How many units are affected?") do
       choose affected_units_status_answer(new_affected_units_status)
       find("#approx_units").set(new_number_of_affected_units)
@@ -163,9 +210,18 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     click_on "Save product"
 
+    expect_to_be_on_product_page(product_id: product_with_no_affected_units_status.id, product_name: new_name)
+
+    expected_markings = case new_has_markings
+                        when "markings_yes" then new_markings.join(", ")
+                        when "markings_no" then "None"
+                        when "markings_unknown" then "Not provided"
+                        end
+
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
     expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)
     expect(page).to have_summary_item(key: "Units affected",            value: "something like 23")
     expect(page).to have_summary_item(key: "Product brand",             value: new_brand)
     expect(page).to have_summary_item(key: "Product name",              value: new_name)

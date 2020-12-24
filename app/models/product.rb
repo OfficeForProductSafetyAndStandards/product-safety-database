@@ -17,6 +17,14 @@ class Product < ApplicationRecord
     "not_relevant" => "not_relevant"
   }
 
+  enum has_markings: {
+    "markings_yes" => "markings_yes",
+    "markings_no" => "markings_no",
+    "markings_unknown" => "markings_unknown"
+  }
+
+  MARKINGS = %w[UKCA UKNI CE].freeze
+
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
   has_many_attached :documents
