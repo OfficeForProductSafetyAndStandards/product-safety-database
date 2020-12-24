@@ -34,7 +34,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       within_fieldset("What action is being taken?") do
         choose "Other"
-        fill_in "corrective_action[other_action]", with: Faker::Hipster.paragraph(sentence_count: 3)
+        fill_in "corrective_action[other_action]", with: new_other_action
       end
 
       fill_in "Day",                        with: new_date_decided.day
@@ -61,13 +61,12 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_on "Update corrective action"
 
-      expect_to_be_on_corrective_action_summary_page
+      expect_to_be_on_corrective_action_summary_page(is_other_action: true)
 
       expect(page).to have_css("h1.govuk-heading-m", text: corrective_action.other_action)
 
       click_link "Edit corrective action"
 
-      new_action = (CorrectiveAction.actions.values - %w[Other]).sample
       within_fieldset("What action is being taken?") do
         choose new_action
       end

@@ -90,7 +90,13 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Record corrective action")
   end
 
-  def expect_to_be_on_corrective_action_summary_page
+  def expect_to_be_on_corrective_action_summary_page(is_other_action: false)
+    if is_other_action
+      expect(page).to have_summary_item(key: "Action",              value: new_other_action)
+    else
+      expect(page).to have_summary_item(key: "Action",              value: new_action)
+    end
+
     expect(page).to have_summary_item(key: "Date of action",      value: new_date_decided.to_s(:govuk))
     expect(page).to have_summary_item(key: "Product",             value: product_two.name)
     expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)

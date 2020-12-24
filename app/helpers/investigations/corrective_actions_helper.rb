@@ -3,6 +3,7 @@ module Investigations
     def corrective_action_summary_list_rows(corrective_action)
       business = corrective_action.business ? link_to(corrective_action.business.trading_name, business_path(corrective_action.business)) : "Not specified"
       rows = [
+        { key: { text: "Action" },              value: { text: corrective_action.other? ? corrective_action.other_action : corrective_action.action_label } },
         { key: { text: "Date of action" },      value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },         value: { text: corrective_action.legislation } },
         { key: { text: "Product" },             value: { html: link_to(corrective_action.product.name, product_path(corrective_action.product)) } },
