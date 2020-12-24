@@ -398,7 +398,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expected_markings = case info[:has_markings]
                         when "markings_yes" then info[:markings].join(", ")
                         when "markings_no" then "None"
-                        when "markings_unknown" then "Not provided"
+                        when "markings_unknown" then "Unknown"
                         end
 
     expected_authenticity = info[:authenticity] == "Yes" ? "Counterfeit" : "Genuine"
