@@ -3,6 +3,8 @@ class AddProductToCase
   include EntitiesToNotify
 
   delegate :authenticity,
+           :has_markings,
+           :markings,
            :batch_number,
            :brand,
            :country_of_origin,
@@ -16,6 +18,10 @@ class AddProductToCase
            :category,
            :user,
            :product,
+           :affected_units_status,
+           :number_of_affected_units,
+           :exact_units,
+           :approx_units,
            to: :context
 
   def call
@@ -25,6 +31,8 @@ class AddProductToCase
     Product.transaction do
       context.product = investigation.products.create!(
         authenticity: authenticity,
+        has_markings: has_markings,
+        markings: markings,
         batch_number: batch_number,
         brand: brand,
         country_of_origin: country_of_origin,
@@ -35,7 +43,9 @@ class AddProductToCase
         subcategory: subcategory,
         category: category,
         webpage: webpage,
-        source: build_user_source
+        source: build_user_source,
+        affected_units_status: affected_units_status,
+        number_of_affected_units: number_of_affected_units
       )
 
       context.activity = create_audit_activity_for_product_added

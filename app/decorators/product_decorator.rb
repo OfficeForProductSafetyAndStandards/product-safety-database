@@ -10,8 +10,10 @@ class ProductDecorator < ApplicationDecorator
   def summary_list
     rows = [
       { key: { text: "Category" }, value: { text: category } },
-      { key: { text: "Product sub-category" }, value: { text: subcategory } },
+      { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
+      { key: { text: "Product marking" }, value: { text: markings } },
+      { key: { text: "Units affected" }, value: { text: units_affected } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
@@ -37,5 +39,28 @@ class ProductDecorator < ApplicationDecorator
     else
       product_and_category.first
     end
+  end
+
+  def units_affected
+    case object.affected_units_status
+    when "exact"
+      object.number_of_affected_units
+    when "approx"
+      object.number_of_affected_units
+    when "unknown"
+      I18n.t(".product.unknown")
+    when "not_relevant"
+      I18n.t(".product.not_relevant")
+    else
+      I18n.t(".product.not_provided")
+    end
+  end
+
+  def markings
+    return I18n.t(".product.not_provided") unless object.has_markings
+    return I18n.t(".product.unknown") if object.markings_unknown?
+    return I18n.t(".product.none") if object.markings_no?
+
+    object.markings.join(", ")
   end
 end

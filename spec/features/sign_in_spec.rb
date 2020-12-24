@@ -59,12 +59,15 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
   end
 
   scenario "user attempts to sign in with wrong two factor authentication code" do
+    # Ensure the OTP code is generated with a known value
+    allow(SecureRandom).to receive(:random_number).and_return(12_345)
+
     visit "/sign-in"
     fill_in_credentials
 
     expect(page).to have_css("h1", text: "Check your phone")
 
-    fill_in "Enter security code", with: otp_code.reverse
+    fill_in "Enter security code", with: "54321"
     click_on "Continue"
 
     expect(page).to have_css("h1", text: "Check your phone")

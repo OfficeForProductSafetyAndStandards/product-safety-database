@@ -64,6 +64,10 @@ en:
     email_update_text:
       false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
       true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
+  change_risk_validation:
+    validated: "has been validated"
+    validation_removed: "has had validation removed"
+
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -128,6 +132,16 @@ en:
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "Coronavirus status updated on %{case_type}"
+    risk_validation:
+      validate: "Validate"
+      not_validated: "No"
+      validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
+      page_title: "Risk level validated"
+      validated_success_message: "Case risk level validated"
+      validation_removed_success_message: "Case risk level validation removed"
+      activity:
+        added: "Case risk level validated"
+        removed: "Case risk level validation removed"
     risk_level:
       show:
         title:
@@ -242,6 +256,23 @@ en:
   activemodel:
     errors:
       models:
+        test_result_form:
+          attributes:
+            product_id:
+              blank: "Select the product which was tested"
+            legislation:
+              inclusion: "Select the legislation that relates to this test"
+            standards_product_was_tested_against:
+              blank: "Enter the standard the product was tested against"
+            result:
+              inclusion: "Select result of the test"
+            document:
+              blank: "Provide the test results file"
+            date:
+              blank: Enter date of the test
+              must_be_real: Date sent must be a real date
+              incomplete: Date sent must include a %{missing_date_parts}
+              in_future: Date sent must be today or in the past
         product_form:
           attributes:
             authenticity:
@@ -251,6 +282,16 @@ en:
             gtin13:
               invalid: "Enter a valid barcode number"
               wrong_length: "Enter a valid barcode number"
+            affected_units_status:
+              inclusion: "You must state how many units are affected"
+            approx_units:
+              not_a_number: "Give the number of units affected"
+            exact_units:
+              not_a_number: "Give the number of units affected"
+            has_markings:
+              inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
+            markings:
+              blank: "Select the product marking(s)"
 
         risk_assessment_form:
           attributes:
@@ -358,6 +399,12 @@ en:
               must_be_real: Date of call must be a real date
               incomplete: Date of call must include a %{missing_date_parts}
               in_future: Date of call must be today or in the past
+        risk_validation_form:
+          attributes:
+            risk_validation_change_rationale:
+              blank: Enter details
+            is_risk_validated:
+              inclusion:  "Select yes if you have validated the case risk level"
 
   activerecord:
     models:
@@ -372,17 +419,10 @@ en:
               must_be_real: Date enquiry received must be a real date
               incomplete: Date enquiry received must include a %{missing_date_parts}
               in_future: Date enquiry received must be today or in the past
-
-        test:
+        test/result:
           attributes:
             product:
               required: "Select the product which was tested"
-        test/result:
-          attributes:
-            date:
-              blank: "Enter date of the test"
-              invalid: "Enter a real date of the test"
-              date_missing_component: "Enter date of the test and include a %{missing_components}"
         test/request:
           attributes:
             date:
@@ -460,6 +500,10 @@ en:
     genuine: "Genuine"
     unsure: "Unsure"
     missing: "Not provided"
+    unknown: "Unknown"
+    not_relevant: "Not relevant"
+    not_provided: "Not provided"
+    none: "None"
 
   corrective_action:
     attributes:

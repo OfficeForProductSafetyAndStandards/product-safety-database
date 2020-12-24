@@ -1,5 +1,5 @@
-<% page_title = "Record #{@test_result.pretty_name}" %>
-<%= page_title page_title, errors: @test_result.errors.any? %>
+<% page_title = "Record test result" %>
+<%= page_title page_title, errors: @test_result_form.errors.any? %>
 
 <% content_for :back_link do %>
   <%= govukBackLink(
@@ -10,18 +10,18 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with model: @test_result, scope: :test_result, local: true, url: create_draft_investigation_test_results_path(@investigation.pretty_id), method: :put do |form| %>
+<%= form_with model: @test_result_form, scope: :test_result, local: true, builder: ApplicationFormBuilder, url: investigation_test_results_path(@investigation.pretty_id) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
-      <%= error_summary(@test_result.errors, %i[legislation date result base])%>
+      <%= error_summary(@test_result_form.errors, %i[legislation standards_product_was_tested_against date result base])%>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
-      <%= render "form", form: form, test_result: @test_result, investigation: @investigation, allow_product_linking: true %>
+      <%= render "form", form: form, test_result_form: @test_result_form, investigation: @investigation, allow_product_linking: true %>
 
-      <%= govukButton text: "Continue" %>
+      <%= govukButton text: "Add test result" %>
     </div>
   </div>
 <% end %>

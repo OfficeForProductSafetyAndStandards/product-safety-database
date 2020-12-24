@@ -2382,10 +2382,10 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
-copy-webpack-plugin@6.3.1:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-6.3.1.tgz#ceb6e9c3e4910e63a774fd4a27451156775f6e2a"
-  integrity sha512-SyIMdP6H3v+zPU+VIhKRsK0ZEF82KZ93JBlKOoIW8SkkuI84FSrHxG+aMTE1u4csbi9PLRqqWTIK+bfJ2xsFuQ==
+copy-webpack-plugin@6.4.1:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-6.4.1.tgz#138cd9b436dbca0a6d071720d5414848992ec47e"
+  integrity sha512-MXyPCjdPVx5iiWyl40Va3JGh27bKzOTNY3NjUTrosD2q7dR/cLD0013uqJ3BpFbUjyONINjb6qI7nDIJujrMbA==
   dependencies:
     cacache "^15.0.5"
     fast-glob "^3.2.4"
@@ -4052,10 +4052,10 @@ govuk-country-and-territory-autocomplete@1.0.1:
     openregister-picker-engine "^1.2.1"
     webpack-sources "^1.3.0"
 
-govuk-frontend@3.10.0:
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.10.0.tgz#86c28c3ff9acd95576bef95498cab3fb2713948b"
-  integrity sha512-bMc487VcYUPc2XvOrVtGoW3wtmITUoDOd183KMIHVIknWl7wjnOh7uxTVYu4o89UmxgoQuFDDbHhrK0RL3o8gg==
+govuk-frontend@3.10.2:
+  version "3.10.2"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.10.2.tgz#6589401e4adad1ab1dc340a18057ec88c9435a84"
+  integrity sha512-MpMymgLsKoMw40MggZ0XLCAj1FY5N2s8Pf3aQR+k0cZOsegjLsnejxNfEB9qEl9jcma2fiiVcvsEZ+Ipo+Oo2g==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2:
   version "4.2.4"
@@ -4449,9 +4449,9 @@ inherits@2.0.3:
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
 ini@^1.3.4, ini@^1.3.5:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.7.tgz#a09363e1911972ea16d7a8851005d84cf09a9a84"
+  integrity sha512-iKpRpXP+CrP2jyrxvg1kMUpXDyRUFDWurxbnVT1vQPx+Wz9uCYsMIqYuSBLV+PAaZG/d7kRLKRFc9oDMsH+mFQ==
 
 internal-ip@^4.3.0:
   version "4.3.0"

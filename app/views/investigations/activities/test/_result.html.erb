@@ -1,0 +1,20 @@
+<div class="govuk-body">
+  Product: <%= link_to activity.product.name, activity.product, class: "govuk-link" %>
+  <br />
+  Legislation: <strong><%= activity.test_result.legislation %></strong>
+  <br />
+  Standards: <strong><%= activity.test_result.standards_product_was_tested_against.join(", ") %></strong>
+  <br />
+  Test date: <strong><%= activity.test_result.date.to_s(:govuk) %></strong>
+  <br />
+  Test result: <strong><%= activity.test_result.result.titleize %></strong>
+  <br />
+  Attached: <strong><%= link_to activity.test_result.document.filename, url_for(activity.test_result.document) %></strong>
+  <br />
+  <br />
+  <%= activity.test_result.details %>
+  <br />
+  <br />
+  <%= link_to "View product details", product_path(activity.product), class: "govuk-link psd-block-link" %>
+  <%= link_to "View test result", investigation_test_result_path(activity.investigation, activity.test_result), class: "govuk-link" %>
+</div>

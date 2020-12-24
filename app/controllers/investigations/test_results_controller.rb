@@ -1,153 +1,96 @@
 class Investigations::TestResultsController < ApplicationController
-  include FileConcern
-  set_attachment_names :test_result_file
-  set_file_params_key :test_result
-
   def new
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
-    @test_result = build_test_result_from_params
-    attach_file_from_params
-  end
-
-  def create_draft
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
-    @test_result = build_test_result_from_params
-    attach_file_from_params
-
-    session[test_result_session_key] = @test_result.attributes
-    update_attachment
-    if test_result_valid?
-      @file_blob.save! if @file_blob
-      redirect_to confirm_investigation_test_results_path(@investigation)
-    else
-      render :new
-    end
-  end
-
-  def confirm
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
-    @test_result = build_test_result_from_params
-    attach_file_from_params
+    investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+    @test_result_form = TestResultForm.new
+    @investigation = investigation.decorate
   end
 
   def create
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
-    @test_result = build_test_result_from_params
-    attach_file_from_params
+    investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+    @test_result_form = TestResultForm.new(test_result_params)
+    @test_result_form.load_document_file
 
-    update_attachment
-    if test_result_saved?
-      session[test_result_session_key] = nil
-      initialize_file_attachments
+    @investigation = investigation.decorate
+    return render :new if @test_result_form.invalid?(:create_with_product)
 
-      redirect_to investigation_supporting_information_index_path(@investigation),
-                  flash: {
-                    success: "#{@test_result.pretty_name.capitalize} was successfully recorded."
-                  }
-    else
-      render :new
+    service_attributes = @test_result_form
+                           .serializable_hash
+                           .merge(investigation: investigation, user: current_user)
+
+    result = AddTestResultToInvestigation.call(service_attributes)
+
+    if result.success?
+      flash_message = "#{result.test_result.pretty_name.capitalize} was successfully recorded."
+      return redirect_to investigation_supporting_information_index_path(investigation), flash: { success: flash_message }
     end
+
+    @investigation = investigation.decorate
+    render :new
   end
 
   def show
-    @investigation = investigation_from_params
-    authorize @investigation, :view_non_protected_details?
-    @test_result = @investigation.test_results.find(params[:id]).decorate
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :view_non_protected_details?
+    @test_result = investigation.test_results.find(params[:id]).decorate
+    @investigation = investigation.decorate
   end
 
   def edit
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
-    @test_result = @investigation.test_results.find(params[:id])
-    @file_blob = @test_result.documents.first.blob
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+    @test_result_form = TestResultForm.from(investigation.test_results.find(params[:id]))
+    @test_result_form.load_document_file
+    @investigation = investigation.decorate
   end
 
   def update
-    @investigation = investigation_from_params
-    authorize @investigation, :update?
+    investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
 
-    @test_result = @investigation.test_results.find(params[:id])
+    test_result = investigation.test_results.find(params[:id])
+
+    @test_result_form = TestResultForm.from(test_result)
+    @test_result_form.assign_attributes(test_result_params)
+    @test_result_form.load_document_file
+
+    if @test_result_form.invalid?(:create_with_product)
+      @investigation = investigation.decorate
+      return render :edit
+    end
 
     result = UpdateTestResult.call(
-      test_result: @test_result,
-      new_attributes: test_result_attributes,
-      new_file: params[:test_result][:test_result_file][:file],
-      new_file_description: params[:test_result][:test_result_file][:description],
-      user: current_user
+      @test_result_form.serializable_hash
+        .merge(test_result: test_result,
+               investigation: investigation,
+               user: current_user,
+               changes: @test_result_form.changes)
     )
 
-    if result.success?
-      redirect_to investigation_test_result_path(@investigation, @test_result)
-    else
-      render "edit"
-    end
+    return redirect_to investigation_test_result_path(investigation, test_result) if result.success?
+
+    @investigation = investigation.decorate
+    render "edit"
   end
 
 private
-
-  def test_result_session_key
-    "test_result_#{@investigation.id}"
-  end
-
-  def test_result_attributes
-    params.require(:test_result).permit(:product_id, :legislation, :result, :details, date: %i[day month year])
-  end
-
-  def investigation_from_params
-    Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      .decorate
-  end
-
-  def build_test_result_from_params
-    test_result = @investigation.test_results.build(test_params)
-    test_result.set_dates_from_params(params[:test_result])
-    test_result
-  end
 
   def test_params
     test_session_params.merge(test_result_request_params)
   end
 
-  def test_result_request_params
-    return {} if params[:test_result].blank?
-
-    params.require(:test_result)
-        .permit(:product_id,
-                :legislation,
-                :result,
-                :details)
-  end
-
-  def attach_file_from_params
-    @file_blob, * = load_file_attachments
-    @test_result.documents.attach(@file_blob) if @file_blob
-  end
-
-  def update_attachment
-    update_blob_metadata @file_blob, test_result_file_metadata
-  end
-
-  def test_result_file_metadata
-    title = "#{@test_result.result&.capitalize} test: #{@test_result.product&.name}"
-    document_type = "test_results"
-    get_attachment_metadata_params(:file).merge(title: title, document_type: document_type)
-  end
-
-  def test_result_saved?
-    test_result_valid? && @test_result.save
-  end
-
-  def test_result_valid?
-    @test_result.validate
-    validate_blob_size(@file_blob, @test_result.errors, "file")
-    @test_result.errors.empty?
-  end
-
-  def test_session_params
-    session[test_result_session_key] || {}
+  def test_result_params
+    params.require(:test_result).permit(
+      :details,
+      :legislation,
+      :product_id,
+      :result,
+      :standards_product_was_tested_against,
+      :existing_document_file_id,
+      :test_result_file,
+      date: %i[day month year],
+      document_form: %i[description file]
+    )
   end
 end

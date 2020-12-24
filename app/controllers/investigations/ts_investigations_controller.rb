@@ -6,7 +6,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CorrectiveActionsConcern
   include FileConcern
   include FlowWithCoronavirusForm
-  set_attachment_names :file, :test_result_file, :risk_assessment_file
+  set_attachment_names :file, :risk_assessment_file
   set_file_params_key :file
 
   steps :coronavirus,
@@ -128,7 +128,7 @@ private
   end
 
   def product
-    @product ||= Product.new(ProductForm.new(product_step_params).serializable_hash)
+    @product ||= Product.new(product_attributes)
   end
 
   def set_investigation
@@ -196,27 +196,10 @@ private
   end
 
   def set_test
-    @test = @investigation.tests.build(test_params)
-    @test.set_dates_from_params(params[:test])
-    @test.build_product(product_step_params)
+    @test_result_form = TestResultForm.new(test_params)
+    @test_result_form.load_document_file
 
-    attachment_params = get_attachment_params(:test_result_file, :test)
-
-    if (file = attachment_params[:file])
-      @file_blob = ActiveStorage::Blob.create_after_upload!(
-        io: file,
-        filename: file.original_filename,
-        content_type: file.content_type,
-        metadata: get_attachment_metadata_params_from_attachment_params(attachment_params)
-      )
-      @file_blob.analyze_later
-      session[:test_result_file] = @file_blob.id
-    elsif session[:test_result_file].present?
-      @file_blob = ActiveStorage::Blob.find_by(id: session[:test_result_file])
-    end
-
-    @test.documents.attach(@file_blob) if @file_blob
-    set_repeat_step(:test)
+    set_repeat_step(:test_result)
   end
 
   def all_businesses_complete?
@@ -243,7 +226,6 @@ private
     session[:files] = []
     session[:product_files] = []
     session.delete :file
-    session.delete :test_result_file
     session.delete :risk_assessment_file
     session[:selected_businesses] = []
     session[:businesses] = []
@@ -307,6 +289,10 @@ private
     product_session_params.merge(product_request_params).symbolize_keys
   end
 
+  def product_attributes
+    ProductForm.new(product_step_params).serializable_hash
+  end
+
   def business_step_params
     business_session_params.merge(business_request_params).symbolize_keys
   end
@@ -323,11 +309,6 @@ private
 
   def risk_assessment_form_session_params
     session[:risk_assessment_form]
-  end
-
-  def test_session_params
-    # TODO: PSD-980 use this to retrieve a test for editing eg for browser back button
-    { type: Test::Result.name }
   end
 
   def which_businesses_params
@@ -441,19 +422,17 @@ private
   def store_test
     return if @skip_step
 
-    if test_valid? && @file_blob
-      update_blob_metadata @file_blob, test_file_metadata
-      @file_blob.save! if @file_blob
-      session[:test_results] << { test: @test.attributes, file_blob_id: @file_blob&.id }
+    if test_valid?
+      session[:test_results] << { test: @test_result_form.serializable_hash }
       session.delete :test_result_file
       session[further_key(step)] = @repeat_step
     end
   end
 
   def test_valid?
-    @test.valid?
-    repeat_step_valid?(@test)
-    @test.errors.empty?
+    @test_result_form.valid?
+    repeat_step_valid?(@test_result_form)
+    @test_result_form.errors.empty?
   end
 
   def store_file
@@ -572,7 +551,7 @@ private
     when :corrective_action
       return false if @corrective_action.errors.any?
     when :test_results
-      return false if @test.errors.any?
+      return @test_result_form.valid?
     when :reference_number
       if reference_number_params[:has_complainant_reference].blank?
         @investigation.errors.add(:has_complainant_reference, "Choose whether you want to add your own reference number")
@@ -612,9 +591,8 @@ private
 
     # Product must be added before investigation is saved for correct audit
     # activity title generation
-    @product = @investigation.products.build(product_step_params)
+    @product = @investigation.products.build(product_session_params)
     CreateCase.call(investigation: @investigation, user: current_user)
-
     save_businesses
     save_corrective_actions
     save_risk_assessments
@@ -678,13 +656,14 @@ private
 
   def save_test_results
     session[:test_results].each do |session_test_result|
-      test_record = Test::Result.new(session_test_result[:test])
-      test_record.product = @product
-      file_blob = ActiveStorage::Blob.find_by(id: session_test_result[:file_blob_id])
-      if file_blob
-        attach_blobs_to_list(file_blob, test_record.documents)
-      end
-      @investigation.tests << test_record
+      test_result_form = TestResultForm.new(session_test_result[:test])
+      test_result_form.load_document_file
+
+      service_attributes = test_result_form
+                             .serializable_hash
+                             .merge(investigation: @investigation, user: current_user, product_id: @product.id)
+
+      AddTestResultToInvestigation.call!(service_attributes)
     end
   end
 
@@ -720,17 +699,22 @@ private
   end
 
   def test_params
-    test_session_params.merge(test_request_params)
+    test_request_params
   end
 
   def test_request_params
-    return {} if params[:test].blank?
+    return {} if params[:test_result].blank?
 
-    params.require(:test)
-        .permit(:product_id,
-                :legislation,
-                :result,
-                :details)
+    params.require(:test_result).permit(
+      :details,
+      :legislation,
+      :product_id,
+      :result,
+      :standards_product_was_tested_against,
+      :existing_document_file_id,
+      date: %i[day month year],
+      document_form: %i[description file]
+    )
   end
 
   def test_file_metadata

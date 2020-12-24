@@ -9,6 +9,38 @@ RSpec.describe ProductDecorator do
     specify { expect(decorated_product.pretty_description).to eq("Product: #{product.name}") }
   end
 
+  describe "#units_affected" do
+    context "when affected_units_status is `exact`" do
+      it "returns correct units affected string" do
+        product.affected_units_status = "exact"
+        product.number_of_affected_units = 12
+        expect(decorated_product.units_affected).to eq "12"
+      end
+    end
+
+    context "when affected_units_status is `approx`" do
+      it "returns correct units affected string" do
+        product.affected_units_status = "approx"
+        product.number_of_affected_units = 12
+        expect(decorated_product.units_affected).to eq "12"
+      end
+    end
+
+    context "when affected_units_status is `unknown`" do
+      it "returns correct units affected string" do
+        product.affected_units_status = "unknown"
+        expect(decorated_product.units_affected).to eq "Unknown"
+      end
+    end
+
+    context "when affected_units_status is `not_relevant`" do
+      it "returns correct units affected string" do
+        product.affected_units_status = "not_relevant"
+        expect(decorated_product.units_affected).to eq "Not relevant"
+      end
+    end
+  end
+
   describe "#summary_list" do
     include CountriesHelper
 
@@ -29,6 +61,10 @@ RSpec.describe ProductDecorator do
 
       it "displays product authenticity" do
         expect(summary_list).to summarise("Product authenticity", text: I18n.t(product.authenticity, scope: Product.model_name.i18n_key))
+      end
+
+      it "displays the product marking" do
+        expect(summary_list).to summarise("Product marking", text: decorated_product.markings)
       end
 
       it "displays the Barcode" do
@@ -79,12 +115,60 @@ RSpec.describe ProductDecorator do
       end
     end
 
-    context "when only the Product sub-category is present" do
+    context "when only the Product subcategory is present" do
       before { product.category = nil }
 
-      it "returns only the Product sub-category" do
+      it "returns only the Product subcategory" do
         expect(decorated_product.subcategory_and_category_label)
           .to eq(product.subcategory)
+      end
+    end
+  end
+
+  describe "#markings" do
+    context "when has_markings is nil" do
+      before { product.has_markings = nil }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
+      end
+    end
+
+    context "when has_markings == markings_unknown" do
+      before { product.has_markings = "markings_unknown" }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Unknown")
+      end
+    end
+
+    context "when has_markings == markings_no" do
+      before { product.has_markings = "markings_no" }
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("None")
+      end
+    end
+
+    context "when has_markings == markings_yes" do
+      before do
+        product.has_markings = "markings_yes"
+        product.markings = %w[UKCA UKNI CE]
+      end
+
+      it "joins into a single String" do
+        expect(decorated_product.markings).to eq("UKCA, UKNI, CE")
+      end
+    end
+
+    context "when has_markings and markings are nil" do
+      before do
+        product.has_markings = nil
+        product.markings = nil
+      end
+
+      it "returns a String" do
+        expect(decorated_product.markings).to eq("Not provided")
       end
     end
   end

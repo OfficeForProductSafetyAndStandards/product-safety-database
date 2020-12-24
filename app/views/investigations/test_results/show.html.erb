@@ -3,7 +3,7 @@
 
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back to #{@investigation.decorate.pretty_description.downcase}",
+    text: "Back to #{@investigation.pretty_description.downcase}",
     href: investigation_supporting_information_index_path(@investigation)
   ) %>
 <% end %>
@@ -29,13 +29,10 @@
     <% end %>
   </div>
   <div class="govuk-grid-column-one-third">
-    <h2 class="govuk-heading-m">Attachments</h2>
-    <% @test_result.documents.each do |document| %>
-      <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
+    <h2 class="govuk-heading-m">Attachment</h2>
 
-      <%= document_placeholder(document) %>
+    <p class="govuk-body"><%= link_to @test_result.document.filename, @test_result.document, class: "govuk-link" %></p>
 
-
-    <% end %>
+    <%= document_placeholder(@test_result.document) %>
   </div>
 </div>

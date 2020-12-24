@@ -8,7 +8,7 @@
     <h1 class="govuk-heading-l">
       <% if params[:q].present? %>
         <%= params[:q] %>
-        <span class="govuk-caption-m"><% "#{@products.count} #{'result'.pluralize(@products.count)}" %></span>
+        <span class="govuk-caption-m"><%= "#{@products.total_entries} #{'result'.pluralize(@products.total_entries)}" %></span>
       <% else %>
         Products
       <% end %>

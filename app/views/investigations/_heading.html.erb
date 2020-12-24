@@ -9,7 +9,7 @@
       <% if params[:q].present? %>
         <%= params[:q] %>
         <span class="govuk-caption-m">
-          <%= "#{answer.results.count} #{'result'.pluralize(answer.results.count)}" %>
+          <%= "#{answer.results.total_entries} #{'result'.pluralize(answer.results.total_entries)}" %>
         </span>
       <% else %>
         Cases
