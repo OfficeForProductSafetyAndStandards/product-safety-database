@@ -36,8 +36,4 @@ class Product < ApplicationRecord
   has_many :tests, dependent: :destroy
 
   has_one :source, as: :sourceable, dependent: :destroy
-
-  def has_markings?
-    has_markings == "markings_yes"
-  end
 end
