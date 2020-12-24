@@ -64,6 +64,10 @@ en:
     email_update_text:
       false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
       true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
+  change_risk_validation:
+    validated: "has been validated"
+    validation_removed: "has had validation removed"
+
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
@@ -128,6 +132,16 @@ en:
         no_label: "No, this is business as usual"
         hint: "For example, cases relating to hand sanitiser or personal protective equipment (PPE)"
       success: "Coronavirus status updated on %{case_type}"
+    risk_validation:
+      validate: "Validate"
+      not_validated: "No"
+      validated_status: "Validated by %{risk_validated_by} on %{risk_validated_at}"
+      page_title: "Risk level validated"
+      validated_success_message: "Case risk level validated"
+      validation_removed_success_message: "Case risk level validation removed"
+      activity:
+        added: "Case risk level validated"
+        removed: "Case risk level validation removed"
     risk_level:
       show:
         title:
@@ -274,6 +288,10 @@ en:
               not_a_number: "Give the number of units affected"
             exact_units:
               not_a_number: "Give the number of units affected"
+            has_markings:
+              inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
+            markings:
+              blank: "Select the product marking(s)"
 
         risk_assessment_form:
           attributes:
@@ -381,6 +399,12 @@ en:
               must_be_real: Date of call must be a real date
               incomplete: Date of call must include a %{missing_date_parts}
               in_future: Date of call must be today or in the past
+        risk_validation_form:
+          attributes:
+            risk_validation_change_rationale:
+              blank: Enter details
+            is_risk_validated:
+              inclusion:  "Select yes if you have validated the case risk level"
 
   activerecord:
     models:
@@ -479,6 +503,7 @@ en:
     unknown: "Unknown"
     not_relevant: "Not relevant"
     not_provided: "Not provided"
+    none: "None"
 
   corrective_action:
     attributes:
