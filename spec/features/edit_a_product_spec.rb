@@ -122,7 +122,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expected_markings = case new_has_markings
                         when "markings_yes" then new_markings.join(", ")
                         when "markings_no" then "None"
-                        when "markings_unknown" then "Not provided"
+                        when "markings_unknown" then "Unknown"
                         end
 
     expect(page).to have_summary_item(key: "Category", value: new_product_category)
@@ -215,7 +215,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expected_markings = case new_has_markings
                         when "markings_yes" then new_markings.join(", ")
                         when "markings_no" then "None"
-                        when "markings_unknown" then "Not provided"
+                        when "markings_unknown" then "Unknown"
                         end
 
     expect(page).to have_summary_item(key: "Category", value: new_product_category)

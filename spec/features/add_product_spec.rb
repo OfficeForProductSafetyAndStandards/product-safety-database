@@ -72,7 +72,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expected_markings = case attributes[:has_markings]
                         when "markings_yes" then attributes[:markings].join(", ")
                         when "markings_no" then "None"
-                        when "markings_unknown" then "Not provided"
+                        when "markings_unknown" then "Unknown"
                         end
 
     expect(page).to have_summary_item(key: "Product brand",             value: attributes[:brand])

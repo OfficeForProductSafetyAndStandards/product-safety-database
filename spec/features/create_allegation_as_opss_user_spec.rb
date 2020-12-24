@@ -170,7 +170,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expected_markings = case has_markings
                         when "Yes" then markings.join(", ")
                         when "No" then "None"
-                        when "Unknown" then "Not provided"
+                        when "Unknown" then "Unknown"
                         end
 
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
