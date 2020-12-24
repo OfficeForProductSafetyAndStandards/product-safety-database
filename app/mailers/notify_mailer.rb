@@ -15,6 +15,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       team_deleted_from_case: "c3ab05a0-cbad-48d3-a271-fe20fda3a0e1",
       case_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
+      risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -160,6 +161,22 @@ class NotifyMailer < GovukNotifyRails::Mailer
     )
 
     mail(to: to_email)
+  end
+
+  def risk_validation_updated(email:, updater:, investigation:, action:, name:)
+    set_template(TEMPLATES[:risk_validation_updated])
+    set_personalisation(
+      case_type: investigation.case_type.to_s.downcase,
+      case_title: investigation.decorate.title,
+      case_id: investigation.pretty_id,
+      updater_name: updater.name,
+      updater_team_name: updater.team.name,
+      action: action,
+      name: name,
+      investigation_url: investigation_url(pretty_id: investigation.pretty_id)
+    )
+
+    mail(to: email)
   end
 
   def case_permission_changed_for_team(message:, investigation:, team:, user:, to_email:, old_permission:, new_permission:)

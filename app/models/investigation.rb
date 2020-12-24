@@ -178,6 +178,14 @@ class Investigation < ApplicationRecord
     end
   end
 
+  def has_had_risk_level_validated_before?
+    activities.where(type: "AuditActivity::Investigation::UpdateRiskLevelValidation").exists?
+  end
+
+  def risk_level_currently_validated?
+    !risk_validated_by.nil?
+  end
+
 private
 
   def create_audit_activity_for_status
