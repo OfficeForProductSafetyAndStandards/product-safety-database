@@ -107,7 +107,7 @@ GEM
     backport (1.1.2)
     barkick (0.1.0)
     bcrypt (3.1.16)
-    benchmark (0.1.0)
+    benchmark (0.1.1)
     builder (3.2.4)
     byebug (11.1.3)
     capybara (3.34.0)
@@ -490,7 +490,7 @@ GEM
     slim_lint (0.20.2)
       rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-    solargraph (0.40.0)
+    solargraph (0.40.1)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -567,7 +567,7 @@ GEM
     will_paginate (3.3.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.25)
+    yard (0.9.26)
     zeitwerk (2.4.2)
 
 PLATFORMS
