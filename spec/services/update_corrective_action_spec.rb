@@ -83,7 +83,17 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
     context "with the required parameters" do
       context "when no changes have been made" do
-        let(:new_action) { corrective_action.action }
+        let(:new_date_decided)                  { corrective_action.date_decided }
+        let(:new_file_description)              { corrective_action.document.metadata["descriptino"] }
+        let(:new_document)                      { nil }
+        let(:new_action)                        { corrective_action.action }
+        let(:new_other_action)                  { corrective_action.other_action }
+        let(:new_geographic_scope)              { corrective_action.geographic_scope }
+        let(:new_duration)                      { corrective_action.duration }
+        let(:new_measure_type)                  { corrective_action.measure_type }
+        let(:new_legislation)                   { corrective_action.legislation }
+        let(:new_details)                       { corrective_action.details }
+        let(:new_has_online_recall_information) { corrective_action.has_online_recall_information }
 
         shared_examples "it does not create an audit log" do
           specify { expect { result }.not_to change(corrective_action.investigation.activities.where(type: "AuditActivity::CorrectiveAction::Update"), :count) }
