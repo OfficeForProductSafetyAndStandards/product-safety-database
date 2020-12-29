@@ -13,7 +13,7 @@ RSpec.describe CommonPasswordValidator do
       def self.name
         "User"
       end
-      }.new
+    }.new
   end
 
   # To avoid tests depending on the actual file content.
