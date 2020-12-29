@@ -9,7 +9,11 @@ RSpec.describe CommonPasswordValidator do
                 common_password: {
                   message: "Choose a less frequently used password"
                 }
-    }.new
+
+      def self.name
+        "User"
+      end
+      }.new
   end
 
   # To avoid tests depending on the actual file content.
