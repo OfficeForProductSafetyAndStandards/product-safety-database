@@ -88,7 +88,7 @@ RSpec.feature "Adding a team to a case", :with_stubbed_elasticsearch, :with_stub
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_summary_item(key: "Teams added to case", value: "Birmingham Trading Standards Portsmouth Trading Standards Southampton Trading Standards")
+    expect(page).to have_summary_item(key: "Teams added to case", value: "Portsmouth Trading Standards Birmingham Trading Standards Southampton Trading Standards")
 
     click_link "Activity"
 
