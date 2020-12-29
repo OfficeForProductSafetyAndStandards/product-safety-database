@@ -48,7 +48,7 @@ private
   end
 
   def any_changes?
-    file_changed? || corrective_action.changes.any? || file_description_changed?
+    file_changed? || changes.any? || file_description_changed?
   end
 
   def file_changed?

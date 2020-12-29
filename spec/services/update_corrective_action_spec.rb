@@ -6,8 +6,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   subject(:result) do
     described_class.call(
       corrective_action: corrective_action,
-      corrective_action_params: corrective_action_params,
-      user: user
+      **corrective_action_params,
+      user: user,
+      changes: changes
     )
   end
 
@@ -43,21 +44,26 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       other_action: other_action
     )
   end
-
+  let(:changes) { {} }
   let(:corrective_action_params) do
     {
-      date_decided_day: corrective_action.date_decided.day,
-      date_decided_month: corrective_action.date_decided.month,
-      date_decided_year: corrective_action.date_decided.year,
-      related_file: "Yes",
-      other_action: new_other_action,
-      action: new_action,
-      file: {
-        description: new_file_description
-      }
+      date_decided: corrective_action.date_decided,
+      other_action: corrective_action.other_action,
+      action: corrective_action.action,
+      product_id: corrective_action.product_id,
+      measure_type: corrective_action.measure_type,
+      legislation: corrective_action.legislation,
+      has_online_recall_information: corrective_action.has_online_recall_information,
+      geographic_scope: corrective_action.geographic_scope,
+      duration: corrective_action.duration,
+      details: corrective_action.details,
+      business_id: corrective_action.business_id,
+      related_file: related_file,
+      document: corrective_action.document_blob
     }
   end
 
+  let(:related_file) { false }
   let(:new_date_decided) { (old_date_decided - 1.day).to_date }
   let(:new_file_description) { "new corrective action file description" }
   let(:new_document) { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
@@ -96,25 +102,25 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           expect { result }.not_to change(corrective_action, :attributes)
         end
 
-        context "with documents attached" do
-          let(:new_file_description) { corrective_action.documents.first.metadata.fetch(:description) }
+        context "with document attached" do
+          let(:new_file_description) { corrective_action.document.metadata.fetch(:description) }
 
           it "does not change the attached document" do
-            expect { result }.not_to change(corrective_action.documents, :first)
+            expect { result }.not_to change(corrective_action.document)
           end
 
           it "does not change the attached document's metadata" do
-            expect { result }.not_to change(corrective_action.documents.first, :metadata)
+            expect { result }.not_to change(corrective_action.document, :metadata)
           end
 
           include_examples "it does not create an audit log"
         end
 
-        context "with no documents attached" do
-          before { corrective_action.documents.detach }
+        context "with no document attached" do
+          before { corrective_action.document.detach }
 
           it "does not change the attached document's" do
-            expect { result }.not_to change(corrective_action.documents, :empty?)
+            expect { result }.not_to change(corrective_action.document, :empty?)
           end
 
           include_examples "it does not create an audit log"
@@ -156,7 +162,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
           it "removes the related file" do
             expect { result }
-              .to change(corrective_action.reload.documents, :any?).from(true).to(false)
+              .to change(corrective_action.reload.document, :attached?).from(true).to(false)
           end
 
           it "creates an audit log" do
@@ -168,24 +174,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with no changes" do
-      before { corrective_action.documents.detach }
-
-      let(:corrective_action_params) do
-        ActionController::Parameters.new(
-          date_decided: {
-            day: corrective_action.date_decided.day,
-            month: corrective_action.date_decided.month,
-            year: corrective_action.date_decided.year,
-          },
-          action: corrective_action.action,
-          legislation: corrective_action.legislation,
-          duration: corrective_action.duration,
-          details: corrective_action.details,
-          measure_type: corrective_action.measure_type,
-          related_file: corrective_action.related_file,
-          file: { description: "" }
-        ).permit!
-      end
+      before { corrective_action.document.detach }
 
       it "does not create an audit activity" do
         expect { result }.not_to change(corrective_action.investigation.activities, :count)
@@ -217,7 +206,6 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           duration: corrective_action.duration,
           details: corrective_action.details,
           measure_type: corrective_action.measure_type,
-          related_file: corrective_action.related_file,
           file: {
             file: fixture_file_upload(file_fixture("files/corrective_action.txt")),
             description: new_file_description
@@ -228,7 +216,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       it "stored the new file with the description", :aggregate_failures do
         result
 
-        document = corrective_action.reload.documents.first
+        document = corrective_action.reload.document
         expect(document.filename.to_s).to eq("corrective_action.txt")
         expect(document.metadata[:description]).to eq(File.basename(new_file_description))
       end
@@ -248,7 +236,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       it "stored the new file with the description", :aggregate_failures do
         result
 
-        document = corrective_action.reload.documents.first
+        document = corrective_action.reload.document
         expect(document.filename.to_s).to eq("corrective_action.txt")
         expect(document.metadata[:description]).to eq(new_file_description)
       end
@@ -262,7 +250,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       it "stored the new file with the description", :aggregate_failures do
         expect {
           result
-        }.not_to change(corrective_action, :documents)
+        }.not_to change(corrective_action, :document)
       end
     end
 
