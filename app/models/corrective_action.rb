@@ -1,6 +1,4 @@
 class CorrectiveAction < ApplicationRecord
-  include SanitizationHelper
-
   MEASURE_TYPES = %w[mandatory voluntary].freeze
   DURATION_TYPES = %w[permanent temporary unknown].freeze
 

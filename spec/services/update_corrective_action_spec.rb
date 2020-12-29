@@ -5,10 +5,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
   subject(:result) do
     described_class.call(
-      corrective_action: corrective_action,
-      **corrective_action_params,
-      user: user,
-      changes: changes
+      corrective_action_attributes
+        .merge(corrective_action: corrective_action, user: user, changes: changes)
     )
   end
 
@@ -28,47 +26,40 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:case_editor)      { create(:user, :activated, team: editor_team) }
   let(:product)          { create(:product) }
   let(:business)         { create(:business) }
-  let(:old_date_decided) { Time.zone.today }
-  let(:related_file)     { true }
-  let(:other_action)     { nil }
-  let(:action)           { (CorrectiveAction.actions.values - %w[Other]).sample }
-  let!(:corrective_action) do
-    create(
-      :corrective_action,
-      :with_file,
-      investigation: investigation,
-      date_decided: old_date_decided,
-      product: product,
-      business: business,
-      action: action,
-      other_action: other_action
-    )
+  let(:related_file)     { false }
+  let!(:corrective_action) { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
+  let(:corrective_action_form) { CorrectiveActionForm.from(corrective_action) }
+  let(:corrective_action_attributes) do
+    corrective_action_form.tap { |form|
+      form.assign_attributes(
+        date_decided: new_date_decided,
+        other_action: new_other_action,
+        action: new_action,
+        product_id: corrective_action.product_id,
+        measure_type: new_measure_type,
+        legislation: new_legislation,
+        has_online_recall_information: new_has_online_recall_information,
+        geographic_scope: new_geographic_scope,
+        duration: new_duration,
+        details: new_details,
+        business_id: corrective_action.business_id,
+        related_file: related_file
+      )
+    }.serializable_hash
   end
-  let(:changes) { {} }
-  let(:corrective_action_params) do
-    {
-      date_decided: corrective_action.date_decided,
-      other_action: corrective_action.other_action,
-      action: corrective_action.action,
-      product_id: corrective_action.product_id,
-      measure_type: corrective_action.measure_type,
-      legislation: corrective_action.legislation,
-      has_online_recall_information: corrective_action.has_online_recall_information,
-      geographic_scope: corrective_action.geographic_scope,
-      duration: corrective_action.duration,
-      details: corrective_action.details,
-      business_id: corrective_action.business_id,
-      related_file: related_file,
-      document: corrective_action.document_blob
-    }
-  end
+  let(:changes) { corrective_action_form.changes }
 
-  let(:related_file) { false }
-  let(:new_date_decided) { (old_date_decided - 1.day).to_date }
-  let(:new_file_description) { "new corrective action file description" }
-  let(:new_document) { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
-  let(:new_action) { (CorrectiveAction.actions.values - %W[Other #{corrective_action.action}]).sample }
-  let(:new_other_action) { corrective_action.other_action }
+  let(:new_date_decided)                  { (corrective_action.date_decided - 1.day).to_date }
+  let(:new_file_description)              { "new corrective action file description" }
+  let(:new_document)                      { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
+  let(:new_action)                        { (CorrectiveAction.actions.values - %W[Other #{corrective_action.action}]).sample }
+  let(:new_other_action)                  { corrective_action.other_action }
+  let(:new_geographic_scope)              { (Rails.application.config.corrective_action_constants["geographic_scope"] - [corrective_action.geographic_scope]).sample }
+  let(:new_duration)                      { (CorrectiveAction::DURATION_TYPES - [corrective_action.duration]).sample }
+  let(:new_measure_type)                  { (CorrectiveAction::MEASURE_TYPES - [corrective_action.measure_type]).sample }
+  let(:new_legislation)                   { (Rails.application.config.legislation_constants["legislation"] - [corrective_action.legislation]).sample }
+  let(:new_details)                       { Faker::Hipster.sentence }
+  let(:new_has_online_recall_information) { Faker::Internet.url }
 
   describe "#call" do
     context "with no parameters" do
@@ -106,7 +97,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           let(:new_file_description) { corrective_action.document.metadata.fetch(:description) }
 
           it "does not change the attached document" do
-            expect { result }.not_to change(corrective_action.document)
+            expect { result }.not_to change(corrective_action, :document)
           end
 
           it "does not change the attached document's metadata" do
@@ -128,12 +119,6 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
 
       context "when changes have been made" do
-        before do
-          corrective_action_params[:date_decided_day] = new_date_decided.day
-          corrective_action_params[:date_decided_month] = new_date_decided.month
-          corrective_action_params[:date_decided_year] = new_date_decided.year
-        end
-
         it "updates the corrective action" do
           expect {
             result
@@ -174,7 +159,10 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with no changes" do
-      before { corrective_action.document.detach }
+      before do
+        corrective_action.document.detach
+        corrective_action.reload
+      end
 
       it "does not create an audit activity" do
         expect { result }.not_to change(corrective_action.investigation.activities, :count)
@@ -182,36 +170,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with no previously attached file" do
-      let(:corrective_action) do
-        create(
-          :corrective_action,
-          investigation: investigation,
-          date_decided: old_date_decided,
-          product: product,
-          business: business,
-          action: action,
-          other_action: other_action
-        )
-      end
+      before { corrective_action.document.detach }
 
-      let(:corrective_action_params) do
-        ActionController::Parameters.new(
-          date_decided: {
-            day: corrective_action.date_decided.day,
-            month: corrective_action.date_decided.month,
-            year: corrective_action.date_decided.year,
-          },
-          action: new_action,
-          legislation: corrective_action.legislation,
-          duration: corrective_action.duration,
-          details: corrective_action.details,
-          measure_type: corrective_action.measure_type,
-          file: {
-            file: fixture_file_upload(file_fixture("files/corrective_action.txt")),
-            description: new_file_description
-          }
-        ).permit!
-      end
 
       it "stored the new file with the description", :aggregate_failures do
         result
@@ -222,7 +182,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
 
       context "when not adding a new file" do
-        before { corrective_action_params[:file].delete(:file) }
+        let(:document)             { nil }
+        let(:new_file_description) { nil }
 
         it "stored the new file with the description", :aggregate_failures do
           expect { result }.not_to raise_error
@@ -243,9 +204,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "without a new file" do
-      before do
-        corrective_action_params[:file][:file] = nil
-      end
+      let(:new_document) { nil }
+      let(:related_file) { false }
 
       it "stored the new file with the description", :aggregate_failures do
         expect {

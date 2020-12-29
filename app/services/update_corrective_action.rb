@@ -8,11 +8,10 @@ class UpdateCorrectiveAction
   def call
     validate_inputs!
     assign_attributes
-    @previous_attachment = corrective_action.document
+    @previous_attachment = corrective_action.document_blob
     corrective_action.transaction do
       corrective_action.document.detach unless related_file
       replace_attached_file             if document
-      context.fail!                     if corrective_action.invalid?
       break                             if no_changes?
 
       corrective_action.save!
