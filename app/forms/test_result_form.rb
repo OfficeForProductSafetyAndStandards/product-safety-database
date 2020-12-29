@@ -57,7 +57,7 @@ class TestResultForm
       file = document_params[:file]
       self.filename = file.original_filename
       self.file_description = document_params[:description]
-      self.document = ActiveStorage::Blob.create_after_upload!(
+      self.document = ActiveStorage::Blob.create_and_upload!(
         io: file,
         filename: file.original_filename,
         content_type: file.content_type,

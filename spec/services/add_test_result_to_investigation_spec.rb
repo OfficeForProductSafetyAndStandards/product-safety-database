@@ -4,7 +4,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
   let(:user)                                 { create(:user, :activated) }
   let!(:investigation)                       { create :allegation, creator: user }
 
-  let(:document)                             { ActiveStorage::Blob.create_after_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
+  let(:document)                             { ActiveStorage::Blob.create_and_upload!(io: StringIO.new("files/test_result.txt"), filename: "test_result.txt") }
   let(:file_description)                     { Faker::Hipster.sentence }
   let(:date)                                 { Date.current }
   let(:details)                              { Faker::Hipster.sentence }

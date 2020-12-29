@@ -64,7 +64,7 @@ class EmailCorrespondenceForm
   def cache_files!
     if email_file.present?
 
-      self.email_file_id = ActiveStorage::Blob.create_after_upload!(
+      self.email_file_id = ActiveStorage::Blob.create_and_upload!(
         io: email_file,
         filename: email_file.original_filename,
         content_type: email_file.content_type
@@ -72,7 +72,7 @@ class EmailCorrespondenceForm
     end
 
     if email_attachment.present?
-      self.email_attachment_id = ActiveStorage::Blob.create_after_upload!(
+      self.email_attachment_id = ActiveStorage::Blob.create_and_upload!(
         io: email_attachment,
         filename: email_attachment.original_filename,
         content_type: email_attachment.content_type
