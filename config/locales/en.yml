@@ -91,6 +91,9 @@ en:
       title: "Title"
 
   investigations:
+    record_corrective_actions:
+      form:
+        has_online_recall_information: "Has the business responsible published product recall information online?"
     overview:
       case_risk_level:
         key: Case risk level
@@ -534,8 +537,3 @@ en:
     array:
       two_words_connector: " and "
       last_word_connector: " and "
-
-  investigations:
-    record_corrective_actions:
-      form:
-        has_online_recall_information: "Has the business responsible published product recall information online?"
