@@ -54,7 +54,7 @@ class PhoneCallCorrespondenceForm
 
   def load_transcript_file
     if existing_transcript_file_id.present? && transcript.nil?
-      self.transcript = ActiveStorage::Blob.find_signed(existing_transcript_file_id)
+      self.transcript = ActiveStorage::Blob.find_signed!(existing_transcript_file_id)
     end
   end
 

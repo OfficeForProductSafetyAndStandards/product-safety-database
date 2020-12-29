@@ -83,13 +83,13 @@ class EmailCorrespondenceForm
   def cached_email_file
     return if email_file_id.nil?
 
-    @cached_email_file ||= ActiveStorage::Blob.find_signed(email_file_id)
+    @cached_email_file ||= ActiveStorage::Blob.find_signed!(email_file_id)
   end
 
   def cached_email_attachment
     return if email_attachment_id.nil?
 
-    @cached_email_attachment ||= ActiveStorage::Blob.find_signed(email_attachment_id)
+    @cached_email_attachment ||= ActiveStorage::Blob.find_signed!(email_attachment_id)
   end
 
 private

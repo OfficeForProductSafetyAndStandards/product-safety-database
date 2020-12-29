@@ -60,7 +60,7 @@ class RiskAssessmentForm
 
   def load_risk_assessment_file
     if existing_risk_assessment_file_file_id.present? && risk_assessment_file.nil?
-      self.risk_assessment_file = ActiveStorage::Blob.find_signed(existing_risk_assessment_file_file_id)
+      self.risk_assessment_file = ActiveStorage::Blob.find_signed!(existing_risk_assessment_file_file_id)
     end
   end
 
