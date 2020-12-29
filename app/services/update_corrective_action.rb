@@ -47,7 +47,7 @@ private
   end
 
   def any_changes?
-    file_changed? || changes.any? || file_description_changed?
+    file_changed? || changes.except(:related_file).any? || file_description_changed?
   end
 
   def file_changed?

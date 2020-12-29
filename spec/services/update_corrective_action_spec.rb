@@ -83,6 +83,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
     context "with the required parameters" do
       context "when no changes have been made" do
+        let(:related_file)                      { false }
         let(:new_date_decided)                  { corrective_action.date_decided }
         let(:new_file_description)              { corrective_action.document.metadata["descriptino"] }
         let(:new_document)                      { nil }
@@ -104,6 +105,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         end
 
         context "with document attached" do
+          let(:related_file) { true }
           let(:new_file_description) { corrective_action.document.metadata.fetch(:description) }
 
           it "does not change the attached document" do
@@ -121,7 +123,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           before { corrective_action.document.detach }
 
           it "does not change the attached document's" do
-            expect { result }.not_to change(corrective_action.document, :empty?)
+            expect { result }.not_to change(corrective_action, :document)
           end
 
           include_examples "it does not create an audit log"
@@ -132,7 +134,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         it "updates the corrective action" do
           expect {
             result
-          }.to change(corrective_action, :date_decided).from(old_date_decided).to(new_date_decided)
+          }.to change(corrective_action, :date_decided).from(corrective_action.date_decided).to(new_date_decided)
         end
 
         it "generates an activity entry with the changes" do
@@ -153,7 +155,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         it_behaves_like "a service which notifies the case owner"
 
         context "when removing the previously attached file" do
-          before { corrective_action_params[:related_file] = "off" }
+          let(:related_file) { false }
 
           it "removes the related file" do
             expect { result }
@@ -168,20 +170,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
     end
 
-    context "with no changes" do
-      before do
-        corrective_action.document.detach
-        corrective_action.reload
-      end
-
-      it "does not create an audit activity" do
-        expect { result }.not_to change(corrective_action.investigation.activities, :count)
-      end
-    end
-
     context "with no previously attached file" do
       before { corrective_action.document.detach }
-
 
       it "stored the new file with the description", :aggregate_failures do
         result
