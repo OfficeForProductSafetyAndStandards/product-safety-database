@@ -55,7 +55,7 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  config.cache_store = :redis_cache_store, Rails.application.config_for(:redis_store).symbolize_keys
+  config.cache_store = :redis_cache_store, Rails.application.config_for(:redis_store)
 
   config.action_mailer.perform_caching = false
 
