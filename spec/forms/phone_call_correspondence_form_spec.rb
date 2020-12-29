@@ -97,7 +97,7 @@ RSpec.describe PhoneCallCorrespondenceForm do
 
     describe "#load_transcript_file " do
       let(:previous_form) do
-        described_class.new(params.merge(transcript: Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt"))))
+        described_class.new(params.merge(transcript: Rack::Test::UploadedFile.new(file_fixture("phone_call_transcript.txt"))))
       end
 
       before do

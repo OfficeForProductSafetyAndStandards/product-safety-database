@@ -60,7 +60,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
   let(:new_date_decided) { (old_date_decided - 1.day).to_date }
   let(:new_file_description) { "new corrective action file description" }
-  let(:new_document) { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
+  let(:new_document) { fixture_file_upload("corrective_action.txt") }
   let(:new_action) { (CorrectiveAction.actions.values - %W[Other #{corrective_action.action}]).sample }
   let(:new_other_action) { corrective_action.other_action }
 
@@ -219,7 +219,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
           measure_type: corrective_action.measure_type,
           related_file: corrective_action.related_file,
           file: {
-            file: fixture_file_upload(file_fixture("files/corrective_action.txt")),
+            file: fixture_file_upload("corrective_action.txt"),
             description: new_file_description
           }
         ).permit!
