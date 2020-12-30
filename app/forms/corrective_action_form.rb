@@ -46,7 +46,6 @@ class CorrectiveActionForm
   validates :details, length: { maximum: 50_000 }
 
   before_validation { trim_line_endings(:other_action, :details) }
-  before_validation { clean_other_action }
 
   ATTRIBUTES_FROM_CORRECTIVE_ACTION = %i[
     id
@@ -117,11 +116,5 @@ private
     if related_file && document.nil?
       errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
     end
-  end
-
-  def clean_other_action
-    return if other?
-
-    self.other_action = nil
   end
 end

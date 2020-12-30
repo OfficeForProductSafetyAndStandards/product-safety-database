@@ -149,7 +149,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       let(:related_file) { "Yes" }
 
       context "without an attached file" do
-        let(:file_form) { nil }
+        let(:file_form) { { description: Faker::Hipster.sentence } }
 
         it "returns false" do
           expect(corrective_action_form).not_to be_valid
