@@ -46,7 +46,7 @@ class TestResultForm
 
   def load_document_file
     if existing_document_file_id.present? && document.nil?
-      self.document = ActiveStorage::Blob.find_signed(existing_document_file_id)
+      self.document = ActiveStorage::Blob.find_signed!(existing_document_file_id)
       self.filename = document.filename.to_s
       self.file_description = document.metadata["description"]
     end
@@ -57,7 +57,7 @@ class TestResultForm
       file = document_params[:file]
       self.filename = file.original_filename
       self.file_description = document_params[:description]
-      self.document = ActiveStorage::Blob.create_after_upload!(
+      self.document = ActiveStorage::Blob.create_and_upload!(
         io: file,
         filename: file.original_filename,
         content_type: file.content_type,

@@ -9,6 +9,10 @@ RSpec.describe CommonPasswordValidator do
                 common_password: {
                   message: "Choose a less frequently used password"
                 }
+
+      def self.name
+        "User"
+      end
     }.new
   end
 

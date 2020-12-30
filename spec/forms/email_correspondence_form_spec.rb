@@ -37,7 +37,7 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
 
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid
-        expect(form.errors.details).to include({ correspondence_date: [{ error: :blank }] })
+        expect(form.errors.details[:correspondence_date]).to eq([{ error: :blank }])
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
 
       it "is not valid and contains an error message", :aggregate_failures do
         expect(form).not_to be_valid
-        expect(form.errors.details).to include({ base: [{ error: "Please provide either an email file or a subject and body" }] })
+        expect(form.errors.details[:base]).to eq([{ error: "Please provide either an email file or a subject and body" }])
       end
     end
 

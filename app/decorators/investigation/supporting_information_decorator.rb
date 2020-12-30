@@ -2,6 +2,8 @@ class Investigation < ApplicationRecord
   class SupportingInformationDecorator
     include ActionView::Helpers::TranslationHelper
 
+    delegate :any?, :none?, :size, :each, :to_a, to: :@supporting_information
+
     DATE_OF_ACTIVITY = :date_of_activity
     DATE_ADDED       = :date_added
     TITLE            = :title
@@ -12,18 +14,6 @@ class Investigation < ApplicationRecord
       @sort_by = (param_sort_by || :date_added)
       @supporting_information = supporting_information
       sort
-    end
-
-    def any?
-      @supporting_information.any?
-    end
-
-    def to_a
-      @supporting_information.to_a
-    end
-
-    def none?
-      @supporting_information.none?
     end
 
     def sort_by

@@ -60,9 +60,8 @@ RSpec.configure do |config|
   # instead of true.
   # config.use_transactional_fixtures = true
 
-  config.file_fixture_path = "spec/fixtures"
-
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include ActiveSupport::Testing::Assertions
 
   config.include PageExpectations, type: :feature
   config.include EmailExpectations, type: :feature

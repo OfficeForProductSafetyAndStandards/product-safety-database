@@ -239,7 +239,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     click_on "Attachments"
     click_on "Add attachment"
 
-    attach_file file_fixture("files/corrective_action.txt")
+    attach_file file_fixture("corrective_action.txt")
     click_on "Upload"
 
     document_title       = Faker::Hipster.word

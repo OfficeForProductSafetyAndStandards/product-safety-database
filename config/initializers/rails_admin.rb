@@ -1,3 +1,6 @@
+require "nested_form/engine"
+require "nested_form/builder_mixin"
+
 Kaminari.configure do |config|
   config.page_method_name = :per_page_kaminari
 end

@@ -9,6 +9,10 @@ RSpec.describe PhoneValidator do
                 phone: {
                   message: "Enter your mobile number in the correct format, like 07700 900 982"
                 }
+
+      def self.name
+        "User"
+      end
     }.new
   end
 

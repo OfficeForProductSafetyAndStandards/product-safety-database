@@ -10,11 +10,12 @@ describe ApplicationHelper do
     end
 
     let(:view) { view_class.new }
+    let(:base) { User.new }
     let(:errors) do
       [
-        [:name, "Name cannot be blank"],
-        [:email, "Email cannot be blank"],
-        [:mobile_number, "Mobile number is too short"],
+        ActiveModel::Error.new(base, :name, :blank),
+        ActiveModel::Error.new(base, :email, :blank),
+        ActiveModel::Error.new(base, :mobile_number, :invalid),
       ]
     end
 
@@ -32,9 +33,9 @@ describe ApplicationHelper do
 
       it "calls for the error summary with a formatted unordered list of errors" do
         view.error_summary(errors, order)
-        expect_error_summary_for([{ text: "Name cannot be blank", href: "#name" },
+        expect_error_summary_for([{ text: "Enter your full name", href: "#name" },
                                   { text: "Email cannot be blank", href: "#email" },
-                                  { text: "Mobile number is too short", href: "#mobile_number" }])
+                                  { text: "Enter your mobile number in the correct format, like 07700 900 982", href: "#mobile_number" }])
       end
     end
 
@@ -44,9 +45,9 @@ describe ApplicationHelper do
 
         it "generates the error summary with an ordered and formatted list of errors" do
           view.error_summary(errors, order)
-          expect_error_summary_for([{ text: "Mobile number is too short", href: "#mobile_number" },
+          expect_error_summary_for([{ text: "Enter your mobile number in the correct format, like 07700 900 982", href: "#mobile_number" },
                                     { text: "Email cannot be blank", href: "#email" },
-                                    { text: "Name cannot be blank", href: "#name" }])
+                                    { text: "Enter your full name", href: "#name" }])
         end
       end
 
@@ -55,8 +56,8 @@ describe ApplicationHelper do
 
         it "adds the attribute errors after the ordered ones" do
           view.error_summary(errors, order)
-          expect_error_summary_for([{ text: "Mobile number is too short", href: "#mobile_number" },
-                                    { text: "Name cannot be blank", href: "#name" },
+          expect_error_summary_for([{ text: "Enter your mobile number in the correct format, like 07700 900 982", href: "#mobile_number" },
+                                    { text: "Enter your full name", href: "#name" },
                                     { text: "Email cannot be blank", href: "#email" }])
         end
       end
@@ -66,8 +67,8 @@ describe ApplicationHelper do
 
         it "ignores them and respects the order for the attributes with errors" do
           view.error_summary(errors, order)
-          expect_error_summary_for([{ text: "Name cannot be blank", href: "#name" },
-                                    { text: "Mobile number is too short", href: "#mobile_number" },
+          expect_error_summary_for([{ text: "Enter your full name", href: "#name" },
+                                    { text: "Enter your mobile number in the correct format, like 07700 900 982", href: "#mobile_number" },
                                     { text: "Email cannot be blank", href: "#email" }])
         end
       end
