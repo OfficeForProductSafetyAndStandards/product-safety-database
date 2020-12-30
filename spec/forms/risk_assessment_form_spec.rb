@@ -290,7 +290,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
 
   describe "#load_transcript_file " do
     let(:previous_form) do
-      described_class.new(params.merge(risk_assessment_file: Rack::Test::UploadedFile.new(file_fixture("files/risk_assessment.txt"))))
+      described_class.new(params.merge(risk_assessment_file: Rack::Test::UploadedFile.new(file_fixture("risk_assessment.txt"))))
     end
 
     before { previous_form.cache_file! }

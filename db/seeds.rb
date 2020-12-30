@@ -2,7 +2,7 @@
 ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapter
 
 def create_blob(filename, title: nil, description: nil)
-  ActiveStorage::Blob.create_after_upload!(
+  ActiveStorage::Blob.create_and_upload!(
     io: File.open("./db/seed_files/#{filename}"),
     filename: filename,
     content_type: "image/jpeg",

@@ -49,7 +49,7 @@ class RiskAssessmentForm
   def cache_file!
     return if risk_assessment_file.blank?
 
-    self.risk_assessment_file = ActiveStorage::Blob.create_after_upload!(
+    self.risk_assessment_file = ActiveStorage::Blob.create_and_upload!(
       io: risk_assessment_file,
       filename: risk_assessment_file.original_filename,
       content_type: risk_assessment_file.content_type
@@ -60,7 +60,7 @@ class RiskAssessmentForm
 
   def load_risk_assessment_file
     if existing_risk_assessment_file_file_id.present? && risk_assessment_file.nil?
-      self.risk_assessment_file = ActiveStorage::Blob.find_signed(existing_risk_assessment_file_file_id)
+      self.risk_assessment_file = ActiveStorage::Blob.find_signed!(existing_risk_assessment_file_file_id)
     end
   end
 

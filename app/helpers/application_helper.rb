@@ -10,15 +10,15 @@ module ApplicationHelper
     ordered_errors = ActiveSupport::OrderedHash.new
     ordered_attributes.map { |attr| ordered_errors[attr] = [] }
 
-    errors.map do |attribute, error|
-      next if error.blank?
+    errors.each do |error|
+      next if error.message.blank?
 
       # Errors for attributes that are not included in the ordered list will be
       # added at the end after the errors for ordered attributes.
-      if ordered_errors[attribute]
-        ordered_errors[attribute] << { text: error, href: "##{attribute}" }
+      if ordered_errors[error.attribute]
+        ordered_errors[error.attribute] << { text: error.message, href: "##{error.attribute}" }
       else
-        ordered_errors[attribute] = [{ text: error, href: "##{attribute}" }]
+        ordered_errors[error.attribute] = [{ text: error.message, href: "##{error.attribute}" }]
       end
     end
     error_list = ordered_errors.values.flatten.compact

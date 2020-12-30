@@ -43,7 +43,7 @@ class PhoneCallCorrespondenceForm
   def cache_file!
     return if transcript.blank?
 
-    self.transcript = ActiveStorage::Blob.create_after_upload!(
+    self.transcript = ActiveStorage::Blob.create_and_upload!(
       io: transcript,
       filename: transcript.original_filename,
       content_type: transcript.content_type
@@ -54,7 +54,7 @@ class PhoneCallCorrespondenceForm
 
   def load_transcript_file
     if existing_transcript_file_id.present? && transcript.nil?
-      self.transcript = ActiveStorage::Blob.find_signed(existing_transcript_file_id)
+      self.transcript = ActiveStorage::Blob.find_signed!(existing_transcript_file_id)
     end
   end
 

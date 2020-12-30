@@ -3,26 +3,26 @@ module SanitizationHelper
   # To keep max length consistent we need to reverse that
   def trim_line_endings(*keys)
     keys.each do |key|
-      public_send("#{key}=", attribute(key).gsub("\r\n", "\n")) if attribute(key)
+      public_send("#{key}=", attributes[key.to_s].gsub("\r\n", "\n")) if attributes[key.to_s]
     end
   end
 
   def nilify_blanks(*keys)
     keys.each do |key|
-      public_send("#{key}=", attribute(key).presence)
+      public_send("#{key}=", attributes[key.to_s].presence)
     end
   end
 
   def trim_whitespace(*keys)
     keys.each do |key|
-      public_send("#{key}=", attribute(key)&.strip)
+      public_send("#{key}=", attributes[key.to_s]&.strip)
     end
   end
 
   def convert_gtin_to_13_digits(*keys)
     keys.each do |key|
-      gtin = Barkick::GTIN.new(attribute(key)&.strip)
-      write_attribute(key, gtin.gtin13) if gtin.valid?
+      gtin = Barkick::GTIN.new(attributes[key.to_s]&.strip)
+      public_send("#{key}=", gtin.gtin13) if gtin.valid?
     # 8 digit codes raise an ArgumentError, as a type (UPC-E or EAN-8) needs
     # to be specified in order to convert the code to a valid GTIN
     rescue ArgumentError

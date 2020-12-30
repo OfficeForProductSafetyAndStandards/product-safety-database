@@ -14,7 +14,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
   end
   let(:new_date)                                 { test_result.date - 2.days }
   let(:new_standards_product_was_tested_against) { Faker::Hipster.words }
-  let(:new_document)                             { ActiveStorage::Blob.create_after_upload!(io: File.open(file_fixture("files/new_test_result.txt")), filename: "new_test_result.txt") }
+  let(:new_document)                             { ActiveStorage::Blob.create_and_upload!(io: File.open(file_fixture("new_test_result.txt")), filename: "new_test_result.txt") }
   let(:new_result)                               { (Test::Result.results.keys - [test_result.result]).sample }
   let(:new_attributes) do
     {
