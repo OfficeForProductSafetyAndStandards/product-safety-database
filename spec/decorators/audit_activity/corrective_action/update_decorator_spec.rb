@@ -5,28 +5,36 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
   subject(:decorated_activity) { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update").decorate }
 
-  let(:new_file_description) { "new corrective action file description" }
-  let(:new_filename)         { "files/corrective_action.txt" }
+  let(:new_file_description)      { "new corrective action file description" }
+  let(:new_filename)              { "files/corrective_action.txt" }
+  let(:new_document)              { ActiveStorage::Blob.create_after_upload!(io: fixture_file_upload(file_fixture(new_filename)), filename: new_filename, content_type: "plain/text") }
+  let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
+  let(:corrective_action_attributes) do
+    corrective_action_form.tap { |form|
+      form.assign_attributes(
+        date_decided: new_date_decided,
+        other_action: new_other_action,
+        action: new_action,
+        product_id: corrective_action.product_id,
+        measure_type: new_measure_type,
+        legislation: new_legislation,
+        has_online_recall_information: new_has_online_recall_information,
+        geographic_scope: new_geographic_scope,
+        duration: new_duration,
+        details: new_details,
+        business_id: corrective_action.business_id,
+        existing_document_file_id: existing_document_file_id,
+        related_file: related_file,
+        file: file_form
+      )
+    }.serializable_hash
+  end
+  let(:changes) { corrective_action_form.changes }
 
   before do
     UpdateCorrectiveAction.call!(
-      corrective_action: corrective_action,
-      user: user,
-      corrective_action_params: ActionController::Parameters.new(
-        action: new_summary,
-        date_decided_day: new_date_decided.day,
-        date_decided_month: new_date_decided.month,
-        date_decided_year: new_date_decided.year,
-        legislation: new_legislation,
-        duration: new_duration,
-        details: new_details,
-        measure_type: new_measure_type,
-        geographic_scope: new_geographic_scope,
-        file: {
-          file: fixture_file_upload(file_fixture(new_filename)),
-          description: new_file_description
-        }
-      ).permit!
+      corrective_action_attributes
+        .merge(corrective_action: corrective_action, user: user, changes: changes)
     )
   end
 

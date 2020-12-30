@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_test_queue_adapter do
   include ActionDispatch::TestProcess::FixtureFile
+  include_context "with corrective action setup for updates"
 
   subject(:result) do
     described_class.call(
@@ -24,11 +25,6 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
   end
   let(:case_editor)               { create(:user, :activated, team: editor_team) }
-  let(:product)                   { create(:product) }
-  let(:business)                  { create(:business) }
-  let(:related_file)              { false }
-  let(:existing_document_file_id) { nil }
-  let(:file_form)                 { { file: new_document, description: new_file_description } }
   let!(:corrective_action)        { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
@@ -52,18 +48,6 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     }.serializable_hash
   end
   let(:changes) { corrective_action_form.changes }
-
-  let(:new_date_decided)                  { (corrective_action.date_decided - 1.day).to_date }
-  let(:new_file_description)              { "new corrective action file description" }
-  let(:new_document)                      { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
-  let(:new_action)                        { (CorrectiveAction.actions.values - %W[Other #{corrective_action.action}]).sample }
-  let(:new_other_action)                  { nil }
-  let(:new_geographic_scope)              { (Rails.application.config.corrective_action_constants["geographic_scope"] - [corrective_action.geographic_scope]).sample }
-  let(:new_duration)                      { (CorrectiveAction::DURATION_TYPES - [corrective_action.duration]).sample }
-  let(:new_measure_type)                  { (CorrectiveAction::MEASURE_TYPES - [corrective_action.measure_type]).sample }
-  let(:new_legislation)                   { (Rails.application.config.legislation_constants["legislation"] - [corrective_action.legislation]).sample }
-  let(:new_details)                       { Faker::Hipster.sentence }
-  let(:new_has_online_recall_information) { Faker::Internet.url }
 
   describe "#call" do
     context "with no parameters" do
