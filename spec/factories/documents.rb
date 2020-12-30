@@ -48,7 +48,6 @@ FactoryBot.define do
       else
         model.documents.attach(file)
       end
-
     end
   end
 end
