@@ -3,6 +3,7 @@ module Investigations
     include UrlHelper
     def update
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
+      authorize @investigation, :risk_level_validation?
 
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: investigation_params["is_risk_validated"], risk_validated_by: current_user.team.name,
                                                      risk_validated_at: Date.current, risk_validation_change_rationale: risk_validation_change_rationale,
@@ -22,6 +23,8 @@ module Investigations
 
     def edit
       @investigation = Investigation.find_by(pretty_id: params["investigation_pretty_id"])
+      authorize @investigation, :risk_level_validation?
+
       @currently_not_validated = currently_not_validated?
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: is_risk_validated_value)
       @breadcrumbs = build_back_link_to_case
