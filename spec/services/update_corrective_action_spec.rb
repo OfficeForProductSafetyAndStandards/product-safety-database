@@ -23,12 +23,14 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       )
     end
   end
-  let(:case_editor)      { create(:user, :activated, team: editor_team) }
-  let(:product)          { create(:product) }
-  let(:business)         { create(:business) }
-  let(:related_file)     { false }
-  let!(:corrective_action) { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
-  let(:corrective_action_form) { CorrectiveActionForm.from(corrective_action) }
+  let(:case_editor)               { create(:user, :activated, team: editor_team) }
+  let(:product)                   { create(:product) }
+  let(:business)                  { create(:business) }
+  let(:related_file)              { false }
+  let(:existing_document_file_id) { nil }
+  let(:file_form)                 { { file: new_document, description: new_file_description } }
+  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
+  let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
     corrective_action_form.tap { |form|
       form.assign_attributes(
@@ -43,7 +45,9 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         duration: new_duration,
         details: new_details,
         business_id: corrective_action.business_id,
-        related_file: related_file
+        existing_document_file_id: existing_document_file_id,
+        related_file: related_file,
+        file: file_form
       )
     }.serializable_hash
   end
@@ -85,8 +89,10 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       context "when no changes have been made" do
         let(:related_file)                      { false }
         let(:new_date_decided)                  { corrective_action.date_decided }
-        let(:new_file_description)              { corrective_action.document.metadata["descriptino"] }
+        let(:new_file_description)              { corrective_action.document.metadata["description"] }
         let(:new_document)                      { nil }
+        let(:file_form)                         { {} }
+        let(:existing_document_file_id)         { corrective_action.document_blob&.signed_id }
         let(:new_action)                        { corrective_action.action }
         let(:new_other_action)                  { corrective_action.other_action }
         let(:new_geographic_scope)              { corrective_action.geographic_scope }
@@ -105,7 +111,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         end
 
         context "with document attached" do
-          let(:related_file) { true }
+          let(:related_file) { false }
           let(:new_file_description) { corrective_action.document.metadata.fetch(:description) }
 
           it "does not change the attached document" do
@@ -182,7 +188,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
 
       context "when not adding a new file" do
-        let(:document)             { nil }
+        let(:new_document)         { nil }
         let(:new_file_description) { nil }
 
         it "stored the new file with the description", :aggregate_failures do
@@ -192,7 +198,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with a new file" do
-      before { corrective_action_params[:file][:file] = new_document }
+      let(:related_file) { true }
 
       it "stored the new file with the description", :aggregate_failures do
         result

@@ -11,7 +11,7 @@ class UpdateCorrectiveAction
     @previous_attachment = corrective_action.document_blob
     corrective_action.transaction do
       corrective_action.document.detach unless related_file
-      replace_attached_file             if document
+      replace_attached_file             if file_changed?
       break                             if no_changes?
 
       corrective_action.save!
@@ -52,6 +52,7 @@ private
 
   def file_changed?
     return false if document.nil? && related_file
+    return false if document == @previous_attachment
 
     [document, @previous_attachment].compact.any?
   end

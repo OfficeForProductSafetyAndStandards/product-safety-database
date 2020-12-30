@@ -65,6 +65,7 @@ class CorrectiveActionForm
 
   def self.from(corrective_action)
     new(corrective_action.serializable_hash(only: ATTRIBUTES_FROM_CORRECTIVE_ACTION)).tap do |corrective_action_form|
+      corrective_action_form.existing_document_file_id = corrective_action.document.signed_id if corrective_action.document.attached?
       corrective_action_form.load_document_file
       corrective_action_form.changes_applied
     end
