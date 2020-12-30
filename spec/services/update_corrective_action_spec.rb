@@ -57,7 +57,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
   let(:new_file_description)              { "new corrective action file description" }
   let(:new_document)                      { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
   let(:new_action)                        { (CorrectiveAction.actions.values - %W[Other #{corrective_action.action}]).sample }
-  let(:new_other_action)                  { corrective_action.other_action }
+  let(:new_other_action)                  { nil }
   let(:new_geographic_scope)              { (Rails.application.config.corrective_action_constants["geographic_scope"] - [corrective_action.geographic_scope]).sample }
   let(:new_duration)                      { (CorrectiveAction::DURATION_TYPES - [corrective_action.duration]).sample }
   let(:new_measure_type)                  { (CorrectiveAction::MEASURE_TYPES - [corrective_action.measure_type]).sample }
@@ -111,7 +111,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         end
 
         context "with document attached" do
-          let(:related_file) { false }
+          let(:related_file) { true }
           let(:new_file_description) { corrective_action.document.metadata.fetch(:description) }
 
           it "does not change the attached document" do
@@ -177,6 +177,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
     end
 
     context "with no previously attached file" do
+      let(:related_file) { true }
+
       before { corrective_action.document.detach }
 
       it "stored the new file with the description", :aggregate_failures do
@@ -188,8 +190,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       end
 
       context "when not adding a new file" do
-        let(:new_document)         { nil }
-        let(:new_file_description) { nil }
+        let(:file_form) { {} }
 
         it "stored the new file with the description", :aggregate_failures do
           expect { result }.not_to raise_error
@@ -217,18 +218,6 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         expect {
           result
         }.not_to change(corrective_action, :document)
-      end
-    end
-
-    context "when the action was previously Other" do
-      let(:action)       { "other" }
-      let(:other_action) { "Other action that should be cleared up once changed to a listed action" }
-      let(:new_action)   { attributes_for(:corrective_action)[:action] }
-
-      it "does clean the other_action field" do
-        expect { result }.to change(corrective_action, :other_action)
-                .from("Other action that should be cleared up once changed to a listed action").to(nil)
-                .and change(corrective_action, :action).from("other").to(new_action)
       end
     end
   end

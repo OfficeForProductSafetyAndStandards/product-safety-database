@@ -47,7 +47,7 @@ private
   end
 
   def any_changes?
-    file_changed? || changes.except(:related_file).any? || file_description_changed?
+    file_changed? || changes.except(:related_file).any?
   end
 
   def file_changed?
@@ -61,13 +61,6 @@ private
     return nil if file_description.blank?
 
     file_description
-  end
-
-  def file_description_changed?
-    old_file_description = @previous_attachment&.metadata&.dig(:description)
-    return false if new_file_description.blank? && old_file_description.blank?
-
-    new_file_description != @previous_attachment&.metadata&.dig(:description)
   end
 
   def replace_attached_file

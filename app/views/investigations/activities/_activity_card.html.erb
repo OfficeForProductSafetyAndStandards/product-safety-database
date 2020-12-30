@@ -61,7 +61,7 @@
           <%= link_with_hidden_text_to "View test result", " from #{activity.test_result.date.to_s(:govuk)}", investigation_test_result_path(@investigation, activity.test_result.id) %>
         <% end %>
       <% elsif activity.is_a?(AuditActivity::CorrectiveAction::Add) && activity.corrective_action %>
-        <%=  link_to "View corrective action", investigation_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
+        <%=  link_to "View corrective action", investigation_corrective_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
 
       <% elsif activity.is_a?(AuditActivity::Correspondence::AddEmail) && activity.correspondence %>
         <%=  link_to "View email", investigation_email_path(@investigation, activity.correspondence), class: "govuk-link" %>

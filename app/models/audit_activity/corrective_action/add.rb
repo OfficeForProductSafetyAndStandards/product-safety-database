@@ -12,7 +12,15 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
   end
 
   def corrective_action
-    @corrective_action ||= CorrectiveAction.find_by!(id: metadata["corrective_action_id"])
+    @corrective_action ||= begin
+                             if metadata&.dig("corrective_action_id")
+                               CorrectiveAction.find_by!(id: metadata["corrective_action_id"])
+                             elsif attachment.attached?
+                               attachment.blob.attachments
+                                 .find_by(record_type: "CorrectiveAction")
+                                 &.record
+                             end
+                           end
   end
 
   def title(_viewing_user)
