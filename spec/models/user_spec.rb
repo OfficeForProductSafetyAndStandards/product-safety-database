@@ -240,11 +240,11 @@ RSpec.describe User do
   end
 
   describe "#has_role?" do
+    subject(:result) { user.has_role?(:test) }
+
     let(:team) { create(:team, roles: team_roles) }
     let(:user) { create(:user, team: team, organisation: team.organisation, roles: user_roles) }
     let(:team_roles) { [] }
-
-    subject(:result) { user.has_role?(:test) }
 
     context "when the user has no roles" do
       let(:user_roles) { [] }
@@ -254,7 +254,7 @@ RSpec.describe User do
       end
 
       context "when the team roles include the specified role" do
-        let(:team_roles) { ["test"] }
+        let(:team_roles) { %w[test] }
 
         it "returns true" do
           expect(result).to be true
@@ -262,7 +262,7 @@ RSpec.describe User do
       end
 
       context "when the team roles do not include the specified role" do
-        let(:team_roles) { ["another_role"] }
+        let(:team_roles) { %w[another_role] }
 
         it "returns false" do
           expect(result).to be false
@@ -272,7 +272,7 @@ RSpec.describe User do
 
     context "when the user has roles" do
       context "when the user roles include the specified role" do
-        let(:user_roles) { ["test"] }
+        let(:user_roles) { %w[test] }
 
         it "returns true" do
           expect(result).to be true
@@ -280,14 +280,14 @@ RSpec.describe User do
       end
 
       context "when the user roles do not include the specified role" do
-        let(:user_roles) { ["another_role"] }
+        let(:user_roles) { %w[another_role] }
 
         it "returns false" do
           expect(result).to be false
         end
 
         context "when the team roles include the specified role" do
-          let(:team_roles) { ["test"] }
+          let(:team_roles) { %w[test] }
 
           it "returns true" do
             expect(result).to be true
@@ -295,7 +295,7 @@ RSpec.describe User do
         end
 
         context "when the team roles do not include the specified role" do
-          let(:team_roles) { ["another_role"] }
+          let(:team_roles) { %w[another_role] }
 
           it "returns false" do
             expect(result).to be false

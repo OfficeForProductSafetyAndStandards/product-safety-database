@@ -521,7 +521,7 @@ if run_seeds
     Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-    user1 = User.create!(
+    User.create!(
       name: "Test User",
       email: "user@example.com",
       password: "testpassword",
@@ -554,7 +554,6 @@ if run_seeds
       team: ts_team,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
-
 
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)

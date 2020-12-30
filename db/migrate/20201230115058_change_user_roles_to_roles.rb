@@ -6,7 +6,7 @@ class ChangeUserRolesToRoles < ActiveRecord::Migration[6.0]
       rename_column :roles, :user_id, :entity_id
       add_column :roles, :entity_type, :string, after: :entity_id, null: false, default: "User"
 
-      change_column_default :roles, :entity_type, nil
+      change_column_default :roles, :entity_type, from: "User", to: nil
     end
   end
 end
