@@ -33,7 +33,7 @@ if run_seeds
   )
 
   %i[opss_user user].each do |role|
-    UserRole.find_or_create_by!(user: user, name: role)
+    Role.find_or_create_by!(entity: user, name: role)
   end
 
   # First investigation
@@ -486,7 +486,7 @@ if run_seeds
     # }
 
     Team.accepts_nested_attributes_for :users
-    User.accepts_nested_attributes_for :user_roles
+    User.accepts_nested_attributes_for :roles
 
     organisations.each do |organisation_attributes|
       organisation_attributes.deep_symbolize_keys!
@@ -496,6 +496,12 @@ if run_seeds
       teams_attributes.map do |team_attributes|
         (team_attributes[:users_attributes] || []).map! do |user_attributes|
           user_attributes[:organisation] = organisation
+
+          # Temporary workaround to prevent other review apps breaking while
+          # the change from user_roles to roles is reviewed. This line can be
+          # removed once the seed JSON structure is updated safely
+          user_attributes[:roles_attributes] = user_attributes[:user_roles_attributes]
+
           user_attributes
         end
         organisation.teams.create! team_attributes
@@ -545,10 +551,10 @@ if run_seeds
     )
 
     %i[opss_user user].each do |role|
-      UserRole.create!(user: user1, name: role)
+      Role.create!(entity: user1, name: role)
     end
     %i[team_admin opss_user user].each do |role|
-      UserRole.create!(user: user2, name: role)
+      Role.create!(entity: user2, name: role)
     end
 
     organisation = Organisation.create!(name: "Southampton Council")

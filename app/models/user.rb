@@ -16,7 +16,7 @@ class User < ApplicationRecord
   has_many :investigations, through: :owner_user_collaborations, dependent: :nullify, as: :user
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
-  has_many :user_roles, dependent: :destroy
+  has_many :roles, dependent: :destroy, as: :entity
   has_many :collaborations, dependent: :destroy, as: :collaborator
 
   belongs_to :team
@@ -172,7 +172,7 @@ private
   end
 
   def has_role?(role)
-    user_roles.exists?(name: role)
+    roles.exists?(name: role)
   end
 
   def password_required?

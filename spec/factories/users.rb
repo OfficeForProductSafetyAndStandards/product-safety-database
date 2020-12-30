@@ -76,7 +76,7 @@ FactoryBot.define do
 
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
-        create(:user_role, name: role, user: user)
+        create(:role, name: role, entity: user)
       end
     end
   end

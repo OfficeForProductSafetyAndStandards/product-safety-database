@@ -27,7 +27,7 @@ private
       team: team
     )
 
-    user.user_roles.create!(name: "opss_user") if inviting_user&.is_opss?
+    user.roles.create!(name: "opss_user") if inviting_user&.is_opss?
     user
   end
 
