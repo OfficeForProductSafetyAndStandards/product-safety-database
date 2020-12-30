@@ -22,6 +22,7 @@ if run_seeds
 
   organisation = Organisation.create!(name: "Seed Organisation")
   team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation)
+  team.roles.create!(name: "opss")
 
   user = User.find_by(email: "seed_user@example.com") || User.create!(
     name: "Seed User",
@@ -31,10 +32,6 @@ if run_seeds
     organisation: organisation,
     team: team,
   )
-
-  %i[opss_user user].each do |role|
-    Role.find_or_create_by!(entity: user, name: role)
-  end
 
   # First investigation
   investigation = Investigation::Allegation.new(
@@ -510,8 +507,13 @@ if run_seeds
   else
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
     trading_standards = Organisation.create!(name: "Trading Standards")
+
     enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+    enforcement.roles.create!(name: "opss")
+
     operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
+    operational_support.roles.create!(name: "opss")
+
     ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards)
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
@@ -529,6 +531,7 @@ if run_seeds
       team: enforcement,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+
     user2 = User.create!(
       name: "Team Admin",
       email: "admin@example.com",
@@ -539,6 +542,8 @@ if run_seeds
       team: operational_support,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+    user2.roles.create!(name: "team_admin")
+
     User.create!(
       name: "TS User",
       email: "ts_user@example.com",
@@ -550,12 +555,6 @@ if run_seeds
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
 
-    %i[opss_user user].each do |role|
-      Role.create!(entity: user1, name: role)
-    end
-    %i[team_admin opss_user user].each do |role|
-      Role.create!(entity: user2, name: role)
-    end
 
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)

@@ -68,7 +68,7 @@ class User < ApplicationRecord
   end
 
   def is_opss?
-    has_role? :opss_user
+    has_role? :opss
   end
 
   def is_team_admin?

@@ -20,15 +20,12 @@ private
   end
 
   def create_user
-    user = User.create!(
+    User.create!(
       email: email,
       organisation: team.organisation,
       skip_password_validation: true,
       team: team
     )
-
-    user.roles.create!(name: "opss_user") if inviting_user&.is_opss?
-    user
   end
 
   def send_invite
