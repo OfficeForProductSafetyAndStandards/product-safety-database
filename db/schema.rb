@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(version: 2020_12_30_134737) do
     t.string "entity_type", null: false
     t.string "name", null: false
     t.datetime "updated_at", null: false
+    t.index ["entity_id", "entity_type"], name: "index_roles_on_entity_id_and_entity_type"
     t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
     t.index ["entity_id"], name: "index_roles_on_entity_id"
   end
