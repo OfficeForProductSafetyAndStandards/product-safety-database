@@ -112,7 +112,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
 
         context "with document attached" do
           let(:related_file) { true }
-          let(:new_file_description) { corrective_action.document.metadata.fetch(:description) }
+          let(:file_form) { { description: corrective_action.document_blob.metadata.fetch(:description) } }
 
           it "does not change the attached document" do
             expect { result }.not_to change(corrective_action, :document)
@@ -126,7 +126,10 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         end
 
         context "with no document attached" do
-          before { corrective_action.document.detach }
+          before do
+            corrective_action.document.detach
+            corrective_action.reload
+          end
 
           it "does not change the attached document's" do
             expect { result }.not_to change(corrective_action, :document)
