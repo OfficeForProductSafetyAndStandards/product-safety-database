@@ -174,9 +174,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
                         when "No" then "None"
                         when "Unknown" then "Unknown"
                         end
-  end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, when_placed_on_market:)
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
     expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
