@@ -26,7 +26,7 @@ class Product < ApplicationRecord
   enum when_placed_on_market: {
     "before_2021" => "before_2021",
     "on_or_after_2021" => "on_or_after_2021",
-    "unknown" => "unknown"
+    "unknown_date" => "unknown_date"
   }
 
   MARKINGS = %w[UKCA UKNI CE].freeze

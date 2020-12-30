@@ -33,7 +33,16 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def when_placed_on_market
-    I18n.t(object.when_placed_on_market || :missing, scope: Product.model_name.i18n_key)
+    case object.when_placed_on_market
+    when "before_2021"
+      I18n.t(".product.before_2021")
+    when "on_or_after_2021"
+      I18n.t(".product.on_or_after_2021")
+    when "unknown"
+      I18n.t(".product.when_placed_on_market.unknown_date")
+    else
+      I18n.t(".product.not_provided")
+    end
   end
 
   def subcategory_and_category_label

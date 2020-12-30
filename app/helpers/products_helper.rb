@@ -73,7 +73,7 @@ module ProductsHelper
     items = [
       { text: "Yes",    value: "before_2021" },
       { text: "No",     value: "on_or_after_2021" },
-      { text: "Unable to ascertain", value: "unknown" }
+      { text: "Unable to ascertain", value: "unknown_date" }
     ]
     return items if product_form.when_placed_on_market.blank?
 

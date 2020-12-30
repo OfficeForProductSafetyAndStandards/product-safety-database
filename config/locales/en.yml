@@ -508,7 +508,7 @@ en:
     none: "None"
     before_2021: "Before 1 January 2021"
     on_or_after_2021: "On or after 1 January 2021"
-    unknown: "Unable to ascertain"
+    unknown_date: "Unable to ascertain"
 
   corrective_action:
     attributes:
