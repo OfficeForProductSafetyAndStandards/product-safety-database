@@ -1,26 +1,28 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  subject(:corrective_action) do
-    build(
-      :corrective_action,
+RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+  include ActionDispatch::TestProcess::FixtureFile
+  subject(:corrective_action_form) do
+    described_class.new(
       action: action,
       other_action: other_action,
-      date_decided_day: date_decided ? date_decided.day : nil,
-      date_decided_month: date_decided ? date_decided.month : nil,
-      date_decided_year: date_decided ? date_decided.year : nil,
+      date_decided: date_decided,
       legislation: legislation,
       measure_type: measure_type,
       duration: duration,
       geographic_scope: geographic_scope,
       details: details,
       related_file: related_file,
-      investigation: investigation,
-      product: create(:product)
+      product_id: create(:product).id,
+      business_id: create(:business).id,
+      file: file_form
     )
   end
 
-  let(:action) { (described_class.actions.values - %w[Other]).sample }
+  let(:file) { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
+  let(:file_description) { Faker::Hipster.sentence }
+  let(:file_form) { { file: file, description: file_description } }
+  let(:action) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:other_action) { nil }
   let(:date_decided) { Faker::Date.backward(days: 14) }
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
@@ -34,7 +36,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   describe "#valid?" do
     context "with valid input" do
       it "returns true" do
-        expect(corrective_action).to be_valid
+        expect(corrective_action_form).to be_valid
       end
     end
 
@@ -42,7 +44,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:action) { nil }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -50,8 +52,8 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:other_action) { Faker::Lorem.characters(number: 10_000) }
 
       it "is not valid with an error message for the other_action field", :aggregate_failures do
-        expect(corrective_action).to be_invalid
-        expect(corrective_action.errors.full_messages_for(:other_action)).to eq(["Other action must be blank"])
+        expect(corrective_action_form).to be_invalid
+        expect(corrective_action_form.errors.full_messages_for(:other_action)).to eq(["Other action must be blank"])
       end
     end
 
@@ -66,7 +68,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
         let(:other_action) { Faker::Lorem.characters(number: 10_001) }
 
         it "returns false" do
-          expect(corrective_action).not_to be_valid
+          expect(corrective_action_form).not_to be_valid
         end
       end
     end
@@ -75,7 +77,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:details) { Faker::Lorem.characters(number: 50_001) }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -83,7 +85,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:date_decided) { Faker::Date.forward(days: 14) }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -91,7 +93,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:date_decided) { nil }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -99,7 +101,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:measure_type) { nil }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -107,7 +109,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:measure_type) { "test" }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -115,7 +117,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:duration) { nil }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -123,7 +125,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:duration) { "test" }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -131,7 +133,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:geographic_scope) { nil }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -139,7 +141,7 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:geographic_scope) { "test" }
 
       it "returns false" do
-        expect(corrective_action).not_to be_valid
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
@@ -147,29 +149,18 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
       let(:related_file) { "Yes" }
 
       context "without an attached file" do
+        let(:file_form) { nil }
+
         it "returns false" do
-          expect(corrective_action).not_to be_valid
+          expect(corrective_action_form).not_to be_valid
         end
       end
 
       context "with an attached file" do
-        let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
-
-        before { corrective_action.documents.attach(io: File.open(file), filename: "test.txt") }
-
         it "returns true" do
-          expect(corrective_action).to be_valid
+          expect(corrective_action_form).to be_valid
         end
       end
-    end
-  end
-
-  describe "#create_audit_activity", :with_stubbed_mailer do
-    # The audit activity requires pretty_id to be set on the Investigation
-    let(:investigation) { create(:allegation) }
-
-    it "creates an activity" do
-      expect { corrective_action.save }.to change { AuditActivity::CorrectiveAction::Add.count }.by(1)
     end
   end
 end
