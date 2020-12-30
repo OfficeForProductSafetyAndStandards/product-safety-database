@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2020_12_22_142417) do
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
+  create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
 
@@ -232,6 +233,8 @@ ActiveRecord::Schema.define(version: 2020_12_22_142417) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "gtin13", limit: 13
+    t.enum "has_markings", as: "has_markings_values"
+    t.text "markings", array: true
     t.string "name"
     t.text "number_of_affected_units"
     t.string "product_code"

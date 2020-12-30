@@ -12,6 +12,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Category" }, value: { text: category } },
       { key: { text: "Product subcategory" }, value: { text: subcategory } },
       { key: { text: "Product authenticity" }, value: { text: authenticity } },
+      { key: { text: "Product marking" }, value: { text: markings } },
       { key: { text: "Units affected" }, value: { text: units_affected } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
@@ -53,5 +54,13 @@ class ProductDecorator < ApplicationDecorator
     else
       I18n.t(".product.not_provided")
     end
+  end
+
+  def markings
+    return I18n.t(".product.not_provided") unless object.has_markings
+    return I18n.t(".product.unknown") if object.markings_unknown?
+    return I18n.t(".product.none") if object.markings_no?
+
+    object.markings.join(", ")
   end
 end

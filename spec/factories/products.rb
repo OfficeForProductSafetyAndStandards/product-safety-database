@@ -9,6 +9,8 @@ FactoryBot.define do
     batch_number { "123123123" }
     brand { Faker::Company.name }
     affected_units_status { "unknown" }
+    has_markings { Product.has_markings.keys.sample }
+    markings { [Product::MARKINGS.sample] }
 
     factory :product_iphone do
       product_code { 234 }
