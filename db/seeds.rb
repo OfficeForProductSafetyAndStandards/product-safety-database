@@ -498,6 +498,7 @@ if run_seeds
           # the change from user_roles to roles is reviewed. This line can be
           # removed once the seed JSON structure is updated safely
           user_attributes[:roles_attributes] = user_attributes[:user_roles_attributes]
+          user_attributes.delete(:user_roles_attributes)
 
           user_attributes
         end
