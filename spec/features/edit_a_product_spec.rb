@@ -204,6 +204,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
       find("#approx_units").set(new_number_of_affected_units)
     end
 
+    within_fieldset("Was the product placed on the market before 1 January 2021?") do
+      choose when_placed_on_market_answer(new_when_placed_on_market)
+    end
+
     fill_in "Product brand",            with: new_brand
     fill_in "Product name",             with: new_name
     fill_in "Barcode number",           with: new_gtin13

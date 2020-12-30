@@ -38,8 +38,8 @@ class ProductDecorator < ApplicationDecorator
       I18n.t(".product.before_2021")
     when "on_or_after_2021"
       I18n.t(".product.on_or_after_2021")
-    when "unknown"
-      I18n.t(".product.when_placed_on_market.unknown_date")
+    when "unknown_date"
+      I18n.t(".product.unknown_date")
     else
       I18n.t(".product.not_provided")
     end

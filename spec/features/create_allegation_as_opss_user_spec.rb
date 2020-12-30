@@ -142,7 +142,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:)
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:, when_placed_on_market:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
     within_fieldset("Was the product placed on the market before 1 January 2021?") { choose when_placed_on_market_answer(when_placed_on_market) }
@@ -168,7 +168,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:, when_placed_on_market:)
     expected_markings = case has_markings
                         when "Yes" then markings.join(", ")
                         when "No" then "None"
