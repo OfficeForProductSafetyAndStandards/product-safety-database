@@ -238,4 +238,70 @@ RSpec.describe User do
       expect(user).not_to be_mobile_number_change_allowed
     end
   end
+
+  describe "#has_role?" do
+    let(:team) { create(:team, roles: team_roles) }
+    let(:user) { create(:user, team: team, organisation: team.organisation, roles: user_roles) }
+    let(:team_roles) { [] }
+
+    subject(:result) { user.has_role?(:test) }
+
+    context "when the user has no roles" do
+      let(:user_roles) { [] }
+
+      it "returns false" do
+        expect(result).to be false
+      end
+
+      context "when the team roles include the specified role" do
+        let(:team_roles) { ["test"] }
+
+        it "returns true" do
+          expect(result).to be true
+        end
+      end
+
+      context "when the team roles do not include the specified role" do
+        let(:team_roles) { ["another_role"] }
+
+        it "returns false" do
+          expect(result).to be false
+        end
+      end
+    end
+
+    context "when the user has roles" do
+      context "when the user roles include the specified role" do
+        let(:user_roles) { ["test"] }
+
+        it "returns true" do
+          expect(result).to be true
+        end
+      end
+
+      context "when the user roles do not include the specified role" do
+        let(:user_roles) { ["another_role"] }
+
+        it "returns false" do
+          expect(result).to be false
+        end
+
+        context "when the team roles include the specified role" do
+          let(:team_roles) { ["test"] }
+
+          it "returns true" do
+            expect(result).to be true
+          end
+        end
+
+        context "when the team roles do not include the specified role" do
+          let(:team_roles) { ["another_role"] }
+
+          it "returns false" do
+            expect(result).to be false
+          end
+        end
+      end
+    end
+  end
 end

@@ -83,6 +83,10 @@ class User < ApplicationRecord
     has_role? :risk_level_validator
   end
 
+  def has_role?(role)
+    roles.exists?(name: role) || team.roles.exists?(name: role)
+  end
+
   def has_completed_registration?
     encrypted_password.present? && name.present? && mobile_number.present? && mobile_number_verified
   end
@@ -169,10 +173,6 @@ private
 
   def current_user?
     User.current&.id == id
-  end
-
-  def has_role?(role)
-    roles.exists?(name: role)
   end
 
   def password_required?
