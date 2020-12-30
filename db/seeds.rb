@@ -449,7 +449,7 @@ if run_seeds
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
-  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations"))
+  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
     # $ cf env REVIEW_APP_NAME
@@ -459,11 +459,11 @@ if run_seeds
     #     {
     #       "name": "Southampton Council",
     #       "teams_attributes": [
-    #          {
+    #         {
     #           "name": "Southampton Council",
     #           "team_recipient_email": "southampton@example.com",
     #           "users_attributes": [
-    #              {
+    #             {
     #               "account_activated": true,
     #               "email": "your.email@example.com",
     #               "mobile_number": "01234567890",
@@ -471,18 +471,22 @@ if run_seeds
     #               "name": "John Doe",
     #               "password": "super secret",
     #               "password_confirmation": "super secret",
-    #               "user_roles_attributes": [
-    #                { "name": "team_admin" },
+    #               "roles_attributes": [
+    #                 { "name": "team_admin" },
     #               ]
-    #              }
+    #             }
+    #           ],
+    #           "roles_attributes": [
+    #             { "name": "opss" },
     #           ]
-    #          }
+    #         }
     #       ]
     #     }
     #   ]
     # }
 
     Team.accepts_nested_attributes_for :users
+    Team.accepts_nested_attributes_for :roles
     User.accepts_nested_attributes_for :roles
 
     organisations.each do |organisation_attributes|
@@ -493,13 +497,6 @@ if run_seeds
       teams_attributes.map do |team_attributes|
         (team_attributes[:users_attributes] || []).map! do |user_attributes|
           user_attributes[:organisation] = organisation
-
-          # Temporary workaround to prevent other review apps breaking while
-          # the change from user_roles to roles is reviewed. This line can be
-          # removed once the seed JSON structure is updated safely
-          user_attributes[:roles_attributes] = user_attributes[:user_roles_attributes]
-          user_attributes.delete(:user_roles_attributes)
-
           user_attributes
         end
         organisation.teams.create! team_attributes
