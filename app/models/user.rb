@@ -16,7 +16,7 @@ class User < ApplicationRecord
   has_many :investigations, through: :owner_user_collaborations, dependent: :nullify, as: :user
   has_many :activities, through: :investigations
   has_many :user_sources, dependent: :destroy
-  has_many :user_roles, dependent: :destroy
+  has_many :roles, dependent: :destroy, as: :entity
   has_many :collaborations, dependent: :destroy, as: :collaborator
 
   belongs_to :team
@@ -68,7 +68,7 @@ class User < ApplicationRecord
   end
 
   def is_opss?
-    has_role? :opss_user
+    has_role? :opss
   end
 
   def is_team_admin?
@@ -81,6 +81,10 @@ class User < ApplicationRecord
 
   def can_validate_risk_level?
     has_role? :risk_level_validator
+  end
+
+  def has_role?(role)
+    roles.exists?(name: role) || team.roles.exists?(name: role)
   end
 
   def has_completed_registration?
@@ -169,10 +173,6 @@ private
 
   def current_user?
     User.current&.id == id
-  end
-
-  def has_role?(role)
-    user_roles.exists?(name: role)
   end
 
   def password_required?

@@ -16,7 +16,7 @@ class CreateOrganisationWithTeamAndAdminUser
         team: context.team
       )
 
-      context.user.user_roles.create!(name: "team_admin")
+      context.user.roles.create!(name: "team_admin")
 
       SendUserInvitationJob.perform_later(context.user.id)
     end

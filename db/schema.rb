@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_29_113650) do
+ActiveRecord::Schema.define(version: 2020_12_30_134737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -280,6 +280,17 @@ ActiveRecord::Schema.define(version: 2020_12_29_113650) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "entity_id"
+    t.string "entity_type", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entity_id", "entity_type"], name: "index_roles_on_entity_id_and_entity_type"
+    t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
+    t.index ["entity_id"], name: "index_roles_on_entity_id"
+  end
+
   create_table "sources", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -317,15 +328,6 @@ ActiveRecord::Schema.define(version: 2020_12_29_113650) do
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
     t.index ["product_id"], name: "index_tests_on_product_id"
-  end
-
-  create_table "user_roles", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["user_id", "name"], name: "index_user_roles_on_user_id_and_name", unique: true
-    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -24,6 +24,7 @@ FactoryBot.define do
 
     transient do
       roles { [] }
+      team_roles { [] }
     end
 
     trait :activated do
@@ -70,13 +71,17 @@ FactoryBot.define do
 
     trait :opss_user do
       transient do
-        roles { %i[opss_user] }
+        team_roles { %i[opss] }
       end
     end
 
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
-        create(:user_role, name: role, user: user)
+        create(:role, name: role, entity: user)
+      end
+
+      evaluator.team_roles.each do |role|
+        create(:role, name: role, entity: user.team)
       end
     end
   end
