@@ -61,6 +61,8 @@
   id: "name",
   hint: { text: "Include model name and model number, for example ‘PlayStation 5’" } %>
 
+<%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
+
 <%= render "form_components/govuk_input",
   key: :gtin13,
   form: form,

@@ -27,10 +27,11 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(errors_list[0].text).to eq "Category cannot be blank"
     expect(errors_list[1].text).to eq "Subcategory cannot be blank"
     expect(errors_list[2].text).to eq "You must state whether the product is a counterfeit"
-    expect(errors_list[3].text).to eq "Select yes if the product has UKCA, UKNI or CE marking"
-    expect(errors_list[4].text).to eq "You must state how many units are affected"
-    expect(errors_list[5].text).to eq "Name cannot be blank"
-    expect(errors_list[6].text).to eq "Enter a valid barcode number"
+    expect(errors_list[3].text).to eq "Select yes if the product was placed on the market before 1 January 2021"
+    expect(errors_list[4].text).to eq "Select yes if the product has UKCA, UKNI or CE marking"
+    expect(errors_list[5].text).to eq "You must state how many units are affected"
+    expect(errors_list[6].text).to eq "Name cannot be blank"
+    expect(errors_list[7].text).to eq "Enter a valid barcode number"
 
     select attributes[:category], from: "Product category"
 
@@ -41,6 +42,10 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     fill_in "Other product identifiers",         with: attributes[:product_code]
     fill_in "Batch number",                      with: attributes[:batch_number]
     fill_in "Webpage",                           with: attributes[:webpage]
+
+    within_fieldset("Was the product placed on the market before 1 January 2021?") do
+      choose when_placed_on_market_answer(attributes[:when_placed_on_market])
+    end
 
     within_fieldset("Is the product counterfeit?") do
       choose counterfeit_answer(attributes[:authenticity])
@@ -87,6 +92,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_summary_item(key: "Webpage",                   value: attributes[:webpage])
     expect(page).to have_summary_item(key: "Country of origin",         value: attributes[:country])
     expect(page).to have_summary_item(key: "Description",               value: attributes[:description])
+    expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key))
   end
 
   scenario "Not being able to add a product to another team’s case" do
