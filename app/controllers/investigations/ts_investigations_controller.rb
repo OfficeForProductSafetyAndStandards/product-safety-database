@@ -185,14 +185,15 @@ private
   end
 
   def set_corrective_action
-    @corrective_action = @investigation.corrective_actions.build(corrective_action_params)
-    @corrective_action.set_dates_from_params(params[:corrective_action])
-    @corrective_action.product = product
-    @file_blob, * = load_file_attachments :corrective_action
-    if @file_blob && @corrective_action.related_file?
-      @corrective_action.documents.attach(@file_blob)
-    end
-    set_repeat_step(:corrective_action)
+    @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
+    @corrective_action_form.load_document_file
+    @product = product
+    # @corrective_action.product = product
+    # @file_blob, * = load_file_attachments :corrective_action
+    # if @file_blob && @corrective_action.related_file?
+    #   @corrective_action.documents.attach(@file_blob)
+    # end
+    set_repeat_step(:corrective_action_form)
   end
 
   def set_test
@@ -389,21 +390,20 @@ private
   end
 
   def corrective_action_valid?
-    @corrective_action.valid?
-    repeat_step_valid?(@corrective_action)
-    @corrective_action.errors.empty?
+    @corrective_action_form.valid?
+    repeat_step_valid?(@corrective_action_form)
+    @corrective_action_form.errors.empty?
   end
 
   def store_corrective_action
     return if @skip_step
     return unless corrective_action_valid?
 
-    if @corrective_action.valid? && @file_blob
-      update_blob_metadata @file_blob, corrective_action_file_metadata
-      @file_blob.save! if @file_blob
+    if @corrective_action_form.valid?
+      attributes = @corrective_action_form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
+      session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document.id }
     end
-    session[:corrective_actions] << { corrective_action: @corrective_action.attributes, file_blob_id: @file_blob&.id }
-    session.delete :file
+
     session[further_key(step)] = @repeat_step
   end
 
@@ -549,7 +549,8 @@ private
 
       return false if risk_assessment_form_valid || reapeat_step_valid
     when :corrective_action
-      return false if @corrective_action.errors.any?
+      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params).tap(&:valid?)
+      return false if @corrective_action_form.errors.any?
     when :test_results
       return @test_result_form.valid?
     when :reference_number
@@ -616,13 +617,10 @@ private
 
   def save_corrective_actions
     session[:corrective_actions].each do |session_corrective_action|
-      action_record = CorrectiveAction.new(session_corrective_action[:corrective_action])
-      action_record.product = @product
-      file_blob = ActiveStorage::Blob.find_by(id: session_corrective_action[:file_blob_id])
-      if file_blob
-        attach_blobs_to_list(file_blob, action_record.documents)
-      end
-      @investigation.corrective_actions << action_record
+      result = AddCorrectiveActionToCase.call!(
+        session_corrective_action[:corrective_action]
+          .merge(product_id: @product.id, user: current_user, investigation: @investigation)
+      )
     end
   end
 

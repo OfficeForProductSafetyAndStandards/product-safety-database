@@ -35,9 +35,9 @@ module CorrectiveActionsConcern
   end
 
   def corrective_action_request_params
-    return {} if params[:corrective_action].blank?
+    return {} if params[:corrective_action_form].blank?
 
-    params.require(:corrective_action).permit(
+    params.require(:corrective_action_form).permit(
       :product_id,
       :business_id,
       :legislation,
@@ -48,6 +48,8 @@ module CorrectiveActionsConcern
       :measure_type,
       :duration,
       :geographic_scope,
+      :has_online_recall_information,
+      file: %i[file description],
       date_decided: %i[day month year]
     )
   end

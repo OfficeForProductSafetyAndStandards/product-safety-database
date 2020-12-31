@@ -1,7 +1,7 @@
 <%= render "repeatable_info",
            title: "Record corrective action",
-           model: @corrective_action,
-           scope: :corrective_action,
+           model: @corrective_action_form,
+           scope: :corrective_action_form,
            other_text: "Are there other actions to report?",
            hide_break: false,
            error_order: %i[action date_decided legislation measure_type duration geographic_scope related_file further_corrective_action],
@@ -9,14 +9,14 @@
 
   <%= render "investigations/record_corrective_actions/form",
              form: form,
-             corrective_action: @corrective_action,
+             corrective_action: @corrective_action_form,
              investigation: @investigation,
-             file_blob: @file_blob,
+             file_blob: @corrective_action_form.document,
              allow_product_linking: false,
              allow_business_linking: false %>
 
   <% file_field = capture do %>
-    <%= render "related_attachment_fields", form: form, file_blob: @file_blob, attachment_name: :file %>
+    <%= render "related_attachment_fields", form: form, file_blob: @corrective_action_form.document, attachment_name: :file %>
   <% end %>
   <%= render "form_components/govuk_radios",
              form: form,

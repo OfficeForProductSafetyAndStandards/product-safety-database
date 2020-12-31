@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notification do
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }
@@ -466,7 +466,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_case_activity_page_to_show_corrective_action(action)
     item = page.find("h3", text: action[:other_action]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
-    expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
+    save_and_open_page
+    expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk_date)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
     expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
@@ -604,8 +605,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     select with[:geographic_scope], from: "What is the geographic scope of the action?"
-
-    choose "corrective_action_further_corrective_action_yes"
+    within_fieldset("Are there other actions to report?") do
+      choose "Yes"
+    end
     click_button "Continue"
   end
 
