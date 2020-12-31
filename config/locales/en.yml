@@ -279,9 +279,11 @@ en:
               inclusion: "You must state whether the product is a counterfeit"
             product_category:
               blank: "Enter a valid product category"
-            gtin13:
+            barcode:
               invalid: "Enter a valid barcode number"
               wrong_length: "Enter a valid barcode number"
+              only_integer: "Enter a valid barcode number"
+              not_a_number: "Enter a valid barcode number"
             affected_units_status:
               inclusion: "You must state how many units are affected"
             approx_units:
