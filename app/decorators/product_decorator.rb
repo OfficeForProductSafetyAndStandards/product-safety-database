@@ -16,6 +16,7 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Units affected" }, value: { text: units_affected } },
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
+      { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
       { key: { text: "Barcode number" }, value: { text: gtin13 } },
       { key: { text: "Batch number" }, value: { text: batch_number } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
@@ -29,6 +30,19 @@ class ProductDecorator < ApplicationDecorator
 
   def authenticity
     I18n.t(object.authenticity || :missing, scope: Product.model_name.i18n_key)
+  end
+
+  def when_placed_on_market
+    case object.when_placed_on_market
+    when "before_2021"
+      I18n.t(".product.before_2021")
+    when "on_or_after_2021"
+      I18n.t(".product.on_or_after_2021")
+    when "unknown_date"
+      I18n.t(".product.unknown_date")
+    else
+      I18n.t(".product.not_provided")
+    end
   end
 
   def subcategory_and_category_label

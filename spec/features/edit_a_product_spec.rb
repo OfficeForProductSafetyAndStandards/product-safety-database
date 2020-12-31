@@ -44,6 +44,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_product_code)      { Faker::Barcode.issn }
   let(:new_webpage)           { Faker::Internet.url }
   let(:new_country_of_origin) { "South Korea" }
+  let(:new_when_placed_on_market) { (Product.when_placed_on_markets.keys - [product.when_placed_on_market]).sample }
 
   before { sign_in user }
 
@@ -87,6 +88,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
 
     select new_product_category, from: "Product category"
     fill_in "Product subcategory", with: new_subcategory
+
+    within_fieldset "Was the product placed on the market before 1 January 2021?" do
+      choose when_placed_on_market_answer(new_when_placed_on_market)
+    end
 
     within_fieldset "Is the product counterfeit?" do
       choose counterfeit_answer(new_authenticity)
@@ -199,6 +204,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
       find("#approx_units").set(new_number_of_affected_units)
     end
 
+    within_fieldset("Was the product placed on the market before 1 January 2021?") do
+      choose when_placed_on_market_answer(new_when_placed_on_market)
+    end
+
     fill_in "Product brand",            with: new_brand
     fill_in "Product name",             with: new_name
     fill_in "Barcode number",           with: new_gtin13
@@ -231,6 +240,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_summary_item(key: "Webpage",                   value: new_webpage)
     expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
     expect(page).to have_summary_item(key: "Description",               value: new_description)
+    expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(new_when_placed_on_market, scope: Product.model_name.i18n_key))
   end
 
   scenario "upload an document" do

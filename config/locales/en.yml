@@ -295,6 +295,8 @@ en:
               inclusion: "Select yes if the product has UKCA, UKNI or CE marking"
             markings:
               blank: "Select the product marking(s)"
+            when_placed_on_market:
+              blank: "Select yes if the product was placed on the market before 1 January 2021"
 
         risk_assessment_form:
           attributes:
@@ -507,6 +509,9 @@ en:
     not_relevant: "Not relevant"
     not_provided: "Not provided"
     none: "None"
+    before_2021: "Before 1 January 2021"
+    on_or_after_2021: "On or after 1 January 2021"
+    unknown_date: "Unable to ascertain"
 
   corrective_action:
     attributes:

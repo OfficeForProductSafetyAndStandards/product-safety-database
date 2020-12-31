@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2020_12_29_113650) do
   create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
+  create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -248,6 +249,7 @@ ActiveRecord::Schema.define(version: 2020_12_29_113650) do
     t.string "subcategory"
     t.datetime "updated_at", null: false
     t.string "webpage"
+    t.enum "when_placed_on_market", as: "when_placed_on_markets"
   end
 
   create_table "rapex_imports", id: :serial, force: :cascade do |t|
