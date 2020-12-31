@@ -611,7 +611,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     select with[:geographic_scope], from: "What is the geographic scope of the action?"
 
-    choose "corrective_action_further_corrective_action_yes"
+    choose "further_corrective_action"
     click_button "Continue"
   end
 
