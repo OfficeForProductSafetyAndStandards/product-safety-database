@@ -188,11 +188,6 @@ private
     @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
     @corrective_action_form.load_document_file
     @product = product
-    # @corrective_action.product = product
-    # @file_blob, * = load_file_attachments :corrective_action
-    # if @file_blob && @corrective_action.related_file?
-    #   @corrective_action.documents.attach(@file_blob)
-    # end
     set_repeat_step(:corrective_action_form)
   end
 
@@ -550,7 +545,7 @@ private
       return false if risk_assessment_form_valid || reapeat_step_valid
     when :corrective_action
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params).tap(&:valid?)
-      return false if @corrective_action_form.errors.any?
+      return false if @corrective_action_form.invalid?
     when :test_results
       return @test_result_form.valid?
     when :reference_number
@@ -617,7 +612,7 @@ private
 
   def save_corrective_actions
     session[:corrective_actions].each do |session_corrective_action|
-      result = AddCorrectiveActionToCase.call!(
+      AddCorrectiveActionToCase.call!(
         session_corrective_action[:corrective_action]
           .merge(product_id: @product.id, user: current_user, investigation: @investigation)
       )
