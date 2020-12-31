@@ -466,8 +466,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def expect_case_activity_page_to_show_corrective_action(action)
     item = page.find("h3", text: action[:other_action]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
-    save_and_open_page
-    expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk_date)}")
+    expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
     expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
