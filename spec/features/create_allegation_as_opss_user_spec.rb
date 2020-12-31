@@ -29,7 +29,8 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       authenticity: Product.authenticities.keys.without("missing").sample,
       affected_units_status: "approx",
       has_markings: %w[Yes No Unknown].sample,
-      markings: [Product::MARKINGS.sample]
+      markings: [Product::MARKINGS.sample],
+      when_placed_on_market: Product.when_placed_on_markets.keys.without("missing").sample
     }
   end
 
@@ -141,9 +142,10 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:)
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:, when_placed_on_market:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
+    within_fieldset("Was the product placed on the market before 1 January 2021?") { choose when_placed_on_market_answer(when_placed_on_market) }
     fill_in "Product subcategory", with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
 
@@ -166,7 +168,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:, when_placed_on_market:)
     expected_markings = case has_markings
                         when "Yes" then markings.join(", ")
                         when "No" then "None"
@@ -183,6 +185,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
     expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21")
+    expect(page.find("dt", text: "When placed on market")).to have_sibling("dd", text: I18n.t(when_placed_on_market, scope: Product.model_name.i18n_key))
   end
 
   def expect_details_on_summary_page

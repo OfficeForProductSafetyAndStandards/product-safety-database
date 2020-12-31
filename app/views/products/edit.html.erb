@@ -6,7 +6,7 @@
 <%= form_with model: @product_form, scope: :product, url: product_path(@product_form.id), method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings affected_units_status number_of_affected_units name]) %>
+      <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings when_placed_on_market affected_units_status number_of_affected_units name]) %>
     </div>
   </div>
 
