@@ -20,7 +20,7 @@ RSpec.describe "Validate risk level", type: :request, with_stubbed_mailer: true,
 
   context "when the user has the `risk_level_validator` role", :with_errors_rendered do
     before do
-      other_user.user_roles.create!(name: "risk_level_validator")
+      other_user.roles.create!(name: "risk_level_validator")
       sign_in other_user
       put investigation_risk_validations_url(investigation.pretty_id), params: params
     end
