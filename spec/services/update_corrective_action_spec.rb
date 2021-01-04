@@ -32,7 +32,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
       form.assign_attributes(
         date_decided: new_date_decided,
         other_action: new_other_action,
-        action: new_action,
+        action: new_summary,
         product_id: corrective_action.product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
@@ -77,7 +77,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         let(:new_document)                      { nil }
         let(:file_form)                         { {} }
         let(:existing_document_file_id)         { corrective_action.document_blob&.signed_id }
-        let(:new_action)                        { corrective_action.action }
+        let(:new_summary)                       { corrective_action.action }
         let(:new_other_action)                  { corrective_action.other_action }
         let(:new_geographic_scope)              { corrective_action.geographic_scope }
         let(:new_duration)                      { corrective_action.duration }

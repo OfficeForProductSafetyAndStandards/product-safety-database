@@ -12,15 +12,16 @@ class UpdateCorrectiveAction
     corrective_action.transaction do
       corrective_action.document.detach unless related_file
       replace_attached_file             if file_changed?
-      break                             if no_changes?
 
-      corrective_action.save!
-      update_document_description!
-      create_audit_activity_for_corrective_action_updated!
-      send_notification_email
+      if any_changes?
+        corrective_action.save!
+        update_document_description!
+        create_audit_activity_for_corrective_action_updated!
+        send_notification_email
 
-      # trigger re-index of to for the model to pick up children relationships saved after the model
-      investigation.reload.__elasticsearch__.index_document
+        # trigger re-index of to for the model to pick up children relationships saved after the model
+        investigation.reload.__elasticsearch__.index_document
+      end
     end
   end
 
@@ -40,10 +41,6 @@ private
       other_action: other_action,
       product_id: product_id
     )
-  end
-
-  def no_changes?
-    !any_changes?
   end
 
   def any_changes?

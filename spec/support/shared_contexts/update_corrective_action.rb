@@ -32,8 +32,8 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
   let(:new_action) { CorrectiveAction.actions[new_summary] }
   let(:new_other_action) { Faker::Hipster.paragraph(sentence_count: 3) }
   let(:new_file_description) { "new corrective action file description" }
-  let(:new_file) { fixture_file_upload("files/corrective_action.txt") }
-  let(:new_document)                      { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
+  let(:new_file) { fixture_file_upload("corrective_action.txt") }
+  let(:new_document)                      { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:new_has_online_recall_information) { Faker::Internet.url(host: "example.com") }
   let(:existing_document_file_id) { nil }
   let(:related_file)              { false }
