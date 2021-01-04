@@ -1,7 +1,5 @@
 module Investigations
   class CorrectiveActionsController < ApplicationController
-    include CorrectiveActionsConcern
-
     def new
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize investigation, :view_non_protected_details?

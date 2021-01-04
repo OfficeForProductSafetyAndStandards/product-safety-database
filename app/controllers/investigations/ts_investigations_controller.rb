@@ -3,7 +3,6 @@ class Investigations::TsInvestigationsController < ApplicationController
   include CountriesHelper
   include ProductsHelper
   include BusinessesHelper
-  include CorrectiveActionsConcern
   include FileConcern
   include FlowWithCoronavirusForm
   set_attachment_names :file, :risk_assessment_file
@@ -707,6 +706,30 @@ private
       :existing_document_file_id,
       date: %i[day month year],
       document_form: %i[description file]
+    )
+  end
+
+  def corrective_action_params
+    corrective_action_session_params.merge(corrective_action_request_params)
+  end
+
+  def corrective_action_request_params
+    return {} if params[:corrective_action_form].blank?
+
+    params.require(:corrective_action_form).permit(
+      :product_id,
+      :business_id,
+      :legislation,
+      :action,
+      :other_action,
+      :details,
+      :related_file,
+      :measure_type,
+      :duration,
+      :geographic_scope,
+      :has_online_recall_information,
+      file: %i[file description],
+      date_decided: %i[day month year]
     )
   end
 
