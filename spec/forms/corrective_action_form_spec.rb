@@ -19,7 +19,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     )
   end
 
-  let(:file) { fixture_file_upload(file_fixture("files/corrective_action.txt")) }
+  let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:file_description) { Faker::Hipster.sentence }
   let(:file_form) { { file: file, description: file_description } }
   let(:action) { (CorrectiveAction.actions.keys - %w[other]).sample }

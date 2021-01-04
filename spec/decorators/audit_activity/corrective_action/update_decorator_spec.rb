@@ -6,15 +6,15 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   subject(:decorated_activity) { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update").decorate }
 
   let(:new_file_description)      { "new corrective action file description" }
-  let(:new_filename)              { "files/corrective_action.txt" }
-  let(:new_document)              { ActiveStorage::Blob.create_after_upload!(io: fixture_file_upload(file_fixture(new_filename)), filename: new_filename, content_type: "plain/text") }
+  let(:new_filename)              { "corrective_action.txt" }
+  let(:new_document)              { fixture_file_upload(file_fixture(new_filename)) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
     corrective_action_form.tap { |form|
       form.assign_attributes(
         date_decided: new_date_decided,
         other_action: new_other_action,
-        action: new_action,
+        action: new_summary,
         product_id: corrective_action.product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         details: new_details,
         business_id: corrective_action.business_id,
         existing_document_file_id: existing_document_file_id,
-        related_file: related_file,
+        related_file: true,
         file: file_form
       )
     }.serializable_hash
