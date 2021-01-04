@@ -23,7 +23,7 @@ RSpec.feature "Validate risk level", :with_stubbed_elasticsearch, :with_stubbed_
         collaboration_class: Collaboration::Access::Edit
       )
 
-      user.user_roles.create!(name: "risk_level_validator")
+      user.roles.create!(name: "risk_level_validator")
       sign_in user
       delivered_emails.clear
     end

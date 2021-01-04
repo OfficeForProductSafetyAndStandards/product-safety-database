@@ -22,6 +22,7 @@ if run_seeds
 
   organisation = Organisation.create!(name: "Seed Organisation")
   team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation)
+  team.roles.create!(name: "opss")
 
   user = User.find_by(email: "seed_user@example.com") || User.create!(
     name: "Seed User",
@@ -31,10 +32,6 @@ if run_seeds
     organisation: organisation,
     team: team,
   )
-
-  %i[opss_user user].each do |role|
-    UserRole.find_or_create_by!(user: user, name: role)
-  end
 
   # First investigation
   investigation = Investigation::Allegation.new(
@@ -452,7 +449,7 @@ if run_seeds
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
-  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations"))
+  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
     # $ cf env REVIEW_APP_NAME
@@ -462,11 +459,11 @@ if run_seeds
     #     {
     #       "name": "Southampton Council",
     #       "teams_attributes": [
-    #          {
+    #         {
     #           "name": "Southampton Council",
     #           "team_recipient_email": "southampton@example.com",
     #           "users_attributes": [
-    #              {
+    #             {
     #               "account_activated": true,
     #               "email": "your.email@example.com",
     #               "mobile_number": "01234567890",
@@ -474,19 +471,23 @@ if run_seeds
     #               "name": "John Doe",
     #               "password": "super secret",
     #               "password_confirmation": "super secret",
-    #               "user_roles_attributes": [
-    #                { "name": "team_admin" },
+    #               "roles_attributes": [
+    #                 { "name": "team_admin" },
     #               ]
-    #              }
+    #             }
+    #           ],
+    #           "roles_attributes": [
+    #             { "name": "opss" },
     #           ]
-    #          }
+    #         }
     #       ]
     #     }
     #   ]
     # }
 
     Team.accepts_nested_attributes_for :users
-    User.accepts_nested_attributes_for :user_roles
+    Team.accepts_nested_attributes_for :roles
+    User.accepts_nested_attributes_for :roles
 
     organisations.each do |organisation_attributes|
       organisation_attributes.deep_symbolize_keys!
@@ -504,8 +505,13 @@ if run_seeds
   else
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
     trading_standards = Organisation.create!(name: "Trading Standards")
+
     enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+    enforcement.roles.create!(name: "opss")
+
     operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
+    operational_support.roles.create!(name: "opss")
+
     ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards)
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
@@ -513,7 +519,7 @@ if run_seeds
     Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-    user1 = User.create!(
+    User.create!(
       name: "Test User",
       email: "user@example.com",
       password: "testpassword",
@@ -523,6 +529,7 @@ if run_seeds
       team: enforcement,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+
     user2 = User.create!(
       name: "Team Admin",
       email: "admin@example.com",
@@ -533,6 +540,8 @@ if run_seeds
       team: operational_support,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+    user2.roles.create!(name: "team_admin")
+
     User.create!(
       name: "TS User",
       email: "ts_user@example.com",
@@ -543,13 +552,6 @@ if run_seeds
       team: ts_team,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
-
-    %i[opss_user user].each do |role|
-      UserRole.create!(user: user1, name: role)
-    end
-    %i[team_admin opss_user user].each do |role|
-      UserRole.create!(user: user2, name: role)
-    end
 
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)

@@ -19,7 +19,7 @@
                  form: form,
                  key: further_key,
                  fieldset: { legend: { text: other_text, classes: "govuk-fieldset__legend--m" } },
-                 items: [{ text: "Yes", value: "Yes", checked: @repeat_step },
+                 items: [{ text: "Yes", value: "Yes", checked: @repeat_step, id: further_key.to_s },
                          { text: "No", value: "No", checked: (@repeat_step == false) }] %>
       <%= govukButton(text: "Continue") %>
       <div class="govuk-body">

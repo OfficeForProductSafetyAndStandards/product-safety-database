@@ -11,7 +11,7 @@
 <%= form_with model: @product_form, scope: :product, url: investigation_products_path(@investigation), local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@product_form.errors, %i[category subcategory authenticity when_placed_on_market has_markings markings affected_units_status number_of_affected_units name gtin13]) %>
+      <%= error_summary(@product_form.errors, %i[category subcategory authenticity has_markings markings affected_units_status number_of_affected_units name when_placed_on_market gtin13]) %>
       <%= render "investigation_heading", investigation: @investigation %>
 
       <h2 class="govuk-heading-m">Add product</h2>
