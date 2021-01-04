@@ -81,7 +81,8 @@ class CorrectiveActionForm
   end
 
   def file=(document_params)
-    document_params.symbolize_keys
+    document_params = document_params.symbolize_keys
+
     return unless related_file
 
     if document_params.key?(:file)
