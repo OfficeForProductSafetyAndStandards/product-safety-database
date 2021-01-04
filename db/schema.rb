@@ -131,10 +131,10 @@ ActiveRecord::Schema.define(version: 2020_12_30_134737) do
     t.text "details"
     t.string "duration"
     t.string "geographic_scope"
-    t.string "has_online_recall_information"
     t.integer "investigation_id"
     t.string "legislation"
     t.string "measure_type"
+    t.string "online_recall_information"
     t.text "other_action"
     t.integer "product_id"
     t.datetime "updated_at", null: false

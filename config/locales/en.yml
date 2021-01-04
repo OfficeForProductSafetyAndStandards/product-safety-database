@@ -425,6 +425,10 @@ en:
               inclusion: "Select type of corrective action"
             other_action:
               blank: "Enter type of corrective action"
+            has_online_recall_information:
+              inclusion: "Select yes if the business responsible has published recall information online"
+            online_recall_information:
+              blank: "Enter the webpage where the business responsible published recall information"
         risk_validation_form:
           attributes:
             risk_validation_change_rationale:

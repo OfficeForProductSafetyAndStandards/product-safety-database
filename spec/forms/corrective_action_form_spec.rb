@@ -15,6 +15,8 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       related_file: related_file,
       product_id: create(:product).id,
       business_id: create(:business).id,
+      has_online_recall_information: has_online_recall_information,
+      online_recall_information: online_recall_information,
       file: file_form
     )
   end
@@ -32,6 +34,8 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { false }
   let(:investigation) { build(:allegation) }
+  let(:has_online_recall_information) { false }
+  let(:online_recall_information) { nil }
 
   describe "#valid?" do
     context "with valid input" do
@@ -159,6 +163,42 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       context "with an attached file" do
         it "returns true" do
           expect(corrective_action_form).to be_valid
+        end
+      end
+    end
+
+    describe "recall information" do
+      context "when has recall information has not been provided" do
+        let(:has_online_recall_information) { nil }
+
+        it "is invalid and has the correct error message", :aggregate_failures do
+          expect(corrective_action_form).to be_invalid
+          expect(corrective_action_form.errors.full_messages).to eq(["Select yes if the business responsible has published recall information online"])
+        end
+      end
+
+      context "when has online recall information has been provided" do
+        context "with no recall information" do
+          let(:has_online_recall_information) { false }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "with recall information" do
+          let(:has_online_recall_information) { true }
+
+          context "when recall information is not provided" do
+            it "is invalid and has the correct error message", :aggregate_failures do
+              expect(corrective_action_form).to be_invalid
+              expect(corrective_action_form.errors.full_messages).to eq(["Enter the webpage where the business responsible published recall information"])
+            end
+          end
+
+          context "when recall information is provided" do
+            let(:online_recall_information) { Faker::Hipster.sentence }
+
+            it { is_expected.to be_valid }
+          end
         end
       end
     end

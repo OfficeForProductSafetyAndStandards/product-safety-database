@@ -19,6 +19,7 @@ class CorrectiveActionForm
   attribute :geographic_scope
   attribute :other_action
   attribute :has_online_recall_information, :boolean, default: nil
+  attribute :online_recall_information
   attribute :related_file, :boolean
   attribute :document
   attribute :existing_document_file_id
@@ -33,6 +34,8 @@ class CorrectiveActionForm
   validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
   validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
+  validates :has_online_recall_information, inclusion: { in: [true, false] }
+  validate :online_recall_information_validation
 
   validates :measure_type, presence: true
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
@@ -118,6 +121,12 @@ private
   def related_file_attachment_validation
     if related_file && document.nil?
       errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
+    end
+  end
+
+  def online_recall_information_validation
+    if has_online_recall_information && online_recall_information.blank?
+      errors.add(:online_recall_information, :blank)
     end
   end
 end
