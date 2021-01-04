@@ -74,14 +74,14 @@ class CorrectiveActionForm
 
   def load_document_file
     if existing_document_file_id.present? && document.nil?
-      self.document = ActiveStorage::Blob.find_signed(existing_document_file_id)
+      self.document = ActiveStorage::Blob.find_signed!(existing_document_file_id)
       self.filename = document.filename.to_s
       self.file_description = document.metadata["description"]
     end
   end
 
   def file=(document_params)
-    document_params.symbolize_keys!
+    document_params.symbolize_keys
     return unless related_file
 
     if document_params.key?(:file)

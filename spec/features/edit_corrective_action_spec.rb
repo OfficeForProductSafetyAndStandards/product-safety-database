@@ -69,6 +69,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       within_fieldset("What action is being taken?") do
         choose new_action
+        fill_in "Other action", with: ""
       end
 
       click_on "Update corrective action"
