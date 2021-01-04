@@ -15,7 +15,9 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            product_code: product_code,
            webpage: webpage,
            country_of_origin: country_of_origin,
-           has_markings: "markings_yes")
+           has_markings: "markings_yes",
+           customs_code: "initial, customs, code123"
+         )
   end
   let(:product_with_no_affected_units_status) do
     create(:product,
@@ -45,6 +47,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
   let(:new_webpage)           { Faker::Internet.url }
   let(:new_country_of_origin) { "South Korea" }
   let(:new_when_placed_on_market) { (Product.when_placed_on_markets.keys - [product.when_placed_on_market]).sample }
+  let(:new_customs_code) { "12345678, abc, 987" }
 
   before { sign_in user }
 
@@ -119,6 +122,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     fill_in "Webpage",                  with: new_webpage
     select new_country_of_origin,       from: "Country of origin"
     fill_in "Description of product",   with: new_description
+    fill_in "Customs code",             with: new_customs_code
 
     click_on "Save product"
 
@@ -143,6 +147,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_summary_item(key: "Webpage",                   value: new_webpage)
     expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
     expect(page).to have_summary_item(key: "Description",               value: new_description)
+    expect(page).to have_summary_item(key: "Customs code",              value: new_customs_code)
   end
 
   it "allows to edit a product without an affected_units_status" do
