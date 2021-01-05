@@ -3,7 +3,7 @@ class UpdateCorrectiveAction
   include EntitiesToNotify
 
   delegate :investigation, to: :corrective_action
-  delegate :user, :corrective_action, :action, :business_id, :date_decided, :details, :duration, :geographic_scope, :has_online_recall_information, :legislation, :measure_type, :other_action, :product_id, :related_file, :document, :file_description, :changes, to: :context
+  delegate :user, :corrective_action, :action, :business_id, :date_decided, :details, :duration, :geographic_scope, :online_recall_information, :legislation, :measure_type, :other_action, :product_id, :related_file, :document, :file_description, :changes, to: :context
 
   def call
     validate_inputs!
@@ -35,7 +35,7 @@ private
       details: details,
       duration: duration,
       geographic_scope: geographic_scope,
-      has_online_recall_information: has_online_recall_information,
+      online_recall_information: online_recall_information,
       legislation: legislation,
       measure_type: measure_type,
       other_action: other_action,

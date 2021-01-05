@@ -62,7 +62,7 @@ class CorrectiveActionForm
     duration
     geographic_scope
     other_action
-    has_online_recall_information
+    online_recall_information
   ].freeze
 
   def self.from(corrective_action)
