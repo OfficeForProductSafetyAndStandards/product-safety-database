@@ -5,6 +5,7 @@ class TestResultForm
   include ActiveModel::Validations::Callbacks
   include ActiveModel::Dirty
   include SanitizationHelper
+  include HasDocumentAttachedConcern
 
   attribute :id, :integer
   attribute :date, :govuk_date
@@ -41,14 +42,6 @@ class TestResultForm
       test_result_form.existing_document_file_id = test_result.document.signed_id
       test_result_form.load_document_file
       test_result_form.changes_applied
-    end
-  end
-
-  def load_document_file
-    if existing_document_file_id.present? && document.nil?
-      self.document = ActiveStorage::Blob.find_signed!(existing_document_file_id)
-      self.filename = document.filename.to_s
-      self.file_description = document.metadata["description"]
     end
   end
 
