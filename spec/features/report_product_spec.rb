@@ -111,7 +111,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           has_markings: "markings_yes",
           markings: [Product::MARKINGS.sample],
           when_placed_on_market: "Yes",
-          customs_code: 'abc, def, 1234567'
+          customs_code: "abc, def, 1234567"
         }
       end
       let(:coronavirus) { false }
