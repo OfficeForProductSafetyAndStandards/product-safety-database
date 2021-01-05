@@ -16,6 +16,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:measure_type) { "Mandatory" }
   let(:duration) { "Permanent" }
   let(:geographic_scope) { "National" }
+  let(:online_recall_information) { Faker::Internet.url(host: "example.com") }
 
   context "when the viewing user only has read only access" do
     scenario "cannot add supporting information" do
@@ -139,6 +140,11 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     fill_in "Year",    with: date.year  if date
 
     select legislation, from: "Under which legislation?"
+
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+      fill_in "Online recall information", with: online_recall_information, visible: false
+    end
 
     within_fieldset "Has the business responsible published product recall information online?" do
       choose "Yes"

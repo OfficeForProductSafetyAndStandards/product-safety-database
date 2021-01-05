@@ -62,7 +62,12 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
 <%= form.govuk_radios :has_online_recall_information,
    legend: t(".has_online_recall_information"),
  items: [
-   { text: "Yes",          value: "yes", conditional: { html: form.govuk_input(:online_recall_information, hint: t(".online_recall_information_hint"), label_classes: "govuk-visually-hidden", label: t(".online_recall_information_label"))} },
+   {
+     text: "Yes",
+     value: "yes",
+     conditional: { html: form.govuk_input(:online_recall_information, hint: t(".online_recall_information_hint"), label_classes: "govuk-visually-hidden", label: t(".online_recall_information_label"))},
+     checked: form.object.online_recall_information.present?
+   },
    { text: "No",           value: "off" },
    { text: "Not relevant", value: nil }
  ] %>

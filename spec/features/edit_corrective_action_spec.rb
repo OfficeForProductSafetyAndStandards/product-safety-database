@@ -45,6 +45,12 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       select business_two.trading_name,     from: "Business"
       select new_geographic_scope,          from: "What is the geographic scope of the action?"
       fill_in "Further details (optional)", with: new_details
+
+      within_fieldset "Has the business responsible published product recall information online?" do
+        choose new_has_online_recall_information ? "Yes" : "No"
+        fill_in "Online recall information", with: new_online_recall_information, visible: false
+      end
+
       within_fieldset "Is the corrective action mandatory?" do
         choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
       end
