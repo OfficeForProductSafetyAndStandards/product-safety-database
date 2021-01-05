@@ -101,6 +101,13 @@
   label: { text: "Country of origin", classes: label_class },
   hint: { text: "Where the product was manufactured" } %>
 
+  <%= render "form_components/govuk_input",
+    key: :customs_code,
+    form: form,
+    classes: "app-!-max-width-three-quarters",
+    label: { text: "Customs code", classes: label_class },
+    hint: { text: "For example, CN code (8 digits) or TARIC code (10 digits). Use a comma to separate multiple codes" } %>
+
 <%= render "form_components/govuk_textarea",
   key: :description,
   form: form,

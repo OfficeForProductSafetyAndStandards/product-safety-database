@@ -5,7 +5,8 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
   let(:investigation) { create(:enquiry, creator: user) }
   let(:attributes)    do
     attributes_for(:product_iphone, authenticity: Product.authenticities.keys.without("missing").sample,
-                                    affected_units_status: Product.affected_units_statuses.keys.sample)
+                                    affected_units_status: Product.affected_units_statuses.keys.sample,
+                                    customs_code: "12345678, abc123, xyz987")
   end
   let(:other_user) { create(:user, :activated) }
 
@@ -42,6 +43,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     fill_in "Other product identifiers",         with: attributes[:product_code]
     fill_in "Batch number",                      with: attributes[:batch_number]
     fill_in "Webpage",                           with: attributes[:webpage]
+    fill_in "Customs code",                      with: attributes[:customs_code]
 
     within_fieldset("Was the product placed on the market before 1 January 2021?") do
       choose when_placed_on_market_answer(attributes[:when_placed_on_market])
@@ -93,6 +95,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     expect(page).to have_summary_item(key: "Country of origin",         value: attributes[:country])
     expect(page).to have_summary_item(key: "Description",               value: attributes[:description])
     expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(attributes[:when_placed_on_market], scope: Product.model_name.i18n_key))
+    expect(page).to have_summary_item(key: "Customs code",              value: attributes[:customs_code])
   end
 
   scenario "Not being able to add a product to another team’s case" do
