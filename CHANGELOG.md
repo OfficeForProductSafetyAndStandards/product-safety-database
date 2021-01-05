@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2020-01-05
+- Added ability to track online recall information.
+
 ## 2020-12-16
 - Added ability to track product markings.
 
