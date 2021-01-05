@@ -16,8 +16,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            webpage: webpage,
            country_of_origin: country_of_origin,
            has_markings: "markings_yes",
-           customs_code: "initial, customs, code123"
-         )
+           customs_code: "initial, customs, code123")
   end
   let(:product_with_no_affected_units_status) do
     create(:product,
