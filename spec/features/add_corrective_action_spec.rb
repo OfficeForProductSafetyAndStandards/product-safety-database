@@ -48,10 +48,11 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(errors_list[0].text).to eq "Select type of corrective action"
     expect(errors_list[1].text).to eq "Enter date the corrective action was decided"
     expect(errors_list[2].text).to eq "Select the legislation relevant to the corrective action"
-    expect(errors_list[3].text).to eq "You must state whether the action is mandatory or voluntary"
-    expect(errors_list[4].text).to eq "You must state how long the action will be in place"
-    expect(errors_list[5].text).to eq "You must state the geographic scope of the action"
-    expect(errors_list[6].text).to eq "Select whether you want to upload a related file"
+    expect(errors_list[3].text).to eq "Select yes if the business responsible has published recall information online"
+    expect(errors_list[4].text).to eq "You must state whether the action is mandatory or voluntary"
+    expect(errors_list[5].text).to eq "You must state how long the action will be in place"
+    expect(errors_list[6].text).to eq "You must state the geographic scope of the action"
+    expect(errors_list[7].text).to eq "Select whether you want to upload a related file"
 
     fill_and_submit_form
 
@@ -81,15 +82,16 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def expect_confirmation_page_to_show_entered_data
-    expect(page).to have_summary_item(key: "Action", value: CorrectiveAction.actions[action])
-    expect(page).to have_summary_item(key: "Date of action", value: "1 May 2020")
-    expect(page).to have_summary_item(key: "Legislation", value: legislation)
-    expect(page).to have_summary_item(key: "Details", value: details)
-    expect(page).to have_summary_item(key: "Attachment", value: File.basename(file))
+    expect(page).to have_summary_item(key: "Action",                 value: CorrectiveAction.actions[action])
+    expect(page).to have_summary_item(key: "Date of action",         value: "1 May 2020")
+    expect(page).to have_summary_item(key: "Legislation",            value: legislation)
+    expect(page).to have_summary_item(key: "Recall information",     value: online_recall_information)
+    expect(page).to have_summary_item(key: "Details",                value: details)
+    expect(page).to have_summary_item(key: "Attachment",             value: File.basename(file))
     expect(page).to have_summary_item(key: "Attachment description", value: file_description)
-    expect(page).to have_summary_item(key: "Type of measure", value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
-    expect(page).to have_summary_item(key: "Duration of action", value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
-    expect(page).to have_summary_item(key: "Geographic scope", value: geographic_scope)
+    expect(page).to have_summary_item(key: "Type of measure",        value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
+    expect(page).to have_summary_item(key: "Duration of action",     value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
+    expect(page).to have_summary_item(key: "Geographic scope",       value: geographic_scope)
   end
 
   def expect_form_to_show_input_data
