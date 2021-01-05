@@ -1,6 +1,6 @@
 class Investigations::TsInvestigationsController < ApplicationController
   include Wicked::Wizard
-  include CorrectiveActionConcern
+  include CorrectiveActionsConcern
   include CountriesHelper
   include ProductsHelper
   include BusinessesHelper

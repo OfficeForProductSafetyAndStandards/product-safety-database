@@ -1,6 +1,6 @@
 module Investigations
   class CorrectiveActionsController < ApplicationController
-    include CorrectiveActionConcern
+    include CorrectiveActionsConcern
 
     def new
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])

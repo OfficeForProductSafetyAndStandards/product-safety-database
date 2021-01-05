@@ -1,4 +1,4 @@
-module CorrectiveActionConcern
+module CorrectiveActionsConcern
   extend ActiveSupport::Concern
 
   def corrective_action_params
