@@ -25,7 +25,7 @@ module Investigations
     end
 
     def business_text_for(corrective_action)
-      corrective_action.business ? link_to(corrective_action.business.trading_name, business_path(corrective_action.business)) : "Not specified"
+      corrective_action.business ? link_to(corrective_action.business.trading_name, business_path(corrective_action.business)) : t(".not_specified")
     end
   end
 end

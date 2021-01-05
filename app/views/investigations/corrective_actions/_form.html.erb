@@ -66,10 +66,10 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
      text: "Yes",
      value: "yes",
      conditional: { html: form.govuk_input(:online_recall_information, hint: t(".online_recall_information_hint"), label_classes: "govuk-visually-hidden", label: t(".online_recall_information_label"))},
-     checked: form.object.online_recall_information.present?
+     checked: form.object.has_online_recall_information?
    },
-   { text: "No",           value: "off" },
-   { text: "Not relevant", value: nil }
+   { text: "No",           value: "off", checked: form.object.has_online_recall_information? == false },
+   { text: "Not relevant", value: checked: form.object.has_online_recall_information.nil? }
  ] %>
 
 <%= form.govuk_radios :measure_type,

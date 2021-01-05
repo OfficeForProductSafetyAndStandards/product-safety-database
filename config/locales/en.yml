@@ -94,6 +94,8 @@ en:
 
   investigations:
     corrective_actions:
+      show:
+        not_specified: "Not specified"
       create:
         success: "Corrective action was successfully recorded."
       update:

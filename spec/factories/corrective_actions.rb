@@ -9,7 +9,8 @@ FactoryBot.define do
     duration { CorrectiveAction::DURATION_TYPES.sample }
     geographic_scope { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
     details { Faker::Lorem.sentence }
-
+    online_recall_information { Faker::Internet.url(host: "example.com") }
+    has_online_recall_information { true }
     transient do
       owner_id {}
     end
