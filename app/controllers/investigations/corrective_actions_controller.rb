@@ -69,7 +69,7 @@ module Investigations
           )
       )
 
-      return redirect_to investigation_corrective_action_path(investigation, result.corrective_action), flash: { success: t(".sucess") } if result.success?
+      return redirect_to investigation_corrective_action_path(investigation, result.corrective_action), flash: { success: t(".success") } if result.success?
 
       render :edit
     end

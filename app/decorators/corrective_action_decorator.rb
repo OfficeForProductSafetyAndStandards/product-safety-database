@@ -67,6 +67,6 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def online_recall_information
     return I18n.t(".no_online_recall_information") if object.online_recall_information.blank?
 
-    h.link_to object.online_recall_information
+    h.link_to object.online_recall_information, object.online_recall_information
   end
 end

@@ -90,12 +90,12 @@ en:
       date_added: "Date added"
       title: "Title"
 
-  no_online_recall_information: "No recall information published online"
-
   investigations:
     corrective_actions:
-      show:
+      helper:
         not_specified: "Not specified"
+        has_online_recall_information_false: "No recall information published online"
+        has_online_recall_information: "Not relevant"
       create:
         success: "Corrective action was successfully recorded."
       update:

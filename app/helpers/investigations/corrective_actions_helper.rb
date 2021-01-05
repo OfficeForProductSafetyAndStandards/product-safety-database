@@ -5,7 +5,7 @@ module Investigations
         { key: { text: "Action" },              value: { text: action_text_for(corrective_action) } },
         { key: { text: "Date of action" },      value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },         value: { text: corrective_action.legislation } },
-        { key: { text: "Recall information" },  value: { text: corrective_action.online_recall_information } },
+        { key: { text: "Recall information" },  value: { text: online_recall_information_for_text(corrective_action) } },
         { key: { text: "Product" },             value: { html: link_to(corrective_action.product.name, product_path(corrective_action.product)) } },
         { key: { text: "Business" },            value: { html: business_text_for(corrective_action) } },
       ]
@@ -25,7 +25,14 @@ module Investigations
     end
 
     def business_text_for(corrective_action)
-      corrective_action.business ? link_to(corrective_action.business.trading_name, business_path(corrective_action.business)) : t(".not_specified")
+      corrective_action.business ? link_to(corrective_action.business.trading_name, business_path(corrective_action.business)) : I18n.t(".not_specified", scope: %i[investigations corrective_actions helper])
+    end
+
+    def online_recall_information_for_text(corrective_action)
+      return corrective_action.online_recall_information if corrective_action.has_online_recall_information?
+
+      key = [".has_online_recall_information", corrective_action.object.has_online_recall_information].compact.join("_")
+      I18n.t(key, scope: %i[investigations corrective_actions helper])
     end
   end
 end
