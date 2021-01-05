@@ -13,7 +13,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_action_path(@investigation, @corrective_action_form.id), method: :put, builder: ApplicationFormBuilder, local: true do |form| %>
-      <%= error_summary(@corrective_action_form.errors) %>
+      <%= error_summary(@corrective_action_form.errors, %i[action date_decided legislation has_online_recall_information online_recall_information measure_type duration geographic_scope related_file]) %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
