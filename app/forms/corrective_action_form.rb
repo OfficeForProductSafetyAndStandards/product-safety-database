@@ -78,22 +78,10 @@ class CorrectiveActionForm
 
   def file=(document_params)
     document_params = document_params.symbolize_keys
-
     return unless related_file
 
     if document_params.key?(:file)
-      file = document_params[:file]
-      file.rewind
-      self.filename = file.original_filename
-      self.file_description = document_params[:description]
-      self.document = ActiveStorage::Blob.create_and_upload!(
-        io: file,
-        filename: file.original_filename,
-        content_type: file.content_type,
-        metadata: { description: file_description }
-      )
-
-      self.existing_document_file_id = document.signed_id
+      assign_file_related_fields(*document_params.values_at(:file, :description))
     else
       load_document_file
       return if document.nil?

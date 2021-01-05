@@ -8,4 +8,17 @@ module HasDocumentAttachedConcern
       self.file_description = document.metadata["description"]
     end
   end
+
+  def assign_file_related_fields(file, description)
+    self.filename = file.original_filename
+    self.file_description = description
+    self.document = ActiveStorage::Blob.create_and_upload!(
+      io: file,
+      filename: file.original_filename,
+      content_type: file.content_type,
+      metadata: { description: file_description }
+    )
+
+    self.existing_document_file_id = document.signed_id
+  end
 end
