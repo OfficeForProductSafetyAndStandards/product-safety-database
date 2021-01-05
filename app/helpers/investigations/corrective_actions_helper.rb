@@ -5,6 +5,7 @@ module Investigations
         { key: { text: "Action" },              value: { text: action_text_for(corrective_action) } },
         { key: { text: "Date of action" },      value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },         value: { text: corrective_action.legislation } },
+        { key: { text: "Recall information" },  value: { text: corrective_action.online_recall_information } },
         { key: { text: "Product" },             value: { html: link_to(corrective_action.product.name, product_path(corrective_action.product)) } },
         { key: { text: "Business" },            value: { html: business_text_for(corrective_action) } },
       ]

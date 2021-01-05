@@ -90,6 +90,8 @@ en:
       date_added: "Date added"
       title: "Title"
 
+  no_online_recall_information: "No recall information published online"
+
   investigations:
     corrective_actions:
       form:

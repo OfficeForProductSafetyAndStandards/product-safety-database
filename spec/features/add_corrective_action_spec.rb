@@ -61,6 +61,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
+    expect(page).to have_summary_item(key: "Recall information",  value: online_recall_information)
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
     expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
     expect(page).to have_summary_item(key: "Scope",               value: "National")
@@ -79,19 +80,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
     expect_case_activity_page_to_show_entered_data
-  end
-
-  def expect_confirmation_page_to_show_entered_data
-    expect(page).to have_summary_item(key: "Action",                 value: CorrectiveAction.actions[action])
-    expect(page).to have_summary_item(key: "Date of action",         value: "1 May 2020")
-    expect(page).to have_summary_item(key: "Legislation",            value: legislation)
-    expect(page).to have_summary_item(key: "Recall information",     value: online_recall_information)
-    expect(page).to have_summary_item(key: "Details",                value: details)
-    expect(page).to have_summary_item(key: "Attachment",             value: File.basename(file))
-    expect(page).to have_summary_item(key: "Attachment description", value: file_description)
-    expect(page).to have_summary_item(key: "Type of measure",        value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
-    expect(page).to have_summary_item(key: "Duration of action",     value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
-    expect(page).to have_summary_item(key: "Geographic scope",       value: geographic_scope)
   end
 
   def expect_form_to_show_input_data
