@@ -94,6 +94,8 @@ en:
     record_corrective_actions:
       form:
         has_online_recall_information: "Has the business responsible published product recall information online?"
+        online_recall_information_hint: "For example http://www.example.com or https://www.example.com"
+        online_recall_information_label: "Online recall information"
     overview:
       case_risk_level:
         key: Case risk level

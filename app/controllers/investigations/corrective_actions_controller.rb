@@ -1,5 +1,7 @@
 module Investigations
   class CorrectiveActionsController < ApplicationController
+    include CorrectiveActionConcern
+
     def new
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize investigation, :view_non_protected_details?
@@ -70,26 +72,6 @@ module Investigations
       return redirect_to investigation_corrective_action_path(investigation, result.corrective_action) if result.success?
 
       render :edit
-    end
-
-  private
-
-    def corrective_action_params
-      params.require(:corrective_action).permit(
-        :product_id,
-        :business_id,
-        :legislation,
-        :action,
-        :has_online_recall_information,
-        :details,
-        :related_file,
-        :measure_type,
-        :duration,
-        :geographic_scope,
-        :other_action,
-        file: %i[file description],
-        date_decided: %i[day month year]
-      )
     end
   end
 end

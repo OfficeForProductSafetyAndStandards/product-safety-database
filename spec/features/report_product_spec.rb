@@ -43,6 +43,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
         geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"].sample,
+        has_online_recall_information: "Yes",
+        online_recall_information: Faker::Internet.url(host: "example.com")
       }
     }
 
@@ -593,6 +595,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Year", with: with[:date].year
     select with[:legislation], from: "Under which legislation?"
     fill_in "Further details (optional)", with: with[:details]
+
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose with[:has_online_recall_information]
+      fill_in "Online recall information", with: with[:online_recall_information], visible: false
+    end
 
     within_fieldset "Are there any files related to the action?" do
       choose "Yes"
