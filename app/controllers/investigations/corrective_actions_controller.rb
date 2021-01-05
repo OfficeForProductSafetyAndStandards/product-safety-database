@@ -25,7 +25,7 @@ module Investigations
       )
 
       if result.success?
-        return redirect_to investigation_corrective_action_path(@investigation, result.corrective_action), flash: { success: t(".sucess") }
+        return redirect_to investigation_corrective_action_path(@investigation, result.corrective_action), flash: { success: t(".success") }
       end
 
       render :new

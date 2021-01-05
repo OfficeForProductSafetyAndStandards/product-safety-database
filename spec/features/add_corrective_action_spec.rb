@@ -136,10 +136,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
       fill_in "Online recall information", with: online_recall_information, visible: false
     end
 
-    within_fieldset "Has the business responsible published product recall information online?" do
-      choose "Yes"
-    end
-
     fill_in "Further details (optional)", with: details
 
     within_fieldset "Are there any files related to the action?" do

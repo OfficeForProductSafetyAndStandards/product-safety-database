@@ -60,16 +60,16 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
 <% end %>
 
 <%= form.govuk_radios :has_online_recall_information,
-   legend: t(".has_online_recall_information"),
+   legend: t(".has_online_recall_information_legend"),
  items: [
    {
-     text: "Yes",
-     value: "yes",
+     text: t(".yes"),
+     value: :has_online_recall_information_yes,
      conditional: { html: form.govuk_input(:online_recall_information, hint: t(".online_recall_information_hint"), label_classes: "govuk-visually-hidden", label: t(".online_recall_information_label"))},
-     checked: form.object.has_online_recall_information
+     checked: form.object.has_online_recall_information&.inquiry&.yes?
    },
-   { text: "No",           value: "off", checked: form.object.has_online_recall_information == false },
-   { text: "Not relevant", value: nil,   checked: form.object.has_online_recall_information.nil? }
+   { text: t(".no"), value: :has_online_recall_information_no, checked: form.object.has_online_recall_information&.inquiry&.no? },
+   { text: t(".not_relevant"), value: :has_online_recall_information_not_relevant, checked: form.object.has_online_recall_information&.inquiry&.not_relevant? }
  ] %>
 
 <%= form.govuk_radios :measure_type,

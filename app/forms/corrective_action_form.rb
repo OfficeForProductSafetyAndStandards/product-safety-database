@@ -19,7 +19,7 @@ class CorrectiveActionForm
   attribute :duration
   attribute :geographic_scope
   attribute :other_action
-  attribute :has_online_recall_information, :boolean, default: nil
+  attribute :has_online_recall_information, default: nil
   attribute :online_recall_information
   attribute :related_file, :boolean
   attribute :document
@@ -35,7 +35,7 @@ class CorrectiveActionForm
   validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
   validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
-  validates :has_online_recall_information, inclusion: { in: [true, false] }
+  validates :has_online_recall_information, inclusion: { in: CorrectiveAction.has_online_recall_informations.keys }
   validate :online_recall_information_validation
 
   validates :measure_type, presence: true
@@ -96,7 +96,7 @@ private
   end
 
   def online_recall_information_validation
-    if has_online_recall_information && online_recall_information.blank?
+    if CorrectiveAction.has_online_recall_informations.key?(has_online_recall_information) && online_recall_information.blank?
       errors.add(:online_recall_information, :blank)
     end
   end
