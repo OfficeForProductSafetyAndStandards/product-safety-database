@@ -22,4 +22,18 @@ module HasDocumentAttachedConcern
 
     self.existing_document_file_id = document.signed_id
   end
+
+  def assign_file_and_description(document_params)
+    if document_params.key?(:file)
+      assign_file_related_fields(*document_params.values_at(:file, :description))
+    else
+      load_document_file
+      return if document.nil?
+
+      self.file_description = document_params.dig(:description)
+      document.metadata[:description] = file_description
+      document.save!
+      document.reload
+    end
+  end
 end
