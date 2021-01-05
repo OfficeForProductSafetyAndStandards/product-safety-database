@@ -112,7 +112,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
           number_of_affected_units: 22,
           has_markings: "markings_yes",
           markings: [Product::MARKINGS.sample],
-          when_placed_on_market: "Yes"
+          when_placed_on_market: "Yes",
+          customs_code: "abc, def, 1234567"
         }
       end
       let(:coronavirus) { false }
@@ -426,6 +427,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: info[:webpage]) if info[:webpage]
       expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: info[:country_of_origin]) if info[:country_of_origin]
       expect(page.find("dt", text: "Description")).to have_sibling("dd", text: info[:description]) if info[:description]
+      expect(page.find("dt", text: "Customs code")).to have_sibling("dd", text: info[:customs_code]) if info[:customs_code]
       expect(page).to have_css("img[alt=\"#{images.first[:title]}\"]") unless images.empty?
     end
   end
@@ -535,6 +537,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Other product identifiers",         with: with[:product_code] if with[:product_code]
     fill_in "Webpage",                           with: with[:webpage] if with[:webpage]
     fill_in "Description of product",            with: with[:description] if with[:description]
+    fill_in "Customs code",                      with: with[:customs_code] if with[:customs_code]
     click_button "Continue"
   end
 

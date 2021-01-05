@@ -22,6 +22,7 @@ class ProductForm
   attribute :number_of_affected_units
   attribute :has_markings
   attribute :markings
+  attribute :customs_code
 
   attr_accessor :approx_units
   attr_accessor :exact_units
