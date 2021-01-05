@@ -10,6 +10,7 @@ module HasDocumentAttachedConcern
   end
 
   def assign_file_related_fields(file, description)
+    file.rewind
     self.filename = file.original_filename
     self.file_description = description
     self.document = ActiveStorage::Blob.create_and_upload!(
