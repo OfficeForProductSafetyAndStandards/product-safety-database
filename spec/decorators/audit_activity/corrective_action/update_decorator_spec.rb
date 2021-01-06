@@ -18,7 +18,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         product_id: corrective_action.product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
-        has_online_recall_information: CorrectiveAction.has_online_recall_information["has_online_recall_information_yes"],
+        has_online_recall_information: CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"],
         online_recall_information: new_has_online_recall_information,
         geographic_scope: new_geographic_scope,
         duration: new_duration,
