@@ -12,7 +12,7 @@ class CorrectiveAction < ApplicationRecord
     "has_online_recall_information_yes" => "has_online_recall_information_yes",
     "has_online_recall_information_no" => "has_online_recall_information_no",
     "has_online_recall_information_not_relevant" => "has_online_recall_information_not_relevant"
-       }
+  }
 
   enum action: {
     ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures, scope: %i[corrective_action attributes actions]),

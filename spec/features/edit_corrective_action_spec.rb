@@ -23,8 +23,10 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_select("Business", selected: corrective_action.business.trading_name)
       expect(page).to have_select("What is the geographic scope of the action?", selected: corrective_action.geographic_scope)
       expect(page).to have_field("Further details (optional)", with: "\r\n#{corrective_action.details}", type: "textarea")
+
       within_fieldset("Has the business responsible published product recall information online?") do
-        expect(page).to have_checked("Yes")
+        expect(page.find_field("Yes")).to be_checked
+        expect(page).to have_field("Online recall information", with: corrective_action.online_recall_information)
       end
 
       measure_type = corrective_action.measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
