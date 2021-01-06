@@ -77,6 +77,12 @@ class CorrectiveActionForm
     end
   end
 
+  def initialize(*args)
+    super
+
+    self.online_recall_information = nil unless has_online_recall_information_yes?
+  end
+
   def file=(document_params)
     return unless related_file
 
@@ -96,8 +102,12 @@ private
   end
 
   def online_recall_information_validation
-    if CorrectiveAction.has_online_recall_informations.key?(has_online_recall_information) && online_recall_information.blank?
+    if has_online_recall_information_yes? && online_recall_information.blank?
       errors.add(:online_recall_information, :blank)
     end
+  end
+
+  def has_online_recall_information_yes?
+    has_online_recall_information == CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"]
   end
 end

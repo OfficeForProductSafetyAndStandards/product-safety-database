@@ -34,7 +34,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { false }
   let(:investigation) { build(:allegation) }
-  let(:has_online_recall_information) { false }
+  let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
   let(:online_recall_information) { nil }
 
   describe "#valid?" do
@@ -179,13 +179,19 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
 
       context "when has online recall information has been provided" do
         context "with no recall information" do
-          let(:has_online_recall_information) { false }
+          let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "with recall information not relevant" do
+          let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_not_relevant"] }
 
           it { is_expected.to be_valid }
         end
 
         context "with recall information" do
-          let(:has_online_recall_information) { true }
+          let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }
 
           context "when recall information is not provided" do
             it "is invalid and has the correct error message", :aggregate_failures do
@@ -199,6 +205,36 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
 
             it { is_expected.to be_valid }
           end
+        end
+      end
+    end
+  end
+
+  describe "#initialize" do
+    context "when online_recall_information is not empty" do
+      let(:online_recall_information) { attributes_for(:corrective_action)[:online_recall_information] }
+
+      context "when has_online_recall_information = has_online_recall_information_no" do
+        let(:has_online_recall_information) { "has_online_recall_information_no" }
+
+        it "clears the online_recall_information field" do
+          expect(corrective_action_form.online_recall_information).to eq(nil)
+        end
+      end
+
+      context "when has_online_recall_information = has_online_recall_information_not_relevant" do
+        let(:has_online_recall_information) { "has_online_recall_information_not_relevant" }
+
+        it "clears the online_recall_information field" do
+          expect(corrective_action_form.online_recall_information).to eq(nil)
+        end
+      end
+
+      context "when has_online_recall_information = has_online_recall_information_yes" do
+        let(:has_online_recall_information) { "has_online_recall_information_yes" }
+
+        it "clears the online_recall_information field" do
+          expect(corrective_action_form.online_recall_information).to eq(online_recall_information)
         end
       end
     end
