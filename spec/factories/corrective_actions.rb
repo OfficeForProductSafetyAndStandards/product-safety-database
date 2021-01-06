@@ -10,7 +10,7 @@ FactoryBot.define do
     geographic_scope { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
     details { Faker::Lorem.sentence }
     online_recall_information { Faker::Internet.url(host: "example.com") }
-    has_online_recall_information { true }
+    has_online_recall_information { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }
     transient do
       owner_id {}
     end

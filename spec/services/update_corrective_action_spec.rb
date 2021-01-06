@@ -36,7 +36,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         product_id: corrective_action.product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
-        has_online_recall_information: new_online_recall_information,
+        has_online_recall_information: new_has_online_recall_information,
         online_recall_information: new_online_recall_information,
         geographic_scope: new_geographic_scope,
         duration: new_duration,
@@ -85,7 +85,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         let(:new_measure_type)                  { corrective_action.measure_type }
         let(:new_legislation)                   { corrective_action.legislation }
         let(:new_details)                       { corrective_action.details }
-        let(:new_has_online_recall_information) { corrective_action.has_online_recall_information.present? }
+        let(:new_has_online_recall_information) { corrective_action.has_online_recall_information }
         let(:new_online_recall_information)     { corrective_action.online_recall_information }
 
         shared_examples "it does not create an audit log" do
