@@ -49,7 +49,8 @@ class CorrectiveActionForm
   validates :other_action, absence: true, unless: :other?
   validates :details, length: { maximum: 50_000 }
 
-  before_validation { trim_line_endings(:other_action, :details) }
+  before_validation { trim_whitespace(:other_action, :details, :file_description) }
+  before_validation { nilify_blanks(:other_action, :details, :file_description) }
 
   ATTRIBUTES_FROM_CORRECTIVE_ACTION = %i[
     id

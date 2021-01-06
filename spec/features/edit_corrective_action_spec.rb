@@ -38,6 +38,17 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       document = corrective_action.document_blob
       expect(page).to have_link(document.filename.to_s)
 
+      # check text area do not trigger changes by trimming whitespace and nullify blanks
+      click_on "Update corrective action"
+
+      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link "Activity"
+      expect(page).not_to have_css("p", text: "Corrective action updated:")
+
+      click_link "Supporting information (1)"
+      click_link corrective_action.decorate.supporting_information_title
+      click_link "Edit corrective action"
+
       within_fieldset("What action is being taken?") do
         choose "Other"
         fill_in "corrective_action[other_action]", with: new_other_action
