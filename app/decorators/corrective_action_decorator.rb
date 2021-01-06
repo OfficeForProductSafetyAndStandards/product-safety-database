@@ -63,10 +63,4 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def display_medium_title_text_size?
     page_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
-
-  def online_recall_information
-    return I18n.t(".no_online_recall_information") if object.online_recall_information.blank?
-
-    h.link_to object.online_recall_information, object.online_recall_information
-  end
 end

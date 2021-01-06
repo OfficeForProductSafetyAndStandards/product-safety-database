@@ -31,8 +31,7 @@ module Investigations
     def online_recall_information_for_text(corrective_action)
       return corrective_action.online_recall_information if corrective_action.has_online_recall_information_yes?
 
-      key = [".has_online_recall_information", corrective_action.object.has_online_recall_information].compact.join("_")
-      I18n.t(key, scope: %i[investigations corrective_actions helper])
+      I18n.t(".#{corrective_action.object.has_online_recall_information}", scope: %i[investigations corrective_actions helper])
     end
   end
 end
