@@ -571,7 +571,6 @@ if run_seeds
       product: product,
       action: "other",
       other_action: "First corrective action",
-      related_file: false,
       created_at: 2.days.ago
     )
 
