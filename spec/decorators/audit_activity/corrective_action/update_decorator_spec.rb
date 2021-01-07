@@ -72,7 +72,6 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
     context "when previously has online recall information was yes" do
       let(:has_online_recall_information) { "has_online_recall_information_yes" }
 
-
       context "when new recall information is set" do
         let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
 
