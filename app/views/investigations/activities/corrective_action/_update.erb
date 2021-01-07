@@ -18,6 +18,10 @@
     Legislation: <b><%= activity.new_legislation %></b><br>
   <% end %>
 
+  <% if activity.new_online_recall_information %>
+    Recall information: <b><%= activity.new_online_recall_information %></b><br>
+  <% end %>
+
   <% if activity.product_updated? %>
     Product: <%= link_to activity.product.name, activity.product %><br>
   <% end %>

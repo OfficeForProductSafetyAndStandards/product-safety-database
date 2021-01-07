@@ -16,8 +16,10 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
            :with_file,
            investigation: investigation,
            product: product_one,
-           business: business_one)
+           business: business_one,
+           has_online_recall_information: has_online_recall_information)
   end
+  let(:has_online_recall_information) { "has_online_recall_information_no" }
   let(:new_summary)          { ((CorrectiveAction.actions.keys - %W[other #{corrective_action.action}])).sample }
   let(:new_date_decided)     { corrective_action.date_decided - 1.day }
   let(:new_legislation)      { (Rails.application.config.legislation_constants["legislation"] - [corrective_action.legislation]).sample }

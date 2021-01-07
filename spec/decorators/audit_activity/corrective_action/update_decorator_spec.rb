@@ -18,8 +18,8 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         product_id: corrective_action.product_id,
         measure_type: new_measure_type,
         legislation: new_legislation,
-        has_online_recall_information: CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"],
-        online_recall_information: new_has_online_recall_information,
+        has_online_recall_information: new_has_online_recall_information,
+        online_recall_information: new_online_recall_information,
         geographic_scope: new_geographic_scope,
         duration: new_duration,
         details: new_details,
@@ -41,6 +41,120 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
   it { expect(decorated_activity.new_action).to eq(CorrectiveAction.actions[new_summary]) }
   it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_s(:govuk)) }
+
+  describe "#new_online_recall_information" do
+    context "when previously has online recall information was nil" do
+      let(:has_online_recall_information) { nil }
+
+      context "when new recall information is set" do
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+        end
+      end
+
+      context "when new recall information is set to no" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
+        end
+      end
+
+      context "when new recall information is set to not relevant" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq("Not relevant")
+        end
+      end
+    end
+
+    context "when previously has online recall information was yes" do
+      let(:has_online_recall_information) { "has_online_recall_information_yes" }
+
+
+      context "when new recall information is set" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq(nil)
+        end
+      end
+
+      context "when new recall information is set to no" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
+        end
+      end
+
+      context "when new recall information is set to not relevant" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq("Not relevant")
+        end
+      end
+    end
+
+    context "when previously has online recall information was no" do
+      let(:has_online_recall_information) { "has_online_recall_information_no" }
+
+      context "when new recall information is set" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+        end
+      end
+
+      context "when new recall information is set to no" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq(nil)
+        end
+      end
+
+      context "when new recall information is set to not relevant" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq("Not relevant")
+        end
+      end
+    end
+
+    context "when previously has online recall information was not relevant" do
+      let(:has_online_recall_information) { "has_online_recall_information_not_relevant" }
+
+      context "when new recall information is set" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+        end
+      end
+
+      context "when new recall information is set to no" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
+        end
+      end
+
+      context "when new recall information is set to not relevant" do
+        let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+
+        specify do
+          expect(decorated_activity.new_online_recall_information).to eq(nil)
+        end
+      end
+    end
+  end
+
   it { expect(decorated_activity.new_legislation).to eq(new_legislation) }
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
   it { expect(decorated_activity.new_details).to eq(new_details) }
