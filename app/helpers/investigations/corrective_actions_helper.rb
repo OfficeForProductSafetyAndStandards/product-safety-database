@@ -7,7 +7,7 @@ module Investigations
       ]
       rows << { key: { text: "Legislation" }, value: { text: corrective_action.legislation } }
 
-      if (recall_information_text = online_recall_information_for_text(corrective_action))
+      if (recall_information_text = online_recall_information_text_for(corrective_action))
         rows << { key: { text: "Recall information" }, value: { text: recall_information_text } }
       end
 
@@ -31,7 +31,7 @@ module Investigations
       corrective_action.business ? link_to(corrective_action.business.trading_name, business_path(corrective_action.business)) : I18n.t(".not_specified", scope: %i[investigations corrective_actions helper])
     end
 
-    def online_recall_information_for_text(corrective_action)
+    def online_recall_information_text_for(corrective_action)
       return corrective_action.online_recall_information if corrective_action.has_online_recall_information_yes?
       return if corrective_action.has_online_recall_information.nil?
 
