@@ -94,8 +94,9 @@ en:
     corrective_actions:
       helper:
         not_specified: "Not specified"
-        has_online_recall_information_no: "No recall information published online"
-        has_online_recall_information_not_relevant: "Not relevant"
+        has_online_recall_information:
+          has_online_recall_information_no: "No recall information published online"
+          has_online_recall_information_not_relevant: "Not relevant"
 
       create:
         success: "Corrective action was successfully recorded."

@@ -2,9 +2,10 @@ require "rails_helper"
 
 RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   describe "#corrective_action_summary_list_rows" do
-    let(:business)          { create(:business) }
-    let(:corrective_action) { create(:corrective_action, date_decided: 2.weeks.ago, business: business).decorate }
+    let(:business)                           { create(:business) }
+    let(:corrective_action)                  { create(:corrective_action, date_decided: 2.weeks.ago, has_online_recall_information: has_online_recall_information, business: business).decorate }
     let(:expected_online_recall_information) { corrective_action.online_recall_information }
+    let(:has_online_recall_information)      { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }
     let(:expected_rows) do
       [
         { key: { text: "Date of action" }, value: { text: corrective_action.date_of_activity } },
@@ -50,25 +51,33 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
 
     context "with online recall information" do
       it "show the recall information" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).not_to include(key: { text: "Recall information" }, value: { text: /expected_online_recall_information/ })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: /#{expected_online_recall_information}/ })
       end
     end
 
     context "with no online recall information" do
-      let(:has_online_recall_information) { false }
+      let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
       let(:expected_online_recall_information) { "No recall information published online" }
 
       it "show the no recall information published online" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).not_to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })
       end
     end
 
     context "when not provided" do
-      let(:has_online_recall_information) { false }
+      let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_not_relevant"] }
       let(:expected_online_recall_information) { "Not relevant" }
 
       it "shows not relevant" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).not_to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })
+      end
+    end
+
+    context "with no online recall information was previously set" do
+      let(:has_online_recall_information) { nil }
+
+      it "does not show the recall information published online" do
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).not_to include(key: { text: "Recall information" })
       end
     end
   end
