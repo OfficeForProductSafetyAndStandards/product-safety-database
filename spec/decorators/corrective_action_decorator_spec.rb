@@ -9,4 +9,10 @@ RSpec.describe CorrectiveActionDecorator, :with_stubbed_elasticsearch, :with_stu
   describe "#description" do
     include_examples "a formated text", :corrective_action, :details
   end
+
+  describe "#date_of_activity_for_sorting" do
+    specify do
+      expect(decorated_corrective_action.date_of_activity_for_sorting).to eq(corrective_action.date_decided)
+    end
+  end
 end

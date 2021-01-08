@@ -56,10 +56,6 @@ class CorrectiveActionDecorator < ApplicationDecorator
     object.duration.upcase_first
   end
 
-  def file_attached?
-    document.attached?
-  end
-
   def display_medium_title_text_size?
     page_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
