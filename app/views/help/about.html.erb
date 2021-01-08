@@ -27,16 +27,10 @@
           <a class="govuk-link" href="#how-opss-uses-info-from-las">4. How OPSS uses information provided by local authorities</a>
         </li>
         <li>
-          <a class="govuk-link" href="#what-youll-be-asked-for-when-you-report-information">What you’ll be asked for when you report information</a>
+          <a class="govuk-link" href="#organisations-with-access-to-the-psd">5. Organisations with access to the PSD</a>
         </li>
         <li>
-          <a class="govuk-link" href="#report-early-and-add-details-when-they-are-available">Report early and add details when they are available</a>
-        </li>
-        <li>
-          <a class="govuk-link" href="#organisations-with-access-to-the-psd">Organisations with access to the PSD</a>
-        </li>
-        <li>
-          <a class="govuk-link" href="#viewing-cases">Viewing cases</a>
+          <a class="govuk-link" href="#viewing-cases">6. Viewing and restricting cases</a>
         </li>
         <li>
           <a class="govuk-link" href="#restricted-cases">Restricted cases</a>
@@ -129,131 +123,112 @@
      </ul>
 
     <p>
-      For further information on circumstances in which you should report on the PSD, please view the following guidance <a class="govuk-link" href="/www.gov.uk/guidance/notification-of-unsafe-and-noncompliant-products-and-cosmetics">https://www.gov.uk/guidance/notification-of-unsafe-and-noncompliant-products-and-cosmetics</a>
+      For further information on circumstances in which you should report on the PSD, please view the following guidance: <%= link_to "https://www.gov.uk/guidance/notification-of-unsafe-and-noncompliant-products-and-cosmetics", "https://www.gov.uk/guidance/notification-of-unsafe-and-noncompliant-products-and-cosmetics", class: "govuk-link" %>
     </p>
-
+    
+    
+    <h3 class="govuk-heading-s">
+      Information you should provide when notifying OPSS
+    </h3>
+    
+    <p>
+      Notifications should provide all available details, and for products found to pose a serious risk, at least the following information. This will ensure that the notification is of greatest benefit to other market surveillance authorities and to protect consumers.
+    </p>
+    
+     <ul class="govuk-list govuk-list--bullet">
+      <li>
+        information enabling the product to be identified, including images of the product and any labelling and packaging. This may include product names, model numbers, batch codes and whether the product is counterfeit
+      </li>
+      <li>
+        a description of the risk involved, including a summary of the results or any test or analysis and of their conclusions which are relevant to assessing the level of risk, including a risk assessment where appropriate
+      </li>
+      <li>
+        the nature and duration of the measures or action taken or decided on, including any links to recalls or safety notices
+      </li>
+      <li>
+        information on supply chains and distribution of the product, such as name and address of manufacturers, importers and/or distributors.
+      </li>
+     </ul>
+    
+    <p>
+      If you have them, you may also add infromation and attachments relating to:
+    </p>
+    
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        test results
+      </li>
+      <li>
+        compliance documentation
+      </li>
+    </ul>
+    
+    <p>
+      You must only add personal data and other information on the database that is required by law (for example by regulation 33 of the General Product Safety Regulation 2005) or is necessary for the performance of your function as a market surveillance authority.
+    </p>
+    
+    
+    <h3 class="govuk-heading-s">
+      How to assess risk
+    </h3>
+    
+    <p>
+      Typically, UK market surveillance authorities that regulate consumer product safety will continue to use the RAPEX risk assessment methodology to conduct the assessment of the risk posed by an unsafe product. The <%= link_to "risk assessment guidelines tool", "https://ec.europa.eu/consumers/consumer-safety/rag/#/screen/home", class: "govuk-link" %> includes a number of standard templates and supporting guidance that can assist risk assessors throughout the process of devising an appropriate risk assessment, including how to calculate probability scores. Guidance on using the current risk assessment guidelines tool can be found <%= link_to "here", "https://ec.europa.eu/consumers/consumers_safety/safety_products/rapex/alerts/repository/content/pages/rapex/docs/Guidelines annex_en.pdf", class: "govuk-link" %>.
+    </p>
+    
+    
+    <h3 class="govuk-heading-s">
+      How to notify OPSS
+    </h3>
+    
+    <p>
+      You can add a case to the Product safety database to notify an unsafe and/or noncompliant product to the Secretary of State. You should only notify one product per case.
+    </p>
+    
+    <p>
+      If the product poses a less than serious risk and has not been recalled, you should close the case once the measures taken are completed, add OPSS Incident Management to the case to ensure access to all relevant information for reporting purposes and there is no further activity anticipated.
+    </p>
+    
+    <p>
+      If the product has been recalled, you should add the OPSS Incident Management Team to the case which will ensure the recall can be added to the Government Recall Site and the OECD Global Recall Portal.
+    </p>
+    
+    <p>
+      If the product poses a serious risk to the health and safety of consumers as determined by a risk assessment, you should add the OPSS Incident Management Team (IMT) to the case or make them the case owner.  OPSS IMT will then validate (for consumer products), publish the notifications on the Gov.uk unsafe products page (for all products where agreed with MSAs), and undertake any further required reporting as part of agreements with other countries. The Gov.uk unsafe products page can be found at the following link: <%= link_to "https://www.gov.uk/guidance/product-safety-database-unsafe-products", "https://www.gov.uk/guidance/product-safety-database-unsafe-products", class: "govuk-link" %>
+    </p>
+      
+    <p>
+      Risk assessments are not required where the product poses a chemical risk; the notification is submitted in circumstances where there is well-documented evidence that certain features of certain products consistently lead to a specified risk and risk level; or the notification is for a cosmetic product containing a banned or restricted substance. However, the risk level should be identified on each case. 
+    </p>
+      
+    <p> 
+      Further information on notifying product safety risks and/or noncompliance can be found at the following link: <%= link_to "https://www.gov.uk/guidance/notification-of-unsafe-and-noncompliant-products-and-cosmetics", "https://www.gov.uk/guidance/notification-of-unsafe-and-noncompliant-products-and-cosmetics", class: "govuk-link" %>
+    </p>
 
     <h2 class="govuk-heading-m" id="how-opss-uses-info-from-las">
       4. How OPSS uses information provided by local authorities
     </h2>
 
     <p>
-      Until the end of the implementation period (31 December 2020), the UK still needs to pass on notifications of serious risk to the European Commission and other EU member states through RAPEX.
+      Notifications for products found to pose a serious risk to the health and safety of consumers go through additional processes. Since 1 January 2021, OPSS undertake the validation and publication of serious risk notifications which was previously undertaken by the European Commission when the UK was a member of the EU and throughout the Transition Period. This validation will consist of quality assurance of information and data provided, ensuring public-facing fields are completed comprehensively and effectively. The validation will also include a review of the risk model and the supporting information, intended to ensure risk is being considered and applied consistently by different market surveillance authorities. This process may also include a consideration of whether the product safety issues identified may be national, novel or contentious, as outlined in the OPSS Incident Management Plan (https://www.gov.uk/government/publications/incident-management-plan).
+    </p>
+    
+    <p>
+      OPSS also uses information added to the PSD to undertake required information exchanges under the EU-UK Withdrawal Agreement and any trade agreements with other countries. OPSS will report information provided on the PSD in respect of Northern Ireland to report to the European Commission, as required by the Northern Ireland Protocol.
+    </p>
+    
+    <p>
+      OPSS may also monitor the PSD for recalls and add them to the UK Government Recall Site and the OECD Global Recall Portal. You can also request addition by adding OPSS Incident Management to the case.
     </p>
 
     <p>
-      You should add the relevant information to the PSD, and OPSS will add it to RAPEX on your behalf. When you report a product that presents a serious risk, you should:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        immediately change the case owner to OPSS Incident Management team and include ‘Serious risk notification’ in the message to the new case owner
-      </li>
-      <li>
-        respond quickly to requests for additional information 
-      </li>
-    </ul>
-
-    <p>
-      OPSS is the UK national contact point for RAPEX and will pass on notifications of serious risk submitted to the PSD to RAPEX on your behalf.
-    </p>
-
-    <p>
-      When OPSS receives a RAPEX alert from another EU member state about a serious risk they will add the information to the PSD. It will be visible and searchable to registered users. OPSS will then make the relevant local authority the case owner, who should take action.
-    </p>
-
-
-    <h2 class="govuk-heading-m" id="what-youll-be-asked-for-when-you-report-information">
-      What you’ll be asked for when you report information
-    </h2>
-
-    <p>
-      The details needed are similar to a RAPEX case.
-    </p>
-
-    <p>
-      The PSD asks for details on:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        the product you are reporting
-      </li>
-      <li>
-        the issues you have found
-      </li>
-      <li>
-        businesses involved
-      </li>
-    </ul>
-
-    <p>
-      And if you have them, you can add details on:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        corrective actions planned or taken
-      </li>
-      <li>
-        test results
-      </li>
-      <li>
-        risk assessments
-      </li>
-      <li>
-        product and evidence images
-      </li>
-    </ul>
-
-    <p>
-      You must only share personal data and other information on the database if you have the necessary consent or power to do so and are acting in compliance with the law (including data protection and intellectual property law).
+      OPSS may also use information on the PSD for monitoring and identification of emerging trends and issues.
     </p>
 
 
     
-    <h2 class="govuk-heading-m" id="report-early-and-add-details-when-they-are-available">
-      Report early and add details when they are available
-    </h2>
-
-    <p>
-      You should use the PSD to record information that has raised any level of concern – even if the issue is not yet proven, or you’re waiting for test results.
-    </p>
-
-    <p>
-      As more evidence is gathered (such as test results or risk assessments) it can be added to the case. OPSS is encouraging the product safety community to report product safety information earlier than it did on RAPEX and ICSMS.
-    </p>
-
-    <p>
-      All users should share information early so that it’s possible to see when other market surveillance authorities have:
-    </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-        raised concerns about a product or business
-      </li>
-      <li>
-        tested a product and shared the results
-      </li>
-    </ul>
-
-    <p>
-      This will help save time and money, and prevent duplication of effort.
-    </p>
-
-
-    <h3 class="govuk-heading-s">
-      OPSS reports product safety information too
-    </h3>
-
-    <p>
-      OPSS monitors the media and product safety websites in Europe, Canada, the US and Australia for new consumer product safety information. When OPSS finds anything that relates to products found on the UK market, it adds them to the PSD and makes the relevant local authority the case owner.
-    </p>
-
-
-
     <h2 class="govuk-heading-m" id="organisations-with-access-to-the-psd">
-      Organisations with access to the PSD
+      5. Organisations with access to the PSD
     </h2>
 
     <p>
@@ -277,21 +252,23 @@
         Health and Safety Executive Northern Ireland (HSENI)
       </li>
       <li>
+        Medicine and Healthcare products Regulatory Agency (MHRA)
+      </li>
+      <li>
         Marine and Coastguard Agency (MCGA)
       </li>
       <li>
         Driver and Vehicle Standards Agency (DVSA)
       </li>
       <li>
-        Vehicle Certification Agency (VCA)
-      </li>
-      <li>
         Ofcom
       </li>
     </ul>
 
+    
+    
     <h2 class="govuk-heading-m" id="viewing-cases">
-      Viewing cases
+      6. Viewing and restricting cases
     </h2>
 
     <p>
