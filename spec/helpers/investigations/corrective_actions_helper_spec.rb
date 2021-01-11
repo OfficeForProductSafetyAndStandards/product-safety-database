@@ -77,7 +77,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
       let(:has_online_recall_information) { nil }
 
       it "does not show the recall information published online" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).not_to include(key: { text: "Recall information" })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: "Not provided" })
       end
     end
   end

@@ -97,6 +97,7 @@ en:
         has_online_recall_information:
           has_online_recall_information_no: "No recall information published online"
           has_online_recall_information_not_relevant: "Not relevant"
+          has_online_recall_information_not_provided: "Not provided"
 
       create:
         success: "Corrective action was successfully recorded."
