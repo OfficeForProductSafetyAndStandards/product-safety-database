@@ -41,4 +41,16 @@ private
       metadata: metadata
     )
   end
+
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        "#{user.decorate.display_name(viewer: recipient)} edited a corrective action on the #{investigation.case_type}.",
+        "Corrective action edited for #{investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
+  end
 end

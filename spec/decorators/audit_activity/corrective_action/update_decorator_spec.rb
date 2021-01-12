@@ -11,7 +11,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
     corrective_action_form.tap { |form|
-      form.assign_attributes(
+      form.tap(&:valid?).assign_attributes(
         date_decided: new_date_decided,
         other_action: new_other_action,
         action: new_summary,
@@ -53,6 +53,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
       end
 
       context "when new recall information is set to no" do
+        let(:new_online_recall_information) { "" }
         let(:new_has_online_recall_information) { "has_online_recall_information_no" }
 
         specify do
@@ -62,6 +63,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set to not relevant" do
         let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq("Not relevant")
@@ -75,13 +77,24 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
       context "when new recall information is set" do
         let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
 
-        specify do
-          expect(decorated_activity.new_online_recall_information).to eq(nil)
+        context "when the recall information does not change" do
+          let(:new_online_recall_information) { corrective_action.online_recall_information }
+
+          specify do
+            expect(decorated_activity.new_online_recall_information).to eq(nil)
+          end
+        end
+
+        context "when the recall information changes" do
+          specify do
+            expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+          end
         end
       end
 
       context "when new recall information is set to no" do
         let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
@@ -90,6 +103,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set to not relevant" do
         let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq("Not relevant")
@@ -110,6 +124,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set to no" do
         let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq(nil)
@@ -118,6 +133,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set to not relevant" do
         let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq("Not relevant")
@@ -138,6 +154,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set to no" do
         let(:new_has_online_recall_information) { "has_online_recall_information_no" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
@@ -146,6 +163,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set to not relevant" do
         let(:new_has_online_recall_information) { "has_online_recall_information_not_relevant" }
+        let(:new_online_recall_information) { "" }
 
         specify do
           expect(decorated_activity.new_online_recall_information).to eq(nil)

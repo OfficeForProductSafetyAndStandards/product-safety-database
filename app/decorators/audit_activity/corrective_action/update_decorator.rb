@@ -16,14 +16,16 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def new_online_recall_information
-    has_online_recall_information = metadata.dig("updates", "has_online_recall_information", 1)
-    return unless has_online_recall_information
-
-    if has_online_recall_information.inquiry.has_online_recall_information_no? || has_online_recall_information.inquiry.has_online_recall_information_not_relevant?
-      return I18n.t(".#{has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])
+    if (online_recall_information = metadata.dig("updates", "online_recall_information", 1)).present?
+      return online_recall_information
     end
 
-    metadata.dig("updates", "online_recall_information", 1)
+    has_online_recall_information = metadata.dig("updates", "has_online_recall_information", 1)
+    return if has_online_recall_information.nil?
+
+    if has_online_recall_information.inquiry.has_online_recall_information_no? || has_online_recall_information.inquiry.has_online_recall_information_not_relevant?
+      I18n.t(".#{has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])
+    end
   end
 
   def new_duration
