@@ -2,8 +2,6 @@ module CorrectiveActionsConcern
   extend ActiveSupport::Concern
 
   def corrective_action_params
-    return {} if params[:corrective_action].blank?
-
     params.require(:corrective_action).permit(
       :product_id,
       :business_id,
@@ -17,6 +15,7 @@ module CorrectiveActionsConcern
       :duration,
       :geographic_scope,
       :other_action,
+      :further_corrective_action,
       file: %i[file description],
       date_decided: %i[day month year]
     )

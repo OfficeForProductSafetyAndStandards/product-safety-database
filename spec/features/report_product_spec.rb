@@ -166,8 +166,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_record_corrective_action_page
 
-        corrective_actions.each do |corrective_action_attributes|
+        corrective_actions.each_with_index do |corrective_action_attributes, i|
           fill_in_record_corrective_action_page(with: corrective_action_attributes)
+          if i.zero?
+            click_button "Continue"
+            expect(page).to have_error_summary("Select whether or not you have further corrective action to record")
+          end
+
+          within_fieldset("Are there other actions to report?") do
+            choose "Yes"
+          end
+          click_button "Continue"
+
           expect_to_be_on_record_corrective_action_page
         end
 
@@ -620,10 +630,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     select with[:geographic_scope], from: "What is the geographic scope of the action?"
-    within_fieldset("Are there other actions to report?") do
-      choose "Yes"
-    end
-    click_button "Continue"
   end
 
   def fill_in_other_information_page(test_results: true, risk_assessments: true)

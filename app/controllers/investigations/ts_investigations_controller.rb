@@ -165,9 +165,9 @@ private
   def set_repeat_step(model = :investigation)
     repeat_step_key = further_key step
     @repeat_step = case params.dig(model, repeat_step_key)
-                   when "Yes"
+                   when "Yes", true
                      true
-                   when "No"
+                   when "No", false
                      false
                    when nil
                      session[repeat_step_key]
@@ -185,8 +185,13 @@ private
   end
 
   def set_corrective_action
-    @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
-    @corrective_action_form.load_document_file
+    if request.get?
+      @corrective_action_form = CorrectiveActionForm.new
+    else
+      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
+      @corrective_action_form.load_document_file
+    end
+
     @product = product
     set_repeat_step(:corrective_action)
   end
@@ -378,7 +383,11 @@ private
   def repeat_step_valid?(model)
     if @repeat_step.nil?
       further_page_type = to_item_text(step)
-      model.errors.add(further_key(step), "Select whether or not you have #{further_page_type} to record")
+      further_key_step = further_key(step)
+      unless model.errors.key?(further_key_step)
+        model.errors.add(further_key_step, "Select whether or not you have #{further_page_type} to record")
+      end
+
       return false
     end
     true
@@ -396,7 +405,7 @@ private
 
     if @corrective_action_form.valid?
       attributes = @corrective_action_form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
-      session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document.id }
+      session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document&.id }
     end
 
     session[further_key(step)] = @repeat_step
@@ -544,7 +553,6 @@ private
 
       return false if risk_assessment_form_valid || reapeat_step_valid
     when :corrective_action
-      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params).tap(&:valid?)
       return false if @corrective_action_form.invalid?
     when :test_results
       return @test_result_form.valid?

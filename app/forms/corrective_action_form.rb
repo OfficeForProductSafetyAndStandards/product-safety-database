@@ -26,6 +26,7 @@ class CorrectiveActionForm
   attribute :existing_document_file_id
   attribute :filename
   attribute :file_description
+  attribute :further_corrective_action, :boolean
 
   validates :date_decided,
             presence: true,
@@ -37,7 +38,7 @@ class CorrectiveActionForm
   validate :related_file_attachment_validation
   validates :has_online_recall_information, inclusion: { in: CorrectiveAction.has_online_recall_informations.keys }
   validate :online_recall_information_validation
-
+  validates :further_corrective_action, inclusion: { in: [true, false] }
   validates :measure_type, presence: true
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true
