@@ -281,7 +281,8 @@ en:
               blank: "Enter a valid product category"
             barcode:
               invalid: "Enter a valid barcode number"
-              wrong_length: "Enter a valid barcode number"
+              too_long: "The barcode must be between 5 and 15 digits"
+              too_short: "The barcode must be between 5 and 15 digits"
               only_integer: "Enter a valid barcode number"
               not_a_number: "Enter a valid barcode number"
             affected_units_status:

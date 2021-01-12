@@ -32,7 +32,8 @@ class ProductForm
   before_validation { trim_whitespace(:brand) }
   before_validation { nilify_blanks(:barcode, :brand) }
 
-  validates :barcode, allow_nil: true, length: { minimum: 5, maximum: 15 }, numericality: { only_integer: true }
+  validates :barcode, allow_nil: true, numericality: { only_integer: true }
+  validates :barcode, allow_nil: true, length: { minimum: 5, maximum: 15 }, if: -> { barcode =~ /\A\d+\z/ }
   validates :authenticity, inclusion: { in: Product.authenticities.keys }
   validates :category, presence: true
   validates :subcategory, presence: true
