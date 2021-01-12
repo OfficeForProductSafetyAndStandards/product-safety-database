@@ -98,7 +98,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       let(:product_details) do
         {
           name: Faker::Lorem.sentence,
-          gtin13: "7622210761231",
+          barcode: "7622210761231",
           product_code: Faker::Number.number(digits: 10),
           category: Rails.application.config.product_constants["product_category"].sample,
           type: Faker::Appliance.equipment,
@@ -415,7 +415,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     within page.find(".product-summary") do
       expect(page).to have_selector("h2", text: info[:name])
       expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: info[:name])
-      expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:gtin13]) if info[:gtin13]
+      expect(page.find("dt", text: "Barcode number")).to have_sibling("dd", text: info[:barcode]) if info[:barcode]
       expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: expected_authenticity)
       expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
       expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: expected_units_affected)
@@ -531,7 +531,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     fill_in "Product name",                      with: with[:name]
-    fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:gtin13]
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: with[:barcode]
     fill_in "Other product identifiers",         with: with[:product_code] if with[:product_code]
     fill_in "Webpage",                           with: with[:webpage] if with[:webpage]
     fill_in "Description of product",            with: with[:description] if with[:description]

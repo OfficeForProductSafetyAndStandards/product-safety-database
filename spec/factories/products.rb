@@ -4,7 +4,7 @@ FactoryBot.define do
     description { "product description" }
     category { Rails.application.config.product_constants["product_category"].sample }
     subcategory { "subcategory" }
-    gtin13 { "9781529034523" }
+    barcode { "9781529034523" }
     authenticity { Product.authenticities.keys.sample }
     batch_number { "123123123" }
     brand { Faker::Company.name }

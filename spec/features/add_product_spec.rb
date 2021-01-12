@@ -18,7 +18,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     sign_in user
     visit "/cases/#{investigation.pretty_id}/products/new"
 
-    fill_in "Barcode number (GTIN, EAN or UPC)", with: "9781529034528"
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: "invalid"
 
     click_button "Save product"
 
@@ -39,7 +39,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsea
     fill_in "Product subcategory",               with: attributes[:subcategory]
     fill_in "Product brand",                     with: attributes[:brand]
     fill_in "Product name",                      with: attributes[:name]
-    fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:gtin13]
+    fill_in "Barcode number (GTIN, EAN or UPC)", with: attributes[:barcode]
     fill_in "Other product identifiers",         with: attributes[:product_code]
     fill_in "Batch number",                      with: attributes[:batch_number]
     fill_in "Webpage",                           with: attributes[:webpage]
