@@ -38,19 +38,23 @@ private
       investigation: investigation,
       business_id: business_id,
       product_id: product_id,
-      source: UserSource.new(user: user),
+      source: source,
       metadata: metadata
     )
   end
 
+  def source
+    @source ||= UserSource.new(user: user)
+  end
+
   def send_notification_email
-    email_recipients_for_case_owner.each do |recipient|
+    email_recipients_for_team_with_access(investigation, user).each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user.decorate.display_name(viewer: recipient)} edited a corrective action on the #{investigation.case_type}.",
-        "Corrective action edited for #{investigation.case_type.upcase_first}"
+        "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source.show(recipient)}.",
+        "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
   end

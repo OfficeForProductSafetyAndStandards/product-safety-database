@@ -4,6 +4,8 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stu
   include_context "with read only team and user"
   include_context "with add corrective action setup"
 
+  subject(:result) { described_class.call(params) }
+
   let(:action) { action_for_service }
   let(:params) do
     {
@@ -20,7 +22,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stu
       action: action,
       product_id: product.id,
       online_recall_information: online_recall_information,
-      has_online_recall_informationy: has_online_recall_information
+      has_online_recall_information: has_online_recall_information
     }
   end
 
@@ -29,10 +31,26 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stu
   end
 
   def expected_email_subject
-    "Asdasd"
+    "#{investigation.case_type.upcase_first} updated"
   end
 
-  it_behaves_like "a service which notifies teams with access" do
-    let(:result) { described_class.call(params) }
+  it "creates the corrective action", :aggregate_failures do
+    expect(result.corrective_action).not_to be_new_record
+    expect(result.corrective_action)
+      .to have_attributes(
+        investigation: investigation, date_decided: date_decided, business_id: business.id, details: details, legislation: legislation, measure_type: measure_type,
+        duration: duration, geographic_scope: geographic_scope, other_action: other_action, action: action, product_id: product.id,
+        online_recall_information: online_recall_information, has_online_recall_information: has_online_recall_information
+      )
   end
+
+  it "creates and audit activity", :aggregate_failures do
+    result
+
+    audit = investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Add")
+    expect(audit.source.user).to eq(user)
+    expect(audit.metadata["corrective_action_id"]).to eq(result.corrective_action.id)
+  end
+
+  it_behaves_like "a service which notifies teams with access"
 end
