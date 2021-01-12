@@ -2,21 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   include_context "with read only team and user"
-  let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
-  let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
-
-  let(:action_key) { (CorrectiveAction.actions.keys - %w[other]).sample }
-  let(:action) { CorrectiveAction.actions[action_key] }
-  let(:date) { Date.parse("2020-05-01") }
-  let(:legislation) { "General Product Safety Regulations 2005" }
-  let(:details) { "Urgent action following consumer reports" }
-  let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
-  let(:file_description) { Faker::Lorem.paragraph }
-  let(:measure_type) { "Mandatory" }
-  let(:duration) { "Permanent" }
-  let(:geographic_scope) { "National" }
-  let(:online_recall_information) { Faker::Internet.url(host: "example.com") }
+  include_context "with add corrective action setup"
 
   context "when the viewing user only has read only access" do
     scenario "cannot add supporting information" do
@@ -87,9 +73,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
       expect(page).to have_checked_field(action)
     end
 
-    expect(page).to have_field("Day", with: date.day)
-    expect(page).to have_field("Month", with: date.month)
-    expect(page).to have_field("Year", with: date.year)
+    expect(page).to have_field("Day", with: date_decided.day)
+    expect(page).to have_field("Month", with: date_decided.month)
+    expect(page).to have_field("Year", with: date_decided.year)
     expect(page).to have_field("Under which legislation?", with: legislation)
 
     within_fieldset "Is the corrective action mandatory?" do
@@ -110,7 +96,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     corrective_action_title = "#{CorrectiveActionDecorator::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}"
     item = page.find("h3", text: corrective_action_title).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{legislation}")
-    expect(item).to have_text("Date came into effect: #{date.to_s(:govuk)}")
+    expect(item).to have_text("Date came into effect: #{date_decided.to_s(:govuk)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")
@@ -125,9 +111,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
   def fill_and_submit_form
     choose action
-    fill_in "Day",     with: date.day   if date
-    fill_in "Month",   with: date.month if date
-    fill_in "Year",    with: date.year  if date
+    fill_in "Day",     with: date_decided.day   if date_decided
+    fill_in "Month",   with: date_decided.month if date_decided
+    fill_in "Year",    with: date_decided.year  if date_decided
 
     select legislation, from: "Under which legislation?"
 

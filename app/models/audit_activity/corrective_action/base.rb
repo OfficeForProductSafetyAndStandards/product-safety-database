@@ -20,4 +20,8 @@ class AuditActivity::CorrectiveAction::Base < AuditActivity::Base
   def activity_type
     "corrective action"
   end
+
+  # Do not send investigation_updated mail when test result updated. This
+  # overrides inherited functionality in the Activity model :(
+  def notify_relevant_users; end
 end

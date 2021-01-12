@@ -25,6 +25,7 @@ class AddCorrectiveActionToCase
       )
       corrective_action.document.attach(document)
       create_audit_activity
+      send_notification_email
     end
   end
 
