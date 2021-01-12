@@ -12,7 +12,7 @@ class ProductForm
   attribute :category
   attribute :country_of_origin
   attribute :description
-  attribute :gtin13
+  attribute :barcode
   attribute :name
   attribute :product_code
   attribute :subcategory
@@ -29,11 +29,11 @@ class ProductForm
   attribute :when_placed_on_market
 
   before_validation { trim_line_endings(:description) }
-  before_validation { convert_gtin_to_13_digits(:gtin13) }
   before_validation { trim_whitespace(:brand) }
-  before_validation { nilify_blanks(:gtin13, :brand) }
+  before_validation { nilify_blanks(:barcode, :brand) }
 
-  validates :gtin13, allow_nil: true, length: { is: 13 }, gtin: true
+  validates :barcode, allow_nil: true, numericality: { only_integer: true }
+  validates :barcode, allow_nil: true, length: { minimum: 5, maximum: 15 }, if: -> { barcode =~ /\A\d+\z/ }
   validates :authenticity, inclusion: { in: Product.authenticities.keys }
   validates :category, presence: true
   validates :subcategory, presence: true
