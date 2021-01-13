@@ -38,7 +38,7 @@ class CorrectiveActionForm
   validate :related_file_attachment_validation
   validates :has_online_recall_information, inclusion: { in: CorrectiveAction.has_online_recall_informations.keys }
   validate :online_recall_information_validation
-  validates :further_corrective_action, inclusion: { in: [true, false] }
+  validates :further_corrective_action, inclusion: { in: [true, false] }, on: :ts_flow
   validates :measure_type, presence: true
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true

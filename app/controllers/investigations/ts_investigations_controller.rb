@@ -537,7 +537,7 @@ private
       @product = product
       set_repeat_step(:corrective_action)
 
-      if @corrective_action_form.valid?
+      if @corrective_action_form.valid?(:ts_flow)
         store_corrective_action
         return true
       end
