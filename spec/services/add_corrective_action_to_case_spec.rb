@@ -50,6 +50,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stu
     audit = investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Add")
     expect(audit.source.user).to eq(user)
     expect(audit.metadata["corrective_action_id"]).to eq(result.corrective_action.id)
+    expect(audit.business).to eq(business)
   end
 
   it_behaves_like "a service which notifies teams with access"

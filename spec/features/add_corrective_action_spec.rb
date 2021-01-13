@@ -103,6 +103,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(item).to have_text("Attached: #{File.basename(file)}")
     expect(item).to have_text("Geographic scope: #{geographic_scope}")
     expect(item).to have_text(details)
+    expect(item).to have_link("View product details", href: product_url(product))
+    expect(item).to have_link("View business details", href: business_url(business))
   end
 
   def expect_case_supporting_information_page_to_show_file
@@ -116,6 +118,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     fill_in "Year",    with: date_decided.year  if date_decided
 
     select legislation, from: "Under which legislation?"
+
+    within_fieldset "Which business is responsible?" do
+      select business.trading_name, from: "Business"
+    end
 
     within_fieldset "Has the business responsible published product recall information online?" do
       choose "Yes"

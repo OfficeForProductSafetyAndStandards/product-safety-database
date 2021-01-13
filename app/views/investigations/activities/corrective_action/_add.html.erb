@@ -20,4 +20,13 @@
   <% end %>
   <br />
   <%= activity.details %>
-</div>
+</div>4
+
+<% if activity.product_id %>
+  <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link" %>
+<% end %>
+
+<% if activity.business_id %>
+  <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
+<% end %>
+<%=  link_to "View corrective action", investigation_corrective_action_path(@investigation, activity.corrective_action), class: "govuk-link" %>
