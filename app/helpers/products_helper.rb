@@ -6,7 +6,7 @@ module ProductsHelper
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
     params.require(:product).permit(
-      :brand, :name, :subcategory, :category, :product_code, :webpage, :description, :batch_number, :country_of_origin, :gtin13, :authenticity, :when_placed_on_market, :affected_units_status, :number_of_affected_units, :exact_units, :approx_units, :customs_code, :has_markings, markings: []
+      :brand, :name, :subcategory, :category, :product_code, :webpage, :description, :batch_number, :country_of_origin, :barcode, :authenticity, :when_placed_on_market, :affected_units_status, :number_of_affected_units, :exact_units, :approx_units, :customs_code, :has_markings, markings: []
     ).with_defaults(markings: [])
   end
 

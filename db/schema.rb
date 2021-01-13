@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_07_162924) do
 
+ActiveRecord::Schema.define(version: 2021_01_07_162924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_162924) do
   create_table "products", id: :serial, force: :cascade do |t|
     t.enum "affected_units_status", as: "affected_units_statuses"
     t.enum "authenticity", as: "authenticities"
+    t.string "barcode", limit: 15
     t.string "batch_number"
     t.text "brand"
     t.string "category"
@@ -243,7 +244,6 @@ ActiveRecord::Schema.define(version: 2021_01_07_162924) do
     t.datetime "created_at", null: false
     t.text "customs_code"
     t.text "description"
-    t.string "gtin13", limit: 13
     t.enum "has_markings", as: "has_markings_values"
     t.text "markings", array: true
     t.string "name"
