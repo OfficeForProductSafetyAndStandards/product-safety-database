@@ -616,10 +616,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
     within_fieldset "Are there any files related to the action?" do
       choose "Yes"
+      attach_file "Upload a file", with[:file], visible: false
+      fill_in "Attachment description", with: with[:file_description]
     end
-
-    attach_file "Upload a file", with[:file], visible: false
-    fill_in "Attachment description", with: with[:file_description]
 
     within_fieldset "Is the corrective action mandatory?" do
       choose with[:measure_type] == "mandatory" ? "Yes" : "No, it’s voluntary"

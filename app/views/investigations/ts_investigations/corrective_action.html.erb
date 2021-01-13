@@ -16,6 +16,7 @@
              allow_business_linking: false %>
 
   <% file_field = capture do %>
+    <%= form.hidden_field :existing_document_file_id %>
     <%= render "related_attachment_fields", form: form, file_blob: @corrective_action_form.document, attachment_name: :file %>
   <% end %>
   <%= render "form_components/govuk_radios",

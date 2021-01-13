@@ -35,7 +35,6 @@ class Investigations::TsInvestigationsController < ApplicationController
                 if: lambda {
                       %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
                     }
-  before_action :set_corrective_action, only: %i[show update], if: -> { step == :corrective_action }
   before_action :set_risk_assessment_form, only: %i[show update], if: -> { step == :risk_assessments }
   # There is no set_other_information because there is no validation on the page so there is no need to set the model
   before_action :set_test, only: %i[show update], if: -> { step == :test_results }
@@ -59,7 +58,6 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_business, only: %i[update], if: -> { step == :business }
-  before_action :store_corrective_action, only: %i[update], if: -> { step == :corrective_action }
   before_action :store_other_information, only: %i[update], if: -> { step == :other_information }
   before_action :store_test, only: %i[update], if: -> { step == :test_results }
   before_action :store_file,
@@ -75,8 +73,12 @@ class Investigations::TsInvestigationsController < ApplicationController
       @product_form = ProductForm.new
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
-    when :corrective_action, *other_information_types.without(:risk_assessments)
+    when *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
+    when :corrective_action
+      @corrective_action_form = CorrectiveActionForm.new
+      @product = product
+      set_repeat_step(:corrective_action)
     when :risk_assessments
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
@@ -182,18 +184,6 @@ private
       product: product
     )
     set_repeat_step(:trading_standards_risk_assessment_form)
-  end
-
-  def set_corrective_action
-    if request.get?
-      @corrective_action_form = CorrectiveActionForm.new
-    else
-      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
-      @corrective_action_form.load_document_file
-    end
-
-    @product = product
-    set_repeat_step(:corrective_action)
   end
 
   def set_test
@@ -394,20 +384,20 @@ private
   end
 
   def corrective_action_valid?
-    @corrective_action_form.valid?
     repeat_step_valid?(@corrective_action_form)
-    @corrective_action_form.errors.empty?
+    @corrective_action_form.valid?
   end
 
   def store_corrective_action
     return if @skip_step
-    return unless corrective_action_valid?
 
-    if @corrective_action_form.valid?
-      attributes = @corrective_action_form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
+    if corrective_action_valid?
+      attributes = @corrective_action_form.serializable_hash
       session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document&.id }
     end
 
+    ap corrective_action_valid?
+    ap @corrective_action_form.errors.messages
     session[further_key(step)] = @repeat_step
   end
 
@@ -553,6 +543,10 @@ private
 
       return false if risk_assessment_form_valid || reapeat_step_valid
     when :corrective_action
+      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
+      @product = product
+      set_repeat_step(:corrective_action)
+      store_corrective_action
       return false if @corrective_action_form.invalid?
     when :test_results
       return @test_result_form.valid?
@@ -621,7 +615,7 @@ private
   def save_corrective_actions
     session[:corrective_actions].each do |session_corrective_action|
       AddCorrectiveActionToCase.call!(
-        session_corrective_action[:corrective_action]
+        session_corrective_action[:corrective_action].except("related_file", "existing_document_file_id", "filename", "file_description")
           .merge(product_id: @product.id, user: current_user, investigation: @investigation)
       )
     end

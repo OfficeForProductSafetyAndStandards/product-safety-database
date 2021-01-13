@@ -16,6 +16,7 @@ module CorrectiveActionsConcern
       :geographic_scope,
       :other_action,
       :further_corrective_action,
+      :existing_document_file_id,
       file: %i[file description],
       date_decided: %i[day month year]
     )

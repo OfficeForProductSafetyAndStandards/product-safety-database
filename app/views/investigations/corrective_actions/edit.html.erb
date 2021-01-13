@@ -27,6 +27,7 @@
       %>
 
       <% file_field = capture do %>
+        <%= form.hidden_field :existing_document_file_id %>
         <%= render "related_attachment_fields", form: form, file_blob: @file_blob, attachment_name: :file %>
       <% end %>
       <%= form.hidden_field :related_file, value: nil %>
