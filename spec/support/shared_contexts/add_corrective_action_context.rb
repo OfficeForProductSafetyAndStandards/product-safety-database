@@ -14,8 +14,8 @@ RSpec.shared_context "with add corrective action setup" do
   let(:duration) { "Permanent" }
   let(:geographic_scope) { "National" }
   let(:online_recall_information) { Faker::Internet.url(host: "example.com") }
-  let(:other_action) { ""}
+  let(:other_action) { "" }
   let(:action_for_form) { CorrectiveAction.actions[action_for_service] }
-  let(:action_for_service) { (CorrectiveAction.actions.keys - ["other"]).sample }
+  let(:action_for_service) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:has_online_recall_information) { "has_online_recall_information_yes" }
 end
