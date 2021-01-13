@@ -15,8 +15,9 @@
   <br />
   Geographic scope: <strong><%= activity.geographic_scope %></strong>
   <br />
-  Attached: <strong><%= activity.document_filename %></strong>
-
+  <% if activity.document_filename %>
+    Attached: <strong><%= activity.document_filename %></strong>
+  <% end %>
   <br />
   <%= activity.details %>
 </div>
