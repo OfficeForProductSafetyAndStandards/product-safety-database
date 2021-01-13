@@ -385,19 +385,9 @@ private
     true
   end
 
-  def corrective_action_valid?
-    repeat_step_valid?(@corrective_action_form)
-    @corrective_action_form.valid?
-  end
-
   def store_corrective_action
-    return if @skip_step
-
-    if corrective_action_valid?
-      attributes = @corrective_action_form.serializable_hash
-      session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document&.id }
-    end
-
+    attributes = @corrective_action_form.serializable_hash
+    session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document&.id }
     session[further_key(step)] = @repeat_step
   end
 
@@ -546,8 +536,12 @@ private
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
       @product = product
       set_repeat_step(:corrective_action)
-      store_corrective_action
-      return false if @corrective_action_form.invalid?
+
+      if @corrective_action_form.valid?
+        store_corrective_action
+        return true
+      end
+      return false
     when :test_results
       return @test_result_form.valid?
     when :reference_number
