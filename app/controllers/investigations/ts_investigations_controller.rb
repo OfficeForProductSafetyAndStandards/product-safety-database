@@ -76,9 +76,11 @@ class Investigations::TsInvestigationsController < ApplicationController
     when *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
     when :corrective_action
+      set_repeat_step(:corrective_action)
+      return redirect_to next_wizard_path unless @repeat_step
+
       @corrective_action_form = CorrectiveActionForm.new
       @product = product
-      set_repeat_step(:corrective_action)
     when :risk_assessments
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
@@ -396,8 +398,6 @@ private
       session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document&.id }
     end
 
-    ap corrective_action_valid?
-    ap @corrective_action_form.errors.messages
     session[further_key(step)] = @repeat_step
   end
 
