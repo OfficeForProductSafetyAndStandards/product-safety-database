@@ -6,8 +6,6 @@ class ChangeHasOnlineRecallInformationToCorrectiveActions < ActiveRecord::Migrat
         dir.down { execute "DROP TYPE IF EXISTS has_online_recall_information;" }
       end
 
-      remove_column :corrective_actions, :has_online_recall_information, :boolean
-
       change_table :corrective_actions, bulk: true do |t|
         t.column :has_online_recall_information, :has_online_recall_information, default: nil
       end

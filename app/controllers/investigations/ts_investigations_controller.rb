@@ -169,9 +169,9 @@ private
   def set_repeat_step(model = :investigation)
     repeat_step_key = further_key step
     @repeat_step = case params.dig(model, repeat_step_key)
-                   when "Yes", true
+                   when "Yes"
                      true
-                   when "No", false
+                   when "No"
                      false
                    when nil
                      session[repeat_step_key]
