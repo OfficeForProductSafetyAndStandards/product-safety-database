@@ -7,7 +7,6 @@ gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 gem "activerecord-pg_enum", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.87"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
-gem "barkick", "~> 0.1"
 gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils", "~> 0.6"
 gem "devise", "~> 4.7"
@@ -59,7 +58,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.3"
+  gem "listen", "~> 3.4"
   gem "m", "~> 1.5"
   gem "solargraph", "~> 0.40"
   gem "spring", "~> 2.1"

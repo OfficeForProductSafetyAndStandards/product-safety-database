@@ -18,15 +18,4 @@ module SanitizationHelper
       public_send("#{key}=", attributes[key.to_s]&.strip)
     end
   end
-
-  def convert_gtin_to_13_digits(*keys)
-    keys.each do |key|
-      gtin = Barkick::GTIN.new(attributes[key.to_s]&.strip)
-      public_send("#{key}=", gtin.gtin13) if gtin.valid?
-    # 8 digit codes raise an ArgumentError, as a type (UPC-E or EAN-8) needs
-    # to be specified in order to convert the code to a valid GTIN
-    rescue ArgumentError
-      next
-    end
-  end
 end

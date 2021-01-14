@@ -17,12 +17,13 @@ class ProductDecorator < ApplicationDecorator
       { key: { text: "Product brand" }, value: { text: object.brand } },
       { key: { text: "Product name" }, value: { text: object.name } },
       { key: { text: "When placed on market" }, value: { text: when_placed_on_market } },
-      { key: { text: "Barcode number" }, value: { text: gtin13 } },
+      { key: { text: "Barcode number" }, value: { text: barcode } },
       { key: { text: "Batch number" }, value: { text: batch_number } },
       { key: { text: "Other product identifiers" }, value: { text: product_code } },
       { key: { text: "Webpage" }, value: { text: object.webpage } },
       { key: { text: "Description" }, value: { text: description } },
-      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } }
+      { key: { text: "Country of origin" }, value: { text: country_from_code(country_of_origin) } },
+      { key: { text: "Customs code" }, value: { text: object.customs_code } }
     ]
     rows.compact!
     h.render "components/govuk_summary_list", rows: rows
