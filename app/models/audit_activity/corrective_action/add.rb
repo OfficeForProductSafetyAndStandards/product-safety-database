@@ -3,10 +3,6 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     { corrective_action_id: corrective_action.id }
   end
 
-  def self.from(_corrective_action)
-    raise "Deprecated - use AddCorrectiveActionToCase.call instead"
-  end
-
   def email_update_text(viewer = nil)
     "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end

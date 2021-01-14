@@ -5,6 +5,10 @@ class AuditActivity::CorrectiveAction::Base < AuditActivity::Base
   belongs_to :business, optional: true, class_name: "::Business"
   belongs_to :product, class_name: "::Product"
 
+  def self.from(_corrective_action)
+    raise "Deprecated - use a service class instead"
+  end
+
   def corrective_action
     @corrective_action ||= begin
                              if metadata&.dig("corrective_action_id")
