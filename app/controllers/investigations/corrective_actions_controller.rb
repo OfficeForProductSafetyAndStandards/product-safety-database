@@ -61,7 +61,7 @@ module Investigations
 
       result = UpdateCorrectiveAction.call(
         @corrective_action_form
-          .serializable_hash(except: :further_corrctive_action)
+          .serializable_hash
           .merge(
             user: current_user,
             corrective_action: corrective_action,
