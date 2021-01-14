@@ -1,0 +1,12 @@
+#! /bin/sh
+
+cd app
+export $(./env/get-env-from-vcap.sh)
+
+args=
+for arg in "$@";
+do
+  args="$args '$arg'"
+done
+
+eval exec /tmp/lifecycle/launcher "" $args ""
