@@ -2,6 +2,7 @@
   Product: <%= link_to activity.product_name, activity.product, class: "govuk-link" %>
   <br />
   Legislation: <strong><%= activity.legislation %></strong>
+  <br />
   Recall information: <%= link_to activity.online_recall_information %>
   <br />
   <% if activity.business.present? %>
