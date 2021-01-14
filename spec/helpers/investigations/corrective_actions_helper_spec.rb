@@ -57,7 +57,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
 
     context "with no online recall information" do
       let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
-      let(:expected_online_recall_information) { "No recall information published online" }
+      let(:expected_online_recall_information) { "Not published online" }
 
       it "show the no recall information published online" do
         expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })

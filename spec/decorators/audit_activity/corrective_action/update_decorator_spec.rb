@@ -57,7 +57,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         let(:new_has_online_recall_information) { "has_online_recall_information_no" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
+          expect(decorated_activity.new_online_recall_information).to eq("Not published online")
         end
       end
 
@@ -97,7 +97,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         let(:new_online_recall_information) { "" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
+          expect(decorated_activity.new_online_recall_information).to eq("Not published online")
         end
       end
 
@@ -157,7 +157,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         let(:new_online_recall_information) { "" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq("No recall information published online")
+          expect(decorated_activity.new_online_recall_information).to eq("Not published online")
         end
       end
 
