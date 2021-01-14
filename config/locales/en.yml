@@ -104,10 +104,9 @@ en:
       update:
         success: "Corrective action was successfully updated."
       form:
-        has_online_recall_information:
-          has_online_recall_information_yes: "Yes"
-          has_online_recall_information_no: "No"
-          has_online_recall_information_not_relevant: "Not relevant"
+        yes: "Yes"
+        no: "No"
+        not_relevant: "Not relevant"
         has_online_recall_information_legend: "Has the business responsible published product recall information online?"
         online_recall_information_hint: "For example http://www.example.com or https://www.example.com"
         online_recall_information_label: "Online recall information"
