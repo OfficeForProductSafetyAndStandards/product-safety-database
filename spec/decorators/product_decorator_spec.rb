@@ -68,7 +68,7 @@ RSpec.describe ProductDecorator do
       end
 
       it "displays the Barcode" do
-        expect(summary_list).to summarise("Barcode", text: product.gtin13)
+        expect(summary_list).to summarise("Barcode", text: product.barcode)
       end
 
       it "displays the other product identifiers" do
