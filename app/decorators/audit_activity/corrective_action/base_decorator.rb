@@ -1,8 +1,14 @@
 class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
+  include Investigations::CorrectiveActionsHelper
+
   decorates_association :product, with: ProductDecorator
   decorates_association :business, with: BusinessDecorator
   delegate :name, to: :product, prefix: true
   delegate :details, :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
+
+  def online_recall_information
+    h.online_recall_information_text_for(object.corrective_action)
+  end
 
   def trading_name
     corrective_action.business.trading_name
