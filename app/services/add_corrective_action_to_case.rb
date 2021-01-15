@@ -2,7 +2,7 @@ class AddCorrectiveActionToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :corrective_action, :user, :investigation, :document, :date_decided, :business_id, :details, :legislation, :measure_type, :duration, :geographic_scope, :other_action, :action, :product_id, :online_recall_information, :has_online_recall_information, to: :context
+  delegate :corrective_action, :user, :investigation, :document, :date_decided, :business_id, :details, :legislation, :measure_type, :duration, :geographic_scope, :other_action, :action, :product_id, :online_recall_information, :has_online_recall_information, :changes, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -32,7 +32,7 @@ class AddCorrectiveActionToCase
 private
 
   def create_audit_activity
-    metadata = AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action)
+    metadata = AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action, changes)
 
     AuditActivity::CorrectiveAction::Add.create!(
       investigation: investigation,

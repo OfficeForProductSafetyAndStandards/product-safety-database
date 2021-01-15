@@ -17,7 +17,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
 
   def new_online_recall_information
     if (online_recall_information = metadata.dig("updates", "online_recall_information", 1)).present?
-      return online_recall_information
+      return h.link_to online_recall_information, online_recall_information
     end
 
     has_online_recall_information = metadata.dig("updates", "has_online_recall_information", 1)

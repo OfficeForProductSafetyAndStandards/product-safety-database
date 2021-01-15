@@ -1,6 +1,6 @@
 class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Base
-  def self.build_metadata(corrective_action)
-    { corrective_action_id: corrective_action.id }
+  def self.build_metadata(corrective_action, changes)
+    { corrective_action_id: corrective_action.id, updates: changes }
   end
 
   def email_update_text(viewer = nil)

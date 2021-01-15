@@ -10,7 +10,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
       [
         { key: { text: "Date of action" }, value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" }, value: { text: corrective_action.legislation } },
-        { key: { text: "Recall information" }, value: { text: expected_online_recall_information } },
+        { key: { text: "Recall information" }, value: { html: match(expected_online_recall_information) } },
         { key: { text: "Product" }, value: { html: helper.link_to(corrective_action.product.name, helper.product_path(corrective_action.product)) } },
         { key: { text: "Business" }, value: { html: helper.link_to(corrective_action.business.trading_name, helper.business_path(corrective_action.business)) } },
         { key: { text: "Type of action" }, value: { text: corrective_action.measure_type.upcase_first } },
@@ -51,7 +51,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
 
     context "with online recall information" do
       it "show the recall information" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: /#{expected_online_recall_information}/ })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /#{expected_online_recall_information}/ })
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
       let(:expected_online_recall_information) { "Not published online" }
 
       it "show the no recall information published online" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: expected_online_recall_information })
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
       let(:expected_online_recall_information) { "Not relevant" }
 
       it "shows not relevant" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: expected_online_recall_information })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: expected_online_recall_information })
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
       let(:has_online_recall_information) { nil }
 
       it "does not show the recall information published online" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { text: "Not provided" })
+        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: "Not provided" })
       end
     end
   end

@@ -7,7 +7,10 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
   delegate :details, :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
 
   def online_recall_information
-    h.online_recall_information_text_for(object.corrective_action)
+    h.online_recall_information_text_for(
+      corrective_action.online_recall_information,
+      has_online_recall_information: corrective_action.has_online_recall_information
+    )
   end
 
   def trading_name

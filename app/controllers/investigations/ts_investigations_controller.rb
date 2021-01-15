@@ -610,7 +610,12 @@ private
     session[:corrective_actions].each do |session_corrective_action|
       AddCorrectiveActionToCase.call!(
         session_corrective_action[:corrective_action].except("related_file", "existing_document_file_id", "filename", "file_description")
-          .merge(product_id: @product.id, user: current_user, investigation: @investigation)
+          .merge(
+            product_id: @product.id,
+            user: current_user,
+            investigation: @investigation,
+            changes: @corrective_action_form.changes
+          )
       )
     end
   end
