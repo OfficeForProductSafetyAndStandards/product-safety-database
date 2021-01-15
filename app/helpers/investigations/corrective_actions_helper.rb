@@ -28,7 +28,7 @@ module Investigations
     end
 
     def online_recall_information_text_for(corrective_action)
-      return corrective_action.online_recall_information if corrective_action.has_online_recall_information_yes?
+      return link_to(corrective_action.online_recall_information) if corrective_action.has_online_recall_information_yes?
       return I18n.t(".has_online_recall_information_not_provided", scope: %i[investigations corrective_actions helper has_online_recall_information]) if corrective_action.has_online_recall_information.nil?
 
       I18n.t(".#{corrective_action.has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])

@@ -3,7 +3,11 @@
   <br />
   Legislation: <strong><%= activity.legislation %></strong>
   <br />
-  Recall information: <%= link_to activity.online_recall_information %>
+  <% if activity.online_recall_information.starts_with?("http") %>
+    Recall information: <%= link_to activity.online_recall_information %>
+  <% else %>
+    Recall information: <strong><%= activity.online_recall_information %></strong>
+  <% end %>
   <br />
   <% if activity.business.present? %>
     Business responsible: <strong><%= activity.trading_name %></strong>
