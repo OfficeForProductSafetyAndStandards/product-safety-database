@@ -8,25 +8,41 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
 
   def online_recall_information
     h.online_recall_information_text_for(
-      corrective_action.online_recall_information,
-      has_online_recall_information: corrective_action.has_online_recall_information
+      metadata.dig("updates", "online_recall_information", 1),
+      has_online_recall_information: metadata.dig("updates", "has_online_recall_information", 1)
     )
   end
 
   def trading_name
-    corrective_action.business.trading_name
+    business.trading_name
   end
 
   def date_decided
-    corrective_action.date_decided.to_s(:govuk)
+    metadata.dig("updates", "date_decided", 1).to_s(:govuk)
+  end
+
+  def legislation
+    metadata.dig("updates", "legislation", 1)
+  end
+
+  def action
+    # TODO
+  end
+
+  def details
+    metadata.dig("updates", "details", 1)
   end
 
   def measure_type
-    CorrectiveAction.human_attribute_name("measure_type.#{corrective_action.measure_type}")
+    CorrectiveAction.human_attribute_name("measure_type.#{metadata.dig("updates", "measure_type", 1)}")
   end
 
   def duration
-    CorrectiveAction.human_attribute_name("duration.#{corrective_action.duration}")
+    CorrectiveAction.human_attribute_name("duration.#{metadata.dig("updates", "duration", 1)}")
+  end
+
+  def geographic_scope
+    metadata.dig("updates", "geographic_scope", 1)
   end
 
   def document_filename
