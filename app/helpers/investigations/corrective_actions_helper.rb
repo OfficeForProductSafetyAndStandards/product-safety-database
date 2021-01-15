@@ -1,13 +1,15 @@
 module Investigations
   module CorrectiveActionsHelper
     def corrective_action_summary_list_rows(corrective_action)
+      recall_information = online_recall_information_text_for(corrective_action)
+      recall_information = link_to(recall_information) if recall_information.starts_with?("http")
       rows = [
         { key: { text: "Action" },                    value: { text: action_text_for(corrective_action) } },
         { key: { text: "Date of action" },            value: { text: corrective_action.date_of_activity } },
         { key: { text: "Legislation" },               value: { text: corrective_action.legislation } },
         { key: { text: "Product" },                   value: { html: link_to(corrective_action.product.name, product_path(corrective_action.product)) } },
         { key: { text: "Business" },                  value: { html: business_text_for(corrective_action) } },
-        { key: { text: "Recall information" },        value: { text: online_recall_information_text_for(corrective_action) } }
+        { key: { text: "Recall information" },        value: { text: recall_information } }
       ]
       rows << { key: { text: "Type of action" },      value: { text: corrective_action.measure_type } } if corrective_action.measure_type.present?
       rows << { key: { text: "Duration of measure" }, value: { text: corrective_action.duration } }
