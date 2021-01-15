@@ -38,6 +38,12 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:online_recall_information) { nil }
 
   describe "#valid?" do
+    let(:form) { corrective_action_form }
+
+    it_behaves_like "it does not allow dates in the future", :date_decided
+    it_behaves_like "it does not allow malformed dates", :date_decided
+    it_behaves_like "it does not allow an incomplete", :date_decided
+
     context "with valid input" do
       it "returns true" do
         expect(corrective_action_form).to be_valid
