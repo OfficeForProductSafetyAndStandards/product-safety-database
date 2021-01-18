@@ -3,7 +3,7 @@
   <br />
   Legislation: <strong><%= activity.legislation %></strong>
   <br />
-  <% if activity.online_recall_information.starts_with?("http") %>
+  <% if activity.online_recall_information.match?("http") %>
     Recall information: <%= link_to activity.online_recall_information %>
   <% else %>
     Recall information: <strong><%= activity.online_recall_information %></strong>
