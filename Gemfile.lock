@@ -69,7 +69,7 @@ GEM
     activerecord (6.1.0)
       activemodel (= 6.1.0)
       activesupport (= 6.1.0)
-    activerecord-pg_enum (1.2.0)
+    activerecord-pg_enum (1.2.2)
       activerecord (>= 4.1.0)
       activesupport
       pg
@@ -242,7 +242,7 @@ GEM
       kramdown (~> 2.0)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.4.0)
+    listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.11.2)
@@ -530,7 +530,7 @@ GEM
       unicode-display_width (~> 1.5)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
-    strong_migrations (0.7.5)
+    strong_migrations (0.7.6)
       activerecord (>= 5)
     super_diff (0.5.3)
       attr_extras (>= 6.2.4)
