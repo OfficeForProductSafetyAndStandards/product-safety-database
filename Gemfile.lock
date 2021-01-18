@@ -69,7 +69,7 @@ GEM
     activerecord (6.1.0)
       activemodel (= 6.1.0)
       activesupport (= 6.1.0)
-    activerecord-pg_enum (1.2.0)
+    activerecord-pg_enum (1.2.2)
       activerecord (>= 4.1.0)
       activesupport
       pg
