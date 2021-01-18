@@ -6,9 +6,7 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
   delegate :name, to: :product, prefix: true
   delegate :details, :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
 
-  def trading_name
-    business.trading_name
-  end
+  delegate :trading_name, to: :business
 
   def date_decided
     @date_decided ||= Date.parse(metadata.dig("updates", "date_decided", 1)).to_s(:govuk)
@@ -18,20 +16,16 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
     metadata.dig("updates", "legislation", 1)
   end
 
-  def action
-    # TODO
-  end
-
   def details
     metadata.dig("updates", "details", 1)
   end
 
   def measure_type
-    CorrectiveAction.human_attribute_name("measure_type.#{metadata.dig("updates", "measure_type", 1)}")
+    CorrectiveAction.human_attribute_name("measure_type.#{metadata.dig('updates', 'measure_type', 1)}")
   end
 
   def duration
-    CorrectiveAction.human_attribute_name("duration.#{metadata.dig("updates", "duration", 1)}")
+    CorrectiveAction.human_attribute_name("duration.#{metadata.dig('updates', 'duration', 1)}")
   end
 
   def geographic_scope
