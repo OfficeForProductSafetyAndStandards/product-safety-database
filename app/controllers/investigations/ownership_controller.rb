@@ -9,7 +9,7 @@ class Investigations::OwnershipController < ApplicationController
     @potential_owner = form.owner&.decorate
 
     get_potential_assignees if step == :"select-owner"
-
+    @investigation = @investigation.decorate
     render_wizard
   end
 
@@ -31,13 +31,14 @@ class Investigations::OwnershipController < ApplicationController
     session[session_store_key] = nil
 
     message = "#{@investigation.case_type.upcase_first} owner changed to #{form.owner.decorate.display_name(viewer: current_user)}"
+    @investigation = @investigation.decorate
     redirect_to investigation_path(@investigation), flash: { success: message }
   end
 
 private
 
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
   end
 
   def authorize_user
@@ -74,9 +75,9 @@ private
   end
 
   def get_potential_assignees
-    @selectable_users = [@investigation.owner_user&.object, current_user].uniq.compact
+    @selectable_users = [@investigation.owner_user, current_user].uniq.compact
     @team_members = current_user.team.users.active.includes(:team)
-    @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team&.object].flatten.uniq.compact
+    @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team].flatten.uniq.compact
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
   end

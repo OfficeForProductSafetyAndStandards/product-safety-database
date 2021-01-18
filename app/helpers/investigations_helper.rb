@@ -306,7 +306,19 @@ module InvestigationsHelper
       }
     end
 
-    rows = [risk_level_row, risk_assessment_row]
+    risk_validated_value = if investigation.risk_validated_by
+                             t("investigations.risk_validation.validated_status", risk_validated_by: investigation.risk_validated_by, risk_validated_at: investigation.risk_validated_at.strftime("%d %B %Y"))
+                           else
+                             t("investigations.risk_validation.not_validated")
+                           end
+
+    validated_row = {
+      key: { text: t("investigations.risk_validation.page_title") },
+      value: { text: risk_validated_value },
+      actions: risk_validation_actions(investigation, user)
+    }
+
+    rows = [risk_level_row, validated_row, risk_assessment_row]
 
     if investigation.hazard_type.present?
       rows << {
@@ -323,6 +335,23 @@ module InvestigationsHelper
     end
 
     rows
+  end
+
+  def risk_validation_actions(investigation, user)
+    if policy(Investigation).risk_level_validation? && investigation.teams_with_access.include?(user.team)
+      {
+        items: [
+          href: edit_investigation_risk_validations_path(investigation.pretty_id),
+          text: risk_validated_link_text(investigation)
+        ]
+      }
+    else
+      {}
+    end
+  end
+
+  def risk_validated_link_text(investigation)
+    investigation.risk_validated_by ? "Change" : t("investigations.risk_validation.validate")
   end
 
   # This builds an array from an investigation which can then

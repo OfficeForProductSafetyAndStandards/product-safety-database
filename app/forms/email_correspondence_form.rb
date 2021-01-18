@@ -64,7 +64,7 @@ class EmailCorrespondenceForm
   def cache_files!
     if email_file.present?
 
-      self.email_file_id = ActiveStorage::Blob.create_after_upload!(
+      self.email_file_id = ActiveStorage::Blob.create_and_upload!(
         io: email_file,
         filename: email_file.original_filename,
         content_type: email_file.content_type
@@ -72,7 +72,7 @@ class EmailCorrespondenceForm
     end
 
     if email_attachment.present?
-      self.email_attachment_id = ActiveStorage::Blob.create_after_upload!(
+      self.email_attachment_id = ActiveStorage::Blob.create_and_upload!(
         io: email_attachment,
         filename: email_attachment.original_filename,
         content_type: email_attachment.content_type
@@ -83,13 +83,13 @@ class EmailCorrespondenceForm
   def cached_email_file
     return if email_file_id.nil?
 
-    @cached_email_file ||= ActiveStorage::Blob.find_signed(email_file_id)
+    @cached_email_file ||= ActiveStorage::Blob.find_signed!(email_file_id)
   end
 
   def cached_email_attachment
     return if email_attachment_id.nil?
 
-    @cached_email_attachment ||= ActiveStorage::Blob.find_signed(email_attachment_id)
+    @cached_email_attachment ||= ActiveStorage::Blob.find_signed!(email_attachment_id)
   end
 
 private

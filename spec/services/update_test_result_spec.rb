@@ -1,42 +1,72 @@
 require "rails_helper"
 
 RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_test_queue_adapter do
+  subject(:result) { described_class.call(params) }
+
+  let(:user)                                     { create(:user, :activated) }
+  let(:investigation)                            { create(:allegation) }
+  let(:product)                                  { create(:product) }
+  let(:test_result)                              { create(:test_result, investigation: investigation, product: product) }
+
+  let(:new_details)                              { Faker::Hipster.sentence }
+  let(:new_legislation)                          do
+    (Rails.application.config.legislation_constants["legislation"] - [test_result.legislation]).sample
+  end
+  let(:new_date)                                 { test_result.date - 2.days }
+  let(:new_standards_product_was_tested_against) { Faker::Hipster.words }
+  let(:new_document)                             { ActiveStorage::Blob.create_and_upload!(io: File.open(file_fixture("new_test_result.txt")), filename: "new_test_result.txt") }
+  let(:new_result)                               { (Test::Result.results.keys - [test_result.result]).sample }
+  let(:new_attributes) do
+    {
+      details: new_details,
+      legislation: new_legislation,
+      date: new_date,
+      result: new_result,
+      product_id: product.id,
+      standards_product_was_tested_against: new_standards_product_was_tested_against,
+      existing_document_file_id: new_document.signed_id
+    }
+  end
+  let(:test_result_form) { TestResultForm.from(test_result).tap { |form| form.assign_attributes(new_attributes) } }
+  let(:changes)          { test_result_form.changes }
+  let(:params) do
+    test_result_form
+      .serializable_hash
+      .merge(
+        test_result: test_result,
+        user: user,
+        investigation: investigation,
+        changes: changes
+      )
+  end
+
   describe ".call" do
-    context "with no parameters" do
-      let(:result) { described_class.call }
-
-      it "returns a failure" do
-        expect(result).to be_failure
-      end
-    end
-
     context "with a missing parameters" do
-      let(:test_result) { build(:test_result) }
-      let(:result) { described_class.call(test_result: test_result) }
+      context "when missing the user" do
+        let(:user) { nil }
 
-      it "returns a failure" do
-        expect(result).to be_failure
-      end
-    end
-
-    context "with required parameters that trigger a validation error" do
-      let!(:test_result) { create(:test_result) }
-      let(:user) { create(:user, :activated) }
-      let(:new_attributes) do
-        ActionController::Parameters.new({
-          legislation: "",
-          date: {
-            year: "",
-            month: "",
-            day: ""
-          }
-        }).permit!
+        it "returns a failure indicating a user was not supplied", :aggregate_failures do
+          expect(result).to be_failure
+          expect(result.error).to eq("No user supplied")
+        end
       end
 
-      let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }
+      context "when missing the investigation" do
+        let(:params) { new_attributes.merge(test_result: test_result, user: user) }
 
-      it "returns a failure" do
-        expect(result).to be_failure
+        it "returns a failure indicating an investigation was not supplied", :aggregate_failures do
+          expect(result).to be_failure
+          expect(result.error).to eq("No investigation supplied")
+        end
+      end
+
+      context "when missing the test result" do
+        let(:params) { new_attributes.merge(user: user, investigation: investigation, changes: changes) }
+
+        it "returns a failure indicating a test result was not supplied", :aggregate_failures do
+          expect(result).to be_failure
+          expect(result.error).to eq("No test result supplied")
+        end
       end
     end
 
@@ -48,102 +78,28 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       def expected_email_body(name)
         "#{name} edited a test result on the allegation."
       end
-
-      let(:user) { create(:user, :activated) }
-      let(:investigation) { create(:allegation) }
-      let(:legislation) { Rails.application.config.legislation_constants["legislation"].first }
-      let(:details) { "Test details" }
-
-      # Test::Result.create triggers callbacks which generate activity and
-      # emails. Create before running tests so that we can check which emails
-      # are sent by the service
-      let!(:test_result) do
-        create(:test_result,
-               investigation: investigation,
-               legislation: legislation,
-               details: details,
-               result: :failed)
+      let!(:expected_changes_metadata) do
+        {
+          "test_result_id" => test_result.id,
+          "updates" => {
+            "date" => [test_result.date.to_s, new_date.to_s],
+            "details" => [test_result.details, new_details],
+            "result" => [test_result.result, new_result],
+            "legislation" => [test_result.legislation, new_legislation],
+            "standards_product_was_tested_against" => [
+              test_result.standards_product_was_tested_against, new_standards_product_was_tested_against
+            ]
+          }
+        }
       end
+      let(:activity_timeline_entry) { test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last }
 
       context "when there are changes to the metadata" do
-        let(:updated_legislation) { Rails.application.config.legislation_constants["legislation"].last }
-        let(:updated_details) { "Updated test details" }
-
-        let(:new_attributes) do
-          ActionController::Parameters.new({
-            legislation: updated_legislation,
-            details: updated_details,
-            result: test_result.result,
-            date: {
-              year: test_result.date.year.to_s,
-              month: test_result.date.month.to_s,
-              day: test_result.date.day.to_s
-            }
-          }).permit!
-        end
-
-        let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }
-
-        let(:expected_metadata) do
-          {
-            "test_result_id" => test_result.id,
-            "updates" => {
-              "legislation" => [legislation, updated_legislation],
-              "details" => [details, updated_details]
-            }
-          }
-        end
-
         it "updates the model and creates an activity log entry", :aggregate_failures do
           result
-          expect(test_result.reload.details).to eq updated_details
-          expect(test_result.reload.legislation).to eq updated_legislation
-
-          activity_timeline_entry = test_result.investigation.activities.where(type: AuditActivity::Test::TestResultUpdated.to_s).order(:created_at).last
-
-          expect(activity_timeline_entry.metadata).to eq(expected_metadata)
-          expect(activity_timeline_entry.attachment.blob).to eq(test_result.documents.first.blob)
-        end
-
-        it_behaves_like "a service which notifies the case owner"
-      end
-
-      context "when just the file attachment description is changed" do
-        let(:new_attributes) do
-          ActionController::Parameters.new({
-            legislation: test_result.legislation,
-            details: test_result.details,
-            result: test_result.result,
-            date: {
-              year: test_result.date.year.to_s,
-              month: test_result.date.month.to_s,
-              day: test_result.date.day.to_s
-            }
-          }).permit!
-        end
-
-        let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user, new_file_description: "Updated description") }
-        let(:activity_timeline_entry) { test_result.investigation.activities.where(type: "AuditActivity::Test::TestResultUpdated").order(:created_at).last }
-
-        before do
-          document = test_result.documents.first
-          document.blob.update!(metadata: document.blob.metadata.merge!({ description: "Previous description" }))
-        end
-
-        it "updates the description of the attached file" do
-          result
           test_result.reload
-          expect(test_result.documents.first.blob.metadata[:description]).to eq "Updated description"
-        end
-
-        it "generates an activity entry with the changes" do
-          result
-          expect(activity_timeline_entry.metadata).to eq({
-            "test_result_id" => test_result.id,
-            "updates" => {
-              "file_description" => ["Previous description", "Updated description"]
-            }
-          })
+          expect(test_result).to have_attributes(new_attributes.except(:document, :existing_document_file_id))
+          expect(activity_timeline_entry.metadata).to eq(expected_changes_metadata)
         end
 
         it_behaves_like "a service which notifies the case owner"
@@ -152,8 +108,8 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       context "when there are no changes" do
         let(:updated_at) { 1.hour.ago }
         let(:new_attributes) do
-          ActionController::Parameters.new({
-            legislation: legislation,
+          {
+            legislation: test_result.legislation,
             details: test_result.details,
             result: test_result.result,
             date: {
@@ -161,7 +117,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
               month: test_result.date.month.to_s,
               day: test_result.date.day.to_s
             }
-          }).permit!
+          }
         end
 
         let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }

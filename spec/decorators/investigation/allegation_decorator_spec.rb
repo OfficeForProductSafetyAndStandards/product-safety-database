@@ -13,7 +13,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
     context "when products are present" do
       context "with one product" do
         before do
-          allegation.products.build attributes_for(:product, name: "iPhone XS MAX", product_type: "phone")
+          allegation.products.build attributes_for(:product, name: "iPhone XS MAX", subcategory: "phone")
         end
 
         context "when no reason was reported" do
@@ -42,12 +42,12 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
       end
 
       context "with two products" do
-        before { allegation.products.build attributes_for(:product, name: "iPhone XS MAX", product_type: "phone") }
+        before { allegation.products.build attributes_for(:product, name: "iPhone XS MAX", subcategory: "phone") }
 
         context "when reported safe" do
           let(:allegation) { create(:allegation, :reported_safe) }
 
-          before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
+          before { allegation.products.build attributes_for(:product, name: "iPhone 3", subcategory: "phone") }
 
           it "produces the correct title" do
             expect(decorated_allegation.title).to eq("2 products, phone – products safe and compliant")
@@ -58,7 +58,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
           let(:allegation) { create(:allegation, :reported_unsafe) }
 
           context "with two common values" do
-            before { allegation.products.build attributes_for(:product, name: "iPhone 3", product_type: "phone") }
+            before { allegation.products.build attributes_for(:product, name: "iPhone 3", subcategory: "phone") }
 
             it "produces the correct title" do
               expect(decorated_allegation.title).to eq("2 products, phone – #{allegation.hazard_type.downcase} hazard")
@@ -66,7 +66,7 @@ RSpec.describe Investigation::AllegationDecorator, :with_stubbed_elasticsearch, 
           end
 
           context "with no common values" do
-            before { allegation.products.build attributes_for(:product, name: "chromcast", product_type: "tv dongle") }
+            before { allegation.products.build attributes_for(:product, name: "chromcast", subcategory: "tv dongle") }
 
             it "produces the correct title" do
               expect(decorated_allegation.title).to eq("2 products – #{allegation.hazard_type.downcase} hazard")

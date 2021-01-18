@@ -10,6 +10,8 @@ class Team < ApplicationRecord
 
   has_many :owner_collaborations, class_name: "Collaboration::Access::OwnerTeam", as: :collaborator
 
+  has_many :roles, dependent: :destroy, as: :entity
+
   validates :name, presence: true
 
   def display_name(*)

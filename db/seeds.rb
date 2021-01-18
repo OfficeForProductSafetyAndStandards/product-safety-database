@@ -2,7 +2,7 @@
 ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapter
 
 def create_blob(filename, title: nil, description: nil)
-  ActiveStorage::Blob.create_after_upload!(
+  ActiveStorage::Blob.create_and_upload!(
     io: File.open("./db/seed_files/#{filename}"),
     filename: filename,
     content_type: "image/jpeg",
@@ -22,6 +22,7 @@ if run_seeds
 
   organisation = Organisation.create!(name: "Seed Organisation")
   team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation)
+  team.roles.create!(name: "opss")
 
   user = User.find_by(email: "seed_user@example.com") || User.create!(
     name: "Seed User",
@@ -31,10 +32,6 @@ if run_seeds
     organisation: organisation,
     team: team,
   )
-
-  %i[opss_user user].each do |role|
-    UserRole.find_or_create_by!(user: user, name: role)
-  end
 
   # First investigation
   investigation = Investigation::Allegation.new(
@@ -66,8 +63,9 @@ if run_seeds
     product_code: "NO.DY807",
     name: "Pretty",
     category: "Toys",
-    product_type: "Plastic doll",
-    webpage: ""
+    subcategory: "Plastic doll",
+    webpage: "",
+    has_markings: "markings_unknown"
   )
 
   product.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
@@ -114,8 +112,9 @@ if run_seeds
     product_code: "Unknown",
     name: "Crazy Geezer's Putty World",
     category: "Toys",
-    product_type: "Putty",
-    webpage: "www.amazon.com"
+    subcategory: "Putty",
+    webpage: "www.amazon.com",
+    has_markings: "markings_no"
   )
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
@@ -126,7 +125,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Cuts",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -149,9 +148,11 @@ if run_seeds
     description: "",
     product_code: "Unknown",
     name: "RXF 36 and RXF 34 Air Mountain Bike Front Forks",
-    category: "Other Product Type",
-    product_type: "Bike Suspension Fork",
-    webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791"
+    category: "Other Product sub-category",
+    subcategory: "Bike Suspension Fork",
+    webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
@@ -166,7 +167,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Chemical",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -189,9 +190,11 @@ if run_seeds
     description: "",
     product_code: "749266006615",
     name: "Fogbuster Lens Cleaner",
-    category: "Other Product Type",
-    product_type: "Swim goggles lens cleaner",
-    webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/"
+    category: "Other Product sub-category",
+    subcategory: "Swim goggles lens cleaner",
+    webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
@@ -204,7 +207,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Fire",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -230,8 +233,10 @@ if run_seeds
     product_code: "8719202753615",
     name: "H&S Collection: Let it snow",
     category: Rails.application.config.product_constants["product_category"].sample,
-    product_type: "Tree shaped candle",
-    webpage: "https://www2.hm.com/en_gb/index.html"
+    subcategory: "Tree shaped candle",
+    webpage: "https://www2.hm.com/en_gb/index.html",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
@@ -268,8 +273,10 @@ if run_seeds
     product_code: "",
     name: "Funny Musical Instrument Set",
     category: Rails.application.config.product_constants["product_category"].sample,
-    product_type: "Musical toy",
-    webpage: ""
+    subcategory: "Musical toy",
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
@@ -313,7 +320,7 @@ if run_seeds
     is_closed: false,
     user_title: nil,
     hazard_type: "Fire",
-    product_category: "Other Product Type",
+    product_category: "Other Product sub-category",
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
@@ -337,8 +344,10 @@ if run_seeds
     product_code: "Models: Black and The Golden Year; 15800 E11115/ 1804",
     name: "Lynx Shower speaker with USB charger",
     category: Rails.application.config.product_constants["product_category"].sample,
-    product_type: "Shower speaker with USB charger",
-    webpage: ""
+    subcategory: "Shower speaker with USB charger",
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2019-w6_27526-1f.jpg", title: "Lynx packaging"))
@@ -378,8 +387,10 @@ if run_seeds
     product_code: "PN 2124531316474, TJ-65-195334",
     name: "Batterytec Battery charger",
     category: "Small electronics",
-    product_type: "Replacement AC/DC adaptor",
-    webpage: ""
+    subcategory: "Replacement AC/DC adaptor",
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
 
   product.documents.attach(create_blob("2019-w3_27167-3f.jpg", title: "packaging and product"))
@@ -388,13 +399,15 @@ if run_seeds
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
-  Test::Result.new(
-    legislation: "Electrical Equipment (Safety) Regulations 2016",
-    result: "other",
-    details: "Passed tests 1 to 4 and failed test 5",
-    date: "2018-03-31",
+  AddTestResultToInvestigation.call!(
     investigation: investigation,
-    product: product
+    user: user,
+    date: 2.days.ago.to_date,
+    legislation: Rails.application.config.legislation_constants["legislation"].sample,
+    details: "Passed tests 1 to 4 and failed test 5",
+    result: "passed",
+    product_id: product.id,
+    document: create_blob("test_result.txt", title: "test result")
   )
 
   # Ninth investigation
@@ -427,14 +440,16 @@ if run_seeds
     product_code: "",
     name: "Creaciones Gavidia Babies' clothing set",
     category: "Clothing (including baby)",
-    product_type: "Babies' clothing set",
-    webpage: ""
+    subcategory: "Babies' clothing set",
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
   )
   product.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
   AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
-  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds").try(:[], "organisations"))
+  if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
     # $ cf env REVIEW_APP_NAME
@@ -444,11 +459,11 @@ if run_seeds
     #     {
     #       "name": "Southampton Council",
     #       "teams_attributes": [
-    #          {
+    #         {
     #           "name": "Southampton Council",
     #           "team_recipient_email": "southampton@example.com",
     #           "users_attributes": [
-    #              {
+    #             {
     #               "account_activated": true,
     #               "email": "your.email@example.com",
     #               "mobile_number": "01234567890",
@@ -456,19 +471,23 @@ if run_seeds
     #               "name": "John Doe",
     #               "password": "super secret",
     #               "password_confirmation": "super secret",
-    #               "user_roles_attributes": [
-    #                { "name": "team_admin" },
+    #               "roles_attributes": [
+    #                 { "name": "team_admin" },
     #               ]
-    #              }
+    #             }
+    #           ],
+    #           "roles_attributes": [
+    #             { "name": "opss" },
     #           ]
-    #          }
+    #         }
     #       ]
     #     }
     #   ]
     # }
 
     Team.accepts_nested_attributes_for :users
-    User.accepts_nested_attributes_for :user_roles
+    Team.accepts_nested_attributes_for :roles
+    User.accepts_nested_attributes_for :roles
 
     organisations.each do |organisation_attributes|
       organisation_attributes.deep_symbolize_keys!
@@ -485,15 +504,22 @@ if run_seeds
     end
   else
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
+    trading_standards = Organisation.create!(name: "Trading Standards")
+
     enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+    enforcement.roles.create!(name: "opss")
+
     operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
+    operational_support.roles.create!(name: "opss")
+
+    ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards)
 
     Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
     Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
 
-    user1 = User.create!(
+    User.create!(
       name: "Test User",
       email: "user@example.com",
       password: "testpassword",
@@ -503,6 +529,7 @@ if run_seeds
       team: enforcement,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+
     user2 = User.create!(
       name: "Team Admin",
       email: "admin@example.com",
@@ -513,13 +540,18 @@ if run_seeds
       team: operational_support,
       mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
     )
+    user2.roles.create!(name: "team_admin")
 
-    %i[opss_user user].each do |role|
-      UserRole.create!(user: user1, name: role)
-    end
-    %i[team_admin opss_user user].each do |role|
-      UserRole.create!(user: user2, name: role)
-    end
+    User.create!(
+      name: "TS User",
+      email: "ts_user@example.com",
+      password: "testpassword",
+      password_confirmation: "testpassword",
+      organisation: trading_standards,
+      mobile_number_verified: true,
+      team: ts_team,
+      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+    )
 
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)
@@ -543,9 +575,19 @@ if run_seeds
       created_at: 2.days.ago
     )
 
-    result = Test::Result.new("date" => 15.days.ago, "details" => "Test results", "investigation" => i, "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", "product" => product, "result" => "failed", "created_at" => 3.days.ago)
-    result.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
-    result.save!
+    investigation = Investigation.order("RANDOM()").first
+    AddTestResultToInvestigation.call!(
+      "date" => 15.days.ago,
+      "details" => "Test results",
+      "investigation" => i,
+      "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
+      "product_id" => product.id,
+      "result" => "failed",
+      "created_at" => 3.days.ago,
+      document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
+      investigation: investigation,
+      user: investigation.owner_user
+    )
   end
 
   Investigation.__elasticsearch__.create_index! force: true

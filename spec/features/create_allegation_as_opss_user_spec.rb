@@ -26,7 +26,11 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       webpage: Faker::Internet.url,
       country_of_origin: Country.all.sample.first,
       description: Faker::Lorem.sentence,
-      authenticity: Product.authenticities.keys.without("missing").sample
+      authenticity: Product.authenticities.keys.without("missing").sample,
+      affected_units_status: "approx",
+      has_markings: %w[Yes No Unknown].sample,
+      markings: [Product::MARKINGS.sample],
+      when_placed_on_market: Product.when_placed_on_markets.keys.without("missing").sample
     }
   end
 
@@ -91,7 +95,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       click_link "Products (1)"
 
-      expect_page_to_show_entered_product_details(**product_details)
+      expect_page_to_show_entered_product_details(**product_details.except(:affected_units_status))
 
       click_link "Activity"
       expect_details_on_activity_page(contact_details, allegation_details)
@@ -138,11 +142,25 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Create allegation"
   end
 
-  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
+  def enter_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, affected_units_status:, has_markings:, markings:, when_placed_on_market:)
     select category,                      from: "Product category"
     select country_of_origin,             from: "Country of origin"
-    fill_in "Product type",               with: type
+    within_fieldset("Was the product placed on the market before 1 January 2021?") { choose when_placed_on_market_answer(when_placed_on_market) }
+    fill_in "Product subcategory", with: type
     within_fieldset("Is the product counterfeit?") { choose counterfeit_answer(authenticity) }
+
+    within_fieldset("Does the product have UKCA, UKNI, or CE marking?") do
+      choose has_markings
+    end
+
+    within_fieldset("Select product marking") do
+      markings.each { |marking| check(marking) } if has_markings == "Yes"
+    end
+
+    within_fieldset("How many units are affected?") do
+      choose affected_units_status_answer(affected_units_status)
+      find("#approx_units").set(21)
+    end
     fill_in "Product name",               with: name
     fill_in "Other product identifiers",  with: barcode
     fill_in "Webpage",                    with: webpage
@@ -150,15 +168,24 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
     click_button "Save product"
   end
 
-  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:)
+  def expect_page_to_show_entered_product_details(name:, barcode:, category:, type:, webpage:, country_of_origin:, description:, authenticity:, has_markings:, markings:, when_placed_on_market:)
+    expected_markings = case has_markings
+                        when "Yes" then markings.join(", ")
+                        when "No" then "None"
+                        when "Unknown" then "Unknown"
+                        end
+
     expect(page.find("dt", text: "Product name")).to have_sibling("dd", text: name)
-    expect(page.find("dt", text: "Product type")).to have_sibling("dd", text: type)
+    expect(page.find("dt", text: "Product subcategory")).to have_sibling("dd", text: type)
     expect(page.find("dt", text: "Product authenticity")).to have_sibling("dd", text: I18n.t(authenticity, scope: Product.model_name.i18n_key))
+    expect(page.find("dt", text: "Product marking")).to have_sibling("dd", text: expected_markings)
     expect(page.find("dt", text: "Category")).to have_sibling("dd", text: category)
     expect(page.find("dt", text: "Other product identifiers")).to have_sibling("dd", text: barcode)
     expect(page.find("dt", text: "Webpage")).to have_sibling("dd", text: webpage)
     expect(page.find("dt", text: "Country of origin")).to have_sibling("dd", text: country_of_origin)
     expect(page.find("dt", text: "Description")).to have_sibling("dd", text: description)
+    expect(page.find("dt", text: "Units affected")).to have_sibling("dd", text: "21")
+    expect(page.find("dt", text: "When placed on market")).to have_sibling("dd", text: I18n.t(when_placed_on_market, scope: Product.model_name.i18n_key))
   end
 
   def expect_details_on_summary_page

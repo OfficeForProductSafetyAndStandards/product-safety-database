@@ -12,14 +12,14 @@ class AuditActivity::Test::Base < AuditActivity::Base
       investigation: test.investigation,
       product: test.product
     )
-    activity.attach_blob test.documents.first.blob if test.documents.attached?
+    activity.attach_blob test.document.blob if test.document.attached?
   end
 
   def self.build_body(test)
     body = ""
     body += "Legislation: **#{sanitize_text(test.legislation)}**<br>" if test.legislation.present?
     body += "#{date_label}: **#{test.date.strftime('%d/%m/%Y')}**<br>" if test.date.present?
-    body += "Attached: **#{sanitize_text test.documents.first.filename}**<br>" if test.documents.attached?
+    body += "Attached: **#{sanitize_text test.document.filename}**<br>" if test.document.attached?
     body += "<br>#{sanitize_text(test.details)}" if test.details.present?
     body
   end

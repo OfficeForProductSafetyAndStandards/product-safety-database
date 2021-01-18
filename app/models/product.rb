@@ -10,6 +10,27 @@ class Product < ApplicationRecord
     "unsure" => "unsure"
   }
 
+  enum affected_units_status: {
+    "exact" => "exact",
+    "approx" => "approx",
+    "unknown" => "unknown",
+    "not_relevant" => "not_relevant"
+  }
+
+  enum has_markings: {
+    "markings_yes" => "markings_yes",
+    "markings_no" => "markings_no",
+    "markings_unknown" => "markings_unknown"
+  }
+
+  enum when_placed_on_market: {
+    "before_2021" => "before_2021",
+    "on_or_after_2021" => "on_or_after_2021",
+    "unknown_date" => "unknown_date"
+  }
+
+  MARKINGS = %w[UKCA UKNI CE].freeze
+
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
   has_many_attached :documents

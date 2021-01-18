@@ -209,6 +209,7 @@ module PageExpectations
 
   def expect_to_be_on_record_test_result_page
     expect_page_to_have_h1("Record test result")
+    expect(page).to have_field("Which standard was the product tested against?")
   end
 
   def expect_to_be_on_case_activity_page(case_id: nil)
@@ -357,6 +358,11 @@ module PageExpectations
   def expect_to_be_on_test_result_details_page
     expect(page).to have_current_path("/ts_investigation/test_results")
     expect(page).to have_selector("h1", text: "Test result details")
+  end
+
+  def expect_to_be_on_product_image_page
+    expect(page).to have_current_path("/ts_investigation/product_images")
+    expect(page).to have_selector("h1", text: "Upload a product image")
   end
 
   # Product pages

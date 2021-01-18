@@ -1,10 +1,11 @@
 <% page_heading = title %>
 <% page_title page_heading, errors: model.errors.any? %>
 <% scope ||= nil %>
+<% error_order ||= [] %>
 <%= form_with model: model, scope: scope, url: wizard_path, method: :put, local: true, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(model.errors) %>
+      <%= error_summary(model.errors, error_order) %>
 
       <span class="govuk-caption-l">
         Report an unsafe or non-compliant product
@@ -18,7 +19,7 @@
                  form: form,
                  key: further_key,
                  fieldset: { legend: { text: other_text, classes: "govuk-fieldset__legend--m" } },
-                 items: [{ text: "Yes", value: "Yes", checked: @repeat_step },
+                 items: [{ text: "Yes", value: "Yes", checked: @repeat_step, id: further_key.to_s },
                          { text: "No", value: "No", checked: (@repeat_step == false) }] %>
       <%= govukButton(text: "Continue") %>
       <div class="govuk-body">

@@ -10,7 +10,7 @@ RSpec.shared_context "with phone call correspondence setup" do
   let(:correspondent_name)   { Faker::Name.name }
   let(:overview)             { Faker::Hipster.paragraph }
   let(:details)              { Faker::Hipster.paragraph }
-  let(:transcript)           { Rack::Test::UploadedFile.new(file_fixture("files/phone_call_transcript.txt")) }
+  let(:transcript)           { Rack::Test::UploadedFile.new(file_fixture("phone_call_transcript.txt")) }
 
   let(:params) do
     {
@@ -28,5 +28,5 @@ RSpec.shared_context "with phone call correspondence setup" do
   let(:new_correspondence_date) { 2.days.ago.to_date }
   let(:new_overview)            { Faker::Hipster.sentence }
   let(:new_details)             { Faker::Hipster.sentence }
-  let(:new_transcript)          { file_fixture("files/new_phone_call_transcript.txt") }
+  let(:new_transcript)          { file_fixture("new_phone_call_transcript.txt") }
 end

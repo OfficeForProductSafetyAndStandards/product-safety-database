@@ -50,15 +50,6 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
             expect(inviting_user_id).to inviting_user.id
           end
         end
-
-        context "when the inviting_user is an OPSS user" do
-          let(:inviting_user) { create(:user, :activated, :opss_user, team: team) }
-
-          it "gives the invited user the opss_user role" do
-            result
-            expect(result.user).to be_is_opss
-          end
-        end
       end
     end
 

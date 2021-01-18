@@ -35,7 +35,7 @@ module FileConcern
     attachment_names.map do |name|
       attachment_params = get_attachment_params(name, params_name_override)
       if attachment_params[:file].present?
-        file = ActiveStorage::Blob.create_after_upload!(
+        file = ActiveStorage::Blob.create_and_upload!(
           io: attachment_params[:file],
           filename: attachment_params[:file].original_filename,
           content_type: attachment_params[:file].content_type,

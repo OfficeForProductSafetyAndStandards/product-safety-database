@@ -6,7 +6,7 @@ class FixOldCategory < ActiveRecord::Migration[6.0]
        "Small Electronics",
        "Alarms"] => "Electrical appliances and equipment",
       ["Baby/Children's Products"] => "Childcare articles and children's equipment",
-      ["Other Product Type"] => "Other",
+      ["Other Product sub-category"] => "Other",
       ["Furniture & Furnishings"] => "Furniture",
       ["Clothing (inc. baby)"] => "Clothing, textiles and fashion items",
       ["Personal Protective Equipment (PPE)."] => "Personal protective equipment (PPE)",

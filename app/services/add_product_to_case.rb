@@ -3,39 +3,54 @@ class AddProductToCase
   include EntitiesToNotify
 
   delegate :authenticity,
+           :has_markings,
+           :markings,
            :batch_number,
            :brand,
            :country_of_origin,
            :description,
-           :gtin13,
+           :barcode,
            :name,
            :product_code,
-           :product_type,
+           :subcategory,
            :webpage,
            :investigation,
            :category,
            :user,
            :product,
+           :affected_units_status,
+           :number_of_affected_units,
+           :exact_units,
+           :approx_units,
+           :when_placed_on_market,
+           :customs_code,
            to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+    when_placed_on_market = context.when_placed_on_market
 
     Product.transaction do
       context.product = investigation.products.create!(
         authenticity: authenticity,
+        has_markings: has_markings,
+        markings: markings,
         batch_number: batch_number,
         brand: brand,
         country_of_origin: country_of_origin,
         description: description,
-        gtin13: gtin13,
+        barcode: barcode,
         name: name,
         product_code: product_code,
-        product_type: product_type,
+        subcategory: subcategory,
         category: category,
         webpage: webpage,
-        source: build_user_source
+        source: build_user_source,
+        affected_units_status: affected_units_status,
+        number_of_affected_units: number_of_affected_units,
+        when_placed_on_market: when_placed_on_market,
+        customs_code: customs_code
       )
 
       context.activity = create_audit_activity_for_product_added

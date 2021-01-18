@@ -2,24 +2,26 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_10_124109) do
-
+ActiveRecord::Schema.define(version: 2021_01_04_153742) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   # These are custom enum types that must be created before they can be used in the schema definition
+  create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
+  create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
+  create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -39,7 +41,14 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
     t.string "filename", null: false
     t.string "key", null: false
     t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "activities", id: :serial, force: :cascade do |t|
@@ -176,6 +185,7 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
     t.boolean "coronavirus_related", default: false
     t.datetime "created_at", null: false
     t.string "custom_risk_level"
+    t.datetime "date_closed"
     t.date "date_received"
     t.text "description"
     t.text "hazard_description"
@@ -188,6 +198,8 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
     t.string "received_type"
     t.enum "reported_reason", as: "reported_reasons"
     t.enum "risk_level", as: "risk_levels"
+    t.datetime "risk_validated_at"
+    t.string "risk_validated_by"
     t.string "type", null: false
     t.datetime "updated_at", null: false
     t.string "user_title"
@@ -218,19 +230,25 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
   end
 
   create_table "products", id: :serial, force: :cascade do |t|
+    t.enum "affected_units_status", as: "affected_units_statuses"
     t.enum "authenticity", as: "authenticities"
+    t.string "barcode", limit: 15
     t.string "batch_number"
     t.text "brand"
     t.string "category"
     t.string "country_of_origin"
     t.datetime "created_at", null: false
+    t.text "customs_code"
     t.text "description"
-    t.string "gtin13", limit: 13
+    t.enum "has_markings", as: "has_markings_values"
+    t.text "markings", array: true
     t.string "name"
+    t.text "number_of_affected_units"
     t.string "product_code"
-    t.string "product_type"
+    t.string "subcategory"
     t.datetime "updated_at", null: false
     t.string "webpage"
+    t.enum "when_placed_on_market", as: "when_placed_on_markets"
   end
 
   create_table "rapex_imports", id: :serial, force: :cascade do |t|
@@ -260,6 +278,17 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
     t.integer "investigation_id", null: false
     t.enum "risk_level", as: "risk_levels"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.uuid "entity_id"
+    t.string "entity_type", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entity_id", "entity_type"], name: "index_roles_on_entity_id_and_entity_type"
+    t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
+    t.index ["entity_id"], name: "index_roles_on_entity_id"
   end
 
   create_table "sources", id: :serial, force: :cascade do |t|
@@ -294,19 +323,11 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
     t.string "legislation"
     t.integer "product_id"
     t.string "result"
+    t.string "standards_product_was_tested_against", default: [], array: true
     t.string "type"
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
     t.index ["product_id"], name: "index_tests_on_product_id"
-  end
-
-  create_table "user_roles", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "name", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["user_id", "name"], name: "index_user_roles_on_user_id_and_name", unique: true
-    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -360,6 +381,7 @@ ActiveRecord::Schema.define(version: 2020_11_10_124109) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activities", "businesses"
   add_foreign_key "activities", "correspondences"
   add_foreign_key "activities", "investigations"

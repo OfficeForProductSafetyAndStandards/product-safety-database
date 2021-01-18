@@ -6,7 +6,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   subject(:decorated_activity) { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update").decorate }
 
   let(:new_file_description) { "new corrective action file description" }
-  let(:new_filename)         { "files/corrective_action.txt" }
+  let(:new_filename)         { "corrective_action.txt" }
 
   before do
     UpdateCorrectiveAction.call!(
@@ -23,7 +23,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         measure_type: new_measure_type,
         geographic_scope: new_geographic_scope,
         file: {
-          file: fixture_file_upload(file_fixture(new_filename)),
+          file: fixture_file_upload(new_filename),
           description: new_file_description
         }
       ).permit!

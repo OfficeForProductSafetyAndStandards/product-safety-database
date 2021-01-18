@@ -86,7 +86,7 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_elasticsearch, :with_stubbed_maile
       context "when the transcript has changed" do
         let(:new_file) { Rack::Test::UploadedFile.new(new_transcript) }
         let(:transcript) do
-          ActiveStorage::Blob.create_after_upload!(
+          ActiveStorage::Blob.create_and_upload!(
             io: new_file,
             filename: new_file.original_filename,
             content_type: new_file.content_type

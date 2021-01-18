@@ -32,7 +32,7 @@ class UpdateEmail
       elsif email_file
         email.email_file.attach(email_file)
       elsif email_file_id
-        email.email_file.attach(ActiveStorage::Blob.find_signed(email_file_id))
+        email.email_file.attach(ActiveStorage::Blob.find_signed!(email_file_id))
       end
 
       if email_attachment_action == "remove"
@@ -42,7 +42,7 @@ class UpdateEmail
       elsif email_attachment
         email.email_attachment.attach(email_attachment)
       elsif email_attachment_id
-        email.email_attachment.attach(ActiveStorage::Blob.find_signed(email_attachment_id))
+        email.email_attachment.attach(ActiveStorage::Blob.find_signed!(email_attachment_id))
       end
 
       break if no_changes?

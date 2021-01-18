@@ -17,20 +17,39 @@
   hint: { text: "COVID-19 categories added: ‘PPE’ and ‘Hand sanitiser’" } %>
 
 <%= render "form_components/govuk_input",
-  key: :product_type,
+  key: :subcategory,
   form: form,
-  id: "product_type",
+  id: "subcategory",
   classes: "app-!-max-width-one-half",
-  label: { text: "Product type", classes: label_class },
-  hint: { text: "For example, ‘Face mask’ or ‘Latex gloves’" } %>
+  label: { text: "Product subcategory", classes: label_class },
+  hint: { text: "For example, ‘Face mask’ or ‘Washing machine’" } %>
 
 <%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
+
+<% product_marking_fields = capture do %>
+  <%= form.govuk_checkboxes :markings,
+                            legend: "Select product marking",
+                            legend_classes: "govuk-fieldset__legend--s",
+                            items: Product::MARKINGS.map { |value| { text: value, value: value} } %>
+<% end %>
+
+<%= form.govuk_radios :has_markings,
+  legend: "Does the product have UKCA, UKNI, or CE marking?",
+  items: [
+    { text: "Yes", value: "markings_yes", conditional: { html: product_marking_fields } },
+    { text: "No", value: "markings_no" },
+    { text: "Unknown", value: "markings_unknown" }
+  ]
+%>
+
+
+<%= form.govuk_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
 
 <%= render "form_components/govuk_input",
   key: :brand,
   form: form,
   classes: "app-!-max-width-one-half",
-  label: { text: "Product brand", classes: label_class },
+  label: { text: "Product brand (if branded)", classes: label_class },
   hint: { text: "For example, ‘Dyson’ or ‘Sony’" } %>
 
 
@@ -40,14 +59,17 @@
   classes: "app-!-max-width-three-quarters",
   label: { text: "Product name", classes: label_class },
   id: "name",
-  hint: { text: "Include model name and model number, for example ‘Playstation 5’. If you suspect the product is counterfeit, add ‘Counterfeit’ before the name, for example ‘Counterfeit Playstion 5’." } %>
+  hint: { text: "Include model name and model number, for example ‘PlayStation 5’" } %>
+
+<%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
 
 <%= render "form_components/govuk_input",
-  key: :gtin13,
+  key: :barcode,
+  id: "barcode",
   form: form,
   classes: "app-!-max-width-one-half",
   label: { text: "Barcode number (GTIN, EAN or UPC)", classes: label_class },
-  hint: {text: "Normally 13 digits, although older products may have a 12 digit number"} %>
+  hint: {text: "Normally 8, 12, or 13 digits"} %>
 
 
 <%= render "form_components/govuk_input",
@@ -80,12 +102,19 @@
   label: { text: "Country of origin", classes: label_class },
   hint: { text: "Where the product was manufactured" } %>
 
+  <%= render "form_components/govuk_input",
+    key: :customs_code,
+    form: form,
+    classes: "app-!-max-width-three-quarters",
+    label: { text: "Customs code", classes: label_class },
+    hint: { text: "For example, CN code (8 digits) or TARIC code (10 digits). Use a comma to separate multiple codes" } %>
+
 <%= render "form_components/govuk_textarea",
   key: :description,
   form: form,
   attributes: { maxlength: 10_000 },
   classes: "app-!-max-width-three-quarters",
   label: { text: "Description of product", classes: label_class },
-  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents." } %>
+  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents" } %>
 
 <%= form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button" %>

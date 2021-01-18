@@ -20,7 +20,7 @@ RSpec.feature "Admin Panel", :with_elasticsearch, :with_stubbed_mailer, :with_st
       visit "/admin"
       expect(page).to have_css("h2", text: "Your cases")
 
-      user.user_roles.create!(name: "superuser")
+      user.roles.create!(name: "superuser")
 
       visit "/admin"
       expect(page).to have_css("h1", text: "Site Administration")
