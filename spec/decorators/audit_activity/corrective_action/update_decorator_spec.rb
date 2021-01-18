@@ -48,7 +48,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
       context "when new recall information is set" do
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+          expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
         end
       end
 
@@ -87,7 +87,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
         context "when the recall information changes" do
           specify do
-            expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+            expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
           end
         end
       end
@@ -118,7 +118,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+          expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
         end
       end
 
@@ -148,7 +148,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         let(:new_has_online_recall_information) { "has_online_recall_information_yes" }
 
         specify do
-          expect(decorated_activity.new_online_recall_information).to eq(new_online_recall_information)
+          expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
         end
       end
 
