@@ -16,10 +16,4 @@ RSpec.describe AuditActivity::CorrectiveAction::BaseDecorator, :with_stubbed_ela
   describe "#trading_name" do
     specify { expect(decorated_activity.trading_name).to eq(business.trading_name) }
   end
-
-  describe "#online_recall_information" do
-    it "delegates to the helper online_recall_information_text_for" do
-      expect(decorated_activity.online_recall_information).to match(corrective_action.online_recall_information)
-    end
-  end
 end

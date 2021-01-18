@@ -6,19 +6,12 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
   delegate :name, to: :product, prefix: true
   delegate :details, :geographic_scope, :duration, :measure_type, :date_decided, :legislation, :geographic_scope, to: :corrective_action
 
-  def online_recall_information
-    h.online_recall_information_text_for(
-      metadata.dig("updates", "online_recall_information", 1),
-      has_online_recall_information: metadata.dig("updates", "has_online_recall_information", 1)
-    )
-  end
-
   def trading_name
     business.trading_name
   end
 
   def date_decided
-    metadata.dig("updates", "date_decided", 1).to_s(:govuk)
+    @date_decided ||= Date.parse(metadata.dig("updates", "date_decided", 1)).to_s(:govuk)
   end
 
   def legislation
