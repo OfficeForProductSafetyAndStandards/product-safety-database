@@ -18,10 +18,10 @@
     Legislation: <b><%= activity.new_legislation %></b><br>
   <% end %>
 
-  <% if activity.online_recall_information.match?("http") %>
-    Recall information: <%= link_to activity.online_recall_information, rel: "noopener", target: "_blank" %>
+  <% if activity.new_online_recall_information&.match?("http") %>
+    Recall information: <%= link_to activity.new_online_recall_information, rel: "noopener", target: "_blank" %>
   <% else %>
-    Recall information: <strong><%= activity.online_recall_information %></strong>
+    Recall information: <strong><%= activity.new_online_recall_information %></strong>
   <% end %>
 
   <% if activity.product_updated? %>
