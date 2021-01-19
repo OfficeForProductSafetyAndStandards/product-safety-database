@@ -42,7 +42,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         file_description: Faker::Lorem.paragraph,
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
-        geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"].sample,
+        geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"],
       }
     }
 
@@ -218,6 +218,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         # trigger validation to verify errors are handled correctly
         click_on "Continue"
+        save_and_open_page
+        byebug
 
         product_images.each do |product_image|
           fill_in_product_image_page(with: product_image)
@@ -597,13 +599,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     select with[:legislation], from: "Under which legislation?"
     fill_in "Further details (optional)", with: with[:details]
 
-    within_fieldset "Are there any files related to the action?" do
-      choose "Yes"
-    end
-
-    attach_file "Upload a file", with[:file], visible: false
-    fill_in "Attachment description", with: with[:file_description]
-
     within_fieldset "Is the corrective action mandatory?" do
       choose with[:measure_type] == "mandatory" ? "Yes" : "No, it’s voluntary"
     end
@@ -612,7 +607,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       choose with[:duration].titleize
     end
 
-    select with[:geographic_scope], from: "What is the geographic scope of the action?"
+    within_fieldset  "What is the geographic scope of the action?" do
+      with[:geographic_scope].each  do |geographic_scope|
+        check geographic_scope
+      end
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "Upload a file", with[:file], visible: false
+      fill_in "Attachment description", with: with[:file_description]
+    end
+
 
     choose "further_corrective_action"
     click_button "Continue"
