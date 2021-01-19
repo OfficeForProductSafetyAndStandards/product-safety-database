@@ -19,7 +19,7 @@
   <% end %>
 
   <% if activity.new_online_recall_information&.match?("http") %>
-    Recall information: <%= link_to activity.new_online_recall_information, rel: "noopener", target: "_blank" %>
+    Recall information: <%= activity.new_online_recall_information %>
   <% else %>
     Recall information: <strong><%= activity.new_online_recall_information %></strong>
   <% end %>
