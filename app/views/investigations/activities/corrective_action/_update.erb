@@ -19,9 +19,9 @@
   <% end %>
 
   <% if activity.new_online_recall_information&.match?("http") %>
-    Recall information: <%= activity.new_online_recall_information %>
-  <% else %>
-    Recall information: <strong><%= activity.new_online_recall_information %></strong>
+    Recall information: <%= activity.new_online_recall_information %><br>
+  <% elsif activity.new_online_recall_information.present? %>
+    Recall information: <strong><%= activity.new_online_recall_information %></strong><br>
   <% end %>
 
   <% if activity.product_updated? %>
