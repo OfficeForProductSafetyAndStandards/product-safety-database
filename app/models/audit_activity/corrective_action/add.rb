@@ -7,7 +7,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
-  def title(_viewing_user)
+  def title(_viewing_user = nil)
     corrective_action.decorate.supporting_information_title
   end
 

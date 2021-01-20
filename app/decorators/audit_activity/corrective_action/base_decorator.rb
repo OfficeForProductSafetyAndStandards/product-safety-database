@@ -8,6 +8,14 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
 
   delegate :trading_name, to: :business
 
+  def attached_image?
+    attachment&.image?
+  end
+
+  def attachment
+    @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
+  end
+
   def date_decided
     @date_decided ||= Date.parse(metadata.dig("updates", "date_decided", 1)).to_s(:govuk)
   end

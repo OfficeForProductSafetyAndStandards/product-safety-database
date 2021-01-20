@@ -2,7 +2,7 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
   def self.build_metadata(corrective_action, changes)
     {
       corrective_action_id: corrective_action.id,
-      updates: changes.except("document", "existing_document_file_id")
+      updates: changes.except("document")
     }
   end
 
