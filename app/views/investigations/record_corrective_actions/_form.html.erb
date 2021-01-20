@@ -68,17 +68,17 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
 %>
 
 <%= form.govuk_radios :duration,
-   legend: "How long will the corrective action be in place?",
-   items: [
-     { text: CorrectiveAction.human_attribute_name("duration.permanent"), value: "permanent" },
-     { text: CorrectiveAction.human_attribute_name("duration.temporary"), value: "temporary" },
-     { text: CorrectiveAction.human_attribute_name("duration.unknown"), value: "unknown" }
-   ]
+ legend: "How long will the corrective action be in place?",
+ items: [
+   { text: CorrectiveAction.human_attribute_name("duration.permanent"), value: "permanent" },
+   { text: CorrectiveAction.human_attribute_name("duration.temporary"), value: "temporary" },
+   { text: CorrectiveAction.human_attribute_name("duration.unknown"), value: "unknown" }
+ ]
 %>
-  <%= form.govuk_checkboxes :geographic_scope,
-   legend: "What is the geographic scope of the action?",
-   items: [{text: "", value: ""}] + corrective_action_geographic_scope.collect {|geographic_scope| { text: geographic_scope, value: geographic_scope } }
-  %>
+<%= form.govuk_checkboxes :geographic_scope,
+ legend: "What is the geographic scope of the action?",
+ items: [{text: "", value: ""}] + corrective_action_geographic_scope.collect {|geographic_scope| { text: geographic_scope, value: geographic_scope } }
+%>
 
 <%= form.govuk_text_area :details,
   label: "Further details (optional)",
