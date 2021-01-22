@@ -45,17 +45,17 @@
   <% end %>
 
   <% if activity.new_details %>
-    Details: <b><%= activity.new_details %></b><br>
+    Details: <%= updated_field activity.new_details %><br>
   <% end %>
-
+  <% byebug if activity.id == 51 %>
   <% if activity.new_filename %>
-    Attached: <b><%= activity.new_filename %></b><br>
+    Attached: <%= updated_field activity.new_filename %><br>
   <% elsif activity.old_filename %>
     Attachment removed: <b><%= activity.old_filename %></b><br>
   <% end %>
 
   <% if activity.new_file_description %>
-    Attachment description: <b><%= activity.new_file_description %></b><br>
+    Attachment description: <%= updated_field activity.new_file_description %><br>
   <% end %>
 </div>
 

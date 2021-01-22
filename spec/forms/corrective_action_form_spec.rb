@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
   subject(:corrective_action_form) do
     described_class.new(
@@ -18,7 +18,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       has_online_recall_information: has_online_recall_information,
       online_recall_information: online_recall_information,
       file: file_form
-    )
+    ).tap(&:valid?)
   end
 
   let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
@@ -241,6 +241,25 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
 
         it "clears the online_recall_information field" do
           expect(corrective_action_form.online_recall_information).to eq(online_recall_information)
+        end
+      end
+    end
+  end
+
+  describe "#related_file" do
+    context "with a previously attached document" do
+      subject(:corrective_action_form) { described_class.from(corrective_action).tap(&:valid?) }
+
+      let(:corrective_action) { create(:corrective_action, :with_document) }
+
+      context "when no related file attached" do
+        let(:related_file) { "off" }
+
+        context "when previously had a document attached" do
+          it "clear the document fields and the form changes reflects there is no more and attchment" do
+            expect(corrective_action_form)
+              .to have_attributes(existing_document_file_id: nil, filename: nil, file_description: nil)
+          end
         end
       end
     end

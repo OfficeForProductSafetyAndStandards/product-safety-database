@@ -52,6 +52,7 @@ class CorrectiveActionForm
 
   before_validation { trim_whitespace(:other_action, :details, :file_description, :online_recall_information) }
   before_validation { nilify_blanks(:other_action, :details, :file_description, :online_recall_information) }
+  before_validation :clear_related_file, unless: :related_file
 
   ATTRIBUTES_FROM_CORRECTIVE_ACTION = %i[
     id
@@ -74,15 +75,14 @@ class CorrectiveActionForm
       if corrective_action.document.attached?
         corrective_action_form.existing_document_file_id = corrective_action.document.signed_id
       end
-      corrective_action_form.load_document_file
       corrective_action_form.changes_applied
     end
   end
 
   def initialize(*args)
     super
-
     self.online_recall_information = nil unless has_online_recall_information_yes?
+    load_document_file
   end
 
   def file=(document_params)
@@ -111,5 +111,11 @@ private
 
   def has_online_recall_information_yes?
     has_online_recall_information == CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"]
+  end
+
+  def clear_related_file
+    self.existing_document_file_id = nil
+    self.filename = nil
+    self.file_description = nil
   end
 end
