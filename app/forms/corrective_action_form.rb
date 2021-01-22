@@ -22,6 +22,7 @@ class CorrectiveActionForm
   attribute :has_online_recall_information, default: nil
   attribute :online_recall_information
   attribute :related_file, :boolean
+  alias_method :related_file?, :related_file
   attribute :document
   attribute :existing_document_file_id
   attribute :filename
@@ -74,6 +75,10 @@ class CorrectiveActionForm
     new(corrective_action.serializable_hash(only: ATTRIBUTES_FROM_CORRECTIVE_ACTION)).tap do |corrective_action_form|
       if corrective_action.document.attached?
         corrective_action_form.existing_document_file_id = corrective_action.document.signed_id
+        corrective_action_form.load_document_file
+        corrective_action_form.related_file = true
+      else
+        corrective_action_form.related_file = false
       end
       corrective_action_form.changes_applied
     end
@@ -82,7 +87,6 @@ class CorrectiveActionForm
   def initialize(*args)
     super
     self.online_recall_information = nil unless has_online_recall_information_yes?
-    load_document_file
   end
 
   def file=(document_params)

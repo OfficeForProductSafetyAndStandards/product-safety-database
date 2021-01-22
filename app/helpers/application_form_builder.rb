@@ -217,7 +217,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     # Set item as checked if the value matches the method from the model
     @items.each_with_index do |item, index|
-      item[:checked] = true if object.public_send(attribute) == item[:value].to_s
+      item[:checked] = object.public_send(attribute).to_s == item[:value].to_s
 
       item[:id] = if index.zero?
                     # First item should have the ID of the attribute, so that it gets

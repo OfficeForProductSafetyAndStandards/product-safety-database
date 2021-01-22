@@ -36,7 +36,7 @@
          legend: "Are there any files related to the action?",
          items: [
            { text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action_form.document.present? },
-           { text: "No", value: "off", checked: !@corrective_action_form.document.present? }
+           { text: "No", value: "off" }
          ]
       %>
 

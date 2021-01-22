@@ -37,6 +37,23 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
   let(:online_recall_information) { nil }
 
+  describe ".from" do
+    subject(:corrective_action_form) { described_class.from(corrective_action) }
+
+
+    context "without a previously attached documnet" do
+      let(:corrective_action) { create(:corrective_action) }
+
+      it { is_expected.not_to be_related_file }
+    end
+
+    context "with a previously attached documnet" do
+      let(:corrective_action) { create(:corrective_action, :with_document) }
+
+      it { is_expected.to be_related_file }
+    end
+  end
+
   describe "#valid?" do
     let(:form) { corrective_action_form }
 
