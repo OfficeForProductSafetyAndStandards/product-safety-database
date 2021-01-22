@@ -102,13 +102,6 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_on "Update corrective action"
 
-      click_on "Edit corrective action"
-
-      within_fieldset "Are there any files related to the action?" do
-        choose "No"
-      end
-      click_on "Update corrective action"
-
       expect_to_be_on_corrective_action_summary_page
 
       if new_action.length > CorrectiveActionDecorator::MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
@@ -119,10 +112,6 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
-
-      page.first(".timeline-details", text: /Edited by #{Regexp.escape(UserSource.new(user: user).show(user))}/)
-
-      byebug
 
       page.first("a", text: "View corrective action").click
 

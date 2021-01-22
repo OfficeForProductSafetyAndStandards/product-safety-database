@@ -40,7 +40,6 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   describe ".from" do
     subject(:corrective_action_form) { described_class.from(corrective_action) }
 
-
     context "without a previously attached documnet" do
       let(:corrective_action) { create(:corrective_action) }
 
