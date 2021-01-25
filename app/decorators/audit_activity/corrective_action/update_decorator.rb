@@ -52,6 +52,10 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     metadata.dig("updates", "filename", 0)
   end
 
+  def file_description_changed?
+    metadata.dig("updates").key?("file_description")
+  end
+
   def new_file_description
     metadata.dig("updates", "file_description", 1)
   end

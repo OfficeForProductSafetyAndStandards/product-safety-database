@@ -172,6 +172,21 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
     end
   end
 
+  describe "#file_description_changed?" do
+    before { decorated_activity.object.update!(metadata: updates) }
+
+    context "when file description changed" do
+      let(:updates) { { updates: { file_description: ["old description", "new description"] } } }
+
+      it { is_expected.to be_file_description_changed }
+    end
+
+    context "when file description did not changed" do
+      let(:updates) { { updates: {} } }
+
+      it { is_expected.not_to be_file_description_changed }
+    end
+  end
   it { expect(decorated_activity.new_legislation).to eq(new_legislation) }
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
   it { expect(decorated_activity.new_details).to eq(new_details) }
