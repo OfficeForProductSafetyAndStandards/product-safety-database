@@ -264,14 +264,19 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
 
   describe "#related_file" do
     context "with a previously attached document" do
-      subject(:corrective_action_form) { described_class.from(corrective_action).tap(&:valid?) }
-
-      let(:corrective_action) { create(:corrective_action, :with_document) }
+      subject(:corrective_action_form) { described_class.from(corrective_action) }
 
       context "when no related file attached" do
         let(:related_file) { "off" }
 
+        before do
+          corrective_action_form.assign_attributes(related_file: related_file)
+          corrective_action_form.valid?
+        end
+
         context "when previously had a document attached" do
+          let(:corrective_action) { create(:corrective_action, :with_document) }
+
           it "clear the document fields and the form changes reflects there is no more and attchment" do
             expect(corrective_action_form)
               .to have_attributes(existing_document_file_id: nil, filename: nil, file_description: nil)
