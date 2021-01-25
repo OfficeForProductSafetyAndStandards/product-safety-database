@@ -266,21 +266,42 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     context "with a previously attached document" do
       subject(:corrective_action_form) { described_class.from(corrective_action) }
 
+      let(:corrective_action) { create(:corrective_action, :with_document) }
+
+      before do
+        corrective_action_form.assign_attributes(related_file: related_file, file: file_form)
+        corrective_action_form.valid?
+      end
+
       context "when no related file attached" do
         let(:related_file) { "off" }
-
-        before do
-          corrective_action_form.assign_attributes(related_file: related_file)
-          corrective_action_form.valid?
-        end
+        let(:file_form) { nil }
 
         context "when previously had a document attached" do
-          let(:corrective_action) { create(:corrective_action, :with_document) }
-
           it "clear the document fields and the form changes reflects there is no more and attchment" do
             expect(corrective_action_form)
               .to have_attributes(existing_document_file_id: nil, filename: nil, file_description: nil)
           end
+        end
+      end
+
+      context "when replacing the attached document" do
+        let(:related_file) { "on" }
+        let(:previous_existing_document_file_id) { corrective_action.document.signed_id }
+        let(:previous_filename)                  { corrective_action.document.filename }
+        let(:previous_file_description)          { corrective_action.document.metadata["description"] }
+        let(:file)                               { fixture_file_upload(file_fixture("new_corrective_action.txt")) }
+        let(:file_description)                   { Faker::Hipster.sentence }
+
+        it "replaces saves the blob", :aggregate_failures do
+          expect(ActiveStorage::Blob.find_signed!(corrective_action_form.document.signed_id))
+            .to have_attributes(filename: ActiveStorage::Filename.new("new_corrective_action.txt"))
+
+          expect(corrective_action_form.changes)
+            .to include(
+              existing_document_file_id: [previous_existing_document_file_id, corrective_action_form.document.signed_id],
+              filename: [previous_filename, "new_corrective_action.txt"], file_description: [previous_file_description, file_description]
+            )
         end
       end
     end
