@@ -41,6 +41,6 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
   end
 
   def document_filename
-    corrective_action.document&.filename
+    attachment&.filename
   end
 end
