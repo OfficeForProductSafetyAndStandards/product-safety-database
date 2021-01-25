@@ -1,5 +1,17 @@
 module Investigations
   module CorrectiveActionsHelper
+    TRUNCATED_ACTION_MAP = {
+      ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on marketing",
+      destruction_of_the_product: "Destruction of product",
+      import_rejected_at_border: "Import rejected",
+      making_the_marketing_of_the_product_subject_to_prior_conditions: "Marketing conditions",
+      marking_the_product_with_appropriate_warnings_on_the_risks: "Add risk warning to product",
+      recall_of_the_product_from_end_users: "Recall",
+      temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban",
+      warning_consumers_of_the_risks: "Warn consumers of risks",
+      withdrawal_of_the_product_from_the_market: "Withdrawal"
+    }.freeze
+
     def corrective_action_summary_list_rows(corrective_action)
       recall_information = online_recall_information_text_for(corrective_action.online_recall_information, has_online_recall_information: corrective_action.has_online_recall_information)
       recall_information = link_to(recall_information) if recall_information.starts_with?("http")

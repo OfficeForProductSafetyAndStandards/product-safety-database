@@ -187,6 +187,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
       it { is_expected.not_to be_file_description_changed }
     end
   end
+
   it { expect(decorated_activity.new_legislation).to eq(new_legislation) }
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
   it { expect(decorated_activity.new_details).to eq(new_details) }

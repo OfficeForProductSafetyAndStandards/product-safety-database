@@ -93,7 +93,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
   def expect_case_activity_page_to_show_entered_data
     expect(page).to have_selector("h1", text: "Activity")
-    corrective_action_title = "#{CorrectiveActionDecorator::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}"
+    corrective_action_title = "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}"
     item = page.find("h3", text: corrective_action_title).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{legislation}")
     expect(item).to have_text("Date came into effect: #{date_decided.to_s(:govuk)}")

@@ -17,13 +17,12 @@ RSpec.shared_context "with add corrective action setup" do
   let(:geographic_scope) { "National" }
   let(:other_action) { "" }
   let(:action_for_form) { CorrectiveAction.actions[action_for_service] }
-  let(:action_for_service) { (CorrectiveAction.actions.keys - %w[other]).sample }
 
   let(:corrective_action_form) do
     CorrectiveActionForm.new(
       business_id: business.id,
       product_id: product.id,
-      action: action_for_form,
+      action: action_key,
       other_action: other_action,
       date_decided: date_decided,
       legislation: legislation,
