@@ -47,7 +47,7 @@ module CorrectiveActionsConcern
       :related_file,
       :measure_type,
       :duration,
-      :geographic_scope,
+      geographic_scope: [],
       date_decided: %i[day month year]
     )
   end

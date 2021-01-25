@@ -177,7 +177,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     end
 
     within_fieldset "What is the geographic scope of the action?" do
-      check "Select all that apply", with: ggeographic_scope
+      check geographic_scope
     end
 
     fill_in "Further details (optional)", with: "Urgent action following consumer reports"
