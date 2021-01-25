@@ -6,7 +6,7 @@ class AddGeographicScopesToCorrectiveActions < ActiveRecord::Migration[6.1]
         dir.down { execute "DROP TYPE IF EXISTS geographic_scopes;" }
       end
 
-      add_column :corrective_actions, :geographic_scopes, array: :geographic_scopes, default: nil
+      add_column :corrective_actions, :geographic_scopes, :geographic_scopes, array: true, default: nil
     end
   end
 end

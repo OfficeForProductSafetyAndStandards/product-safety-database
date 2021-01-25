@@ -27,11 +27,18 @@ RSpec.describe CorrectiveAction, :with_stubbed_elasticsearch, :with_stubbed_mail
   let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
   let(:duration) { CorrectiveAction::DURATION_TYPES.sample }
   let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
+  let(:geographic_scopes) { [geographic_scope] }
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { false }
   let(:investigation) { build(:allegation) }
 
   describe "#valid?" do
+    describe "#geographic_scopes" do
+      context "with a valid geographic scope" do
+        it { is_expected.to be_valid }
+      end
+    end
+
     context "with valid input" do
       it "returns true" do
         expect(corrective_action).to be_valid

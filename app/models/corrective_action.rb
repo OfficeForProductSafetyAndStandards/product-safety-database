@@ -15,6 +15,16 @@ class CorrectiveAction < ApplicationRecord
 
   date_attribute :date_decided
 
+  enum geographic_scopes: {
+    local: :local,
+    great_britain: :great_britain,
+    northern_ireland: :northern_ireland,
+    eea_wide: :eea_wide,
+    eu_wide: :eu_wide,
+    worldwide: :worldwide,
+    unknown: :unknown
+  }
+
   enum action: {
     ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures, scope: %i[corrective_action attributes actions]),
     destruction_of_the_product: I18n.t(:destruction_of_the_product, scope: %i[corrective_action attributes actions]),
@@ -39,6 +49,7 @@ class CorrectiveAction < ApplicationRecord
   validates :duration, presence: true
   validates :duration, inclusion: { in: DURATION_TYPES }, if: -> { duration.present? }
   validates :geographic_scope, presence: true
+  validates :geographic_scopes, presence: true
   validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
   validates :action, inclusion: { in: actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
