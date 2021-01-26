@@ -5,6 +5,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
   include_context "with add corrective action setup"
 
   subject(:audit_activity) { investigation.activities.find_by(type: described_class.to_s) }
+
   let(:changes) { corrective_action_form.changes }
   let(:params) do
     corrective_action_form
