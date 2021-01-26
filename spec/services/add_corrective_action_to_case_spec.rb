@@ -6,7 +6,7 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stu
 
   subject(:result) { described_class.call(params) }
 
-  let(:action) { action_for_service }
+  let(:action) { action_key }
   let(:params) do
     corrective_action_form
       .serializable_hash

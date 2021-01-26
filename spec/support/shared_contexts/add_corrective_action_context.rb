@@ -16,7 +16,7 @@ RSpec.shared_context "with add corrective action setup" do
   let(:duration) { "Permanent" }
   let(:geographic_scope) { "National" }
   let(:other_action) { "" }
-  let(:action_for_form) { CorrectiveAction.actions[action_for_service] }
+  let(:action_for_form) { CorrectiveAction.actions[action_key] }
 
   let(:corrective_action_form) do
     CorrectiveActionForm.new(

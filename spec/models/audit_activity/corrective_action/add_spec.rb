@@ -5,18 +5,18 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
   include_context "with add corrective action setup"
 
   subject(:audit_activity) { investigation.activities.find_by(type: described_class.to_s) }
-
+  let(:changes) { corrective_action_form.changes }
   let(:params) do
     corrective_action_form
       .serializable_hash
       .merge(
         investigation: investigation,
         user: user,
-        changes: corrective_action_form.changes
+        changes: changes
       )
   end
 
-  before { AddCorrectiveActionToCase.call!(params) }
+  let!(:corrective_action) { AddCorrectiveActionToCase.call!(params).corrective_action }
 
   describe ".build_metadata" do
     it "saves the passed changes and corrective action id" do
@@ -26,7 +26,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
   end
 
   describe "#title" do
-    let(:expected_title) { "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_for_form]}: #{product.name}" }
+    let(:expected_title) { "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}" }
 
     context "when the action is not other" do
       it "shows the action and product name" do
