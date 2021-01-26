@@ -51,7 +51,7 @@ RSpec.describe AddTestResultToInvestigation, :with_stubbed_elasticsearch, :with_
       test_result = command.test_result
       audit = investigation.activities.find_by!(type: "AuditActivity::Test::Result", product_id: product_id)
       expect(audit.source.user).to eq(user)
-      expect(audit.metadata["test_result_id"]).to eq(test_result.id)
+      expect(audit.metadata["test_result"]["id"]).to eq(test_result.id)
     end
 
     it_behaves_like "a service which notifies teams with access" do
