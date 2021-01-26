@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 2021_01_25_122553) do
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
-  create_enum "geographic_scopes", ["local", "great_britain", "northern_ireland", "eea_wide", "eu_wide", "worldwide", "unknown"]
   create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
+  create_enum "has_online_recall_information", ["has_online_recall_information_yes", "has_online_recall_information_no", "has_online_recall_information_not_relevant"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
   create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
@@ -132,10 +132,12 @@ ActiveRecord::Schema.define(version: 2021_01_25_122553) do
     t.text "details"
     t.string "duration"
     t.string "geographic_scope"
-    t.enum "geographic_scopes", array: true, as: "geographic_scopes"
+    t.string "geographic_scopes", default: [], array: true
+    t.enum "has_online_recall_information", as: "has_online_recall_information"
     t.integer "investigation_id"
     t.string "legislation"
     t.string "measure_type"
+    t.string "online_recall_information"
     t.text "other_action"
     t.integer "product_id"
     t.datetime "updated_at", null: false

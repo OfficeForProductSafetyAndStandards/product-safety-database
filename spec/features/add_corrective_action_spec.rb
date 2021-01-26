@@ -15,7 +15,10 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:file_description) { Faker::Lorem.paragraph }
   let(:measure_type) { "Mandatory" }
   let(:duration) { "Permanent" }
-  let(:geographic_scope) { "National" }
+  let(:geographic_scopes) do
+    CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)]
+      .yield_self { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }
+  end
 
   context "when the viewing user only has read only access" do
     scenario "cannot add supporting information" do
@@ -106,7 +109,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_summary_item(key: "Attachment description", value: file_description)
     expect(page).to have_summary_item(key: "Type of measure", value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
     expect(page).to have_summary_item(key: "Duration of action", value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
-    expect(page).to have_summary_item(key: "Geographic scope", value: geographic_scope)
+    save_and_open_page
+    expect(page).to have_summary_item(key: "Geographic scopes", value: geographic_scopes.to_sentence)
   end
 
   def expect_form_to_show_input_data
@@ -177,7 +181,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     end
 
     within_fieldset "What is the geographic scope of the action?" do
-      check geographic_scope
+      geographic_scopes.each do |geographic_scope|
+        check geographic_scope
+      end
     end
 
     fill_in "Further details (optional)", with: "Urgent action following consumer reports"

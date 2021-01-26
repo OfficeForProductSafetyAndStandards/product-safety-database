@@ -51,8 +51,8 @@
         value: { text: CorrectiveAction.human_attribute_name("duration.#{@corrective_action.duration}") }
       },
       {
-        key: { text: "Geographic scope" },
-        value: { text: @corrective_action.geographic_scope }
+        key: { text: "Geographic scopes" },
+        value: { text: @corrective_action.geographic_scopes.map {|geographic_scope| t(".#{geographic_scope}")}.to_sentence }
       }
     ]
 

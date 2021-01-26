@@ -15,28 +15,40 @@ class CorrectiveAction < ApplicationRecord
 
   date_attribute :date_decided
 
-  enum geographic_scopes: {
-    local: :local,
-    great_britain: :great_britain,
-    northern_ireland: :northern_ireland,
-    eea_wide: :eea_wide,
-    eu_wide: :eu_wide,
-    worldwide: :worldwide,
-    unknown: :unknown
-  }
+  GEOGRAPHIC_SCOPES = %i[
+    local
+    great_britain
+    northern_ireland
+    eea_wide
+    eu_wide
+    worldwide
+    unknown
+  ].freeze
 
-  enum action: {
-    ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures, scope: %i[corrective_action attributes actions]),
-    destruction_of_the_product: I18n.t(:destruction_of_the_product, scope: %i[corrective_action attributes actions]),
-    import_rejected_at_border: I18n.t(:import_rejected_at_border, scope: %i[corrective_action attributes actions]),
-    making_the_marketing_of_the_product_subject_to_prior_conditions: I18n.t(:making_the_marketing_of_the_product_subject_to_prior_conditions, scope: %i[corrective_action attributes actions]),
-    marking_the_product_with_appropriate_warnings_on_the_risks: I18n.t(:marking_the_product_with_appropriate_warnings_on_the_risks, scope: %i[corrective_action attributes actions]),
-    recall_of_the_product_from_end_users: I18n.t(:recall_of_the_product_from_end_users, scope: %i[corrective_action attributes actions]),
-    temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: I18n.t(:temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product, scope: %i[corrective_action attributes actions]),
-    warning_consumers_of_the_risks: I18n.t(:warning_consumers_of_the_risks, scope: %i[corrective_action attributes actions]),
-    withdrawal_of_the_product_from_the_market: I18n.t(:withdrawal_of_the_product_from_the_market, scope: %i[corrective_action attributes actions]),
-    other: I18n.t(:other, scope: %i[corrective_action attributes actions])
-  }
+  I18n.with_options scope: %i[corrective_action attributes actions] do |i18n|
+    enum action: {
+      ban_on_the_marketing_of_the_product_and_any_accompanying_measures:
+        i18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures),
+      destruction_of_the_product:
+             i18n.t(:destruction_of_the_product),
+      import_rejected_at_border:
+             i18n.t(:import_rejected_at_border),
+      making_the_marketing_of_the_product_subject_to_prior_conditions:
+             i18n.t(:making_the_marketing_of_the_product_subject_to_prior_conditions),
+      marking_the_product_with_appropriate_warnings_on_the_risks:
+             i18n.t(:marking_the_product_with_appropriate_warnings_on_the_risks),
+      recall_of_the_product_from_end_users:
+             i18n.t(:recall_of_the_product_from_end_users, scope: %i[corrective_action attributes actions]),
+      temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product:
+             i18n.t(:temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product),
+      warning_consumers_of_the_risks:
+             i18n.t(:warning_consumers_of_the_risks),
+      withdrawal_of_the_product_from_the_market:
+             i18n.t(:withdrawal_of_the_product_from_the_market),
+      other:
+             i18n.t(:other)
+    }
+  end
 
   before_validation { trim_line_endings(:other_action, :details) }
   validate :date_decided_cannot_be_in_the_future
@@ -48,9 +60,7 @@ class CorrectiveAction < ApplicationRecord
   validates :measure_type, inclusion: { in: MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true
   validates :duration, inclusion: { in: DURATION_TYPES }, if: -> { duration.present? }
-  validates :geographic_scope, presence: true
   validates :geographic_scopes, presence: true
-  validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
   validates :action, inclusion: { in: actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
