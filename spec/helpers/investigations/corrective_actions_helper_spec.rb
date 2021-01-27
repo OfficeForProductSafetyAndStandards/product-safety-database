@@ -13,7 +13,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
         { key: { text: "Business" }, value: { html: helper.link_to(corrective_action.business.trading_name, helper.business_path(corrective_action.business)) } },
         { key: { text: "Type of action" }, value: { text: corrective_action.measure_type.upcase_first } },
         { key: { text: "Duration of measure" }, value: { text: corrective_action.duration.upcase_first } },
-        { key: { text: "Scope" }, value: { text: corrective_action.geographic_scope } }
+        { key: { text: "Geographic scopes" }, value: { text: corrective_action.geographic_scopes } }
       ]
     end
 

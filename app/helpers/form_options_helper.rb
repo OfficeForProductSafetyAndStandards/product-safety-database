@@ -15,7 +15,7 @@ module FormOptionsHelper
 
   def corrective_action_geographic_scopes
     CorrectiveAction::GEOGRAPHIC_SCOPES.map do |geographic_scope|
-      { text: I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]), value: geographic_scope }
+      { text: I18n.t(geographic_scope, scope: %i[investigations record_corrective_actions confirmation]), value: geographic_scope }
     end
   end
 

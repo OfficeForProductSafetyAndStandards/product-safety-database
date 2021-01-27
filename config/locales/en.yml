@@ -558,3 +558,11 @@ en:
 
   investigations:
     record_corrective_actions:
+      confirmation:
+        local: "Local"
+        great_britain: "Great Britain"
+        northern_ireland: "Northern Ireland"
+        eea_wide: "EEA Wide"
+        eu_wide: "EU Wide"
+        worldwide: "Worldwide"
+        unknown: "Unknown"

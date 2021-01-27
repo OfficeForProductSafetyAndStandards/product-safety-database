@@ -564,7 +564,7 @@ if run_seeds
       date_decided: rand(1..30).days.ago,
       details: "Some corrective action",
       duration: CorrectiveAction::DURATION_TYPES.sample,
-      geographic_scope: "Regional",
+      geographic_scopes: CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)],
       investigation: i,
       legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
       measure_type: CorrectiveAction::MEASURE_TYPES.sample,

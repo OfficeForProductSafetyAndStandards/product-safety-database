@@ -8,6 +8,8 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
 
   antivirus:
     image: beisopss/antivirus:master

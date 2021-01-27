@@ -15,9 +15,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   let(:file_description) { Faker::Lorem.paragraph }
   let(:measure_type) { "Mandatory" }
   let(:duration) { "Permanent" }
+  let(:geographic_scopes_keys) { CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)] }
   let(:geographic_scopes) do
-    CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)]
-      .yield_self { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }
+    geographic_scopes_keys.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }
   end
 
   context "when the viewing user only has read only access" do
@@ -94,7 +94,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
     expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
-    expect(page).to have_summary_item(key: "Scope",               value: "National")
+    expect(page).to have_summary_item(key: "Geographic scopes",   value: geographic_scopes.to_sentence)
     expect(page).to have_summary_item(key: "Other details",       value: "Urgent action following consumer reports")
 
     expect(page).to have_link("old_risk_assessment.txt")
@@ -109,7 +109,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_summary_item(key: "Attachment description", value: file_description)
     expect(page).to have_summary_item(key: "Type of measure", value: CorrectiveAction.human_attribute_name("measure_type.#{measure_type}"))
     expect(page).to have_summary_item(key: "Duration of action", value: CorrectiveAction.human_attribute_name("duration.#{duration}"))
-    save_and_open_page
     expect(page).to have_summary_item(key: "Geographic scopes", value: geographic_scopes.to_sentence)
   end
 
@@ -131,7 +130,12 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
       expect(page).to have_checked_field(duration)
     end
 
-    expect(page).to have_field("What is the geographic scope of the action?", with: geographic_scope)
+    within_fieldset "What is the geographic scope of the action?" do
+      geographic_scopes_keys.each do |geographic_scope|
+        expect(page).to have_checked_field(I18n.t(geographic_scope, scope: %i[investigations record_corrective_actions confirmation]))
+      end
+    end
+
     expect(page).to have_selector("#conditional-related_file a", text: File.basename(file))
     expect(page).to have_field("Attachment description", with: /#{Regexp.escape(file_description)}/)
   end
@@ -144,9 +148,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(item).to have_text("Date came into effect: #{date.strftime('%d/%m/%Y')}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{measure_type}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{duration}")}")
-    expect(item).to have_text("Geographic scope: #{geographic_scope}")
+    expect(item).to have_text("Geographic scopes: #{geographic_scopes.to_sentence}")
     expect(item).to have_text("Attached: #{File.basename(file)}")
-    expect(item).to have_text("Geographic scope: #{geographic_scope}")
     expect(item).to have_text(details)
   end
 

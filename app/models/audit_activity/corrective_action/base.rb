@@ -25,7 +25,7 @@ class AuditActivity::CorrectiveAction::Base < AuditActivity::Base
     body += "Date came into effect: **#{corrective_action.date_decided.strftime('%d/%m/%Y')}**<br>" if corrective_action.date_decided.present?
     body += "Type of measure: **#{CorrectiveAction.human_attribute_name("measure_type.#{corrective_action.measure_type}")}**<br>"
     body += "Duration of action: **#{CorrectiveAction.human_attribute_name("duration.#{corrective_action.duration}")}**<br>"
-    body += "Geographic scope: **#{corrective_action.geographic_scope}**<br>"
+    body += "Geographic scopes: **#{corrective_action.decorate.geographic_scopes}**<br>"
     body += "Attached: **#{sanitize_text corrective_action.documents.first.filename}**<br>" if corrective_action.documents.attached?
     body += "<br>#{sanitize_text corrective_action.details}" if corrective_action.details.present?
     body
