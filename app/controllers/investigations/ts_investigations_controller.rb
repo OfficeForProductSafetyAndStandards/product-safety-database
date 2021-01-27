@@ -612,12 +612,7 @@ private
 
       AddCorrectiveActionToCase.call!(
         form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
-          .merge(
-            product_id: @product.id,
-            user: current_user,
-            investigation: @investigation,
-            changes: form.changes
-          )
+          .merge(product_id: @product.id, user: current_user, investigation: @investigation)
       )
     end
   end
