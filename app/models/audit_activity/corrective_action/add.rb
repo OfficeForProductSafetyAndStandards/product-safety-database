@@ -1,6 +1,6 @@
 class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Base
-  def self.build_metadata(corrective_action, changes)
-    { corrective_action_id: corrective_action.id, updates: changes }
+  def self.build_metadata(corrective_action)
+    { corrective_action: corrective_action.attributes, document: corrective_action.document.attributes }
   end
 
   def email_update_text(viewer = nil)
@@ -8,12 +8,12 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
   end
 
   def title(_viewing_user = nil)
-    action_name = metadata.dig("updates", "action", 1)
+    action_name = metadata.dig("corrective_action", "action")
 
     truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym]
     return "#{truncated_action}: #{product.name}" unless action_name.inquiry.other?
 
-    metadata.dig("updates", "other_action", 1)
+    metadata.dig("corrective_action", "other_action")
   end
 
 private

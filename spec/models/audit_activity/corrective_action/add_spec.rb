@@ -1,28 +1,29 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include_context "with read only team and user"
   include_context "with add corrective action setup"
 
-  subject(:audit_activity) { investigation.activities.find_by(type: described_class.to_s) }
+  subject(:audit_activity) { described_class.new(metadata: metadata, product: product) }
 
-  let(:changes) { corrective_action_form.changes }
-  let(:params) do
-    corrective_action_form
-      .serializable_hash
-      .merge(
-        investigation: investigation,
-        user: user,
-        changes: changes
-      )
-  end
-
-  let!(:corrective_action) { AddCorrectiveActionToCase.call!(params).corrective_action }
+  let(:metadata) { described_class.build_metadata(corrective_action) }
+  let!(:corrective_action) { create(:corrective_action, action: action_key, other_action: other_action) }
 
   describe ".build_metadata" do
-    it "saves the passed changes and corrective action id" do
-      expect(described_class.build_metadata(corrective_action, changes))
-        .to eq(corrective_action_id: corrective_action.id, updates: changes)
+    context "with no document attached" do
+      it "saves the passed changes and corrective action id" do
+        expect(described_class.build_metadata(corrective_action))
+          .to eq(corrective_action: corrective_action.attributes, document: nil)
+      end
+    end
+
+    context "with a document attached" do
+      let!(:corrective_action) { create(:corrective_action, :with_document) }
+
+      it "saves the passed changes and corrective action id" do
+        expect(described_class.build_metadata(corrective_action))
+          .to eq(corrective_action: corrective_action.attributes, document: corrective_action.document.attributes)
+      end
     end
   end
 
