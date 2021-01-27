@@ -26,7 +26,6 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
                            end
   end
 
-
 private
 
   def subtitle_slug

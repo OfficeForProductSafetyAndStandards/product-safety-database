@@ -7,7 +7,7 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
   end
 
   def attachment
-    @attachment ||= (document_id = metadata.dig("document", "id")) && ActiveStorage::Blob.find_by!(id: document_id)
+    @attachment ||= (document_id = metadata.dig("document", "id")) && ActiveStorage::Blob.find_by(id: document_id)
   end
 
   def date_decided
