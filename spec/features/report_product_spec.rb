@@ -42,7 +42,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         file_description: Faker::Lorem.paragraph,
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
-        geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"],
+        geographic_scopes: [
+          I18n.t("great_britain", scope: %i[corrective_action attributes geographic_scopes]),
+          I18n.t("northern_ireland", scope: %i[corrective_action attributes geographic_scopes]),
+
+        ],
       }
     }
 
@@ -218,8 +222,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         # trigger validation to verify errors are handled correctly
         click_on "Continue"
-        save_and_open_page
-        byebug
 
         product_images.each do |product_image|
           fill_in_product_image_page(with: product_image)
@@ -608,7 +610,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     within_fieldset  "What is the geographic scope of the action?" do
-      with[:geographic_scope].each  do |geographic_scope|
+      with[:geographic_scopes].each do |geographic_scope|
         check geographic_scope
       end
     end
