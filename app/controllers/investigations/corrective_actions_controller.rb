@@ -21,7 +21,7 @@ module Investigations
       result = AddCorrectiveActionToCase.call(
         @corrective_action_form
           .serializable_hash(except: :further_corrctive_action)
-          .merge(user: current_user, investigation: investigation, changes: @corrective_action_form.changes)
+          .merge(user: current_user, investigation: investigation)
       )
 
       if result.success?

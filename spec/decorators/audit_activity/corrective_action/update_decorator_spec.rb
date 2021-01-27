@@ -195,4 +195,36 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   it { expect(decorated_activity.new_geographic_scope).to eq(new_geographic_scope) }
   it { expect(decorated_activity.new_filename).to eq(File.basename(new_filename)) }
   it { expect(decorated_activity.new_file_description).to eq(new_file_description) }
+
+  describe "#attachment and #attached_image" do
+    context "with an exisiting document id metadata" do
+      let(:blob) do
+        ActiveStorage::Blob.create_and_upload!(
+          io: document,
+          filename: Faker::Hipster.word,
+          content_type: "text/plain",
+          metadata: {}
+        )
+      end
+      let(:changes) { corrective_action.previous_changes.merge(existing_document_file_id: [nil, blob.signed_id]) }
+
+      context "when the document is not an image" do
+        let(:document) { fixture_file_upload("corrective_action.txt") }
+
+        it "returns the saved record in the update metadata", :aggregate_failures do
+          expect(decorated_activity.attachment).to eq(blob)
+          expect(decorated_activity).not_to be_attached_image
+        end
+      end
+
+      context "when the document is an image" do
+        let(:document) { fixture_file_upload("testImage.png") }
+
+        it "returns the saved record in the update metadata", :aggregate_failures do
+          expect(decorated_activity.attachment).to eq(blob)
+          expect(decorated_activity).to be_attached_image
+        end
+      end
+    end
+  end
 end

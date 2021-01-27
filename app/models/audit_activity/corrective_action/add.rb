@@ -16,6 +16,17 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     metadata.dig("corrective_action", "other_action")
   end
 
+  def corrective_action
+    @corrective_action ||= begin
+                             if (corrective_action_id = metadata&.dig("corrective_action", "id"))
+                               CorrectiveAction.find_by!(id: corrective_action_id)
+                             else
+                               super
+                             end
+                           end
+  end
+
+
 private
 
   def subtitle_slug

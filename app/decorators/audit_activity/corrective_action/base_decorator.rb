@@ -12,34 +12,6 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
     attachment&.image?
   end
 
-  def attachment
-    @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
-  end
-
-  def date_decided
-    @date_decided ||= Date.parse(metadata.dig("updates", "date_decided", 1)).to_s(:govuk)
-  end
-
-  def legislation
-    metadata.dig("updates", "legislation", 1)
-  end
-
-  def details
-    metadata.dig("updates", "details", 1)
-  end
-
-  def measure_type
-    CorrectiveAction.human_attribute_name("measure_type.#{metadata.dig('updates', 'measure_type', 1)}")
-  end
-
-  def duration
-    CorrectiveAction.human_attribute_name("duration.#{metadata.dig('updates', 'duration', 1)}")
-  end
-
-  def geographic_scope
-    metadata.dig("updates", "geographic_scope", 1)
-  end
-
   def document_filename
     attachment&.filename
   end
