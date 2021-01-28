@@ -15,7 +15,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    action_name = other? ? other_action : CorrectiveAction::TRUNCATED_ACTION_MAP[action.to_sym]
+    action_name = other? ? other_action : I18n.t(".#{action}")
 
     "#{action_name}: #{product.name}"
   end

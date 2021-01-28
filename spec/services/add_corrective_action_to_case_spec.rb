@@ -46,9 +46,8 @@ RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stu
     audit = investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Add")
     expect(audit.source.user).to eq(user)
 
-    expect(audit.metadata).to eq(
-      "corrective_action_id" => result.corrective_action.id, "updates" => expected_changes
-    )
+    expect(audit.metadata)
+      .to eq("corrective_action" => result.corrective_action.as_json, "document" => result.corrective_action.document.attributes)
     expect(audit.business).to eq(business)
   end
 
