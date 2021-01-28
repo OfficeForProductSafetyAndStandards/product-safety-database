@@ -22,7 +22,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
 
       it "saves the passed changes and corrective action id" do
         expect(described_class.build_metadata(corrective_action))
-          .to eq(corrective_action: corrective_action.attributes, document: corrective_action.document.attributes)
+          .to eq(corrective_action: corrective_action.attributes, document: corrective_action.document_blob.attributes)
       end
     end
   end
