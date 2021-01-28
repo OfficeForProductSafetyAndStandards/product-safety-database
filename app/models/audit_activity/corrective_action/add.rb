@@ -1,6 +1,6 @@
 class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Base
   def self.build_metadata(corrective_action)
-    { corrective_action: corrective_action.attributes, document: corrective_action.document.attributes }
+    { corrective_action: corrective_action.attributes, document: corrective_action.document_blob&.attributes }
   end
 
   def email_update_text(viewer = nil)
