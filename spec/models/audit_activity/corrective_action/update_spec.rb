@@ -14,11 +14,8 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
         .except(:date_decided_day, :date_decided_month, :date_decided_year, :related_file)
     end
 
-    before do
-      old_attachment.blob.metadata[:description] = old_description
-      old_attachment.blob.metadata[:filename] = old_attachment.filename
-      old_attachment.blob.save!
-      corrective_action.update!(
+    let(:attributes) do
+      {
         action: new_summary,
         date_decided_day: new_date_decided.day,
         date_decided_month: new_date_decided.month,
@@ -26,11 +23,18 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
         product: product_two,
         legislation: new_legislation,
         business: business_two,
-        geographic_scope: new_geographic_scope,
+        geographic_scopes: new_geographic_scope,
         details: new_details,
         measure_type: new_measure_type,
         duration: new_duration
-      )
+      }
+    end
+
+    before do
+      old_attachment.blob.metadata[:description] = old_description
+      old_attachment.blob.metadata[:filename] = old_attachment.filename
+      old_attachment.blob.save!
+      corrective_action.update!(attributes)
 
       corrective_action.documents.detach
       corrective_action.documents.attach(new_file)
@@ -40,13 +44,33 @@ RSpec.describe AuditActivity::CorrectiveAction::Update, :with_stubbed_elasticsea
       new_blob.save!
     end
 
-    it "has all the updated metadata" do
-      expect(described_class.build_metadata(corrective_action, old_attachment))
-        .to eq(corrective_action_id: corrective_action.id,
-               updates: expected_corrective_action_changes.merge(
-                 file_description: [old_description, new_description],
-                 filename: [old_filename.to_s, corrective_action.documents.first.filename.to_s]
-               ))
+    describe "" do
+      context "when only changing the geographic_scopes" do
+        let(:attributes) { { geographic_scopes: new_geographic_scopes } }
+        let(:expected_corrective_action_changes) do
+          corrective_action
+            .previous_changes
+            .except(:date_decided_day, :date_decided_month, :date_decided_year, :related_file)
+        end
+
+        it "has the changes" do
+          expect(described_class.build_metadata(corrective_action, old_attachment))
+            .to eq(corrective_action_id: corrective_action.id,
+                   updates: expected_corrective_action_changes.merge(
+                     file_description: [old_description, new_description],
+                     filename: [old_filename.to_s, corrective_action.documents.first.filename.to_s]
+                   ))
+        end
+      end
+
+      it "has all the updated metadata" do
+        expect(described_class.build_metadata(corrective_action, old_attachment))
+          .to eq(corrective_action_id: corrective_action.id,
+                 updates: expected_corrective_action_changes.merge(
+                   file_description: [old_description, new_description],
+                   filename: [old_filename.to_s, corrective_action.documents.first.filename.to_s]
+                 ))
+      end
     end
   end
 end
