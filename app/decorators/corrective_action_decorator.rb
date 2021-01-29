@@ -15,7 +15,7 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    action_name = other? ? other_action : I18n.t(".#{action}")
+    action_name = other? ? other_action : I18n.t(action, scope: %i[corrective_action attributes actions])
 
     "#{action_name}: #{product.name}"
   end
