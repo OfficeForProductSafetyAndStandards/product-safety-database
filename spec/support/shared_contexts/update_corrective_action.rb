@@ -26,8 +26,9 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
   let(:new_measure_type) do
     (CorrectiveAction::MEASURE_TYPES - [corrective_action.measure_type]).sample
   end
-  let(:new_geographic_scope) do
-    (Rails.application.config.corrective_action_constants["geographic_scope"] - [corrective_action.geographic_scope]).sample
+  let(:geographic_scopes_last_index) { rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1) }
+  let(:new_geographic_scopes) do
+    CorrectiveAction::GEOGRAPHIC_SCOPES[0..geographic_scopes_last_index]
   end
   let(:new_file_description) { "new corrective action file description" }
   let(:new_file) { fixture_file_upload("corrective_action.txt") }

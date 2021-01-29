@@ -21,7 +21,9 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       expect(page).to have_select("Product", selected: corrective_action.product.name)
       expect(page).to have_select("Under which legislation?", selected: corrective_action.legislation)
       expect(page).to have_select("Business", selected: corrective_action.business.trading_name)
-      expect(page).to have_select("What is the geographic scope of the action?", selected: corrective_action.geographic_scope)
+      corrective_action.geographic_scopes.each do |geographic_scope|
+        expect(page).to have_checked_field(I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]))
+      end
       expect(page).to have_field("Further details (optional)", with: "\r\n#{corrective_action.details}", type: "textarea")
       measure_type = corrective_action.measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"
       expect(page).to have_checked_field(measure_type)
@@ -40,7 +42,12 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       select product_two.name,              from: "Product"
       select new_legislation,               from: "Under which legislation?"
       select business_two.trading_name,     from: "Business"
-      select new_geographic_scope,          from: "What is the geographic scope of the action?"
+      within_fieldset("What is the geographic scope of the action?") do
+        new_geographic_scopes.each do |new_geographic_scope|
+          check I18n.t(new_geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
+        end
+      end
+
       fill_in "Further details (optional)", with: new_details
       within_fieldset "Is the corrective action mandatory?" do
         choose new_measure_type == CorrectiveAction::MEASURE_TYPES[0] ? "Yes" : "No, it’s voluntary"

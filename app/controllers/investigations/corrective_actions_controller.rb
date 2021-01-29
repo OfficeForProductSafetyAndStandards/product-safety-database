@@ -52,7 +52,7 @@ module Investigations
         :other_action,
         file: %i[file description],
         date_decided: %i[day month year],
-        geographic_scope: []
+        geographic_scopes: []
       )
     end
   end
