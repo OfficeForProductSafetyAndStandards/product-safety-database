@@ -139,7 +139,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    database_cleaner (1.8.5)
+    database_cleaner (1.99.0)
     devise (4.7.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -595,7 +595,7 @@ DEPENDENCIES
   capybara-screenshot (~> 1.0)
   caxlsx_rails (~> 0.6.2)
   cf-app-utils (~> 0.6)
-  database_cleaner (~> 1.8)
+  database_cleaner (~> 1.99)
   devise (~> 4.7)
   devise-encryptable (~> 0.2)
   dotenv-rails (~> 2.7)
