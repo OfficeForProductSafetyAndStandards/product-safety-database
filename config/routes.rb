@@ -147,6 +147,7 @@ Rails.application.routes.draw do
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
 
     resources :accident_or_incidents_type, controller: "investigations/accident_or_incidents_type", only: %i[new create]
+    resources :accident_or_incidents, controller: "investigations/accident_or_incidents", only: %i[new create]
 
     resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
     resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
