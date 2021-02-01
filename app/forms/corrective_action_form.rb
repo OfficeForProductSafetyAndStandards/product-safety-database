@@ -17,7 +17,7 @@ class CorrectiveActionForm
   attribute :related_file
   attribute :measure_type
   attribute :duration
-  attribute :geographic_scope
+  attribute :geographic_scopes
   attribute :other_action
   attribute :has_online_recall_information, default: nil
   attribute :online_recall_information
@@ -44,8 +44,7 @@ class CorrectiveActionForm
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true
   validates :duration, inclusion: { in: CorrectiveAction::DURATION_TYPES }, if: -> { duration.present? }
-  validates :geographic_scope, presence: true
-  validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
+  validates :geographic_scopes, presence: true
   validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
@@ -65,7 +64,7 @@ class CorrectiveActionForm
     details
     measure_type
     duration
-    geographic_scope
+    geographic_scopes
     other_action
     online_recall_information
     has_online_recall_information
