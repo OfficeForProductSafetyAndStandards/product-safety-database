@@ -306,7 +306,7 @@ private
 
   def which_businesses_params
     params.require(:businesses).permit(
-      :retailer, :distributor, :importer, :manufacturer, :other, :other_business_type, :none
+      :retailer, :distributor, :exporter, :importer, :manufacturer, :other, :other_business_type, :none
     )
   end
 
