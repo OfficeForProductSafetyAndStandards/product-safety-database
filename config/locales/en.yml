@@ -94,13 +94,15 @@ en:
     corrective_actions:
       form:
         geographic_scopes:
-        local: "Local"
-        great_britain: "Great Britain"
-        northern_ireland: "Northern Ireland"
-        eea_wide: "EEA Wide"
-        eu_wide: "EU Wide"
-        worldwide: "Worldwide"
-        unknown: "Unknown"
+          local: "Local"
+          great_britain: "Great Britain"
+          northern_ireland: "Northern Ireland"
+          eea_wide: "EEA Wide"
+          eu_wide: "EU Wide"
+          worldwide: "Worldwide"
+          unknown: "Unknown"
+        geographic_scopes_legend: "What is the geographic scope of the action?"
+        geographic_scopes_hint: "Select all that apply."
       helper:
         not_specified: "Not specified"
         has_online_recall_information:

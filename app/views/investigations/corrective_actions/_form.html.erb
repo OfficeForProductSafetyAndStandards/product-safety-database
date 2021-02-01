@@ -73,11 +73,11 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
  ] %>
 
 <%= form.govuk_radios :measure_type,
-   legend: "Is the corrective action mandatory?",
-   items: [
-     { text: "Yes", value: "mandatory" },
-     { text: "No, it’s voluntary", value: "voluntary" }
-   ]
+ legend: "Is the corrective action mandatory?",
+ items: [
+   { text: "Yes", value: "mandatory" },
+   { text: "No, it’s voluntary", value: "voluntary" }
+ ]
 %>
 
 <%= form.govuk_radios :duration,
@@ -90,8 +90,8 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
 %>
 
 <%= form.govuk_checkboxes :geographic_scopes,
- legend: "What is the geographic scope of the action?",
- hint: "Select all that apply.",
+ legend: t(".geographic_scopes_legend"),
+ hint: t(".geographic_scopes_hint"),
  items: corrective_action_geographic_scopes
 %>
 
