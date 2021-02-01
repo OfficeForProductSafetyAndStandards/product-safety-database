@@ -9,4 +9,16 @@ class AuditActivity::Test::ResultDecorator < ApplicationDecorator
     # original attributes in order to decorate it
     Test::Result.new(metadata["test_result"].except("document")).decorate.title
   end
+
+  def standards_product_was_tested_against
+    super.join(", ")
+  end
+
+  def date
+    super.to_s(:govuk)
+  end
+
+  def result
+    super.titleize
+  end
 end

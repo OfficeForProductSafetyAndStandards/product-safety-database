@@ -3,11 +3,11 @@
   <br />
   Legislation: <strong><%= activity.legislation %></strong>
   <br />
-  Standards: <strong><%= activity.standards_product_was_tested_against.join(", ") %></strong>
+  Standards: <strong><%= activity.standards_product_was_tested_against %></strong>
   <br />
-  Date of test: <strong><%= activity.date.to_s(:govuk) %></strong>
+  Date of test: <strong><%= activity.date %></strong>
   <br />
-  Result: <strong><%= activity.result.titleize %></strong>
+  Result: <strong><%= activity.result %></strong>
   <br />
   Attached: <strong><%= link_to activity.attached_file_name, url_for(activity.attached_file) %></strong>
   <br />
