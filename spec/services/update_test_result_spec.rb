@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus do
+RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_test_queue_adapter do
   subject(:result) { described_class.call(params) }
 
   let(:user)                                     { create(:user, :activated) }
@@ -105,7 +105,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
         it_behaves_like "a service which notifies the case owner"
 
         it "retains the original file" do
-          expect { result }.to change { ActiveStorage::Blob.count }.from(1).to(2)
+          expect { result }.not_to have_enqueued_job(ActiveStorage::PurgeJob)
         end
       end
 
