@@ -449,9 +449,9 @@ en:
             duration:
               blank: "You must state how long the action will be in place"
               inclusion: "You must choose one of Permanently, Temporarily or Unknown"
-            geographic_scope:
-              blank: "You must state the geographic scope of the action"
-              inclusion: "You must state the geographic scope of the action"
+            geographic_scopes:
+              blank: "Select the geographic scope of the action"
+              inclusion: "Select the geographic scope of the action"
             action:
               inclusion: "Select type of corrective action"
             other_action:
@@ -508,8 +508,6 @@ en:
             duration:
               blank: "You must state how long the action will be in place"
               inclusion: "You must choose one of Permanently, Temporarily or Unknown"
-            geographic_scopes:
-              inclusion: "You must state the geographic scope of the action"
             action:
               inclusion: "Select type of corrective action"
             other_action:
