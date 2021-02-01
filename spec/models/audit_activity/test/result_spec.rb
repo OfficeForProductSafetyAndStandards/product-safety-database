@@ -14,7 +14,7 @@ RSpec.describe AuditActivity::Test::Result, :with_stubbed_elasticsearch, :with_s
 
   describe "#title" do
     it "returns a string" do
-      expect(activity.title).to eq(/\A(Passed test|Failed test|Test result): #{test_result.product.name}\z/)
+      expect(activity.title).to match(/\A(Passed test|Failed test|Test result): #{test_result.product.name}\z/)
     end
   end
 
