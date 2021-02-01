@@ -16,7 +16,7 @@ RSpec.describe Investigations::ActivitiesController, :with_stubbed_elasticsearch
       get investigation_activity_path(investigation)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to match(legacy_audit_activity_test_result.title)
+      expect(response.body).to match(Regexp.escape(legacy_audit_activity_test_result.title))
     end
   end
 end

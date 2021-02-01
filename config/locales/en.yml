@@ -91,16 +91,25 @@ en:
       title: "Title"
 
   investigations:
-    record_corrective_actions:
-      confirmation:
-        local: "Local"
-        great_britain: "Great Britain"
-        northern_ireland: "Northern Ireland"
-        eea_wide: "EEA Wide"
-        eu_wide: "EU Wide"
-        worldwide: "Worldwide"
-        unknown: "Unknown"
+    corrective_actions:
+      helper:
+        not_specified: "Not specified"
+        has_online_recall_information:
+          has_online_recall_information_no: "Not published online"
+          has_online_recall_information_not_relevant: "Not relevant"
+          has_online_recall_information_not_provided: "Not provided"
 
+      create:
+        success: "Corrective action was successfully recorded."
+      update:
+        success: "Corrective action was successfully updated."
+      form:
+        yes: "Yes"
+        no: "No"
+        not_relevant: "Not relevant"
+        has_online_recall_information_legend: "Has the business responsible published product recall information online?"
+        online_recall_information_hint: "For example http://www.example.com or https://www.example.com"
+        online_recall_information_label: "Online recall information"
     overview:
       case_risk_level:
         key: Case risk level
@@ -414,6 +423,34 @@ en:
               must_be_real: Date of call must be a real date
               incomplete: Date of call must include a %{missing_date_parts}
               in_future: Date of call must be today or in the past
+        corrective_action_form:
+          attributes:
+            product:
+              required: "Select the product the corrective action relates to"
+            date_decided:
+              blank: "Enter date the corrective action was decided"
+              must_be_real: "Enter a real date when the corrective action was decided"
+              date_missing_component: "Enter date the corrective action was decided and include a %{missing_components}"
+              in_future: "Date decided must be today or in the past"
+            further_corrective_action:
+              inclusion: "Select whether or not you have further corrective action to record"
+            measure_type:
+              blank: You must state whether the action is mandatory or voluntary
+              inclusion: "You must choose either mandatory or voluntary"
+            duration:
+              blank: "You must state how long the action will be in place"
+              inclusion: "You must choose one of Permanently, Temporarily or Unknown"
+            geographic_scope:
+              blank: "You must state the geographic scope of the action"
+              inclusion: "You must state the geographic scope of the action"
+            action:
+              inclusion: "Select type of corrective action"
+            other_action:
+              blank: "Enter type of corrective action"
+            has_online_recall_information:
+              inclusion: "Select yes if the business responsible has published recall information online"
+            online_recall_information:
+              blank: "Enter the webpage where the business responsible published recall information"
         risk_validation_form:
           attributes:
             risk_validation_change_rationale:

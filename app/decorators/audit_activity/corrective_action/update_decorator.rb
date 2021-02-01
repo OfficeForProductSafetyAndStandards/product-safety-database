@@ -15,6 +15,19 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     metadata.dig("updates", "legislation", 1)
   end
 
+  def new_online_recall_information
+    if (online_recall_information = metadata.dig("updates", "online_recall_information", 1)).present?
+      return h.link_to online_recall_information, online_recall_information, rel: "noopener", target: "_blank"
+    end
+
+    has_online_recall_information = metadata.dig("updates", "has_online_recall_information", 1)
+    return if has_online_recall_information.nil?
+
+    if has_online_recall_information.inquiry.has_online_recall_information_no? || has_online_recall_information.inquiry.has_online_recall_information_not_relevant?
+      I18n.t(".#{has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])
+    end
+  end
+
   def new_duration
     metadata.dig("updates", "duration", 1)
   end
@@ -41,6 +54,10 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     metadata.dig("updates", "filename", 0)
   end
 
+  def file_description_changed?
+    metadata.dig("updates").key?("file_description")
+  end
+
   def new_file_description
     metadata.dig("updates", "file_description", 1)
   end
@@ -51,5 +68,9 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
 
   def business_updated?
     metadata.dig("updates", "business_id", 1)
+  end
+
+  def attachment
+    @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
   end
 end

@@ -4,7 +4,7 @@
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
-    href: investigation_action_path(@investigation, @corrective_action)
+    href: investigation_corrective_action_path(@investigation, @corrective_action_form.id)
   ) %>
 <% end %>
 
@@ -12,31 +12,32 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @corrective_action.object, scope: :corrective_action, url: investigation_action_path(@investigation, @corrective_action), builder: ApplicationFormBuilder, local: true do |form| %>
-      <%= error_summary(@corrective_action.errors) %>
+    <%= form_with model: @corrective_action_form, scope: :corrective_action, url: investigation_corrective_action_path(@investigation, @corrective_action_form.id), method: :put, builder: ApplicationFormBuilder, local: true do |form| %>
+      <%= error_summary(@corrective_action_form.errors, %i[action date_decided legislation has_online_recall_information online_recall_information measure_type duration geographic_scope related_file]) %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-      <%= render "investigations/record_corrective_actions/form",
+      <%= render "form",
                  form: form,
                  allow_product_linking: true,
                  allow_business_linking: true,
-                 corrective_action: @corrective_action,
+                 corrective_action: @corrective_action_form,
                  investigation: @investigation
       %>
 
       <% file_field = capture do %>
+        <%= form.hidden_field :existing_document_file_id %>
         <%= render "related_attachment_fields", form: form, file_blob: @file_blob, attachment_name: :file %>
       <% end %>
       <%= form.hidden_field :related_file, value: nil %>
 
       <%= form.govuk_radios :related_file,
-        legend: "Are there any files related to the action?",
-        items: [
-          { text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action.file_attached? },
-          { text: "No", value: "off", checked: !@corrective_action.file_attached? }
-        ]
+         legend: "Are there any files related to the action?",
+         items: [
+           { text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action_form.document.present? },
+           { text: "No", value: "off" }
+         ]
       %>
 
       <%= govukButton text: "Update corrective action" %>

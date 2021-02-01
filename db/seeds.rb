@@ -407,7 +407,8 @@ if run_seeds
     details: "Passed tests 1 to 4 and failed test 5",
     result: "passed",
     product_id: product.id,
-    document: create_blob("test_result.txt", title: "test result")
+    document: create_blob("test_result.txt", title: "test result"),
+    standards_product_was_tested_against: []
   )
 
   # Ninth investigation
@@ -571,7 +572,6 @@ if run_seeds
       product: product,
       action: "other",
       other_action: "First corrective action",
-      related_file: false,
       created_at: 2.days.ago
     )
 

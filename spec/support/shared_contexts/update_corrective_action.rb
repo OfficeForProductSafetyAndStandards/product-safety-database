@@ -16,8 +16,10 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
            :with_file,
            investigation: investigation,
            product: product_one,
-           business: business_one)
+           business: business_one,
+           has_online_recall_information: has_online_recall_information)
   end
+  let(:has_online_recall_information) { "has_online_recall_information_no" }
   let(:new_summary)          { ((CorrectiveAction.actions.keys - %W[other #{corrective_action.action}])).sample }
   let(:new_date_decided)     { corrective_action.date_decided - 1.day }
   let(:new_legislation)      { (Rails.application.config.legislation_constants["legislation"] - [corrective_action.legislation]).sample }
@@ -30,6 +32,17 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
   let(:new_geographic_scopes) do
     CorrectiveAction::GEOGRAPHIC_SCOPES[0..geographic_scopes_last_index]
   end
+  let(:new_action) { CorrectiveAction.actions[new_summary] }
+  let(:new_other_action) { Faker::Hipster.paragraph(sentence_count: 3) }
   let(:new_file_description) { "new corrective action file description" }
   let(:new_file) { fixture_file_upload("corrective_action.txt") }
+  let(:new_document)                      { fixture_file_upload(file_fixture("corrective_action.txt")) }
+  let(:new_has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }
+  let(:new_online_recall_information) { Faker::Internet.url(host: "example.com") }
+  let(:existing_document_file_id) { nil }
+  let(:related_file)              { false }
+  let(:file_form)                 { { file: new_document, description: new_file_description } }
+
+  let(:product)                   { create(:product) }
+  let(:business)                  { create(:business) }
 end
