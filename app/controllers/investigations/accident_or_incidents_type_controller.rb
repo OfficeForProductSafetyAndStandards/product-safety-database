@@ -8,13 +8,13 @@ module Investigations
     def create
       authorize investigation, :update?
       return render(:new) if accident_or_incident_type_form.invalid?
-      redirect_to new_investigation_accident_or_incident_path(@investigation, type: type)
+      redirect_to new_investigation_accident_or_incident_path(@investigation, event_type: event_type)
     end
 
   private
 
     def accident_or_incident_type_form
-      @accident_or_incident_type_form ||= AccidentOrIncidentTypeForm.new(type: type)
+      @accident_or_incident_type_form ||= AccidentOrIncidentTypeForm.new(event_type: event_type)
     end
 
     def investigation
@@ -23,9 +23,9 @@ module Investigations
                         .decorate
     end
 
-    def type
-      return unless params[:investigation] && params[:investigation][:type]
-      params[:investigation][:type]
+    def event_type
+      return unless params[:investigation] && params[:investigation][:event_type]
+      params[:investigation][:event_type]
     end
   end
 end

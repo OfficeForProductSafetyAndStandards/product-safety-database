@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @accident_or_incident_type_form.errors %>
 
-      <%= render "form_components/govuk_radios", form: form, key: :type,
+      <%= render "form_components/govuk_radios", form: form, key: :event_type,
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
                  hint: { text: t(".hint") },
                  items: [{ text: "Accident", value: "accident", id: "accident_type" },

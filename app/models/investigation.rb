@@ -86,6 +86,7 @@ class Investigation < ApplicationRecord
   has_one :owner_user, through: :owner_user_collaboration, dependent: :destroy, source_type: "User", source: :collaborator
 
   has_many :risk_assessments
+  has_many :accident_or_incidents
 
   # All sub-classes share this policy class
   def self.policy_class
@@ -129,7 +130,7 @@ class Investigation < ApplicationRecord
   end
 
   def supporting_information
-    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product) + risk_assessments).sort_by(&:created_at).reverse
+    @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product) + risk_assessments + accident_or_incidents).sort_by(&:created_at).reverse
   end
 
   def status
