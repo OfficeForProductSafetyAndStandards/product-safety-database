@@ -25,7 +25,7 @@ class CorrectiveAction < ApplicationRecord
     "has_online_recall_information_not_relevant" => "has_online_recall_information_not_relevant"
   }
 
-  GEOGRAPHIC_SCOPES = %i[
+  GEOGRAPHIC_SCOPES = %w[
     local
     great_britain
     northern_ireland

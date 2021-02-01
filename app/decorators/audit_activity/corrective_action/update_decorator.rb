@@ -43,7 +43,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   def new_geographic_scopes
     return unless (geographic_scopes = metadata.dig("updates", "geographic_scopes", 1))
 
-    geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }
+    geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence
   end
 
   def new_filename
