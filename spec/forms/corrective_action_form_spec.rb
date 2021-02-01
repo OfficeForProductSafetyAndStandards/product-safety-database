@@ -164,7 +164,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     context "with invalid geographic_scope" do
-      let(:geographic_scopes) { ["test"] }
+      let(:geographic_scopes) { %w[test] }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid
