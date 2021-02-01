@@ -2,7 +2,7 @@ class AccidentOrIncidentForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :date
+  attribute :date, :govuk_date
   attribute :is_date_known
   attribute :product
   attribute :severity

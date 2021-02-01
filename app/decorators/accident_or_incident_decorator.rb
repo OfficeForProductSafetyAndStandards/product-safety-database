@@ -14,11 +14,11 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
   end
 
   def supporting_information_type
-    type
+    object.event_type.capitalize
   end
 
   def date_of_activity
-    return unless object.date
+    return I18n.t(".accident_or_incident.date.unknown") unless object.date
     object.date.to_s(:govuk)
   end
 
@@ -32,10 +32,5 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
 
   def usage
     I18n.t(".accident_or_incident.usage.#{object.usage}")
-  end
-
-  def type
-    byebug
-    object.event_type.capitalize
   end
 end

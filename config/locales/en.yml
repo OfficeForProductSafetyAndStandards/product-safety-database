@@ -551,6 +551,8 @@ en:
       medium: "Medium"
       low: "Low"
       unknown_severity: "Unknown"
+    date:
+      unknown: "Unknown"
 
   corrective_action:
     attributes:
