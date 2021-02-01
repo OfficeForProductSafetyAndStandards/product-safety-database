@@ -44,7 +44,7 @@ class CorrectiveActionForm
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true
   validates :duration, inclusion: { in: CorrectiveAction::DURATION_TYPES }, if: -> { duration.present? }
-  validates :geographic_scopes, presence: true
+  validates :geographic_scopes, inclusion: { in: CorrectiveAction::GEOGRAPHIC_SCOPES }
   validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?

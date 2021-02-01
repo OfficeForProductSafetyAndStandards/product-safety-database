@@ -10,7 +10,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       legislation: legislation,
       measure_type: measure_type,
       duration: duration,
-      geographic_scope: geographic_scope,
+      geographic_scopes: geographic_scopes,
       details: details,
       related_file: related_file,
       product_id: create(:product).id,
@@ -30,7 +30,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
   let(:duration) { CorrectiveAction::DURATION_TYPES.sample }
-  let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
+  let(:geographic_scopes) { CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)] }
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { false }
   let(:investigation) { build(:allegation) }
@@ -156,7 +156,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     context "with blank geographic_scope" do
-      let(:geographic_scope) { nil }
+      let(:geographic_scopes) { nil }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid
@@ -164,7 +164,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     context "with invalid geographic_scope" do
-      let(:geographic_scope) { "test" }
+      let(:geographic_scopes) { "test" }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid
