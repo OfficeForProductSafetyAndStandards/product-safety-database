@@ -12,12 +12,6 @@ RSpec.describe AuditActivity::Test::Result, :with_stubbed_elasticsearch, :with_s
     end
   end
 
-  describe "#title" do
-    it "returns a string" do
-      expect(activity.title).to match(/\A(Passed test|Failed test|Test result): #{test_result.product.name}\z/)
-    end
-  end
-
   describe "#attached_file" do
     it "returns the file" do
       expect(activity.attached_file).to eq test_result.document.blob
