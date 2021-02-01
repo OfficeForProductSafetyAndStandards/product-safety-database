@@ -634,7 +634,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       choose with[:duration].titleize
     end
 
-    within_fieldset  "What is the geographic scope of the action?" do
+    within_fieldset "What is the geographic scope of the action?" do
       with[:geographic_scopes].each do |geographic_scope|
         check geographic_scope
       end
@@ -645,7 +645,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       attach_file "Upload a file", with[:file], visible: false
       fill_in "Attachment description", with: with[:file_description]
     end
-
 
     choose "further_corrective_action"
     click_button "Continue"
