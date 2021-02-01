@@ -19,6 +19,6 @@ module CorrectiveActionsConcern
       geographic_scopes: [],
       file: %i[file description],
       date_decided: %i[day month year]
-    )
+    ).with_defaults(geographic_scopes: [])
   end
 end

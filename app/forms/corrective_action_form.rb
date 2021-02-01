@@ -44,7 +44,8 @@ class CorrectiveActionForm
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true
   validates :duration, inclusion: { in: CorrectiveAction::DURATION_TYPES }, if: -> { duration.present? }
-  validates :geographic_scopes, inclusion: { in: CorrectiveAction::GEOGRAPHIC_SCOPES }
+  validates :geographic_scopes, presence: true
+  validate :geographic_scopes_inclusion
   validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
@@ -120,5 +121,11 @@ private
     self.existing_document_file_id = nil
     self.filename = nil
     self.file_description = nil
+  end
+
+  def geographic_scopes_inclusion
+    unless geographic_scopes.all? { |geographic_scope| CorrectiveAction::GEOGRAPHIC_SCOPES.include?(geographic_scope) }
+      errors.add(:geographic_scopes, :inclusion)
+    end
   end
 end

@@ -92,6 +92,15 @@ en:
 
   investigations:
     corrective_actions:
+      form:
+        geographic_scopes:
+        local: "Local"
+        great_britain: "Great Britain"
+        northern_ireland: "Northern Ireland"
+        eea_wide: "EEA Wide"
+        eu_wide: "EU Wide"
+        worldwide: "Worldwide"
+        unknown: "Unknown"
       helper:
         not_specified: "Not specified"
         has_online_recall_information:
@@ -500,7 +509,7 @@ en:
               blank: "You must state how long the action will be in place"
               inclusion: "You must choose one of Permanently, Temporarily or Unknown"
             geographic_scopes:
-              blank: "You must state the geographic scope of the action"
+              inclusion: "You must state the geographic scope of the action"
             action:
               inclusion: "Select type of corrective action"
             other_action:

@@ -114,7 +114,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     within_fieldset "What is the geographic scope of the action?" do
       geographic_scopes_keys.each do |geographic_scope|
-        expect(page).to have_checked_field(I18n.t(geographic_scope, scope: %i[investigations record_corrective_actions confirmation]))
+        expect(page).to have_checked_field(I18n.t(geographic_scope, scope: %i[investigations corrective_actions confirmation]))
       end
     end
 
