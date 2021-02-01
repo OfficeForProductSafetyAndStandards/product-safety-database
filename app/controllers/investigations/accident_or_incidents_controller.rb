@@ -4,11 +4,12 @@ module Investigations
       @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
       authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new
+      @type = params[:type]
     end
 
     def create
       authorize investigation, :update?
-      @accident_or_incident_form = AccidentOrIncidentForm.new(params.require(:accident_or_incident).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product, date: %i[day month year]))
+      @accident_or_incident_form = AccidentOrIncidentForm.new(params.require(:accident_or_incident).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product, :type, date: %i[day month year]))
       return render(:new) if accident_or_incident_form.invalid?
       redirect_to investigation_supporting_information_index_path(investigation)
     end

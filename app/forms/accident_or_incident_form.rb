@@ -9,6 +9,7 @@ class AccidentOrIncidentForm
   attribute :severity_other
   attribute :usage
   attribute :additional_info
+  attribute :type
 
   validates :is_date_known, presence: true
   validates :product, presence: true
@@ -16,4 +17,5 @@ class AccidentOrIncidentForm
   validates :usage, presence: true
   validates :date, presence: true, if: -> { is_date_known }
   validates :severity_other, presence: true, if: -> { severity == 'other' }
+  validates :type, presence: true
 end
