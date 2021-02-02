@@ -83,7 +83,7 @@ group :test do
   gem "scss_lint-govuk", "~> 0.2"
   gem "shoulda-matchers"
   gem "simplecov"
-  gem "simplecov-console", "~> 0.8"
+  gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
   gem "slim_lint", "~> 0.20"
   gem "super_diff"
