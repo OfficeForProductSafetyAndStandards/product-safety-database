@@ -101,8 +101,6 @@ en:
           eu_wide: "EU Wide"
           worldwide: "Worldwide"
           unknown: "Unknown"
-        geographic_scopes_legend: "What is the geographic scope of the action?"
-        geographic_scopes_hint: "Select all that apply."
       helper:
         not_specified: "Not specified"
         has_online_recall_information:
