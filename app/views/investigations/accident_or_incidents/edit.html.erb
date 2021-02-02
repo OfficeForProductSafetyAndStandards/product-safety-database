@@ -4,7 +4,7 @@
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
-    href: investigation_action_path(@investigation, @accident_or_incident)
+    href: investigation_accident_or_incident_path(@investigation, @accident_or_incident)
   ) %>
 <% end %>
 

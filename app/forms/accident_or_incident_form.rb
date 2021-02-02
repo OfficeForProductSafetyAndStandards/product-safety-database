@@ -1,6 +1,7 @@
 class AccidentOrIncidentForm
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   attribute :date, :govuk_date
   attribute :is_date_known

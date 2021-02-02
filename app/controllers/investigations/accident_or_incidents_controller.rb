@@ -47,8 +47,34 @@ module Investigations
       @investigation = @investigation.decorate
     end
 
-    # private
-    #
+    def update
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+
+      authorize @investigation, :update?
+
+      @accident_or_incident = @investigation.accident_or_incidents.find(params[:id])
+
+      @accident_or_incident_form = AccidentOrIncidentForm.new(params.require(:accident_or_incident).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product_id, :event_type, date: %i[day month year]))
+
+      if @accident_or_incident_form.valid?
+        result = UpdateAccidentOrIncident.call!(
+          @accident_or_incident_form.serializable_hash.merge({
+            accident_or_incident: @accident_or_incident,
+            investigation: @investigation,
+            user: current_user
+          })
+        )
+
+        redirect_to investigation_accident_or_incident_path(@investigation, result.accident_or_incident)
+
+      else
+        @investigation = @investigation.decorate
+        render :edit
+      end
+    end
+
+  private
+
     def accident_or_incident_form
       @accident_or_incident_form ||= AccidentOrIncidentForm.new
     end
