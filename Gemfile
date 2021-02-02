@@ -23,7 +23,7 @@ gem "lograge", "~> 0.11"
 gem "mini_magick", "~> 4.11"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.7"
-gem "puma", "~> 5.1"
+gem "puma", "~> 5.2"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2"
 gem "rails", "~> 6.1"
@@ -66,9 +66,9 @@ group :development do
 end
 
 group :test do
-  gem "capybara", "~> 3.34"
+  gem "capybara", "~> 3.35"
   gem "capybara-screenshot", "~> 1.0"
-  gem "database_cleaner", "~> 1.8"
+  gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.1"
   gem "faker", "~> 2.15"
   gem "launchy", "~> 2.5"

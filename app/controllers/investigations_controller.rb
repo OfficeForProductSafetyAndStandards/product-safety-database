@@ -19,7 +19,7 @@ class InvestigationsController < ApplicationController
         authorize Investigation, :export?
 
         @answer = search_for_investigations
-        @investigations = @answer.records(includes: %i[complainant creator_user products owner_team owner_user])
+        @investigations = @answer.records(includes: [:complainant, :products, :owner_team, :owner_user, creator_user: :team])
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
@@ -79,7 +79,7 @@ class InvestigationsController < ApplicationController
 private
 
   def update!
-    return if request.get?
+    return unless request.patch?
 
     respond_to do |format|
       if @investigation.update(update_params)

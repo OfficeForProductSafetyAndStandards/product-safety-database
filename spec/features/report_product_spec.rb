@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notification do
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }
@@ -43,6 +43,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
         geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"].sample,
+        has_online_recall_information: "Yes",
+        online_recall_information: Faker::Internet.url(host: "example.com")
       }
     }
 
@@ -164,8 +166,18 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_record_corrective_action_page
 
-        corrective_actions.each do |corrective_action_attributes|
+        corrective_actions.each_with_index do |corrective_action_attributes, i|
           fill_in_record_corrective_action_page(with: corrective_action_attributes)
+          if i.zero?
+            click_button "Continue"
+            expect(page).to have_error_summary("Select whether or not you have further corrective action to record")
+          end
+
+          within_fieldset("Are there other actions to report?") do
+            choose "Yes"
+          end
+          click_button "Continue"
+
           expect_to_be_on_record_corrective_action_page
         end
 
@@ -469,8 +481,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_case_activity_page_to_show_corrective_action(action)
     item = page.find("h3", text: action[:other_action]).find(:xpath, "..")
+    expect(item).to have_text("Product: #{product_details[:name]}")
     expect(item).to have_text("Legislation: #{action[:legislation]}")
-    expect(item).to have_text("Date came into effect: #{action[:date].strftime('%d/%m/%Y')}")
+    expect(item).to have_text(/Recall information: #{action[:online_recall_information]}/)
+    expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk)}")
     expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
     expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
@@ -597,12 +611,16 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     select with[:legislation], from: "Under which legislation?"
     fill_in "Further details (optional)", with: with[:details]
 
-    within_fieldset "Are there any files related to the action?" do
-      choose "Yes"
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose with[:has_online_recall_information]
+      fill_in "Online recall information", with: with[:online_recall_information], visible: false
     end
 
-    attach_file "Upload a file", with[:file], visible: false
-    fill_in "Attachment description", with: with[:file_description]
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "Upload a file", with[:file], visible: false
+      fill_in "Attachment description", with: with[:file_description]
+    end
 
     within_fieldset "Is the corrective action mandatory?" do
       choose with[:measure_type] == "mandatory" ? "Yes" : "No, it’s voluntary"
@@ -613,9 +631,6 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     select with[:geographic_scope], from: "What is the geographic scope of the action?"
-
-    choose "further_corrective_action"
-    click_button "Continue"
   end
 
   def fill_in_other_information_page(test_results: true, risk_assessments: true)

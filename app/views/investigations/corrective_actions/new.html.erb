@@ -1,5 +1,5 @@
 <% page_title = "Record corrective action" %>
-<%= page_title page_title, errors: @corrective_action.object.errors.any? %>
+<%= page_title page_title, errors: @corrective_action_form.errors.any? %>
 
 <% content_for :back_link do %>
   <%= govukBackLink(
@@ -10,17 +10,17 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with model: @corrective_action.object, local: true, url: wizard_path, method: :put, builder: ApplicationFormBuilder do |form| %>
+<%= form_with model: @corrective_action_form, scope: :corrective_action, local: true, url: investigation_corrective_actions_path(@investigation.pretty_id), method: :post, builder: ApplicationFormBuilder do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary(@corrective_action.errors, %i[action date_decided legislation measure_type duration geographic_scope related_file]) %>
+      <%= error_summary(@corrective_action_form.errors, %i[action date_decided legislation has_online_recall_information online_recall_information measure_type duration geographic_scope related_file]) %>
 
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_title %></h1>
 
-      <%= render "investigations/record_corrective_actions/form",
+      <%= render "form",
                  form: form,
-                 corrective_action: @corrective_action,
+                 corrective_action: @corrective_action_form,
                  investigation: @investigation,
                  file_blob: @file_blob,
                  allow_product_linking: true,
