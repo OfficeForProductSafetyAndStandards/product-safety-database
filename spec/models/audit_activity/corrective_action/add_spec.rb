@@ -9,6 +9,15 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
   let(:metadata) { described_class.build_metadata(corrective_action) }
   let!(:corrective_action) { create(:corrective_action, action: action_key, other_action: other_action) }
 
+  describe ".migrate_legacy_audit_activity" do
+    let(:body) { "Product: **qerg qerg qerg q**<br>Legislation: **Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)**<br>Date came into effect: **01/11/2010**<br>Type of measure: **Voluntary**<br>Duration of action: **Unknown**<br>Geographic scopes: **Local, EEA Wide and EU Wide**<br>" }
+    let(:audit_activity) { described_class.new(body: body, title: "Marketing conditions:  qerg qerg qerg q") }
+
+    it "migrates all attributes to the new metadata format" do
+      expect(described_class.migrate_legacy_audit_activity(audit_activity).metadata).to eq({})
+    end
+  end
+
   describe ".build_metadata" do
     context "with no document attached" do
       it "saves the passed changes and corrective action id" do

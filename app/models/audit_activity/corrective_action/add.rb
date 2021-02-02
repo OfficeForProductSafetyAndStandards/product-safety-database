@@ -3,6 +3,19 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     { corrective_action: corrective_action.attributes, document: corrective_action.document_blob&.attributes }
   end
 
+  def self.migrate_legacy_audit_activity(audit_activity)
+    audit_activity.body.split("<br>").each do |fragment|
+      case fragment
+      when /Legislation: \*\*(.*)\*\*/
+
+      when /Date came into effect: \*\*(.*)\*\*/
+      when /Type of measure: \*\*(.*)\*\*/
+      when /Duration of action: \*\*(.*)\*\*/
+      when /Geographic scopes: \*\*(.*)\*\*/
+      end
+    end
+  end
+
   def email_update_text(viewer = nil)
     "Corrective action was added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
