@@ -8,7 +8,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
       next if fragment.empty?
 
       case fragment
-      when /Legislation: \*\*(.*)\*\*/
+      when /\ALegislation: \*\*(.*)\*\*\z/
         corrective_action_attributes[:legislation] = Regexp.last_match(1)
       when /Date came into effect: \*\*(.*)\*\*/
         corrective_action_attributes[:decided_date] = Regexp.last_match(1)
