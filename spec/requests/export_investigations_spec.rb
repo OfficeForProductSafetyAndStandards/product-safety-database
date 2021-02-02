@@ -164,18 +164,37 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
-      it "exports Case_Creator_Team" do
-        team = create(:team)
-        creator_user = create(:user, team: team)
-        create(:allegation, creator: creator_user)
+      context "when creator user does not have a team" do
+        it "exports Case_Creator_Team as nil" do
+          creator_user = build(:user)
+          create(:allegation, creator: creator_user)
+          allow(creator_user).to receive(:team).and_return(nil)
 
-        Investigation.import refresh: true, force: true
+          Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+          get investigations_path format: :xlsx
 
-        aggregate_failures do
-          expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
-          expect(exported_data.cell(2, 24)).to eq creator_user.team.name
+          aggregate_failures do
+            expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
+            expect(exported_data.cell(2, 24)).to eq nil
+          end
+        end
+      end
+
+      context "when creator user has a team" do
+        it "exports Case_Creator_Team" do
+          team = create(:team)
+          creator_user = create(:user, team: team)
+          create(:allegation, creator: creator_user)
+
+          Investigation.import refresh: true, force: true
+
+          get investigations_path format: :xlsx
+
+          aggregate_failures do
+            expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
+            expect(exported_data.cell(2, 24)).to eq creator_user.team.name
+          end
         end
       end
 
