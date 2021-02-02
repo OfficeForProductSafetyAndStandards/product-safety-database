@@ -1,6 +1,6 @@
 <%= form.govuk_radios :is_date_known, legend: "Do you know when the #{@event_type} happened?", items: [{ text: "Yes", value: "yes", conditional: { html: form.govuk_date_input(:date, legend: "Date of #{@event_type}", hint: "For example, 12 11 2020") } }, { text: "No", value: "no" }] %>
 
-<%= form.govuk_autocomplete :product, label: "Select the product linked to this #{@event_type}", label_classes: "govuk-label--m", items: investigation.products.map { |product| { text: product.name, value: product.id } } %>
+<%= form.govuk_autocomplete :product_id, label: "Select the product linked to this #{@event_type}", label_classes: "govuk-label--m", items: investigation.products.map { |product| { text: product.name, value: product.id } } %>
 
 <% other = capture do %>
 <%= render "form_components/govuk_input",

@@ -9,7 +9,8 @@ module Investigations
 
     def create
       authorize investigation, :update?
-      @accident_or_incident_form = AccidentOrIncidentForm.new(params.require(:accident_or_incident).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product, :event_type, date: %i[day month year]))
+      @accident_or_incident_form = AccidentOrIncidentForm.new(params.require(:accident_or_incident).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product_id, :event_type, date: %i[day month year]))
+      @event_type = params[:accident_or_incident][:event_type]
       return render(:new) if accident_or_incident_form.invalid?
 
       result = AddAccidentOrIncidentToCase.call!(
@@ -19,7 +20,6 @@ module Investigations
         })
       )
 
-
       redirect_to investigation_supporting_information_index_path(investigation)
     end
 
@@ -27,6 +27,24 @@ module Investigations
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       authorize @investigation, :view_non_protected_details?
       @accident_or_incident = @investigation.accident_or_incidents.find(params[:id]).decorate
+    end
+
+    def edit
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+
+      authorize @investigation, :update?
+
+      @accident_or_incident = @investigation.accident_or_incidents.find(params[:id])
+
+      @accident_or_incident_form = AccidentOrIncidentForm.new(
+        @accident_or_incident.serializable_hash(
+          only: %i[date is_date_known product severity severity_other usage additional_info event_type]
+        )
+      )
+
+      @event_type = @accident_or_incident.event_type
+      @accident_or_incident = @accident_or_incident.decorate
+      @investigation = @investigation.decorate
     end
 
     # private

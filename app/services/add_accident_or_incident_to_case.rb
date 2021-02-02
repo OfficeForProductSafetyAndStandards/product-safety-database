@@ -2,7 +2,7 @@ class AddAccidentOrIncidentToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :date, :is_date_known, :product, :severity, :severity_other, :usage, :additional_info, :user, :event_type, to: :context
+  delegate :investigation, :date, :is_date_known, :product_id, :severity, :severity_other, :usage, :additional_info, :user, :event_type, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -12,7 +12,7 @@ class AddAccidentOrIncidentToCase
       context.accident_or_incident = investigation.accident_or_incidents.create!(
         date: date,
         is_date_known: is_date_known,
-        product_id: product,
+        product_id: product_id,
         severity: severity,
         severity_other: severity_other,
         usage: usage,

@@ -19,7 +19,7 @@
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-      <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, type: @type %>
+      <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, event_type: @event_type %>
 
       <%= govukButton text: "Add accident or incident" %>
     </div>

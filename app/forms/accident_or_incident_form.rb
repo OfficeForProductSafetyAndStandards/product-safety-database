@@ -4,7 +4,7 @@ class AccidentOrIncidentForm
 
   attribute :date, :govuk_date
   attribute :is_date_known
-  attribute :product
+  attribute :product_id
   attribute :severity
   attribute :severity_other
   attribute :usage
@@ -12,7 +12,7 @@ class AccidentOrIncidentForm
   attribute :event_type
 
   validates :is_date_known, presence: true
-  validates :product, presence: true
+  validates :product_id, presence: true
   validates :severity, presence: true
   validates :usage, presence: true
   validates :date, presence: true, if: -> { is_date_known }
