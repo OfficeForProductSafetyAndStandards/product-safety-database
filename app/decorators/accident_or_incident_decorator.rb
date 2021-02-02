@@ -10,7 +10,7 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
   end
 
   def show_path
-    h.investigation_risk_assessment_path(investigation, object)
+    h.investigation_accident_or_incident_path(investigation, object.id)
   end
 
   def supporting_information_type
@@ -32,5 +32,13 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
 
   def usage
     I18n.t(".accident_or_incident.usage.#{object.usage}")
+  end
+
+  def page_title
+    "#{object.event_type.capitalize}: #{product_description}"
+  end
+
+  def severity
+    I18n.t(".accident_or_incident.severity.#{object.severity}")
   end
 end

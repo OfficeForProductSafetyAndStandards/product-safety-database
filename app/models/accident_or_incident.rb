@@ -1,6 +1,6 @@
 class AccidentOrIncident < ApplicationRecord
   belongs_to :investigation
-  has_many :products
+  belongs_to :product
 
   enum usage: {
     "during_normal_use" => "during_normal_use",

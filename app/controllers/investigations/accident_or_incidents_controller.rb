@@ -23,6 +23,12 @@ module Investigations
       redirect_to investigation_supporting_information_index_path(investigation)
     end
 
+    def show
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      authorize @investigation, :view_non_protected_details?
+      @accident_or_incident = @investigation.accident_or_incidents.find(params[:id]).decorate
+    end
+
     # private
     #
     def accident_or_incident_form
