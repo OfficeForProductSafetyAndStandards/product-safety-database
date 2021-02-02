@@ -608,7 +608,7 @@ private
 
   def save_corrective_actions
     session[:corrective_actions].each do |session_corrective_action|
-      form = CorrectiveActionForm.new(session_corrective_action[:corrective_action])
+      form = CorrectiveActionForm.new(session_corrective_action[:corrective_action].only(CorrectiveActionForm::ATTRIBUTES_FROM_CORRECTIVE_ACTION))
 
       AddCorrectiveActionToCase.call!(
         form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
