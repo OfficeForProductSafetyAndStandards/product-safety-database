@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2021_02_15_141534) do
     t.date "date"
     t.enum "event_type", as: "event_types"
     t.integer "investigation_id"
-    t.boolean "is_date_known"
+    t.string "is_date_known"
     t.integer "product_id"
     t.enum "severity", as: "severities"
     t.string "severity_other"

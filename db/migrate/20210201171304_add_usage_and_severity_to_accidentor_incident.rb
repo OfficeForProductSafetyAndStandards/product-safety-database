@@ -7,7 +7,7 @@ class AddUsageAndSeverityToAccidentorIncident < ActiveRecord::Migration[6.1]
         dir.up { execute "CREATE TYPE event_types AS ENUM ('accident', 'incident');" }
         dir.down { execute "DROP TYPE IF EXISTS usages;" }
         dir.down { execute "DROP TYPE IF EXISTS severities;" }
-        dir.down { execute "DROP TYPE IF EXISTS types;" }
+        dir.down { execute "DROP TYPE IF EXISTS event_types;" }
       end
       add_column :accident_or_incidents, :usage, :usages
       add_column :accident_or_incidents, :severity, :severities
