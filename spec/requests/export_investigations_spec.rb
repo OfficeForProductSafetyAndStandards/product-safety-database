@@ -164,11 +164,11 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
-      context "when creator user does not have a team" do
+      context "when case does not have a creator_user" do
         it "exports Case_Creator_Team as nil" do
           creator_user = build(:user)
-          create(:allegation, creator: creator_user)
-          allow(creator_user).to receive(:team).and_return(nil)
+          allegation = create(:allegation, creator: creator_user)
+          allow(allegation).to receive(:creator_user).and_return(nil)
 
           Investigation.import refresh: true, force: true
 
@@ -181,7 +181,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
-      context "when creator user has a team" do
+      context "when case has a creator user" do
         it "exports Case_Creator_Team" do
           team = create(:team)
           creator_user = create(:user, team: team)
