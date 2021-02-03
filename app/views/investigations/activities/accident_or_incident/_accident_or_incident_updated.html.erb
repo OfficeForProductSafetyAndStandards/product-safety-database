@@ -1,9 +1,9 @@
 <div class="govuk-body">
-
+  <% byebug %>
   <p>Changes:</p>
 
   <% if activity.date_changed? %>
-    <%= "Date of #{activity.metadata["event_type"]}:" %> <b><%= activity.new_date.to_s %></b><br>
+    <%= "Date of #{activity.metadata['event_type']}:" %> <b><%= activity.new_date.to_s %></b><br>
   <% end %>
 
   <% if activity.product_changed? %>
@@ -15,7 +15,7 @@
   <% end %>
 
   <% if activity.usage_changed? %>
-    <%= "Usage:" %> <b><%= activity.new_usage %></b><br>
+    <%= "Usage:" %> <b><%= I18n.t(".accident_or_incident.usage.#{activity.new_usage}")  %></b><br>
   <% end %>
 </div>
 
