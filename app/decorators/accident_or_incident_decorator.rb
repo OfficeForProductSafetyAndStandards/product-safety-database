@@ -39,6 +39,7 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
   end
 
   def severity
+    return object.severity_other if severity_other
     I18n.t(".accident_or_incident.severity.#{object.severity}")
   end
 end

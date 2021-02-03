@@ -10,9 +10,9 @@ classes: "govuk-!-width-one-third",
 label: { text: "Other type", classes: "govuk-visually-hidden" } %>
 <% end %>
 
-<%= form.govuk_radios :severity, legend: "Indicate the severity", items: [{ text: "Serious", value: "serious" },  { text: "High", value: "high" }, { text: "Medium", value: "medium" }, { text: "Low", value: "low" }, { text: "Unknown", value: "unknown" }, { text: "Other", value: "other_usage", conditional: { html: other } }] %>
+<%= form.govuk_radios :severity, legend: "Indicate the severity", items: [{ text: "Serious", value: "serious" },  { text: "High", value: "high" }, { text: "Medium", value: "medium" }, { text: "Low", value: "low" }, { text: "Unknown", value: "unknown_severity" }, { text: "Other", value: "other", conditional: { html: other } }] %>
 
-<%= form.govuk_radios :usage, legend: "How was the product being used at the time of this #{@event_type}", items: [{ text: "During normal use", value: "during_normal_use" },  { text: "During misuse", value: "during_misuse" }, { text: "With the supervision of an adult", value: "with_adult_supervision" }, { text: "Without the supervision of an adult", value: "without_adult_supervision" }, { text: "Unknown use", value: "unknown" }] %>
+<%= form.govuk_radios :usage, legend: "How was the product being used at the time of this #{@event_type}", items: [{ text: "During normal use", value: "during_normal_use" },  { text: "During misuse", value: "during_misuse" }, { text: "With the supervision of an adult", value: "with_adult_supervision" }, { text: "Without the supervision of an adult", value: "without_adult_supervision" }, { text: "Unknown use", value: "unknown_usage" }] %>
 
 <%= form.govuk_text_area :additional_info, label: "Additional information (optional)", attributes: { maxlength: 50_000 } %>
 

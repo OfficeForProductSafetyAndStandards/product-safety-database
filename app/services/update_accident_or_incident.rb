@@ -14,7 +14,7 @@ class UpdateAccidentOrIncident
         is_date_known: is_date_known,
         product_id: product_id,
         severity: severity,
-        severity_other: severity_other,
+        severity_other: updated_custom_severity,
         usage: usage,
         additional_info: additional_info,
         event_type: event_type
@@ -32,5 +32,9 @@ class UpdateAccidentOrIncident
 
   def updated_date
     is_date_known == "yes" ? date : nil
+  end
+
+  def updated_custom_severity
+    severity == "other" ? severity_other : nil
   end
 end
