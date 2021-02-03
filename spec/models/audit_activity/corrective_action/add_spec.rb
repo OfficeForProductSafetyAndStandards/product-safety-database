@@ -27,7 +27,7 @@ ergq perog n
     it "migrates all attributes to the new metadata format" do
       expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
         .to eq(corrective_action: {
-          legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", decided_date: Date.parse("01/11/2010"), measure: "Voluntary", duration: "Unknown", geographic_scopes: "Local, EEA Wide and EU Wide", details: details.strip
+          legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure: "Voluntary", duration: "Unknown", geographic_scopes: "Local, EEA Wide and EU Wide", details: details.strip
         })
     end
 
@@ -42,7 +42,7 @@ ergq perog n
       it "trims details" do
         expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
           .to eq(corrective_action: {
-            legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", decided_date: Date.parse("01/11/2010"), measure: "Voluntary", duration: "Unknown", geographic_scopes: "Local, EEA Wide and EU Wide", details: nil
+            legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure: "Voluntary", duration: "Unknown", geographic_scopes: "Local, EEA Wide and EU Wide", details: nil
           })
       end
     end
