@@ -37,9 +37,11 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
 
   def title(_viewing_user = nil)
     action_name = metadata.dig("corrective_action", "action")
+    return unless action_name
 
-    truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym]
-    return "#{truncated_action}: #{product.name}" unless action_name.inquiry.other?
+    if (truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym])
+      return "#{truncated_action}: #{product.name}" unless action_name.inquiry.other?
+    end
 
     metadata.dig("corrective_action", "other_action")
   end
