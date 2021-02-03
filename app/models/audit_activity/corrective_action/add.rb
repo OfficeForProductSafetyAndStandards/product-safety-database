@@ -10,15 +10,15 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
       case fragment
       when /\ALegislation: \*\*(.*)\*\*\z/
         corrective_action_attributes[:legislation] = Regexp.last_match(1)
-      when /Date came into effect: \*\*(.*)\*\*/
+      when /\ADate came into effect: \*\*(.*)\*\*\z/
         corrective_action_attributes[:decided_date] = Date.parse(Regexp.last_match(1))
-      when /Type of measure: \*\*(.*)\*\*/
+      when /\AType of measure: \*\*(.*)\*\*\z/
         corrective_action_attributes[:measure] = Regexp.last_match(1)
-      when /Duration of action: \*\*(.*)\*\*/
+      when /\ADuration of action: \*\*(.*)\*\*\z/
         corrective_action_attributes[:duration] = Regexp.last_match(1)
-      when /Geographic scopes: \*\*(.*)\*\*/
+      when /\AGeographic scope: \*\*(.*)\*\*\z/
         corrective_action_attributes[:geographic_scopes] = Regexp.last_match(1)
-      when /Attached|Product/
+      when /\AAttached|\AProduct|\ABusiness responsible:/
         next
       else
         corrective_action_attributes[:details] ||= fragment.strip.presence

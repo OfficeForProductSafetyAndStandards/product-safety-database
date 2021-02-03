@@ -20,7 +20,7 @@ ergq perog n
  gerg erg"
     end
     let(:body) do
-      "Product: **qerg qerg qerg q**<br>Legislation: **Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)**<br>Date came into effect: **01/11/2010**<br>Type of measure: **Voluntary**<br>Duration of action: **Unknown**<br>Geographic scopes: **Local, EEA Wide and EU Wide**<br>Attached: **c07ff66d5b.jpg**<br>" + details
+      "Product: **qerg qerg qerg q**<br>Legislation: **Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)**<br>Date came into effect: **01/11/2010**<br>Type of measure: **Voluntary**<br>Duration of action: **Unknown**<br>Geographic scope: **Local, EEA Wide and EU Wide**<br>Attached: **c07ff66d5b.jpg**<br>" + details
     end
     let(:audit_activity) { described_class.new(body: body, title: "Marketing conditions:  qerg qerg qerg q") }
 
