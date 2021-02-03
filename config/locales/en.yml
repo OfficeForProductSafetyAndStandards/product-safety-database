@@ -275,6 +275,16 @@ en:
   activemodel:
     errors:
       models:
+        accident_or_incident_form:
+          attributes:
+            is_date_known:
+              blank: Select yes if you know when the accident or incident happened
+            product_id:
+              blank: Select the product linked to the accident or incident
+            severity:
+              blank: Select the severity of the accident or incident
+            usage:
+              blank: Select how the product was being used
         test_result_form:
           attributes:
             product_id:

@@ -20,7 +20,7 @@ module Investigations
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(investigation)
+      redirect_to investigation_supporting_information_index_path(investigation, flash: { success: "#{@event_type.capitalize} was successfully added." })
     end
 
     def show

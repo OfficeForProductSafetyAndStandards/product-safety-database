@@ -1,0 +1,22 @@
+<div class="govuk-body">
+
+  <p>Changes:</p>
+
+  <% if activity.date_changed? %>
+    <%= "Date of #{activity.metadata["event_type"]}:" %> <b><%= activity.new_date.to_s %></b><br>
+  <% end %>
+
+  <% if activity.product_changed? %>
+    <%= "Product:" %> <b><%= Product.find(activity.new_product_id).name %></b><br>
+  <% end %>
+
+  <% if activity.severity_changed? %>
+    <%= "Severity:" %> <b><%= activity.new_severity %></b><br>
+  <% end %>
+
+  <% if activity.usage_changed? %>
+    <%= "Usage:" %> <b><%= activity.new_usage %></b><br>
+  <% end %>
+</div>
+
+<% id = activity.metadata['accident_or_incident'] %>

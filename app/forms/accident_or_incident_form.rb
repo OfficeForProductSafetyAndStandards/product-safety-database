@@ -16,7 +16,7 @@ class AccidentOrIncidentForm
   validates :product_id, presence: true
   validates :severity, presence: true
   validates :usage, presence: true
-  validates :date, presence: true, if: -> { is_date_known }
+  validates :date, presence: true, if: -> { is_date_known == 'yes' }
   validates :severity_other, presence: true, if: -> { severity == 'other' }
   validates :event_type, presence: true
 end

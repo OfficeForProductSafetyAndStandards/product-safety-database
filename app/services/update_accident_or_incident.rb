@@ -23,7 +23,27 @@ class UpdateAccidentOrIncident
       break if no_changes?
 
       accident_or_incident.save!
+
+      create_audit_activity
     end
+  end
+
+  def create_audit_activity
+    AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated.create!(
+      source: user_source,
+      investigation: investigation,
+      metadata: audit_activity_metadata,
+      title: nil,
+      body: nil
+    )
+  end
+
+  def audit_activity_metadata
+    AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated.build_metadata(accident_or_incident)
+  end
+
+  def user_source
+    @user_source ||= UserSource.new(user: user)
   end
 
   def no_changes?
