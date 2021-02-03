@@ -4,14 +4,14 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
   end
 
   def self.metadata_from_legacy_audit_activity(audit_activity)
-    attributes = audit_activity.body.split("<br>").each_with_object({}) do |fragment, corrective_action_attributes|
+    attributes = audit_activity.body.split("<br>").each_with_object(details: nil) do |fragment, corrective_action_attributes|
       next if fragment.empty?
 
       case fragment
       when /Legislation: \*\*(.*)\*\*/
         corrective_action_attributes[:legislation] = Regexp.last_match(1)
       when /Date came into effect: \*\*(.*)\*\*/
-        corrective_action_attributes[:decided_date] = Regexp.last_match(1)
+        corrective_action_attributes[:decided_date] = Date.parse(Regexp.last_match(1))
       when /Type of measure: \*\*(.*)\*\*/
         corrective_action_attributes[:measure] = Regexp.last_match(1)
       when /Duration of action: \*\*(.*)\*\*/
@@ -21,7 +21,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
       when /Attached|Product/
         next
       else
-        corrective_action_attributes[:details] = fragment
+        corrective_action_attributes[:details] ||= fragment.strip.presence
       end
     end
 
