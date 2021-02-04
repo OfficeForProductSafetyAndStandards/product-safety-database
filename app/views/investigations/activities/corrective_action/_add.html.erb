@@ -35,4 +35,7 @@
 <% if activity.business_id %>
   <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
 <% end %>
-<%=  link_to "View corrective action", investigation_corrective_action_path(@investigation.pretty_id, activity.corrective_action), class: "govuk-link" %>
+
+<% if activity.corrective_action.present? %>
+  <%= link_to "View corrective action", investigation_corrective_action_path(@investigation.pretty_id, activity.corrective_action), class: "govuk-link" %>
+<% end %>
