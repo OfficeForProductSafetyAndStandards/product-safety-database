@@ -1,29 +1,19 @@
 class CorrectiveAction < ApplicationRecord
+  include DateConcern
+  include SanitizationHelper
+
   MEASURE_TYPES = %w[mandatory voluntary].freeze
   DURATION_TYPES = %w[permanent temporary unknown].freeze
-  TRUNCATED_ACTION_MAP = {
-    ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on marketing",
-    destruction_of_the_product: "Destruction of product",
-    import_rejected_at_border: "Import rejected",
-    making_the_marketing_of_the_product_subject_to_prior_conditions: "Marketing conditions",
-    marking_the_product_with_appropriate_warnings_on_the_risks: "Add risk warning to product",
-    recall_of_the_product_from_end_users: "Recall",
-    temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban",
-    warning_consumers_of_the_risks: "Warn consumers of risks",
-    withdrawal_of_the_product_from_the_market: "Withdrawal"
-  }.freeze
+
+  attribute :related_file, :boolean
 
   belongs_to :investigation
   belongs_to :business, optional: true
   belongs_to :product
 
-  has_one_attached :document
+  has_many_attached :documents
 
-  enum has_online_recall_information: {
-    "has_online_recall_information_yes" => "has_online_recall_information_yes",
-    "has_online_recall_information_no" => "has_online_recall_information_no",
-    "has_online_recall_information_not_relevant" => "has_online_recall_information_not_relevant"
-  }
+  date_attribute :date_decided
 
   enum action: {
     ban_on_the_marketing_of_the_product_and_any_accompanying_measures: I18n.t(:ban_on_the_marketing_of_the_product_and_any_accompanying_measures, scope: %i[corrective_action attributes actions]),
@@ -38,7 +28,45 @@ class CorrectiveAction < ApplicationRecord
     other: I18n.t(:other, scope: %i[corrective_action attributes actions])
   }
 
+  before_validation { trim_line_endings(:other_action, :details) }
+  validate :date_decided_cannot_be_in_the_future
+  validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
+  validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
+  validate :related_file_attachment_validation
+
+  validates :measure_type, presence: true
+  validates :measure_type, inclusion: { in: MEASURE_TYPES }, if: -> { measure_type.present? }
+  validates :duration, presence: true
+  validates :duration, inclusion: { in: DURATION_TYPES }, if: -> { duration.present? }
+  validates :geographic_scope, presence: true
+  validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
+  validates :action, inclusion: { in: actions.keys }
+  validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
+  validates :other_action, absence: true, unless: :other?
+
+  validates :details, length: { maximum: 50_000 }
+
+  after_create :create_audit_activity
+
   def action_label
     self.class.actions[action]
+  end
+
+private
+
+  def date_decided_cannot_be_in_the_future
+    if date_decided.present? && date_decided > Time.zone.today
+      errors.add(:date_decided, "The date of corrective action decision can not be in the future")
+    end
+  end
+
+  def create_audit_activity
+    AuditActivity::CorrectiveAction::Add.from(self)
+  end
+
+  def related_file_attachment_validation
+    if related_file && documents.attachments.empty?
+      errors.add(:related_file, :file_missing, message: "Provide a related file or select no")
+    end
   end
 end

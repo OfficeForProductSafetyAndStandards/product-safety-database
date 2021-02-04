@@ -1,9 +1,9 @@
 class Investigations::TsInvestigationsController < ApplicationController
   include Wicked::Wizard
-  include CorrectiveActionsConcern
   include CountriesHelper
   include ProductsHelper
   include BusinessesHelper
+  include CorrectiveActionsConcern
   include FileConcern
   include FlowWithCoronavirusForm
   set_attachment_names :file, :risk_assessment_file
@@ -35,6 +35,7 @@ class Investigations::TsInvestigationsController < ApplicationController
                 if: lambda {
                       %i[business has_corrective_action corrective_action test_results risk_assessments product_images evidence_images other_files].include? step
                     }
+  before_action :set_corrective_action, only: %i[show update], if: -> { step == :corrective_action }
   before_action :set_risk_assessment_form, only: %i[show update], if: -> { step == :risk_assessments }
   # There is no set_other_information because there is no validation on the page so there is no need to set the model
   before_action :set_test, only: %i[show update], if: -> { step == :test_results }
@@ -58,6 +59,7 @@ class Investigations::TsInvestigationsController < ApplicationController
   before_action :store_selected_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_pending_businesses, only: %i[update], if: -> { step == :which_businesses }
   before_action :store_business, only: %i[update], if: -> { step == :business }
+  before_action :store_corrective_action, only: %i[update], if: -> { step == :corrective_action }
   before_action :store_other_information, only: %i[update], if: -> { step == :other_information }
   before_action :store_test, only: %i[update], if: -> { step == :test_results }
   before_action :store_file,
@@ -73,14 +75,8 @@ class Investigations::TsInvestigationsController < ApplicationController
       @product_form = ProductForm.new
     when :business
       return redirect_to next_wizard_path if all_businesses_complete?
-    when *other_information_types.without(:risk_assessments)
+    when :corrective_action, *other_information_types.without(:risk_assessments)
       return redirect_to next_wizard_path unless @repeat_step
-    when :corrective_action
-      set_repeat_step(:corrective_action)
-      return redirect_to next_wizard_path unless @repeat_step
-
-      @corrective_action_form = CorrectiveActionForm.new
-      @product = product
     when :risk_assessments
       @investigation = @investigation.decorate
       return redirect_to next_wizard_path unless @repeat_step
@@ -186,6 +182,17 @@ private
       product: product
     )
     set_repeat_step(:trading_standards_risk_assessment_form)
+  end
+
+  def set_corrective_action
+    @corrective_action = @investigation.corrective_actions.build(corrective_action_params)
+    @corrective_action.set_dates_from_params(params[:corrective_action])
+    @corrective_action.product = product
+    @file_blob, * = load_file_attachments :corrective_action
+    if @file_blob && @corrective_action.related_file?
+      @corrective_action.documents.attach(@file_blob)
+    end
+    set_repeat_step(:corrective_action)
   end
 
   def set_test
@@ -375,19 +382,28 @@ private
   def repeat_step_valid?(model)
     if @repeat_step.nil?
       further_page_type = to_item_text(step)
-      further_key_step = further_key(step)
-      unless model.errors.key?(further_key_step)
-        model.errors.add(further_key_step, "Select whether or not you have #{further_page_type} to record")
-      end
-
+      model.errors.add(further_key(step), "Select whether or not you have #{further_page_type} to record")
       return false
     end
     true
   end
 
+  def corrective_action_valid?
+    @corrective_action.valid?
+    repeat_step_valid?(@corrective_action)
+    @corrective_action.errors.empty?
+  end
+
   def store_corrective_action
-    attributes = @corrective_action_form.serializable_hash
-    session[:corrective_actions] << { corrective_action: attributes, file_blob_id: @corrective_action_form.document&.id }
+    return if @skip_step
+    return unless corrective_action_valid?
+
+    if @corrective_action.valid? && @file_blob
+      update_blob_metadata @file_blob, corrective_action_file_metadata
+      @file_blob.save! if @file_blob
+    end
+    session[:corrective_actions] << { corrective_action: @corrective_action.attributes, file_blob_id: @file_blob&.id }
+    session.delete :file
     session[further_key(step)] = @repeat_step
   end
 
@@ -533,15 +549,7 @@ private
 
       return false if risk_assessment_form_valid || reapeat_step_valid
     when :corrective_action
-      @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
-      @product = product
-      set_repeat_step(:corrective_action)
-
-      if @corrective_action_form.valid?(:ts_flow)
-        store_corrective_action
-        return true
-      end
-      return false
+      return false if @corrective_action.errors.any?
     when :test_results
       return @test_result_form.valid?
     when :reference_number
@@ -608,12 +616,13 @@ private
 
   def save_corrective_actions
     session[:corrective_actions].each do |session_corrective_action|
-      form = CorrectiveActionForm.new(session_corrective_action[:corrective_action])
-
-      AddCorrectiveActionToCase.call!(
-        form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
-          .merge(product_id: @product.id, user: current_user, investigation: @investigation)
-      )
+      action_record = CorrectiveAction.new(session_corrective_action[:corrective_action])
+      action_record.product = @product
+      file_blob = ActiveStorage::Blob.find_by(id: session_corrective_action[:file_blob_id])
+      if file_blob
+        attach_blobs_to_list(file_blob, action_record.documents)
+      end
+      @investigation.corrective_actions << action_record
     end
   end
 

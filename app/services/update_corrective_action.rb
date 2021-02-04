@@ -2,68 +2,76 @@ class UpdateCorrectiveAction
   include Interactor
   include EntitiesToNotify
 
+  delegate :user, :corrective_action, :corrective_action_params, to: :context
   delegate :investigation, to: :corrective_action
-  delegate :user, :corrective_action, :action, :business_id, :date_decided, :details, :duration, :geographic_scope, :online_recall_information, :has_online_recall_information, :legislation, :measure_type, :other_action, :product_id, :related_file, :document, :file_description, :changes, to: :context
 
   def call
     validate_inputs!
     assign_attributes
-    @previous_attachment = corrective_action.document_blob
+    set_dates_from_params
+    @previous_attachment = corrective_action.documents.first
     corrective_action.transaction do
-      corrective_action.document.detach unless related_file
-      replace_attached_file             if file_changed?
+      corrective_action.documents.detach unless corrective_action.related_file
+      replace_attached_file              if new_file
+      context.fail!                      if corrective_action.invalid?
+      break                              if no_changes?
 
-      if any_changes?
-        corrective_action.save!
-        update_document_description!
-        create_audit_activity_for_corrective_action_updated!
-        send_notification_email
+      corrective_action.save!
+      update_document_description!
+      create_audit_activity_for_corrective_action_updated!(@previous_attachment)
+      send_notification_email
 
-        # trigger re-index of to for the model to pick up children relationships saved after the model
-        investigation.reload.__elasticsearch__.index_document
-      end
+      # trigger re-index of to for the model to pick up children relationships saved after the model
+      investigation.reload.__elasticsearch__.index_document
     end
   end
 
 private
 
   def assign_attributes
-    corrective_action.assign_attributes(
-      action: action,
-      business_id: business_id,
-      date_decided: date_decided,
-      details: details,
-      duration: duration,
-      geographic_scope: geographic_scope,
-      online_recall_information: online_recall_information,
-      has_online_recall_information: has_online_recall_information,
-      legislation: legislation,
-      measure_type: measure_type,
-      other_action: other_action,
-      product_id: product_id
-    )
+    corrective_action.assign_attributes(corrective_action_params.except(:file, :date_decided))
+    corrective_action.other_action = nil unless corrective_action.other?
+  end
+
+  def set_dates_from_params
+    corrective_action.set_dates_from_params(corrective_action_params)
+  end
+
+  def no_changes?
+    !any_changes?
   end
 
   def any_changes?
-    file_changed? || changes.except(:related_file, :existing_document_file_id).any?
+    file_changed? || corrective_action.changes.except(:date_decided_year, :date_decided_month, :date_decided_day, :related_file).any? || file_description_changed?
   end
 
   def file_changed?
-    return false if document.nil? && related_file
-    return false if document == @previous_attachment
+    return false if new_file.nil? && corrective_action.related_file?
 
-    [document, @previous_attachment].compact.any?
+    [new_file, @previous_attachment].compact.any?
+  end
+
+  def new_file
+    corrective_action_params.dig(:file, :file)
   end
 
   def new_file_description
-    return nil if file_description.blank?
+    description = corrective_action_params.dig(:file, :description)
+    return nil if description.blank?
 
-    file_description
+    description
+  end
+
+  def file_description_changed?
+    old_file_description = @previous_attachment&.metadata&.dig(:description)
+    return false if new_file_description.blank? && old_file_description.blank?
+
+    new_file_description != @previous_attachment&.metadata&.dig(:description)
   end
 
   def replace_attached_file
-    corrective_action.document.detach
-    corrective_action.document.attach(document)
+    corrective_action.documents.detach
+    corrective_action.documents.attach(new_file)
   end
 
   # The document description is currently saved within the `metadata` JSON
@@ -71,10 +79,12 @@ private
   # documents to be attached, but in practice the interfaces only allows one
   # at a time.
   def update_document_description!
+    document = corrective_action.documents.first
+
     return unless document
 
-    document.metadata[:description] = new_file_description
-    document.save!
+    document.blob.metadata[:description] = new_file_description
+    document.blob.save!
   end
 
   def validate_inputs!
@@ -90,8 +100,8 @@ private
     context.fail!(error: "No user supplied") unless user.is_a?(User)
   end
 
-  def create_audit_activity_for_corrective_action_updated!
-    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, changes)
+  def create_audit_activity_for_corrective_action_updated!(previous_document)
+    metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, previous_document)
 
     AuditActivity::CorrectiveAction::Update.create!(
       source: UserSource.new(user: user),
