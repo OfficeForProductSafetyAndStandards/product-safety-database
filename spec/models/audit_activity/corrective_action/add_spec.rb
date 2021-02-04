@@ -9,6 +9,45 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
   let(:metadata) { described_class.build_metadata(corrective_action) }
   let!(:corrective_action) { create(:corrective_action, action: action_key, other_action: other_action) }
 
+  describe ".migrate_legacy_audit_activity" do
+    let(:details) do
+      "balbabl alf ba;erl qmer
+
+
+ergq perog n
+
+
+ gerg erg"
+    end
+    let(:body) do
+      "Product: **qerg qerg qerg q**<br>Legislation: **Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)**<br>Date came into effect: **01/11/2010**<br>Type of measure: **Voluntary**<br>Duration of action: **Unknown**<br>Geographic scope: **Local, EEA Wide and EU Wide**<br>Attached: **c07ff66d5b.jpg**<br>" + details
+    end
+    let(:audit_activity) { described_class.new(body: body, title: "Marketing conditions:  qerg qerg qerg q") }
+
+    it "migrates all attributes to the new metadata format" do
+      expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
+        .to eq(corrective_action: {
+          legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure: "Voluntary", duration: "Unknown", geographic_scopes: "Local, EEA Wide and EU Wide", details: details.strip
+        })
+    end
+
+    context "with an empty lines in the details field" do
+      let(:details) do
+        "
+
+
+        "
+      end
+
+      it "trims details" do
+        expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
+          .to eq(corrective_action: {
+            legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure: "Voluntary", duration: "Unknown", geographic_scopes: "Local, EEA Wide and EU Wide", details: nil
+          })
+      end
+    end
+  end
+
   describe ".build_metadata" do
     context "with no document attached" do
       it "saves the passed changes and corrective action id" do
