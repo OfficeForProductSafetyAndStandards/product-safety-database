@@ -616,13 +616,15 @@ private
 
   def save_corrective_actions
     session[:corrective_actions].each do |session_corrective_action|
-      action_record = CorrectiveAction.new(session_corrective_action[:corrective_action])
-      action_record.product = @product
-      file_blob = ActiveStorage::Blob.find_by(id: session_corrective_action[:file_blob_id])
-      if file_blob
-        attach_blobs_to_list(file_blob, action_record.documents)
-      end
-      @investigation.corrective_actions << action_record
+      form = CorrectiveActionForm.new(
+        session_corrective_action[:corrective_action]
+          .slice(*CorrectiveActionForm::ATTRIBUTES_FROM_CORRECTIVE_ACTION.map(&:to_s) + %w[document])
+      )
+
+      AddCorrectiveActionToCase.call!(
+        form.serializable_hash.except("related_file", "existing_document_file_id", "filename", "file_description")
+          .merge(product_id: @product.id, user: current_user, investigation: @investigation)
+      )
     end
   end
 
