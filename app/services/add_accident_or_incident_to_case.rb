@@ -22,7 +22,7 @@ class AddAccidentOrIncidentToCase
 
       create_audit_activity
     end
-    # send_notification_email
+    send_notification_email
   end
 
 private
@@ -41,15 +41,15 @@ private
     AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded.build_metadata(accident_or_incident)
   end
 
-  # def send_notification_email
-  #   email_recipients_for_case_owner.each do |recipient|
-  #     NotifyMailer.investigation_updated(
-  #       investigation.pretty_id,
-  #       recipient.name,
-  #       recipient.email,
-  #       "Risk assessment was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
-  #       "#{investigation.case_type.upcase_first} updated"
-  #     ).deliver_later
-  #   end
-  # end
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        "#{event_type} was added to the #{investigation.case_type} by #{user.decorate.display_name(viewer: recipient)}.",
+        "#{investigation.case_type.upcase_first} updated"
+      ).deliver_later
+    end
+  end
 end

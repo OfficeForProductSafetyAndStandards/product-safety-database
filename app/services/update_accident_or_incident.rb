@@ -25,6 +25,7 @@ class UpdateAccidentOrIncident
       accident_or_incident.save!
 
       create_audit_activity
+      send_notification_email
     end
   end
 
@@ -56,5 +57,17 @@ class UpdateAccidentOrIncident
 
   def updated_custom_severity
     severity == "other" ? severity_other : nil
+  end
+
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        "#{user_source.show(recipient)} edited an #{event_type} on the #{investigation.case_type}.",
+        "#{event_type} edited for #{investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
   end
 end
