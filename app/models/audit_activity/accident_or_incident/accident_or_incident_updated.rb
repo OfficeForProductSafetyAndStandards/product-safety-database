@@ -20,6 +20,14 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     }
   end
 
+  def title(*)
+    "Accident or Incident"
+  end
+
+  def subtitle_slug
+    "Updated"
+  end
+
   def date_changed?
      new_date
   end

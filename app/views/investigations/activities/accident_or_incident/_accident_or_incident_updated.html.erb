@@ -1,22 +1,20 @@
 <div class="govuk-body">
-  <% byebug %>
   <p>Changes:</p>
-
   <% if activity.date_changed? %>
     <%= "Date of #{activity.metadata['event_type']}:" %> <b><%= activity.new_date.to_s %></b><br>
   <% end %>
 
   <% if activity.product_changed? %>
-    <%= "Product:" %> <b><%= Product.find(activity.new_product_id).name %></b><br>
+    Product: <b><%= Product.find(activity.new_product_id).name %></b><br>
   <% end %>
 
   <% if activity.severity_changed? %>
-    <%= "Severity:" %> <b><%= activity.new_severity %></b><br>
+    Severity: <b><%= I18n.t(".accident_or_incident.severity.#{activity.new_severity}") %></b><br>
   <% end %>
 
   <% if activity.usage_changed? %>
-    <%= "Usage:" %> <b><%= I18n.t(".accident_or_incident.usage.#{activity.new_usage}")  %></b><br>
+    Usage: <b><%= I18n.t(".accident_or_incident.usage.#{activity.new_usage}") %></b><br>
   <% end %>
 </div>
 
-<% id = activity.metadata['accident_or_incident'] %>
+<%= link_to "View #{activity.metadata["event_type"]}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>
