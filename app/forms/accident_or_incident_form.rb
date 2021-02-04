@@ -13,10 +13,14 @@ class AccidentOrIncidentForm
   attribute :event_type
 
   validates :is_date_known, presence: true
+  validates :date,
+            real_date: true,
+            complete_date: true,
+            not_in_future: true,
+            if: -> { is_date_known == 'yes' }
   validates :product_id, presence: true
   validates :severity, presence: true
   validates :usage, presence: true
-  validates :date, presence: true, if: -> { is_date_known == 'yes' }
   validates :severity_other, presence: true, if: -> { severity == 'other' }
   validates :event_type, presence: true
 end

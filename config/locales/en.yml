@@ -285,6 +285,11 @@ en:
               blank: Select the severity of the accident or incident
             usage:
               blank: Select how the product was being used
+            date:
+              in_future: Date sent must be today or in the past
+              blank: Enter date
+              must_be_real: Date must be a real date
+              incomplete: Date must include a %{missing_date_parts}
         test_result_form:
           attributes:
             product_id:
