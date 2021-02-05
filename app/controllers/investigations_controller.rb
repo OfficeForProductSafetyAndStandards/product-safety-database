@@ -79,7 +79,7 @@ class InvestigationsController < ApplicationController
 private
 
   def update!
-    return if request.get?
+    return unless request.patch?
 
     respond_to do |format|
       if @investigation.update(update_params)
