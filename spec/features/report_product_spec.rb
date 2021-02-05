@@ -510,7 +510,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
-    expect(item).to have_text("Test date: #{test[:date].to_s(:govuk)}")
+    expect(item).to have_text("Date of test: #{test[:date].to_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end
