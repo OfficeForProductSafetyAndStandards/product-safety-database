@@ -12,6 +12,8 @@ class AuditActivity::CorrectiveAction::Base < AuditActivity::Base
   def corrective_action
     if attachment.attached?
       attachment.blob.attachments.find_by(record_type: "CorrectiveAction")&.record
+    elsif investigation.corrective_actions.one?
+      investigation.corrective_actions.first
     end
   end
 
