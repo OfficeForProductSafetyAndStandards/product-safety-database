@@ -49,7 +49,7 @@ ergq perog n
         it "fetches from the corrective_action" do
           expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
             .to eq(corrective_action: {
-              legislation: corrective_action.legislation, date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scopes: "Local", details: details.strip
+              legislation: corrective_action.legislation, date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip
             })
         end
       end
