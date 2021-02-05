@@ -6,7 +6,8 @@ $(document).ready(() => {
       $('#businesses_retailer')[0],
       $('#businesses_distributor')[0],
       $('#businesses_importer')[0],
-      $('#businesses_manufacturer')[0]
+      $('#businesses_manufacturer')[0],
+      $('#businesses_exporter')[0]
     ]
     const elementOther = $('#businesses_other')[0]
     const elementNone = $('#businesses_none')[0]
