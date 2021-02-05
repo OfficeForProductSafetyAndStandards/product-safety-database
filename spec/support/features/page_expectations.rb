@@ -106,6 +106,21 @@ module PageExpectations
     expect(page).to have_summary_item(key: "Other details",       value: new_details)
   end
 
+  def expect_to_be_on_accident_or_incident_type_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents_type/new")
+    expect(page).to have_selector("h1", text: "Are you recording an accident or incident?")
+  end
+
+  def expect_to_be_on_add_accident_or_incident_page(event_type)
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/new?event_type=#{event_type}")
+    expect(page).to have_selector("h1", text: "Record an accident")
+  end
+
+  def expect_to_be_on_show_accident_or_incident_page
+    id = AccidentOrIncident.last.id
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{id}")
+  end
+
   def expect_to_be_on_confirmation_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/corrective_actions/confirmation")
     expect(page).to have_selector("h1", text: "Confirm corrective action details")
