@@ -17,4 +17,6 @@ FactoryBot.define do
     investigation { create :allegation }
     product
   end
+
+  factory :legacy_audit_add_activity_corrective_action, class: "AuditActivity::CorrectiveAction::Add", parent: :legacy_audit_activity_corrective_action
 end
