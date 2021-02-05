@@ -1,9 +1,7 @@
 class FixTestResultAuditActivityMetadata < ActiveRecord::Migration[6.1]
   def up
     AuditActivity::Test::Result.all.each do |activity|
-      test_result_id = activity.metadata["test_result_id"]
-      test_result = Test::Result.find(test_result_id)
-
+      test_result = resolve_test_result(activity)
       new_metadata = AuditActivity::Test::Result.build_metadata(test_result)
 
       activity.metadata = rewind_metadata_changes(new_metadata)
@@ -16,6 +14,26 @@ class FixTestResultAuditActivityMetadata < ActiveRecord::Migration[6.1]
       activity.metadata = { test_result_id: activity.metadata["test_result"]["id"] }
       activity.save!
     end
+  end
+
+  def resolve_test_result(activity)
+    if activity.metadata.present?
+      test_result_id = activity.metadata["test_result_id"]
+      return Test::Result.find(test_result_id)
+    end
+
+    test_result = get_test_result_from_attachment(activity)
+    test_result ||= get_only_test_result_from_investigation(activity.investigation)
+
+    test_result
+  end
+
+  def get_test_result_from_attachment(activity)
+    activity.attachment.blob.attachments.find_by(record_type: "Test")&.record
+  end
+
+  def get_only_test_result_from_investigation(investigation)
+    investigation.test_results.first if investigation.test_results.count.one?
   end
 
   def rewind_metadata_changes(new_metadata)
