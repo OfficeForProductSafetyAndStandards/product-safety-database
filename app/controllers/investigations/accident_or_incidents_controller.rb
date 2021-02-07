@@ -38,7 +38,7 @@ module Investigations
 
       @accident_or_incident_form = AccidentOrIncidentForm.new(
         @accident_or_incident.serializable_hash(
-          only: %i[date is_date_known product severity severity_other usage additional_info event_type]
+          only: %i[date is_date_known product_id severity severity_other usage additional_info event_type]
         )
       )
 
