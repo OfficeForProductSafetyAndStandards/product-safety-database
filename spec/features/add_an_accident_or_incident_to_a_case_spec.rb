@@ -17,7 +17,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     end
   end
 
-  scenario "Adding an accident or incident (with validation errors)" do
+  scenario "Adding an accident or incident with date unknown, no custom severity and no additional info" do
     sign_in(user)
 
     visit "/cases/#{investigation.pretty_id}/supporting-information"
@@ -88,11 +88,85 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).to have_summary_item(key: "Additional Info",       value: "")
   end
 
+  scenario "Adding an accident or incident with date known, custom severity and additional info" do
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+    click_link "Add new"
+
+    expect_to_be_on_add_supporting_information_page
+
+    choose "Accident or Incident"
+
+    click_button "Continue"
+
+    expect_to_be_on_accident_or_incident_type_page
+
+    expect(page).not_to have_error_messages
+
+    click_button "Continue"
+
+    expect(page).to have_error_messages
+
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Select the type of information you're adding"
+
+    choose('Accident')
+
+    click_button "Continue"
+
+    expect_to_be_on_add_accident_or_incident_page("accident")
+
+    click_button "Add accident or incident"
+
+    expect(page).to have_error_messages
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Select yes if you know when the accident or incident happened"
+    expect(errors_list[1].text).to eq "Select the product linked to the accident or incident"
+    expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
+    expect(errors_list[3].text).to eq "Select how the product was being used"
+
+    choose('Yes')
+    fill_in("Day", with: "3")
+    fill_in("Month", with: "4")
+    fill_in("Year", with: "2020")
+    select "MyBrand Washing Machine", from: "Select the product linked to this accident"
+    choose('Other')
+    fill_in "Other type", with: "Test"
+    choose('During normal use')
+    fill_in("Additional information (optional)", with: "Some additional stuff you should know")
+
+    click_button "Add accident or incident"
+
+    expect(page).not_to have_error_messages
+
+    expect(page).to have_content "During normal use: MyBrand Washing Machine"
+
+    expect_to_be_on_supporting_information_page
+
+    click_on "Activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect_case_activity_page_to_show_entered_data
+
+    click_link "View accident"
+
+    expect_to_be_on_show_accident_or_incident_page
+
+    expect(page).to have_summary_item(key: "Date of accident",      value: "2020-04-03")
+    expect(page).to have_summary_item(key: "Product",               value: "MyBrand Washing Machine")
+    expect(page).to have_summary_item(key: "Severity",              value: "Test")
+    expect(page).to have_summary_item(key: "Product usage",         value: "During normal use")
+    expect(page).to have_summary_item(key: "Additional Info",       value: "Some additional stuff you should know")
+  end
+
   def expect_case_activity_page_to_show_entered_data
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
-
-    expect(item).to have_text("Date of accident: Unknown")
+    byebug
+    expect(item).to have_text("Date of accident: #{Date.new(2020,04,03)}")
     expect(item).to have_text("Product: MyBrand Washing Machine")
     expect(item).to have_text("Severity: Serious")
     expect(item).to have_text("Product usage: During normal use")

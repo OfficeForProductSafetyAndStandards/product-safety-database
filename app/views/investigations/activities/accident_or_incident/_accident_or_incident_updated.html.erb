@@ -9,11 +9,11 @@
   <% end %>
 
   <% if activity.severity_changed? %>
-    Severity: <b><%= I18n.t(".accident_or_incident.severity.#{activity.new_severity}") %></b><br>
+    Severity: <b><%= activity.new_severity_other.blank? ? I18n.t(".accident_or_incident.severity.#{activity.new_severity}") : activity.new_severity_other %></b><br>
   <% end %>
 
   <% if activity.usage_changed? %>
-    Usage: <b><%= I18n.t(".accident_or_incident.usage.#{activity.new_usage}") %></b><br>
+    Product usage: <b><%= I18n.t(".accident_or_incident.usage.#{activity.new_usage}") %></b><br>
   <% end %>
 </div>
 

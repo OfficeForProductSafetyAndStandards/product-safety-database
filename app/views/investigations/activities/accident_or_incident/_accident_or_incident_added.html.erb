@@ -3,7 +3,7 @@
   <br>
   Product: <%= Product.find(activity.metadata["product_id"])&.name  %>
   <br>
-  Severity: <%= I18n.t(".accident_or_incident.severity.#{activity.metadata['severity']}")  %>
+  Severity: <%= activity.metadata['severity_other'].blank? ? I18n.t(".accident_or_incident.severity.#{activity.metadata['severity']}") : activity.metadata['severity_other'] %>
   <br>
   Product usage: <%= I18n.t(".accident_or_incident.usage.#{activity.metadata['usage']}")  %>
 </div>
