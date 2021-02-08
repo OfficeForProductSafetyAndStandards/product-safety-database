@@ -290,6 +290,10 @@ en:
               blank: Enter date
               must_be_real: Date must be a real date
               incomplete: Date must include a %{missing_date_parts}
+        accident_or_incident_type_form:
+          attributes:
+            event_type:
+              inclusion: Select the type of information you're adding
         test_result_form:
           attributes:
             product_id:

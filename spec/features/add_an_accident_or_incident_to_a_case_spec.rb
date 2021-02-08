@@ -75,7 +75,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data
+    expect_case_activity_page_to_show_entered_data('Unknown', "MyBrand Washing Machine", "Serious", "During normal use")
 
     click_link "View accident"
 
@@ -149,7 +149,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data
+    expect_case_activity_page_to_show_entered_data(Date.new(2020, 4, 3).strftime("%-d %B %Y"), "MyBrand Washing Machine", "Test", "During normal use")
 
     click_link "View accident"
 
@@ -162,49 +162,16 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).to have_summary_item(key: "Additional Info",       value: "Some additional stuff you should know")
   end
 
-  def expect_case_activity_page_to_show_entered_data
+  def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
-    byebug
-    expect(item).to have_text("Date of accident: #{Date.new(2020, 0o4, 0o3)}")
-    expect(item).to have_text("Product: MyBrand Washing Machine")
-    expect(item).to have_text("Severity: Serious")
-    expect(item).to have_text("Product usage: During normal use")
+    expect(item).to have_text("Date of accident: #{date}")
+    expect(item).to have_text("Product: #{product_name}")
+    expect(item).to have_text("Severity: #{severity}")
+    expect(item).to have_text("Product usage: #{usage}")
   end
 
   def expect_to_be_on_supporting_information_page
     expect(page).to have_css("h1", text: "Supporting information")
   end
-
-  # def fill_and_submit_form
-  #   choose action
-  #   fill_in "Day",     with: date.day   if date
-  #   fill_in "Month",   with: date.month if date
-  #   fill_in "Year",    with: date.year  if date
-  #
-  #   select legislation, from: "Under which legislation?"
-  #
-  #   fill_in "Further details (optional)", with: details
-  #
-  #   within_fieldset "Are there any files related to the action?" do
-  #     choose "Yes"
-  #   end
-  #
-  #   attach_file "Upload a file", file
-  #
-  #   fill_in "Attachment description", with: file_description
-  #
-  #   within_fieldset "Is the corrective action mandatory?" do
-  #     choose "Yes"
-  #   end
-  #
-  #   within_fieldset "How long will the corrective action be in place?" do
-  #     choose duration
-  #   end
-  #
-  #   select geographic_scope, from: "What is the geographic scope of the action?"
-  #
-  #   fill_in "Further details (optional)", with: "Urgent action following consumer reports"
-  #   click_button "Continue"
-  # end
 end

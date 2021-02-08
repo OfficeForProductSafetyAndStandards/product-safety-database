@@ -24,5 +24,5 @@ class AccidentOrIncidentForm
   validates :usage, inclusion: { in: AccidentOrIncident.usages.values, message: I18n.t(".accident_or_incident_form.usage.inclusion") }
   validates :severity_other, presence: true, if: -> { severity == "other" }
   validates :event_type,
-            inclusion: { in: AccidentOrIncident.event_types.values, message: "Select yes if you know when the accident or incident happened" }
+            inclusion: { in: AccidentOrIncident.event_types.values, message: "Event type missing" }
 end
