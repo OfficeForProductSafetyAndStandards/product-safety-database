@@ -15,14 +15,13 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
 
   let!(:accident_or_incident) do
-    create(:accident_or_incident,
+    create(:incident,
            date: nil,
            is_date_known: "no",
            product: doll,
            severity: "serious",
            usage: "during_normal_use",
-           investigation: investigation,
-           event_type: "incident")
+           investigation: investigation)
   end
 
   scenario "Editing a risk assessment (with validation errors)" do
@@ -35,21 +34,21 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     click_link "During normal use: Doll"
 
-    click_link "Edit incident"
+    click_link "Edit Incident"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{accident_or_incident.id}/edit")
 
-    within_fieldset("Do you know when the incident happened?") do
+    within_fieldset("Do you know when the Incident happened?") do
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Select the product linked to this incident", selected: 'Doll')
+    expect(page).to have_select("Select the product linked to this Incident", selected: 'Doll')
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
     end
 
-    within_fieldset("How was the product being used at the time of this incident") do
+    within_fieldset("How was the product being used at the time of this Incident") do
       expect(page).to have_checked_field("During normal use")
     end
 
@@ -58,7 +57,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     fill_in("Month", with: "4")
     fill_in("Year", with: "2020")
 
-    select "Teddy Bear", from: "Select the product linked to this incident"
+    select "Teddy Bear", from: "Select the product linked to this Incident"
 
     choose("Other")
     fill_in "Other type", with: "Test"
@@ -67,7 +66,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
-    click_button "Update incident"
+    click_button "Update Incident"
 
     expect(page).not_to have_error_messages
 
@@ -82,7 +81,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(page).to have_selector("h1", text: "Activity")
 
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
-    expect(item).to have_text("Date of incident: #{Date.new(2020, 04, 03)}")
+    expect(item).to have_text("Date of Incident: #{Date.new(2020, 04, 03)}")
     expect(item).to have_text("Teddy Bear")
     expect(item).to have_text("Severity: Test")
     expect(item).to have_text("Product usage: During misuse")

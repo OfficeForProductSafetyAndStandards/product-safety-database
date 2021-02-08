@@ -1,4 +1,4 @@
-class AccidentOrIncident < ApplicationRecord
+class UnexpectedEvent < ApplicationRecord
   belongs_to :investigation
   belongs_to :product
 
@@ -17,10 +17,5 @@ class AccidentOrIncident < ApplicationRecord
     "low" => "low",
     "unknown_severity" => "unknown_severity",
     "other" => "other"
-  }
-
-  enum event_type: {
-    "accident" => "accident",
-    "incident" => "incident"
   }
 end

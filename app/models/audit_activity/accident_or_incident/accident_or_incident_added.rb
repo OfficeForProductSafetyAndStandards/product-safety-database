@@ -13,7 +13,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity
       severity_other: accident_or_incident.severity_other,
       usage: accident_or_incident.usage,
       additional_info: accident_or_incident.additional_info,
-      event_type: accident_or_incident.event_type
+      event_type: accident_or_incident.type
     }
   end
 

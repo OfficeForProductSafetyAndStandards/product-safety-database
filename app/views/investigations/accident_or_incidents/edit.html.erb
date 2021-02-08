@@ -1,4 +1,4 @@
-<% page_heading = "Edit #{@accident_or_incident.event_type}" %>
+<% page_heading = "Edit #{@accident_or_incident.type}" %>
 <% page_title page_heading %>
 
 <% content_for :back_link do %>
@@ -18,9 +18,9 @@
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-      <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, event_type: @accident_or_incident.event_type %>
+      <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, event_type: @accident_or_incident.type %>
 
-      <%= govukButton text: "Update #{@accident_or_incident.event_type}" %>
+      <%= govukButton text: "Update #{@accident_or_incident.type}" %>
     <% end %>
   </div>
 </div>

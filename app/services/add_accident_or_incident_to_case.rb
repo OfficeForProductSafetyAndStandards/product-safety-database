@@ -7,18 +7,14 @@ class AddAccidentOrIncidentToCase
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+    params = { date: date, is_date_known: is_date_known, product_id: product_id, severity: severity, severity_other: severity_other, usage: usage, additional_info: additional_info }
 
     ActiveRecord::Base.transaction do
-      context.accident_or_incident = investigation.accident_or_incidents.create!(
-        date: date,
-        is_date_known: is_date_known,
-        product_id: product_id,
-        severity: severity,
-        severity_other: severity_other,
-        usage: usage,
-        additional_info: additional_info,
-        event_type: event_type
-      )
+      if event_type == "accident"
+        context.accident_or_incident = investigation.accidents.create!(params)
+      else
+        context.accident_or_incident = investigation.incidents.create!(params)
+      end
 
       create_audit_activity
     end

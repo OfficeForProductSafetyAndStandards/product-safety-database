@@ -20,9 +20,7 @@ class AccidentOrIncidentForm
             not_in_future: true,
             if: -> { is_date_known == "yes" }
   validates :product_id, presence: true
-  validates :severity, inclusion: { in: AccidentOrIncident.severities.values, message: I18n.t(".accident_or_incident_form.severity.inclusion") }
-  validates :usage, inclusion: { in: AccidentOrIncident.usages.values, message: I18n.t(".accident_or_incident_form.usage.inclusion") }
+  validates :severity, inclusion: { in: UnexpectedEvent.severities.values, message: I18n.t(".accident_or_incident_form.severity.inclusion") }
+  validates :usage, inclusion: { in: UnexpectedEvent.usages.values, message: I18n.t(".accident_or_incident_form.usage.inclusion") }
   validates :severity_other, presence: true, if: -> { severity == "other" }
-  validates :event_type,
-            inclusion: { in: AccidentOrIncident.event_types.values, message: "Event type missing" }
 end

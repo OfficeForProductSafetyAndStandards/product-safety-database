@@ -26,7 +26,7 @@ module Investigations
     def show
       @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
       authorize @investigation, :view_non_protected_details?
-      @accident_or_incident = @investigation.accident_or_incidents.find(params[:id]).decorate
+      @accident_or_incident = @investigation.unexpected_events.find(params[:id]).decorate
     end
 
     def edit
@@ -34,7 +34,7 @@ module Investigations
 
       authorize @investigation, :update?
 
-      @accident_or_incident = @investigation.accident_or_incidents.find(params[:id])
+      @accident_or_incident = @investigation.unexpected_events.find(params[:id])
 
       @accident_or_incident_form = AccidentOrIncidentForm.new(
         @accident_or_incident.serializable_hash(
@@ -42,7 +42,7 @@ module Investigations
         )
       )
 
-      @event_type = @accident_or_incident.event_type
+      @event_type = @accident_or_incident.type
       @accident_or_incident = @accident_or_incident.decorate
       @investigation = @investigation.decorate
     end
@@ -52,7 +52,7 @@ module Investigations
 
       authorize @investigation, :update?
 
-      @accident_or_incident = @investigation.accident_or_incidents.find(params[:id])
+      @accident_or_incident = @investigation.unexpected_events.find(params[:id])
       @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
 
       if @accident_or_incident_form.valid?

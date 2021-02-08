@@ -25,7 +25,7 @@
     <%= govukSummaryList(rows: accident_or_incident_summary_list_rows(@accident_or_incident)) %>
 
     <% if policy(@investigation).update? %>
-      <p class="govuk-body"><%= link_to "Edit #{@accident_or_incident.event_type}", edit_investigation_accident_or_incident_path(@investigation, @accident_or_incident), class: "govuk-link" %></p>
+      <p class="govuk-body"><%= link_to "Edit #{@accident_or_incident.type}", edit_investigation_accident_or_incident_path(@investigation, @accident_or_incident), class: "govuk-link" %></p>
     <% end %>
   </div>
 </div>

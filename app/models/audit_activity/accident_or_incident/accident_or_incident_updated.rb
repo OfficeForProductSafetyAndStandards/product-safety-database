@@ -6,6 +6,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   def self.build_metadata(accident_or_incident)
     updates = accident_or_incident.previous_changes.slice(
       :date,
+      :is_date_known,
       :product_id,
       :severity,
       :severity_other,
@@ -16,7 +17,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     {
       accident_or_incident_id: accident_or_incident.id,
       updates: updates,
-      event_type: accident_or_incident.event_type
+      event_type: accident_or_incident.type
     }
   end
 
@@ -29,11 +30,21 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   end
 
   def date_changed?
-    new_date
+    new_date?
+  end
+
+  def new_date?
+    updates["date"]&.second || updates["is_date_known"]&.second
   end
 
   def new_date
-    updates["date"]&.second
+    return unless new_date?
+    return updates["date"]&.second if updates["date"]&.second
+    if updates["is_date_known"]&.second == 'yes'
+      updates["date"]&.first
+    else
+      "Unknown"
+    end
   end
 
   def product_changed?

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :accident_or_incident do
+  factory :incident do
     investigation { association :allegation }
     date { "" }
     is_date_known { "no" }

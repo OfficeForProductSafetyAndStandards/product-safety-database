@@ -117,7 +117,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_show_accident_or_incident_page
-    id = AccidentOrIncident.last.id
+    id = UnexpectedEvent.last.id
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{id}")
   end
 

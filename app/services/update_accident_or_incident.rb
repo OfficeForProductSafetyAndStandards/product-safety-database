@@ -16,8 +16,7 @@ class UpdateAccidentOrIncident
         severity: severity,
         severity_other: updated_custom_severity,
         usage: usage,
-        additional_info: additional_info,
-        event_type: event_type
+        additional_info: additional_info
       )
 
       break if no_changes?

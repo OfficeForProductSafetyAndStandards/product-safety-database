@@ -1,4 +1,4 @@
-class AccidentOrIncidentDecorator < ApplicationDecorator
+class UnexpectedEventDecorator < ApplicationDecorator
   delegate_all
 
   def activity_cell_partial(_viewing_user)
@@ -14,7 +14,7 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
   end
 
   def supporting_information_type
-    object.event_type.capitalize
+    object.type
   end
 
   def date_of_activity
@@ -36,7 +36,7 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
   end
 
   def page_title
-    "#{object.event_type.capitalize}: #{product_description}"
+    "#{object.type.capitalize}: #{product_description}"
   end
 
   def severity

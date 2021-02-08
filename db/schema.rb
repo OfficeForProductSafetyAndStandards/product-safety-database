@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_141534) do
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
-  create_enum "event_types", ["accident", "incident"]
   create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
   create_enum "has_online_recall_information", ["has_online_recall_information_yes", "has_online_recall_information_no", "has_online_recall_information_not_relevant"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
@@ -26,20 +25,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_141534) do
   create_enum "severities", ["serious", "high", "medium", "low", "unknown_severity", "other"]
   create_enum "usages", ["during_normal_use", "during_misuse", "with_adult_supervision", "without_adult_supervision", "unknown_usage"]
   create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
-
-  create_table "accident_or_incidents", force: :cascade do |t|
-    t.text "additional_info"
-    t.datetime "created_at", precision: 6, null: false
-    t.date "date"
-    t.enum "event_type", as: "event_types"
-    t.integer "investigation_id"
-    t.string "is_date_known"
-    t.integer "product_id"
-    t.enum "severity", as: "severities"
-    t.string "severity_other"
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "usage", as: "usages"
-  end
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -348,6 +333,20 @@ ActiveRecord::Schema.define(version: 2021_02_15_141534) do
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
     t.index ["product_id"], name: "index_tests_on_product_id"
+  end
+
+  create_table "unexpected_events", force: :cascade do |t|
+    t.text "additional_info"
+    t.datetime "created_at", precision: 6, null: false
+    t.date "date"
+    t.integer "investigation_id"
+    t.string "is_date_known"
+    t.integer "product_id"
+    t.enum "severity", as: "severities"
+    t.string "severity_other"
+    t.string "type"
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "usage", as: "usages"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
