@@ -33,7 +33,7 @@ class FixTestResultAuditActivityMetadata < ActiveRecord::Migration[6.1]
   end
 
   def get_only_test_result_from_investigation(investigation)
-    investigation.test_results.first if investigation.test_results.count.one?
+    investigation.test_results.first if investigation.test_results.one?
   end
 
   def rewind_metadata_changes(new_metadata, activity)
