@@ -4,8 +4,6 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
   end
 
   def self.possible_corrective_action_for(audit_activity)
-    byebug
-
     if (corrective_action = audit_activity.corrective_action)
       return corrective_action
     end
@@ -16,7 +14,9 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
         .joins(investigation: :activities)
         .where.not(investigation: { activities: { type: AuditActivity::CorrectiveAction::Update.name } })
         .where(investigation: { activities: { type: AuditActivity::CorrectiveAction::Add.name } })
-        .select { |ca| !ca.document.attached? }
+        .distinct
+
+    corrective_actions = corrective_actions.reject { |ca| ca.document.attached? }
 
     if corrective_actions.one?
       corrective_action = corrective_actions.first
@@ -51,7 +51,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
         corrective_action_attributes[:date_decided] = Date.parse(Regexp.last_match(1))
       when /\AType of measure: \*\*(.*)\*\*\z/
         corrective_action_attributes[:measure_type] = Regexp.last_match(1)
-
+      when /\ADuration of action: \*\*(.*)\*\*\z/
         corrective_action_attributes[:duration] = Regexp.last_match(1)
       when /\AGeographic scope: \*\*(.*)\*\*\z/
         corrective_action_attributes[:geographic_scope] = Regexp.last_match(1)

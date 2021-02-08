@@ -47,14 +47,13 @@ ergq perog n
 
         context "when the corrective_action has more than one corrective action" do
           let(:other_corrective_action) { create(:corrective_action, :with_document, investigation: corrective_action.investigation) }
+
           before do
-            create(:legacy_audit_add_activity_corrective_action, attachment: other_corrective_action.document_blob, investigation: corrective_action.investigation)
+            create(:legacy_audit_add_activity_corrective_action, investigation: corrective_action.investigation).attachment.attach(other_corrective_action.document_blob)
             corrective_action.investigation.reload
           end
 
-
           context "when one has an attachment" do
-
             it "returns the corrective action that has no attachment" do
               expect(described_class.metadata_from_legacy_audit_activity(audit_activity)[:corrective_action][:id])
                 .to eq(corrective_action.id)
@@ -70,7 +69,7 @@ ergq perog n
 
             it "returns raise and error" do
               expect { described_class.metadata_from_legacy_audit_activity(audit_activity) }
-                .to raise_error(AuditActivity::CorrectiveAction::CouldNotDeterminCorrectiveAction)
+                .to raise_error AuditActivity::CorrectiveAction::CouldNotDeterminCorrectiveAction
             end
           end
         end
@@ -80,8 +79,8 @@ ergq perog n
     it "migrates all attributes to the new metadata format" do
       expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
         .to eq(corrective_action: {
-                 legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip
-               })
+          legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip, id: corrective_action.id
+        })
     end
 
     context "when missing parts" do
@@ -91,8 +90,8 @@ ergq perog n
         it "fetches from the corrective_action" do
           expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
             .to eq(corrective_action: {
-                     legislation: corrective_action.legislation, date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip
-                   })
+              legislation: corrective_action.legislation, date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip, id: corrective_action.id
+            })
         end
       end
 
@@ -102,8 +101,8 @@ ergq perog n
         it "fetches from the corrective_action" do
           expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
             .to eq(corrective_action: {
-                     legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: corrective_action.date_decided, measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip
-                   })
+              legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: corrective_action.date_decided, measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: details.strip, id: corrective_action.id
+            })
         end
       end
 
@@ -113,8 +112,8 @@ ergq perog n
         it "fetches from the corrective_action" do
           expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
             .to eq(corrective_action: {
-                     legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: corrective_action.measure_type, duration: "Unknown", geographic_scope: "Local", details: details.strip
-                   })
+              legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: corrective_action.measure_type, duration: "Unknown", geographic_scope: "Local", details: details.strip, id: corrective_action.id
+            })
         end
       end
 
@@ -124,8 +123,8 @@ ergq perog n
         it "fetches from the corrective_action" do
           expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
             .to eq(corrective_action: {
-                     legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: corrective_action.duration, geographic_scope: "Local", details: details.strip
-                   })
+              legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: corrective_action.duration, geographic_scope: "Local", details: details.strip, id: corrective_action.id
+            })
         end
       end
 
@@ -135,8 +134,8 @@ ergq perog n
         it "fetches from the corrective_action" do
           expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
             .to eq(corrective_action: {
-                     legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: corrective_action.geographic_scope, details: details.strip
-                   })
+              legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: corrective_action.geographic_scope, details: details.strip, id: corrective_action.id
+            })
         end
       end
     end
@@ -152,8 +151,8 @@ ergq perog n
       it "trims details" do
         expect(described_class.metadata_from_legacy_audit_activity(audit_activity))
           .to eq(corrective_action: {
-                   legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: nil
-                 })
+            legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)", date_decided: Date.parse("01/11/2010"), measure_type: "Voluntary", duration: "Unknown", geographic_scope: "Local", details: nil, id: corrective_action.id
+          })
       end
     end
   end
