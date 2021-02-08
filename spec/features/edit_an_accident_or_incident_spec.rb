@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }
   let(:doll) { create(:product, name: "Doll") }
@@ -20,11 +19,10 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
            date: nil,
            is_date_known: "no",
            product: doll,
-           severity: 'serious',
-           usage: 'during_normal_use',
+           severity: "serious",
+           usage: "during_normal_use",
            investigation: investigation,
-           event_type: "incident"
-         )
+           event_type: "incident")
   end
 
   scenario "Editing a risk assessment (with validation errors)" do
@@ -57,17 +55,17 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("During normal use")
     end
 
-    choose('Yes')
+    choose("Yes")
     fill_in("Day", with: "3")
     fill_in("Month", with: "4")
     fill_in("Year", with: "2020")
 
     select "Teddy Bear", from: "Select the product linked to this incident"
 
-    choose('Other')
+    choose("Other")
     fill_in "Other type", with: "Test"
 
-    choose('During misuse')
+    choose("During misuse")
 
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
@@ -86,7 +84,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(page).to have_selector("h1", text: "Activity")
 
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
-    expect(item).to have_text("Date of incident: #{Date.new(2020,04,03)}")
+    expect(item).to have_text("Date of incident: #{Date.new(2020, 0o4, 0o3)}")
     expect(item).to have_text("Teddy Bear")
     expect(item).to have_text("Severity: Test")
     expect(item).to have_text("Product usage: During misuse")

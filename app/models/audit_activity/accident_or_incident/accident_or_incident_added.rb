@@ -34,7 +34,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity
   end
 
   def date(accident_or_incident)
-    accident_or_incident.is_date_known ? date : 'Unknown'
+    accident_or_incident.is_date_known ? date : "Unknown"
   end
 
   # Do not send investigation_updated mail when test result updated. This

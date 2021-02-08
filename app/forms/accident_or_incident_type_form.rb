@@ -5,5 +5,5 @@ class AccidentOrIncidentTypeForm
   attribute :event_type, :string, default: nil
 
   validates :event_type,
-            inclusion: { in: ["accident", "incident"], message: "Select the type of information you're adding" }
+            inclusion: { in: %w[accident incident], message: "Select the type of information you're adding" }
 end

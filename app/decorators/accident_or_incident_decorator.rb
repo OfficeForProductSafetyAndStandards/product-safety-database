@@ -19,6 +19,7 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
 
   def date_of_activity
     return I18n.t(".accident_or_incident.date.unknown") unless object.date
+
     object.date.to_s(:govuk)
   end
 
@@ -39,7 +40,8 @@ class AccidentOrIncidentDecorator < ApplicationDecorator
   end
 
   def severity
-    return object.severity_other unless severity_other.blank?
+    return object.severity_other if severity_other.present?
+
     I18n.t(".accident_or_incident.severity.#{object.severity}")
   end
 end

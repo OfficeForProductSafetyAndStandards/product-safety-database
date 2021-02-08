@@ -41,7 +41,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the type of information you're adding"
 
-    choose('Accident')
+    choose("Accident")
 
     click_button "Continue"
 
@@ -56,10 +56,10 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
     expect(errors_list[3].text).to eq "Select how the product was being used"
 
-    choose('No')
+    choose("No")
     select "MyBrand Washing Machine", from: "Select the product linked to this accident"
-    choose('Serious')
-    choose('During normal use')
+    choose("Serious")
+    choose("During normal use")
 
     expect(page).to have_error_messages
     click_button "Add accident or incident"
@@ -112,7 +112,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select the type of information you're adding"
 
-    choose('Accident')
+    choose("Accident")
 
     click_button "Continue"
 
@@ -127,14 +127,14 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
     expect(errors_list[3].text).to eq "Select how the product was being used"
 
-    choose('Yes')
+    choose("Yes")
     fill_in("Day", with: "3")
     fill_in("Month", with: "4")
     fill_in("Year", with: "2020")
     select "MyBrand Washing Machine", from: "Select the product linked to this accident"
-    choose('Other')
+    choose("Other")
     fill_in "Other type", with: "Test"
-    choose('During normal use')
+    choose("During normal use")
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
     click_button "Add accident or incident"
@@ -166,7 +166,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
     byebug
-    expect(item).to have_text("Date of accident: #{Date.new(2020,04,03)}")
+    expect(item).to have_text("Date of accident: #{Date.new(2020, 0o4, 0o3)}")
     expect(item).to have_text("Product: MyBrand Washing Machine")
     expect(item).to have_text("Severity: Serious")
     expect(item).to have_text("Product usage: During normal use")

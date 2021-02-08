@@ -29,7 +29,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   end
 
   def date_changed?
-     new_date
+    new_date
   end
 
   def new_date
@@ -63,93 +63,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   def new_usage
     updates["usage"]&.second
   end
-
-  # def risk_level_changed?
-  #   new_risk_level || new_custom_risk_level
-  # end
-  #
-  # def assessed_by_changed?
-  #   new_assessed_by_team_id || new_assessed_by_business_id || new_assessed_by_other
-  # end
-  #
-  # def products_changed?
-  #   new_product_ids
-  # end
-  #
-  # def new_assessed_on
-  #   date = updates["assessed_on"]&.second
-  #   return nil unless date
-  #
-  #   Date.parse(date)
-  # end
-  #
-  # def new_risk_level
-  #   updates["risk_level"]&.second
-  # end
-  #
-  # def new_filename
-  #   updates["filename"]&.second
-  # end
-  #
-  # def new_assessed_by_team
-  #   if new_assessed_by_team_id
-  #     Team.find(new_assessed_by_team_id)
-  #   end
-  # end
-  #
-  # def new_assessed_by_business
-  #   if new_assessed_by_business_id
-  #     Business.find(new_assessed_by_business_id)
-  #   end
-  # end
-  #
-  # def new_assessed_by_team_id
-  #   updates["assessed_by_team_id"]&.second
-  # end
-  #
-  # def new_assessed_by_business_id
-  #   updates["assessed_by_business_id"]&.second
-  # end
-  #
-  # def new_assessed_by_other
-  #   updates["assessed_by_other"]&.second
-  # end
-  #
-  # def new_custom_risk_level
-  #   updates["custom_risk_level"]&.second
-  # end
-  #
-  # def new_product_ids
-  #   updates["product_ids"]&.second
-  # end
-  #
-  # def new_products
-  #   Product.find(new_product_ids)
-  # end
-  #
-  # def new_details
-  #   updates["details"]&.second
-  # end
-  #
-  # def risk_assessment_id
-  #   metadata["risk_assessment_id"]
-  # end
-  #
-  # def title(_)
-  #   "Risk assessment edited"
-  # end
-  #
-  # def subtitle_slug
-  #   "Edited"
-  # end
-  #
-  # def products_assessed
-  #   Product.find(metadata["product_ids"])
-  # end
-  #
-  # def further_details
-  #   metadata["details"].presence
-  # end
 
 private
 
