@@ -67,7 +67,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: "", product_name: "MyBrand Washing Machine", severity: "Serious", usage: "During normal use", additional_info: "")
+    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine", severity: "Serious", usage: "During normal use", additional_info: "")
   end
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
