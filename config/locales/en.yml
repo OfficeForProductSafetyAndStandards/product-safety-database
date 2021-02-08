@@ -278,13 +278,13 @@ en:
         accident_or_incident_form:
           attributes:
             is_date_known:
-              blank: Select yes if you know when the accident or incident happened
+              inclusion: Select yes if you know when the accident or incident happened
             product_id:
               blank: Select the product linked to the accident or incident
             severity:
-              blank: Select the severity of the accident or incident
+              inclusion: Select the severity of the accident or incident
             usage:
-              blank: Select how the product was being used
+              inclusion: Select how the product was being used
             date:
               in_future: Date sent must be today or in the past
               blank: Enter date

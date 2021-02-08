@@ -19,7 +19,7 @@ class AccidentOrIncident < ApplicationRecord
     "other" => "other"
   }
 
-  enum type: {
+  enum event_type: {
     "accident" => "accident",
     "incident" => "incident"
   }

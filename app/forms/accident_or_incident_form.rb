@@ -12,15 +12,17 @@ class AccidentOrIncidentForm
   attribute :additional_info
   attribute :event_type
 
-  validates :is_date_known, presence: true
+  validates :is_date_known, inclusion: { in: %w[yes no], message: I18n.t(".accident_or_incident_form.is_date_know.inclusion") }
   validates :date,
+            presence: true,
             real_date: true,
             complete_date: true,
             not_in_future: true,
             if: -> { is_date_known == "yes" }
   validates :product_id, presence: true
-  validates :severity, presence: true
-  validates :usage, presence: true
+  validates :severity, inclusion: { in: AccidentOrIncident.severities.values, message: I18n.t(".accident_or_incident_form.severity.inclusion") }
+  validates :usage, inclusion: { in: AccidentOrIncident.usages.values, message: I18n.t(".accident_or_incident_form.usage.inclusion") }
   validates :severity_other, presence: true, if: -> { severity == "other" }
-  validates :event_type, presence: true
+  validates :event_type,
+            inclusion: { in: AccidentOrIncident.event_types.values, message: "Select yes if you know when the accident or incident happened" }
 end
