@@ -10,11 +10,11 @@ class AddAccidentOrIncidentToCase
     params = { date: date, is_date_known: is_date_known, product_id: product_id, severity: severity, severity_other: severity_other, usage: usage, additional_info: additional_info }
 
     ActiveRecord::Base.transaction do
-      if event_type == "accident"
-        context.accident_or_incident = investigation.accidents.create!(params)
-      else
-        context.accident_or_incident = investigation.incidents.create!(params)
-      end
+      context.accident_or_incident = if event_type == "accident"
+                                       investigation.accidents.create!(params)
+                                     else
+                                       investigation.incidents.create!(params)
+                                     end
 
       create_audit_activity
     end

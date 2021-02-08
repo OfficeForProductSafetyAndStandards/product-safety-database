@@ -61,7 +61,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data('Unknown', "MyBrand Washing Machine", "Serious", "During normal use")
+    expect_case_activity_page_to_show_entered_data("Unknown", "MyBrand Washing Machine", "Serious", "During normal use")
 
     click_link "View Accident"
 

@@ -13,7 +13,7 @@ module Investigations
       @event_type = event_type
       return render(:new) if @accident_or_incident_form.invalid?
 
-      result = AddAccidentOrIncidentToCase.call!(
+      AddAccidentOrIncidentToCase.call!(
         @accident_or_incident_form.attributes.merge({
           investigation: investigation,
           user: current_user,

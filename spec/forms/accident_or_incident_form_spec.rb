@@ -38,7 +38,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
     context "with blank date" do
       context "with is_date_known == 'no'" do
         let(:date) { nil }
-        let(:is_date_known) { 'no' }
+        let(:is_date_known) { "no" }
 
         it "is valid" do
           expect(form).to be_valid
@@ -47,7 +47,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
 
       context "with is_date_known == 'yes'" do
         let(:date) { nil }
-        let(:is_date_known) { 'yes' }
+        let(:is_date_known) { "yes" }
 
         it "is not valid" do
           expect(form).not_to be_valid
@@ -56,7 +56,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
     end
 
     context "when `is_date_known` is not `yes` or `no`" do
-      let(:is_date_known) { '' }
+      let(:is_date_known) { "" }
 
       it "is not valid" do
         expect(form).not_to be_valid
@@ -86,29 +86,22 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
         expect(form).not_to be_valid
       end
     end
-    
-    context "when usage is missing" do
-      let(:usage) { nil }
 
-      it "is not valid" do
-        expect(form).not_to be_valid
-      end
-    end
-
-    context 'with severity_other is blank' do
+    context "with severity_other is blank" do
       let(:severity_other) { nil }
-      context 'when severity is `other`' do
+
+      context "when severity is `other`" do
         let(:severity) { "other" }
 
-        it 'is not valid' do
+        it "is not valid" do
           expect(form).not_to be_valid
         end
       end
 
-      context 'when severity is not `other`' do
+      context "when severity is not `other`" do
         let(:severity) { "serious" }
 
-        it 'is valid' do
+        it "is valid" do
           expect(form).to be_valid
         end
       end

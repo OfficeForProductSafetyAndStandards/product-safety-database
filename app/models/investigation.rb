@@ -90,7 +90,6 @@ class Investigation < ApplicationRecord
   has_many :incidents
   has_many :unexpected_events
 
-
   # All sub-classes share this policy class
   def self.policy_class
     InvestigationPolicy

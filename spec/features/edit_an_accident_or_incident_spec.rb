@@ -42,7 +42,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Select the product linked to this Incident", selected: 'Doll')
+    expect(page).to have_select("Select the product linked to this Incident", selected: "Doll")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
@@ -81,7 +81,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(page).to have_selector("h1", text: "Activity")
 
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
-    expect(item).to have_text("Date of Incident: #{Date.new(2020, 04, 03)}")
+    expect(item).to have_text("Date of Incident: #{Date.new(2020, 0o4, 0o3)}")
     expect(item).to have_text("Teddy Bear")
     expect(item).to have_text("Severity: Test")
     expect(item).to have_text("Product usage: During misuse")

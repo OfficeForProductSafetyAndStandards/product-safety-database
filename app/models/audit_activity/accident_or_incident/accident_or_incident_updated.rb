@@ -40,7 +40,8 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   def new_date
     return unless new_date?
     return updates["date"]&.second if updates["date"]&.second
-    if updates["is_date_known"]&.second == 'yes'
+
+    if updates["is_date_known"]&.second == "yes"
       updates["date"]&.first
     else
       "Unknown"
