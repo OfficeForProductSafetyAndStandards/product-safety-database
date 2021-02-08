@@ -43,9 +43,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("No")
     end
 
-    within_fieldset("Select the product linked to this incident") do
-      expect(page).to have_select("Doll")
-    end
+    expect(page).to have_select("Select the product linked to this incident", selected: 'Doll')
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")

@@ -18,17 +18,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
   end
 
   scenario "Adding an accident or incident with date unknown, no custom severity and no additional info" do
-    sign_in(user)
-
-    visit "/cases/#{investigation.pretty_id}/supporting-information"
-
-    click_link "Add new"
-
-    expect_to_be_on_add_supporting_information_page
-
-    choose "Accident or Incident"
-
-    click_button "Continue"
+    navigate_to_accident_or_incident_type_page
 
     expect_to_be_on_accident_or_incident_type_page
 
@@ -50,11 +40,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     click_button "Add accident or incident"
 
     expect(page).to have_error_messages
-    errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Select yes if you know when the accident or incident happened"
-    expect(errors_list[1].text).to eq "Select the product linked to the accident or incident"
-    expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
-    expect(errors_list[3].text).to eq "Select how the product was being used"
+    expect_ordered_error_list
 
     choose("No")
     select "MyBrand Washing Machine", from: "Select the product linked to this accident"
@@ -81,11 +67,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect(page).to have_summary_item(key: "Date of accident",      value: "")
-    expect(page).to have_summary_item(key: "Product",               value: "MyBrand Washing Machine")
-    expect(page).to have_summary_item(key: "Severity",              value: "Serious")
-    expect(page).to have_summary_item(key: "Product usage",         value: "During normal use")
-    expect(page).to have_summary_item(key: "Additional Info",       value: "")
+    expect_summary_list_to_have(date: "", product_name: "MyBrand Washing Machine", severity: "Serious", usage: "During normal use", additional_info: "")
   end
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
@@ -121,11 +103,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     click_button "Add accident or incident"
 
     expect(page).to have_error_messages
-    errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Select yes if you know when the accident or incident happened"
-    expect(errors_list[1].text).to eq "Select the product linked to the accident or incident"
-    expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
-    expect(errors_list[3].text).to eq "Select how the product was being used"
+    expect_ordered_error_list
 
     choose("Yes")
     fill_in("Day", with: "3")
@@ -155,11 +133,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect(page).to have_summary_item(key: "Date of accident",      value: "2020-04-03")
-    expect(page).to have_summary_item(key: "Product",               value: "MyBrand Washing Machine")
-    expect(page).to have_summary_item(key: "Severity",              value: "Test")
-    expect(page).to have_summary_item(key: "Product usage",         value: "During normal use")
-    expect(page).to have_summary_item(key: "Additional Info",       value: "Some additional stuff you should know")
+    expect_summary_list_to_have(date: "2020-04-03", product_name: "MyBrand Washing Machine", severity: "Test", usage: "During normal use", additional_info: "Some additional stuff you should know")
   end
 
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
@@ -173,5 +147,35 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
   def expect_to_be_on_supporting_information_page
     expect(page).to have_css("h1", text: "Supporting information")
+  end
+
+  def expect_ordered_error_list
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Select yes if you know when the accident or incident happened"
+    expect(errors_list[1].text).to eq "Select the product linked to the accident or incident"
+    expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
+    expect(errors_list[3].text).to eq "Select how the product was being used"
+  end
+
+  def expect_summary_list_to_have(date:, product_name:, severity:, usage:, additional_info:)
+    expect(page).to have_summary_item(key: "Date of accident",      value: date)
+    expect(page).to have_summary_item(key: "Product",               value: product_name)
+    expect(page).to have_summary_item(key: "Severity",              value: severity)
+    expect(page).to have_summary_item(key: "Product usage",         value: usage)
+    expect(page).to have_summary_item(key: "Additional Info",       value: additional_info)
+  end
+
+  def navigate_to_accident_or_incident_type_page
+    sign_in(user)
+
+    visit "/cases/#{investigation.pretty_id}/supporting-information"
+
+    click_link "Add new"
+
+    expect_to_be_on_add_supporting_information_page
+
+    choose "Accident or Incident"
+
+    click_button "Continue"
   end
 end
