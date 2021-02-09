@@ -6,6 +6,8 @@
   Severity: <%= activity.metadata['severity_other'].blank? ? I18n.t(".accident_or_incident.severity.#{activity.metadata['severity']}") : activity.metadata['severity_other'] %>
   <br>
   Product usage: <%= I18n.t(".accident_or_incident.usage.#{activity.metadata['usage']}")  %>
+  <br>
+  Additional information: <%=  activity.metadata['additional_info'] %>
 </div>
 
 <%= link_to "View #{activity.metadata["event_type"]}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>

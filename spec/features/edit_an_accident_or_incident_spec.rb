@@ -81,7 +81,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(page).to have_selector("h1", text: "Activity")
 
     item = page.find("h3", text: "Accident or Incident").find(:xpath, "..")
-    expect(item).to have_text("Date of Incident: #{Date.new(2020, 0o4, 0o3)}")
+    expect(item).to have_text("Date of Incident: #{Date.new(2020, 0o4, 0o3).to_s(:govuk)}")
     expect(item).to have_text("Teddy Bear")
     expect(item).to have_text("Severity: Test")
     expect(item).to have_text("Product usage: During misuse")

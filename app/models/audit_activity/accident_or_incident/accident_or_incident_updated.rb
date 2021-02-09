@@ -76,6 +76,14 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     updates["usage"]&.second
   end
 
+  def additional_info_changed?
+    new_additional_info
+  end
+
+  def new_additional_info
+    updates["additional_info"]&.second
+  end
+
 private
 
   def updates
