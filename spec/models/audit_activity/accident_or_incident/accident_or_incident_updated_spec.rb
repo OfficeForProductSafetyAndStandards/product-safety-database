@@ -33,13 +33,19 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
     context "when fields have changed" do
       before { accident_or_incident.update!(severity: new_severity, date: date, is_date_known: "yes", usage: new_usage, additional_info: "wow") }
 
+      let(:updates) do
+        {
+          "severity" => [severity, new_severity],
+          "usage" => [usage, new_usage],
+          "additional_info" => [nil, "wow"],
+          "is_date_known" => %w[no yes],
+          "date" => [nil, date]
+        }
+      end
+
       it "builds a list of changes" do
         expect(metadata).to eq({
-          updates: { "severity" => [severity, new_severity],
-                     "usage" => [usage, new_usage],
-                     "additional_info" => [nil, "wow"],
-                     "is_date_known" => %w[no yes],
-                     "date" => [nil, date] },
+          updates: updates,
           event_type: accident_or_incident.type,
           accident_or_incident_id: accident_or_incident.id
         })
