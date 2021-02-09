@@ -2,7 +2,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   def self.from(*)
     raise "Deprecated - use UpdateAccidentOrIncident.call instead"
   end
-  
 
   def self.build_metadata(accident_or_incident)
     updates = accident_or_incident.previous_changes.slice(
