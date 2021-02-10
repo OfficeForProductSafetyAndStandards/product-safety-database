@@ -22,7 +22,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   end
 
   def title(*)
-    "Accident or Incident"
+    metadata["event_type"]
   end
 
   def subtitle_slug
