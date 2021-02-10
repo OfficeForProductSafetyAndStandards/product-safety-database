@@ -19,6 +19,7 @@ class UpdateTestResult
     )
 
     test_result.transaction do
+      test_result.document.detach
       test_result.document.attach(document)
 
       if test_result.save
