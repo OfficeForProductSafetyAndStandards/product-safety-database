@@ -3,8 +3,9 @@ require "rails_helper"
 RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   include_context "with read only team and user"
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
-  let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
-  let(:investigation) { create(:allegation, products: [product], creator: user, read_only_teams: read_only_team) }
+  let(:product1) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
+  let(:product2) { create(:product_iphone, name: "iPhone 23") }
+  let(:investigation) { create(:allegation, products: [product1, product2], creator: user, read_only_teams: read_only_team) }
 
   let(:date) { Date.parse("2020-05-01") }
 
