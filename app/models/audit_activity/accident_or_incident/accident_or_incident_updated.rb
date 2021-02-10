@@ -30,22 +30,18 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   end
 
   def date_changed?
-    new_date?
+    new_date_information?
   end
 
-  def new_date?
+  def new_date_information?
     updates["date"]&.second || updates["is_date_known"]&.second
   end
 
   def new_date
-    return unless new_date?
+    return unless new_date_information?
     return updates["date"]&.second if updates["date"]&.second
 
-    if updates["is_date_known"]&.second == "yes"
-      updates["date"]&.first
-    else
-      "Unknown"
-    end
+    is_date_know_has_been_changed_from_no_to_yes? ? updates["date"]&.first : "Unknown"
   end
 
   def product_changed?
@@ -88,6 +84,10 @@ private
 
   def updates
     metadata["updates"]
+  end
+
+  def is_date_know_has_been_changed_from_no_to_yes?
+    updates["is_date_known"]&.second == "yes"
   end
 
   # Do not send investigation_updated mail when risk assessment updated. This

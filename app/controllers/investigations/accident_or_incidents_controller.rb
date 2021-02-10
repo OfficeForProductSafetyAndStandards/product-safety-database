@@ -1,7 +1,6 @@
 module Investigations
   class AccidentOrIncidentsController < ApplicationController
     def new
-      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
       authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new
       @event_type = params[:event_type]
@@ -24,17 +23,14 @@ module Investigations
     end
 
     def show
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-      authorize @investigation, :view_non_protected_details?
-      @accident_or_incident = @investigation.unexpected_events.find(params[:id]).decorate
+      authorize investigation, :view_non_protected_details?
+      @accident_or_incident = investigation.unexpected_events.find(params[:id]).decorate
     end
 
     def edit
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :update?
 
-      authorize @investigation, :update?
-
-      @accident_or_incident = @investigation.unexpected_events.find(params[:id])
+      @accident_or_incident = investigation.unexpected_events.find(params[:id])
 
       @accident_or_incident_form = AccidentOrIncidentForm.new(
         @accident_or_incident.serializable_hash(
@@ -44,31 +40,27 @@ module Investigations
 
       @event_type = @accident_or_incident.type
       @accident_or_incident = @accident_or_incident.decorate
-      @investigation = @investigation.decorate
     end
 
     def update
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :update?
 
-      authorize @investigation, :update?
-
-      @accident_or_incident = @investigation.unexpected_events.find(params[:id])
+      @accident_or_incident = investigation.unexpected_events.find(params[:id])
       @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
 
       if @accident_or_incident_form.valid?
         result = UpdateAccidentOrIncident.call!(
           @accident_or_incident_form.serializable_hash.merge({
             accident_or_incident: @accident_or_incident,
-            investigation: @investigation,
+            investigation: investigation,
             user: current_user
           })
         )
 
-        redirect_to investigation_accident_or_incident_path(@investigation, result.accident_or_incident)
+        redirect_to investigation_accident_or_incident_path(investigation, result.accident_or_incident)
 
       else
         @event_type = event_type
-        @investigation = @investigation.decorate
         render :edit
       end
     end
