@@ -148,6 +148,10 @@ class User < ApplicationRecord
     !mobile_number_verified?
   end
 
+  def has_filled_out_account_setup_form?
+    !name.blank? && !email.blank?
+  end
+
 private
 
   def lock_two_factor!
