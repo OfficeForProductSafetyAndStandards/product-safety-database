@@ -21,11 +21,7 @@ FactoryBot.define do
         }
       )
 
-      if model.respond_to?(:document)
-        model.document.attach(file)
-      else
-        model.documents.attach(file)
-      end
+      model.documents.attach(file)
     end
   end
 
@@ -47,11 +43,7 @@ FactoryBot.define do
         }
       )
 
-      if model.respond_to?(:document)
-        model.document.attach(file)
-      else
-        model.documents.attach(file)
-      end
+      model.documents.attach(file)
     end
   end
 end

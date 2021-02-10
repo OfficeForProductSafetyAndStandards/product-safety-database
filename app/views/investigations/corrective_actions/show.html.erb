@@ -25,22 +25,23 @@
     <%= govukSummaryList(rows: corrective_action_summary_list_rows(@corrective_action)) %>
 
     <% if policy(@investigation).update? %>
-      <p class="govuk-body"><%= link_to "Edit corrective action", edit_investigation_corrective_action_path(@investigation, @corrective_action), class: "govuk-link" %></p>
+      <p class="govuk-body"><%= link_to "Edit corrective action", edit_investigation_action_path(@investigation, @corrective_action), class: "govuk-link" %></p>
     <% end %>
   </div>
 
-  <% if @corrective_action.document.attached? %>
+  <% if @corrective_action.documents.any? %>
     <div class="govuk-grid-column-one-third">
       <h2 class="govuk-heading-m">Attachments</h2>
+      <% @corrective_action.documents.each do |document| %>
+        <p class="govuk-body"><%= link_to document.filename, document, class: "govuk-link" %></p>
 
-      <p class="govuk-body"><%= link_to @corrective_action.document_blob.filename, @corrective_action.document, class: "govuk-link" %></p>
+        <%= document_placeholder(document) %>
 
-      <%= document_placeholder(@corrective_action.document) %>
+        <% if document.blob.metadata["description"].present? %>
+          <p class="govuk-body"><%= document.blob.metadata["description"] %></p>
+        <% end %>
 
-      <% if @corrective_action.document.metadata["description"].present? %>
-        <p class="govuk-body"><%= @corrective_action.document.metadata["description"] %></p>
       <% end %>
-
     </div>
   <% end %>
 </div>

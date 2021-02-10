@@ -18,12 +18,6 @@
     Legislation: <b><%= activity.new_legislation %></b><br>
   <% end %>
 
-  <% if activity.new_online_recall_information&.match?("http") %>
-    Recall information: <%= activity.new_online_recall_information %><br>
-  <% elsif activity.new_online_recall_information.present? %>
-    Recall information: <strong><%= activity.new_online_recall_information %></strong><br>
-  <% end %>
-
   <% if activity.product_updated? %>
     Product: <%= link_to activity.product.name, activity.product %><br>
   <% end %>
@@ -45,18 +39,18 @@
   <% end %>
 
   <% if activity.new_details %>
-    Details: <%= updated_field activity.new_details %><br>
+    Details: <b><%= activity.new_details %></b><br>
   <% end %>
 
   <% if activity.new_filename %>
-    Attached: <%= updated_field activity.new_filename %><br>
+    Attached: <b><%= activity.new_filename %></b><br>
   <% elsif activity.old_filename %>
     Attachment removed: <b><%= activity.old_filename %></b><br>
   <% end %>
 
-  <% if activity.file_description_changed? %>
-    Attachment description: <%= updated_field activity.new_file_description %><br>
+  <% if activity.new_file_description %>
+    Attachment description: <b><%= activity.new_file_description %></b><br>
   <% end %>
 </div>
 
-<%= link_to "View corrective action", investigation_corrective_action_path(activity.investigation, activity.metadata["corrective_action_id"]) %>
+<%= link_to "View corrective action", investigation_action_path(activity.investigation, activity.metadata["corrective_action_id"]) %>
