@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
   let(:new_severity)                          { "serious" }
   let(:new_severity_other)                    { "dead serious" }
 
-  let(:accident_or_incident_form)    { AccidentOrIncidentForm.from(accident) }
+  let(:accident_or_incident_form) { AccidentOrIncidentForm.from(accident) }
   let(:accident_or_incident_attributes) do
     accident_or_incident_form.tap { |form|
       form.tap(&:valid?).assign_attributes(

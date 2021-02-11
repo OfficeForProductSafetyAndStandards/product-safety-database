@@ -2,7 +2,7 @@ module Investigations
   class AccidentOrIncidentsController < ApplicationController
     def new
       authorize investigation, :update?
-      @accident_or_incident_form = AccidentOrIncidentForm.new({type: params["type"]})
+      @accident_or_incident_form = AccidentOrIncidentForm.new({ type: params["type"] })
     end
 
     def create

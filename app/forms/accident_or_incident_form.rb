@@ -13,7 +13,7 @@ class AccidentOrIncidentForm
   attribute :additional_info
   attribute :type
 
-  validates :is_date_known, inclusion: { in: [ true, false ] }
+  validates :is_date_known, inclusion: { in: [true, false] }
   validates :date,
             presence: true,
             real_date: true,
@@ -37,8 +37,6 @@ class AccidentOrIncidentForm
   ].freeze
 
   def self.from(accident_or_incident)
-    new(accident_or_incident.serializable_hash(only: ATTRIBUTES_FROM_ACCIDENT_OR_INCIDENT)).tap do |form|
-      form.changes_applied
-    end
+    new(accident_or_incident.serializable_hash(only: ATTRIBUTES_FROM_ACCIDENT_OR_INCIDENT)).tap(&:changes_applied)
   end
 end

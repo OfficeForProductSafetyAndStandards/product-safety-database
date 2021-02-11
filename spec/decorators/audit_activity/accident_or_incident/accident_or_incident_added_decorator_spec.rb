@@ -30,6 +30,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorat
 
     context "when date is unknown" do
       let(:is_date_known) { "no" }
+
       it "returns unknown" do
         expect(decorated_accident.date).to eq "Unknown"
       end
@@ -40,6 +41,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorat
     context "when severity is `other`" do
       let(:severity) { "other" }
       let(:severity_other) { "not very serious" }
+
       it "returns severity_other" do
         expect(decorated_accident.severity).to eq severity_other
       end
