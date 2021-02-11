@@ -1,7 +1,7 @@
 <div class="govuk-body">
   <p>Changes:</p>
   <% if activity.date_changed? %>
-    <%= "Date of #{activity.metadata['type']}:" %> <b><%= Date.parse(activity.new_date).to_s(:govuk)%></b><br>
+    <%= "Date of #{activity.type}:" %> <b><%= activity.new_date %></b><br>
   <% end %>
 
   <% if activity.product_changed? %>
@@ -9,11 +9,11 @@
   <% end %>
 
   <% if activity.severity_changed? %>
-    Severity: <b><%= activity.new_severity_other.blank? ? I18n.t(".accident_or_incident.severity.#{activity.new_severity}") : activity.new_severity_other %></b><br>
+    Severity: <b><%= activity.new_severity %></b><br>
   <% end %>
 
   <% if activity.usage_changed? %>
-    Product usage: <b><%= I18n.t(".accident_or_incident.usage.#{activity.new_usage}") %></b><br>
+    Product usage: <b><%= activity.new_usage %></b><br>
   <% end %>
 
   <% if activity.additional_info_changed? %>
@@ -21,4 +21,4 @@
   <% end %>
 </div>
 
-<%= link_to "View #{activity.metadata["type"]}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>
+<%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>

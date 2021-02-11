@@ -1,13 +1,13 @@
 <div class="govuk-body">
-  <%= "Date of #{activity.metadata['type']}:" %> <%= activity.metadata["date"] ? Date.parse(activity.metadata["date"]).to_s(:govuk) : "Unknown" %>
+  <%= "Date of #{activity.type}:" %> <%= activity.date  %>
   <br>
   Product: <%= Product.find(activity.metadata["product_id"])&.name  %>
   <br>
-  Severity: <%= activity.metadata['severity_other'].blank? ? I18n.t(".accident_or_incident.severity.#{activity.metadata['severity']}") : activity.metadata['severity_other'] %>
+  Severity: <%= activity.severity %>
   <br>
-  Product usage: <%= I18n.t(".accident_or_incident.usage.#{activity.metadata['usage']}")  %>
+  Product usage: <%= activity.usage  %>
   <br>
-  Additional information: <%=  activity.metadata['additional_info'] %>
+  Additional information: <%=  activity.additional_info %>
 </div>
 
-<%= link_to "View #{activity.metadata["type"]}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>
+<%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>
