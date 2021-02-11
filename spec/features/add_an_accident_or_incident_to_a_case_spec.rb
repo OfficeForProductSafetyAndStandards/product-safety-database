@@ -36,7 +36,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     click_button "Continue"
 
-    expect_to_be_on_add_accident_or_incident_page("accident")
+    expect_to_be_on_add_accident_or_incident_page("Accident")
 
     click_button "Add accident or incident"
 
@@ -44,7 +44,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect_ordered_error_list
 
     choose("No")
-    select "MyBrand Washing Machine", from: "Select the product linked to this accident"
+    select "MyBrand Washing Machine", from: "Select the product linked to this Accident"
     choose("Serious")
     choose("During normal use")
 
@@ -99,7 +99,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     click_button "Continue"
 
-    expect_to_be_on_add_accident_or_incident_page("accident")
+    expect_to_be_on_add_accident_or_incident_page("Accident")
 
     click_button "Add accident or incident"
 
@@ -110,7 +110,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     fill_in("Day", with: "3")
     fill_in("Month", with: "4")
     fill_in("Year", with: "2020")
-    select "MyBrand Washing Machine", from: "Select the product linked to this accident"
+    select "MyBrand Washing Machine", from: "Select the product linked to this Accident"
     choose("Other")
     fill_in "Other type", with: "Test"
     choose("During normal use")

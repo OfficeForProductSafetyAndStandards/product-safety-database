@@ -11,7 +11,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
   let(:severity_other) { "" }
   let(:usage) { "during_normal_use" }
   let(:product_id) { product.id }
-  let(:event_type) { "accident" }
+  let(:type) { "accident" }
   let(:product) { create(:product) }
 
   let(:params) do
@@ -22,7 +22,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
       severity_other: severity_other,
       usage: usage,
       product_id: product_id,
-      event_type: event_type
+      type: type
     }
   end
 

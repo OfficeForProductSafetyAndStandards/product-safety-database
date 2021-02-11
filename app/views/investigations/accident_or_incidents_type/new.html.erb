@@ -14,10 +14,10 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @accident_or_incident_type_form.errors %>
 
-      <%= render "form_components/govuk_radios", form: form, key: :event_type,
+      <%= render "form_components/govuk_radios", form: form, key: :type,
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } },
-                 items: [{ text: "Accident", value: "accident", id: "accident_type" },
-                         { text: "Incident", value: "incident", id: "incident_type" }] %>
+                 items: [{ text: "Accident", value: "Accident", id: "accident_type" },
+                         { text: "Incident", value: "Incident", id: "incident_type" }] %>
 
       <div class="govuk-form-group">
         <%= govukButton(text: "Continue") %>

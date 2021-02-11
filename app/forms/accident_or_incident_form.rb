@@ -10,7 +10,7 @@ class AccidentOrIncidentForm
   attribute :severity_other
   attribute :usage
   attribute :additional_info
-  attribute :event_type
+  attribute :type
 
   validates :is_date_known, inclusion: { in: %w[yes no], message: I18n.t(".accident_or_incident_form.is_date_know.inclusion") }
   validates :date,

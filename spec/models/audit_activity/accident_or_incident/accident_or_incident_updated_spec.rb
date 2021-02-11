@@ -22,7 +22,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
       severity: severity,
       usage: usage,
       product_id: product.id,
-      event_type: "accident",
+      type: "accident",
       additional_info: nil
     ).accident_or_incident
   end
@@ -46,7 +46,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
       it "builds a list of changes" do
         expect(metadata).to eq({
           updates: updates,
-          event_type: accident_or_incident.type,
+          type: accident_or_incident.type,
           accident_or_incident_id: accident_or_incident.id
         })
       end

@@ -1,7 +1,7 @@
 <div class="govuk-body">
   <p>Changes:</p>
   <% if activity.date_changed? %>
-    <%= "Date of #{activity.metadata['event_type']}:" %> <b><%= Date.parse(activity.new_date).to_s(:govuk)%></b><br>
+    <%= "Date of #{activity.metadata['type']}:" %> <b><%= Date.parse(activity.new_date).to_s(:govuk)%></b><br>
   <% end %>
 
   <% if activity.product_changed? %>
@@ -21,4 +21,4 @@
   <% end %>
 </div>
 
-<%= link_to "View #{activity.metadata["event_type"]}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>
+<%= link_to "View #{activity.metadata["type"]}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]) %>

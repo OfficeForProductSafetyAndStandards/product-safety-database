@@ -3,8 +3,8 @@ class AccidentOrIncidentTypeForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  attribute :event_type, :string, default: nil
+  attribute :type, :string, default: nil
 
-  validates :event_type,
-            inclusion: { in: %w[accident incident], message: I18n.t(".accident_or_incident_type_form.event_type.inclusion") }
+  validates :type,
+            inclusion: { in: %w[Accident Incident], message: I18n.t(".accident_or_incident_type_form.type.inclusion") }
 end

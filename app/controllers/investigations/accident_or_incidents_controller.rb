@@ -3,13 +3,13 @@ module Investigations
     def new
       authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new
-      @event_type = params[:event_type]
+      @type = params[:type]
     end
 
     def create
       authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
-      @event_type = event_type
+      @type = type
       return render(:new) if @accident_or_incident_form.invalid?
 
       AddAccidentOrIncidentToCase.call!(
@@ -19,7 +19,7 @@ module Investigations
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(investigation, flash: { success: "#{@event_type.capitalize} was successfully added." })
+      redirect_to investigation_supporting_information_index_path(investigation, flash: { success: "#{@type.capitalize} was successfully added." })
     end
 
     def show
@@ -34,11 +34,11 @@ module Investigations
 
       @accident_or_incident_form = AccidentOrIncidentForm.new(
         @accident_or_incident.serializable_hash(
-          only: %i[date is_date_known product_id severity severity_other usage additional_info event_type]
+          only: %i[date is_date_known product_id severity severity_other usage additional_info type]
         )
       )
 
-      @event_type = @accident_or_incident.type
+      @type = @accident_or_incident.type
       @accident_or_incident = @accident_or_incident.decorate
     end
 
@@ -60,7 +60,7 @@ module Investigations
         redirect_to investigation_accident_or_incident_path(investigation, result.accident_or_incident)
 
       else
-        @event_type = event_type
+        @type = type
         render :edit
       end
     end
@@ -73,12 +73,12 @@ module Investigations
                         .decorate
     end
 
-    def event_type
-      params[:accident_or_incident_form][:event_type]
+    def type
+      params[:accident_or_incident_form][:type]
     end
 
     def accident_or_incident_params
-      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product_id, :event_type, date: %i[day month year])
+      params.require(:accident_or_incident_form).permit(:is_date_known, :severity, :severity_other, :additional_info, :usage, :product_id, :type, date: %i[day month year])
     end
   end
 end

@@ -17,12 +17,12 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     {
       accident_or_incident_id: accident_or_incident.id,
       updates: updates,
-      event_type: accident_or_incident.type
+      type: accident_or_incident.type
     }
   end
 
   def title(*)
-    metadata["event_type"]
+    metadata["type"]
   end
 
   def subtitle_slug

@@ -2,7 +2,7 @@ class UpdateAccidentOrIncident
   include Interactor
   include EntitiesToNotify
 
-  delegate :accident_or_incident, :investigation, :date, :is_date_known, :product_id, :severity, :severity_other, :usage, :additional_info, :user, :event_type, to: :context
+  delegate :accident_or_incident, :investigation, :date, :is_date_known, :product_id, :severity, :severity_other, :usage, :additional_info, :user, :type, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -64,8 +64,8 @@ class UpdateAccidentOrIncident
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{user_source.show(recipient)} edited an #{event_type} on the #{investigation.case_type}.",
-        "#{event_type} edited for #{investigation.case_type.upcase_first}"
+        "#{user_source.show(recipient)} edited an #{type} on the #{investigation.case_type}.",
+        "#{type} edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
     end
   end
