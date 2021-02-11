@@ -17,7 +17,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
   let!(:accident_or_incident) do
     create(:incident,
            date: nil,
-           is_date_known: "no",
+           is_date_known: false,
            product: doll,
            severity: "serious",
            usage: "during_normal_use",

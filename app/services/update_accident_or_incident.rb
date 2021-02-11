@@ -51,7 +51,7 @@ class UpdateAccidentOrIncident
   end
 
   def updated_date
-    is_date_known == "yes" ? date : nil
+    is_date_known ? date : nil
   end
 
   def updated_custom_severity

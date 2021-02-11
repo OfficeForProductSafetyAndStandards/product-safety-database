@@ -1,4 +1,4 @@
-<%= form.govuk_radios :is_date_known, legend: "Do you know when the #{@type} happened?", items: [{ text: "Yes", value: "yes", conditional: { html: form.govuk_date_input(:date, legend: "Date of #{@type}", hint: "For example, 12 11 2020") } }, { text: "No", value: "no" }] %>
+<%= form.govuk_radios :is_date_known, legend: "Do you know when the #{@type} happened?", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_date_input(:date, legend: "Date of #{@type}", hint: "For example, 12 11 2020") } }, { text: "No", value: "false" }] %>
 
 <% if  investigation.products.size == 1 %>
   <h2 class="govuk-heading-m"><%= "Product linked to #{@type}" %></h2>

@@ -339,12 +339,12 @@ ActiveRecord::Schema.define(version: 2021_02_15_141534) do
     t.text "additional_info"
     t.datetime "created_at", precision: 6, null: false
     t.date "date"
-    t.integer "investigation_id"
-    t.string "is_date_known"
-    t.integer "product_id"
+    t.integer "investigation_id", null: false
+    t.boolean "is_date_known"
+    t.integer "product_id", null: false
     t.enum "severity", as: "severities"
     t.string "severity_other"
-    t.string "type"
+    t.string "type", null: false
     t.datetime "updated_at", precision: 6, null: false
     t.enum "usage", as: "usages"
   end
