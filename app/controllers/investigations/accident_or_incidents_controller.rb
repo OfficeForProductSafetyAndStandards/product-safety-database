@@ -2,14 +2,12 @@ module Investigations
   class AccidentOrIncidentsController < ApplicationController
     def new
       authorize investigation, :update?
-      @accident_or_incident_form = AccidentOrIncidentForm.new
-      @type = params[:type]
+      @accident_or_incident_form = AccidentOrIncidentForm.new({type: params["type"]})
     end
 
     def create
       authorize investigation, :update?
       @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
-      @type = type
       return render(:new) if @accident_or_incident_form.invalid?
 
       AddAccidentOrIncidentToCase.call!(
@@ -19,7 +17,7 @@ module Investigations
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(investigation, flash: { success: "#{@type.capitalize} was successfully added." })
+      redirect_to investigation_supporting_information_index_path(investigation, flash: { success: "#{@accident_or_incident_form.type} was successfully added." })
     end
 
     def show
