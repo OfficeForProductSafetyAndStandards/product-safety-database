@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
 
   let(:accident) { create(:accident, date: date, is_date_known: is_date_known, usage: usage, severity: severity, severity_other: severity_other, additional_info: additional_info) }
   let(:date) { Date.current }
-  let(:is_date_known) { "yes" }
+  let(:is_date_known) { true }
   let(:severity) { "high" }
   let(:severity_other) { nil }
   let(:usage) { "during_normal_use" }
@@ -19,7 +19,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
   end
 
   let(:new_date)                              { Date.current - 1.year }
-  let(:new_is_date_known)                     { "yes" }
+  let(:new_is_date_known)                     { true }
   let(:new_usage)                             { "during_misuse" }
   let(:new_severity)                          { "serious" }
   let(:new_severity_other)                    { "dead serious" }
@@ -51,7 +51,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
 
   describe "#new_date" do
     context "when date changes from known to unknown" do
-      let(:new_is_date_known) { "no" }
+      let(:new_is_date_known) { false }
       let(:new_date) { nil }
 
       it "returns `unknown`" do

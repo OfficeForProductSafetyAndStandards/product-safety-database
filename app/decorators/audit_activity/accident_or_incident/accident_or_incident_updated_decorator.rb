@@ -5,7 +5,8 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
   end
 
   def new_severity
-    activity.new_severity == "other" ? activity.new_severity_other : I18n.t(".accident_or_incident.severity.#{activity.new_severity}")
+    return activity.new_severity_other if activity.new_severity.inquiry.other?
+    I18n.t(".accident_or_incident.severity.#{activity.new_severity}")
   end
 
   def new_usage

@@ -34,7 +34,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
   end
 
   def new_date_information?
-    updates["date"]&.second || updates["is_date_known"]&.second
+    updates["date"]&.second || updates["is_date_known"].count == 2
   end
 
   def new_date
