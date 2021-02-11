@@ -32,11 +32,7 @@ module Investigations
 
       @accident_or_incident = investigation.unexpected_events.find(params[:id])
 
-      @accident_or_incident_form = AccidentOrIncidentForm.new(
-        @accident_or_incident.serializable_hash(
-          only: %i[date is_date_known product_id severity severity_other usage additional_info type]
-        )
-      )
+      @accident_or_incident_form = AccidentOrIncidentForm.from(@accident_or_incident)
 
       @type = @accident_or_incident.type
       @accident_or_incident = @accident_or_incident.decorate
@@ -46,7 +42,8 @@ module Investigations
       authorize investigation, :update?
 
       @accident_or_incident = investigation.unexpected_events.find(params[:id])
-      @accident_or_incident_form = AccidentOrIncidentForm.new(accident_or_incident_params)
+      @accident_or_incident_form = AccidentOrIncidentForm.from(@accident_or_incident)
+      @accident_or_incident_form.assign_attributes(accident_or_incident_params)
 
       if @accident_or_incident_form.valid?
         result = UpdateAccidentOrIncident.call!(
