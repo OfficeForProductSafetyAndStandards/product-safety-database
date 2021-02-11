@@ -26,6 +26,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     }
     {
       retailer: business.call,
+      exporter: business.call,
       advertiser: business.call
     }
   end
@@ -162,6 +163,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_business_details_page("Distributor")
         skip_page
 
+        expect_to_be_on_business_details_page("Exporter")
+        fill_in_business_details_page(with: business_details[:exporter])
+
         expect_to_be_on_business_details_page("Advertiser")
         fill_in_business_details_page(with: business_details[:advertiser])
 
@@ -261,9 +265,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_case_products_page
         expect_case_products_page_to_show(info: product_details, images: product_images)
 
-        click_link "Businesses (2)"
+        click_link "Businesses (3)"
 
         expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
+        expect_case_businesses_page_to_show(label: "Exporter", business: business_details[:exporter])
         expect_case_businesses_page_to_show(label: "Advertiser", business: business_details[:advertiser])
 
         click_link "Supporting information (7)"
@@ -510,7 +515,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find(".timeline li", text: test[:details]).find(:xpath, "..")
     expect(item).to have_text("Legislation: #{test[:legislation]}")
-    expect(item).to have_text("Test date: #{test[:date].to_s(:govuk)}")
+    expect(item).to have_text("Date of test: #{test[:date].to_s(:govuk)}")
     expect(item).to have_text("Attached: #{File.basename(test[:file])}")
     expect(item).to have_text(test[:details])
   end
@@ -577,6 +582,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def fill_in_supply_chain_page
     check "Retailer"
+    check "Exporter"
     check "Distributor"
     check "Other"
     fill_in "Other type", with: "advertiser"

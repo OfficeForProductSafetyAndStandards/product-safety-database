@@ -15,7 +15,7 @@ FactoryBot.define do
 
   factory :test_result, class: "Test::Result", parent: :test do
     result { Test::Result.results.keys.sample }
-    standards_product_was_tested_against { [] }
+    standards_product_was_tested_against { %w[Test] }
   end
 
   factory :test_request, class: "Test::Request", parent: :test do

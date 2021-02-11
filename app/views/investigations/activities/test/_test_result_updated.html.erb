@@ -3,23 +3,23 @@
   <p>Changes:</p>
 
   <% if activity.new_date_of_test %>
-    Date of test: <b><%= activity.new_date_of_test.to_s(:govuk) %></b><br>
+    Date of test: <strong><%= activity.new_date_of_test.to_s(:govuk) %></strong><br>
   <% end %>
 
   <% if activity.new_result %>
-    Result: <b><%= activity.new_result %></b><br>
+    Result: <strong><%= activity.new_result %></strong><br>
   <% end %>
 
   <% if activity.new_details %>
-    Further details: <b><%= activity.new_details %></b><br>
+    Further details: <strong><%= activity.new_details %></strong><br>
   <% end %>
 
   <% if activity.new_legislation %>
-    Legislation: <b><%= activity.new_legislation %></b><br>
+    Legislation: <strong><%= activity.new_legislation %></strong><br>
   <% end %>
 
   <% if activity.new_standards_product_was_tested_against %>
-    Standards: <b><%= activity.new_standards_product_was_tested_against.join(", ") %></b><br>
+    Standards: <strong><%= activity.new_standards_product_was_tested_against.join(", ") %></strong><br>
   <% end %>
 
   <% if activity.new_product %>
@@ -27,11 +27,11 @@
   <% end %>
 
   <% if activity.new_filename %>
-    Attached: <b><%= activity.new_filename %></b><br>
+    Attached: <strong><%= activity.new_filename %></strong><br>
   <% end %>
 
   <% if activity.new_file_description %>
-    Attachment description: <b><%= activity.new_file_description %></b><br>
+    Attachment description: <strong><%= activity.new_file_description %></strong><br>
   <% end %>
 </div>
 
