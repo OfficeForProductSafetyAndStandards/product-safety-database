@@ -25,10 +25,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity
     "Added"
   end
 
-  def product_assessed
-    Product.find(metadata["product_id"])
-  end
-
   def further_details
     metadata["additional_info"].presence
   end
