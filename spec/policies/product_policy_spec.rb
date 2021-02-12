@@ -10,13 +10,13 @@ RSpec.describe ProductPolicy do
       before { user.roles.create!(name: "psd_admin") }
 
       it "returns true" do
-        expect(policy.export?).to be true
+        expect(policy).to be_export
       end
     end
 
     context "when the user does not have the psd_admin role" do
       it "returns false" do
-        expect(policy.export?).to be false
+        expect(policy).not_to be_export
       end
     end
   end
