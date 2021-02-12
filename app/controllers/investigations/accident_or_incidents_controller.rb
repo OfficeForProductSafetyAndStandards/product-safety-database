@@ -17,7 +17,7 @@ module Investigations
         })
       )
 
-      redirect_to investigation_supporting_information_index_path(investigation, flash: { success: "#{@accident_or_incident_form.type} was successfully added." })
+      redirect_to investigation_supporting_information_index_path(investigation), flash: { success: "#{@accident_or_incident_form.type} was successfully added." }
     end
 
     def show
