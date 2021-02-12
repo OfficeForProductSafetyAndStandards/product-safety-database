@@ -78,4 +78,8 @@ class ProductDecorator < ApplicationDecorator
 
     object.markings.join(", ")
   end
+
+  def to_csv
+    attributes.keys.map { |key| send(key) }
+  end
 end
