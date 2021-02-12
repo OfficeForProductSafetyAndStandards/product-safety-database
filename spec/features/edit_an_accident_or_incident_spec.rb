@@ -4,6 +4,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
   let(:user) { create(:user, :activated, name: "Joe Bloggs") }
   let(:teddy_bear) { create(:product, name: "Teddy Bear") }
   let(:doll) { create(:product, name: "Doll") }
+  let(:date) { Date.current }
 
   let(:investigation) do
     create(:allegation,
@@ -53,9 +54,9 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     end
 
     choose("Yes")
-    fill_in("Day", with: "3")
-    fill_in("Month", with: "4")
-    fill_in("Year", with: "2020")
+    fill_in("Day", with: date.day)
+    fill_in("Month", with: date.month)
+    fill_in("Year", with: date.year)
 
     select "Teddy Bear", from: "Select the product linked to this Incident"
 
@@ -81,7 +82,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(page).to have_selector("h1", text: "Activity")
 
     item = page.find("h3", text: "Incident").find(:xpath, "..")
-    expect(item).to have_text("Date of Incident: #{Date.new(2020, 0o4, 0o3).to_s(:govuk)}")
+    expect(item).to have_text("Date of Incident: #{date.to_s(:govuk)}")
     expect(item).to have_text("Teddy Bear")
     expect(item).to have_text("Severity: Test")
     expect(item).to have_text("Product usage: During misuse")

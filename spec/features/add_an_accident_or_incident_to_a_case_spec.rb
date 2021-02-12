@@ -44,7 +44,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect_ordered_error_list
 
     choose("No")
-    select "MyBrand Washing Machine", from: "Select the product linked to this Accident"
+    select product1.name, from: "Select the product linked to this Accident"
     choose("Serious")
     choose("During normal use")
 
@@ -107,10 +107,10 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect_ordered_error_list
 
     choose("Yes")
-    fill_in("Day", with: "3")
-    fill_in("Month", with: "4")
-    fill_in("Year", with: "2020")
-    select "MyBrand Washing Machine", from: "Select the product linked to this Accident"
+    fill_in("Day", with: date.day)
+    fill_in("Month", with: date.month)
+    fill_in("Year", with: date.year)
+    select product1.name, from: "Select the product linked to this Accident"
     choose("Other")
     fill_in "Other type", with: "Test"
     choose("During normal use")
@@ -128,13 +128,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data(Date.new(2020, 4, 3).strftime("%-d %B %Y"), "MyBrand Washing Machine", "Test", "During normal use")
+    expect_case_activity_page_to_show_entered_data(date.to_s(:govuk), product1.name, "Test", "During normal use")
 
     click_link "View Accident"
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: Date.new(2020, 4, 3).strftime("%-d %B %Y"), product_name: "MyBrand Washing Machine", severity: "Test", usage: "During normal use", additional_info: "Some additional stuff you should know")
+    expect_summary_list_to_have(date: date.to_s(:govuk), product_name: product1.name, severity: "Test", usage: "During normal use", additional_info: "Some additional stuff you should know")
   end
 
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
