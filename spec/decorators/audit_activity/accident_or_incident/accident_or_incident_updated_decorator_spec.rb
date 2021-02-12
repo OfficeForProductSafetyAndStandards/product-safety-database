@@ -60,6 +60,52 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
     end
   end
 
+  describe "#new_date_information?" do
+    context "when date changes from known to unknown" do
+      let(:date) { Date.current }
+      let(:is_date_known) { true }
+      let(:new_date) { nil }
+      let(:new_is_date_known) { false }
+
+      it "returns true" do
+        expect(decorated_activity.new_date_information?).to eq(true)
+      end
+    end
+
+    context "when date changes from unknown to known" do
+      let(:date) { nil }
+      let(:is_date_known) { false }
+      let(:new_date) { Date.current }
+      let(:new_is_date_known) { true }
+
+      it "returns true" do
+        expect(decorated_activity.new_date_information?).to eq(true)
+      end
+    end
+
+    context "when date is unknown and unchanged" do
+      let(:date) { nil }
+      let(:is_date_known) { false }
+      let(:new_date) { nil }
+      let(:new_is_date_known) { false }
+
+      it "returns false" do
+        expect(decorated_activity.new_date_information?).to eq(false)
+      end
+    end
+
+    context "when date is known and unchanged" do
+      let(:date) { Date.current }
+      let(:is_date_known) { true }
+      let(:new_date) { Date.current }
+      let(:new_is_date_known) { true }
+
+      it "returns false" do
+        expect(decorated_activity.new_date_information?).to eq(false)
+      end
+    end
+  end
+
   describe "#new_severity" do
     context "when severity changes to other" do
       let(:new_severity) { "other" }
