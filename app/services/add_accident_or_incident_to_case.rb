@@ -25,7 +25,8 @@ private
       investigation: investigation,
       metadata: audit_activity_metadata,
       title: nil,
-      body: nil
+      body: nil,
+      product_id: product_id
     )
   end
 

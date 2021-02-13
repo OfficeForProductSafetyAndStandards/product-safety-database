@@ -4,8 +4,8 @@
     <%= "Date of #{activity.type}:" %> <b><%= activity.new_date %></b><br>
   <% end %>
 
-  <% if activity.product_changed? %>
-    Product: <b><%= Product.find(activity.new_product_id).name %></b><br>
+  <% if activity.product_updated? %>
+    Product: <b><%= activity.product.name %></b><br>
   <% end %>
 
   <% if activity.severity_changed? %>

@@ -1,4 +1,6 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity::Base
+  belongs_to :product, class_name: "::Product"
+  
   def self.from(*)
     raise "Deprecated - use AddAccidentOrIncidentToCase.call instead"
   end
@@ -8,7 +10,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity
       accident_or_incident_id: accident_or_incident.id,
       date: accident_or_incident.date,
       is_date_known: accident_or_incident.is_date_known,
-      product_id: accident_or_incident.product_id,
       severity: accident_or_incident.severity,
       severity_other: accident_or_incident.severity_other,
       usage: accident_or_incident.usage,

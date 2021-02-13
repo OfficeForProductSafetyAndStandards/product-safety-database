@@ -7,11 +7,11 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     updates = accident_or_incident.previous_changes.slice(
       :date,
       :is_date_known,
-      :product_id,
       :severity,
       :severity_other,
       :usage,
       :additional_info,
+      :product_id
     )
 
     {
@@ -50,14 +50,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     return updates["date"]&.second if updates["date"]&.second
 
     is_date_know_has_been_changed_from_no_to_yes? ? updates["date"]&.first : "Unknown"
-  end
-
-  def product_changed?
-    new_product_id
-  end
-
-  def new_product_id
-    updates["product_id"]&.second
   end
 
   def severity_changed?

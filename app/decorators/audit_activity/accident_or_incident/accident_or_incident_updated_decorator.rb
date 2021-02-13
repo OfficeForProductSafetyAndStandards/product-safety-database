@@ -22,4 +22,8 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
   def additional_info
     activity.metadata["additional_info"]
   end
+
+  def product_updated?
+    metadata.dig("updates", "product_id", 1)
+  end
 end
