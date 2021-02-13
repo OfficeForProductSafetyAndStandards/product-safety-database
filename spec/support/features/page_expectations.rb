@@ -108,7 +108,7 @@ module PageExpectations
 
   def expect_to_be_on_accident_or_incident_type_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents_type/new")
-    expect(page).to have_selector("h1", text: "Are you recording an accident or incident?")
+    expect(page).to have_css(".govuk-fieldset__legend--m", text: "Are you recording an accident or incident?")
   end
 
   def expect_to_be_on_add_accident_or_incident_page(type)
