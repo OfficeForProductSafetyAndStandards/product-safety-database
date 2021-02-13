@@ -25,14 +25,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity
     "Added"
   end
 
-  def further_details
-    metadata["additional_info"].presence
-  end
-
-  def date(accident_or_incident)
-    accident_or_incident.is_date_known ? date : "Unknown"
-  end
-
   # Do not send investigation_updated mail when test result updated. This
   # overrides inherited functionality in the Activity model :(
   def notify_relevant_users; end
