@@ -39,5 +39,9 @@
   <div class="govuk-grid-column-three-quarters">
     <%= render "table", products: @products %>
     <%= will_paginate @products %>
+
+    <% if policy(Product).export? %>
+      <%= link_to "Export as spreadsheet", products_path(format: :csv, params: product_export_params) %>
+    <% end %>
   </div>
 </div>
