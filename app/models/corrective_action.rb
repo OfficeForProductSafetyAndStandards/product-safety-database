@@ -60,6 +60,20 @@ class CorrectiveAction < ApplicationRecord
     }
   end
 
+  GEOGRAPHIC_SCOPES_MIGRATION_MAP = {
+    "Local" => %w[local],
+    "Regional" => %w[great_britain northern_ireland],
+    "National" => %w[great_britain northern_ireland],
+    "EEA wide" => %w[eea_wide],
+    "EU wide" => %w[eu_wide],
+    "Unknown" => %w[unknown],
+    nil => %w[unknown]
+  }.freeze
+
+  def self.migrate_geographical_scope(corrective_action)
+    corrective_action.update!(geographic_scopes: GEOGRAPHIC_SCOPES_MIGRATION_MAP[corrective_action.geographic_scope])
+  end
+
   def action_label
     self.class.actions[action]
   end
