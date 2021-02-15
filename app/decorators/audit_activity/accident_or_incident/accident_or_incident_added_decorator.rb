@@ -8,7 +8,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorator < Acti
   end
 
   def type
-    activity.metadata["type"]
+    activity.metadata["type"].downcase
   end
 
   def usage

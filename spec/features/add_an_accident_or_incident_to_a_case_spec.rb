@@ -64,7 +64,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_case_activity_page_to_show_entered_data("Unknown", "MyBrand Washing Machine", "Serious", "During normal use")
 
-    click_link "View Accident"
+    click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
 
@@ -130,7 +130,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_case_activity_page_to_show_entered_data(date.to_s(:govuk), product1.name, "Test", "During normal use")
 
-    click_link "View Accident"
+    click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
 
@@ -140,7 +140,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: "Accident").find(:xpath, "..")
-    expect(item).to have_text("Date of Accident: #{date}")
+    expect(item).to have_text("Date of accident: #{date}")
     expect(item).to have_text("Product: #{product_name}")
     expect(item).to have_text("Severity: #{severity}")
     expect(item).to have_text("Product usage: #{usage}")

@@ -16,7 +16,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
   end
 
   def type
-    activity.metadata["type"]
+    activity.metadata["type"].downcase
   end
 
   def additional_info
