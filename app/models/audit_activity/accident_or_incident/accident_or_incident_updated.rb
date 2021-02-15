@@ -29,29 +29,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     "Updated"
   end
 
-  def date_changed?
-    new_date_information?
-  end
-
-  def new_date_information?
-    has_date_specified_and_changed? || has_is_date_known_changed?
-  end
-
-  def has_date_specified_and_changed?
-    !updates["date"]&.second.nil?
-  end
-
-  def has_is_date_known_changed?
-    !updates["is_date_known"]&.second.nil?
-  end
-
-  def new_date
-    return unless new_date_information?
-    return updates["date"]&.second if updates["date"]&.second
-
-    is_date_know_has_been_changed_from_no_to_yes? ? updates["date"]&.first : "Unknown"
-  end
-
   def severity_changed?
     new_severity
   end

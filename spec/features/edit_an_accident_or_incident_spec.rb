@@ -15,7 +15,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
   let(:team) { create(:team, name: "MyCouncil Trading Standards") }
 
-  let!(:accident_or_incident) do
+  let!(:incident) do
     create(:incident,
            date: nil,
            is_date_known: false,
@@ -25,11 +25,21 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
            investigation: investigation)
   end
 
-  scenario "Editing a risk assessment (with validation errors)" do
+  let!(:accident) do
+    create(:accident,
+           date: Date.current,
+           is_date_known: true,
+           product: teddy_bear,
+           severity: "serious",
+           usage: "during_normal_use",
+           investigation: investigation)
+  end
+
+  scenario "Editing an incident, setting date to known, (with validation errors)" do
     sign_in(user)
     visit "/cases/#{investigation.pretty_id}"
 
-    click_link "Supporting information (1)"
+    click_link "Supporting information (2)"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
@@ -37,7 +47,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     click_link "Edit incident"
 
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{accident_or_incident.id}/edit")
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{incident.id}/edit")
 
     within_fieldset("Do you know when the incident happened?") do
       expect(page).to have_checked_field("No")
@@ -84,6 +94,66 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     item = page.find("h3", text: "Incident").find(:xpath, "..")
     expect(item).to have_text("Date of incident: #{date.to_s(:govuk)}")
     expect(item).to have_text("Teddy Bear")
+    expect(item).to have_text("Severity: Test")
+    expect(item).to have_text("Product usage: During misuse")
+  end
+
+  scenario "Editing an accident, setting date to unknown" do
+    sign_in(user)
+    visit "/cases/#{investigation.pretty_id}"
+
+    click_link "Supporting information (2)"
+
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
+
+    click_link "During normal use: Teddy Bear"
+
+    click_link "Edit accident"
+
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{accident.id}/edit")
+
+    within_fieldset("Do you know when the accident happened?") do
+      expect(page).to have_checked_field("Yes")
+    end
+
+    expect(page).to have_select("Select the product linked to this accident", selected: "Teddy Bear")
+
+    within_fieldset("Indicate the severity") do
+      expect(page).to have_checked_field("Serious")
+    end
+
+    within_fieldset("How was the product being used at the time of this accident") do
+      expect(page).to have_checked_field("During normal use")
+    end
+
+    choose("No")
+
+    select "Doll", from: "Select the product linked to this accident"
+
+    choose("Other")
+    fill_in "Other type", with: "Test"
+
+    choose("During misuse")
+
+    fill_in("Additional information (optional)", with: "Some additional stuff you should know")
+
+    click_button "Update accident"
+
+    expect(page).not_to have_error_messages
+
+    expect(page).to have_content "Accident: Doll"
+
+    click_link "Back to allegation: #{investigation.pretty_id}"
+
+    click_on "Activity"
+
+    expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
+
+    expect(page).to have_selector("h1", text: "Activity")
+
+    item = page.find("h3", text: "Accident").find(:xpath, "..")
+    expect(item).to have_text("Date of accident: Unknown")
+    expect(item).to have_text("Doll")
     expect(item).to have_text("Severity: Test")
     expect(item).to have_text("Product usage: During misuse")
   end

@@ -60,7 +60,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
     end
   end
 
-  describe "#new_date_information?" do
+  describe "#date_changed?" do
     context "when date changes from known to unknown" do
       let(:date) { Date.current }
       let(:is_date_known) { true }
@@ -68,7 +68,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { false }
 
       it "returns true" do
-        expect(decorated_activity.new_date_information?).to eq(true)
+        expect(decorated_activity.date_changed?).to eq(true)
       end
     end
 
@@ -79,7 +79,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { true }
 
       it "returns true" do
-        expect(decorated_activity.new_date_information?).to eq(true)
+        expect(decorated_activity.date_changed?).to eq(true)
       end
     end
 
@@ -90,7 +90,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { false }
 
       it "returns false" do
-        expect(decorated_activity.new_date_information?).to eq(false)
+        expect(decorated_activity.date_changed?).to eq(false)
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
       let(:new_is_date_known) { true }
 
       it "returns false" do
-        expect(decorated_activity.new_date_information?).to eq(false)
+        expect(decorated_activity.date_changed?).to eq(false)
       end
     end
   end

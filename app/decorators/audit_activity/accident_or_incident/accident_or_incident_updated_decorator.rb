@@ -1,10 +1,4 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < ActivityDecorator
-  def new_date
-    return activity.new_date if activity.new_date == "Unknown"
-
-    Date.parse(activity.new_date).to_s(:govuk)
-  end
-
   def new_severity
     return activity.new_severity_other if activity.new_severity.inquiry.other?
 
@@ -25,5 +19,38 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
 
   def product_updated?
     metadata.dig("updates", "product_id", 1)
+  end
+
+  def date_changed?
+    new_date_information?
+  end
+
+  def new_date
+    return unless new_date_information?
+
+    return "Unknown" if return_unknown_date?
+
+    new_date = metadata.dig("updates", "date", 1)
+    Date.parse(new_date).to_s(:govuk)
+  end
+
+  def new_date_information?
+    has_date_changed? || has_is_date_known_changed?
+  end
+
+  def has_date_changed?
+    metadata.dig("updates", "date", 1).present?
+  end
+
+  def has_is_date_known_changed?
+    !metadata.dig("updates", "is_date_known", 1).nil?
+  end
+
+  def return_unknown_date?
+    has_is_date_known_changed? && updated_date_is_not_known?
+  end
+
+  def updated_date_is_not_known?
+    metadata.dig("updates", "is_date_known", 1) == false
   end
 end
