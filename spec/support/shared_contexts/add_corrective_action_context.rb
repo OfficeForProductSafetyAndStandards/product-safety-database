@@ -14,7 +14,7 @@ RSpec.shared_context "with add corrective action setup" do
   let(:file_description) { Faker::Lorem.paragraph }
   let(:measure_type) { "Mandatory" }
   let(:duration) { "Permanent" }
-  let(:geographic_scopes_last_index) { rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1) }
+  let!(:geographic_scopes_last_index) { rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1) }
   let(:geographic_scopes) do
     CorrectiveAction::GEOGRAPHIC_SCOPES[0..geographic_scopes_last_index]
   end
@@ -34,7 +34,7 @@ RSpec.shared_context "with add corrective action setup" do
       details: details,
       measure_type: measure_type,
       duration: duration,
-      geographic_scope: geographic_scope,
+      geographic_scopes: geographic_scopes,
       file: {
         file: Rack::Test::UploadedFile.new(file),
         description: file_description,
