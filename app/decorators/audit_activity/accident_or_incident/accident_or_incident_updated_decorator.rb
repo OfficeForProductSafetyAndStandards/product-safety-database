@@ -20,7 +20,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
   end
 
   def additional_info
-    activity.metadata["additional_info"].blank? ? "Removed" : activity.metadata["additional_info"]
+    activity.metadata["additional_info"].presence || "Removed"
   end
 
   def product_updated?
