@@ -56,7 +56,7 @@ class UpdateAccidentOrIncident
   end
 
   def updated_custom_severity
-    return severity_other if severity.inquiry.other?
+    severity.inquiry.other? ? severity_other : ""
   end
 
   def send_notification_email
