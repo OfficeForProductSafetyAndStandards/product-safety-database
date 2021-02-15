@@ -51,6 +51,8 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
   end
 
   def updated_date_is_not_known?
-    metadata.dig("updates", "is_date_known", 1) == false
+    updated_date_is_not_known = metadata.dig("updates", "is_date_known", 1)
+
+    ActiveModel::Type::Boolean.new.cast(updated_date_is_not_known == false)
   end
 end
