@@ -69,7 +69,6 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       select business_two.trading_name,     from: "Business"
       within_fieldset("What is the geographic scope of the action?") do
         new_geographic_scopes.each do |new_geographic_scope|
-          pp new_geographic_scope
           check I18n.t(new_geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
         end
       end

@@ -44,4 +44,6 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
 
   let(:product)                   { create(:product) }
   let(:business)                  { create(:business) }
+
+  before { new_geographic_scopes }
 end
