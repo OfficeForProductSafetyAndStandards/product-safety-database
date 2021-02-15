@@ -35,21 +35,21 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     click_link "During normal use: Doll"
 
-    click_link "Edit Incident"
+    click_link "Edit incident"
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{accident_or_incident.id}/edit")
 
-    within_fieldset("Do you know when the Incident happened?") do
+    within_fieldset("Do you know when the incident happened?") do
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Select the product linked to this Incident", selected: "Doll")
+    expect(page).to have_select("Select the product linked to this incident", selected: "Doll")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
     end
 
-    within_fieldset("How was the product being used at the time of this Incident") do
+    within_fieldset("How was the product being used at the time of this incident") do
       expect(page).to have_checked_field("During normal use")
     end
 
@@ -58,7 +58,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
 
-    select "Teddy Bear", from: "Select the product linked to this Incident"
+    select "Teddy Bear", from: "Select the product linked to this incident"
 
     choose("Other")
     fill_in "Other type", with: "Test"
@@ -67,7 +67,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
-    click_button "Update Incident"
+    click_button "Update incident"
 
     expect(page).not_to have_error_messages
 

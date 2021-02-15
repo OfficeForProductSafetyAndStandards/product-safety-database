@@ -113,7 +113,7 @@ module PageExpectations
 
   def expect_to_be_on_add_accident_or_incident_page(type)
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/new?type=#{type}")
-    expect(page).to have_selector("h1", text: "Record an #{type}")
+    expect(page).to have_selector("h1", text: "Record an #{type.downcase}")
   end
 
   def expect_to_be_on_show_accident_or_incident_page

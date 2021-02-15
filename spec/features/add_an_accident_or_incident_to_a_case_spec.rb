@@ -44,7 +44,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect_ordered_error_list
 
     choose("No")
-    select product1.name, from: "Select the product linked to this Accident"
+    select product1.name, from: "Select the product linked to this accident"
     choose("Serious")
     choose("During normal use")
 
@@ -110,7 +110,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     fill_in("Day", with: date.day)
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
-    select product1.name, from: "Select the product linked to this Accident"
+    select product1.name, from: "Select the product linked to this accident"
     choose("Other")
     fill_in "Other type", with: "Test"
     choose("During normal use")

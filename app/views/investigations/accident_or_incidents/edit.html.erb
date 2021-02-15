@@ -1,4 +1,4 @@
-<% page_heading = "Edit #{@accident_or_incident.type}" %>
+<% page_heading = "Edit #{@accident_or_incident.type.downcase}" %>
 <% page_title page_heading %>
 
 <% content_for :back_link do %>
@@ -20,7 +20,7 @@
 
       <%= render "form", form: form, accident_or_incident_form: @accident_or_incident_form, investigation: @investigation, type: @accident_or_incident.type %>
 
-      <%= govukButton text: "Update #{@accident_or_incident.type}" %>
+      <%= govukButton text: "Update #{@accident_or_incident.type.downcase}" %>
     <% end %>
   </div>
 </div>

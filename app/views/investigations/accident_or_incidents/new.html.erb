@@ -1,4 +1,4 @@
-<% page_heading = "Record an #{@accident_or_incident_form.type}" %>
+<% page_heading = "Record an #{@accident_or_incident_form.type.downcase}" %>
 <%= page_title page_heading, errors: @accident_or_incident_form.errors.any? %>
 
 <% content_for :back_link do %>
