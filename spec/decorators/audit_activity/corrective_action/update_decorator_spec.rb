@@ -192,7 +192,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
   it { expect(decorated_activity.new_details).to eq(new_details) }
   it { expect(decorated_activity.new_measure_type).to eq(new_measure_type) }
-  it { expect(decorated_activity.new_geographic_scopes).to eq(new_geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }) }
+  it { expect(decorated_activity.new_geographic_scopes).to eq(new_geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence) }
   it { expect(decorated_activity.new_filename).to eq(File.basename(new_filename)) }
   it { expect(decorated_activity.new_file_description).to eq(new_file_description) }
 
