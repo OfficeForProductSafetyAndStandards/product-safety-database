@@ -10,8 +10,9 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_elasticsearch
     ).decorate
   end
 
-  let(:test_result) { create(:test_result, result: :passed) }
+  let(:test_result) { create(:test_result, result: :passed, standards_product_was_tested_against: standards_product_was_tested_against) }
   let(:user) { test_result.investigation.creator_user }
+  let(:standards_product_was_tested_against) { %w[test1 test2] }
 
   describe "#title" do
     it "returns a string" do
@@ -28,6 +29,22 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_elasticsearch
   describe "#result" do
     it "returns a formatted string" do
       expect(activity.result).to eq("Passed")
+    end
+  end
+
+  describe "#standards_product_was_tested_against" do
+    context "when nil" do
+      let(:standards_product_was_tested_against) { nil }
+
+      it "returns nil" do
+        expect(activity.standards_product_was_tested_against).to be_nil
+      end
+    end
+
+    context "when not nil" do
+      it "returns a String" do
+        expect(activity.standards_product_was_tested_against).to eq("test1, test2")
+      end
     end
   end
 end

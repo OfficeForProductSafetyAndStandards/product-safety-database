@@ -11,7 +11,7 @@ class AuditActivity::Test::ResultDecorator < ApplicationDecorator
   end
 
   def standards_product_was_tested_against
-    super.join(", ")
+    super&.join(", ")
   end
 
   def date

@@ -23,6 +23,8 @@ FactoryBot.define do
 
       if model.respond_to?(:document)
         model.document.attach(file)
+      elsif model.respond_to?(:attachment)
+        model.attachment.attach(file)
       else
         model.documents.attach(file)
       end
