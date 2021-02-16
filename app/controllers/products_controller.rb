@@ -12,7 +12,18 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = search_for_products(20)
+    respond_to do |format|
+      format.html do
+        @products = search_for_products(20)
+      end
+      format.csv do
+        authorize Product, :export?
+
+        @products = search_for_products
+
+        render csv: @products, filename: "products"
+      end
+    end
   end
 
   # GET /products/1

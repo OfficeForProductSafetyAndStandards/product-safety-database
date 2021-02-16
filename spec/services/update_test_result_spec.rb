@@ -9,7 +9,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:test_result)                              { create(:test_result, investigation: investigation, product: product) }
 
   let(:new_details)                              { Faker::Hipster.sentence }
-  let(:new_legislation)                          do
+  let(:new_legislation) do
     (Rails.application.config.legislation_constants["legislation"] - [test_result.legislation]).sample
   end
   let(:new_date)                                 { test_result.date - 2.days }
@@ -24,7 +24,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
       result: new_result,
       product_id: product.id,
       standards_product_was_tested_against: new_standards_product_was_tested_against,
-      existing_document_file_id: new_document.signed_id
+      document: new_document
     }
   end
   let(:test_result_form) { TestResultForm.from(test_result).tap { |form| form.assign_attributes(new_attributes) } }
@@ -103,6 +103,10 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_elasticsear
         end
 
         it_behaves_like "a service which notifies the case owner"
+
+        it "retains the original file" do
+          expect { result }.not_to have_enqueued_job(ActiveStorage::PurgeJob)
+        end
       end
 
       context "when there are no changes" do

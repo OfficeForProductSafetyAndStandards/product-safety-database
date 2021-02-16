@@ -26,6 +26,16 @@ RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_elasticsearc
         it "returns nil" do
           expect(activity.corrective_action).to eq(nil)
         end
+
+        context "with another corrective action without an attachment" do
+          let!(:other_corrective_action) { create(:corrective_action, investigation: activity.investigation) }
+
+          before { investigation.reload }
+
+          it "returns the corrective action linked to the investigation" do
+            expect(activity.reload.corrective_action).to eq(other_corrective_action)
+          end
+        end
       end
 
       context "with attachment" do
