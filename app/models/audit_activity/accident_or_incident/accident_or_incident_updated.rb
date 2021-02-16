@@ -29,18 +29,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
     "Updated"
   end
 
-  def severity_changed?
-    new_severity
-  end
-
-  def new_severity
-    updates["severity"]&.second
-  end
-
-  def new_severity_other
-    updates["severity_other"]&.second
-  end
-
   def usage_changed?
     new_usage
   end

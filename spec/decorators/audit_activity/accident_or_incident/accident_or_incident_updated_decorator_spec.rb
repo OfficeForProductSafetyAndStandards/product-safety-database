@@ -115,5 +115,68 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecor
         expect(decorated_activity.new_severity).to eq(new_severity_other)
       end
     end
+
+    context "when severity stays at other but severity_other changes" do
+      let(:severity) { "other" }
+      let(:severity_other) { "not deadly" }
+      let(:new_severity) { "other" }
+      let(:new_severity_other) { "deadly" }
+
+      it "returns `new_severity_other`" do
+        expect(decorated_activity.new_severity).to eq(new_severity_other)
+      end
+    end
+
+    context "when severity changes from other to specified severity" do
+      let(:severity) { "other" }
+      let(:severity_other) { "not deadly" }
+      let(:new_severity) { "high" }
+
+      it "returns `new_severity`" do
+        expect(decorated_activity.new_severity).to eq(new_severity.capitalize)
+      end
+    end
+
+    describe "#severity_changed?" do
+      context "when severity changes from other to specific" do
+        let(:severity) { "other" }
+        let(:new_severity) { "high" }
+
+        it "returns true" do
+          expect(decorated_activity.severity_changed?).to eq(true)
+        end
+      end
+
+      context "when severity changes from one specified severity to another" do
+        let(:severity) { "serious" }
+        let(:new_severity) { "high" }
+
+        it "returns true" do
+          expect(decorated_activity.severity_changed?).to eq(true)
+        end
+      end
+
+      context "when severity stays `other` and severity_other does not change" do
+        let(:severity) { "other" }
+        let(:severity_other) { "very" }
+        let(:new_severity) { "other" }
+        let(:new_severity_other) { "very" }
+
+        it "returns false" do
+          expect(decorated_activity.severity_changed?).to eq(false)
+        end
+      end
+
+      context "when severity stays other but severity other changes" do
+        let(:severity) { "other" }
+        let(:severity_other) { "very" }
+        let(:new_severity) { "other" }
+        let(:new_severity_other) { "extreme" }
+
+        it "returns true" do
+          expect(decorated_activity.severity_changed?).to eq(true)
+        end
+      end
+    end
   end
 end

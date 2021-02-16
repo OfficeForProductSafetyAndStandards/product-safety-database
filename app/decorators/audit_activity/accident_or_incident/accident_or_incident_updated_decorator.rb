@@ -1,10 +1,4 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < ActivityDecorator
-  def new_severity
-    return activity.new_severity_other if activity.new_severity.inquiry.other?
-
-    I18n.t(".accident_or_incident.severity.#{activity.new_severity}")
-  end
-
   def new_usage
     I18n.t(".accident_or_incident.usage.#{activity.new_usage}")
   end
@@ -33,6 +27,40 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
     new_date = metadata.dig("updates", "date", 1)
     Date.parse(new_date).to_s(:govuk)
   end
+
+  def severity_changed?
+    new_severity_information?
+  end
+
+  def new_severity
+    return unless new_severity_information?
+
+    return metadata.dig("updates", "severity_other", 1) if use_severity_other?
+    I18n.t(".accident_or_incident.severity.#{metadata.dig("updates", "severity", 1)}")
+  end
+
+  private
+
+  def use_severity_other?
+    severity_is_unchanged_or_other? && has_severity_other_changed?
+  end
+
+  def severity_is_unchanged_or_other?
+    metadata.dig("updates", "severity", 1).nil? || metadata.dig("updates", "severity", 1) == "other"
+  end
+
+  def new_severity_information?
+    has_severity_changed? || has_severity_other_changed?
+  end
+
+  def has_severity_changed?
+    metadata.dig("updates", "severity", 1).present?
+  end
+
+  def has_severity_other_changed?
+    metadata.dig("updates", "severity_other", 1).present?
+  end
+
 
   def new_date_information?
     has_date_changed? || has_is_date_known_changed?

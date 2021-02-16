@@ -30,7 +30,8 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
            date: Date.current,
            is_date_known: true,
            product: teddy_bear,
-           severity: "serious",
+           severity: "other",
+           severity_other: "very extreme",
            usage: "during_normal_use",
            investigation: investigation)
   end
@@ -98,7 +99,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(item).to have_text("Product usage: During misuse")
   end
 
-  scenario "Editing an accident, setting date to unknown" do
+  scenario "Editing an accident, setting date to unknown, changing severity other" do
     sign_in(user)
     visit "/cases/#{investigation.pretty_id}"
 
@@ -119,7 +120,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(page).to have_select("Select the product linked to this accident", selected: "Teddy Bear")
 
     within_fieldset("Indicate the severity") do
-      expect(page).to have_checked_field("Serious")
+      expect(page).to have_checked_field("Other")
     end
 
     within_fieldset("How was the product being used at the time of this accident") do
