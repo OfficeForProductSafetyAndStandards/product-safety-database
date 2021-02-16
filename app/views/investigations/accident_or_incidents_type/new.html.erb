@@ -1,0 +1,25 @@
+<% page_heading = "Are you recording an accident or incident?" %>
+<% page_title page_heading, errors: @accident_or_incident_type_form.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back",
+    href: new_investigation_supporting_information_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with scope: :investigation, model: @accident_or_incident_type_form, url: investigation_accident_or_incidents_type_index_path(@investigation), builder: ApplicationFormBuilder, method: :post, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @accident_or_incident_type_form.errors %>
+
+      <%= form.govuk_radios :type, legend: page_heading, items: [{ text: "Accident", value: "Accident", id: "accident_type" }, { text: "Incident", value: "Incident", id: "incident_type" }] %>
+
+      <div class="govuk-form-group">
+        <%= govukButton(text: "Continue") %>
+        <p><%= link_to "Cancel", investigation_supporting_information_index_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -10,15 +10,8 @@ RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_elasti
   let(:viewing_user)    { create(:user) }
   let(:activity) { correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall") }
 
-  describe "#phone_call_by" do
-    it {
-      expect(decorated_activity.phone_call_by(viewing_user))
-        .to eq("Phone call by #{activity.source.show(viewing_user)}, #{activity.created_at.to_s(:govuk)}")
-    }
-  end
-
   describe "#phone_number" do
-    context "when no phone umber was provded" do
+    context "when no phone number was provded" do
       let(:phone_number) { nil }
 
       it { expect(decorated_activity.phone_number).to be nil }
@@ -40,6 +33,14 @@ RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_elasti
   end
 
   describe "#attached" do
-    it { expect(decorated_activity.attached).to eq("Attached: #{correspondence.transcript_blob.filename}") }
+    context "with an attached file" do
+      it { expect(decorated_activity.attached).to eq("Attached: #{correspondence.transcript_blob.filename}") }
+    end
+
+    context "with no attached file" do
+      let(:transcript) { nil }
+
+      it { expect(decorated_activity.attached).to be_nil }
+    end
   end
 end
