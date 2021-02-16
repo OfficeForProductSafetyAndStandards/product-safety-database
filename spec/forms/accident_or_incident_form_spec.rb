@@ -6,7 +6,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
   let(:user) { create(:user) }
 
   let(:date) { { day: "1", month: "2", year: "2020" } }
-  let(:is_date_known) { "yes" }
+  let(:is_date_known) { "true" }
   let(:severity) { "serious" }
   let(:severity_other) { "" }
   let(:usage) { "during_normal_use" }
@@ -36,18 +36,18 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
     end
 
     context "with blank date" do
-      context "with is_date_known == 'no'" do
+      context "with is_date_known == 'false'" do
         let(:date) { nil }
-        let(:is_date_known) { "no" }
+        let(:is_date_known) { "false" }
 
         it "is valid" do
           expect(form).to be_valid
         end
       end
 
-      context "with is_date_known == 'yes'" do
+      context "with is_date_known == 'true'" do
         let(:date) { nil }
-        let(:is_date_known) { "yes" }
+        let(:is_date_known) { "true" }
 
         it "is not valid" do
           expect(form).not_to be_valid
@@ -55,7 +55,7 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
       end
     end
 
-    context "when `is_date_known` is not `yes` or `no`" do
+    context "when `is_date_known` is not `true` or `false`" do
       let(:is_date_known) { "" }
 
       it "is not valid" do

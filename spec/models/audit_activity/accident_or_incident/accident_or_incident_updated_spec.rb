@@ -18,11 +18,11 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
       investigation: investigation,
       user: user,
       date: nil,
-      is_date_known: "no",
+      is_date_known: "false",
       severity: severity,
       usage: usage,
       product_id: product.id,
-      type: "accident",
+      type: "Accident",
       additional_info: nil
     ).accident_or_incident
   end
@@ -38,7 +38,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
           "severity" => [severity, new_severity],
           "usage" => [usage, new_usage],
           "additional_info" => [nil, "wow"],
-          "is_date_known" => %w[no yes],
+          "is_date_known" => [false, true],
           "date" => [nil, date]
         }
       end

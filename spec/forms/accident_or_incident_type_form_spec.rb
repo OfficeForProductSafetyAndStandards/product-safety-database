@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AccidentOrIncidentTypeForm, :with_stubbed_elasticsearch, :with_test_queue_adapter do
   # Default set of valid attributes
-  let(:type) { "accident" }
+  let(:type) { "Accident" }
   let(:params) do
     {
       type: type
@@ -13,7 +13,7 @@ RSpec.describe AccidentOrIncidentTypeForm, :with_stubbed_elasticsearch, :with_te
 
   describe "validations" do
     context "with valid attributes" do
-      let(:type) { "accident" }
+      let(:type) { "Accident" }
 
       it "is valid" do
         expect(form).to be_valid
