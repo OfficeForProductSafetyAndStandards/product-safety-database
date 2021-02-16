@@ -120,6 +120,34 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
   end
 
+  context "when invited user has been invited" do
+    let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true) }
+
+    before do
+      sign_in(user)
+      visit_invite_page_and_submit_email
+    end
+
+    context "when user has filled in details but not accepted declaration and signed out" do
+      it "does not allow re-inviting" do
+        click_link "Your team"
+        expect(page).to have_content "Resend invitation to #{email}"
+
+        sign_out
+
+        visit invitation_url
+
+        fill_in_user_info
+
+        sign_out
+
+        sign_in(user)
+        click_link "Your team"
+        expect(page).not_to have_content "Resend invitation to #{email}"
+      end
+    end
+  end
+
   def expect_to_be_on_invite_a_team_member_page
     expect(page).to have_css("h1", text: "Invite a team member")
   end
@@ -138,5 +166,16 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     expect(notification_email.recipient).to eq(to)
     expect(notification_email.action_name).to eq("invitation_email")
     expect(notification_email.personalization[:inviting_team_member_name]).to eq(inviting_user.name)
+  end
+
+  def fill_in_user_info
+    fill_in "Full name", with: "Test Person"
+    fill_in "Mobile number", with: "07595 295 799"
+    fill_in "Password", with: "TestPersonPassword"
+    click_button "Continue"
+  end
+
+  def invitation_url
+    delivered_emails.last.personalization[:invitation_url]
   end
 end
