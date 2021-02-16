@@ -7,7 +7,7 @@ FactoryBot.define do
     legislation { Rails.application.config.legislation_constants["legislation"].sample }
     measure_type { CorrectiveAction::MEASURE_TYPES.sample }
     duration { CorrectiveAction::DURATION_TYPES.sample }
-    geographic_scopes { CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)] }
+    geographic_scopes { CorrectiveAction::GEOGRAPHIC_SCOPES[0..-2] }
     details { Faker::Lorem.sentence }
     online_recall_information { Faker::Internet.url(host: "example.com") }
     has_online_recall_information { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }

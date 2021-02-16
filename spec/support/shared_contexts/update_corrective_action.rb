@@ -29,7 +29,7 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
     (CorrectiveAction::MEASURE_TYPES - [corrective_action.measure_type]).sample
   end
   let(:new_geographic_scopes) do
-    CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)]
+    CorrectiveAction::GEOGRAPHIC_SCOPES[0..-1]
   end
   let(:new_action) { CorrectiveAction.actions[new_summary] }
   let(:new_other_action) { Faker::Hipster.paragraph(sentence_count: 3) }
