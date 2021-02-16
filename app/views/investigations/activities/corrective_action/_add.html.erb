@@ -1,0 +1,41 @@
+<div class="govuk-body">
+  Product: <%= link_to activity.product_name, activity.product, class: "govuk-link" %>
+  <br />
+  Legislation: <strong><%= activity.legislation %></strong>
+  <br />
+  <% if activity.online_recall_information.match?("http") %>
+    Recall information: <%= link_to activity.online_recall_information, rel: "noopener", target: "_blank" %>
+  <% else %>
+    Recall information: <strong><%= activity.online_recall_information %></strong>
+  <% end %>
+  <br />
+  <% if activity.business.present? %>
+    Business responsible: <strong><%= activity.trading_name %></strong>
+    <br />
+  <% end %>
+  Date came into effect: <strong><%= activity.date_decided %></strong>
+  <br />
+  Type of measure: <strong><%= activity.measure_type %></strong>
+  <br />
+  Duration of action: <strong><%= activity.duration %></strong>
+  <br />
+  Geographic scope: <strong><%= activity.geographic_scope %></strong>
+  <br />
+  <% if activity.document_filename %>
+    Attached: <strong><%= activity.document_filename %></strong>
+  <% end %>
+  <br />
+  <%= activity.details %>
+</div>
+
+<% if activity.product_id %>
+  <%= link_to "View product details", product_url(activity.product_id), class: "govuk-link psd-block-link" %>
+<% end %>
+
+<% if activity.business_id %>
+  <%= link_to "View business details", business_url(activity.business_id), class: "govuk-link psd-block-link" %>
+<% end %>
+
+<% if activity.corrective_action.present? %>
+  <%= link_to "View corrective action", investigation_corrective_action_path(@investigation.pretty_id, activity.corrective_action), class: "govuk-link" %>
+<% end %>

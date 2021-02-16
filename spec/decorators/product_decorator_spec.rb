@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProductDecorator do
+RSpec.describe ProductDecorator, :with_stubbed_elasticsearch do
   subject(:decorated_product) { product.decorate }
 
   let(:product) { build(:product) }
@@ -171,5 +171,35 @@ RSpec.describe ProductDecorator do
         expect(decorated_product.markings).to eq("Not provided")
       end
     end
+  end
+
+  describe "#to_csv" do
+    # rubocop:disable RSpec/ExampleLength
+    it "returns an Array of decorated attributes" do
+      decorated_product.save!
+      expect(decorated_product.to_csv).to eq([
+        decorated_product.id,
+        decorated_product.affected_units_status,
+        decorated_product.authenticity,
+        decorated_product.barcode,
+        decorated_product.batch_number,
+        decorated_product.brand,
+        decorated_product.category,
+        decorated_product.country_of_origin,
+        decorated_product.created_at,
+        decorated_product.customs_code,
+        decorated_product.description,
+        decorated_product.has_markings,
+        decorated_product.markings,
+        decorated_product.name,
+        decorated_product.number_of_affected_units,
+        decorated_product.product_code,
+        decorated_product.subcategory,
+        decorated_product.updated_at,
+        decorated_product.webpage,
+        decorated_product.when_placed_on_market
+      ])
+    end
+    # rubocop:enable RSpec/ExampleLength
   end
 end
