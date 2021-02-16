@@ -149,7 +149,7 @@ class User < ApplicationRecord
   end
 
   def has_filled_out_account_setup_form?
-    !name.blank? && !email.blank?
+    name.present? && email.present?
   end
 
 private
