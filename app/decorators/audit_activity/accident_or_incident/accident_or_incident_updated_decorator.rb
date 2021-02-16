@@ -36,10 +36,11 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
     return unless new_severity_information?
 
     return metadata.dig("updates", "severity_other", 1) if use_severity_other?
-    I18n.t(".accident_or_incident.severity.#{metadata.dig("updates", "severity", 1)}")
+
+    I18n.t(".accident_or_incident.severity.#{metadata.dig('updates', 'severity', 1)}")
   end
 
-  private
+private
 
   def use_severity_other?
     severity_is_unchanged_or_other? && has_severity_other_changed?
@@ -60,7 +61,6 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdatedDecorator < Ac
   def has_severity_other_changed?
     metadata.dig("updates", "severity_other", 1).present?
   end
-
 
   def new_date_information?
     has_date_changed? || has_is_date_known_changed?
