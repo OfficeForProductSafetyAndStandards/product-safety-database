@@ -444,6 +444,10 @@ module InvestigationsHelper
         text: "Risk assessment"
       },
       {
+        path: new_investigation_accident_or_incidents_type_path(investigation),
+        text: "Accident or Incident"
+      },
+      {
         path: new_investigation_new_path(investigation),
         text: "Other document or attachment"
       }
