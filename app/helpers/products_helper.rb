@@ -10,7 +10,11 @@ module ProductsHelper
     ).with_defaults(markings: [])
   end
 
-  def search_for_products(page_size)
+  def product_export_params
+    params.permit(:sort, :q)
+  end
+
+  def search_for_products(page_size = Product.count)
     ProductDecorator.decorate_collection(
       Product.full_search(search_query)
         .page(params[:page]).per_page(page_size).records
