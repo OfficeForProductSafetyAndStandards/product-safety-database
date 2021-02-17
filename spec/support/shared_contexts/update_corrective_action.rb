@@ -28,8 +28,8 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
   let(:new_measure_type) do
     (CorrectiveAction::MEASURE_TYPES - [corrective_action.measure_type]).sample
   end
-  let(:new_geographic_scope) do
-    (Rails.application.config.corrective_action_constants["geographic_scope"] - [corrective_action.geographic_scope]).sample
+  let(:new_geographic_scopes) do
+    CorrectiveAction::GEOGRAPHIC_SCOPES[0..-1]
   end
   let(:new_action) { CorrectiveAction.actions[new_summary] }
   let(:new_other_action) { Faker::Hipster.paragraph(sentence_count: 3) }
@@ -44,4 +44,6 @@ RSpec.shared_context "with corrective action setup for updates", :with_stubbed_e
 
   let(:product)                   { create(:product) }
   let(:business)                  { create(:business) }
+
+  before { new_geographic_scopes }
 end

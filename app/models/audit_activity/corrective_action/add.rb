@@ -27,6 +27,13 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     corrective_action
   end
 
+  def self.migrate_geographic_scopes!(audit_activity)
+    return unless (geographic_scope = audit_activity.metadata.dig("corrective_action", "geographic_scope"))
+
+    audit_activity.metadata["corrective_action"]["geographic_scopes"] = Array(CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope])
+    audit_activity.save!
+  end
+
   def self.populate_missing_fields(metadata, audit_activity)
     return unless (corrective_action = possible_corrective_action_for(audit_activity))
 

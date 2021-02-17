@@ -30,7 +30,9 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
     CorrectiveAction.human_attribute_name("duration.#{metadata.dig('corrective_action', 'duration')}")
   end
 
-  def geographic_scope
-    metadata.dig("corrective_action", "geographic_scope")
+  def geographic_scopes
+    metadata.dig("corrective_action", "geographic_scopes").map { |geographic_scope|
+      I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
+    }.to_sentence
   end
 end

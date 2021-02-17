@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_15_141534) do
+ActiveRecord::Schema.define(version: 2021_02_16_134638) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -133,6 +134,7 @@ ActiveRecord::Schema.define(version: 2021_02_15_141534) do
     t.text "details"
     t.string "duration"
     t.string "geographic_scope"
+    t.string "geographic_scopes", default: [], array: true
     t.enum "has_online_recall_information", as: "has_online_recall_information"
     t.integer "investigation_id"
     t.string "legislation"

@@ -89,12 +89,11 @@ hint: "This may be in the future. For example, #{two_weeks_from_now.day} #{two_w
  ]
 %>
 
-<%= form.govuk_select :geographic_scope,
-         label: "What is the geographic scope of the action?",
-         label_classes: "govuk-label govuk-label--m",
-         items: [{text: "", value: ""}] + corrective_action_geographic_scope.collect {|geographic_scope| { text: geographic_scope, value: geographic_scope } }
+<%= form.govuk_checkboxes :geographic_scopes,
+ legend: "What is the geographic scope of the action?",
+ hint: "Select all that apply.",
+ items: corrective_action_geographic_scopes
 %>
-
 
 <%= form.govuk_text_area :details,
   label: "Further details (optional)",
