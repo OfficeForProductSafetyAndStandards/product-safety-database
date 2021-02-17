@@ -26,6 +26,13 @@ module TestsHelper
       value: { text: test_result.result.upcase_first }
     }
 
+    if test_result.result == "failed"
+      rows << {
+        key: { text: "Reason for failure" },
+        value: { text: test_result.failure_details }
+      }
+    end
+
     if test_result.details.present?
       rows << {
         key: { text: "Further details" },
