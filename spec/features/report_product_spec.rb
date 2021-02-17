@@ -43,7 +43,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         file_description: Faker::Lorem.paragraph,
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
-        geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"].sample,
+        geographic_scopes: [
+          I18n.t("great_britain", scope: %i[corrective_action attributes geographic_scopes]),
+          I18n.t("northern_ireland", scope: %i[corrective_action attributes geographic_scopes]),
+
+        ],
         has_online_recall_information: "Yes",
         online_recall_information: Faker::Internet.url(host: "example.com")
       }
@@ -490,9 +494,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text(/Recall information: #{action[:online_recall_information]}/)
     expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk)}")
-    expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
+    measure = CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")
+    expect(item).to have_text("Type of measure: #{measure}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
-    expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
+    expect(item).to have_text("Geographic scopes: #{action[:geographic_scopes].to_sentence}")
     expect(item).to have_text("Attached: #{File.basename(action[:file])}")
     expect(item).to have_text(action[:details])
   end
@@ -636,7 +641,20 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       choose with[:duration].titleize
     end
 
-    select with[:geographic_scope], from: "What is the geographic scope of the action?"
+    within_fieldset "What is the geographic scope of the action?" do
+      with[:geographic_scopes].each do |geographic_scope|
+        check geographic_scope
+      end
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "Upload a file", with[:file], visible: false
+      fill_in "Attachment description", with: with[:file_description]
+    end
+
+    choose "further_corrective_action"
+    click_button "Continue"
   end
 
   def fill_in_other_information_page(test_results: true, risk_assessments: true)

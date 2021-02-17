@@ -92,6 +92,15 @@ en:
 
   investigations:
     corrective_actions:
+      form:
+        geographic_scopes:
+          local: "Local"
+          great_britain: "Great Britain"
+          northern_ireland: "Northern Ireland"
+          eea_wide: "EEA Wide"
+          eu_wide: "EU Wide"
+          worldwide: "Worldwide"
+          unknown: "Unknown"
       helper:
         not_specified: "Not specified"
         has_online_recall_information:
@@ -459,9 +468,9 @@ en:
             duration:
               blank: "You must state how long the action will be in place"
               inclusion: "You must choose one of Permanently, Temporarily or Unknown"
-            geographic_scope:
-              blank: "You must state the geographic scope of the action"
-              inclusion: "You must state the geographic scope of the action"
+            geographic_scopes:
+              blank: "Select the geographic scope of the action"
+              inclusion: "Select the geographic scope of the action"
             action:
               inclusion: "Select type of corrective action"
             other_action:
@@ -504,6 +513,24 @@ en:
           attributes:
             body:
               blank: "Enter a comment"
+        corrective_action:
+          attributes:
+            product:
+              required: "Select the product the corrective action relates to"
+            date_decided:
+              blank: "Enter date the corrective action was decided"
+              invalid: "Enter a real date when the corrective action was decided"
+              date_missing_component: "Enter date the corrective action was decided and include a %{missing_components}"
+            measure_type:
+              blank: You must state whether the action is mandatory or voluntary
+              inclusion: "You must choose either mandatory or voluntary"
+            duration:
+              blank: "You must state how long the action will be in place"
+              inclusion: "You must choose one of Permanently, Temporarily or Unknown"
+            action:
+              inclusion: "Select type of corrective action"
+            other_action:
+              blank: "Enter type of corrective action"
         alert:
           attributes:
             summary:
@@ -575,6 +602,15 @@ en:
 
   corrective_action:
     attributes:
+      geographic_scopes:
+        local: "Local"
+        great_britain: "Great Britain"
+        northern_ireland: "Northern Ireland"
+        eea_wide: "EEA Wide"
+        eu_wide: "EU Wide"
+        worldwide: "Worldwide"
+        unknown: "Unknown"
+
       actions:
           ban_on_the_marketing_of_the_product_and_any_accompanying_measures: "Ban on the marketing of the product and any accompanying measures"
           destruction_of_the_product: "Destruction of the product"

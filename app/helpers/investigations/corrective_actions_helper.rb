@@ -13,8 +13,8 @@ module Investigations
       ]
       rows << { key: { text: "Type of action" },      value: { text: corrective_action.measure_type } } if corrective_action.measure_type.present?
       rows << { key: { text: "Duration of measure" }, value: { text: corrective_action.duration } }
-      rows << { key: { text: "Scope" },               value: { text: corrective_action.geographic_scope } }
-      rows << { key: { text: "Other details" },       value: { text: corrective_action.details } }      if corrective_action.details.present?
+      rows << { key: { text: "Geographic scopes" },   value: { text: corrective_action.geographic_scopes } }
+      rows << { key: { text: "Other details" },       value: { text: corrective_action.details } } if corrective_action.details.present?
 
       rows
     end

@@ -15,8 +15,30 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
   end
 
   let(:metadata) { described_class.build_metadata(corrective_action) }
-  let!(:corrective_action) { create(:corrective_action, action: action_key, other_action: other_action) }
+  let!(:corrective_action) do
+    create(
+      :corrective_action,
+      action: action_key,
+      other_action: other_action,
+      geographic_scope: geographic_scope,
+      geographic_scopes: geographic_scopes
+    )
+  end
   let(:body) { nil }
+  let(:geographic_scope) { nil }
+  let(:geographic_scopes) { %i[great_britain northern_ireland] }
+
+  describe ".migrate_geographic_scopes" do
+    let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
+    let(:geographic_scopes) { nil }
+
+    it "migrates the data" do
+      expect { described_class.migrate_geographic_scopes!(audit_activity) }
+        .to change { audit_activity.reload.metadata.dig("corrective_action", "geographic_scopes") }
+              .from(nil)
+              .to([CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope]])
+    end
+  end
 
   describe ".migrate_legacy_audit_activity" do
     let(:metadata) { nil }
