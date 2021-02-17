@@ -149,7 +149,7 @@ class User < ApplicationRecord
   end
 
   def has_filled_out_account_setup_form?
-    name.present? && email.present?
+    name.present? && mobile_number.present?
   end
 
 private

@@ -116,6 +116,26 @@ RSpec.describe User do
     end
   end
 
+  describe "#has_filled_out_account_setup_form?" do
+    it "returns true if user mobile_number and name details are present" do
+      user = create(:user)
+
+      expect(user.has_filled_out_account_setup_form?).to eq true
+    end
+
+    it "returns false if name is nil" do
+      user = create(:user, name: nil)
+
+      expect(user.has_filled_out_account_setup_form?).to eq false
+    end
+
+    it "returns false if mobile_number is nil" do
+      user = create(:user, mobile_number: nil)
+
+      expect(user.has_filled_out_account_setup_form?).to eq false
+    end
+  end
+
   describe ".not_deleted" do
     it "returns only users without deleted timestamp" do
       create(:user, :deleted)
