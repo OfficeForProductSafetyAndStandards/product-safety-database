@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 2021_02_16_134638) do
   create_enum "has_online_recall_information", ["has_online_recall_information_yes", "has_online_recall_information_no", "has_online_recall_information_not_relevant"]
   create_enum "reported_reasons", ["unsafe", "non_compliant", "unsafe_and_non_compliant", "safe_and_compliant"]
   create_enum "risk_levels", ["serious", "high", "medium", "low", "other"]
+  create_enum "severities", ["serious", "high", "medium", "low", "unknown_severity", "other"]
+  create_enum "usages", ["during_normal_use", "during_misuse", "with_adult_supervision", "without_adult_supervision", "unknown_usage"]
   create_enum "when_placed_on_markets", ["before_2021", "on_or_after_2021", "unknown_date"]
 
   create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
@@ -333,6 +335,20 @@ ActiveRecord::Schema.define(version: 2021_02_16_134638) do
     t.datetime "updated_at", null: false
     t.index ["investigation_id"], name: "index_tests_on_investigation_id"
     t.index ["product_id"], name: "index_tests_on_product_id"
+  end
+
+  create_table "unexpected_events", force: :cascade do |t|
+    t.text "additional_info"
+    t.datetime "created_at", precision: 6, null: false
+    t.date "date"
+    t.integer "investigation_id", null: false
+    t.boolean "is_date_known"
+    t.integer "product_id", null: false
+    t.enum "severity", as: "severities"
+    t.string "severity_other"
+    t.string "type", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "usage", as: "usages"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

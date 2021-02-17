@@ -1,0 +1,25 @@
+<%= form.govuk_radios :is_date_known, legend: "Do you know when the #{form.object.type.downcase} happened?", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_date_input(:date, legend: "Date of #{form.object.type.downcase}", hint: "For example, 12 11 2020") } }, { text: "No", value: "false" }] %>
+
+<% if  investigation.products.size == 1 %>
+  <h2 class="govuk-heading-m"><%= "Product linked to #{form.object.type.downcase}" %></h2>
+  <p class="govuk-body"><%= investigation.products.first.name %></p>
+  <%= form.hidden_field :product_id, value: investigation.products.first.id %>
+<% else %>
+  <%= form.govuk_autocomplete :product_id, label: "Select the product linked to this #{form.object.type.downcase}", label_classes: "govuk-label--m", items: investigation.products.map { |product| { text: product.name, value: product.id } } %>
+<% end %>
+
+<% other = capture do %>
+<%= render "form_components/govuk_input",
+key: :severity_other,
+form: form,
+classes: "govuk-!-width-one-third",
+label: { text: "Other type", classes: "govuk-visually-hidden" } %>
+<% end %>
+
+<%= form.govuk_radios :severity, legend: "Indicate the severity", items: [{ text: "Serious", value: "serious" },  { text: "High", value: "high" }, { text: "Medium", value: "medium" }, { text: "Low", value: "low" }, { text: "Unknown", value: "unknown_severity" }, { text: "Other", value: "other", conditional: { html: other } }] %>
+
+<%= form.govuk_radios :usage, legend: "How was the product being used at the time of this #{form.object.type.downcase}", items: [{ text: "During normal use", value: "during_normal_use" },  { text: "During misuse", value: "during_misuse" }, { text: "With the supervision of an adult", value: "with_adult_supervision" }, { text: "Without the supervision of an adult", value: "without_adult_supervision" }, { text: "Unknown use", value: "unknown_usage" }] %>
+
+<%= form.govuk_text_area :additional_info, label: "Additional information (optional)", attributes: { maxlength: 50_000 } %>
+
+<%= form.hidden_field :type, value: form.object.type %>
