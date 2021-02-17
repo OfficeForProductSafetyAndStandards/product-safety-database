@@ -43,4 +43,11 @@ module TestsHelper
 
     rows
   end
+
+  def result_items(form)
+    [
+      { text: Test::Result.results["passed"], value: "passed" },
+      { text: Test::Result.results["failed"], value: "failed", conditional: { html: form.govuk_input(:failed_details, label: "How the product failed") } }
+    ]
+  end
 end
