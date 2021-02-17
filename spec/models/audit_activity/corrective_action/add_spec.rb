@@ -36,7 +36,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
       expect { described_class.migrate_geographic_scopes!(audit_activity) }
         .to change { audit_activity.reload.metadata.dig("corrective_action", "geographic_scopes") }
               .from(nil)
-              .to([CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope]])
+              .to(CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope])
     end
   end
 
