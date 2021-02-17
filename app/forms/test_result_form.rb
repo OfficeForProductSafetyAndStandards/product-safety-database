@@ -18,7 +18,7 @@ class TestResultForm
   attribute :existing_document_file_id
   attribute :filename
   attribute :file_description
-  attribute :failed_details
+  attribute :failure_details
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
@@ -31,6 +31,7 @@ class TestResultForm
             real_date: true,
             complete_date: true,
             not_in_future: true
+  validates :failure_details, presence: true, if: -> { result.inquiry.failed? }
 
   before_validation { trim_line_endings(:details, :file_description) }
 
