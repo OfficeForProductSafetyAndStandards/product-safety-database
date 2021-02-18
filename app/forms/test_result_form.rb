@@ -36,7 +36,7 @@ class TestResultForm
   before_validation { trim_line_endings(:details, :file_description) }
 
   ATTRIBUTES_FROM_TEST_RESULT = %i[
-    id date details legislation result standards_product_was_tested_against product_id
+    id date details legislation result failure_details standards_product_was_tested_against product_id
   ].freeze
 
   def self.from(test_result)
