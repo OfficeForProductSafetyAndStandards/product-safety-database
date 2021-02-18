@@ -31,7 +31,7 @@ class TestResultForm
             real_date: true,
             complete_date: true,
             not_in_future: true
-  validates :failure_details, presence: true, if: -> { result.inquiry.failed? }
+  validates :failure_details, presence: true, if: -> { result == "failed" }
 
   before_validation { trim_line_endings(:details, :file_description) }
 
