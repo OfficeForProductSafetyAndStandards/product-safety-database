@@ -68,6 +68,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
     within_fieldset "What was the result?" do
       choose "Fail"
+      fill_in "How the product failed", with: failure_details
     end
 
     fill_in "Further details", with: "Final result"
