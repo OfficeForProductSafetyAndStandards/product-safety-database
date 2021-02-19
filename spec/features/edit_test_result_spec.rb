@@ -113,20 +113,10 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     expect(activity_card_body).to have_text("Attached: test_result.txt")
   end
 
-  context "with legacy test result" do
-    let(:standards_product_was_tested_against) { nil }
-
-    scenario "legacy test results with no standard tested against should enforce adding the standard" do
-      go_edit_test_result
-
-      click_button "Update test result"
-      expect(page).to have_error_summary "Enter the standard the product was tested against"
-    end
-  end
-
-  context "Editing a failed test result (with validation errors)" do
+  context "when editing a failed test result (with validation errors)" do
     let(:result) { "failed" }
-    it 'handles old test results with no failure_details' do
+
+    it "handles old test results with no failure_details" do
       sign_in(user)
 
       visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
