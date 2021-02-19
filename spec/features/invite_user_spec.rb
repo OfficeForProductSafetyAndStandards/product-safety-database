@@ -120,7 +120,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
   end
 
-  context "when invited user has been invited" do
+  context "when invited user has been invited", :with_2fa, :with_stubbed_notify do
     let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true) }
 
     before do
@@ -128,7 +128,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
       visit_invite_page_and_submit_email
     end
 
-    context "when user has filled in details but not accepted declaration and signed out" do
+    context "when user has filled in details and verified phone number but not accepted declaration and signed out" do
       it "does not allow re-inviting" do
         click_link "Your team"
         expect(page).to have_content "Resend invitation to #{email}"
@@ -138,6 +138,15 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
         visit invitation_url
 
         fill_in_user_info
+
+        click_link "Not received a text message?"
+
+        expect_to_be_on_resend_secondary_authentication_page
+        click_button "Resend security code"
+
+        expect_to_be_on_secondary_authentication_page
+        fill_in "Enter security code", with: User.find_by(email: email).reload.direct_otp
+        click_button "Continue"
 
         sign_out
 

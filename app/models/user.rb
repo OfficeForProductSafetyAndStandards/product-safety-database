@@ -148,8 +148,8 @@ class User < ApplicationRecord
     !mobile_number_verified?
   end
 
-  def has_filled_out_account_setup_form?
-    name.present? && mobile_number.present?
+  def has_filled_out_account_setup_form_and_verified?
+    name.present? && mobile_number_verified?
   end
 
 private
