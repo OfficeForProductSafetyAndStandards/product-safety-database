@@ -90,7 +90,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       legislation: Rails.application.config.legislation_constants["legislation"].sample,
       standards_product_was_tested_against: "EN71, EN73",
       date: Faker::Date.backward(days: 14),
-      result: %w[Pass Fail].sample,
+      result: "Pass",
       details: Faker::Lorem.sentence,
       file: Rails.root + "test/fixtures/files/test_result.txt"
     }
