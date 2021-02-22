@@ -15,7 +15,7 @@ RSpec.feature "Exporting businesses", :with_elasticsearch, :with_stubbed_antivir
 
     click_link "Export as spreadsheet"
 
-    expect(page.body).to eq("id,company_number,created_at,legal_name,trading_name,updated_at,types\n#{business_3.id},#{business_3.company_number},#{business_3.created_at},#{business_3.legal_name},#{business_3.trading_name},#{business_3.updated_at},#{business_3.types}\n#{business_2.id},#{business_2.company_number},#{business_2.created_at},#{business_2.legal_name},#{business_2.trading_name},#{business_2.updated_at},#{business_2.types}\n#{business_1.id},#{business_1.company_number},#{business_1.created_at},#{business_1.legal_name},#{business_1.trading_name},#{business_1.updated_at},\"[\"\"Manufacturer\"\"]\"\n")
+    expect(page.body).to eq("id,company_number,created_at,legal_name,trading_name,updated_at,types,case_ids\n#{business_3.id},#{business_3.company_number},#{business_3.created_at},#{business_3.legal_name},#{business_3.trading_name},#{business_3.updated_at},#{business_3.types},#{business_3.case_ids}\n#{business_2.id},#{business_2.company_number},#{business_2.created_at},#{business_2.legal_name},#{business_2.trading_name},#{business_2.updated_at},#{business_2.types},#{business_2.case_ids}\n#{business_1.id},#{business_1.company_number},#{business_1.created_at},#{business_1.legal_name},#{business_1.trading_name},#{business_1.updated_at},\"[\"\"Manufacturer\"\"]\",\"[\"\"#{investigation.pretty_id}\"\"]\"\n")
   end
 
   scenario "searching businesses" do
@@ -27,6 +27,6 @@ RSpec.feature "Exporting businesses", :with_elasticsearch, :with_stubbed_antivir
 
     click_link "Export as spreadsheet"
 
-    expect(page.body).to eq("id,company_number,created_at,legal_name,trading_name,updated_at,types\n#{business_3.id},#{business_3.company_number},#{business_3.created_at},#{business_3.legal_name},#{business_3.trading_name},#{business_3.updated_at},#{business_3.types}\n")
+    expect(page.body).to eq("id,company_number,created_at,legal_name,trading_name,updated_at,types,case_ids\n#{business_3.id},#{business_3.company_number},#{business_3.created_at},#{business_3.legal_name},#{business_3.trading_name},#{business_3.updated_at},#{business_3.types},#{business_3.case_ids}\n")
   end
 end

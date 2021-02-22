@@ -15,7 +15,8 @@ RSpec.describe BusinessDecorator, :with_stubbed_elasticsearch do
         decorated_business.legal_name,
         decorated_business.trading_name,
         decorated_business.updated_at,
-        decorated_business.types
+        decorated_business.types,
+        decorated_business.case_ids
       ])
     end
     # rubocop:enable RSpec/ExampleLength

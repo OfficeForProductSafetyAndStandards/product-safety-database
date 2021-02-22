@@ -15,12 +15,14 @@ class BusinessesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @businesses = search_for_businesses(20)
+        results = search_for_businesses(20)
+        @businesses = BusinessDecorator.decorate_collection(results)
       end
       format.csv do
         authorize Business, :export?
 
-        @businesses = search_for_businesses
+        results = search_for_businesses.records.includes(:investigations)
+        @businesses = BusinessDecorator.decorate_collection(results)
 
         render csv: @businesses, filename: "businesses"
       end

@@ -8,12 +8,10 @@ module BusinessesHelper
   end
 
   def search_for_businesses(page_size = Business.count)
-    BusinessDecorator.decorate_collection(
-      Business.full_search(search_query)
-        .page(params[:page])
-        .per_page(page_size)
-        .records
-    )
+    Business.full_search(search_query)
+      .page(params[:page])
+      .per_page(page_size)
+      .records
   end
 
   def business_export_params

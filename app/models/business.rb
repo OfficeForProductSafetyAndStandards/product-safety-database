@@ -31,11 +31,15 @@ class Business < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
 
   def self.attributes_for_export
-    attribute_names.dup << "types"
+    attribute_names.dup.concat(%w[types case_ids])
   end
 
   def types
     investigation_businesses.map(&:relationship)
+  end
+
+  def case_ids
+    investigations.map(&:pretty_id)
   end
 
   def primary_location
