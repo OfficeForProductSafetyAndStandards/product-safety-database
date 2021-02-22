@@ -1,5 +1,6 @@
 <% page_heading = "Are you recording an accident or incident?" %>
 <% page_title page_heading, errors: @accident_or_incident_type_form.errors.any? %>
+
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
@@ -14,7 +15,10 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @accident_or_incident_type_form.errors %>
 
-      <%= form.govuk_radios :type, legend: page_heading, items: [{ text: "Accident", value: "Accident", id: "accident_type" }, { text: "Incident", value: "Incident", id: "incident_type" }] %>
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+      <%= form.govuk_radios :type, legend: nil, items: [{ text: "Accident", value: "Accident", id: "accident_type" }, { text: "Incident", value: "Incident", id: "incident_type" }] %>
 
       <div class="govuk-form-group">
         <%= govukButton(text: "Continue") %>

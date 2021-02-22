@@ -287,11 +287,11 @@ en:
         accident_or_incident_form:
           attributes:
             is_date_known:
-              inclusion: Select yes if you know when the accident or incident happened
+              inclusion: Select yes if you know when the %{type} happened
             product_id:
-              blank: Select the product linked to the accident or incident
+              blank: Select the product linked to the %{type}
             severity:
-              inclusion: Select the severity of the accident or incident
+              inclusion: Select the severity of the %{type}
             usage:
               inclusion: Select how the product was being used
             date:

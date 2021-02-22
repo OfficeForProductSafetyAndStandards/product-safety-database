@@ -54,13 +54,13 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Select the product linked to this incident", selected: "Doll")
+    expect(page).to have_select("Which product was involved in the incident", selected: "Doll")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
     end
 
-    within_fieldset("How was the product being used at the time of this incident") do
+    within_fieldset("How was the product being used?") do
       expect(page).to have_checked_field("During normal use")
     end
 
@@ -69,7 +69,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
 
-    select "Teddy Bear", from: "Select the product linked to this incident"
+    select "Teddy Bear", from: "Which product was involved in the incident"
 
     choose("Other")
     fill_in "Other type", with: "Test"
@@ -117,19 +117,19 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("Yes")
     end
 
-    expect(page).to have_select("Select the product linked to this accident", selected: "Teddy Bear")
+    expect(page).to have_select("Which product was involved in the accident", selected: "Teddy Bear")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Other")
     end
 
-    within_fieldset("How was the product being used at the time of this accident") do
+    within_fieldset("How was the product being used?") do
       expect(page).to have_checked_field("During normal use")
     end
 
     choose("No")
 
-    select "Doll", from: "Select the product linked to this accident"
+    select "Doll", from: "Which product was involved in the accident"
 
     choose("Other")
     fill_in "Other type", with: "Test"

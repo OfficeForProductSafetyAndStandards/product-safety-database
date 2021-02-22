@@ -38,18 +38,18 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_add_accident_or_incident_page("Accident")
 
-    click_button "Add accident or incident"
+    click_button "Add accident"
 
     expect(page).to have_error_messages
     expect_ordered_error_list
 
     choose("No")
-    select product1.name, from: "Select the product linked to this accident"
+    select product1.name, from: "Which product was involved in the accident"
     choose("Serious")
     choose("During normal use")
 
     expect(page).to have_error_messages
-    click_button "Add accident or incident"
+    click_button "Add accident"
 
     expect(page).not_to have_error_messages
 
@@ -80,7 +80,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_add_supporting_information_page
 
-    choose "Accident or Incident"
+    choose "Accident or incident"
 
     click_button "Continue"
 
@@ -101,7 +101,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_add_accident_or_incident_page("Accident")
 
-    click_button "Add accident or incident"
+    click_button "Add accident"
 
     expect(page).to have_error_messages
     expect_ordered_error_list
@@ -110,13 +110,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     fill_in("Day", with: date.day)
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
-    select product1.name, from: "Select the product linked to this accident"
+    select product1.name, from: "Which product was involved in the accident"
     choose("Other")
     fill_in "Other type", with: "Test"
     choose("During normal use")
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
-    click_button "Add accident or incident"
+    click_button "Add accident"
 
     expect(page).not_to have_error_messages
 
@@ -152,9 +152,9 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
   def expect_ordered_error_list
     errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Select yes if you know when the accident or incident happened"
-    expect(errors_list[1].text).to eq "Select the product linked to the accident or incident"
-    expect(errors_list[2].text).to eq "Select the severity of the accident or incident"
+    expect(errors_list[0].text).to eq "Select yes if you know when the accident happened"
+    expect(errors_list[1].text).to eq "Select the product linked to the accident"
+    expect(errors_list[2].text).to eq "Select the severity of the accident"
     expect(errors_list[3].text).to eq "Select how the product was being used"
   end
 
@@ -175,7 +175,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_add_supporting_information_page
 
-    choose "Accident or Incident"
+    choose "Accident or incident"
 
     click_button "Continue"
   end
