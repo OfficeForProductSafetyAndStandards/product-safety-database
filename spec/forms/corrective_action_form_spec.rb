@@ -13,7 +13,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       geographic_scopes: geographic_scopes,
       details: details,
       related_file: related_file,
-      product_id: create(:product).id,
+      product_id: product_id,
       business_id: create(:business).id,
       has_online_recall_information: has_online_recall_information,
       online_recall_information: online_recall_information,
@@ -21,6 +21,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     ).tap(&:valid?)
   end
 
+  let(:product_id) { create(:product).id }
   let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:file_description) { Faker::Hipster.sentence }
   let(:file_form) { { file: file, description: file_description } }
@@ -63,6 +64,14 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     context "with valid input" do
       it "returns true" do
         expect(corrective_action_form).to be_valid
+      end
+    end
+
+    context "without a product" do
+      let(:product_id) { nil }
+
+      it "returns false" do
+        expect(corrective_action_form).not_to be_valid
       end
     end
 
