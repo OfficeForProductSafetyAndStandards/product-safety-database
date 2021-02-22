@@ -16,7 +16,7 @@ module Investigations
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
 
       @investigation = investigation.decorate
-      return render :new if @corrective_action_form.invalid?
+      return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
       result = AddCorrectiveActionToCase.call(
         @corrective_action_form
@@ -57,7 +57,7 @@ module Investigations
 
       @corrective_action_form.assign_attributes(corrective_action_params)
 
-      return render :edit if @corrective_action_form.invalid?
+      return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
       result = UpdateCorrectiveAction.call(
         @corrective_action_form

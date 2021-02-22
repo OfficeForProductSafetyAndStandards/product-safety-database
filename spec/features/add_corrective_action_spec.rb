@@ -13,6 +13,23 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     end
   end
 
+  context "with no product added to the case" do
+    let(:products) { [] }
+
+    scenario "shows errors" do
+      sign_in(user)
+
+      visit "/cases/#{investigation.pretty_id}/corrective-actions/new"
+
+      expect(page).to have_text("There are no products on this case.")
+
+      click_button "Continue"
+
+      expect(page).to have_error_messages
+      expect(page).to have_error_summary "Select the product the corrective action relates to"
+    end
+  end
+
   scenario "Adding a corrective action (with validation errors)" do
     sign_in(user)
 

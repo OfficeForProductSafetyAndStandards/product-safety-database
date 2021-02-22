@@ -29,6 +29,7 @@ class CorrectiveActionForm
   attribute :file_description
   attribute :further_corrective_action, :boolean
 
+  validates :product_id, presence: true, on: %i[add_corrective_action edit_corrective_action]
   validates :date_decided,
             presence: true,
             real_date: true,

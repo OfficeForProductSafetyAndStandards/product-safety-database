@@ -13,14 +13,16 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       geographic_scopes: geographic_scopes,
       details: details,
       related_file: related_file,
-      product_id: create(:product).id,
+      product_id: product_id,
       business_id: create(:business).id,
       has_online_recall_information: has_online_recall_information,
       online_recall_information: online_recall_information,
-      file: file_form
+      file: file_form,
+      further_corrective_action: further_corrective_action
     ).tap(&:valid?)
   end
 
+  let(:product_id) { create(:product).id }
   let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:file_description) { Faker::Hipster.sentence }
   let(:file_form) { { file: file, description: file_description } }
@@ -36,6 +38,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:investigation) { build(:allegation) }
   let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
   let(:online_recall_information) { nil }
+  let(:further_corrective_action) { false }
 
   describe ".from" do
     subject(:corrective_action_form) { described_class.from(corrective_action) }
@@ -63,6 +66,34 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     context "with valid input" do
       it "returns true" do
         expect(corrective_action_form).to be_valid
+      end
+    end
+
+    context "without a product" do
+      let(:product_id) { nil }
+
+      context "with add_corrective_action custom context" do
+        it "returns false" do
+          expect(corrective_action_form).not_to be_valid(:add_corrective_action)
+        end
+      end
+
+      context "with edit_corrective_action custom context" do
+        it "returns false" do
+          expect(corrective_action_form).not_to be_valid(:edit_corrective_action)
+        end
+      end
+
+      context "with ts_flow custom context" do
+        it "returns true" do
+          expect(corrective_action_form).to be_valid(:ts_flow)
+        end
+      end
+
+      context "with no custom context" do
+        it "returns true" do
+          expect(corrective_action_form).to be_valid
+        end
       end
     end
 
