@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
   yarn \
   unzip
 
-RUN gem install bundler:2.1.4
+RUN gem install bundler:2.2.9
 
 WORKDIR /psd
 
