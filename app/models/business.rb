@@ -30,6 +30,14 @@ class Business < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  def self.attributes_for_export
+    attribute_names.dup << "types"
+  end
+
+  def types
+    investigation_businesses.map(&:relationship)
+  end
+
   def primary_location
     locations.first
   end

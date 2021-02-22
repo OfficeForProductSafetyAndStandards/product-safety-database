@@ -13,7 +13,18 @@ class BusinessesController < ApplicationController
   # GET /businesses
   # GET /businesses.json
   def index
-    @businesses = search_for_businesses(20)
+    respond_to do |format|
+      format.html do
+        @businesses = search_for_businesses(20)
+      end
+      format.csv do
+        authorize Business, :export?
+
+        @businesses = search_for_businesses
+
+        render csv: @businesses, filename: "businesses"
+      end
+    end
   end
 
   # GET /businesses/1
