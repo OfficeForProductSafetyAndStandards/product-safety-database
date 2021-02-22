@@ -41,7 +41,7 @@ class AccidentOrIncidentForm
   end
 
   def severity_inclusion
-    errors.add(:severity, :inclusion, { type: type.downcase }) unless UnexpectedEvent.value?(severity)
+    errors.add(:severity, :inclusion, { type: type.downcase }) unless UnexpectedEvent.severities.value?(severity)
   end
 
   def is_date_known_inclusion
