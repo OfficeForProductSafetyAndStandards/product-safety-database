@@ -2,7 +2,7 @@
 applications:
 - name: ((app-name))
   buildpacks:
-    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.28
+    - https://github.com/cloudfoundry/ruby-buildpack.git#v1.8.31
   path: .
   stack: cflinuxfs3
   routes:
