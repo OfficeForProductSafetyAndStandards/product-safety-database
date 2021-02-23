@@ -1,5 +1,4 @@
 class FixCorrectiveActionsAddedGeographicScopes < ActiveRecord::Migration[6.1]
-
   def change
     safety_assured do
       reversible do |dir|
