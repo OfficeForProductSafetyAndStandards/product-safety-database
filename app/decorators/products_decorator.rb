@@ -3,7 +3,7 @@ class ProductsDecorator < Draper::CollectionDecorator
 
   def to_csv
     CSV.generate do |csv|
-      csv << Product.attribute_names.dup.append(additional_csv_fields)
+      csv << Product.attribute_names.dup.append(additional_csv_fields).flatten
       each { |product| csv << product.to_csv }
     end
   end
