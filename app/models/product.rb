@@ -42,8 +42,4 @@ class Product < ApplicationRecord
   has_many :tests, dependent: :destroy
 
   has_one :source, as: :sourceable, dependent: :destroy
-
-  def case_ids
-    investigation_ids
-  end
 end
