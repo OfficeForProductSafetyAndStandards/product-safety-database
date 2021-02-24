@@ -3,10 +3,10 @@ class ReconcileCorrectiveActionWithoutDocumentAttached < ActiveRecord::Migration
     safety_assured do
       reversible do |dir|
         dir.up do
-          wihtout_attachemnt = audit_activities.select { |a| a.investigation.corrective_actions.any? { |ca| !ca.document.attached? } }
-          wihtout_attachemnt.each do |audit_activity|
-            corrective_actions = audit_activity.investigation.corrective_actions.select { |ca| ca.document.attached? }.sort(&:created_at)
-            audits = audit_activity.investigation.where(type: AuditActivity::CorrectiveAction::Add.to_s).select { |a| a.corrective_action.nil? }.sort(&:created_at)
+          without_attachemnt = audit_activities.select { |a| a.investigation.corrective_actions.any? { |ca| !ca.document.attached? } }
+          without_attachemnt.each do |audit_activity|
+            corrective_actions = audit_activity.investigation.corrective_actions.select { |ca| !ca.document.attached? }.sort_by(&:created_at)
+            audits = audit_activity.investigation.activities.where(type: AuditActivity::CorrectiveAction::Add.to_s).select { |a| a.corrective_action.nil? }.sort_by(&:created_at)
             if corrective_actions.size != audits.size
               Rails.logger.tagged(self.class.to_s) { "Eisenbug detected: for investigation: #{audit_activity.investigation_id}" }
             else
