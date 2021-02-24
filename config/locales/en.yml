@@ -588,8 +588,8 @@ en:
     unknown_date: "Unable to ascertain"
   accident_or_incident:
     usage:
-      during_normal_use: "During normal use"
-      during_misuse: "During misuse"
+      during_normal_use: "Normal use"
+      during_misuse: "Misuse"
       with_adult_supervision: "With the supervision of an adult"
       without_adult_supervision: "Without the supervision of an adult"
       unknown_usage: "Unknown use"

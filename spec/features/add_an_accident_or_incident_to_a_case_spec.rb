@@ -46,7 +46,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     choose("No")
     select product1.name, from: "Which product was involved in the accident"
     choose("Serious")
-    choose("During normal use")
+    choose("Normal use")
 
     expect(page).to have_error_messages
     click_button "Add accident"
@@ -54,7 +54,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).not_to have_error_messages
 
     expect(page).to have_content "Supporting information"
-    expect(page).to have_content "During normal use: MyBrand Washing Machine"
+    expect(page).to have_content "Normal use: MyBrand Washing Machine"
 
     expect_to_be_on_supporting_information_page
 
@@ -62,13 +62,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data("Unknown", "MyBrand Washing Machine", "Serious", "During normal use")
+    expect_case_activity_page_to_show_entered_data("Unknown", "MyBrand Washing Machine", "Serious", "Normal use")
 
     click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine", severity: "Serious", usage: "During normal use", additional_info: "")
+    expect_summary_list_to_have(date: "Unknown", product_name: "MyBrand Washing Machine", severity: "Serious", usage: "Normal use", additional_info: "")
   end
 
   scenario "Adding an accident or incident with date known, custom severity and additional info" do
@@ -113,14 +113,14 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     select product1.name, from: "Which product was involved in the accident"
     choose("Other")
     fill_in "Other type", with: "Test"
-    choose("During normal use")
+    choose("Normal use")
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
     click_button "Add accident"
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "During normal use: MyBrand Washing Machine"
+    expect(page).to have_content "Normal use: MyBrand Washing Machine"
 
     expect_to_be_on_supporting_information_page
 
@@ -128,13 +128,13 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_data(date.to_s(:govuk), product1.name, "Test", "During normal use")
+    expect_case_activity_page_to_show_entered_data(date.to_s(:govuk), product1.name, "Test", "Normal use")
 
     click_link "View accident"
 
     expect_to_be_on_show_accident_or_incident_page
 
-    expect_summary_list_to_have(date: date.to_s(:govuk), product_name: product1.name, severity: "Test", usage: "During normal use", additional_info: "Some additional stuff you should know")
+    expect_summary_list_to_have(date: date.to_s(:govuk), product_name: product1.name, severity: "Test", usage: "Normal use", additional_info: "Some additional stuff you should know")
   end
 
   def expect_case_activity_page_to_show_entered_data(date, product_name, severity, usage)
