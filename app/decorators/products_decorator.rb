@@ -8,9 +8,9 @@ class ProductsDecorator < Draper::CollectionDecorator
     end
   end
 
-  private
+private
 
   def additional_csv_fields
-    ["case_ids"]
+    %w[case_ids]
   end
 end
