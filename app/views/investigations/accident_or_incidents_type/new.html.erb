@@ -15,7 +15,6 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @accident_or_incident_type_form.errors %>
 
-      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
       <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
       <%= form.govuk_radios :type, legend: nil, items: [{ text: "Accident", value: "Accident", id: "accident_type" }, { text: "Incident", value: "Incident", id: "incident_type" }] %>
