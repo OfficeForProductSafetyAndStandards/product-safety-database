@@ -453,8 +453,8 @@ en:
               in_future: Date of call must be today or in the past
         corrective_action_form:
           attributes:
-            product:
-              required: "Select the product the corrective action relates to"
+            product_id:
+              blank: "Select the product the corrective action relates to"
             date_decided:
               blank: "Enter date the corrective action was decided"
               must_be_real: "Enter a real date when the corrective action was decided"
