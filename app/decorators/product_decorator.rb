@@ -80,6 +80,12 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def to_csv
-    attributes.keys.map { |key| send(key) }
+    attributes.keys.append(additional_csv_fields).flatten.map { |key| send(key) }
+  end
+
+  private
+
+  def additional_csv_fields
+    ["case_ids"]
   end
 end
