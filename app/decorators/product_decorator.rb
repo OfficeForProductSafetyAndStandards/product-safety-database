@@ -80,7 +80,7 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def case_ids
-    investigation_ids
+    object.investigations.map(&:pretty_id).to_s
   end
 
 private

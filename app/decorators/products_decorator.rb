@@ -3,7 +3,7 @@ class ProductsDecorator < Draper::CollectionDecorator
 
   def to_csv
     CSV.generate do |csv|
-      csv << Product.attributes_for_export
+      csv << attributes_for_export
       each { |product| csv << product_to_csv(product) }
     end
   end
@@ -11,7 +11,7 @@ class ProductsDecorator < Draper::CollectionDecorator
 private
 
   def product_to_csv(product)
-    product.attributes.keys.concat(additional_csv_fields).map { |key| product.send(key) }
+    attributes_for_export.map { |key| product.send(key) }
   end
 
   def attributes_for_export
