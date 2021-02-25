@@ -79,12 +79,8 @@ class ProductDecorator < ApplicationDecorator
     object.markings.join(", ")
   end
 
-  def to_csv
-    attributes.keys.append(additional_csv_fields).flatten.map { |key| send(key) }
-  end
-
   def case_ids
-    investigation_ids.join(",")
+    investigation_ids
   end
 
 private
