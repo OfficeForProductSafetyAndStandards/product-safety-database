@@ -36,7 +36,7 @@ class UnexpectedEventDecorator < ApplicationDecorator
   end
 
   def page_title
-    "#{product_description}: #{object.type.capitalize}"
+    "#{object.type.capitalize} involving #{product_description}"
   end
 
   def severity
