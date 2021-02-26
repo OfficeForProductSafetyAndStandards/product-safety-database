@@ -706,6 +706,7 @@ private
       :result,
       :standards_product_was_tested_against,
       :existing_document_file_id,
+      :failure_details,
       date: %i[day month year],
       document_form: %i[description file]
     )
