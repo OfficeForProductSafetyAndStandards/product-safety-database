@@ -326,6 +326,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_113829) do
     t.datetime "created_at", null: false
     t.date "date"
     t.text "details"
+    t.text "failure_details"
     t.integer "investigation_id"
     t.string "legislation"
     t.integer "product_id"
