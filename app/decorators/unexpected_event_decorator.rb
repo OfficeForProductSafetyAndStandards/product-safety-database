@@ -6,7 +6,7 @@ class UnexpectedEventDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    "#{usage}: #{product_description}"
+    "#{product_description}: #{usage}"
   end
 
   def show_path
