@@ -2,7 +2,7 @@ class UpdateTestResult
   include Interactor
   include EntitiesToNotify
 
-  delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, :changes, to: :context
+  delegate :test_result, :user, :investigation, :document, :date, :details, :legislation, :result, :failure_details, :standards_product_was_tested_against, :product_id, :changes, to: :context
 
   def call
     context.fail!(error: "No test result supplied")   unless test_result.is_a?(Test::Result)
@@ -14,6 +14,7 @@ class UpdateTestResult
       details: details,
       legislation: legislation,
       result: result,
+      failure_details: updated_failure_details,
       standards_product_was_tested_against: standards_product_was_tested_against,
       product_id: product_id,
     )
@@ -54,5 +55,11 @@ private
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later
     end
+  end
+
+  def updated_failure_details
+    return if result == "passed"
+
+    failure_details
   end
 end

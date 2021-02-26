@@ -2,7 +2,7 @@ class AddTestResultToInvestigation
   include Interactor
   include EntitiesToNotify
 
-  delegate :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, to: :context
+  delegate :user, :investigation, :document, :date, :details, :legislation, :result, :standards_product_was_tested_against, :product_id, :failure_details, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -14,6 +14,7 @@ class AddTestResultToInvestigation
         details: details,
         legislation: legislation,
         result: result,
+        failure_details: failure_details,
         standards_product_was_tested_against: standards_product_was_tested_against,
         product_id: product_id
       )

@@ -10,7 +10,10 @@ class ReconcileCorrectiveActionWithoutDocumentAttached < ActiveRecord::Migration
             if corrective_actions.size != audits.size
               Rails.logger.tagged(self.class.to_s) { "Eisenbug detected: for investigation: #{audit_activity.investigation_id}" }
             else
-              audits.zip(corrective_actions).each { |corrective_action, audit| audit.metatada["corrective_action"]["id"] = corrective_action.id }
+              audits.zip(corrective_actions).each do |audit, corrective_action|
+                audit.metadata["corrective_action"]["id"] = corrective_action.id
+                audit.save!
+              end
             end
           end
         end
