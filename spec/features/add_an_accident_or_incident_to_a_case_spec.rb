@@ -54,7 +54,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).not_to have_error_messages
 
     expect(page).to have_content "Supporting information"
-    expect(page).to have_content "Normal use: MyBrand Washing Machine"
+    expect(page).to have_content "MyBrand Washing Machine: Normal use"
 
     expect_to_be_on_supporting_information_page
 
@@ -120,7 +120,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Normal use: MyBrand Washing Machine"
+    expect(page).to have_content "MyBrand Washing Machine: Normal use"
 
     expect_to_be_on_supporting_information_page
 

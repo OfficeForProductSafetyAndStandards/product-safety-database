@@ -44,7 +44,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
-    click_link "Normal use: Doll"
+    click_link "Doll: Normal use"
 
     click_link "Edit incident"
 
@@ -82,7 +82,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Teddy Bear: Incident"
+    expect(page).to have_content "Incident involving Teddy Bear"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
 
@@ -107,7 +107,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
-    click_link "Normal use: Teddy Bear"
+    click_link "Teddy Bear: Normal use"
 
     click_link "Edit accident"
 
@@ -142,7 +142,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Doll: Accident"
+    expect(page).to have_content "Accident involving Doll"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
 
