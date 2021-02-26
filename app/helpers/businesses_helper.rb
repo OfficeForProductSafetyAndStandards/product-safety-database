@@ -7,13 +7,15 @@ module BusinessesHelper
     business
   end
 
-  def search_for_businesses(page_size)
-    BusinessDecorator.decorate_collection(
-      Business.full_search(search_query)
-        .page(params[:page])
-        .per_page(page_size)
-        .records
-    )
+  def search_for_businesses(page_size = Business.count)
+    Business.full_search(search_query)
+      .page(params[:page])
+      .per_page(page_size)
+      .records
+  end
+
+  def business_export_params
+    params.permit(:sort, :q)
   end
 
   def sorting_params
