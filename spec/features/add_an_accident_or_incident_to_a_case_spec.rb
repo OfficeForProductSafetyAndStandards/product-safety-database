@@ -153,7 +153,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
   def expect_ordered_error_list
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select yes if you know when the accident happened"
-    expect(errors_list[1].text).to eq "Select the product linked to the accident"
+    expect(errors_list[1].text).to eq "Select the product involved in the accident"
     expect(errors_list[2].text).to eq "Select the severity of the accident"
     expect(errors_list[3].text).to eq "Select how the product was being used"
   end
