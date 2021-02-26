@@ -8,7 +8,7 @@ module Investigations
         { key: { text: "Product usage" },    value: { html: accident_or_incident.usage } }
       ]
 
-      unless accident_or_incident.additional_info.blank?
+      if accident_or_incident.additional_info.present?
         rows << { key: { text: "Additional Information" },  value: { html: accident_or_incident.additional_info } }
       end
 

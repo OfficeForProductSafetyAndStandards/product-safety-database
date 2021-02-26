@@ -163,8 +163,8 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).to have_summary_item(key: "Product",               value: product_name)
     expect(page).to have_summary_item(key: "Severity",              value: severity)
     expect(page).to have_summary_item(key: "Product usage",         value: usage)
-    unless additional_info.blank?
-      expect(page).to have_summary_item(key: "Additional Information",       value: additional_info)
+    if additional_info.present?
+      expect(page).to have_summary_item(key: "Additional Information", value: additional_info)
     end
   end
 
