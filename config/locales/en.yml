@@ -289,7 +289,7 @@ en:
             is_date_known:
               inclusion: Select yes if you know when the %{type} happened
             product_id:
-              blank: Select the product linked to the %{type}
+              blank: Select the product involved in the %{type}
             severity:
               inclusion: Select the severity of the %{type}
             usage:

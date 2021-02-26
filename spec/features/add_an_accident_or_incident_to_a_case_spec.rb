@@ -44,7 +44,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect_ordered_error_list
 
     choose("No")
-    select product1.name, from: "Which product was involved in the accident"
+    select product1.name, from: "Which product was involved?"
     choose("Serious")
     choose("Normal use")
 
@@ -110,7 +110,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     fill_in("Day", with: date.day)
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
-    select product1.name, from: "Which product was involved in the accident"
+    select product1.name, from: "Which product was involved?"
     choose("Other")
     fill_in "Other type", with: "Test"
     choose("Normal use")
@@ -154,8 +154,8 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select yes if you know when the accident happened"
     expect(errors_list[1].text).to eq "Select the product involved in the accident"
-    expect(errors_list[2].text).to eq "Select the severity of the accident"
-    expect(errors_list[3].text).to eq "Select how the product was being used"
+    expect(errors_list[2].text).to eq "Select how the product was being used"
+    expect(errors_list[3].text).to eq "Select the severity of the accident"
   end
 
   def expect_summary_list_to_have(date:, product_name:, severity:, usage:, additional_info:)
@@ -163,7 +163,9 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
     expect(page).to have_summary_item(key: "Product",               value: product_name)
     expect(page).to have_summary_item(key: "Severity",              value: severity)
     expect(page).to have_summary_item(key: "Product usage",         value: usage)
-    expect(page).to have_summary_item(key: "Additional Info",       value: additional_info)
+    unless additional_info.blank?
+      expect(page).to have_summary_item(key: "Additional Information",       value: additional_info)
+    end
   end
 
   def navigate_to_accident_or_incident_type_page

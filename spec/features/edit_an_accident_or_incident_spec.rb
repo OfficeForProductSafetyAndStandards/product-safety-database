@@ -54,7 +54,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Which product was involved in the incident", selected: "Doll")
+    expect(page).to have_select("Which product was involved?", selected: "Doll")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
@@ -69,7 +69,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
 
-    select "Teddy Bear", from: "Which product was involved in the incident"
+    select "Teddy Bear", from: "Which product was involved?"
 
     choose("Other")
     fill_in "Other type", with: "Test"
@@ -82,7 +82,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Incident: Teddy Bear"
+    expect(page).to have_content "Teddy Bear: Incident"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
 
@@ -117,7 +117,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("Yes")
     end
 
-    expect(page).to have_select("Which product was involved in the accident", selected: "Teddy Bear")
+    expect(page).to have_select("Which product was involved?", selected: "Teddy Bear")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Other")
@@ -129,7 +129,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     choose("No")
 
-    select "Doll", from: "Which product was involved in the accident"
+    select "Doll", from: "Which product was involved?"
 
     choose("Other")
     fill_in "Other type", with: "Test"
@@ -142,7 +142,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Accident: Doll"
+    expect(page).to have_content "Doll: Accident"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
 
