@@ -30,21 +30,6 @@ class Business < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
-  delegate :address_line_1, :address_line_2, :city, :country, :county, :phone_number, :postal_code, to: :primary_location, prefix: true, allow_nil: true
-  delegate :email, :job_title, :name, :phone_number, to: :primary_contact, prefix: true, allow_nil: true
-
-  def self.attributes_for_export
-    attribute_names.dup.concat(%w[types case_ids primary_location_address_line_1 primary_location_address_line_2 primary_location_city primary_location_country primary_location_county primary_location_postal_code primary_location_phone_number primary_contact_email primary_contact_name primary_contact_phone_number primary_contact_job_title]).sort.freeze
-  end
-
-  def types
-    investigation_businesses.map(&:relationship)
-  end
-
-  def case_ids
-    investigations.map(&:pretty_id)
-  end
-
   def primary_location
     locations.first
   end
