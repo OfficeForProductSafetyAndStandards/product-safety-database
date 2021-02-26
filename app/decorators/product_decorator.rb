@@ -80,12 +80,6 @@ class ProductDecorator < ApplicationDecorator
   end
 
   def case_ids
-    object.investigations.map(&:pretty_id).to_s
-  end
-
-private
-
-  def additional_csv_fields
-    %w[case_ids]
+    object.investigations.map(&:pretty_id)
   end
 end

@@ -15,6 +15,6 @@ private
   end
 
   def attributes_for_export
-    Product.attribute_names.dup.concat(%w[case_ids])
+    Product.attribute_names.dup.concat(%w[case_ids]).sort
   end
 end
