@@ -9,6 +9,10 @@
   <br />
   Result: <strong><%= activity.result %></strong>
   <br />
+  <% if activity.result == "Failed" %>
+    Reason for failure: <strong><%= activity.failure_details %></strong>
+    <br />
+  <% end %>
   Attached: <strong><%= link_to activity.attached_file_name, url_for(activity.attached_file) %></strong>
   <br />
   <br />

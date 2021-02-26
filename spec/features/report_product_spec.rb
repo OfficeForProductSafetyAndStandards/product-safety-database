@@ -91,6 +91,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       standards_product_was_tested_against: "EN71, EN73",
       date: Faker::Date.backward(days: 14),
       result: %w[Pass Fail].sample,
+      failure_details: "Additional details",
       details: Faker::Lorem.sentence,
       file: Rails.root + "test/fixtures/files/test_result.txt"
     }
@@ -673,6 +674,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     choose with[:result] if with[:result]
+
+    if with[:result] == "Fail"
+      fill_in "How the product failed", with: with[:failure_details]
+    end
 
     fill_in "Further details", with: with[:details]
 
