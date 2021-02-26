@@ -15,6 +15,6 @@ private
   end
 
   def export_attribute_values_for_business(business)
-    attributes_for_export.map { |key| business.send(key) }
+    attributes_for_export.map { |key| business.public_send(key) }
   end
 end
