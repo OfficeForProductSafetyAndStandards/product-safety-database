@@ -287,11 +287,11 @@ en:
         accident_or_incident_form:
           attributes:
             is_date_known:
-              inclusion: Select yes if you know when the accident or incident happened
+              inclusion: Select yes if you know when the %{type} happened
             product_id:
-              blank: Select the product linked to the accident or incident
+              blank: Select the product involved in the %{type}
             severity:
-              inclusion: Select the severity of the accident or incident
+              inclusion: Select the severity of the %{type}
             usage:
               inclusion: Select how the product was being used
             date:
@@ -588,8 +588,8 @@ en:
     unknown_date: "Unable to ascertain"
   accident_or_incident:
     usage:
-      during_normal_use: "During normal use"
-      during_misuse: "During misuse"
+      during_normal_use: "Normal use"
+      during_misuse: "Misuse"
       with_adult_supervision: "With the supervision of an adult"
       without_adult_supervision: "Without the supervision of an adult"
       unknown_usage: "Unknown use"
