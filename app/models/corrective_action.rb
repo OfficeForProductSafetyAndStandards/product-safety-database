@@ -48,9 +48,9 @@ class CorrectiveAction < ApplicationRecord
       marking_the_product_with_appropriate_warnings_on_the_risks:
              i18n.t(:marking_the_product_with_appropriate_warnings_on_the_risks),
       recall_of_the_product_from_end_users:
-        i18n.t(:recall_of_the_product_from_end_users, scope: %i[corrective_action attributes actions]),
+             i18n.t(:recall_of_the_product_from_end_users, scope: %i[corrective_action attributes actions]),
       removal_of_the_listing_by_the_online_marketplace:
-        i18n.t(:removal_of_the_listing_by_the_online_marketplace, scope: %i[corrective_action attributes actions]),
+             i18n.t(:removal_of_the_listing_by_the_online_marketplace, scope: %i[corrective_action attributes actions]),
       temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product:
              i18n.t(:temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product),
       warning_consumers_of_the_risks:
