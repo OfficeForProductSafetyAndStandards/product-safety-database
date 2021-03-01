@@ -72,8 +72,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       it "exports categories" do
-        product_category = Faker::Hipster.word
-        category = Faker::Hipster.word
+        product_category = Faker::Hipster.unique.word
+        category = Faker::Hipster.unique.word
         create(:allegation, product_category: product_category, products: [create(:product, category: category)])
         Investigation.import refresh: true, force: true
 
