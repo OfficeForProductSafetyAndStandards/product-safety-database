@@ -6,6 +6,7 @@ $(document).ready(() => {
       $('#businesses_retailer')[0],
       $('#businesses_distributor')[0],
       $('#businesses_importer')[0],
+      $('#businesses_fulfillment_house')[0],
       $('#businesses_manufacturer')[0],
       $('#businesses_exporter')[0]
     ]
