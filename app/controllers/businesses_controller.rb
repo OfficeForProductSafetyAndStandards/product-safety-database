@@ -13,7 +13,20 @@ class BusinessesController < ApplicationController
   # GET /businesses
   # GET /businesses.json
   def index
-    @businesses = search_for_businesses(20)
+    respond_to do |format|
+      format.html do
+        results = search_for_businesses(20)
+        @businesses = BusinessDecorator.decorate_collection(results)
+      end
+      format.csv do
+        authorize Business, :export?
+
+        results = search_for_businesses.records.includes(:investigations, :locations, :contacts)
+        @businesses = BusinessDecorator.decorate_collection(results)
+
+        render csv: @businesses, filename: "businesses"
+      end
+    end
   end
 
   # GET /businesses/1
