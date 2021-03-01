@@ -6,7 +6,7 @@ class UnexpectedEventDecorator < ApplicationDecorator
   end
 
   def supporting_information_title
-    "#{usage}: #{product_description}"
+    "#{product_description}: #{usage}"
   end
 
   def show_path
@@ -36,7 +36,7 @@ class UnexpectedEventDecorator < ApplicationDecorator
   end
 
   def page_title
-    "#{object.type.capitalize}: #{product_description}"
+    "#{object.type.capitalize} involving #{product_description}"
   end
 
   def severity

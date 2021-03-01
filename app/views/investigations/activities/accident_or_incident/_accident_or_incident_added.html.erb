@@ -7,7 +7,9 @@
   <br>
   Product usage: <%= activity.usage  %>
   <br>
-  Additional information: <%=  activity.additional_info %>
+  <% unless activity.additional_info.blank? %>
+    Additional information: <%=  activity.additional_info %>
+  <% end %>
 </div>
 
 <%= link_to "View #{activity.type}", investigation_accident_or_incident_path(activity.investigation, activity.metadata["accident_or_incident_id"]), class: "govuk-link psd-block-link" %>
