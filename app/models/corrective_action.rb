@@ -8,6 +8,7 @@ class CorrectiveAction < ApplicationRecord
     making_the_marketing_of_the_product_subject_to_prior_conditions: "Marketing conditions",
     marking_the_product_with_appropriate_warnings_on_the_risks: "Add risk warning to product",
     recall_of_the_product_from_end_users: "Recall",
+    removal_of_the_listing_by_the_online_marketplace: "Removal from online marketplace",
     temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban",
     warning_consumers_of_the_risks: "Warn consumers of risks",
     withdrawal_of_the_product_from_the_market: "Withdrawal"
