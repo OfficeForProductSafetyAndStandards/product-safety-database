@@ -445,7 +445,7 @@ module InvestigationsHelper
       },
       {
         path: new_investigation_accident_or_incidents_type_path(investigation),
-        text: "Accident or Incident"
+        text: "Accident or incident"
       },
       {
         path: new_investigation_new_path(investigation),
