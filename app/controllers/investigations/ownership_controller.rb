@@ -19,7 +19,11 @@ class Investigations::OwnershipController < ApplicationController
   end
 
   def update
-    return render_wizard unless form.valid?
+    unless form.valid?
+      get_potential_assignees if step == :"select-owner"
+      @investigation = @investigation.decorate
+      return render_wizard
+    end
 
     session[session_store_key] = form.attributes.compact
     redirect_to next_wizard_path
@@ -50,20 +54,20 @@ private
   end
 
   def form_params
-    params[:investigation] ||= {}
-    params[:investigation][:owner_id] = case params[:investigation][:owner_id]
-                                        when "someone_in_your_team"
-                                          params[:investigation][:select_team_member]
-                                        when "previous_owners"
-                                          params[:investigation][:select_previous_owner]
-                                        when "other_team"
-                                          params[:investigation][:select_other_team]
-                                        when "someone_else"
-                                          params[:investigation][:select_someone_else]
-                                        else
-                                          params[:investigation][:owner_id]
-                                        end
-    params.require(:investigation).permit(:owner_id, :owner_rationale).merge(session_params)
+    params[:change_case_owner_form] ||= {}
+    params[:change_case_owner_form][:owner_id] = case params[:change_case_owner_form][:owner_id]
+                                                 when "someone_in_your_team"
+                                                   params[:change_case_owner_form][:select_team_member]
+                                                 when "previous_owners"
+                                                   params[:change_case_owner_form][:select_previous_owner]
+                                                 when "other_team"
+                                                   params[:change_case_owner_form][:select_other_team]
+                                                 when "someone_else"
+                                                   params[:change_case_owner_form][:select_someone_else]
+                                                 else
+                                                   params[:change_case_owner_form][:owner_id]
+                                                 end
+    params.require(:change_case_owner_form).permit(:owner_id, :owner_rationale).merge(session_params)
   end
 
   def session_params
