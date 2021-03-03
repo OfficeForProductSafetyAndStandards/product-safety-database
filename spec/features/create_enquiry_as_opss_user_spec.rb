@@ -26,7 +26,8 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     }
   end
 
-  let(:user) { create(:user, :activated, :opss_user) }
+  let(:team) { create(:team, country: "Iceland") }
+  let(:user) { create(:user, :activated, :opss_user, team: team) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
 
@@ -152,6 +153,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_details_on_summary_page
     expect(page.find("dt", text: "Source type")).to have_sibling("dd", text: "Consumer")
+    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Iceland")
     expect(page.find("dt", text: "Coronavirus related"))
       .to have_sibling("dd", text: "Coronavirus related case")
   end
