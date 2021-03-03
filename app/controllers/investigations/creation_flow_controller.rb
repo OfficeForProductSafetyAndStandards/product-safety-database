@@ -84,6 +84,10 @@ private
     # This needs to be defined by any controller that inherits from this class.
   end
 
+  def set_notifying_country
+    @investigation.notifying_country = current_user.team.country
+  end
+
   def set_attachment
     @file_blob, * = load_file_attachments
   end

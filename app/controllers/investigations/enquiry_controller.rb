@@ -16,6 +16,7 @@ private
 
   def set_investigation
     @investigation = Investigation::Enquiry.new(investigation_params).build_owner_collaborations_from(current_user)
+    set_notifying_country
   end
 
   def assign_type
