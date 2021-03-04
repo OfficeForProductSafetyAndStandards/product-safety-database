@@ -388,7 +388,7 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.9.0)
       redis (>= 4, < 5)
-    regexp_parser (2.0.3)
+    regexp_parser (2.1.1)
     remotipart (1.4.4)
     request_store (1.5.0)
       rack (>= 1.4)
@@ -514,7 +514,7 @@ GEM
     slim_lint (0.20.2)
       rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-    solargraph (0.40.3)
+    solargraph (0.40.4)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
