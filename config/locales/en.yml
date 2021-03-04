@@ -91,6 +91,10 @@ en:
       title: "Title"
 
   investigations:
+    filters:
+      teams_added_to_case: "Teams added to case"
+      my_team: "My team"
+      other_team: "Other team"
     corrective_actions:
       form:
         geographic_scopes:

@@ -3,6 +3,18 @@ module Investigations::UserFiltersHelper
     User.get_owners(except: current_user).decorate + Team.not_deleted.decorate
   end
 
+  def teams_added_to_case_items(form)
+    [
+      { key: :my_team, value: current_user.team_id, text: t(".my_team") },
+      {
+        key: :other_collaborating_team,
+        value: "on",
+        text: t(".other_team"),
+        conditional: { html: other_teams(form) }
+      }
+    ]
+  end
+
   def case_owner_is(form)
     case_owner_is_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
     case_owner_is_items << { key: owner_team_with_key[0], value: owner_team_with_key[1].id, unchecked_value: "unchecked", text: owner_team_with_key[2] }
@@ -28,6 +40,17 @@ module Investigations::UserFiltersHelper
            key: :case_owner_is_someone_else_id,
            form: form,
            items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
+           label: { text: "Name" },
+           is_autocomplete: true
+  end
+
+  def other_teams(form)
+    other_teams = Team.not_deleted.where.not(id: current_user.team)
+
+    render "form_components/govuk_select",
+           key: :other_collaborating_team_id,
+           form: form,
+           items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
            label: { text: "Name" },
            is_autocomplete: true
   end

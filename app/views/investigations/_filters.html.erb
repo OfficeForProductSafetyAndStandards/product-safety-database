@@ -4,9 +4,9 @@
 
       <div class="search-box">
         <%= render "form_components/govuk_input",
-          key: :q,
-          form: form,
-          label: { text: "Keywords", classes: "govuk-label--s" }
+                   key: :q,
+                   form: form,
+                   label: { text: "Keywords", classes: "govuk-label--s" }
         %>
         <%= form.submit "Search", name: nil, class: "search-box--submit" %>
       </div>
@@ -17,12 +17,22 @@
 
       <%= render "investigations/coronavirus_and_risk_level_checkbox", form: form %>
       <%= render "form_components/govuk_checkboxes",
-        form: form,
-        key: :case_owner,
-        classes: "govuk-checkboxes--small",
-        fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
-        items: case_owner_is(form)
+                 form: form,
+                 key: :case_owner,
+                 classes: "govuk-checkboxes--small",
+                 fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
+                 items: case_owner_is(form)
       %>
+
+      <%= render "form_components/govuk_checkboxes",
+                 form: form,
+                 key: :teams_added_to_case,
+                 classes: "govuk-checkboxes--small",
+                 fieldset: { legend: { text: t(".teams_added_to_case"), classes: "govuk-fieldset__legend--s" } },
+                 items: teams_added_to_case_items(form)
+      %>
+
+
       <%= render "form_components/govuk_checkboxes",
         form: form,
         key: :created_by,

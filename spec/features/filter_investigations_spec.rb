@@ -109,6 +109,24 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
+  describe "collaborators with case access" do
+    before do
+      AddTeamToCase.call!(
+        investigation: other_user_other_team_investigation,
+        user: user,
+        team: team,
+        collaboration_class: Collaboration::Access::Edit
+      )
+    end
+
+    scenario "filtering cases having a given team a collaborator" do
+      within_fieldset("Teams added to case") { check "My team" }
+      click_button "Apply filters"
+
+      expect(page).to have_listed_case(other_user_other_team_investigation)
+    end
+  end
+
   scenario "filtering cases where the user’s team is the owner" do
     check "My team", id: "case_owner_is_team_0"
     click_button "Apply filters"
