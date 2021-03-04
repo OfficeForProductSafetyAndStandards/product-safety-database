@@ -10,7 +10,8 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
       metadata: metadata,
       product: product,
       investigation: corrective_action.investigation,
-      body: body
+      body: body,
+      title: legacy_title
     )
   end
 
@@ -24,6 +25,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
       geographic_scopes: geographic_scopes
     )
   end
+  let(:legacy_title) { Faker::Hipster.sentence }
   let(:body) { nil }
   let(:geographic_scope) { nil }
   let(:geographic_scopes) { %i[great_britain northern_ireland] }
@@ -199,6 +201,13 @@ ergq perog n
 
   describe "#title" do
     let(:expected_title) { "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}" }
+
+    context "when the no action is empty" do
+      let(:action_key) { nil }
+      let(:other_action) { nil }
+
+      specify { expect(audit_activity.title).to eq(legacy_title) }
+    end
 
     context "when the action is not other" do
       it "shows the action and product name" do

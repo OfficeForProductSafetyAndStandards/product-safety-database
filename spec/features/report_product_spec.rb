@@ -27,6 +27,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     {
       retailer: business.call,
       exporter: business.call,
+      fulfillment_house: business.call,
       advertiser: business.call
     }
   end
@@ -91,6 +92,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       standards_product_was_tested_against: "EN71, EN73",
       date: Faker::Date.backward(days: 14),
       result: %w[Pass Fail].sample,
+      failure_details: "Additional details",
       details: Faker::Lorem.sentence,
       file: Rails.root + "test/fixtures/files/test_result.txt"
     }
@@ -165,6 +167,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_business_details_page("Exporter")
         fill_in_business_details_page(with: business_details[:exporter])
+
+        expect_to_be_on_business_details_page("Fulfillment house")
+        fill_in_business_details_page(with: business_details[:fulfillment_house])
 
         expect_to_be_on_business_details_page("Advertiser")
         fill_in_business_details_page(with: business_details[:advertiser])
@@ -265,7 +270,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_case_products_page
         expect_case_products_page_to_show(info: product_details, images: product_images)
 
-        click_link "Businesses (3)"
+        click_link "Businesses (4)"
 
         expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
         expect_case_businesses_page_to_show(label: "Exporter", business: business_details[:exporter])
@@ -583,6 +588,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_supply_chain_page
     check "Retailer"
     check "Exporter"
+    check "Fulfillment house"
     check "Distributor"
     check "Other"
     fill_in "Other type", with: "advertiser"
@@ -673,6 +679,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     choose with[:result] if with[:result]
+
+    if with[:result] == "Fail"
+      fill_in "How the product failed", with: with[:failure_details]
+    end
 
     fill_in "Further details", with: with[:details]
 

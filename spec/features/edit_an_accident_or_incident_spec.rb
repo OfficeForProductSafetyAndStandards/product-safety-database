@@ -44,7 +44,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
-    click_link "During normal use: Doll"
+    click_link "Doll: Normal use"
 
     click_link "Edit incident"
 
@@ -54,14 +54,14 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("No")
     end
 
-    expect(page).to have_select("Select the product linked to this incident", selected: "Doll")
+    expect(page).to have_select("Which product was involved?", selected: "Doll")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Serious")
     end
 
-    within_fieldset("How was the product being used at the time of this incident") do
-      expect(page).to have_checked_field("During normal use")
+    within_fieldset("How was the product being used?") do
+      expect(page).to have_checked_field("Normal use")
     end
 
     choose("Yes")
@@ -69,12 +69,12 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     fill_in("Month", with: date.month)
     fill_in("Year", with: date.year)
 
-    select "Teddy Bear", from: "Select the product linked to this incident"
+    select "Teddy Bear", from: "Which product was involved?"
 
     choose("Other")
     fill_in "Other type", with: "Test"
 
-    choose("During misuse")
+    choose("Misuse")
 
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
@@ -82,7 +82,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Incident: Teddy Bear"
+    expect(page).to have_content "Incident involving Teddy Bear"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
 
@@ -96,7 +96,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(item).to have_text("Date of incident: #{date.to_s(:govuk)}")
     expect(item).to have_text("Teddy Bear")
     expect(item).to have_text("Severity: Test")
-    expect(item).to have_text("Product usage: During misuse")
+    expect(item).to have_text("Product usage: Misuse")
   end
 
   scenario "Editing an accident, setting date to unknown, changing severity other" do
@@ -107,7 +107,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information")
 
-    click_link "During normal use: Teddy Bear"
+    click_link "Teddy Bear: Normal use"
 
     click_link "Edit accident"
 
@@ -117,24 +117,24 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
       expect(page).to have_checked_field("Yes")
     end
 
-    expect(page).to have_select("Select the product linked to this accident", selected: "Teddy Bear")
+    expect(page).to have_select("Which product was involved?", selected: "Teddy Bear")
 
     within_fieldset("Indicate the severity") do
       expect(page).to have_checked_field("Other")
     end
 
-    within_fieldset("How was the product being used at the time of this accident") do
-      expect(page).to have_checked_field("During normal use")
+    within_fieldset("How was the product being used?") do
+      expect(page).to have_checked_field("Normal use")
     end
 
     choose("No")
 
-    select "Doll", from: "Select the product linked to this accident"
+    select "Doll", from: "Which product was involved?"
 
     choose("Other")
     fill_in "Other type", with: "Test"
 
-    choose("During misuse")
+    choose("Misuse")
 
     fill_in("Additional information (optional)", with: "Some additional stuff you should know")
 
@@ -142,7 +142,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
 
     expect(page).not_to have_error_messages
 
-    expect(page).to have_content "Accident: Doll"
+    expect(page).to have_content "Accident involving Doll"
 
     click_link "Back to allegation: #{investigation.pretty_id}"
 
@@ -156,6 +156,6 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_elastic
     expect(item).to have_text("Date of accident: Unknown")
     expect(item).to have_text("Doll")
     expect(item).to have_text("Severity: Test")
-    expect(item).to have_text("Product usage: During misuse")
+    expect(item).to have_text("Product usage: Misuse")
   end
 end

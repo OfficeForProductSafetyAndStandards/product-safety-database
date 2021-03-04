@@ -56,7 +56,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorat
 
   describe "#usage" do
     it "returns human friendly usage" do
-      expect(decorated_accident.usage).to eq "During normal use"
+      expect(decorated_accident.usage).to eq "Normal use"
     end
   end
 

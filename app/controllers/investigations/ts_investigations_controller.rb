@@ -306,7 +306,7 @@ private
 
   def which_businesses_params
     params.require(:businesses).permit(
-      :retailer, :distributor, :exporter, :importer, :manufacturer, :other, :other_business_type, :none
+      :retailer, :distributor, :exporter, :importer, :fulfillment_house, :manufacturer, :other, :other_business_type, :none
     )
   end
 
@@ -706,6 +706,7 @@ private
       :result,
       :standards_product_was_tested_against,
       :existing_document_file_id,
+      :failure_details,
       date: %i[day month year],
       document_form: %i[description file]
     )

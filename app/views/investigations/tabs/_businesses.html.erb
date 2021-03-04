@@ -23,7 +23,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <% @investigation.investigation_businesses.each do |ib| %>
       <h2 class="govuk-heading-m">
-        <%= ib.relationship.upcase_first %>
+        <%= ib.decorate.pretty_relationship %>
       </h2>
 
       <%= business_summary_list ib.business %>

@@ -287,11 +287,11 @@ en:
         accident_or_incident_form:
           attributes:
             is_date_known:
-              inclusion: Select yes if you know when the accident or incident happened
+              inclusion: Select yes if you know when the %{type} happened
             product_id:
-              blank: Select the product linked to the accident or incident
+              blank: Select the product involved in the %{type}
             severity:
-              inclusion: Select the severity of the accident or incident
+              inclusion: Select the severity of the %{type}
             usage:
               inclusion: Select how the product was being used
             date:
@@ -317,9 +317,11 @@ en:
               blank: "Provide the test results file"
             date:
               blank: Enter date of the test
-              must_be_real: Date sent must be a real date
-              incomplete: Date sent must include a %{missing_date_parts}
-              in_future: Date sent must be today or in the past
+              must_be_real: Date of test must be a real date
+              incomplete: Date of test must include a %{missing_date_parts}
+              in_future: Date of test must be today or in the past
+            failure_details:
+              blank: Enter details about how the product failed to meet the requirements
         product_form:
           attributes:
             authenticity:
@@ -586,8 +588,8 @@ en:
     unknown_date: "Unable to ascertain"
   accident_or_incident:
     usage:
-      during_normal_use: "During normal use"
-      during_misuse: "During misuse"
+      during_normal_use: "Normal use"
+      during_misuse: "Misuse"
       with_adult_supervision: "With the supervision of an adult"
       without_adult_supervision: "Without the supervision of an adult"
       unknown_usage: "Unknown use"
@@ -618,6 +620,7 @@ en:
           making_the_marketing_of_the_product_subject_to_prior_conditions: "Making the marketing of the product subject to prior conditions"
           marking_the_product_with_appropriate_warnings_on_the_risks: "Marking the product with appropriate warnings on the risks"
           recall_of_the_product_from_end_users:  "Recall of the product from end users"
+          removal_of_the_listing_by_the_online_marketplace: "Removal of the listing by the online marketplace"
           temporary_ban_on_the_supply_offer_to_supply_and_display_of_the_product: "Temporary ban on the supply, offer to supply and display of the product"
           warning_consumers_of_the_risks: "Warning consumers of the risks"
           withdrawal_of_the_product_from_the_market: "Withdrawal of the product from the market"
@@ -643,3 +646,12 @@ en:
     array:
       two_words_connector: " and "
       last_word_connector: " and "
+  business:
+    type:
+      retailer: "Retailer"
+      manufacturer: "Manufacturer"
+      exporter: "Exporter"
+      importer: "Importer"
+      fulfillment_house: "Fulfillment house"
+      distributor: "Distributor"
+      other: "Other"

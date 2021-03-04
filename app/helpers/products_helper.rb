@@ -15,10 +15,8 @@ module ProductsHelper
   end
 
   def search_for_products(page_size = Product.count)
-    ProductDecorator.decorate_collection(
-      Product.full_search(search_query)
-        .page(params[:page]).per_page(page_size).records
-    )
+    Product.full_search(search_query)
+      .page(params[:page]).per_page(page_size).records
   end
 
   def sorting_params
