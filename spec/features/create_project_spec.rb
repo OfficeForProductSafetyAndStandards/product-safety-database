@@ -4,7 +4,7 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
   context "when logged in as an OPSS user" do
     let(:title) { Faker::Lorem.sentence }
     let(:summary) { Faker::Lorem.paragraph }
-    let(:team) { create(:team }
+    let(:team) { create(:team) }
 
     before do
       sign_in(create(:user, :activated, :opss_user, team: team))
