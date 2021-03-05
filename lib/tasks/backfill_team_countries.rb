@@ -127,6 +127,7 @@ namespace :team do
         "London Borough of Sutton" => "England",
         "London Borough of Tower Hamlets" => "England",
         "London Borough of Waltham Forest" => "England",
+        "London Economics" => "England",
         "Luton Borough Council" =>	"England",
         "MHRA Medicine Borderline Section" =>	"United Kingdom",
         "Manchester City Council" =>	"England",
