@@ -5,6 +5,10 @@ namespace :team do
       team.update(country: team_to_country[team.name])
     end
 
+    Investigation.includes(:creator_team).all.each do |investigation|
+      investigation.update(notifying_country: investigation.creator_team.country)
+    end
+
     def team_to_country
       {
         "Aberdeen City Council" => "Scotland",
