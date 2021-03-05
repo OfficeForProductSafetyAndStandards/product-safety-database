@@ -13,7 +13,6 @@ class Team < ApplicationRecord
   has_many :roles, dependent: :destroy, as: :entity
 
   validates :name, presence: true
-  validates :country, presence: true
 
   def display_name(*)
     name
