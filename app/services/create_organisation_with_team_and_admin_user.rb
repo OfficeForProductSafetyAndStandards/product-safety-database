@@ -7,7 +7,7 @@ class CreateOrganisationWithTeamAndAdminUser
 
     ActiveRecord::Base.transaction do
       context.org = Organisation.create!(name: context.org_name)
-      context.team = context.org.teams.create!(name: context.org_name)
+      context.team = context.org.teams.create!(name: context.org_name, country: "United Kingdom")
 
       context.user = context.team.users.create!(
         email: context.admin_email,
