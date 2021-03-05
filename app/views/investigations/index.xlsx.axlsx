@@ -4,7 +4,7 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
   sheet_investigations.add_row %w[ID Status Title Type Description Product_Category Hazard_Type Coronavirus_Related
                                   Risk_Level Case_Owner_Team Case_Owner_User Source Complainant_Type
                                   Products Businesses Activities Correspondences Corrective_Actions Tests Risk_Assessments
-                                  Date_Created Last_Updated Date_Closed Date_Validated Case_Creator_Team]
+                                  Date_Created Last_Updated Date_Closed Date_Validated Case_Creator_Team Notifying_Country]
   @investigations.each do |investigation|
     complainant = investigation.complainant
     sheet_investigations.add_row [
@@ -32,7 +32,8 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       investigation.updated_at,
       investigation.date_closed,
       investigation.risk_validated_at,
-      investigation.creator_user&.team&.name
+      investigation.creator_user&.team&.name,
+      investigation.notifying_country
     ], types: :text
   end
 end

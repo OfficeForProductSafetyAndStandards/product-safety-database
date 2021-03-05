@@ -177,6 +177,19 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
+      it "exports notifying_country" do
+        investigation = create(:allegation, notifying_country: "USA")
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 25)).to eq "Notifying_Country"
+          expect(exported_data.cell(2, 25)).to eq investigation.notifying_country
+        end
+      end
+
       context "when case does not have a creator_user" do
         it "exports Case_Creator_Team as nil" do
           creator_user = build(:user)
