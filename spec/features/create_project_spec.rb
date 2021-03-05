@@ -4,7 +4,7 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
   context "when logged in as an OPSS user" do
     let(:title) { Faker::Lorem.sentence }
     let(:summary) { Faker::Lorem.paragraph }
-    let(:team) { create(:team, country: "Iceland") }
+    let(:team) { create(:team }
 
     before do
       sign_in(create(:user, :activated, :opss_user, team: team))
@@ -47,7 +47,7 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
       expect(page).to have_css("p", text: summary)
       expect(page.find("dt", text: "Coronavirus related"))
         .to have_sibling("dd", text: "Coronavirus related case")
-      expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Iceland")
+      expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
 
       click_on "Activity"
       expect_details_on_activity_page(title, summary)

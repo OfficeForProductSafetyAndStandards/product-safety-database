@@ -10,6 +10,7 @@ FactoryBot.define do
     hazard_type           {}
     hazard_description    {}
     non_compliant_reason  {}
+    notifying_country     { "United Kingdom" }
 
     transient do
       creator { create(:user, :activated, has_viewed_introduction: true) }
