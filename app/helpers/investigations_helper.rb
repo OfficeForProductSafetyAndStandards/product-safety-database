@@ -31,7 +31,15 @@ module InvestigationsHelper
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     end
 
+    teams_with_access_ids.each do |team_with_access_id|
+      must_filters[:must] << { term: { collaboration_access_ids: team_with_access_id } }
+    end
+
     must_filters
+  end
+
+  def teams_with_access_ids
+    [params[:my_team_has_access], params[:team_with_access_id]].select(&:present?)
   end
 
   def get_status_filter
@@ -182,6 +190,9 @@ module InvestigationsHelper
       :case_owner_is_me,
       :case_owner_is_someone_else,
       :case_owner_is_someone_else_id,
+      :my_team_has_access,
+      :other_team_with_access,
+      :team_with_access_id,
       :sort_by,
       :created_by_me,
       :created_by_me,
