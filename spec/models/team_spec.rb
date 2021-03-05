@@ -10,7 +10,7 @@ RSpec.describe Team do
       org = Organisation.create!(name: "test")
 
       (important_team_names + %w[bobbins cribbins]).map do |name|
-        described_class.create!(id: SecureRandom.uuid, name: name, organisation: org)
+        described_class.create!(id: SecureRandom.uuid, name: name, organisation: org, country: "United Kingdom")
       end
     end
 
