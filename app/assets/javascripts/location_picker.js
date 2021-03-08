@@ -14,3 +14,25 @@ $(document).ready(() => {
     })
   }
 })
+
+$(document).ready(() => {
+  const autocompleteElement = document.getElementById('notifying-country-autocomplete')
+  if (autocompleteElement) {
+    openregisterLocationPicker({
+      additionalEntries: [
+        { name: 'England', code: 'country:ENG' },
+        { name: 'Scotland', code: 'country:SCO' },
+        { name: 'Wales', code: 'country:WAL' },
+        { name: 'Northern Ireland', code: 'country:NIL' }
+      ],
+      additionalSynonyms: [
+        { name: 'England', code: 'country:ENG' },
+        { name: 'Scotland', code: 'country:SCO' },
+        { name: 'Wales', code: 'country:WAL' },
+        { name: 'Northern Ireland', code: 'country:NIL' }
+      ],
+      selectElement: autocompleteElement,
+      url: locationGraph
+    })
+  }
+})

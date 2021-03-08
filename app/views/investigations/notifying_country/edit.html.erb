@@ -18,9 +18,9 @@
         form: form,
         key: :country,
         formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
-        items: options_for_notifying_country(Country.all, @notifying_country_form),
+        items: options_for_notifying_country(Country.notifying_countries, @notifying_country_form),
         include_blank: true,
-        id: "location-autocomplete",
+        id: "notifying-country-autocomplete",
         label: { text: "Change notifying country", classes: "govuk-label--m" },
         hint: { text: "Notifying country" } %>
 
