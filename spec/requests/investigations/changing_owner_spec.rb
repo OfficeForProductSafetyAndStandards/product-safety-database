@@ -24,7 +24,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
       sign_in user_from_owner_team
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
-            investigation: {
+            change_case_owner_form: {
               owner_id: "someone_else",
               select_someone_else: other_user.id
             }
@@ -41,7 +41,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
       sign_in user_from_collaborator_team
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
-            investigation: {
+            change_case_owner_form: {
               owner_id: "someone_else",
               select_someone_else: other_user.id
             }
@@ -58,7 +58,7 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
       sign_in other_user
       put investigation_ownership_path(investigation, "select-owner"),
           params: {
-            investigation: {
+            change_case_owner_form: {
               owner_id: "someone_else",
               select_someone_else: other_user.id
             }
