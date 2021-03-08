@@ -91,7 +91,7 @@ GEM
     ansi (1.5.0)
     ast (2.4.2)
     attr_extras (6.2.4)
-    awesome_print (1.8.0)
+    awesome_print (1.9.2)
     aws-eventstream (1.1.0)
     aws-partitions (1.429.0)
     aws-sdk-core (3.112.0)
@@ -599,7 +599,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-pg_enum (~> 1.2)
-  awesome_print (~> 1.8)
+  awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.88)
   axlsx!
   byebug (~> 11.1)
