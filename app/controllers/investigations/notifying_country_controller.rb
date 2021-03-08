@@ -3,7 +3,7 @@ module Investigations
     def edit
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
       authorize @investigation, :update?
-      @notifying_country_form = NotifyingCountryForm.new
+      @notifying_country_form = NotifyingCountryForm.from(@investigation)
     end
 
     def update
@@ -17,6 +17,7 @@ module Investigations
 
         redirect_to investigation_path(@investigation), flash: { success: "#{@investigation.pretty_id} was successfully updated." }
       else
+        @investigation = @investigation.decorate
         render :edit
       end
     end

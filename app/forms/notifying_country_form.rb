@@ -5,4 +5,8 @@ class NotifyingCountryForm
   attribute :country, :string
 
   validates :country, presence: true
+
+  def self.from(investigation)
+    new(country: investigation.notifying_country)
+  end
 end
