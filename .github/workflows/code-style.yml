@@ -22,9 +22,7 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
 
     - name: Set up Ruby
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: 2.7.x
+      uses: ruby/setup-ruby@v1
     - name: install dependencies
       run: |
         gem install bundler --no-doc
