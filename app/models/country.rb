@@ -7,8 +7,7 @@ class Country
     ["Scotland", "countries:GB-SCT"],
     ["Wales", "countries:GB-WLS"],
     ["Northern Ireland", "countries:GB-NIR"]
-  ]
-
+  ].freeze
 
   class << self
     def all
