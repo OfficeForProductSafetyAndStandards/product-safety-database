@@ -56,6 +56,8 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
         corrective_action_attributes[:legislation] = Regexp.last_match(1)
       when /\ADate came into effect: \*\*(.*)\*\*\z/
         corrective_action_attributes[:date_decided] = Date.parse(Regexp.last_match(1))
+      when /\ADate decided: \*\*(.*)\*\*\z/
+        corrective_action_attributes[:date_decided] = Date.parse(Regexp.last_match(1))
       when /\AType of measure: \*\*(.*)\*\*\z/
         corrective_action_attributes[:measure_type] = Regexp.last_match(1)
       when /\ADuration of action: \*\*(.*)\*\*\z/
