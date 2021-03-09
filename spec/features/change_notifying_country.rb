@@ -10,8 +10,8 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Brazil")
 
     click_link "Change notifying_country"
-    select "Poland", from: "Change notifying country"
+    select "Scotland", from: "Change notifying country"
     click_button "Submit Button"
-    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Poland")
+    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Scotland")
   end
 end
