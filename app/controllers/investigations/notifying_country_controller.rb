@@ -13,7 +13,14 @@ module Investigations
       @notifying_country_form = NotifyingCountryForm.new(country: params["investigation"]["country"])
 
       if @notifying_country_form.valid?
-        @investigation.update(notifying_country: @notifying_country_form.country)
+        result = UpdateNotifyingCountry.call!(
+          @notifying_country_form.serializable_hash.merge({
+            investigation: @investigation,
+            user: current_user
+          })
+        )
+
+        # @investigation.update(notifying_country: @notifying_country_form.country)
 
         redirect_to investigation_path(@investigation), flash: { success: "#{@investigation.pretty_id} was successfully updated." }
       else

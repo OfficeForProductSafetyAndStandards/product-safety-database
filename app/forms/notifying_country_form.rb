@@ -1,6 +1,7 @@
 class NotifyingCountryForm
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   attribute :country, :string
 
