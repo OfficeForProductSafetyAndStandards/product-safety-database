@@ -101,6 +101,10 @@ class Investigation < ApplicationRecord
     super
   end
 
+  def teams_with_access_ids
+    teams_with_access.map(&:id)
+  end
+
   def owner
     owner_user || owner_team
   end

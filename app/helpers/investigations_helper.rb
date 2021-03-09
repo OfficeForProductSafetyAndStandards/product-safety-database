@@ -21,7 +21,13 @@ module InvestigationsHelper
   end
 
   def merged_must_filters
-    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_owner_filter }] }
+    must_filters = {
+      must: [
+        get_status_filter,
+        { bool: get_creator_filter },
+        { bool: get_owner_filter }
+      ]
+    }
 
     if params[:coronavirus_related_only] == "yes"
       must_filters[:must] << { term: { coronavirus_related: true } }
@@ -31,15 +37,18 @@ module InvestigationsHelper
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     end
 
-    teams_with_access_ids.each do |team_with_access_id|
-      must_filters[:must] << { term: { collaboration_access_ids: team_with_access_id } }
+    if params[:other_team_with_access] == "yes"
+      must_filters[:must] << get_teams_with_access_filter
     end
+
+    ap params
+    ap must_filters
 
     must_filters
   end
 
   def teams_with_access_ids
-    [params[:my_team_has_access], params[:team_with_access_id]].select(&:present?)
+    [params[:team_with_access_id]].select(&:present?)
   end
 
   def get_status_filter
@@ -69,6 +78,10 @@ module InvestigationsHelper
     return { should: [], must_not: compute_excluded_terms } if owner_filter_exclusive
 
     { should: compute_included_terms, must_not: [] }
+  end
+
+  def get_teams_with_access_filter
+    { terms: { "teams_with_access_ids" => teams_with_access_ids } }
   end
 
   def no_owner_boxes_checked
