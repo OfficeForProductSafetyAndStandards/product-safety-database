@@ -33,7 +33,7 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
       investigation.date_closed,
       investigation.risk_validated_at,
       investigation.creator_user&.team&.name,
-      investigation.notifying_country
+      country_from_code(investigation.notifying_country, Country.notifying_countries)
     ], types: :text
   end
 end

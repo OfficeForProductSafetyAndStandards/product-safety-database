@@ -398,7 +398,7 @@ module InvestigationsHelper
       },
       {
         key: { text: "Notifying country" },
-        value: { text: investigation.notifying_country }
+        value: { text: country_from_code(investigation.notifying_country, Country.notifying_countries) }
       },
       {
         key: { text: "Date created" },
