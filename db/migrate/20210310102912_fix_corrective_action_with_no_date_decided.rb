@@ -11,7 +11,7 @@ private
 
   def migrate_legacy_audit_record
     unmigrated_audits = []
-    AuditActivity::CorrectiveAction::Add.where("metadata-'corrective_action'->'date_decided' IS NULL").find_each do |audit_activity|
+    AuditActivity::CorrectiveAction::Add.where("metadata->'corrective_action'->'date_decided' IS NULL").find_each do |audit_activity|
       audit_activity.update!(metadata: AuditActivity::CorrectiveAction::Add.metadata_from_legacy_audit_activity(audit_activity))
     rescue StandardError => e
       Rails.logger.error(e)
