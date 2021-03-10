@@ -83,7 +83,7 @@ private
   def set_investigation
     # This needs to be defined by any controller that inherits from this class.
   end
-  
+
   def set_attachment
     @file_blob, * = load_file_attachments
   end
