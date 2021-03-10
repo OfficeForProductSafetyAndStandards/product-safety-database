@@ -33,7 +33,7 @@ module InvestigationElasticsearch
                  non_compliant_reason
                  coronavirus_related
                  risk_level],
-        methods: %i[title creator_id owner_id teams_with_access_ids],
+        methods: %i[title creator_id owner_id],
         include: {
           teams_with_access: { only: %i[id name] },
           documents: {

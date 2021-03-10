@@ -20,7 +20,7 @@ class ElasticsearchQuery
         }
       end
     }
-
+    ap search_query.to_json
     search_query
   end
 

@@ -41,7 +41,6 @@ module InvestigationsHelper
       must_filters[:must] << get_teams_with_access_filter
     end
 
-    ap params
     ap must_filters
 
     must_filters
@@ -81,7 +80,7 @@ module InvestigationsHelper
   end
 
   def get_teams_with_access_filter
-    { terms: { "teams_with_access_ids" => teams_with_access_ids } }
+    { term: { "teams_with_access.id" => teams_with_access_ids.first } }
   end
 
   def no_owner_boxes_checked
