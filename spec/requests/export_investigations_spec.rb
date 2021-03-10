@@ -1,4 +1,4 @@
-require "rails_helper"
+  require "rails_helper"
 
 RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
   # rubocop:disable RSpec/ExampleLength
@@ -185,8 +185,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         get investigations_path format: :xlsx
 
         aggregate_failures do
-          expect(exported_data.cell(1, 25)).to eq "Notifying_Country"
-          expect(exported_data.cell(2, 25)).to eq investigation.notifying_country
+          expect(exported_data.cell(1, 26)).to eq "Notifying_Country"
+          expect(exported_data.cell(2, 26)).to eq investigation.notifying_country
         end
       end
 
