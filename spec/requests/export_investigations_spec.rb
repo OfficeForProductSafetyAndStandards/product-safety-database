@@ -1,4 +1,4 @@
-  require "rails_helper"
+require "rails_helper"
 
 RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
   # rubocop:disable RSpec/ExampleLength
