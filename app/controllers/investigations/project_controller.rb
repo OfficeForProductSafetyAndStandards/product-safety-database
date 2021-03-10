@@ -64,11 +64,6 @@ private
 
   def set_investigation
     @investigation = Investigation::Project.new(investigation_params).build_owner_collaborations_from(current_user)
-    set_notifying_country
-  end
-
-  def set_notifying_country
-    @investigation.notifying_country = current_user.team.country
   end
 
   def coronavirus_form_params

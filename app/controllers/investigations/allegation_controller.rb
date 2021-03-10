@@ -16,7 +16,6 @@ private
 
   def set_investigation
     @investigation = Investigation::Allegation.new(investigation_params).build_owner_collaborations_from(current_user)
-    set_notifying_country
   end
 
   def success_message

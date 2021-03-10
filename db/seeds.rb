@@ -43,8 +43,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -83,8 +82,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -131,8 +129,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -174,8 +171,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -215,8 +211,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -258,8 +253,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -330,8 +324,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -374,8 +367,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
@@ -429,8 +421,7 @@ if run_seeds
     is_private: false,
     hazard_description: nil,
     non_compliant_reason: nil,
-    complainant_reference: nil,
-    notifying_country: "United Kingdom"
+    complainant_reference: nil
   )
 
   investigation.complainant = Complainant.new(
