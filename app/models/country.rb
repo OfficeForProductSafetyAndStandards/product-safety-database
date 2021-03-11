@@ -3,10 +3,10 @@ class Country
     "node_modules/govuk-country-and-territory-autocomplete/dist/location-autocomplete-canonical-list.json".freeze
 
   ADDITIONAL_COUNTRIES = [
-    ["England", "countries:GB-ENG"],
-    ["Scotland", "countries:GB-SCT"],
-    ["Wales", "countries:GB-WLS"],
-    ["Northern Ireland", "countries:GB-NIR"]
+    ["England", "country:GB-ENG"],
+    ["Scotland", "country:GB-SCT"],
+    ["Wales", "country:GB-WLS"],
+    ["Northern Ireland", "country:GB-NIR"]
   ].freeze
 
   class << self
