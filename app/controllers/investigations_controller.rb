@@ -27,6 +27,7 @@ class InvestigationsController < ApplicationController
         @corrective_action_counts = CorrectiveAction.group(:investigation_id).count
         @correspondence_counts = Correspondence.group(:investigation_id).count
         @test_counts = Test.group(:investigation_id).count
+        @risk_assessment_counts = RiskAssessment.group(:investigation_id).count
       end
     end
   end

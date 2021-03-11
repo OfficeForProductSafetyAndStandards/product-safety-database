@@ -317,9 +317,9 @@ en:
               blank: "Provide the test results file"
             date:
               blank: Enter date of the test
-              must_be_real: Date sent must be a real date
-              incomplete: Date sent must include a %{missing_date_parts}
-              in_future: Date sent must be today or in the past
+              must_be_real: Date of test must be a real date
+              incomplete: Date of test must include a %{missing_date_parts}
+              in_future: Date of test must be today or in the past
             failure_details:
               blank: Enter details about how the product failed to meet the requirements
         product_form:
@@ -646,3 +646,12 @@ en:
     array:
       two_words_connector: " and "
       last_word_connector: " and "
+  business:
+    type:
+      retailer: "Retailer"
+      manufacturer: "Manufacturer"
+      exporter: "Exporter"
+      importer: "Importer"
+      fulfillment_house: "Fulfillment house"
+      distributor: "Distributor"
+      other: "Other"
