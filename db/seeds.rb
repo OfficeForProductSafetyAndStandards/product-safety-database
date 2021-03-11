@@ -555,7 +555,7 @@ if run_seeds
     )
 
     organisation = Organisation.create!(name: "Southampton Council")
-    Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "England")
+    Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
   end
   Investigation.all.each do |i|
     product = i.products.first
