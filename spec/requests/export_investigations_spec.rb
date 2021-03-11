@@ -178,15 +178,14 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       it "exports notifying_country" do
-        investigation = create(:allegation, notifying_country: "country:US")
-
+        investigation = create(:allegation)
         Investigation.import refresh: true, force: true
 
         get investigations_path format: :xlsx
 
         aggregate_failures do
           expect(exported_data.cell(1, 26)).to eq "Notifying_Country"
-          expect(exported_data.cell(2, 26)).to eq "United States"
+          expect(exported_data.cell(2, 26)).to eq "England"
         end
       end
 
