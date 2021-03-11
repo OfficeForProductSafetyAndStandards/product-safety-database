@@ -16,8 +16,8 @@
           <%= render("documents/image_tag", image: document, dimensions: dimensions) %>
         <% else %>
           <% link_content = capture do %>
-            <span class="govuk-visually-hidden">Opens in a new window</span>
             <%= render("documents/image_tag", image: document, dimensions: dimensions) %>
+            <span class="govuk-visually-hidden">(opens in new tab)</span>
           <% end %>
           <%= link_to link_content, document, target: "_blank", rel: 'noopener' %>
         <% end %>
