@@ -178,7 +178,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       it "exports notifying_country" do
-        investigation = create(:allegation)
+        create(:allegation)
         Investigation.import refresh: true, force: true
 
         get investigations_path format: :xlsx
