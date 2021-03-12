@@ -119,11 +119,16 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       )
     end
 
-    scenario "filtering cases having a given team a collaborator" do
-      within_fieldset("Teams added to case") { check "My team" }
-      click_button "Apply filters"
-      save_and_open_page
-      expect(page).to have_listed_case(other_user_other_team_investigation)
+    context "filtering case where my team has access" do
+      scenario "filtering cases having a given team a collaborator" do
+        within_fieldset("Teams added to case") { check "My team" }
+        click_button "Apply filters"
+        save_and_open_page
+        expect(page).to have_listed_case(other_user_other_team_investigation)
+      end
+    end
+
+    context "filtering case where another team has access" do
     end
   end
 
