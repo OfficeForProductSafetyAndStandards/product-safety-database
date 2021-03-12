@@ -1,7 +1,7 @@
 class ElasticsearchQuery
   attr_accessor :query, :filters, :sorting, :nested
 
-  def initialize(query, filters, sorting, nested: nil)
+  def initialize(query, filters, sorting, nested: [])
     @query = query
     @filters = filters
     @sorting = sorting
