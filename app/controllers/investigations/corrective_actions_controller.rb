@@ -53,6 +53,7 @@ module Investigations
 
       corrective_action       = investigation.corrective_actions.find(params[:id])
       @corrective_action_form = CorrectiveActionForm.from(corrective_action)
+      @file_blob              = corrective_action.document_blob
       @investigation          = investigation.decorate
 
       @corrective_action_form.assign_attributes(corrective_action_params)
