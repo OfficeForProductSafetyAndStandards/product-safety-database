@@ -397,6 +397,10 @@ module InvestigationsHelper
         value: { text: investigation.created_by }
       },
       {
+        key: { text: "Notifying country" },
+        value: { text: country_from_code(investigation.notifying_country, Country.notifying_countries) }
+      },
+      {
         key: { text: "Date created" },
         value: { text: investigation.created_at.to_s(:govuk) }
       },

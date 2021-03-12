@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 2021_03_10_102912) do
     t.boolean "is_closed", default: false
     t.boolean "is_private", default: false, null: false
     t.text "non_compliant_reason"
+    t.string "notifying_country"
     t.string "pretty_id", null: false
     t.string "product_category"
     t.string "received_type"
@@ -311,6 +312,7 @@ ActiveRecord::Schema.define(version: 2021_03_10_102912) do
   end
 
   create_table "teams", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "country"
     t.datetime "created_at", null: false
     t.datetime "deleted_at"
     t.string "name"
