@@ -12,6 +12,10 @@ module InvestigationElasticsearch
         indexes :type, type: :keyword
         indexes :owner_id, type: :keyword
         indexes :creator_id, type: :keyword
+        indexes :teams_with_access, type: :nested do
+          indexes :id, type: :keyword
+          indexes :type, type: :keyword
+        end
       end
     end
 
@@ -29,8 +33,9 @@ module InvestigationElasticsearch
                  non_compliant_reason
                  coronavirus_related
                  risk_level],
-        methods: %i[title creator_id owner_id teams_with_access_ids],
+        methods: %i[title creator_id owner_id],
         include: {
+          teams_with_access: { only: %i[id name] },
           documents: {
             only: [],
             methods: %i[title description filename]

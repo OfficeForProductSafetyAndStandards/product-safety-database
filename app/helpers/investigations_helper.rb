@@ -2,7 +2,7 @@ module InvestigationsHelper
   include SearchHelper
 
   def search_for_investigations(page_size = Investigation.count)
-    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
+    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params, nested: nested_filters)
     result = Investigation.full_search(query)
     result.paginate(page: params[:page], per_page: page_size)
   end
@@ -18,6 +18,26 @@ module InvestigationsHelper
     filters = {}
     filters.merge!(get_type_filter)
     filters.merge!(merged_must_filters) { |_key, current_filters, new_filters| current_filters + new_filters }
+  end
+
+  def nested_filters
+    filters = []
+    if params[:other_team_with_access] == "yes"
+      filters << {
+        nested: {
+          path: :teams_with_access,
+          query: {
+            bool: {
+              must: {
+                match: { "teams_with_access.id" => teams_with_access_ids.first }
+              }
+            }
+          }
+        }
+      }
+    end
+
+    filters
   end
 
   def merged_must_filters
@@ -36,12 +56,6 @@ module InvestigationsHelper
     if params[:serious_and_high_risk_level_only] == "yes"
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     end
-
-    if params[:other_team_with_access] == "yes"
-      must_filters[:must] << get_teams_with_access_filter
-    end
-
-    ap must_filters
 
     must_filters
   end
@@ -77,10 +91,6 @@ module InvestigationsHelper
     return { should: [], must_not: compute_excluded_terms } if owner_filter_exclusive
 
     { should: compute_included_terms, must_not: [] }
-  end
-
-  def get_teams_with_access_filter
-    { term: { "teams_with_access.id" => teams_with_access_ids.first } }
   end
 
   def no_owner_boxes_checked
@@ -279,13 +289,13 @@ module InvestigationsHelper
 
     if policy(investigation).update?(user: user)
       risk_level_row[:actions] = { items: [
-        href: investigation_risk_level_path(investigation),
-        text: t(
-          (investigation.risk_level ? :change : :set),
-          scope: "investigations.overview.case_risk_level.action"
-        ),
-        visuallyHiddenText: t(:visually_hidden_text, scope: "investigations.overview.case_risk_level")
-      ] }
+                                     href: investigation_risk_level_path(investigation),
+                                     text: t(
+                                       (investigation.risk_level ? :change : :set),
+                                       scope: "investigations.overview.case_risk_level.action"
+                                     ),
+                                     visuallyHiddenText: t(:visually_hidden_text, scope: "investigations.overview.case_risk_level")
+                                   ] }
     end
 
     most_recent_risk_assessment = investigation.risk_assessments.max_by(&:assessed_on)

@@ -1,10 +1,11 @@
 class ElasticsearchQuery
-  attr_accessor :query, :filters, :sorting
+  attr_accessor :query, :filters, :sorting, :nested
 
-  def initialize(query, filters, sorting)
+  def initialize(query, filters, sorting, nested: nil)
     @query = query
     @filters = filters
     @sorting = sorting
+    @nested = nested
   end
 
   def build_query(highlighted_fields, fuzzy_fields, exact_fields)
@@ -20,7 +21,7 @@ class ElasticsearchQuery
         }
       end
     }
-    ap search_query.to_json
+
     search_query
   end
 
@@ -52,11 +53,12 @@ private
   end
 
   def filter_params
-    filters.map do |field, value|
+    f = filters.map do |field, value|
       {
         bool: { "#{field}": value }
       }
     end
+    f + nested
   end
 
   def sort_params
