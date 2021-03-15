@@ -232,14 +232,19 @@ namespace :team do
     }
 
     Team.all.each do |team|
-      puts "Updating #{team.name}"
       if team.update(country: team_to_country[team.name])
-        puts "#{team.name} country updated to #{team_to_country[team.name]}"
+        Rails.logger.tagged("!!!!! Successfully updated team:") { puts "#{team.name} country updated to #{team_to_country[team.name]}" }
+      else
+        Rails.logger.tagged("!!!!! Failed to update team:") { puts "#{team.name}" }
       end
     end
 
     Investigation.includes(:creator_team).all.each do |investigation|
-      investigation.update(notifying_country: investigation.creator_team.country)
+      if investigation.update(notifying_country: investigation.creator_team.country)
+        Rails.logger.tagged("$$$$$ Successfully updated investigation:") { puts "#{investigation.pretty_id} notifying country updated to #{investigation.notifying_country}" }
+      else
+        Rails.logger.tagged("$$$$$ Failed to update investigation:") { puts "#{investigation.pretty_id}" }
+      end
     end
   end
 end
