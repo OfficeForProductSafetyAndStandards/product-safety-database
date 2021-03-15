@@ -16,13 +16,13 @@
           - html = capture do
             | terms and conditions
             span.govuk-visually-hidden
-              |  (opens new window)
+              |  (opens in new tab)
           = link_to html, help_terms_and_conditions_path, target: "_blank"
           '  and
           - html = capture do
             | privacy policy
             span.govuk-visually-hidden
-              |  (opens new window)
+              |  (opens in new tab)
           = link_to html, help_privacy_notice_path, target: "_blank"
           - # rubocop:enable Rails/LinkToBlank
         li not to share information from the Product safety database outside your organisation

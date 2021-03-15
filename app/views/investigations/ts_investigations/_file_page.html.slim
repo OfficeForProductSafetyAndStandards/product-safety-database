@@ -6,7 +6,7 @@ fieldset.govuk-fieldset
     - if @file_blob.present?
       p#current-attachment-details
         ' Currently selected file:
-        = link_to @file_blob.filename, @file_blob, target: "_blank", rel: 'noopener'
+        = link_to "#{@file_blob.filename} (opens in new tab)", @file_blob, target: "_blank", rel: 'noopener'
     = form.fields_for :file do |subform|
       - if @file_blob.blank?
         .govuk-form-group class=("govuk-form-group--error" if form.object.errors[:file].any?)
