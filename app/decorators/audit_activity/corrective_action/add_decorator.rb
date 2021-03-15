@@ -31,7 +31,9 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
   end
 
   def geographic_scopes
-    metadata.dig("corrective_action", "geographic_scopes").map { |geographic_scope|
+    return [] unless (scopes = metadata.dig("corrective_action", "geographic_scopes"))
+
+    scopes.map { |geographic_scope|
       I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
     }.to_sentence
   end
