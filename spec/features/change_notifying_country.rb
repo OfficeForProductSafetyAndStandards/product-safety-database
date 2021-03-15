@@ -10,9 +10,9 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     end
 
     it "can succesfully change pre-populated notifying_country" do
-      investigation.update!(notifying_country: "Brazil")
+      investigation.update!(notifying_country: 'country:GB-ENG')
 
-      sign_in_and_visit_change_notifying_country_page("Brazil")
+      sign_in_and_visit_change_notifying_country_page("England")
 
       select "Scotland", from: "Notifying country"
       click_button "Change"
@@ -20,7 +20,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
       click_link "Activity"
       expect(page).to have_css("h3", text: "Notifying country changed")
-      expect(page).to have_css("p", text: "Notifying country changed from Brazil to Scotland.")
+      expect(page).to have_css("p", text: "Notifying country changed from England to Scotland.")
     end
   end
 
