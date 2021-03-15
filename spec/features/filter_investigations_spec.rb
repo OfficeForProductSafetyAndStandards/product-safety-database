@@ -119,28 +119,35 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       )
     end
 
-    context "filtering case where my team has access" do
+    context "when filtering case where my team has access" do
       let(:chosen_team) { team }
 
       scenario "filtering cases having a given team a collaborator" do
         within_fieldset("Teams added to case") { check "My team" }
         click_button "Apply filters"
-        save_and_open_page
-        expect(page).to have_listed_case(other_user_other_team_investigation)
+
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        # save_and_open_page
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).to have_listed_case(investigation.pretty_id)
       end
     end
 
-    context "filtering case where another team has access" do
+    context "when filtering case where another team has access" do
       let(:chosen_team) { other_team }
 
-      scenario "filters the cases which the chosen team has access" do
+      scenario "filters the cases by other team with access" do
         within_fieldset("Teams added to case") do
           check "Other team"
           select other_team.name, from: "Name"
         end
         click_button "Apply filters"
-        save_and_open_page
-        expect(page).to have_listed_case(other_user_other_team_investigation)
+
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(investigation.pretty_id)
       end
     end
   end
@@ -251,6 +258,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
     def select_sorting_option(option)
+      ap option
       within_fieldset("Sort by") { choose(option) }
       click_button "Apply filters"
     end
@@ -265,7 +273,8 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Most recently updated") }
 
       it "shows results by most recently updated" do
-        expect(page).to list_cases_in_order(cases)
+        save_and_open_page
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
 

@@ -9,9 +9,10 @@ module InvestigationsHelper
 
   def set_search_params
     params_to_save = params.dup
+    byebug
     params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
     @search = SearchParams.new(query_params)
-    session[:previous_search_params] = params_to_save
+    session[:previous_search_params] = @search.serializable_hash
   end
 
   def filter_params
@@ -218,7 +219,8 @@ module InvestigationsHelper
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
-      creator_team_with_key[0]
+      creator_team_with_key[0],
+      team_with_access: %i[id other_team_with_access other_team_with_access_id]
     )
   end
 

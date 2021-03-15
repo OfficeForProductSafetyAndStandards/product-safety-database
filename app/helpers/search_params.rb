@@ -2,6 +2,7 @@
 
 class SearchParams
   include ActiveModel::Model
+  include ActiveModel::Serialization
   include ActiveModel::Attributes
 
   SORT_BY_OPTIONS = [
@@ -39,6 +40,28 @@ class SearchParams
   def initialize(attributes = {})
     attributes.keys.each { |name| class_eval { attr_accessor name } } # Add any additional query attributes to the model
     super(attributes)
+  end
+
+  def attributes
+    super.merge(
+      case_owner_is_me: case_owner_is_me,
+      case_owner_is_someone_else: case_owner_is_someone_else,
+      case_owner_is_someone_else_id: case_owner_is_someone_else_id,
+      case_owner_is_team_0: case_owner_is_team_0,
+      created_by_me: created_by_me,
+      created_by_someone_else: created_by_someone_else,
+      created_by_someone_else_id: created_by_someone_else_id,
+      created_by_team_0: created_by_team_0,
+      team_with_access: team_with_access,
+      allegation: allegation,
+      enquiry: enquiry,
+      project: project,
+      status_open: status_open,
+      sort_by: sort_by,
+      status_closed: status_closed,
+      coronavirus_related_only: coronavirus_related_only,
+      serious_and_high_risk_level_only: serious_and_high_risk_level_only
+    )
   end
 
   def sort_by

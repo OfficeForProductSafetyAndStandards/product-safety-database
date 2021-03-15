@@ -2,6 +2,7 @@ class TeamWithAccessSearchFormFields
   include ActiveModel::Model
   include ActiveModle::Attributes
 
-  attributes :other_team_with_access
-  attribites
+  attribute :other_team_with_access, :boolean
+  attribute :other_team_with_access_id
+  attribute :id
 end

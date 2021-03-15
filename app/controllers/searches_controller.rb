@@ -10,7 +10,7 @@ class SearchesController < ApplicationController
     end
 
     @search = SearchParams.new(query_params)
-    session[:previous_search_params] = params_to_save
+    session[:previous_search_params] = @search.serializable_hash
 
     if @search.q.blank?
       redirect_to investigations_path(previous_search_params)
