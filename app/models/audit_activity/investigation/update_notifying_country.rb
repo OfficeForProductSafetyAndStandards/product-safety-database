@@ -19,7 +19,7 @@ class AuditActivity::Investigation::UpdateNotifyingCountry < AuditActivity::Inve
     "Notifying country changed from #{previous_country} to #{new_country}"
   end
 
-  private
+private
 
   def previous_country
     metadata["updates"]["notifying_country"].first

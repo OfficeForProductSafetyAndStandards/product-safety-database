@@ -382,7 +382,6 @@ module InvestigationsHelper
       }
     end
 
-
     if policy(investigation).change_notifying_country?(user: user)
       notifying_country_actions[:items] << {
         href: edit_investigation_notifying_country_path(investigation),

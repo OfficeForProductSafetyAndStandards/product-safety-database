@@ -4,13 +4,13 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, creator: user) }
 
-  context "user is a notifying_country_editor" do
+  context "when user is a notifying_country_editor" do
     before do
       user.roles.create!(name: "notifying_country_editor")
     end
 
     it "can succesfully change pre-populated notifying_country" do
-      investigation.update(notifying_country: "Brazil")
+      investigation.update!(notifying_country: "Brazil")
 
       sign_in_and_visit_change_notifying_country_page("Brazil")
 
@@ -22,10 +22,9 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
       expect(page).to have_css("h3", text: "Notifying country changed")
       expect(page).to have_css("p", text: "Notifying country changed from Brazil to Scotland.")
     end
-
   end
 
-  context "user is not a notifying_country_editor" do
+  context "when user is not a notifying_country_editor" do
     it "does not allow user to change country" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}"

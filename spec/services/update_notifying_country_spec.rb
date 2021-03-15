@@ -4,7 +4,6 @@ RSpec.describe UpdateNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbe
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user, name: "User One") }
 
-
   describe ".call" do
     context "with no parameters" do
       let(:result) { described_class.call }
@@ -68,7 +67,6 @@ RSpec.describe UpdateNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbe
           expect(investigation.notifying_country).to eq("country:GB-NIR")
         end
 
-        # rubocop:disable RSpec/ExampleLength
         it "creates an activity entry" do
           result
 
