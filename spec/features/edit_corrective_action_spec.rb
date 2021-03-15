@@ -56,6 +56,18 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       click_link corrective_action.decorate.supporting_information_title
       click_link "Edit corrective action"
 
+      # check error rendering and attachment details are retained
+      fill_in "Year", with: ""
+      click_on "Update corrective action"
+
+      expect(page).to have_error_summary("Enter date the corrective action was decided and include year")
+
+      within_fieldset("Are there any files related to the action?") do
+        expect(page).to have_checked_field("Yes")
+        expect(page).to have_link(corrective_action.document_blob.filename.to_s)
+        expect(page).to have_field("Attachment description", with: /#{Regexp.escape(corrective_action.document_blob.metadata["description"])}/)
+      end
+
       within_fieldset("What action is being taken?") do
         choose "Other"
         fill_in "corrective_action[other_action]", with: new_other_action
