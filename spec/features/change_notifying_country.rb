@@ -4,28 +4,31 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, creator: user) }
 
-  scenario "Change notifying_country with errors" do
-    sign_in_and_visit_change_notifying_country_page("")
+  context "user is a notifying_country_editor" do
+    before do
+      user.roles.create!(name: "notifying_country_editor")
+    end
 
-    click_button "Change"
+    it "can succesfully changes pre-populated notifying_country" do
+      investigation.update(notifying_country: "Brazil")
 
-    expect(page).to have_error_messages
-    errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[0].text).to eq "Enter the notifying country"
+      sign_in_and_visit_change_notifying_country_page("Brazil")
 
-    select "England", from: "Notifying country"
-    click_button "Change"
-    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
+      select "Scotland", from: "Notifying country"
+      click_button "Change"
+      expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Scotland")
+    end
+
   end
 
-  scenario "Change pre-populated notifying_country with errors" do
-    investigation.update(notifying_country: "Brazil")
+  context "user is not a notifying_country_editor" do
+    it "does not allow user to change country" do
+      sign_in user
+      visit "/cases/#{investigation.pretty_id}"
+      expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
 
-    sign_in_and_visit_change_notifying_country_page("Brazil")
-
-    select "Scotland", from: "Notifying country"
-    click_button "Change"
-    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Scotland")
+      expect(page).not_to have_css("h1", text: "Change notifying country")
+    end
   end
 
   def sign_in_and_visit_change_notifying_country_page(country)
