@@ -9,7 +9,6 @@ module InvestigationsHelper
 
   def set_search_params
     params_to_save = params.dup
-    byebug
     params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
     @search = SearchParams.new(query_params)
     session[:previous_search_params] = @search.serializable_hash

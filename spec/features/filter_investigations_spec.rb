@@ -258,14 +258,13 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
     def select_sorting_option(option)
-      ap option
       within_fieldset("Sort by") { choose(option) }
       click_button "Apply filters"
     end
 
     context "with no sort by option selected" do
       it "shows results by most recently updated" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
 
@@ -273,7 +272,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Most recently updated") }
 
       it "shows results by most recently updated" do
-        save_and_open_page
         expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
@@ -284,7 +282,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Least recently updated") }
 
       it "shows results by least recently updated" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
 
@@ -294,7 +292,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Most recently created") }
 
       it "shows results by most recently created" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
   end

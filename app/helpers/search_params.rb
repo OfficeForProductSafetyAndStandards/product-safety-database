@@ -22,6 +22,7 @@ class SearchParams
                 :my_team_has_access,
                 :other_collaborating_team,
                 :other_collaborating_team_id,
+                :override_sort_by,
                 :direction,
                 :enquiry,
                 :project,
@@ -65,7 +66,7 @@ class SearchParams
   end
 
   def sort_by
-    @sort_by || RECENT
+    @override_sort_by || @sort_by || RECENT
   end
 
   def sorting_params

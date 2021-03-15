@@ -2,10 +2,6 @@ class SearchesController < ApplicationController
   include InvestigationsHelper
 
   def show
-    if params[:override_sort_by]
-      params[:sort_by] = params[:override_sort_by]
-    end
-
     @search = SearchParams.new(query_params)
 
     params_to_save = @search.serializable_hash
