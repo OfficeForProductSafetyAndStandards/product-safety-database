@@ -114,12 +114,14 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       AddTeamToCase.call!(
         investigation: other_user_other_team_investigation,
         user: user,
-        team: team,
+        team: chosen_team,
         collaboration_class: Collaboration::Access::Edit
       )
     end
 
     context "filtering case where my team has access" do
+      let(:chosen_team) { team }
+
       scenario "filtering cases having a given team a collaborator" do
         within_fieldset("Teams added to case") { check "My team" }
         click_button "Apply filters"
@@ -129,6 +131,17 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     end
 
     context "filtering case where another team has access" do
+      let(:chosen_team) { other_team }
+
+      scenario "filters the cases which the chosen team has access" do
+        within_fieldset("Teams added to case") do
+          check "Other team"
+          select other_team.name, from: "Name"
+        end
+        click_button "Apply filters"
+        save_and_open_page
+        expect(page).to have_listed_case(other_user_other_team_investigation)
+      end
     end
   end
 

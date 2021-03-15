@@ -22,17 +22,12 @@ module InvestigationsHelper
 
   def nested_filters
     filters = []
-    if params[:other_team_with_access] == "yes"
+
+    if team_with_access_id
       filters << {
         nested: {
           path: :teams_with_access,
-          query: {
-            bool: {
-              must: {
-                match: { "teams_with_access.id" => teams_with_access_ids.first }
-              }
-            }
-          }
+          query: { bool: { must: { match: { "teams_with_access.id" => team_with_access_id } } } }
         }
       }
     end
@@ -60,8 +55,8 @@ module InvestigationsHelper
     must_filters
   end
 
-  def teams_with_access_ids
-    [params[:team_with_access_id]].select(&:present?)
+  def team_with_access_id
+    @team_with_access_id ||= params[:other_team_with_access] ? params[:team_with_access_id] : params[:my_team_has_access]
   end
 
   def get_status_filter

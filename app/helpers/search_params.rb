@@ -2,6 +2,7 @@
 
 class SearchParams
   include ActiveModel::Model
+  include ActiveModel::Attributes
 
   SORT_BY_OPTIONS = [
     NEWEST   = "newest",
@@ -31,6 +32,8 @@ class SearchParams
                 :serious_and_high_risk_level_only
 
   attr_writer :sort_by
+
+  attribute :team_with_access, :team_with_access_search_params
 
   # ActionController::Parameters#each_key is not implemented in Rails 5.2 but is implemented in 6.0
   def initialize(attributes = {})
