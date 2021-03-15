@@ -10,7 +10,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     end
 
     it "can succesfully change pre-populated notifying_country" do
-      investigation.update!(notifying_country: 'country:GB-ENG')
+      investigation.update!(notifying_country: "country:GB-ENG")
 
       sign_in_and_visit_change_notifying_country_page("England")
 
