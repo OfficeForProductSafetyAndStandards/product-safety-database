@@ -20,16 +20,16 @@ $(document).ready(() => {
   if (autocompleteElement) {
     openregisterLocationPicker({
       additionalEntries: [
-        { name: 'England', code: 'country:ENG' },
-        { name: 'Scotland', code: 'country:SCO' },
-        { name: 'Wales', code: 'country:WAL' },
-        { name: 'Northern Ireland', code: 'country:NIL' }
+        { name: 'England', code: 'country:GB-ENG' },
+        { name: 'Scotland', code: 'country:GB-SCT' },
+        { name: 'Wales', code: 'country:GB-WLS' },
+        { name: 'Northern Ireland', code: 'country:GB-NIR' }
       ],
       additionalSynonyms: [
-        { name: 'England', code: 'country:ENG' },
-        { name: 'Scotland', code: 'country:SCO' },
-        { name: 'Wales', code: 'country:WAL' },
-        { name: 'Northern Ireland', code: 'country:NIL' }
+        { name: 'England', code: 'country:GB-ENG' },
+        { name: 'Scotland', code: 'country:GB-SCT' },
+        { name: 'Wales', code: 'country:GB-WLS' },
+        { name: 'Northern Ireland', code: 'country:GB-NIR' }
       ],
       selectElement: autocompleteElement,
       url: locationGraph
