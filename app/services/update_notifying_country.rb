@@ -20,7 +20,7 @@ class UpdateNotifyingCountry
 
     context.changes_made = true
 
-    # send_notification_email
+    send_notification_email(investigation, user)
   end
 
 private
@@ -29,7 +29,7 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
+      source: user_source,
       investigation: investigation,
       metadata: metadata
     )
@@ -43,16 +43,19 @@ private
     investigation.assign_attributes(notifying_country: country)
   end
 
-  # def send_notification_email
-  #   email_recipients_for_team_with_access(investigation, user).each do |entity|
-  #     email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
-  #     NotifyMailer.risk_validation_updated(
-  #       email: email,
-  #       updater: user,
-  #       name: entity.name,
-  #       investigation: investigation,
-  #       action: change_action.to_s,
-  #     ).deliver_later
-  #   end
-  # end
+  def user_source
+    @user_source ||= UserSource.new(user: user)
+  end
+
+  def send_notification_email(investigation, user)
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        "#{user.name} edited notifying country on the #{investigation.case_type}.",
+        "Notifying country edited for #{investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
+  end
 end
