@@ -232,7 +232,10 @@ namespace :team do
     }
 
     Team.all.each do |team|
-      team.update(country: team_to_country[team.name])
+      puts "Updating #{team.name}"
+      if team.update(country: team_to_country[team.name])
+        puts "#{team.name} country updated to #{team_to_country[team.name]}"
+      end
     end
 
     Investigation.includes(:creator_team).all.each do |investigation|
