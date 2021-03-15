@@ -20,7 +20,6 @@ module Investigations
 
         redirect_to investigation_path(@investigation), flash: { success: "#{@investigation.pretty_id} was successfully updated." }
       else
-        @investigation = @investigation.decorate
         render :edit
       end
     end
@@ -28,7 +27,7 @@ module Investigations
     private
 
     def set_investigation
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
     end
 
     def authorize_user
