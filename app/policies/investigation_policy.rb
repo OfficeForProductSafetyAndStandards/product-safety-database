@@ -18,10 +18,6 @@ class InvestigationPolicy < ApplicationPolicy
     @record.owner.in_same_team_as?(user) || @record.owner == user
   end
 
-  def change_notifying_country?(user: @user)
-    user.is_notifying_country_editor?
-  end
-
   # Ability to add and remove other teams as collaborators, and to set their
   # permission levels.
   def manage_collaborators?
@@ -58,5 +54,9 @@ class InvestigationPolicy < ApplicationPolicy
 
   def risk_level_validation?
     user.can_validate_risk_level?
+  end
+
+  def change_notifying_country?(user: @user)
+    user.is_notifying_country_editor?
   end
 end
