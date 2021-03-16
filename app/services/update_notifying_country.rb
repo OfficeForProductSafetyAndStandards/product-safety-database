@@ -48,11 +48,12 @@ private
   end
 
   def send_notification_email(investigation, user)
-    email_recipients_for_case_owner.each do |recipient|
+    email_recipients_for_team_with_access(investigation, user).each do |entity|
+      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
-        recipient.name,
-        recipient.email,
+        entity.name,
+        email,
         "#{user.name} edited notifying country on the #{investigation.case_type}.",
         "Notifying country edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
