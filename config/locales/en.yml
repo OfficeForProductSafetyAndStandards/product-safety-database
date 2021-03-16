@@ -461,7 +461,6 @@ en:
               blank: "Enter the date the corrective action came into effect"
               must_be_real: "Enter a real date when the corrective action came into effect"
               incomplete: "The date the corrective action came into effect must include a %{missing_date_parts}"
-              in_future: "The date the corrective action came into effect must be today or in the past"
             further_corrective_action:
               inclusion: "Select whether or not you have further corrective action to record"
             measure_type:

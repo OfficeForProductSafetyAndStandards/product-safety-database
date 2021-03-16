@@ -59,7 +59,6 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   describe "#valid?" do
     let(:form) { corrective_action_form }
 
-    it_behaves_like "it does not allow dates in the future", :date_decided
     it_behaves_like "it does not allow malformed dates", :date_decided
     it_behaves_like "it does not allow an incomplete", :date_decided
 
@@ -132,14 +131,6 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
 
     context "with details longer than 50,000 characters" do
       let(:details) { Faker::Lorem.characters(number: 50_001) }
-
-      it "returns false" do
-        expect(corrective_action_form).not_to be_valid
-      end
-    end
-
-    context "with future date_decided" do
-      let(:date_decided) { Faker::Date.forward(days: 14) }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid
