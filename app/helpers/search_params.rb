@@ -25,16 +25,16 @@ class SearchParams
   attribute :project
   attribute :q
   attribute :sort
-  attribute :status_open
-  attribute :status_closed
-  attribute :coronavirus_related_only
+  attribute :status_open, :boolean
+  attribute :status_closed, :boolean
+  attribute :coronavirus_related_only, :boolean
   attribute :serious_and_high_risk_level_only
   attribute :sort_by
 
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
 
   def teams_with_access_ids
-    @teams_with_access_ids ||= teams_with_access.ids
+    @teams_with_access_ids ||= teams_with_access.id
   end
 
   def filter_teams_with_access?
