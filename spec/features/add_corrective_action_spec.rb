@@ -49,7 +49,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select type of corrective action"
-    expect(errors_list[1].text).to eq "Enter date the corrective action was decided"
+    expect(errors_list[1].text).to eq "Enter the date the corrective action came into effect"
     expect(errors_list[2].text).to eq "Select the legislation relevant to the corrective action"
     expect(errors_list[3].text).to eq "Select yes if the business responsible has published recall information online"
     expect(errors_list[4].text).to eq "You must state whether the action is mandatory or voluntary"
