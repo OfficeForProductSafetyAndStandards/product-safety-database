@@ -18,7 +18,7 @@ module Investigations
           })
         )
 
-        redirect_to investigation_path(@investigation), flash: { success: "#{@investigation.pretty_id} was successfully updated." }
+        redirect_to investigation_path(@investigation), flash: { success: "Notifying country changed." }
       else
         render :edit
       end
