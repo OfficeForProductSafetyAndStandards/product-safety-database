@@ -2,11 +2,9 @@ class SearchesController < ApplicationController
   include InvestigationsHelper
 
   def show
-    @search = SearchParams.new(query_params)
+    @search = SearchParams.new(query_params.except(:case_owner_is_team_0, :created_by_team_0))
 
-    params_to_save = @search.serializable_hash
-    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
-    session[:previous_search_params] = params_to_save
+    store_previous_search_params
 
     if @search.q.blank?
       redirect_to investigations_path(previous_search_params)

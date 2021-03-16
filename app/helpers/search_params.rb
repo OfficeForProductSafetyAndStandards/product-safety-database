@@ -2,8 +2,8 @@
 
 class SearchParams
   include ActiveModel::Model
-  include ActiveModel::Serialization
   include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   SORT_BY_OPTIONS = [
     NEWEST   = "newest",
@@ -12,57 +12,39 @@ class SearchParams
     RELEVANT = "relevant"
   ].freeze
 
-  attr_accessor :allegation,
-                :case_owner_is_me,
-                :case_owner_is_someone_else,
-                :case_owner_is_someone_else_id,
-                :created_by_me,
-                :created_by_someone_else,
-                :created_by_someone_else_id,
-                :my_team_has_access,
-                :other_collaborating_team,
-                :other_collaborating_team_id,
-                :override_sort_by,
-                :direction,
-                :enquiry,
-                :project,
-                :q,
-                :sort,
-                :status_open,
-                :status_closed,
-                :coronavirus_related_only,
-                :serious_and_high_risk_level_only
+  attribute :allegation
+  attribute :case_owner_is_me
+  attribute :case_owner_is_someone_else
+  attribute :case_owner_is_someone_else_id
+  attribute :created_by_me
+  attribute :created_by_someone_else
+  attribute :created_by_someone_else_id
+  attribute :override_sort_by
+  attribute :direction
+  attribute :enquiry
+  attribute :project
+  attribute :q
+  attribute :sort
+  attribute :status_open
+  attribute :status_closed
+  attribute :coronavirus_related_only
+  attribute :serious_and_high_risk_level_only
+  attribute :sort_by
 
-  attr_writer :sort_by
+  attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
 
-  attribute :team_with_access, :team_with_access_search_params
+  def teams_with_access_ids
+    @teams_with_access_ids ||= teams_with_access.ids
+  end
 
-  # ActionController::Parameters#each_key is not implemented in Rails 5.2 but is implemented in 6.0
-  def initialize(attributes = {})
-    attributes.keys.each { |name| class_eval { attr_accessor name } } # Add any additional query attributes to the model
-    super(attributes)
+  def filter_teams_with_access?
+    teams_with_access_ids.any?
   end
 
   def attributes
-    super.merge(
-      case_owner_is_me: case_owner_is_me,
-      case_owner_is_someone_else: case_owner_is_someone_else,
-      case_owner_is_someone_else_id: case_owner_is_someone_else_id,
-      case_owner_is_team_0: case_owner_is_team_0,
-      created_by_me: created_by_me,
-      created_by_someone_else: created_by_someone_else,
-      created_by_someone_else_id: created_by_someone_else_id,
-      created_by_team_0: created_by_team_0,
-      team_with_access: team_with_access,
-      allegation: allegation,
-      enquiry: enquiry,
-      project: project,
-      status_open: status_open,
-      sort_by: sort_by,
-      status_closed: status_closed,
-      coronavirus_related_only: coronavirus_related_only,
-      serious_and_high_risk_level_only: serious_and_high_risk_level_only
-    )
+    super
+      .except("teams_with_access")
+      .merge("teams_with_access" => teams_with_access.attributes)
   end
 
   def sort_by

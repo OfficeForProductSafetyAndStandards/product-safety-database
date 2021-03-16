@@ -71,7 +71,7 @@ class ApplicationController < ActionController::Base
         created_by_someone_else: s[:created_by_someone_else],
         created_by_someone_else_id: s[:created_by_someone_else_id],
         created_by_team_0: s[:created_by_team_0],
-        team_with_access: s[:team_with_access],
+        teams_with_access: s[:teams_with_access],
         allegation: s[:allegation],
         enquiry: s[:enquiry],
         project: s[:project],

@@ -10,8 +10,9 @@ module InvestigationsHelper
   def set_search_params
     params_to_save = params.dup
     params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
-    @search = SearchParams.new(query_params)
-    session[:previous_search_params] = @search.serializable_hash
+    @search = SearchParams.new(query_params.except(:case_owner_is_team_0, :created_by_team_0))
+
+    store_previous_search_params
   end
 
   def filter_params
@@ -23,11 +24,11 @@ module InvestigationsHelper
   def nested_filters
     filters = []
 
-    if team_with_access_id
+    if @search.filter_teams_with_access?
       filters << {
         nested: {
           path: :teams_with_access,
-          query: { bool: { must: { match: { "teams_with_access.id" => team_with_access_id } } } }
+          query: { bool: { must: { terms: { "teams_with_access.id" => @search.teams_with_access_ids } } } }
         }
       }
     end
@@ -53,10 +54,6 @@ module InvestigationsHelper
     end
 
     must_filters
-  end
-
-  def team_with_access_id
-    @team_with_access_id ||= params[:other_team_with_access] ? params[:team_with_access_id] : params[:my_team_has_access]
   end
 
   def get_status_filter
@@ -207,9 +204,6 @@ module InvestigationsHelper
       :case_owner_is_me,
       :case_owner_is_someone_else,
       :case_owner_is_someone_else_id,
-      :my_team_has_access,
-      :other_team_with_access,
-      :team_with_access_id,
       :sort_by,
       :created_by_me,
       :created_by_me,
@@ -219,7 +213,7 @@ module InvestigationsHelper
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
       creator_team_with_key[0],
-      team_with_access: %i[id other_team_with_access other_team_with_access_id]
+      teams_with_access: %i[id other_team_with_access other_team_with_access_id]
     )
   end
 
@@ -533,5 +527,16 @@ module InvestigationsHelper
     end
 
     data_attributes
+  end
+
+  def store_previous_search_params
+    session[:previous_search_params] = @search.serializable_hash(form_serialisation_option).symbolize_keys
+  end
+
+  def form_serialisation_option
+    options = { include: :teams_with_access }
+    options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
+
+    options
   end
 end

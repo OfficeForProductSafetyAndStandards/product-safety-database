@@ -1,9 +1,9 @@
 require "active_model/types/govuk_date"
 require "active_model/types/business_list"
 require "active_model/types/comma_separated_list"
-require "active_model/types/team_with_access_search_params"
+require "active_model/types/teams_with_access_search_params"
 ActiveModel::Type.register(:govuk_date, ActiveModel::Types::GovUKDate)
 ActiveRecord::Type.register(:govuk_date, ActiveModel::Types::GovUKDate)
 ActiveModel::Type.register(:business_list, ActiveModel::Types::BusinessList)
 ActiveModel::Type.register(:comma_separated_list, ActiveModel::Types::CommaSeparatedList)
-ActiveModel::Type.register(:team_with_access_search_params, ActiveModel::Types::TeamWithAccessSearchParams)
+ActiveModel::Type.register(:teams_with_access_search_params, ActiveModel::Types::TeamsWithAccessSearchParams)
