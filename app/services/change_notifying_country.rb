@@ -8,8 +8,6 @@ class ChangeNotifyingCountry
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    context.changes_made = false
-
     assign_country
     return if investigation.changes.none?
 
@@ -18,7 +16,6 @@ class ChangeNotifyingCountry
       create_audit_activity_for_notifying_country_changed
     end
 
-    context.changes_made = true
 
     send_notification_email(investigation, user)
   end

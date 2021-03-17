@@ -19,8 +19,6 @@ class AuditActivity::Investigation::ChangeNotifyingCountry < AuditActivity::Inve
     "Notifying country changed from #{previous_country} to #{new_country}"
   end
 
-private
-
   def previous_country
     metadata["updates"]["notifying_country"].first
   end
@@ -28,7 +26,10 @@ private
   def new_country
     metadata["updates"]["notifying_country"].second
   end
+  
+private
 
-  # Do not send investigation_updated mail. This is handled by the ChangeRiskValidation service
+
+  # Do not send investigation_updated mail. This is handled by the ChangeNotifyingCountry service
   def notify_relevant_users; end
 end

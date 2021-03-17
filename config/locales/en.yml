@@ -308,7 +308,7 @@ en:
         notifying_country_form:
           attributes:
             country:
-              blank: Enter the notifying country
+              inclusion: Enter the notifying country
         test_result_form:
           attributes:
             product_id:
