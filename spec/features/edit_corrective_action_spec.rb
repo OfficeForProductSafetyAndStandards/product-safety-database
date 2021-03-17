@@ -60,7 +60,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       fill_in "Year", with: ""
       click_on "Update corrective action"
 
-      expect(page).to have_error_summary("Enter date the corrective action was decided and include year")
+      expect(page).to have_error_summary("The date the corrective action came into effect must include a year")
 
       within_fieldset("Are there any files related to the action?") do
         expect(page).to have_checked_field("Yes")
