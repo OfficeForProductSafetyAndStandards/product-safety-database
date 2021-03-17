@@ -26,9 +26,8 @@ class AuditActivity::Investigation::ChangeNotifyingCountry < AuditActivity::Inve
   def new_country
     metadata["updates"]["notifying_country"].second
   end
-  
-private
 
+private
 
   # Do not send investigation_updated mail. This is handled by the ChangeNotifyingCountry service
   def notify_relevant_users; end

@@ -16,7 +16,6 @@ class ChangeNotifyingCountry
       create_audit_activity_for_notifying_country_changed
     end
 
-
     send_notification_email(investigation, user)
   end
 
