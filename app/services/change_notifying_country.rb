@@ -1,4 +1,4 @@
-class UpdateNotifyingCountry
+class ChangeNotifyingCountry
   include Interactor
   include EntitiesToNotify
 
@@ -36,7 +36,7 @@ private
   end
 
   def activity_class
-    AuditActivity::Investigation::UpdateNotifyingCountry
+    AuditActivity::Investigation::ChangeNotifyingCountry
   end
 
   def assign_country

@@ -11,7 +11,7 @@ module Investigations
       @notifying_country_form = NotifyingCountryForm.new(country: params["investigation"]["country"])
 
       if @notifying_country_form.valid?
-        UpdateNotifyingCountry.call!(
+        ChangeNotifyingCountry.call!(
           @notifying_country_form.serializable_hash.merge({
             investigation: @investigation,
             user: current_user
@@ -26,12 +26,16 @@ module Investigations
 
   private
 
-    def set_investigation
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-    end
+  def set_investigation
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+  end
 
-    def authorize_user
-      authorize @investigation, :change_notifying_country?
-    end
+  def authorize_user
+    authorize @investigation, :change_notifying_country?
+  end
+
+  def notifying_country_params
+    params.require(:investigation).permit(:country)
+  end
   end
 end

@@ -1,4 +1,4 @@
-class AuditActivity::Investigation::UpdateNotifyingCountryDecorator < ApplicationDecorator
+class AuditActivity::Investigation::ChangeNotifyingCountryDecorator < ApplicationDecorator
   delegate_all
 
   def new_country

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe ChangeNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:investigation) { create(:allegation) }
   let(:user) { create(:user, name: "User One") }
 
@@ -38,7 +38,7 @@ RSpec.describe UpdateNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbe
         )
       end
 
-      let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::UpdateNotifyingCountry.to_s).order(:created_at).last }
+      let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::ChangeNotifyingCountry.to_s).order(:created_at).last }
 
       context "when no changes have been made" do
         let(:country) { "country:GB-ENG" }
@@ -50,7 +50,7 @@ RSpec.describe UpdateNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbe
         it "does not generate an activity entry" do
           result
 
-          expect(investigation.activities.where(type: AuditActivity::Investigation::UpdateNotifyingCountry.to_s)).to eq []
+          expect(investigation.activities.where(type: AuditActivity::Investigation::ChangeNotifyingCountry.to_s)).to eq []
         end
 
         it "does not send any case updated emails" do

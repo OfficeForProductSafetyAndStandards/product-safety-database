@@ -57,6 +57,6 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def change_notifying_country?(user: @user)
-    user.is_notifying_country_editor?
+    user.notifying_country_editor?
   end
 end

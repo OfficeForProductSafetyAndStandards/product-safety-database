@@ -1,6 +1,6 @@
-class AuditActivity::Investigation::UpdateNotifyingCountry < AuditActivity::Investigation::Base
+class AuditActivity::Investigation::ChangeNotifyingCountry < AuditActivity::Investigation::Base
   def self.from(*)
-    raise "Deprecated - use UpdateNotifyingCountry.call instead"
+    raise "Deprecated - use ChangeNotifyingCountry.call instead"
   end
 
   def self.build_metadata(investigation)

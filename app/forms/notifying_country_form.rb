@@ -5,7 +5,7 @@ class NotifyingCountryForm
 
   attribute :country, :string
 
-  validates :country, presence: true
+  validates :country, inclusion: { in: Country.notifying_countries.map(&:last) }
 
   def self.from(investigation)
     new(country: investigation.notifying_country)

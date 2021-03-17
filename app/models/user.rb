@@ -67,7 +67,7 @@ class User < ApplicationRecord
     has_role? :psd_admin
   end
 
-  def is_notifying_country_editor?
+  def notifying_country_editor?
     has_role? :notifying_country_editor
   end
 

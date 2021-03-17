@@ -137,7 +137,6 @@ private
 
   def set_investigation
     @investigation = Investigation::Allegation.new(investigation_step_params).build_owner_collaborations_from(current_user)
-    @investigation.notifying_country = current_user.team.country
   end
 
   def set_selected_businesses
