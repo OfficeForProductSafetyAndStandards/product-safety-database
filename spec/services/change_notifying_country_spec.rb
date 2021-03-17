@@ -80,9 +80,9 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_elasticsearch, :with_stubbe
         it "sends an email to notify of the change" do
           expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
             investigation.pretty_id,
-            investigation.owner_user.name,
-            investigation.owner_user.email,
-            "#{user.name} edited notifying country on the #{investigation.case_type}.",
+            investigation.owner_team.name,
+            investigation.owner_team.email,
+            "#{user.name} (#{user.team.name}) edited notifying country on the #{investigation.case_type}.",
             "Notifying country edited for #{investigation.case_type.upcase_first}"
           ]))
         end
