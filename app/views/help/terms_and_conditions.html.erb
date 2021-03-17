@@ -61,6 +61,8 @@
             help_terms_and_conditions_path(anchor: "prohibited-use")%></li>
       <li><%= link_to "Requests to remove content",
             help_terms_and_conditions_path(anchor: "request-to-remove-content") %></li>
+      <li><%= link_to "Data retention",
+            help_terms_and_conditions_path(anchor: "data-retention") %></li>
       <li><%= link_to "We are not responsible for viruses and you must not introduce them",
             help_terms_and_conditions_path(anchor: "no-viruses")%></li>
       <li><%= link_to "Our responsibility for loss or damage suffered by you",
@@ -185,11 +187,16 @@
     <p>We may: </p>
 
     <ul class="govuk-list govuk-list--bullet">
-      <li>make information provided on the Service publicly available in order to inform and protect consumers</li>
+      <li>make information provided on the Service publicly available in order to inform and protect consumers;</li>
       <li>share product and other information with third party countries and organisations, both in the UK, the EU,
         and outside of the EU:
+        <ul class="govuk-list govuk-list--bullet">
+          <li>to fulfill legislative requirements,</li>
+          <li>as part of international co-operation on market surveillance, or</li>
+          <li>to inform and protect consumers;</li>
+        </ul>
       </li>
-      <li>use information provided on the Service to take enforcement action where appropriate</li>
+      <li>use information provided on the Service to take enforcement action where appropriate.</li>
     </ul>
 
     <p>
@@ -290,6 +297,8 @@
     <ul class="govuk-list govuk-list--bullet">
       <li>in any way that infringes the rights of, or restrict or inhibit the use and enjoyment of, the Service by
         anyone else</li>
+      <li>in any way that breaches or does not comply with any applicable local, national or international law or regulation including data protection legislation<li>
+      <li>in any way that breaches the confidentiality or data rights of any person</li>
       <li>in any way that is unlawful or fraudulent, or has any unlawful or fraudulent purpose or effect</li>
       <li>to make inaccurate or misleading statements where you provide information</li>
       <li>
@@ -327,6 +336,16 @@
 
     <p>
       We remove content at our discretion in discussion with the department or agency responsible for it. You can still request information under the <%= link_to "Freedom of Information Act", "https://www.gov.uk/make-a-freedom-of-information-request" %> and the <%= link_to "Data Protection Act", "https://www.gov.uk/data-protection" %>.
+    </p>
+    
+    <h2 class="govuk-heading-m" id="data-retention">Data retention</h2>
+    
+    <p>
+      Data retention is defined as the retention of data for a specific period of time and for back up purposes.
+      We shall not keep any personal data longer than is necessary to fulfill the purposes set out in our Privacy Notice.
+      The general data retention period for non-personal data shall be for a period of 15 years.
+      This period of retention commences when the case is closed.
+      For further information on the use, storage and retention of personal data, please see the <%= link_to "Privacy Notice", "https://www.product-safety-database.service.gov.uk/help/privacy-notice" %>.
     </p>
 
     <h2 class="govuk-heading-m" id="no-viruses">We are not responsible for viruses and you must not introduce them</h2>
