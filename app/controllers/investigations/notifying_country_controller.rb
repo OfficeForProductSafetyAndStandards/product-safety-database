@@ -1,41 +1,37 @@
 module Investigations
   class NotifyingCountryController < ApplicationController
-    before_action :set_investigation
-    before_action :authorize_user
-
     def edit
-      @notifying_country_form = NotifyingCountryForm.from(@investigation)
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :change_notifying_country?
+      @notifying_country_form = NotifyingCountryForm.from(investigation)
+      @investigation = investigation.decorate
     end
 
     def update
-      @notifying_country_form = NotifyingCountryForm.new(country: params["investigation"]["country"])
+      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+      authorize investigation, :change_notifying_country?
+      @notifying_country_form = NotifyingCountryForm.new(notifying_country_params)
 
       if @notifying_country_form.valid?
         ChangeNotifyingCountry.call!(
           @notifying_country_form.serializable_hash.merge({
-            investigation: @investigation,
+            investigation: investigation,
             user: current_user
           })
         )
 
+        @investigation = investigation.decorate
         redirect_to investigation_path(@investigation), flash: { success: "Notifying country changed." }
       else
+        @investigation = investigation.decorate
         render :edit
       end
     end
 
   private
 
-  def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-  end
-
-  def authorize_user
-    authorize @investigation, :change_notifying_country?
-  end
-
-  def notifying_country_params
-    params.require(:investigation).permit(:country)
-  end
+    def notifying_country_params
+      params.require(:investigation).permit(:country)
+    end
   end
 end
