@@ -487,7 +487,7 @@ GEM
       faraday (>= 1.0)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
-    sidekiq (6.1.3)
+    sidekiq (6.2.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -655,7 +655,7 @@ DEPENDENCIES
   scss_lint-govuk (~> 0.2)
   sentry-raven (~> 3.1)
   shoulda-matchers
-  sidekiq (~> 6.1)
+  sidekiq (~> 6.2)
   sidekiq-cron (~> 1.2)
   simplecov
   simplecov-console (~> 0.9)
