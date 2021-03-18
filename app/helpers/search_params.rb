@@ -25,7 +25,9 @@ class SearchParams
   attribute :project
   attribute :q
   attribute :sort
-  attribute :status_open, :boolean
+  attribute :status
+  attribute :status_open, :boolean, default: true
+  alias_method :status_open?, :status_open
   attribute :status_closed, :boolean
   attribute :coronavirus_related_only, :boolean
   attribute :serious_and_high_risk_level_only
@@ -49,6 +51,10 @@ class SearchParams
 
   def sort_by
     @override_sort_by || @sort_by || RECENT
+  end
+
+  def filter_status?
+    status_open != status_closed
   end
 
   def sorting_params

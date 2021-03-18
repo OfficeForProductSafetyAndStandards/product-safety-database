@@ -57,9 +57,9 @@ module InvestigationsHelper
   end
 
   def get_status_filter
-    return nil if params[:status_open] == params[:status_closed]
+    return unless @search.filter_status?
 
-    status = if params[:status_open] == "checked"
+    status = if @search.status_open?
                { is_closed: false }
              else
                { is_closed: true }
@@ -189,7 +189,6 @@ module InvestigationsHelper
   end
 
   def query_params
-    set_default_status_filter
     set_default_type_filter
     set_default_owner_filter
     set_default_creator_filter
@@ -219,10 +218,6 @@ module InvestigationsHelper
 
   def export_params
     query_params.except(:page)
-  end
-
-  def set_default_status_filter
-    params[:status_open] = "checked" if params[:status_open].blank?
   end
 
   def set_default_owner_filter
