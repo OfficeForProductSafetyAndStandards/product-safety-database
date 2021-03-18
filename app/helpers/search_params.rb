@@ -15,7 +15,7 @@ class SearchParams
   attribute :allegation
   attribute :case_owner_is_me, :boolean
   alias_method :case_owner_is_me?, :case_owner_is_me
-  attribute :case_owner_is_my_team
+  attribute :case_owner_is_my_team, :boolean
   alias_method :case_owner_is_my_team?, :case_owner_is_my_team
   attribute :case_owner_is_someone_else, :boolean
   attribute :case_owner_is_someone_else_id
