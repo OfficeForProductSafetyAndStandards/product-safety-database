@@ -173,8 +173,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where another person or team is the owner" do
-    check "Other person or team", id: "case_owner_is_someone_else"
-    select other_team.name, from: "case_owner_is_someone_else_id"
+    within_fieldset("Case owner") do
+      check "Other person or team", id: "case_owner_is_someone_else"
+      select other_team.name, from: "case_owner_is_someone_else_id"
+    end
     click_button "Apply filters"
 
     expect(page).not_to have_listed_case(investigation.pretty_id)

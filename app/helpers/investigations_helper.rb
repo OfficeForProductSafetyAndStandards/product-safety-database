@@ -80,7 +80,7 @@ module InvestigationsHelper
 
   def get_owner_filter
     return { should: [], must_not: [] } if no_owner_boxes_checked
-    return { should: [], must_not: compute_excluded_terms } if owner_filter_exclusive
+    return { should: [], must_not: compute_excluded_terms } if @search.owner_filter_exclusive?
 
     { should: compute_included_terms, must_not: [] }
   end
@@ -88,10 +88,6 @@ module InvestigationsHelper
   def no_owner_boxes_checked
     no_team_boxes_checked = query_params[owner_team_with_key[0]].blank?
     @search.no_people_boxes_checked? && no_team_boxes_checked
-  end
-
-  def owner_filter_exclusive
-    params[:case_owner_is_someone_else] == "checked" && params[:case_owner_is_someone_else_id].blank?
   end
 
   def compute_excluded_terms
@@ -103,9 +99,10 @@ module InvestigationsHelper
 
   def compute_included_terms
     # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    owners = checked_team_owners
-    owners.concat(someone_else_owners)
-    owners << current_user.id if params[:case_owner_is_me] == "checked"
+    # owners = checked_team_owners
+    # owners.concat(someone_else_owners)
+    owners = []
+    owners << current_user.id if @search.case_owner_is_me?
     format_owner_terms(owners.uniq)
   end
 
@@ -161,9 +158,9 @@ module InvestigationsHelper
   end
 
   def checked_team_creators
-    creators = []
-    creators.concat(user_ids_from_team(creator_team_with_key[1])) if query_params[creator_team_with_key[1]] != "unchecked"
-    creators
+    return [] unless @search.case_owner_is_team?
+
+    [current_user.team.id] + current_user.user_ids
   end
 
   def someone_else_creators

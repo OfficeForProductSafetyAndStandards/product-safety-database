@@ -13,12 +13,15 @@ class SearchParams
   ].freeze
 
   attribute :allegation
-  attribute :case_owner_is_me
-  attribute :case_owner_is_team_0
-  attribute :case_owner_is_someone_else
+  attribute :case_owner_is_me, :boolean
+  alias_method :case_owner_is_me?, :case_owner_is_me
+  attribute :case_owner_is_my_team
+  alias_method :case_owner_is_my_team?, :case_owner_is_my_team
+  attribute :case_owner_is_someone_else, :boolean
   attribute :case_owner_is_someone_else_id
   attribute :created_by_me
   attribute :created_by_someone_else
+  alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
   attribute :created_by_someone_else_id
   attribute :override_sort_by
   attribute :direction
@@ -36,6 +39,9 @@ class SearchParams
 
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
 
+  def owner_filter_exclusive?
+    case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
+  end
 
   def no_people_boxes_checked?
     case_owner_is_me.nil? && case_owner_is_someone_else.nil?

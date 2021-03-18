@@ -17,10 +17,10 @@ module Investigations::UserFiltersHelper
 
   def case_owner_is(form)
     case_owner_is_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
-    case_owner_is_items << { key: owner_team_with_key[0], value: owner_team_with_key[1].id, unchecked_value: "unchecked", text: owner_team_with_key[2] }
+    case_owner_is_items << { key: "case_owner_is_my_team", value: owner_team_with_key[1].id, unchecked_value: "off", text: owner_team_with_key[2] }
     case_owner_is_items << { key: "case_owner_is_someone_else",
-                             value: "checked",
-                             unchecked_value: "unchecked",
+                             value: true,
+                             unchecked_value: "off",
                              text: "Other person or team",
                              conditional: { html: other_owner(form) } }
   end
