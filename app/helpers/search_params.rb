@@ -13,8 +13,9 @@ class SearchParams
   ].freeze
 
   attribute :allegation
-  attribute :case_owner_is_me
-  attribute :case_owner_is_someone_else
+  attribute :case_owner_is_me, :boolean, default: false
+  attribute :case_owner_is_team_0, :boolean, default: false
+  attribute :case_owner_is_someone_else, :boolean, default: false
   attribute :case_owner_is_someone_else_id
   attribute :created_by_me
   attribute :created_by_someone_else

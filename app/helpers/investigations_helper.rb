@@ -190,7 +190,6 @@ module InvestigationsHelper
 
   def query_params
     set_default_type_filter
-    set_default_owner_filter
     set_default_creator_filter
     params.permit(
       :q,
@@ -218,12 +217,6 @@ module InvestigationsHelper
 
   def export_params
     query_params.except(:page)
-  end
-
-  def set_default_owner_filter
-    params[:case_owner_is_me] = "unchecked" if params[:case_owner_is_me].blank?
-    params[:case_owner_is_team_0] = "unchecked" if params[:case_owner_is_team_0].blank?
-    params[:case_owner_is_someone_else] = "unchecked" if params[:case_owner_is_someone_else].blank?
   end
 
   def set_default_creator_filter
