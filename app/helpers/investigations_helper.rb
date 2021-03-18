@@ -86,9 +86,8 @@ module InvestigationsHelper
   end
 
   def no_owner_boxes_checked
-    no_people_boxes_checked = params[:case_owner_is_me] == "unchecked" && params[:case_owner_is_someone_else] == "unchecked"
     no_team_boxes_checked = query_params[owner_team_with_key[0]].blank?
-    no_people_boxes_checked && no_team_boxes_checked
+    @search.no_people_boxes_checked? && no_team_boxes_checked
   end
 
   def owner_filter_exclusive
