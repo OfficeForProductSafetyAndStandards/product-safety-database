@@ -79,30 +79,26 @@ module InvestigationsHelper
   end
 
   def get_owner_filter
-    return { should: [], must_not: [] } if no_owner_boxes_checked
+    return { should: [], must_not: [] } if @search.no_owner_boxes_checked?
     return { should: [], must_not: compute_excluded_terms } if @search.owner_filter_exclusive?
 
     { should: compute_included_terms, must_not: [] }
   end
 
-  def no_owner_boxes_checked
-    no_team_boxes_checked = query_params[owner_team_with_key[0]].blank?
-    @search.no_people_boxes_checked? && no_team_boxes_checked
-  end
-
   def compute_excluded_terms
     # After consultation with designers we chose to ignore teams who are not selected in blacklisting
     excluded_owners = []
-    excluded_owners << current_user.id if params[:case_owner_is_me] == "unchecked"
+    excluded_owners << current_user.id if @search.case_owner_is_me?
     format_owner_terms(excluded_owners)
   end
 
   def compute_included_terms
-    # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    # owners = checked_team_owners
-    # owners.concat(someone_else_owners)
     owners = []
     owners << current_user.id if @search.case_owner_is_me?
+    if @search.case_owner_is_my_team?
+      owners << current_user.team_id
+      owners += current_user.team.user_ids
+    end
     format_owner_terms(owners.uniq)
   end
 
@@ -196,6 +192,7 @@ module InvestigationsHelper
       :enquiry,
       :project,
       :case_owner_is_me,
+      :case_owner_is_my_team,
       :case_owner_is_someone_else,
       :case_owner_is_someone_else_id,
       :sort_by,

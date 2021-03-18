@@ -64,6 +64,7 @@ class ApplicationController < ActionController::Base
       s = session[:previous_search_params]
       {
         case_owner_is_me: s[:case_owner_is_me],
+        case_owner_is_my_team: s[:case_owner_is_my_team],
         case_owner_is_someone_else: s[:case_owner_is_someone_else],
         case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id],
         case_owner_is_team_0: s[:case_owner_is_team_0],

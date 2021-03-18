@@ -66,9 +66,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering for both open and closed cases" do
-    within_fieldset "Status" do
-      check "Closed"
-    end
+    within_fieldset("Status") { check "Closed" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -152,9 +150,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where the user’s team is the owner" do
-    within_fieldset("Case owner") do
-      check "My team"
-    end
+    within_fieldset("Case owner") { check "My team" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)

@@ -43,8 +43,11 @@ class SearchParams
     case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
   end
 
-  def no_people_boxes_checked?
-    case_owner_is_me.nil? && case_owner_is_someone_else.nil?
+  def no_owner_boxes_checked?
+    return false if case_owner_is_me?
+    return false if case_owner_is_my_team?
+
+    !case_owner_is_someone_else?
   end
 
   def teams_with_access_ids
