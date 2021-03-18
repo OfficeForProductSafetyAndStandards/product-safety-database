@@ -320,19 +320,44 @@ module InvestigationsHelper
 
     rows = [risk_level_row, validated_row, risk_assessment_row]
 
-    if investigation.hazard_type.present?
-      rows << {
-        key: { text: t(:key, scope: "investigations.overview.hazards") },
-        value: { text: simple_format([investigation.hazard_type, investigation.hazard_description].join("\n\n")) }
-      }
-    end
-
     if investigation.non_compliant_reason.present?
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
         value: { text: simple_format(investigation.non_compliant_reason) }
       }
     end
+
+    rows
+  end
+
+  def safety_and_compliance_rows(investigation, user)
+    rows = []
+
+    if investigation.reported_reason
+      rows << {
+        key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(t(investigation.reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) }
+      }
+    end
+
+    if investigation.unsafe?
+      rows << {
+        key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(investigation.hazard_type) }
+      }
+
+      rows << {
+        key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(investigation.hazard_description) }
+      }
+    end
+
+    # if investigation.non_compliant_reason.present?
+    #   rows << {
+    #     key: { text: t(:key, scope: "investigations.overview.compliance") },
+    #     value: { text: simple_format(investigation.non_compliant_reason) }
+    #   }
+    # end
 
     rows
   end
