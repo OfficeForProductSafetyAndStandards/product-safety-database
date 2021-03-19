@@ -45,7 +45,7 @@ module InvestigationsHelper
       ]
     }
 
-    if params[:coronavirus_related_only] == "yes"
+    if @search.coronavirus_related_only?
       must_filters[:must] << { term: { coronavirus_related: true } }
     end
 
