@@ -2,7 +2,7 @@ class SearchesController < ApplicationController
   include InvestigationsHelper
 
   def show
-    @search = SearchParams.new(query_params.except(:case_owner_is_team_0, :created_by_team_0))
+    @search = SearchParams.new(query_params.except(:created_by_team_0))
 
     store_previous_search_params
 

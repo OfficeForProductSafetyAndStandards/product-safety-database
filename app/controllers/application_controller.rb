@@ -67,7 +67,6 @@ class ApplicationController < ActionController::Base
         case_owner_is_my_team: s[:case_owner_is_my_team],
         case_owner_is_someone_else: s[:case_owner_is_someone_else],
         case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id],
-        case_owner_is_team_0: s[:case_owner_is_team_0],
         created_by_me: s[:created_by_me],
         created_by_someone_else: s[:created_by_someone_else],
         created_by_someone_else_id: s[:created_by_someone_else_id],
@@ -77,8 +76,8 @@ class ApplicationController < ActionController::Base
         enquiry: s[:enquiry],
         project: s[:project],
         status_open: s[:status_open],
-        sort_by: s[:sort_by],
         status_closed: s[:status_closed],
+        sort_by: s[:sort_by],
         coronavirus_related_only: s[:coronavirus_related_only],
         serious_and_high_risk_level_only: s[:serious_and_high_risk_level_only]
       }
