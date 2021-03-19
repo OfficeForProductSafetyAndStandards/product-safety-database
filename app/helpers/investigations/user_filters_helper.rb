@@ -5,7 +5,7 @@ module Investigations::UserFiltersHelper
 
   def teams_added_to_case_items(form)
     [
-      { key: "teams_with_access[id][]", value: current_user.team_id, text: t(".my_team") },
+      { key: "teams_with_access[id][]", value: current_user.team_id, text: t(".my_team"), unchecked_value: "" },
       {
         key: :other_team_with_access,
         value: "yes",

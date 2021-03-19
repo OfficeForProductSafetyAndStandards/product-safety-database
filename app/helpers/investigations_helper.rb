@@ -81,26 +81,25 @@ module InvestigationsHelper
   end
 
   def compute_excluded_terms
-    # After consultation with designers we chose to ignore teams who are not selected in blacklisting
-    excluded_owners = []
-    excluded_owners << current_user.id if @search.case_owner_is_me?
-    format_owner_terms(excluded_owners)
+    format_owner_terms([current_user.id])
   end
 
   def compute_included_terms
     owners = []
     owners << current_user.id if @search.case_owner_is_me?
+
     if @search.case_owner_is_my_team?
       owners << current_user.team_id
       owners += current_user.team.user_ids
+    else
+      if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+        owners += user_ids_from_team(team)
+      else
+        owners << @search.case_owner_is_someone_else_id
+      end
     end
-    format_owner_terms(owners.uniq)
-  end
 
-  def checked_team_owners
-    owners = []
-    owners.concat(user_ids_from_team(owner_team_with_key[1])) if query_params[owner_team_with_key[0]] != "unchecked"
-    owners
+    format_owner_terms(owners.uniq)
   end
 
   def someone_else_owners
@@ -149,6 +148,10 @@ module InvestigationsHelper
   end
 
   def checked_team_creators
+    if @search.case_owner_is_someone_else? && @search.case_owner_is_someone_else_id.present?
+      return user_ids_from_team(@search.case_owner_is_someone_else_id)
+    end
+
     return [] unless @search.case_owner_is_team?
 
     [current_user.team.id] + current_user.user_ids
