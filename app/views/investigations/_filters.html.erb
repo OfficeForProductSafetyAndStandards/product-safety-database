@@ -24,15 +24,13 @@
                  items: case_owner_is(form)
       %>
 
-      <%= form.fields_for :teams_with_access do |team_with_access_form| %>
-        <%= render "form_components/govuk_checkboxes",
-                   form: team_with_access_form,
-                   key: :teams_with_access,
-                   classes: "govuk-checkboxes--small",
-                   fieldset: { legend: { text: t(".teams_added_to_case"), classes: "govuk-fieldset__legend--s" } },
-                   items: teams_added_to_case_items(team_with_access_form)
-        %>
-      <% end %>
+      <%= render "form_components/govuk_checkboxes",
+                 form: form,
+                 key: :teams_with_access,
+                 classes: "govuk-checkboxes--small",
+                 fieldset: { legend: { text: t(".teams_added_to_case"), classes: "govuk-fieldset__legend--s" } },
+                 items: teams_added_to_case_items(form)
+      %>
 
       <%= render "form_components/govuk_checkboxes",
         form: form,

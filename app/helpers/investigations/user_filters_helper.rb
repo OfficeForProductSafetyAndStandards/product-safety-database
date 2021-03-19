@@ -5,7 +5,7 @@ module Investigations::UserFiltersHelper
 
   def teams_added_to_case_items(form)
     [
-      { key: "id[]", value: current_user.team_id, text: t(".my_team") },
+      { key: "teams_with_access[id][]", value: current_user.team_id, text: t(".my_team") },
       {
         key: :other_team_with_access,
         value: "yes",
@@ -48,7 +48,7 @@ module Investigations::UserFiltersHelper
     other_teams = Team.not_deleted.where.not(id: current_user.team)
 
     render "form_components/govuk_select",
-           key: "id[]",
+           key: "teams_with_access[id][]",
            form: form,
            items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
            label: { text: "Name" },

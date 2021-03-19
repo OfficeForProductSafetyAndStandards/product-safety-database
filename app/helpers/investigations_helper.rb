@@ -59,12 +59,7 @@ module InvestigationsHelper
   def get_status_filter
     return unless @search.filter_status?
 
-    status = if @search.status_open?
-               { is_closed: false }
-             else
-               { is_closed: true }
-             end
-    { term: status }
+    { term: { is_closed: @search.is_closed? } }
   end
 
   def get_type_filter
@@ -204,7 +199,7 @@ module InvestigationsHelper
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
       creator_team_with_key[0],
-      teams_with_access: { id: [] }
+      teams_with_access: [:other_team_with_access, id: []]
     )
   end
 

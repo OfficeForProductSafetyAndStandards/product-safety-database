@@ -72,6 +72,10 @@ class SearchParams
     status_open != status_closed
   end
 
+  def is_closed?
+    !status_open?
+  end
+
   def sorting_params
     case sort_by
     when NEWEST
