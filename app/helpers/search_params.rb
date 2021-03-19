@@ -35,7 +35,8 @@ class SearchParams
   attribute :status_closed, :boolean
   attribute :coronavirus_related_only, :boolean
   alias_method :coronavirus_related_only?, :coronavirus_related_only
-  attribute :serious_and_high_risk_level_only
+  attribute :serious_and_high_risk_level_only, :boolean
+  alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
   attribute :sort_by
 
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new

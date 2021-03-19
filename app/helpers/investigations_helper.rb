@@ -49,7 +49,7 @@ module InvestigationsHelper
       must_filters[:must] << { term: { coronavirus_related: true } }
     end
 
-    if params[:serious_and_high_risk_level_only] == "yes"
+    if @search.serious_and_high_risk_level_only?
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     end
 
