@@ -91,7 +91,7 @@ module InvestigationsHelper
     if @search.case_owner_is_my_team?
       owners << current_user.team_id
       owners += current_user.team.user_ids
-    else
+    elsif @search.case_owner_is_someone_else?
       if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
         owners += user_ids_from_team(team)
       else
