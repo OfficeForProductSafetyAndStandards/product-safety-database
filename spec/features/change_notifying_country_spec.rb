@@ -16,6 +16,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
       select "Scotland", from: "Notifying country"
       click_button "Change"
+      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
       expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Scotland")
 
       click_link "Activity"

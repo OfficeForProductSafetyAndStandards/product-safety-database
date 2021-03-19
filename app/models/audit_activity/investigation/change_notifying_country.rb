@@ -15,10 +15,6 @@ class AuditActivity::Investigation::ChangeNotifyingCountry < AuditActivity::Inve
     "Notifying country changed"
   end
 
-  def body
-    "Notifying country changed from #{previous_country} to #{new_country}"
-  end
-
   def previous_country
     metadata["updates"]["notifying_country"].first
   end

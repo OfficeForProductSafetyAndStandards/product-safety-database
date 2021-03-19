@@ -24,23 +24,23 @@ RSpec.describe AuditActivity::Investigation::ChangeNotifyingCountry, :with_stubb
         })
       end
     end
-
-    context "when the case'scountry has not been updated" do
-      subject(:metadata) { described_class.build_metadata(stale_investigation) }
-
-      let(:stale_investigation) { create(:enquiry, coronavirus_related: previous_country) }
-
-      it "produces a Hash with no changes" do
-        expect(metadata).to eq({
-          updates: {}
-        })
-      end
-    end
   end
 
   describe "#body" do
     it "returns a string" do
       expect(activity.body).to eq("Notifying country changed from #{previous_country} to #{new_country}")
+    end
+  end
+
+  describe "#new_country" do
+    it "returns the newly assigned country" do
+      expect(activity.new_country).to eq(new_country)
+    end
+  end
+
+  describe "#previous_country" do
+    it "returns the previously assigned country" do
+      expect(activity.previous_country).to eq(previous_country)
     end
   end
 end
