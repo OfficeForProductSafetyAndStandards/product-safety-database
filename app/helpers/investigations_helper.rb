@@ -336,28 +336,32 @@ module InvestigationsHelper
     if investigation.reported_reason
       rows << {
         key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
-        value: { text: simple_format(t(investigation.reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) }
+        value: { text: simple_format(t(investigation.reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
+        actions: safety_and_compliance_actions(investigation, user)
       }
     end
 
     if investigation.unsafe?
       rows << {
         key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
-        value: { text: simple_format(investigation.hazard_type) }
+        value: { text: simple_format(investigation.hazard_type) },
+        actions: safety_and_compliance_actions(investigation, user)
       }
 
       rows << {
         key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
-        value: { text: simple_format(investigation.hazard_description) }
+        value: { text: simple_format(investigation.hazard_description) },
+        actions: safety_and_compliance_actions(investigation, user)
       }
     end
 
-    # if investigation.non_compliant_reason.present?
-    #   rows << {
-    #     key: { text: t(:key, scope: "investigations.overview.compliance") },
-    #     value: { text: simple_format(investigation.non_compliant_reason) }
-    #   }
-    # end
+    if investigation.non_compliant_reason.present?
+      rows << {
+        key: { text: t(:key, scope: "investigations.overview.compliance") },
+        value: { text: simple_format(investigation.non_compliant_reason) },
+        actions: safety_and_compliance_actions(investigation, user)
+      }
+    end
 
     rows
   end
@@ -368,6 +372,19 @@ module InvestigationsHelper
         items: [
           href: edit_investigation_risk_validations_path(investigation.pretty_id),
           text: risk_validated_link_text(investigation)
+        ]
+      }
+    else
+      {}
+    end
+  end
+
+  def safety_and_compliance_actions(investigation, user)
+    if policy(investigation).update?(user: user)
+      {
+        items: [
+          href: edit_investigation_safety_and_compliance_path(investigation.pretty_id),
+          text: "Change"
         ]
       }
     else
