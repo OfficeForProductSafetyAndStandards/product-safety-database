@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.feature "Changing the notifying country of a case", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
   let(:investigation)  { create(:allegation, creator: user) }
 
