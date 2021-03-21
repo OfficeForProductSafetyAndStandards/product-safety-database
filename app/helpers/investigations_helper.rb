@@ -320,13 +320,6 @@ module InvestigationsHelper
 
     rows = [risk_level_row, validated_row, risk_assessment_row]
 
-    if investigation.non_compliant_reason.present?
-      rows << {
-        key: { text: t(:key, scope: "investigations.overview.compliance") },
-        value: { text: simple_format(investigation.non_compliant_reason) }
-      }
-    end
-
     rows
   end
 
@@ -337,7 +330,7 @@ module InvestigationsHelper
       rows << {
         key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
         value: { text: simple_format(t(investigation.reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
-        actions: safety_and_compliance_actions(investigation, user)
+        actions: safety_and_compliance_actions(investigation, user, "reported_as")
       }
     end
 
@@ -345,13 +338,13 @@ module InvestigationsHelper
       rows << {
         key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
         value: { text: simple_format(investigation.hazard_type) },
-        actions: safety_and_compliance_actions(investigation, user)
+        actions: safety_and_compliance_actions(investigation, user, "hazard_type")
       }
 
       rows << {
         key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
         value: { text: simple_format(investigation.hazard_description) },
-        actions: safety_and_compliance_actions(investigation, user)
+        actions: safety_and_compliance_actions(investigation, user, "hazard_description")
       }
     end
 
@@ -359,7 +352,7 @@ module InvestigationsHelper
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
         value: { text: simple_format(investigation.non_compliant_reason) },
-        actions: safety_and_compliance_actions(investigation, user)
+        actions: safety_and_compliance_actions(investigation, user, "non_compliant_reason")
       }
     end
 
@@ -379,12 +372,13 @@ module InvestigationsHelper
     end
   end
 
-  def safety_and_compliance_actions(investigation, user)
+  def safety_and_compliance_actions(investigation, user, field_name)
     if policy(investigation).update?(user: user)
       {
         items: [
           href: edit_investigation_safety_and_compliance_path(investigation.pretty_id),
-          text: "Change"
+          text: "Change",
+          visuallyHiddenText: field_name
         ]
       }
     else

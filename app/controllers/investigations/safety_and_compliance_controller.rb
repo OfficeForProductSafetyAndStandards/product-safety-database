@@ -3,7 +3,7 @@ module Investigations
     def edit
       @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
       authorize @investigation, :update?
-      @why_reporting_form = WhyReportingForm.new
+      @why_reporting_form = WhyReportingForm.from(@investigation)
     end
 
     def update

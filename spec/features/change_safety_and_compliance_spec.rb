@@ -1,46 +1,21 @@
 require "rails_helper"
 
-RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.feature "Change safety and compliance details for a case", :with_stubbed_mailer, :with_stubbed_elasticsearch do
   let(:user)           { create(:user, :activated, team: create(:team, name: "Portsmouth Trading Standards"), name: "Bob Jones") }
-  let(:investigation)  { create(:allegation, creator: user) }
+  let(:investigation)  { create(:allegation, creator: user, reported_reason: "unsafe_and_non_compliant", hazard_type: "burns", hazard_description: "FIRE FIRE FIRE", non_compliant_reason: "Covered in petrol") }
 
-  context "when user is a notifying_country_editor" do
-    before do
-      user.roles.create!(name: "notifying_country_editor")
-    end
-
-    it "can succesfully change pre-populated notifying_country" do
-      investigation.update!(notifying_country: "country:GB-ENG")
-
-      sign_in_and_visit_change_notifying_country_page("England")
-
-      select "Scotland", from: "Notifying country"
-      click_button "Change"
-      expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-      expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "Scotland")
-
-      click_link "Activity"
-      expect(page).to have_css("h3", text: "Notifying country changed")
-      expect(page).to have_css("p", text: "Notifying country changed from England to Scotland.")
-    end
-  end
-
-  context "when user is not a notifying_country_editor" do
+  context "when user is allowed to edit the case" do
     it "does not allow user to change country" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}"
-      expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: "England")
+      expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe and non-compliant")
+      expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: investigation.hazard_type)
+      expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: investigation.hazard_description)
+      expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: investigation.non_compliant_reason)
 
-      expect(page).not_to have_css("h1", text: "Change notifying country")
+      click_link "Change hazard_type"
+
+      expect(page).to have_css("h1", text: "Why are you reporting this product?")
     end
-  end
-
-  def sign_in_and_visit_change_notifying_country_page(country)
-    sign_in user
-    visit "/cases/#{investigation.pretty_id}"
-    expect(page.find("dt", text: "Notifying country")).to have_sibling("dd", text: country)
-    click_link "Change notifying_country"
-    expect(page).to have_css("h1", text: "Change notifying country")
-    expect(page).to have_select("Notifying country", selected: country)
   end
 end
