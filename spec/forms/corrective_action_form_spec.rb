@@ -107,9 +107,9 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     context "when action is not 'other' and other_action is not blank" do
       let(:other_action) { Faker::Lorem.characters(number: 10_000) }
 
-      it "is not valid with an error message for the other_action field", :aggregate_failures do
-        expect(corrective_action_form).to be_invalid
-        expect(corrective_action_form.errors.full_messages_for(:other_action)).to eq(["Other action must be blank"])
+      it "clears the other action", :aggregate_failures do
+        expect(corrective_action_form).to be_valid
+        expect(corrective_action_form.other_action).to be_nil
       end
     end
 
