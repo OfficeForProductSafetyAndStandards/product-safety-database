@@ -3,6 +3,10 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     CorrectiveAction.actions[metadata.dig("updates", "action", 1)]
   end
 
+  def new_other_action
+    metadata.dig("updates", "other_action", 1)
+  end
+
   def new_summary
     metadata.dig("updates", "summary", 1)
   end
