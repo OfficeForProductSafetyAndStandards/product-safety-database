@@ -348,7 +348,7 @@ module InvestigationsHelper
       }
     end
 
-    if investigation.non_compliant_reason.present?
+    if investigation.non_compliant?
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
         value: { text: simple_format(investigation.non_compliant_reason) },

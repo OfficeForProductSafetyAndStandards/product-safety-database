@@ -9,6 +9,7 @@ class WhyReportingForm
   attribute :reported_reason_unsafe,             :boolean, default: false
   attribute :reported_reason_non_compliant,      :boolean, default: false
   attribute :reported_reason_safe_and_compliant, :boolean, default: false
+  attribute :reported_reason
 
   validate :selected_at_least_one_checkbox
   validate :mutually_exclusive_checkboxes

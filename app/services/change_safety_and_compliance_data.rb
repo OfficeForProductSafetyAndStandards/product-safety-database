@@ -8,12 +8,12 @@ class ChangeSafetyAndComplianceData
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
-    investigation.assign_attributes(hazard_description: hazard_description, hazard_type: hazard_type, non_compliant_reason: non_compliant_reason, reported_reason: reported_reason)
+    assign_attributes
     return if investigation.changes.none?
 
     ActiveRecord::Base.transaction do
       investigation.save!
-      # create_audit_activity_for_case_summary_changed
+      create_audit_activity_for_safety_and_compliance_change
     end
 
     # send_notification_email
@@ -21,19 +21,41 @@ class ChangeSafetyAndComplianceData
 
 private
 
-  # def create_audit_activity_for_risk_validation_changed
-  #   metadata = activity_class.build_metadata(investigation, risk_validation_change_rationale)
-  #
-  #   activity_class.create!(
-  #     source: UserSource.new(user: user),
-  #     investigation: investigation,
-  #     metadata: metadata
-  #   )
-  # end
-  #
-  # def activity_class
-  #   AuditActivity::Investigation::UpdateRiskLevelValidation
-  # end
+  def assign_attributes
+    if reported_reason == :safe_and_compliant
+      investigation.assign_attributes(hazard_description: nil, hazard_type:nil, non_compliant_reason: nil, reported_reason: reported_reason)
+    end
+
+    if reported_reason == :unsafe_and_non_compliant
+      investigation.assign_attributes(hazard_description: hazard_description, hazard_type: hazard_type, non_compliant_reason: non_compliant_reason, reported_reason: reported_reason)
+    end
+
+    if reported_reason == :unsafe
+      investigation.assign_attributes(hazard_description: hazard_description, hazard_type: hazard_type, non_compliant_reason: nil, reported_reason: reported_reason)
+    end
+
+    if reported_reason == :non_compliant
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: non_compliant_reason, reported_reason: reported_reason)
+    end
+  end
+
+  def create_audit_activity_for_safety_and_compliance_change
+    metadata = activity_class.build_metadata(investigation)
+
+    activity_class.create!(
+      source: user_source,
+      investigation: investigation,
+      metadata: metadata
+    )
+  end
+
+  def activity_class
+    AuditActivity::Investigation::ChangeSafetyAndComplianceData
+  end
+  
+  def user_source
+    @user_source ||= UserSource.new(user: user)
+  end
   #
   # def assign_risk_validation_attributes
   #   if is_risk_validated

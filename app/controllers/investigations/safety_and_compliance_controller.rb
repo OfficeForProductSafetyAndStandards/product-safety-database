@@ -7,19 +7,20 @@ module Investigations
     end
 
     def update
-      @investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
-      authorize @investigation, :update?
+      investigation = Investigation.find_by!(pretty_id: params.require(:investigation_pretty_id)).decorate
+      authorize investigation, :update?
 
       @why_reporting_form = WhyReportingForm.new(why_reporting_form_params)
+      
       if @why_reporting_form.valid?
         ChangeSafetyAndComplianceData.call!(
           @why_reporting_form.serializable_hash.merge({
-            investigation: @investigation,
+            investigation: investigation,
             user: current_user
           })
         )
 
-        @investigation = @investigation.decorate
+        @investigation = investigation.decorate
         redirect_to investigation_path(@investigation), flash: { success: "Case information changed." }
       else
         @investigation = investigation.decorate
