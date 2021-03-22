@@ -55,4 +55,8 @@ class InvestigationPolicy < ApplicationPolicy
   def risk_level_validation?
     user.can_validate_risk_level?
   end
+
+  def change_notifying_country?(user: @user)
+    user.notifying_country_editor?
+  end
 end

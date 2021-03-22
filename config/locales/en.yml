@@ -225,6 +225,8 @@ en:
         title: "%{team_name}'s case permission level changed"
         subtitle: "Case permissions updated by %{user_name}, %{date}"
         body: "Permission level changed to '%{new_permission}' from '%{old_permission}'."
+      update_notifying_country:
+        body: "Notifying country changed from %{previous_country} to %{new_country}."
   cases:
     filters:
       coronavirus_cases_only: "Coronavirus cases only"
@@ -303,6 +305,10 @@ en:
           attributes:
             type:
               inclusion: Select the type of information you're adding
+        notifying_country_form:
+          attributes:
+            country:
+              inclusion: Enter the notifying country
         test_result_form:
           attributes:
             product_id:
