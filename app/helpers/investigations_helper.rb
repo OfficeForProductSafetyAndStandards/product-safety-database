@@ -258,13 +258,13 @@ module InvestigationsHelper
 
     if policy(investigation).update?(user: user)
       risk_level_row[:actions] = { items: [
-                                     href: investigation_risk_level_path(investigation),
-                                     text: t(
-                                       (investigation.risk_level ? :change : :set),
-                                       scope: "investigations.overview.case_risk_level.action"
-                                     ),
-                                     visuallyHiddenText: t(:visually_hidden_text, scope: "investigations.overview.case_risk_level")
-                                   ] }
+        href: investigation_risk_level_path(investigation),
+        text: t(
+          (investigation.risk_level ? :change : :set),
+          scope: "investigations.overview.case_risk_level.action"
+        ),
+        visuallyHiddenText: t(:visually_hidden_text, scope: "investigations.overview.case_risk_level")
+      ] }
     end
 
     most_recent_risk_assessment = investigation.risk_assessments.max_by(&:assessed_on)
