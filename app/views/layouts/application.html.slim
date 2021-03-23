@@ -89,7 +89,7 @@ html.govuk-template.app-html-class[lang="en"]
                 - html = capture do
                   | More information
                   span.govuk-visually-hidden
-                    |  (opens new window)
+                    |  (opens in new tab)
                 = link_to html,
                           help_about_path,
                           class: "govuk-footer__link govuk-!-margin-right-2",
@@ -100,7 +100,7 @@ html.govuk-template.app-html-class[lang="en"]
                 - html = capture do
                   | Privacy policy
                   span.govuk-visually-hidden
-                    |  (opens new window)
+                    |  (opens in new tab)
                 = link_to html,
                           help_privacy_notice_path,
                           class: "govuk-footer__link govuk-!-margin-right-2",
@@ -109,7 +109,7 @@ html.govuk-template.app-html-class[lang="en"]
                 - html = capture do
                   | Terms and conditions
                   span.govuk-visually-hidden
-                    |  (opens new window)
+                    |  (opens in new tab)
                 = link_to html,
                           help_terms_and_conditions_path,
                           class: "govuk-footer__link govuk-!-margin-right-2",
@@ -120,7 +120,7 @@ html.govuk-template.app-html-class[lang="en"]
                - html = capture do
                  | Office for Product Safety and Standards
                  span.govuk-visually-hidden
-                   | (opens new window)
+                   | (opens in new tab)
                = link_to html, "https://www.gov.uk/government/organisations/office-for-product-safety-and-standards", target: :_blank, rel: 'noopener', class: "govuk-footer__link"
              .opss-footer__body
                br
@@ -128,7 +128,7 @@ html.govuk-template.app-html-class[lang="en"]
                - html = capture do
                   | feedback
                   span.govuk-visually-hidden
-                    | (opens new window)
+                    | (opens in new tab)
                = link_to html, "https://www.surveymonkey.co.uk/r/TWLYX9W", target: :_blank, rel: 'noopener', class: "govuk-footer__link"
                |  will help us to improve it.
              - # rubocop:enable Rails/LinkToBlank

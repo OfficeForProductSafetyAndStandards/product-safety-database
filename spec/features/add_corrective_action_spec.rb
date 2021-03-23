@@ -49,7 +49,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Select type of corrective action"
-    expect(errors_list[1].text).to eq "Enter date the corrective action was decided"
+    expect(errors_list[1].text).to eq "Enter the date the corrective action came into effect"
     expect(errors_list[2].text).to eq "Select the legislation relevant to the corrective action"
     expect(errors_list[3].text).to eq "Select yes if the business responsible has published recall information online"
     expect(errors_list[4].text).to eq "You must state whether the action is mandatory or voluntary"
@@ -64,7 +64,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(page).to have_summary_item(key: "Date of action",      value: "1 May 2020")
     expect(page).to have_summary_item(key: "Product",             value: "MyBrand Washing Machine")
     expect(page).to have_summary_item(key: "Legislation",         value: "General Product Safety Regulations 2005")
-    expect(page).to have_summary_item(key: "Recall information",  value: online_recall_information)
+    expect(page).to have_summary_item(key: "Recall information",  value: "#{online_recall_information} (opens in new tab)")
     expect(page).to have_summary_item(key: "Type of action",      value: "Mandatory")
     expect(page).to have_summary_item(key: "Duration of measure", value: "Permanent")
     expect(page).to have_summary_item(key: "Geographic scopes",   value: geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence)

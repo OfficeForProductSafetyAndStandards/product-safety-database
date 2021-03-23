@@ -362,6 +362,7 @@ module InvestigationsHelper
     coronavirus_related_actions = { items: [] }
     status_actions = { items: [] }
     activity_actions = { items: [] }
+    notifying_country_actions = { items: [] }
 
     if policy(investigation).update?(user: user)
       activity_actions[:items] << {
@@ -383,6 +384,14 @@ module InvestigationsHelper
       }
     end
 
+    if policy(investigation).change_notifying_country?(user: user)
+      notifying_country_actions[:items] << {
+        href: edit_investigation_notifying_country_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "notifying_country"
+      }
+    end
+
     rows = [
       {
         key: { text: "Status" },
@@ -397,6 +406,11 @@ module InvestigationsHelper
       {
         key: { text: "Created by" },
         value: { text: investigation.created_by }
+      },
+      {
+        key: { text: "Notifying country" },
+        value: { text: country_from_code(investigation.notifying_country, Country.notifying_countries) },
+        actions: notifying_country_actions
       },
       {
         key: { text: "Date created" },
@@ -517,5 +531,14 @@ module InvestigationsHelper
     options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
 
     options
+  end
+
+  def options_for_notifying_country(countries, notifying_country_form)
+    countries.map do |country|
+      text = country[0]
+      option = { text: text, value: country[1] }
+      option[:selected] = true if notifying_country_form.country == text
+      option
+    end
   end
 end

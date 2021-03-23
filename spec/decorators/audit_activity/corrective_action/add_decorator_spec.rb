@@ -11,9 +11,18 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_elas
   end
 
   let(:business)                      { create(:business) }
-  let(:corrective_action)             { create(:corrective_action, business: business, has_online_recall_information: has_online_recall_information, online_recall_information: online_recall_information) }
+  let(:corrective_action)             do
+    create(
+      :corrective_action,
+      business: business,
+      has_online_recall_information: has_online_recall_information,
+      online_recall_information: online_recall_information,
+      geographic_scopes: geographic_scopes
+    )
+  end
   let(:online_recall_information)     { Faker::Internet.url(host: "example.com") }
   let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_yes"] }
+  let(:geographic_scopes) { [] }
 
   describe "#legislation" do
     it "returns the legislation" do
@@ -57,5 +66,13 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_elas
 
   describe "#duration" do
     specify { expect(decorated_activity.duration).to eq(CorrectiveAction.human_attribute_name("measure_type.#{corrective_action.duration}")) }
+  end
+
+  describe "#geographic_scopes" do
+    context "with a legacy corrective action without geographic scope" do
+      let(:geographic_scopes) { nil }
+
+      specify { expect(decorated_activity.geographic_scopes).to eq([]) }
+    end
   end
 end

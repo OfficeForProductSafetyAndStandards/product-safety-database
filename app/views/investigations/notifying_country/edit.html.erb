@@ -1,0 +1,34 @@
+<% page_heading = "Change notifying country" %>
+<% page_title page_heading, errors: @notifying_country_form.errors.any? %>
+
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_path(@investigation)
+  ) %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with scope: :investigation, model: @notifying_country_form, url: investigation_notifying_country_path(@investigation), method: :put, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @notifying_country_form.errors %>
+      <%= render "minimal_investigation_heading", investigation: @investigation, title: "Change notifying country" %>
+
+      <%= render "form_components/govuk_select",
+        form: form,
+        key: :country,
+        formGroup: { classes: "app-!-autocomplete--max-width-one-half" },
+        items: options_for_notifying_country(Country.notifying_countries, @notifying_country_form),
+        include_blank: true,
+        id: "notifying-country-autocomplete",
+        label: { text: "Notifying country", classes: "govuk-label--m" } %>
+
+      <div class="govuk-form-group">
+        <%= govukButton(text: t("Change")) %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
+    </div>
+  </div>
+<% end %>
