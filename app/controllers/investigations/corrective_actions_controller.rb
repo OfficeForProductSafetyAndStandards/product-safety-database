@@ -16,11 +16,12 @@ module Investigations
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
 
       @investigation = investigation.decorate
+      @file_blob = @corrective_action_form.document
       return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
       result = AddCorrectiveActionToCase.call(
         @corrective_action_form
-          .serializable_hash(except: :further_corrctive_action)
+          .serializable_hash(except: :further_corrective_action)
           .merge(user: current_user, investigation: investigation)
       )
 

@@ -57,6 +57,19 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(errors_list[6].text).to eq "Select the geographic scope of the action"
     expect(errors_list[7].text).to eq "Select whether you want to upload a related file"
 
+    # Test file attachments are retained on validation errors
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+    end
+
+    attach_file "Upload a file", file
+    fill_in "Attachment description", with: file_description
+    click_button "Continue"
+
+    expect(page).to have_text("Currently selected file: #{File.basename(file)}")
+    expect(page).to have_text("Replace this file")
+    expect(page).to have_field("Attachment description", with: "\r\n#{file_description}")
+
     fill_and_submit_form
 
     expect_to_be_on_corrective_action_page(case_id: investigation.pretty_id)
@@ -176,14 +189,6 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     end
 
     fill_in "Further details (optional)", with: details
-
-    within_fieldset "Are there any files related to the action?" do
-      choose "Yes"
-    end
-
-    attach_file "Upload a file", file
-
-    fill_in "Attachment description", with: file_description
 
     within_fieldset "Is the corrective action mandatory?" do
       choose "Yes"

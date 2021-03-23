@@ -1,6 +1,9 @@
 class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::CorrectiveAction::BaseDecorator
   def new_action
-    CorrectiveAction.actions[metadata.dig("updates", "action", 1)]
+    action = metadata.dig("updates", "action", 1)
+    return new_other_action if action == "other"
+
+    CorrectiveAction.actions[action]
   end
 
   def new_summary
@@ -72,5 +75,11 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
 
   def attachment
     @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
+  end
+
+private
+
+  def new_other_action
+    metadata.dig("updates", "other_action", 1)
   end
 end
