@@ -88,10 +88,9 @@ module InvestigationsHelper
     owners = []
     owners << current_user.id if @search.case_owner_is_me?
 
-    if @search.case_owner_is_my_team?
-      owners << current_user.team_id
-      owners += current_user.team.user_ids
-    elsif @search.case_owner_is_someone_else?
+    return format_owner_terms(my_team_id_and_its_user_ids) if @search.case_owner_is_my_team?
+
+    if @search.case_owner_is_someone_else?
       if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
         owners += user_ids_from_team(team)
       else
@@ -520,6 +519,10 @@ module InvestigationsHelper
     end
 
     data_attributes
+  end
+
+  def my_team_id_and_its_user_ids
+    [current_user.team_id] + current_user.team.user_ids
   end
 
   def store_previous_search_params
