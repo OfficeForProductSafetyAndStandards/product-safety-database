@@ -1,6 +1,9 @@
 class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::CorrectiveAction::BaseDecorator
   def new_action
-    CorrectiveAction.actions[metadata.dig("updates", "action", 1)]
+    action = metadata.dig("updates", "action", 1)
+    return new_other_action if action == "other"
+
+    CorrectiveAction.actions[action]
   end
 
   def new_other_action

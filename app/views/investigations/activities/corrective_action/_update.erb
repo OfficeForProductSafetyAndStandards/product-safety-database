@@ -7,13 +7,7 @@
   <% end %>
 
   <% if activity.new_action %>
-    Action:
-    <b>
-      <%= activity.new_action %>
-      <% if activity.new_other_action %>
-        (<%= activity.new_other_action %>)
-      <% end %>
-    </b><br>
+    Action: <b><%= activity.new_action %></b><br>
   <% end %>
 
   <% if activity.new_date_decided %>
