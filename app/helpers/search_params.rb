@@ -28,7 +28,6 @@ class SearchParams
   attribute :enquiry
   attribute :project
   attribute :q
-  attribute :sort
   attribute :status
   attribute :status_open, :boolean, default: true
   alias_method :status_open?, :status_open
@@ -58,16 +57,6 @@ class SearchParams
 
   def filter_teams_with_access?
     teams_with_access_ids.any?
-  end
-
-  def attributes
-    super
-      .except("teams_with_access")
-      .merge("teams_with_access" => teams_with_access.attributes)
-  end
-
-  def sort_by
-    @override_sort_by || @sort_by || RECENT
   end
 
   def filter_status?
