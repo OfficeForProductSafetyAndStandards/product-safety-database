@@ -16,7 +16,7 @@ class ChangeSafetyAndComplianceData
       create_audit_activity_for_safety_and_compliance_change
     end
 
-    # send_notification_email
+    send_notification_email(investigation, user)
   end
 
 private
@@ -52,31 +52,21 @@ private
   def activity_class
     AuditActivity::Investigation::ChangeSafetyAndComplianceData
   end
-  
+
   def user_source
     @user_source ||= UserSource.new(user: user)
   end
-  #
-  # def assign_risk_validation_attributes
-  #   if is_risk_validated
-  #     investigation.assign_attributes(risk_validated_at: risk_validated_at, risk_validated_by: risk_validated_by)
-  #     context.change_action = I18n.t("change_risk_validation.validated")
-  #   else
-  #     investigation.assign_attributes(risk_validated_at: nil, risk_validated_by: nil)
-  #     context.change_action = I18n.t("change_risk_validation.validation_removed")
-  #   end
-  # end
-  #
-  # def send_notification_email
-  #   email_recipients_for_team_with_access(investigation, user).each do |entity|
-  #     email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
-  #     NotifyMailer.risk_validation_updated(
-  #       email: email,
-  #       updater: user,
-  #       name: entity.name,
-  #       investigation: investigation,
-  #       action: change_action.to_s,
-  #     ).deliver_later
-  #   end
-  # end
+
+  def send_notification_email(investigation, user)
+    email_recipients_for_team_with_access(investigation, user).each do |entity|
+      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        entity.name,
+        email,
+        "#{user.name} (#{user.team.name}) edited safety and compliance data on the #{investigation.case_type}.",
+        "Safety and compliance data edited for #{investigation.case_type.upcase_first}"
+      ).deliver_later
+    end
+  end
 end
