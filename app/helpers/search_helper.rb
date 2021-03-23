@@ -4,7 +4,7 @@ module SearchHelper
   end
 
   def search_params
-    { query: params[:q], sort: sort_column, direction: sort_direction }
+    { query: params[:q], sort_by: sort_column, direction: sort_direction }
   end
 
   def search_query
@@ -15,7 +15,7 @@ module SearchHelper
   end
 
   def query_params
-    params.permit(:q, :sort, :direction)
+    params.permit(:q, :sort_by, :direction)
   end
 
   def sorting_params
