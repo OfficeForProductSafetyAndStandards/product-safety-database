@@ -21,7 +21,7 @@
 
     <br />
 
-    <% if policy(Investigation).export? %>
+    <% if @investigations.any? && policy(Investigation).export? %>
       <%= link_to "Export as spreadsheet", investigations_path(format: :xlsx, params: export_params), class: "govuk-link" %>
     <% end %>
 
