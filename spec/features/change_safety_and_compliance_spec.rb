@@ -35,6 +35,12 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
 
         expect(page).to_not have_css("dt", text: "Primary hazard")
         expect(page).to_not have_css("dt", text: "Description of hazard")
+
+        click_link "Activity"
+        expect(page).to have_css("h3", text: "Allegation changed")
+        expect(page).to have_content("Changes:")
+        expect(page).to have_content("Reported reason: Non-compliant")
+        expect(page).to have_content("Non-compliant reason: No one really knows")
       end
 
       it "allows user to change details and make the case unsafe but compliant" do
@@ -67,6 +73,13 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text:  "Far too sharp")
 
         expect(page).to_not have_css("dt", text: "Compliance")
+
+        click_link "Activity"
+        expect(page).to have_css("h3", text: "Allegation changed")
+        expect(page).to have_content("Changes:")
+        expect(page).to have_content("Reported reason: Unsafe")
+        expect(page).to have_content("Primary hazard: Cuts")
+        expect(page).to have_content("Hazard description: Far too sharp")
       end
 
       it "allows user to change details and make the case safe and compliant" do
@@ -99,6 +112,11 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         expect(page).to_not have_css("dt", text: "Primary hazard")
         expect(page).to_not have_css("dt", text: "Description of hazard")
         expect(page).to_not have_css("dt", text: "Compliance")
+
+        click_link "Activity"
+        expect(page).to have_css("h3", text: "Allegation changed")
+        expect(page).to have_content("Changes:")
+        expect(page).to have_content("Reported reason: Safe And Compliant")
       end
     end
   end
