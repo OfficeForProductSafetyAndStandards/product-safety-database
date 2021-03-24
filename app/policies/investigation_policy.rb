@@ -41,7 +41,7 @@ class InvestigationPolicy < ApplicationPolicy
   end
 
   def send_email_alert?(user: @user)
-    user.is_opss?
+    user.can_send_email_alert?
   end
 
   def investigation_restricted?
