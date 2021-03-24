@@ -1,4 +1,8 @@
 <% page_heading = "Why was the product reported?" %>
+<%= govukBackLink(
+  text: "Back to #{@investigation.pretty_description.downcase}",
+  href: investigation_path(@investigation)
+) %>
 
 <%= page_title page_heading, errors: @why_reporting_form.errors.any? %>
 
@@ -11,3 +15,5 @@
     </div>
   </div>
 <% end %>
+
+<p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link govuk-link--no-visited-state" %></p>
