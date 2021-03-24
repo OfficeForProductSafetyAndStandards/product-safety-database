@@ -33,8 +33,8 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Non-compliant")
         expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text:  "No one really knows")
 
-        expect(page).to_not have_css("dt", text: "Primary hazard")
-        expect(page).to_not have_css("dt", text: "Description of hazard")
+        expect(page).not_to have_css("dt", text: "Primary hazard")
+        expect(page).not_to have_css("dt", text: "Description of hazard")
 
         click_link "Activity"
         expect(page).to have_css("h3", text: "Allegation changed")
@@ -70,9 +70,9 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
         expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Unsafe")
         expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text:  "Cuts")
-        expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text:  "Far too sharp")
+        expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: "Far too sharp")
 
-        expect(page).to_not have_css("dt", text: "Compliance")
+        expect(page).not_to have_css("dt", text: "Compliance")
 
         click_link "Activity"
         expect(page).to have_css("h3", text: "Allegation changed")
@@ -109,9 +109,9 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
         expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Safe And Compliant")
 
-        expect(page).to_not have_css("dt", text: "Primary hazard")
-        expect(page).to_not have_css("dt", text: "Description of hazard")
-        expect(page).to_not have_css("dt", text: "Compliance")
+        expect(page).not_to have_css("dt", text: "Primary hazard")
+        expect(page).not_to have_css("dt", text: "Description of hazard")
+        expect(page).not_to have_css("dt", text: "Compliance")
 
         click_link "Activity"
         expect(page).to have_css("h3", text: "Allegation changed")

@@ -23,7 +23,7 @@ private
 
   def assign_attributes
     if reported_reason == :safe_and_compliant
-      investigation.assign_attributes(hazard_description: nil, hazard_type:nil, non_compliant_reason: nil, reported_reason: reported_reason)
+      investigation.assign_attributes(hazard_description: nil, hazard_type: nil, non_compliant_reason: nil, reported_reason: reported_reason)
     end
 
     if reported_reason == :unsafe_and_non_compliant

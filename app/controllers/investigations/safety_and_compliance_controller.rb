@@ -11,7 +11,7 @@ module Investigations
       authorize investigation, :update?
 
       @why_reporting_form = WhyReportingForm.new(why_reporting_form_params)
-      
+
       if @why_reporting_form.valid?
         ChangeSafetyAndComplianceData.call!(
           @why_reporting_form.serializable_hash.merge({
