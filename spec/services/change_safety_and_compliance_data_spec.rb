@@ -53,29 +53,41 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
 
       let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::ChangeSafetyAndComplianceData.to_s).order(:created_at).last }
 
+
       context "when reported_reason is `safe_and_compliant`" do
         let(:reported_reason) { :safe_and_compliant }
 
-        it "updates reported_reason and makes other fields nil" do
-          result
+        context "updates values, creates activity_entry" do
+          before do
+            result
+          end
 
-          expect(investigation.reported_reason).to eq("safe_and_compliant")
-          expect(investigation.hazard_type).to eq(nil)
-          expect(investigation.hazard_description).to eq(nil)
-          expect(investigation.non_compliant_reason).to eq(nil)
-        end
+          it "updates reported_reason" do
+            expect(investigation.reported_reason).to eq("safe_and_compliant")
+          end
 
-        it "creates an activity entry" do
-          result
+          it "makes hazard_type nil" do
+            expect(investigation.hazard_type).to eq(nil)
+          end
 
-          expect(activity_entry.metadata).to eql({
-            "updates" => {
-              "reported_reason" => %w[unsafe_and_non_compliant safe_and_compliant],
-              "hazard_type" => ["Burns", nil],
-              "hazard_description" => ["Too hot", nil],
-              "non_compliant_reason" => ["Breaks all the rules", nil]
-            }
-          })
+          it "makes hazard_description nil" do
+            expect(investigation.hazard_description).to eq(nil)
+          end
+
+          it "makes non_compliant_reason nil" do
+            expect(investigation.non_compliant_reason).to eq(nil)
+          end
+
+          it "creates an activity entry" do
+            expect(activity_entry.metadata).to eql({
+              "updates" => {
+                "reported_reason" => %w[unsafe_and_non_compliant safe_and_compliant],
+                "hazard_type" => ["Burns", nil],
+                "hazard_description" => ["Too hot", nil],
+                "non_compliant_reason" => ["Breaks all the rules", nil]
+              }
+              })
+          end
         end
 
         it "sends an email to notify of the change" do
@@ -94,26 +106,36 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:hazard_type) { "Cuts" }
         let(:hazard_description) { "Too Sharp" }
         let(:non_compliant_reason) { "Breaks all the requirements" }
+        context "updates values, creates activity_entry" do
+          before do
+            result
+          end
 
-        it "updates reported_reason and other fields" do
-          result
+          it "updates reported_reason" do
+            expect(investigation.reported_reason).to eq("unsafe_and_non_compliant")
+          end
 
-          expect(investigation.reported_reason).to eq("unsafe_and_non_compliant")
-          expect(investigation.hazard_type).to eq(hazard_type)
-          expect(investigation.hazard_description).to eq(hazard_description)
-          expect(investigation.non_compliant_reason).to eq(non_compliant_reason)
-        end
+          it "updates hazard_type" do
+            expect(investigation.hazard_type).to eq(hazard_type)
+          end
 
-        it "creates an activity entry" do
-          result
+          it "updates hazard_description" do
+            expect(investigation.hazard_description).to eq(hazard_description)
+          end
 
-          expect(activity_entry.metadata).to eql({
-            "updates" => {
-              "hazard_type" => %w[Burns Cuts],
-              "hazard_description" => ["Too hot", "Too Sharp"],
-              "non_compliant_reason" => ["Breaks all the rules", "Breaks all the requirements"]
-            }
-          })
+          it "updates non_compliant_reason" do
+            expect(investigation.non_compliant_reason).to eq(non_compliant_reason)
+          end
+
+          it "creates an activity entry" do
+            expect(activity_entry.metadata).to eql({
+              "updates" => {
+                "hazard_type" => %w[Burns Cuts],
+                "hazard_description" => ["Too hot", "Too Sharp"],
+                "non_compliant_reason" => ["Breaks all the rules", "Breaks all the requirements"]
+              }
+            })
+          end
         end
 
         it "sends an email to notify of the change" do
@@ -132,26 +154,37 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:hazard_type) { "Cuts" }
         let(:hazard_description) { "Too Sharp" }
 
-        it "updates reported_reason and hazard fields, makes non_compliant_reason nil" do
-          result
+        context "updates values, creates activity_entry" do
+          before do
+            result
+          end
 
-          expect(investigation.reported_reason).to eq("unsafe")
-          expect(investigation.hazard_type).to eq(hazard_type)
-          expect(investigation.hazard_description).to eq(hazard_description)
-          expect(investigation.non_compliant_reason).to eq(nil)
-        end
+          it "updates reported_reason" do
+            expect(investigation.reported_reason).to eq("unsafe")
+          end
 
-        it "creates an activity entry" do
-          result
+          it "updates hazard_type" do
+            expect(investigation.hazard_type).to eq(hazard_type)
+          end
 
-          expect(activity_entry.metadata).to eql({
-            "updates" => {
-              "reported_reason" => %w[unsafe_and_non_compliant unsafe],
-              "hazard_type" => %w[Burns Cuts],
-              "hazard_description" => ["Too hot", "Too Sharp"],
-              "non_compliant_reason" => ["Breaks all the rules", nil]
-            }
-          })
+          it "updates hazard_description" do
+            expect(investigation.hazard_description).to eq(hazard_description)
+          end
+
+          it "makes non_compliant_reason nil" do
+            expect(investigation.non_compliant_reason).to eq(nil)
+          end
+
+          it "creates an activity entry" do
+            expect(activity_entry.metadata).to eql({
+              "updates" => {
+                "reported_reason" => %w[unsafe_and_non_compliant unsafe],
+                "hazard_type" => %w[Burns Cuts],
+                "hazard_description" => ["Too hot", "Too Sharp"],
+                "non_compliant_reason" => ["Breaks all the rules", nil]
+              }
+            })
+          end
         end
 
         it "sends an email to notify of the change" do
@@ -169,26 +202,37 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:reported_reason) { :non_compliant }
         let(:non_compliant_reason) { "Did not fill out the forms" }
 
-        it "updates reported_reason and hazard fields, makes non_compliant_reason nil" do
-          result
+        context "updates values, creates activity_entry" do
+          before do
+            result
+          end
 
-          expect(investigation.reported_reason).to eq("non_compliant")
-          expect(investigation.hazard_type).to eq(nil)
-          expect(investigation.hazard_description).to eq(nil)
-          expect(investigation.non_compliant_reason).to eq(non_compliant_reason)
-        end
+          it "updates reported_reason" do
+            expect(investigation.reported_reason).to eq("non_compliant")
+          end
 
-        it "creates an activity entry" do
-          result
+          it "makes hazard_type nil" do
+            expect(investigation.hazard_type).to eq(nil)
+          end
 
-          expect(activity_entry.metadata).to eql({
-            "updates" => {
-              "reported_reason" => %w[unsafe_and_non_compliant non_compliant],
-              "hazard_type" => ["Burns", nil],
-              "hazard_description" => ["Too hot", nil],
-              "non_compliant_reason" => ["Breaks all the rules", "Did not fill out the forms"]
-            }
-          })
+          it "makes hazard_description nil" do
+            expect(investigation.hazard_description).to eq(nil)
+          end
+
+          it "updates non_compliant_reason" do
+            expect(investigation.non_compliant_reason).to eq(non_compliant_reason)
+          end
+
+          it "creates an activity entry" do
+            expect(activity_entry.metadata).to eql({
+              "updates" => {
+                "reported_reason" => ["unsafe_and_non_compliant", "non_compliant"],
+                "hazard_type" => ["Burns", nil],
+                "hazard_description" => ["Too hot", nil],
+                "non_compliant_reason" => ["Breaks all the rules", non_compliant_reason]
+              }
+            })
+          end
         end
 
         it "sends an email to notify of the change" do
