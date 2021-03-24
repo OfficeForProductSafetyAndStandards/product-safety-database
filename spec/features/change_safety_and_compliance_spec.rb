@@ -9,6 +9,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
       sign_in_and_visit_investigation_page
       visit_change_safety_and_compliance_page_and_expect_prefilled_values
     end
+    
     context "when the case is unsafe and non compliant" do
       it "allows user to change details and make the case safe but uncompliant" do
         uncheck("It’s unsafe (or suspected to be)")
