@@ -39,7 +39,22 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
     )
   end
 
-  it { expect(decorated_activity.new_action).to eq(CorrectiveAction.actions[new_summary]) }
+  describe "#new_action" do
+    context "when action is other" do
+      let(:new_summary) { "other" }
+
+      it "returns the other action description" do
+        expect(decorated_activity.new_action).to eq(new_other_action)
+      end
+    end
+
+    context "when action is not other" do
+      it "returns the action name" do
+        expect(decorated_activity.new_action).to eq(CorrectiveAction.actions[new_summary])
+      end
+    end
+  end
+
   it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_s(:govuk)) }
 
   describe "#new_online_recall_information" do
