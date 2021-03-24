@@ -53,7 +53,6 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
 
       let(:activity_entry) { investigation.activities.where(type: AuditActivity::Investigation::ChangeSafetyAndComplianceData.to_s).order(:created_at).last }
 
-
       context "when reported_reason is `safe_and_compliant`" do
         let(:reported_reason) { :safe_and_compliant }
 
@@ -80,13 +79,11 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
 
           it "creates an activity entry" do
             expect(activity_entry.metadata).to eql({
-              "updates" => {
-                "reported_reason" => %w[unsafe_and_non_compliant safe_and_compliant],
-                "hazard_type" => ["Burns", nil],
-                "hazard_description" => ["Too hot", nil],
-                "non_compliant_reason" => ["Breaks all the rules", nil]
-              }
-              })
+              "updates" => { "reported_reason" => %w[unsafe_and_non_compliant safe_and_compliant],
+                             "hazard_type" => ["Burns", nil],
+                             "hazard_description" => ["Too hot", nil],
+                             "non_compliant_reason" => ["Breaks all the rules", nil] }
+            })
           end
         end
 
@@ -106,6 +103,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:hazard_type) { "Cuts" }
         let(:hazard_description) { "Too Sharp" }
         let(:non_compliant_reason) { "Breaks all the requirements" }
+
         context "updates values, creates activity_entry" do
           before do
             result
@@ -177,12 +175,10 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
 
           it "creates an activity entry" do
             expect(activity_entry.metadata).to eql({
-              "updates" => {
-                "reported_reason" => %w[unsafe_and_non_compliant unsafe],
-                "hazard_type" => %w[Burns Cuts],
-                "hazard_description" => ["Too hot", "Too Sharp"],
-                "non_compliant_reason" => ["Breaks all the rules", nil]
-              }
+              "updates" => { "reported_reason" => %w[unsafe_and_non_compliant unsafe],
+                             "hazard_type" => %w[Burns Cuts],
+                             "hazard_description" => ["Too hot", "Too Sharp"],
+                             "non_compliant_reason" => ["Breaks all the rules", nil] }
             })
           end
         end
@@ -225,12 +221,10 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
 
           it "creates an activity entry" do
             expect(activity_entry.metadata).to eql({
-              "updates" => {
-                "reported_reason" => ["unsafe_and_non_compliant", "non_compliant"],
-                "hazard_type" => ["Burns", nil],
-                "hazard_description" => ["Too hot", nil],
-                "non_compliant_reason" => ["Breaks all the rules", non_compliant_reason]
-              }
+              "updates" => { "reported_reason" => %w[unsafe_and_non_compliant non_compliant],
+                             "hazard_type" => ["Burns", nil],
+                             "hazard_description" => ["Too hot", nil],
+                             "non_compliant_reason" => ["Breaks all the rules", non_compliant_reason] }
             })
           end
         end
