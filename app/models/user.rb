@@ -87,6 +87,10 @@ class User < ApplicationRecord
     has_role? :risk_level_validator
   end
 
+  def can_send_email_alert?
+    has_role? :email_alert_sender
+  end
+
   def has_role?(role)
     roles.exists?(name: role) || team.roles.exists?(name: role)
   end

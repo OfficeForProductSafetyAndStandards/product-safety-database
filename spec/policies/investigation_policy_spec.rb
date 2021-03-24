@@ -5,10 +5,9 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
 
   let(:team) { create(:team) }
   let(:user) { create(:user, team: team) }
+  let(:investigation) { create(:allegation, is_private: false) }
 
   context "when the investigation is not restricted" do
-    let(:investigation) { create(:allegation, is_private: false) }
-
     context "when the user’s team has not been added to the case" do
       it "cannot update the case" do
         expect(policy.update?).to be false
@@ -146,6 +145,22 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
 
       it "cannot view all details about the case" do
         expect(policy.view_protected_details?).to be false
+      end
+    end
+  end
+
+  describe "#send_email_alert?" do
+    context "when the user has the email_alert_sender role" do
+      before { user.team.roles.create!(name: "email_alert_sender") }
+
+      it "returns true" do
+        expect(policy).to be_send_email_alert
+      end
+    end
+
+    context "when the user does not have the email_alert_sender role" do
+      it "returns false" do
+        expect(policy).not_to be_send_email_alert
       end
     end
   end
