@@ -56,7 +56,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
       context "when reported_reason is `safe_and_compliant`" do
         let(:reported_reason) { :safe_and_compliant }
 
-        context "updates values, creates activity_entry" do
+        context "with updated values" do
           before do
             result
           end
@@ -104,7 +104,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:hazard_description) { "Too Sharp" }
         let(:non_compliant_reason) { "Breaks all the requirements" }
 
-        context "updates values, creates activity_entry" do
+        context "with updated values" do
           before do
             result
           end
@@ -152,7 +152,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:hazard_type) { "Cuts" }
         let(:hazard_description) { "Too Sharp" }
 
-        context "updates values, creates activity_entry" do
+        context "with updated values" do
           before do
             result
           end
@@ -198,7 +198,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
         let(:reported_reason) { :non_compliant }
         let(:non_compliant_reason) { "Did not fill out the forms" }
 
-        context "updates values, creates activity_entry" do
+        context "with updated values" do
           before do
             result
           end
