@@ -18,10 +18,10 @@ class SearchParams
   attribute :case_owner_is_my_team, :boolean
   alias_method :case_owner_is_my_team?, :case_owner_is_my_team
   attribute :case_owner_is_someone_else, :boolean
+  alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
   attribute :case_owner_is_someone_else_id
   attribute :created_by_me
   attribute :created_by_someone_else
-  alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
   attribute :created_by_someone_else_id
   attribute :override_sort_by
   attribute :direction

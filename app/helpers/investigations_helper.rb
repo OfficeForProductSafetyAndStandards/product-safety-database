@@ -151,9 +151,9 @@ module InvestigationsHelper
       return user_ids_from_team(@search.case_owner_is_someone_else_id)
     end
 
-    return [] unless @search.case_owner_is_team?
+    return [] unless @search.case_owner_is_my_team?
 
-    [current_user.team.id] + current_user.user_ids
+    [current_user.team.id] + current_user.team.user_ids
   end
 
   def someone_else_creators

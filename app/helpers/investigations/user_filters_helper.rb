@@ -16,8 +16,8 @@ module Investigations::UserFiltersHelper
   end
 
   def case_owner_is(form)
-    case_owner_is_items = [{ key: "case_owner_is_me", value: "checked", unchecked_value: "off", text: "Me" }]
-    case_owner_is_items << { key: "case_owner_is_my_team", value: current_user.team_id, unchecked_value: "off", text: "My team" }
+    case_owner_is_items = [{ key: "case_owner_is_me", value: true, unchecked_value: "off", text: "Me" }]
+    case_owner_is_items << { key: "case_owner_is_my_team", value: true, unchecked_value: "off", text: "My team", checked: form.object.case_owner_is_my_team? }
     case_owner_is_items << { key: "case_owner_is_someone_else",
                              value: true,
                              unchecked_value: "off",
