@@ -28,7 +28,8 @@ class WhyReportingForm
     new(reported_reason_unsafe: investigation.unsafe?,
         reported_reason_non_compliant: investigation.non_compliant?,
         reported_reason_safe_and_compliant: (!investigation.non_compliant? && !investigation.unsafe?),
-        hazard_description: investigation.hazard_description, hazard_type: investigation.hazard_type,
+        hazard_description: investigation.hazard_description,
+        hazard_type: investigation.hazard_type,
         non_compliant_reason: investigation.non_compliant_reason)
   end
 
@@ -40,11 +41,6 @@ class WhyReportingForm
   end
 
 private
-
-
-  def calculated_reported_reason_unsafe(investigation)
-    investigation.unsafe?
-  end
 
   def reason_created
     I18n.t(reported_reason, scope: :why_reporting_form)
