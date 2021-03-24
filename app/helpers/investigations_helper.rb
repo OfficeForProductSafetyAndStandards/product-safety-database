@@ -326,13 +326,13 @@ module InvestigationsHelper
   def safety_and_compliance_rows(investigation, user)
     rows = []
 
-    if investigation.reported_reason
-      rows << {
-        key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
-        value: { text: simple_format(t(investigation.reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
-        actions: safety_and_compliance_actions(investigation, user, "reported_as")
-      }
-    end
+    reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided
+
+    rows << {
+      key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
+      value: { text: simple_format(t(reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
+      actions: safety_and_compliance_actions(investigation, user, "reported_as")
+    }
 
     if investigation.unsafe?
       rows << {

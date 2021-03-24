@@ -135,6 +135,7 @@ en:
         unsafe: Unsafe
         non_compliant: Non-compliant
         unsafe_and_non_compliant: Unsafe and non-compliant
+        not_provided: Not Provided
       risk_assessments:
         key:
           one: Risk assessment
