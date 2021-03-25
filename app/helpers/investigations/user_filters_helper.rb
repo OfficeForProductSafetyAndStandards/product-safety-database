@@ -50,7 +50,7 @@ module Investigations::UserFiltersHelper
     render "form_components/govuk_select",
            key: "teams_with_access[id][]",
            form: form,
-           items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
+           items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_ids.detect { |team_with_access_id| team_with_access_id == e.id } } },
            label: { text: "Name" },
            is_autocomplete: true
   end
