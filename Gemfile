@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.92"
+gem "aws-sdk-s3", "~> 1.93"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils", "~> 0.6"
@@ -20,6 +20,7 @@ gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
 gem "lograge", "~> 0.11"
+gem "mimemagic", "~> 0.3.6" # TODO: Remove when Rails dependency on yanked 0.3.5 version gets fixed.
 gem "mini_magick", "~> 4.11"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.8"
