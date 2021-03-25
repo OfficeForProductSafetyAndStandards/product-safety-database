@@ -14,6 +14,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
   let!(:other_team_investigation)            { create(:allegation, creator: other_user_other_team) }
+  let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
 
   let!(:closed_investigation) { create(:allegation, :closed) }
   let!(:project) { create(:project) }
@@ -37,6 +38,18 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     Investigation.import refresh: :wait_for
     sign_in(user)
     visit investigations_path
+  end
+
+  scenario "filter investigations created by another team" do
+    within_fieldset("Created by") do
+      check "Other person or team"
+      select other_team.name, from: "Name"
+    end
+    click_button "Apply filters"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
@@ -151,6 +164,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
         expect(page).not_to have_listed_case(investigation.pretty_id)
 
         within_fieldset("Teams added to case") do
+          expect(page).to have_checked_field("Other team")
           expect(page).to have_select("Name", with_options: [other_team.name])
         end
       end
@@ -199,16 +213,17 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "combining filters" do
-    pending
-    check "My team", id: "case_owner_is_team_0"
-    check "Other person or team", id: "case_owner_is_someone_else"
-    select other_user_other_team.name, from: "case_owner_is_someone_else_id"
+    within_fieldset "Case owner" do
+      check "My team"
+      check "Other person or team", id: "case_owner_is_someone_else"
+      select other_user_other_team.name, from: "case_owner_is_someone_else_id"
+    end
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
   end
 
   scenario "Filtering to coronavirus-related cases only" do

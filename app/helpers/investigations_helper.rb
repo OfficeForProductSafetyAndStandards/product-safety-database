@@ -87,8 +87,7 @@ module InvestigationsHelper
   def compute_included_terms
     owners = []
     owners << current_user.id if @search.case_owner_is_me?
-
-    return format_owner_terms(my_team_id_and_its_user_ids) if @search.case_owner_is_my_team?
+    owners += my_team_id_and_its_user_ids if @search.case_owner_is_my_team?
 
     if @search.case_owner_is_someone_else?
       if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
