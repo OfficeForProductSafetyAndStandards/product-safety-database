@@ -63,6 +63,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       expect(page).to have_checked_field("Open")
       expect(page).to have_unchecked_field("Closed")
     end
+
+    within_fieldset "Sort by" do
+      expect(page).to have_checked_field("Most recently updated")
+    end
   end
 
   scenario "filtering for both open and closed cases" do
