@@ -20,7 +20,7 @@ gem "image_processing"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
 gem "lograge", "~> 0.11"
-gem "mimemagic", "~> 0.3.6" # TODO: Remove when Rails dependency on yanked 0.3.5 version gets fixed.
+gem "mimemagic", "~> 0.3.8" # TODO: Remove when Rails dependency on yanked 0.3.5 version gets fixed.
 gem "mini_magick", "~> 4.11"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.8"
