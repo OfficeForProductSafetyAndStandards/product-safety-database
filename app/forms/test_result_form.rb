@@ -26,6 +26,7 @@ class TestResultForm
   validates :result, inclusion: { in: Test::Result.results.keys }
   validates :document, presence: true
   validates :product_id, presence: true, on: :create_with_product
+  validates :further_test_results, presence: true, on: :ts_user_create
   validates :date,
             presence: true,
             real_date: true,
