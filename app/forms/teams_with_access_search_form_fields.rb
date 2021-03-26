@@ -9,6 +9,7 @@ class TeamsWithAccessSearchFormFields
   def initialize(*args)
     super
 
+    self.id = [] unless other_team_with_access
     id.reject!(&:blank?)
   end
 end

@@ -14,7 +14,6 @@ module InvestigationElasticsearch
         indexes :creator_id, type: :keyword
         indexes :teams_with_access, type: :nested do
           indexes :id, type: :keyword
-          indexes :type, type: :keyword
         end
       end
     end

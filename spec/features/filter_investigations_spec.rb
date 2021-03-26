@@ -159,7 +159,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
         click_button "Apply filters"
 
         expect(page).to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
         expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
         expect(page).not_to have_listed_case(investigation.pretty_id)
 
@@ -167,6 +166,19 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
           expect(page).to have_checked_field("Other team")
           expect(page).to have_select("Name", with_options: [other_team.name])
         end
+
+        within_fieldset("Teams added to case") do
+          uncheck "Other team"
+        end
+
+        within_fieldset("Case owner") do
+          check "My team"
+        end
+        click_button "Apply filters"
+
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
       end
     end
   end
