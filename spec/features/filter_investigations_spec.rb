@@ -167,13 +167,8 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
           expect(page).to have_select("Name", with_options: [other_team.name])
         end
 
-        within_fieldset("Teams added to case") do
-          uncheck "Other team"
-        end
-
-        within_fieldset("Case owner") do
-          check "My team"
-        end
+        within_fieldset("Teams added to case") { uncheck "Other team" }
+        within_fieldset("Case owner")          { check "My team" }
         click_button "Apply filters"
 
         expect(page).not_to have_listed_case(other_team_investigation.pretty_id)

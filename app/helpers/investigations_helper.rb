@@ -200,7 +200,7 @@ module InvestigationsHelper
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
       creator_team_with_key[0],
-      teams_with_access: [:other_team_with_access, id: []]
+      teams_with_access: [:other_team_with_access, :my_team, id: []]
     )
   end
 

@@ -5,7 +5,7 @@ module Investigations::UserFiltersHelper
 
   def teams_added_to_case_items(form)
     [
-      { key: "teams_with_access[id][]", value: current_user.team_id, text: t(".my_team"), unchecked_value: "", checked: form.object.teams_with_access_ids.detect { |team_with_access_id| team_with_access_id == current_user.team_id } },
+      { key: "teams_with_access[my_team]", value: current_user.team_id, text: t(".my_team"), unchecked_value: "", checked: form.object.teams_with_access_ids.detect { |team_with_access_id| team_with_access_id == current_user.team_id } },
       {
         key: "teams_with_access[other_team_with_access]",
         value: true,

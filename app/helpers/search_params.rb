@@ -52,7 +52,7 @@ class SearchParams
   end
 
   def teams_with_access_ids
-    @teams_with_access_ids ||= teams_with_access.id
+    @teams_with_access_ids ||= teams_with_access.ids
   end
 
   def filter_teams_with_access?
