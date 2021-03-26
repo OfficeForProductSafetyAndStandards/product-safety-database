@@ -88,16 +88,17 @@ module InvestigationsHelper
     owners = []
     owners << current_user.id if @search.case_owner_is_me?
     owners += my_team_id_and_its_user_ids if @search.case_owner_is_my_team?
-
-    if @search.case_owner_is_someone_else?
-      if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
-        owners += user_ids_from_team(team)
-      else
-        owners << @search.case_owner_is_someone_else_id
-      end
-    end
+    owners += other_owner_ids if @search.case_owner_is_someone_else?
 
     format_owner_terms(owners.uniq)
+  end
+
+  def other_owner_ids
+    if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+      return user_ids_from_team(team)
+    end
+
+    [@search.case_owner_is_someone_else_id]
   end
 
   def someone_else_owners
