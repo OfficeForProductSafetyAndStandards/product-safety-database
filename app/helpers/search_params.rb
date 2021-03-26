@@ -37,6 +37,7 @@ class SearchParams
   attribute :serious_and_high_risk_level_only, :boolean
   alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
   attribute :sort_by, default: RECENT
+  attribute :page, :integer
 
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
 
