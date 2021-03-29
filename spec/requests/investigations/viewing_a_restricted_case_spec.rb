@@ -65,4 +65,13 @@ RSpec.describe "Viewing a restricted case", :with_stubbed_elasticsearch, :with_s
       expect(response).to have_http_status(:ok)
     end
   end
+
+  context "when the case is owned by a team from another organisation and the user has the restricted_case_viewer role" do
+    let(:investigation) { create(:allegation, is_private: true, creator: other_user) }
+    let(:user) { create(:user, :activated, :restricted_case_viewer, organisation: users_organisation, team: users_team,) }
+
+    it "renders the page" do
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end
