@@ -13,15 +13,18 @@ module Investigations
       @why_reporting_form = WhyReportingForm.new(why_reporting_form_params)
 
       if @why_reporting_form.valid?
-        ChangeSafetyAndComplianceData.call!(
+        result = ChangeSafetyAndComplianceData.call!(
           @why_reporting_form.serializable_hash.merge({
             investigation: investigation,
             user: current_user
           })
         )
 
+
+        flash[:success] = "Case information changed." if result.changes_made
+
         @investigation = investigation.decorate
-        redirect_to investigation_path(@investigation), flash: { success: "Case information changed." }
+        redirect_to investigation_path(@investigation)
       else
         @investigation = investigation.decorate
         render :edit

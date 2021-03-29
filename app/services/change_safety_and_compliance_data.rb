@@ -8,6 +8,8 @@ class ChangeSafetyAndComplianceData
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
+    context.changes_made = false
+
     assign_attributes
     return if investigation.changes.none?
 
@@ -15,6 +17,8 @@ class ChangeSafetyAndComplianceData
       investigation.save!
       create_audit_activity_for_safety_and_compliance_change
     end
+
+    context.changes_made = true
 
     send_notification_email(investigation, user)
   end
