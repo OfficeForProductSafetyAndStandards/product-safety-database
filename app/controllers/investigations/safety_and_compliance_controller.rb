@@ -20,7 +20,6 @@ module Investigations
           })
         )
 
-
         flash[:success] = "Case information changed." if result.changes_made
 
         @investigation = investigation.decorate
