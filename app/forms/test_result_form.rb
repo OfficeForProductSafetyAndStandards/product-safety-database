@@ -19,6 +19,7 @@ class TestResultForm
   attribute :filename
   attribute :file_description
   attribute :failure_details
+  attribute :further_test_results
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
