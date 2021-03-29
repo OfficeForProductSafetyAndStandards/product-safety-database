@@ -28,8 +28,8 @@ module Investigations::UserFiltersHelper
   end
 
   def created_by(form)
-    created_by_items = [{ key: "created_by[me]", value: true, unchecked_value: "off", text: "Me" }]
-    created_by_items << { key: "created_by[my_team]", value: true, unchecked_value: "off", text: "My team" }
+    created_by_items = [{ key: "created_by[me]", value: true, unchecked_value: "off", text: "Me", checked: @search.created_by.me? }]
+    created_by_items << { key: "created_by[my_team]", value: true, unchecked_value: "off", text: "My team", checked: @search.created_by.my_team? }
     created_by_items << { key: "created_by[someone_else]",
                           value: true,
                           unchecked_value: "off",
