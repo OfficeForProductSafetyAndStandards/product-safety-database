@@ -34,6 +34,7 @@ module Investigations::UserFiltersHelper
                           value: true,
                           unchecked_value: "off",
                           text: "Other person or team",
+                          checked: @search.created_by.someone_else?,
                           conditional: { html: other_creator(form) } }
   end
 

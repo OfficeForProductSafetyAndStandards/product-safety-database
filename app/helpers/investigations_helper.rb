@@ -109,16 +109,9 @@ module InvestigationsHelper
 
   def get_creator_filter
     return { should: [], must_not: [] } if @search.no_created_by_checked?
-    return { should: [], must_not: compute_excluded_created_by_terms } if @search.created_by_filter_exclusive?
+    return { should: [], must_not: { terms: { creator_id: current_user.team.user_ids } } } if @search.created_by_filter_exclusive?
 
     { should: format_creator_terms(checked_team_creators), must_not: [] }
-  end
-
-  def compute_excluded_created_by_terms
-    # After consultation with designers we chose to ignore teams who are not selected in blacklisting
-    excluded_creators = []
-    excluded_creators << current_user.id if params[:created_by_me] == "unchecked"
-    format_creator_terms(excluded_creators)
   end
 
   def checked_team_creators
