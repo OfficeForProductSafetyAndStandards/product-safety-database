@@ -101,13 +101,6 @@ module InvestigationsHelper
     [@search.case_owner_is_someone_else_id]
   end
 
-  def someone_else_owners
-    return [] unless params[:case_owner_is_someone_else] == "checked"
-
-    team = Team.find_by(id: params[:case_owner_is_someone_else_id])
-    team.present? ? user_ids_from_team(team) : [params[:case_owner_is_someone_else_id]]
-  end
-
   def format_owner_terms(owner_array)
     owner_array.map do |a|
       { term: { owner_id: a } }
@@ -115,20 +108,10 @@ module InvestigationsHelper
   end
 
   def get_creator_filter
-    return { should: [], must_not: [] } if no_created_by_boxes_checked
-    return { should: [], must_not: compute_excluded_created_by_terms } if creator_filter_exclusive
+    return { should: [], must_not: [] } if @search.no_created_by_checked?
+    return { should: [], must_not: compute_excluded_created_by_terms } if @search.created_by_filter_exclusive?
 
-    { should: compute_included_created_by_terms, must_not: [] }
-  end
-
-  def no_created_by_boxes_checked
-    no_created_by_people_boxes_checked = params[:created_by_me] == "unchecked" && params[:created_by_someone_else] == "unchecked"
-    no_created_by_team_boxes_checked = query_params[creator_team_with_key[0]] == "unchecked"
-    no_created_by_people_boxes_checked && no_created_by_team_boxes_checked
-  end
-
-  def creator_filter_exclusive
-    params[:created_by_someone_else] == "checked" && params[:created_by_someone_else_id].blank?
+    { should: format_creator_terms(checked_team_creators), must_not: [] }
   end
 
   def compute_excluded_created_by_terms
@@ -138,22 +121,21 @@ module InvestigationsHelper
     format_creator_terms(excluded_creators)
   end
 
-  def compute_included_created_by_terms
-    # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    creators = checked_team_creators
-    creators.concat(someone_else_creators)
-    creators << current_user.id if params[:created_by_me] == "checked"
-    format_creator_terms(creators.uniq)
-  end
-
   def checked_team_creators
-    if @search.case_owner_is_someone_else? && @search.case_owner_is_someone_else_id.present?
-      return user_ids_from_team(@search.case_owner_is_someone_else_id)
+    ids = []
+
+    ids << current_user.id                       if @search.created_by.me?
+    ids += user_ids_from_team(current_user.team) if @search.created_by.my_team?
+
+    if @search.created_by.someone_else? && @search.created_by.someone_else_id.present?
+      if (team = Team.find_by(id: @search.created_by.someone_else_id))
+        ids += user_ids_from_team(team)
+      else
+        @search.created_by.someone_else_id
+      end
     end
 
-    return [] unless @search.case_owner_is_my_team?
-
-    [current_user.team.id] + current_user.team.user_ids
+    ids
   end
 
   def someone_else_creators
@@ -179,7 +161,6 @@ module InvestigationsHelper
 
   def query_params
     set_default_type_filter
-    set_default_creator_filter
     params.permit(
       :q,
       :status_open,
@@ -193,26 +174,16 @@ module InvestigationsHelper
       :case_owner_is_someone_else,
       :case_owner_is_someone_else_id,
       :sort_by,
-      :created_by_me,
-      :created_by_me,
-      :created_by_someone_else,
-      :created_by_someone_else_id,
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
-      creator_team_with_key[0],
+      created_by: [:me, :someone_else, :my_team, id: []],
       teams_with_access: [:other_team_with_access, :my_team, id: []]
     )
   end
 
   def export_params
     query_params.except(:page)
-  end
-
-  def set_default_creator_filter
-    params[:created_by_me] = "unchecked" if params[:created_by_me].blank?
-    params[:created_by_team_0] = "unchecked" if params[:created_by_team_0].blank?
-    params[:created_by_someone_else] = "unchecked" if params[:created_by_someone_else].blank?
   end
 
   def set_default_type_filter
@@ -530,7 +501,7 @@ module InvestigationsHelper
   end
 
   def form_serialisation_option
-    options = { include: :teams_with_access }
+    options = { include: %i[teams_with_access created_by] }
     options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
 
     options

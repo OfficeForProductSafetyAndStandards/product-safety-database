@@ -28,11 +28,11 @@ module Investigations::UserFiltersHelper
   end
 
   def created_by(form)
-    created_by_items = [{ key: "created_by_me", value: "checked", unchecked_value: "unchecked", text: "Me" }]
-    created_by_items << { key: creator_team_with_key[0], value: creator_team_with_key[1].id, unchecked_value: "unchecked", text: creator_team_with_key[2] }
-    created_by_items << { key: "created_by_someone_else",
-                          value: "checked",
-                          unchecked_value: "unchecked",
+    created_by_items = [{ key: "created_by[me]", value: true, unchecked_value: "off", text: "Me" }]
+    created_by_items << { key: "created_by[my_team]", value: true, unchecked_value: "off", text: "My team" }
+    created_by_items << { key: "created_by[someone_else]",
+                          value: true,
+                          unchecked_value: "off",
                           text: "Other person or team",
                           conditional: { html: other_creator(form) } }
   end
@@ -59,9 +59,9 @@ module Investigations::UserFiltersHelper
 
   def other_creator(form)
     render "form_components/govuk_select",
-           key: :created_by_someone_else_id,
+           key: "created_by[id][]",
            form: form,
-           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
+           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_ids.detect { |someone_else_id| someone_else_id == e.id } } },
            label: { text: "Name" },
            is_autocomplete: true
   end

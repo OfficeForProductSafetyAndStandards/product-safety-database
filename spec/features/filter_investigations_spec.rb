@@ -52,6 +52,15 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
+  scenario "filter investigations created by my team" do
+    within_fieldset("Created by") { check "My team" }
+    click_button "Apply filters"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+  end
+
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
     within_fieldset("Case owner") do
       expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])

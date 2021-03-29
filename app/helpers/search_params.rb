@@ -20,9 +20,11 @@ class SearchParams
   attribute :case_owner_is_someone_else, :boolean
   alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
   attribute :case_owner_is_someone_else_id
-  attribute :created_by_me
-  attribute :created_by_someone_else
-  attribute :created_by_someone_else_id
+  attribute :created_by_me, :boolean
+  alias_method :created_by_me?, :created_by_me
+  attribute :created_by_someone_else, :boolean
+  alias_method :created_by_someone_else?, :created_by_someone_else
+  attribute :created_by_someone_else_ids, default: []
   attribute :override_sort_by
   attribute :direction
   attribute :enquiry
@@ -38,11 +40,15 @@ class SearchParams
   alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
   attribute :sort_by, default: RECENT
   attribute :page, :integer
-
+  attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
 
   def owner_filter_exclusive?
     case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
+  end
+
+  def created_by_filter_exclusive?
+    created_by.someone_else? && created_by.id.empty?
   end
 
   def no_owner_boxes_checked?
@@ -50,6 +56,10 @@ class SearchParams
     return false if case_owner_is_my_team?
 
     !case_owner_is_someone_else?
+  end
+
+  def no_created_by_checked?
+    !created_by.me? && !created_by.my_team? && !created_by.someone_else?
   end
 
   def teams_with_access_ids
