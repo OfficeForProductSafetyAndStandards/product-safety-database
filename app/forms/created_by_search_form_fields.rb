@@ -9,16 +9,12 @@ class CreatedBySearchFormFields
   alias_method :my_team?, :my_team
   attribute :me, :boolean
   alias_method :me?, :me
-  attribute :id, default: []
+  attribute :id
 
   def initialize(*args)
     super
 
-    self.id = [] unless someone_else?
-    id.reject!(&:blank?)
-  end
-
-  def me?
-    me.present?
+    self.id = nil unless someone_else?
+    self.id = nil if id.blank?
   end
 end

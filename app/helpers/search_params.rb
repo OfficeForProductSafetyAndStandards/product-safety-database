@@ -48,7 +48,7 @@ class SearchParams
   end
 
   def created_by_filter_exclusive?
-    created_by.someone_else? && created_by.id.empty?
+    created_by.someone_else? && created_by.id.blank?
   end
 
   def no_owner_boxes_checked?

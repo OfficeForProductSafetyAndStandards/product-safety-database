@@ -120,8 +120,8 @@ module InvestigationsHelper
     ids << current_user.id                       if @search.created_by.me?
     ids += user_ids_from_team(current_user.team) if @search.created_by.my_team?
 
-    if @search.created_by.someone_else? && @search.created_by.someone_else_id.present?
-      if (team = Team.find_by(id: @search.created_by.someone_else_id))
+    if @search.created_by.someone_else? && @search.created_by.id.present?
+      if (team = Team.find_by(id: @search.created_by.id))
         ids += user_ids_from_team(team)
       else
         @search.created_by.someone_else_id
@@ -170,7 +170,7 @@ module InvestigationsHelper
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
-      created_by: [:me, :someone_else, :my_team, id: []],
+      created_by: %i[me someone_else my_team id],
       teams_with_access: [:other_team_with_access, :my_team, id: []]
     )
   end
