@@ -27,7 +27,7 @@ class WhyReportingForm
   def self.from(investigation)
     new(reported_reason_unsafe: investigation.unsafe?,
         reported_reason_non_compliant: investigation.non_compliant?,
-        reported_reason_safe_and_compliant: (!investigation.non_compliant? && !investigation.unsafe?),
+        reported_reason_safe_and_compliant: investigation.safe_and_compliant?,
         hazard_description: investigation.hazard_description,
         hazard_type: investigation.hazard_type,
         non_compliant_reason: investigation.non_compliant_reason)
