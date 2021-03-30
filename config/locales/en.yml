@@ -135,8 +135,8 @@ en:
         unsafe: Unsafe
         non_compliant: Non-compliant
         unsafe_and_non_compliant: Unsafe and non-compliant
-        safe_and_compliant: Safe And Compliant
-        not_provided: Not Provided
+        safe_and_compliant: Safe and compliant
+        not_provided: Not provided
       risk_assessments:
         key:
           one: Risk assessment

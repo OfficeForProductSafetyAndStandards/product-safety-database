@@ -61,7 +61,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_button "Change"
 
         expect(page).to have_current_path("/cases/#{investigation.pretty_id}")
-        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Safe And Compliant")
+        expect(page.find("dt", text: "Reported as")).to have_sibling("dd", text: "Safe and compliant")
 
         expect(page).not_to have_css("dt", text: "Primary hazard")
         expect(page).not_to have_css("dt", text: "Description of hazard")
@@ -70,7 +70,7 @@ RSpec.feature "Change safety and compliance details for a case", :with_stubbed_m
         click_link "Activity"
         expect(page).to have_css("h3", text: "Allegation changed")
         expect(page).to have_content("Changes:")
-        expect(page).to have_content("Reported reason: Safe And Compliant")
+        expect(page).to have_content("Reported reason: Safe and compliant")
       end
 
       def sign_in_and_visit_investigation_page

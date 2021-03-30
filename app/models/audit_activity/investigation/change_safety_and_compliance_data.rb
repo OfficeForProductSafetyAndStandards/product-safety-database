@@ -12,7 +12,7 @@ class AuditActivity::Investigation::ChangeSafetyAndComplianceData < AuditActivit
   end
 
   def title(*)
-    "#{investigation.case_type.upcase_first} changed"
+    "Safety and compliance status changed"
   end
 
 private
