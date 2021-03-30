@@ -189,18 +189,6 @@ class Investigation < ApplicationRecord
     !risk_validated_by.nil?
   end
 
-  def unsafe?
-    reported_reason == "unsafe" || reported_reason == "unsafe_and_non_compliant"
-  end
-
-  def non_compliant?
-    reported_reason == "non_compliant" || reported_reason == "unsafe_and_non_compliant"
-  end
-
-  def safe_and_compliant?
-    reported_reason == "safe_and_compliant"
-  end
-
 private
 
   def create_audit_activity_for_status

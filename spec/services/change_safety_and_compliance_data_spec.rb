@@ -174,7 +174,7 @@ RSpec.describe ChangeSafetyAndComplianceData, :with_stubbed_elasticsearch, :with
           end
 
           it "creates an activity entry" do
-            expect(activity_entry.metadata).to eql({
+            expect(activity_entry.metadata).to eq({
               "updates" => { "reported_reason" => %w[unsafe_and_non_compliant unsafe],
                              "hazard_type" => %w[Burns Cuts],
                              "hazard_description" => ["Too hot", "Too Sharp"],
