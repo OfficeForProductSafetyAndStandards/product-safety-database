@@ -63,11 +63,10 @@ private
 
   def send_notification_email(investigation, user)
     email_recipients_for_team_with_access(investigation, user).each do |entity|
-      email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         entity.name,
-        email,
+        entity.email,
         "#{user.name} (#{user.team.name}) edited safety and compliance data on the #{investigation.case_type}.",
         "Safety and compliance data edited for #{investigation.case_type.upcase_first}"
       ).deliver_later
