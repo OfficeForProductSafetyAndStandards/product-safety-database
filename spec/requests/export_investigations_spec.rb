@@ -240,7 +240,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
       context "when investigation is closed" do
         it "date_closed column is empty" do
-          create(:allegation, is_closed: true, date_closed: Date.yesterday)
+          closed_at_date = Date.new(2021, 01, 01)
+          create(:allegation, is_closed: true, date_closed: closed_at_date)
 
           Investigation.import refresh: true, force: true
 
@@ -248,7 +249,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           aggregate_failures do
             expect(exported_data.cell(1, 23)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 23)).to eq Date.yesterday.strftime("%Y-%m-%d %H:%M:%S %z")
+            expect(exported_data.cell(2, 23)).to eq closed_at_date.strftime("%Y-%m-%d %H:%M:%S %z")
           end
         end
       end
