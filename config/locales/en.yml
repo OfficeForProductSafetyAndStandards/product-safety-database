@@ -126,6 +126,17 @@ en:
           change: Change
           set: Set
         visually_hidden_text: risk level
+      safety_and_compliance:
+        key: Safety and compliance
+        reported_as: Reported as
+        primary_hazard: Primary hazard
+        description: Description of hazard
+        compliance: Compliance
+        unsafe: Unsafe
+        non_compliant: Non-compliant
+        unsafe_and_non_compliant: Unsafe and non-compliant
+        safe_and_compliant: Safe and compliant
+        not_provided: Not provided
       risk_assessments:
         key:
           one: Risk assessment
