@@ -109,7 +109,7 @@ jobs:
 
     - name: Run Specs
       run: |
-        bundle exec rspec {{ matrix.rspec-folder }}
+        bundle exec rspec ${{ matrix.rspec-folder }}
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
