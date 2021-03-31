@@ -48,8 +48,8 @@ jobs:
         rspec-folder:
           - active_model
           - decorators
-          - --tag @with_elasticsearch features
-          - --tag ~@with_elasticsearch features
+          - --tag with_elasticsearch features
+          - --tag ~with_elasticsearch features
           - forms
           - helpers
           - jobs
