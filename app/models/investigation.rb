@@ -167,7 +167,7 @@ class Investigation < ApplicationRecord
   def reported_reason
     return if self[:reported_reason].blank?
 
-    @reported_reason ||= ActiveSupport::StringInquirer.new(self[:reported_reason])
+    @reported_reason = ActiveSupport::StringInquirer.new(self[:reported_reason])
   end
 
   def case_created_audit_activity_class
