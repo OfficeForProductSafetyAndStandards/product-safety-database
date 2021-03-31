@@ -52,10 +52,10 @@ group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
   gem "dotenv-rails", "~> 2.7"
+  gem "parallel_tests"
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
   gem "pry-doc", "~> 1.1"
-  gem "parallel_tests"
 end
 
 group :development do
