@@ -48,17 +48,14 @@ jobs:
         rspec-folder:
           - spec/active_model
           - spec/decorators
+          - spec/forms
+          - spec/helpers spec/jobs spec/mailers spec/policies
+          - spec/models spec/validators
+          - spec/requests
           - --tag with_elasticsearch spec/features
           - --tag ~with_elasticsearch spec/features
-          - spec/forms
-          - spec/helpers
-          - spec/jobs
-          - spec/mailers
-          - spec/models
-          - spec/policies
-          - spec/requests
-          - spec/services
-          - spec/validators
+          - --tag with_elasticsearch spec/services
+          - --tag ~with_elasticsearch spec/services
 
     steps:
     - uses: actions/checkout@v1
