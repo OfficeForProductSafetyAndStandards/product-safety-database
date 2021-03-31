@@ -46,19 +46,19 @@ jobs:
       fail-fast: false
       matrix:
         rspec-folder:
-          - active_model
-          - decorators
-          - --tag with_elasticsearch features
-          - --tag ~with_elasticsearch features
-          - forms
-          - helpers
-          - jobs
-          - mailers
-          - models
-          - policies
-          - requests
-          - services
-          - validators
+          - spec/active_model
+          - spec/decorators
+          - --tag with_elasticsearch spec/features
+          - --tags ~with_elasticsearch spec/features
+          - spec/forms
+          - spec/helpers
+          - spec/jobs
+          - spec/mailers
+          - spec/models
+          - spec/policies
+          - spec/requests
+          - spec/services
+          - spec/validators
 
     steps:
     - uses: actions/checkout@v1
@@ -109,7 +109,7 @@ jobs:
 
     - name: Run Specs
       run: |
-        bundle exec rspec spec/${{ matrix.rspec-folder }}
+        bundle exec rspec {{ matrix.rspec-folder }}
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
