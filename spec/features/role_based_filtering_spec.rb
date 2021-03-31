@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "List cases based on role", :with_elasticsearch, :with_stubbed_mailer do
-  let(:user) { create(:user, :activated, :crown_dependency, has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, :crown_dependency, has_viewed_introduction: true, team: french_team) }
+  let(:french_team) { create(:team, country: "country:FR") }
 
   let!(:gb_case)               { create(:allegation, notifying_country: "country:GB") }
   let!(:england_case)          { create(:allegation, notifying_country: "country:GB-ENG") }
@@ -9,14 +10,12 @@ RSpec.feature "List cases based on role", :with_elasticsearch, :with_stubbed_mai
   let!(:wales_case)            { create(:allegation, notifying_country: "country:GB-WLS") }
   let!(:northern_ireland_case) { create(:allegation, notifying_country: "country:GB-NIR") }
 
-  let!(:french_case) { create(:allegation, notifying_country: "country:FR") }
+  let!(:french_case) { create(:allegation, notifying_country: "country:FR", creator: user) }
 
   before { sign_in user }
 
-
   scenario "should not see CROWN_DEPENDENCIES_HIDDEN_NOTIFYING_COUNTRY" do
     click_link "All cases"
-
 
     expect(page).to have_listed_case(french_case.pretty_id)
 

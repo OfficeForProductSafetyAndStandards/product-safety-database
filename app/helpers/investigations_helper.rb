@@ -17,7 +17,8 @@ module InvestigationsHelper
   def filter_params
     filters = {}
     filters.merge!(get_type_filter)
-    filters.merge!(merged_must_filters) { |_key, current_filters, new_filters| current_filters + new_filters }
+    filters.merge!(merged_must_filters)     { |_key, current_filters, new_filters| current_filters + new_filters }
+    filters.merge!(merged_must_not_filters)
   end
 
   def merged_must_filters
@@ -34,6 +35,10 @@ module InvestigationsHelper
     must_filters
   end
 
+  def merged_must_not_filters
+    must_not_filters = { must_not: [get_notifying_country_filter] }
+  end
+
   def get_status_filter
     return nil if params[:status_open] == params[:status_closed]
 
@@ -43,6 +48,14 @@ module InvestigationsHelper
                { is_closed: true }
              end
     { term: status }
+  end
+
+  def get_notifying_country_filter
+    excluded_notifying_countries = Role::CROWN_DEPENDENCIES_HIDDEN_NOTIFYING_COUNTRY
+
+    {
+      terms: { notifying_country: excluded_notifying_countries }
+    }
   end
 
   def get_type_filter

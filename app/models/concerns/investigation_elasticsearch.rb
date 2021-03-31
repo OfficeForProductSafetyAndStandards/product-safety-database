@@ -12,6 +12,7 @@ module InvestigationElasticsearch
         indexes :type, type: :keyword
         indexes :owner_id, type: :keyword
         indexes :creator_id, type: :keyword
+        indexes :notifying_country, type: :keyword
       end
     end
 
@@ -28,7 +29,8 @@ module InvestigationElasticsearch
                  hazard_description
                  non_compliant_reason
                  coronavirus_related
-                 risk_level],
+                 risk_level
+                 notifying_country],
         methods: %i[title creator_id owner_id],
         include: {
           documents: {
