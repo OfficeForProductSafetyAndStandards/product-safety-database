@@ -49,7 +49,7 @@ jobs:
           - spec/active_model
           - spec/decorators
           - --tag with_elasticsearch spec/features
-          - --tags ~with_elasticsearch spec/features
+          - --tag ~with_elasticsearch spec/features
           - spec/forms
           - spec/helpers
           - spec/jobs
