@@ -104,7 +104,7 @@ jobs:
       run: yarn install
 
     - name: Prepare database
-      run: bin/rails parallel:setup
+      run: bin/rails parallel:load_schema
 
     - name: Run Specs
       run: |
