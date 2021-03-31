@@ -103,7 +103,7 @@ jobs:
       run: yarn install
 
     - name: Prepare database
-      run: bin/rails parallel:setup
+      run: bin/rails parallel:create parallel:prepare
 
     - name: Run Specs
       run: |
