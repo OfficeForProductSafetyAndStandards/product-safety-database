@@ -81,6 +81,12 @@ FactoryBot.define do
       end
     end
 
+    trait :crown_dependency do
+      transient do
+        roles { %i[crown_dependency] }
+      end
+    end
+
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
         create(:role, name: role, entity: user)
