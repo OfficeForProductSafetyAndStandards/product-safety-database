@@ -44,8 +44,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Each group of tests affected by the following tags will run in a different job in parallel.
-        rspec-tag: ["type:feature --tag ~with_elasticsearch", "~type:feature --tag ~with_elasticsearch", "with_elasticsearch"]
+        rspec-folder:
+          - active_model
+          - decorators
+          - features
+          - forms
+          - helpers
+          - jobs
+          - mailers
+          - models
+          - policies
+          - requests
+          - services
+          - validators
 
     steps:
     - uses: actions/checkout@v1
@@ -96,7 +107,7 @@ jobs:
 
     - name: Run Specs
       run: |
-        bundle exec rspec spec --tag ${{ matrix.rspec-tag }}
+        bundle exec rspec spec/${{ matrix.rspec-folder }}
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
