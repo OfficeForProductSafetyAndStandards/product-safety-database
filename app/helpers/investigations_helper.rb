@@ -334,7 +334,7 @@ module InvestigationsHelper
       actions: safety_and_compliance_actions(investigation, user, "reported_as")
     }
 
-    if investigation.unsafe?
+    if (investigation.unsafe_and_non_compliant? ||  investigation.unsafe?)
       rows << {
         key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
         value: { text: simple_format(investigation.hazard_type) },
@@ -348,7 +348,7 @@ module InvestigationsHelper
       }
     end
 
-    if investigation.non_compliant?
+    if (investigation.unsafe_and_non_compliant? ||  investigation.non_compliant?)
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
         value: { text: simple_format(investigation.non_compliant_reason) },
