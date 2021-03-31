@@ -9,7 +9,7 @@ development:
   database: psd_development
 test:
   <<: *default
-  database: psd_test
+  database: psd_test<%= ENV['TEST_ENV_NUMBER'] %>
 
 production:
   adapter: postgresql

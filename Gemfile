@@ -55,6 +55,7 @@ group :development, :test do
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
   gem "pry-doc", "~> 1.1"
+  gem "parallel_tests"
 end
 
 group :development do
