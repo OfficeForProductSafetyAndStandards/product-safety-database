@@ -138,6 +138,6 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     errors_list = page.find(".govuk-error-summary__list").all("li")
     expect(errors_list[0].text).to eq "Enter your full name"
     expect(errors_list[1].text).to eq "Enter your mobile number"
-    expect(errors_list[2].text).to eq "Enter your password"
+    expect(errors_list[2].text).to eq "Enter a password"
   end
 end
