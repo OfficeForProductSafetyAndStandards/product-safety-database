@@ -339,6 +339,8 @@ en:
               in_future: Date of test must be today or in the past
             failure_details:
               blank: Enter details about how the product failed to meet the requirements
+            further_test_results:
+              blank: Select yes if there are other test results to report
         product_form:
           attributes:
             authenticity:
