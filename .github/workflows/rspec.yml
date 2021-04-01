@@ -13,7 +13,6 @@ env:
   PSD_HOST: example.com
   EMAIL_WHITELIST_ENABLED: false
   TWO_FACTOR_AUTHENTICATION_ENABLED: false
-  NOTIFY_API_KEY: 5a2d20e1-2ddc-42d7-820e-d0b2af5a16dc.293785d2-7f4d-47bf-978b-5f316c5cc62f
   CI: true
 
 jobs:
