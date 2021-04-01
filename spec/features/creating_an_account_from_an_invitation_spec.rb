@@ -10,6 +10,10 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     expect_to_be_on_complete_registration_page
 
+    click_button "Continue"
+
+    expect_ordered_error_list
+
     fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
 
     click_button "Continue"
@@ -51,6 +55,10 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
     expect_to_be_on_complete_registration_page
 
+    click_button "Continue"
+
+    expect_ordered_error_list
+
     fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: "testpassword123@"
 
     click_button "Continue"
@@ -83,6 +91,10 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
       # Form should NOT contain values from previous abandoned registration
       expect(find_field("Full name").value).to eq ""
       expect(find_field("Mobile number").value).to eq ""
+
+      click_button "Continue"
+
+      expect_ordered_error_list
 
       # Deliberately leave password blank
       fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: ""
@@ -120,5 +132,12 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
 
   def otp_code
     invited_user.reload.direct_otp
+  end
+
+  def expect_ordered_error_list
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Enter your full name"
+    expect(errors_list[1].text).to eq "Enter your mobile number"
+    expect(errors_list[2].text).to eq "Enter a password"
   end
 end
