@@ -189,6 +189,18 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
+      it "exports reported_as" do
+        create(:allegation, reported_reason: "unsafe")
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 27)).to eq "Reported_as"
+          expect(exported_data.cell(2, 27)).to eq "unsafe"
+        end
+      end
+
       context "when case does not have a creator_user" do
         it "exports Case_Creator_Team as nil" do
           creator_user = build(:user)
@@ -240,7 +252,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
       context "when investigation is closed" do
         it "date_closed column is empty" do
-          create(:allegation, is_closed: true, date_closed: Date.yesterday)
+          closed_at_date = Date.new(2021, 1, 1)
+          create(:allegation, is_closed: true, date_closed: closed_at_date)
 
           Investigation.import refresh: true, force: true
 
@@ -248,7 +261,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           aggregate_failures do
             expect(exported_data.cell(1, 23)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 23)).to eq Date.yesterday.strftime("%Y-%m-%d %H:%M:%S %z")
+            expect(exported_data.cell(2, 23)).to eq closed_at_date.strftime("%Y-%m-%d %H:%M:%S %z")
           end
         end
       end
