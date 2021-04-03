@@ -47,6 +47,7 @@ class Investigations::ProductsController < ApplicationController
 
   def remove
     authorize @investigation, :update?
+    @remove_product_form = RemoveProductForm.new
   end
 
   # DELETE /cases/1/products
