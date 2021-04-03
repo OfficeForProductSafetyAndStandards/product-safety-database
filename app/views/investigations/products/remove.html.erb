@@ -1,4 +1,4 @@
-<%= page_title "Remove product from case" %>
+<%= page_title "Remove #{@product.name}" %>
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.pretty_description.downcase}",
@@ -8,21 +8,44 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(url: unlink_investigation_product_path(@investigation), method: :delete, local: true) do |form| %>
+<h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
+<p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
+
+<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), method: :delete, local: true do |form| %>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-m">Remove product</h2>
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @remove_product_form.errors %>
+      <%= render "minimal_investigation_heading", investigation: @investigation, title: "Do you want to remove the product from the case" %>
 
-      <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Product details</h3>
+      <%= render "form_components/govuk_radios",
+        form: form,
+        key: :permission_level,
+        classes: "",
+        fieldset: {
+          legend: {
+            text: "Do you want to remove the product from the case",
+            is_page_heading: false,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: [
+          {
+            id: "yes",
+            text: "Yes",
+            value: true
+          },
+          {
+            id: "no",
+            text: "No",
+            value: false
+          }
+        ]
+      %>
 
-      <%= render "product_summary", product: @product %>
+      <div class="govuk-form-group">
+        <%= govukButton(text: t("Change")) %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
     </div>
   </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">&nbsp;</div>
-    <div class="govuk-grid-column-two-thirds">
-      <%= form.submit "Remove product", class: "govuk-button govuk-button--warning" %>
-    </div>
-  </div>
-
 <% end %>

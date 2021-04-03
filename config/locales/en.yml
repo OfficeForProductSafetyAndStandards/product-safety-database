@@ -320,6 +320,10 @@ en:
           attributes:
             type:
               inclusion: Select the type of information you're adding
+        remove_product_form:
+          attributes:
+            remove_product:
+              inclusion: Select yes if you want to remove the product from the case
         notifying_country_form:
           attributes:
             country:

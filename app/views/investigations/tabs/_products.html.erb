@@ -28,6 +28,12 @@
       product,
       class: "app-block-link govuk-link govuk-!-margin-right-3"
     %>
+    <%= link_with_hidden_text_to "Change product details",
+      "(#{product.name})",
+      edit_product_path(product),
+      class: "app-block-link govuk-link govuk-!-margin-right-3"
+    %>
+    <br>
     <% if policy(@investigation).update?(user: current_user) %>
       <%= link_with_hidden_text_to "Remove product",
         "(#{product.name})",
