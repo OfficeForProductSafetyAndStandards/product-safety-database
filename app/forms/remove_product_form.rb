@@ -6,6 +6,6 @@ class RemoveProductForm
   attribute :remove_product, :boolean
   attribute :reason
 
-  validates :remove_product,
-            inclusion: { in: [true, false], message: I18n.t(".remove_product_form.attributes.remove_product.inclusion") }
+  validates :remove_product, inclusion: { in: [true, false] }
+  validates :reason, presence: true, if: -> { remove_product }
 end

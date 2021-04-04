@@ -2,7 +2,7 @@ class RemoveProductFromCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :product, :investigation, :user, to: :context
+  delegate :product, :investigation, :user, :reason, to: :context
 
   def call
     context.fail!(error: "No product supplied") unless product.is_a?(Product)
@@ -23,7 +23,8 @@ private
       source: UserSource.new(user: user),
       investigation: investigation,
       title: "Removed: #{product.name}",
-      product: product
+      product: product,
+      metadata: { reason: reason }
     )
   end
 

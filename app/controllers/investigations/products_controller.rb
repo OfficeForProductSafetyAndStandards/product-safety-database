@@ -57,7 +57,7 @@ class Investigations::ProductsController < ApplicationController
     return render(:remove) if @remove_product_form.invalid?
 
     if @remove_product_form.remove_product
-      RemoveProductFromCase.call(investigation: @investigation, product: @product, user: current_user)
+      RemoveProductFromCase.call(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
       respond_to do |format|
         format.html do
           redirect_to_investigation_products_tab success: "Product was successfully removed."
