@@ -4,7 +4,8 @@ class RemoveProductForm
   include ActiveModel::Serialization
 
   attribute :remove_product, :boolean
+  attribute :reason
 
   validates :remove_product,
-            inclusion: { in: %w[true false], message: I18n.t(".remove_product_form.remove_product.inclusion") }
+            inclusion: { in: [true, false], message: I18n.t(".remove_product_form.attributes.remove_product.inclusion") }
 end
