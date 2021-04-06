@@ -181,9 +181,14 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Select an action")
   end
 
-  def expect_to_be_on_change_case_status_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/status")
-    expect(page).to have_h1("Status information")
+  def expect_to_be_on_close_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/close")
+    expect(page).to have_h1("Why are you closing the case?")
+  end
+
+  def expect_to_be_on_reopen_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/reopen")
+    expect(page).to have_h1("Why are you re-opening the case?")
   end
 
   def expect_to_be_on_add_correspondence_page

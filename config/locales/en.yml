@@ -64,6 +64,9 @@ en:
     email_update_text:
       false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
       true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
+  change_case_status:
+    email_subject_text: "%{case_type} was %{status}"
+    email_update_text: "%{case_type} was %{status} by %{name}."
   change_risk_validation:
     validated: "has been validated"
     validation_removed: "has had validation removed"
@@ -218,6 +221,9 @@ en:
         body:
           true: "The case is related to the coronavirus outbreak."
           false: "The case is not related to the coronavirus outbreak."
+      update_status:
+        title: "%{case_type} %{status}"
+        subtitle: "by %{user_name}, %{date}"
       risk_level_updated:
         title:
           set: "Case risk level set to %{level}"
@@ -290,9 +296,8 @@ en:
     investigation_actions:
       actions:
         change_case_owner: "Change case owner"
-        change_case_status:
-          open: "Close case"
-          closed: "Reopen case"
+        close_case: "Close case"
+        reopen_case: "Re-open case"
         change_case_visibility:
           restricted: "Unrestrict this case"
           not_restricted: "Restrict this case"

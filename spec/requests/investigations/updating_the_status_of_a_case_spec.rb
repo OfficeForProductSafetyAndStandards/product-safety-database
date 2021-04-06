@@ -23,9 +23,9 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
     before do
       sign_in user_from_owner_team
       User.current = user_from_owner_team
-      patch status_investigation_path(investigation),
+      patch close_investigation_path(investigation),
             params: {
-              investigation: { is_closed: "true", status_rationale: "Test" }
+              change_case_status_form: { rationale: "Test" }
             }
     end
 
@@ -37,11 +37,11 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
       end
     end
 
-    context "when case is reopened" do
+    context "when case is re-opened" do
       before do
-        patch status_investigation_path(investigation),
+        patch reopen_investigation_path(investigation),
               params: {
-                investigation: { is_closed: "false", status_rationale: "Test" }
+                change_case_status_form: { rationale: "Test" }
               }
       end
 
@@ -57,9 +57,9 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
     before do
       sign_in user_from_collaborator_team
       User.current = user_from_collaborator_team
-      patch status_investigation_path(investigation),
+      patch close_investigation_path(investigation),
             params: {
-              investigation: { is_closed: "true", status_rationale: "Test" }
+              change_case_status_form: { rationale: "Test" }
             }
     end
 
@@ -75,9 +75,9 @@ RSpec.describe "Updating the status of a case", :with_stubbed_elasticsearch, :wi
     before do
       sign_in other_user
       User.current = other_user
-      patch status_investigation_path(investigation),
+      patch close_investigation_path(investigation),
             params: {
-              investigation: { is_closed: "true", status_rationale: "Test" }
+              change_case_status_form: { rationale: "Test" }
             }
     end
 

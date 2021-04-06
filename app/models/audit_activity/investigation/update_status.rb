@@ -1,22 +1,19 @@
 class AuditActivity::Investigation::UpdateStatus < AuditActivity::Investigation::Base
-  def self.from(investigation)
-    title = "#{investigation.case_type.upcase_first} #{investigation.is_closed? ? 'closed' : 'reopened'}"
-    super(investigation, title, sanitize_text(investigation.status_rationale))
+  def self.from(_investigation)
+    raise "Deprecated - use ChangeCaseStatus.call instead"
   end
 
-  def email_update_text(viewer = nil)
-    "#{email_subject_text} by #{source&.show(viewer)}."
-  end
+  def self.build_metadata(investigation, rationale)
+    updated_values = investigation.previous_changes.slice(:is_closed, :date_closed)
 
-  def email_subject_text
-    "#{investigation.case_type.upcase_first} was #{investigation.is_closed? ? 'closed' : 'reopened'}"
+    {
+      updates: updated_values,
+      rationale: rationale
+    }
   end
 
 private
 
-  def users_to_notify
-    return super if source&.user == investigation.creator_user && source.present?
-
-    ([investigation.creator_user] + super).compact
-  end
+  # Do not send investigation_updated mail. This is handled by the ChangeCaseStatus service
+  def notify_relevant_users; end
 end

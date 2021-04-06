@@ -3,7 +3,6 @@ class Investigation < ApplicationRecord
   include SanitizationHelper
   include InvestigationElasticsearch
 
-  attr_accessor :status_rationale
   attr_accessor :visibility_rationale
   attr_accessor :owner_rationale
 
@@ -35,8 +34,7 @@ class Investigation < ApplicationRecord
   validates :custom_risk_level, absence: true, if: -> { risk_level != "other" }
   validates :custom_risk_level, presence: true, if: -> { risk_level == "other" }
 
-  after_update :create_audit_activity_for_status,
-               :create_audit_activity_for_visibility
+  after_update :create_audit_activity_for_visibility
 
   has_many :investigation_products, dependent: :destroy
   has_many :products, through: :investigation_products
@@ -190,12 +188,6 @@ class Investigation < ApplicationRecord
   end
 
 private
-
-  def create_audit_activity_for_status
-    if saved_changes.key?(:is_closed) || status_rationale.present?
-      AuditActivity::Investigation::UpdateStatus.from(self)
-    end
-  end
 
   def create_audit_activity_for_visibility
     if saved_changes.key?(:is_private) || visibility_rationale.present?

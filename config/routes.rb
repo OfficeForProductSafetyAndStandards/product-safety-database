@@ -96,8 +96,10 @@ Rails.application.routes.draw do
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
-      get :status
-      patch :status
+      get :close
+      get :reopen
+      patch :close
+      patch :reopen
       get :visibility
       patch :visibility
       get :created

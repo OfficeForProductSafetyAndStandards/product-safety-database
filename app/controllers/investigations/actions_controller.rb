@@ -27,8 +27,10 @@ module Investigations
 
     def path_for_action(action)
       case action
-      when "change_case_status"
-        status_investigation_path(@investigation)
+      when "close_case"
+        close_investigation_path(@investigation)
+      when "reopen_case"
+        reopen_investigation_path(@investigation)
       when "change_case_owner"
         new_investigation_ownership_path(@investigation)
       when "change_case_visibility"

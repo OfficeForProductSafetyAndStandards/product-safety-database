@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show status visibility created]
+  before_action :set_investigation, only: %i[show visibility created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -58,12 +58,12 @@ class InvestigationsController < ApplicationController
     end
   end
 
-  # GET /cases/1/status
-  # PATCH /cases/1/status
-  def status
-    authorize @investigation, :change_owner_or_status?
-    @investigation.date_closed = update_params[:is_closed] == "true" ? Date.current : nil
-    update!
+  def close
+    change_case_status(new_status: "closed", template: :close, flash: "closed")
+  end
+
+  def reopen
+    change_case_status(new_status: "open", template: :reopen, flash: "re-opened")
   end
 
   # GET /cases/1/visibility
@@ -98,6 +98,22 @@ private
     end
   end
 
+  def change_case_status(new_status:, template:, flash:)
+    investigation = Investigation.find_by!(pretty_id: params[:pretty_id])
+    authorize investigation, :change_owner_or_status?
+
+    @change_case_status_form = ChangeCaseStatusForm.new(change_case_status_form_params.merge(new_status: new_status))
+
+    if !@change_case_status_form.valid? || !request.patch?
+      @investigation = investigation.decorate
+      return render template
+    end
+
+    ChangeCaseStatus.call!(@change_case_status_form.serializable_hash.merge(user: current_user, investigation: investigation))
+
+    redirect_to investigation_path(investigation), flash: { success: "#{investigation.case_type.upcase_first} was #{flash}" }
+  end
+
   def set_investigation
     investigation = Investigation.includes(:owner_team, :owner_user, :products, :teams_with_access).find_by!(pretty_id: params[:pretty_id])
     @investigation = investigation.decorate
@@ -109,8 +125,14 @@ private
     params.require(:investigation).permit(editable_keys)
   end
 
+  def change_case_status_form_params
+    return {} unless request.patch?
+
+    params.require(:change_case_status_form).permit(:rationale)
+  end
+
   def editable_keys
-    %i[description is_closed status_rationale is_private visibility_rationale]
+    %i[description is_private visibility_rationale]
   end
 
   def build_breadcrumbs
