@@ -8,10 +8,26 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
-<p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
+<% if @product.supporting_information %>
+  <div class="hmcts-banner hmcts-banner--warning">
 
-<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
+  <svg class="hmcts-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
+    <path d="M13.6,15.4h-2.3v-4.5h2.3V15.4z M13.6,19.8h-2.3v-2.2h2.3V19.8z M0,23.2h25L12.5,2L0,23.2z" /></svg>
+      <div class="govuk-warning-text">
+        <div class="hmcts-banner__message">
+          <span class="hmcts-banner__assistive">Warning</span>
+            Cannot remove product from the case because it's associated with following supporting information
+            <% @product.supporting_information.each do |supporting_information| %>
+              <br> <%= supporting_information.decorate.supporting_information_title %>
+            <% end %>
+        </div>
+      </div>
+    </div>
+<% else %>
+  <h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
+  <p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
+
+  <%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= error_summary @remove_product_form.errors %>
@@ -25,4 +41,5 @@
       </div>
     </div>
   </div>
+  <% end %>
 <% end %>
