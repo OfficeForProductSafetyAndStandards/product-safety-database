@@ -320,17 +320,39 @@ module InvestigationsHelper
 
     rows = [risk_level_row, validated_row, risk_assessment_row]
 
-    if investigation.hazard_type.present?
+    rows
+  end
+
+  def safety_and_compliance_rows(investigation, user)
+    rows = []
+
+    reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided
+
+    rows << {
+      key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
+      value: { text: simple_format(t(reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
+      actions: safety_and_compliance_actions(investigation, user, "reported_as")
+    }
+
+    if investigation.unsafe_and_non_compliant? || investigation.unsafe?
       rows << {
-        key: { text: t(:key, scope: "investigations.overview.hazards") },
-        value: { text: simple_format([investigation.hazard_type, investigation.hazard_description].join("\n\n")) }
+        key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(investigation.hazard_type) },
+        actions: safety_and_compliance_actions(investigation, user, "hazard_type")
+      }
+
+      rows << {
+        key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(investigation.hazard_description) },
+        actions: safety_and_compliance_actions(investigation, user, "hazard_description")
       }
     end
 
-    if investigation.non_compliant_reason.present?
+    if investigation.unsafe_and_non_compliant? || investigation.non_compliant?
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
-        value: { text: simple_format(investigation.non_compliant_reason) }
+        value: { text: simple_format(investigation.non_compliant_reason) },
+        actions: safety_and_compliance_actions(investigation, user, "non_compliant_reason")
       }
     end
 
@@ -343,6 +365,20 @@ module InvestigationsHelper
         items: [
           href: edit_investigation_risk_validations_path(investigation.pretty_id),
           text: risk_validated_link_text(investigation)
+        ]
+      }
+    else
+      {}
+    end
+  end
+
+  def safety_and_compliance_actions(investigation, user, field_name)
+    if policy(investigation).update?(user: user)
+      {
+        items: [
+          href: edit_investigation_safety_and_compliance_path(investigation.pretty_id),
+          text: "Change",
+          visuallyHiddenText: field_name
         ]
       }
     else
