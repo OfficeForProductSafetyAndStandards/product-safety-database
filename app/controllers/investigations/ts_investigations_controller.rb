@@ -414,7 +414,7 @@ private
   end
 
   def test_valid?
-    @test_result_form.valid?
+    @test_result_form.valid?(:ts_user_create)
     repeat_step_valid?(@test_result_form)
     @test_result_form.errors.empty?
   end
@@ -543,7 +543,7 @@ private
       end
       return false
     when :test_results
-      return @test_result_form.valid?
+      return @test_result_form.valid?(:ts_user_create)
     when :reference_number
       if reference_number_params[:has_complainant_reference].blank?
         @investigation.errors.add(:has_complainant_reference, "Choose whether you want to add your own reference number")
@@ -707,6 +707,7 @@ private
       :standards_product_was_tested_against,
       :existing_document_file_id,
       :failure_details,
+      :further_test_results,
       date: %i[day month year],
       document_form: %i[description file]
     )

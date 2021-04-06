@@ -19,6 +19,7 @@ class TestResultForm
   attribute :filename
   attribute :file_description
   attribute :failure_details
+  attribute :further_test_results
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
@@ -26,6 +27,7 @@ class TestResultForm
   validates :result, inclusion: { in: Test::Result.results.keys }
   validates :document, presence: true
   validates :product_id, presence: true, on: :create_with_product
+  validates :further_test_results, presence: true, on: :ts_user_create
   validates :date,
             presence: true,
             real_date: true,
