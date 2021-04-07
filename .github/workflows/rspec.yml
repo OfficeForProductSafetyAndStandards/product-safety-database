@@ -55,6 +55,7 @@ jobs:
           - --tag ~with_elasticsearch spec/features
           - --tag with_elasticsearch spec/services
           - --tag ~with_elasticsearch spec/services
+          - $(ls -d spec/*/ | grep -v -E 'decorators|models|active_model|forms|jobs|mailers|requests|features|policies|services|helpers|validators')
 
     steps:
     - uses: actions/checkout@v1
