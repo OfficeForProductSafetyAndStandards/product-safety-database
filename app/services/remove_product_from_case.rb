@@ -11,6 +11,8 @@ class RemoveProductFromCase
 
     investigation.products.delete(product)
 
+    product.__elasticsearch__.delete_index
+
     context.activity = create_audit_activity_for_product_removed
 
     send_notification_email
