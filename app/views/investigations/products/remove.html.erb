@@ -9,37 +9,7 @@
 <%= render "investigations/pages_top", investigation: @investigation %>
 
 <% unless @product.supporting_information.empty? %>
-  <div class="hmcts-banner hmcts-banner--warning">
-
-  <svg class="hmcts-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
-    <path d="M13.6,15.4h-2.3v-4.5h2.3V15.4z M13.6,19.8h-2.3v-2.2h2.3V19.8z M0,23.2h25L12.5,2L0,23.2z" /></svg>
-      <div class="govuk-warning-text">
-        <div class="hmcts-banner__message">
-          <span class="hmcts-banner__assistive">Warning</span>
-            Cannot remove product from the case because it's associated with following supporting information
-            <% @product.supporting_information.each do |supporting_information| %>
-              <br> <%= link_to supporting_information.decorate.supporting_information_title, supporting_information.decorate.show_path %>
-            <% end %>
-        </div>
-      </div>
-    </div>
+  <%= render "investigations/products/supporting_information_warning" %>
 <% else %>
-  <h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
-  <p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
-
-  <%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <%= error_summary @remove_product_form.errors %>
-      <%= render "minimal_investigation_heading", investigation: @investigation, title: "Do you want to remove the product from the case" %>
-
-      <%= form.govuk_radios :remove_product, legend: "Do you want to remove the product from the case", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, hint: "Reason for removing the product from the case", label_classes: "govuk-visually-hidden", label: "yo")} },  { text: "No", value: "false" }] %>
-
-      <div class="govuk-form-group">
-        <%= form.submit "Submit", class: "govuk-button govuk-button--warning" %>
-        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
-      </div>
-    </div>
-  </div>
-  <% end %>
+  <%= render "investigations/products/removal_form" %>
 <% end %>

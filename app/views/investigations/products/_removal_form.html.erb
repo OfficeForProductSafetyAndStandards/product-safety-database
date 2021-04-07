@@ -1,0 +1,18 @@
+<h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
+<p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
+
+<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary @remove_product_form.errors %>
+      <%= render "minimal_investigation_heading", investigation: @investigation, title: "Do you want to remove the product from the case" %>
+
+      <%= form.govuk_radios :remove_product, legend: "Do you want to remove the product from the case", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_text_area(:reason, hint: "Reason for removing the product from the case", label_classes: "govuk-visually-hidden", label: "yo")} },  { text: "No", value: "false" }] %>
+
+      <div class="govuk-form-group">
+        <%= form.submit "Submit", class: "govuk-button govuk-button--warning" %>
+        <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
+      </div>
+    </div>
+  </div>
+<% end %>
