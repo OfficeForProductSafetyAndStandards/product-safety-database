@@ -8,7 +8,7 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<% if @product.supporting_information %>
+<% unless @product.supporting_information.empty? %>
   <div class="hmcts-banner hmcts-banner--warning">
 
   <svg class="hmcts-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
