@@ -135,11 +135,9 @@ Rails.application.routes.draw do
         delete :unlink, path: ""
       end
     end
+
     resources :businesses, only: %i[index update show new create], controller: "investigations/businesses" do
-      member do
-        get :remove
-        delete :unlink, path: ""
-      end
+      resource :remove, only: %i[show create], controller: "investigations/businesses/remove"
     end
 
     resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
