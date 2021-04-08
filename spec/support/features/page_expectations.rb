@@ -144,7 +144,6 @@ module PageExpectations
 
   def expect_to_be_on_remove_product_from_case_page(case_id:, product_id:)
     expect(page).to have_current_path("/cases/#{case_id}/products/#{product_id}/remove")
-    expect(page).to have_selector("h2", text: "Remove product")
   end
 
   def expect_to_be_on_teams_page(case_id:)
