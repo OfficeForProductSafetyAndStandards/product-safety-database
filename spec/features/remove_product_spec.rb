@@ -6,7 +6,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
   let(:removal_reason) { "I made a mistake" }
   let(:product)        { investigation.products.first }
 
-  context "Product does not have any linked supporting information" do
+  context "when product does not have any linked supporting information" do
     it "allows user to remove product from investigation" do
       sign_in user
       visit "/cases/#{investigation.pretty_id}/products"
@@ -41,7 +41,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
     end
   end
 
-  context "Product has linked supporting information" do
+  context "when product has linked supporting information" do
     before do
       create(:accident, product: product)
       create(:risk_assessment, products: [product])

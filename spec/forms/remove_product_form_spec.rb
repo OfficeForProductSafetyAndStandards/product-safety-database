@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe RemoveProductForm do
   subject(:form)       { described_class.new(remove_product: remove_product, reason: reason) }
+
   let(:remove_product) { nil }
   let(:reason)         { nil }
 
@@ -22,11 +23,17 @@ RSpec.describe RemoveProductForm do
       end
 
       context "when reason has a value" do
-        let(:reason)         { "just some reason" }
+        let(:reason) { "just some reason" }
 
         it "is valid" do
           expect(form).to be_valid
+        end
+
+        it "persists remove_product value" do
           expect(form.remove_product).to eq true
+        end
+
+        it "persists reason value" do
           expect(form.reason).to eq reason
         end
       end
@@ -37,6 +44,9 @@ RSpec.describe RemoveProductForm do
 
       it "is valid" do
         expect(form).to be_valid
+      end
+
+      it "persists remove_product value" do
         expect(form.remove_product).to eq false
       end
     end
