@@ -6,7 +6,7 @@
       <div class="hmcts-banner__message">
         <span class="hmcts-banner__assistive">Warning</span>
           Cannot remove product from the case because it's associated with following supporting information
-          <% @supporting_information.each do |supporting_information| %>
+          <% @product.supporting_information.each do |supporting_information| %>
             <% supporting_information = supporting_information.decorate %>
             <br> <%= link_to supporting_information.supporting_information_title, supporting_information.show_path %>
           <% end %>
