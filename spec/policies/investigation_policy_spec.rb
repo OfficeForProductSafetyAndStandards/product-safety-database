@@ -146,6 +146,18 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
       it "cannot view all details about the case" do
         expect(policy.view_protected_details?).to be false
       end
+
+      context "when the user has the restricted_case_viewer role" do
+        let(:user) { create(:user, :restricted_case_viewer, team: team) }
+
+        it "can view non-protected details" do
+          expect(policy.view_non_protected_details?).to be true
+        end
+
+        it "can view all details about the case" do
+          expect(policy.view_protected_details?).to be true
+        end
+      end
     end
   end
 
