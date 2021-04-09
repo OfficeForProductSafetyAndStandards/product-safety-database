@@ -33,6 +33,8 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
       fill_in "Reason for removing the business from the case", with: "This business no longer exists"
     end
 
+    expect(page).to have_link("Cancel", href: investigation_businesses_path(investigation))
+
     click_on "Remove business"
 
     expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")

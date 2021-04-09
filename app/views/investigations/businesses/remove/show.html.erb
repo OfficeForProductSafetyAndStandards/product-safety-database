@@ -29,5 +29,6 @@
       %>
       <%= form.submit "Remove business", class: "govuk-button govuk-button--warning" %>
     <% end %>
+    <%= link_to t(".cancel"), investigation_businesses_path(@investigation), class: "govuk-link" %>
   </div>
 </div>
