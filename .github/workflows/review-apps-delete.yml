@@ -31,6 +31,9 @@ jobs:
         cf api api.london.cloud.service.gov.uk
         cf auth
         cf target -o 'beis-opss' -s $SPACE
+        cf stop psd-pr-$PR_NUMBER
+        cf run-task psd-pr-$PR_NUMBER "./env/delete-elasticsearch-indexes.sh" --name delete-elasticsearch-indexes
+        until [ $(cf tasks psd-pr-$PR_NUMBER | grep delete-elasticsearch-indexes | awk '{print $3}') -eq 'SUCCEEDED']; do sleep 10; end;
         cf delete -f -r psd-pr-$PR_NUMBER
         cf delete-service -f psd-db-pr-$PR_NUMBER
         cf logout
