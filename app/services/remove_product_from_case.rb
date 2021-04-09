@@ -12,6 +12,7 @@ class RemoveProductFromCase
     investigation.products.delete(product)
 
     product.__elasticsearch__.delete_document
+    Product.import force: true 
 
     context.activity = create_audit_activity_for_product_removed
 
