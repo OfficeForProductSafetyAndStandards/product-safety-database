@@ -14,7 +14,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body"><%= t(".remove_business_warning") %></p>
+    <p class="govuk-body"><%= t(".remove_business_warning_html", href: investigation_businesses_path(@investigation)) %></p>
   </div>
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @remove_business_form, url: investigation_business_remove_path(@investigation, @business), method: :post, local: true, builder: ApplicationFormBuilder) do |form| %>

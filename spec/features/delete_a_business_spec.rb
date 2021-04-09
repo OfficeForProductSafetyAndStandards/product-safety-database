@@ -19,7 +19,7 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
     click_on "Remove business"
 
     expect(page).to have_css("p.govuk-body", text: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab.")
-
+    expect(page).to have_link("Businesses tab", href: investigation_businesses_path(investigation))
     expect(page).to have_unchecked_field("No")
     expect(page).to have_unchecked_field("Yes")
 
