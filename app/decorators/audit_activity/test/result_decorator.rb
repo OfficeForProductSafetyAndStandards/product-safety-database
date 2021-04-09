@@ -21,4 +21,8 @@ class AuditActivity::Test::ResultDecorator < ApplicationDecorator
   def result
     super.titleize
   end
+
+  def file_description
+    object.metadata["test_result"]["document"]["metadata"]["description"]
+  end
 end
