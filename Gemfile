@@ -46,7 +46,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.2"
 gem "wicked", "~> 1.3"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.1", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.2", require: "govuk_design_system"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
