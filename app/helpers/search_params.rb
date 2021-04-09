@@ -2,6 +2,8 @@
 
 class SearchParams
   include ActiveModel::Model
+  include ActiveModel::Attributes
+  include ActiveModel::Serialization
 
   SORT_BY_OPTIONS = [
     NEWEST   = "newest",
@@ -10,33 +12,70 @@ class SearchParams
     RELEVANT = "relevant"
   ].freeze
 
-  attr_accessor :allegation,
-                :case_owner_is_me,
-                :case_owner_is_someone_else,
-                :case_owner_is_someone_else_id,
-                :created_by_me,
-                :created_by_someone_else,
-                :created_by_someone_else_id,
-                :direction,
-                :enquiry,
-                :project,
-                :q,
-                :sort,
-                :status_open,
-                :status_closed,
-                :coronavirus_related_only,
-                :serious_and_high_risk_level_only
+  attribute :allegation
+  attribute :case_owner_is_me, :boolean
+  alias_method :case_owner_is_me?, :case_owner_is_me
+  attribute :case_owner_is_my_team, :boolean
+  alias_method :case_owner_is_my_team?, :case_owner_is_my_team
+  attribute :case_owner_is_someone_else, :boolean
+  alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
+  attribute :case_owner_is_someone_else_id
+  attribute :created_by_me, :boolean
+  alias_method :created_by_me?, :created_by_me
+  attribute :created_by_someone_else, :boolean
+  alias_method :created_by_someone_else?, :created_by_someone_else
+  attribute :created_by_someone_else_ids, default: []
+  attribute :override_sort_by
+  attribute :direction
+  attribute :enquiry
+  attribute :project
+  attribute :q
+  attribute :status
+  attribute :status_open, :boolean, default: true
+  alias_method :status_open?, :status_open
+  attribute :status_closed, :boolean
+  attribute :coronavirus_related_only, :boolean
+  alias_method :coronavirus_related_only?, :coronavirus_related_only
+  attribute :serious_and_high_risk_level_only, :boolean
+  alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
+  attribute :sort_by, default: RECENT
+  attribute :page, :integer
+  attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
+  attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
 
-  attr_writer :sort_by
-
-  # ActionController::Parameters#each_key is not implemented in Rails 5.2 but is implemented in 6.0
-  def initialize(attributes = {})
-    attributes.keys.each { |name| class_eval { attr_accessor name } } # Add any additional query attributes to the model
-    super(attributes)
+  def owner_filter_exclusive?
+    case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
   end
 
-  def sort_by
-    @sort_by || RECENT
+  def created_by_filter_exclusive?
+    created_by.someone_else? && created_by.id.blank?
+  end
+
+  def no_owner_boxes_checked?
+    return false if case_owner_is_me?
+    return false if case_owner_is_my_team?
+
+    !case_owner_is_someone_else?
+  end
+
+  def no_created_by_checked?
+    !created_by.me? && !created_by.my_team? && !created_by.someone_else?
+  end
+
+  def teams_with_access_ids
+    @teams_with_access_ids ||= teams_with_access.ids
+  end
+
+  def filter_teams_with_access?
+    teams_with_access_ids.any?
+  end
+
+  def filter_status?
+    status_open != status_closed
+  end
+
+  def is_closed?
+    !status_open?
   end
 
   def sorting_params
@@ -47,8 +86,6 @@ class SearchParams
       { updated_at: "asc" }
     when RECENT
       { updated_at: "desc" }
-    when RELEVANT
-      {}
     else
       { updated_at: "desc" }
     end

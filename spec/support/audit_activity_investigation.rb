@@ -159,6 +159,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
         context "when the user is on a team collaborating on the case" do
           before do
             create(:collaboration_edit_access, investigation: investigation, collaborator: user.team)
+            investigation.reload
           end
 
           it "returns true" do

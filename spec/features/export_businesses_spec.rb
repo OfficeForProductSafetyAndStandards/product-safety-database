@@ -23,7 +23,7 @@ RSpec.feature "Exporting businesses", :with_elasticsearch, :with_stubbed_antivir
   end
 
   scenario "searching businesses" do
-    Business.import(force: true)
+    Business.import(force: true, refresh: :wait_for)
 
     sign_in user
     visit "/businesses"
