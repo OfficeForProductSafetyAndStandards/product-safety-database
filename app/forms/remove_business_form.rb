@@ -2,7 +2,7 @@ class RemoveBusinessForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :remove
+  attribute :remove, :boolean
   alias_method :remove?, :remove
   attribute :reason
 

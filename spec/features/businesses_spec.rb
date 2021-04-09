@@ -52,39 +52,4 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
       expect(page).to have_css("span", text: "Allegation restricted")
     end
   end
-
-  scenario "delete a business" do
-    investigation = create(:allegation, :with_business, business_to_add: business_one, creator: user)
-
-    visit "/cases/#{investigation.pretty_id}/businesses"
-
-    expect(page).to have_summary_item(key: "Trading name",             value: business_one.trading_name)
-    expect(page).to have_summary_item(key: "Registered or legal name", value: business_one.legal_name)
-    expect(page).to have_summary_item(key: "Company number",           value: business_one.company_number)
-    expect(page).to have_summary_item(key: "Address",                  value: business_one.primary_location&.summary)
-    expect(page).to have_summary_item(key: "Contact",                  value: business_one.primary_contact&.summary)
-
-    click_on "Remove business"
-
-    expect(page).to have_css("p.govuk-body", text: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab.")
-
-    expect(page).to have_unchecked_field("No")
-    expect(page).to have_unchecked_field("Yes")
-
-    click_on "Remove business"
-
-    expect(page).to have_error_messages
-    expect(page).to have_error_summary "Select yes if you want to remove the business from the case"
-
-    within_fieldset("Do you wamt to remove the business from the case?") do
-      choose "Yes"
-      fill_in "Reason for removing the business from the case", with: "This business no longer exists"
-    end
-    save_and_open_page
-
-    click_on "Remove business"
-
-    expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")
-    expect(page).to have_css("p.govuk-body", text: "No businesses")
-  end
 end

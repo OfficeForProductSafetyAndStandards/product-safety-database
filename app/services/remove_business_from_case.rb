@@ -1,12 +1,13 @@
 class RemoveBusinessFromCase
   include Interactor
+  include EntitiesToNotify
 
-  context :reason, :investigation, :business, to: :context
+  delegate :user, :reason, :investigation, :business, to: :context
 
   def call
-    context.fail!(error: "No business supplied") unless product.is_a?(Business)
+    context.fail!(error: "No business supplied")      unless business.is_a?(Business)
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
-    context.fail!(error: "No user supplied") unless user.is_a?(User)
+    context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
     investigation.businesses.delete(business)
 
