@@ -35,7 +35,10 @@ class TestResultForm
             not_in_future: true
   validates :failure_details, presence: true, if: -> { result == "failed" }
 
-  before_validation { trim_line_endings(:details, :file_description) }
+  before_validation do
+    trim_line_endings(:details, :file_description)
+    make_failure_details_nil_if_empty
+  end
 
   ATTRIBUTES_FROM_TEST_RESULT = %i[
     id date details legislation result failure_details standards_product_was_tested_against product_id
@@ -51,5 +54,9 @@ class TestResultForm
 
   def document_form=(document_params)
     assign_file_and_description(document_params)
+  end
+
+  def make_failure_details_nil_if_empty
+    self.failure_details = nil if self.failure_details.empty?
   end
 end
