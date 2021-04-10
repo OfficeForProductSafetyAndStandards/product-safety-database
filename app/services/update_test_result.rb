@@ -24,7 +24,7 @@ class UpdateTestResult
       test_result.document.attach(document)
 
       if test_result.save
-        create_audit_activity_for_test_result_updated if changes.any?
+        create_audit_activity_for_test_result_updated if any_changes?
         send_notification_email
       else
         context.fail!
@@ -61,5 +61,20 @@ private
     return if result == "passed"
 
     failure_details
+  end
+
+  def file_replaced_with_same_file?
+    if changes["document"]
+      checksums = changes["document"].map(&:checksum)
+      checksums.first == checksums.second
+    end
+  end
+
+  def any_changes?
+    changes = self.changes
+    if file_replaced_with_same_file?
+      changes = changes.except(:document, :existing_document_file_id)
+    end
+    changes.any?
   end
 end
