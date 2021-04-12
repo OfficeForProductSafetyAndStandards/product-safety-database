@@ -1,7 +1,7 @@
 class AuditActivity::Business::Destroy < AuditActivity::Business::Base
-  def self.from(business, investigation)
-    title = "Removed: #{sanitize_text business.trading_name}"
-    super(business, investigation, title, nil)
+
+  def self.from(_business, _investigation)
+    raise "Deprecated - use RemoveBusinessFromCase.call instead"
   end
 
   def email_update_text(viewer = nil)

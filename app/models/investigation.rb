@@ -44,8 +44,7 @@ class Investigation < ApplicationRecord
   has_many :investigation_businesses, dependent: :destroy
   has_many :businesses,
            through: :investigation_businesses,
-           after_add: :create_audit_activity_for_business,
-           after_remove: :create_audit_activity_for_removing_business
+           after_add: :create_audit_activity_for_business
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -205,10 +204,6 @@ private
 
   def create_audit_activity_for_business(business)
     AuditActivity::Business::Add.from(business, self)
-  end
-
-  def create_audit_activity_for_removing_business(business)
-    AuditActivity::Business::Destroy.from(business, self)
   end
 
   def creator_id

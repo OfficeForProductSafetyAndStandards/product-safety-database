@@ -39,6 +39,10 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
 
     expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")
     expect(page).to have_css("p.govuk-body", text: "No businesses")
+
+    click_on "Activity"
+
+    expect(page).to have_css("h3", text: "Removed: #{business.trading_name}")
   end
 
   scenario "when the business is attached to supporting information" do
