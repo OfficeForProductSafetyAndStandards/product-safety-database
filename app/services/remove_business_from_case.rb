@@ -9,6 +9,10 @@ class RemoveBusinessFromCase
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
+    if attached_to_supporting_information?
+      context.fail!(error: :business_is_attached_to_supporting_information)
+    end
+
     investigation.businesses.delete(business)
 
     create_audit_activity_for_business_removed
@@ -37,5 +41,9 @@ private
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end
+  end
+
+  def attached_to_supporting_information?
+    investigation.corrective_actions.where(business: business).exists? || investigation.risk_assessments.where(assessed_by_business: business).exists?
   end
 end
