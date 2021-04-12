@@ -40,4 +40,17 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
     expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")
     expect(page).to have_css("p.govuk-body", text: "No businesses")
   end
+
+  scenario "when the business is attached to supporting information"  do
+    product = create(:product, investigations: [investigation])
+    corrective_action_params = attributes_for(:corrective_action, business_id: business.id, product_id: product.id)
+      .merge(user: user, investigation: investigation)
+    AddCorrectiveActionToCase.call!(corrective_action_params).corrective_action
+
+    visit "/cases/#{investigation.pretty_id}/businesses"
+
+    click_on "Remove business"
+
+    expect(page).to have_css(".hmcts-banner__message", text: "Cannot remove the business from the case because it's associated with following supporting information ")
+  end
 end

@@ -24,13 +24,16 @@ class Business < ApplicationRecord
   has_many :locations, dependent: :destroy
   has_many :contacts, dependent: :destroy
   has_many :corrective_actions, dependent: :destroy
-
-  has_many :corrective_actions, dependent: :destroy
+  has_many :risk_assessments, dependent: :destroy, foreign_key: :assessed_by_business_id
 
   accepts_nested_attributes_for :locations, reject_if: :all_blank
   accepts_nested_attributes_for :contacts, reject_if: :all_blank
 
   has_one :source, as: :sourceable, dependent: :destroy
+
+  def supporting_information
+    corrective_actions + risk_assessments
+  end
 
   def primary_location
     locations.first

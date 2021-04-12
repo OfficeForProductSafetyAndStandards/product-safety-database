@@ -94,7 +94,9 @@ en:
     businesses:
       remove:
         create:
-          :business_successfully_deleted: "Business was successfully removed."
+          business_successfully_deleted: "Business was successfully removed."
+        supporting_information_warning:
+          cannot_remove_business_warning: "Cannot remove the business from the case because it's associated with following supporting information"
         show:
           yes_label: "Yes"
           no_label: "No"
