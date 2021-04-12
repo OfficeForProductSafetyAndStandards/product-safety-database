@@ -27,7 +27,8 @@ private
       source: UserSource.new(user: user),
       investigation: investigation,
       title: "Removed: #{business.trading_name}",
-      business: business
+      business: business,
+      metadata: { reason: reason }
     )
   end
 

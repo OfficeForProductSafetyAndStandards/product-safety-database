@@ -18,6 +18,7 @@ module Investigations
         end
 
         result = RemoveBusinessFromCase.call!(
+          reason: @remove_business_form.reason,
           investigation: investigation,
           business: @business,
           user: current_user

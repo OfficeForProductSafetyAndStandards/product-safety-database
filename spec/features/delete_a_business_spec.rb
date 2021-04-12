@@ -42,7 +42,8 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
 
     click_on "Activity"
 
-    expect(page).to have_css("h3", text: "Removed: #{business.trading_name}")
+    expect(page.find("h3", text: "Removed: #{business.trading_name}"))
+      .to have_sibling(".govuk-body", text: "This business no longer exists")
   end
 
   scenario "when the business is attached to supporting information" do
