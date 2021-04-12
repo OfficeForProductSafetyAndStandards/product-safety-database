@@ -60,7 +60,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
       click_link "Remove product"
 
       expect(page).not_to have_content "Remove #{product.name}"
-      expect(page).to have_content "Cannot remove product from the case because it's associated with following supporting information"
+      expect(page).to have_content "Cannot remove the product from the case because it's associated with following supporting information"
     end
   end
 end
