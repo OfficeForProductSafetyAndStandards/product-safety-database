@@ -25,18 +25,6 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     ).test_result
   end
 
-  def go_edit_test_result
-    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
-
-    click_link "Edit test result"
-
-    expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
-
-    # Check back link works
-    click_link "Back"
-    expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
-    click_link "Edit test result"
-  end
 
   scenario "Editing a passed test result (with validation errors)" do
     sign_in(user)
@@ -79,6 +67,34 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
+  context "when removing document and then re-adding the same document" do
+    let(:result) { "failed" }
+
+    it "does not create new activity entry" do
+      sign_in(user)
+
+      expect_failed_test_without_failure_details_to_show_not_provided
+
+      go_edit_test_result
+
+      expect_edit_form_to_have_fields_populated_by_original_test_result_values(result: "Fail")
+
+      change_values_in_form(file_path: "test/fixtures/files/test_result.txt")
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+
+      expect_result_page_to_show_updated_values
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+      expect(page).to have_link("test_result.txt")
+
+      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link "Activity"
+
+      expect(page).not_to have_content(activity_card_body = page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, ".."))
+    end
+  end
+
   context "with legacy test result" do
     let(:standards_product_was_tested_against) { nil }
 
@@ -90,6 +106,19 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
       click_button "Update test result"
       expect(page).to have_error_summary "Enter the standard the product was tested against"
     end
+  end
+
+  def go_edit_test_result
+    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
+
+    click_link "Edit test result"
+
+    expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
+
+    # Check back link works
+    click_link "Back"
+    expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+    click_link "Edit test result"
   end
 
   def expect_failed_test_without_failure_details_to_show_not_provided
@@ -131,7 +160,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     expect(activity_card_body).to have_text("Attached: test_result.txt")
   end
 
-  def change_values_in_form
+  def change_values_in_form(file_path: "test/fixtures/files/test_result_2.txt")
     # Change some of the fields
     select "Consumer Protection Act 1987", from: "Against which legislation?"
     fill_in "Which standard was the product tested against?", with: "EN72,EN73"
@@ -150,7 +179,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
     find("details > summary", text: "Replace this file").click
 
-    attach_file "Upload a file", Rails.root + "test/fixtures/files/test_result_2.txt"
+    attach_file "Upload a file", Rails.root + file_path
     fill_in "Attachment description", with: "Final test result certificate"
 
     click_button "Update test result"
