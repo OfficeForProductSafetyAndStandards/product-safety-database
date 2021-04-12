@@ -57,7 +57,7 @@ class Investigations::ProductsController < ApplicationController
     return render(:remove) if @remove_product_form.invalid?
 
     if @remove_product_form.remove_product
-      RemoveProductFromCase.call(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
+      RemoveProductFromCase.call!(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
       respond_to do |format|
         format.html do
           redirect_to_investigation_products_tab success: "Product was successfully removed."
@@ -65,13 +65,13 @@ class Investigations::ProductsController < ApplicationController
         format.json { head :no_content }
       end
     else
-      redirect_to_investigation_products_tab(nil)
+      redirect_to_investigation_products_tab
     end
   end
 
 private
 
-  def redirect_to_investigation_products_tab(flash)
+  def redirect_to_investigation_products_tab(flash = nil)
     redirect_to investigation_products_path(@investigation), flash: flash
   end
 

@@ -11,7 +11,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
       sign_in user
       visit "/cases/#{investigation.pretty_id}/products"
 
-      expect(page).to have_text(product.name)
+      have_css("h2", text: product.name)
 
       click_link "Remove product"
 
@@ -31,10 +31,10 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
       errors_list = page.find(".govuk-error-summary__list").all("li")
       expect(errors_list[0].text).to eq "Reason cannot be blank"
 
-      find("#reason").set(removal_reason)
+      fill_in "Reason for removing the product from the case", with: removal_reason
       click_on "Submit"
 
-      expect(page).to have_content "Product was successfully removed."
+      expect_confirmation_banner("Product was successfully removed.")
       expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
 
       expect(page).not_to have_text(product.name)
