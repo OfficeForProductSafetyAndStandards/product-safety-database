@@ -90,7 +90,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
-      expect(page).not_to have_content(activity_card_body = page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, ".."))
+      expect(page).not_to have_content(page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, ".."))
     end
   end
 
