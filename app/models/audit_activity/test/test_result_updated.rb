@@ -32,7 +32,9 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   end
 
   def new_details
-    updates["details"]&.second
+    if updates["details"]&.second
+      updates["details"]&.second.blank? ? "Removed" : updates["details"]&.second
+    end
   end
 
   def new_legislation
@@ -44,7 +46,9 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
   end
 
   def new_file_description
-    updates["file_description"]&.second
+    if updates["file_description"]&.second
+      updates["file_description"]&.second.blank? ? "Removed" : updates["file_description"]&.second
+    end
   end
 
   def new_standards_product_was_tested_against

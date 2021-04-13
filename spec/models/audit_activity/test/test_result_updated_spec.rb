@@ -32,6 +32,44 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_elasticsear
     end
   end
 
+  describe "#new_details" do
+    let(:activity) { described_class.new(metadata: { updates: { details: ["old details", new_details] } }) }
+    context "new details is blank" do
+      let(:new_details) { ""}
+
+      it "returns `Removed` when new_details is blank" do
+        expect(activity.new_details).to eq "Removed"
+      end
+    end
+
+    context "new_details is not blank" do
+      let(:new_details) { "New"}
+
+      it "returns new details when new_details is not blank" do
+        expect(activity.new_details).to eq "New"
+      end
+    end
+  end
+
+  describe "#new_file_description" do
+    let(:activity) { described_class.new(metadata: { updates: { file_description: ["old description", new_file_description] } }) }
+    context "new details is blank" do
+      let(:new_file_description) { ""}
+
+      it "returns `Removed` when new_details is blank" do
+        expect(activity.new_file_description).to eq "Removed"
+      end
+    end
+
+    context "new_details is not blank" do
+      let(:new_file_description) { "New"}
+
+      it "returns new details when new_details is not blank" do
+        expect(activity.new_file_description).to eq "New"
+      end
+    end
+  end
+
   describe "#new_product" do
     let(:new_product) { create(:product) }
     let(:activity) { described_class.new(metadata: { updates: { product_id: [product.id, new_product.id] } }) }
