@@ -57,6 +57,6 @@ class TestResultForm
   end
 
   def make_failure_details_nil_if_empty
-    self.failure_details = nil if self.failure_details.empty?
+    self.failure_details = nil if failure_details.empty?
   end
 end

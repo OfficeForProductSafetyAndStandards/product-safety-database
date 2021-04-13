@@ -25,7 +25,6 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     ).test_result
   end
 
-
   scenario "Editing a passed test result (with validation errors)" do
     sign_in(user)
     go_edit_test_result
