@@ -47,28 +47,40 @@ class Investigations::ProductsController < ApplicationController
 
   def remove
     authorize @investigation, :update?
+    @remove_product_form = RemoveProductForm.new
   end
 
   # DELETE /cases/1/products
   def unlink
     authorize @investigation, :update?
-    RemoveProductFromCase.call(investigation: @investigation, product: @product, user: current_user)
-    respond_to do |format|
-      format.html do
-        redirect_to_investigation_products_tab success: "Product was successfully removed."
+    @remove_product_form = RemoveProductForm.new(remove_product_params)
+    return render(:remove) if @remove_product_form.invalid?
+
+    if @remove_product_form.remove_product
+      RemoveProductFromCase.call!(investigation: @investigation, product: @product, user: current_user, reason: @remove_product_form.reason)
+      respond_to do |format|
+        format.html do
+          redirect_to_investigation_products_tab success: "Product was successfully removed."
+        end
+        format.json { head :no_content }
       end
-      format.json { head :no_content }
+    else
+      redirect_to_investigation_products_tab
     end
   end
 
 private
 
-  def redirect_to_investigation_products_tab(flash)
+  def redirect_to_investigation_products_tab(flash = nil)
     redirect_to investigation_products_path(@investigation), flash: flash
   end
 
   def set_investigation
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     @investigation = investigation.decorate
+  end
+
+  def remove_product_params
+    params.require(:investigation).permit(:remove_product, :reason)
   end
 end
