@@ -4,6 +4,7 @@
         model: @investigation,
         hide_break: true,
         other_text: "Are there other evidence images to report?",
+        error_order: %i[file title description further_product_images],
         further_key: :further_evidence_images do |form|
   = render "file_page",
            form: form,
