@@ -34,16 +34,17 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_elasticsear
 
   describe "#new_details" do
     let(:activity) { described_class.new(metadata: { updates: { details: ["old details", new_details] } }) }
-    context "new details is blank" do
-      let(:new_details) { ""}
+
+    context "when new details is blank" do
+      let(:new_details) { "" }
 
       it "returns `Removed` when new_details is blank" do
         expect(activity.new_details).to eq "Removed"
       end
     end
 
-    context "new_details is not blank" do
-      let(:new_details) { "New"}
+    context "when new_details is not blank" do
+      let(:new_details) { "New" }
 
       it "returns new details when new_details is not blank" do
         expect(activity.new_details).to eq "New"
@@ -53,16 +54,17 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_elasticsear
 
   describe "#new_file_description" do
     let(:activity) { described_class.new(metadata: { updates: { file_description: ["old description", new_file_description] } }) }
-    context "new details is blank" do
-      let(:new_file_description) { ""}
+
+    context "when new details is blank" do
+      let(:new_file_description) { "" }
 
       it "returns `Removed` when new_details is blank" do
         expect(activity.new_file_description).to eq "Removed"
       end
     end
 
-    context "new_details is not blank" do
-      let(:new_file_description) { "New"}
+    context "when new_details is not blank" do
+      let(:new_file_description) { "New" }
 
       it "returns new details when new_details is not blank" do
         expect(activity.new_file_description).to eq "New"

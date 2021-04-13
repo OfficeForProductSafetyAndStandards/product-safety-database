@@ -33,7 +33,7 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
 
   def new_details
     if updates["details"]&.second
-      updates["details"]&.second.blank? ? "Removed" : updates["details"]&.second
+      updates["details"]&.second.presence || "Removed"
     end
   end
 
@@ -47,7 +47,7 @@ class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
 
   def new_file_description
     if updates["file_description"]&.second
-      updates["file_description"]&.second.blank? ? "Removed" : updates["file_description"]&.second
+      updates["file_description"]&.second.presence || "Removed"
     end
   end
 
