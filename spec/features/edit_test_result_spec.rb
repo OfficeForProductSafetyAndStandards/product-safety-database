@@ -82,7 +82,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
-      expect_result_page_to_show_updated_values
+      expect_result_page_to_show_updated_values(file_name: "test_result.txt")
 
       expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
       expect(page).to have_link("test_result.txt")
@@ -125,7 +125,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     expect(page).to have_summary_item(key: "Reason for failure", value: "Not provided")
   end
 
-  def expect_result_page_to_show_updated_values
+  def expect_result_page_to_show_updated_values(file_name: "test_result_2.txt")
     expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Date of test", value: "2 June 2019")
@@ -135,7 +135,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     expect(page).to have_summary_item(key: "Reason for failure", value: failure_details)
     expect(page).to have_summary_item(key: "Further details", value: "Final result")
     expect(page).to have_summary_item(key: "Attachment description", value: "Final test result certificate")
-    expect(page).to have_link("test_result_2.txt")
+    expect(page).to have_link(file_name)
   end
 
   def expect_activity_page_to_show_edited_test_result_values
