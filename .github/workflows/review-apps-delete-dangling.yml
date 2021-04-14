@@ -78,7 +78,7 @@ jobs:
           echo "Deleting ${dangling}"
           cf stop ${dangling}
           cf run-task ${dangling} --command "./env/delete-elasticsearch-indexes.sh" --name delete-elasticsearch-indexes
-          until [ $(cf tasks ${dangling} | grep delete-elasticsearch-indexes | awk '{print $3}') -eq 'SUCCEEDED']; do sleep 10; end;
+          task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-${dangling} | grep delete-elasticsearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
           cf delete -f -r ${dangling}
           cf delete-service -f psd-db-pr-${dangling:7} # Substring from 7th char contains the PR number
         done

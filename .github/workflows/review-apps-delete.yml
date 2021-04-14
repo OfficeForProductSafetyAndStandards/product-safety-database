@@ -31,7 +31,7 @@ jobs:
         cf target -o 'beis-opss' -s $SPACE
         cf stop psd-pr-$PR_NUMBER
         cf run-task psd-pr-$PR_NUMBER --command "./env/delete-elasticsearch-indexes.sh" --name delete-elasticsearch-indexes
-        until [ $(cf tasks psd-pr-$PR_NUMBER | grep delete-elasticsearch-indexes | awk '{print $3}') -eq 'SUCCEEDED']; do sleep 10; end;
+        task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-$PR_NUMBER | grep delete-elasticsearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
         cf delete -f -r psd-pr-$PR_NUMBER
         cf delete-service -f psd-db-pr-$PR_NUMBER
         cf logout
