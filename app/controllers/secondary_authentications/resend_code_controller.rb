@@ -3,7 +3,7 @@ module SecondaryAuthentications
     skip_before_action :authenticate_user!,
                        :set_current_user,
                        :require_secondary_authentication,
-                       :set_raven_context,
+                       :set_sentry_context,
                        :authorize_user,
                        :has_accepted_declaration,
                        :has_viewed_introduction,
