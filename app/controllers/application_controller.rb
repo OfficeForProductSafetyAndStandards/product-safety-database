@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   include CacheConcern
   include HttpAuthConcern
-  include RavenConfigurationConcern
+  include SentryConfigurationConcern
   include SecondaryAuthenticationConcern
 
   protect_from_forgery with: :exception
@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :ensure_secondary_authentication
   before_action :require_secondary_authentication
-  before_action :set_raven_context
+  before_action :set_sentry_context
   before_action :authorize_user
   before_action :has_accepted_declaration
   before_action :has_viewed_introduction
