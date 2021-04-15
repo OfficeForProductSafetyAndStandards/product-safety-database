@@ -36,7 +36,10 @@ jobs:
         cf delete-service -f psd-db-pr-$PR_NUMBER
         cf logout
 
-    - name: Deactivate Github deploy
+    - name: Checkout code to get deploy functions
+      uses: actions/checkout@v2
+
+    - name: Deactivate GitHub deployment
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
       run: |
