@@ -91,6 +91,10 @@ class User < ApplicationRecord
     has_role? :email_alert_sender
   end
 
+  def can_view_restricted_cases?
+    has_role? :restricted_case_viewer
+  end
+
   def has_role?(role)
     roles.exists?(name: role) || team.roles.exists?(name: role)
   end

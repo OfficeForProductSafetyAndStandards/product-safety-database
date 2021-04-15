@@ -81,6 +81,12 @@ FactoryBot.define do
       end
     end
 
+    trait :restricted_case_viewer do
+      transient do
+        roles { %i[restricted_case_viewer] }
+      end
+    end
+
     after(:create) do |user, evaluator|
       evaluator.roles.each do |role|
         create(:role, name: role, entity: user)

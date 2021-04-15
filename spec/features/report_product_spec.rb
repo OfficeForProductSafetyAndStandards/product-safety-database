@@ -241,8 +241,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_product_image_page
 
-        # trigger validation to verify errors are handled correctly
         click_on "Continue"
+
+        expect_correctly_ordered_product_image_errors
 
         product_images.each do |product_image|
           fill_in_product_image_page(with: product_image)
@@ -755,5 +756,13 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
   def expect_product_reported_unsafe_and_non_compliant
     expect(page.find("h2", text: "Summary")).to have_sibling("p", text: "Product reported because it is unsafe and non-compliant.")
+  end
+
+  def expect_correctly_ordered_product_image_errors
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "You must upload a file"
+    expect(errors_list[1].text).to eq "Enter file title"
+    expect(errors_list[2].text).to eq "Enter file description"
+    expect(errors_list[3].text).to eq "Select whether or not you have further product images to record"
   end
 end

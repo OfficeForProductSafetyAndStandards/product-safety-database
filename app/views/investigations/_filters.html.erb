@@ -23,6 +23,15 @@
         fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
         items: case_owner_is(form)
       %>
+
+      <%= render "form_components/govuk_checkboxes",
+        form: form,
+        key: :teams_with_access,
+        classes: "govuk-checkboxes--small",
+        fieldset: { legend: { text: t(".teams_added_to_case"), classes: "govuk-fieldset__legend--s" } },
+        items: teams_added_to_case_items(form)
+      %>
+
       <%= render "form_components/govuk_checkboxes",
         form: form,
         key: :created_by,
@@ -44,9 +53,10 @@
         key: :status,
         classes: "govuk-checkboxes--small",
         fieldset: { legend: { text: "Status", classes: "govuk-fieldset__legend--s" } },
-        items: [{ key: "status_open", value: "checked", unchecked_value: "unchecked", text: "Open" },
-               { key: "status_closed", value: "checked", unchecked_value: "unchecked", text: "Closed" }]
+        items: [{ key: "status_open", value: true, unchecked_value: "off", text: "Open" },
+               { key: "status_closed", value: true, unchecked_value: "off", text: "Closed" }]
       %>
+
 
       <% if submitted_from == "investigation_listing" %>
         <%= form.hidden_field :override_sort_by, value: SearchParams::RELEVANT %>

@@ -111,6 +111,10 @@ en:
         remove_business_hint: "Removing a business from a case cannot be undone"
         remove:
           remove_business_warning: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab."
+    filters:
+      teams_added_to_case: "Teams added to case"
+      my_team: "My team"
+      other_team: "Other team"
     corrective_actions:
       form:
         geographic_scopes:
@@ -343,6 +347,12 @@ en:
           attributes:
             type:
               inclusion: Select the type of information you're adding
+        remove_product_form:
+          attributes:
+            remove_product:
+              inclusion: Select yes if you want to remove the product from the case
+            reason:
+              presence: Enter the reason for removing the product from the case
         notifying_country_form:
           attributes:
             country:

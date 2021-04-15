@@ -33,6 +33,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
     context "when the user’s has been given read-only access" do
       before do
         create(:read_only_collaboration, investigation: investigation, collaborator: team)
+        investigation.reload
       end
 
       it "cannot update the case" do
@@ -63,6 +64,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
     context "when the user’s has been given edit access" do
       before do
         create(:collaboration_edit_access, investigation: investigation, collaborator: team)
+        investigation.reload
       end
 
       it "can update the case" do
@@ -143,6 +145,18 @@ RSpec.describe InvestigationPolicy, :with_stubbed_elasticsearch, :with_stubbed_m
 
       it "cannot view all details about the case" do
         expect(policy.view_protected_details?).to be false
+      end
+
+      context "when the user has the restricted_case_viewer role" do
+        let(:user) { create(:user, :restricted_case_viewer, team: team) }
+
+        it "can view non-protected details" do
+          expect(policy.view_non_protected_details?).to be true
+        end
+
+        it "can view all details about the case" do
+          expect(policy.view_protected_details?).to be true
+        end
       end
     end
   end
