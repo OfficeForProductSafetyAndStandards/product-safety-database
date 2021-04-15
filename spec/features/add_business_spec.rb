@@ -104,16 +104,9 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
     expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
 
-    click_link "Remove business"
-
-    expect_to_be_on_remove_business_page
-    click_button "Remove business"
-    expect_confirmation_banner("Business was successfully removed.")
-
-    # Check that adding and removing the business was recorded in the
+    # Check that adding  the business was recorded in the
     # activity log for the investigation.
     click_link "Activity"
-    expect(page).to have_text("Removed: #{trading_name}")
     expect(page).to have_text("Business added")
   end
 
