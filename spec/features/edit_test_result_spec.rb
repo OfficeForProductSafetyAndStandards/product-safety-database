@@ -25,19 +25,6 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     ).test_result
   end
 
-  def go_edit_test_result
-    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
-
-    click_link "Edit test result"
-
-    expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
-
-    # Check back link works
-    click_link "Back"
-    expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
-    click_link "Edit test result"
-  end
-
   scenario "Editing a passed test result (with validation errors)" do
     sign_in(user)
     go_edit_test_result
@@ -79,6 +66,34 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
+  context "when removing document and then re-adding the same document" do
+    let(:result) { "failed" }
+
+    it "does not create new activity entry" do
+      sign_in(user)
+
+      expect_failed_test_without_failure_details_to_show_not_provided
+
+      go_edit_test_result
+
+      expect_edit_form_to_have_fields_populated_by_original_test_result_values(result: "Fail")
+
+      change_values_in_form(file_path: "test/fixtures/files/test_result.txt")
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+
+      expect_result_page_to_show_updated_values(file_name: "test_result.txt")
+
+      expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+      expect(page).to have_link("test_result.txt")
+
+      click_link "Back to #{investigation.decorate.pretty_description.downcase}"
+      click_link "Activity"
+
+      expect(page).not_to have_content(page.find("p", text: "Edited by #{UserSource.new(user: investigation.creator_user).show(user)}").find(:xpath, ".."))
+    end
+  end
+
   context "with legacy test result" do
     let(:standards_product_was_tested_against) { nil }
 
@@ -92,12 +107,25 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     end
   end
 
+  def go_edit_test_result
+    visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
+
+    click_link "Edit test result"
+
+    expect_to_be_on_edit_test_result_page(case_id: investigation.pretty_id, test_result_id: test_result.id)
+
+    # Check back link works
+    click_link "Back"
+    expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
+    click_link "Edit test result"
+  end
+
   def expect_failed_test_without_failure_details_to_show_not_provided
     visit "/cases/#{investigation.pretty_id}/test-results/#{test_result.id}"
     expect(page).to have_summary_item(key: "Reason for failure", value: "Not provided")
   end
 
-  def expect_result_page_to_show_updated_values
+  def expect_result_page_to_show_updated_values(file_name: "test_result_2.txt")
     expect_to_be_on_test_result_page(case_id: investigation.pretty_id)
 
     expect(page).to have_summary_item(key: "Date of test", value: "2 June 2019")
@@ -107,7 +135,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     expect(page).to have_summary_item(key: "Reason for failure", value: failure_details)
     expect(page).to have_summary_item(key: "Further details", value: "Final result")
     expect(page).to have_summary_item(key: "Attachment description", value: "Final test result certificate")
-    expect(page).to have_link("test_result_2.txt")
+    expect(page).to have_link(file_name)
   end
 
   def expect_activity_page_to_show_edited_test_result_values
@@ -131,7 +159,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
     expect(activity_card_body).to have_text("Attached: test_result.txt")
   end
 
-  def change_values_in_form
+  def change_values_in_form(file_path: "test/fixtures/files/test_result_2.txt")
     # Change some of the fields
     select "Consumer Protection Act 1987", from: "Against which legislation?"
     fill_in "Which standard was the product tested against?", with: "EN72,EN73"
@@ -150,7 +178,7 @@ RSpec.feature "Editing a test result", :with_stubbed_elasticsearch, :with_stubbe
 
     find("details > summary", text: "Replace this file").click
 
-    attach_file "Upload a file", Rails.root + "test/fixtures/files/test_result_2.txt"
+    attach_file "Upload a file", Rails.root + file_path
     fill_in "Attachment description", with: "Final test result certificate"
 
     click_button "Update test result"

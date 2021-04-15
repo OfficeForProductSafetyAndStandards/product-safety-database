@@ -13,10 +13,13 @@
     Reason for failure: <strong><%= activity.failure_details %></strong>
     <br />
   <% end %>
-  Attached: <strong><%= link_to activity.attached_file_name, url_for(activity.attached_file) %></strong>
+    Attached: <strong><%= link_to activity.attached_file_name, url_for(activity.attached_file) %></strong>
   <br />
+    File description: <strong><%= activity.file_description %></strong>
   <br />
-  <%= activity.details %>
+  <% unless activity.details.empty? %>
+    Further details: <strong><%= activity.details %></strong>
+  <% end %>
   <br />
   <br />
   <%= link_to "View product details", product_path(activity.product), class: "govuk-link psd-block-link" %>
