@@ -17,6 +17,8 @@ module Investigations
           return render :show
         end
 
+        return redirect_to investigation_businesses_path(investigation, @business) unless @remove_business_form.remove?
+
         result = RemoveBusinessFromCase.call!(
           reason: @remove_business_form.reason,
           investigation: investigation,

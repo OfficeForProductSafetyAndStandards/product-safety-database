@@ -29,6 +29,26 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
     expect(page).to have_error_summary "Select yes if you want to remove the business from the case"
 
     within_fieldset("Do you want to remove the business from the case?") do
+      choose "No"
+    end
+    click_on "Remove business"
+
+    expect(page).to have_title("Businesses")
+    expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
+    expect(page).to have_summary_item(key: "Registered or legal name", value: business.legal_name)
+    expect(page).to have_summary_item(key: "Company number",           value: business.company_number)
+    expect(page).to have_summary_item(key: "Address",                  value: business.primary_location&.summary)
+    expect(page).to have_summary_item(key: "Contact",                  value: business.primary_contact&.summary)
+
+
+    click_on "Activity"
+
+    expect(page).not_to have_css("h3", text: "Removed: #{business.trading_name}")
+
+    click_on "Businesses (1)"
+    click_on "Remove business"
+
+    within_fieldset("Do you want to remove the business from the case?") do
       choose "Yes"
       fill_in "Reason for removing the business from the case", with: "This business no longer exists"
     end
