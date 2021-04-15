@@ -189,6 +189,8 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     expect(page).to have_text("Legislation: General Product Safety Regulations 2005")
     expect(page).to have_text("Standards: EN71, EN73")
     expect(page).to have_text("Date of test: 1 January 2020")
+    expect(page).to have_text("Further details: Test result includes certificate of conformity")
+    expect(page).to have_text("File description: test result file")
     expect(page).to have_text("Test result includes certificate of conformity")
     expect(page).to have_link("test_result.txt")
     expect(page).to have_link("View product details", href: product_path(product))
