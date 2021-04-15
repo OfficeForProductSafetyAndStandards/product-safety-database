@@ -4,9 +4,9 @@
 Rails.application.configure do
   config.rails_activesupport_breadcrumbs = true
 
-  Raven.configure do |config|
+  Sentry.init do |config|
     config.dsn = ENV["SENTRY_DSN"]
-    config.sanitize_fields = Rails.application.config.filter_parameters.map(&:to_s)
+    config.send_default_pii = false
     config.breadcrumbs_logger << :sentry_logger
   end
 end

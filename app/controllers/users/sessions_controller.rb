@@ -4,7 +4,7 @@ module Users
     skip_before_action :has_viewed_introduction
     # These methods trigger Warden authentication.
     # We don't want this to happen until we explicitly attempt to authenticate the user.
-    skip_before_action :set_current_user, :set_raven_context, :authorize_user, only: :create
+    skip_before_action :set_current_user, :set_sentry_context, :authorize_user, only: :create
     skip_before_action :require_secondary_authentication
 
     def new
@@ -41,7 +41,7 @@ module Users
       return redirect_to missing_mobile_number_path unless resource.mobile_number?
 
       set_current_user
-      set_raven_context
+      set_sentry_context
       authorize_user
       sign_in(resource_name, resource)
       respond_with resource, location: after_sign_in_path_for(resource)
