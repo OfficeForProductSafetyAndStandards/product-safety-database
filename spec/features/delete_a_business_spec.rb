@@ -23,7 +23,7 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
     expect(page).to have_unchecked_field("No")
     expect(page).to have_unchecked_field("Yes")
 
-    click_on "Remove business"
+    click_on "Submit"
 
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Select yes if you want to remove the business from the case"
@@ -31,7 +31,7 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
     within_fieldset("Do you want to remove the business from the case?") do
       choose "No"
     end
-    click_on "Remove business"
+    click_on "Submit"
 
     expect(page).to have_title("Businesses")
     expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
@@ -54,7 +54,7 @@ RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :wit
 
     expect(page).to have_link("Cancel", href: investigation_businesses_path(investigation))
 
-    click_on "Remove business"
+    click_on "Submit"
 
     expect(page).to have_css(".hmcts-banner__message", text: "Business was successfully removed.")
     expect(page).to have_css("p.govuk-body", text: "No businesses")
