@@ -54,17 +54,6 @@ class Investigations::BusinessesController < ApplicationController
 
   def remove; end
 
-  # DELETE /cases/1/businesses
-  def unlink
-    @investigation.businesses.delete(@business)
-    respond_to do |format|
-      format.html do
-        redirect_to_investigation_businesses_tab success: "Business was successfully removed."
-      end
-      format.json { head :no_content }
-    end
-  end
-
 private
 
   def create!

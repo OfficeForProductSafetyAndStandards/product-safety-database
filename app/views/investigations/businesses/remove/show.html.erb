@@ -13,16 +13,15 @@
 
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <% if @business.supporting_information.any? %>
+  <% if @business.supporting_information.any? %>
+    <div class="govuk-grid-column-two-thirds">
       <%= render 'supporting_information_warning' %>
-    <% else %>
+    </div>
+  <% else %>
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body"><%= t(".remove_business_warning_html", href: investigation_businesses_path(@investigation)) %></p>
 
-      <div class="govuk-grid-column-two-thirds">
-        <p class="govuk-body"><%= t(".remove_business_warning_html", href: investigation_businesses_path(@investigation)) %></p>
-      </div>
       <%= render 'form' %>
-
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
