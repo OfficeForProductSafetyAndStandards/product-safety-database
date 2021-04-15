@@ -2,11 +2,11 @@ class Investigations::BusinessesController < ApplicationController
   include BusinessesHelper
   include CountriesHelper
   include Wicked::Wizard
-  skip_before_action :setup_wizard, only: %i[remove unlink]
+  skip_before_action :setup_wizard, only: %i[remove]
   steps :type, :details
 
-  before_action :set_investigation, only: %i[index update new show remove unlink]
-  before_action :set_business, only: %i[remove unlink]
+  before_action :set_investigation, only: %i[index update new show remove]
+  before_action :set_business, only: %i[remove]
   before_action :set_countries, only: %i[update show]
   before_action :set_business_location_and_contact, only: %i[update new show]
   before_action :store_business, only: %i[update]
