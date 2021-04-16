@@ -33,7 +33,7 @@
        ib.business,
        class: "govuk-link app-block-link govuk-!-margin-right-3" %>
 
-      <%= link_with_hidden_text_to t("change_business_details"), ib.business, class: "govuk-link app-block-link govuk-!-margin-right-3" %>
+      <%= link_with_hidden_text_to t("change_business_details"), t("change_business_details"), edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
       <% if policy(@investigation).update?(user: current_user) %>
         <div class="govuk-warning-text">
           <br />
