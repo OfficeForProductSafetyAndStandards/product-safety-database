@@ -2,7 +2,7 @@ class ProductsDecorator < Draper::CollectionDecorator
   delegate :current_page, :total_entries, :total_pages, :per_page, :offset
 
   def to_csv
-    ::CSV.generate do |csv|
+    CSV.generate do |csv|
       csv << attributes_for_export
       each { |product| csv << product_to_csv(product) }
     end
