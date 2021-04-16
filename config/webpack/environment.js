@@ -20,7 +20,7 @@ environment.loaders.get('sass').use.splice(-1, 0, {
 environment.config.node = {
   global: false,
   __filename: false,
-  __dirname: false,
+  __dirname: false
 }
 
 module.exports = environment
