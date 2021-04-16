@@ -11,8 +11,8 @@
     "@hmcts/frontend": "^0.0.41-alpha",
     "@rails/webpacker": "5.2.1",
     "accessible-autocomplete": "2.0.3",
-    "core-js": "^3.10.1",
     "copy-webpack-plugin": "6.4.1",
+    "core-js": "^3.10.1",
     "govuk-country-and-territory-autocomplete": "1.0.1",
     "govuk-frontend": "3.11.0",
     "html5shiv": "3.7.3",
@@ -31,7 +31,7 @@
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "babel-loader": "^8.2.1",
-    "css-loader": "^5.0.1",
+    "css-loader": "^5.2.1",
     "file-loader": "^6.2.0",
     "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0"
