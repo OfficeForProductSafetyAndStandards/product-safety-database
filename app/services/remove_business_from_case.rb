@@ -15,9 +15,7 @@ class RemoveBusinessFromCase
 
     investigation.businesses.delete(business)
 
-    create_audit_activity_for_business_removed
-
-    send_notification_email
+    send_notification_email(create_audit_activity_for_business_removed)
   end
 
 private
@@ -32,13 +30,13 @@ private
     )
   end
 
-  def send_notification_email
+  def send_notification_email(activity)
     email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Business was removed from the #{investigation.case_type} by #{context.activity.source.show(recipient)}.",
+        "Business was removed from the #{investigation.case_type} by #{activity.source.show(recipient)}.",
         "#{investigation.case_type.upcase_first} updated"
       ).deliver_later
     end

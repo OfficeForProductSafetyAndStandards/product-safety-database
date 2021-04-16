@@ -1,23 +1,35 @@
 require "rails_helper"
 
-RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_stubbed_mailer do
-  subject(:remove_business_from_case) { described_class.call({ business: business }.merge(common_context)) }
+RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
+  subject(:result) { described_class.call({ business: business }.merge(common_context)) }
 
   let(:business)                 { create(:business) }
   let(:user)                     { create(:user) }
+  let(:creator)                  { user }
+  let(:owner)                    { user }
   let(:product)                  { create(:product, investigations: [investigation]) }
-  let(:investigation)            { create(:allegation, :with_business, creator: user, business_to_add: business) }
+  let(:investigation)            { create(:allegation, :with_business, creator: creator, business_to_add: business) }
   let(:common_context)           { { user: user, investigation: investigation } }
 
   describe "#call" do
+    def expected_email_subject
+      "Allegation updated"
+    end
+
+    def expected_email_body(name)
+      "Business was removed from the allegation by #{name}."
+    end
+
     context "when no supporting informations are attached to the business" do
       it { is_expected.to be_a_success }
 
       it "has removed the business from the investigation" do
         expect {
-          remove_business_from_case
+          result
         }.to change { investigation.businesses.where(businesses: { id: business }).count }.from(1).to(0)
       end
+
+      it_behaves_like "a service which notifies the case owner"
     end
 
     context "when a corrective action is attached to the business" do
@@ -27,8 +39,8 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_stubbe
       before { corrective_action }
 
       it "is a failure with the relevant error", :aggregate_failures do
-        expect(remove_business_from_case).to be_a_failure
-        expect(remove_business_from_case.error).to eq(:business_is_attached_to_supporting_information)
+        expect(result).to be_a_failure
+        expect(result.error).to eq(:business_is_attached_to_supporting_information)
       end
     end
 
@@ -41,8 +53,8 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_stubbe
       before { risk_assessment }
 
       it "is a failure with the relevant error", :aggregate_failures do
-        expect(remove_business_from_case).to be_a_failure
-        expect(remove_business_from_case.error).to eq(:business_is_attached_to_supporting_information)
+        expect(result).to be_a_failure
+        expect(result.error).to eq(:business_is_attached_to_supporting_information)
       end
     end
   end

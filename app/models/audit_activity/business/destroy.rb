@@ -3,10 +3,6 @@ class AuditActivity::Business::Destroy < AuditActivity::Business::Base
     raise "Deprecated - use RemoveBusinessFromCase.call instead"
   end
 
-  def email_update_text(viewer = nil)
-    "Business was removed from the #{investigation.case_type} by #{source&.show(viewer)}."
-  end
-
 private
 
   def subtitle_slug
