@@ -325,7 +325,7 @@ en:
             remove_product:
               inclusion: Select yes if you want to remove the product from the case
             reason:
-              presence: Enter the reason for removing the product from the case
+              blank: Enter the reason for removing the product from the case
         notifying_country_form:
           attributes:
             country:
