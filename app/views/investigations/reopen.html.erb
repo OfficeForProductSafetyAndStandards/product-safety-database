@@ -21,6 +21,8 @@
                  hint: { text: "For example, the business responsible needs to take further action." }
       %>
       <%= form.submit "Re-open case", class: "govuk-button" %>
+
+      <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
     </div>
   </div>
 <% end %>

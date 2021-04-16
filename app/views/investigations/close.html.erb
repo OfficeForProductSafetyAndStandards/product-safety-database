@@ -21,6 +21,8 @@
                  hint: { text: "For example, the product is low risk, so no further activity is expected." }
       %>
       <%= form.submit "Close case", class: "govuk-button" %>
+
+      <p><%= link_to "Cancel", investigation_path(@investigation), class: "govuk-link--no-visited-state" %></p>
     </div>
   </div>
 <% end %>
