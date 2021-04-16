@@ -1,4 +1,5 @@
-- page_heading = "#{@business_type.capitalize} details"
+- pretty_business_type = @business_type == "fulfillment_house" ? "Fulfillment house" : @business_type.capitalize
+- page_heading = "#{pretty_business_type} details"
 
 = page_title page_heading, errors: @business.errors.any?
 

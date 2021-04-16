@@ -72,8 +72,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
       end
 
       it "exports categories" do
-        product_category = Faker::Hipster.word
-        category = Faker::Hipster.word
+        product_category = Faker::Hipster.unique.word
+        category = Faker::Hipster.unique.word
         create(:allegation, product_category: product_category, products: [create(:product, category: category)])
         Investigation.import refresh: true, force: true
 
@@ -136,6 +136,19 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
 
+      it "exports risk_assessments count" do
+        create(:risk_assessment)
+
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 20)).to eq "Risk_Assessments"
+          expect(exported_data.cell(2, 20)).to eq "1"
+        end
+      end
+
       it "exports created_at and updated_at" do
         investigation = create(:allegation)
 
@@ -144,10 +157,10 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         get investigations_path format: :xlsx
 
         aggregate_failures do
-          expect(exported_data.cell(1, 20)).to eq "Date_Created"
-          expect(exported_data.cell(1, 21)).to eq "Last_Updated"
-          expect(exported_data.cell(2, 20)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
-          expect(exported_data.cell(2, 21)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(1, 21)).to eq "Date_Created"
+          expect(exported_data.cell(1, 22)).to eq "Last_Updated"
+          expect(exported_data.cell(2, 21)).to eq investigation.created_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(2, 22)).to eq investigation.updated_at.strftime("%Y-%m-%d %H:%M:%S %z")
         end
       end
 
@@ -159,8 +172,32 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         get investigations_path format: :xlsx
 
         aggregate_failures do
-          expect(exported_data.cell(1, 23)).to eq "Date_Validated"
-          expect(exported_data.cell(2, 23)).to eq investigation.risk_validated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+          expect(exported_data.cell(1, 24)).to eq "Date_Validated"
+          expect(exported_data.cell(2, 24)).to eq investigation.risk_validated_at.strftime("%Y-%m-%d %H:%M:%S %z")
+        end
+      end
+
+      it "exports notifying_country" do
+        create(:allegation)
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 26)).to eq "Notifying_Country"
+          expect(exported_data.cell(2, 26)).to eq "England"
+        end
+      end
+
+      it "exports reported_as" do
+        create(:allegation, reported_reason: "unsafe")
+        Investigation.import refresh: true, force: true
+
+        get investigations_path format: :xlsx
+
+        aggregate_failures do
+          expect(exported_data.cell(1, 27)).to eq "Reported_as"
+          expect(exported_data.cell(2, 27)).to eq "unsafe"
         end
       end
 
@@ -175,8 +212,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
           get investigations_path format: :xlsx
 
           aggregate_failures do
-            expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
-            expect(exported_data.cell(2, 24)).to eq nil
+            expect(exported_data.cell(1, 25)).to eq "Case_Creator_Team"
+            expect(exported_data.cell(2, 25)).to eq nil
           end
         end
       end
@@ -192,8 +229,8 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
           get investigations_path format: :xlsx
 
           aggregate_failures do
-            expect(exported_data.cell(1, 24)).to eq "Case_Creator_Team"
-            expect(exported_data.cell(2, 24)).to eq creator_user.team.name
+            expect(exported_data.cell(1, 25)).to eq "Case_Creator_Team"
+            expect(exported_data.cell(2, 25)).to eq creator_user.team.name
           end
         end
       end
@@ -207,23 +244,24 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
           get investigations_path format: :xlsx
 
           aggregate_failures do
-            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 22)).to eq nil
+            expect(exported_data.cell(1, 23)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 23)).to eq nil
           end
         end
       end
 
       context "when investigation is closed" do
         it "date_closed column is empty" do
-          create(:allegation, is_closed: true, date_closed: Date.yesterday)
+          closed_at_date = Date.new(2021, 1, 1)
+          create(:allegation, is_closed: true, date_closed: closed_at_date)
 
           Investigation.import refresh: true, force: true
 
           get investigations_path, params: { status_closed: "checked", format: :xlsx }
 
           aggregate_failures do
-            expect(exported_data.cell(1, 22)).to eq "Date_Closed"
-            expect(exported_data.cell(2, 22)).to eq Date.yesterday.strftime("%Y-%m-%d %H:%M:%S %z")
+            expect(exported_data.cell(1, 23)).to eq "Date_Closed"
+            expect(exported_data.cell(2, 23)).to eq closed_at_date.strftime("%Y-%m-%d %H:%M:%S %z")
           end
         end
       end

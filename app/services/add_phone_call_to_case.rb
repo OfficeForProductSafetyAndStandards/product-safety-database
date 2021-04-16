@@ -22,7 +22,7 @@ class AddPhoneCallToCase
         source: UserSource.new(user: user),
         investigation: investigation,
         correspondence: correspondence,
-        metadata: AuditActivity::Correspondence::AddPhoneCall.build_metadata
+        metadata: AuditActivity::Correspondence::AddPhoneCall.build_metadata(correspondence)
       )
 
       send_notification_email(investigation, user)

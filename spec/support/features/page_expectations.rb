@@ -102,8 +102,30 @@ module PageExpectations
     expect(page).to have_summary_item(key: "Legislation",         value: new_legislation)
     expect(page).to have_summary_item(key: "Type of action",      value: new_measure_type.upcase_first)
     expect(page).to have_summary_item(key: "Duration of measure", value: CorrectiveAction.human_attribute_name("duration.#{new_duration}"))
-    expect(page).to have_summary_item(key: "Scope",               value: new_geographic_scope)
-    expect(page).to have_summary_item(key: "Other details",       value: new_details)
+    expected_geographic_scopes_text =
+      new_geographic_scopes
+        .map { |new_geographic_scope| I18n.t(new_geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }
+        .to_sentence
+
+    expect(page)
+      .to have_summary_item(key: "Geographic scopes", value: expected_geographic_scopes_text)
+
+    expect(page).to have_summary_item(key: "Other details", value: new_details)
+  end
+
+  def expect_to_be_on_accident_or_incident_type_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents_type/new")
+    expect(page).to have_selector("h1", text: "Are you recording an accident or incident?")
+  end
+
+  def expect_to_be_on_add_accident_or_incident_page(type)
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/new?type=#{type}")
+    expect(page).to have_selector("h1", text: "Record an #{type.downcase}")
+  end
+
+  def expect_to_be_on_show_accident_or_incident_page
+    id = UnexpectedEvent.last.id
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/accident_or_incidents/#{id}")
   end
 
   def expect_to_be_on_confirmation_page
@@ -122,7 +144,6 @@ module PageExpectations
 
   def expect_to_be_on_remove_product_from_case_page(case_id:, product_id:)
     expect(page).to have_current_path("/cases/#{case_id}/products/#{product_id}/remove")
-    expect(page).to have_selector("h2", text: "Remove product")
   end
 
   def expect_to_be_on_teams_page(case_id:)

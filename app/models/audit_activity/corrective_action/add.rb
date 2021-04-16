@@ -27,6 +27,13 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     corrective_action
   end
 
+  def self.migrate_geographic_scopes!(audit_activity)
+    return unless (geographic_scope = audit_activity.metadata.dig("corrective_action", "geographic_scope"))
+
+    audit_activity.metadata["corrective_action"]["geographic_scopes"] = Array(CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope])
+    audit_activity.save!
+  end
+
   def self.populate_missing_fields(metadata, audit_activity)
     return unless (corrective_action = possible_corrective_action_for(audit_activity))
 
@@ -48,6 +55,8 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
       when /\ALegislation: \*\*(.*)\*\*\z/
         corrective_action_attributes[:legislation] = Regexp.last_match(1)
       when /\ADate came into effect: \*\*(.*)\*\*\z/
+        corrective_action_attributes[:date_decided] = Date.parse(Regexp.last_match(1))
+      when /\ADate decided: \*\*(.*)\*\*\z/
         corrective_action_attributes[:date_decided] = Date.parse(Regexp.last_match(1))
       when /\AType of measure: \*\*(.*)\*\*\z/
         corrective_action_attributes[:measure_type] = Regexp.last_match(1)
@@ -74,7 +83,7 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
 
   def title(_viewing_user = nil)
     action_name = metadata.dig("corrective_action", "action")
-    return unless action_name
+    return super unless action_name
 
     if (truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym])
       return "#{truncated_action}: #{product.name}" unless action_name.inquiry.other?

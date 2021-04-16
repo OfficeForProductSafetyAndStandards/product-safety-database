@@ -8,6 +8,8 @@ services:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
 
   antivirus:
     image: beisopss/antivirus:master
@@ -29,7 +31,7 @@ services:
       - 9200:9200
 
   kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.2.3
+    image: docker.elastic.co/kibana/kibana-oss:7.9.2
     ports:
       - 5601:5601
     depends_on:

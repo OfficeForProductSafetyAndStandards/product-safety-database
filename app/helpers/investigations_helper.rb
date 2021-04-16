@@ -2,7 +2,7 @@ module InvestigationsHelper
   include SearchHelper
 
   def search_for_investigations(page_size = Investigation.count)
-    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params)
+    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params, nested: nested_filters)
     result = Investigation.full_search(query)
     result.paginate(page: params[:page], per_page: page_size)
   end
@@ -10,8 +10,9 @@ module InvestigationsHelper
   def set_search_params
     params_to_save = params.dup
     params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
-    @search = SearchParams.new(query_params)
-    session[:previous_search_params] = params_to_save
+    @search = SearchParams.new(query_params.except(:case_owner_is_team_0, :created_by_team_0))
+
+    store_previous_search_params
   end
 
   def filter_params
@@ -20,14 +21,35 @@ module InvestigationsHelper
     filters.merge!(merged_must_filters) { |_key, current_filters, new_filters| current_filters + new_filters }
   end
 
-  def merged_must_filters
-    must_filters = { must: [get_status_filter, { bool: get_creator_filter }, { bool: get_owner_filter }] }
+  def nested_filters
+    filters = []
 
-    if params[:coronavirus_related_only] == "yes"
+    if @search.filter_teams_with_access?
+      filters << {
+        nested: {
+          path: :teams_with_access,
+          query: { bool: { must: { terms: { "teams_with_access.id" => @search.teams_with_access_ids } } } }
+        }
+      }
+    end
+
+    filters
+  end
+
+  def merged_must_filters
+    must_filters = {
+      must: [
+        get_status_filter,
+        { bool: get_creator_filter },
+        { bool: get_owner_filter }
+      ]
+    }
+
+    if @search.coronavirus_related_only?
       must_filters[:must] << { term: { coronavirus_related: true } }
     end
 
-    if params[:serious_and_high_risk_level_only] == "yes"
+    if @search.serious_and_high_risk_level_only?
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     end
 
@@ -35,14 +57,9 @@ module InvestigationsHelper
   end
 
   def get_status_filter
-    return nil if params[:status_open] == params[:status_closed]
+    return unless @search.filter_status?
 
-    status = if params[:status_open] == "checked"
-               { is_closed: false }
-             else
-               { is_closed: true }
-             end
-    { term: status }
+    { term: { is_closed: @search.is_closed? } }
   end
 
   def get_type_filter
@@ -57,48 +74,31 @@ module InvestigationsHelper
   end
 
   def get_owner_filter
-    return { should: [], must_not: [] } if no_owner_boxes_checked
-    return { should: [], must_not: compute_excluded_terms } if owner_filter_exclusive
+    return { should: [], must_not: [] } if @search.no_owner_boxes_checked?
+    return { should: [], must_not: compute_excluded_terms } if @search.owner_filter_exclusive?
 
     { should: compute_included_terms, must_not: [] }
   end
 
-  def no_owner_boxes_checked
-    no_people_boxes_checked = params[:case_owner_is_me] == "unchecked" && params[:case_owner_is_someone_else] == "unchecked"
-    no_team_boxes_checked = query_params[owner_team_with_key[0]].blank?
-    no_people_boxes_checked && no_team_boxes_checked
-  end
-
-  def owner_filter_exclusive
-    params[:case_owner_is_someone_else] == "checked" && params[:case_owner_is_someone_else_id].blank?
-  end
-
   def compute_excluded_terms
-    # After consultation with designers we chose to ignore teams who are not selected in blacklisting
-    excluded_owners = []
-    excluded_owners << current_user.id if params[:case_owner_is_me] == "unchecked"
-    format_owner_terms(excluded_owners)
+    format_owner_terms([current_user.id])
   end
 
   def compute_included_terms
-    # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    owners = checked_team_owners
-    owners.concat(someone_else_owners)
-    owners << current_user.id if params[:case_owner_is_me] == "checked"
+    owners = []
+    owners << current_user.id if @search.case_owner_is_me?
+    owners += my_team_id_and_its_user_ids if @search.case_owner_is_my_team?
+    owners += other_owner_ids if @search.case_owner_is_someone_else?
+
     format_owner_terms(owners.uniq)
   end
 
-  def checked_team_owners
-    owners = []
-    owners.concat(user_ids_from_team(owner_team_with_key[1])) if query_params[owner_team_with_key[0]] != "unchecked"
-    owners
-  end
+  def other_owner_ids
+    if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+      return user_ids_from_team(team)
+    end
 
-  def someone_else_owners
-    return [] unless params[:case_owner_is_someone_else] == "checked"
-
-    team = Team.find_by(id: params[:case_owner_is_someone_else_id])
-    team.present? ? user_ids_from_team(team) : [params[:case_owner_is_someone_else_id]]
+    [@search.case_owner_is_someone_else_id]
   end
 
   def format_owner_terms(owner_array)
@@ -108,41 +108,27 @@ module InvestigationsHelper
   end
 
   def get_creator_filter
-    return { should: [], must_not: [] } if no_created_by_boxes_checked
-    return { should: [], must_not: compute_excluded_created_by_terms } if creator_filter_exclusive
+    return { should: [], must_not: [] } if @search.no_created_by_checked?
+    return { should: [], must_not: { terms: { creator_id: current_user.team.user_ids } } } if @search.created_by_filter_exclusive?
 
-    { should: compute_included_created_by_terms, must_not: [] }
-  end
-
-  def no_created_by_boxes_checked
-    no_created_by_people_boxes_checked = params[:created_by_me] == "unchecked" && params[:created_by_someone_else] == "unchecked"
-    no_created_by_team_boxes_checked = query_params[creator_team_with_key[0]] == "unchecked"
-    no_created_by_people_boxes_checked && no_created_by_team_boxes_checked
-  end
-
-  def creator_filter_exclusive
-    params[:created_by_someone_else] == "checked" && params[:created_by_someone_else_id].blank?
-  end
-
-  def compute_excluded_created_by_terms
-    # After consultation with designers we chose to ignore teams who are not selected in blacklisting
-    excluded_creators = []
-    excluded_creators << current_user.id if params[:created_by_me] == "unchecked"
-    format_creator_terms(excluded_creators)
-  end
-
-  def compute_included_created_by_terms
-    # If 'Me' is not checked, but one of current users teams is selected, we don't exclude current user from it
-    creators = checked_team_creators
-    creators.concat(someone_else_creators)
-    creators << current_user.id if params[:created_by_me] == "checked"
-    format_creator_terms(creators.uniq)
+    { should: format_creator_terms(checked_team_creators), must_not: [] }
   end
 
   def checked_team_creators
-    creators = []
-    creators.concat(user_ids_from_team(creator_team_with_key[1])) if query_params[creator_team_with_key[1]] != "unchecked"
-    creators
+    ids = []
+
+    ids << current_user.id                       if @search.created_by.me?
+    ids += user_ids_from_team(current_user.team) if @search.created_by.my_team?
+
+    if @search.created_by.someone_else? && @search.created_by.id.present?
+      if (team = Team.find_by(id: @search.created_by.id))
+        ids += user_ids_from_team(team)
+      else
+        @search.created_by.someone_else_id
+      end
+    end
+
+    ids
   end
 
   def someone_else_creators
@@ -167,10 +153,7 @@ module InvestigationsHelper
   end
 
   def query_params
-    set_default_status_filter
     set_default_type_filter
-    set_default_owner_filter
-    set_default_creator_filter
     params.permit(
       :q,
       :status_open,
@@ -180,38 +163,20 @@ module InvestigationsHelper
       :enquiry,
       :project,
       :case_owner_is_me,
+      :case_owner_is_my_team,
       :case_owner_is_someone_else,
       :case_owner_is_someone_else_id,
       :sort_by,
-      :created_by_me,
-      :created_by_me,
-      :created_by_someone_else,
-      :created_by_someone_else_id,
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
       owner_team_with_key[0],
-      creator_team_with_key[0]
+      created_by: %i[me someone_else my_team id],
+      teams_with_access: [:other_team_with_access, :my_team, id: []]
     )
   end
 
   def export_params
     query_params.except(:page)
-  end
-
-  def set_default_status_filter
-    params[:status_open] = "checked" if params[:status_open].blank?
-  end
-
-  def set_default_owner_filter
-    params[:case_owner_is_me] = "unchecked" if params[:case_owner_is_me].blank?
-    params[:case_owner_is_team_0] = "unchecked" if params[:case_owner_is_team_0].blank?
-    params[:case_owner_is_someone_else] = "unchecked" if params[:case_owner_is_someone_else].blank?
-  end
-
-  def set_default_creator_filter
-    params[:created_by_me] = "unchecked" if params[:created_by_me].blank?
-    params[:created_by_team_0] = "unchecked" if params[:created_by_team_0].blank?
-    params[:created_by_someone_else] = "unchecked" if params[:created_by_someone_else].blank?
   end
 
   def set_default_type_filter
@@ -320,17 +285,39 @@ module InvestigationsHelper
 
     rows = [risk_level_row, validated_row, risk_assessment_row]
 
-    if investigation.hazard_type.present?
+    rows
+  end
+
+  def safety_and_compliance_rows(investigation, user)
+    rows = []
+
+    reported_reason = investigation.reported_reason ? investigation.reported_reason.to_sym : :not_provided
+
+    rows << {
+      key: { text: t(:reported_as, scope: "investigations.overview.safety_and_compliance") },
+      value: { text: simple_format(t(reported_reason.to_sym, scope: "investigations.overview.safety_and_compliance")) },
+      actions: safety_and_compliance_actions(investigation, user, "reported_as")
+    }
+
+    if investigation.unsafe_and_non_compliant? || investigation.unsafe?
       rows << {
-        key: { text: t(:key, scope: "investigations.overview.hazards") },
-        value: { text: simple_format([investigation.hazard_type, investigation.hazard_description].join("\n\n")) }
+        key: { text: t(:primary_hazard, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(investigation.hazard_type) },
+        actions: safety_and_compliance_actions(investigation, user, "hazard_type")
+      }
+
+      rows << {
+        key: { text: t(:description, scope: "investigations.overview.safety_and_compliance") },
+        value: { text: simple_format(investigation.hazard_description) },
+        actions: safety_and_compliance_actions(investigation, user, "hazard_description")
       }
     end
 
-    if investigation.non_compliant_reason.present?
+    if investigation.unsafe_and_non_compliant? || investigation.non_compliant?
       rows << {
         key: { text: t(:key, scope: "investigations.overview.compliance") },
-        value: { text: simple_format(investigation.non_compliant_reason) }
+        value: { text: simple_format(investigation.non_compliant_reason) },
+        actions: safety_and_compliance_actions(investigation, user, "non_compliant_reason")
       }
     end
 
@@ -350,6 +337,20 @@ module InvestigationsHelper
     end
   end
 
+  def safety_and_compliance_actions(investigation, user, field_name)
+    if policy(investigation).update?(user: user)
+      {
+        items: [
+          href: edit_investigation_safety_and_compliance_path(investigation.pretty_id),
+          text: "Change",
+          visuallyHiddenText: field_name
+        ]
+      }
+    else
+      {}
+    end
+  end
+
   def risk_validated_link_text(investigation)
     investigation.risk_validated_by ? "Change" : t("investigations.risk_validation.validate")
   end
@@ -360,6 +361,7 @@ module InvestigationsHelper
     coronavirus_related_actions = { items: [] }
     status_actions = { items: [] }
     activity_actions = { items: [] }
+    notifying_country_actions = { items: [] }
 
     if policy(investigation).update?(user: user)
       activity_actions[:items] << {
@@ -381,6 +383,14 @@ module InvestigationsHelper
       }
     end
 
+    if policy(investigation).change_notifying_country?(user: user)
+      notifying_country_actions[:items] << {
+        href: edit_investigation_notifying_country_path(investigation),
+        text: "Change",
+        visuallyHiddenText: "notifying_country"
+      }
+    end
+
     rows = [
       {
         key: { text: "Status" },
@@ -395,6 +405,11 @@ module InvestigationsHelper
       {
         key: { text: "Created by" },
         value: { text: investigation.created_by }
+      },
+      {
+        key: { text: "Notifying country" },
+        value: { text: country_from_code(investigation.notifying_country, Country.notifying_countries) },
+        actions: notifying_country_actions
       },
       {
         key: { text: "Date created" },
@@ -442,6 +457,10 @@ module InvestigationsHelper
       {
         path: new_investigation_risk_assessment_path(investigation),
         text: "Risk assessment"
+      },
+      {
+        path: new_investigation_accident_or_incidents_type_path(investigation),
+        text: "Accident or incident"
       },
       {
         path: new_investigation_new_path(investigation),
@@ -500,5 +519,29 @@ module InvestigationsHelper
     end
 
     data_attributes
+  end
+
+  def my_team_id_and_its_user_ids
+    [current_user.team_id] + current_user.team.user_ids
+  end
+
+  def store_previous_search_params
+    session[:previous_search_params] = @search.serializable_hash(form_serialisation_option).symbolize_keys
+  end
+
+  def form_serialisation_option
+    options = { include: %i[teams_with_access created_by] }
+    options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
+
+    options
+  end
+
+  def options_for_notifying_country(countries, notifying_country_form)
+    countries.map do |country|
+      text = country[0]
+      option = { text: text, value: country[1] }
+      option[:selected] = true if notifying_country_form.country == text
+      option
+    end
   end
 end

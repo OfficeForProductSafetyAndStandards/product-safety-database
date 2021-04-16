@@ -18,6 +18,8 @@ class TestResultForm
   attribute :existing_document_file_id
   attribute :filename
   attribute :file_description
+  attribute :failure_details
+  attribute :further_test_results
 
   validates :details, length: { maximum: 50_000 }
   validates :legislation, inclusion: { in: Rails.application.config.legislation_constants["legislation"] }
@@ -25,16 +27,21 @@ class TestResultForm
   validates :result, inclusion: { in: Test::Result.results.keys }
   validates :document, presence: true
   validates :product_id, presence: true, on: :create_with_product
+  validates :further_test_results, presence: true, on: :ts_user_create
   validates :date,
             presence: true,
             real_date: true,
             complete_date: true,
             not_in_future: true
+  validates :failure_details, presence: true, if: -> { result == "failed" }
 
-  before_validation { trim_line_endings(:details, :file_description) }
+  before_validation do
+    trim_line_endings(:details, :file_description)
+    make_failure_details_nil_if_empty
+  end
 
   ATTRIBUTES_FROM_TEST_RESULT = %i[
-    id date details legislation result standards_product_was_tested_against product_id
+    id date details legislation result failure_details standards_product_was_tested_against product_id
   ].freeze
 
   def self.from(test_result)
@@ -47,5 +54,9 @@ class TestResultForm
 
   def document_form=(document_params)
     assign_file_and_description(document_params)
+  end
+
+  def make_failure_details_nil_if_empty
+    self.failure_details = nil if failure_details.try(:empty?)
   end
 end

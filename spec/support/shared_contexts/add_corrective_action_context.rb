@@ -1,7 +1,8 @@
 RSpec.shared_context "with add corrective action setup" do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
-  let(:investigation) { create(:allegation, :with_business, products: [product], creator: user, read_only_teams: read_only_team) }
+  let(:products) { [product] }
+  let(:investigation) { create(:allegation, :with_business, products: products, creator: user, read_only_teams: read_only_team) }
   let(:business) { investigation.businesses.first }
   let(:action_key) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:action) { CorrectiveAction.actions[action_key] }
@@ -14,7 +15,10 @@ RSpec.shared_context "with add corrective action setup" do
   let(:file_description) { Faker::Lorem.paragraph }
   let(:measure_type) { "Mandatory" }
   let(:duration) { "Permanent" }
-  let(:geographic_scope) { "National" }
+  let!(:geographic_scopes_last_index) { rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1) }
+  let(:geographic_scopes) do
+    CorrectiveAction::GEOGRAPHIC_SCOPES[0..geographic_scopes_last_index]
+  end
   let(:other_action) { "" }
   let(:action_for_form) { CorrectiveAction.actions[action_key] }
 
@@ -31,7 +35,7 @@ RSpec.shared_context "with add corrective action setup" do
       details: details,
       measure_type: measure_type,
       duration: duration,
-      geographic_scope: geographic_scope,
+      geographic_scopes: geographic_scopes,
       file: {
         file: Rack::Test::UploadedFile.new(file),
         description: file_description,

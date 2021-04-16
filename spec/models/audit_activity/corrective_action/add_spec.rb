@@ -10,13 +10,37 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
       metadata: metadata,
       product: product,
       investigation: corrective_action.investigation,
-      body: body
+      body: body,
+      title: legacy_title
     )
   end
 
   let(:metadata) { described_class.build_metadata(corrective_action) }
-  let!(:corrective_action) { create(:corrective_action, action: action_key, other_action: other_action) }
+  let!(:corrective_action) do
+    create(
+      :corrective_action,
+      action: action_key,
+      other_action: other_action,
+      geographic_scope: geographic_scope,
+      geographic_scopes: geographic_scopes
+    )
+  end
+  let(:legacy_title) { Faker::Hipster.sentence }
   let(:body) { nil }
+  let(:geographic_scope) { nil }
+  let(:geographic_scopes) { %i[great_britain northern_ireland] }
+
+  describe ".migrate_geographic_scopes" do
+    let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
+    let(:geographic_scopes) { nil }
+
+    it "migrates the data" do
+      expect { described_class.migrate_geographic_scopes!(audit_activity) }
+        .to change { audit_activity.reload.metadata.dig("corrective_action", "geographic_scopes") }
+              .from(nil)
+              .to(CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope])
+    end
+  end
 
   describe ".migrate_legacy_audit_activity" do
     let(:metadata) { nil }
@@ -177,6 +201,13 @@ ergq perog n
 
   describe "#title" do
     let(:expected_title) { "#{CorrectiveAction::TRUNCATED_ACTION_MAP[action_key.to_sym]}: #{product.name}" }
+
+    context "when the no action is empty" do
+      let(:action_key) { nil }
+      let(:other_action) { nil }
+
+      specify { expect(audit_activity.title).to eq(legacy_title) }
+    end
 
     context "when the action is not other" do
       it "shows the action and product name" do

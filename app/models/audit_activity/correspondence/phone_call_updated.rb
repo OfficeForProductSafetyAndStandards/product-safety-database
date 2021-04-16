@@ -5,10 +5,6 @@ class AuditActivity::Correspondence::PhoneCallUpdated < AuditActivity::Correspon
     raise "Deprecated - no longer supported"
   end
 
-  def title(_viewing_user = nil)
-    correspondence.overview
-  end
-
   def self.build_metadata(correspondence)
     updates = correspondence.previous_changes
 

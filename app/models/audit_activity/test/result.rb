@@ -35,6 +35,10 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     metadata["test_result"]["result"]
   end
 
+  def failure_details
+    metadata["test_result"]["failure_details"]
+  end
+
   def details
     metadata["test_result"]["details"]
   end

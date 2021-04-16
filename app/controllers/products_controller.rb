@@ -14,12 +14,14 @@ class ProductsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @products = search_for_products(20)
+        results = search_for_products(20)
+        @products = ProductDecorator.decorate_collection(results)
       end
       format.csv do
         authorize Product, :export?
 
-        @products = search_for_products
+        results = search_for_products.includes(:investigations)
+        @products = ProductDecorator.decorate_collection(results)
 
         render csv: @products, filename: "products"
       end

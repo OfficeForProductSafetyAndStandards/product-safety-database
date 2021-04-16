@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :with_test_queue_adapter, :with_stubbed_mailer, type: :feature do
-  let(:user) { create(:user, :activated, :opss_user, email: "user@example.com") }
+  let(:user) { create(:user, :activated, :opss_user, :email_alert_sender, email: "user@example.com") }
   let(:investigation) { create(:allegation, creator: user) }
 
   let(:restricted_investigation) { create(:allegation, :restricted, creator: user) }

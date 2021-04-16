@@ -2,7 +2,7 @@ class AddCorrectiveActionToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :corrective_action, :user, :investigation, :document, :date_decided, :business_id, :details, :legislation, :measure_type, :duration, :geographic_scope, :other_action, :action, :product_id, :online_recall_information, :has_online_recall_information, to: :context
+  delegate :corrective_action, :user, :investigation, :document, :date_decided, :business_id, :details, :legislation, :measure_type, :duration, :geographic_scopes, :other_action, :action, :product_id, :online_recall_information, :has_online_recall_information, to: :context
 
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
@@ -16,7 +16,7 @@ class AddCorrectiveActionToCase
         legislation: legislation,
         measure_type: measure_type,
         duration: duration,
-        geographic_scope: geographic_scope,
+        geographic_scopes: geographic_scopes,
         other_action: other_action,
         action: action,
         product_id: product_id,

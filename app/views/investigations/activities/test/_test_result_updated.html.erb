@@ -10,6 +10,10 @@
     Result: <strong><%= activity.new_result %></strong><br>
   <% end %>
 
+  <% if activity.new_failure_details && activity.show_new_failure_details? %>
+    Reason for failure: <strong><%= activity.new_failure_details %></strong><br>
+  <% end %>
+
   <% if activity.new_details %>
     Further details: <strong><%= activity.new_details %></strong><br>
   <% end %>

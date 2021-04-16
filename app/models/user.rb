@@ -67,6 +67,10 @@ class User < ApplicationRecord
     has_role? :psd_admin
   end
 
+  def notifying_country_editor?
+    has_role? :notifying_country_editor
+  end
+
   def is_opss?
     has_role? :opss
   end
@@ -81,6 +85,14 @@ class User < ApplicationRecord
 
   def can_validate_risk_level?
     has_role? :risk_level_validator
+  end
+
+  def can_send_email_alert?
+    has_role? :email_alert_sender
+  end
+
+  def can_view_restricted_cases?
+    has_role? :restricted_case_viewer
   end
 
   def has_role?(role)
@@ -146,6 +158,10 @@ class User < ApplicationRecord
 
   def mobile_number_change_allowed?
     !mobile_number_verified?
+  end
+
+  def has_filled_out_account_setup_form_and_verified_number?
+    name.present? && mobile_number_verified?
   end
 
 private

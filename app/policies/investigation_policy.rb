@@ -32,16 +32,15 @@ class InvestigationPolicy < ApplicationPolicy
   def view_non_protected_details?(user: @user, private: @record.is_private)
     return true unless private
 
-    # Has the user's team been added to the case as a collaborator?
-    @record.teams_with_access.include?(user.team)
+    user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team)
   end
 
   def view_protected_details?(user: @user)
-    @record.teams_with_access.include?(user.team)
+    user.can_view_restricted_cases? || @record.teams_with_access.include?(user.team)
   end
 
   def send_email_alert?(user: @user)
-    user.is_opss?
+    user.can_send_email_alert?
   end
 
   def investigation_restricted?
@@ -54,5 +53,9 @@ class InvestigationPolicy < ApplicationPolicy
 
   def risk_level_validation?
     user.can_validate_risk_level?
+  end
+
+  def change_notifying_country?(user: @user)
+    user.notifying_country_editor?
   end
 end

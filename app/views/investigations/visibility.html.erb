@@ -18,7 +18,7 @@
                  key: :is_private,
                  fieldset: { legend: { text: "Visibility",
                                        classes: "govuk-label--m" } },
-                 hint: { text: "Restricted cases are visible only to the organisation that created them and the organisation of the current case owner." },
+                 hint: { text: "Restricted cases are visible only to teams added to the case, as well as certain OPSS users." },
                  items: [{ text: t(false, scope: "case.is_private"),
                            value: "false" },
                          { text: t(true, scope: "case.is_private"),

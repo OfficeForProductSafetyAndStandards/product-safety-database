@@ -10,8 +10,8 @@
 <%= render "investigations/pages_top", investigation: @investigation %>
 
 <%= form_with(
-      scope: :investigation,
-      model: @investigation,
+      scope: :change_case_owner_form,
+      model: @form,
       local: true,
       url: investigation_ownership_index_path(@investigation),
       method: :post

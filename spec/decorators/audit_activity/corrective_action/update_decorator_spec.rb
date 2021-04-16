@@ -20,7 +20,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         legislation: new_legislation,
         has_online_recall_information: new_has_online_recall_information,
         online_recall_information: new_online_recall_information,
-        geographic_scope: new_geographic_scope,
+        geographic_scopes: new_geographic_scopes,
         duration: new_duration,
         details: new_details,
         business_id: corrective_action.business_id,
@@ -39,7 +39,22 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
     )
   end
 
-  it { expect(decorated_activity.new_action).to eq(CorrectiveAction.actions[new_summary]) }
+  describe "#new_action" do
+    context "when action is other" do
+      let(:new_summary) { "other" }
+
+      it "returns the other action description" do
+        expect(decorated_activity.new_action).to eq(new_other_action)
+      end
+    end
+
+    context "when action is not other" do
+      it "returns the action name" do
+        expect(decorated_activity.new_action).to eq(CorrectiveAction.actions[new_summary])
+      end
+    end
+  end
+
   it { expect(decorated_activity.new_date_decided).to eq(new_date_decided.to_s(:govuk)) }
 
   describe "#new_online_recall_information" do
@@ -192,7 +207,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   it { expect(decorated_activity.new_duration).to eq(new_duration) }
   it { expect(decorated_activity.new_details).to eq(new_details) }
   it { expect(decorated_activity.new_measure_type).to eq(new_measure_type) }
-  it { expect(decorated_activity.new_geographic_scope).to eq(new_geographic_scope) }
+  it { expect(decorated_activity.new_geographic_scopes).to eq(new_geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence) }
   it { expect(decorated_activity.new_filename).to eq(File.basename(new_filename)) }
   it { expect(decorated_activity.new_file_description).to eq(new_file_description) }
 

@@ -17,7 +17,7 @@ class CorrectiveActionForm
   attribute :related_file
   attribute :measure_type
   attribute :duration
-  attribute :geographic_scope
+  attribute :geographic_scopes
   attribute :other_action
   attribute :has_online_recall_information, default: nil
   attribute :online_recall_information
@@ -29,11 +29,11 @@ class CorrectiveActionForm
   attribute :file_description
   attribute :further_corrective_action, :boolean
 
+  validates :product_id, presence: true, on: %i[add_corrective_action edit_corrective_action]
   validates :date_decided,
             presence: true,
             real_date: true,
-            complete_date: true,
-            not_in_future: true
+            complete_date: true
   validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
   validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
@@ -44,8 +44,8 @@ class CorrectiveActionForm
   validates :measure_type, inclusion: { in: CorrectiveAction::MEASURE_TYPES }, if: -> { measure_type.present? }
   validates :duration, presence: true
   validates :duration, inclusion: { in: CorrectiveAction::DURATION_TYPES }, if: -> { duration.present? }
-  validates :geographic_scope, presence: true
-  validates :geographic_scope, inclusion: { in: Rails.application.config.corrective_action_constants["geographic_scope"] }, if: -> { geographic_scope.present? }
+  validates :geographic_scopes, presence: true
+  validate :geographic_scopes_inclusion
   validates :action, inclusion: { in: CorrectiveAction.actions.keys }
   validates :other_action, presence: true, length: { maximum: 10_000 }, if: :other?
   validates :other_action, absence: true, unless: :other?
@@ -54,6 +54,7 @@ class CorrectiveActionForm
   before_validation { trim_whitespace(:other_action, :details, :file_description, :online_recall_information) }
   before_validation { nilify_blanks(:other_action, :details, :file_description, :online_recall_information) }
   before_validation :clear_related_file, unless: :related_file
+  before_validation :clear_other_action, unless: -> { other? }
 
   ATTRIBUTES_FROM_CORRECTIVE_ACTION = %i[
     id
@@ -65,7 +66,7 @@ class CorrectiveActionForm
     details
     measure_type
     duration
-    geographic_scope
+    geographic_scopes
     other_action
     online_recall_information
     has_online_recall_information
@@ -121,5 +122,15 @@ private
     self.existing_document_file_id = nil
     self.filename = nil
     self.file_description = nil
+  end
+
+  def geographic_scopes_inclusion
+    unless geographic_scopes.all? { |geographic_scope| CorrectiveAction::GEOGRAPHIC_SCOPES.include?(geographic_scope) }
+      errors.add(:geographic_scopes, :inclusion)
+    end
+  end
+
+  def clear_other_action
+    self.other_action = nil
   end
 end

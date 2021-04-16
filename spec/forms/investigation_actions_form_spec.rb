@@ -55,18 +55,17 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       let(:investigation) { create(:allegation, creator: user) }
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
-      it "contains four possible actions" do
+      it "contains three possible actions" do
         expect(form.actions).to eq({
           change_case_status: "Close case",
           change_case_owner: "Change case owner",
-          change_case_visibility: "Restrict this case",
-          send_email_alert: "Send email alert"
+          change_case_visibility: "Restrict this case"
         })
       end
     end
 
-    context "when the user is not involved with the investigation but is an OPSS user" do
-      let(:user) { create(:user, :activated, :opss_user) }
+    context "when the user is not involved with the investigation but can send email alerts" do
+      let(:user) { create(:user, :activated, :email_alert_sender) }
       let(:investigation) { create(:allegation) }
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 

@@ -27,6 +27,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     {
       retailer: business.call,
       exporter: business.call,
+      fulfillment_house: business.call,
       advertiser: business.call
     }
   end
@@ -43,7 +44,11 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         file_description: Faker::Lorem.paragraph,
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
-        geographic_scope: Rails.application.config.corrective_action_constants["geographic_scope"].sample,
+        geographic_scopes: [
+          I18n.t("great_britain", scope: %i[corrective_action attributes geographic_scopes]),
+          I18n.t("northern_ireland", scope: %i[corrective_action attributes geographic_scopes]),
+
+        ],
         has_online_recall_information: "Yes",
         online_recall_information: Faker::Internet.url(host: "example.com")
       }
@@ -87,6 +92,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       standards_product_was_tested_against: "EN71, EN73",
       date: Faker::Date.backward(days: 14),
       result: %w[Pass Fail].sample,
+      failure_details: "Additional details",
       details: Faker::Lorem.sentence,
       file: Rails.root + "test/fixtures/files/test_result.txt"
     }
@@ -161,6 +167,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         expect_to_be_on_business_details_page("Exporter")
         fill_in_business_details_page(with: business_details[:exporter])
+
+        expect_to_be_on_business_details_page("Fulfillment house")
+        fill_in_business_details_page(with: business_details[:fulfillment_house])
 
         expect_to_be_on_business_details_page("Advertiser")
         fill_in_business_details_page(with: business_details[:advertiser])
@@ -261,7 +270,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         expect_to_be_on_case_products_page
         expect_case_products_page_to_show(info: product_details, images: product_images)
 
-        click_link "Businesses (3)"
+        click_link "Businesses (4)"
 
         expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
         expect_case_businesses_page_to_show(label: "Exporter", business: business_details[:exporter])
@@ -408,8 +417,8 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(page).to have_text("Product reported because it is unsafe and non-compliant.")
 
     expect(page.find("dt", text: "Trading Standards reference")).to have_sibling("dd", text: reference_number)
-    expect(page.find("dt", text: "Hazards")).to have_sibling("dd", text: hazard_type)
-    expect(page.find("dt", text: "Hazards")).to have_sibling("dd", text: hazard_description)
+    expect(page.find("dt", text: "Primary hazard")).to have_sibling("dd", text: hazard_type)
+    expect(page.find("dt", text: "Description of hazard")).to have_sibling("dd", text: hazard_description)
     expect(page.find("dt", text: "Compliance")).to have_sibling("dd", text: non_compliance_details)
     expect(page.find("dt", text: "Coronavirus related")).to have_sibling("dd", text: "Not a coronavirus related case")
   end
@@ -490,9 +499,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     expect(item).to have_text("Legislation: #{action[:legislation]}")
     expect(item).to have_text(/Recall information: #{action[:online_recall_information]}/)
     expect(item).to have_text("Date came into effect: #{action[:date].to_s(:govuk)}")
-    expect(item).to have_text("Type of measure: #{CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")}")
+    measure = CorrectiveAction.human_attribute_name("measure_type.#{action[:measure_type]}")
+    expect(item).to have_text("Type of measure: #{measure}")
     expect(item).to have_text("Duration of action: #{CorrectiveAction.human_attribute_name("duration.#{action[:duration]}")}")
-    expect(item).to have_text("Geographic scope: #{action[:geographic_scope]}")
+    expect(item).to have_text("Geographic scopes: #{action[:geographic_scopes].to_sentence}")
     expect(item).to have_text("Attached: #{File.basename(action[:file])}")
     expect(item).to have_text(action[:details])
   end
@@ -578,6 +588,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   def fill_in_supply_chain_page
     check "Retailer"
     check "Exporter"
+    check "Fulfillment house"
     check "Distributor"
     check "Other"
     fill_in "Other type", with: "advertiser"
@@ -636,7 +647,20 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       choose with[:duration].titleize
     end
 
-    select with[:geographic_scope], from: "What is the geographic scope of the action?"
+    within_fieldset "What is the geographic scope of the action?" do
+      with[:geographic_scopes].each do |geographic_scope|
+        check geographic_scope
+      end
+    end
+
+    within_fieldset "Are there any files related to the action?" do
+      choose "Yes"
+      attach_file "Upload a file", with[:file], visible: false
+      fill_in "Attachment description", with: with[:file_description]
+    end
+
+    choose "further_corrective_action"
+    click_button "Continue"
   end
 
   def fill_in_other_information_page(test_results: true, risk_assessments: true)
@@ -655,6 +679,10 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
     fill_in "Month", with: with[:date].month
     fill_in "Year", with: with[:date].year
     choose with[:result] if with[:result]
+
+    if with[:result] == "Fail"
+      fill_in "How the product failed", with: with[:failure_details]
+    end
 
     fill_in "Further details", with: with[:details]
 

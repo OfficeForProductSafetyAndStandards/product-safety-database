@@ -10,17 +10,19 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
       legislation: legislation,
       measure_type: measure_type,
       duration: duration,
-      geographic_scope: geographic_scope,
+      geographic_scopes: geographic_scopes,
       details: details,
       related_file: related_file,
-      product_id: create(:product).id,
+      product_id: product_id,
       business_id: create(:business).id,
       has_online_recall_information: has_online_recall_information,
       online_recall_information: online_recall_information,
-      file: file_form
+      file: file_form,
+      further_corrective_action: further_corrective_action
     ).tap(&:valid?)
   end
 
+  let(:product_id) { create(:product).id }
   let(:file) { fixture_file_upload(file_fixture("corrective_action.txt")) }
   let(:file_description) { Faker::Hipster.sentence }
   let(:file_form) { { file: file, description: file_description } }
@@ -30,12 +32,13 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   let(:legislation) { Rails.application.config.legislation_constants["legislation"].sample }
   let(:measure_type) { CorrectiveAction::MEASURE_TYPES.sample }
   let(:duration) { CorrectiveAction::DURATION_TYPES.sample }
-  let(:geographic_scope) { Rails.application.config.corrective_action_constants["geographic_scope"].sample }
+  let(:geographic_scopes) { CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)] }
   let(:details) { Faker::Lorem.sentence }
   let(:related_file) { false }
   let(:investigation) { build(:allegation) }
   let(:has_online_recall_information) { CorrectiveAction.has_online_recall_informations["has_online_recall_information_no"] }
   let(:online_recall_information) { nil }
+  let(:further_corrective_action) { false }
 
   describe ".from" do
     subject(:corrective_action_form) { described_class.from(corrective_action) }
@@ -56,13 +59,40 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
   describe "#valid?" do
     let(:form) { corrective_action_form }
 
-    it_behaves_like "it does not allow dates in the future", :date_decided
     it_behaves_like "it does not allow malformed dates", :date_decided
     it_behaves_like "it does not allow an incomplete", :date_decided
 
     context "with valid input" do
       it "returns true" do
         expect(corrective_action_form).to be_valid
+      end
+    end
+
+    context "without a product" do
+      let(:product_id) { nil }
+
+      context "with add_corrective_action custom context" do
+        it "returns false" do
+          expect(corrective_action_form).not_to be_valid(:add_corrective_action)
+        end
+      end
+
+      context "with edit_corrective_action custom context" do
+        it "returns false" do
+          expect(corrective_action_form).not_to be_valid(:edit_corrective_action)
+        end
+      end
+
+      context "with ts_flow custom context" do
+        it "returns true" do
+          expect(corrective_action_form).to be_valid(:ts_flow)
+        end
+      end
+
+      context "with no custom context" do
+        it "returns true" do
+          expect(corrective_action_form).to be_valid
+        end
       end
     end
 
@@ -77,9 +107,9 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     context "when action is not 'other' and other_action is not blank" do
       let(:other_action) { Faker::Lorem.characters(number: 10_000) }
 
-      it "is not valid with an error message for the other_action field", :aggregate_failures do
-        expect(corrective_action_form).to be_invalid
-        expect(corrective_action_form.errors.full_messages_for(:other_action)).to eq(["Other action must be blank"])
+      it "clears the other action", :aggregate_failures do
+        expect(corrective_action_form).to be_valid
+        expect(corrective_action_form.other_action).to be_nil
       end
     end
 
@@ -101,14 +131,6 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
 
     context "with details longer than 50,000 characters" do
       let(:details) { Faker::Lorem.characters(number: 50_001) }
-
-      it "returns false" do
-        expect(corrective_action_form).not_to be_valid
-      end
-    end
-
-    context "with future date_decided" do
-      let(:date_decided) { Faker::Date.forward(days: 14) }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid
@@ -156,7 +178,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     context "with blank geographic_scope" do
-      let(:geographic_scope) { nil }
+      let(:geographic_scopes) { [] }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid
@@ -164,7 +186,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
     end
 
     context "with invalid geographic_scope" do
-      let(:geographic_scope) { "test" }
+      let(:geographic_scopes) { %w[test] }
 
       it "returns false" do
         expect(corrective_action_form).not_to be_valid

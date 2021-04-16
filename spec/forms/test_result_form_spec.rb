@@ -37,6 +37,7 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
     it { is_expected.to validate_inclusion_of(:result).in_array(Test::Result.results.keys).with_message("Select result of the test") }
     it { is_expected.to validate_presence_of(:document).with_message("Provide the test results file") }
     it { is_expected.to validate_presence_of(:product_id).with_message("Select the product which was tested").on(:create_with_product) }
+    it { is_expected.to validate_presence_of(:further_test_results).on(:ts_user_create) }
     it { is_expected.to validate_presence_of(:standards_product_was_tested_against).with_message("Enter the standard the product was tested against") }
 
     it_behaves_like "it does not allow dates in the future", :date_form_params, :date

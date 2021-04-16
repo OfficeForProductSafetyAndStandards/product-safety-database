@@ -38,7 +38,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         legislation: new_legislation,
         has_online_recall_information: new_has_online_recall_information,
         online_recall_information: new_online_recall_information,
-        geographic_scope: new_geographic_scope,
+        geographic_scopes: new_geographic_scopes,
         duration: new_duration,
         details: new_details,
         business_id: corrective_action.business_id,
@@ -80,7 +80,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elast
         let(:existing_document_file_id)         { corrective_action.document_blob&.signed_id }
         let(:new_summary)                       { corrective_action.action }
         let(:new_other_action)                  { corrective_action.other_action }
-        let(:new_geographic_scope)              { corrective_action.geographic_scope }
+        let(:new_geographic_scopes)             { corrective_action.geographic_scopes }
         let(:new_duration)                      { corrective_action.duration }
         let(:new_measure_type)                  { corrective_action.measure_type }
         let(:new_legislation)                   { corrective_action.legislation }

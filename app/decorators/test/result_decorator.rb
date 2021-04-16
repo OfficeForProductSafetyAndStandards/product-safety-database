@@ -44,5 +44,11 @@ class Test < ApplicationRecord
     def standards_product_was_tested_against
       object.standards_product_was_tested_against&.join(", ")
     end
+
+    def failure_details
+      return "Not provided" if object.failure_details.nil?
+
+      object.failure_details
+    end
   end
 end

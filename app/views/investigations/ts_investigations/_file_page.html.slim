@@ -6,16 +6,17 @@ fieldset.govuk-fieldset
     - if @file_blob.present?
       p#current-attachment-details
         ' Currently selected file:
-        = link_to @file_blob.filename, @file_blob, target: "_blank", rel: 'noopener'
+        = link_to "#{@file_blob.filename} (opens in new tab)", @file_blob, target: "_blank", rel: 'noopener'
     = form.fields_for :file do |subform|
       - if @file_blob.blank?
         .govuk-form-group class=("govuk-form-group--error" if form.object.errors[:file].any?)
-          = subform.label :file, "Upload a file", class: "govuk-label"
+          = subform.label :file, "Upload a file", class: "govuk-label", id: "file"
           = subform.file_field :file, class: "govuk-file-upload"
       hr.govuk-section-break.govuk-section-break--m.govuk-section-break--visible
       = render "form_components/govuk_input",
                key: :title,
                form: subform,
+               id: "title",
                value: @file_title,
                classes: "govuk-!-width-two-thirds",
                label: { text: "Title" }
@@ -24,6 +25,7 @@ fieldset.govuk-fieldset
       = render "form_components/govuk_textarea",
                key: :description,
                form: subform,
+               id: "description",
                value: @file_description,
                attributes: { maxlength: 10_000 },
                label: { text: "Description" },

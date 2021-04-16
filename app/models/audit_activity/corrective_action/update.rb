@@ -6,6 +6,16 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
     }
   end
 
+  def self.migrate_geographic_scope!(audit_activity)
+    return unless (geographic_scope_updates = audit_activity.metadata.dig("updates", "geographic_scope"))
+
+    audit_activity.metadata["updates"]["geographic_scopes"] =
+      geographic_scope_updates
+        .map { |geographic_scope| CorrectiveAction::GEOGRAPHIC_SCOPES_MIGRATION_MAP[geographic_scope] }
+
+    audit_activity.save!
+  end
+
   def title(_user = nil)
     "Corrective action"
   end

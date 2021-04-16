@@ -13,8 +13,8 @@ module Investigations
       ]
       rows << { key: { text: "Type of action" },      value: { text: corrective_action.measure_type } } if corrective_action.measure_type.present?
       rows << { key: { text: "Duration of measure" }, value: { text: corrective_action.duration } }
-      rows << { key: { text: "Scope" },               value: { text: corrective_action.geographic_scope } }
-      rows << { key: { text: "Other details" },       value: { text: corrective_action.details } }      if corrective_action.details.present?
+      rows << { key: { text: "Geographic scopes" },   value: { text: corrective_action.geographic_scopes } }
+      rows << { key: { text: "Other details" },       value: { text: corrective_action.details } } if corrective_action.details.present?
 
       rows
     end
@@ -30,7 +30,7 @@ module Investigations
     end
 
     def online_recall_information_text_for(online_recall_information, has_online_recall_information:)
-      return link_to(online_recall_information, online_recall_information, rel: "noopener", target: "_blank") if has_online_recall_information&.inquiry&.has_online_recall_information_yes?
+      return link_to("#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank") if has_online_recall_information&.inquiry&.has_online_recall_information_yes?
       return I18n.t(".has_online_recall_information_not_provided", scope: %i[investigations corrective_actions helper has_online_recall_information]) if has_online_recall_information.nil?
 
       I18n.t(".#{has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])

@@ -17,11 +17,11 @@ end
 run_seeds = (Product.count.zero? || Complainant.count.zero?)
 
 if run_seeds
-
+  User.reset_column_information
   Rails.logger.info("Running seeds.rb")
 
   organisation = Organisation.create!(name: "Seed Organisation")
-  team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation)
+  team = Team.create!(name: "Seed Team", team_recipient_email: "seed@example.com", "organisation": organisation, country: "country:GB")
   team.roles.create!(name: "opss")
 
   user = User.find_by(email: "seed_user@example.com") || User.create!(
@@ -507,18 +507,18 @@ if run_seeds
     organisation = Organisation.create!(name: "Office for Product Safety and Standards")
     trading_standards = Organisation.create!(name: "Trading Standards")
 
-    enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation)
+    enforcement = Team.create!(name: "OPSS Enforcement", team_recipient_email: "enforcement@example.com", "organisation": organisation, country: "country:GB")
     enforcement.roles.create!(name: "opss")
 
-    operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation)
+    operational_support = Team.create!(name: "OPSS Operational support unit", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
     operational_support.roles.create!(name: "opss")
 
-    ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards)
+    ts_team = Team.create!(name: "TS team", team_recipient_email: nil, "organisation": trading_standards, country: "country:GB")
 
-    Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation)
-    Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation)
-    Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation)
-    Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation)
+    Team.create!(name: "OPSS Science and Tech", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
+    Team.create!(name: "OPSS Trading Standards Co-ordination", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
+    Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation, country: "country:GB")
+    Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
 
     User.create!(
       name: "Test User",
@@ -555,7 +555,7 @@ if run_seeds
     )
 
     organisation = Organisation.create!(name: "Southampton Council")
-    Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation)
+    Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
   end
   Investigation.all.each do |i|
     product = i.products.first
@@ -565,7 +565,7 @@ if run_seeds
       date_decided: rand(1..30).days.ago,
       details: "Some corrective action",
       duration: CorrectiveAction::DURATION_TYPES.sample,
-      geographic_scope: "Regional",
+      geographic_scopes: CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)],
       investigation: i,
       legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
       measure_type: CorrectiveAction::MEASURE_TYPES.sample,

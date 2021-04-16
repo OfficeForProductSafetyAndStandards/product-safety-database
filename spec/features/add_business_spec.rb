@@ -38,6 +38,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_unchecked_field("Manufacturer")
     expect(page).to have_unchecked_field("Exporter")
     expect(page).to have_unchecked_field("Importer")
+    expect(page).to have_unchecked_field("Fulfillment house")
     expect(page).to have_unchecked_field("Distributor")
     expect(page).to have_unchecked_field("Other")
 

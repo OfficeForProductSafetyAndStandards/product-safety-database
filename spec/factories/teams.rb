@@ -3,6 +3,7 @@ FactoryBot.define do
     name { Faker::TvShows::SiliconValley.company }
     team_recipient_email { "#{name.downcase.gsub(/\s/, '.')}@example.com" }
     organisation
+    country { "country:GB-ENG" }
 
     transient do
       roles { [] }

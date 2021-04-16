@@ -24,6 +24,8 @@ module Investigations
       return render(:new) if supporting_information_type_form.invalid?
 
       case supporting_information_type_form.type
+      when "accident_or_incident"
+        redirect_to new_investigation_accident_or_incidents_type_path(@investigation)
       when "comment"
         redirect_to new_investigation_activity_comment_path(@investigation)
       when "corrective_action"

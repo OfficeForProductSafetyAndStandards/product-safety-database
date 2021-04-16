@@ -11,7 +11,7 @@
     <ul class="teams--list">
       <% @team.users.not_deleted.sort_by(&:name).each do |user| %>
         <li class="teams--user govuk-!-padding-top-3 govuk-!-padding-bottom-3 govuk-!-margin-0">
-          <% if !user.account_activated? && current_user.is_team_admin? %>
+          <% if !user.has_filled_out_account_setup_form_and_verified_number? && current_user.is_team_admin? %>
 
             <%= button_to resend_team_invitation_path(@team, user), method: :put, class: "button-link right", role: "link" do %>
               Resend invitation<span class="govuk-visually-hidden"> to <%= user.email %></span>

@@ -3,6 +3,7 @@ class SupportingInformationTypeForm
   include ActiveModel::Attributes
 
   MAIN_TYPES = {
+    accident_or_incident: "Accident or incident",
     comment: "Comment",
     corrective_action: "Corrective action",
     correspondence: "Correspondence",

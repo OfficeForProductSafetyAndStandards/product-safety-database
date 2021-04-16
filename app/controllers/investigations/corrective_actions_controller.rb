@@ -16,11 +16,12 @@ module Investigations
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
 
       @investigation = investigation.decorate
-      return render :new if @corrective_action_form.invalid?
+      @file_blob = @corrective_action_form.document
+      return render :new if @corrective_action_form.invalid?(:add_corrective_action)
 
       result = AddCorrectiveActionToCase.call(
         @corrective_action_form
-          .serializable_hash(except: :further_corrctive_action)
+          .serializable_hash(except: :further_corrective_action)
           .merge(user: current_user, investigation: investigation)
       )
 
@@ -53,11 +54,12 @@ module Investigations
 
       corrective_action       = investigation.corrective_actions.find(params[:id])
       @corrective_action_form = CorrectiveActionForm.from(corrective_action)
+      @file_blob              = corrective_action.document_blob
       @investigation          = investigation.decorate
 
       @corrective_action_form.assign_attributes(corrective_action_params)
 
-      return render :edit if @corrective_action_form.invalid?
+      return render :edit if @corrective_action_form.invalid?(:edit_corrective_action)
 
       result = UpdateCorrectiveAction.call(
         @corrective_action_form

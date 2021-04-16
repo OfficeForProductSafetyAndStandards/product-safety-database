@@ -13,12 +13,12 @@ module CorrectiveActionsConcern
       :related_file,
       :measure_type,
       :duration,
-      :geographic_scope,
       :other_action,
       :further_corrective_action,
       :existing_document_file_id,
+      geographic_scopes: [],
       file: %i[file description],
       date_decided: %i[day month year]
-    )
+    ).with_defaults(geographic_scopes: [])
   end
 end

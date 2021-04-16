@@ -14,6 +14,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
   let!(:other_team_investigation)            { create(:allegation, creator: other_user_other_team) }
+  let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
 
   let!(:closed_investigation) { create(:allegation, :closed) }
   let!(:project) { create(:project) }
@@ -37,6 +38,41 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     Investigation.import refresh: :wait_for
     sign_in(user)
     visit investigations_path
+  end
+
+  scenario "filter investigations created by another team" do
+    within_fieldset("Created by") do
+      check "Other person or team"
+      select other_team.name, from: "Name"
+    end
+    click_button "Apply filters"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
+  end
+
+  scenario "filter investigations created by my team" do
+    within_fieldset("Created by") { check "My team" }
+    click_button "Apply filters"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+  end
+
+  scenario "filter investigations created by anybody but my team" do
+    within_fieldset("Created by") { check "Other person or team" }
+    click_button "Apply filters"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(another_team_investigation.pretty_id)
+
+    within_fieldset("Created by") { expect(page).to have_checked_field "Other person or team" }
   end
 
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
@@ -63,12 +99,14 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       expect(page).to have_checked_field("Open")
       expect(page).to have_unchecked_field("Closed")
     end
+
+    within_fieldset "Sort by" do
+      expect(page).to have_checked_field("Most recently updated")
+    end
   end
 
   scenario "filtering for both open and closed cases" do
-    within_fieldset "Status" do
-      check "Closed"
-    end
+    within_fieldset("Status") { check "Closed" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -109,8 +147,62 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
+  describe "collaborators with case access", :with_stubbed_mailer do
+    before do
+      AddTeamToCase.call!(
+        investigation: other_user_other_team_investigation,
+        user: user,
+        team: chosen_team,
+        collaboration_class: Collaboration::Access::Edit
+      )
+    end
+
+    context "when filtering case where my team has access" do
+      let(:chosen_team) { team }
+
+      scenario "filtering cases having a given team a collaborator" do
+        within_fieldset("Teams added to case") { check "My team" }
+        click_button "Apply filters"
+
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).to have_listed_case(investigation.pretty_id)
+      end
+    end
+
+    context "when filtering case where another team has access" do
+      let(:chosen_team) { other_team }
+
+      scenario "filters the cases by other team with access" do
+        within_fieldset("Teams added to case") do
+          check "Other team"
+          select other_team.name, from: "Name"
+        end
+        click_button "Apply filters"
+
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+
+        within_fieldset("Teams added to case") do
+          expect(page).to have_checked_field("Other team")
+          expect(page).to have_select("Name", with_options: [other_team.name])
+        end
+
+        within_fieldset("Teams added to case") { uncheck "Other team" }
+        within_fieldset("Case owner")          { check "My team" }
+        click_button "Apply filters"
+
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_investigation.pretty_id)
+      end
+    end
+  end
+
   scenario "filtering cases where the user’s team is the owner" do
-    check "My team", id: "case_owner_is_team_0"
+    within_fieldset("Case owner") { check "My team" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -122,7 +214,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   scenario "filtering cases where the owner is someone else" do
     check "Other person or team", id: "case_owner_is_someone_else"
     click_button "Apply filters"
-
     expect(page).not_to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
@@ -130,8 +221,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where another person or team is the owner" do
-    check "Other person or team", id: "case_owner_is_someone_else"
-    select other_team.name, from: "case_owner_is_someone_else_id"
+    within_fieldset("Case owner") do
+      check "Other person or team", id: "case_owner_is_someone_else"
+      select other_team.name, from: "case_owner_is_someone_else_id"
+    end
     click_button "Apply filters"
 
     expect(page).not_to have_listed_case(investigation.pretty_id)
@@ -150,16 +243,17 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "combining filters" do
-    pending
-    check "My team", id: "case_owner_is_team_0"
-    check "Other person or team", id: "case_owner_is_someone_else"
-    select other_user_other_team.name, from: "case_owner_is_someone_else_id"
+    within_fieldset "Case owner" do
+      check "My team"
+      check "Other person or team", id: "case_owner_is_someone_else"
+      select other_user_other_team.name, from: "case_owner_is_someone_else_id"
+    end
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
   end
 
   scenario "Filtering to coronavirus-related cases only" do
@@ -221,7 +315,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     context "with no sort by option selected" do
       it "shows results by most recently updated" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
 
@@ -229,7 +323,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Most recently updated") }
 
       it "shows results by most recently updated" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
 
@@ -239,7 +333,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Least recently updated") }
 
       it "shows results by least recently updated" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
 
@@ -249,7 +343,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       before { select_sorting_option("Most recently created") }
 
       it "shows results by most recently created" do
-        expect(page).to list_cases_in_order(cases)
+        expect(page).to list_cases_in_order(cases.map(&:pretty_id))
       end
     end
   end

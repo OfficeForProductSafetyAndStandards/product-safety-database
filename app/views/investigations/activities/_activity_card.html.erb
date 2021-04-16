@@ -71,7 +71,7 @@
 
       <% elsif activity.has_attachment? %>
         <% activity.attachments.each do |name, attachment| %>
-          <%= link_to "View #{name}", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
+          <%= link_to "View #{name} (opens in new tab)", attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
         <% end %>
       <% end %>
     <% end %>

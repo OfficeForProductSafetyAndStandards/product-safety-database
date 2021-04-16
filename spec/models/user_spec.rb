@@ -116,6 +116,26 @@ RSpec.describe User do
     end
   end
 
+  describe "#has_filled_out_account_setup_form_and_verified_number?" do
+    it "returns true if user mobile_number_verified and name details are present" do
+      user = create(:user)
+
+      expect(user.has_filled_out_account_setup_form_and_verified_number?).to eq true
+    end
+
+    it "returns false if name is nil" do
+      user = create(:user, name: nil)
+
+      expect(user.has_filled_out_account_setup_form_and_verified_number?).to eq false
+    end
+
+    it "returns false if mobile_number_verified is not verified" do
+      user = create(:user, mobile_number_verified: false)
+
+      expect(user.has_filled_out_account_setup_form_and_verified_number?).to eq false
+    end
+  end
+
   describe ".not_deleted" do
     it "returns only users without deleted timestamp" do
       create(:user, :deleted)

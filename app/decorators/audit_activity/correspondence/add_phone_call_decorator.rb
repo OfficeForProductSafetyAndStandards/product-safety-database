@@ -1,27 +1,21 @@
 module AuditActivity
   module Correspondence
     class AddPhoneCallDecorator < AuditActivity::Correspondence::BaseDecorator
-      def phone_call_by(viewing_user)
-        return if correspondence.correspondent_name.blank?
-
-        Activity.sanitize_text(subtitle(viewing_user))
-      end
-
       def phone_number
-        return if correspondence.phone_number.blank?
-        return correspondence.phone_number if correspondence.correspondent_name.blank?
+        return if object.phone_number.blank?
+        return object.phone_number if object.correspondent_name.blank?
 
-        "(#{correspondence.phone_number})"
+        "(#{object.phone_number})"
       end
 
       def correspondence_date
-        correspondence.correspondence_date.to_s(:govuk)
+        object.correspondence_date.to_s(:govuk)
       end
 
       def attached
-        return if correspondence.transcript.blank?
+        return if object.filename.blank?
 
-        "Attached: #{correspondence.transcript_blob.filename}"
+        "Attached: #{object.filename}"
       end
     end
   end

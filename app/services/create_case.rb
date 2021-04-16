@@ -6,9 +6,11 @@ class CreateCase
   def call
     context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+    team = user.team
 
     investigation.creator_user = user
-    investigation.creator_team = user.team
+    investigation.creator_team = team
+    investigation.notifying_country = team.country
 
     ActiveRecord::Base.transaction do
       # This ensures no other pretty_id generation is happenning concurrently.

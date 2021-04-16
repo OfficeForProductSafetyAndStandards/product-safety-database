@@ -17,14 +17,14 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   end
 
   scenario "does not show inactive users or teams" do
-    expect(page).to have_css("#investigation_select_team_member option[value=\"#{another_active_user.id}\"]")
-    expect(page).not_to have_css("#investigation_select_team_member option[value=\"#{another_inactive_user.id}\"]")
+    expect(page).to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_active_user.id}\"]")
+    expect(page).not_to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_inactive_user.id}\"]")
 
-    expect(page).to have_css("#investigation_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
-    expect(page).not_to have_css("#investigation_select_other_team option[value=\"#{deleted_team.id}\"]")
+    expect(page).to have_css("#change_case_owner_form_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
+    expect(page).not_to have_css("#change_case_owner_form_select_other_team option[value=\"#{deleted_team.id}\"]")
 
-    expect(page).to have_css("#investigation_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
-    expect(page).not_to have_css("#investigation_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
+    expect(page).to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
+    expect(page).not_to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
   end
 
   scenario "change owner to the same user" do
@@ -37,8 +37,15 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   end
 
   scenario "change owner to other user in same team" do
+    # Test validation errors
     choose("Someone in your team")
-    select another_active_user.name, from: "investigation_select_team_member"
+
+    click_button "Continue"
+
+    expect(page).to have_summary_error("Select case owner")
+
+    choose("Someone in your team")
+    select another_active_user.name, from: "change_case_owner_form_select_team_member"
     click_button "Continue"
 
     fill_and_submit_change_owner_reason_form
@@ -61,7 +68,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
 
   scenario "a case owned by someone else in another team can no longer have ownership changed by original owner" do
     choose("Someone else")
-    select another_active_user_another_team.name, from: "investigation_select_someone_else"
+    select another_active_user_another_team.name, from: "change_case_owner_form_select_someone_else"
     click_button "Continue"
 
     fill_and_submit_change_owner_reason_form
@@ -74,7 +81,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   end
 
   def fill_and_submit_change_owner_reason_form
-    fill_in "investigation_owner_rationale", with: "Test assign"
+    fill_in "change_case_owner_form_owner_rationale", with: "Test assign"
     click_button "Confirm change"
   end
 

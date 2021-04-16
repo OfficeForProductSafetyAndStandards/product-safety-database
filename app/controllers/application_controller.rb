@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   include CacheConcern
   include HttpAuthConcern
-  include RavenConfigurationConcern
+  include SentryConfigurationConcern
   include SecondaryAuthenticationConcern
 
   protect_from_forgery with: :exception
@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :ensure_secondary_authentication
   before_action :require_secondary_authentication
-  before_action :set_raven_context
+  before_action :set_sentry_context
   before_action :authorize_user
   before_action :has_accepted_declaration
   before_action :has_viewed_introduction
@@ -64,19 +64,17 @@ class ApplicationController < ActionController::Base
       s = session[:previous_search_params]
       {
         case_owner_is_me: s[:case_owner_is_me],
+        case_owner_is_my_team: s[:case_owner_is_my_team],
         case_owner_is_someone_else: s[:case_owner_is_someone_else],
         case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id],
-        case_owner_is_team_0: s[:case_owner_is_team_0],
-        created_by_me: s[:created_by_me],
-        created_by_someone_else: s[:created_by_someone_else],
-        created_by_someone_else_id: s[:created_by_someone_else_id],
-        created_by_team_0: s[:created_by_team_0],
+        created_by: s[:created_by],
+        teams_with_access: s[:teams_with_access],
         allegation: s[:allegation],
         enquiry: s[:enquiry],
         project: s[:project],
         status_open: s[:status_open],
-        sort_by: s[:sort_by],
         status_closed: s[:status_closed],
+        sort_by: s[:sort_by],
         coronavirus_related_only: s[:coronavirus_related_only],
         serious_and_high_risk_level_only: s[:serious_and_high_risk_level_only]
       }

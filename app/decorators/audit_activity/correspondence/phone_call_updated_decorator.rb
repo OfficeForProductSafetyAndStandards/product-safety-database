@@ -4,6 +4,10 @@ module AuditActivity
       REMOVED = "removed".freeze
       EMPTY_ENQUIRY = ActiveSupport::StringInquirer.new("").freeze
 
+      def title(_viewing_user = nil)
+        new_summary
+      end
+
       def new_correspondent_name
         return EMPTY_ENQUIRY if metadata.dig("updates", "correspondent_name").blank?
 

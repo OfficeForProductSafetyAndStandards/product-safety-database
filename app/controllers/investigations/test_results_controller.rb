@@ -86,6 +86,7 @@ private
       :legislation,
       :product_id,
       :result,
+      :failure_details,
       :standards_product_was_tested_against,
       :existing_document_file_id,
       :test_result_file,

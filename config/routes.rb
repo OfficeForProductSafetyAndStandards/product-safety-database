@@ -1,8 +1,6 @@
 require "sidekiq/web"
 require "sidekiq/cron/web"
 
-Sidekiq::Web.set :session_secret, Rails.application.secret_key_base
-
 if Rails.env.production?
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     ActiveSupport::SecurityUtils.secure_compare(username, ENV["SIDEKIQ_USERNAME"]) &&
@@ -111,8 +109,10 @@ Rails.application.routes.draw do
     resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }
 
     resource :coronavirus_related, only: %i[update show], path: "edit-coronavirus-related", controller: "investigations/coronavirus_related"
+    resource :notifying_country, only: %i[update edit], path: "edit-notifying-country", controller: "investigations/notifying_country"
     resource :risk_level, only: %i[update show], path: "edit-risk-level", controller: "investigations/risk_level"
     resource :risk_validations, only: %i[edit update], path: "validate-risk-level", controller: "investigations/risk_validations"
+    resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
     resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
 
@@ -145,6 +145,9 @@ Rails.application.routes.draw do
     resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
 
     resources :ownership, controller: "investigations/ownership", only: %i[show new create update], path: "assign"
+
+    resources :accident_or_incidents_type, controller: "investigations/accident_or_incidents_type", only: %i[new create]
+    resources :accident_or_incidents, controller: "investigations/accident_or_incidents", only: %i[show new create edit update]
 
     resources :correspondence, controller: "investigations/correspondence_routing", only: %i[new create]
     resources :emails, controller: "investigations/record_emails", only: %i[new create edit update]
