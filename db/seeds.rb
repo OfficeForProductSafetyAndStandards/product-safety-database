@@ -17,7 +17,7 @@ end
 run_seeds = (Product.count.zero? || Complainant.count.zero?)
 
 if run_seeds
-
+  User.reset_column_information
   Rails.logger.info("Running seeds.rb")
 
   organisation = Organisation.create!(name: "Seed Organisation")
