@@ -6,7 +6,7 @@ default: &default
 
 development:
   <<: *default
-  database: psd_development
+  database: psd_development_seed
 test:
   <<: *default
   database: psd_test<%= ENV['TEST_ENV_NUMBER'] %>
