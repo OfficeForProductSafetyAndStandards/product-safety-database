@@ -22,7 +22,7 @@
   <% end %>
 <% end %>
 
-<%= render "documents/metadata_form", document: @file_blob, edit: false, target_url: wizard_path do %>
+<%= render "documents/metadata_form", document: @file_blob, edit: false, target_url: wizard_path, cancel_url: investigation_supporting_information_index_path(@investigation) do %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <span class="govuk-caption-l"><%= @parent.pretty_description %></span>
