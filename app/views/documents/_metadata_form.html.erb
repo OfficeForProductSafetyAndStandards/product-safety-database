@@ -1,6 +1,4 @@
 <%= form_with model: document, scope: :document, url: target_url, cancel_url: cancel_url, method: :put, local: true do |form| %>
-  <% cancel_link = cancel_url ? cancel_url : path_for_model(@parent) %>
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= render "form_components/govuk_error_summary", form: form, errors: @errors %>
@@ -36,7 +34,7 @@
             </div>
             <% if edit %>
               <div class="govuk-grid-column-one-quarter">
-                <p><%= link_to "Cancel", cancel_link, class: "psd-block-link" %></p>
+                <p><%= link_to "Cancel", investigation_supporting_information_index_path(@investigation), class: "psd-block-link" %></p>
               </div>
             <% end %>
           </div>
