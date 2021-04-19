@@ -8,5 +8,6 @@ Rails.application.configure do
     config.dsn = ENV["SENTRY_DSN"]
     config.send_default_pii = false
     config.breadcrumbs_logger << :sentry_logger
+    config.excluded_exceptions += ["Pundit::NotAuthorizedError"]
   end
 end
