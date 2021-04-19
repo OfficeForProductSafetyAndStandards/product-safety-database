@@ -34,7 +34,7 @@
             </div>
             <% if edit %>
               <div class="govuk-grid-column-one-quarter">
-                <p><%= link_to "Cancel", investigation_supporting_information_index_path(@investigation), class: "psd-block-link" %></p>
+                <p><%= link_to "Cancel", investigation_supporting_information_index_path(@investigation.pretty_id), class: "psd-block-link" %></p>
               </div>
             <% end %>
           </div>
