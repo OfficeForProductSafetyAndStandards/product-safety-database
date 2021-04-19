@@ -45,10 +45,9 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
-  def source_details_summary_list(view_protected_details = false)
+  def source_details_summary_list(_view_protected_details = false)
     contact_details = h.tag.p(complainant.contact_details)
     contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
-
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,

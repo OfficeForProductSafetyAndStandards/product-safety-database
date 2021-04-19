@@ -42,7 +42,7 @@ RSpec.describe Complainant do
 
     context "when phone_number is not blank" do
       it "returns true", :aggregate_failures do
-        complainant.update!(phone_number: 077777777)
+        complainant.update!(phone_number: 1077777777)
         expect(complainant.has_contact_details?).to eq true
       end
     end
