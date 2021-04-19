@@ -46,18 +46,16 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list(view_protected_details = false)
-    contact_details = h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
-    contact_details << complainant.contact_details if view_protected_details
+    contact_details = h.tag.p(complainant.contact_details)
+    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
+
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,
       should_display_received_by? ? { key: { text: "Received by" }, value: { text: received_type.upcase_first } } : nil,
-      { key: { text: "Source type" }, value: { text: complainant.complainant_type } }
+      { key: { text: "Source type" }, value: { text: complainant.complainant_type } },
+      { key: { text: "Contact details" }, value: { text: contact_details } }
     ]
-
-    if complainant.has_contact_details?
-      rows << { key: { text: "Contact details" }, value: { text: contact_details } }
-    end
 
     rows.compact!
 

@@ -21,6 +21,6 @@ class Complainant < ApplicationRecord
   validates :other_details, length: { maximum: 10_000 }
 
   def has_contact_details?
-    email_address.present? || name.present? || other_details.present?
+    email_address.present? || name.present? || other_details.present? || phone_number.present?
   end
 end

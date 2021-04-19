@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Complainant do
-  subject(:complainant) { build(:complainant, investigation: investigation, email_address: nil, name: nil, other_details: nil) }
+  subject(:complainant) { build(:complainant, investigation: investigation, email_address: nil, name: nil, other_details: nil, phone_number: nil) }
 
   let(:investigation) { build(:allegation) }
 
@@ -36,6 +36,13 @@ RSpec.describe Complainant do
     context "when email_address is not blank" do
       it "returns true", :aggregate_failures do
         complainant.update!(email_address: "test@email.com")
+        expect(complainant.has_contact_details?).to eq true
+      end
+    end
+
+    context "when phone_number is not blank" do
+      it "returns true", :aggregate_failures do
+        complainant.update!(phone_number: 077777777)
         expect(complainant.has_contact_details?).to eq true
       end
     end
