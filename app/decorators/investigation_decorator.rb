@@ -46,7 +46,7 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list(_view_protected_details = false)
-    contact_details = h.tag.p(complainant.contact_details) if view_protected_details
+    contact_details = h.tag.p(complainant.contact_details) if _view_protected_details
     contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
 
     rows = [
