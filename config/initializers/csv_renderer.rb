@@ -1,3 +1,5 @@
+require "csv"
+
 ActiveSupport.on_load(:action_controller) do
   ActionController::Renderers.add :csv do |obj, options|
     filename = options[:filename] || "data"
