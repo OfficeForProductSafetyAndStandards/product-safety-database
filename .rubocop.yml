@@ -22,7 +22,6 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/bundle/**/*'
     - 'config/initializers/devise.rb'
-    - 'config/initializers/rails_admin.rb'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
