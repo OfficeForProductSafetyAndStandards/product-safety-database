@@ -90,7 +90,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
 
-    within_fieldset("Created by") { expect(page).to have_checked_field "Other person or team" }
+    within_fieldset("Created by") do
+      expect(page).to have_checked_field "Other person or team"
+      expect(page).to have_select "Name", with_options: [other_user_other_team.name]
+    end
   end
 
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
