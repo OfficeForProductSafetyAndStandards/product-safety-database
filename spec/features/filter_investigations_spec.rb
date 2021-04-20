@@ -8,7 +8,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let(:other_team)            { create(:team, organisation: organisation, name: "other team") }
   let(:user)                  { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
   let(:other_user_same_team)  { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
-  let(:yet_another_user_same_team)  { create(:user, :activated, name: "yet another user same team", organisation: organisation, team: other_team) }
+  let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation: organisation, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, team: other_team) }
 
   let!(:investigation)                       { create(:allegation, creator: user) }
