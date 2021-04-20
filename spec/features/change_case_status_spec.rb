@@ -36,14 +36,14 @@ RSpec.feature "Changing the status of a case", :with_elasticsearch, :with_stubbe
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_text("Allegation was closed")
+    expect(page).to have_css(".hmcts-banner__message", text: "Allegation was closed")
     expect(page).to have_summary_item(key: "Status", value: "Closed")
 
     click_link "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_text("Allegation closed")
-    expect(page).to have_text("Case has been resolved.")
+    expect(page).to have_css("h3", text: "Allegation closed")
+    expect(page).to have_css("p", text: "Case has been resolved.")
 
     visit "/cases/#{investigation.pretty_id}"
 
@@ -69,13 +69,13 @@ RSpec.feature "Changing the status of a case", :with_elasticsearch, :with_stubbe
 
     expect_to_be_on_case_page(case_id: investigation.pretty_id)
 
-    expect(page).to have_text("Allegation was re-opened")
+    expect(page).to have_css(".hmcts-banner__message", text: "Allegation was re-opened")
     expect(page).to have_summary_item(key: "Status", value: "Open")
 
     click_link "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect(page).to have_text("Allegation re-opened")
-    expect(page).to have_text("Case has not been resolved.")
+    expect(page).to have_css("h3", text: "Allegation re-opened")
+    expect(page).to have_css("p", text: "Case has not been resolved.")
   end
 end
