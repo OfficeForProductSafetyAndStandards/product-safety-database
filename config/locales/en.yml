@@ -208,6 +208,17 @@ en:
         set: "Case risk level set to %{level}"
         changed: "Case risk level changed to %{level}"
         removed: "Case risk level removed"
+    status:
+      close:
+        title: "Close case"
+        label: "Why are you closing the case?"
+        hint: "For example, the product is low risk, so no further activity is expected."
+        action: "Close case"
+      reopen:
+        title: "Re-open case"
+        label: "Why are you re-opening the case?"
+        hint: "For example, the business responsible needs to take further action."
+        action: "Re-open case"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
