@@ -29,7 +29,7 @@ RSpec.describe Complainant do
     context "when name is not blank" do
       it "returns true", :aggregate_failures do
         complainant.update!(name: "John Doe")
-        expect(complainant).to eq true
+        expect(complainant.has_contact_details?).to eq true
       end
     end
 
