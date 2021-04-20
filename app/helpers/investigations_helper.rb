@@ -378,13 +378,13 @@ module InvestigationsHelper
     if policy(investigation).change_owner_or_status?(user: user)
       status_actions[:items] << if investigation.is_closed?
                                   {
-                                    href: reopen_investigation_path(investigation),
+                                    href: reopen_investigation_status_path(investigation),
                                     text: "Re-open",
                                     visuallyHiddenText: "case"
                                   }
                                 else
                                   {
-                                    href: close_investigation_path(investigation),
+                                    href: close_investigation_status_path(investigation),
                                     text: "Close",
                                     visuallyHiddenText: "case"
                                   }
@@ -497,12 +497,12 @@ module InvestigationsHelper
 
       actions << if investigation.is_closed?
                    {
-                     path: reopen_investigation_path(@investigation),
+                     path: reopen_investigation_status_path(@investigation),
                      text: I18n.t("reopen_case", scope: "forms.investigation_actions.actions")
                    }
                  else
                    {
-                     path: close_investigation_path(@investigation),
+                     path: close_investigation_status_path(@investigation),
                      text: I18n.t("close_case", scope: "forms.investigation_actions.actions")
                    }
                  end
