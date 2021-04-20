@@ -8,7 +8,7 @@ class ComplainantDecorator < ApplicationDecorator
   def contact_details
     details = [name, phone_number, email_address, object.other_details].compact
 
-    return "Not provided" unless object.has_contact_details?
+    return "Not provided" if details.empty?
 
     h.simple_format(details.join("\n\n"))
   end
