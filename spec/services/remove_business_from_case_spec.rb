@@ -29,6 +29,15 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_q
         }.to change { investigation.businesses.where(businesses: { id: business }).count }.from(1).to(0)
       end
 
+      it "creates an audit activity", :aggregate_failures do
+        result
+
+        activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Destroy.name)
+
+        expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id)
+        expect(activity.source.user).to eq(user)
+      end
+
       it_behaves_like "a service which notifies the case owner"
     end
 

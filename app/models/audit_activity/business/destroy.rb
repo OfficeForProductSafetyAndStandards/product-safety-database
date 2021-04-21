@@ -8,4 +8,6 @@ private
   def subtitle_slug
     "Business removed"
   end
+
+  def notify_relevant_users; end
 end

@@ -24,7 +24,6 @@ private
     AuditActivity::Business::Destroy.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
-      title: "Removed: #{business.trading_name}",
       business: business,
       metadata: { reason: reason }
     )
