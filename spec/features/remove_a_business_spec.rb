@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.feature "Delete a business from a case", :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.feature "Remove a business from a case", :with_stubbed_elasticsearch, :with_stubbed_mailer do
   let(:business)      { create(:business) }
   let(:user)          { create(:user, :activated, has_accepted_declaration: true) }
   let(:investigation) { create(:allegation, :with_business, business_to_add: business, creator: user) }
 
   before { sign_in user }
 
-  scenario "delete a business" do
+  scenario "removing a business" do
     visit "/cases/#{investigation.pretty_id}/businesses"
 
     expect(page).to have_summary_item(key: "Trading name",             value: business.trading_name)
