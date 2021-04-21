@@ -2,15 +2,14 @@ class Investigations::BusinessesController < ApplicationController
   include BusinessesHelper
   include CountriesHelper
   include Wicked::Wizard
-  skip_before_action :setup_wizard, only: %i[remove]
+  skip_before_action :setup_wizard, only: %i[show destroy]
   steps :type, :details
 
-  before_action :set_investigation, only: %i[index update new show remove]
-  before_action :set_business, only: %i[remove]
-  before_action :set_countries, only: %i[update show]
-  before_action :set_business_location_and_contact, only: %i[update new show]
+  before_action :set_investigation, only: %i[index update new show]
+  before_action :set_countries, only: %i[update]
+  before_action :set_business_location_and_contact, only: %i[update new]
   before_action :store_business, only: %i[update]
-  before_action :set_investigation_business
+  before_action :set_investigation_business, except: %i[show destroy]
   before_action :business_request_params, only: %i[new]
 
   def index
@@ -32,10 +31,12 @@ class Investigations::BusinessesController < ApplicationController
     create!
   end
 
-  # This action is used for the edit flow
   def show
     authorize @investigation, :update?
-    render_wizard
+
+    @investigation        = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
+    @business             = @investigation.businesses.find(params[:id])
+    @remove_business_form = RemoveBusinessForm.new
   end
 
   def update
@@ -52,9 +53,34 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
-  def remove; end
+  def destroy
+    investigation         = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
+    @business             = investigation.businesses.find(params[:id])
+    @remove_business_form = RemoveBusinessForm.new(remove_business_params)
 
-private
+    if @remove_business_form.invalid?
+      @investigation = investigation.decorate
+      return render :show
+    end
+
+    return redirect_to investigation_businesses_path(investigation, @business) unless @remove_business_form.remove?
+
+    result = RemoveBusinessFromCase.call!(
+      reason: @remove_business_form.reason,
+      investigation: investigation,
+      business: @business,
+      user: current_user
+    )
+
+    if result.success?
+      redirect_to investigation_businesses_path(investigation, @business), flash: { success: t(".business_successfully_deleted") }
+    else
+      @investigation = investigation.decorate
+      render :show
+    end
+  end
+
+  private
 
   def create!
     if @business.save
@@ -131,5 +157,9 @@ private
     investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize investigation, :view_non_protected_details?
     @investigation = investigation.decorate
+  end
+
+  def remove_business_params
+    params.require(:remove_business_form).permit(:remove, :reason)
   end
 end

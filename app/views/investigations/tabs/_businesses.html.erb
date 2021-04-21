@@ -36,7 +36,6 @@
       <%= link_with_hidden_text_to t("change_business_details"), t("change_business_details"), edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
       <% if policy(@investigation).update?(user: current_user) %>
         <div class="govuk-warning-text">
-          <br />
           <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
           <strong class="govuk-warning-text__text">
             <span class="govuk-warning-text__assistive">Warning</span>
@@ -45,7 +44,7 @@
           <br />
           <%= link_with_hidden_text_to "Remove business",
                  "(#{ib.business.trading_name})",
-           investigation_business_remove_path(@investigation, ib.business),
+           investigation_business_path(@investigation, ib.business),
            class: "govuk-link app-block-link" %>
         </div>
       <% end %>
