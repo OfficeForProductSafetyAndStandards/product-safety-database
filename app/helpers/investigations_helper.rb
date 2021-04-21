@@ -486,7 +486,7 @@ module InvestigationsHelper
 
       case_status = investigation.is_closed? ? "closed" : "open"
       visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
-      risk_level_status = investigation.risk_level.nil? ? "not_set" : "set"
+      risk_level_status = investigation.risk_level ? "set" : "not_set"
 
       actions << {
         path: status_investigation_path(@investigation),

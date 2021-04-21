@@ -51,10 +51,10 @@ private
   end
 
   def risk_level_status
-    if investigation.risk_level.nil?
-      "not_set"
-    else
+    if investigation.risk_level
       "set"
+    else
+      "not_set"
     end
   end
 
