@@ -11,6 +11,7 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_q
   let(:investigation)            { create(:allegation, :with_business, creator: creator, business_to_add: business) }
   let(:common_context)           { { user: user, investigation: investigation } }
   let(:reason)                   { Faker::Hipster.sentence }
+
   describe "#call" do
     def expected_email_subject
       "Allegation updated"

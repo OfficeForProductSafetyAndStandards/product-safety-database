@@ -80,7 +80,7 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
-  private
+private
 
   def create!
     if @business.save
