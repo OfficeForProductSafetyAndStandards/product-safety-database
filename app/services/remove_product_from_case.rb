@@ -24,9 +24,8 @@ private
     AuditActivity::Product::Destroy.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
-      title: "#{product.name} removed",
       product: product,
-      metadata: { reason: reason }
+      metadata: AuditActivity::Product::Destroy.build_metadata(product, reason)
     )
   end
 
