@@ -21,7 +21,8 @@ private
     {
       change_case_status: action_label("change_case_status.#{case_status}"),
       change_case_owner: action_label(:change_case_owner),
-      change_case_visibility: action_label("change_case_visibility.#{visibility_status}")
+      change_case_visibility: action_label("change_case_visibility.#{visibility_status}"),
+      change_case_risk_level: action_label("change_case_risk_level.#{risk_level_status}")
     }
   end
 
@@ -46,6 +47,14 @@ private
       "closed"
     else
       "open"
+    end
+  end
+
+  def risk_level_status
+    if investigation.risk_level.nil?
+      "not_set"
+    else
+      "set"
     end
   end
 
