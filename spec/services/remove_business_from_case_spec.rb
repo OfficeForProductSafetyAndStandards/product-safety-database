@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
-  subject(:result) { described_class.call({ business: business }.merge(common_context)) }
+  subject(:result) { described_class.call({ business: business, reason: reason }.merge(common_context)) }
 
   let(:business)                 { create(:business) }
   let(:user)                     { create(:user) }
@@ -10,7 +10,7 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_q
   let(:product)                  { create(:product, investigations: [investigation]) }
   let(:investigation)            { create(:allegation, :with_business, creator: creator, business_to_add: business) }
   let(:common_context)           { { user: user, investigation: investigation } }
-
+  let(:reason)                   { Faker::Hipster.sentence }
   describe "#call" do
     def expected_email_subject
       "Allegation updated"
@@ -33,8 +33,8 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_q
         result
 
         activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Destroy.name)
-
-        expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id)
+        expect(activity)
+          .to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "reason" => reason })
         expect(activity.source.user).to eq(user)
       end
 

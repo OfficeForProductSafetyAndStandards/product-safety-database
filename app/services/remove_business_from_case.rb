@@ -25,7 +25,7 @@ private
       source: UserSource.new(user: user),
       investigation: investigation,
       business: business,
-      metadata: { reason: reason }
+      metadata: AuditActivity::Business::Destroy.build_metadata(business, reason)
     )
   end
 
