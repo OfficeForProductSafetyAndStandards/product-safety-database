@@ -133,10 +133,6 @@ class Investigation < ApplicationRecord
     @supporting_information ||= (corrective_actions + correspondences + test_results.includes(:product) + risk_assessments + accidents + incidents).sort_by(&:created_at).reverse
   end
 
-  def status
-    is_closed? ? "Closed" : "Open"
-  end
-
   def enquiry?
     is_a?(Investigation::Enquiry)
   end

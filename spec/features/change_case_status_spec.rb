@@ -45,6 +45,11 @@ RSpec.feature "Changing the status of a case", :with_elasticsearch, :with_stubbe
     expect(page).to have_css("h3", text: "Allegation closed")
     expect(page).to have_css("p", text: "Case has been resolved.")
 
+    # Check the close page shows an error if trying to revisit it
+    visit "/cases/#{investigation.pretty_id}/status/close"
+    expect(page).to have_css("h1", text: "Close case")
+    expect(page).to have_css("p", text: "The allegation is already closed. Do you want to re-open it?")
+
     visit "/cases/#{investigation.pretty_id}"
 
     # Navigate via the action bar
@@ -77,5 +82,10 @@ RSpec.feature "Changing the status of a case", :with_elasticsearch, :with_stubbe
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
     expect(page).to have_css("h3", text: "Allegation re-opened")
     expect(page).to have_css("p", text: "Case has not been resolved.")
+
+    # Check the close page shows an error if trying to revisit it
+    visit "/cases/#{investigation.pretty_id}/status/reopen"
+    expect(page).to have_css("h1", text: "Re-open case")
+    expect(page).to have_css("p", text: "The allegation is already open. Do you want to close it?")
   end
 end

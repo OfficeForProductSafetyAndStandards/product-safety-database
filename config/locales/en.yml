@@ -443,6 +443,10 @@ en:
             summary:
               blank: Enter the case summary
               too_long: Summary must be 10,000 characters or fewer
+        change_case_status_form:
+          attributes:
+            new_status:
+              same_as_existing: The %{case_type} is already %{status}
         correspondence_type_form:
           attributes:
             type:
