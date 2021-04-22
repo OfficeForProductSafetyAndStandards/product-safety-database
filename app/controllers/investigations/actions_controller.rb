@@ -35,6 +35,8 @@ module Investigations
         visibility_investigation_path(@investigation)
       when "send_email_alert"
         new_investigation_alert_path(@investigation)
+      when "change_case_risk_level"
+        investigation_risk_level_path(@investigation)
       end
     end
   end
