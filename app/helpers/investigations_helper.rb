@@ -486,6 +486,7 @@ module InvestigationsHelper
 
       case_status = investigation.is_closed? ? "closed" : "open"
       visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
+      risk_level_status = investigation.risk_level ? "set" : "not_set"
 
       actions << {
         path: status_investigation_path(@investigation),
@@ -500,6 +501,11 @@ module InvestigationsHelper
       actions << {
         path: visibility_investigation_path(@investigation),
         text: I18n.t("change_case_visibility.#{visibility_status}", scope: "forms.investigation_actions.actions")
+      }
+
+      actions << {
+        path: investigation_risk_level_path(@investigation),
+        text: I18n.t("change_case_risk_level.#{risk_level_status}", scope: "forms.investigation_actions.actions")
       }
     end
 
