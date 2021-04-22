@@ -1,7 +1,7 @@
 module Investigations
   class AddToCaseController < ApplicationController
     before_action :set_options_to_add
-    
+
     def new
       authorize investigation, :update?
       @supporting_information_type_form = SupportingInformationTypeForm.new
