@@ -15,12 +15,12 @@ module Investigations
       @actions_form = InvestigationActionsForm.new(
         investigation: @investigation,
         current_user: current_user,
-        action: params[:investigation_action]
+        investigation_action: actions_params[:investigation_action]
       )
 
       return render(:index) if @actions_form.invalid?
 
-      redirect_to path_for_action(@actions_form.action)
+      redirect_to path_for_action(@actions_form.investigation_action)
     end
 
   private
@@ -40,6 +40,12 @@ module Investigations
       when "change_case_risk_level"
         investigation_risk_level_path(@investigation)
       end
+    end
+
+    def actions_params
+      return {} if params[:investigation_actions_form].blank?
+
+      params.require(:investigation_actions_form).permit(:investigation_action)
     end
   end
 end

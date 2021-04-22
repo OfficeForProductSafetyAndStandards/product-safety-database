@@ -11,20 +11,10 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= error_summary @actions_form.errors %>
-    <%= form_with local: true, url: investigation_actions_path(@investigation) do |form| %>
-      <%= render "form_components/govuk_radios",
-        form: form,
-        key: :investigation_action,
-        items: radio_items_from_hash(@actions_form.actions),
-        fieldset: {
-        legend: {
-          text: page_heading,
-          classes: "govuk-fieldset__legend--l",
-          isPageHeading: true
-        }
-      } %>
-      <%= govukButton(text: "Continue") %>
+    <%= form_with model: @actions_form, local: true, url: investigation_actions_path(@investigation), builder: ApplicationFormBuilder do |form| %>
+      <%= error_summary @actions_form.errors %>
+      <%= form.govuk_radios :investigation_action, legend: page_heading, items: radio_items_from_hash(@actions_form.actions) %>
+      <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
 </div>
