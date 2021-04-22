@@ -138,6 +138,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Products")
   end
 
+  def expect_to_be_on_add_product_to_investigation_page(investigation)
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products/new")
+    expect(page).to have_selector("h1", text: investigation.user_title)
+  end
+
   def expect_to_be_on_case_products_page
     expect(page).to have_selector("h1", text: "Products")
   end
