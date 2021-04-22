@@ -61,7 +61,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
 
       it "contains four actions with alternative labels" do
         expect(form.actions).to eq({
-          change_case_status: "Reopen case",
+          reopen_case: "Re-open case",
           change_case_owner: "Change case owner",
           change_case_visibility: "Unrestrict this case",
           change_case_risk_level: "Change risk level"
