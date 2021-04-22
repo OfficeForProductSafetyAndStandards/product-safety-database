@@ -376,11 +376,19 @@ module InvestigationsHelper
     end
 
     if policy(investigation).change_owner_or_status?(user: user)
-      status_actions[:items] << {
-        href: status_investigation_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "status"
-      }
+      status_actions[:items] << if investigation.is_closed?
+                                  {
+                                    href: reopen_investigation_status_path(investigation),
+                                    text: "Re-open",
+                                    visuallyHiddenText: "case"
+                                  }
+                                else
+                                  {
+                                    href: close_investigation_status_path(investigation),
+                                    text: "Close",
+                                    visuallyHiddenText: "case"
+                                  }
+                                end
     end
 
     if policy(investigation).change_notifying_country?(user: user)
@@ -484,14 +492,20 @@ module InvestigationsHelper
 
     if policy(investigation).change_owner_or_status?
 
-      case_status = investigation.is_closed? ? "closed" : "open"
       visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
       risk_level_status = investigation.risk_level ? "set" : "not_set"
 
-      actions << {
-        path: status_investigation_path(@investigation),
-        text: I18n.t("change_case_status.#{case_status}", scope: "forms.investigation_actions.actions")
-      }
+      actions << if investigation.is_closed?
+                   {
+                     path: reopen_investigation_status_path(@investigation),
+                     text: I18n.t("reopen_case", scope: "forms.investigation_actions.actions")
+                   }
+                 else
+                   {
+                     path: close_investigation_status_path(@investigation),
+                     text: I18n.t("close_case", scope: "forms.investigation_actions.actions")
+                   }
+                 end
 
       actions << {
         path: new_investigation_ownership_path(@investigation),
