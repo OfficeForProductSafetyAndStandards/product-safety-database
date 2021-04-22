@@ -48,6 +48,8 @@ gem "wicked", "~> 1.3"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.2", require: "govuk_design_system"
 
+gem "bootsnap"
+
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
