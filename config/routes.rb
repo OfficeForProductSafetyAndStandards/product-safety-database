@@ -114,6 +114,7 @@ Rails.application.routes.draw do
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
     resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
+    resources :add_to_case, controller: "investigations/add_to_case", path: "add-to-case", only: %i[new create]
 
     resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
 

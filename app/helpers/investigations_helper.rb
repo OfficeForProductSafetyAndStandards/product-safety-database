@@ -465,6 +465,14 @@ module InvestigationsHelper
       {
         path: new_investigation_new_path(investigation),
         text: "Other document or attachment"
+      },
+      {
+        path: new_investigation_product_path(investigation),
+        text: "Product"
+      },
+      {
+        path: new_investigation_business_path(investigation),
+        text: "Business"
       }
 
     ]
