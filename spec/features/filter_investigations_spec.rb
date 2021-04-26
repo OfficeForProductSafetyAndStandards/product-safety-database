@@ -8,12 +8,13 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let(:other_team)            { create(:team, organisation: organisation, name: "other team") }
   let(:user)                  { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
   let(:other_user_same_team)  { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
+  let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation: organisation, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, team: other_team) }
 
   let!(:investigation)                       { create(:allegation, creator: user) }
   let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
   let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
-  let!(:other_team_investigation)            { create(:allegation, creator: other_user_other_team) }
+  let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team) }
   let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
 
   let!(:closed_investigation) { create(:allegation, :closed) }
@@ -73,6 +74,26 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(another_team_investigation.pretty_id)
 
     within_fieldset("Created by") { expect(page).to have_checked_field "Other person or team" }
+  end
+
+  scenario "filter investigations created by a different user" do
+    within_fieldset("Created by") do
+      check "Other person or team"
+      select other_user_other_team.name, from: "Name"
+    end
+    click_button "Apply filters"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
+
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+
+    within_fieldset("Created by") do
+      expect(page).to have_checked_field "Other person or team"
+      expect(page).to have_select "Name", with_options: [other_user_other_team.name]
+    end
   end
 
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
