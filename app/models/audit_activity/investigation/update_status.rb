@@ -1,6 +1,7 @@
 class AuditActivity::Investigation::UpdateStatus < AuditActivity::Investigation::Base
   def migrate_to_metadata
-    self.metadata = { updates: { is_closed: [false, true], date_closed: [nil, created_at] } }
+    is_closed = title.match?(/closed/i) ? [false, true] : [true, false]
+    self.metadata = title.match?(/closed/i) ? { updates: { is_closed: is_closed, date_closed: [nil, created_at] } } : { updates: { is_closed: is_closed } }
     save!
   end
 
