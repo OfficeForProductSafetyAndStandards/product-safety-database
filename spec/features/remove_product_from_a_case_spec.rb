@@ -15,7 +15,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
 
       click_link "Remove product"
 
-      expect(page).to have_content "Remove #{product.name}"
+      expect(page).to have_css("h1", text: "Remove #{product.name}")
 
       click_on "Submit"
 
@@ -29,7 +29,7 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
 
       expect(page).to have_error_messages
       errors_list = page.find(".govuk-error-summary__list").all("li")
-      expect(errors_list[0].text).to eq "Reason cannot be blank"
+      expect(errors_list[0].text).to eq "Enter the reason for removing the product from the case"
 
       fill_in "Reason for removing the product from the case", with: removal_reason
       click_on "Submit"
@@ -37,13 +37,14 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
       expect_confirmation_banner("Product was successfully removed.")
       expect_to_be_on_investigation_products_page(case_id: investigation.pretty_id)
 
-      expect(page).not_to have_text(product.name)
-      expect(page).to have_text("No products")
+      expect(page).not_to have_css("h2", text: product.name)
+      expect(page).to have_css("p.govuk-body", text: "No products")
 
       click_link "Activity"
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-      expect(page).to have_content("#{product.name} removed")
-      expect(page).to have_content(removal_reason)
+
+      expect(page.find("h3", text: "#{product.name} removed"))
+        .to have_sibling(".govuk-body", text: removal_reason)
     end
   end
 
@@ -59,8 +60,8 @@ RSpec.feature "Remove product from investigation", :with_stubbed_elasticsearch, 
       visit "/cases/#{investigation.pretty_id}/products"
       click_link "Remove product"
 
-      expect(page).not_to have_content "Remove #{product.name}"
-      expect(page).to have_content "Cannot remove the product from the case because it's associated with following supporting information"
+      expect(page).not_to have_css("h1", text: "Remove #{product.name}")
+      expect(page).to have_css(".hmcts-banner__message", text: "Cannot remove the product from the case because it's associated with following supporting information")
     end
   end
 end

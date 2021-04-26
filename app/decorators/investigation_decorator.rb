@@ -46,8 +46,8 @@ class InvestigationDecorator < ApplicationDecorator
   end
 
   def source_details_summary_list(view_protected_details = false)
-    contact_details = h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
-    contact_details << complainant.contact_details if view_protected_details
+    contact_details = view_protected_details ? h.tag.p(complainant.contact_details) : h.tag.p("")
+    contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
 
     rows = [
       should_display_date_received? ? { key: { text: "Received date" }, value: { text: date_received.to_s(:govuk) } } : nil,
@@ -105,6 +105,10 @@ class InvestigationDecorator < ApplicationDecorator
 
   def owner
     object.owner&.decorate
+  end
+
+  def status
+    is_closed? ? "Closed" : "Open"
   end
 
 private
