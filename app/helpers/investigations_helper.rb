@@ -169,7 +169,6 @@ module InvestigationsHelper
       :sort_by,
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
-      owner_team_with_key[0],
       created_by: %i[me someone_else my_team id],
       teams_with_access: [:other_team_with_access, :my_team, id: []]
     )
@@ -197,14 +196,6 @@ module InvestigationsHelper
         }
       ]
     }
-  end
-
-  def owner_team_with_key
-    [
-      "case_owner_is_team_0".to_sym,
-      current_user.team,
-      "My team"
-    ]
   end
 
   def user_ids_from_team(team)
