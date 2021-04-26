@@ -5,7 +5,7 @@ set -ex
 bin/bundle check || bin/bundle install
 
 # Ensure all node packages are installed.
-yarn install
+bin/rails webpacker:install
 
 # Run the passed in command
 exec "$@"
