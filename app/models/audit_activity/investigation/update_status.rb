@@ -1,4 +1,9 @@
 class AuditActivity::Investigation::UpdateStatus < AuditActivity::Investigation::Base
+  def migrate_to_metadata
+    self.metadata = { updates: { is_closed: [false, true], date_closed: [nil, created_at] } }
+    save!
+  end
+
   def self.from(_investigation)
     raise "Deprecated - use ChangeCaseStatus.call instead"
   end

@@ -21,4 +21,15 @@ RSpec.describe AuditActivity::Investigation::UpdateStatus, :with_stubbed_elastic
       })
     end
   end
+
+  describe "#migrate_to_metadata" do
+    subject(:audit_activity) { create(:legacy_audit_investigation_update_status) }
+
+    it "populates the metadata" do
+      expect { audit_activity.migrate_to_metadata }
+        .to change(audit_activity, :metadata)
+              .from(nil)
+              .to("updates" => { "is_closed" => [false, true], "date_closed" => [nil, JSON.parse(audit_activity.created_at.to_json)] })
+    end
+  end
 end
