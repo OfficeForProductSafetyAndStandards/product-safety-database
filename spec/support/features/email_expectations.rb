@@ -32,7 +32,7 @@ module EmailExpectations
 
     def failure_message
       if @delivered_emails.empty?
-        "No emails were deliverd"
+        "No emails were delivered"
       elsif @emails_matching_recipient.empty?
         "No emails delivered to #{to}. Emails were delieved to #{@delivered_emails.collect(&:recipient).join(',')}"
       elsif @emails_matching_subject.empty?
