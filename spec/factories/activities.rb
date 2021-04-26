@@ -20,4 +20,9 @@ FactoryBot.define do
 
   factory :legacy_audit_add_activity_corrective_action, class: "AuditActivity::CorrectiveAction::Add", parent: :legacy_audit_activity_corrective_action
   factory :legacy_audit_update_activity_corrective_action, class: "AuditActivity::CorrectiveAction::Update", parent: :legacy_audit_activity_corrective_action
+
+  factory :legacy_audit_investigation_update_status, class: "AuditActivity::Investigation::UpdateStatus" do
+    investigation { create :allegation }
+    title { "Allegation closed" }
+  end
 end
