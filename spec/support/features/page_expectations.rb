@@ -178,7 +178,7 @@ module PageExpectations
 
   def expect_to_be_on_case_actions_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/actions")
-    expect(page).to have_selector("h1", text: "Select an action")
+    expect(page).to have_selector(".govuk-fieldset__legend--l", text: "Select an action")
   end
 
   def expect_to_be_on_close_case_page(case_id:)
