@@ -43,6 +43,8 @@ module Investigations
     end
 
     def actions_params
+      return {} if params[:investigation_actions_form].blank?
+
       params.require(:investigation_actions_form).permit(:investigation_action)
     end
   end
