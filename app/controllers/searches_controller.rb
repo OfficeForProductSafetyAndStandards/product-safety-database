@@ -17,7 +17,7 @@ class SearchesController < ApplicationController
 private
 
   def search_params
-    query_params.except(:created_by_team_0).tap do |p|
+    query_params.tap do |p|
       p[:sort_by] = SearchParams::RELEVANT if p[:q].present?
     end
   end
