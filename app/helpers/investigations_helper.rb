@@ -124,7 +124,7 @@ module InvestigationsHelper
       if (team = Team.find_by(id: @search.created_by.id))
         ids += user_ids_from_team(team)
       else
-        @search.created_by.someone_else_id
+        ids << @search.created_by.id
       end
     end
 

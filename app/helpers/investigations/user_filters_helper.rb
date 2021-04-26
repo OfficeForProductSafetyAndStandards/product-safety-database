@@ -62,7 +62,7 @@ module Investigations::UserFiltersHelper
     render "form_components/govuk_select",
            key: "created_by[id]",
            form: form,
-           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_ids.detect { |someone_else_id| someone_else_id == e.id } } },
+           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.created_by.id == e.id } },
            label: { text: "Name" },
            is_autocomplete: true
   end
