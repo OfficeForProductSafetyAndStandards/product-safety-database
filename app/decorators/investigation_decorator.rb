@@ -107,6 +107,10 @@ class InvestigationDecorator < ApplicationDecorator
     object.owner&.decorate
   end
 
+  def status
+    is_closed? ? "Closed" : "Open"
+  end
+
 private
 
   def category

@@ -124,7 +124,7 @@ module InvestigationsHelper
       if (team = Team.find_by(id: @search.created_by.id))
         ids += user_ids_from_team(team)
       else
-        @search.created_by.someone_else_id
+        ids << @search.created_by.id
       end
     end
 
@@ -169,7 +169,6 @@ module InvestigationsHelper
       :sort_by,
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
-      owner_team_with_key[0],
       created_by: %i[me someone_else my_team id],
       teams_with_access: [:other_team_with_access, :my_team, id: []]
     )
@@ -197,14 +196,6 @@ module InvestigationsHelper
         }
       ]
     }
-  end
-
-  def owner_team_with_key
-    [
-      "case_owner_is_team_0".to_sym,
-      current_user.team,
-      "My team"
-    ]
   end
 
   def user_ids_from_team(team)
@@ -376,11 +367,19 @@ module InvestigationsHelper
     end
 
     if policy(investigation).change_owner_or_status?(user: user)
-      status_actions[:items] << {
-        href: status_investigation_path(investigation),
-        text: "Change",
-        visuallyHiddenText: "status"
-      }
+      status_actions[:items] << if investigation.is_closed?
+                                  {
+                                    href: reopen_investigation_status_path(investigation),
+                                    text: "Re-open",
+                                    visuallyHiddenText: "case"
+                                  }
+                                else
+                                  {
+                                    href: close_investigation_status_path(investigation),
+                                    text: "Close",
+                                    visuallyHiddenText: "case"
+                                  }
+                                end
     end
 
     if policy(investigation).change_notifying_country?(user: user)
@@ -484,14 +483,20 @@ module InvestigationsHelper
 
     if policy(investigation).change_owner_or_status?
 
-      case_status = investigation.is_closed? ? "closed" : "open"
       visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
       risk_level_status = investigation.risk_level ? "set" : "not_set"
 
-      actions << {
-        path: status_investigation_path(@investigation),
-        text: I18n.t("change_case_status.#{case_status}", scope: "forms.investigation_actions.actions")
-      }
+      actions << if investigation.is_closed?
+                   {
+                     path: reopen_investigation_status_path(@investigation),
+                     text: I18n.t("reopen_case", scope: "forms.investigation_actions.actions")
+                   }
+                 else
+                   {
+                     path: close_investigation_status_path(@investigation),
+                     text: I18n.t("close_case", scope: "forms.investigation_actions.actions")
+                   }
+                 end
 
       actions << {
         path: new_investigation_ownership_path(@investigation),

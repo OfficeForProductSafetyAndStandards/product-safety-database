@@ -5,7 +5,7 @@ set -ex
 bin/bundle check || bin/bundle install
 
 # Ensure all node packages are installed.
-yarn install
+yarn
 
 # Run the passed in command
 exec "$@"

@@ -30,12 +30,12 @@ services:
     ports:
       - 9200:9200
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:7.9.2
-    ports:
-      - 5601:5601
-    depends_on:
-      - elasticsearch
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana-oss:7.9.2
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch
 
   redis:
     image: redis
@@ -53,7 +53,7 @@ services:
     volumes:
       # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
       - ${PWD-.}:/psd
-      - bundle-cache:/usr/local/bundle
+      - bundle-cache:/usr/local/bundle/gems
     depends_on:
       - db
       - elasticsearch
@@ -71,8 +71,8 @@ services:
       - ./docker/env.psd
     volumes:
       # ${PWD-.} calls PWD on systems which have that variable, and . on others e.g. windows
-      - ${PWD-.}/psd:/psd
-      - bundle-cache:/usr/local/bundle
+      - ${PWD-.}:/psd
+      - bundle-cache:/usr/local/bundle/gems
     depends_on:
       - db
       - elasticsearch
