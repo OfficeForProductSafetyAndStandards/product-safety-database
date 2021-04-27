@@ -54,7 +54,7 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_q
       end
     end
 
-    context "when a risk assessemnt is attached to the business" do
+    context "when a risk assessment is attached to the business" do
       let(:risk_assessment_params) do
         attributes_for(:risk_assessment, assessed_by_business_id: business.id, product_ids: [product.id]).merge(common_context)
       end
