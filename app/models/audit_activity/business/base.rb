@@ -1,5 +1,4 @@
 class AuditActivity::Business::Base < AuditActivity::Base
-
   private_class_method def self.from(business, investigation, title, body)
     create!(
       body: body,
