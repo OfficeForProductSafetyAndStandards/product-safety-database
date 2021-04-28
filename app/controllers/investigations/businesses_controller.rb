@@ -1,15 +1,12 @@
 class Investigations::BusinessesController < ApplicationController
   include BusinessesHelper
   include CountriesHelper
-  include Wicked::Wizard
-  skip_before_action :setup_wizard, only: %i[show destroy]
-  steps :type, :details
 
   before_action :set_investigation, only: %i[index update new show]
   before_action :set_countries, only: %i[update]
   before_action :set_business_location_and_contact, only: %i[update new]
   before_action :store_business, only: %i[update]
-  before_action :set_investigation_business, except: %i[show destroy]
+  before_action :set_investigation_business, except: %i[show destroy create]
   before_action :business_request_params, only: %i[new]
 
   def index
@@ -27,7 +24,9 @@ class Investigations::BusinessesController < ApplicationController
   end
 
   def create
-    authorize @investigation, :update?
+    investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
+    authorize investigation, :update?
+
     create!
   end
 
@@ -82,17 +81,8 @@ class Investigations::BusinessesController < ApplicationController
 
 private
 
-  def create!
-    if @business.save
-      @investigation.add_business(@business, session[:type])
-      redirect_to_investigation_businesses_tab success: "Business was successfully created."
-    else
-      render_wizard
-    end
-  end
-
   def set_investigation_business
-    @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)
+    # @investigation_business = InvestigationBusiness.new(business_id: params[:id], investigation_id: @investigation.id)
   end
 
   def assign_type

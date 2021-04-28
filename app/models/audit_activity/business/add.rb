@@ -1,6 +1,4 @@
 class AuditActivity::Business::Add < AuditActivity::Business::Base
-  belongs_to :business
-
   def self.from(business, investigation)
     title = business.trading_name
     relationship = investigation.investigation_businesses.find_by(business_id: business.id).relationship

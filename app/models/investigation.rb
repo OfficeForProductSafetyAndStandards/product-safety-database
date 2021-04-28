@@ -191,6 +191,8 @@ private
   end
 
   def create_audit_activity_for_business(business)
+    return if business.new_record?
+
     AuditActivity::Business::Add.from(business, self)
   end
 

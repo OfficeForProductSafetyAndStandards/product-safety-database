@@ -339,6 +339,13 @@ en:
   activemodel:
     errors:
       models:
+        business_type_form:
+          attributes:
+            relationship:
+              inclusion: "Please select a business type"
+            other_relationship:
+              blank: "Please enter a business type \"Other\""
+
         remove_business_form:
           attributes:
             remove:

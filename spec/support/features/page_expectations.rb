@@ -29,7 +29,6 @@ module PageExpectations
   end
 
   def expect_to_be_on_investigation_add_business_details_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/businesses/details")
     expect(page).to have_selector("legend", text: "Business details")
   end
 

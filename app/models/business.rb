@@ -14,8 +14,6 @@ class Business < ApplicationRecord
     end
   end
 
-  validates :trading_name, presence: true
-
   has_many_attached :documents
 
   has_many :investigation_businesses, dependent: :destroy

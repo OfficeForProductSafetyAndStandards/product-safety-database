@@ -31,7 +31,6 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-
     expect(page).to have_text("Please select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
@@ -46,7 +45,6 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-
     expect(page).to have_text('Please enter a business type "Other"')
 
     choose "Other" # This shouldn't need to be re-selected, but currently does.
@@ -54,7 +52,10 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     click_on "Continue"
 
+    save_and_open_page
+
     expect_to_be_on_investigation_add_business_details_page
+
 
     within_fieldset "Business details" do
       fill_in "Registered or legal name", with: business_details

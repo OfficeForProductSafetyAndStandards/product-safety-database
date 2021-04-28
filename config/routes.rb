@@ -138,7 +138,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :businesses, only: [] do
+      resource :type, controller: "investigations/businesses/type", only: %i[show create]
+      resource :details, controller: "investigations/businesses/details", only: %i[show create]
+    end
     resources :businesses, controller: "investigations/businesses"
+
     resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
     resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }
     resources :meetings, controller: "investigations/meetings", only: :show, constraints: { id: /\d+/ }
