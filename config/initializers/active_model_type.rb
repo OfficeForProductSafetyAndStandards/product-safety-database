@@ -3,13 +3,9 @@ require "active_model/types/business_list"
 require "active_model/types/comma_separated_list"
 require "active_model/types/teams_with_access_search_params"
 require "active_model/types/created_by_search_params"
-require "active_model/types/location_form_params"
-require "active_model/types/contact_form_params"
 ActiveModel::Type.register(:govuk_date, ActiveModel::Types::GovUKDate)
 ActiveRecord::Type.register(:govuk_date, ActiveModel::Types::GovUKDate)
 ActiveModel::Type.register(:business_list, ActiveModel::Types::BusinessList)
 ActiveModel::Type.register(:comma_separated_list, ActiveModel::Types::CommaSeparatedList)
 ActiveModel::Type.register(:teams_with_access_search_params, ActiveModel::Types::TeamsWithAccessSearchParams)
 ActiveModel::Type.register(:created_by_search_params, ActiveModel::Types::CreatedBySearchParams)
-ActiveModel::Type.register(:location_form_params, ActiveModel::Types::LocationFormParams)
-ActiveModel::Type.register(:contact_form_params, ActiveModel::Types::ContactFormParams)

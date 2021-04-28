@@ -26,8 +26,11 @@ class Business < ApplicationRecord
 
   accepts_nested_attributes_for :locations, reject_if: :all_blank
   accepts_nested_attributes_for :contacts, reject_if: :all_blank
+  accepts_nested_attributes_for :investigation_businesses, reject_if: :all_blank
 
   has_one :source, as: :sourceable, dependent: :destroy
+
+  validates :trading_name, presence: true
 
   def supporting_information
     corrective_actions + risk_assessments

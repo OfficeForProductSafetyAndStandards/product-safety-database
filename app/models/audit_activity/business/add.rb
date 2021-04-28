@@ -1,18 +1,10 @@
 class AuditActivity::Business::Add < AuditActivity::Business::Base
-  def self.from(business, investigation)
-    title = business.trading_name
-    relationship = investigation.investigation_businesses.find_by(business_id: business.id).relationship
-    body = "Role: **#{sanitize_text relationship}**"
-    super(business, investigation, title, body)
+  belongs_to :business
+  def self.build_metadata(business)
+    { business: business.attributes }
   end
 
-  def email_update_text(viewer = nil)
-    "Business was added to the #{investigation.case_type} by #{source&.show(viewer)}."
-  end
-
-private
-
-  def subtitle_slug
-    "Business added"
+  def self.from(*)
+    raise "Deprecated - use AddBusinessToCase.call instead"
   end
 end

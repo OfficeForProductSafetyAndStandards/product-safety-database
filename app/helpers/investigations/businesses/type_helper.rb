@@ -7,7 +7,7 @@ module Investigations::Businesses::TypeHelper
       label_classes: "govuk-visually-hidden"
     )
 
-    BusinessTypeForm::BUSINESS_TYPES.map do |value, label|
+    BusinessInvestigationForm::BUSINESS_TYPES.map do |value, label|
       item = { text: label, value: value }
       item[:conditional] = { html: condition_html } if value.inquiry.other?
       item

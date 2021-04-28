@@ -339,7 +339,7 @@ en:
   activemodel:
     errors:
       models:
-        business_type_form:
+        business_investigation_form:
           attributes:
             relationship:
               inclusion: "Please select a business type"

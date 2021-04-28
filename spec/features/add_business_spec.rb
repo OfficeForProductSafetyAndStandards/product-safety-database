@@ -52,10 +52,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     click_on "Continue"
 
-    save_and_open_page
-
     expect_to_be_on_investigation_add_business_details_page
-
 
     within_fieldset "Business details" do
       fill_in "Registered or legal name", with: business_details
@@ -79,7 +76,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     click_on "Save business"
 
-    expect(page).to have_text("Trading name cannot be blank")
+    expect(page).to have_error_summary("Trading name cannot be blank")
 
     within_fieldset "Business details" do
       fill_in "Trading name", with: trading_name

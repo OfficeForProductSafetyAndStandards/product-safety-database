@@ -40,9 +40,7 @@ class Investigation < ApplicationRecord
   has_many :products, through: :investigation_products
 
   has_many :investigation_businesses, dependent: :destroy
-  has_many :businesses,
-           through: :investigation_businesses,
-           after_add: :create_audit_activity_for_business
+  has_many :businesses, through: :investigation_businesses
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -188,12 +186,6 @@ private
     if saved_changes.key?(:is_private) || visibility_rationale.present?
       AuditActivity::Investigation::UpdateVisibility.from(self)
     end
-  end
-
-  def create_audit_activity_for_business(business)
-    return if business.new_record?
-
-    AuditActivity::Business::Add.from(business, self)
   end
 
   def creator_id

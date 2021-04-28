@@ -20,11 +20,12 @@
              classes: "govuk-!-width-one-third"
   %>
 <% end %>
-<%= form.fields_for :primary_location, business.primary_location do |ff| %>
+
+<%= form.fields_for :locations, business.primary_location || business.locations.new do |ff| %>
   <%= render "locations/address_form", form: ff, countries: countries %>
 <% end %>
 
-<%= form.fields_for :primary_contact, business.primary_contact do |ff| %>
+<%= form.fields_for :contacts, business.primary_contact || business.contacts.new do |ff| %>
   <%= render "contacts/form", form: ff, legend: { text: "Contact", classes: "govuk-fieldset__legend--m" } %>
 <% end %>
 
