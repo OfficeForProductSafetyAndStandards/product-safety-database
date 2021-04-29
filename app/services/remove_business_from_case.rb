@@ -6,7 +6,7 @@ class RemoveBusinessFromCase
 
   def call
     context.fail!(error: "No business supplied")          unless business.is_a?(Business)
-    contexrmust.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
+    context.fail!(error: "No investigation supplied") unless investigation.is_a?(Investigation)
     context.fail!(error: "No user supplied")              unless user.is_a?(User)
 
     if attached_to_supporting_information?
