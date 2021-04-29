@@ -11,6 +11,5 @@ class AuditActivity::Business::Add < AuditActivity::Business::Base
 
 private
 
-
-def notify_relevant_users; end
+  def notify_relevant_users; end
 end
