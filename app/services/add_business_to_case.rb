@@ -2,7 +2,7 @@ class AddBusinessToCase
   include Interactor
   include EntitiesToNotify
 
-  delegate :investigation, :user, :business, to: :context
+  delegate :investigation, :user, :business, :skip_email, to: :context
 
   def call
     context.fail!(error: "No business supplied")      unless business.is_a?(Business)
@@ -11,6 +11,7 @@ class AddBusinessToCase
 
     Business.transaction do
       business.primary_location&.assign_attributes(name: "Registered office address", source: UserSource.new(user: user))
+
       business.save!
 
       investigation.reload
@@ -31,6 +32,8 @@ private
   end
 
   def send_notification_email(activity)
+    return if skip_email
+
     email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,

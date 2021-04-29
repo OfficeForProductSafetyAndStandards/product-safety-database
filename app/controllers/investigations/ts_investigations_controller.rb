@@ -602,7 +602,8 @@ private
       if session_business[:location]
         business.locations << Location.new(session_business[:location])
       end
-      @investigation.add_business(business, session_business[:type])
+      business.investigation_businesses.new(relationship: session_business[:type], investigation: @investigation)
+      AddBusinessToCase.call!(business: business, investigation: @investigation, user: current_user, skip_email: true)
     end
   end
 
