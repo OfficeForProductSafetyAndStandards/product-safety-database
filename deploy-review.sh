@@ -40,5 +40,7 @@ fi
 # Deploy the app
 cf push $APP_NAME -f $MANIFEST_FILE --app-start-timeout 180 --var route=$APP_NAME.$DOMAIN --var app-name=$APP_NAME --var psd-db-name=$DB_NAME --var psd-host=$APP_NAME.$DOMAIN --var sidekiq-queue=$APP_NAME --var sentry-current-env=$APP_NAME --var web-max-threads=$WEB_MAX_THREADS --var worker-max-threads=$WORKER_MAX_THREADS
 
+cf run-task -c "export \$(./env/get-env-from-vcap.sh) && bin/rails db:migrate db:seed" -k 2G
+
 # Remove the copied infrastructure env files to clean up
 rm -fR ${PWD-.}/env/
