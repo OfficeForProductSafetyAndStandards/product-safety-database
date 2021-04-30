@@ -9,6 +9,13 @@ class AuditActivity::Business::Add < AuditActivity::Base
     raise "Deprecated - use AddBusinessToCase.call instead"
   end
 
+  def migrate_to_metadata
+    self.metadata = {
+      business: { trading_name: title },
+      investigation_business: { relationship: body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].gsub("\\", "") }
+    }
+    save!
+  end
 private
 
   def notify_relevant_users; end

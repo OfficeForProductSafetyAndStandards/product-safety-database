@@ -30,4 +30,11 @@ FactoryBot.define do
     investigation { create :allegation }
     title { "Removed: A business name" }
   end
+
+  factory :legacy_audit_business_added_status, class: "AuditActivity::Business::Add" do
+    investigation { create :allegation }
+    business { create(:business) }
+    title { "A business name" }
+    body { "Role: **fulfillment\\_house**" }
+  end
 end
