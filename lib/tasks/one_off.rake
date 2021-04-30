@@ -5,7 +5,7 @@ namespace :db do
       AuditActivity::Business::Destroy.where(metadata: nil).find_each(&:migrate_to_metadata)
     end
 
-    desc "AuditActivity::Business::Add4 to new metadata format"
+    desc "AuditActivity::Business::Add to new metadata format"
     task business_added_audit: :environment do
       AuditActivity::Business::Add.where(metadata: nil).find_each(&:migrate_to_metadata)
     end

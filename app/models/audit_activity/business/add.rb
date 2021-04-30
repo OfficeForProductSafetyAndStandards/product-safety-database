@@ -12,10 +12,11 @@ class AuditActivity::Business::Add < AuditActivity::Base
   def migrate_to_metadata
     self.metadata = {
       business: { trading_name: title },
-      investigation_business: { relationship: body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].gsub("\\", "") }
+      investigation_business: { relationship: body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].delete("\\") }
     }
     save!
   end
+
 private
 
   def notify_relevant_users; end
