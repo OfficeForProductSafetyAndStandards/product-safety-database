@@ -47,7 +47,8 @@ FactoryBot.define do
       end
 
       after(:create) do |investigation, evaluator|
-        investigation.add_business(evaluator.business_to_add, evaluator.business_relationship)
+        evaluator.business_to_add.investigation_businesses.build(relationship: evaluator.business_relationship, investigation: investigation)
+        AddBusinessToCase.call!(investigation: investigation, business: evaluator.business_to_add, user: investigation.owner)
         investigation.reload # This ensures investigation.businesses returns business_to_add
       end
     end
