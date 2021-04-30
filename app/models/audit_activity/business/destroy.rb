@@ -1,4 +1,4 @@
-class AuditActivity::Business::Destroy < AuditActivity::Business::Base
+class AuditActivity::Business::Destroy < AuditActivity::Base
   def self.build_metadata(business, reason)
     { reason: reason, business: business.attributes }
   end

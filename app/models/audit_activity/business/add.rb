@@ -1,4 +1,4 @@
-class AuditActivity::Business::Add < AuditActivity::Business::Base
+class AuditActivity::Business::Add < AuditActivity::Base
   belongs_to :business
 
   def self.build_metadata(business, business_investigation)
