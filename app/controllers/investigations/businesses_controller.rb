@@ -44,7 +44,7 @@ class Investigations::BusinessesController < ApplicationController
 
   def show
     @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
-    authorize investigation, :update?
+    authorize @investigation, :update?
 
     @business             = @investigation.businesses.find(params[:id])
     @remove_business_form = RemoveBusinessForm.new
