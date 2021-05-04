@@ -24,6 +24,7 @@ private
     AuditActivity::Business::Destroy.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
+      business: business,
       metadata: AuditActivity::Business::Destroy.build_metadata(business, reason)
     )
   end

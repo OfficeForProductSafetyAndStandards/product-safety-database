@@ -35,7 +35,7 @@ RSpec.describe RemoveBusinessFromCase, :with_stubbed_elasticsearch, :with_test_q
 
         activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Destroy.name)
         expect(activity)
-          .to have_attributes(title: nil, body: nil, metadata: { "business" => JSON.parse(business.attributes.to_json), "reason" => reason })
+          .to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "reason" => reason })
         expect(activity.source.user).to eq(user)
       end
 

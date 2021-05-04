@@ -106,6 +106,12 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     # activity log for the investigation.
     click_link "Activity"
     expect(page).to have_text("Business added")
+
+    expect(page.find("h3", text: "Business added"))
+      .to have_sibling(".govuk-body", text: "Role: other")
+
+    expect(page)
+      .to have_link("View business", href: /\/businesses\/(\d)+/)
   end
 
   scenario "Not being able to add a business to another team’s case" do
