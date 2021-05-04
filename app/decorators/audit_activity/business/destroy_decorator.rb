@@ -8,10 +8,6 @@ module AuditActivity
       def reason
         metadata.dig("reason")
       end
-
-      def business_id
-        metadata.dig("business", "id")
-      end
     end
   end
 end
