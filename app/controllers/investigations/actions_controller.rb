@@ -33,8 +33,10 @@ module Investigations
         reopen_investigation_status_path(@investigation)
       when "change_case_owner"
         new_investigation_ownership_path(@investigation)
-      when "change_case_visibility"
-        visibility_investigation_path(@investigation)
+      when "restrict_case"
+        restrict_investigation_visibility_path(@investigation)
+      when "unrestrict_case"
+        unrestrict_investigation_visibility_path(@investigation)
       when "send_email_alert"
         new_investigation_alert_path(@investigation)
       when "change_case_risk_level"
