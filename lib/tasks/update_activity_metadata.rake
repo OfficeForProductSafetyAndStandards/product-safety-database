@@ -13,13 +13,11 @@ namespace :activities do
     activities = class_to_update.all
 
     activities.each do |activity|
-      begin
-        activity.update!(metadata: activity.metadata)
-        succeeded += 1
-      rescue
-        puts "Updating activity with ID #{activity.id} failed."
-        failed += 1
-      end
+      activity.update!(metadata: activity.metadata)
+      succeeded += 1
+    rescue StandardError
+      puts "Updating activity with ID #{activity.id} failed."
+      failed += 1
     end
 
     puts "Finished: #{succeeded} activities updated successfully. #{failed} activities failed to update; see previous log."
