@@ -1,3 +1,5 @@
 <p class="govuk-body">
-  <%= activity.metadata['reason'] %>
+  <%= activity.reason %>
 </p>
+
+<%= link_to t(".view_business"), business_path(activity.business_id), class: "govuk-link psd-block-link"%>

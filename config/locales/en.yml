@@ -94,6 +94,10 @@ en:
       title: "Title"
 
   investigations:
+    activities:
+      business:
+        destroy:
+          view_business: "View business"
     businesses:
       destroy:
         business_successfully_deleted: "Business was successfully removed."

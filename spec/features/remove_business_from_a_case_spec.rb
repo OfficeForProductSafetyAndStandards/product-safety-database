@@ -63,6 +63,9 @@ RSpec.feature "Remove a business from a case", :with_stubbed_elasticsearch, :wit
 
     expect(page.find("h3", text: "Removed: #{business.trading_name}"))
       .to have_sibling(".govuk-body", text: "This business no longer exists")
+
+    expect(page)
+      .to have_link("View business", href: business_path(business))
   end
 
   scenario "when the business is attached to supporting information" do
