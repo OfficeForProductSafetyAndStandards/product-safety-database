@@ -28,6 +28,7 @@ FactoryBot.define do
 
   factory :legacy_audit_business_remove_status, class: "AuditActivity::Business::Destroy" do
     investigation { create :allegation }
+    business { create(:business) }
     title { "Removed: A business name" }
   end
 
