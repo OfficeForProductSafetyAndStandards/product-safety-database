@@ -1,3 +1,4 @@
+<% byebug %>
 <%= page_title "#{@investigation.case_type.upcase_first} visibility", errors: @investigation.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(

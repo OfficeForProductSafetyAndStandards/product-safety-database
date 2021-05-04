@@ -67,6 +67,9 @@ en:
   change_case_status:
     email_subject_text: "%{case_type} was %{status}"
     email_update_text: "%{case_type} was %{status} by %{name}."
+  change_case_visibility:
+    email_subject_text: "%{case_type} was %{visibility}"
+    email_update_text: "%{case_type} was %{visibility} by %{name}."
   change_risk_validation:
     validated: "has been validated"
     validation_removed: "has had validation removed"

@@ -108,6 +108,13 @@ Rails.application.routes.draw do
       patch :reopen
     end
 
+    resource :visibility, only: %i[], controller: "investigations/visibility" do
+      get :restrict
+      get :unrestrict
+      patch :restrict
+      patch :unrestrict
+    end
+
     resource :summary, only: %i[edit update], controller: "investigations/summary"
 
     resources :collaborators, only: %i[index new create edit update], path: "teams", path_names: { new: "add" }

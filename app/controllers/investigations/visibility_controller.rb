@@ -1,35 +1,39 @@
 module Investigations
   class VisibilityController < ApplicationController
-    before_action :set_investigation
-    before_action :authorize_investigation
-
-    def show
-      @last_update_visibility_activity = @investigation.activities.where(type: "AuditActivity::Investigation::UpdateVisibility").order(:created_at).first
+    def restrict
+      byebug
+      change_case_visibility(new_visibility: "restrict", template: :restrict, flash: "closed")
     end
 
-    def update
-      if @investigation.update(visibility_params)
-        redirect_to investigation_path(@investigation),
-                    flash: {
-                      success: I18n.t(".investigations.visibility.updated", case_type: @investigation.case_type.upcase_first, status: @investigation.decorate.visibility_status)
-                    }
-      else
-        format.html { render :new }
-      end
+    def unrestrict
+      change_case_visibility(new_visibility: "unrestrict", template: :unrestrict, flash: "re-opened")
     end
 
   private
 
-    def set_investigation
-      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
-    end
-
-    def authorize_investigation
+    def change_case_visibility(new_visibility:, template:, flash:)
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
       authorize @investigation, :change_owner_or_status?
+
+      @change_case_visibility_form = ChangeCaseVisibilityForm.from(@investigation)
+      @change_case_visibility_form.assign_attributes(change_case_visibility_form_params.merge(new_visibility: new_visibility))
+
+      # If not a PATCH request we should escape now and just display the form.
+      if !@change_case_visibility_form.valid? || !request.patch?
+        @investigation = @investigation.decorate
+        byebug
+        return render(template)
+      end
+
+      ChangeCaseVisibility.call!(@change_case_visibility_form.serializable_hash.merge(user: current_user, investigation: @investigation))
+
+      redirect_to investigation_path(@investigation), flash: { success: "#{@investigation.case_type.upcase_first} was #{flash}" }
     end
 
-    def visibility_params
-      params.require(:investigation).permit(:is_private, :visibility_rationale)
+    def change_case_visibility_form_params
+      return {} unless request.patch?
+
+      params.require(:change_case_visibility_form).permit(:rationale)
     end
   end
 end
