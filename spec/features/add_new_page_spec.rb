@@ -131,7 +131,7 @@ RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_e
 
   def sign_in_and_navigate_to_add_to_case_page
     sign_in user
-    visit "/cases/#{investigation.pretty_id}/add-to-case/new"
+    visit "/cases/#{investigation.pretty_id}/add-to-case"
 
     expect_to_be_on_add_to_case_page
   end

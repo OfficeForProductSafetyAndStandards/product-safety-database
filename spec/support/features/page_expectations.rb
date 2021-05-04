@@ -172,7 +172,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_to_case_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/add-to-case/new")
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/add-to-case")
     expect(page).to have_selector("h1", text: "What are you adding to the case?")
   end
 

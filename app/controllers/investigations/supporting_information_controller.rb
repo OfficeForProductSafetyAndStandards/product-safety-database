@@ -16,6 +16,13 @@ module Investigations
 
     def new
       authorize investigation, :update?
+      @information_types = SupportingInformationTypeForm::MAIN_TYPES
+      supporting_information_type_form
+    end
+
+    def add_to_case
+      authorize investigation, :update?
+      @information_types = SupportingInformationTypeForm::MAIN_TYPES.merge({ product: "Product", business: "Business" })
       supporting_information_type_form
     end
 
@@ -38,6 +45,10 @@ module Investigations
         redirect_to new_investigation_test_result_path(@investigation)
       when "risk_assessment"
         redirect_to new_investigation_risk_assessment_path(@investigation)
+      when "product"
+        redirect_to new_investigation_product_path(investigation)
+      when "business"
+        redirect_to new_investigation_business_path(investigation)
       end
     end
 
