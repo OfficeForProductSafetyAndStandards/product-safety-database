@@ -1,17 +1,22 @@
 <div class="govuk-body">
-  Date of assessment: <%= Date.parse(activity.metadata["assessed_on"]).to_s(:govuk) %>
+  Date of assessment: <strong><%= activity.assessed_on %></strong>
   <br>
-  Risk level: <%= activity.metadata["custom_risk_level"].presence || I18n.t(".investigations.risk_level.show.levels.#{activity.metadata["risk_level"]}")  %>
+  Risk level: <strong><%= activity.risk_level %></strong>
   <br>
-  Assessed by: <%= activity.assessed_by_name  %>
+  Assessed by: <strong><%= activity.assessed_by_name %></strong>
   <br>
-  Product assessed: <%= activity.products_assessed.collect(&:name).to_sentence  %>
+  Product assessed: <strong><%= activity.products_assessed %></strong>
+
+  <% if activity.risk_assessment_file %>
+    <br>
+    Attached: <strong><%= activity.risk_assessment_file %></strong>
+  <% end %>
 
   <% if activity.further_details %>
     <br>
-    Further details: <%= activity.further_details %>
+    Further details: <strong><%= activity.further_details %></strong>
   <% end %>
 </div>
 
-<%= link_to "View risk assessment", investigation_risk_assessment_path(activity.investigation, activity.metadata["risk_assessment_id"]) %>
+<%= link_to "View risk assessment", investigation_risk_assessment_path(activity.investigation, activity.risk_assessment) %>
 
