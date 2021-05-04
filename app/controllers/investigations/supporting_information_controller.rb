@@ -16,18 +16,18 @@ module Investigations
 
     def new
       authorize investigation, :update?
-      @information_types = SupportingInformationTypeForm::MAIN_TYPES
       supporting_information_type_form
     end
 
     def add_to_case
       authorize investigation, :update?
-      @information_types = SupportingInformationTypeForm::MAIN_TYPES.merge({ product: "Product", business: "Business" })
+      @add_to_case_action = true
       supporting_information_type_form
     end
 
     def create
       authorize investigation, :update?
+      @add_to_case_action = params["add_to_case_action"].present?
       return render(:new) if supporting_information_type_form.invalid?
 
       case supporting_information_type_form.type

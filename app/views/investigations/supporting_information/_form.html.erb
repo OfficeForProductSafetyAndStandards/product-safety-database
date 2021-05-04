@@ -1,5 +1,6 @@
+<% information_types = @add_to_case_action ? SupportingInformationTypeForm::MAIN_TYPES.merge({ product: "Product", business: "Business" }) : SupportingInformationTypeForm::MAIN_TYPES %>
 <%
-  radio_items = radio_items_from_hash(@information_types).tap do |items|
+  radio_items = radio_items_from_hash(information_types).tap do |items|
                   items.push divider: "or"
                   items.push(radio_items_from_hash(SupportingInformationTypeForm::GENERIC_TYPE).first)
                 end
@@ -16,6 +17,7 @@
                                                  @supporting_information_type_form.errors.full_messages_for(:type)),
                  items: radio_items,
                  fieldset: { legend: { text: page_heading, classes: "govuk-fieldset__legend--l", isPageHeading: true } }%>
+      <%= form.hidden_field :add_to_case_action, value: @add_to_case_action %>
       <%= govukButton(text: "Continue") %>
     <% end %>
     <p class="govuk-body">
