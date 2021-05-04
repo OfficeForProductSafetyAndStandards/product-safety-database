@@ -54,7 +54,6 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
             "custom_risk_level" => risk_assessment.custom_risk_level,
             "added_by_user_id" => risk_assessment.added_by_user_id,
             "added_by_team_id" => risk_assessment.added_by_team_id,
-            "created_at" => risk_assessment.created_at,
             "risk_level" => risk_assessment.risk_level,
             "product_ids" => risk_assessment.product_ids
           })
@@ -64,11 +63,11 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
 
       context "when the risk assessment has not been subsequently updated" do
         it "returns the file blob metadata" do
-          expect(activity.metadata["risk_assessment"]["risk_assessment_file"]).to eq(risk_assessment.risk_assessment_file.blob.attributes)
+          expect(activity.metadata["risk_assessment"]["risk_assessment_file"]).to match(hash_including(risk_assessment.risk_assessment_file.blob.attributes.except("created_at", "updated_at")))
         end
 
         it "returns the updated_at of the risk assessment" do
-          expect(activity.metadata["risk_assessment"]["updated_at"]).to eq(risk_assessment.updated_at)
+          expect(activity.metadata["risk_assessment"]["updated_at"].to_i).to eq(risk_assessment.updated_at.to_i)
         end
       end
 
