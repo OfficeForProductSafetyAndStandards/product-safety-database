@@ -1,4 +1,4 @@
-class BusinessInvestigationForm
+class AddBusinessToCaseForm
   include ActiveModel::Model
   include ActiveModel::Attributes
   include ActiveModel::Serialization
