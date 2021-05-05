@@ -1,4 +1,4 @@
-<% page_heading =  I18n.t(".investigations.visibility.show", future_status: @investigation.future_visibility_status.capitalize) %>
+<% page_heading =  I18n.t(".investigations.visibility.show", future_status: @investigation.visibility_action.capitalize) %>
 <% page_title page_heading %>
 <% content_for :back_link do %>
   <%= govukBackLink(

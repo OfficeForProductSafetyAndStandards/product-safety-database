@@ -10,7 +10,7 @@ RSpec.describe ChangeCaseVisibilityForm, :with_stubbed_elasticsearch, :with_test
       expect(form.case_type).to eq("allegation")
     end
 
-    it "sets the old status" do
+    it "sets the old visibility" do
       expect(form.old_visibility).to eq("unrestricted")
     end
   end

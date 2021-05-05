@@ -115,7 +115,7 @@ class InvestigationDecorator < ApplicationDecorator
     is_private? ? "restricted" : "unrestricted"
   end
 
-  def future_visibility_status
+  def visibility_action
     is_private? ? "unrestrict" : "restrict"
   end
 
