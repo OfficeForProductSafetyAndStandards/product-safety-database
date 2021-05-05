@@ -1,37 +1,51 @@
 module Investigations
-  class StatusController < ApplicationController
-    def restrict
-      change_case_visibility(new_is_private: true, template: :restrict, flash: "restricted")
+  class ActionsController < ApplicationController
+    def index
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      @actions_form = InvestigationActionsForm.new(
+        investigation: @investigation,
+        current_user: current_user
+      )
     end
 
-    def unrestrict
-      change_case_visibility(new_is_private: false, template: :unrestrict, flash: "unrestricted")
+    def create
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      authorize @investigation, :update?
+
+      @actions_form = InvestigationActionsForm.new(
+        investigation: @investigation,
+        current_user: current_user,
+        investigation_action: actions_params[:investigation_action]
+      )
+
+      return render(:index) if @actions_form.invalid?
+
+      redirect_to path_for_action(@actions_form.investigation_action)
     end
 
   private
 
-    def change_case_visibility(new_is_private:, template:, flash:)
-      investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize investigation, :change_owner_or_status?
-
-      @change_case_visibility_form = ChangeCaseVisibilityForm.from(investigation)
-      @change_case_visibility_form.assign_attributes(change_case_visibility_form.merge(new_is_private: new_is_private))
-
-      # If not a PATCH request we should escape now and just display the form.
-      if !@change_case_visibility_form.valid? || !request.patch?
-        @investigation = investigation.decorate
-        return render(template)
+    def path_for_action(action)
+      case action
+      when "close_case"
+        close_investigation_status_path(@investigation)
+      when "reopen_case"
+        reopen_investigation_status_path(@investigation)
+      when "change_case_owner"
+        new_investigation_ownership_path(@investigation)
+      when "change_case_visibility"
+        visibility_investigation_path(@investigation)
+      when "send_email_alert"
+        new_investigation_alert_path(@investigation)
+      when "change_case_risk_level"
+        investigation_risk_level_path(@investigation)
       end
-
-      ChangeCaseVisibilityForm.call!(@change_case_visibility_form.serializable_hash.merge(user: current_user, investigation: investigation))
-
-      redirect_to investigation_path(investigation), flash: { success: "#{investigation.case_type.upcase_first} was #{flash}" }
     end
 
-    def change_case_visibility_form
-      return {} unless request.patch?
+    def actions_params
+      return {} if params[:investigation_actions_form].blank?
 
-      params.require(:change_case_visibility_form).permit(:rationale)
+      params.require(:investigation_actions_form).permit(:investigation_action)
     end
   end
 end
