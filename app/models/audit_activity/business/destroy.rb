@@ -10,9 +10,7 @@ class AuditActivity::Business::Destroy < AuditActivity::Base
   end
 
   def migrate_to_metadata
-    match = title.match(/Removed: (?<tradding_name>.*)/)
-    self.metadata = { business: { trading_name: match["tradding_name"] } }
-    save!
+    update!(metadata: { business: business.attributes })
   end
 
 private
