@@ -29,6 +29,9 @@ RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :wi
         expect_to_be_on_case_page(case_id: case_id)
         expect_confirmation_banner("Allegation was restricted")
         expect(page).to have_summary_item(key: "Case restriction", value: "Restricted")
+        click_link "Activity"
+        expect(page).to have_css("h3", text: "Allegation restricted")
+        expect(page).to have_css("p", text: "Restriction reason")
       end
     end
 
@@ -60,6 +63,10 @@ RSpec.feature "Change case restriction status", :with_stubbed_elasticsearch, :wi
         expect_to_be_on_case_page(case_id: case_id)
         expect_confirmation_banner("Allegation was unrestricted")
         expect(page).to have_summary_item(key: "Case restriction", value: "Unrestricted")
+
+        click_link "Activity"
+        expect(page).to have_css("h3", text: "Allegation unrestricted")
+        expect(page).to have_css("p", text: "Unrestricted reason")
       end
     end
   end
