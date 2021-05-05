@@ -56,23 +56,13 @@
           visuallyHiddenText: "case owner"
         ]
       } %>
-      <% case_restriction_actions = if @investigation.is_private?
-                                      {
-                                        items: [
-                                          href: unrestrict_investigation_visibility_path(@investigation),
-                                          text: "Unrestrict",
-                                          visuallyHiddenText: "case"
-                                        ]
-                                      }
-                                    else
-                                      {
-                                        items: [
-                                          href: restrict_investigation_visibility_path(@investigation),
-                                          text: "Restrict",
-                                          visuallyHiddenText: "case"
-                                        ]
-                                      }
-                                    end
+      <% case_restriction_actions = {
+                                      items: [
+                                        href: investigation_visibility_path(@investigation),
+                                        text: "Change",
+                                        visuallyHiddenText: "case restriction"
+                                      ]
+                                    }
       %>
     <% else %>
       <% case_owner_actions = {} %>

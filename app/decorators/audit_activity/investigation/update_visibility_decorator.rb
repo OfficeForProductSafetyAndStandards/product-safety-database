@@ -2,19 +2,27 @@ class AuditActivity::Investigation::UpdateVisibilityDecorator < ApplicationDecor
   delegate_all
 
   def title(_viewer)
-    I18n.t(".title", scope: object.class.i18n_scope, case_type: investigation.case_type.upcase_first, status: new_status)
+    I18n.t(".title", scope: object.class.i18n_scope, case_type: investigation.case_type.upcase_first, visibility: new_visibility)
   end
 
   def subtitle(viewer)
     I18n.t(".subtitle", scope: object.class.i18n_scope, user_name: source&.show(viewer), date: created_at.to_s(:govuk))
   end
 
-  def new_status
+  def new_visibility
     new_is_private? ? "restricted" : "unrestricted"
   end
 
   def rationale
     metadata.dig("rationale")
+  end
+
+  def user_name
+    User.find(source.user_id).name
+  end
+
+  def govuk_created_at
+    created_at.to_s(:govuk)
   end
 
 private

@@ -15,5 +15,5 @@
     </div>
   </div>
 <% else %>
-  <%= render partial: "form", locals: { form_path: close_investigation_status_path(@investigation), i18n_scope: ".investigations.status.close" } %>
+  <%= render partial: "form", locals: { form_path: unrestrict_investigation_visibility_path(@investigation), i18n_scope: ".investigations.visibility.unrestrict" } %>
 <% end %>

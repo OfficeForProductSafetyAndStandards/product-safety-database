@@ -74,7 +74,7 @@ private
   end
 
   def private?
-    new_visibility == "closed"
+    new_visibility == "restricted"
   end
 
   def email_visibility

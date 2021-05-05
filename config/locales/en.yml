@@ -222,6 +222,18 @@ en:
         label: "Why are you re-opening the case?"
         hint: "For example, the business responsible needs to take further action."
         action: "Re-open case"
+    visibility:
+      updated: "%{case_type} has been %{status}"
+      show: "%{future_status} case"
+      why: "Why is this case being %{future_status}ed?"
+      restrict:
+        title: "Restrict this case"
+        label: "Why is the case being restricted?"
+        action: "Restrict this case"
+      unrestrict:
+        title: "Unrestrict this case"
+        label: "Why is the case being unrestricted?"
+        action: "Unrestrict this case"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
@@ -237,6 +249,9 @@ en:
           false: "The case is not related to the coronavirus outbreak."
       update_status:
         title: "%{case_type} %{status}"
+        subtitle: "by %{user_name}, %{date}"
+      update_visibility:
+        title: "%{case_type} %{visibility}"
         subtitle: "by %{user_name}, %{date}"
       risk_level_updated:
         title:

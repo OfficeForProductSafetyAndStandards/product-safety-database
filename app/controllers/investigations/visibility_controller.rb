@@ -1,12 +1,17 @@
 module Investigations
   class VisibilityController < ApplicationController
+    def show
+      @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+      authorize @investigation, :change_owner_or_status?
+      @last_update_visibility_activity = @investigation.activities.where(type: "AuditActivity::Investigation::UpdateVisibility").order(:created_at).first
+    end
+
     def restrict
-      byebug
-      change_case_visibility(new_visibility: "restrict", template: :restrict, flash: "closed")
+      change_case_visibility(new_visibility: "restricted", template: :restrict, flash: "restricted")
     end
 
     def unrestrict
-      change_case_visibility(new_visibility: "unrestrict", template: :unrestrict, flash: "re-opened")
+      change_case_visibility(new_visibility: "unrestricted", template: :unrestrict, flash: "unrestricted")
     end
 
   private
@@ -21,7 +26,6 @@ module Investigations
       # If not a PATCH request we should escape now and just display the form.
       if !@change_case_visibility_form.valid? || !request.patch?
         @investigation = @investigation.decorate
-        byebug
         return render(template)
       end
 

@@ -504,7 +504,7 @@ module InvestigationsHelper
       }
 
       actions << {
-        path: visibility_investigation_path(@investigation),
+        path: investigation_visibility_path(@investigation),
         text: I18n.t("change_case_visibility.#{visibility_status}", scope: "forms.investigation_actions.actions")
       }
 
