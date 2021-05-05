@@ -61,7 +61,13 @@ module Investigations
     end
 
     def supporting_information_type_form
-      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type])
+      options = if @add_to_case_action
+                  SupportingInformationTypeForm::MAIN_TYPES.merge({ product: "Product", business: "Business" })
+                else
+                  SupportingInformationTypeForm::MAIN_TYPES
+                end
+
+      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type], options: options )
     end
   end
 end

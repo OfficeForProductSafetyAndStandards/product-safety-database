@@ -1,6 +1,5 @@
-<% information_types = @add_to_case_action ? SupportingInformationTypeForm::MAIN_TYPES.merge({ product: "Product", business: "Business" }) : SupportingInformationTypeForm::MAIN_TYPES %>
 <%
-  radio_items = radio_items_from_hash(information_types).tap do |items|
+  radio_items = radio_items_from_hash(@supporting_information_type_form.options).tap do |items|
                   items.push divider: "or"
                   items.push(radio_items_from_hash(SupportingInformationTypeForm::GENERIC_TYPE).first)
                 end
