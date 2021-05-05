@@ -93,7 +93,33 @@ class Investigations::BusinessesController < ApplicationController
     end
   end
 
+  def type
+    # It has been decided not to use another controller (i.e Investigation::InvestigationBusinessController new and create action)
+    # So we need to check the HTTP verb to handle the rendering of the form and the posting of the action so that
+    # upon form validation if errors need to be displayed the url remain the same: /case/:pretty_id/businesses/type
+    if request.get?
+      @investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id]).decorate
+      # displays the InvestigationBusiness model form
+      @add_business_to_case_form = AddBusinessToCaseForm.new
+    else
+      investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
+      # builds the InvestigationBusiness model form
+      @add_business_to_case = AddBusinessToCaseForm.new(investigation_business_params)
+
+      if @add_business_to_case.invalid?
+        @investigation = investigation.decorate
+        return render :show
+      end
+
+      redirect_to new_investigation_business_path(investigation, business: { investigation_businesses_attributes: [@add_business_to_case.serializable_hash] })
+    end
+  end
+
 private
+
+  def investigation_business_params
+    params.require(:investigation_business).permit(:relationship, :other_relationship)
+  end
 
   def redirect_to_investigation_businesses_tab(flash)
     redirect_to investigation_businesses_path(@investigation), flash: flash

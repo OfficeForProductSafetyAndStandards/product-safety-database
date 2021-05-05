@@ -1,3 +1,4 @@
+# This class helps building the InvestigationBusiness model
 class AddBusinessToCaseForm
   include ActiveModel::Model
   include ActiveModel::Attributes
