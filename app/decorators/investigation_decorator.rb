@@ -111,10 +111,6 @@ class InvestigationDecorator < ApplicationDecorator
     is_closed? ? "Closed" : "Open"
   end
 
-  def visibility
-    is_closed? ? "Restricted" : "Unrestricted"
-  end
-
   def visibility_status
     is_private? ? "restricted" : "unrestricted"
   end

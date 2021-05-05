@@ -33,14 +33,6 @@ private
     }
   end
 
-  def visibility_status_action
-    if investigation.is_private?
-      { unrestrict_case: action_label("unrestrict_case") }
-    else
-      { restrict_case: action_label("restrict_case") }
-    end
-  end
-
   def case_status_action
     if investigation.is_closed?
       { reopen_case: action_label("reopen_case") }

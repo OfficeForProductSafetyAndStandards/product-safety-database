@@ -57,12 +57,12 @@
         ]
       } %>
       <% case_restriction_actions = {
-                                      items: [
-                                        href: investigation_visibility_path(@investigation),
-                                        text: "Change",
-                                        visuallyHiddenText: "case restriction"
-                                      ]
-                                    }
+        items: [
+          href: investigation_visibility_path(@investigation),
+          text: "Change",
+          visuallyHiddenText: "case restriction"
+        ]
+      }
       %>
     <% else %>
       <% case_owner_actions = {} %>
