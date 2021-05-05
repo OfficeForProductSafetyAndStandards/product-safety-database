@@ -73,7 +73,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
       end
     end
 
-    context "when searchin for product once removed from the case", :with_elasticsearch do
+    context "when searching for product once removed from the case", :with_elasticsearch do
       let(:records) { Product.full_search(ElasticsearchQuery.new(product.name, {}, {})).records }
 
       before { Product.import(refresh: :wait_for) }
