@@ -13,7 +13,7 @@ RSpec.describe RemoveBusinessFromCase, :with_test_queue_adapter do
   let(:reason)                   { Faker::Hipster.sentence }
 
   describe "#call" do
-    context "with stubbed elasticsearch", :with_stubbed_elasticsearch  do
+    context "with stubbed elasticsearch", :with_stubbed_elasticsearch do
       def expected_email_subject
         "Allegation updated"
       end
