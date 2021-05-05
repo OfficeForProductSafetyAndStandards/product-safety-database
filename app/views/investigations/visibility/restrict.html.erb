@@ -6,14 +6,4 @@
   ) %>
 <% end %>
 <%= render "investigations/pages_top", investigation: @investigation %>
-<% unless @change_case_visibility_form.errors[:new_visibility].empty? %>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-l"><%= t(".title") %></h1>
-
-      <p><%= @change_case_visibility_form.errors[:new_visibility].first %>. Do you want to <%= link_to "restrict it", restrict_investigation_status_path(@investigation) %>?</p>
-    </div>
-  </div>
-<% else %>
-  <%= render partial: "form", locals: { form_path: restrict_investigation_visibility_path(@investigation), i18n_scope: ".investigations.visibility.restrict" } %>
-<% end %>
+<%= render partial: "form", locals: { form_path: restrict_investigation_visibility_path(@investigation), i18n_scope: ".investigations.visibility.restrict" } %>
