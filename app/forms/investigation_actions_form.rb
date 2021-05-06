@@ -49,6 +49,14 @@ private
     end
   end
 
+  def visibility_status
+    if investigation.is_private
+      "restricted"
+    else
+      "unrestricted"
+    end
+  end
+
   def action_label(action)
     I18n.t(action, scope: "forms.investigation_actions.actions")
   end

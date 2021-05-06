@@ -329,7 +329,7 @@ en:
         reopen_case: "Re-open case"
         change_case_visibility:
           restricted: "Unrestrict this case"
-          not_restricted: "Restrict this case"
+          unrestricted: "Restrict this case"
         change_case_risk_level:
           not_set: Set risk level
           set: Change risk level
