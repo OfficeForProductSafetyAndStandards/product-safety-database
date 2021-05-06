@@ -483,7 +483,7 @@ module InvestigationsHelper
 
     if policy(investigation).change_owner_or_status?
 
-      visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
+      visibility_status = investigation.is_private? ? "restricted" : "unrestricted"
       risk_level_status = investigation.risk_level ? "set" : "not_set"
 
       actions << if investigation.is_closed?
