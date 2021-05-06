@@ -79,7 +79,7 @@ RSpec.describe RemoveBusinessFromCase, :with_test_queue_adapter do
     it "is searchable from the business index" do
       result
 
-      expect(records).to include(business)
+      expect(records.to_a).to include(business)
     end
   end
 end
