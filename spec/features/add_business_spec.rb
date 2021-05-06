@@ -31,7 +31,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-    expect(page).to have_text("Please select a business type")
+    expect(page).to have_error_summary("Please select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
     expect(page).to have_unchecked_field("Manufacturer")

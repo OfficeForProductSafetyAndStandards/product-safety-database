@@ -343,7 +343,7 @@ en:
   activemodel:
     errors:
       models:
-        business_investigation_form:
+        add_business_to_case_form:
           attributes:
             relationship:
               inclusion: "Please select a business type"

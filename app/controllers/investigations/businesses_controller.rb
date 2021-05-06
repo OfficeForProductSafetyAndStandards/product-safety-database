@@ -104,14 +104,14 @@ class Investigations::BusinessesController < ApplicationController
     else
       investigation = Investigation.find_by(pretty_id: params[:investigation_pretty_id])
       # builds the InvestigationBusiness model form
-      @add_business_to_case = AddBusinessToCaseForm.new(investigation_business_params)
+      @add_business_to_case_form = AddBusinessToCaseForm.new(investigation_business_params)
 
-      if @add_business_to_case.invalid?
+      if @add_business_to_case_form.invalid?
         @investigation = investigation.decorate
-        return render :show
+        return
       end
 
-      redirect_to new_investigation_business_path(investigation, business: { investigation_businesses_attributes: [@add_business_to_case.serializable_hash] })
+      redirect_to new_investigation_business_path(investigation, business: { investigation_businesses_attributes: [@add_business_to_case_form.serializable_hash] })
     end
   end
 
