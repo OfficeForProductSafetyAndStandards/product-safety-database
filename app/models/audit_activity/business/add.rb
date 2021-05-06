@@ -11,9 +11,11 @@ class AuditActivity::Business::Add < AuditActivity::Base
 
   def migrate_to_metadata
     update!(
-      business: business.attributes,
-      investigation_business: {
-        relationship: body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].delete("\\")
+      metadata: {
+        business: business.attributes,
+        investigation_business: {
+          relationship: body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].delete("\\")
+        }
       }
     )
   end
