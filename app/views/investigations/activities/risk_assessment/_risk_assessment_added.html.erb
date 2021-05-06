@@ -9,7 +9,7 @@
 
   <% if activity.risk_assessment_file %>
     <br>
-    Attached: <strong><%= activity.risk_assessment_file %></strong>
+    Attached: <strong><%= link_to activity.risk_assessment_file.filename, url_for(activity.risk_assessment_file) %></strong>
   <% end %>
 
   <% if activity.further_details %>

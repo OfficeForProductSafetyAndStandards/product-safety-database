@@ -10,9 +10,7 @@ namespace :activities do
 
     puts "Migrating #{class_to_update.count} records of #{class_to_update}"
 
-    activities = class_to_update.all
-
-    activities.each do |activity|
+    class_to_update.find_each do |activity|
       activity.update!(metadata: activity.metadata)
       succeeded += 1
     rescue StandardError

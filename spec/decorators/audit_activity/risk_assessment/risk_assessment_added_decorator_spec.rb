@@ -88,20 +88,4 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator, :wit
       end
     end
   end
-
-  describe "#risk_assessment_file" do
-    context "with no file attached" do
-      it "returns nil" do
-        expect(activity.risk_assessment_file).to be_nil
-      end
-    end
-
-    context "with a file attached" do
-      let(:trait) { :with_file }
-
-      it "returns the filename" do
-        expect(activity.risk_assessment_file).to eq("new_risk_assessment.txt")
-      end
-    end
-  end
 end

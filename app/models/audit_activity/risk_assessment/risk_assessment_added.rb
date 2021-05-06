@@ -86,7 +86,9 @@ private
     return metadata if metadata["risk_assessment"].present?
 
     risk_assessment = RiskAssessment.find(metadata["risk_assessment_id"])
-    risk_assessment_updated = AuditActivity::RiskAssessment::RiskAssessmentUpdated.where("metadata->'risk_assessment_id' = ?", risk_assessment.id.to_s).count.positive?
+
+    # ID must be cast to String to avoid SQL error querying JSON column
+    risk_assessment_updated = AuditActivity::RiskAssessment::RiskAssessmentUpdated.where("metadata->'risk_assessment_id' = ?", risk_assessment.id.to_s).any?
 
     if risk_assessment_updated
       # We cannot reliably find the old file since orphaned files were

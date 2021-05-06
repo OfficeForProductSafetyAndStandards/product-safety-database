@@ -63,7 +63,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
 
       context "when the risk assessment has not been subsequently updated" do
         it "returns the file blob metadata" do
-          expect(activity.metadata["risk_assessment"]["risk_assessment_file"]).to match(hash_including(risk_assessment.risk_assessment_file.blob.attributes.except("created_at", "updated_at")))
+          expect(JSON.parse(activity.metadata["risk_assessment"]["risk_assessment_file"].to_json)).to eq(JSON.parse(risk_assessment.risk_assessment_file.blob.attributes.to_json))
         end
 
         it "returns the updated_at of the risk assessment" do

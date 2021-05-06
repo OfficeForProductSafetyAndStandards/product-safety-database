@@ -25,8 +25,4 @@ class AuditActivity::RiskAssessment::RiskAssessmentAddedDecorator < ApplicationD
   def products_assessed
     object.products_assessed.collect(&:name).to_sentence
   end
-
-  def risk_assessment_file
-    object.risk_assessment_file&.filename
-  end
 end
