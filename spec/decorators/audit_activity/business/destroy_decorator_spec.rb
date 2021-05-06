@@ -8,7 +8,7 @@ RSpec.describe AuditActivity::Business::DestroyDecorator, :with_stubbed_elastics
       expect { audit_activity.migrate_to_metadata }
         .to change(audit_activity, :metadata)
               .from(nil)
-              .to("business" => { "trading_name" => "A business name" })
+              .to("business" => JSON.parse(audit_activity.business.attributes.to_json))
     end
   end
 end
