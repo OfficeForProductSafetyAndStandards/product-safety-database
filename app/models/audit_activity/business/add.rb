@@ -9,18 +9,32 @@ class AuditActivity::Business::Add < AuditActivity::Base
     raise "Deprecated - use AddBusinessToCase.call instead"
   end
 
-  def migrate_to_metadata
-    update!(
-      metadata: {
-        business: business.attributes,
-        investigation_business: {
-          relationship: body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].delete("\\")
-        }
-      }
-    )
+  def metadata
+    migrate_metadata_structure
   end
 
 private
 
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    return metadata if already_in_new_format?
+
+    JSON.parse({
+      "business" => business.attributes,
+      "investigation_business" => {
+        "relationship" => extract_relationship_from_body
+      }
+    }.to_json)
+  end
+
   def notify_relevant_users; end
+
+  def extract_relationship_from_body
+    body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].delete("\\")
+  end
+
+  def already_in_new_format?
+    self[:metadata]&.key?("business")
+  end
 end
