@@ -78,7 +78,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     click_link "Add new"
 
-    expect_to_be_on_add_supporting_information_page
+    expect_to_be_on_add_to_case_page
 
     choose "Accident or incident"
 
@@ -175,7 +175,7 @@ RSpec.feature "Adding an accident or incident to a case", :with_stubbed_elastics
 
     click_link "Add new"
 
-    expect_to_be_on_add_supporting_information_page
+    expect_to_be_on_add_to_case_page
 
     choose "Accident or incident"
 

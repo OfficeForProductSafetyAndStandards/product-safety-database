@@ -137,6 +137,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Products")
   end
 
+  def expect_to_be_on_add_product_to_investigation_page(investigation)
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products/new")
+    expect(page).to have_selector("h1", text: investigation.user_title)
+  end
+
   def expect_to_be_on_case_products_page
     expect(page).to have_selector("h1", text: "Products")
   end
@@ -163,6 +168,11 @@ module PageExpectations
   def expect_to_be_on_add_supporting_information_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/supporting-information/new")
     expect(page).to have_selector("h1", text: "What type of information are you adding?")
+  end
+
+  def expect_to_be_on_add_to_case_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/add-to-case")
+    expect(page).to have_selector("h1", text: "What are you adding to the case?")
   end
 
   def expect_to_be_on_add_attachment_to_a_case_upload_page
