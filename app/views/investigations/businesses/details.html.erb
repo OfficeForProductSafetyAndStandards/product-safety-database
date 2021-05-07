@@ -1,24 +1,24 @@
 <%= page_title "Add business to case", errors: @business.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back",
-    href: type_investigation_businesses_path(@investigation)
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: previous_wizard_path
   ) %>
 <% end %>
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(model: @business, scope: :business, url: investigation_businesses_path(@investigation), method: :post, local: true, html: { autocomplete: :off }) do |form| %>
+<%= form_with(model: @business,
+              url: wizard_path,
+              method: :put,
+              local: true,
+              html: { autocomplete: :off }) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= render "form_components/govuk_error_summary", form: form %>
       <%= render "investigation_heading", investigation: @investigation %>
 
       <h2 class="govuk-heading-m">Add business</h2>
-      <%= form.fields_for :investigation_businesses, form.object.investigation_businesses.first do |investigation_business_fields| %>
-        <%= investigation_business_fields.hidden_field :relationship %>
-        <%= investigation_business_fields.hidden_field :investigation_id, value: @investigation.id %>
-      <% end %>
       <%= render "businesses/form", form: form, business: @business, countries: @countries %>
     </div>
   </div>

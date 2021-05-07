@@ -139,12 +139,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :businesses, controller: "investigations/businesses", path_names: { new: :details, create: :details } do
-      collection do
-        get :type
-        post :type
-      end
-    end
+    resources :businesses, only: %i[index update show new create], controller: "investigations/businesses"
 
     resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"
     resources :emails, controller: "investigations/emails", only: :show, constraints: { id: /\d+/ }

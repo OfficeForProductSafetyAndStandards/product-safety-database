@@ -111,7 +111,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_text("Business added")
 
     expect(page.find("h3", text: "Business added"))
-      .to have_sibling(".govuk-body", text: "Role: other")
+      .to have_sibling(".govuk-body", text: "Role: Advertiser")
 
     expect(page)
       .to have_link("View business", href: /\/businesses\/(\d)+/)
