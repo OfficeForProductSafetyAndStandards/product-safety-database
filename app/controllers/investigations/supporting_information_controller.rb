@@ -19,8 +19,15 @@ module Investigations
       supporting_information_type_form
     end
 
+    def add_to_case
+      authorize investigation, :update?
+      @add_to_case_action = true
+      supporting_information_type_form
+    end
+
     def create
       authorize investigation, :update?
+      @add_to_case_action = params["add_to_case_action"].present?
       return render(:new) if supporting_information_type_form.invalid?
 
       case supporting_information_type_form.type
@@ -38,6 +45,10 @@ module Investigations
         redirect_to new_investigation_test_result_path(@investigation)
       when "risk_assessment"
         redirect_to new_investigation_risk_assessment_path(@investigation)
+      when "product"
+        redirect_to new_investigation_product_path(investigation)
+      when "business"
+        redirect_to new_investigation_business_path(investigation)
       end
     end
 
@@ -50,7 +61,13 @@ module Investigations
     end
 
     def supporting_information_type_form
-      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type])
+      options = if @add_to_case_action
+                  SupportingInformationTypeForm::MAIN_TYPES.merge({ product: "Product", business: "Business" })
+                else
+                  SupportingInformationTypeForm::MAIN_TYPES
+                end
+
+      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type], options: options)
     end
   end
 end

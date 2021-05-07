@@ -15,6 +15,8 @@ class SupportingInformationTypeForm
   AVAILABLE_TYPES = MAIN_TYPES.merge(GENERIC_TYPE)
 
   attribute :type
+  attribute :options
 
   validates_presence_of :type
+  validates_presence_of :options
 end
