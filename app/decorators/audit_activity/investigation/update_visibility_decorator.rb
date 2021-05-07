@@ -18,7 +18,7 @@ class AuditActivity::Investigation::UpdateVisibilityDecorator < ApplicationDecor
   end
 
   def user_name
-    User.find(source.user_id).name
+    source.user.name
   end
 
   def govuk_created_at

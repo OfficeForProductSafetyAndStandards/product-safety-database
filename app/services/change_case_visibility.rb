@@ -40,7 +40,7 @@ private
   end
 
   def send_notification_email
-    email_recipients.each do |recipient|
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
@@ -49,10 +49,6 @@ private
         email_subject
       ).deliver_later
     end
-  end
-
-  def email_recipients
-    (email_recipients_for_case_owner + email_recipients_for_case_creator).uniq
   end
 
   def email_subject
