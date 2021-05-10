@@ -23,7 +23,7 @@ private
 
     return metadata if already_in_new_format?
 
-    { "updates" => { "is_private" => title.match?(/\s+restricted$/im) } }
+    { "updates" => { "is_private" => [nil, title.match?(/\s+restricted$/im)] } }
   end
 
   # Do not send investigation_updated mail. This is handled by the ChangeCaseVisibility service
