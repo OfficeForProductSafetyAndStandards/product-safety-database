@@ -74,6 +74,11 @@ RSpec.describe RemoveBusinessFromCase, :with_elasticsearch, :with_test_queue_ada
   context "when searching for the business once removed from the case" do
     let(:records) { Business.full_search(ElasticsearchQuery.new(business.trading_name, {}, {})).records }
 
+    before do
+      business
+      Business.import refresh: :wait_for
+    end
+
     it "is searchable from the business index" do
       result
 
