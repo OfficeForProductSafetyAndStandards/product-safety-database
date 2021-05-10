@@ -9,6 +9,10 @@ class AuditActivity::Business::Destroy < AuditActivity::Base
     raise "Deprecated - use RemoveBusinessFromCase.call instead"
   end
 
+  def metadata
+    migrate_metadata_structure
+  end
+
 private
 
   def subtitle_slug
@@ -22,7 +26,7 @@ private
 
     return metadata if already_in_new_format?
 
-    # { business  }
+    JSON.parse({ business: business.attributes }.to_json)
   end
 
   def already_in_new_format?
