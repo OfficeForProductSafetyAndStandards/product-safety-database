@@ -39,11 +39,13 @@
 
   <% items.push divider: "Other" %>
 
-  <% items.push text: @opss_incident_management_team.name,
-                value: @opss_incident_management_team.id,
-                checked: investigation.owner == @opss_incident_management_team,
-                hint: { text: "For reporting serious risks to OPSS" }
-                %>
+  <% if @opss_incident_management_team %>
+    <% items.push text: @opss_incident_management_team.name,
+                  value: @opss_incident_management_team.id,
+                  checked: investigation.owner == @opss_incident_management_team,
+                  hint: { text: "For reporting serious risks to OPSS" }
+                  %>
+  <% end %>
 
   <% other_teams = capture do %>
     <%= render "investigations/ownership/owner_selection",
