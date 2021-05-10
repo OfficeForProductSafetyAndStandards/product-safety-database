@@ -14,8 +14,6 @@ class AddBusinessToCase
       investigation_business = business.investigation_businesses.build(investigation: investigation, relationship: relationship)
       business.save!
 
-      investigation.reload
-
       send_notification_email(
         create_audit_activity_for_business_added(business, investigation_business)
       )
