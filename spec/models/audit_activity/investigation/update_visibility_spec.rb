@@ -24,10 +24,22 @@ RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_ela
 
   describe "#metadata" do
     context "with legacy audit" do
-      subject(:audit_activity) { migrates the aud }
+      subject(:audit_activity) { create(:legacy_audit_investigation_visibility_status, title: title) }
 
-      it "populates the audit" do
+      context "with restricted status" do
+        let(:title) { "Allegation visibility\n            Restricted" }
 
+        it "populates the audit" do
+          expect(audit_activity.metadata).to eq("updates" => { "is_private" => true })
+        end
+      end
+
+      context "with unrestricted status" do
+        let(:title) { "Allegation visibility\n            Unrestricted" }
+
+        it "populates the audit" do
+          expect(audit_activity.metadata).to eq("updates" => { "is_private" => false })
+        end
       end
     end
   end
