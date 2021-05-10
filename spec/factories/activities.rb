@@ -38,4 +38,9 @@ FactoryBot.define do
     title { "A business name" }
     body { "Role: **fulfillment\\_house**" }
   end
+
+  factory :legacy_audit_investigation_visibility_status, class: "AuditActivity::Investigation::UpdateVisibility" do
+    investigation { create :allegation }
+    title { "Allegation visibility\n            restricted" }
+  end
 end
