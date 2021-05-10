@@ -172,12 +172,6 @@ class Investigation < ApplicationRecord
 
 private
 
-  def create_audit_activity_for_visibility
-    if saved_changes.key?(:is_private) || visibility_rationale.present?
-      AuditActivity::Investigation::UpdateVisibility.from(self)
-    end
-  end
-
   def creator_id
     creator_user&.id
   end
