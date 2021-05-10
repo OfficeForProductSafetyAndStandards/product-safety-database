@@ -10,9 +10,9 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   let!(:another_active_user_another_team) { create(:user, :activated, name: "another user in another team", organisation: user.organisation, team: create(:team)) }
   let!(:another_inactive_user_another_team) { create(:user, :inactive, organisation: user.organisation, team: create(:team)) }
   let!(:deleted_team) { create(:team, :deleted) }
-  let!(:opss_incident_management_team) { create(:team, name: "OPSS Incident Management") }
 
   before do
+    create(:team, name: "OPSS Incident Management")
     sign_in(user)
     visit "/cases/#{investigation.pretty_id}/assign/new"
   end
