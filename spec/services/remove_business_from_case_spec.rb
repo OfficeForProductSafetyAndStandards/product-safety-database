@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe RemoveBusinessFromCase, :with_test_queue_adapter do
+RSpec.describe RemoveBusinessFromCase, :with_elasticsearch, :with_test_queue_adapter do
   subject(:result) { described_class.call({ business: business, reason: reason }.merge(common_context)) }
 
   let(:business)                 { create(:business) }
@@ -13,7 +13,7 @@ RSpec.describe RemoveBusinessFromCase, :with_test_queue_adapter do
   let(:reason)                   { Faker::Hipster.sentence }
 
   describe "#call" do
-    context "with stubbed elasticsearch", :with_stubbed_elasticsearch do
+    context "with stubbed elasticsearch" do
       def expected_email_subject
         "Allegation updated"
       end
@@ -71,10 +71,8 @@ RSpec.describe RemoveBusinessFromCase, :with_test_queue_adapter do
     end
   end
 
-  context "when searching for the business once removed from the case", :with_elasticsearch do
+  context "when searching for the business once removed from the case" do
     let(:records) { Business.full_search(ElasticsearchQuery.new(business.trading_name, {}, {})).records }
-
-    before { Business.import refresh: :wait_for }
 
     it "is searchable from the business index" do
       result

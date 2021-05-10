@@ -45,7 +45,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-    expect(page).to have_text('Please enter a business type "Other"')
+    expect(page).to have_error_summary('Please enter a business type "Other"')
 
     choose "Other" # This shouldn't need to be re-selected, but currently does.
     fill_in "Other type", with: "Advertiser"
@@ -53,6 +53,9 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_details_page
+
+    click_on "Save business"
+    expect(page).to have_error_summary("Trading name cannot be blank")
 
     within_fieldset "Business details" do
       fill_in "Registered or legal name", with: business_details
@@ -108,7 +111,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_text("Business added")
 
     expect(page.find("h3", text: "Business added"))
-      .to have_sibling(".govuk-body", text: "Role: other")
+      .to have_sibling(".govuk-body", text: "Role: Advertiser")
 
     expect(page)
       .to have_link("View business", href: /\/businesses\/(\d)+/)

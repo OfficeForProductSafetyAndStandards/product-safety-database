@@ -119,6 +119,7 @@ Rails.application.routes.draw do
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
     resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
+    get "add-to-case", to: "investigations/supporting_information#add_to_case", as: "add_to_case"
 
     resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
 
@@ -138,11 +139,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :businesses, controller: "investigations/businesses", path_names: { new: :details, create: :details } do
-      collection do
-        get :type
-        post :type
-      end
+    resources :businesses, only: %i[index update show new create destroy], controller: "investigations/businesses" do
+      member { get :remove }
     end
 
     resources :phone_calls, controller: "investigations/phone_calls", only: :show, constraints: { id: /\d+/ }, path: "phone-calls"

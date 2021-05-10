@@ -9,10 +9,6 @@ RSpec.describe AddBusinessToCase, :with_stubbed_elasticsearch, :with_test_queue_
   let(:creator)       { user }
   let(:owner)         { user }
 
-  before do
-    business.investigation_businesses.build(investigation: investigation)
-  end
-
   describe ".call" do
     def expected_email_subject
       "Business added"

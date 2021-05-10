@@ -11,7 +11,7 @@
 
     <% if policy(@investigation).update?(user: current_user) %>
       <p class="govuk-body">
-        <%= link_to "Add business", type_investigation_businesses_path(@investigation) %>
+        <%= link_to "Add business", new_investigation_business_path(@investigation) %>
       </p>
     <% end %>
 
@@ -44,7 +44,7 @@
           <br />
           <%= link_with_hidden_text_to "Remove business",
                  "(#{ib.business.trading_name})",
-           investigation_business_path(@investigation, ib.business),
+           remove_investigation_business_path(@investigation, ib.business),
            class: "govuk-link app-block-link" %>
         </div>
       <% end %>

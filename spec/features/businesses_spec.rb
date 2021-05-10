@@ -42,7 +42,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
   scenario "displays cases for business" do
     investigation = create(:allegation, :with_business, business_to_add: business_one)
     visit "/businesses/#{business_one.id}"
-    save_page
+
     within ".psd-case-card" do
       expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
     end
