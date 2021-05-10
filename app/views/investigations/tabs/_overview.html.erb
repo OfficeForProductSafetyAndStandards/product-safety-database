@@ -31,12 +31,6 @@
       rows: risks_and_issues_rows(@investigation, current_user)
     ) %>
 
-    <% if @investigation.complainant %>
-      <%= govuk_hr %>
-      <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
-      <%= @investigation.source_details_summary_list(policy(@investigation).view_protected_details?) %>
-    <% end %>
-
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Safety and compliance</h2>
 
@@ -44,6 +38,13 @@
     classes: "govuk-summary-list--no-border app-summary-list--actions-on-own-line",
     rows: safety_and_compliance_rows(@investigation, current_user)
     ) %>
+    
+    <% if @investigation.complainant %>
+      <%= govuk_hr %>
+      <h2 class="govuk-heading-m"><%= @investigation.type.demodulize.upcase_first %></h2>
+      <%= @investigation.source_details_summary_list(policy(@investigation).view_protected_details?) %>
+    <% end %>
+
 
     <%= govuk_hr %>
     <h2 class="govuk-heading-m">Sharing and collaboration</h2>
@@ -58,11 +59,12 @@
       } %>
       <% case_restriction_actions = {
         items: [
-          href: visibility_investigation_path(@investigation),
+          href: investigation_visibility_path(@investigation),
           text: "Change",
           visuallyHiddenText: "case restriction"
         ]
-      } %>
+      }
+      %>
     <% else %>
       <% case_owner_actions = {} %>
       <% case_restriction_actions = {} %>

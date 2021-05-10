@@ -67,6 +67,9 @@ en:
   change_case_status:
     email_subject_text: "%{case_type} was %{status}"
     email_update_text: "%{case_type} was %{status} by %{name}."
+  change_case_visibility:
+    email_subject_text: "%{case_type} was %{visibility}"
+    email_update_text: "%{case_type} was %{visibility} by %{name}."
   change_risk_validation:
     validated: "has been validated"
     validation_removed: "has had validation removed"
@@ -219,6 +222,18 @@ en:
         label: "Why are you re-opening the case?"
         hint: "For example, the business responsible needs to take further action."
         action: "Re-open case"
+    visibility:
+      updated: "%{case_type} has been %{status}"
+      show: "%{future_status} case"
+      why: "Why is this case being %{future_status}ed?"
+      restrict:
+        title: "Restrict this case"
+        label: "Why is the case being restricted?"
+        action: "Restrict this case"
+      unrestrict:
+        title: "Unrestrict this case"
+        label: "Why is the case being unrestricted?"
+        action: "Unrestrict this case"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
@@ -234,6 +249,9 @@ en:
           false: "The case is not related to the coronavirus outbreak."
       update_status:
         title: "%{case_type} %{status}"
+        subtitle: "by %{user_name}, %{date}"
+      update_visibility:
+        title: "%{case_type} %{visibility}"
         subtitle: "by %{user_name}, %{date}"
       risk_level_updated:
         title:
@@ -311,7 +329,7 @@ en:
         reopen_case: "Re-open case"
         change_case_visibility:
           restricted: "Unrestrict this case"
-          not_restricted: "Restrict this case"
+          unrestricted: "Restrict this case"
         change_case_risk_level:
           not_set: Set risk level
           set: Change risk level
