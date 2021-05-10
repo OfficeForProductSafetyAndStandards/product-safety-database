@@ -30,7 +30,7 @@ RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_ela
         let(:title) { "Allegation visibility\n            Restricted" }
 
         it "populates the audit" do
-          expect(audit_activity.metadata).to eq("updates" => { "is_private" => true })
+          expect(audit_activity.metadata).to eq("updates" => { "is_private" => [nil, true] })
         end
       end
 
@@ -38,7 +38,7 @@ RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_ela
         let(:title) { "Allegation visibility\n            Unrestricted" }
 
         it "populates the audit" do
-          expect(audit_activity.metadata).to eq("updates" => { "is_private" => false })
+          expect(audit_activity.metadata).to eq("updates" => { "is_private" => [nil, false] })
         end
       end
     end
