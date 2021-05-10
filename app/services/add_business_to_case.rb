@@ -10,8 +10,11 @@ class AddBusinessToCase
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
     Business.transaction do
-      business.primary_location&.assign_attributes(name: "Registered office address", source: UserSource.new(user: user))
+      Business.primary_location&.assign_attributes(name: "Registered office address", source: UserSource.new(user: user))
 
+      business.investigation_businesses.each do |ib|
+        ap ib
+      end
       business.save!
 
       investigation.reload
