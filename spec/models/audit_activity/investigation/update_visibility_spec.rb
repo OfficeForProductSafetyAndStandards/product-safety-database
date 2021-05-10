@@ -14,11 +14,11 @@ RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_ela
   describe ".build_metadata" do
     it "returns a Hash of the arguments" do
       expect(metadata).to eq({
-                               updates: {
-                                 "is_private" => [false, true]
-                               },
-                               rationale: rationale
-                             })
+        updates: {
+          "is_private" => [false, true]
+        },
+        rationale: rationale
+      })
     end
   end
 
