@@ -96,8 +96,6 @@ Rails.application.routes.draw do
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
-      get :visibility
-      patch :visibility
       get :created
     end
 
@@ -106,6 +104,14 @@ Rails.application.routes.draw do
       get :reopen
       patch :close
       patch :reopen
+    end
+
+    resource :visibility, only: %i[], controller: "investigations/visibility" do
+      get :show
+      get :restrict
+      get :unrestrict
+      patch :restrict
+      patch :unrestrict
     end
 
     resource :summary, only: %i[edit update], controller: "investigations/summary"
