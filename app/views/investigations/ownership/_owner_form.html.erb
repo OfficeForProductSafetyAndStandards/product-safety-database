@@ -8,6 +8,8 @@
     end
   %>
 
+  <% items.unshift divider: "Your team" %>
+
   <% someone_in_your_team = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,
@@ -22,7 +24,11 @@
                value: "someone_in_your_team",
                conditional: { html: someone_in_your_team } %>
 
-  <% items.push divider: "Teams" %>
+  <% items.push text: current_user.team.name,
+                value: current_user.team.id,
+                checked: investigation.owner == current_user.team %>
+
+  <% items.push divider: "Other teams added to the case" %>
 
   <%
     teams = @selectable_teams.map do |team|
@@ -30,6 +36,14 @@
     end
   %>
   <% items.concat teams %>
+
+  <% items.push divider: "Other" %>
+
+  <% items.push text: @opss_incident_management_team.name,
+                value: @opss_incident_management_team.id,
+                checked: investigation.owner == @opss_incident_management_team,
+                hint: { text: "For reporting serious risks to OPSS" }
+                %>
 
   <% other_teams = capture do %>
     <%= render "investigations/ownership/owner_selection",
@@ -42,8 +56,6 @@
   <% end %>
   <% items.push text: "Other team", value: "other_team", conditional: { html: other_teams } %>
 
-  <% items.push divider: "or" %>
-
   <% someone_else = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,
@@ -54,7 +66,7 @@
   <% end %>
   <% items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else } %>
 
-  <%= render "form_components/govuk_radios", form: form, key: :owner_id, items: items %>
+  <%= render "form_components/govuk_radios", form: form, key: :owner_id, items: items, classes: "opss-radios__divider--title" %>
 
   <div class="govuk-form-group">
     <%= form.submit "Continue", class: "govuk-button" %>
