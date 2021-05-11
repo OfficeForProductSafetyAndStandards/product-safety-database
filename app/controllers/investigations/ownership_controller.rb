@@ -79,14 +79,20 @@ private
   end
 
   def get_potential_assignees
-    
-
-
-
+    @other_teams_added_to_case = Team.find(@investigation.collaboration_accesses.where.not(type: "Collaboration::Access::OwnerTeam").map(&:collaborator_id))
     @selectable_users = [@investigation.owner_user, current_user].uniq.compact
     @team_members = current_user.team.users.active.includes(:team)
     @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team].flatten.uniq.compact
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
+    @default_opss_teams = default_opss_teams
+  end
+
+  def default_opss_teams
+    if current_user.is_opss?
+      Team.where("name IN (?)", ["OPSS Enforcement", "OPSS Incident Management", "OPSS Trading Standards Co-ordination"])
+    else
+      Team.find_by(name: "OPSS Incident Management")
+    end
   end
 end

@@ -7,7 +7,6 @@
   <% items << { divider: "Your team"} %>
 
   <% your_team_items = [current_user, @investigation.owner.object, current_user.team].uniq %>
-  <% byebug %>
   <% your_team_items.each { |user| items << {text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user} } %>
   <% someone_in_your_team = capture do %>
     <%= render "investigations/ownership/owner_selection",
@@ -22,25 +21,20 @@
                 value: "someone_in_your_team",
                 conditional: { html: someone_in_your_team } %>
 
-  <% items << { divider: "YO" } %>
-
+  <% items << { divider: "Other teams added to the case" } %>
   <%
-    @selectable_users.each do |user|
-      items << { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
+    teams = @other_teams_added_to_case.each do |team|
+      items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
     end
   %>
 
-
-
-
-  <% items.push divider: "Teams" %>
+  <% items.push divider: "Other" %>
 
   <%
-    teams = @selectable_teams.map do |team|
-      { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
+    teams = @default_opss_teams.each do |team|
+      items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
     end
   %>
-  <% items.concat teams %>
 
   <% other_teams = capture do %>
     <%= render "investigations/ownership/owner_selection",
@@ -52,8 +46,6 @@
     %>
   <% end %>
   <% items.push text: "Other team", value: "other_team", conditional: { html: other_teams } %>
-
-  <% items.push divider: "or" %>
 
   <% someone_else = capture do %>
     <%= render "investigations/ownership/owner_selection",
