@@ -244,9 +244,15 @@ module PageExpectations
     expect(page).to have_h1("You cannot send an alert about a restricted case")
   end
 
-  def expect_to_be_on_case_visiblity_page(case_id:)
+  def expect_to_be_on_case_visiblity_page(case_id:, status:, action:)
     expect(page).to have_current_path("/cases/#{case_id}/visibility")
-    expect(page).to have_h1("Legal privilege")
+    expect(page).to have_h1("#{action.capitalize} case")
+    expect(page).to have_content("This case is currently #{status}.")
+  end
+
+  def expect_to_be_on_change_case_visiblity_page(case_id:, future_status:, action:)
+    expect(page).to have_current_path("/cases/#{case_id}/visibility/#{action}")
+    expect(page).to have_css(".govuk-label--l", text: "Why is the case being #{future_status}?")
   end
 
   def expect_to_be_on_record_test_result_page
