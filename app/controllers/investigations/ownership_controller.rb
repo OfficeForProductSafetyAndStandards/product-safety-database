@@ -79,6 +79,10 @@ private
   end
 
   def get_potential_assignees
+    
+
+
+
     @selectable_users = [@investigation.owner_user, current_user].uniq.compact
     @team_members = current_user.team.users.active.includes(:team)
     @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team].flatten.uniq.compact

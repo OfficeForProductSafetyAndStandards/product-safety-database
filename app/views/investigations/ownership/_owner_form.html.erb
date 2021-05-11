@@ -2,12 +2,13 @@
   <%= render "form_components/govuk_error_summary", form: form %>
   <%= yield %>
 
-  <%
-    items = @selectable_users.map do |user|
-      { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
-    end
-  %>
+  <% items = [] %>
 
+  <% items << { divider: "Your team"} %>
+
+  <% your_team_items = [current_user, @investigation.owner.object, current_user.team].uniq %>
+  <% byebug %>
+  <% your_team_items.each { |user| items << {text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user} } %>
   <% someone_in_your_team = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,
@@ -17,10 +18,20 @@
       show_all_values: true
     %>
   <% end %>
-
   <% items.push text: "Someone in your team",
-               value: "someone_in_your_team",
-               conditional: { html: someone_in_your_team } %>
+                value: "someone_in_your_team",
+                conditional: { html: someone_in_your_team } %>
+
+  <% items << { divider: "YO" } %>
+
+  <%
+    @selectable_users.each do |user|
+      items << { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
+    end
+  %>
+
+
+
 
   <% items.push divider: "Teams" %>
 
