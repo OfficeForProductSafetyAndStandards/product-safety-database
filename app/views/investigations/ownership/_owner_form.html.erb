@@ -6,8 +6,7 @@
 
   <% items << { divider: "Your team"} %>
 
-  <% your_team_items = [current_user, @investigation.owner.object, current_user.team].uniq %>
-  <% your_team_items.each { |user| items << {text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user} } %>
+  <% @current_user_and_owner.each { |user| items << {text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user} } %>
   <% someone_in_your_team = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,

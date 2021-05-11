@@ -79,12 +79,11 @@ private
   end
 
   def get_potential_assignees
-    @other_teams_added_to_case = Team.find(@investigation.collaboration_accesses.where.not(type: "Collaboration::Access::OwnerTeam").map(&:collaborator_id))
-    @selectable_users = [@investigation.owner_user, current_user].uniq.compact
+    @current_user_and_owner = [current_user, @investigation.owner.object, current_user.team].uniq
     @team_members = current_user.team.users.active.includes(:team)
-    @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team].flatten.uniq.compact
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
+    @other_teams_added_to_case = Team.find(@investigation.collaboration_accesses.where.not(type: "Collaboration::Access::OwnerTeam").map(&:collaborator_id))
     @default_opss_teams = default_opss_teams
   end
 
