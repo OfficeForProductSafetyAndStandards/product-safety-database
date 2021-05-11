@@ -72,7 +72,7 @@ group :test do
   gem "capybara", "~> 3.35"
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
-  gem "factory_bot_rails", "~> 6.1"
+  gem "factory_bot_rails", "~> 6.2"
   gem "faker", "~> 2.17"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
