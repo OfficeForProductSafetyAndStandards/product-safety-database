@@ -87,7 +87,8 @@ private
         query: query,
         fields: @exact_fields,
         type: "phrase",
-        fuzzy_transpositions: "false"
+        fuzzy_transpositions: "false",
+        operator: "and"
       }
     }
   end
@@ -97,7 +98,8 @@ private
       multi_match: {
         query: query,
         fields: @fuzzy_fields,
-        fuzziness: "AUTO"
+        fuzziness: "AUTO",
+        operator: "and"
       }
     }
   end
