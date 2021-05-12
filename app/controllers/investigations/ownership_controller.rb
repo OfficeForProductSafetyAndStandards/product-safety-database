@@ -91,7 +91,7 @@ private
     if current_user.is_opss?
       Team.where("name IN (?)", ["OPSS Enforcement", "OPSS Incident Management", "OPSS Trading Standards Co-ordination", "OPSS Operational support unit"])
     else
-      Team.find_by(name: "OPSS Incident Management")
+      Team.where(name: "OPSS Incident Management")
     end
   end
 end

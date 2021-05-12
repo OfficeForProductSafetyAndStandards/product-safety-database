@@ -11,73 +11,154 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   let!(:another_inactive_user_another_team) { create(:user, :inactive, organisation: user.organisation, team: create(:team)) }
   let!(:deleted_team) { create(:team, :deleted) }
 
-  before do
-    sign_in(user)
-    visit "/cases/#{investigation.pretty_id}/assign/new"
+  context "when user is not opss" do
+    before do
+      create_opss_teams
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/assign/new"
+    end
+
+    scenario "does not show inactive users or teams" do
+      expect(page).to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_active_user.id}\"]")
+      expect(page).not_to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_inactive_user.id}\"]")
+
+      expect(page).to have_css("#change_case_owner_form_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
+      expect(page).not_to have_css("#change_case_owner_form_select_other_team option[value=\"#{deleted_team.id}\"]")
+
+      expect(page).to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
+      expect(page).not_to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
+    end
+
+    scenario "shows OPSS management team" do
+      expect(page).to have_field("OPSS Incident Management")
+      # expect(find_field("OPSS Incident Management")).to eq true
+    end
+
+    scenario "does not show OPSS Trading Standards Co-ordination team" do
+      expect(page).not_to have_field("OPSS Trading Standards Co-ordination")
+    end
+
+    scenario "does not show OPSS Enforcement team" do
+      expect(page).not_to have_field("OPSS Enforcement")
+    end
+
+    scenario "does not show OPSS Operational support unit team" do
+      expect(page).not_to have_field("OPSS Operational support unit")
+    end
+
+    scenario "has current owner pre-selected" do
+      expect(page).to have_checked_field(user.name)
+    end
+
+    scenario "change owner to the same user" do
+      choose user.name
+      click_button "Continue"
+
+      fill_and_submit_change_owner_reason_form
+
+      expect_page_to_show_case_owner(user)
+    end
+
+    scenario "change owner to other user in same team" do
+      # Test validation errors
+      choose("Someone in your team")
+
+      click_button "Continue"
+
+      expect(page).to have_summary_error("Select case owner")
+
+      choose("Someone in your team")
+      select another_active_user.name, from: "change_case_owner_form_select_team_member"
+      click_button "Continue"
+
+      fill_and_submit_change_owner_reason_form
+
+      expect_confirmation_banner("Allegation owner changed to " + another_active_user.name)
+      expect_page_to_show_case_owner(another_active_user)
+      expect_activity_page_to_show_case_owner_changed_to(another_active_user)
+    end
+
+    scenario "change owner to your team" do
+      choose user.team.name
+      click_button "Continue"
+
+      fill_and_submit_change_owner_reason_form
+
+      expect_confirmation_banner("Allegation owner changed to " + user.team.name)
+      expect_page_to_show_case_owner(user.team)
+      expect_activity_page_to_show_case_owner_changed_to(user.team)
+    end
+
+    scenario "a case owned by someone else in another team can no longer have ownership changed by original owner" do
+      choose("Someone else")
+      select another_active_user_another_team.name, from: "change_case_owner_form_select_someone_else"
+      click_button "Continue"
+
+      fill_and_submit_change_owner_reason_form
+
+      expect_page_to_show_case_owner(another_active_user_another_team)
+      expect_activity_page_to_show_case_owner_changed_to(another_active_user_another_team)
+
+      click_link "Overview"
+      expect(page).not_to have_link("Change owner")
+    end
   end
 
-  scenario "does not show inactive users or teams" do
-    expect(page).to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_active_user.id}\"]")
-    expect(page).not_to have_css("#change_case_owner_form_select_team_member option[value=\"#{another_inactive_user.id}\"]")
+  context "when user is opss" do
+    before do
+      create_opss_teams
+      user.roles.create!(name: "opss")
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/assign/new"
+    end
 
-    expect(page).to have_css("#change_case_owner_form_select_other_team option[value=\"#{another_active_user_another_team.team.id}\"]")
-    expect(page).not_to have_css("#change_case_owner_form_select_other_team option[value=\"#{deleted_team.id}\"]")
+    scenario "shows OPSS management team" do
+      expect(page).to have_field("OPSS Incident Management")
+      # expect(find_field("OPSS Incident Management")).to eq true
+    end
 
-    expect(page).to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_active_user_another_team.id}\"]")
-    expect(page).not_to have_css("#change_case_owner_form_select_someone_else option[value=\"#{another_inactive_user_another_team.id}\"]")
+    scenario "shows OPSS Trading Standards Co-ordination team" do
+      expect(page).to have_field("OPSS Trading Standards Co-ordination")
+    end
+
+    scenario "shows OPSS Enforcement team" do
+      expect(page).to have_field("OPSS Enforcement")
+    end
+
+    scenario "shows OPSS Operational support unit team" do
+      expect(page).to have_field("OPSS Operational support unit")
+    end
   end
 
-  scenario "change owner to the same user" do
-    choose user.name
-    click_button "Continue"
+  context "when investigation has other teams added to the case" do
+    let(:other_team) { create(:team) }
 
-    fill_and_submit_change_owner_reason_form
+    before do
+      AddTeamToCase.call(
+        team: other_team,
+        message: 'na',
+        investigation: investigation,
+        collaboration_class: Collaboration::Access::Edit,
+        user: user,
+        silent: true
+      )
+    end
 
-    expect_page_to_show_case_owner(user)
+    scenario "shows other teams in the `Other teams added to the case` section" do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/assign/new"
+      expect(page).to have_css(".govuk-radios__divider", text: "Other teams added to the case")
+    end
   end
 
-  scenario "change owner to other user in same team" do
-    # Test validation errors
-    choose("Someone in your team")
+  context "when investigation has no other teams added to the case" do
+    let(:other_team) { create(:team) }
 
-    click_button "Continue"
-
-    expect(page).to have_summary_error("Select case owner")
-
-    choose("Someone in your team")
-    select another_active_user.name, from: "change_case_owner_form_select_team_member"
-    click_button "Continue"
-
-    fill_and_submit_change_owner_reason_form
-
-    expect_confirmation_banner("Allegation owner changed to " + another_active_user.name)
-    expect_page_to_show_case_owner(another_active_user)
-    expect_activity_page_to_show_case_owner_changed_to(another_active_user)
-  end
-
-  scenario "change owner to your team" do
-    choose user.team.name
-    click_button "Continue"
-
-    fill_and_submit_change_owner_reason_form
-
-    expect_confirmation_banner("Allegation owner changed to " + user.team.name)
-    expect_page_to_show_case_owner(user.team)
-    expect_activity_page_to_show_case_owner_changed_to(user.team)
-  end
-
-  scenario "a case owned by someone else in another team can no longer have ownership changed by original owner" do
-    choose("Someone else")
-    select another_active_user_another_team.name, from: "change_case_owner_form_select_someone_else"
-    click_button "Continue"
-
-    fill_and_submit_change_owner_reason_form
-
-    expect_page_to_show_case_owner(another_active_user_another_team)
-    expect_activity_page_to_show_case_owner_changed_to(another_active_user_another_team)
-
-    click_link "Overview"
-    expect(page).not_to have_link("Change owner")
+    scenario "does not show `Other teams added to the case` section" do
+      sign_in(user)
+      visit "/cases/#{investigation.pretty_id}/assign/new"
+      expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
+    end
   end
 
   def fill_and_submit_change_owner_reason_form
@@ -93,5 +174,11 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     click_link "Activity"
     expect(page).to have_css("h3", text: "Case owner changed to #{owner.name}")
     expect(page).to have_css("p", text: "Test assign")
+  end
+
+  def create_opss_teams
+    ["OPSS Enforcement", "OPSS Incident Management", "OPSS Trading Standards Co-ordination", "OPSS Operational support unit"].each do |name|
+      create(:team, name: name)
+    end
   end
 end
