@@ -138,6 +138,7 @@ RSpec.feature "Adding a risk assessment to a case", :with_stubbed_elasticsearch,
     expect(page).to have_text("Risk level: Serious risk")
     expect(page).to have_text("Assessed by: MyCouncil Trading Standards")
     expect(page).to have_text("Product assessed: MyBrand washing machine model X")
+    expect(page).to have_text("Attached: new_risk_assessment.txt")
     expect(page).to have_text("Further details: Products risk-assessed in response to incident.")
 
     expect(page).to have_link("View risk assessment")
