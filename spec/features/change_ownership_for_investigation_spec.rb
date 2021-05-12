@@ -137,7 +137,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     before do
       AddTeamToCase.call(
         team: other_team_with_edit_access,
-        message: 'na',
+        message: "na",
         investigation: investigation,
         collaboration_class: Collaboration::Access::Edit,
         user: user,
@@ -146,7 +146,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
 
       AddTeamToCase.call(
         team: other_team_with_read_only_access,
-        message: 'na',
+        message: "na",
         investigation: investigation,
         collaboration_class: Collaboration::Access::ReadOnly,
         user: user,
