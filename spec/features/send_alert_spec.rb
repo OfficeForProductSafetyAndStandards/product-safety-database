@@ -96,6 +96,6 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
     expect(page).to have_text("Email alerts can only be sent for cases that are not restricted. To send an alert about this case you need to unrestrict it.")
 
     click_link "Change case visibility"
-    expect_to_be_on_case_visiblity_page(case_id: restricted_investigation.pretty_id)
+    expect_to_be_on_case_visiblity_page(case_id: restricted_investigation.pretty_id, status: "restricted", action: "unrestrict")
   end
 end
