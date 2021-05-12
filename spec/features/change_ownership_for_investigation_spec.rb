@@ -131,14 +131,24 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
   end
 
   context "when investigation has other teams added to the case" do
-    let(:other_team) { create(:team) }
+    let(:other_team_with_edit_access) { create(:team) }
+    let(:other_team_with_read_only_access) { create(:team) }
 
     before do
       AddTeamToCase.call(
-        team: other_team,
+        team: other_team_with_edit_access,
         message: 'na',
         investigation: investigation,
         collaboration_class: Collaboration::Access::Edit,
+        user: user,
+        silent: true
+      )
+
+      AddTeamToCase.call(
+        team: other_team_with_read_only_access,
+        message: 'na',
+        investigation: investigation,
+        collaboration_class: Collaboration::Access::ReadOnly,
         user: user,
         silent: true
       )
@@ -148,6 +158,8 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
       expect(page).to have_css(".govuk-radios__divider", text: "Other teams added to the case")
+      expect(page).to have_field(other_team_with_edit_access.name)
+      expect(page).to have_field(other_team_with_read_only_access.name)
     end
   end
 
@@ -157,6 +169,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     scenario "does not show `Other teams added to the case` section" do
       sign_in(user)
       visit "/cases/#{investigation.pretty_id}/assign/new"
+      expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
       expect(page).not_to have_css(".govuk-radios__divider", text: "Other teams added to the case")
     end
   end
