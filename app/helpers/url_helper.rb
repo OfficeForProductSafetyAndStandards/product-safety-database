@@ -4,7 +4,7 @@ module UrlHelper
   # an Investigation subclass. This is a sticky plaster on a crazy design.
   #
   def path_for_model(object, *slug)
-    slug = Array(slug)
+    slug = Array(slug).compact.map(&:to_sym)
 
     if object.is_a?(Investigation)
       model = :investigation
