@@ -464,6 +464,14 @@ module InvestigationsHelper
       {
         path: new_investigation_new_path(investigation),
         text: "Other document or attachment"
+      },
+      {
+        path: new_investigation_product_path(investigation),
+        text: "Product"
+      },
+      {
+        path: new_investigation_business_path(investigation),
+        text: "Business"
       }
 
     ]
@@ -483,7 +491,7 @@ module InvestigationsHelper
 
     if policy(investigation).change_owner_or_status?
 
-      visibility_status = investigation.is_private? ? "restricted" : "not_restricted"
+      visibility_status = investigation.is_private? ? "restricted" : "unrestricted"
       risk_level_status = investigation.risk_level ? "set" : "not_set"
 
       actions << if investigation.is_closed?
@@ -504,7 +512,7 @@ module InvestigationsHelper
       }
 
       actions << {
-        path: visibility_investigation_path(@investigation),
+        path: investigation_visibility_path(@investigation),
         text: I18n.t("change_case_visibility.#{visibility_status}", scope: "forms.investigation_actions.actions")
       }
 

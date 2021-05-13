@@ -35,3 +35,13 @@ cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && ID=<id> 
 ```
 
 Case collaborations and users which belong to the team identified by `ID` will be migrated to another team identified by `NEW_TEAM_ID`. The user identified by `EMAIL` will be attributed to the change on all relevant audit activity.
+
+## Migrating audit activity metadata
+
+Sometimes we need to update the structure of metadata stored against an activity type. We provide a task which can be used instead of ActiveRecord migrations to more safely migrate the data asynchronously to avoid problems with deployment timeouts and multiple versions of the code resulting in errors.
+
+```bash
+cf run-task psd-web --command "export \$(./env/get-env-from-vcap.sh) && CLASS_NAME=<activity class name> rake activities:update_metadata" --name <task name> -k 2G
+```
+
+To implement a conversion, override the `metadata` getter method on the class being changed to return legacy activity metadata in the new format. This task will invoke the overridden getter method and update each instance with the new structure.
