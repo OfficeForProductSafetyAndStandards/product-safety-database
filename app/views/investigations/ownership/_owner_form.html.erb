@@ -4,21 +4,17 @@
 
   <% items = [] %>
 
-  <% items << { divider: "Your team"} %>
-
-  <% @current_user_and_owner.each { |user| items << { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user } } %>
-  <% someone_else_in_your_team = capture do %>
-    <%= render "investigations/ownership/owner_selection",
-      form: form,
-      key: :select_team_member,
-      items: @team_members,
-      label: "Select team member",
-      show_all_values: true
-    %>
+  <% someone_else_in_your_team_dropdown = capture do %>
+  <%= render "investigations/ownership/owner_selection",
+  form: form,
+  key: :select_team_member,
+  items: @team_members,
+  label: "Select team member",
+  show_all_values: true
+  %>
   <% end %>
-  <% items.insert(3, text: "Someone else in your team",
-                     value: "someone_else_in_your_team",
-                     conditional: { html: someone_else_in_your_team }) %>
+
+  <% items = add_your_team_values(items, investigation, someone_else_in_your_team_dropdown) %>
 
   <% unless @other_teams_added_to_case.empty? %>
     <% items << { divider: "Other teams added to the case" } %>
