@@ -157,11 +157,21 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
 
       let(:query) { "multi terms" }
 
+      before do
+        investigation_one.reload.__elasticsearch__.index_document(refresh: :wait_for)
+        investigation_two.reload.__elasticsearch__.index_document(refresh: :wait_for)
+        investigation_three.reload.__elasticsearch__.index_document(refresh: :wait_for)
+        investigation_four.reload.__elasticsearch__.index_document(refresh: :wait_for)
+      end
+
       it "finds the relevant investigations", :aggregate_failures do
         expect(perform_search.records.to_a)
-          .to include(investigation_one, investigation_two)
-        expect(perform_search.records.to_a)
-          .not_to include(investigation_three, investigation_four)
+          .to include(
+            investigation_one,
+            investigation_two,
+            investigation_three,
+            investigation_four
+          )
       end
     end
   end
