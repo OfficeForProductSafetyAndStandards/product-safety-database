@@ -16,9 +16,9 @@
       show_all_values: true
     %>
   <% end %>
-  <% items.insert(-2, text: "Someone else in your team",
-                      value: "someone_else_in_your_team",
-                      conditional: { html: someone_else_in_your_team }) %>
+  <% items.insert(3, text: "Someone else in your team",
+                     value: "someone_else_in_your_team",
+                     conditional: { html: someone_else_in_your_team }) %>
 
   <% unless @other_teams_added_to_case.empty? %>
     <% items << { divider: "Other teams added to the case" } %>
