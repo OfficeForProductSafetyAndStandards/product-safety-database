@@ -86,7 +86,7 @@ private
       multi_match: {
         query: query,
         fields: @exact_fields,
-        type: "phrase",
+        type: "cross_fields",
         fuzzy_transpositions: "false",
         operator: "and"
       }
@@ -99,7 +99,7 @@ private
         query: query,
         fields: @fuzzy_fields,
         fuzziness: "AUTO",
-        operator: "and"
+        operator: "or"
       }
     }
   end
