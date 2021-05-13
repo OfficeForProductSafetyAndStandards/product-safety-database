@@ -61,13 +61,13 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
 
     scenario "change owner to other user in same team" do
       # Test validation errors
-      choose("Someone in your team")
+      choose("Someone else in your team")
 
       click_button "Continue"
 
       expect(page).to have_summary_error("Select case owner")
 
-      choose("Someone in your team")
+      choose("Someone else in your team")
       select another_active_user.name, from: "change_case_owner_form_select_team_member"
       click_button "Continue"
 
