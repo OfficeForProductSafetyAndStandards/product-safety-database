@@ -2,7 +2,7 @@ class InvestigationsController < ApplicationController
   include InvestigationsHelper
 
   before_action :set_search_params, only: %i[index]
-  before_action :set_investigation, only: %i[show status visibility created]
+  before_action :set_investigation, only: %i[show created]
   before_action :build_breadcrumbs, only: %i[show]
 
   # GET /cases
@@ -58,21 +58,6 @@ class InvestigationsController < ApplicationController
     end
   end
 
-  # GET /cases/1/status
-  # PATCH /cases/1/status
-  def status
-    authorize @investigation, :change_owner_or_status?
-    @investigation.date_closed = update_params[:is_closed] == "true" ? Date.current : nil
-    update!
-  end
-
-  # GET /cases/1/visibility
-  # PATCH /cases/1/visibility
-  def visibility
-    authorize @investigation, :change_owner_or_status?
-    update!
-  end
-
   def created
     authorize @investigation, :view_non_protected_details?
   end
@@ -110,7 +95,7 @@ private
   end
 
   def editable_keys
-    %i[description is_closed status_rationale is_private visibility_rationale]
+    %i[description]
   end
 
   def build_breadcrumbs

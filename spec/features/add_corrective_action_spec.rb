@@ -36,8 +36,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     visit "/cases/#{investigation.pretty_id}/supporting-information"
 
     click_link "Add new"
-    expect_to_be_on_add_supporting_information_page
-
+    expect_to_be_on_add_to_case_page
     choose "Corrective action"
 
     click_button "Continue"

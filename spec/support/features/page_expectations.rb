@@ -138,6 +138,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "Products")
   end
 
+  def expect_to_be_on_add_product_to_investigation_page(investigation)
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/products/new")
+    expect(page).to have_selector("h1", text: investigation.user_title)
+  end
+
   def expect_to_be_on_case_products_page
     expect(page).to have_selector("h1", text: "Products")
   end
@@ -166,6 +171,11 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "What type of information are you adding?")
   end
 
+  def expect_to_be_on_add_to_case_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/add-to-case")
+    expect(page).to have_selector("h1", text: "What are you adding to the case?")
+  end
+
   def expect_to_be_on_add_attachment_to_a_case_upload_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_h1("Add attachment")
@@ -178,12 +188,17 @@ module PageExpectations
 
   def expect_to_be_on_case_actions_page(case_id:)
     expect(page).to have_current_path("/cases/#{case_id}/actions")
-    expect(page).to have_selector("h1", text: "Select an action")
+    expect(page).to have_selector(".govuk-fieldset__legend--l", text: "Select an action")
   end
 
-  def expect_to_be_on_change_case_status_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/status")
-    expect(page).to have_h1("Status information")
+  def expect_to_be_on_close_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/status/close")
+    expect(page).to have_h1("Why are you closing the case?")
+  end
+
+  def expect_to_be_on_reopen_case_page(case_id:)
+    expect(page).to have_current_path("/cases/#{case_id}/status/reopen")
+    expect(page).to have_h1("Why are you re-opening the case?")
   end
 
   def expect_to_be_on_add_correspondence_page
@@ -229,9 +244,15 @@ module PageExpectations
     expect(page).to have_h1("You cannot send an alert about a restricted case")
   end
 
-  def expect_to_be_on_case_visiblity_page(case_id:)
+  def expect_to_be_on_case_visiblity_page(case_id:, status:, action:)
     expect(page).to have_current_path("/cases/#{case_id}/visibility")
-    expect(page).to have_h1("Legal privilege")
+    expect(page).to have_h1("#{action.capitalize} case")
+    expect(page).to have_content("This case is currently #{status}.")
+  end
+
+  def expect_to_be_on_change_case_visiblity_page(case_id:, future_status:, action:)
+    expect(page).to have_current_path("/cases/#{case_id}/visibility/#{action}")
+    expect(page).to have_css(".govuk-label--l", text: "Why is the case being #{future_status}?")
   end
 
   def expect_to_be_on_record_test_result_page

@@ -64,6 +64,12 @@ en:
     email_update_text:
       false: "%{case_type} %{pretty_id} is not related to the coronavirus outbreak. This status was updated by %{name}."
       true: "%{case_type} %{pretty_id} is related to the coronavirus outbreak. This status was updated by %{name}."
+  change_case_status:
+    email_subject_text: "%{case_type} was %{status}"
+    email_update_text: "%{case_type} was %{status} by %{name}."
+  change_case_visibility:
+    email_subject_text: "%{case_type} was %{visibility}"
+    email_update_text: "%{case_type} was %{visibility} by %{name}."
   change_risk_validation:
     validated: "has been validated"
     validation_removed: "has had validation removed"
@@ -205,6 +211,29 @@ en:
         set: "Case risk level set to %{level}"
         changed: "Case risk level changed to %{level}"
         removed: "Case risk level removed"
+    status:
+      close:
+        title: "Close case"
+        label: "Why are you closing the case?"
+        hint: "For example, the product is low risk, so no further activity is expected."
+        action: "Close case"
+      reopen:
+        title: "Re-open case"
+        label: "Why are you re-opening the case?"
+        hint: "For example, the business responsible needs to take further action."
+        action: "Re-open case"
+    visibility:
+      updated: "%{case_type} has been %{status}"
+      show: "%{future_status} case"
+      why: "Why is this case being %{future_status}ed?"
+      restrict:
+        title: "Restrict this case"
+        label: "Why is the case being restricted?"
+        action: "Restrict this case"
+      unrestrict:
+        title: "Unrestrict this case"
+        label: "Why is the case being unrestricted?"
+        action: "Unrestrict this case"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
@@ -218,6 +247,12 @@ en:
         body:
           true: "The case is related to the coronavirus outbreak."
           false: "The case is not related to the coronavirus outbreak."
+      update_status:
+        title: "%{case_type} %{status}"
+        subtitle: "by %{user_name}, %{date}"
+      update_visibility:
+        title: "%{case_type} %{visibility}"
+        subtitle: "by %{user_name}, %{date}"
       risk_level_updated:
         title:
           set: "Case risk level set to %{level}"
@@ -290,12 +325,14 @@ en:
     investigation_actions:
       actions:
         change_case_owner: "Change case owner"
-        change_case_status:
-          open: "Close case"
-          closed: "Reopen case"
+        close_case: "Close case"
+        reopen_case: "Re-open case"
         change_case_visibility:
           restricted: "Unrestrict this case"
-          not_restricted: "Restrict this case"
+          unrestricted: "Restrict this case"
+        change_case_risk_level:
+          not_set: Set risk level
+          set: Change risk level
         send_email_alert: "Send email alert"
 
   activemodel:
@@ -424,6 +461,10 @@ en:
             summary:
               blank: Enter the case summary
               too_long: Summary must be 10,000 characters or fewer
+        change_case_status_form:
+          attributes:
+            new_status:
+              same_as_existing: The %{case_type} is already %{status}
         correspondence_type_form:
           attributes:
             type:

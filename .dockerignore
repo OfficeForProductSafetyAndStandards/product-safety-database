@@ -155,7 +155,7 @@ bower.json
 
 # Ignore yarn files
 /yarn-error.log
-
+/package-lock.json
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stubbed_mailer do
   describe "validations" do
     context "when an action has been set" do
-      let(:form) { described_class.new(action: "change_case_status") }
+      let(:form) { described_class.new(investigation_action: "close_case") }
 
       it "is valid" do
         expect(form).to be_valid
@@ -11,7 +11,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
     end
 
     context "when no action has been set" do
-      let(:form) { described_class.new(action: nil) }
+      let(:form) { described_class.new(investigation_action: nil) }
 
       it "is not valid" do
         expect(form).not_to be_valid
@@ -25,11 +25,12 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       let(:investigation) { create(:allegation, creator: user) }
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
-      it "contains three possible actions" do
+      it "contains four possible actions" do
         expect(form.actions).to eq({
-          change_case_status: "Close case",
+          close_case: "Close case",
           change_case_owner: "Change case owner",
-          change_case_visibility: "Restrict this case"
+          change_case_visibility: "Restrict this case",
+          change_case_risk_level: "Set risk level"
         })
       end
     end
@@ -41,11 +42,29 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       end
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
-      it "contains three actions with alternative labels" do
+      it "contains four actions with alternative labels" do
         expect(form.actions).to eq({
-          change_case_status: "Reopen case",
+          reopen_case: "Re-open case",
           change_case_owner: "Change case owner",
-          change_case_visibility: "Unrestrict this case"
+          change_case_visibility: "Unrestrict this case",
+          change_case_risk_level: "Set risk level"
+        })
+      end
+    end
+
+    context "when the risk level is already set" do
+      let(:user) { create(:user, :activated) }
+      let(:investigation) do
+        create(:allegation, :restricted, :closed, creator: user, risk_level: "high")
+      end
+      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+
+      it "contains four actions with alternative labels" do
+        expect(form.actions).to eq({
+          reopen_case: "Re-open case",
+          change_case_owner: "Change case owner",
+          change_case_visibility: "Unrestrict this case",
+          change_case_risk_level: "Change risk level"
         })
       end
     end
@@ -55,11 +74,12 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_elasticsearch, :with_stub
       let(:investigation) { create(:allegation, creator: user) }
       let(:form) { described_class.new(investigation: investigation, current_user: user) }
 
-      it "contains three possible actions" do
+      it "contains four possible actions" do
         expect(form.actions).to eq({
-          change_case_status: "Close case",
+          close_case: "Close case",
           change_case_owner: "Change case owner",
-          change_case_visibility: "Restrict this case"
+          change_case_visibility: "Restrict this case",
+          change_case_risk_level: "Set risk level"
         })
       end
     end
