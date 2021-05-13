@@ -96,8 +96,6 @@ Rails.application.routes.draw do
             param: :pretty_id,
             concerns: %i[document_attachable] do
     member do
-      get :visibility
-      patch :visibility
       get :created
     end
 
@@ -106,6 +104,14 @@ Rails.application.routes.draw do
       get :reopen
       patch :close
       patch :reopen
+    end
+
+    resource :visibility, only: %i[], controller: "investigations/visibility" do
+      get :show
+      get :restrict
+      get :unrestrict
+      patch :restrict
+      patch :unrestrict
     end
 
     resource :summary, only: %i[edit update], controller: "investigations/summary"
@@ -119,6 +125,7 @@ Rails.application.routes.draw do
     resource :safety_and_compliance, only: %i[edit update], path: "edit-safety-and-compliance", controller: "investigations/safety_and_compliance"
     resources :images, controller: "investigations/images", only: %i[index], path: "images"
     resources :supporting_information, controller: "investigations/supporting_information", path: "supporting-information", as: :supporting_information, only: %i[index new create]
+    get "add-to-case", to: "investigations/supporting_information#add_to_case", as: "add_to_case"
 
     resources :actions, controller: "investigations/actions", path: "actions", as: :actions, only: %i[index create]
 
