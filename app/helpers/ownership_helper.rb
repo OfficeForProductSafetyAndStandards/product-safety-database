@@ -10,7 +10,7 @@ module OwnershipHelper
 
     items << { text: "Someone else in your team", value: "someone_else_in_your_team", conditional: { html: someone_else_in_your_team_dropdown } }
 
-    items << { text: current_user.team.descorate.display_name(viewer: current_user), value: current_user.team.id, checked: false }
+    items << { text: current_user.team.decorate.display_name(viewer: current_user), value: current_user.team.id, checked: false }
 
     items
   end
