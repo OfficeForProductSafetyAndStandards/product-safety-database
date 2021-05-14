@@ -4,6 +4,7 @@ module ActivityHelper
       tag.strong(field)
     else
       "Removed"
+      
     end
   end
 end
