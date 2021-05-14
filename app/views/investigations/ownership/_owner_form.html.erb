@@ -2,8 +2,6 @@
   <%= render "form_components/govuk_error_summary", form: form %>
   <%= yield %>
 
-  <% items = [] %>
-
   <% someone_else_in_your_team_dropdown = capture do %>
   <%= render "investigations/ownership/owner_selection",
   form: form,
@@ -14,7 +12,7 @@
   %>
   <% end %>
 
-  <% items = add_your_team_values(items, investigation, someone_else_in_your_team_dropdown) %>
+  <% items = add_your_team_values([], investigation, someone_else_in_your_team_dropdown) %>
 
   <% unless @other_teams_added_to_case.empty? %>
     <% items << { divider: "Other teams added to the case" } %>
