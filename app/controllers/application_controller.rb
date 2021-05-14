@@ -45,12 +45,11 @@ class ApplicationController < ActionController::Base
 
   def nav_items
     return nil if hide_nav? || !current_user # On some pages we don't want to show the main navigation
-
     items = []
     unless current_user.is_opss?
       items.push text: "Home", href: authenticated_opss_root_path, active: params[:controller] == "homepage"
     end
-    items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators/)
+    items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators|comments|documents_flow/)
     items.push text: "Businesses", href: businesses_path, active: params[:controller].start_with?("businesses")
     items.push text: "Products", href: products_path, active: params[:controller].start_with?("products")
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
