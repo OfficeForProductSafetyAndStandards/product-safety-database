@@ -11,8 +11,8 @@ RSpec.describe OwnershipHelper do
     end
 
     context "when investigation owner is current user" do
-      it 'returns expected items' do
-        expect(helper.add_your_team_values([], investigation, '')).to eq([
+      it "returns expected items" do
+        expect(helper.add_your_team_values([], investigation, "")).to eq([
           { divider: "Your team" },
           { text: investigation.owner.decorate.display_name(viewer: helper.current_user), value: investigation.owner.id, checked: true },
           { text: "Someone else in your team", value: "someone_else_in_your_team", conditional: { html: "" } },
@@ -26,8 +26,8 @@ RSpec.describe OwnershipHelper do
         allow(investigation).to receive(:owner) { helper.current_user.team }
       end
 
-      it 'returns expected items' do
-        expect(helper.add_your_team_values([], investigation, '')).to eq([
+      it "returns expected items" do
+        expect(helper.add_your_team_values([], investigation, "")).to eq([
           { divider: "Your team" },
           { text: investigation.owner.decorate.display_name(viewer: helper.current_user), value: investigation.owner.id, checked: true },
           { text: helper.current_user.decorate.display_name(viewer: helper.current_user), value: helper.current_user.id, checked: false },
@@ -41,8 +41,8 @@ RSpec.describe OwnershipHelper do
         allow(investigation).to receive(:owner) { another_user }
       end
 
-      it 'returns expected items' do
-        expect(helper.add_your_team_values([], investigation, '')).to eq([
+      it "returns expected items" do
+        expect(helper.add_your_team_values([], investigation, "")).to eq([
           { divider: "Your team" },
           { text: investigation.owner.decorate.display_name(viewer: helper.current_user), value: investigation.owner.id, checked: true },
           { text: helper.current_user.decorate.display_name(viewer: helper.current_user), value: helper.current_user.id, checked: false },
