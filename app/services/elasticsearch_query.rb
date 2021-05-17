@@ -87,8 +87,7 @@ private
         query: query,
         fields: @exact_fields,
         type: "cross_fields",
-        fuzzy_transpositions: "false",
-        operator: "and"
+        fuzzy_transpositions: "false"
       }
     }
   end
