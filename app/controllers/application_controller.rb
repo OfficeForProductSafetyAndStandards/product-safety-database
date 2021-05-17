@@ -50,8 +50,8 @@ class ApplicationController < ActionController::Base
     unless current_user.is_opss?
       items.push text: "Home", href: authenticated_opss_root_path, active: params[:controller] == "homepage"
     end
-    items.push text: "Cases", href: investigations_path(previous_search_params), active: params[:controller].match?(/investigations|searches|collaborators|comments/)
-    items.push text: "Businesses", href: businesses_path, active: params[:controller].start_with?("businesses")
+    items.push text: "Cases", href: investigations_path(previous_search_params), active: highlight_cases?
+    items.push text: "Businesses", href: businesses_path, active: highlight_businesses?
     items.push text: "Products", href: products_path, active: params[:controller].start_with?("products")
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
@@ -120,5 +120,15 @@ private
 
   def render_404_page
     render "errors/not_found", status: :not_found
+  end
+
+  def highlight_businesses?
+    return true if params[:controller].start_with?("businesses")
+    return true if params[:controller] ==  "documents_flow" && params[:business_id]
+  end
+
+  def highlight_cases?
+    return true if params[:controller].match?(/investigations|searches|collaborators|comments/)
+    return true if params[:controller] ==  "documents_flow" && params[:investigation_pretty_id]
   end
 end
