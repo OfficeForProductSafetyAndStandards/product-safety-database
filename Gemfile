@@ -91,5 +91,5 @@ group :test do
   gem "simplecov-lcov"
   gem "slim_lint", "~> 0.21"
   gem "super_diff"
-  gem "webmock", "~> 3.12"
+  gem "webmock", "~> 3.13"
 end
