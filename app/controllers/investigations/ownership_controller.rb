@@ -83,7 +83,7 @@ private
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
     @other_teams_added_to_case = Team.find(@investigation.collaboration_accesses.where("type IN (?)", ["Collaboration::Access::Edit", "Collaboration::Access::ReadOnly"]).map(&:collaborator_id))
-    @default_opss_teams = (default_opss_teams - [@investigation.owner, current_user.team] - @other_teams_added_to_case).uniq
+    @default_opss_teams = (default_opss_teams - [@investigation.owner, current_user.team] - @other_teams_added_to_case)
   end
 
   def default_opss_teams
