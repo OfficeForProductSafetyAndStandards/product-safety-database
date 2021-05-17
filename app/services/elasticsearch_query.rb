@@ -99,7 +99,7 @@ private
         query: query,
         fields: @fuzzy_fields,
         fuzziness: "AUTO",
-        operator: "or"
+        operator: "and"
       }
     }
   end
