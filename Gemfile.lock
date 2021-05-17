@@ -191,7 +191,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.17.0)
+    faker (2.18.0)
       i18n (>= 1.6, < 2)
     faraday (1.3.0)
       faraday-net_http (~> 1.0)
@@ -520,7 +520,7 @@ GEM
     strings-ansi (0.2.0)
     strong_migrations (0.7.6)
       activerecord (>= 5)
-    super_diff (0.7.0)
+    super_diff (0.8.0)
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
@@ -591,7 +591,7 @@ DEPENDENCIES
   elasticsearch-model (~> 7.1)
   elasticsearch-rails (~> 7.1)
   factory_bot_rails (~> 6.2)
-  faker (~> 2.17)
+  faker (~> 2.18)
   govuk-design-system-rails!
   govuk_notify_rails (~> 2.1)
   image_processing
