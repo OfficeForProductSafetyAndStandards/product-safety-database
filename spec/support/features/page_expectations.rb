@@ -231,6 +231,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_new_comment_page
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
     expect_page_to_have_h1("Add comment")
   end
 
