@@ -124,11 +124,11 @@ private
 
   def highlight_businesses?
     return true if params[:controller].start_with?("businesses")
-    return true if params[:controller] ==  "documents_flow" && params[:business_id]
+    return true if params[:controller] == "documents_flow" && params[:business_id]
   end
 
   def highlight_cases?
     return true if params[:controller].match?(/investigations|searches|collaborators|comments/)
-    return true if params[:controller] ==  "documents_flow" && params[:investigation_pretty_id]
+    return true if params[:controller] == "documents_flow" && params[:investigation_pretty_id]
   end
 end
