@@ -26,6 +26,19 @@ FactoryBot.define do
     title { "Allegation closed" }
   end
 
+  factory :legacy_audit_business_remove_status, class: "AuditActivity::Business::Destroy" do
+    investigation { create :allegation }
+    business { create(:business) }
+    title { "Removed: A business name" }
+  end
+
+  factory :legacy_audit_business_added_status, class: "AuditActivity::Business::Add" do
+    investigation { create :allegation }
+    business { create(:business) }
+    title { "A business name" }
+    body { "Role: **fulfillment\\_house**" }
+  end
+
   factory :legacy_audit_investigation_visibility_status, class: "AuditActivity::Investigation::UpdateVisibility" do
     investigation { create :allegation }
     title { "Allegation visibility\n            restricted" }
