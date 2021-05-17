@@ -168,9 +168,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
         expect(perform_search.records.to_a)
           .to include(
             investigation_one,
-            investigation_two,
-            investigation_three,
-            investigation_four
+            investigation_two
           )
       end
     end
