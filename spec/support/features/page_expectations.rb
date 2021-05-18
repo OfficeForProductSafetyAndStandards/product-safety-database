@@ -47,6 +47,7 @@ module PageExpectations
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
     expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
   def expect_to_view_supporting_information_table
@@ -179,11 +180,13 @@ module PageExpectations
   def expect_to_be_on_add_attachment_to_a_case_upload_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
   def expect_to_be_on_add_attachment_to_a_case_metadata_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
     expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
 
   def expect_to_be_on_case_actions_page(case_id:)
@@ -231,6 +234,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_new_comment_page
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
     expect_page_to_have_h1("Add comment")
   end
 
@@ -547,11 +551,13 @@ module PageExpectations
   def expect_to_be_on_add_attachment_to_a_business_upload_page(business_id:)
     expect(page).to have_current_path("/businesses/#{business_id}/documents/new/upload")
     expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Businesses")
   end
 
   def expect_to_be_on_add_attachment_to_a_business_metadata_page(business_id:)
     expect(page).to have_current_path("/businesses/#{business_id}/documents/new/metadata")
     expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Businesses")
   end
 
   def expect_to_be_on_add_contact_to_a_business_page(business_id:)

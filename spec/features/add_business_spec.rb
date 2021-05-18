@@ -31,8 +31,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-
-    expect(page).to have_text("Please select a business type")
+    expect(page).to have_error_summary("Please select a business type")
 
     expect(page).to have_unchecked_field("Retailer")
     expect(page).to have_unchecked_field("Manufacturer")
@@ -46,8 +45,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_type_page
-
-    expect(page).to have_text('Please enter a business type "Other"')
+    expect(page).to have_error_summary('Please enter a business type "Other"')
 
     choose "Other" # This shouldn't need to be re-selected, but currently does.
     fill_in "Other type", with: "Advertiser"
@@ -55,6 +53,9 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     click_on "Continue"
 
     expect_to_be_on_investigation_add_business_details_page
+
+    click_on "Save business"
+    expect(page).to have_error_summary("Trading name cannot be blank")
 
     within_fieldset "Business details" do
       fill_in "Registered or legal name", with: business_details
@@ -78,7 +79,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
 
     click_on "Save business"
 
-    expect(page).to have_text("Trading name cannot be blank")
+    expect(page).to have_error_summary("Trading name cannot be blank")
 
     within_fieldset "Business details" do
       fill_in "Trading name", with: trading_name
@@ -104,17 +105,16 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
     expect(page).to have_css("dt.govuk-summary-list__key",   text: "Contact")
     expect(page).to have_css("dd.govuk-summary-list__value", text: expected_contact)
 
-    click_link "Remove business"
-
-    expect_to_be_on_remove_business_page
-    click_button "Remove business"
-    expect_confirmation_banner("Business was successfully removed.")
-
-    # Check that adding and removing the business was recorded in the
+    # Check that adding  the business was recorded in the
     # activity log for the investigation.
     click_link "Activity"
-    expect(page).to have_text("Removed: #{trading_name}")
     expect(page).to have_text("Business added")
+
+    expect(page.find("h3", text: "Business added"))
+      .to have_sibling(".govuk-body", text: "Role: Advertiser")
+
+    expect(page)
+      .to have_link("View business", href: /\/businesses\/(\d)+/)
   end
 
   scenario "Not being able to add a business to another team’s case" do
