@@ -67,6 +67,9 @@ en:
   change_case_status:
     email_subject_text: "%{case_type} was %{status}"
     email_update_text: "%{case_type} was %{status} by %{name}."
+  change_case_visibility:
+    email_subject_text: "%{case_type} was %{visibility}"
+    email_update_text: "%{case_type} was %{visibility} by %{name}."
   change_risk_validation:
     validated: "has been validated"
     validation_removed: "has had validation removed"
@@ -94,6 +97,29 @@ en:
       title: "Title"
 
   investigations:
+    activities:
+      business:
+        destroy:
+          view_business: "View business"
+    businesses:
+      destroy:
+        business_successfully_deleted: "Business was successfully removed."
+      supporting_information_warning:
+        cannot_remove_business_warning: "Cannot remove the business from the case because it's associated with following supporting information"
+      form:
+        remove_business_legend: "Do you want to remove the business from the case?"
+        yes_label: "Yes"
+        no_label: "No"
+        reason_for_removing_the_business_from_the_case: "Reason for removing the business from the case"
+        cancel: "Cancel"
+      remove:
+        remove_business_warning_html: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the <a class='govuk-link' href='%{href}'>Businesses tab</a>."
+
+    tabs:
+      businesses:
+        remove_business_hint: "Removing a business from a case cannot be undone"
+        remove:
+          remove_business_warning: "Remove a business from a case if it's not relevant to the investigation. Business details can be changed from the Businesses tab."
     filters:
       teams_added_to_case: "Teams added to case"
       my_team: "My team"
@@ -219,6 +245,18 @@ en:
         label: "Why are you re-opening the case?"
         hint: "For example, the business responsible needs to take further action."
         action: "Re-open case"
+    visibility:
+      updated: "%{case_type} has been %{status}"
+      show: "%{future_status} case"
+      why: "Why is this case being %{future_status}ed?"
+      restrict:
+        title: "Restrict this case"
+        label: "Why is the case being restricted?"
+        action: "Restrict this case"
+      unrestrict:
+        title: "Unrestrict this case"
+        label: "Why is the case being unrestricted?"
+        action: "Unrestrict this case"
     ts_investigations:
       coronavirus:
         caption: "Report an unsafe or non-compliant product"
@@ -234,6 +272,9 @@ en:
           false: "The case is not related to the coronavirus outbreak."
       update_status:
         title: "%{case_type} %{status}"
+        subtitle: "by %{user_name}, %{date}"
+      update_visibility:
+        title: "%{case_type} %{visibility}"
         subtitle: "by %{user_name}, %{date}"
       risk_level_updated:
         title:
@@ -311,7 +352,7 @@ en:
         reopen_case: "Re-open case"
         change_case_visibility:
           restricted: "Unrestrict this case"
-          not_restricted: "Restrict this case"
+          unrestricted: "Restrict this case"
         change_case_risk_level:
           not_set: Set risk level
           set: Change risk level
@@ -320,6 +361,20 @@ en:
   activemodel:
     errors:
       models:
+        add_business_to_case_form:
+          attributes:
+            relationship:
+              inclusion: "Please select a business type"
+            other_relationship:
+              blank: "Please enter a business type \"Other\""
+
+        remove_business_form:
+          attributes:
+            remove:
+              inclusion: "Select yes if you want to remove the business from the case"
+            reason:
+              blank: "Enter the reason for removing the business from the case"
+
         accident_or_incident_form:
           attributes:
             is_date_known:

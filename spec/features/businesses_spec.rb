@@ -11,7 +11,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
     sign_in(user)
   end
 
-  scenario "lists products according to search relevance" do
+  scenario "lists business according to search relevance" do
     Business.import refresh: :wait_for
     visit businesses_path
 
@@ -39,10 +39,10 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
     end
   end
 
-  scenario "displays cases for product" do
+  scenario "displays cases for business" do
     investigation = create(:allegation, :with_business, business_to_add: business_one)
     visit "/businesses/#{business_one.id}"
-    save_page
+
     within ".psd-case-card" do
       expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
     end

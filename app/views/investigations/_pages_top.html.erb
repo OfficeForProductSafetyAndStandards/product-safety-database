@@ -11,7 +11,7 @@
         <% if policy(investigation).update? %>
           <div class="hmcts-identity-bar__menu">
             <%= tag.div(class: "app-menu", "data-module": "app-menu", data: add_new_menu_data_attributes(investigation)) do %>
-              <%= govukButton(text: "Add new", href: new_investigation_supporting_information_path(investigation), classes: "hmcts-menu__item app-button--case-bar-secondary") %>
+              <%= govukButton(text: "Add new", href: investigation_add_to_case_path(investigation), classes: "hmcts-menu__item app-button--case-bar-secondary") %>
             <% end %>
           </div>
         <% else %>
