@@ -86,7 +86,7 @@ private
       multi_match: {
         query: query,
         fields: @exact_fields,
-        type: "cross_fields",
+        type: "phrase",
         fuzzy_transpositions: "false"
       }
     }
