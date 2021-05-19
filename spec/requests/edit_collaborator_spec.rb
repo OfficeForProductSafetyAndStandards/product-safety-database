@@ -77,6 +77,16 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
         expect(response).to have_http_status(:not_found)
       end
     end
+
+    context "when the collaboration has already been deleted", :with_errors_rendered do
+      before do
+        edit_access_collaboration.destroy!
+      end
+
+      it "redirects back to the 'teams added to case' page" do
+        expect(do_request).to redirect_to(investigation_collaborators_path(investigation))
+      end
+    end
   end
 
   context "when the user isn't part of the team assigned", :with_errors_rendered do
