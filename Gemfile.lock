@@ -191,7 +191,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.17.0)
+    faker (2.18.0)
       i18n (>= 1.6, < 2)
     faraday (1.3.0)
       faraday-net_http (~> 1.0)
@@ -263,10 +263,10 @@ GEM
     multipart-post (2.1.1)
     netrc (0.11.0)
     nio4r (2.5.7)
-    nokogiri (1.11.3)
+    nokogiri (1.11.4)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
-    nokogiri (1.11.3-x86_64-darwin)
+    nokogiri (1.11.4-x86_64-darwin)
       racc (~> 1.4)
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
@@ -551,7 +551,7 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.3.0)
+    webpacker (5.4.0)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -591,7 +591,7 @@ DEPENDENCIES
   elasticsearch-model (~> 7.1)
   elasticsearch-rails (~> 7.1)
   factory_bot_rails (~> 6.2)
-  faker (~> 2.17)
+  faker (~> 2.18)
   govuk-design-system-rails!
   govuk_notify_rails (~> 2.1)
   image_processing
@@ -648,7 +648,7 @@ DEPENDENCIES
   tty-table
   validate_email (~> 0.1)
   webmock (~> 3.12)
-  webpacker (~> 5.3)
+  webpacker (~> 5.4)
   wicked (~> 1.3)
   will_paginate (~> 3.3)
 
