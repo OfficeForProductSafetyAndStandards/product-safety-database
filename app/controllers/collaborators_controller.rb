@@ -48,7 +48,11 @@ class CollaboratorsController < ApplicationController
   def update
     authorize @investigation, :manage_collaborators?
 
-    @collaboration = @investigation.collaboration_accesses.changeable.find(params[:id])
+    @collaboration = @investigation.collaboration_accesses.find_by(id: params[:id])
+
+    return redirect_to investigation_collaborators_path(@investigation) unless @collaboration # Usually due to double form submission
+    return render_404_page unless @collaboration.class.changeable?
+
     @collaborator = @collaboration.collaborator
 
     @edit_form = EditCaseCollaboratorForm.new(edit_params.merge(collaboration: @collaboration))
