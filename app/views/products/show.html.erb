@@ -46,8 +46,13 @@
     },
     {
       id: "attachments",
-      label: "Attachments (#{@product.documents.count})",
+      label: "Attachments (#{@product.non_image_documents.count})",
       panel: { html: render("products/tabs/attachments") }
+    },
+    {
+      id: "images",
+      label: "Images (#{@product.documents.count})",
+      panel: { html: render("products/tabs/images") }
     },
     {
       id: "cases",
