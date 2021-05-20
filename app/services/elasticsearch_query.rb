@@ -75,7 +75,8 @@ private
       bool: {
         should: [
           match_exact_fields,
-          match_fuzzy_fields
+          match_fuzzy_fields_and,
+          match_fuzzy_fields_or
         ]
       }
     }
@@ -92,13 +93,23 @@ private
     }
   end
 
-  def match_fuzzy_fields
+  def match_fuzzy_fields_and
     {
       multi_match: {
         query: query,
         fields: @fuzzy_fields,
         fuzziness: "AUTO",
         operator: "and"
+      }
+    }
+  end
+
+  def match_fuzzy_fields_or
+    {
+      multi_match: {
+        query: query,
+        fields: @fuzzy_fields,
+        fuzziness: "AUTO",
       }
     }
   end
