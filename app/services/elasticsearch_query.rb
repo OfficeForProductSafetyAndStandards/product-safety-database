@@ -88,7 +88,8 @@ private
         query: query,
         fields: @exact_fields,
         type: "phrase",
-        fuzzy_transpositions: "false"
+        fuzzy_transpositions: "false",
+        boost: 10
       }
     }
   end
@@ -99,7 +100,8 @@ private
         query: query,
         fields: @fuzzy_fields,
         fuzziness: "AUTO",
-        operator: "and"
+        operator: "and",
+        boost: 5
       }
     }
   end
