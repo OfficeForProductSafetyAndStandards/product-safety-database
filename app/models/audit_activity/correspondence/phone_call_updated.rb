@@ -1,10 +1,6 @@
 class AuditActivity::Correspondence::PhoneCallUpdated < AuditActivity::Correspondence::Base
   belongs_to :correspondence, class_name: "Correspondence::PhoneCall"
 
-  def self.from(*)
-    raise "Deprecated - no longer supported"
-  end
-
   def self.build_metadata(correspondence)
     updates = correspondence.previous_changes
 
@@ -24,7 +20,4 @@ private
   def subtitle_slug
     "Phone call updated"
   end
-
-  # no-op sending of email is done by the service UpdatePhoneCall
-  def notify_relevant_users; end
 end

@@ -5,10 +5,6 @@ class AuditActivity::Business::Add < AuditActivity::Base
     { business: business.attributes, investigation_business: business_investigation.attributes }
   end
 
-  def self.from(*)
-    raise "Deprecated - use AddBusinessToCase.call instead"
-  end
-
   def metadata
     migrate_metadata_structure
   end
@@ -27,8 +23,6 @@ private
       }
     }.to_json)
   end
-
-  def notify_relevant_users; end
 
   def extract_relationship_from_body
     body.match(/Role: \*\*(?<relationship>.*)\*\*/)["relationship"].delete("\\")

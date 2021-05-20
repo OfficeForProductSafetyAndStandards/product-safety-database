@@ -1,8 +1,4 @@
 class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
-  def self.from(*)
-    raise "Deprecated - use AddRiskAssessmentToCase.call instead"
-  end
-
   def self.build_metadata(risk_assessment)
     { "risk_assessment" => risk_assessment.attributes.merge(
       "product_ids" => risk_assessment.product_ids,
@@ -58,10 +54,6 @@ class AuditActivity::RiskAssessment::RiskAssessmentAdded < AuditActivity::Base
   end
 
 private
-
-  # Do not send investigation_updated mail when test result updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 
   # Migrates metadata from old structure to current. This method can be deleted once data is migrated.
   # TODO: Remove method once data migrated

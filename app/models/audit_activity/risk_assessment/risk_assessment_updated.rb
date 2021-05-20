@@ -1,8 +1,4 @@
 class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
-  def self.from(*)
-    raise "Deprecated - use UpdateRiskAssessment.call instead"
-  end
-
   def self.build_metadata(risk_assessment:, previous_product_ids:, attachment_changed:, previous_attachment_filename:)
     updates = risk_assessment.previous_changes.slice(
       :assessed_on,
@@ -121,8 +117,4 @@ private
   def updates
     metadata["updates"]
   end
-
-  # Do not send investigation_updated mail when risk assessment updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 end

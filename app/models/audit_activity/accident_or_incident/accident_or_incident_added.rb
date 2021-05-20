@@ -1,10 +1,6 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity::Base
   belongs_to :product, class_name: "::Product"
 
-  def self.from(*)
-    raise "Deprecated - use AddAccidentOrIncidentToCase.call instead"
-  end
-
   def self.build_metadata(accident_or_incident)
     {
       accident_or_incident_id: accident_or_incident.id,
@@ -25,8 +21,4 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentAdded < AuditActivity
   def subtitle_slug
     "Added"
   end
-
-  # Do not send investigation_updated mail when test result updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 end

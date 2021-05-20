@@ -1,8 +1,4 @@
 class AuditActivity::Test::TestResultUpdated < AuditActivity::Test::Base
-  def self.from(*)
-    raise "Deprecated - use UpdateTestResult.call instead"
-  end
-
   def self.build_metadata(test_result, changes)
     updated_values = changes.except("document", "existing_document_file_id")
 
@@ -75,8 +71,4 @@ private
   def updates
     metadata["updates"]
   end
-
-  # Do not send investigation_updated mail when test result updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 end
