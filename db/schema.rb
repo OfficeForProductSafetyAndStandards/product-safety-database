@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 2021_05_20_120140) do
     t.index ["business_id"], name: "index_activities_on_business_id"
     t.index ["correspondence_id"], name: "index_activities_on_correspondence_id"
     t.index ["investigation_id"], name: "index_activities_on_investigation_id"
-    t.index ["metadata"], name: "index_activities_on_metadata"
     t.index ["product_id"], name: "index_activities_on_product_id"
     t.index ["type"], name: "index_activities_on_type"
   end
