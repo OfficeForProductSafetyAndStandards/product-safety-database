@@ -82,13 +82,13 @@ private
     @team_members = current_user.team.users.active.includes(:team)
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
-    @other_teams_added_to_case = Team.find(@investigation.collaboration_accesses.where("type IN (?)", ["Collaboration::Access::Edit", "Collaboration::Access::ReadOnly"]).map(&:collaborator_id))
+    @other_teams_added_to_case = @investigation.non_owner_teams_with_access
     @default_opss_teams = (default_opss_teams - [@investigation.owner, current_user.team] - @other_teams_added_to_case)
   end
 
   def default_opss_teams
     if current_user.is_opss?
-      Team.where("name IN (?)", ["OPSS Enforcement", "OPSS Incident Management", "OPSS Trading Standards Co-ordination", "OPSS Operational support unit"])
+      Team.get_visible_teams(current_user)
     else
       Team.where(name: "OPSS Incident Management")
     end
