@@ -2,10 +2,6 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
   I18N_SCOPE = "audit_activity.investigation.risk_level_updated".freeze
   SUBTITLE_SLUG = "Risk level changed".freeze
 
-  def self.from(*)
-    raise "Deprecated - use ChangeCaseRiskLevel.call instead"
-  end
-
   def self.build_metadata(investigation, update_verb)
     updated_values = investigation.previous_changes.slice(:risk_level, :custom_risk_level)
     {
@@ -33,7 +29,4 @@ private
       metadata["updates"]["custom_risk_level"]&.second
     end
   end
-
-  # Do not send investigation_updated mail. This is handled by the ChangeCaseRiskLevel service
-  def notify_relevant_users; end
 end

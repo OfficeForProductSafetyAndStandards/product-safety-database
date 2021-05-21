@@ -1,4 +1,5 @@
 class AuditActivity::Alert::Add < AuditActivity::Base
+  include ActivityNotification
   extend ActionView::Helpers::NumberHelper
   belongs_to :investigation
 

@@ -12,11 +12,4 @@ class AuditActivity::Investigation::TeamPermissionChanged < AuditActivity::Inves
       message: message
     }
   end
-
-private
-
-  # This is handled by ChangeCasePermissionLevelForTeam, but this override is
-  # required to prevent a duplicate investigation_updated email being enqueued,
-  # which will fail
-  def notify_relevant_users; end
 end
