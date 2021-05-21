@@ -43,7 +43,7 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
-gem "webpacker", "~> 5.3"
+gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.3"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.2", require: "govuk_design_system"
