@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::UpdateSummary < AuditActivity::Investigation::Base
-  def self.from(*)
-    raise "Deprecated - use ChangeCaseSummary.call instead"
-  end
-
   def self.build_metadata(investigation)
     updated_values = investigation.previous_changes.slice(:description)
 
@@ -24,7 +20,4 @@ private
   def subtitle_slug
     "Changed"
   end
-
-  # Do not send investigation_updated mail. This is handled by the ChangeCaseSummary service
-  def notify_relevant_users; end
 end

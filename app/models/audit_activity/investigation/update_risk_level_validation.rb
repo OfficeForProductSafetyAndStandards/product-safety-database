@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::UpdateRiskLevelValidation < AuditActivity::Investigation::Base
-  def self.from(*)
-    raise "Deprecated - use UpdateRiskLevelValidation.call instead"
-  end
-
   def self.build_metadata(investigation, rationale)
     updated_values = investigation.previous_changes.slice(:risk_validated_at).merge(investigation.previous_changes.slice(:risk_validated_by))
 
@@ -23,7 +19,4 @@ class AuditActivity::Investigation::UpdateRiskLevelValidation < AuditActivity::I
   def body
     metadata["rationale"]
   end
-
-  # Do not send investigation_updated mail. This is handled by the ChangeRiskValidation service
-  def notify_relevant_users; end
 end

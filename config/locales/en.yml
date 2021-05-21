@@ -73,6 +73,10 @@ en:
   change_risk_validation:
     validated: "has been validated"
     validation_removed: "has had validation removed"
+  add_phone_call_to_case:
+    email_subject_text: "%{case_type} updated"
+  update_phone_call:
+    email_subject_text: "%{case_type} updated"
 
   case:
     badges:

@@ -1,10 +1,18 @@
 class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::Base
   belongs_to :correspondence, class_name: "Correspondence::Email"
   include ActivityAttachable
+  include ActivityNotification
   with_attachments email_file: "email file", email_attachment: "email attachment"
 
   def self.from(correspondence, investigation)
-    activity = super(correspondence, investigation, build_body(correspondence))
+    activity = create!(
+      body: build_body(correspondence) || sanitize_text(correspondence.details),
+      source: UserSource.new(user: User.current),
+      investigation: investigation,
+      title: correspondence.overview,
+      correspondence: correspondence
+    )
+
     activity.attach_blob(correspondence.email_file.blob, :email_file) if correspondence.email_file.attached?
     activity.attach_blob(correspondence.email_attachment.blob, :email_attachment) if correspondence.email_attachment.attached?
   end

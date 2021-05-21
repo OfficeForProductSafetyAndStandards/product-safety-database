@@ -5,10 +5,6 @@ class AuditActivity::Test::Result < AuditActivity::Test::Base
     ) }
   end
 
-  def self.from(_test_result)
-    raise "Deprecated - use AddTestResultToInvestigation.call instead"
-  end
-
   def test_result
     return if metadata.nil?
 
@@ -54,8 +50,4 @@ private
   def subtitle_slug
     "Test result recorded"
   end
-
-  # Do not send investigation_updated mail when test result updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 end

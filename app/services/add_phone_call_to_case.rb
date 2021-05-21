@@ -38,12 +38,20 @@ private
         entity.name,
         entity.email,
         email_update_text,
-        activity.email_subject_text
+        email_subject
       ).deliver_later
     end
   end
 
+  def email_subject
+    I18n.t("add_phone_call_to_case.email_subject_text", case_type: email_case_type)
+  end
+
+  def email_case_type
+    investigation.case_type.upcase_first
+  end
+
   def email_update_text
-    "Phone call details added to the #{investigation.case_type.upcase_first} by #{activity.source.show}."
+    "Phone call details added to the #{email_case_type} by #{activity.source.show}."
   end
 end
