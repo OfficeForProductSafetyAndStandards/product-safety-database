@@ -1,7 +1,7 @@
 <%= page_title "Add business to case", errors: @business.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
-    text: "Back",
+    text: "Back to #{@investigation.pretty_description.downcase}",
     href: previous_wizard_path
   ) %>
 <% end %>
