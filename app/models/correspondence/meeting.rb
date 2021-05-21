@@ -5,4 +5,8 @@ class Correspondence::Meeting < Correspondence
   has_one_attached :related_attachment
 
   date_attribute :correspondence_date
+
+  def readonly?
+    true
+  end
 end

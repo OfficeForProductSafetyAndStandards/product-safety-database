@@ -4,6 +4,10 @@ class AuditActivity::Correspondence::AddMeeting < AuditActivity::Correspondence:
   include ActivityAttachable
   with_attachments transcript: "transcript", related_attachment: "related attachment"
 
+  def readonly?
+    true
+  end
+
   def activity_type
     "meeting"
   end
