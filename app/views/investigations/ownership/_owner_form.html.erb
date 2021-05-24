@@ -18,8 +18,7 @@
     <% items << { divider: "Other teams added to the case" } %>
     <%
       teams = @other_teams_added_to_case.each do |team|
-        hint_text = "For reporting serious risks to OPSS" if team.name == "OPSS Incident Management"
-        items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: hint_text } }
+        items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }
       end
     %>
   <% end %>
@@ -28,8 +27,7 @@
 
   <%
     teams = @default_opss_teams.each do |team|
-      hint_text = "For reporting serious risks to OPSS" if team.name == "OPSS Incident Management"
-      items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: hint_text } }
+      items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }
     end
   %>
 
