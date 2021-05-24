@@ -20,7 +20,7 @@ module OwnershipHelper
   def opss_hint_text(team)
     return unless team.name == "OPSS Incident Management"
     return if current_user.is_opss?
-    
+
     "For reporting serious risks to OPSS"
   end
 end

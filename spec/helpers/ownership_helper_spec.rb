@@ -52,4 +52,26 @@ RSpec.describe OwnershipHelper do
       end
     end
   end
+
+  describe "#opss_hint_text", :with_stubbed_elasticsearch, :with_stubbed_mailer do
+    let(:opss_user)                { create(:user, :opss_user) }
+    let(:other_user)               { create(:user) }
+    let(:incident_management_team) { create(:team, name: "OPSS Incident Management") }
+    let(:other_team)               { create(:team) }
+
+    it "returns hint text if current user is not opss and team is the incident management team" do
+      allow(helper).to receive(:current_user) { other_user }
+      expect(helper.opss_hint_text(incident_management_team)).to eq "For reporting serious risks to OPSS"
+    end
+
+    it "returns nil if current user is opss" do
+      allow(helper).to receive(:current_user) { opss_user }
+      expect(helper.opss_hint_text(incident_management_team)).to eq nil
+    end
+
+    it "returns nil if team is not the incident management team" do
+      allow(helper).to receive(:current_user) { other_user }
+      expect(helper.opss_hint_text(other_team)).to eq nil
+    end
+  end
 end
