@@ -79,7 +79,7 @@ private
   end
 
   def get_potential_assignees
-    @team_members = current_user.team.users.active.includes(:team)
+    @team_members = current_user.team.users.active.includes(:team) - [@investigation.owner_user, current_user]
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
     @other_teams_added_to_case = @investigation.non_owner_teams_with_access
