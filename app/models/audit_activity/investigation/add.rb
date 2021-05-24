@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
-  def self.from(*)
-    raise "Deprecated - use CreateCase.call instead"
-  end
-
   def self.build_metadata(investigation)
     {
       owner_id: investigation.owner&.id,
@@ -52,10 +48,4 @@ class AuditActivity::Investigation::Add < AuditActivity::Investigation::Base
   def restricted_title(user)
     title(user)
   end
-
-private
-
-  # Do not send investigation_updated mail when case added. This overrides
-  # inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 end

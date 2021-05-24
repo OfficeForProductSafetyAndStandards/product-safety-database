@@ -38,10 +38,7 @@ class Investigation < ApplicationRecord
   has_many :products, through: :investigation_products
 
   has_many :investigation_businesses, dependent: :destroy
-  has_many :businesses,
-           through: :investigation_businesses,
-           after_add: :create_audit_activity_for_business,
-           after_remove: :create_audit_activity_for_removing_business
+  has_many :businesses, through: :investigation_businesses
 
   has_many :activities, -> { order(created_at: :desc) }, dependent: :destroy, inverse_of: :investigation
 
@@ -148,14 +145,6 @@ class Investigation < ApplicationRecord
 
   def case_type; end
 
-  def add_business(business, relationship)
-    # Could not find a way to add a business to an investigation which allowed us to set the relationship value and
-    # while still triggering the callback to add the audit activity. One possibility is to move the callback to the
-    # InvestigationBusiness model.
-    investigation_businesses.create!(business_id: business.id, relationship: relationship)
-    create_audit_activity_for_business(business)
-  end
-
   def to_param
     pretty_id
   end
@@ -186,14 +175,6 @@ class Investigation < ApplicationRecord
   end
 
 private
-
-  def create_audit_activity_for_business(business)
-    AuditActivity::Business::Add.from(business, self)
-  end
-
-  def create_audit_activity_for_removing_business(business)
-    AuditActivity::Business::Destroy.from(business, self)
-  end
 
   def creator_id
     creator_user&.id

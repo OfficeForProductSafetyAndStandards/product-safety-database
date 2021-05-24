@@ -1,16 +1,29 @@
-class AuditActivity::Business::Destroy < AuditActivity::Business::Base
-  def self.from(business, investigation)
-    title = "Removed: #{sanitize_text business.trading_name}"
-    super(business, investigation, title, nil)
+class AuditActivity::Business::Destroy < AuditActivity::Base
+  belongs_to :business, class_name: "::Business"
+
+  def self.build_metadata(business, reason)
+    { reason: reason, business: business.attributes }
   end
 
-  def email_update_text(viewer = nil)
-    "Business was removed from the #{investigation.case_type} by #{source&.show(viewer)}."
+  def metadata
+    migrate_metadata_structure
   end
 
 private
 
   def subtitle_slug
     "Business removed"
+  end
+
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    return metadata if already_in_new_format?
+
+    JSON.parse({ business: business.attributes }.to_json)
+  end
+
+  def already_in_new_format?
+    self[:metadata]&.key?("business")
   end
 end

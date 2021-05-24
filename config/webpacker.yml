@@ -65,6 +65,7 @@ development:
     disable_host_check: true
     use_local_ip: false
     quiet: false
+    pretty: false
     headers:
       'Access-Control-Allow-Origin': '*'
     watch_options:
@@ -84,7 +85,7 @@ production:
   # Production depends on precompilation of packs prior to booting for performance.
   compile: false
 
-  # Extract and emit a css file - set explicitly to ensure prod always has it
+  # Extract and emit a css file
   extract_css: true
 
   # Cache manifest.json for performance
