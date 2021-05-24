@@ -124,10 +124,6 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_elasticse
     scenario "shows OPSS Enforcement team" do
       expect(page).to have_field("OPSS Enforcement")
     end
-
-    scenario "shows OPSS Operational support unit team" do
-      expect(page).to have_field("OPSS Operational support unit")
-    end
   end
 
   context "when investigation has other teams added to the case" do
