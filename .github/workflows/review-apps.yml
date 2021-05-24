@@ -72,7 +72,7 @@ jobs:
         cf auth
         cf target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
-        cf run-task psd-web -c "export \$(./env/get-env-from-vcap.sh) && rails elasticsearch:index" -k 2G
+        cf run-task $APP_NAME -c "export \$(./env/get-env-from-vcap.sh) && rails elasticsearch:index" -k 2G
 
     - name: Update deployment status (success)
       if: success()
