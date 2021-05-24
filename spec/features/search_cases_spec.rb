@@ -68,6 +68,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
   end
 
   scenario "searching for cases using multiple keywords" do
+    pending 'this will be fixed once we re-add fuzzy "or" matching on'
     sign_in(user)
     visit "/cases"
 
