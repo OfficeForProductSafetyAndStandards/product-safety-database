@@ -21,7 +21,7 @@ RSpec.describe UpdateProduct, :with_elasticsearch, :with_stubbed_mailer do
     end
 
     context "with all the required parameters" do
-      let(:perform_search) { Product.full_search(ElasticsearchQuery.new(product_params[:name], {}, {})) }
+      let(:perform_product_search) { Product.full_search(ElasticsearchQuery.new(product_params[:name], {}, {})) }
 
       it "updates the product", :aggregate_failures do
         expect(result).to be_a_success
@@ -32,11 +32,17 @@ RSpec.describe UpdateProduct, :with_elasticsearch, :with_stubbed_mailer do
       it "reindexes the product" do
         result
 
-        expect(perform_search.records.to_a).to eq([product])
+        expect(perform_product_search.records.to_a).to include(product)
       end
 
       it "reindexes the product's investigations" do
+        result
 
+        expect(
+          Investigation
+            .full_search(ElasticsearchQuery.new(product_params[:name], {}, {}))
+            .records.to_a
+        ).to include(investigation)
       end
     end
   end
