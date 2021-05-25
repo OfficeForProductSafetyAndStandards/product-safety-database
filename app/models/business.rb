@@ -4,6 +4,10 @@ class Business < ApplicationRecord
   include Documentable
   include AttachmentConcern
 
+  after_commit do
+    investigations.import
+  end
+
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "business"].join("_")
 
   settings do

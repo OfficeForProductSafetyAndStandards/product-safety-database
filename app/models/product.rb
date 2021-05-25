@@ -4,6 +4,10 @@ class Product < ApplicationRecord
   include Searchable
   include AttachmentConcern
 
+  after_commit do
+    investigations.import
+  end
+
   enum authenticity: {
     "counterfeit" => "counterfeit",
     "genuine" => "genuine",
