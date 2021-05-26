@@ -57,10 +57,6 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondenc
     updated_values["attachment_description"]
   end
 
-  def self.from(*)
-    raise "Deprecated - use UpdateEmail.call instead"
-  end
-
   def self.build_metadata(email:, email_changed:, previous_email_filename:, email_attachment_changed:, previous_email_attachment_filename:, previous_attachment_description:)
     updates = email.previous_changes.slice(
       :correspondence_date,
@@ -101,7 +97,4 @@ private
   def updated_values
     @updated_values ||= metadata["updates"].transform_values(&:second)
   end
-
-  # no-op sending of email is done by the service UpdateEmail
-  def notify_relevant_users; end
 end

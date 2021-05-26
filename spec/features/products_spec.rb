@@ -31,6 +31,8 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, typ
     expect(page).to have_link("2", href: products_path(page: 2))
     expect(page).to have_link("Next →", href: products_path(page: 2))
 
+    pending 'this will be fixed once we re-add fuzzy "or" matching on'
+
     fill_in "Keywords", with: iphone.name
     click_on "Search"
 

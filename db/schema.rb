@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_26_083705) do
+ActiveRecord::Schema.define(version: 2021_05_20_120140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -64,12 +64,13 @@ ActiveRecord::Schema.define(version: 2021_04_26_083705) do
     t.jsonb "metadata"
     t.bigint "product_id"
     t.string "title"
-    t.string "type", default: "CommentActivity"
+    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_activities_on_business_id"
     t.index ["correspondence_id"], name: "index_activities_on_correspondence_id"
     t.index ["investigation_id"], name: "index_activities_on_investigation_id"
     t.index ["product_id"], name: "index_activities_on_product_id"
+    t.index ["type"], name: "index_activities_on_type"
   end
 
   create_table "alerts", id: :serial, force: :cascade do |t|

@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::AutomaticallyUpdateOwner < AuditActivity::Investigation::Base
-  def self.from(*)
-    raise "Deprecated - use DeleteUser.call instead"
-  end
-
   def self.build_metadata(owner)
     {
       owner_id: owner.id
@@ -24,7 +20,4 @@ private
   def owner
     User.find_by(id: metadata["owner_id"]) || Team.find_by(id: metadata["owner_id"])
   end
-
-  # Do not send investigation_updated mail. This is handled by the DeleteUser service
-  def notify_relevant_users; end
 end

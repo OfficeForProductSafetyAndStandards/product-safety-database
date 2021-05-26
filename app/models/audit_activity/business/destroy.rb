@@ -5,10 +5,6 @@ class AuditActivity::Business::Destroy < AuditActivity::Base
     { reason: reason, business: business.attributes }
   end
 
-  def self.from(_business, _investigation)
-    raise "Deprecated - use RemoveBusinessFromCase.call instead"
-  end
-
   def metadata
     migrate_metadata_structure
   end
@@ -18,8 +14,6 @@ private
   def subtitle_slug
     "Business removed"
   end
-
-  def notify_relevant_users; end
 
   def migrate_metadata_structure
     metadata = self[:metadata]
