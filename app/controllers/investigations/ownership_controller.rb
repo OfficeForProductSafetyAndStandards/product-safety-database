@@ -83,10 +83,6 @@ private
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
     @other_teams_added_to_case = @investigation.non_owner_teams_with_access
-    @default_opss_teams = (default_opss_teams - [@investigation.owner, current_user.team] - @other_teams_added_to_case)
-  end
-
-  def default_opss_teams
-    Team.get_visible_teams(current_user)
+    @default_opss_teams = (Team.get_visible_teams(current_user) - [@investigation.owner, current_user.team] - @other_teams_added_to_case)
   end
 end
