@@ -61,6 +61,19 @@ jobs:
         ./deploy-review.sh
         cf logout
 
+    - name: Index seeds
+      if: success()
+      env:
+        SPACE: int
+        CF_USERNAME: ${{ secrets.PaaSUsernameInt }}
+        CF_PASSWORD: ${{ secrets.PaaSPasswordInt }}
+      run: |
+        cf api api.london.cloud.service.gov.uk
+        cf auth
+        cf target -o 'beis-opss' -s $SPACE
+        export APP_NAME=psd-pr-$PR_NUMBER
+        cf run-task $APP_NAME -c "export \$(./env/get-env-from-vcap.sh) && rails elasticsearch:index" -k 2G
+
     - name: Update deployment status (success)
       if: success()
       env:

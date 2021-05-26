@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Investigation::Base
-  def self.from(*)
-    raise "Deprecated - use ChangeCaseCoronavirusStatus.call instead"
-  end
-
   def self.build_metadata(investigation)
     updated_values = investigation.previous_changes.slice(:coronavirus_related)
 
@@ -22,9 +18,4 @@ class AuditActivity::Investigation::UpdateCoronavirusStatus < AuditActivity::Inv
   def new_status
     metadata["updates"]["coronavirus_related"].second
   end
-
-private
-
-  # Do not send investigation_updated mail. This is handled by the ChangeCaseCoronavirusStatus service
-  def notify_relevant_users; end
 end

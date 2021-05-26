@@ -3,10 +3,6 @@ class AuditActivity::Correspondence::AddPhoneCall < AuditActivity::Correspondenc
   with_attachments transcript: "transcript"
   belongs_to :correspondence, class_name: "Correspondence::PhoneCall"
 
-  def self.from(*)
-    raise "Deprecated - use AddPhoneCallToCase.call instead"
-  end
-
   def self.build_metadata(correspondence)
     { "correspondence" => correspondence.attributes.merge(
       "transcript" => correspondence.transcript.blob&.attributes
@@ -48,7 +44,4 @@ private
   def subtitle_slug
     "Phone call"
   end
-
-  # no-op sending of email is done by the service AddPhoneCallToCase
-  def notify_relevant_users; end
 end
