@@ -15,4 +15,4 @@
   </div>
 </div>
 
-<%= render "documents_list_summary", parent: @product %>
+<%= render partial: "documents/document_card", collection: @product.non_image_documents, as: :document, locals: { parent: @product } %>
