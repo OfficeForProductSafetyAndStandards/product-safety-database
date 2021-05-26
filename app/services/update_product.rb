@@ -9,11 +9,8 @@ class UpdateProduct
 
     Product.transaction do
       product.update!(product_params)
-      product.__elasticsearch__.update_document
 
-      product.investigations.each do |investigation|
-        investigation.__elasticsearch__.update_document
-      end
+      product.investigations.import
     end
   end
 end

@@ -30,19 +30,13 @@ RSpec.describe UpdateProduct, :with_elasticsearch, :with_stubbed_mailer do
       end
 
       it "reindexes the product" do
+        expect(product.__elasticsearch__).to receive(:update_document)
         result
-
-        expect(perform_product_search.records.to_a).to include(product)
       end
 
       it "reindexes the product's investigations" do
+        expect(product.investigations).to receive(:import)
         result
-
-        expect(
-          Investigation
-            .full_search(ElasticsearchQuery.new(product_params[:name], {}, {}))
-            .records.to_a
-        ).to include(investigation)
       end
     end
   end
