@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
     if current_user.deleted_at
       sign_out current_user
-      redirect_to '/'
+      redirect_to "/"
     end
 
     User.current = current_user
