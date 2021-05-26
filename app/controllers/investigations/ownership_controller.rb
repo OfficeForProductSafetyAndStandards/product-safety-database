@@ -87,10 +87,6 @@ private
   end
 
   def default_opss_teams
-    if current_user.is_opss?
-      Team.get_visible_teams(current_user)
-    else
-      Team.where(name: "OPSS Incident Management")
-    end
+    Team.get_visible_teams(current_user)
   end
 end
