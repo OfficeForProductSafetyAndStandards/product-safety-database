@@ -52,7 +52,7 @@ class ProductsController < ApplicationController
       if @product_form.valid?
         format.html do
           UpdateProduct.call!(
-            product: @product,
+            product: product,
             product_params: @product_form.serializable_hash
           )
 
