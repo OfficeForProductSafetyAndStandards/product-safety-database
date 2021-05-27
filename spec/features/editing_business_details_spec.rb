@@ -1,8 +1,9 @@
 require "rails_helper"
 
-RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.feature "Editing business details", :with_stubbed_mailer, :with_elasticsearch do
   let(:user)      { create(:user, :activated) }
   let(:business)  { create(:business, trading_name: "OldCo") }
+  let!(:investigation) { create(:allegation, businesses: [business]) }
 
   before do
     create(:contact, business: business)
@@ -51,5 +52,12 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_stubbed_el
     expect(page).to have_summary_item(key: "Address", value: "22 New Street, New Town, Newcity, NE2 2EW")
 
     expect(page).to have_summary_item(key: "Contact", value: "Mr New, CEO, 01632 960000, contact@newco.example")
+
+    within("header") { click_on "Cases" }
+
+    fill_in "Keywords", with: "NewCo"
+    click_on "Apply filters"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
   end
 end
