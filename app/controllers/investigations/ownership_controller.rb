@@ -56,7 +56,7 @@ private
   def form_params
     params[:change_case_owner_form] ||= {}
     params[:change_case_owner_form][:owner_id] = case params[:change_case_owner_form][:owner_id]
-                                                 when "someone_in_your_team"
+                                                 when "someone_else_in_your_team"
                                                    params[:change_case_owner_form][:select_team_member]
                                                  when "previous_owners"
                                                    params[:change_case_owner_form][:select_previous_owner]
@@ -79,10 +79,10 @@ private
   end
 
   def get_potential_assignees
-    @selectable_users = [@investigation.owner_user, current_user].uniq.compact
-    @team_members = current_user.team.users.active.includes(:team)
-    @selectable_teams = [current_user.team, Team.get_visible_teams(current_user), @investigation.owner_team].flatten.uniq.compact
+    @team_members = current_user.team.users.active.includes(:team) - [@investigation.owner_user, current_user]
     @other_teams = Team.not_deleted
     @other_users = User.active.includes(:team)
+    @other_teams_added_to_case = @investigation.non_owner_teams_with_access
+    @default_opss_teams = (Team.get_visible_teams(current_user) - [@investigation.owner, current_user.team] - @other_teams_added_to_case)
   end
 end
