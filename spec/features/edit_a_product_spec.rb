@@ -150,6 +150,13 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
     expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
     expect(page).to have_summary_item(key: "Description",               value: new_description)
     expect(page).to have_summary_item(key: "Customs code",              value: new_customs_code)
+
+    within("header") { click_on "Cases" }
+
+    fill_in "Keywords", with: new_name
+    click_on "Apply filters"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
   end
 
   it "allows to edit a product without an affected_units_status" do
@@ -248,13 +255,6 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
     expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
     expect(page).to have_summary_item(key: "Description",               value: new_description)
     expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(new_when_placed_on_market, scope: Product.model_name.i18n_key))
-
-    within("header") { click_on "Cases" }
-
-    fill_in "Keywords", with: new_name
-    click_on "Apply filters"
-
-    expect(page).to have_listed_case(investigation.pretty_id)
   end
 
   scenario "upload an document" do
