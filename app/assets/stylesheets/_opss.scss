@@ -1,0 +1,18 @@
+.opss-radios__divider--title .govuk-radios__divider,
+.govuk-radios__divider.opss-radios__divider--title {
+  width: 100%;
+  text-align: left;
+  font-weight: 700;
+
+  @include govuk-media-query($from: tablet) {
+    margin-top: govuk-spacing(6);
+    margin-bottom: govuk-spacing(3);
+  }
+}
+
+.opss-radios__divider--title,
+.govuk-radios__divider.opss-radios__divider--title {
+  > .govuk-radios__divider:first-child {
+    margin-top: govuk-spacing(0);
+  }
+}
