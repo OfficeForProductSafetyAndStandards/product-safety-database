@@ -49,4 +49,12 @@ class Product < ApplicationRecord
   def supporting_information
     tests + corrective_actions + unexpected_events + risk_assessments
   end
+
+  def images
+    documents.includes(:blob).joins(:blob).where("left(content_type, 5) = 'image'")
+  end
+
+  def non_image_documents
+    documents.includes(:blob).joins(:blob).where("left(content_type, 5) != 'image'")
+  end
 end
