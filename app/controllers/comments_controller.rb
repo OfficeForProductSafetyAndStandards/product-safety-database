@@ -27,7 +27,7 @@ private
   end
 
   def comment_activity_params
-    params.require(:comment_activity).permit(:body).tap do |p|
+    params.require(:comment_form).permit(:body).tap do |p|
       p[:body] = ActionController::Base.helpers.sanitize(p[:body])
     end
   end
