@@ -121,6 +121,16 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
         fill_in "Other action", with: ""
       end
 
+      within_fieldset("What action is being taken?") do
+        choose new_action
+        fill_in "Other action", with: ""
+      end
+
+      select "", from: "Business"
+      within_fieldset "Are there any files related to the action?" do
+        choose "Remove attached file"
+      end
+
       click_on "Update corrective action"
 
       expect_to_be_on_corrective_action_summary_page
@@ -134,9 +144,19 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       click_link "Back to #{investigation.decorate.pretty_description.downcase}"
       click_link "Activity"
 
+      expect(page).to have_content "Business: Removed"
+
       page.first("a", text: "View corrective action").click
 
       expect_to_be_on_corrective_action_summary_page
+
+      click_link "Edit corrective action"
+
+      within_fieldset("Are there any files related to the action?") do
+        expect(page).to have_unchecked_field("Yes")
+        expect(page).to have_checked_field("No")
+        expect(page).not_to have_checked_field("Remove attached file")
+      end
     end
   end
 end
