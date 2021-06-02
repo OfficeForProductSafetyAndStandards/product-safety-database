@@ -29,7 +29,11 @@
   <% end %>
 
   <% if activity.business_updated? %>
-    Business: <%= link_to activity.business.trading_name, activity.business %><br>
+    <% if activity.business %>
+      Business: <%= link_to activity.business.trading_name, activity.business %><br>
+    <% else %>
+      Business: Removed
+    <% end %>
   <% end %>
 
   <% if activity.new_measure_type %>

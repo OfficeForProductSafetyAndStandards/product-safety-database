@@ -70,7 +70,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def business_updated?
-    metadata.dig("updates", "business_id", 1)
+    metadata.dig("updates", "business_id")
   end
 
   def attachment
