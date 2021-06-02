@@ -52,7 +52,7 @@ private
     return false if document.nil? && related_file
     return false if document == @previous_attachment
 
-    [document, @previous_attachment].compact.any?
+    document.checksum != @previous_attachment.checksum
   end
 
   def new_file_description
