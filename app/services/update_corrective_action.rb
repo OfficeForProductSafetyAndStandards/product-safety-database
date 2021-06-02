@@ -45,7 +45,7 @@ private
   end
 
   def any_changes?
-    file_changed? || changes.except(:related_file, :existing_document_file_id).any?
+    file_changed? || changes.except(:related_file, :existing_document_file_id, :document).any?
   end
 
   def file_changed?
