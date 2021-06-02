@@ -31,3 +31,18 @@
     <% end %>
   </div>
 </div>
+
+<%= form_with model: @comment_form, scope: :comment_form, local: true, builder: ApplicationFormBuilder, method: :post, url: comment_path(@investigation.pretty_id) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary(@comment_form.errors)%>
+
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+      <%= render "form", form: form, comment_form: @comment_form, investigation: @investigation, type: @comment_form.type %>
+
+      <%= govukButton text: "Add comment" %>
+    </div>
+  </div>
+<% end %>
