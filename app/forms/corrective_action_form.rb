@@ -51,8 +51,8 @@ class CorrectiveActionForm
   validates :other_action, absence: true, unless: :other?
   validates :details, length: { maximum: 50_000 }
 
-  before_validation { trim_whitespace(:other_action, :details, :file_description, :online_recall_information) }
-  before_validation { nilify_blanks(:other_action, :details, :file_description, :online_recall_information) }
+  before_validation { trim_whitespace(:other_action, :details, :online_recall_information) }
+  before_validation { nilify_blanks(:other_action, :details, :online_recall_information) }
   before_validation :clear_related_file, unless: :related_file
   before_validation :clear_other_action, unless: -> { other? }
 

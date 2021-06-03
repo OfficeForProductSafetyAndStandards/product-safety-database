@@ -45,7 +45,7 @@ private
   end
 
   def any_changes?
-    file_changed? || file_description_changed? || changes.except(:related_file, :existing_document_file_id, :document, :file_description).any?
+    file_changed? || changes.except(:related_file, :existing_document_file_id, :document).any?
   end
 
   def file_changed?
@@ -53,16 +53,6 @@ private
     return false if document == @previous_attachment
 
     document.try(:checksum) != @previous_attachment.try(:checksum)
-  end
-
-  def file_description_changed?
-    return false unless changes["file_description"]
-
-    return true unless new_and_old_file_description_both_blank?
-  end
-
-  def new_and_old_file_description_both_blank?
-    changes["file_description"].select { |value| value.present? }.empty?
   end
 
   def new_file_description
