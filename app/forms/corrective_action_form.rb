@@ -26,7 +26,7 @@ class CorrectiveActionForm
   attribute :document
   attribute :existing_document_file_id
   attribute :filename
-  attribute :file_description, default: nil
+  attribute :file_description
   attribute :further_corrective_action, :boolean
 
   validates :product_id, presence: true, on: %i[add_corrective_action edit_corrective_action]
