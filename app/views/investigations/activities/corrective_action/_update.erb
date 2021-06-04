@@ -48,7 +48,7 @@
     Geographic scopes: <b><%= activity.new_geographic_scopes %></b><br>
   <% end %>
 
-  <% if activity.new_details %>
+  <% if activity.further_details_changed? %>
     Details: <%= updated_field activity.new_details %><br>
   <% end %>
 
