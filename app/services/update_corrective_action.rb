@@ -12,6 +12,7 @@ class UpdateCorrectiveAction
     corrective_action.transaction do
       corrective_action.document.detach unless related_file
       replace_attached_file             if file_changed?
+      remove_blanks_from_changes
 
       if any_changes?
         corrective_action.save!
@@ -46,6 +47,10 @@ private
 
   def any_changes?
     file_changed? || changes.except(:related_file, :existing_document_file_id, :document).any?
+  end
+
+  def remove_blanks_from_changes
+    changes.delete_if { |k,v| v.first.blank? && v.last.blank? }
   end
 
   def file_changed?
