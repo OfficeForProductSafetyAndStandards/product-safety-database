@@ -60,6 +60,12 @@ private
     document.try(:checksum) != @previous_attachment.try(:checksum)
   end
 
+  def new_file_description
+    return nil if file_description.blank?
+
+    file_description
+  end
+
   def replace_attached_file
     corrective_action.document.detach
     corrective_action.document.attach(document)
@@ -72,7 +78,7 @@ private
   def update_document_description!
     return unless document
 
-    document.metadata[:description] = file_description
+    document.metadata[:description] = new_file_description
     document.save!
   end
 
