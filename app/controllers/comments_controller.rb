@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
 
     AddCommentToCase.call!(
       @comment_form.attributes.merge({
-        investigation: investigation,
+        investigation: @investigation,
         user: current_user
       })
     )

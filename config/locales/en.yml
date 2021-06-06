@@ -408,6 +408,10 @@ en:
           attributes:
             country:
               inclusion: Enter the notifying country
+        comment_form:
+          attributes:
+            body:
+              blank: Enter a comment
         test_result_form:
           attributes:
             product_id:
@@ -621,10 +625,6 @@ en:
               blank: "Enter date of the test request"
               invalid: "Enter a real date of the test request"
               date_missing_component: "Enter date of the test request and include a %{missing_components}"
-        comment_activity:
-          attributes:
-            body:
-              blank: "Enter a comment"
         corrective_action:
           attributes:
             product:
