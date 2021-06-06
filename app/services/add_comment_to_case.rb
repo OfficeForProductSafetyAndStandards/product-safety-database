@@ -23,11 +23,11 @@ class AddCommentToCase
   end
 
   def send_notification_email(investigation, user)
-    email_recipients_for_team_with_access(investigation, user).each do |entity|
+    email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
-        entity.name,
-        entity.email,
+        recipient.name,
+        recipient.email,
         email_update_text,
         email_subject
       ).deliver_later
