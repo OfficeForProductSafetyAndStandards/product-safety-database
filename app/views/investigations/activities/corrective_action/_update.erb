@@ -30,7 +30,7 @@
 
   <% if activity.business_updated? %>
     <% if activity.business %>
-      Business: <%= link_to activity.business.trading_name, activity.business %><br>
+      Business: <%= link_to activity.new_business.trading_name, activity.new_business %><br>
     <% else %>
       Business: Removed
     <% end %>
