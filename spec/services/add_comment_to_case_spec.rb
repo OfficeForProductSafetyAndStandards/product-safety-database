@@ -2,9 +2,17 @@ require "rails_helper"
 
 RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator: user) }
+  let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
+  let(:product) { create(:product_washing_machine) }
+
+  let(:team) { create(:team) }
+  let(:business) { create(:business) }
+
+  let(:read_only_teams) { [team] }
   let(:user) { create(:user) }
-  let(:body) { "Very important note" }
+  let(:creator) { user }
+  let(:owner) { user }
+  let(:body) { "an important note" }
 
   describe ".call" do
     context "with no parameters" do
@@ -57,12 +65,9 @@ RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_stubbed_mail
       it "adds an audit activity record", :aggregate_failures do
         result
         last_added_activity = investigation.activities.order(:id).first
-        byebug
         expect(last_added_activity).to be_a(CommentActivity)
         expect(last_added_activity.body).to eql(body)
       end
-
-      it_behaves_like "a service which notifies the case owner"
     end
   end
 end
