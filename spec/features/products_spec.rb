@@ -19,6 +19,22 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, typ
       expect(page).to have_link(iphone.name, href: product_path(iphone))
     end
 
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(1) > span:nth-child(1)" do
+      expect(page).to have_content("Product type")
+    end
+
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(1) > span:nth-child(2)" do
+      expect(page).to have_content(iphone.subcategory)
+    end
+
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(2) > span:nth-child(1)" do
+      expect(page).to have_content("Category")
+    end
+
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(2) > span:nth-child(2)" do
+      expect(page).to have_content(iphone.category)
+    end
+
     within ".govuk-grid-row.psd-product-card:nth-child(2) > .govuk-grid-column-one-half:nth-child(1) > span:nth-child(2)" do
       expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
     end
