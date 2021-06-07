@@ -20,7 +20,7 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, typ
     end
 
     within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(1) > span:nth-child(1)" do
-      expect(page).to have_content("Product type")
+      expect(page).to have_content("Product Type")
     end
 
     within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(1) > span:nth-child(2)" do
