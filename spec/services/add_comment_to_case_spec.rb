@@ -68,6 +68,8 @@ RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_stubbed_mail
         expect(last_added_activity).to be_a(CommentActivity)
         expect(last_added_activity.body).to eql(body)
       end
+
+      it_behaves_like "a service which notifies the case owner"
     end
   end
 end
