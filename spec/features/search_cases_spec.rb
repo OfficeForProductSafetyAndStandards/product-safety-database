@@ -107,7 +107,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
     expect(page).to have_text("T12 mobile phone")
   end
 
-  context "fuzzy matching" do
+  context "with fuzzy matching" do
     it "does not allow any edits for words less than 6 letters long" do
       sign_in(user)
       visit "/cases"
