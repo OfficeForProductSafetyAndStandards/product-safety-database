@@ -32,7 +32,7 @@ gem "redis-rails", "~> 5.0"
 gem "request_store", "~> 1.5"
 gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
-gem "scout_apm", "~> 4.0"
+gem "scout_apm", "~> 4.1"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.2"
@@ -63,7 +63,7 @@ end
 group :development do
   gem "listen", "~> 3.5"
   gem "m", "~> 1.5"
-  gem "solargraph", "~> 0.40"
+  gem "solargraph", "~> 0.41"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
