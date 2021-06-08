@@ -28,14 +28,13 @@ class AddCommentToCase
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        email_update_text,
-        email_subject
-      ).deliver_later
+        email_update_text(recipient),
+        email_subject).deliver_later
     end
   end
 
-  def email_update_text
-    "#{source.show} commented on the allegation."
+  def email_update_text(recipient)
+    "#{source.show(recipient)} commented on the allegation."
   end
 
   def email_subject

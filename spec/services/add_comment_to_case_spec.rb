@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_test_queue_adapter do
+RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
   let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
@@ -45,7 +45,7 @@ RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_stubbed_mail
       end
 
       def expected_email_body(name)
-        "Comment was added to the #{investigation.case_type} by #{name}."
+        "#{name} commented on the allegation."
       end
 
       let(:assessment_date) { Time.zone.today }
