@@ -35,7 +35,7 @@ class AddCommentToCase
   end
 
   def email_update_text
-    "Comment was added to the #{investigation.case_type.upcase_first} by #{source.show}."
+    "#{source.show} commented on the allegation."
   end
 
   def email_subject
