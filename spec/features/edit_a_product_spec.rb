@@ -154,6 +154,7 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
     within("header") { click_on "Cases" }
 
     fill_in "Keywords", with: new_name
+    sleep 1
     click_on "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
