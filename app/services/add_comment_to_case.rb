@@ -22,14 +22,15 @@ class AddCommentToCase
     UserSource.new(user: user)
   end
 
-  def send_notification_email(investigation, user)
+  def send_notification_email(investigation, _user)
     email_recipients_for_case_owner.each do |recipient|
       NotifyMailer.investigation_updated(
         investigation.pretty_id,
         recipient.name,
         recipient.email,
         email_update_text(recipient),
-        email_subject).deliver_later
+        email_subject
+      ).deliver_later
     end
   end
 

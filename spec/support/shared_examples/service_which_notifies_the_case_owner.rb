@@ -17,6 +17,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
 
   context "when the case owner is a user on the same team" do
     let(:user_same_team) { create(:user, :activated, team: user.team, organisation: user.organisation) }
+
     before { ChangeCaseOwner.call!(investigation: investigation, owner: user_same_team, user: user) }
 
     it "sends an email to the user" do
