@@ -32,11 +32,13 @@
       <% end %>
       <%= form.hidden_field :related_file, value: nil %>
 
+      <% remove_file_text = @corrective_action_form.related_file? ? "Remove attached file" : "No" %>
+
       <%= form.govuk_radios :related_file,
          legend: "Are there any files related to the action?",
          items: [
            { text: "Yes", value: "true", conditional: { html: file_field }, checked: @corrective_action_form.document.present? },
-           { text: "No", value: "off" }
+           { text: remove_file_text, value: "off" }
          ]
       %>
 
