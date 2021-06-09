@@ -5,7 +5,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:product) { create(:product_washing_machine, name: "MyBrand washing machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user) }
   let(:date) { Date.parse("1 Jan 2020") }
-  let(:file) { Rails.root + "test/fixtures/files/test_result.txt" }
+  let(:file) { "#{Rails.root}test/fixtures/files/test_result.txt" }
   let(:other_user) { create(:user, :activated) }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:failure_details) { "Something went wrong" }
@@ -116,7 +116,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
     expect(page).not_to have_link("Add supporting information")
   end
 
-  def fill_in_test_result_submit_form(legislation:, date:, test_result:, failure_details: nil, file:, standards:)
+  def fill_in_test_result_submit_form(legislation:, date:, test_result:, file:, standards:, failure_details: nil)
     select legislation, from: "Against which legislation?"
     fill_in "Day",   with: date.day if date
     fill_in "Month", with: date.month if date

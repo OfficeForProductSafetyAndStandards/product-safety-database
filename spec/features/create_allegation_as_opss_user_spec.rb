@@ -14,7 +14,7 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
       description: Faker::Lorem.paragraph,
       hazard_type: hazard_type,
       category: Rails.application.config.product_constants["product_category"].sample,
-      file: Rails.root + "test/fixtures/files/testImage.png"
+      file: "#{Rails.root}test/fixtures/files/testImage.png"
     }
   end
   let(:product_details) do

@@ -53,7 +53,7 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
     output += "(" if correspondence.correspondent_name.present?
     output += sanitize_text correspondence.email_address
     output += ")" if correspondence.correspondent_name.present?
-    output + "<br>"
+    "#{output}<br>"
   end
 
   def restricted_title(_user)

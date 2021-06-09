@@ -105,7 +105,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
       find("details > summary", text: "Replace this file").click
 
-      attach_file "Upload a file", Rails.root + "spec/fixtures/files/corrective_action.txt"
+      attach_file "Upload a file", "#{Rails.root}spec/fixtures/files/corrective_action.txt"
       fill_in "Attachment description", with: "New test result"
 
       click_on "Update corrective action"

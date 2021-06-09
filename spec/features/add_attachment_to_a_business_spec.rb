@@ -4,7 +4,7 @@ RSpec.feature "Add an attachment to a business", :with_stubbed_elasticsearch, :w
   let(:user)     { create(:user, :activated, has_viewed_introduction: true) }
   let(:business) { create(:business) }
 
-  let(:file)        { Rails.root + "test/fixtures/files/testImage.png" }
+  let(:file)        { "#{Rails.root}test/fixtures/files/testImage.png" }
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 

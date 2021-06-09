@@ -50,7 +50,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def further_details_changed?
-    metadata.dig("updates").key?("details")
+    metadata["updates"].key?("details")
   end
 
   def new_filename
@@ -62,7 +62,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def file_description_changed?
-    metadata.dig("updates").key?("file_description")
+    metadata["updates"].key?("file_description")
   end
 
   def new_file_description
