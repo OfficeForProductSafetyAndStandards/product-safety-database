@@ -31,14 +31,16 @@ gh_deploy_create() {
     "environment": "'"$environment_name"'",
     "auto_merge": false,
     "required_contexts": []
-    }' | jq -r '.url?') # Gets 'url' field from the response
+    }' | jq -r '.url') # Gets 'url' field from the response
 
-  if [ -z "$deploy_url" ]; then
+  if [[ "$deploy_url" == "null" ]]; then
     echo "Failed to create Github deployment"
+    exit 1
   else
     # Need to be shared between steps
     echo "DEPLOY_STATUSES_URL=$deploy_url/statuses" >> $GITHUB_ENV
     echo "Github deployment created: $deploy_url"
+    exit 0
   fi
 }
 
