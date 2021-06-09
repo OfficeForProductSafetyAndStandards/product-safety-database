@@ -29,7 +29,11 @@
   <% end %>
 
   <% if activity.business_updated? %>
-    Business: <%= link_to activity.business.trading_name, activity.business %><br>
+    <% if activity.business %>
+      Business: <%= link_to activity.new_business.trading_name, activity.new_business %><br>
+    <% else %>
+      Business: Removed
+    <% end %>
   <% end %>
 
   <% if activity.new_measure_type %>
@@ -44,7 +48,7 @@
     Geographic scopes: <b><%= activity.new_geographic_scopes %></b><br>
   <% end %>
 
-  <% if activity.new_details %>
+  <% if activity.further_details_changed? %>
     Details: <%= updated_field activity.new_details %><br>
   <% end %>
 
