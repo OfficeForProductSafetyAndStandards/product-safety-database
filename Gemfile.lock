@@ -93,8 +93,8 @@ GEM
     attr_extras (6.2.4)
     awesome_print (1.9.2)
     aws-eventstream (1.1.1)
-    aws-partitions (1.462.0)
-    aws-sdk-core (3.114.0)
+    aws-partitions (1.465.0)
+    aws-sdk-core (3.114.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -102,7 +102,7 @@ GEM
     aws-sdk-kms (1.43.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.95.1)
+    aws-sdk-s3 (1.96.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
@@ -467,7 +467,7 @@ GEM
     sentry-ruby-core (4.5.1)
       concurrent-ruby
       faraday
-    sentry-sidekiq (4.5.0)
+    sentry-sidekiq (4.5.1)
       sentry-ruby-core (~> 4.5.0)
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
@@ -499,7 +499,7 @@ GEM
     slim_lint (0.21.1)
       rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-    solargraph (0.41.1)
+    solargraph (0.41.2)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -584,7 +584,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-pg_enum (~> 1.2)
   awesome_print (~> 1.9)
-  aws-sdk-s3 (~> 1.95)
+  aws-sdk-s3 (~> 1.96)
   axlsx!
   bootsnap
   byebug (~> 11.1)
