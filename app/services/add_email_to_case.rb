@@ -34,8 +34,13 @@ class AddEmailToCase
 
 private
 
+  def audit_activity_metadata
+    AuditActivity::Correspondence::AddEmail.build_metadata(email)
+  end
+
   def create_audit_activity(correspondence, investigation)
     activity = AuditActivity::Correspondence::AddEmail.create!(
+      metadata: audit_activity_metadata,
       body: build_body(correspondence) || sanitize_text(correspondence.details),
       source: UserSource.new(user: User.current),
       investigation: investigation,
