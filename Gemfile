@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.94"
+gem "aws-sdk-s3", "~> 1.95"
 gem "axlsx", git: "https://github.com/randym/axlsx.git", ref: "c593a08"
 gem "caxlsx_rails", "~> 0.6.2"
 gem "cf-app-utils", "~> 0.6"
@@ -32,7 +32,7 @@ gem "redis-rails", "~> 5.0"
 gem "request_store", "~> 1.5"
 gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
-gem "scout_apm", "~> 4.0"
+gem "scout_apm", "~> 4.1"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.2"
@@ -63,7 +63,7 @@ end
 group :development do
   gem "listen", "~> 3.5"
   gem "m", "~> 1.5"
-  gem "solargraph", "~> 0.40"
+  gem "solargraph", "~> 0.41"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
@@ -80,10 +80,10 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.10"
   gem "rspec-rails"
-  gem "rubocop", "~> 0.87"
-  gem "rubocop-govuk", "~> 3.17"
-  gem "rubocop-performance", "~> 1.8"
-  gem "rubocop-rspec", "~> 1.42", require: false
+  gem "rubocop", "~> 1.15"
+  gem "rubocop-govuk", "~> 4.0"
+  gem "rubocop-performance", "~> 1.11"
+  gem "rubocop-rspec", "~> 2.3", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "shoulda-matchers"
   gem "simplecov"

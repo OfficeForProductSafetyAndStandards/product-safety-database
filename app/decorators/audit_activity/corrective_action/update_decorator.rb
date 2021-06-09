@@ -49,6 +49,10 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     geographic_scopes.map { |geographic_scope| I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes]) }.to_sentence
   end
 
+  def further_details_changed?
+    metadata["updates"].key?("details")
+  end
+
   def new_filename
     metadata.dig("updates", "filename", 1)
   end
@@ -58,7 +62,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def file_description_changed?
-    metadata.dig("updates").key?("file_description")
+    metadata["updates"].key?("file_description")
   end
 
   def new_file_description
@@ -70,7 +74,11 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def business_updated?
-    metadata.dig("updates", "business_id", 1)
+    metadata.dig("updates", "business_id")
+  end
+
+  def new_business
+    Business.find(metadata.dig("updates", "business_id", 1))
   end
 
   def attachment

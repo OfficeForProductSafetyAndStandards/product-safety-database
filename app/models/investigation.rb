@@ -3,8 +3,7 @@ class Investigation < ApplicationRecord
   include SanitizationHelper
   include InvestigationElasticsearch
 
-  attr_accessor :visibility_rationale
-  attr_accessor :owner_rationale
+  attr_accessor :visibility_rationale, :owner_rationale
 
   enum reported_reason: {
     unsafe: "unsafe",
@@ -89,7 +88,7 @@ class Investigation < ApplicationRecord
   end
 
   def initialize(*args)
-    raise "Cannot instantiate an Investigation - use one of its subclasses instead" if self.class == Investigation
+    raise "Cannot instantiate an Investigation - use one of its subclasses instead" if instance_of?(Investigation)
 
     super
   end

@@ -2,14 +2,14 @@ require "rails_helper"
 
 RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_test_queue_adapter do
   include ActionDispatch::TestProcess::FixtureFile
-  include_context "with corrective action setup for updates"
-
   subject(:result) do
     described_class.call(
       corrective_action_attributes
         .merge(corrective_action: corrective_action, user: user, changes: changes)
     )
   end
+
+  include_context "with corrective action setup for updates"
 
   let(:user)             { create(:user, :activated) }
   let(:case_creator)     { create(:user, :activated, team: user.team) }
