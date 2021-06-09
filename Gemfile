@@ -80,10 +80,10 @@ group :test do
   gem "rspec"
   gem "rspec-mocks", "~> 3.10"
   gem "rspec-rails"
-  gem "rubocop", "~> 0.87"
-  gem "rubocop-govuk", "~> 3.17"
-  gem "rubocop-performance", "~> 1.8"
-  gem "rubocop-rspec", "~> 1.42", require: false
+  gem "rubocop", "~> 1.15"
+  gem "rubocop-govuk", "~> 4.0"
+  gem "rubocop-performance", "~> 1.11"
+  gem "rubocop-rspec", "~> 2.3", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "shoulda-matchers"
   gem "simplecov"

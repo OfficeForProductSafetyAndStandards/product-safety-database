@@ -14,7 +14,7 @@ class AuditActivity::Investigation::UpdateStatusDecorator < ApplicationDecorator
   end
 
   def rationale
-    metadata.dig("rationale")
+    metadata["rationale"]
   end
 
 private

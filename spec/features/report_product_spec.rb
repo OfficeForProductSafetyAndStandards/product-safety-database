@@ -40,7 +40,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
         date: Faker::Date.backward(days: 14),
         legislation: Rails.application.config.legislation_constants["legislation"].sample,
         details: Faker::Lorem.sentence,
-        file: Rails.root + "test/fixtures/files/old_risk_assessment.txt",
+        file: Rails.root.join("test/fixtures/files/old_risk_assessment.txt"),
         file_description: Faker::Lorem.paragraph,
         measure_type: CorrectiveAction::MEASURE_TYPES.sample,
         duration: CorrectiveAction::DURATION_TYPES.sample,
@@ -72,7 +72,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
   let(:risk_assessments) do
     assessment = lambda {
       {
-        file: Rails.root + "test/fixtures/files/new_risk_assessment.txt",
+        file: Rails.root.join("test/fixtures/files/new_risk_assessment.txt"),
         title: Faker::Lorem.sentence,
         description: Faker::Lorem.paragraph,
         risk_level: RiskAssessment.risk_levels.values.sample.titleize,
@@ -94,7 +94,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       result: %w[Pass Fail].sample,
       failure_details: "Additional details",
       details: Faker::Lorem.sentence,
-      file: Rails.root + "test/fixtures/files/test_result.txt"
+      file: Rails.root.join("test/fixtures/files/test_result.txt")
     }
   end
 
@@ -127,7 +127,7 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
       let(:product_images) do
         image = lambda {
           {
-            file: Rails.root + "test/fixtures/files/testImage.png",
+            file: Rails.root.join("test/fixtures/files/testImage.png"),
             title: Faker::Lorem.sentence,
             description: Faker::Lorem.paragraph
           }

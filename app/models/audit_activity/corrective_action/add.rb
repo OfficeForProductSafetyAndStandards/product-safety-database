@@ -85,20 +85,18 @@ class AuditActivity::CorrectiveAction::Add < AuditActivity::CorrectiveAction::Ba
     action_name = metadata.dig("corrective_action", "action")
     return super unless action_name
 
-    if (truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym])
-      return "#{truncated_action}: #{product.name}" unless action_name.inquiry.other?
+    if (truncated_action = CorrectiveAction::TRUNCATED_ACTION_MAP[action_name.to_sym]) && !action_name.inquiry.other?
+      return "#{truncated_action}: #{product.name}"
     end
 
     metadata.dig("corrective_action", "other_action")
   end
 
   def corrective_action
-    @corrective_action ||= begin
-                             if (corrective_action_id = metadata&.dig("corrective_action", "id"))
-                               CorrectiveAction.find_by!(id: corrective_action_id)
-                             else
-                               super
-                             end
+    @corrective_action ||= if (corrective_action_id = metadata&.dig("corrective_action", "id"))
+                             CorrectiveAction.find_by!(id: corrective_action_id)
+                           else
+                             super
                            end
   end
 

@@ -22,7 +22,7 @@ module UrlHelper
     if parent.is_a?(Investigation)
       path_for_model(parent) + (file&.image? ? "/images" : "/supporting-information")
     else
-      path_for_model(parent) + "#attachments"
+      "#{path_for_model(parent)}#attachments"
     end
   end
 
@@ -32,23 +32,23 @@ module UrlHelper
   end
 
   def associated_document_path(parent, document)
-    path_for_model(parent, :documents) + "/" + document.id.to_s
+    "#{path_for_model(parent, :documents)}/#{document.id}"
   end
 
   def new_associated_document_path(parent)
-    path_for_model(parent, :documents) + "/new"
+    "#{path_for_model(parent, :documents)}/new"
   end
 
   def new_document_flow_path(parent)
-    path_for_model(parent, :documents) + "/new/new"
+    "#{path_for_model(parent, :documents)}/new/new"
   end
 
   def edit_associated_document_path(parent, document)
-    associated_document_path(parent, document) + "/edit"
+    "#{associated_document_path(parent, document)}/edit"
   end
 
   def remove_associated_document_path(parent, document)
-    associated_document_path(parent, document) + "/remove"
+    "#{associated_document_path(parent, document)}/remove"
   end
 
   def build_back_link_to_case
