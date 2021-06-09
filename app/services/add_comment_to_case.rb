@@ -9,13 +9,18 @@ class AddCommentToCase
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     ActiveRecord::Base.transaction do
-      CommentActivity.create!(
-        body: body,
+      context.comment = AuditActivity::Comment::AddComment.create!(
+        source: UserSource.new(user: user),
+        metadata: audit_activity_metadata,
         investigation_id: investigation.id
       )
     end
 
     send_notification_email(investigation, user)
+  end
+
+  def audit_activity_metadata
+    AuditActivity::Comment::AddComment.build_metadata(body)
   end
 
   def source
