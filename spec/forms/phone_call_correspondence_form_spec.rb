@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe PhoneCallCorrespondenceForm do
-  include_context "with phone call correspondence setup"
-
   subject(:form) { described_class.new(params) }
+
+  include_context "with phone call correspondence setup"
 
   let(:existing_transcript_file_id) { nil }
   let(:correspondence_date) { { "day" => day, "month" => "1", "year" => "2020" } }

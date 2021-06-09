@@ -78,10 +78,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_field("Product name",             with: product.name)
     expect(page).to have_field("Barcode number",           with: product.barcode)
     expect(page).to have_field("Batch number",             with: product.batch_number)
-    expect(page).to have_field("Other product identifier", with: "\r\n" + product.product_code)
+    expect(page).to have_field("Other product identifier", with: "\r\n#{product.product_code}")
     expect(page).to have_field("Webpage",                  with: product.webpage)
     expect(page).to have_select("Country of origin",       selected: "France")
-    expect(page).to have_field("Description of product",   with: "\r\n" + product.description)
+    expect(page).to have_field("Description of product",   with: "\r\n#{product.description}")
 
     click_on "Save product"
 
@@ -177,10 +177,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_field("Product name",             with: product_with_no_affected_units_status.name)
     expect(page).to have_field("Barcode number",           with: product_with_no_affected_units_status.barcode)
     expect(page).to have_field("Batch number",             with: product_with_no_affected_units_status.batch_number)
-    expect(page).to have_field("Other product identifier", with: "\r\n" + product_with_no_affected_units_status.product_code)
+    expect(page).to have_field("Other product identifier", with: "\r\n#{product_with_no_affected_units_status.product_code}")
     expect(page).to have_field("Webpage",                  with: product_with_no_affected_units_status.webpage)
     expect(page).to have_select("Country of origin",       selected: "France")
-    expect(page).to have_field("Description of product",   with: "\r\n" + product_with_no_affected_units_status.description)
+    expect(page).to have_field("Description of product",   with: "\r\n#{product_with_no_affected_units_status.description}")
 
     click_on "Save product"
 

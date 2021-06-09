@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AddPhoneCallToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include_context "with phone call correspondence setup"
-
   subject(:result) { described_class.call(params) }
+
+  include_context "with phone call correspondence setup"
 
   before do
     params[:investigation] = investigation

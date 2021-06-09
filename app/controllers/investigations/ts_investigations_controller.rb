@@ -349,13 +349,13 @@ private
       business_entry = session[:businesses].find { |entry| entry[:type] == current_business_type }
       contact = @business.contacts.first
       location = @business.locations.first
-      if contact.attributes.values.any?(&:present?)
-        business_entry[:contact] = contact.attributes if contact.valid?
+      if contact.attributes.values.any?(&:present?) && contact.valid?
+        business_entry[:contact] = contact.attributes
       end
       # Defaults_on_primary_location adds a default value to the location name field but we don't want to consider this
       # value when determining if the location form has been completed
-      if location.attributes.reject { |k, _| k == "name" }.values.any?(&:present?)
-        business_entry[:location] = location.attributes if location&.valid?
+      if location.attributes.reject { |k, _| k == "name" }.values.any?(&:present?) && location&.valid?
+        business_entry[:location] = location.attributes
       end
       business_entry[:business] = @business.attributes
     end
@@ -460,7 +460,7 @@ private
     if key == :has_corrective_action
       :further_corrective_action
     else
-      ("further_" + key.to_s).to_sym
+      "further_#{key}".to_sym
     end
   end
 
@@ -468,7 +468,7 @@ private
     if key == :has_corrective_action
       "corrective action"
     else
-      "further " + key.to_s.humanize(capitalize: false)
+      "further #{key.to_s.humanize(capitalize: false)}"
     end
   end
 

@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include_context "with phone call correspondence setup"
-
   subject(:decorator) { phone_call.activities.find_by!(type: "AuditActivity::Correspondence::PhoneCallUpdated").decorate }
+
+  include_context "with phone call correspondence setup"
 
   let(:phone_call) do
     AddPhoneCallToCase.call!(
