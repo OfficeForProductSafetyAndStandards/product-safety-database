@@ -21,6 +21,11 @@ set -e
 gh_deploy_create() {
   environment_name=$1
 
+  if [ -z "$GITHUB_TOKEN" ]; then
+    echo "GITHUB_TOKEN not set"
+    exit 1
+  fi
+
   deploy_url=$(curl -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json" \
@@ -61,6 +66,11 @@ gh_deploy_initiate() {
   environment_name=$1
   log_url=$2
 
+  if [ -z "$GITHUB_TOKEN" ]; then
+    echo "GITHUB_TOKEN not set"
+    exit 1
+  fi
+
   curl -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json" \
@@ -93,6 +103,11 @@ gh_deploy_success() {
   log_url=$2
   environment_url=$3
 
+  if [ -z "$GITHUB_TOKEN" ]; then
+    echo "GITHUB_TOKEN not set"
+    exit 1
+  fi
+
   curl -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json" \
@@ -122,6 +137,12 @@ gh_deploy_success() {
 gh_deploy_failure() {
   environment_name=$1
   log_url=$2
+
+  if [ -z "$GITHUB_TOKEN" ]; then
+    echo "GITHUB_TOKEN not set"
+    exit 1
+  fi
+
   curl -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json" \
@@ -149,6 +170,12 @@ gh_deploy_failure() {
 #
 gh_deploy_deactivate() {
   deploy_id=$1
+
+  if [ -z "$GITHUB_TOKEN" ]; then
+    echo "GITHUB_TOKEN not set"
+    exit 1
+  fi
+
   curl -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Accept: application/vnd.github.ant-man-preview+json" \
