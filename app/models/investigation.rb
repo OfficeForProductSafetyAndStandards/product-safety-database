@@ -102,6 +102,10 @@ class Investigation < ApplicationRecord
     owner&.id
   end
 
+  def non_owner_teams_with_access
+    teams_with_read_only_access.or(teams_with_edit_access) - [owner.team]
+  end
+
   def build_owner_collaborations_from(user)
     build_owner_user_collaboration(collaborator: user)
     build_owner_team_collaboration(collaborator: user.team)

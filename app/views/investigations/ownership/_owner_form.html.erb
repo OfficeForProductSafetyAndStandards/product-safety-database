@@ -2,34 +2,34 @@
   <%= render "form_components/govuk_error_summary", form: form %>
   <%= yield %>
 
-  <%
-    items = @selectable_users.map do |user|
-      { text: user.decorate.display_name(viewer: current_user), value: user.id, checked: investigation.owner == user }
-    end
+  <% someone_else_in_your_team_dropdown = capture do %>
+  <%= render "investigations/ownership/owner_selection",
+  form: form,
+  key: :select_team_member,
+  items: @team_members,
+  label: "Select team member",
+  show_all_values: true
   %>
+  <% end %>
 
-  <% someone_in_your_team = capture do %>
-    <%= render "investigations/ownership/owner_selection",
-      form: form,
-      key: :select_team_member,
-      items: @team_members,
-      label: "Select team member",
-      show_all_values: true
+  <% items = add_your_team_values([], investigation, someone_else_in_your_team_dropdown) %>
+
+  <% unless @other_teams_added_to_case.empty? %>
+    <% items << { divider: "Other teams added to the case" } %>
+    <%
+      teams = @other_teams_added_to_case.each do |team|
+        items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }
+      end
     %>
   <% end %>
 
-  <% items.push text: "Someone in your team",
-               value: "someone_in_your_team",
-               conditional: { html: someone_in_your_team } %>
-
-  <% items.push divider: "Teams" %>
+  <% items.push divider: "Other" %>
 
   <%
-    teams = @selectable_teams.map do |team|
-      { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team }
+    teams = @default_opss_teams.each do |team|
+      items << { text: team.decorate.display_name(viewer: current_user), value: team.id, checked: investigation.owner == team, hint: { text: opss_hint_text(team) } }
     end
   %>
-  <% items.concat teams %>
 
   <% other_teams = capture do %>
     <%= render "investigations/ownership/owner_selection",
@@ -42,8 +42,6 @@
   <% end %>
   <% items.push text: "Other team", value: "other_team", conditional: { html: other_teams } %>
 
-  <% items.push divider: "or" %>
-
   <% someone_else = capture do %>
     <%= render "investigations/ownership/owner_selection",
       form: form,
@@ -54,7 +52,7 @@
   <% end %>
   <% items.push text: "Someone else", value: "someone_else", conditional: { html: someone_else } %>
 
-  <%= render "form_components/govuk_radios", form: form, key: :owner_id, items: items %>
+  <%= render "form_components/govuk_radios", form: form, key: :owner_id, items: items, classes: "opss-radios__divider--title" %>
 
   <div class="govuk-form-group">
     <%= form.submit "Continue", class: "govuk-button" %>

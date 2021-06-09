@@ -3,10 +3,6 @@ class AuditActivity::Product::Destroy < AuditActivity::Product::Base
     { reason: reason, product: product.attributes }
   end
 
-  def self.from(*)
-    raise "Deprecated - use RemoveProductFromCase.call instead"
-  end
-
 private
 
   def subtitle_slug

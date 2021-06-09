@@ -97,7 +97,8 @@ private
       multi_match: {
         query: query,
         fields: @fuzzy_fields,
-        fuzziness: "AUTO"
+        fuzziness: "AUTO",
+        operator: "and"
       }
     }
   end

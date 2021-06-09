@@ -42,7 +42,7 @@ private
         entity.name,
         entity.email,
         email_update_text,
-        activity.email_subject_text
+        email_subject
       ).deliver_later
     end
   end
@@ -56,8 +56,16 @@ private
     )
   end
 
+  def email_subject
+    I18n.t("update_phone_call.email_subject_text", case_type: email_case_type)
+  end
+
+  def email_case_type
+    investigation.case_type.upcase_first
+  end
+
   def email_update_text
-    "Phone call details updated on the #{investigation.case_type.upcase_first} by #{activity.source.show}."
+    "Phone call details updated on the #{email_case_type} by #{activity.source.show}."
   end
 
   def any_changes?
