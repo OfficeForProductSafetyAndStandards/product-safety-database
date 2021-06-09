@@ -45,20 +45,14 @@ private
   end
 
   def any_changes?
-    file_changed? || changes.except(:related_file, :existing_document_file_id).any?
+    file_changed? || changes.except(:related_file, :existing_document_file_id, :document).any?
   end
 
   def file_changed?
     return false if document.nil? && related_file
     return false if document == @previous_attachment
 
-    [document, @previous_attachment].compact.any?
-  end
-
-  def new_file_description
-    return nil if file_description.blank?
-
-    file_description
+    document.try(:checksum) != @previous_attachment.try(:checksum)
   end
 
   def replace_attached_file
@@ -73,7 +67,7 @@ private
   def update_document_description!
     return unless document
 
-    document.metadata[:description] = new_file_description
+    document.metadata[:description] = file_description
     document.save!
   end
 
