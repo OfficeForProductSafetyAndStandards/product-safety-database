@@ -5,7 +5,7 @@ RSpec.feature "Adding a test result", :with_stubbed_elasticsearch, :with_stubbed
   let(:product) { create(:product_washing_machine, name: "MyBrand washing machine") }
   let(:investigation) { create(:allegation, products: [product], creator: user) }
   let(:date) { Date.parse("1 Jan 2020") }
-  let(:file) { "#{Rails.root}test/fixtures/files/test_result.txt" }
+  let(:file) { Rails.root.join "test/fixtures/files/test_result.txt" }
   let(:other_user) { create(:user, :activated) }
   let(:legislation) { "General Product Safety Regulations 2005" }
   let(:failure_details) { "Something went wrong" }

@@ -10,7 +10,7 @@ FactoryBot.define do
     contact_method { %w[phone email].sample }
 
     transient do
-      correspondence_file { "#{Rails.root}test/fixtures/files/test_result.txt" }
+      correspondence_file { Rails.root.join("test/fixtures/files/test_result.txt") }
     end
   end
 

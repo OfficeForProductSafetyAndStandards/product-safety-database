@@ -4,8 +4,8 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_elasticsearch, :wi
   let(:user)    { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product) }
 
-  let(:image)                 { "#{Rails.root}test/fixtures/files/testImage.png" }
-  let(:non_image_attachment)  { "#{Rails.root}test/fixtures/files/email_file.txt" }
+  let(:image)                 { Rails.root.join "test/fixtures/files/testImage.png" }
+  let(:non_image_attachment)  { Rails.root.join "test/fixtures/files/email_file.txt" }
   let(:title)                 { Faker::Lorem.sentence }
   let(:description)           { Faker::Lorem.paragraph }
 

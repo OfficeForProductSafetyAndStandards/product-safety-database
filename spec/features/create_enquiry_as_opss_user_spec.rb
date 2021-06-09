@@ -15,7 +15,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     {
       enquiry_description: Faker::Lorem.paragraph,
       enquiry_title: Faker::Name.name,
-      file: "#{Rails.root}test/fixtures/files/testImage.png",
+      file: Rails.root.join("test/fixtures/files/testImage.png"),
     }
   end
   let(:blank_enquiry_details) do

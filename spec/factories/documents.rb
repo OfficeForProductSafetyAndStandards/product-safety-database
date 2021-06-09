@@ -1,7 +1,7 @@
 FactoryBot.define do
   trait :with_document_info do
     transient do
-      document_file { "#{Rails.root}test/fixtures/files/test_result.txt" }
+      document_file { Rails.root.join("test/fixtures/files/test_result.txt") }
       document_title { Faker::Lorem.sentence }
       document_description { Faker::Lorem.paragraph }
     end

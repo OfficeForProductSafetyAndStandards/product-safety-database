@@ -4,8 +4,8 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_elasticsearch, :with_
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, creator: user) }
 
-  let(:image_file)  { "#{Rails.root}test/fixtures/files/testImage.png" }
-  let(:other_file)  { "#{Rails.root}test/fixtures/files/attachment_filename.txt" }
+  let(:image_file)  { Rails.root.join "test/fixtures/files/testImage.png" }
+  let(:other_file)  { Rails.root.join "test/fixtures/files/attachment_filename.txt" }
   let(:title)       { Faker::Lorem.sentence }
   let(:description) { Faker::Lorem.paragraph }
 
