@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include_context "with corrective action setup for updates"
-
   subject(:decorated_activity) { corrective_action.reload.investigation.activities.find_by!(type: "AuditActivity::CorrectiveAction::Update").decorate }
+
+  include_context "with corrective action setup for updates"
 
   let(:new_file_description)      { "new corrective action file description" }
   let(:new_filename)              { "corrective_action.txt" }

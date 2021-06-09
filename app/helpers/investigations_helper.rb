@@ -170,7 +170,7 @@ module InvestigationsHelper
       :coronavirus_related_only,
       :serious_and_high_risk_level_only,
       created_by: %i[me someone_else my_team id],
-      teams_with_access: [:other_team_with_access, :my_team, id: []]
+      teams_with_access: [:other_team_with_access, :my_team, { id: [] }]
     )
   end
 
@@ -274,9 +274,7 @@ module InvestigationsHelper
       actions: risk_validation_actions(investigation, user)
     }
 
-    rows = [risk_level_row, validated_row, risk_assessment_row]
-
-    rows
+    [risk_level_row, validated_row, risk_assessment_row]
   end
 
   def safety_and_compliance_rows(investigation, user)

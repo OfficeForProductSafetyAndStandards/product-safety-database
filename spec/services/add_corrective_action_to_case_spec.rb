@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe AddCorrectiveActionToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_test_queue_adapter do
+  subject(:result) { described_class.call(params) }
+
   include_context "with read only team and user"
   include_context "with add corrective action setup"
-
-  subject(:result) { described_class.call(params) }
 
   let(:action) { action_key }
   let(:params) do

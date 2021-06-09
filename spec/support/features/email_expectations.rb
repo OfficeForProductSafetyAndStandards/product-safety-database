@@ -1,6 +1,7 @@
 module EmailExpectations
   class HaveEmail
     attr_reader :to, :subject, :with_text
+
     def initialize(to:, subject:, with_text:)
       @to = to
       @subject = subject

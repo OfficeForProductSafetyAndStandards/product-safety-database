@@ -5,6 +5,7 @@ RSpec.describe CommonPasswordValidator do
     Class.new {
       include ActiveModel::Validations
       attr_accessor :password
+
       validates :password,
                 common_password: {
                   message: "Choose a less frequently used password"
