@@ -19,14 +19,7 @@ linters:
     enabled: true
 
   LineLength:
-    enabled: true
-    exclude:
-      - 'app/views/layouts/_header.html.slim'
-      - 'app/views/layouts/_footer.html.slim'
-      - 'app/views/layouts/application.html.slim'
-      - 'app/views/investigations/creation_flow/allegation_details.html.slim'
-      - 'app/views/investigations/creation_flow/enquiry_details.html.slim'
-    max: 120
+    enabled: false
 
   FileLength:
     enabled: false

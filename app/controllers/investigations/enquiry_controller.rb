@@ -11,7 +11,7 @@ private
   end
 
   def model_params
-    [:user_title, :description, :received_type, :coronavirus_related, date_received: %i[day month year]]
+    [:user_title, :description, :received_type, :coronavirus_related, { date_received: %i[day month year] }]
   end
 
   def set_investigation

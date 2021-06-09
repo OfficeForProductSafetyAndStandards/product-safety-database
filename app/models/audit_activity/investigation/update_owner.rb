@@ -1,8 +1,4 @@
 class AuditActivity::Investigation::UpdateOwner < AuditActivity::Investigation::Base
-  def self.from(*)
-    raise "Deprecated - use ChangeCaseOwner.call instead"
-  end
-
   def self.build_metadata(owner, rationale)
     {
       owner_id: owner.id,
@@ -27,7 +23,4 @@ private
   def subtitle_slug
     "Changed"
   end
-
-  # Do not send investigation_updated mail. This is handled by the ChangeCaseOwner service
-  def notify_relevant_users; end
 end

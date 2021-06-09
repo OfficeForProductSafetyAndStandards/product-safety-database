@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include_context "with phone call correspondence setup"
-
   subject(:decorated_activity) { activity.decorate }
+
+  include_context "with phone call correspondence setup"
 
   let!(:correspondence) { AddPhoneCallToCase.call!(params.merge(investigation: investigation, user: user)).correspondence }
   let(:reporting_user)  { user }

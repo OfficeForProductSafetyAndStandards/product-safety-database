@@ -1,8 +1,4 @@
 class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivity::Base
-  def self.from(*)
-    raise "Deprecated - use UpdateAccidentOrIncident.call instead"
-  end
-
   def self.build_metadata(accident_or_incident)
     updates = accident_or_incident.previous_changes.slice(
       :date,
@@ -54,8 +50,4 @@ private
   def is_date_know_has_been_changed_from_no_to_yes?
     updates["is_date_known"]&.second
   end
-
-  # Do not send investigation_updated mail when risk assessment updated. This
-  # overrides inherited functionality in the Activity model :(
-  def notify_relevant_users; end
 end

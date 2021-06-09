@@ -19,6 +19,22 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, typ
       expect(page).to have_link(iphone.name, href: product_path(iphone))
     end
 
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(1) > span:nth-child(1)" do
+      expect(page).to have_content("Product Type")
+    end
+
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(1) > span:nth-child(2)" do
+      expect(page).to have_content(iphone.subcategory)
+    end
+
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(2) > span:nth-child(1)" do
+      expect(page).to have_content("Category")
+    end
+
+    within ".govuk-grid-row.psd-product-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(2) > .govuk-grid-column-one-third:nth-child(2) > span:nth-child(2)" do
+      expect(page).to have_content(iphone.category)
+    end
+
     within ".govuk-grid-row.psd-product-card:nth-child(2) > .govuk-grid-column-one-half:nth-child(1) > span:nth-child(2)" do
       expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
     end
@@ -30,6 +46,8 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, typ
     expect(page).to have_css(".pagination em.current", text: 1)
     expect(page).to have_link("2", href: products_path(page: 2))
     expect(page).to have_link("Next →", href: products_path(page: 2))
+
+    pending 'this will be fixed once we re-add fuzzy "or" matching on'
 
     fill_in "Keywords", with: iphone.name
     click_on "Search"

@@ -23,7 +23,7 @@ class CorrespondenceDecorator < ApplicationDecorator
   end
 
   def supporting_information_type
-    ("Correspondence" + h.tag.span(super, class: "govuk-caption-m")).html_safe
+    "Correspondence#{h.tag.span(super, class: 'govuk-caption-m')}".html_safe
   end
 
   def activity_cell_partial(viewing_user)

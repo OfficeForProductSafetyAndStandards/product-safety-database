@@ -148,5 +148,29 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
         it_behaves_like "finds the relevant investigation"
       end
     end
+
+    context "with a multi term search" do
+      let!(:investigation_one)   { create(:allegation, description: "multi term search") }
+      let!(:investigation_two)   { create(:allegation, description: "multi term") }
+      let!(:investigation_three) { create(:allegation,  description: "term search") }
+      let!(:investigation_four)  { create(:allegation,  description: "multi search") }
+
+      let(:query) { "multi terms" }
+
+      before do
+        investigation_one.reload.__elasticsearch__.index_document(refresh: :wait_for)
+        investigation_two.reload.__elasticsearch__.index_document(refresh: :wait_for)
+        investigation_three.reload.__elasticsearch__.index_document(refresh: :wait_for)
+        investigation_four.reload.__elasticsearch__.index_document(refresh: :wait_for)
+      end
+
+      it "finds the relevant investigations", :aggregate_failures do
+        expect(perform_search.records.to_a)
+          .to include(
+            investigation_one,
+            investigation_two
+          )
+      end
+    end
   end
 end

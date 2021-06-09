@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe UpdatePhoneCall, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include_context "with phone call correspondence setup"
-
   subject(:result) { described_class.call(**params) }
+
+  include_context "with phone call correspondence setup"
 
   let(:user_same_team) { create(:user, team: investigation.owner_team) }
 

@@ -23,6 +23,11 @@ class ApplicationController < ActionController::Base
   def set_current_user
     return unless user_signed_in?
 
+    if current_user.deleted?
+      sign_out current_user
+      redirect_to "/"
+    end
+
     User.current = current_user
   end
 

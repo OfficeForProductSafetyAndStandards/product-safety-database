@@ -117,9 +117,10 @@ class RiskAssessmentForm
   end
 
   def assessed_by_team_id
-    if assessed_by == "my_team"
+    case assessed_by
+    when "my_team"
       current_user.team_id
-    elsif assessed_by == "another_team"
+    when "another_team"
       super
     end
   end

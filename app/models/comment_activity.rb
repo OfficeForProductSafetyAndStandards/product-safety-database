@@ -1,4 +1,5 @@
 class CommentActivity < Activity
+  include ActivityNotification
   include SanitizationHelper
   before_validation { trim_line_endings(:body) }
   validates :body, presence: true
