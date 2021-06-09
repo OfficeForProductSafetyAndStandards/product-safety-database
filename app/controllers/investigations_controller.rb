@@ -19,7 +19,7 @@ class InvestigationsController < ApplicationController
         authorize Investigation, :export?
 
         @answer = search_for_investigations
-        @investigations = @answer.records(includes: [:complainant, :products, :owner_team, :owner_user, creator_user: :team])
+        @investigations = @answer.records(includes: [:complainant, :products, :owner_team, :owner_user, { creator_user: :team }])
 
         @activity_counts = Activity.group(:investigation_id).count
         @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count

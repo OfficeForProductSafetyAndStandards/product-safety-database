@@ -24,8 +24,8 @@ class ProductForm
   attribute :markings
   attribute :customs_code
 
-  attr_accessor :approx_units
-  attr_accessor :exact_units
+  attr_accessor :approx_units, :exact_units
+
   attribute :when_placed_on_market
 
   before_validation { trim_line_endings(:description) }

@@ -6,7 +6,7 @@ RSpec/MultipleExpectations:
 RSpec/ExampleLength:
    Enabled: false
 
-Capybara/FeatureMethods:
+RSpec/Capybara/FeatureMethods:
   EnabledMethods:
     - feature
     - scenario

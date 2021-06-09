@@ -5,7 +5,7 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
   let(:other_user_different_org) { create(:user, :activated) }
 
   let(:investigation) { create(:allegation, creator: user) }
-  let(:file)          { Rails.root + "test/fixtures/files/testImage.png" }
+  let(:file)          { Rails.root.join "test/fixtures/files/testImage.png" }
   let(:title)         { Faker::Lorem.sentence }
   let(:description)   { Faker::Lorem.paragraph }
 

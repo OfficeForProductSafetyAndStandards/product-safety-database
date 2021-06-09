@@ -21,7 +21,7 @@ RSpec.describe RiskLevelForm do
       end
 
       context "with a custom risk level that matches with space/capital variations a standard level" do
-        let(:custom_risk_level) { standard_level_key.upcase + "  " }
+        let(:custom_risk_level) { "#{standard_level_key.upcase}  " }
         let(:risk_level) { Investigation.risk_levels[:other] }
 
         it "sets risk level attribute as the standard level matching the custom risk level" do

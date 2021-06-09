@@ -5,6 +5,7 @@ RSpec.describe PhoneValidator do
     Class.new {
       include ActiveModel::Validations
       attr_accessor :phone
+
       validates :phone,
                 phone: {
                   message: "Enter your mobile number in the correct format, like 07700 900 982"

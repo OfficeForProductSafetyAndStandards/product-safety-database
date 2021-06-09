@@ -6,7 +6,7 @@ module AuditActivity
       end
 
       def reason
-        metadata.dig("reason")
+        metadata["reason"]
       end
     end
   end

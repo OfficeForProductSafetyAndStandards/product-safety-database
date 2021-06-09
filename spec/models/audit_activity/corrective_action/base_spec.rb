@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_elasticsearch, :with_stubbed_antivirus do
-  include_context "with corrective action setup for updates"
-
   subject(:activity) { described_class.last }
+
+  include_context "with corrective action setup for updates"
 
   let!(:corrective_action)        { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
