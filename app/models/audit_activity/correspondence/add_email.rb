@@ -21,4 +21,12 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
       email_file_name: email.email_file.filename
     }
   end
+
+  def title(*)
+    "Email added"
+  end
+
+  def restricted_title(_user)
+    "Email added"
+  end
 end

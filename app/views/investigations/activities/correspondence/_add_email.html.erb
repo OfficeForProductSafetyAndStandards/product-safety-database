@@ -35,6 +35,10 @@
     Attachment description: <%= activity.metadata["email_attachment_description"] %><br>
   <% end %>
 
+  <% if activity.metadata["email_body"] %>
+    <%= activity.metadata["email_body"] %><br>
+  <% end %>
+
 </div>
 
 <%= link_to "View email", investigation_email_path(activity.investigation, activity.object.id) %>
