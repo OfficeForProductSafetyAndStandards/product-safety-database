@@ -39,6 +39,12 @@ FactoryBot.define do
     body { "Role: **fulfillment\\_house**" }
   end
 
+  factory :legacy_audit_product_destroyed, class: "AuditActivity::Product::Destroy" do
+    investigation { create :allegation }
+    product { create(:product) }
+    title { "Product removed from case" }
+  end
+
   factory :legacy_audit_investigation_visibility_status, class: "AuditActivity::Investigation::UpdateVisibility" do
     investigation { create :allegation }
     title { "Allegation visibility\n            restricted" }
