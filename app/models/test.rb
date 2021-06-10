@@ -5,7 +5,7 @@ class Test < ApplicationRecord
   has_one_attached :document
 
   def initialize(*args)
-    raise "Cannot directly instantiate a Test record" if self.class == Test
+    raise "Cannot directly instantiate a Test record" if instance_of?(Test)
 
     super
   end

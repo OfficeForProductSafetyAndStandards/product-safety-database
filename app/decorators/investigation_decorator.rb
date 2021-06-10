@@ -45,7 +45,7 @@ class InvestigationDecorator < ApplicationDecorator
     end
   end
 
-  def source_details_summary_list(view_protected_details = false)
+  def source_details_summary_list(view_protected_details: false)
     contact_details = view_protected_details ? h.tag.p(complainant.contact_details) : h.tag.p("")
     contact_details << h.tag.p(I18n.t("case.protected_details", data_type: "#{object.case_type} contact details"), class: "govuk-hint")
 
@@ -123,14 +123,12 @@ private
 
   def category
     @category ||= \
-      begin
-        if categories.size == 1
-          h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
-        else
-          h.tag.ul(class: "govuk-list") do
-            lis = categories.map { |cat| h.tag.li(cat.downcase.upcase_first) }
-            lis.join.html_safe
-          end
+      if categories.size == 1
+        h.simple_format(categories.first.downcase.upcase_first, class: "govuk-body")
+      else
+        h.tag.ul(class: "govuk-list") do
+          lis = categories.map { |cat| h.tag.li(cat.downcase.upcase_first) }
+          lis.join.html_safe
         end
       end
   end

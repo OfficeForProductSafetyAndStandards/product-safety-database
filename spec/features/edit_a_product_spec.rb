@@ -1,11 +1,12 @@
 require "rails_helper"
 
-RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_form_helper, :with_stubbed_antivirus do
+RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :with_product_form_helper, :with_stubbed_antivirus do
   let(:product_code)      { Faker::Barcode.issn }
   let(:webpage)           { Faker::Internet.url }
   let(:user)              { create(:user, :activated, has_viewed_introduction: true) }
   let(:brand)             { Faker::Appliance.brand }
   let(:country_of_origin) { "France" }
+  let(:investigation) { create(:allegation) }
   let(:product) do
     create(:product,
            authenticity: nil,
@@ -16,7 +17,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            webpage: webpage,
            country_of_origin: country_of_origin,
            has_markings: "markings_yes",
-           customs_code: "initial, customs, code123")
+           customs_code: "initial, customs, code123",
+           investigations: [investigation])
   end
   let(:product_with_no_affected_units_status) do
     create(:product,
@@ -27,7 +29,8 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
            product_code: product_code,
            webpage: webpage,
            country_of_origin: country_of_origin,
-           has_markings: "markings_yes")
+           has_markings: "markings_yes",
+           investigations: [investigation])
   end
 
   let(:new_name)              { Faker::Commerce.product_name }
@@ -78,10 +81,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_field("Product name",             with: product.name)
     expect(page).to have_field("Barcode number",           with: product.barcode)
     expect(page).to have_field("Batch number",             with: product.batch_number)
-    expect(page).to have_field("Other product identifier", with: "\r\n" + product.product_code)
+    expect(page).to have_field("Other product identifier", with: "\r\n#{product.product_code}")
     expect(page).to have_field("Webpage",                  with: product.webpage)
     expect(page).to have_select("Country of origin",       selected: "France")
-    expect(page).to have_field("Description of product",   with: "\r\n" + product.description)
+    expect(page).to have_field("Description of product",   with: "\r\n#{product.description}")
 
     click_on "Save product"
 
@@ -147,6 +150,15 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_summary_item(key: "Country of origin",         value: new_country_of_origin)
     expect(page).to have_summary_item(key: "Description",               value: new_description)
     expect(page).to have_summary_item(key: "Customs code",              value: new_customs_code)
+
+    within("header") { click_on "Cases" }
+
+    fill_in "Keywords", with: new_name
+    # sleep in order to wait for the changes to be indexed
+    sleep 1
+    click_on "Apply filters"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
   end
 
   it "allows to edit a product without an affected_units_status" do
@@ -177,10 +189,10 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
     expect(page).to have_field("Product name",             with: product_with_no_affected_units_status.name)
     expect(page).to have_field("Barcode number",           with: product_with_no_affected_units_status.barcode)
     expect(page).to have_field("Batch number",             with: product_with_no_affected_units_status.batch_number)
-    expect(page).to have_field("Other product identifier", with: "\r\n" + product_with_no_affected_units_status.product_code)
+    expect(page).to have_field("Other product identifier", with: "\r\n#{product_with_no_affected_units_status.product_code}")
     expect(page).to have_field("Webpage",                  with: product_with_no_affected_units_status.webpage)
     expect(page).to have_select("Country of origin",       selected: "France")
-    expect(page).to have_field("Description of product",   with: "\r\n" + product_with_no_affected_units_status.description)
+    expect(page).to have_field("Description of product",   with: "\r\n#{product_with_no_affected_units_status.description}")
 
     click_on "Save product"
 
@@ -231,7 +243,7 @@ RSpec.feature "Editing a product", :with_stubbed_elasticsearch, :with_product_fo
                         when "markings_unknown" then "Unknown"
                         end
 
-    expect(page).to have_summary_item(key: "Category", value: new_product_category)
+    expect(page).to have_summary_item(key: "Category",                  value: new_product_category)
     expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
     expect(page).to have_summary_item(key: "Product authenticity",      value: I18n.t(new_authenticity, scope: Product.model_name.i18n_key))
     expect(page).to have_summary_item(key: "Product marking",           value: expected_markings)

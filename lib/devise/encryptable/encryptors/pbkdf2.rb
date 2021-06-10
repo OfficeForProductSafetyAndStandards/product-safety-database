@@ -4,7 +4,7 @@ module Devise
   module Encryptable
     module Encryptors
       class PBKDF2 < Base
-        HASH_FUNCTION = OpenSSL::Digest::SHA256.new
+        HASH_FUNCTION = OpenSSL::Digest.new("SHA256")
         KEY_LEN = 64
         def self.digest(password, _stretches, salt, _pepper)
           hashed_password = OpenSSL::KDF.pbkdf2_hmac(

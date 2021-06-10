@@ -1,7 +1,7 @@
 namespace :data do
   desc "display stats on zip file"
   task zip_file_report: [:environment] do
-    Rails.logger = ActiveSupport::Logger.new(STDOUT)
+    Rails.logger = ActiveSupport::Logger.new($stdout)
     require "tty-table"
     require "active_storage/filename"
     include ActionView::Helpers::NumberHelper
@@ -93,7 +93,7 @@ namespace :data do
       end
     }
 
-    extensions_count = statistics.flat_map(&:last).group_by(&:itself).each_with_object({}) { |(extension, extensions), hash| hash[extension] = extensions.size }
+    extensions_count = statistics.flat_map(&:last).group_by(&:itself).transform_values(&:size)
     total_file = extensions_count.values.reduce(:+)
 
     table = TTY::Table.new(["Blob ID", "File name", "Associated records", "Average file size", "File extensions"], process_unique_file_extensions[statistics])

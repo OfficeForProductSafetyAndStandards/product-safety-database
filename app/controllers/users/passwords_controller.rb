@@ -99,7 +99,7 @@ module Users
     end
 
     def email_not_found_first_error?
-      resource.errors.details.dig(:email).include?(error: :not_found)
+      resource.errors.details[:email].include?(error: :not_found)
     end
 
     def reset_password_form
