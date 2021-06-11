@@ -65,7 +65,7 @@ RSpec.describe AddCommentToCase, :with_stubbed_elasticsearch, :with_test_queue_a
       it "adds an audit activity record", :aggregate_failures do
         result
         last_added_activity = investigation.activities.order(:id).first
-        expect(last_added_activity).to be_a(AuditActivity::Comment::AddComment)
+        expect(last_added_activity).to be_a(AuditActivity::Investigation::AddComment)
         expect(last_added_activity.metadata["comment_text"]).to eql(body)
       end
 

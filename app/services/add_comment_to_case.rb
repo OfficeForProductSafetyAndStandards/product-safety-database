@@ -9,7 +9,7 @@ class AddCommentToCase
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     ActiveRecord::Base.transaction do
-      context.comment = AuditActivity::Comment::AddComment.create!(
+      context.comment = AuditActivity::Investigation::AddComment.create!(
         source: UserSource.new(user: user),
         metadata: audit_activity_metadata,
         investigation_id: investigation.id
@@ -20,7 +20,7 @@ class AddCommentToCase
   end
 
   def audit_activity_metadata
-    AuditActivity::Comment::AddComment.build_metadata(body)
+    AuditActivity::Investigation::AddComment.build_metadata(body)
   end
 
   def source
