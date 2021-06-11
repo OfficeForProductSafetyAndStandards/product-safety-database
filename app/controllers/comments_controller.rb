@@ -2,6 +2,7 @@ class CommentsController < ApplicationController
   before_action :set_investigation
 
   def new
+    @investigation = @investigation.decorate
     @comment_form = CommentForm.new
   end
 
@@ -16,13 +17,14 @@ class CommentsController < ApplicationController
       })
     )
 
+    @investigation = @investigation.decorate
     redirect_to investigation_activity_path(@investigation), flash: { success: "Comment was successfully added." }
   end
 
 private
 
   def set_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]).decorate
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize @investigation, :show?
   end
 
