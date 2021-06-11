@@ -41,7 +41,6 @@ private
   def create_audit_activity(correspondence, investigation)
     activity = AuditActivity::Correspondence::AddEmail.create!(
       metadata: audit_activity_metadata,
-      body: build_body(correspondence) || sanitize_text(correspondence.details),
       source: UserSource.new(user: User.current),
       investigation: investigation,
       title: correspondence.overview,
@@ -50,45 +49,6 @@ private
 
     activity.attach_blob(correspondence.email_file.blob, :email_file) if correspondence.email_file.attached?
     activity.attach_blob(correspondence.email_attachment.blob, :email_attachment) if correspondence.email_attachment.attached?
-  end
-
-  def build_body(correspondence)
-    body = ""
-    body += build_correspondent_details correspondence
-    body += "Subject: **#{sanitize_text correspondence.email_subject}**<br>" if correspondence.email_subject.present?
-    body += "Date sent: **#{correspondence.correspondence_date.strftime('%d/%m/%Y')}**<br>" if correspondence.correspondence_date.present?
-    body += build_email_file_body correspondence
-    body += build_attachment_body correspondence
-    body += "<br>#{sanitize_text correspondence.details}" if correspondence.details.present?
-    body
-  end
-
-  def build_correspondent_details(correspondence)
-    return "" unless correspondence.correspondent_name || correspondence.email_address
-
-    output = ""
-    output += "#{Correspondence::Email.email_directions[correspondence.email_direction]}: " if correspondence.email_direction.present?
-    output += "**#{sanitize_text correspondence.correspondent_name}** " if correspondence.correspondent_name.present?
-    output += build_email_address correspondence if correspondence.email_address.present?
-    output
-  end
-
-  def build_email_file_body(correspondence)
-    file = correspondence.email_file
-    file.attached? ? "Email: #{sanitize_text file.filename}<br>" : ""
-  end
-
-  def build_attachment_body(correspondence)
-    file = correspondence.email_attachment
-    file.attached? ? "Attached: #{sanitize_text file.filename}<br>" : ""
-  end
-
-  def build_email_address(correspondence)
-    output = ""
-    output += "(" if correspondence.correspondent_name.present?
-    output += sanitize_text correspondence.email_address
-    output += ")" if correspondence.correspondent_name.present?
-    output + "<br>"
   end
 
   def sanitize_text(text)

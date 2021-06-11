@@ -71,11 +71,25 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
       it "creates an audit activity", :aggregate_failures do
         result
         activity = investigation.reload.activities.first
+        email = investigation.emails.first
         expect(activity).to be_a(AuditActivity::Correspondence::AddEmail)
         expect(activity.product).to be_nil
         expect(activity.title(nil)).to be_nil
-        expect(activity.body).to eq "Subject: **Re: safety issue**<br>Date sent: **02/01/2020**<br><br>Please call me."
-        expect(activity.metadata).to be_nil
+        expect(activity.body).to eq nil
+        expect(activity.metadata).to be(
+          {
+            "subject"=>email.email_subject,
+           "overview"=>email.overview ,
+           "email_body"=>email.details,
+           "email_file_name"=>email.email_file.name,
+           "correspondent_name"=>email.correspondent_name,
+           "correspondence_date"=>email.correspondence_date.to_s,
+           "correspondent_email"=>email.email_address,
+           "email_attachment_name"=>email.email_attachment.name,
+           "correspondent_direction" =>email.email_direction,
+           "email_attachment_description"=>email.email_attachment.description
+         }
+        )
       end
 
       it "notifies the team", :aggregate_failures do

@@ -16,14 +16,10 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
       correspondent_email: email.email_address,
       correspondent_direction: Correspondence::Email.email_directions[email.email_direction],
       email_body: email.details,
-      email_attachment_name: email.email_attachment.filename,
+      email_attachment_name: email.email_attachment.name,
       email_attachment_description: email.email_attachment.description,
-      email_file_name: email.email_file.filename
+      email_file_name: email.email_file.name
     }
-  end
-
-  def title(*)
-    "Email added"
   end
 
   def restricted_title(_user)
