@@ -40,7 +40,7 @@ class AddCommentToCase
   end
 
   def email_update_text(recipient)
-    "#{source.show(recipient)} commented on the allegation."
+    "#{source.show(recipient)} commented on the #{investigation.case_type}."
   end
 
   def email_subject

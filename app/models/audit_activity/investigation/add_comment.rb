@@ -6,10 +6,10 @@ class AuditActivity::Investigation::AddComment < AuditActivity::Base
   end
 
   def title(*)
-    "Add comment"
+    "Comment added"
   end
 
   def subtitle_slug
-    "Added"
+    "Comment added"
   end
 end
