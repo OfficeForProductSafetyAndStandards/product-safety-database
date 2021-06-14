@@ -39,7 +39,6 @@
     <% if activity.metadata %>
       <%= render "investigations/activities/#{activity.template_name}", activity: activity %>
     <% else  %>
-      <% #yoyoyoyoyoyo %>
       <% if activity.body %>
         <%= markdown simple_format(activity.body) %>
       <% end %>

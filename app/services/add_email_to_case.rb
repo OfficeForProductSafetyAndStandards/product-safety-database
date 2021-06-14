@@ -27,9 +27,6 @@ class AddEmailToCase
     create_audit_activity(email, investigation)
 
     send_notification_email(investigation, user)
-
-    # TODO: refactor into this class
-    # AuditActivity::Correspondence::AddEmail.from(email, investigation)
   end
 
 private
