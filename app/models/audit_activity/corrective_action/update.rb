@@ -25,12 +25,10 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
   end
 
   def corrective_action
-    @corrective_action ||= begin
-                             if (corrective_action_id = metadata&.dig("corrective_action_id"))
-                               CorrectiveAction.find_by!(id: corrective_action_id)
-                             else
-                               super
-                             end
+    @corrective_action ||= if (corrective_action_id = metadata&.dig("corrective_action_id"))
+                             CorrectiveAction.find_by!(id: corrective_action_id)
+                           else
+                             super
                            end
   end
 end

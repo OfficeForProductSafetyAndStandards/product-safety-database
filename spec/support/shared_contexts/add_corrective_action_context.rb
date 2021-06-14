@@ -11,7 +11,7 @@ RSpec.shared_context "with add corrective action setup" do
   let(:has_online_recall_information) { "has_online_recall_information_yes" }
   let(:online_recall_information) { Faker::Internet.url(host: "example.com") }
   let(:details) { "Urgent action following consumer reports" }
-  let(:file) { Rails.root + "test/fixtures/files/old_risk_assessment.txt" }
+  let(:file) { Rails.root.join "test/fixtures/files/old_risk_assessment.txt" }
   let(:file_description) { Faker::Lorem.paragraph }
   let(:measure_type) { "Mandatory" }
   let(:duration) { "Permanent" }

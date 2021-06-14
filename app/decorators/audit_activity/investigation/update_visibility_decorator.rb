@@ -14,7 +14,7 @@ class AuditActivity::Investigation::UpdateVisibilityDecorator < ApplicationDecor
   end
 
   def rationale
-    metadata.dig("rationale")
+    metadata["rationale"]
   end
 
   def user_name

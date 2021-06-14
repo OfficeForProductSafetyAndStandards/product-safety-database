@@ -127,7 +127,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_elasticsearch, :with_stubbe
 
   describe "#source_details_summary_list" do
     let(:view_protected_details) { true }
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details) }
+    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details: view_protected_details) }
 
     it "does not display the Received date" do
       expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_s(:govuk))

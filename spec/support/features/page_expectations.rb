@@ -277,7 +277,7 @@ module PageExpectations
     if test_result_id
       expect(page).to have_current_path("/cases/#{case_id}/test-results/#{test_result_id}")
     else
-      expect(page).to have_current_path(/\/cases\/#{case_id}\/test\-results\/[\d]+/)
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/test-results\/\d+/)
     end
   end
 
@@ -285,7 +285,7 @@ module PageExpectations
     if test_result_id
       expect(page).to have_current_path("/cases/#{case_id}/test-results/#{test_result_id}/edit")
     else
-      expect(page).to have_current_path(/\/cases\/#{case_id}\/test\-results\/[\d]+\/edit/)
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/test-results\/\d+\/edit/)
     end
   end
 
@@ -293,7 +293,7 @@ module PageExpectations
     if corrective_action_id
       expect(page).to have_current_path("/cases/#{case_id}/corrective-actions/#{corrective_action_id}")
     else
-      expect(page).to have_current_path(/\/cases\/#{case_id}\/corrective-actions\/[\d]+/)
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/corrective-actions\/\d+/)
     end
   end
 
@@ -301,7 +301,7 @@ module PageExpectations
     if email_id
       expect(page).to have_current_path("/cases/#{case_id}/emails/#{email_id}")
     else
-      expect(page).to have_current_path(/\/cases\/#{case_id}\/emails\/[\d]+/)
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/emails\/\d+/)
     end
   end
 
@@ -311,7 +311,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_phone_call_page(case_id:)
-    expect(page).to have_current_path(/\/cases\/#{case_id}\/phone-calls\/[\d]+/)
+    expect(page).to have_current_path(/\/cases\/#{case_id}\/phone-calls\/\d+/)
   end
 
   # Open a case flow
@@ -648,7 +648,7 @@ module PageExpectations
     if risk_assessment_id
       expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/#{risk_assessment_id}")
     else
-      expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+/)
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+/)
     end
   end
 
@@ -660,7 +660,7 @@ module PageExpectations
     if risk_assessment_id
       expect(page).to have_current_path("/cases/#{case_id}/risk-assessments/#{risk_assessment_id}/update-case-risk-level")
     else
-      expect(page).to have_current_path(/\/cases\/#{case_id}\/risk\-assessments\/\d+\/update\-case\-risk\-level/)
+      expect(page).to have_current_path(/\/cases\/#{case_id}\/risk-assessments\/\d+\/update-case-risk-level/)
     end
     expect_page_to_have_h1("Case risk level")
   end

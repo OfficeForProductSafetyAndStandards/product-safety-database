@@ -81,7 +81,7 @@ module Searchable
     end
 
     def self.sort_params(params)
-      sort_field = params[:sort] + ".sort"
+      sort_field = "#{params[:sort]}.sort"
       [{ "#{sort_field}": { order: params[:direction] } }]
     end
 

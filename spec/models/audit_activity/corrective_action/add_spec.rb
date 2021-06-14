@@ -1,9 +1,6 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  include_context "with read only team and user"
-  include_context "with add corrective action setup"
-
   subject(:audit_activity) do
     create(
       :legacy_audit_add_activity_corrective_action,
@@ -14,6 +11,9 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_elasticsearch
       title: legacy_title
     )
   end
+
+  include_context "with read only team and user"
+  include_context "with add corrective action setup"
 
   let(:metadata) { described_class.build_metadata(corrective_action) }
   let!(:corrective_action) do

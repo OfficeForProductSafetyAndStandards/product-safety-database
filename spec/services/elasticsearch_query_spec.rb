@@ -150,8 +150,8 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
     end
 
     context "with a multi term search" do
-      let!(:investigation_one)   { create(:allegation, description: "multi term search") }
-      let!(:investigation_two)   { create(:allegation, description: "multi term") }
+      let!(:investigation_one)   { create(:allegation, description: "multi terms search") }
+      let!(:investigation_two)   { create(:allegation, description: "multi terms") }
       let!(:investigation_three) { create(:allegation,  description: "term search") }
       let!(:investigation_four)  { create(:allegation,  description: "multi search") }
 
