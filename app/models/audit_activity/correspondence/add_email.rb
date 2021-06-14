@@ -18,7 +18,7 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
       email_body: email.details,
       email_attachment_name: email.email_attachment.name,
       email_attachment_description: email.email_attachment.description,
-      email_file_name: email.email_file.filename
+      email_file_name: email.email_file.name
     }
   end
 
