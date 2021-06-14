@@ -21,7 +21,6 @@ class CommentsController < ApplicationController
       })
     )
 
-    @investigation = @investigation.decorate
     redirect_to investigation_activity_path(@investigation), flash: { success: "Comment was successfully added." }
   end
 
