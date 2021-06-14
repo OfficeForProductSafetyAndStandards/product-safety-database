@@ -81,13 +81,13 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
             "subject" => email.email_subject,
             "overview" => email.overview,
             "email_body" => email.details,
-            "email_file_name" => email.email_file.name,
+            "email_file_name" => nil,
             "correspondent_name" => email.correspondent_name,
             "correspondence_date" => email.correspondence_date.to_s,
             "correspondent_email" => email.email_address,
-            "email_attachment_name" => email.email_attachment.name,
+            "email_attachment_name" => nil,
             "correspondent_direction" => email.email_direction,
-            "email_attachment_description" => email.email_attachment.description
+            "email_attachment_description" => nil
           }
         )
       end
