@@ -5,7 +5,7 @@ namespace :comments do
     puts "Updating #{comment_activities.count} old comments"
 
     comment_activities.each do |comment|
-      comment.update(type: AuditActivity::Investigation::AddComment, metadata: { comment_text: comment.body }, body: nil)
+      comment.update!(type: AuditActivity::Investigation::AddComment, metadata: { comment_text: comment.body }, body: nil)
       puts "#{comment.id} updated"
     end
   end
