@@ -71,25 +71,17 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
       it "creates an audit activity", :aggregate_failures do
         result
         activity = investigation.reload.activities.first
-        email = investigation.emails.first
         expect(activity).to be_a(AuditActivity::Correspondence::AddEmail)
         expect(activity.product).to be_nil
         expect(activity.title(nil)).to be_nil
         expect(activity.body).to eq nil
-        expect(activity.metadata).to eq(
-          {
-            "subject" => email.email_subject,
-            "overview" => email.overview,
-            "email_body" => email.details,
-            "email_file_name" => nil,
-            "correspondent_name" => email.correspondent_name,
-            "correspondence_date" => email.correspondence_date.to_s,
-            "correspondent_email" => email.email_address,
-            "email_attachment_name" => nil,
-            "correspondent_direction" => email.email_direction,
-            "email_attachment_description" => nil
-          }
-        )
+      end
+
+      it "creates metadata" do
+        result
+        activity = investigation.reload.activities.first
+        email = investigation.emails.first
+        expect(activity.metadata).to eq build_metadata_with_no_attached_files(email)
       end
 
       it "notifies the team", :aggregate_failures do
@@ -125,5 +117,20 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
         expect(result.email.email_attachment.metadata).to include({ description: "Risk assessment" })
       end
     end
+  end
+
+  def build_metadata_with_no_attached_files(email)
+    {
+      "subject" => email.email_subject,
+      "overview" => email.overview,
+      "email_body" => email.details,
+      "email_file_name" => nil,
+      "correspondent_name" => email.correspondent_name,
+      "correspondence_date" => email.correspondence_date.to_s,
+      "correspondent_email" => email.email_address,
+      "email_attachment_name" => nil,
+      "correspondent_direction" => email.email_direction,
+      "email_attachment_description" => nil
+    }
   end
 end
