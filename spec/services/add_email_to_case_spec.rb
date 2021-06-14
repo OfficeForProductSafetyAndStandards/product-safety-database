@@ -78,17 +78,17 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
         expect(activity.body).to eq nil
         expect(activity.metadata).to eq(
           {
-           "subject"=>email.email_subject,
-           "overview"=>email.overview ,
-           "email_body"=>email.details,
-           "email_file_name"=>email.email_file.name,
-           "correspondent_name"=>email.correspondent_name,
-           "correspondence_date"=>email.correspondence_date.to_s,
-           "correspondent_email"=>email.email_address,
-           "email_attachment_name"=>email.email_attachment.name,
-           "correspondent_direction" =>email.email_direction,
-           "email_attachment_description"=>email.email_attachment.description
-         }
+            "subject" => email.email_subject,
+            "overview" => email.overview,
+            "email_body" => email.details,
+            "email_file_name" => email.email_file.name,
+            "correspondent_name" => email.correspondent_name,
+            "correspondence_date" => email.correspondence_date.to_s,
+            "correspondent_email" => email.email_address,
+            "email_attachment_name" => email.email_attachment.name,
+            "correspondent_direction" => email.email_direction,
+            "email_attachment_description" => email.email_attachment.description
+          }
         )
       end
 
