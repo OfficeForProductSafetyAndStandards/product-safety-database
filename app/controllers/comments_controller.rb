@@ -1,30 +1,27 @@
 class CommentsController < ApplicationController
   before_action :set_investigation
 
-  def create
-    @comment = CommentActivity.new(comment_activity_params)
-    @comment.investigation = @investigation
-    @comment.source = UserSource.new(user: current_user)
+  def new
     @investigation = @investigation.decorate
-
-    respond_to do |format|
-      if @comment.save
-        format.html do
-          redirect_to investigation_activity_path(@investigation), flash: { success: "Comment was successfully added." }
-        end
-        format.json { render :show, status: :created, location: @comment }
-      else
-        format.html do
-          render :new
-        end
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
-    end
+    @comment_form = CommentForm.new
   end
 
-  def new
-    @comment = CommentActivity.new
-    @investigation = @investigation.decorate
+  def create
+    @comment_form = CommentForm.new(comment_activity_params)
+
+    if @comment_form.invalid?
+      @investigation = @investigation.decorate
+      return render(:new)
+    end
+
+    AddCommentToCase.call!(
+      @comment_form.attributes.merge({
+        investigation: @investigation,
+        user: current_user
+      })
+    )
+
+    redirect_to investigation_activity_path(@investigation), flash: { success: "Comment was successfully added." }
   end
 
 private
@@ -35,7 +32,7 @@ private
   end
 
   def comment_activity_params
-    params.require(:comment_activity).permit(:body).tap do |p|
+    params.require(:comment_form).permit(:body).tap do |p|
       p[:body] = ActionController::Base.helpers.sanitize(p[:body])
     end
   end

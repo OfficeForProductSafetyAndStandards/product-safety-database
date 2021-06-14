@@ -10,7 +10,7 @@ RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer
     before do
       post investigation_activity_comment_path(investigation),
            params: {
-             comment_activity: {
+             comment_form: {
                body: ""
              }
            }
@@ -29,7 +29,7 @@ RSpec.describe "Adding a comment to a case", type: :request, with_stubbed_mailer
     before do
       post investigation_activity_comment_path(investigation),
            params: {
-             comment_activity: {
+             comment_form: {
                body: "Test"
              }
            }

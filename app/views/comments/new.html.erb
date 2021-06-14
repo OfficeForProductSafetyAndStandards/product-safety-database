@@ -1,5 +1,5 @@
 <% page_title = "Add comment" %>
-<% page_title page_title, errors: @comment.errors.any? %>
+<% page_title page_title, errors: @comment_form.errors.any? %>
 
 <% content_for :back_link do %>
   <%= govukBackLink(
@@ -10,24 +10,17 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <%= error_summary(@comment.errors) %>
+<%= form_with model: @comment_form, scope: :comment_form, local: true, builder: ApplicationFormBuilder, method: :post, url: investigation_activity_comment_path(@investigation.pretty_id) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= error_summary(@comment_form.errors)%>
 
-    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+      <h1 class="govuk-heading-l"><%= page_title %></h1>
 
-    <%= form_with(
-          model: @comment,
-          url: investigation_activity_comment_path(@investigation),
-          local: true
-        ) do |form| %>
-      <%= render "form_components/govuk_textarea",
-                 key: :body,
-                 form: form,
-                 attributes: { maxlength: 10_000 },
-                 id: "body",
-                 label: { text: page_title, classes: "govuk-label--l", isPageHeading: true } %>
-      <%= form.submit "Continue", class: "govuk-button" %>
-    <% end %>
+      <%= render "form", form: form, comment_form: @comment_form, investigation: @investigation %>
+
+      <%= govukButton text: "Continue" %>
+    </div>
   </div>
-</div>
+<% end %>
