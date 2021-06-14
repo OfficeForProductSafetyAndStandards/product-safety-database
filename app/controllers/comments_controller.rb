@@ -8,7 +8,11 @@ class CommentsController < ApplicationController
 
   def create
     @comment_form = CommentForm.new(comment_activity_params)
-    return render(:new) if @comment_form.invalid?
+    
+    if @comment_form.invalid?
+      @investigation = @investigation.decorate
+      return render(:new)
+    end
 
     AddCommentToCase.call!(
       @comment_form.attributes.merge({
