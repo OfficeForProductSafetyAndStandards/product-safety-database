@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment_form = CommentForm.new(comment_activity_params)
-    
+
     if @comment_form.invalid?
       @investigation = @investigation.decorate
       return render(:new)
