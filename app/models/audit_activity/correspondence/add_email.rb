@@ -3,10 +3,6 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
   include ActivityAttachable
   with_attachments email_file: "email file", email_attachment: "email attachment"
 
-  def subtitle_slug
-    "Email recorded"
-  end
-
   def self.build_metadata(email)
     {
       overview: email.overview,
@@ -20,9 +16,5 @@ class AuditActivity::Correspondence::AddEmail < AuditActivity::Correspondence::B
       email_attachment_description: email.email_attachment.description,
       email_file_name: email.email_file.filename
     }
-  end
-
-  def restricted_title(_user)
-    "Email added"
   end
 end
