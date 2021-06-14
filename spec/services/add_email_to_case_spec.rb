@@ -76,7 +76,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_elasticsearch, :with_stubbed_mailer
         expect(activity.product).to be_nil
         expect(activity.title(nil)).to be_nil
         expect(activity.body).to eq nil
-        expect(activity.metadata).to be(
+        expect(activity.metadata).to eq(
           {
            "subject"=>email.email_subject,
            "overview"=>email.overview ,
