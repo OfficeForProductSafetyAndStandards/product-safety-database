@@ -6,6 +6,8 @@ class Investigations::OwnershipController < ApplicationController
   steps :"select-owner", :confirm
 
   def show
+    return redirect_to wizard_path(:"select-owner") if form_params[:owner_id].blank? && (step != :"select-owner")
+
     @potential_owner = form.owner&.decorate
 
     get_potential_assignees if step == :"select-owner"
