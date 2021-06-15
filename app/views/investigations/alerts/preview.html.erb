@@ -2,13 +2,13 @@
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back",
-    href: previous_wizard_path
+    href: new_investigation_alert_path(@investigation)
   ) %>
 <% end %>
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with model: @alert, local: true, url: wizard_path, method: :put do |form| %>
+<%= form_with model: @alert_form, local: true, url: investigation_alerts_path(@investigation), method: :post do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
@@ -30,7 +30,7 @@
             </tr>
             <tr class="email-message-meta govuk-table__row">
               <th class="govuk-table__header">Subject</th>
-              <td class="govuk-table__cell"><%= @alert.summary %></td>
+              <td class="govuk-table__cell"><%= @alert_form.summary %></td>
             </tr>
           </tbody>
         </table>
@@ -41,10 +41,13 @@
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <p>If you’re not happy you can <%= link_to "edit your message", previous_wizard_path, class: "govuk-link" %>.</p>
+      <p>If you’re not happy you can <%= link_to "edit your message", new_investigation_alert_path(@investigation), class: "govuk-link" %>.</p>
       <p>Alerts may take up to 5 minutes to send.</p>
     </div>
   </div>
+
+  <%= form.hidden_field :summary, :value => @alert_form.summary %>
+  <%= form.hidden_field :description, :value => @alert_form.description %>
 
   <%= form.submit "Send to #{@user_count} people", class: "govuk-button" %>
 
