@@ -1,19 +1,24 @@
 class Investigations::AlertsController < ApplicationController
-  include Wicked::Wizard
   include Pundit
   include ActionView::Helpers::NumberHelper
-
-  steps :about_alerts, :compose, :preview
 
   before_action :set_investigation
   before_action :set_alert, only: %i[show update], if: -> { %i[compose preview].include? step }
   before_action :store_alert, only: :update, if: -> { step == :compose }
-  before_action :set_user_count, only: %i[show update create], if: -> { step == :preview }
   before_action :get_preview, only: :show, if: -> { step == :preview }
 
+  def about
+  end
+
   def new
-    clear_session
-    redirect_to wizard_path(steps.first)
+    @alert_form = AlertForm.new
+  end
+
+  def preview
+    @alert_form = AlertForm.new(alert_request_params)
+    get_preview
+    set_user_count
+    byebug
   end
 
   def show
@@ -31,7 +36,8 @@ class Investigations::AlertsController < ApplicationController
   end
 
   def create
-    @alert.save!
+    @alert_form = AlertForm.new(alert_request_params)
+    byebug
     redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to #{@user_count} users" }
   end
 
@@ -48,7 +54,6 @@ private
 
   def authorize_investigation
     authorize @investigation, :send_email_alert?
-    authorize @investigation, :investigation_restricted? if %i[compose preview].include? step
     @investigation = @investigation.decorate
   end
 
@@ -73,9 +78,9 @@ private
   end
 
   def alert_request_params
-    return {} unless params.key? :alert
+    return {} unless params.key? :alert_form
 
-    params.require(:alert).permit(:summary, :description)
+    params.require(:alert_form).permit(:summary, :description)
   end
 
   def set_user_count
@@ -86,8 +91,8 @@ private
     @preview = NotificationsClient.instance.generate_template_preview(
       NotifyMailer::TEMPLATES[:alert],
       personalisation: {
-        email_text: @alert.description,
-        subject_text: @alert.summary
+        email_text: @alert_form.description,
+        subject_text: @alert_form.summary
       }
     )
   end
