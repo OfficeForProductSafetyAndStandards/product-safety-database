@@ -1,0 +1,8 @@
+<div class="govuk-body">
+  From: <b>Office for Product Safety and Standards</b><br>
+  To: <b><%= "All users (#{activity.metadata["user_count"]} people)" %></b><br>
+  Subject: <b><%= activity.metadata["subject"] %></b><br>
+  Date sent: <b><%= activity.metadata["date_sent"] %></b><br>
+
+  <br><%= activity.metadata["description"] %>
+</div>

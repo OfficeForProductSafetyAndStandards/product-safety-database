@@ -6,6 +6,7 @@ class AlertForm
 
   attribute :summary
   attribute :description
+  attribute :user_count
 
   validates :summary, presence: true
   validates :description, length: { maximum: 10_000 }
