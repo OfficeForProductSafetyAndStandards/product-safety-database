@@ -3,9 +3,6 @@ class Investigations::AlertsController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
   before_action :set_investigation
-  before_action :set_alert, only: %i[show update], if: -> { %i[compose preview].include? step }
-  before_action :store_alert, only: :update, if: -> { step == :compose }
-  before_action :get_preview, only: :show, if: -> { step == :preview }
 
   def about
   end
@@ -18,6 +15,7 @@ class Investigations::AlertsController < ApplicationController
     @alert_form = AlertForm.new(alert_request_params)
     get_preview
     set_user_count
+    render :new unless @alert_form.valid?
   end
 
   def show
