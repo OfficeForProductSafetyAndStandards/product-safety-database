@@ -8,8 +8,8 @@ class AlertForm
   attribute :description
   attribute :user_count
 
-  validates :summary, presence: true
-  validates :description, length: { maximum: 10_000 }
+  validate :summary_validation
+  validate :description_validation
 
   def default_summary
     "Product safety alert: "
@@ -17,5 +17,17 @@ class AlertForm
 
   def default_description
     "\r\n\r\n\r\nMore details can be found on the case page: "
+  end
+
+  def summary_validation
+    if summary.empty? || summary == default_summary
+      errors.add(:summary, :required, message: "Enter a summary")
+    end
+  end
+
+  def description_validation
+    if description.empty? || description == default_description
+      errors.add(:description, :required, message: "Enter an alert")
+    end
   end
 end

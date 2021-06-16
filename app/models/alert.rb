@@ -11,19 +11,6 @@ class Alert < ApplicationRecord
   validate :summary_validation
   validate :description_validation
 
-  after_save :create_audit_activity
-
-  after_save :send_alert_email
-
-  def send_alert_email
-    emails = User.active.map(&:email)
-    SendAlertJob.perform_later(emails, subject_text: summary, body_text: description)
-  end
-
-  def create_audit_activity
-    AuditActivity::Alert::Add.from self
-  end
-
   def summary_validation
     if summary.empty? || summary == default_summary
       errors.add(:summary, :required)

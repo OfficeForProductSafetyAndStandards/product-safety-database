@@ -397,7 +397,7 @@ en:
         accident_or_incident_type_form:
           attributes:
             type:
-              inclusion: Select the type of information you're adding
+              inclusion: Select the type of information you're adding 
         remove_product_form:
           attributes:
             remove_product:
