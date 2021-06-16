@@ -5,34 +5,28 @@ class Investigations::AlertsController < ApplicationController
   before_action :set_investigation
 
   def about
+    set_investigation
+    @investigation = @investigation.decorate
   end
 
   def new
+    set_investigation
     @alert_form = AlertForm.new
+    @investigation = @investigation.decorate
   end
 
   def preview
+    set_investigation
     @alert_form = AlertForm.new(alert_request_params)
+    @user_count = number_with_delimiter(User.active.count, delimiter: ",")
+    @investigation = @investigation.decorate
     get_preview
-    set_user_count
+
     render :new unless @alert_form.valid?
   end
 
-  def show
-    render_wizard
-  end
-
-  def update
-    if @alert.valid?
-      return create if step == steps.last
-
-      redirect_to next_wizard_path
-    else
-      render_wizard
-    end
-  end
-
   def create
+    set_investigation
     @alert_form = AlertForm.new(alert_request_params)
     set_user_count
     if @alert_form.valid?
@@ -44,15 +38,12 @@ class Investigations::AlertsController < ApplicationController
         })
       )
 
+      @investigation = @investigation.decorate
       redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to #{@user_count} users" }
     end
   end
 
 private
-
-  def clear_session
-    session.delete(:alert)
-  end
 
   def set_investigation
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
@@ -61,7 +52,6 @@ private
 
   def authorize_investigation
     authorize @investigation, :send_email_alert?
-    @investigation = @investigation.decorate
   end
 
   def set_alert
@@ -70,18 +60,6 @@ private
       source: UserSource.new(user: current_user),
       investigation_url: investigation_url(@investigation)
     )
-  end
-
-  def store_alert
-    session[:alert] = @alert.attributes
-  end
-
-  def alert_params
-    alert_session_params.merge(alert_request_params).symbolize_keys
-  end
-
-  def alert_session_params
-    session[:alert] || {}
   end
 
   def alert_request_params
