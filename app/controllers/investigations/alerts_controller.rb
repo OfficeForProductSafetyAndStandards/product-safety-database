@@ -11,13 +11,13 @@ class Investigations::AlertsController < ApplicationController
 
   def new
     set_investigation
-    @alert_form = AlertForm.new
+    @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     @investigation = @investigation.decorate
   end
 
   def preview
     set_investigation
-    @alert_form = AlertForm.new(alert_request_params)
+    @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     @user_count = number_with_delimiter(User.active.count, delimiter: ",")
     @investigation = @investigation.decorate
     get_preview

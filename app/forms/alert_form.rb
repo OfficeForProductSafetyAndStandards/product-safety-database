@@ -7,6 +7,7 @@ class AlertForm
   attribute :summary
   attribute :description
   attribute :user_count
+  attribute :investigation_url
 
   validate :summary_validation
   validate :description_validation
@@ -16,7 +17,7 @@ class AlertForm
   end
 
   def default_description
-    "\r\n\r\n\r\nMore details can be found on the case page: "
+    "\r\n\r\n\r\nMore details can be found on the case page: #{investigation_url}"
   end
 
   def summary_validation
