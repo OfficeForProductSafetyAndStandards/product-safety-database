@@ -41,7 +41,7 @@
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <p>If you’re not happy you can <%= link_to "edit your message", new_investigation_alert_path(@investigation), class: "govuk-link" %>.</p>
+      <p>If you’re not happy you can <%= link_to "edit your message", new_investigation_alert_path(@investigation, alert_form: { summary: @alert_form.summary, description: @alert_form.description }), class: "govuk-link" %>.</p>
       <p>Alerts may take up to 5 minutes to send.</p>
     </div>
   </div>
