@@ -18,7 +18,6 @@ class Investigations::AlertsController < ApplicationController
     @alert_form = AlertForm.new(alert_request_params)
     get_preview
     set_user_count
-    byebug
   end
 
   def show
@@ -37,8 +36,18 @@ class Investigations::AlertsController < ApplicationController
 
   def create
     @alert_form = AlertForm.new(alert_request_params)
-    byebug
-    redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to #{@user_count} users" }
+    set_user_count
+    if @alert_form.valid?
+      AddAlert.call!(
+        @alert_form.attributes.merge({
+          investigation: @investigation,
+          user: current_user,
+          user_count: @user_count
+        })
+      )
+
+      redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to #{@user_count} users" }
+    end
   end
 
 private
