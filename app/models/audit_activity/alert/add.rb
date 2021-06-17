@@ -10,4 +10,8 @@ class AuditActivity::Alert::Add < AuditActivity::Base
       description: alert.description
     }
   end
+
+  def title(current_user)
+    "Product safety alert sent"
+  end
 end

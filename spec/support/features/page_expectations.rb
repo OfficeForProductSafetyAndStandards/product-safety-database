@@ -239,12 +239,11 @@ module PageExpectations
   end
 
   def expect_to_be_on_new_alert_for_case_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/alerts/new")
     expect(page).to have_h1("Compose new alert")
   end
 
   def expect_to_be_on_about_alerts_page(case_id:)
-    expect(page).to have_current_path("/cases/#{case_id}/alerts/about_alerts")
+    expect(page).to have_current_path("/cases/#{case_id}/alerts/about")
     expect(page).to have_h1("You cannot send an alert about a restricted case")
   end
 
