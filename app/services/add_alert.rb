@@ -14,11 +14,16 @@ class AddAlert
       investigation_id: investigation.id,
     )
 
+    send_alert_emails
     create_audit_activity
-    send_notification_email(investigation, user)
   end
 
 private
+
+  def send_alert_emails
+    emails = User.active.map(&:email)
+    SendAlertJob.perform_later(emails, subject_text: summary, body_text: description)
+  end
 
   def audit_activity_metadata
     AuditActivity::Alert::Add.build_metadata(alert, user_count)
@@ -34,21 +39,5 @@ private
 
   def source
     UserSource.new(user: user)
-  end
-
-  def send_notification_email(investigation, _user)
-    email_recipients_for_case_owner.each do |recipient|
-      NotifyMailer.investigation_updated(
-        investigation.pretty_id,
-        recipient.name,
-        recipient.email,
-        email_update_text(recipient),
-        email_subject
-      ).deliver_later
-    end
-  end
-
-  def email_update_text(viewer = nil)
-    "Email details added to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 end
