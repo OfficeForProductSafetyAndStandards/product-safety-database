@@ -5,7 +5,7 @@ RSpec.describe "Sending a product safety alert", :with_stubbed_elasticsearch, :w
 
   before { sign_in user }
 
-  context "#about" do
+  describe "#about" do
     context "when the case is not restricted" do
       let(:investigation) { create(:allegation, creator: user) }
 

@@ -29,7 +29,7 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
 
     click_link "Compose new alert"
 
-    expect_to_be_on_new_alert_for_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_new_alert_for_case_page
 
     # Check that the 2 fields are pre-filled with the default values
     expect(find_field("Alert subject").value).to eq("Product safety alert: ")
@@ -45,7 +45,7 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
 
     click_link "edit your message"
 
-    expect_to_be_on_new_alert_for_case_page(case_id: investigation.pretty_id)
+    expect_to_be_on_new_alert_for_case_pages
 
     expect(page).to have_field("Alert subject", with: "Important safety alert")
     expect(page).to have_field("Alert summary", text: "Please review this case")

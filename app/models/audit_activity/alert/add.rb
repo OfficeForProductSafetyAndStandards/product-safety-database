@@ -11,7 +11,7 @@ class AuditActivity::Alert::Add < AuditActivity::Base
     }
   end
 
-  def title(current_user)
+  def title(_current_user)
     "Product safety alert sent"
   end
 end
