@@ -5,20 +5,22 @@ RSpec.describe "Sending a product safety alert", :with_stubbed_elasticsearch, :w
 
   before { sign_in user }
 
-  context "when the case is not restricted" do
-    let(:investigation) { create(:allegation, creator: user) }
+  context "#about" do
+    context "when the case is not restricted" do
+      let(:investigation) { create(:allegation, creator: user) }
 
-    it "responds with a 200 status code" do
-      get investigation_alert_url(investigation, id: "compose")
-      expect(response).to have_http_status(:ok)
+      it "responds with a 200 status code" do
+        get about_investigation_alerts_url(investigation)
+        expect(response).to have_http_status(:ok)
+      end
     end
-  end
 
-  context "when the case is restricted" do
-    let(:investigation) { create(:allegation, :restricted, creator: user) }
+    context "when the case is restricted" do
+      let(:investigation) { create(:allegation, :restricted, creator: user) }
 
-    it "raises a Pundit::NotAuthorizedError exception" do
-      expect { get investigation_alert_url(investigation, id: "compose") }.to raise_error(Pundit::NotAuthorizedError)
+      it "raises a Pundit::NotAuthorizedError exception" do
+        expect { get about_investigation_alerts_url(investigation) }.to raise_error(Pundit::NotAuthorizedError)
+      end
     end
   end
 end

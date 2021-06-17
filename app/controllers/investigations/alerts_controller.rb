@@ -18,11 +18,11 @@ class Investigations::AlertsController < ApplicationController
   def preview
     set_investigation
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
+    render :new unless @alert_form.valid?
+
     @user_count = number_with_delimiter(User.active.count, delimiter: ",")
     @investigation = @investigation.decorate
     get_preview
-
-    render :new unless @alert_form.valid?
   end
 
   def create
@@ -52,6 +52,7 @@ private
 
   def authorize_investigation
     authorize @investigation, :send_email_alert?
+    authorize @investigation, :investigation_restricted?
   end
 
   def set_alert
