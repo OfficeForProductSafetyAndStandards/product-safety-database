@@ -11,12 +11,16 @@ class Investigations::AlertsController < ApplicationController
 
   def new
     set_investigation
+    authorize @investigation, :investigation_restricted?
+
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     @investigation = @investigation.decorate
   end
 
   def preview
     set_investigation
+    authorize @investigation, :investigation_restricted?
+
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     render :new unless @alert_form.valid?
 
@@ -27,6 +31,8 @@ class Investigations::AlertsController < ApplicationController
 
   def create
     set_investigation
+    authorize @investigation, :investigation_restricted?
+
     @alert_form = AlertForm.new(alert_request_params)
     set_user_count
     if @alert_form.valid?
@@ -52,7 +58,6 @@ private
 
   def authorize_investigation
     authorize @investigation, :send_email_alert?
-    authorize @investigation, :investigation_restricted?
   end
 
   def set_alert
