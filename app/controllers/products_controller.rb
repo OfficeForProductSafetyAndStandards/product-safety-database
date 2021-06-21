@@ -78,7 +78,7 @@ class ProductsController < ApplicationController
 
   def filter_params
     if params["hazard_type"].present?
-      { must: [ { term: { "investigations.hazard_type" => @search.hazard_type } } ] }
+      { must: [ { match: { "investigations.hazard_type" => @search.hazard_type } } ] }
     end
   end
 
