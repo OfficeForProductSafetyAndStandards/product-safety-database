@@ -15,8 +15,8 @@ module ProductsHelper
   end
 
   def search_for_products(page_size = Product.count)
-    Product.full_search(search_query)
-      .page(params[:page]).per_page(page_size).records
+    result = Product.full_search(search_query)
+    result.paginate(page: params[:page], per_page: page_size)
   end
 
   def sorting_params
