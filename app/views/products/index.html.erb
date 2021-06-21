@@ -32,6 +32,13 @@
             } %>
           <%= form.submit "Search", name: nil, class: "search-box--submit" %>
         </div>
+
+        <%= render "form_components/govuk_select",
+           key: "hazard_type",
+           form: form,
+           items: hazard_types.map {|type| {text: type, value: type}},
+           label: { text: "Hazard type" },
+           is_autocomplete: true %>
       <% end %>
     </div>
   </div>

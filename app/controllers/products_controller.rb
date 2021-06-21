@@ -76,6 +76,12 @@ class ProductsController < ApplicationController
     end
   end
 
+  def filter_params
+    if params["hazard_type"].present?
+      { must: [ { term: { hazard_type: @search.hazard_type } } ] }
+    end
+  end
+
 private
 
   def build_breadcrumbs
