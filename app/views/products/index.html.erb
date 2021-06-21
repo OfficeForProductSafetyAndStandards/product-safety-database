@@ -39,6 +39,8 @@
            items: hazard_types.map {|type| {text: type, value: type}},
            label: { text: "Hazard type" },
            is_autocomplete: true %>
+           
+        <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
       <% end %>
     </div>
   </div>
