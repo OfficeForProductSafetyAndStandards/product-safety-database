@@ -63,8 +63,4 @@ class Product < ApplicationRecord
   def non_image_documents
     documents.includes(:blob).joins(:blob).where("left(content_type, 5) != 'image'")
   end
-
-  def self.fuzzy_fields
-    %w[investigations.*]
-  end
 end
