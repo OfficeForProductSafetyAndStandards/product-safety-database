@@ -58,7 +58,7 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
       click_button "Send to 2 people"
 
       expect_to_be_on_case_page(case_id: investigation.pretty_id)
-      expect(page).to have_text("Email alert sent to 2 users")
+      expect(page).to have_text("Email alert sent to users")
 
       click_link "Activity"
 
