@@ -35,6 +35,10 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
     expect(find_field("Alert subject").value).to eq("Product safety alert: ")
     expect(find_field("Alert summary").value).to include("More details can be found on the case page: http://www.example.com/cases/#{investigation.pretty_id}")
 
+    click_button "Preview alert"
+
+    expect_ordered_error_list
+
     fill_in "Alert subject", with: "Important safety alert"
     fill_in "Alert summary", with: "Please review this case"
 
@@ -97,5 +101,11 @@ RSpec.feature "Sending a product safety alert", :with_stubbed_elasticsearch, :wi
 
     click_link "Change case visibility"
     expect_to_be_on_case_visiblity_page(case_id: restricted_investigation.pretty_id, status: "restricted", action: "unrestrict")
+  end
+
+  def expect_ordered_error_list
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[0].text).to eq "Enter a summary"
+    expect(errors_list[1].text).to eq "Enter an alert"
   end
 end

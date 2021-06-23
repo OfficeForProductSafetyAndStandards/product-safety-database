@@ -22,13 +22,13 @@ class AlertForm
 private
 
   def summary_validation
-    if summary.empty? || summary == default_summary
+    if summary.empty? || summary.strip == default_summary.strip
       errors.add(:summary, :required, message: "Enter a summary")
     end
   end
 
   def description_validation
-    if description.empty? || description == default_description
+    if description.empty? || description.strip == default_description.strip
       errors.add(:description, :required, message: "Enter an alert")
     end
   end
