@@ -48,7 +48,6 @@ private
     activity.attach_blob(correspondence.email_attachment.blob, :email_attachment) if correspondence.email_attachment.attached?
   end
 
-
   def update_attachment_description!
     context.email.email_attachment.blob.metadata[:description] = attachment_description
     context.email.email_attachment.blob.save!
