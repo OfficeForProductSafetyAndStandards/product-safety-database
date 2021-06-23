@@ -37,6 +37,6 @@ module EntitiesToNotify
   end
 
   def email_recipients_for_alerts
-    emails = User.active.map(&:email)
+    User.active.map(&:email)
   end
 end

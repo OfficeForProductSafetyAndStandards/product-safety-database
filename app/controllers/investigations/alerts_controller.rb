@@ -2,7 +2,6 @@ class Investigations::AlertsController < ApplicationController
   include Pundit
   include ActionView::Helpers::NumberHelper
 
-
   def about
     set_and_authorize_investigation
     @investigation = @investigation.decorate
@@ -46,7 +45,7 @@ class Investigations::AlertsController < ApplicationController
       @investigation = @investigation.decorate
       redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to #{@user_count} users" }
     else
-      return render :new
+      render :new
     end
   end
 
