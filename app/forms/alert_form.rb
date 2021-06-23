@@ -19,6 +19,8 @@ class AlertForm
     "\r\n\r\n\r\nMore details can be found on the case page: #{investigation_url}"
   end
 
+private
+
   def summary_validation
     if summary.empty? || summary == default_summary
       errors.add(:summary, :required, message: "Enter a summary")
