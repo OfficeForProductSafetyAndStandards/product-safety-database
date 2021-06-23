@@ -1,9 +1,9 @@
 class AuditActivity::Alert::Add < AuditActivity::Base
   belongs_to :investigation
 
-  def self.build_metadata(alert, user_count)
+  def self.build_metadata(alert)
     {
-      user_count: user_count,
+      user_count: User.active.count,
       subject: alert.summary,
       date_sent: alert.created_at,
       description: alert.description

@@ -22,7 +22,7 @@ class Investigations::AlertsController < ApplicationController
 
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     @investigation = @investigation.decorate
-    
+
     return render :new unless @alert_form.valid?
 
     set_user_count
@@ -34,18 +34,19 @@ class Investigations::AlertsController < ApplicationController
     authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params)
-    set_user_count
+
     if @alert_form.valid?
       AddAlert.call!(
         @alert_form.attributes.merge({
           investigation: @investigation,
-          user: current_user,
-          user_count: @user_count
+          user: current_user
         })
       )
 
       @investigation = @investigation.decorate
       redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to #{@user_count} users" }
+    else
+      return render :new
     end
   end
 

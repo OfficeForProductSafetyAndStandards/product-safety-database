@@ -26,7 +26,7 @@ private
   end
 
   def audit_activity_metadata
-    AuditActivity::Alert::Add.build_metadata(alert, user_count)
+    AuditActivity::Alert::Add.build_metadata(alert)
   end
 
   def create_audit_activity
