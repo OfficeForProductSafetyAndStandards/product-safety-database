@@ -40,7 +40,7 @@ private
       metadata: audit_activity_metadata,
       source: UserSource.new(user: User.current),
       investigation: investigation,
-      title: correspondence.overview,
+      title: nil,
       correspondence: correspondence
     )
 
