@@ -25,7 +25,7 @@ class Investigations::AlertsController < ApplicationController
     
     return render :new unless @alert_form.valid?
 
-    @user_count = number_with_delimiter(User.active.count, delimiter: ",")
+    set_user_count
     get_preview
   end
 
