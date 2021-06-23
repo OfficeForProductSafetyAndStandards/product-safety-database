@@ -111,28 +111,6 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       end
     end
 
-    context "when searching on the complainant fields" do
-      let!(:complainant) { create(:complainant, investigation: investigation) }
-
-      context "when searching by complainant name" do
-        let(:query) { complainant.name }
-
-        it_behaves_like "finds the relevant investigation"
-      end
-
-      context "when searching by complainant phone number" do
-        let(:query) { complainant.phone_number }
-
-        it_behaves_like "finds the relevant investigation"
-      end
-
-      context "when searching by complainant email address" do
-        let(:query) { complainant.email_address }
-
-        it_behaves_like "finds the relevant investigation"
-      end
-    end
-
     context "when searcing on a business" do
       let!(:business) { create(:business, investigations: [investigation]) }
 

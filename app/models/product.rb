@@ -33,6 +33,12 @@ class Product < ApplicationRecord
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
+  def as_indexed_json(*)
+    as_json(
+      include: { investigations: { only: :hazard_type } }
+    )
+  end
+
   has_many_attached :documents
 
   has_many :investigation_products, dependent: :destroy
