@@ -69,4 +69,15 @@ RSpec.describe "Changing the owner of a case", :with_stubbed_elasticsearch, :wit
       expect(response).to have_http_status(:forbidden)
     end
   end
+
+  context "when no form params are supplied on confirm step" do
+    before do
+      sign_in user_from_owner_team
+      get investigation_ownership_path(investigation, "confirm")
+    end
+
+    it "redirects to the first step" do
+      expect(response).to redirect_to(investigation_ownership_path(investigation, "select-owner"))
+    end
+  end
 end

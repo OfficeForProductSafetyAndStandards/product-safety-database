@@ -108,7 +108,7 @@ GEM
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.2.3)
       aws-eventstream (~> 1, >= 1.0.2)
-    backport (1.1.2)
+    backport (1.2.0)
     bcrypt (3.1.16)
     benchmark (0.1.1)
     bootsnap (1.7.5)
@@ -499,10 +499,11 @@ GEM
     slim_lint (0.21.1)
       rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-    solargraph (0.41.2)
-      backport (~> 1.1)
+    solargraph (0.42.3)
+      backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
+      diff-lcs (~> 1.4)
       e2mmap
       jaro_winkler (~> 1.5)
       kramdown (~> 2.3)
@@ -648,7 +649,7 @@ DEPENDENCIES
   simplecov-lcov
   slim-rails (~> 3.2)
   slim_lint (~> 0.21)
-  solargraph (~> 0.41)
+  solargraph (~> 0.42)
   spring (~> 2.1)
   spring-commands-rspec (~> 1.0)
   sprockets (= 4.0.2)
@@ -666,4 +667,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.2.15
+   2.2.20
