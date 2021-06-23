@@ -1,5 +1,4 @@
 class AuditActivity::Alert::Add < AuditActivity::Base
-  extend ActionView::Helpers::NumberHelper
   belongs_to :investigation
 
   def self.build_metadata(alert, user_count)
