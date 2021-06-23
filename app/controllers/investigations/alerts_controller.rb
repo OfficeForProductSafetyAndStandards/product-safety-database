@@ -52,12 +52,8 @@ class Investigations::AlertsController < ApplicationController
 
 private
 
-  def set_investigation
+  def set_and_authorize_investigation
     @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-    authorize_investigation
-  end
-
-  def authorize_investigation
     authorize @investigation, :send_email_alert?
   end
 
