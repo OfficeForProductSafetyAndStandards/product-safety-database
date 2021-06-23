@@ -22,10 +22,11 @@ class Investigations::AlertsController < ApplicationController
     authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
-    render :new unless @alert_form.valid?
+    @investigation = @investigation.decorate
+    
+    return render :new unless @alert_form.valid?
 
     @user_count = number_with_delimiter(User.active.count, delimiter: ",")
-    @investigation = @investigation.decorate
     get_preview
   end
 
