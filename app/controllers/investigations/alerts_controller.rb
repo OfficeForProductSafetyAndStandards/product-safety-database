@@ -4,12 +4,12 @@ class Investigations::AlertsController < ApplicationController
 
 
   def about
-    set_investigation
+    set_and_authorize_investigation
     @investigation = @investigation.decorate
   end
 
   def new
-    set_investigation
+    set_and_authorize_investigation
     authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
@@ -17,7 +17,7 @@ class Investigations::AlertsController < ApplicationController
   end
 
   def preview
-    set_investigation
+    set_and_authorize_investigation
     authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
@@ -30,7 +30,7 @@ class Investigations::AlertsController < ApplicationController
   end
 
   def create
-    set_investigation
+    set_and_authorize_investigation
     authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params)
