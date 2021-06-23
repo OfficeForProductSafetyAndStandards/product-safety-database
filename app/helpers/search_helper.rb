@@ -15,7 +15,7 @@ module SearchHelper
   end
 
   def query_params
-    params.permit(:q, :sort_by, :direction)
+    params.permit(:q, :sort_by, :direction, :hazard_type)
   end
 
   def sorting_params
