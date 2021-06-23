@@ -21,8 +21,7 @@ class AddAlert
 private
 
   def send_alert_emails
-    emails = User.active.map(&:email)
-    SendAlertJob.perform_later(emails, subject_text: summary, body_text: description)
+    SendAlertJob.perform_later(email_recipients_for_alerts, subject_text: summary, body_text: description)
   end
 
   def audit_activity_metadata

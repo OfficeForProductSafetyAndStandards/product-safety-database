@@ -6,7 +6,6 @@ class AlertForm
 
   attribute :summary
   attribute :description
-  attribute :user_count
   attribute :investigation_url
 
   validate :summary_validation
