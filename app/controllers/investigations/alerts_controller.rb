@@ -2,7 +2,6 @@ class Investigations::AlertsController < ApplicationController
   include Pundit
   include ActionView::Helpers::NumberHelper
 
-  before_action :set_investigation
 
   def about
     set_investigation
