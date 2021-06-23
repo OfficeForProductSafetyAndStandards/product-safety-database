@@ -79,7 +79,6 @@ module InvestigationElasticsearch
          activities.*
          businesses.*
          products.*
-         complainant.*
          corrective_actions.*
          tests.*
          alerts.*

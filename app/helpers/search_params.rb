@@ -42,6 +42,7 @@ class SearchParams
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
+  attribute :hazard_type
 
   def owner_filter_exclusive?
     case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
