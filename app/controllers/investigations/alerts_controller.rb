@@ -45,6 +45,7 @@ class Investigations::AlertsController < ApplicationController
       @investigation = @investigation.decorate
       redirect_to investigation_path(@investigation), flash: { success: "Email alert sent to users" }
     else
+      @investigation = @investigation.decorate
       render :new
     end
   end
