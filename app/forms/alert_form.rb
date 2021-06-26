@@ -11,6 +11,17 @@ class AlertForm
   validate :summary_validation
   validate :description_validation
 
+
+  def content_of_summary_field
+    summary ? summary : default_summary
+  end
+
+  def content_of_description_field
+    description ? description : default_description
+  end
+
+private
+
   def default_summary
     "Product safety alert: "
   end
@@ -18,8 +29,6 @@ class AlertForm
   def default_description
     "\r\n\r\n\r\nMore details can be found on the case page: #{investigation_url}"
   end
-
-private
 
   def summary_validation
     if summary.empty? || summary.strip == default_summary.strip

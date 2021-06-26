@@ -22,14 +22,14 @@
                  key: :summary,
                  label: { text: "Alert subject", classes: "govuk-label--m" },
                  hint: { text: "This will be used in the email subject line." },
-                 value: (@alert_form.summary.presence || @alert_form.default_summary) %>
+                 value: (@alert_form.content_of_summary_field) %>
 
       <%= render "form_components/govuk_textarea",
                  form: form,
                  key: :description,
                  rows: 12,
                  maxlength: 1000,
-                 value: (@alert_form.description.presence || @alert_form.default_description),
+                 value: (@alert_form.content_of_description_field),
                  label: { text: "Alert summary", classes: "govuk-label--m" },
                  hint: { text: "Include a summary of the incident and what actions you’d like recipients to take. Recipients will need to view the case to see attachments and images." } %>
 
