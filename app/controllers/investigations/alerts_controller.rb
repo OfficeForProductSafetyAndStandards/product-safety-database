@@ -3,13 +3,13 @@ class Investigations::AlertsController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
   def about
-    set_and_authorize_investigation
+    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    authorize @investigation, :send_email_alert?
     @investigation = @investigation.decorate
   end
 
   def new
     set_and_authorize_investigation
-    authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     @investigation = @investigation.decorate
@@ -17,7 +17,6 @@ class Investigations::AlertsController < ApplicationController
 
   def preview
     set_and_authorize_investigation
-    authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params.merge(investigation_url: investigation_url(@investigation)))
     @investigation = @investigation.decorate
@@ -30,7 +29,6 @@ class Investigations::AlertsController < ApplicationController
 
   def create
     set_and_authorize_investigation
-    authorize @investigation, :investigation_restricted?
 
     @alert_form = AlertForm.new(alert_request_params)
 
@@ -53,7 +51,7 @@ class Investigations::AlertsController < ApplicationController
 private
 
   def set_and_authorize_investigation
-    @investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
+    @investigation = Investigation.not_private.find_by!(pretty_id: params[:investigation_pretty_id])
     authorize @investigation, :send_email_alert?
   end
 
