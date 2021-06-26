@@ -11,13 +11,12 @@ class AlertForm
   validate :summary_validation
   validate :description_validation
 
-
   def content_of_summary_field
-    summary ? summary : default_summary
+    summary || default_summary
   end
 
   def content_of_description_field
-    description ? description : default_description
+    description || default_description
   end
 
 private
