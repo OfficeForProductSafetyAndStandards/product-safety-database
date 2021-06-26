@@ -38,3 +38,13 @@ book.add_worksheet name: "Cases" do |sheet_investigations| # rubocop:disable Met
     ], types: :text
   end
 end
+
+book.add_worksheet name: "Another worksheet yo" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
+  sheet_investigations.add_row %w[ID]
+  @investigations.each do |investigation|
+    complainant = investigation.complainant
+    sheet_investigations.add_row [
+      investigation.pretty_id
+    ], types: :text
+  end
+end
