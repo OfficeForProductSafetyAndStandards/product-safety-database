@@ -26,6 +26,8 @@ class ProductsController < ApplicationController
         render csv: @products, filename: "products"
       end
       format.xlsx do
+        results = search_for_products(20)
+        @products = ProductDecorator.decorate_collection(results)
       end
     end
   end
