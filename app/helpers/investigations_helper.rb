@@ -521,9 +521,8 @@ module InvestigationsHelper
     end
 
     if policy(investigation).send_email_alert?
-
       actions << {
-        path: new_investigation_alert_path(@investigation),
+        path: about_investigation_alerts_path(@investigation),
         text: I18n.t(:send_email_alert, scope: "forms.investigation_actions.actions")
       }
     end

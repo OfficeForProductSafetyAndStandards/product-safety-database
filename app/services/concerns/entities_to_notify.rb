@@ -35,4 +35,8 @@ module EntitiesToNotify
 
     [investigation.creator_user]
   end
+
+  def email_recipients_for_alerts
+    User.active.map(&:email)
+  end
 end
