@@ -26,8 +26,9 @@ class ProductsController < ApplicationController
         render csv: @products, filename: "products"
       end
       format.xlsx do
-        results = search_for_products(20)
-        @products = ProductDecorator.decorate_collection(results)
+        authorize Product, :export?
+
+        @products = search_for_products(20, [:investigations, :corrective_actions, :risk_assessments, :test_results]).sort
       end
     end
   end
