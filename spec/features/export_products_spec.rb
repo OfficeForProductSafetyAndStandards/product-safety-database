@@ -99,8 +99,8 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 7)).to eq "case_ids"
-          expect(sheet.cell(2, 7)).to eq product.investigations.map(&:id).to_s
-          expect(sheet.cell(3, 7)).to eq other_product.investigations.map(&:id).to_s
+          expect(sheet.cell(2, 7)).to eq product.investigations.map(&:pretty_id).to_s
+          expect(sheet.cell(3, 7)).to eq other_product.investigations.map(&:pretty_id).to_s
         end
 
         it "exports category" do
