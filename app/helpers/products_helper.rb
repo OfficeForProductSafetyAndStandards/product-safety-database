@@ -14,7 +14,7 @@ module ProductsHelper
     params.permit(:sort, :q)
   end
 
-  def search_for_products(page_size = Product.count, include_models=[])
+  def search_for_products(page_size = Product.count, include_models = [])
     Product.includes(include_models).full_search(search_query)
       .page(params[:page]).per_page(page_size).records
   end
