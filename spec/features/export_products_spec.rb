@@ -40,8 +40,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
       let(:user) { create(:user, :activated, :psd_admin, :viewed_introduction) }
 
       it "exports correct sheets" do
-        Investigation.import refresh: true, force: true
-
         get products_path format: :xlsx
 
         expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
@@ -51,8 +49,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         let(:sheet) { exported_data.sheet("product_info") }
 
         it "exports product ids" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 1)).to eq "ID"
@@ -61,8 +57,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports affected_units_status" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 2)).to eq "affected_units_status"
@@ -71,8 +65,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports authenticity" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
           expect(sheet.cell(1, 3)).to eq "authenticity"
           expect(sheet.cell(2, 3)).to eq product.authenticity
@@ -80,8 +72,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports barcode" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 4)).to eq "barcode"
@@ -90,8 +80,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports batch_number" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 5)).to eq "batch_number"
@@ -100,8 +88,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports brand" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 6)).to eq "brand"
@@ -110,8 +96,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports case_ids" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 7)).to eq "case_ids"
@@ -120,8 +104,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports category" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 8)).to eq "category"
@@ -130,8 +112,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports country_of_origin" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 9)).to eq "country_of_origin"
@@ -140,8 +120,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports created_at" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
           expect(sheet.cell(1, 10)).to eq "created_at"
           expect(sheet.cell(2, 10)).to eq product.created_at.to_s
@@ -149,8 +127,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports customs_code" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 11)).to eq "customs_code"
@@ -159,8 +135,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports description" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 12)).to eq "description"
@@ -169,8 +143,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports has_markings" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 13)).to eq "has_markings"
@@ -179,8 +151,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports markings" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 14)).to eq "markings"
@@ -189,8 +159,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports name" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 15)).to eq "name"
@@ -199,8 +167,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports number_of_affected_units" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 16)).to eq "number_of_affected_units"
@@ -209,8 +175,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports product_code" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 17)).to eq "product_code"
@@ -219,8 +183,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports subcategory" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 18)).to eq "subcategory"
@@ -229,8 +191,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports updated_at" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 19)).to eq "updated_at"
@@ -239,8 +199,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports webpage" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 20)).to eq "webpage"
@@ -249,8 +207,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports when_placed_on_market" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 21)).to eq "when_placed_on_market"
@@ -259,8 +215,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports reported_reason" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 22)).to eq "reported_reason"
@@ -269,8 +223,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports hazard_type" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 23)).to eq "hazard_type"
@@ -279,8 +231,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports non_compliant_reason" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 24)).to eq "non_compliant_reason"
@@ -289,8 +239,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports risk_level" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 25)).to eq "risk_level"
@@ -303,8 +251,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         let(:sheet) { exported_data.sheet("test_results") }
 
         it "exports product_id" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 1)).to eq "product_id"
@@ -313,8 +259,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports legislation" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 2)).to eq "legislation"
@@ -323,8 +267,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports standards" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 3)).to eq "standards"
@@ -333,8 +275,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports date_of_test" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 4)).to eq "date_of_test"
@@ -343,8 +283,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports result" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 5)).to eq "result"
@@ -353,8 +291,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports how_product_failed" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 6)).to eq "how_product_failed"
@@ -363,8 +299,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports further_details" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 7)).to eq "further_details"
@@ -377,8 +311,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         let(:sheet) { exported_data.sheet("risk_assessments") }
 
         it "exports product_id" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 1)).to eq "product_id"
@@ -387,8 +319,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports date_of_assessment" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 2)).to eq "date_of_assessment"
@@ -397,8 +327,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports risk_level" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 3)).to eq "risk_level"
@@ -407,8 +335,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports assessed_by_business_id" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 4)).to eq "assessed_by_business_id"
@@ -417,8 +343,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports assessed_by_team_id" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 5)).to eq "assessed_by_team_id"
@@ -427,8 +351,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports further_details" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 6)).to eq "further_details"
@@ -441,8 +363,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         let(:sheet) { exported_data.sheet("corrective_actions") }
 
         it "exports product_id" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 1)).to eq "product_id"
@@ -451,8 +371,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports action_taken" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 2)).to eq "action_taken"
@@ -461,8 +379,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports date_of_action" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 3)).to eq "date_of_action"
@@ -471,8 +387,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports legislation" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 4)).to eq "legislation"
@@ -481,8 +395,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports business_responsible" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 5)).to eq "business_responsible"
@@ -491,8 +403,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports recall_information_online" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 6)).to eq "recall_information_online"
@@ -501,8 +411,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports mandatory_or_voluntary" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 7)).to eq "mandatory_or_voluntary"
@@ -511,8 +419,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports how_long" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 8)).to eq "how_long"
@@ -521,8 +427,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports geographic_scope" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 9)).to eq "geographic_scope"
@@ -531,8 +435,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
 
         it "exports further_details" do
-          Investigation.import refresh: true, force: true
-
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 10)).to eq "further_details"
