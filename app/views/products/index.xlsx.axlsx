@@ -12,7 +12,7 @@ book.add_worksheet name: "product_info" do |sheet_investigations| # rubocop:disa
       product.barcode,
       product.batch_number,
       product.brand,
-      product.investigations.map(&:id),
+      product.investigations.map(&:pretty_id),
       product.category,
       product.country_of_origin,
       product.created_at,
