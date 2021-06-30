@@ -45,7 +45,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
       end
 
-      context "product_info sheet" do
+      context "with product_info sheet" do
         let(:sheet) { exported_data.sheet("product_info") }
 
         it "exports product ids" do
@@ -247,7 +247,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
       end
 
-      context "test_results sheet" do
+      context "with test_results sheet" do
         let(:sheet) { exported_data.sheet("test_results") }
 
         it "exports product_id" do
@@ -307,7 +307,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
       end
 
-      context "risk_assessments sheet" do
+      context "with risk_assessments sheet" do
         let(:sheet) { exported_data.sheet("risk_assessments") }
 
         it "exports product_id" do
@@ -359,7 +359,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
       end
 
-      context "corrective_actions sheet" do
+      context "with corrective_actions sheet" do
         let(:sheet) { exported_data.sheet("corrective_actions") }
 
         it "exports product_id" do
