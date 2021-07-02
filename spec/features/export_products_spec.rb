@@ -313,6 +313,14 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           expect(sheet.cell(2, 7)).to eq test.details.to_s
           expect(sheet.cell(3, 7)).to eq test_2.details.to_s
         end
+
+        it "exports product_name" do
+          get products_path format: :xlsx
+
+          expect(sheet.cell(1, 8)).to eq "product_name"
+          expect(sheet.cell(2, 8)).to eq product.name
+          expect(sheet.cell(3, 8)).to eq product.name
+        end
       end
 
       context "with risk_assessments sheet" do
@@ -356,6 +364,14 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           expect(sheet.cell(1, 5)).to eq "further_details"
           expect(sheet.cell(2, 5)).to eq risk_assessment.details.to_s
           expect(sheet.cell(3, 5)).to eq risk_assessment_2.details.to_s
+        end
+
+        it "exports product_name" do
+          get products_path format: :xlsx
+
+          expect(sheet.cell(1, 6)).to eq "product_name"
+          expect(sheet.cell(2, 6)).to eq product.name
+          expect(sheet.cell(3, 6)).to eq product.name
         end
       end
 
@@ -440,6 +456,14 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           expect(sheet.cell(1, 10)).to eq "further_details"
           expect(sheet.cell(2, 10)).to eq corrective_action.details
           expect(sheet.cell(3, 10)).to eq corrective_action_2.details
+        end
+
+        it "exports product_name" do
+          get products_path format: :xlsx
+
+          expect(sheet.cell(1, 11)).to eq "product_name"
+          expect(sheet.cell(2, 11)).to eq product.name
+          expect(sheet.cell(3, 11)).to eq product.name
         end
       end
     end

@@ -37,7 +37,7 @@ book.add_worksheet name: "product_info" do |sheet_investigations| # rubocop:disa
 end
 
 book.add_worksheet name: "test_results" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
-  sheet_investigations.add_row %w[product_id legislation standards date_of_test result how_product_failed further_details]
+  sheet_investigations.add_row %w[product_id legislation standards date_of_test result how_product_failed further_details product_name]
   @products.each do |product|
     product.tests.sort.each do |test_result|
       sheet_investigations.add_row [
@@ -48,13 +48,14 @@ book.add_worksheet name: "test_results" do |sheet_investigations| # rubocop:disa
         test_result.result,
         test_result.failure_details,
         test_result.details,
+        product.name
       ], types: :text
     end
   end
 end
 
 book.add_worksheet name: "risk_assessments" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
-  sheet_investigations.add_row %w[product_id date_of_assessment risk_level assessed_by further_details]
+  sheet_investigations.add_row %w[product_id date_of_assessment risk_level assessed_by further_details product_name]
   @products.each do |product|
     product.risk_assessments.sort.each do |risk_assessment|
       sheet_investigations.add_row [
@@ -62,7 +63,8 @@ book.add_worksheet name: "risk_assessments" do |sheet_investigations| # rubocop:
         risk_assessment.assessed_on,
         risk_assessment.risk_level,
         risk_assessment.decorate.assessed_by,
-        risk_assessment.details
+        risk_assessment.details,
+        product.name
       ], types: :text
     end
   end
@@ -70,7 +72,7 @@ end
 
 book.add_worksheet name: "corrective_actions" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
   sheet_investigations.add_row %w[product_id action_taken date_of_action legislation business_responsible
-                                  recall_information_online mandatory_or_voluntary how_long geographic_scope further_details]
+                                  recall_information_online mandatory_or_voluntary how_long geographic_scope further_details product_name]
   @products.each do |product|
     product.corrective_actions.sort.each do |corrective_action|
       sheet_investigations.add_row [
@@ -78,12 +80,13 @@ book.add_worksheet name: "corrective_actions" do |sheet_investigations| # ruboco
         corrective_action.action,
         corrective_action.date_decided,
         corrective_action.legislation,
-        corrective_action.business_id,
+        corrective_action.business.try(:legal_name),
         corrective_action.online_recall_information,
         corrective_action.measure_type,
         corrective_action.duration,
         corrective_action.geographic_scopes.join(","),
-        corrective_action.details
+        corrective_action.details,
+        product.name
       ], types: :text
     end
   end
