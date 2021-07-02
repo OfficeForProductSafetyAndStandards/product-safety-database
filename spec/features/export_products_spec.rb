@@ -18,7 +18,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
     let!(:test)                  { create(:test_result, investigation: investigation, product: product, failure_details: "something bad") }
     let!(:test_2)                { create(:test_result, investigation: investigation, product: product, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]) }
     let!(:corrective_action)     { create(:corrective_action, investigation: investigation, product: product) }
-    let!(:corrective_action_2)   { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: ["great_britain", "eea_wide", "worldwide"]) }
+    let!(:corrective_action_2)   { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: %w[great_britain eea_wide worldwide]) }
 
     before do
       Dir.mkdir(temp_dir) unless Dir.exist?(temp_dir)
@@ -244,14 +244,6 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           expect(sheet.cell(1, 25)).to eq "risk_level"
           expect(sheet.cell(2, 25)).to eq product.investigations.first.risk_level
           expect(sheet.cell(3, 25)).to eq other_product.investigations.first.risk_level
-        end
-
-        it "exports name" do
-          get products_path format: :xlsx
-
-          expect(sheet.cell(1, 26)).to eq "name"
-          expect(sheet.cell(2, 26)).to eq product.name
-          expect(sheet.cell(3, 26)).to eq other_product.name
         end
       end
 

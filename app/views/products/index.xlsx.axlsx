@@ -30,8 +30,7 @@ book.add_worksheet name: "product_info" do |sheet_investigations| # rubocop:disa
       product.investigations.first.try(:reported_reason),
       product.investigations.first.try(:hazard_type),
       product.investigations.first.try(:non_compliant_reason),
-      product.investigations.first.try(:risk_level),
-      product.name
+      product.investigations.first.try(:risk_level)
     ], types: :text
   end
 end
