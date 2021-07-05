@@ -76,7 +76,7 @@ book.add_worksheet name: "corrective_actions" do |sheet_investigations| # ruboco
     product.corrective_actions.sort.each do |corrective_action|
       sheet_investigations.add_row [
         product.id,
-        corrective_action.action,
+        corrective_action.decorate.page_title,
         corrective_action.date_decided,
         corrective_action.legislation,
         corrective_action.business.try(:legal_name),
