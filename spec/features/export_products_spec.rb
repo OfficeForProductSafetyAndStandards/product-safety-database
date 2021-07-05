@@ -382,8 +382,8 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           get products_path format: :xlsx
 
           expect(sheet.cell(1, 2)).to eq "action_taken"
-          expect(sheet.cell(2, 2)).to eq corrective_action.action
-          expect(sheet.cell(3, 2)).to eq corrective_action_2.action
+          expect(sheet.cell(2, 2)).to eq CorrectiveAction.actions[corrective_action.action]
+          expect(sheet.cell(3, 2)).to eq CorrectiveAction.actions[corrective_action_2.action]
         end
 
         it "exports date_of_action" do
