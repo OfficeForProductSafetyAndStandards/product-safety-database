@@ -17,14 +17,6 @@ class ProductsController < ApplicationController
         results = search_for_products(20)
         @products = ProductDecorator.decorate_collection(results)
       end
-      format.csv do
-        authorize Product, :export?
-
-        results = search_for_products.includes(:investigations)
-        @products = ProductDecorator.decorate_collection(results)
-
-        render csv: @products, filename: "products"
-      end
       format.xlsx do
         authorize Product, :export?
 
