@@ -19,7 +19,7 @@ book.add_worksheet name: "product_info" do |sheet_investigations| # rubocop:disa
       product.customs_code,
       product.description,
       product.has_markings,
-      product.markings.join(","),
+      product.markings.try(:join, ","),
       product.name,
       product.number_of_affected_units,
       product.product_code,
