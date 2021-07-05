@@ -82,6 +82,8 @@ class Investigation < ApplicationRecord
   has_many :incidents
   has_many :unexpected_events
 
+  scope :not_private, -> { where(is_private: false) }
+
   # All sub-classes share this policy class
   def self.policy_class
     InvestigationPolicy

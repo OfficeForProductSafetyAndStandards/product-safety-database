@@ -199,8 +199,9 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_elastics
 
   def expect_case_activity_page_to_show_entered_information(user_name:, name:, email:, date:, file: nil, summary: nil, subject: nil, body: nil)
     item = page.find("p", text: "Email recorded by #{user_name}").find(:xpath, "..")
-    expect(item).to have_text("From: #{name} (#{email})")
-    expect(item).to have_text("Date sent: #{date.strftime('%d/%m/%Y')}")
+    expect(item).to have_text("Email address: #{email}")
+    expect(item).to have_text("Contact: #{name}")
+    expect(item).to have_text("Date of email: #{date.to_s(:govuk)}")
 
     if file
       expect(item).to have_text("Email: #{File.basename(file)}")
