@@ -19,6 +19,10 @@ module ProductsHelper
       .page(params[:page]).per_page(page_size).records
   end
 
+  def search_for_products_for_export(include_models = [])
+    Product.includes(include_models).full_search(search_query).records
+  end
+
   def sorting_params
     return {} if params[:sort] == SearchParams::RELEVANT
 
