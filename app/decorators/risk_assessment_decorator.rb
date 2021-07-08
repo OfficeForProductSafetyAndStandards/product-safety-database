@@ -40,8 +40,8 @@ class RiskAssessmentDecorator < ApplicationDecorator
   end
 
   def assessed_by
-    return Business.find(assessed_by_business_id).legal_name if assessed_by_business_id
-    return Team.find(assessed_by_team_id).name if assessed_by_team_id
+    return assessed_by_business.legal_name if assessed_by_business_id
+    return assessed_by_team.name if assessed_by_team_id
 
     assessed_by_other
   end
