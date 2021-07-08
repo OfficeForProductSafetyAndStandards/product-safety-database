@@ -20,7 +20,7 @@ class ProductsController < ApplicationController
       format.xlsx do
         authorize Product, :export?
 
-        @products = search_for_products(Product.count, [:investigations, :corrective_actions, :test_results, risk_assessments: [:assessed_by_business, :assessed_by_team]]).sort
+        @products = search_for_products(Product.count, [:investigations, :test_results, corrective_actions: [:business], risk_assessments: [:assessed_by_business, :assessed_by_team]]).sort
       end
     end
   end
