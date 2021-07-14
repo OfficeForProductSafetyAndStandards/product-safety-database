@@ -14,13 +14,16 @@ class ProductsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        results = search_for_products(20)
-        @products = ProductDecorator.decorate_collection(results)
+        @products = search_for_products(Product.count, [:investigations, :test_results, corrective_actions: [:business], risk_assessments: [:assessed_by_business, :assessed_by_team]]).sort
+        @product_export = ProductExport.create
+        @product_export.export(@products)
       end
       format.xlsx do
         authorize Product, :export?
 
         @products = search_for_products(Product.count, [:investigations, :test_results, corrective_actions: [:business], risk_assessments: [:assessed_by_business, :assessed_by_team]]).sort
+        # product_export.export_file.attach(export_file)
+        # byebug
       end
     end
   end
