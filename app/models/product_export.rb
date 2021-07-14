@@ -97,10 +97,9 @@ class ProductExport < ApplicationRecord
           end
         end
       end
-      p.serialize(Rails.root.join("yoyoyo.xlsx"))
+      p.serialize(Rails.root.join("xxx.xlsx"))
 
-      byebug
-      export_file.attach(io: File.open(Rails.root.join("bbbb.xlsx")), filename: "#{id}.xlsx")
+      export_file.attach(io: File.open(Rails.root.join("xxx.xlsx")), filename: "#{id}.xlsx")
     end
   end
 end

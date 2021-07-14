@@ -8,6 +8,6 @@ class ProductExportsController < ApplicationController
   def generate
     @products = search_for_products(Product.count, [:investigations, :test_results, corrective_actions: [:business], risk_assessments: [:assessed_by_business, :assessed_by_team]]).sort
     product_export = ProductExport.create
-    ProductExport.new.export(@products)
+    product_export.export(@products)
   end
 end
