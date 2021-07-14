@@ -10,4 +10,8 @@ class ProductExportsController < ApplicationController
     product_export = ProductExport.create
     ProductExportWorker.perform_later(@products, product_export.id)
   end
+
+  def index
+    @product_export = ProductExport.last
+  end
 end

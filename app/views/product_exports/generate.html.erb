@@ -1,5 +1,1 @@
 GENERATING PRODUCT EXPORT
-
-<% if ProductExport.last.export_file.filename %>
-  <%= link_to ProductExport.last.export_file.filename, rails_blob_path(ProductExport.last.export_file, disposition: 'attachment') %>
-<% end %>
