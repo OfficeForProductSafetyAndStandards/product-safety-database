@@ -8,6 +8,6 @@ class ProductExportsController < ApplicationController
   def generate
     @products = search_for_products(Product.count, [:investigations, :test_results, corrective_actions: [:business], risk_assessments: [:assessed_by_business, :assessed_by_team]]).sort
     product_export = ProductExport.create
-    ProductExportWorker.perform_async(@products, product_export.id)
+    ProductExportWorker.perform_later(@products, product_export.id)
   end
 end
