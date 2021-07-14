@@ -1,6 +1,6 @@
 class ProductExportWorker < ApplicationJob
-  def export(products, product_export_id)
-    product_export = ProductExport.find(product_export.id)
+  def perform(products, product_export_id)
+    product_export = ProductExport.find(product_export_id)
     return unless product_export
 
     Axlsx::Package.new do |p|
@@ -97,7 +97,7 @@ class ProductExportWorker < ApplicationJob
       end
       p.serialize(Rails.root.join("xxxx.xlsx"))
 
-      product_export.export_file.attach(io: File.open(Rails.root.join("xxxx.xlsx")), filename: "test.xlsx")
+      product_export.export_file.attach(io: File.open(Rails.root.join("xxxx.xlsx")), filename: "new.xlsx")
     end
   end
 end

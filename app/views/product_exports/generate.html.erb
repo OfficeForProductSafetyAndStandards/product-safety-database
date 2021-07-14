@@ -1,5 +1,3 @@
 HELLO THERE
 
-<% byebug %>
-
 <%= link_to ProductExport.last.export_file.filename, rails_blob_path(ProductExport.last.export_file, disposition: 'attachment') %>
