@@ -16,6 +16,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       case_permission_changed_for_team: "772f8eb6-2aa2-4ed3-92f2-78af24548303",
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
+      export_product: "1c88c503-638e-4f91-b55f-726900b83f92"
     }.freeze
 
   def reset_password_instructions(user, token)
@@ -223,6 +224,18 @@ class NotifyMailer < GovukNotifyRails::Mailer
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       investigation_url: investigation_url(pretty_id: investigation.pretty_id)
+    )
+
+    mail(to: email)
+  end
+
+  def product_export(email:, name:, download_export_url:)
+    set_template(TEMPLATES[:product_export])
+    set_reference("Product Export")
+
+    set_personalisation(
+      name: name,
+      download_export_url: download_export_url
     )
 
     mail(to: email)
