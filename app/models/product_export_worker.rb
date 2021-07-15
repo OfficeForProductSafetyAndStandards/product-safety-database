@@ -95,9 +95,9 @@ class ProductExportWorker < ApplicationJob
           end
         end
       end
-      p.serialize(Rails.root.join("xxxx.xlsx"))
+      p.serialize(Rails.root.join("product_export#{product_export.id}.xlsx"))
 
-      product_export.export_file.attach(io: File.open(Rails.root.join("xxxx.xlsx")), filename: "new.xlsx")
+      product_export.export_file.attach(io: File.open(Rails.root.join("product_export#{product_export.id}.xlsx")), filename: "products_export.xlsx")
 
       NotifyMailer.product_export(
         email: user.email,
