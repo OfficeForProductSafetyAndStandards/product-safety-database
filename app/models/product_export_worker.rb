@@ -1,12 +1,12 @@
 class ProductExportWorker < ApplicationJob
-  def perform(products, product_export_id)
+  def perform(products, product_export_id, user)
     product_export = ProductExport.find(product_export_id)
     return unless product_export
 
     Axlsx::Package.new do |p|
       book = p.workbook
       book.add_worksheet name: "product_info" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
-        sheet_investigations.add_row %w[ID affected_units_status authenticity barcode batch_number brand case_ids category country_of_origin
+        sheet_investigations.add_row %w[XXX affected_units_status authenticity barcode batch_number brand case_ids category country_of_origin
                                         created_at customs_code description has_markings markings name number_of_affected_units product_code
                                         subcategory updated_at webpage when_placed_on_market reported_reason hazard_type non_compliant_reason risk_level name]
         products.each do |product|
@@ -98,6 +98,12 @@ class ProductExportWorker < ApplicationJob
       p.serialize(Rails.root.join("xxxx.xlsx"))
 
       product_export.export_file.attach(io: File.open(Rails.root.join("xxxx.xlsx")), filename: "new.xlsx")
+
+      NotifyMailer.product_export(
+        email: user.email,
+        name: user.name,
+        product_export: product_export
+      ).deliver_later
     end
   end
 end
