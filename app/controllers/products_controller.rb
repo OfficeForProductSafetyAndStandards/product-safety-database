@@ -19,7 +19,7 @@ class ProductsController < ApplicationController
       end
       format.csv do
         authorize Product, :export?
-        
+
         results = search_for_products.includes(:investigations)
         @products = ProductDecorator.decorate_collection(results)
 
