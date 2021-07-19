@@ -50,7 +50,7 @@
     <%= will_paginate @products %>
 
     <% if @products.any? && policy(Product).export? %>
-      <%= link_to "Export as spreadsheet", products_path(format: :xlsx, params: product_export_params) %>
+      <%= link_to "Export as spreadsheet", generate_product_exports_path(params: product_export_params) %>
     <% end %>
   </div>
 </div>
