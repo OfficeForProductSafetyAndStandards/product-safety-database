@@ -1,3 +1,0 @@
-<% if @product_export %>
-  <%= link_to @product_export.export_file.filename, rails_blob_path(@product_export.export_file, disposition: 'attachment') %>
-<% end %>
