@@ -42,7 +42,7 @@ class ProductExport < ApplicationRecord
       book.add_worksheet name: "test_results" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
         sheet_investigations.add_row %w[product_id legislation standards date_of_test result how_product_failed further_details product_name]
         products.each do |product|
-          product.tests.where(type: "Result").sort.each do |test_result|
+          product.tests.where(type: "Test::Result").sort.each do |test_result|
             sheet_investigations.add_row [
               product.id,
               test_result.legislation,
@@ -95,9 +95,9 @@ class ProductExport < ApplicationRecord
         end
       end
 
-      p.serialize(Rails.root.join("product_export#{id}.xlsx"))
+      p.serialize(Rails.root.join("product_export.xlsx"))
 
-      export_file.attach(io: File.open(Rails.root.join("product_export#{id}.xlsx")), filename: "products_export.xlsx")
+      export_file.attach(io: File.open(Rails.root.join("product_export.xlsx")), filename: "products_export.xlsx")
     end
   end
 end
