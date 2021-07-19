@@ -23,18 +23,18 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
     let(:products)               { [product, other_product] }
 
     describe "#export" do
-      it "exports correct sheets" do
+      before do
         product_export.export(products)
-        exported_data = Roo::Excelx.new(Rails.root.join("product_export.xlsx"))
+        @exported_data = Roo::Excelx.new(Rails.root.join("product_export.xlsx"))
+      end
 
-        expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
+      it "exports correct sheets" do
+        expect(@exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
       end
 
       context "with product_info sheet" do
         before do
-          product_export.export(products)
-          exported_data = Roo::Excelx.new(Rails.root.join("product_export.xlsx"))
-          @sheet = exported_data.sheet("product_info")
+          @sheet = @exported_data.sheet("product_info")
         end
 
         it "exports product ids" do
@@ -189,9 +189,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
 
       context "with test_results sheet" do
         before do
-          product_export.export(products)
-          exported_data = Roo::Excelx.new(Rails.root.join("product_export.xlsx"))
-          @sheet = exported_data.sheet("test_results")
+          @sheet = @exported_data.sheet("test_results")
         end
 
         it "exports product_id" do
@@ -242,123 +240,119 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
           expect(@sheet.cell(3, 8)).to eq product.name
         end
       end
-    end
 
-    context "with risk_assessments sheet" do
-      before do
-        product_export.export(products)
-        exported_data = Roo::Excelx.new(Rails.root.join("product_export.xlsx"))
-        @sheet = exported_data.sheet("risk_assessments")
+      context "with risk_assessments sheet" do
+        before do
+          @sheet = @exported_data.sheet("risk_assessments")
+        end
+
+        it "exports product_id" do
+          expect(@sheet.cell(1, 1)).to eq "product_id"
+          expect(@sheet.cell(2, 1)).to eq product.id.to_s
+          expect(@sheet.cell(3, 1)).to eq product.id.to_s
+        end
+
+        it "exports date_of_assessment" do
+          expect(@sheet.cell(1, 2)).to eq "date_of_assessment"
+          expect(@sheet.cell(2, 2)).to eq risk_assessment.assessed_on.to_s
+          expect(@sheet.cell(3, 2)).to eq risk_assessment_2.assessed_on.to_s
+        end
+
+        it "exports risk_level" do
+          expect(@sheet.cell(1, 3)).to eq "risk_level"
+          expect(@sheet.cell(2, 3)).to eq risk_assessment.risk_level.to_s
+          expect(@sheet.cell(3, 3)).to eq risk_assessment_2.risk_level.to_s
+        end
+
+        it "exports assessed_by" do
+          expect(@sheet.cell(1, 4)).to eq "assessed_by"
+          expect(@sheet.cell(2, 4)).to eq Team.find(risk_assessment.assessed_by_team_id).name
+          expect(@sheet.cell(3, 4)).to eq Team.find(risk_assessment_2.assessed_by_team_id).name
+        end
+
+        it "exports further_details" do
+          expect(@sheet.cell(1, 5)).to eq "further_details"
+          expect(@sheet.cell(2, 5)).to eq risk_assessment.details.to_s
+          expect(@sheet.cell(3, 5)).to eq risk_assessment_2.details.to_s
+        end
+
+        it "exports product_name" do
+          expect(@sheet.cell(1, 6)).to eq "product_name"
+          expect(@sheet.cell(2, 6)).to eq product.name
+          expect(@sheet.cell(3, 6)).to eq product.name
+        end
       end
 
-      it "exports product_id" do
-        expect(@sheet.cell(1, 1)).to eq "product_id"
-        expect(@sheet.cell(2, 1)).to eq product.id.to_s
-        expect(@sheet.cell(3, 1)).to eq product.id.to_s
-      end
+      context "with corrective_actions sheet" do
+        before do
+          @sheet = @exported_data.sheet("corrective_actions")
+        end
 
-      it "exports date_of_assessment" do
-        expect(@sheet.cell(1, 2)).to eq "date_of_assessment"
-        expect(@sheet.cell(2, 2)).to eq risk_assessment.assessed_on.to_s
-        expect(@sheet.cell(3, 2)).to eq risk_assessment_2.assessed_on.to_s
-      end
+        it "exports product_id" do
+          expect(@sheet.cell(1, 1)).to eq "product_id"
+          expect(@sheet.cell(2, 1)).to eq product.id.to_s
+          expect(@sheet.cell(3, 1)).to eq product.id.to_s
+        end
 
-      it "exports risk_level" do
-        expect(@sheet.cell(1, 3)).to eq "risk_level"
-        expect(@sheet.cell(2, 3)).to eq risk_assessment.risk_level.to_s
-        expect(@sheet.cell(3, 3)).to eq risk_assessment_2.risk_level.to_s
-      end
+        it "exports action_taken" do
+          expect(@sheet.cell(1, 2)).to eq "action_taken"
+          expect(@sheet.cell(2, 2)).to eq CorrectiveAction.actions[corrective_action.action]
+          expect(@sheet.cell(3, 2)).to eq CorrectiveAction.actions[corrective_action_2.action]
+        end
 
-      it "exports assessed_by" do
-        expect(@sheet.cell(1, 4)).to eq "assessed_by"
-        expect(@sheet.cell(2, 4)).to eq Team.find(risk_assessment.assessed_by_team_id).name
-        expect(@sheet.cell(3, 4)).to eq Team.find(risk_assessment_2.assessed_by_team_id).name
-      end
+        it "exports date_of_action" do
+          expect(@sheet.cell(1, 3)).to eq "date_of_action"
+          expect(@sheet.cell(2, 3)).to eq corrective_action.date_decided.to_s
+          expect(@sheet.cell(3, 3)).to eq corrective_action_2.date_decided.to_s
+        end
 
-      it "exports further_details" do
-        expect(@sheet.cell(1, 5)).to eq "further_details"
-        expect(@sheet.cell(2, 5)).to eq risk_assessment.details.to_s
-        expect(@sheet.cell(3, 5)).to eq risk_assessment_2.details.to_s
-      end
+        it "exports legislation" do
+          expect(@sheet.cell(1, 4)).to eq "legislation"
+          expect(@sheet.cell(2, 4)).to eq corrective_action.legislation
+          expect(@sheet.cell(3, 4)).to eq corrective_action_2.legislation
+        end
 
-      it "exports product_name" do
-        expect(@sheet.cell(1, 6)).to eq "product_name"
-        expect(@sheet.cell(2, 6)).to eq product.name
-        expect(@sheet.cell(3, 6)).to eq product.name
-      end
-    end
+        it "exports business_responsible" do
+          expect(@sheet.cell(1, 5)).to eq "business_responsible"
+          expect(@sheet.cell(2, 5)).to eq corrective_action.business_id
+          expect(@sheet.cell(3, 5)).to eq corrective_action_2.business_id
+        end
 
-    context "with corrective_actions sheet" do
-      before do
-        product_export.export(products)
-        exported_data = Roo::Excelx.new(Rails.root.join("product_export.xlsx"))
-        @sheet = exported_data.sheet("corrective_actions")
-      end
+        it "exports recall_information_online" do
+          expect(@sheet.cell(1, 6)).to eq "recall_information_online"
+          expect(@sheet.cell(2, 6)).to eq corrective_action.online_recall_information
+          expect(@sheet.cell(3, 6)).to eq corrective_action_2.online_recall_information
+        end
 
-      it "exports product_id" do
-        expect(@sheet.cell(1, 1)).to eq "product_id"
-        expect(@sheet.cell(2, 1)).to eq product.id.to_s
-        expect(@sheet.cell(3, 1)).to eq product.id.to_s
-      end
+        it "exports mandatory_or_voluntary" do
+          expect(@sheet.cell(1, 7)).to eq "mandatory_or_voluntary"
+          expect(@sheet.cell(2, 7)).to eq corrective_action.measure_type
+          expect(@sheet.cell(3, 7)).to eq corrective_action_2.measure_type
+        end
 
-      it "exports action_taken" do
-        expect(@sheet.cell(1, 2)).to eq "action_taken"
-        expect(@sheet.cell(2, 2)).to eq CorrectiveAction.actions[corrective_action.action]
-        expect(@sheet.cell(3, 2)).to eq CorrectiveAction.actions[corrective_action_2.action]
-      end
+        it "exports how_long" do
+          expect(@sheet.cell(1, 8)).to eq "how_long"
+          expect(@sheet.cell(2, 8)).to eq corrective_action.duration
+          expect(@sheet.cell(3, 8)).to eq corrective_action_2.duration
+        end
 
-      it "exports date_of_action" do
-        expect(@sheet.cell(1, 3)).to eq "date_of_action"
-        expect(@sheet.cell(2, 3)).to eq corrective_action.date_decided.to_s
-        expect(@sheet.cell(3, 3)).to eq corrective_action_2.date_decided.to_s
-      end
+        it "exports geographic_scope" do
+          expect(@sheet.cell(1, 9)).to eq "geographic_scope"
+          expect(@sheet.cell(2, 9)).to eq corrective_action.geographic_scopes.join(",")
+          expect(@sheet.cell(3, 9)).to eq corrective_action_2.geographic_scopes.join(",")
+        end
 
-      it "exports legislation" do
-        expect(@sheet.cell(1, 4)).to eq "legislation"
-        expect(@sheet.cell(2, 4)).to eq corrective_action.legislation
-        expect(@sheet.cell(3, 4)).to eq corrective_action_2.legislation
-      end
+        it "exports further_details" do
+          expect(@sheet.cell(1, 10)).to eq "further_details"
+          expect(@sheet.cell(2, 10)).to eq corrective_action.details
+          expect(@sheet.cell(3, 10)).to eq corrective_action_2.details
+        end
 
-      it "exports business_responsible" do
-        expect(@sheet.cell(1, 5)).to eq "business_responsible"
-        expect(@sheet.cell(2, 5)).to eq corrective_action.business_id
-        expect(@sheet.cell(3, 5)).to eq corrective_action_2.business_id
-      end
-
-      it "exports recall_information_online" do
-        expect(@sheet.cell(1, 6)).to eq "recall_information_online"
-        expect(@sheet.cell(2, 6)).to eq corrective_action.online_recall_information
-        expect(@sheet.cell(3, 6)).to eq corrective_action_2.online_recall_information
-      end
-
-      it "exports mandatory_or_voluntary" do
-        expect(@sheet.cell(1, 7)).to eq "mandatory_or_voluntary"
-        expect(@sheet.cell(2, 7)).to eq corrective_action.measure_type
-        expect(@sheet.cell(3, 7)).to eq corrective_action_2.measure_type
-      end
-
-      it "exports how_long" do
-        expect(@sheet.cell(1, 8)).to eq "how_long"
-        expect(@sheet.cell(2, 8)).to eq corrective_action.duration
-        expect(@sheet.cell(3, 8)).to eq corrective_action_2.duration
-      end
-
-      it "exports geographic_scope" do
-        expect(@sheet.cell(1, 9)).to eq "geographic_scope"
-        expect(@sheet.cell(2, 9)).to eq corrective_action.geographic_scopes.join(",")
-        expect(@sheet.cell(3, 9)).to eq corrective_action_2.geographic_scopes.join(",")
-      end
-
-      it "exports further_details" do
-        expect(@sheet.cell(1, 10)).to eq "further_details"
-        expect(@sheet.cell(2, 10)).to eq corrective_action.details
-        expect(@sheet.cell(3, 10)).to eq corrective_action_2.details
-      end
-
-      it "exports product_name" do
-        expect(@sheet.cell(1, 11)).to eq "product_name"
-        expect(@sheet.cell(2, 11)).to eq product.name
-        expect(@sheet.cell(3, 11)).to eq product.name
+        it "exports product_name" do
+          expect(@sheet.cell(1, 11)).to eq "product_name"
+          expect(@sheet.cell(2, 11)).to eq product.name
+          expect(@sheet.cell(3, 11)).to eq product.name
+        end
       end
     end
   end
