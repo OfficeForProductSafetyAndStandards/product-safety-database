@@ -4,10 +4,33 @@ class ProductExport < ApplicationRecord
   def export(products)
     Axlsx::Package.new do |p|
       book = p.workbook
-      book.add_worksheet name: "product_info" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
-        sheet_investigations.add_row %w[ID affected_units_status authenticity barcode batch_number brand case_ids category country_of_origin
-                                        created_at customs_code description has_markings markings name number_of_affected_units product_code
-                                        subcategory updated_at webpage when_placed_on_market reported_reason hazard_type non_compliant_reason risk_level name]
+      book.add_worksheet name: "product_info" do |sheet_investigations|
+        sheet_investigations.add_row %w[ID
+                                        affected_units_status
+                                        authenticity
+                                        barcode
+                                        batch_number
+                                        brand
+                                        case_ids
+                                        category
+                                        country_of_origin
+                                        created_at
+                                        customs_code
+                                        description
+                                        has_markings
+                                        markings
+                                        name
+                                        number_of_affected_units
+                                        product_code
+                                        subcategory
+                                        updated_at
+                                        webpage
+                                        when_placed_on_market
+                                        reported_reason
+                                        hazard_type
+                                        non_compliant_reason
+                                        risk_level
+                                        name]
         products.each do |product|
           sheet_investigations.add_row [
             product.id,
@@ -39,7 +62,7 @@ class ProductExport < ApplicationRecord
         end
       end
 
-      book.add_worksheet name: "test_results" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
+      book.add_worksheet name: "test_results" do |sheet_investigations|
         sheet_investigations.add_row %w[product_id legislation standards date_of_test result how_product_failed further_details product_name]
         products.each do |product|
           product.tests.where(type: "Test::Result").sort.each do |test_result|
@@ -57,7 +80,7 @@ class ProductExport < ApplicationRecord
         end
       end
 
-      book.add_worksheet name: "risk_assessments" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
+      book.add_worksheet name: "risk_assessments" do |sheet_investigations|
         sheet_investigations.add_row %w[product_id date_of_assessment risk_level assessed_by further_details product_name]
         products.each do |product|
           product.risk_assessments.sort.each do |risk_assessment|
@@ -73,9 +96,18 @@ class ProductExport < ApplicationRecord
         end
       end
 
-      book.add_worksheet name: "corrective_actions" do |sheet_investigations| # rubocop:disable Metrics/BlockLength
-        sheet_investigations.add_row %w[product_id action_taken date_of_action legislation business_responsible
-                                        recall_information_online mandatory_or_voluntary how_long geographic_scope further_details product_name]
+      book.add_worksheet name: "corrective_actions" do |sheet_investigations|
+        sheet_investigations.add_row %w[product_id
+                                        action_taken
+                                        date_of_action
+                                        legislation
+                                        business_responsible
+                                        recall_information_online
+                                        mandatory_or_voluntary
+                                        how_long
+                                        geographic_scope
+                                        further_details
+                                        product_name]
         products.each do |product|
           product.corrective_actions.sort.each do |corrective_action|
             sheet_investigations.add_row [

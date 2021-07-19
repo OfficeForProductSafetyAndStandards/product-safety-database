@@ -9,7 +9,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
     context "when logged in as a normal user" do
       let(:user) { create(:user, :activated, :viewed_introduction) }
 
-      context "generating a product export" do
+      context "when generating a product export" do
         it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
           get generate_product_exports_path
 
@@ -18,7 +18,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
       end
 
-      context "viewing a product export" do
+      context "when viewing a product export" do
         it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
           product_export = ProductExport.create!
           get product_export_path(product_export)
@@ -32,7 +32,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
     context "when logged in as a user with the psd_admin role" do
       let(:user) { create(:user, :activated, :psd_admin, :viewed_introduction) }
 
-      context "generating a product export" do
+      context "when generating a product export" do
         it "allows user to generate a product export and redirects back to products page" do
           get generate_product_exports_path
 
@@ -40,7 +40,7 @@ RSpec.describe "Export products as XLSX file", :with_elasticsearch, :with_stubbe
         end
       end
 
-      context "viewing a product export" do
+      context "when viewing a product export" do
         it "allows user to generate a product export" do
           product_export = ProductExport.create!
           get product_export_path(product_export)
