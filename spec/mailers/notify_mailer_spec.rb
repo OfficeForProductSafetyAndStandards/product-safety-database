@@ -28,7 +28,7 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
     let(:user)           { build(:user) }
     let(:product_export) { ProductExport.create }
 
-    let(:mail)  { described_class.product_export(email: user.email, name: user.name, product_export: product_export) }
+    let(:mail) { described_class.product_export(email: user.email, name: user.name, product_export: product_export) }
 
     it "sets the recipient of the email" do
       expect(mail.to).to eq([user.email])
