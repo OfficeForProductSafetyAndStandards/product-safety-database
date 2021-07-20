@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
     end
     items.push text: "Cases", href: investigations_path(previous_search_params), active: highlight_cases?
     items.push text: "Businesses", href: businesses_path, active: highlight_businesses?
-    items.push text: "Products", href: products_path, active: params[:controller].start_with?("products")
+    items.push text: "Products", href: products_path, active: params[:controller].start_with?("product")
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
   end
