@@ -19,8 +19,9 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       before do
         product_export.export(products)
       end
-
-      let!(:exported_data) { Roo::Excelx.new(Rails.root.join("product_export.xlsx")) }
+      
+      let(:temp_dir) { "spec/tmp/" }
+      let!(:exported_data) { Roo::Excelx.new(Rails.root.join("#{temp_dir}product_export_#{id}.xlsx")) }
 
       it "exports correct sheets" do
         expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
