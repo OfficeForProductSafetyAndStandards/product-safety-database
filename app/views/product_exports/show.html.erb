@@ -1,3 +1,5 @@
 <% if @product_export.export_file.attached? %>
-  Click <%= link_to "here", rails_blob_path(@product_export.export_file, disposition: 'attachment') %> to download your product export.
+<p class="govuk-body govuk-!-font-size-19 govuk-!-margin-top-6 govuk-!-margin-bottom-6" download>
+  <%= link_to "Download", rails_blob_path(@product_export.export_file, disposition: 'attachment'), { class: "govuk-link govuk-link--no-visited-state" } %> your product export.
+</p>
 <% end %>
