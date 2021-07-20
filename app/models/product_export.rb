@@ -89,7 +89,7 @@ private
     book.add_worksheet name: "test_results" do |sheet_investigations|
       sheet_investigations.add_row %w[product_id legislation standards date_of_test result how_product_failed further_details product_name]
       products.each do |product|
-        product.tests.where(type: "Test::Result").sort.each do |test_result|
+        product.test_results.sort.each do |test_result|
           sheet_investigations.add_row [
             product.id,
             test_result.legislation,
