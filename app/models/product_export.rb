@@ -127,9 +127,11 @@ class ProductExport < ApplicationRecord
         end
       end
 
-      p.serialize(Rails.root.join("product_export.xlsx"))
+      temp_file = Tempfile.new("product_export_#{id}.xlsx")
 
-      export_file.attach(io: File.open(Rails.root.join("product_export.xlsx")), filename: "products_export.xlsx")
+      p.serialize(temp_file.path)
+
+      export_file.attach(io: temp_file.open, filename: "products_export.xlsx")
     end
   end
 end
