@@ -10,7 +10,7 @@ class ProductExportsController < ApplicationController
     @products = search_for_products(Product.count, [:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }]).sort
     product_export = ProductExport.create!
     ProductExportWorker.perform_later(@products, product_export.id, current_user)
-    redirect_to products_path, flash: { success: "Your product export is being prepared. You will receive an email when your export is ready to download." }
+    redirect_to products_path(q: params[:q]), flash: { success: "Your product export is being prepared. You will receive an email when your export is ready to download." }
   end
 
   def show
