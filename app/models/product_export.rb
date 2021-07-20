@@ -132,6 +132,8 @@ class ProductExport < ApplicationRecord
       p.serialize(temp_file.path)
 
       export_file.attach(io: temp_file.open, filename: "products_export.xlsx")
+    rescue StandardError => e
+      Sentry.capture_exception(e)
     end
   end
 end
