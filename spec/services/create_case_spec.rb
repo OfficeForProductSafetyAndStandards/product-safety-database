@@ -65,6 +65,18 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
         expect(investigation.reload.pretty_id).to be_a(String)
       end
 
+      context "with previous investigations" do
+        let(:investigations) { build_list(:enquiry, 3, creator: user) }
+
+        it "generates a successive pretty_id", :aggregate_failures do
+          investigations.each { |i| described_class.call(investigation: i, user: user) }
+          expect(investigations.pluck(:pretty_id).map { |id| id.split("-").last })
+            .to eq(%w[0001 0002 0003])
+          result
+          expect(investigation.reload.pretty_id).to end_with("0004")
+        end
+      end
+
       it "creates an audit activity for case created", :aggregate_failures do
         result
         activity = investigation.reload.activities.first
