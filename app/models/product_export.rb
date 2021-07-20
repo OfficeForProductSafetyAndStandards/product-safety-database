@@ -13,11 +13,10 @@ class ProductExport < ApplicationRecord
 
       add_corrective_actions_worksheet(book, products)
 
-      temp_file = Tempfile.new("product_export_#{id}.xlsx")
+      p.serialize(Rails.root.join("product_export_#{id}.xlsx"))
 
-      p.serialize(temp_file.path)
+      export_file.attach(io: File.open(Rails.root.join("product_export_#{id}.xlsx")), filename: "products_export.xlsx")
 
-      export_file.attach(io: temp_file.open, filename: "products_export.xlsx")
     rescue StandardError => e
       Sentry.capture_exception(e)
     end
