@@ -7,7 +7,7 @@ class ProductExportsController < ApplicationController
   def generate
     authorize Product, :export?
 
-    # TODO move this query to the job once we are satisfied that this is working well.
+    # TODO: move this query to the job once we are satisfied that this is working well.
     @products = search_for_products(Product.count, [:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }]).sort
     product_export = ProductExport.create!
     ProductExportWorker.perform_later(@products, product_export.id, current_user)
