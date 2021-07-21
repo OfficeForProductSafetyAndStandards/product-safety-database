@@ -461,7 +461,7 @@ GEM
     scss_lint-govuk (0.2.0)
       scss_lint
     semantic_range (3.0.0)
-    sentry-rails (4.5.1)
+    sentry-rails (4.5.2)
       railties (>= 5.0)
       sentry-ruby-core (~> 4.5.0)
     sentry-ruby-core (4.5.2)
@@ -667,4 +667,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.2.21
+   2.2.22
