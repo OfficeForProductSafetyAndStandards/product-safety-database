@@ -68,10 +68,19 @@ RSpec.describe CreateCase, :with_stubbed_elasticsearch, :with_test_queue_adapter
       context "with previous investigations" do
         let(:investigations) { build_list(:enquiry, 3, creator: user) }
 
+        before { investigations.each { |i| described_class.call(investigation: i, user: user) } }
+
         it "generates a successive pretty_id", :aggregate_failures do
-          investigations.each { |i| described_class.call(investigation: i, user: user) }
-          expect(investigations.pluck(:pretty_id).map { |id| id.split("-").last })
+          expect(Investigation.pluck(:pretty_id).map { |id| id.split("-").last })
             .to eq(%w[0001 0002 0003])
+          result
+          expect(investigation.reload.pretty_id).to end_with("0004")
+        end
+
+        it "does not generate a conflicting pretty_id following a case deletion", :aggregate_failures do
+          investigations.second.destroy!
+          expect(Investigation.pluck(:pretty_id).map { |id| id.split("-").last })
+            .to eq(%w[0001 0003])
           result
           expect(investigation.reload.pretty_id).to end_with("0004")
         end
