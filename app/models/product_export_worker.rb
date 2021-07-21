@@ -11,4 +11,8 @@ class ProductExportWorker < ApplicationJob
       product_export: product_export
     ).deliver_later
   end
+
+rescue StandardError => e
+  Sentry.capture_exception(e)
+  raise
 end

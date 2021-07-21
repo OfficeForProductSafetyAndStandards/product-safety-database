@@ -16,9 +16,6 @@ class ProductExport < ApplicationRecord
       p.serialize(Rails.root.join("product_export_#{id}.xlsx"))
 
       export_file.attach(io: File.open(Rails.root.join("product_export_#{id}.xlsx")), filename: "products_export.xlsx")
-
-    rescue StandardError => e
-      Sentry.capture_exception(e)
     end
   end
 
