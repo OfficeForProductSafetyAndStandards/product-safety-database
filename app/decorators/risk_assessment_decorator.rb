@@ -39,6 +39,13 @@ class RiskAssessmentDecorator < ApplicationDecorator
     "activity_table_cell_with_link"
   end
 
+  def assessed_by
+    return assessed_by_business.legal_name if assessed_by_business_id
+    return assessed_by_team.name if assessed_by_team_id
+
+    assessed_by_other
+  end
+
 private
 
   def products_description
