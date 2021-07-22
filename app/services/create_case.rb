@@ -39,7 +39,7 @@ class CreateCase
 private
 
   def generate_pretty_id
-    sprintf("#{date.strftime('%y%m')}-%04d", (number_of_cases_this_month + 1))
+    "#{date.strftime('%y%m')}-#{latest_case_number_this_month.next}"
   end
 
   def create_audit_activity_for_case_added
@@ -78,7 +78,13 @@ private
     Time.zone.now
   end
 
-  def number_of_cases_this_month
-    Investigation.where("created_at < ? AND created_at > ?", date, date.beginning_of_month).count
+  def latest_case_number_this_month
+    case_number = Investigation.select(:pretty_id)
+      .where("created_at < ? AND created_at > ?", date, date.beginning_of_month)
+      .order(:id).last&.pretty_id
+
+    return "0000" unless case_number
+
+    case_number.split("-").last
   end
 end
