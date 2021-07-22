@@ -193,6 +193,12 @@ Rails.application.routes.draw do
 
   resources :products, except: %i[new create destroy], concerns: %i[document_attachable]
 
+  resources :product_exports do
+    collection do
+      get :generate
+    end
+  end
+
   resources :teams, only: %i[index show] do
     resources :invitations, only: %i[new create] do
       member do

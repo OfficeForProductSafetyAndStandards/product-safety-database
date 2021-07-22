@@ -5,17 +5,6 @@ GIT
   specs:
     govuk-design-system-rails (0.7.2)
 
-GIT
-  remote: https://github.com/randym/axlsx.git
-  revision: c593a08b2a929dac7aa8dc418b55e26b4c49dc34
-  ref: c593a08
-  specs:
-    axlsx (3.0.0.pre)
-      htmlentities (~> 4.3, >= 4.3.4)
-      mimemagic (~> 0.3)
-      nokogiri (~> 1.8, >= 1.8.2)
-      rubyzip (~> 1.2, >= 1.2.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -93,20 +82,20 @@ GEM
     attr_extras (6.2.4)
     awesome_print (1.9.2)
     aws-eventstream (1.1.1)
-    aws-partitions (1.466.0)
-    aws-sdk-core (3.114.2)
+    aws-partitions (1.479.0)
+    aws-sdk-core (3.117.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.43.0)
+    aws-sdk-kms (1.44.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.96.1)
+    aws-sdk-s3 (1.96.2)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
-    aws-sigv4 (1.2.3)
+    aws-sigv4 (1.2.4)
       aws-eventstream (~> 1, >= 1.0.2)
     backport (1.2.0)
     bcrypt (3.1.16)
@@ -590,12 +579,12 @@ DEPENDENCIES
   activerecord-pg_enum (~> 1.2)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.96)
-  axlsx!
   bootsnap
   byebug (~> 11.1)
   capybara (~> 3.35)
   capybara-screenshot (~> 1.0)
-  caxlsx_rails (~> 0.6.2)
+  caxlsx
+  caxlsx_rails
   cf-app-utils (~> 0.6)
   database_cleaner (~> 2.0)
   devise (~> 4.8)
