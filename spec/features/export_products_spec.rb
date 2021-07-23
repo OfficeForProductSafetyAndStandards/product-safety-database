@@ -1,29 +1,33 @@
 require "rails_helper"
+require "sidekiq/testing"
 
-RSpec.feature "Exporting products", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-  let(:user) { create(:user, :activated, :psd_admin, has_viewed_introduction: true) }
-  let(:product_1) { create(:product, description: "Battery", brand: "Brand 1", category: "Motor vehicles") }
-  let(:product_2) { create(:product, description: "Hair dryer", brand: "Brand 2", category: "Clothing, textiles and fashion items") }
-  let!(:investigation) { create(:allegation, products: [product_1, product_2]) }
+RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, :with_test_queue_adapter, type: :feature do
+  let(:user) { create :user, :activated, has_viewed_introduction: true }
 
-  scenario "all products" do
-    sign_in user
-    visit "/products"
-
-    click_link "Export as spreadsheet"
-
-    expect(page.body).to eq("affected_units_status,authenticity,barcode,batch_number,brand,case_ids,category,country_of_origin,created_at,customs_code,description,has_markings,id,markings,name,number_of_affected_units,product_code,subcategory,updated_at,webpage,when_placed_on_market\n#{product_2.decorate.affected_units_status},#{product_2.decorate.authenticity},#{product_2.decorate.barcode},#{product_2.decorate.batch_number},#{product_2.decorate.brand},\"[\"\"#{investigation.pretty_id}\"\"]\",\"Clothing, textiles and fashion items\",#{product_2.decorate.country_of_origin},#{product_2.decorate.created_at},#{product_2.decorate.customs_code},#{product_2.decorate.description},#{product_2.decorate.has_markings},#{product_2.decorate.id},#{product_2.decorate.markings},#{product_2.decorate.name},#{product_2.decorate.number_of_affected_units},#{product_2.decorate.product_code},#{product_2.decorate.subcategory},#{product_2.decorate.updated_at},#{product_2.decorate.webpage},#{product_2.decorate.when_placed_on_market}\n#{product_1.decorate.affected_units_status},#{product_1.decorate.authenticity},#{product_1.decorate.barcode},#{product_1.decorate.batch_number},#{product_1.decorate.brand},\"[\"\"#{investigation.pretty_id}\"\"]\",#{product_1.decorate.category},#{product_1.decorate.country_of_origin},#{product_1.decorate.created_at},#{product_1.decorate.customs_code},#{product_1.decorate.description},#{product_1.decorate.has_markings},#{product_1.decorate.id},#{product_1.decorate.markings},#{product_1.decorate.name},#{product_1.decorate.number_of_affected_units},#{product_1.decorate.product_code},#{product_1.decorate.subcategory},#{product_1.decorate.updated_at},#{product_1.decorate.webpage},#{product_1.decorate.when_placed_on_market}\n")
+  before do
+    create_list(:product, 18, created_at: 4.days.ago)
+    user.roles.create!(name: "psd_admin")
+    sign_in(user)
+    allow(ProductExportWorker).to receive(:perform_later) do
+      ProductExportWorker.new.perform(Product.all, ProductExport.last.id, user)
+    end
   end
 
-  scenario "searching products" do
-    sign_in user
-    visit "/products"
-
-    fill_in "Keywords", with: "Battery"
-    click_button "Search"
+  scenario "lists products according to search relevance" do
+    Product.import refresh: :wait_for
+    visit products_path
 
     click_link "Export as spreadsheet"
+    expect(page).to have_content "Your product export is being prepared. You will receive an email when your export is ready to download."
 
-    expect(page.body).to eq("affected_units_status,authenticity,barcode,batch_number,brand,case_ids,category,country_of_origin,created_at,customs_code,description,has_markings,id,markings,name,number_of_affected_units,product_code,subcategory,updated_at,webpage,when_placed_on_market\n#{product_1.decorate.affected_units_status},#{product_1.decorate.authenticity},#{product_1.decorate.barcode},#{product_1.decorate.batch_number},#{product_1.decorate.brand},\"[\"\"#{investigation.pretty_id}\"\"]\",#{product_1.decorate.category},#{product_1.decorate.country_of_origin},#{product_1.decorate.created_at},#{product_1.decorate.customs_code},#{product_1.decorate.description},#{product_1.decorate.has_markings},#{product_1.decorate.id},#{product_1.decorate.markings},#{product_1.decorate.name},#{product_1.decorate.number_of_affected_units},#{product_1.decorate.product_code},#{product_1.decorate.subcategory},#{product_1.decorate.updated_at},#{product_1.decorate.webpage},#{product_1.decorate.when_placed_on_market}\n")
+    perform_enqueued_jobs
+
+    expect(ProductExport.count).to eq 1
+    expect(ProductExport.first.export_file.attached?).to eq true
+
+    product_export_email = delivered_emails.last
+    expect(product_export_email.action_name).to eq "product_export"
+    expect(product_export_email.personalization[:name]).to eq user.name
+    expect(product_export_email.personalization[:download_export_url]).to eq product_export_url(1)
   end
 end
