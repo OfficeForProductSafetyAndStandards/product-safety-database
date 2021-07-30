@@ -30,7 +30,12 @@ class DocumentForm
   end
 
   def cache_file!(user)
-    if document && !document.is_a?(ActiveStorage::Blob)
+    if document.is_a?(ActiveStorage::Blob)
+      document.metadata["title"] = title
+      document.metadata["description"] = description
+      document.metadata["updated"] = Time.zone.now
+      document.save!
+    elsif document
       self.document = ActiveStorage::Blob.create_and_upload!(
         io: document,
         filename: document.original_filename,

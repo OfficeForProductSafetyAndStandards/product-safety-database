@@ -108,49 +108,72 @@ RSpec.describe DocumentForm, :with_stubbed_elasticsearch, :with_test_queue_adapt
     let(:existing_document_file_id) { nil }
     let(:user) { instance_double(User, id: "test") }
 
-    it "creates the blob" do
-      expect { form.cache_file!(user) }.to change { ActiveStorage::Blob.count }.by(1)
-    end
+    context "with a new document" do
+      it "creates the blob" do
+        expect { form.cache_file!(user) }.to change { ActiveStorage::Blob.count }.by(1)
+      end
 
-    it "saves the document filename metadata" do
-      form.cache_file!(user)
-      expect(form.document.filename).to eq("testImage.png")
-    end
-
-    it "saves the document content_type metadata" do
-      form.cache_file!(user)
-      expect(form.document.content_type).to eq("image/png")
-    end
-
-    it "saves the document title metadata" do
-      form.cache_file!(user)
-      expect(form.document.metadata["title"]).to eq(title)
-    end
-
-    it "saves the document description metadata" do
-      form.cache_file!(user)
-      expect(form.document.metadata["description"]).to eq(description)
-    end
-
-    it "saves the document created_by metadata" do
-      form.cache_file!(user)
-      expect(form.document.metadata["created_by"]).to eq(user.id)
-    end
-
-    it "saves the document updated metadata" do
-      freeze_time do
+      it "saves the document filename metadata" do
         form.cache_file!(user)
-        expect(form.document.metadata["updated"].to_json).to eq(Time.zone.now.to_json)
+        expect(form.document.filename).to eq("testImage.png")
+      end
+
+      it "saves the document content_type metadata" do
+        form.cache_file!(user)
+        expect(form.document.content_type).to eq("image/png")
+      end
+
+      it "saves the document title metadata" do
+        form.cache_file!(user)
+        expect(form.document.metadata["title"]).to eq(title)
+      end
+
+      it "saves the document description metadata" do
+        form.cache_file!(user)
+        expect(form.document.metadata["description"]).to eq(description)
+      end
+
+      it "saves the document created_by metadata" do
+        form.cache_file!(user)
+        expect(form.document.metadata["created_by"]).to eq(user.id)
+      end
+
+      it "saves the document updated metadata" do
+        freeze_time do
+          form.cache_file!(user)
+          expect(form.document.metadata["updated"].to_json).to eq(Time.zone.now.to_json)
+        end
+      end
+
+      it "schedules the analyze job" do
+        expect { form.cache_file!(user) }.to have_enqueued_job(ActiveStorage::AnalyzeJob)
+      end
+
+      it "sets existing_document_file_id" do
+        form.cache_file!(user)
+        expect(form.existing_document_file_id).to be_a(String)
       end
     end
 
-    it "schedules the analyze job" do
-      expect { form.cache_file!(user) }.to have_enqueued_job(ActiveStorage::AnalyzeJob)
-    end
+    context "with an existing document" do
+      let(:document) { existing_document }
 
-    it "sets existing_document_file_id" do
-      form.cache_file!(user)
-      expect(form.existing_document_file_id).to be_a(String)
+      it "saves the document title metadata" do
+        form.cache_file!(user)
+        expect(form.document.metadata["title"]).to eq(title)
+      end
+
+      it "saves the document description metadata" do
+        form.cache_file!(user)
+        expect(form.document.metadata["description"]).to eq(description)
+      end
+
+      it "saves the document updated metadata" do
+        freeze_time do
+          form.cache_file!(user)
+          expect(form.document.metadata["updated"].to_json).to eq(Time.zone.now.to_json)
+        end
+      end
     end
   end
 end
