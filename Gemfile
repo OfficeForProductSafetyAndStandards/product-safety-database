@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.96"
+gem "aws-sdk-s3", "~> 1.98"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
