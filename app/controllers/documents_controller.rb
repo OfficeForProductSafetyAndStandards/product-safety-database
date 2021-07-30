@@ -96,7 +96,7 @@ class DocumentsController < ApplicationController
       user: current_user
     )
 
-    flash[:success] = "File was successfully removed"
+    flash[:success] = t(:file_removed)
 
     return redirect_to(@parent) unless @parent.is_a?(Investigation)
     return redirect_to investigation_images_path(@parent) if @file.image?
