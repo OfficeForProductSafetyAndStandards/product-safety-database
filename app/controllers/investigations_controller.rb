@@ -15,20 +15,6 @@ class InvestigationsController < ApplicationController
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
       end
-      format.xlsx do
-        authorize Investigation, :export?
-
-        @answer = search_for_investigations
-        @investigations = @answer.records(includes: [:complainant, :products, :owner_team, :owner_user, { creator_user: :team }])
-
-        @activity_counts = Activity.group(:investigation_id).count
-        @business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
-        @product_counts = InvestigationProduct.unscoped.group(:investigation_id).count
-        @corrective_action_counts = CorrectiveAction.group(:investigation_id).count
-        @correspondence_counts = Correspondence.group(:investigation_id).count
-        @test_counts = Test.group(:investigation_id).count
-        @risk_assessment_counts = RiskAssessment.group(:investigation_id).count
-      end
     end
   end
 
