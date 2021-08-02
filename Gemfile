@@ -61,7 +61,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.5"
+  gem "listen", "~> 3.6"
   gem "m", "~> 1.5"
   gem "solargraph", "~> 0.42"
   gem "spring", "~> 2.1"
@@ -89,7 +89,7 @@ group :test do
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
-  gem "slim_lint", "~> 0.21"
+  gem "slim_lint", "~> 0.22"
   gem "super_diff"
   gem "webmock", "~> 3.13"
 end
