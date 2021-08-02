@@ -46,7 +46,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.3"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.2", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.4", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -61,9 +61,9 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.5"
+  gem "listen", "~> 3.6"
   gem "m", "~> 1.5"
-  gem "solargraph", "~> 0.42"
+  gem "solargraph", "~> 0.43"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
@@ -89,7 +89,7 @@ group :test do
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
-  gem "slim_lint", "~> 0.21"
+  gem "slim_lint", "~> 0.22"
   gem "super_diff"
   gem "webmock", "~> 3.13"
 end
