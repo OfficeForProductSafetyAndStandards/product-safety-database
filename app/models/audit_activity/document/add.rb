@@ -1,20 +1,11 @@
 class AuditActivity::Document::Add < AuditActivity::Document::Base
-  has_one_attached :document
-
-  def self.build_metadata(blob)
-    blob.metadata.merge(blob_id: blob.id)
+  def self.from(document, investigation)
+    title = document.metadata[:title] || "Untitled document"
+    super(document, investigation, title)
   end
 
-  def metadata
-    migrate_metadata_structure
-  end
-
-  def title(_user)
-    metadata["title"]
-  end
-
-  def description
-    metadata["description"]
+  def email_update_text(viewer = nil)
+    "Document was attached to the #{investigation.case_type.upcase_first} by #{source&.show(viewer)}."
   end
 
   def restricted_title(_user)
@@ -22,18 +13,6 @@ class AuditActivity::Document::Add < AuditActivity::Document::Base
   end
 
 private
-
-  def migrate_metadata_structure
-    metadata = self[:metadata]
-
-    return metadata if metadata
-
-    new_metadata = self.class.build_metadata(document)
-    new_metadata["title"] = self[:title]
-    new_metadata["description"] = self[:body]
-
-    JSON.parse(new_metadata.to_json)
-  end
 
   def subtitle_slug
     "#{attachment_type} added"

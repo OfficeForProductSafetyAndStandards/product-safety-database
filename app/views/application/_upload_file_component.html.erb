@@ -1,7 +1,7 @@
 <% if old_file.present? %>
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><%= legend %></legend>
-    <%= render partial: "active_storage/blobs/blob", locals: { blob: old_file } %>
+    <%= render form.object.old_file %>
 
     <%= govukDetails(summaryText: "Replace this file") do %>
       <%= form.govuk_file_upload field_name, label: "Select file", label_classes: "govuk-label--s" %>

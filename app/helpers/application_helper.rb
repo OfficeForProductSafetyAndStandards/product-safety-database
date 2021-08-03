@@ -46,7 +46,7 @@ module ApplicationHelper
     safe_join(
       [
         existing_uploaded_file_id,
-        render(partial: "active_storage/blobs/blob", locals: { blob: uploaded_file }),
+        render(uploaded_file),
         govukDetails(summaryText: "Replace this file", html: file_upload_field)
       ]
     )

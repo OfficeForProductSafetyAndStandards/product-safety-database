@@ -212,7 +212,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
   it { expect(decorated_activity.new_file_description).to eq(new_file_description) }
 
   describe "#attachment and #attached_image" do
-    context "with an existing document id metadata" do
+    context "with an exisiting document id metadata" do
       let(:blob) do
         ActiveStorage::Blob.create_and_upload!(
           io: document,

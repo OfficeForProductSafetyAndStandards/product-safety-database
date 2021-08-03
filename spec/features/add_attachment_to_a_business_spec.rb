@@ -15,13 +15,23 @@ RSpec.feature "Add an attachment to a business", :with_stubbed_elasticsearch, :w
     expect_to_be_on_business_page(business_id: business.id, business_name: business.trading_name)
 
     click_link "Add attachment"
-    expect_to_be_on_add_attachment_to_a_business_page(business_id: business.id)
+    expect_to_be_on_add_attachment_to_a_business_upload_page(business_id: business.id)
+
+    click_button "Upload"
+
+    expect_to_be_on_add_attachment_to_a_business_upload_page(business_id: business.id)
+    expect(page).to have_error_summary("Enter file")
+
+    attach_file "document[file][file]", file
+    click_button "Upload"
+
+    expect_to_be_on_add_attachment_to_a_business_metadata_page(business_id: business.id)
 
     click_button "Save attachment"
 
-    expect(page).to have_error_summary("Select a file", "Enter a document title")
+    expect_to_be_on_add_attachment_to_a_business_metadata_page(business_id: business.id)
+    expect(page).to have_error_summary("Enter title")
 
-    attach_file "document[document]", file
     fill_in "Document title", with: title
     fill_in "Description",    with: description
 
