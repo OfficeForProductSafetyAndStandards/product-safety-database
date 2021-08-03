@@ -44,6 +44,10 @@ Rails.application.routes.draw do
 
   concern :document_attachable do
     resources :documents, controller: "documents" do
+      collection do
+        # TODO: Fix this route - results in a non-descript alias and path with new/new
+        resources :new, controller: "documents_flow", only: %i[show new create update]
+      end
       member do
         get :remove
       end

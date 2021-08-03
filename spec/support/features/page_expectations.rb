@@ -44,7 +44,7 @@ module PageExpectations
   end
 
   def expect_to_be_on_add_image_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
     expect(page).to have_selector("h1", text: "Add attachment")
     expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
@@ -78,6 +78,12 @@ module PageExpectations
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
       expect(page).to have_css("tr.govuk-table__row td.govuk-table__cell", text: test_result.date_added)
     end
+  end
+
+  def expect_to_be_on_enter_image_details_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
+    expect(page).to have_selector("h3", text: "Image details")
+    expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/documents/new/upload")
   end
 
   def expect_to_be_on_record_corrective_action_for_case_page
@@ -171,8 +177,14 @@ module PageExpectations
     expect(page).to have_selector("h1", text: "What are you adding to the case?")
   end
 
-  def expect_to_be_on_add_attachment_to_a_case_page
-    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new")
+  def expect_to_be_on_add_attachment_to_a_case_upload_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/upload")
+    expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_case_metadata_page
+    expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/new/metadata")
     expect(page).to have_h1("Add attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Cases")
   end
@@ -205,7 +217,7 @@ module PageExpectations
 
   def expect_to_be_on_edit_attachment_page
     expect(page).to have_current_path("/cases/#{investigation.pretty_id}/documents/#{document.to_param}/edit")
-    expect(page).to have_selector("h2", text: "Edit attachment")
+    expect(page).to have_selector("h2", text: "Edit document details")
     expect(page).to have_link("Back", href: "/cases/#{investigation.pretty_id}/supporting-information")
   end
 
@@ -409,7 +421,6 @@ module PageExpectations
     expect(page).to have_current_path("/products/#{product.id}/documents/#{document.id}/remove")
     expect(page).to have_selector("h2", text: "Remove attachment")
     expect(page).to have_link("Back", href: "/products/#{product.id}#attachments")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
   end
 
   def expect_to_be_on_product_page(product_id:, product_name:)
@@ -422,10 +433,14 @@ module PageExpectations
     expect(page).to have_selector("h1", text: product_name)
   end
 
-  def expect_to_be_on_add_attachment_to_a_product_page(product_id:)
-    expect(page).to have_current_path("/products/#{product_id}/documents/new")
+  def expect_to_be_on_add_attachment_to_a_product_upload_page(product_id:)
+    expect(page).to have_current_path("/products/#{product_id}/documents/new/upload")
     expect(page).to have_h1("Add attachment")
-    expect(page).to have_css(".psd-header__navigation-item--active", text: "Products")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_product_metadata_page(product_id:)
+    expect(page).to have_current_path("/products/#{product_id}/documents/new/metadata")
+    expect(page).to have_h1("Add attachment")
   end
 
   # Shared pages across different flows
@@ -532,8 +547,14 @@ module PageExpectations
     expect(page).to have_h1("Remove location")
   end
 
-  def expect_to_be_on_add_attachment_to_a_business_page(business_id:)
-    expect(page).to have_current_path("/businesses/#{business_id}/documents/new")
+  def expect_to_be_on_add_attachment_to_a_business_upload_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/documents/new/upload")
+    expect(page).to have_h1("Add attachment")
+    expect(page).to have_css(".psd-header__navigation-item--active", text: "Businesses")
+  end
+
+  def expect_to_be_on_add_attachment_to_a_business_metadata_page(business_id:)
+    expect(page).to have_current_path("/businesses/#{business_id}/documents/new/metadata")
     expect(page).to have_h1("Add attachment")
     expect(page).to have_css(".psd-header__navigation-item--active", text: "Businesses")
   end

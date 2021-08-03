@@ -259,13 +259,15 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
     expect(page).to have_summary_item(key: "When placed on market",     value: I18n.t(new_when_placed_on_market, scope: Product.model_name.i18n_key))
   end
 
-  scenario "upload a document" do
+  scenario "upload an document" do
     visit "/products/#{product.id}"
 
     click_on "Attachments"
     click_on "Add attachment"
 
     attach_file file_fixture("corrective_action.txt")
+    click_on "Upload"
+
     document_title       = Faker::Hipster.word
     document_description = Faker::Hipster.sentence
     fill_in "Document title", with: document_title

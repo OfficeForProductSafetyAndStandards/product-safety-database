@@ -31,8 +31,4 @@ class AuditActivity::CorrectiveAction::Update < AuditActivity::CorrectiveAction:
                              super
                            end
   end
-
-  def attachment
-    @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
-  end
 end

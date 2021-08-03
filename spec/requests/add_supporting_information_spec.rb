@@ -60,7 +60,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
       let(:type) { "image" }
 
       it "redirects to new document page" do
-        expect(response).to redirect_to(new_investigation_document_path(investigation))
+        expect(response).to redirect_to(new_investigation_new_path(investigation))
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe "Adding supporting information to a case", type: :request, with_s
       let(:type) { "generic_information" }
 
       it "redirects to new document page" do
-        expect(response).to redirect_to(new_investigation_document_path(investigation))
+        expect(response).to redirect_to(new_investigation_new_path(investigation))
       end
     end
 

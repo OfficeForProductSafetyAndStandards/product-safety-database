@@ -444,7 +444,7 @@ module InvestigationsHelper
         text: "Correspondence"
       },
       {
-        path: new_investigation_document_path(investigation),
+        path: new_investigation_new_path(investigation),
         text: "Image"
       },
       {
@@ -460,7 +460,7 @@ module InvestigationsHelper
         text: "Accident or incident"
       },
       {
-        path: new_investigation_document_path(investigation),
+        path: new_investigation_new_path(investigation),
         text: "Other document or attachment"
       },
       {

@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
     end
     items.push text: "Cases", href: investigations_path(previous_search_params), active: highlight_cases?
     items.push text: "Businesses", href: businesses_path, active: highlight_businesses?
-    items.push text: "Products", href: products_path, active: highlight_products?
+    items.push text: "Products", href: products_path, active: params[:controller].start_with?("product")
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
   end
@@ -129,16 +129,11 @@ private
 
   def highlight_businesses?
     return true if params[:controller].start_with?("businesses")
-    return true if params[:controller] == "documents" && params[:business_id]
-  end
-
-  def highlight_products?
-    return true if params[:controller].start_with?("product")
-    return true if params[:controller] == "documents" && params[:product_id]
+    return true if params[:controller] == "documents_flow" && params[:business_id]
   end
 
   def highlight_cases?
     return true if params[:controller].match?(/investigations|searches|collaborators|comments/)
-    return true if params[:controller] == "documents" && params[:investigation_pretty_id]
+    return true if params[:controller] == "documents_flow" && params[:investigation_pretty_id]
   end
 end
