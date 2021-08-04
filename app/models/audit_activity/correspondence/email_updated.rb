@@ -17,6 +17,10 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondenc
     updated_values["correspondence_date"]&.to_date
   end
 
+  def new_correspondent_name
+    updated_values["correspondent_name"]
+  end
+
   def new_email_direction
     updated_values["email_direction"]
   end
@@ -70,7 +74,8 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondenc
       :email_direction,
       :email_subject,
       :overview,
-      :email_direction
+      :email_direction,
+      :name
     )
 
     if email_changed

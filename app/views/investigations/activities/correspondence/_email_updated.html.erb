@@ -10,6 +10,10 @@
     Date of email: <%= updated_field(activity.new_correspondence_date.to_s(:govuk)) %><br>
   <% end %>
 
+  <% if activity.new_correspondent_name %>
+    Date of email: <%= updated_field(activity.new_correspondent_name) %><br>
+  <% end %>
+
   <% if activity.new_email_direction %>
     Email direction: <%= updated_field(activity.new_email_direction) %><br>
   <% end %>
