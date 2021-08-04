@@ -17,7 +17,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       welcome: "035876e3-5b97-4b4c-9bd5-c504b5158a85",
       risk_validation_updated: "a22d37b1-5dc0-4147-ac6d-826232ca8b7a",
       product_export: "1c88c503-638e-4f91-b55f-726900b83f92",
-      case_export: "f6c9a4ad-2050-4f76-bbad-d73bd9747d18 "
+      case_export: "f6c9a4ad-2050-4f76-bbad-d73bd9747d18"
     }.freeze
 
   def reset_password_instructions(user, token)
