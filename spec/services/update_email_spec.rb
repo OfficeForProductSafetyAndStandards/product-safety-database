@@ -174,24 +174,18 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
         # rubocop:enable RSpec/ExampleLength
       end
 
-      context "when the same email and attachment files have been uploaded" do
+      context "when the same email and attachment files have been uploaded and nothing else has changed" do
         let(:email_file_action) { "replace" }
         let(:email_attachment_action) { "replace" }
         let(:email_file) { Rack::Test::UploadedFile.new("spec/fixtures/files/email.txt") }
-        let(:email_attachment) { Rack::Test::UploadedFile.new("spec/fixtures/files/risk_assessment.txt") }
+        let(:email_attachment) { Rack::Test::UploadedFile.new("spec/fixtures/files/email_attachment.txt") }
         let(:attachment_description) { "Risk assessment" }
 
         # rubocop:disable RSpec/ExampleLength
-        it "creates an activity entry" do
+        it "creates no activity entry" do
           result
 
-          expect(activity_entry.metadata).to eql({
-            "email_id" => email.id,
-            "updates" => {
-              "email_attachment_filename" => ["email_attachment.txt", "risk_assessment.txt"],
-              "attachment_description" => ["", "Risk assessment"]
-            }
-          })
+          expect(activity_entry).to eq nil
         end
         # rubocop:enable RSpec/ExampleLength
       end
