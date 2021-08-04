@@ -19,9 +19,9 @@ class CaseExport < ApplicationRecord
                           correspondence_counts, corrective_action_counts, test_counts,
                           risk_assessment_counts)
 
-      Tempfile.create("cases_export", Rails.root.join("tmp")) do |f|
-        p.serialize(f)
-        export_file.attach(io: f, filename: "cases_export.xlsx")
+      Tempfile.create("cases_export", Rails.root.join("tmp")) do |file|
+        p.serialize(file)
+        export_file.attach(io: file, filename: "cases_export.xlsx")
       end
     end
   end

@@ -1,50 +1,71 @@
 require "rails_helper"
 
-RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  # rubocop:disable RSpec/ExampleLength
-  describe "#index as XLSX" do
-    let(:temp_dir) { "spec/tmp/" }
-    let(:export_path) { Rails.root.join("#{temp_dir}export_cases.xlsx") }
-    let(:exported_data) do
-      File.open(export_path, "w") { |f| f.write response.body }
-      Roo::Excelx.new(export_path).sheet("Cases")
-    end
+RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
+  before do
+    sign_in(user)
+  end
 
-    before do
-      Dir.mkdir(temp_dir) unless Dir.exist?(temp_dir)
-      sign_in(user)
-    end
+  context "when logged in as a normal user" do
+    let(:user) { create(:user, :activated, :viewed_introduction) }
 
-    context "when logged in as a normal user" do
-      let(:user) { create(:user, :activated, :viewed_introduction) }
-
+    context "when generating a case export" do
       it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         expect(response).to render_template("errors/forbidden")
         expect(response).to have_http_status(:forbidden)
       end
     end
 
-    context "when logged in as a user with the psd_admin role" do
-      let(:user) { create(:user, :activated, :psd_admin, :viewed_introduction) }
+    context "when viewing a case export" do
+      it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
+        case_export = CaseExport.create!
+        get case_export_path(case_export)
 
-      after { File.delete(export_path) }
+        expect(response).to render_template("errors/forbidden")
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 
-      it "exports all the investigations into a XLSX file" do
-        create_list(:allegation, 5)
-        Investigation.import refresh: true, force: true
+  context "when logged in as a user with the psd_admin role" do
+    let(:user) { create(:user, :activated, :psd_admin, :viewed_introduction) }
 
-        get investigations_path format: :xlsx
+    context "when generating a case export" do
+      it "allows user to generate a case export and redirects back to cases page" do
+        get generate_case_exports_path
 
-        expect(exported_data.last_row).to eq(Investigation.count + 1)
+        expect(response).to have_http_status(:found)
+      end
+    end
+
+    context "when viewing a case export" do
+      it "allows user to view a case export download link" do
+        case_export = CaseExport.create!
+        get case_export_path(case_export)
+
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    # rubocop:disable RSpec/ExampleLength
+    context "when downloading the export file" do
+      let(:exported_data) do
+        perform_enqueued_jobs
+        get rails_blob_path(CaseExport.last.export_file)
+        follow_redirect!
+
+        Tempfile.create("export_cases_spec", Rails.root.join("tmp"), encoding: "ascii-8bit") do |file|
+          file.write response.body
+          Roo::Excelx.new(file).sheet("Cases")
+        end
       end
 
       it "treats formulas as text" do
         create(:allegation, description: "=A1")
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx, params: { q: "A1" }
+        get generate_case_exports_path, params: { q: "A1" }
 
         cell_a1 = exported_data.cell(1, 1)
         cell_with_formula_as_description = exported_data.cell(2, 5)
@@ -60,7 +81,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         create(:allegation, coronavirus_related: true)
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         coronavirus_cell_title = exported_data.cell(1, 8)
         coronavirus_cell_content = exported_data.cell(2, 8)
@@ -77,7 +98,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         create(:allegation, product_category: product_category, products: [create(:product, category: category)])
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         categories_cell_title = exported_data.cell(1, 6)
         categories_cell_content = exported_data.cell(2, 6)
@@ -92,14 +113,13 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         investigation = create(:allegation)
         ChangeCaseRiskLevel.call!(
           investigation: investigation,
-          user:
-            user,
+          user: user,
           risk_level: (Investigation.risk_levels.values - %w[other]).sample
         )
 
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         categories_cell_title = exported_data.cell(1, 9)
         categories_cell_content = exported_data.cell(2, 9)
@@ -120,7 +140,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         aggregate_failures do
           expect(exported_data.cell(1, 10)).to eq "Case_Owner_Team"
@@ -141,7 +161,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         aggregate_failures do
           expect(exported_data.cell(1, 20)).to eq "Risk_Assessments"
@@ -154,7 +174,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         aggregate_failures do
           expect(exported_data.cell(1, 21)).to eq "Date_Created"
@@ -169,7 +189,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         aggregate_failures do
           expect(exported_data.cell(1, 24)).to eq "Date_Validated"
@@ -181,7 +201,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         create(:allegation)
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         aggregate_failures do
           expect(exported_data.cell(1, 26)).to eq "Notifying_Country"
@@ -193,7 +213,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         create(:allegation, reported_reason: "unsafe")
         Investigation.import refresh: true, force: true
 
-        get investigations_path format: :xlsx
+        get generate_case_exports_path
 
         aggregate_failures do
           expect(exported_data.cell(1, 27)).to eq "Reported_as"
@@ -209,7 +229,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           Investigation.import refresh: true, force: true
 
-          get investigations_path format: :xlsx
+          get generate_case_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 25)).to eq "Case_Creator_Team"
@@ -226,7 +246,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           Investigation.import refresh: true, force: true
 
-          get investigations_path format: :xlsx
+          get generate_case_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 25)).to eq "Case_Creator_Team"
@@ -241,7 +261,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           Investigation.import refresh: true, force: true
 
-          get investigations_path format: :xlsx
+          get generate_case_exports_path
 
           aggregate_failures do
             expect(exported_data.cell(1, 23)).to eq "Date_Closed"
@@ -257,7 +277,7 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
 
           Investigation.import refresh: true, force: true
 
-          get investigations_path, params: { status_closed: "checked", format: :xlsx }
+          get generate_case_exports_path, params: { status_closed: "checked", format: :xlsx }
 
           aggregate_failures do
             expect(exported_data.cell(1, 23)).to eq "Date_Closed"
@@ -266,6 +286,6 @@ RSpec.describe "Export investigations as XLSX file", :with_elasticsearch, :with_
         end
       end
     end
+    # rubocop:enable RSpec/ExampleLength
   end
-  # rubocop:enable RSpec/ExampleLength
 end

@@ -15,7 +15,7 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
       case_export.export(cases)
     end
 
-    let!(:exported_data) { case_export.export_file.open { |f| Roo::Excelx.new(f) } }
+    let!(:exported_data) { case_export.export_file.open { |file| Roo::Excelx.new(file) } }
 
     it "exports one Cases sheet" do
       expect(exported_data.sheets).to eq %w[Cases]
