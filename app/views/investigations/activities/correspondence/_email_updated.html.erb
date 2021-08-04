@@ -27,7 +27,7 @@
   <% end %>
 
   <% if activity.email_file_changed? %>
-    Email: <%= updated_field(activity.new_email_file) %><br>
+    Email file: <%= updated_field(activity.new_email_file) %><br>
   <% end %>
 
   <% if activity.email_attachment_changed? %>
