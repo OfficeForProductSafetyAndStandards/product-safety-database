@@ -27,7 +27,7 @@
   <% end %>
 
   <% if activity.new_details %>
-    Email: <%= activity.new_details %><br>
+    Email: <%= updated_field(activity.new_details) %><br>
   <% end %>
 
   <% if activity.email_file_changed? %>
