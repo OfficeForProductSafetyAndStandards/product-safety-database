@@ -181,13 +181,11 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
         let(:email_attachment) { Rack::Test::UploadedFile.new("spec/fixtures/files/email_attachment.txt") }
         let(:attachment_description) { "Risk assessment" }
 
-        # rubocop:disable RSpec/ExampleLength
         it "creates no activity entry" do
           result
 
           expect(activity_entry).to eq nil
         end
-        # rubocop:enable RSpec/ExampleLength
       end
 
       context "when the email and attachments are removed" do

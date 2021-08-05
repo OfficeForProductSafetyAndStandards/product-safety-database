@@ -66,9 +66,9 @@ private
     !email.changed? &&
       (same_email_file? || email_file_action == "keep" || (
         email_file_action.nil? && !email.email_file.attached?)) &&
-        (same_attachment? ||
-      (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
-      (!email.email_attachment.attached? || (attachment_description == @previous_attachment_description.to_s)))
+      (same_attachment? ||
+    (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
+    (!email.email_attachment.attached? || (attachment_description == @previous_attachment_description.to_s)))
   end
 
   def same_email_file?
