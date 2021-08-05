@@ -64,10 +64,16 @@ private
 
   def no_changes?
     !email.changed? &&
-      (same_email_file? || email_file_action == "keep" || (
-        email_file_action.nil? && !email.email_file.attached?)) &&
-      (same_attachment? ||
-    (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
+      email_file_unchanged? &&
+      email_attachment_unchanged?
+  end
+
+  def email_file_unchanged?
+    (same_email_file? || email_file_action == "keep" || (email_file_action.nil? && !email.email_file.attached?))
+  end
+
+  def email_attachment_unchanged?
+    (same_attachment? || (email_attachment_action == "keep" || (email_attachment_action.nil? && !email.email_attachment.attached?)) &&
     (!email.email_attachment.attached? || (attachment_description == @previous_attachment_description.to_s)))
   end
 
