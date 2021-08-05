@@ -27,7 +27,7 @@
   <% end %>
 
   <% if activity.new_details %>
-    Email: <%= format_with_line_breaks(activity.new_details) %><br>
+    Email: <%= activity.new_details %><br>
   <% end %>
 
   <% if activity.email_file_changed? %>
