@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: c2715a409bc2ace99b21ccba404d7218699bdfc0
-  tag: 0.7.2
+  revision: e09ab62f769d3e4a581b21bcfef12a31d7207b0e
+  tag: 0.7.4
   specs:
     govuk-design-system-rails (0.7.2)
 
@@ -100,7 +100,7 @@ GEM
     backport (1.2.0)
     bcrypt (3.1.16)
     benchmark (0.1.1)
-    bootsnap (1.7.5)
+    bootsnap (1.7.6)
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -200,7 +200,7 @@ GEM
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
-    ffi (1.15.0)
+    ffi (1.15.3)
     fugit (1.3.4)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
@@ -232,7 +232,7 @@ GEM
       kramdown (~> 2.0)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.5.1)
+    listen (3.6.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     lograge (0.11.2)
@@ -296,7 +296,7 @@ GEM
       pry (~> 0.11)
       yard (~> 0.9.11)
     public_suffix (4.0.6)
-    puma (5.3.2)
+    puma (5.4.0)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
@@ -339,7 +339,7 @@ GEM
       thor (~> 1.0)
     rainbow (3.0.0)
     rake (13.0.6)
-    rb-fsevent (0.10.4)
+    rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.5.1)
@@ -460,8 +460,9 @@ GEM
     sentry-ruby-core (4.6.4)
       concurrent-ruby
       faraday
-    sentry-sidekiq (4.6.1)
+    sentry-sidekiq (4.6.4)
       sentry-ruby-core (~> 4.6.0)
+      sidekiq (>= 3.0)
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
     sidekiq (6.2.1)
@@ -489,10 +490,10 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 5.0)
-    slim_lint (0.21.1)
+    slim_lint (0.22.0)
       rubocop (>= 0.78.0)
       slim (>= 3.0, < 5.0)
-    solargraph (0.42.4)
+    solargraph (0.43.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -602,7 +603,7 @@ DEPENDENCIES
   interactor (~> 3.1)
   jbuilder (~> 2.11)
   launchy (~> 2.5)
-  listen (~> 3.5)
+  listen (~> 3.6)
   lograge (~> 0.11)
   m (~> 1.5)
   mini_magick (~> 4.11)
@@ -612,7 +613,7 @@ DEPENDENCIES
   pry (~> 0.13)
   pry-byebug (~> 3.9)
   pry-doc (~> 1.1)
-  puma (~> 5.3)
+  puma (~> 5.4)
   pundit (~> 2.1)
   rack (~> 2.2)
   rails (~> 6.1.4)
@@ -641,8 +642,8 @@ DEPENDENCIES
   simplecov-console (~> 0.9)
   simplecov-lcov
   slim-rails (~> 3.3)
-  slim_lint (~> 0.21)
-  solargraph (~> 0.42)
+  slim_lint (~> 0.22)
+  solargraph (~> 0.43)
   spring (~> 2.1)
   spring-commands-rspec (~> 1.0)
   sprockets (= 4.0.2)
