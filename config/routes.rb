@@ -178,6 +178,12 @@ Rails.application.routes.draw do
     resources :corrective_actions, controller: "investigations/corrective_actions", only: %i[new show create edit update], path: "corrective-actions"
   end
 
+  resources :case_exports, only: :show do
+    collection do
+      get :generate
+    end
+  end
+
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do
       member do
