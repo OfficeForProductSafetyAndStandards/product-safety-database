@@ -174,6 +174,20 @@ RSpec.describe UpdateEmail, :with_stubbed_elasticsearch, :with_stubbed_mailer, :
         # rubocop:enable RSpec/ExampleLength
       end
 
+      context "when the same email and attachment files have been uploaded and nothing else has changed" do
+        let(:email_file_action) { "replace" }
+        let(:email_attachment_action) { "replace" }
+        let(:email_file) { Rack::Test::UploadedFile.new("spec/fixtures/files/email.txt") }
+        let(:email_attachment) { Rack::Test::UploadedFile.new("spec/fixtures/files/email_attachment.txt") }
+        let(:attachment_description) { "Risk assessment" }
+
+        it "creates no activity entry" do
+          result
+
+          expect(activity_entry).to eq nil
+        end
+      end
+
       context "when the email and attachments are removed" do
         let(:email_file_action) { "remove" }
         let(:email_attachment_action) { "remove" }
