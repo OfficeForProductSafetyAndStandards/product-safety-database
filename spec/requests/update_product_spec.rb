@@ -6,20 +6,17 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
   let(:investigation) { create(:allegation, creator: user) }
   let(:product)       { create(:product, investigations: [investigation]) }
 
-
   context "when user has permission to edit product" do
     before do
       sign_in(user)
-      allow(UpdateProduct).to receive(:call!) { true }
-    end
+      allow(UpdateProduct).to receive(:call!).and_return(true)
 
-    before do
       put product_path(product),
-           params: {
-             product: {
-               name: "something else"
-             }
-           }
+          params: {
+            product: {
+              name: "something else"
+            }
+          }
     end
 
     it "allows user to edit product" do
@@ -31,29 +28,12 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
     before { sign_in(other_user) }
 
     it "raises an unauthorised error" do
-      expect do
+      expect {
         put product_path(product),
-             params: {
-               product: {
-                 name: "something else"
-               }
-             }
-      end.to raise_error(Pundit::NotAuthorizedError)
+            params: {
+              product: { name: "something else" }
+            }
+      }.to raise_error(Pundit::NotAuthorizedError)
     end
   end
-
-  # context "with a valid comment" do
-  #   before do
-  #     post investigation_activity_comment_path(investigation),
-  #          params: {
-  #            comment_form: {
-  #              body: "Test"
-  #            }
-  #          }
-  #   end
-  #
-  #   it "redirects to the case activities page" do
-  #     expect(response).to redirect_to(investigation_activity_path(investigation))
-  #   end
-  # end
 end

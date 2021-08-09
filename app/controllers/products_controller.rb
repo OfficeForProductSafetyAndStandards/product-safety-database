@@ -92,7 +92,8 @@ private
   end
 
   def allow_product_to_be_edited?(product)
-    return true if product.investigations.first == nil
+    return true if product.investigations.first.nil?
+
     authorize product.investigations.first, :update?
   end
 end

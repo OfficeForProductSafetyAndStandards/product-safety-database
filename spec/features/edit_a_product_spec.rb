@@ -56,22 +56,21 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
     before { sign_in other_user }
 
     it "does not allow user to edit the product" do
-        visit "/products/#{product.id}"
-        expect(page).to_not have_link "Edit details"
+      visit "/products/#{product.id}"
+      expect(page).not_to have_link "Edit details"
 
-        visit "/cases/#{investigation.pretty_id}/products"
-        expect(page).to_not have_link "Change product details"
+      visit "/cases/#{investigation.pretty_id}/products"
+      expect(page).not_to have_link "Change product details"
     end
   end
 
   context "when user does have edit permissions for the corresponding investigation" do
-
     before { sign_in user }
 
     it "allows to edit a product" do
       visit "/cases/#{investigation.pretty_id}/products"
-      expect(page).to_not have_link "Change product details"
-      
+      expect(page).not_to have_link "Change product details"
+
       visit "/products/#{product.id}"
 
       expect(page).to have_summary_item(key: "Product authenticity", value: "Not provided")
@@ -150,10 +149,10 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
       expect_to_be_on_product_page(product_id: product.id, product_name: new_name)
 
       expected_markings = case new_has_markings
-      when "markings_yes" then new_markings.join(", ")
-      when "markings_no" then "None"
-      when "markings_unknown" then "Unknown"
-      end
+                          when "markings_yes" then new_markings.join(", ")
+                          when "markings_no" then "None"
+                          when "markings_unknown" then "Unknown"
+                          end
 
       expect(page).to have_summary_item(key: "Category", value: new_product_category)
       expect(page).to have_summary_item(key: "Product subcategory", value: new_subcategory)
@@ -257,10 +256,10 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
       expect_to_be_on_product_page(product_id: product_with_no_affected_units_status.id, product_name: new_name)
 
       expected_markings = case new_has_markings
-      when "markings_yes" then new_markings.join(", ")
-      when "markings_no" then "None"
-      when "markings_unknown" then "Unknown"
-      end
+                          when "markings_yes" then new_markings.join(", ")
+                          when "markings_no" then "None"
+                          when "markings_unknown" then "Unknown"
+                          end
 
       expect(page).to have_summary_item(key: "Category",                  value: new_product_category)
       expect(page).to have_summary_item(key: "Product subcategory",       value: new_subcategory)
@@ -299,5 +298,4 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
       expect(page).to have_css("p", text: document_description)
     end
   end
-
 end
