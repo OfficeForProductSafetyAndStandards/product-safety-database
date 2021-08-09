@@ -44,8 +44,11 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
+    product = Product.find(params[:id])
+
+    allow_product_to_be_edited?(product)
+
     respond_to do |format|
-      product = Product.find(params[:id])
       @product_form = ProductForm.from(product)
       @product_form.attributes = product_params
 
@@ -86,5 +89,10 @@ private
 
   def build_breadcrumbs
     @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
+  end
+
+  def allow_product_to_be_edited?(product)
+    return true if product.investigations.first == nil
+    authorize product.investigations.first, :update?
   end
 end
