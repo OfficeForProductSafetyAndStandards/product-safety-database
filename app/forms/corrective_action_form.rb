@@ -33,7 +33,8 @@ class CorrectiveActionForm
   validates :date_decided,
             presence: true,
             real_date: true,
-            complete_date: true
+            complete_date: true,
+            recent_date: true
   validates :legislation, presence: { message: "Select the legislation relevant to the corrective action" }
   validates :related_file, inclusion: { in: [true, false], message: "Select whether you want to upload a related file" }
   validate :related_file_attachment_validation
