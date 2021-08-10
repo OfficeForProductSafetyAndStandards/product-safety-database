@@ -13,7 +13,7 @@ class UpdateCorrectiveAction
       corrective_action.document.detach unless related_file
       replace_attached_file             if file_changed?
 
-      context.document = corrective_action.document
+      context.document = corrective_action.document if related_file
 
       if any_changes?
         corrective_action.save!
