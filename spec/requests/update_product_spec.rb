@@ -8,9 +8,10 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
 
 
   context "when user has permission to edit product" do
-    before do
-      sign_in(user)
-      allow(UpdateProduct).to receive(:call!) { true }
+    before { sign_in(user) }
+
+    it "allows user to edit product" do
+      expect(UpdateProduct).to receive(:call!)
 
       put product_path(product),
            params: {
@@ -18,10 +19,6 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
                name: "something else"
              }
            }
-    end
-
-    it "allows user to edit product" do
-      expect(response.code).to eq "302"
     end
   end
 
