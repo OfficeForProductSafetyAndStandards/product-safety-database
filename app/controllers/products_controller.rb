@@ -44,8 +44,11 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
+    product = Product.find(params[:id])
+
+    authorize product, :update?
+
     respond_to do |format|
-      product = Product.find(params[:id])
       @product_form = ProductForm.from(product)
       @product_form.attributes = product_params
 
