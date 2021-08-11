@@ -4,7 +4,7 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
   let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
   let(:other_user)    { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, creator: user) }
-  let(:product)       { create(:product, investigations: [investigation]) }
+  let(:product)       { create(:product, investigations: [investigation], has_markings: "markings_no") }
 
   context "when user has permission to edit product" do
     before do
@@ -13,7 +13,9 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
     end
 
     it "allows user to edit product" do
+      # rubocop:disable  RSpec/MessageSpies
       expect(UpdateProduct).to receive(:call!)
+      # rubocop:enable2  RSpec/MessageSpies
 
       put product_path(product),
           params: {
