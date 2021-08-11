@@ -35,7 +35,8 @@ class EmailCorrespondenceForm
             presence: true,
             real_date: true,
             complete_date: true,
-            not_in_future: true
+            not_in_future: true,
+            recent_date: { on_or_before: false }
 
   validate :validate_email_file_and_content
 

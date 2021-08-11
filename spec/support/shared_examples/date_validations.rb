@@ -25,22 +25,26 @@ RSpec.shared_examples "it does not allow an incomplete" do |form_attribute, attr
   end
 end
 
-RSpec.shared_examples "it does not allow far away dates" do |form_attribute, attribute|
-  context "with a date 60 years from now" do
-    let(form_attribute) { { day: "1", month: "1", year: 60.years.from_now.to_date.year.to_s } }
+RSpec.shared_examples "it does not allow far away dates" do |form_attribute, attribute, on_or_after: true, on_or_before: true|
+  if on_or_before
+    context "with a date 60 years from now" do
+      let(form_attribute) { { day: "1", month: "1", year: 60.years.from_now.year.to_s } }
 
-    it "is not valid and contains an error message", :aggregate_failures do
-      expect(form).not_to be_valid
-      expect(form.errors.details[attribute || form_attribute]).to eq([{ error: :recent_date }])
+      it "is not valid and contains an error message", :aggregate_failures do
+        expect(form).not_to be_valid
+        expect(form.errors.details[attribute || form_attribute]).to eq([{ error: :recent_date }])
+      end
     end
   end
 
-  context "with a date before 1970" do
-    let(form_attribute) { { day: "1", month: "1", year: "1960" } }
+  if on_or_after
+    context "with a date before 1970" do
+      let(form_attribute) { { day: "31", month: "12", year: "1969" } }
 
-    it "is not valid and contains an error message", :aggregate_failures do
-      expect(form).not_to be_valid
-      expect(form.errors.details[attribute || form_attribute]).to eq([{ error: :recent_date }])
+      it "is not valid and contains an error message", :aggregate_failures do
+        expect(form).not_to be_valid
+        expect(form.errors.details[attribute || form_attribute]).to eq([{ error: :recent_date }])
+      end
     end
   end
 end
