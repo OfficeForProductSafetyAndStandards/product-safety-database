@@ -13,7 +13,7 @@ class UpdateCorrectiveAction
       corrective_action.document.detach unless related_file
       replace_attached_file             if file_changed?
 
-      context.document = corrective_action.document if related_file
+      context.document = corrective_action.document if user_has_attached_file?
 
       if any_changes?
         corrective_action.save!
@@ -84,6 +84,10 @@ private
 
   def validate_user!
     context.fail!(error: "No user supplied") unless user.is_a?(User)
+  end
+
+  def user_has_attached_file?
+    related_file && document
   end
 
   def create_audit_activity_for_corrective_action_updated!
