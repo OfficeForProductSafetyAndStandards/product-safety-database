@@ -46,7 +46,7 @@ class ProductsController < ApplicationController
   def update
     product = Product.find(params[:id])
 
-    allow_product_to_be_edited?(product)
+    authorize product, :update?
 
     respond_to do |format|
       @product_form = ProductForm.from(product)
