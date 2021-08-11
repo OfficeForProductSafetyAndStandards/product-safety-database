@@ -32,7 +32,8 @@ class TestResultForm
             presence: true,
             real_date: true,
             complete_date: true,
-            not_in_future: true
+            not_in_future: true,
+            recent_date: { on_or_before: false }
   validates :failure_details, presence: true, if: -> { result == "failed" }
 
   before_validation do

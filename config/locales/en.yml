@@ -394,6 +394,7 @@ en:
               blank: Enter date
               must_be_real: Date must be a real date
               incomplete: Date must include a %{missing_date_parts}
+              recent_date: Date must be on or after 1 January 1970
         accident_or_incident_type_form:
           attributes:
             type:
@@ -429,6 +430,7 @@ en:
               must_be_real: Date of test must be a real date
               incomplete: Date of test must include a %{missing_date_parts}
               in_future: Date of test must be today or in the past
+              recent_date: Date of test must be on or after 1 January 1970
             failure_details:
               blank: Enter details about how the product failed to meet the requirements
             further_test_results:
@@ -463,9 +465,9 @@ en:
             assessed_on:
               blank: Enter the date of the assessment
               in_future: Date of assessment must be today or in the past
-              too_old: Date of assessment must be on or after 1 January 1970
               must_be_real: Date of assessment must be a real date
               incomplete: Date of assessment must include a %{missing_date_parts}
+              recent_date: Date of assessment must be on or after 1 January 1970
             risk_level:
               blank: Select the risk level
             custom_risk_level:
@@ -557,6 +559,7 @@ en:
               must_be_real: Date sent must be a real date
               incomplete: Date sent must include a %{missing_date_parts}
               in_future: Date sent must be today or in the past
+              recent_date: Date sent must be on or after 1 January 1970
             email_file:
               blank: Select a replacement file
             email_attachment:
@@ -568,6 +571,7 @@ en:
               must_be_real: Date of call must be a real date
               incomplete: Date of call must include a %{missing_date_parts}
               in_future: Date of call must be today or in the past
+              recent_date: Date of call must be on or after 1 January 1970
         corrective_action_form:
           attributes:
             product_id:
@@ -576,6 +580,7 @@ en:
               blank: "Enter the date the corrective action came into effect"
               must_be_real: "Enter a real date when the corrective action came into effect"
               incomplete: "The date the corrective action came into effect must include a %{missing_date_parts}"
+              recent_date: "The date the corrective action came into effect must be on or after 1 January 1970 and within the next 50 years"
             further_corrective_action:
               inclusion: "Select whether or not you have further corrective action to record"
             measure_type:
