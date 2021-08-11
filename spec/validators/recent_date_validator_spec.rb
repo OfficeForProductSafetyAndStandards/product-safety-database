@@ -129,4 +129,54 @@ RSpec.describe RecentDateValidator do
       end
     end
   end
+
+  context "with on_or_after set to false" do
+    subject(:validator) do
+      Class.new {
+        include ActiveModel::Validations
+        attr_accessor :date
+
+        validates :date,
+                  recent_date: {
+                    message: "Date not recent",
+                    on_or_after: false
+                  }
+
+        def self.name
+          "RecentDateValidatorSpec"
+        end
+      }.new
+    end
+
+    it "does not check dates before 1970" do
+      validator.date = Date.new(1969, 12, 31)
+      validator.validate
+      expect(validator).to be_valid
+    end
+  end
+
+  context "with on_or_before set to false" do
+    subject(:validator) do
+      Class.new {
+        include ActiveModel::Validations
+        attr_accessor :date
+
+        validates :date,
+                  recent_date: {
+                    message: "Date not recent",
+                    on_or_before: false
+                  }
+
+        def self.name
+          "RecentDateValidatorSpec"
+        end
+      }.new
+    end
+
+    it "does not check dates over 50 years in the future" do
+      validator.date = Time.zone.today + 50.years + 1.day
+      validator.validate
+      expect(validator).to be_valid
+    end
+  end
 end
