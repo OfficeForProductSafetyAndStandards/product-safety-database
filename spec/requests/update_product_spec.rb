@@ -13,16 +13,14 @@ RSpec.describe "Updating a product", type: :request, with_stubbed_mailer: true, 
     end
 
     it "allows user to edit product" do
-      # rubocop:disable  RSpec/MessageSpies
-      expect(UpdateProduct).to receive(:call!)
-      # rubocop:enable2  RSpec/MessageSpies
-
       put product_path(product),
           params: {
             product: {
               name: "something else"
             }
           }
+
+      expect(UpdateProduct).to have_received(:call!)
     end
   end
 
