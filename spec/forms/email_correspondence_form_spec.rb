@@ -44,6 +44,7 @@ RSpec.describe EmailCorrespondenceForm, :with_stubbed_elasticsearch, :with_stubb
     it_behaves_like "it does not allow an incomplete", :correspondence_date
     it_behaves_like "it does not allow malformed dates", :correspondence_date
     it_behaves_like "it does not allow dates in the future", :correspondence_date
+    it_behaves_like "it does not allow far away dates", :correspondence_date, nil, on_or_before: false
 
     context "when both subject and body and email file are missing" do
       let(:email_file) { nil }
