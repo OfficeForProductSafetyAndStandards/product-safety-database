@@ -77,6 +77,7 @@ RSpec.describe RiskAssessmentForm, :with_stubbed_elasticsearch, :with_test_queue
     it_behaves_like "it does not allow an incomplete", :assessment_date, :assessed_on
     it_behaves_like "it does not allow malformed dates", :assessment_date, :assessed_on
     it_behaves_like "it does not allow dates in the future", :assessment_date, :assessed_on
+    it_behaves_like "it does not allow far away dates", :assessment_date, :assessed_on, on_or_before: false
 
     context "with an assessment date that isn't numerical" do
       let(:assessment_date) { { day: "x", month: "12", year: "2020" } }
