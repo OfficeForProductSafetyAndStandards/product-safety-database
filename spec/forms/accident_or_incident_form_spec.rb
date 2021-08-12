@@ -35,6 +35,8 @@ RSpec.describe AccidentOrIncidentForm, :with_stubbed_elasticsearch, :with_test_q
       end
     end
 
+    it_behaves_like "it does not allow far away dates", :date, nil, on_or_before: false
+
     context "with blank date" do
       context "with is_date_known == 'false'" do
         let(:date) { nil }

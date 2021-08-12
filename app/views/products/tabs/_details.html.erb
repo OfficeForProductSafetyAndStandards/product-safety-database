@@ -4,7 +4,9 @@
     <h2 class="govuk-heading-m">Full detail</h2>
 
     <p class="govuk-body">
-      <%= link_to "Edit details", edit_product_path(@product), class: "govuk-link" %>
+      <% if @product.investigations.first == nil || policy(@product.investigations.first).update? %>
+        <%= link_to "Edit details", edit_product_path(@product), class: "govuk-link" %>
+      <% end %>
     </p>
 
     <hr class="govuk-section-break govuk-section-break--l">
