@@ -523,7 +523,7 @@ GEM
       unicode-display_width (~> 1.5)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
-    strong_migrations (0.7.7)
+    strong_migrations (0.7.8)
       activerecord (>= 5)
     super_diff (0.8.0)
       attr_extras (>= 6.2.4)
