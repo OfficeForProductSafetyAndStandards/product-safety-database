@@ -50,8 +50,22 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
     end
 
     context "with online recall information" do
-      it "show the recall information" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /#{expected_online_recall_information}/ })
+      before { corrective_action.online_recall_information = "https://www.gov.uk" }
+
+      context "when online recall information includes protocol" do
+        it "show the recall information" do
+          expected_online_recall_information = corrective_action.online_recall_information
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /#{expected_online_recall_information}/ })
+        end
+      end
+
+      context "when online recall information does not include protocol" do
+        before { corrective_action.online_recall_information = "www.gov.uk" }
+
+        it "show the recall information with `http://` prepended in order to make the link work" do
+          expected_online_recall_information = "http://#{corrective_action.online_recall_information}"
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /#{expected_online_recall_information}/ })
+        end
       end
     end
 
