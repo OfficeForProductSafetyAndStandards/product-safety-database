@@ -6,12 +6,11 @@ class CaseExportsController < ApplicationController
   def generate
     authorize Investigation, :export?
 
-    # TODO: move this query to the job once we are satisfied that this is working well.
-    answer = search_for_investigations
-    investigations = answer.records(includes: [:complainant, :products, :owner_team, :owner_user, { creator_user: :team }]).to_a
+    investigation_ids = search_for_investigations.records.ids
 
     case_export = CaseExport.create!
-    CaseExportJob.perform_later(investigations, case_export.id, current_user)
+    CaseExportJob.perform_later(investigation_ids, case_export.id, current_user)
+
     redirect_to investigations_path(q: params[:q]), flash: { success: "Your case export is being prepared. You will receive an email when your export is ready to download." }
   end
 

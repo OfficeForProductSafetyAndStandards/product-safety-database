@@ -3,7 +3,7 @@ class CaseExport < ApplicationRecord
 
   has_one_attached :export_file
 
-  def export(cases)
+  def export(case_ids)
     activity_counts = Activity.group(:investigation_id).count
     business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
     product_counts = InvestigationProduct.unscoped.group(:investigation_id).count
@@ -11,11 +11,10 @@ class CaseExport < ApplicationRecord
     correspondence_counts = Correspondence.group(:investigation_id).count
     test_counts = Test.group(:investigation_id).count
     risk_assessment_counts = RiskAssessment.group(:investigation_id).count
-
     Axlsx::Package.new do |p|
       book = p.workbook
 
-      add_cases_worksheet(book, cases, product_counts, business_counts, activity_counts,
+      add_cases_worksheet(book, case_ids, product_counts, business_counts, activity_counts,
                           correspondence_counts, corrective_action_counts, test_counts,
                           risk_assessment_counts)
 
@@ -28,7 +27,7 @@ class CaseExport < ApplicationRecord
 
 private
 
-  def add_cases_worksheet(book, cases, product_counts, business_counts, activity_counts,
+  def add_cases_worksheet(book, case_ids, product_counts, business_counts, activity_counts,
                           correspondence_counts, corrective_action_counts, test_counts,
                           risk_assessment_counts)
     book.add_worksheet name: "Cases" do |sheet_investigations|
@@ -59,7 +58,11 @@ private
                                       Case_Creator_Team
                                       Notifying_Country
                                       Reported_as]
-      cases.each do |investigation|
+
+      Investigation
+        .includes(:complainant, :products, :owner_team, :owner_user, { creator_user: :team })
+        .where(id: case_ids)
+        .find_each do |investigation|
         sheet_investigations.add_row [
           investigation.pretty_id,
           investigation.is_closed? ? "Closed" : "Open",
