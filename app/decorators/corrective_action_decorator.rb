@@ -53,4 +53,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   def display_medium_title_text_size?
     page_title.length > MEDIUM_TITLE_TEXT_SIZE_THRESHOLD
   end
+
+  def online_recall_information
+    object.online_recall_information.first(4) == "http" ? object.online_recall_information : "http://#{object.online_recall_information}"
+  end
 end
