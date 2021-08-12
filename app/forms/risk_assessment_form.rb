@@ -42,9 +42,8 @@ class RiskAssessmentForm
   validates :assessed_on,
             real_date: true,
             complete_date: true,
-            not_in_future: true
-
-  validate :assessed_on_cannot_be_older_than_1970
+            not_in_future: true,
+            recent_date: { on_or_before: false }
 
   def cache_file!
     return if risk_assessment_file.blank?
@@ -132,12 +131,6 @@ class RiskAssessmentForm
   end
 
 private
-
-  def assessed_on_cannot_be_older_than_1970
-    if assessed_on.is_a?(Date) && assessed_on < Date.parse("1970-01-01")
-      errors.add(:assessed_on, :too_old)
-    end
-  end
 
   def at_least_one_product_associated
     return unless product_ids.to_a.empty?
