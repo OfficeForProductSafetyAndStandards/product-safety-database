@@ -55,6 +55,8 @@ class CorrectiveActionDecorator < ApplicationDecorator
   end
 
   def online_recall_information
-    object.online_recall_information.first(4) == "http" ? object.online_recall_information : "http://#{object.online_recall_information}"
+    return unless object.online_recall_information.present?
+    
+    URI.parse(object.online_recall_information).scheme.present? ? object.online_recall_information : "http://#{object.online_recall_information}"
   end
 end

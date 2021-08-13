@@ -40,5 +40,13 @@ RSpec.describe CorrectiveActionDecorator, :with_stubbed_elasticsearch, :with_stu
         expect(decorated_corrective_action.online_recall_information).to eq("http://#{online_recall_information}")
       end
     end
+
+    context "when online_recall_information is blank" do
+      let(:online_recall_information) { nil }
+
+      it "prepends `http://` to online_recall_information" do
+        expect(decorated_corrective_action.online_recall_information).to eq(nil)
+      end
+    end
   end
 end
