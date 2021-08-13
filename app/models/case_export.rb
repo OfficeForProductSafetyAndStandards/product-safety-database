@@ -1,6 +1,8 @@
 class CaseExport < ApplicationRecord
   include CountriesHelper
 
+  FIND_IN_BATCH_SIZE = 1000
+
   has_one_attached :export_file
 
   def export(case_ids)
@@ -59,39 +61,40 @@ private
                                       Notifying_Country
                                       Reported_as]
 
-      Investigation
-        .includes(:complainant, :products, :owner_team, :owner_user, { creator_user: :team })
-        .where(id: case_ids)
-        .find_each do |investigation|
-        sheet_investigations.add_row [
-          investigation.pretty_id,
-          investigation.is_closed? ? "Closed" : "Open",
-          investigation.title,
-          investigation.type,
-          investigation.description,
-          investigation.categories.join(", "),
-          investigation.hazard_type,
-          investigation.coronavirus_related?,
-          investigation.decorate.risk_level_description,
-          investigation.owner_team&.name,
-          investigation.owner_user&.name,
-          investigation.creator_user&.name,
-          investigation.complainant&.complainant_type,
-          product_counts[investigation.id] || 0,
-          business_counts[investigation.id] || 0,
-          activity_counts[investigation.id] || 0,
-          correspondence_counts[investigation.id] || 0,
-          corrective_action_counts[investigation.id] || 0,
-          test_counts[investigation.id] || 0,
-          risk_assessment_counts[investigation.id] || 0,
-          investigation.created_at,
-          investigation.updated_at,
-          investigation.date_closed,
-          investigation.risk_validated_at,
-          investigation.creator_user&.team&.name,
-          country_from_code(investigation.notifying_country, Country.notifying_countries),
-          investigation.reported_reason
-        ], types: :text
+      case_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_case_ids|
+        Investigation
+          .includes(:complainant, :products, :owner_team, :owner_user, { creator_user: :team })
+          .find(batch_case_ids).each do |investigation|
+          sheet_investigations.add_row [
+            investigation.pretty_id,
+            investigation.is_closed? ? "Closed" : "Open",
+            investigation.title,
+            investigation.type,
+            investigation.description,
+            investigation.categories.join(", "),
+            investigation.hazard_type,
+            investigation.coronavirus_related?,
+            investigation.decorate.risk_level_description,
+            investigation.owner_team&.name,
+            investigation.owner_user&.name,
+            investigation.creator_user&.name,
+            investigation.complainant&.complainant_type,
+            product_counts[investigation.id] || 0,
+            business_counts[investigation.id] || 0,
+            activity_counts[investigation.id] || 0,
+            correspondence_counts[investigation.id] || 0,
+            corrective_action_counts[investigation.id] || 0,
+            test_counts[investigation.id] || 0,
+            risk_assessment_counts[investigation.id] || 0,
+            investigation.created_at,
+            investigation.updated_at,
+            investigation.date_closed,
+            investigation.risk_validated_at,
+            investigation.creator_user&.team&.name,
+            country_from_code(investigation.notifying_country, Country.notifying_countries),
+            investigation.reported_reason
+          ], types: :text
+        end
       end
     end
   end
