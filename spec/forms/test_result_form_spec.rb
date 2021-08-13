@@ -43,6 +43,7 @@ RSpec.describe TestResultForm, :with_stubbed_elasticsearch, :with_stubbed_mailer
     it_behaves_like "it does not allow dates in the future", :date_form_params, :date
     it_behaves_like "it does not allow malformed dates", :date_form_params, :date
     it_behaves_like "it does not allow an incomplete", :date_form_params, :date
+    it_behaves_like "it does not allow far away dates", :date_form_params, :date, on_or_before: false
   end
 
   describe "#product_form=" do

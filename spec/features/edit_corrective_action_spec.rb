@@ -158,5 +158,36 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
         expect(page).not_to have_checked_field("Remove attached file")
       end
     end
+
+    context "when the attached file is replaced with the same file but file description is changed" do
+      it "updates the description" do
+        visit "/cases/#{investigation.pretty_id}/corrective-actions/#{corrective_action.id}"
+
+        click_link "Edit corrective action"
+
+        within_fieldset("Are there any files related to the action?") do
+          expect(page).to have_checked_field("Yes")
+          expect(page).to have_unchecked_field("Remove attached file")
+          expect(page).to have_link(corrective_action.document_blob.filename.to_s)
+        end
+
+        expect(page).to have_field("Attachment description", with: "\r\n#{corrective_action.document.description}")
+
+        within_fieldset "Are there any files related to the action?" do
+          choose "Yes"
+        end
+
+        find("details > summary", text: "Replace this file").click
+
+        attach_file "Upload a file", Rails.root.join("spec/fixtures/files/test_result.txt")
+        fill_in "Attachment description", with: "Brand new attachment description"
+
+        click_on "Update corrective action"
+
+        click_link "Edit corrective action"
+
+        expect(page).to have_field("Attachment description", with: "\r\nBrand new attachment description")
+      end
+    end
   end
 end
