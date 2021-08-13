@@ -35,9 +35,5 @@ module Investigations
 
       I18n.t(".#{has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])
     end
-
-    def online_recall_information_url(online_recall_information)
-      online_recall_information.first(4) == "http" ? online_recall_information : "http://#{online_recall_information}"
-    end
   end
 end

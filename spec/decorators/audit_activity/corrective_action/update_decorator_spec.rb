@@ -111,6 +111,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
 
           context "when online_recall_information does include a protocol" do
             let(:new_online_recall_information) { "gov.uk" }
+
             it "returns new online_recall_information" do
               expect(decorated_activity.new_online_recall_information).to match("http://#{new_online_recall_information}")
             end

@@ -94,7 +94,7 @@ private
 
   def format_online_recall_url
     online_recall_information = metadata.dig("updates", "online_recall_information", 1)
-    return unless online_recall_information.present?
+    return if online_recall_information.blank?
 
     URI.parse(online_recall_information).scheme.present? ? online_recall_information : "http://#{online_recall_information}"
   end
