@@ -101,8 +101,19 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         end
 
         context "when the recall information changes" do
-          specify do
-            expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
+          context "when online_recall_information does not include a protocol" do
+            let(:new_online_recall_information) { "https://gov.uk" }
+
+            it "prepends `http://` to new online_recall_information" do
+              expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
+            end
+          end
+
+          context "when online_recall_information does include a protocol" do
+            let(:new_online_recall_information) { "gov.uk" }
+            it "returns new online_recall_information" do
+              expect(decorated_activity.new_online_recall_information).to match("http://#{new_online_recall_information}")
+            end
           end
         end
       end
