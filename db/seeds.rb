@@ -72,6 +72,27 @@ if run_seeds
   AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
   investigation.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
 
+  accident_params = {
+    type: "Accident",
+    date: Date.today,
+    product_id: investigation.products.first.id,
+    severity: "serious",
+    usage: "during_normal_use",
+    is_date_known: true
+  }
+
+  incident_params = {
+    type: "Incident",
+    product_id: investigation.products.first.id,
+    severity: "other",
+    severity_other: "maximum severity",
+    usage: "unknown_usage",
+    is_date_known: false
+  }
+
+  AddAccidentOrIncidentToCase.call!(accident_params.merge(investigation: investigation, user: user))
+  AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation: investigation, user: user))
+
   # Second investigation
   investigation = Investigation::Allegation.new(
     description: "The putty contains a magnet which is a small part and has a high magnetic flux.\nIf a child swallows the small magnet and other metallic objects, they could attract one another causing intestinal blockage or perforation.",
