@@ -140,6 +140,16 @@ if run_seeds
 
   AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
 
+  risk_assessment_params = {
+    assessed_on: Date.today,
+    risk_level: "serious",
+    product_ids: [investigation.products.first.id]
+  }
+
+  AddRiskAssessmentToCase.call!(risk_assessment_params.merge(investigation: investigation, user: user, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
+
+  RiskAssessment.first.risk_assessment_file.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
+
   # Third investigation
   investigation = Investigation::Allegation.new(
     description: "The top cap of the fork may not be adequately torqued and could work itself free while the bicycle is being ridden.\n\nThis could cause the air cartridge to spring out of the tube and cause injuries.",
