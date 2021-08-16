@@ -1,8 +1,5 @@
 class CaseExportJob < ApplicationJob
-  def perform(case_ids, case_export_id, user)
-    case_export = CaseExport.find(case_export_id)
-    return unless case_export
-
+  def perform(case_ids, case_export, user)
     case_export.export case_ids
 
     NotifyMailer.case_export(

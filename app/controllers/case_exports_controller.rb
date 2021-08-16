@@ -9,7 +9,7 @@ class CaseExportsController < ApplicationController
     investigation_ids = search_for_investigations.records.ids
 
     case_export = CaseExport.create!
-    CaseExportJob.perform_later(investigation_ids, case_export.id, current_user)
+    CaseExportJob.perform_later(investigation_ids, case_export, current_user)
 
     redirect_to investigations_path(q: params[:q]), flash: { success: "Your case export is being prepared. You will receive an email when your export is ready to download." }
   end
