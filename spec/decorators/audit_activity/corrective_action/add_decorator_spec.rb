@@ -32,8 +32,18 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_elas
 
   describe "#online_recall_information" do
     context "with online recall information" do
-      specify do
-        expect(decorated_activity.online_recall_information).to match(online_recall_information)
+      context "when online_recall_information includes a protocol" do
+        it "returns online_recall_information" do
+          expect(decorated_activity.online_recall_information).to match(online_recall_information)
+        end
+      end
+
+      context "when online_recall_information does not include a protocol" do
+        let(:online_recall_information) { "example.com" }
+
+        it "prepends `http://` to online_recall_information" do
+          expect(decorated_activity.online_recall_information).to match("http://#{online_recall_information}")
+        end
       end
     end
 
