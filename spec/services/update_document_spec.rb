@@ -155,7 +155,7 @@ RSpec.describe UpdateDocument, :with_stubbed_elasticsearch, :with_test_queue_ada
           it "adds an audit activity record", :aggregate_failures do
             result
             expect(last_added_activity).to be_a(AuditActivity::Document::Update)
-            expect(last_added_activity.document.blob).to eq(uploaded_document)
+            expect(last_added_activity.attachment.blob).to eq(uploaded_document)
             expect(last_added_activity.metadata).to match({
               "blob_id" => file.id,
               "updates" => { "metadata" => [hash_including(old_document_metadata), hash_including(new_document_metadata)] }

@@ -1,5 +1,5 @@
 class AuditActivity::Document::Destroy < AuditActivity::Document::Base
-  has_one_attached :document
+  has_one_attached :attachment
 
   def self.build_metadata(blob)
     blob.metadata.merge(blob_id: blob.id)
@@ -24,7 +24,7 @@ private
 
     return metadata if metadata
 
-    JSON.parse(self.class.build_metadata(document).to_json)
+    JSON.parse(self.class.build_metadata(attachment).to_json)
   end
 
   def subtitle_slug

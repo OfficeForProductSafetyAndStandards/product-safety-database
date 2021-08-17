@@ -90,7 +90,7 @@ RSpec.describe DeleteDocument, :with_stubbed_elasticsearch, :with_test_queue_ada
           result
           last_added_activity = investigation.activities.order(:id).first
           expect(last_added_activity).to be_a(AuditActivity::Document::Destroy)
-          expect(last_added_activity.document.blob).to eq(uploaded_document)
+          expect(last_added_activity.attachment.blob).to eq(uploaded_document)
           expect(last_added_activity.metadata).to match(hash_including(document_metadata))
         end
 

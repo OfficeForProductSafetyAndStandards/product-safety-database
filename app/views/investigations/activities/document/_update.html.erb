@@ -2,15 +2,15 @@
   <p><%= markdown simple_format(activity.new_description) %></p>
 <% end %>
 
-<% if activity.document.image? %>
+<% if activity.attachment.image? %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
       <%= render "documents/document_preview",
-               document: activity.document,
+               document: activity.attachment,
                dimensions: "100x100",
                class_name: "product-image" %>
     </div>
   </div>
 <% else %>
-  <%= link_to "View document (opens in new tab)", activity.document, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
+  <%= link_to "View document (opens in new tab)", activity.attachment, class: "psd-block-link", target: "_blank", rel: 'noopener' %>
 <% end %>

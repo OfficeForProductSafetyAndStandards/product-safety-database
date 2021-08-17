@@ -102,9 +102,9 @@ RSpec.describe AuditActivity::Document::Update, :with_stubbed_elasticsearch, :wi
         }.deep_stringify_keys
       end
 
-      before { activity.document.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
+      before { activity.attachment.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
 
-      it "constructs the metadata from the title and document" do
+      it "constructs the metadata from the title and attachment" do
         expect(activity.metadata).to eq(expected_metadata)
       end
     end
@@ -125,9 +125,9 @@ RSpec.describe AuditActivity::Document::Update, :with_stubbed_elasticsearch, :wi
         }.deep_stringify_keys
       end
 
-      before { activity.document.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
+      before { activity.attachment.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
 
-      it "constructs the metadata from the title and document" do
+      it "constructs the metadata from the title and attachment" do
         expect(activity.metadata).to eq(expected_metadata)
       end
     end

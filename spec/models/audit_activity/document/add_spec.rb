@@ -46,7 +46,7 @@ RSpec.describe AuditActivity::Document::Add, :with_stubbed_elasticsearch, :with_
         { "identified" => true, "blob_id" => nil, "title" => title, "description" => description }
       end
 
-      before { activity.document.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
+      before { activity.attachment.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
 
       it "constructs the metadata from the title and body" do
         expect(activity.metadata).to eq(expected_metadata)

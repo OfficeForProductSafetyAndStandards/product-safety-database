@@ -38,9 +38,9 @@ RSpec.describe AuditActivity::Document::Destroy, :with_stubbed_elasticsearch, :w
         { "identified" => true, "blob_id" => nil }
       end
 
-      before { activity.document.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
+      before { activity.attachment.attach(Rack::Test::UploadedFile.new("test/fixtures/files/test_result.txt")) }
 
-      it "constructs the metadata from the document blob" do
+      it "constructs the metadata from the attachment blob" do
         expect(activity.metadata).to eq(expected_metadata)
       end
     end

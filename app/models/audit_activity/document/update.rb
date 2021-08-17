@@ -1,5 +1,5 @@
 class AuditActivity::Document::Update < AuditActivity::Document::Base
-  has_one_attached :document
+  has_one_attached :attachment
 
   def self.build_metadata(blob)
     {
@@ -43,7 +43,7 @@ private
     description_changed = self[:title].start_with?("Updated: Description for")
 
     new_metadata = {
-      blob_id: document.blob.id,
+      blob_id: attachment.blob.id,
       updates: {
         metadata: [
           {

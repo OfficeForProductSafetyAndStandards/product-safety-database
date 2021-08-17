@@ -1,5 +1,5 @@
 class AuditActivity::Document::Add < AuditActivity::Document::Base
-  has_one_attached :document
+  has_one_attached :attachment
 
   def self.build_metadata(blob)
     blob.metadata.merge(blob_id: blob.id)
@@ -28,7 +28,7 @@ private
 
     return metadata if metadata
 
-    new_metadata = self.class.build_metadata(document)
+    new_metadata = self.class.build_metadata(attachment)
     new_metadata["title"] = self[:title]
     new_metadata["description"] = self[:body]
 

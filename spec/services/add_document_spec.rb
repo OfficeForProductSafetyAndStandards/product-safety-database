@@ -92,7 +92,7 @@ RSpec.describe AddDocument, :with_stubbed_elasticsearch, :with_test_queue_adapte
           result
           last_added_activity = investigation.activities.order(:id).first
           expect(last_added_activity).to be_a(AuditActivity::Document::Add)
-          expect(last_added_activity.document.blob).to eq(document)
+          expect(last_added_activity.attachment.blob).to eq(document)
           expect(last_added_activity.metadata).to match(hash_including(document_metadata))
         end
 

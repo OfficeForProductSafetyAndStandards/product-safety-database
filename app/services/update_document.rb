@@ -55,7 +55,7 @@ private
       investigation: investigation
     )
 
-    activity.document.attach(file)
+    activity.attachment.attach(file)
   end
 
   def investigation

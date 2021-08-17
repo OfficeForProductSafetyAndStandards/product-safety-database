@@ -8,7 +8,7 @@ class AuditActivity::Document::Base < AuditActivity::Base
   end
 
   def attached_image?
-    document.image?
+    attachment.image?
   end
 
   def restricted_title(_user); end

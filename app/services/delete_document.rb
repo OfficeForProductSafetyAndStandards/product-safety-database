@@ -29,7 +29,7 @@ private
       investigation: investigation
     )
 
-    activity.document.attach(document.blob)
+    activity.attachment.attach(document.blob)
   end
 
   def investigation
