@@ -31,7 +31,9 @@ if run_seeds
     password: "testpassword",
     password_confirmation: "testpassword",
     organisation: organisation,
+    mobile_number_verified: true,
     team: team,
+    mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
   )
 
   # First investigation
