@@ -126,7 +126,7 @@ GEM
     cf-app-utils (0.6)
     coderay (1.1.2)
     concurrent-ruby (1.1.9)
-    connection_pool (2.2.3)
+    connection_pool (2.2.5)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -300,7 +300,7 @@ GEM
     public_suffix (4.0.6)
     puma (5.4.0)
       nio4r (~> 2.0)
-    pundit (2.1.0)
+    pundit (2.1.1)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
     racc (1.5.2)
@@ -345,7 +345,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.5.1)
-    redis (4.2.5)
+    redis (4.4.0)
     redis-actionpack (5.2.0)
       actionpack (>= 5, < 7)
       redis-rack (>= 2.1.0, < 3)
@@ -462,7 +462,7 @@ GEM
     sentry-ruby-core (4.6.5)
       concurrent-ruby
       faraday
-    sentry-sidekiq (4.6.4)
+    sentry-sidekiq (4.6.5)
       sentry-ruby-core (~> 4.6.0)
       sidekiq (>= 3.0)
     shoulda-matchers (5.0.0)
