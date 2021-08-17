@@ -1,16 +1,6 @@
 class AuditActivity::Document::Base < AuditActivity::Base
-  include ActivityAttachable
-  include ActivityNotification
-  with_attachments attachment: "document"
-
-  private_class_method def self.from(document, investigation, title)
-    activity = create!(
-      body: sanitize_text(document.metadata[:description]),
-      source: UserSource.new(user: User.current),
-      investigation: investigation,
-      title: title
-    )
-    activity.attach_blob document
+  def has_attachment?
+    true
   end
 
   def attachment_type
@@ -18,7 +8,7 @@ class AuditActivity::Document::Base < AuditActivity::Base
   end
 
   def attached_image?
-    attachment.image?
+    document.image?
   end
 
   def restricted_title(_user); end

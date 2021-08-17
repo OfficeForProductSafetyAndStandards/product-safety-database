@@ -19,15 +19,15 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
 
     click_link "Images"
 
-    expect_uploading_a_file_without_completing_the_add_image_flow_does_not_save_the_image
+    click_link "Add image"
 
-    expect_requires_a_file
+    expect_to_be_on_add_image_page
 
-    expect_requires_a_title_for_the_document
+    click_button "Save attachment"
 
-    expect_to_be_on_enter_image_details_page
+    expect(page).to have_error_summary("Select a file", "Enter a document title")
 
-    fill_and_submit_attachment_details_page
+    attach_and_submit_file
 
     expect_to_be_on_images_page
     expect_confirmation_banner("File has been added to the allegation")
@@ -53,42 +53,6 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
     expect_case_activity_page_to_show_entered_information
   end
 
-  def expect_uploading_a_file_without_completing_the_add_image_flow_does_not_save_the_image
-    click_link "Add image"
-
-    attach_and_submit_file
-
-    visit investigation_path(investigation)
-
-    click_link "Images"
-
-    expect(page).not_to have_selector("h2")
-  end
-
-  def expect_requires_a_file
-    click_link "Add image"
-
-    expect_to_be_on_add_image_page
-
-    click_button "Upload"
-
-    expect_to_be_on_add_image_page
-    expect(page).to have_error_summary("Enter file")
-  end
-
-  def expect_requires_a_title_for_the_document
-    expect_to_be_on_add_image_page
-
-    attach_and_submit_file
-
-    expect_to_be_on_enter_image_details_page
-
-    click_button "Save attachment"
-
-    expect_to_be_on_enter_image_details_page
-    expect(page).to have_error_summary("Enter title")
-  end
-
   def expect_case_activity_page_to_show_entered_information
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: title).find(:xpath, "..")
@@ -102,11 +66,7 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
   end
 
   def attach_and_submit_file
-    attach_file "document[file][file]", file
-    click_button "Upload"
-  end
-
-  def fill_and_submit_attachment_details_page
+    attach_file "document[document]", file
     fill_in "Document title", with: title
     fill_in "Description", with: description
     click_button "Save attachment"
