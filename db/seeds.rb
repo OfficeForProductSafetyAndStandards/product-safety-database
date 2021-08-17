@@ -75,7 +75,7 @@ if run_seeds
 
   accident_params = {
     type: "Accident",
-    date: Date.today,
+    date: Time.zone.today,
     product_id: investigation.products.first.id,
     severity: "serious",
     usage: "during_normal_use",
@@ -142,7 +142,7 @@ if run_seeds
   AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
 
   risk_assessment_params = {
-    assessed_on: Date.today,
+    assessed_on: Time.zone.today,
     risk_level: "serious",
     product_ids: [investigation.products.first.id]
   }
@@ -192,7 +192,6 @@ if run_seeds
   investigation.products.first.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
 
   investigation.products.first.documents.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
-
 
   # Fourth investigation
   investigation = Investigation::Allegation.new(
@@ -316,7 +315,6 @@ if run_seeds
 
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
-
 
   business = Business.new(
     trading_name: "ABC toys",
@@ -602,9 +600,9 @@ if run_seeds
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
 
-    Investigation.all.each do |investigation|
-      AddTeamToCase.call!(collaboration_class: Collaboration::Access::Edit, investigation: investigation, team: operational_support, user: user)
-      AddTeamToCase.call!(collaboration_class: Collaboration::Access::ReadOnly, investigation: investigation, team: enforcement, user: user)
+    Investigation.all.each do |i|
+      AddTeamToCase.call!(collaboration_class: Collaboration::Access::Edit, investigation: i, team: operational_support, user: user)
+      AddTeamToCase.call!(collaboration_class: Collaboration::Access::ReadOnly, investigation: i, team: enforcement, user: user)
     end
   end
   Investigation.all.each do |i|
