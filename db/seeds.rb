@@ -14,7 +14,6 @@ def create_blob(filename, title: nil, description: nil)
   )
 end
 
-
 run_seeds = (Product.count.zero? || Complainant.count.zero?)
 
 if run_seeds
