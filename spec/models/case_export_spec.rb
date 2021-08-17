@@ -12,7 +12,7 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
 
   describe "#export" do
     before do
-      case_export.export(cases)
+      case_export.export(cases.pluck(:id))
     end
 
     let!(:exported_data) { case_export.export_file.open { |file| Roo::Excelx.new(file) } }
