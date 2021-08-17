@@ -30,9 +30,7 @@ if run_seeds
     password: "testpassword",
     password_confirmation: "testpassword",
     organisation: organisation,
-    mobile_number_verified: true,
     team: team,
-    mobile_number: "your-mobile-number-to-receive-two-factor-authentication-code"
   )
 
   # First investigation
@@ -599,11 +597,6 @@ if run_seeds
 
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
-
-    Investigation.all.each do |i|
-      AddTeamToCase.call!(collaboration_class: Collaboration::Access::Edit, investigation: i, team: operational_support, user: user)
-      AddTeamToCase.call!(collaboration_class: Collaboration::Access::ReadOnly, investigation: i, team: enforcement, user: user)
-    end
   end
   Investigation.all.each do |i|
     product = i.products.first
