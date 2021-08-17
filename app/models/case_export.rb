@@ -1,6 +1,7 @@
 class CaseExport < ApplicationRecord
   include CountriesHelper
 
+  # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
 
   has_one_attached :export_file
