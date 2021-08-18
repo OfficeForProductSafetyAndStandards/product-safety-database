@@ -600,6 +600,7 @@ if run_seeds
   end
   Investigation.all.each do |i|
     operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
+    Collaboration::Access::Edit.create!(investigation: i, collaborator: operational_support_unit, added_by_user: User.first)
 
     product = i.products.first
     Correspondence::Email.create!("correspondence_date" => 20.days.ago, "correspondent_name" => "John Doe", "details" => "Body", "email_address" => "john@doe.com", "email_direction" => "outbound", "email_subject" => "Subject about investigation", "investigation" => i, "overview" => "Some email about investigation", "created_at" => 1.day.ago)
