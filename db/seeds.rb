@@ -655,42 +655,31 @@ if run_seeds
   Investigation.all.each do |i|
     operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
     Collaboration::Access::Edit.create!(investigation: i, collaborator: operational_support_unit, added_by_user: User.first)
-    
-    User.where(team_id: operational_support_unit.id).each do |user|
-      user.roles.create!(name: "psd_admin")
-      user.roles.create!(name: "risk_level_validator")
-    end
 
     product = i.products.first
     Correspondence::Email.create!("correspondence_date" => 20.days.ago, "correspondent_name" => "John Doe", "details" => "Body", "email_address" => "john@doe.com", "email_direction" => "outbound", "email_subject" => "Subject about investigation", "investigation" => i, "overview" => "Some email about investigation", "created_at" => 1.day.ago)
 
-    CorrectiveAction.create!(
-      date_decided: rand(1..30).days.ago,
-      details: "Some corrective action",
-      duration: CorrectiveAction::DURATION_TYPES.sample,
-      geographic_scopes: CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)],
-      investigation: i,
-      legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
-      measure_type: CorrectiveAction::MEASURE_TYPES.sample,
-      product: product,
-      action: "other",
-      other_action: "First corrective action",
-      created_at: 2.days.ago
-    )
+    if product
+      CorrectiveAction.create!(
+        date_decided: rand(1..30).days.ago,
+        details: "Some corrective action",
+        duration: CorrectiveAction::DURATION_TYPES.sample,
+        geographic_scopes: CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)],
+        investigation: i,
+        legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
+        measure_type: CorrectiveAction::MEASURE_TYPES.sample,
+        product: product,
+        action: "other",
+        other_action: "First corrective action",
+        created_at: 2.days.ago
+      )
+    end
+  end
 
-    investigation = Investigation.order("RANDOM()").first
-    AddTestResultToInvestigation.call!(
-      "date" => 15.days.ago,
-      "details" => "Test results",
-      "investigation" => i,
-      "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
-      "product_id" => product.id,
-      "result" => "failed",
-      "created_at" => 3.days.ago,
-      document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
-      investigation: investigation,
-      user: investigation.owner_user
-    )
+  operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
+  User.where(team_id: operational_support_unit.id).each do |user|
+    user.roles.create!(name: "psd_admin")
+    user.roles.create!(name: "risk_level_validator")
   end
 
   Investigation.__elasticsearch__.create_index! force: true
