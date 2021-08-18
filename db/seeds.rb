@@ -96,7 +96,7 @@ if run_seeds
   investigation = Investigation::Project.new(
     description: "The putty contains a magnet which is a small part and has a high magnetic flux.\nIf a child swallows the small magnet and other metallic objects, they could attract one another causing intestinal blockage or perforation.",
     is_closed: false,
-    user_title: nil,
+    user_title: "Project investigating putty",
     hazard_type: "Other",
     product_category: "Toys",
     is_private: false,
@@ -153,7 +153,7 @@ if run_seeds
   investigation = Investigation::Enquiry.new(
     description: "The top cap of the fork may not be adequately torqued and could work itself free while the bicycle is being ridden.\n\nThis could cause the air cartridge to spring out of the tube and cause injuries.",
     is_closed: false,
-    user_title: nil,
+    user_title: "Bicycle top cap fork",
     hazard_type: "Cuts",
     product_category: "Other Product sub-category",
     is_private: false,
