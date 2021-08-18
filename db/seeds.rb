@@ -92,6 +92,18 @@ if run_seeds
   AddAccidentOrIncidentToCase.call!(accident_params.merge(investigation: investigation, user: user))
   AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation: investigation, user: user))
 
+  AddTestResultToInvestigation.call!(
+    date: 15.days.ago,
+    details: "Test results",
+    legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
+    product_id: investigation.products.first.id,
+    result: "failed",
+    created_at: 3.days.ago,
+    document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
+    investigation: investigation,
+    user: investigation.owner_user
+  )
+
   # Second investigation
   investigation = Investigation::Project.new(
     description: "The putty contains a magnet which is a small part and has a high magnetic flux.\nIf a child swallows the small magnet and other metallic objects, they could attract one another causing intestinal blockage or perforation.",
