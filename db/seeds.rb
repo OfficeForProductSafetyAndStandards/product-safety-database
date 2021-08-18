@@ -485,6 +485,60 @@ if run_seeds
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
+  investigation = Investigation::Allegation.new(
+    description: "The desk has been observed as being poorly constructed and can collapse upon the user.",
+    is_closed: false,
+    user_title: nil,
+    hazard_type: "Injuries",
+    product_category: "Furniture",
+    is_private: true,
+    hazard_description: nil,
+    non_compliant_reason: nil,
+    complainant_reference: nil
+  )
+
+  investigation.complainant = Complainant.new(
+    name: "John O'Standards",
+    phone_number: "02092344431",
+    email_address: "tradingstandards@ts.msa",
+    complainant_type: "Local authority (Trading Standards)",
+    other_details: ""
+  )
+
+  CreateCase.call!(investigation: investigation, user: user)
+
+  product_params = {
+    batch_number: "11",
+    country_of_origin: "country:ES",
+    description: "",
+    product_code: "",
+    name: "Spanish desk set",
+    category: "Furniture",
+    subcategory: "Office desk",
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
+  }
+
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+
+  investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
+
+  investigation = Investigation::Allegation.new(
+    description: "The vacuum has potential issues which may result in the item setting on fire.",
+    is_closed: false,
+    user_title: nil,
+    hazard_type: "Fire",
+    product_category: "Other Product sub-category",
+    is_private: false,
+    hazard_description: "Fire from vacuum",
+    reported_reason: "unsafe",
+    non_compliant_reason: nil,
+    complainant_reference: nil
+  )
+
+  CreateCase.call!(investigation: investigation, user: user)
+
   if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:
     # If you want to inspect the current structure on you review app you can inspect the review app env:
