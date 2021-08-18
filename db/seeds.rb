@@ -93,7 +93,7 @@ if run_seeds
   AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation: investigation, user: user))
 
   # Second investigation
-  investigation = Investigation::Allegation.new(
+  investigation = Investigation::Project.new(
     description: "The putty contains a magnet which is a small part and has a high magnetic flux.\nIf a child swallows the small magnet and other metallic objects, they could attract one another causing intestinal blockage or perforation.",
     is_closed: false,
     user_title: nil,
@@ -150,7 +150,7 @@ if run_seeds
   RiskAssessment.first.risk_assessment_file.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
 
   # Third investigation
-  investigation = Investigation::Allegation.new(
+  investigation = Investigation::Enquiry.new(
     description: "The top cap of the fork may not be adequately torqued and could work itself free while the bicycle is being ridden.\n\nThis could cause the air cartridge to spring out of the tube and cause injuries.",
     is_closed: false,
     user_title: nil,
@@ -600,7 +600,7 @@ if run_seeds
   end
   Investigation.all.each do |i|
     operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
-    AddTeamToCase(investigation: i, team: operational_support_unit, user: User.first, collaboration_class: Collaboration::Access::Edit) if operational_support_unit
+
     product = i.products.first
     Correspondence::Email.create!("correspondence_date" => 20.days.ago, "correspondent_name" => "John Doe", "details" => "Body", "email_address" => "john@doe.com", "email_direction" => "outbound", "email_subject" => "Subject about investigation", "investigation" => i, "overview" => "Some email about investigation", "created_at" => 1.day.ago)
 
