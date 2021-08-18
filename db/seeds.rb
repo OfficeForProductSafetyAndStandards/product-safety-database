@@ -599,6 +599,8 @@ if run_seeds
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
   end
   Investigation.all.each do |i|
+    operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
+    AddTeamToCase(investigation: i, team: operational_support_unit, user: User.first, collaboration_class: Collaboration::Access::Edit) if operational_support_unit
     product = i.products.first
     Correspondence::Email.create!("correspondence_date" => 20.days.ago, "correspondent_name" => "John Doe", "details" => "Body", "email_address" => "john@doe.com", "email_direction" => "outbound", "email_subject" => "Subject about investigation", "investigation" => i, "overview" => "Some email about investigation", "created_at" => 1.day.ago)
 
