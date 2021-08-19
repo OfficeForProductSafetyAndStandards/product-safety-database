@@ -245,8 +245,14 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_elasticsearch, :with_stubbed_
             end
           end
 
-          context "when recall information is provided" do
+          context "when recall information is not a valid URL" do
             let(:online_recall_information) { Faker::Hipster.sentence }
+
+            it { is_expected.not_to be_valid }
+          end
+
+          context "when recall information is a valid URL" do
+            let(:online_recall_information) { "https://www.gov.uk" }
 
             it { is_expected.to be_valid }
           end

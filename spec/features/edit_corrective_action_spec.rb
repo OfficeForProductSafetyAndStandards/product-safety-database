@@ -189,5 +189,22 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
         expect(page).to have_field("Attachment description", with: "\r\nBrand new attachment description")
       end
     end
+
+    context "when a user submits something other than a valid url for online recall information" do
+      it "raises an error" do
+        visit "/cases/#{investigation.pretty_id}/corrective-actions/#{corrective_action.id}"
+
+        click_link "Edit corrective action"
+
+        within_fieldset "Has the business responsible published product recall information online?" do
+          choose "Yes"
+          fill_in "Online recall information", with: "blah blah blah", visible: false
+        end
+
+        expect(page).to have_error_messages
+        errors_list = page.find(".govuk-error-summary__list").all("li")
+        expect(errors_list[0].text).to eq "Select type of corrective action"
+      end
+    end
   end
 end

@@ -109,9 +109,19 @@ private
     end
   end
 
+  def valid_url?
+    uri = URI.parse(online_recall_information)
+    uri.is_a?(URI::HTTP) && !uri.host.nil?
+  rescue URI::InvalidURIError
+    false
+  end
+
   def online_recall_information_validation
     if has_online_recall_information_yes? && online_recall_information.blank?
       errors.add(:online_recall_information, :blank)
+    end
+    if has_online_recall_information_yes? && !online_recall_information.blank? && !valid_url?
+      errors.add(:online_recall_information, :invalid)
     end
   end
 

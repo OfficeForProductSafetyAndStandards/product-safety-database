@@ -56,6 +56,16 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(errors_list[6].text).to eq "Select the geographic scope of the action"
     expect(errors_list[7].text).to eq "Select whether you want to upload a related file"
 
+    within_fieldset "Has the business responsible published product recall information online?" do
+      choose "Yes"
+      fill_in "Online recall information", with: "not a url", visible: false
+    end
+
+    click_button "Continue"
+    expect(page).to have_error_messages
+    errors_list = page.find(".govuk-error-summary__list").all("li")
+    expect(errors_list[3].text).to eq "Enter a valid URL staring with `http://` or `https://`. For example `https://www.gov.uk`"
+
     # Test file attachments are retained on validation errors
     within_fieldset "Are there any files related to the action?" do
       choose "Yes"
