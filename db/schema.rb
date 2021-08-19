@@ -10,13 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_141941) do
+ActiveRecord::Schema.define(version: 2021_07_28_005316) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "citext"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
 
   # These are custom enum types that must be created before they can be used in the schema definition
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
@@ -90,6 +88,11 @@ ActiveRecord::Schema.define(version: 2021_07_12_141941) do
     t.string "legal_name"
     t.string "trading_name", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "case_exports", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "collaborations", force: :cascade do |t|

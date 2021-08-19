@@ -18,6 +18,7 @@ class AccidentOrIncidentForm
             real_date: true,
             complete_date: true,
             not_in_future: true,
+            recent_date: { on_or_before: false },
             if: -> { is_date_known }
   validates :usage, inclusion: { in: UnexpectedEvent.usages.values, message: I18n.t(".accident_or_incident_form.usage.inclusion") }
   validates :severity_other, presence: true, if: -> { severity == "other" }

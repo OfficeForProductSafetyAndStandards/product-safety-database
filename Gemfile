@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.96"
+gem "aws-sdk-s3", "~> 1.98"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -23,7 +23,7 @@ gem "lograge", "~> 0.11"
 gem "mini_magick", "~> 4.11"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.8"
-gem "puma", "~> 5.3"
+gem "puma", "~> 5.4"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2"
 gem "rails", "~> 6.1.4"
@@ -46,7 +46,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.3"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.2", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.5", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -63,7 +63,7 @@ end
 group :development do
   gem "listen", "~> 3.6"
   gem "m", "~> 1.5"
-  gem "solargraph", "~> 0.42"
+  gem "solargraph", "~> 0.43"
   gem "spring", "~> 2.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
@@ -89,7 +89,7 @@ group :test do
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
-  gem "slim_lint", "~> 0.21"
+  gem "slim_lint", "~> 0.22"
   gem "super_diff"
   gem "webmock", "~> 3.13"
 end
