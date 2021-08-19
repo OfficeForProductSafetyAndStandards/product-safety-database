@@ -61,7 +61,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.6"
+  gem "listen", "~> 3.7"
   gem "m", "~> 1.5"
   gem "solargraph", "~> 0.43"
   gem "spring", "~> 2.1"
