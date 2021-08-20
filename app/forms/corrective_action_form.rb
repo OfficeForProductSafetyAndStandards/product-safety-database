@@ -120,7 +120,7 @@ private
     if has_online_recall_information_yes? && online_recall_information.blank?
       errors.add(:online_recall_information, :blank)
     end
-    if has_online_recall_information_yes? && !online_recall_information.blank? && !valid_url?
+    if has_online_recall_information_yes? && online_recall_information.present? && !valid_url?
       errors.add(:online_recall_information, :invalid)
     end
   end
