@@ -64,7 +64,7 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     click_button "Continue"
     expect(page).to have_error_messages
     errors_list = page.find(".govuk-error-summary__list").all("li")
-    expect(errors_list[3].text).to eq "Enter a valid URL staring with `http://` or `https://`. For example `https://www.gov.uk`"
+    expect(errors_list[3].text).to eq "Enter a valid URL starting with `http://` or `https://`. For example `https://www.gov.uk`"
 
     # Test file attachments are retained on validation errors
     within_fieldset "Are there any files related to the action?" do

@@ -205,7 +205,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
 
         expect(page).to have_error_messages
         errors_list = page.find(".govuk-error-summary__list").all("li")
-        expect(errors_list[0].text).to eq "Enter a valid URL staring with `http://` or `https://`. For example `https://www.gov.uk`"
+        expect(errors_list[0].text).to eq "Enter a valid URL starting with `http://` or `https://`. For example `https://www.gov.uk`"
       end
     end
   end
