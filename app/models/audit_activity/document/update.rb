@@ -1,38 +1,87 @@
 class AuditActivity::Document::Update < AuditActivity::Document::Base
-  def self.from(document, investigation, previous_data)
-    return if no_change?(document, previous_data)
+  has_one_attached :attachment
 
-    if title_changed?(document, previous_data)
-      title = "Updated: #{document.metadata[:title] || 'Untitled document'} (was: #{previous_data[:title] || 'Untitled document'})"
-    elsif description_changed?(document, previous_data)
-      title = "Updated: Description for #{document.metadata[:title]}"
+  def self.build_metadata(blob)
+    {
+      blob_id: blob.id,
+      updates: blob.previous_changes.slice(:metadata)
+    }
+  end
+
+  def metadata
+    migrate_metadata_structure
+  end
+
+  def title(_user)
+    if title_changed?
+      "Updated: #{new_title || 'Untitled document'} (was: #{old_title || 'Untitled document'})"
+    elsif description_changed?
+      "Updated: Description for #{new_title}"
     end
-    super(document, investigation, title)
   end
 
-  def self.no_change?(document, previous_data)
-    document.metadata[:title] == previous_data[:title] && document.metadata[:description] == previous_data[:description]
-  end
-
-  def self.title_changed?(document, previous_data)
-    document.metadata[:title] != previous_data[:title]
-  end
-
-  def self.description_changed?(document, previous_data)
-    document.metadata[:description] != previous_data[:description]
+  def new_description
+    metadata["updates"]["metadata"].last["description"]
   end
 
   def restricted_title(_user)
     "Document updated"
   end
 
-  def email_update_text(viewer = nil)
-    "Document attached to the #{investigation.case_type.upcase_first} was updated by #{source&.show(viewer)}."
-  end
-
 private
+
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    return metadata if metadata
+
+    title_matches = self[:title].match(/\AUpdated: (.*) \(was: (.*)\)\z/)
+    new_title = title_matches&.captures&.first
+    old_title = title_matches&.captures&.last
+
+    # We can't reconstruct the old description for comparison so we will need to compare the new description with nil
+    description_changed = self[:title].start_with?("Updated: Description for")
+
+    new_metadata = {
+      blob_id: attachment.blob.id,
+      updates: {
+        metadata: [
+          {
+            title: old_title,
+            description: nil
+          },
+          {
+            title: new_title,
+            description: (description_changed ? self[:body] : nil)
+          }
+        ]
+      }
+    }
+
+    JSON.parse(new_metadata.to_json)
+  end
 
   def subtitle_slug
     "#{attachment_type} details updated"
+  end
+
+  def title_changed?
+    old_title != new_title
+  end
+
+  def description_changed?
+    old_description != new_description
+  end
+
+  def old_title
+    metadata["updates"]["metadata"].first["title"]
+  end
+
+  def new_title
+    metadata["updates"]["metadata"].last["title"]
+  end
+
+  def old_description
+    metadata["updates"]["metadata"].first["description"]
   end
 end

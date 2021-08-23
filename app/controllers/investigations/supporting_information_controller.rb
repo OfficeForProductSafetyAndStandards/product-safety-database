@@ -40,7 +40,7 @@ module Investigations
       when "correspondence"
         redirect_to new_investigation_correspondence_path(@investigation)
       when "image", "generic_information"
-        redirect_to new_investigation_new_path(@investigation)
+        redirect_to new_investigation_document_path(@investigation)
       when "testing_result"
         redirect_to new_investigation_test_result_path(@investigation)
       when "risk_assessment"

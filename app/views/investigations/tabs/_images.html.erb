@@ -8,7 +8,7 @@
 
     <% if policy(@investigation).update?(user: current_user) %>
       <p class="govuk-body">
-        <%= link_to "Add image", new_investigation_new_path(@investigation) %>
+        <%= link_to "Add image", new_investigation_document_path(@investigation) %>
       </p>
     <% end %>
 
