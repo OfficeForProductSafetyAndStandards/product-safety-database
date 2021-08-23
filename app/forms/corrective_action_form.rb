@@ -111,7 +111,6 @@ private
 
   def valid_url?
     uri = URI.parse(online_recall_information)
-    uri.is_a?(URI::HTTP) && !uri.host.nil?
   rescue URI::InvalidURIError
     false
   end
