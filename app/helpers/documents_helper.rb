@@ -5,22 +5,6 @@ module DocumentsHelper
     render "documents/placeholder", document: document
   end
 
-  def set_parent
-    @parent = Investigation.find_by!(pretty_id: params[:investigation_pretty_id]) if params[:investigation_pretty_id]
-    @parent ||= Investigation.find_by!(pretty_id: params[:allegation_id]) if params[:allegation_id]
-    @parent ||= Investigation.find_by!(pretty_id: params[:project_id]) if params[:project_id]
-    @parent ||= Investigation.find_by!(pretty_id: params[:inquiry]) if params[:inquiry]
-    if params[:product_id]
-      @parent ||= Product.find(params[:product_id])
-      @product_form = ProductForm.from(@parent)
-    end
-    @parent ||= Business.find(params[:business_id]) if params[:business_id]
-  end
-
-  def file_collection
-    @parent.documents
-  end
-
   def document_file_extension(document)
     File.extname(document.filename.to_s)&.remove(".")&.upcase
   end
