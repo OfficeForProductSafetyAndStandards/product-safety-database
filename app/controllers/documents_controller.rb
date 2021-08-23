@@ -1,72 +1,125 @@
 class DocumentsController < ApplicationController
-  include FileConcern
-  set_attachment_names :file
-  set_file_params_key :document
-
   include DocumentsHelper
 
-  before_action :set_parent
-  before_action :authorize_if_attached_to_investigation
-  before_action :set_file, only: %i[edit update remove destroy]
+  def new
+    @parent = get_parent
+    authorize_if_attached_to_investigation
+
+    @document_form = DocumentForm.new
+
+    @parent = @parent.decorate
+  end
+
+  def create
+    @parent = get_parent
+    authorize_if_attached_to_investigation
+
+    @document_form = DocumentForm.new(document_params)
+    @document_form.cache_file!(current_user)
+
+    unless @document_form.valid?
+      @parent = @parent.decorate
+      return render :new
+    end
+
+    AddDocument.call!(@document_form.attributes.except("existing_document_file_id").merge({
+      parent: @parent,
+      user: current_user,
+    }))
+
+    flash[:success] = t(:file_added, type: @parent.model_name.human.downcase)
+
+    return redirect_to(@parent) unless @parent.is_a?(Investigation)
+    return redirect_to investigation_images_path(@parent) if @document_form.document.image?
+
+    redirect_to investigation_supporting_information_index_path(@parent)
+  end
 
   # GET /documents/1/edit
-  def edit; end
+  def edit
+    @parent = get_parent
+    authorize_if_attached_to_investigation
+
+    @file = @parent.documents.find(params[:id])
+
+    @document_form = DocumentForm.from(@file)
+
+    @parent = @parent.decorate
+  end
 
   # PATCH/PUT /documents/1
   def update
-    previous_data = {
-      title: @file.metadata[:title],
-      description: @file.metadata[:description]
-    }
-    update_blob_metadata(@file.blob, get_attachment_metadata_params(:file))
+    @parent = get_parent
+    authorize_if_attached_to_investigation
 
-    return render :edit unless file_valid?
+    @file = @parent.documents.find(params[:id])
 
-    @file.blob.save!
-    return redirect_to @parent unless @parent.is_a? Investigation
+    @document_form = DocumentForm.from(@file)
+    @document_form.assign_attributes(document_params)
 
-    AuditActivity::Document::Update.from(@file.blob, @parent, previous_data)
-    if @file.blob.image?
-      redirect_to investigation_images_path(@parent)
-    else
-      redirect_to investigation_supporting_information_index_path(@parent)
+    unless @document_form.valid?
+      @parent = @parent.decorate
+      return render :edit
     end
+
+    UpdateDocument.call!(@document_form.attributes.slice("title", "description").merge({
+      parent: @parent,
+      file: @file.blob,
+      user: current_user,
+    }))
+
+    flash[:success] = t(:file_updated)
+
+    return redirect_to(@parent) unless @parent.is_a?(Investigation)
+    return redirect_to investigation_images_path(@parent) if @document_form.document.image?
+
+    redirect_to investigation_supporting_information_index_path(@parent)
   end
 
-  def remove; end
+  def remove
+    @parent = get_parent
+    authorize_if_attached_to_investigation
+
+    @file = @parent.documents.find(params[:id])
+  end
 
   # DELETE /documents/1
   def destroy
-    ActiveRecord::Base.transaction do
-      AuditActivity::Document::Destroy.from(@file.blob, @parent) if @parent.is_a? Investigation
-      @file.destroy!
-    end
+    @parent = get_parent
+    authorize_if_attached_to_investigation
 
-    return redirect_to @parent, flash: { success: "File was successfully removed" } unless @parent.is_a? Investigation
+    @file = @parent.documents.find(params[:id])
 
-    redirection_path = @file.image? ? investigation_images_path(@parent) : investigation_supporting_information_index_path(@parent)
-    redirect_to redirection_path, flash: { success: "File was successfully removed" }
+    DeleteDocument.call!(
+      document: @file,
+      parent: @parent,
+      user: current_user
+    )
+
+    flash[:success] = t(:file_removed)
+
+    return redirect_to(@parent) unless @parent.is_a?(Investigation)
+    return redirect_to investigation_images_path(@parent) if @file.image?
+
+    redirect_to investigation_supporting_information_index_path(@parent)
   end
 
 private
 
+  def document_params
+    params.require(:document).permit(:existing_document_file_id, :document, :title, :description)
+  end
+
+  def get_parent
+    if (pretty_id = params[:investigation_pretty_id] || params[:allegation_id] || params[:project_id] || params[:enquiry_id])
+      return Investigation.find_by!(pretty_id: pretty_id)
+    end
+
+    return Product.find(params[:product_id]) if params[:product_id]
+    return Business.find(params[:business_id]) if params[:business_id]
+  end
+
   def authorize_if_attached_to_investigation
     authorize @parent, :update? if @parent.is_a? Investigation
-  end
-
-  def set_file
-    @errors = ActiveModel::Errors.new(ActiveStorage::Blob.new)
-    @file = file_collection.find(params[:id]) if params[:id].present?
-  end
-
-  def file_valid?
-    if @file.blank? || @file.blob.blank?
-      @errors.add(:base, :file_not_implemented, message: "File cannot be blank")
-    end
-    if @file.metadata[:title].blank?
-      @errors.add(:base, :title_not_implemented, message: "Title cannot be blank")
-    end
-    validate_blob_size(@file, @errors, "file")
-    @errors.empty?
   end
 end

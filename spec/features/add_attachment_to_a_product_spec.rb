@@ -16,23 +16,13 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_elasticsearch, :wi
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
 
     click_link "Add image"
-    expect_to_be_on_add_attachment_to_a_product_upload_page(product_id: product.id)
-
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_product_upload_page(product_id: product.id)
-    expect(page).to have_error_summary("Enter file")
-
-    attach_file "document[file][file]", image
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_product_metadata_page(product_id: product.id)
+    expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
 
     click_button "Save attachment"
 
-    expect_to_be_on_add_attachment_to_a_product_metadata_page(product_id: product.id)
-    expect(page).to have_error_summary("Enter title")
+    expect(page).to have_error_summary("Select a file", "Enter a document title")
 
+    attach_file "document[document]", image
     fill_in "Document title", with: title
     fill_in "Description",    with: description
 
@@ -54,23 +44,13 @@ RSpec.feature "Add an attachment to a product", :with_stubbed_elasticsearch, :wi
     expect_to_be_on_product_page(product_id: product.id, product_name: product.name)
 
     click_link "Add attachment"
-    expect_to_be_on_add_attachment_to_a_product_upload_page(product_id: product.id)
-
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_product_upload_page(product_id: product.id)
-    expect(page).to have_error_summary("Enter file")
-
-    attach_file "document[file][file]", non_image_attachment
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_product_metadata_page(product_id: product.id)
+    expect_to_be_on_add_attachment_to_a_product_page(product_id: product.id)
 
     click_button "Save attachment"
 
-    expect_to_be_on_add_attachment_to_a_product_metadata_page(product_id: product.id)
-    expect(page).to have_error_summary("Enter title")
+    expect(page).to have_error_summary("Select a file", "Enter a document title")
 
+    attach_file "document[document]", non_image_attachment
     fill_in "Document title", with: title
     fill_in "Description",    with: description
 
