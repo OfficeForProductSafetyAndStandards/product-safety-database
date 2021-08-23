@@ -38,7 +38,7 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
     }.to_sentence
   end
 
-  private
+private
 
   def format_online_recall_url
     online_recall_information = metadata.dig("corrective_action", "online_recall_information")
