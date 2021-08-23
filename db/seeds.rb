@@ -56,27 +56,59 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "",
     country_of_origin: "country:CN",
     description: "Plastic doll (5 different models) with long blonde hair.",
     product_code: "NO.DY807",
-    name: "Pretty",
+    name: "Pretty plastic doll 7000",
     category: "Toys",
     subcategory: "Plastic doll",
     webpage: "",
     has_markings: "markings_unknown"
+  }
+
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  investigation.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
+
+  accident_params = {
+    type: "Accident",
+    date: Time.zone.today,
+    product_id: investigation.products.first.id,
+    severity: "serious",
+    usage: "during_normal_use",
+    is_date_known: true
+  }
+
+  incident_params = {
+    type: "Incident",
+    product_id: investigation.products.first.id,
+    severity: "other",
+    severity_other: "maximum severity",
+    usage: "unknown_usage",
+    is_date_known: false
+  }
+
+  AddAccidentOrIncidentToCase.call!(accident_params.merge(investigation: investigation, user: user))
+  AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation: investigation, user: user))
+
+  AddTestResultToInvestigation.call!(
+    date: 15.days.ago,
+    details: "Test results",
+    legislation: "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
+    product_id: investigation.products.first.id,
+    result: "failed",
+    created_at: 3.days.ago,
+    document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
+    investigation: investigation,
+    user: investigation.owner_user
   )
 
-  product.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
-
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
-
   # Second investigation
-  investigation = Investigation::Allegation.new(
+  investigation = Investigation::Project.new(
     description: "The putty contains a magnet which is a small part and has a high magnetic flux.\nIf a child swallows the small magnet and other metallic objects, they could attract one another causing intestinal blockage or perforation.",
     is_closed: false,
-    user_title: nil,
+    user_title: "Project investigating putty",
     hazard_type: "Other",
     product_category: "Toys",
     is_private: false,
@@ -105,7 +137,7 @@ if run_seeds
   investigation.documents.attach(blob)
   AuditActivity::Document::Add.from(blob, investigation)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "Unknown",
     country_of_origin: "country:CN",
     description: "Purple magnetic putty with small plastic accessories (eyes and a nose).",
@@ -115,15 +147,25 @@ if run_seeds
     subcategory: "Putty",
     webpage: "www.amazon.com",
     has_markings: "markings_no"
-  )
+  }
 
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+
+  risk_assessment_params = {
+    assessed_on: Time.zone.today,
+    risk_level: "serious",
+    product_ids: [investigation.products.first.id]
+  }
+
+  AddRiskAssessmentToCase.call!(risk_assessment_params.merge(investigation: investigation, user: user, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
+
+  RiskAssessment.first.risk_assessment_file.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
 
   # Third investigation
-  investigation = Investigation::Allegation.new(
+  investigation = Investigation::Enquiry.new(
     description: "The top cap of the fork may not be adequately torqued and could work itself free while the bicycle is being ridden.\n\nThis could cause the air cartridge to spring out of the tube and cause injuries.",
     is_closed: false,
-    user_title: nil,
+    user_title: "Bicycle top cap fork",
     hazard_type: "Cuts",
     product_category: "Other Product sub-category",
     is_private: false,
@@ -142,7 +184,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "Unknown",
     country_of_origin: "territory:TW",
     description: "",
@@ -153,13 +195,13 @@ if run_seeds
     webpage: "https://www.mbr.co.uk/news/product-recall-ohlins-rxf-36-rxf-34-379791",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
+  }
 
-  product.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
 
-  product.documents.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
+  investigation.products.first.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
 
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
+  investigation.products.first.documents.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
 
   # Fourth investigation
   investigation = Investigation::Allegation.new(
@@ -184,7 +226,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "Batch 105R sold between February and May 2018",
     country_of_origin: "territory:TW",
     description: "",
@@ -195,11 +237,11 @@ if run_seeds
     webpage: "https://www.zoggs.com/blog/product-recall-zoggs-fogbuster-and-lens-cleaner/",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
+  }
 
-  product.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
 
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
+  investigation.products.first.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
 
   # Fifth investigation
   investigation = Investigation::Allegation.new(
@@ -226,7 +268,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "",
     country_of_origin: "",
     description: "White Christmas tree shaped candle, 4 inches high, unstable base.",
@@ -237,11 +279,11 @@ if run_seeds
     webpage: "https://www2.hm.com/en_gb/index.html",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
+  }
 
-  product.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
 
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
+  investigation.products.first.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
 
   # Sixth investigation
   investigation = Investigation::Allegation.new(
@@ -266,7 +308,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "",
     country_of_origin: "country:CN",
     description: "",
@@ -277,12 +319,12 @@ if run_seeds
     webpage: "",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
+  }
 
-  product.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
-  product.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
 
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
+  investigation.products.first.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
+  investigation.products.first.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
 
   business = Business.new(
     trading_name: "ABC toys",
@@ -337,7 +379,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "8710447348123 (LynxThe Golden Year); 8710522349168 (Lynx Black)",
     country_of_origin: "country:CN",
     description: "",
@@ -348,14 +390,16 @@ if run_seeds
     webpage: "",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
+  }
+
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+
+  product = investigation.products.first
 
   product.documents.attach(create_blob("2019-w6_27526-1f.jpg", title: "Lynx packaging"))
   product.documents.attach(create_blob("2019-w6_27526-2f.jpg", title: "Lynx packaging"))
   product.documents.attach(create_blob("2019-w6_27526-3f.jpg", title: "Lynx instructions"))
   product.documents.attach(create_blob("2019-w6_27526-4f.jpg", title: "images of product"))
-
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   # Eighth investigation
   investigation = Investigation::Allegation.new(
@@ -380,7 +424,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "X00076P3WF",
     country_of_origin: "country:CN",
     description: "",
@@ -391,13 +435,15 @@ if run_seeds
     webpage: "",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
+  }
+
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+
+  product = investigation.products.first
 
   product.documents.attach(create_blob("2019-w3_27167-3f.jpg", title: "packaging and product"))
   product.documents.attach(create_blob("2019-w3_27167-1f.jpg", title: "label"))
   product.documents.attach(create_blob("2019-w3_27167-2f.jpg", title: "stickers and serial"))
-
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
 
   AddTestResultToInvestigation.call!(
     investigation: investigation,
@@ -434,7 +480,7 @@ if run_seeds
 
   CreateCase.call!(investigation: investigation, user: user)
 
-  product = Product.create!(
+  product_params = {
     batch_number: "3105 & 1109",
     country_of_origin: "country:ES",
     description: "",
@@ -445,10 +491,65 @@ if run_seeds
     webpage: "",
     has_markings: "markings_yes",
     markings: [Product::MARKINGS.sample]
-  )
-  product.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
+  }
 
-  AddProductToCase.call!(product: product, investigation: investigation, user: user)
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+
+  investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
+
+  investigation = Investigation::Allegation.new(
+    description: "The desk has been observed as being poorly constructed and can collapse upon the user.",
+    is_closed: false,
+    user_title: nil,
+    hazard_type: "Injuries",
+    product_category: "Furniture",
+    is_private: true,
+    hazard_description: nil,
+    non_compliant_reason: nil,
+    complainant_reference: nil
+  )
+
+  investigation.complainant = Complainant.new(
+    name: "John O'Standards",
+    phone_number: "02092344431",
+    email_address: "tradingstandards@ts.msa",
+    complainant_type: "Local authority (Trading Standards)",
+    other_details: ""
+  )
+
+  CreateCase.call!(investigation: investigation, user: user)
+
+  product_params = {
+    batch_number: "11",
+    country_of_origin: "country:ES",
+    description: "",
+    product_code: "",
+    name: "Spanish desk set",
+    category: "Furniture",
+    subcategory: "Office desk",
+    webpage: "",
+    has_markings: "markings_yes",
+    markings: [Product::MARKINGS.sample]
+  }
+
+  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+
+  investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
+
+  investigation = Investigation::Allegation.new(
+    description: "The vacuum has potential issues which may result in the item setting on fire.",
+    is_closed: false,
+    user_title: nil,
+    hazard_type: "Fire",
+    product_category: "Other Product sub-category",
+    is_private: false,
+    hazard_description: "Fire from vacuum",
+    reported_reason: "unsafe",
+    non_compliant_reason: nil,
+    complainant_reference: nil
+  )
+
+  CreateCase.call!(investigation: investigation, user: user)
 
   if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:
@@ -520,46 +621,59 @@ if run_seeds
     Team.create!(name: "OPSS Incident Management",  team_recipient_email: nil, "organisation": organisation, country: "country:GB")
     Team.create!(name: "OPSS Testing", team_recipient_email: nil, "organisation": organisation, country: "country:GB")
 
-    User.create!(
-      name: "Test User",
-      email: "user@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: organisation,
-      mobile_number_verified: true,
-      team: enforcement,
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
+    unless User.find_by(email: "user@example.com")
+      User.create!(
+        name: "Test User",
+        email: "user@example.com",
+        password: "testpassword",
+        password_confirmation: "testpassword",
+        organisation: organisation,
+        mobile_number_verified: true,
+        team: enforcement,
+        mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+      )
+    end
 
-    user2 = User.create!(
-      name: "Team Admin",
-      email: "admin@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: organisation,
-      mobile_number_verified: true,
-      team: operational_support,
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
-    user2.roles.create!(name: "team_admin")
+    unless User.find_by(email: "admin@example.com")
+      user2 = User.create!(
+        name: "Team Admin",
+        email: "admin@example.com",
+        password: "testpassword",
+        password_confirmation: "testpassword",
+        organisation: organisation,
+        mobile_number_verified: true,
+        team: operational_support,
+        mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+      )
+      user2.roles.create!(name: "team_admin")
+    end
 
-    User.create!(
-      name: "TS User",
-      email: "ts_user@example.com",
-      password: "testpassword",
-      password_confirmation: "testpassword",
-      organisation: trading_standards,
-      mobile_number_verified: true,
-      team: ts_team,
-      mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
-    )
+    unless User.find_by(email: "ts_user@example.com")
+      User.create!(
+        name: "TS User",
+        email: "ts_user@example.com",
+        password: "testpassword",
+        password_confirmation: "testpassword",
+        organisation: trading_standards,
+        mobile_number_verified: true,
+        team: ts_team,
+        mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+      )
+    end
 
     organisation = Organisation.create!(name: "Southampton Council")
     Team.create!(name: "Southampton Council", team_recipient_email: nil, "organisation": organisation, country: "country:GB-ENG")
   end
   Investigation.all.each do |i|
+    operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
+    southampton_council = Team.find_by(name: "Southampton Council")
+    Collaboration::Access::Edit.create!(investigation: i, collaborator: operational_support_unit, added_by_user: User.first)
+    Collaboration::Access::Edit.create!(investigation: i, collaborator: southampton_council, added_by_user: User.first)
+
     product = i.products.first
     Correspondence::Email.create!("correspondence_date" => 20.days.ago, "correspondent_name" => "John Doe", "details" => "Body", "email_address" => "john@doe.com", "email_direction" => "outbound", "email_subject" => "Subject about investigation", "investigation" => i, "overview" => "Some email about investigation", "created_at" => 1.day.ago)
+
+    next unless product
 
     CorrectiveAction.create!(
       date_decided: rand(1..30).days.ago,
@@ -574,20 +688,12 @@ if run_seeds
       other_action: "First corrective action",
       created_at: 2.days.ago
     )
+  end
 
-    investigation = Investigation.order("RANDOM()").first
-    AddTestResultToInvestigation.call!(
-      "date" => 15.days.ago,
-      "details" => "Test results",
-      "investigation" => i,
-      "legislation" => "Aerosol Dispensers Regulations 2009 (Consumer Protection Act 1987)",
-      "product_id" => product.id,
-      "result" => "failed",
-      "created_at" => 3.days.ago,
-      document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
-      investigation: investigation,
-      user: investigation.owner_user
-    )
+  operational_support_unit = Team.find_by(name: "OPSS Operational support unit")
+  User.where(team_id: operational_support_unit.id).each do |u|
+    u.roles.create!(name: "psd_admin")
+    u.roles.create!(name: "risk_level_validator")
   end
 
   Investigation.__elasticsearch__.create_index! force: true

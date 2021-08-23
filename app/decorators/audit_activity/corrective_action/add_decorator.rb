@@ -1,7 +1,7 @@
 class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveAction::BaseDecorator
   def online_recall_information
     h.online_recall_information_text_for(
-      format_online_recall_url,
+      metadata.dig("corrective_action", "online_recall_information"),
       has_online_recall_information: metadata.dig("corrective_action", "has_online_recall_information")
     )
   end
@@ -36,14 +36,5 @@ class AuditActivity::CorrectiveAction::AddDecorator < AuditActivity::CorrectiveA
     scopes.map { |geographic_scope|
       I18n.t(geographic_scope, scope: %i[corrective_action attributes geographic_scopes])
     }.to_sentence
-  end
-
-private
-
-  def format_online_recall_url
-    online_recall_information = metadata.dig("corrective_action", "online_recall_information")
-    return if online_recall_information.blank?
-
-    URI.parse(online_recall_information).scheme.present? ? online_recall_information : "http://#{online_recall_information}"
   end
 end
