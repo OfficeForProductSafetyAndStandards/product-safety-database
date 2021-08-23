@@ -18,23 +18,13 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_elasticsearch, :with_
     choose "Other document or attachment"
     click_button "Continue"
 
-    expect_to_be_on_add_attachment_to_a_case_upload_page
-
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_case_upload_page
-    expect(page).to have_error_summary("Enter file")
-
-    attach_file "document[file][file]", other_file
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_case_metadata_page
+    expect_to_be_on_add_attachment_to_a_case_page
 
     click_button "Save attachment"
 
-    expect_to_be_on_add_attachment_to_a_case_metadata_page
-    expect(page).to have_error_summary("Enter title")
+    expect(page).to have_error_summary("Select a file", "Enter a document title")
 
+    attach_file "document[document]", other_file
     fill_in "Document title", with: title
     fill_in "Description",    with: description
 
@@ -58,13 +48,9 @@ RSpec.feature "Add an attachment to a case", :with_stubbed_elasticsearch, :with_
     choose "Other document or attachment"
     click_button "Continue"
 
-    expect_to_be_on_add_attachment_to_a_case_upload_page
+    expect_to_be_on_add_attachment_to_a_case_page
 
-    attach_file "document[file][file]", image_file
-    click_button "Upload"
-
-    expect_to_be_on_add_attachment_to_a_case_metadata_page
-
+    attach_file "document[document]", image_file
     fill_in "Document title", with: title
     fill_in "Description",    with: description
 

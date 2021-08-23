@@ -19,8 +19,7 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
   end
 
   def new_online_recall_information
-    online_recall_information = format_online_recall_url
-    if online_recall_information.present?
+    if (online_recall_information = metadata.dig("updates", "online_recall_information", 1)).present?
       return h.link_to "#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank"
     end
 
@@ -82,20 +81,9 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     Business.find(metadata.dig("updates", "business_id", 1))
   end
 
-  def attachment
-    @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
-  end
-
 private
 
   def new_other_action
     metadata.dig("updates", "other_action", 1)
-  end
-
-  def format_online_recall_url
-    online_recall_information = metadata.dig("updates", "online_recall_information", 1)
-    return if online_recall_information.blank?
-
-    URI.parse(online_recall_information).scheme.present? ? online_recall_information : "http://#{online_recall_information}"
   end
 end
