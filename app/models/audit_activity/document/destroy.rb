@@ -1,18 +1,31 @@
 class AuditActivity::Document::Destroy < AuditActivity::Document::Base
-  def self.from(document, investigation)
-    title = "Deleted: #{document.metadata[:title]}"
-    super(document, investigation, title)
+  has_one_attached :attachment
+
+  def self.build_metadata(blob)
+    blob.metadata.merge(blob_id: blob.id)
+  end
+
+  def metadata
+    migrate_metadata_structure
+  end
+
+  def title(_user)
+    "Deleted: #{metadata['title']}"
   end
 
   def restricted_title(_user)
     "Document deleted"
   end
 
-  def email_update_text(viewer = nil)
-    "Document attached to the #{investigation.case_type.upcase_first} was removed by #{source&.show(viewer)}."
-  end
-
 private
+
+  def migrate_metadata_structure
+    metadata = self[:metadata]
+
+    return metadata if metadata
+
+    JSON.parse(self.class.build_metadata(attachment.blob).to_json)
+  end
 
   def subtitle_slug
     "#{attachment_type} deleted"

@@ -41,6 +41,10 @@ module ActivityAttachable
         .to_h
   end
 
+  def attached_image?
+    attachment_names.keys.any? { |name| send(name).image? }
+  end
+
   def attach_blob(file_blob, attachment_key = attachment_names.keys.first)
     raise "You have not passed a blob to attach_blob in ActivityAttachable" unless file_blob.is_a? ActiveStorage::Blob
     return unless attachment_key.present? && file_blob.present?

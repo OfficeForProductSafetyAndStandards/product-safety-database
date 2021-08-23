@@ -30,7 +30,7 @@
                class_name: "product-image app-document-preview--inherit" %>
     <% else %>
       <div class="app-document-preview__image-without-preview app-document-preview--add-image-prompt">
-        <p class="govuk-body"><%= link_to "Add an image of this product", new_document_flow_path(@product) %></p>
+        <p class="govuk-body"><%= link_to "Add an image of this product", new_product_document_path(@product) %></p>
       </div>
     <% end %>
   </div>
