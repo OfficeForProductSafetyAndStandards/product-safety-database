@@ -24,7 +24,7 @@ private
 
     return metadata if metadata
 
-    JSON.parse(self.class.build_metadata(attachment).to_json)
+    JSON.parse(self.class.build_metadata(attachment.blob).to_json)
   end
 
   def subtitle_slug

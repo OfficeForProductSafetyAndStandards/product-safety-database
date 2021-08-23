@@ -28,7 +28,7 @@ private
 
     return metadata if metadata
 
-    new_metadata = self.class.build_metadata(attachment)
+    new_metadata = self.class.build_metadata(attachment.blob)
     new_metadata["title"] = self[:title]
     new_metadata["description"] = self[:body]
 
