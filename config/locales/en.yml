@@ -516,6 +516,12 @@ en:
           attributes:
             type:
               blank: "Select the type of correspondence you’re adding"
+        document_form:
+          attributes:
+            document:
+              blank: "Select a file"
+            title:
+              blank: "Enter a document title"
         investigation_actions_form:
           attributes:
             action:
@@ -745,6 +751,8 @@ en:
     inclusion: "Select whether or not the case is related to the coronavirus outbreak"
   enter_email_address: "Enter your email address"
   file_added: "File has been added to the %{type}"
+  file_updated: "File has been updated"
+  file_removed: "File was successfully removed"
   otp_code:
     blank: "Enter the security code"
     too_short: "You haven’t entered enough numbers"
