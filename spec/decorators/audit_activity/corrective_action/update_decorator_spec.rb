@@ -62,8 +62,18 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
       let(:has_online_recall_information) { nil }
 
       context "when new recall information is set" do
-        specify do
-          expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
+        context "when new recall info is a valid url" do
+          it "displays a link" do
+            expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
+            expect(decorated_activity.new_online_recall_information).to match(/href/)
+          end
+        end
+
+        context "when new recall info is not a valid url" do
+          it "does not display a link" do
+            expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
+            expect(decorated_activity.new_online_recall_information).not_to match(/href/)
+          end
         end
       end
 
