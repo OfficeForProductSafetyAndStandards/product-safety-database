@@ -81,10 +81,6 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
     Business.find(metadata.dig("updates", "business_id", 1))
   end
 
-  def attachment
-    @attachment ||= (signed_id = metadata.dig("updates", "existing_document_file_id", 1)) && ActiveStorage::Blob.find_signed!(signed_id)
-  end
-
 private
 
   def new_other_action

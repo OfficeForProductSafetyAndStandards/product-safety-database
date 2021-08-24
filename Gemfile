@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.98"
+gem "aws-sdk-s3", "~> 1.99"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -73,7 +73,7 @@ group :test do
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.2"
-  gem "faker", "~> 2.18"
+  gem "faker", "~> 2.19"
   gem "launchy", "~> 2.5"
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.8"
@@ -91,5 +91,5 @@ group :test do
   gem "simplecov-lcov"
   gem "slim_lint", "~> 0.22"
   gem "super_diff"
-  gem "webmock", "~> 3.13"
+  gem "webmock", "~> 3.14"
 end
