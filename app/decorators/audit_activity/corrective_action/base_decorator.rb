@@ -8,10 +8,6 @@ class AuditActivity::CorrectiveAction::BaseDecorator < ActivityDecorator
 
   delegate :trading_name, to: :business
 
-  def attached_image?
-    attachment&.image?
-  end
-
   def document_filename
     attachment&.filename
   end
