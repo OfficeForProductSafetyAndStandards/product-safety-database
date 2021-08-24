@@ -50,8 +50,19 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
     end
 
     context "with online recall information" do
-      it "show the recall information" do
-        expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /#{expected_online_recall_information}/ })
+      context "when online recall information is not a url" do
+        it "does not link to the recall information" do
+          corrective_action.update!(online_recall_information: "something other than a url")
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: "#{expected_online_recall_information}" })
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).not_to include(key: { text: "Recall information" }, value: { html: /href/ })
+        end
+      end
+
+      context "when online_recall_information is a url" do
+        it "shows a link to the recall information" do
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /#{expected_online_recall_information}/ })
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /href/ })
+        end
       end
     end
 
