@@ -20,7 +20,8 @@ class AuditActivity::CorrectiveAction::UpdateDecorator < AuditActivity::Correcti
 
   def new_online_recall_information
     if (online_recall_information = metadata.dig("updates", "online_recall_information", 1)).present?
-      return h.link_to "#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank"
+      return h.link_to "#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank" if valid_url?(online_recall_information)
+      return online_recall_information
     end
 
     has_online_recall_information = metadata.dig("updates", "has_online_recall_information", 1)
@@ -85,5 +86,12 @@ private
 
   def new_other_action
     metadata.dig("updates", "other_action", 1)
+  end
+
+  def valid_url?(online_recall_information)
+    uri = URI.parse(online_recall_information)
+    uri.is_a?(URI::HTTP) && !uri.host.nil?
+  rescue URI::InvalidURIError
+    false
   end
 end
