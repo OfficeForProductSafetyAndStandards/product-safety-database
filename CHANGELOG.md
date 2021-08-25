@@ -108,7 +108,7 @@ All notable changes to this project will be documented in this file.
 - Fixed an error which was displayed when deleting an attachment from a product.
 
 ## 2019-08-05
-### Product safety database
+### Product Safety Database
 - Filter by case type
 - Filter by creator
 - New service navigation
@@ -119,20 +119,20 @@ All notable changes to this project will be documented in this file.
 - Case ID can now be searched by using an exact match (e.g 1907-001)
 
 ## 2019-04-23
-### Product safety database
+### Product Safety Database
 - Fixed a bug where the wrong user was attributed to entries in the activity log.
 - Improvements to the display of error messages across the service.
 - Various bug fixes.
 
 
 ## 2019-04-03
-### Product safety database
+### Product Safety Database
 - Update introduction, about page, terms and conditions and privacy notice.
 
 
 ## 2019-03-29
-### Product safety database
-- Rename the service to Product safety database.
+### Product Safety Database
+- Rename the service to Product Safety Database.
 - Add case alert functionality (to send RAPEX-style alerts).
 - Add introduction slides, about page, terms and conditions and privacy policy.
 - Add terms and conditions declaration prompt.
