@@ -54,7 +54,7 @@ RSpec.feature "Signing in", :with_elasticsearch, :with_stubbed_mailer, :with_stu
       click_link("Sign out")
     end
 
-    expect(page).to have_css("h1", text: "Product safety database")
+    expect(page).to have_css("h1", text: "Product Safety Database")
     expect(page).to have_link("Sign in to your account")
   end
 

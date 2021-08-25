@@ -591,9 +591,9 @@ DEPENDENCIES
   devise-encryptable (~> 0.2)
   dotenv-rails (~> 2.7)
   draper (~> 4.0)
-  elasticsearch (~> 7.13)
-  elasticsearch-model (~> 7.1)
-  elasticsearch-rails (~> 7.1)
+  elasticsearch (< 7.14)
+  elasticsearch-model (< 7.2)
+  elasticsearch-rails (< 7.2)
   factory_bot_rails (~> 6.2)
   faker (~> 2.19)
   govuk-design-system-rails!

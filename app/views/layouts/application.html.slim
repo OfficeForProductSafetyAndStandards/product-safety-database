@@ -6,7 +6,7 @@ html.govuk-template.app-html-class[lang="en"]
       = yield :page_title
       - if content_for?(:page_title)
         |  -
-      |  Product safety database - GOV.UK
+      |  Product Safety Database - GOV.UK
     meta[name="viewport" content="width=device-width, initial-scale=1"]
     meta[name="theme-color" content="blue"]
     link[rel="shortcut icon" type="image/x-icon" href=asset_pack_path("media/images/favicon.ico")]
@@ -48,7 +48,7 @@ html.govuk-template.app-html-class[lang="en"]
     = render "layouts/cookie_banner"
 
     = render "components/psd_header",
-            productName: "Product safety database",
+            productName: "Product Safety Database",
             phaseBanner: !@show_full_phase_banner && "beta",
             navigation: nav_items,
             secondary_navigation: secondary_nav_items,
@@ -78,7 +78,7 @@ html.govuk-template.app-html-class[lang="en"]
           .govuk-footer__meta-item.govuk-footer__meta-item--grow
             .opss-footer__body
               ' Email
-              = mail_to t(:enquiries_email), t(:enquiries_email), subject: "Help requested on the Product safety database", class: "govuk-footer__link"
+              = mail_to t(:enquiries_email), t(:enquiries_email), subject: "Help requested on the Product Safety Database", class: "govuk-footer__link"
               |  for help using this service.
             br
             ul.govuk-footer__inline-list

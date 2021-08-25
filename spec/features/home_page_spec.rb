@@ -92,7 +92,7 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
           expect(page).to have_current_path(introduction_overview_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
-          expect(page).to have_text("The Product safety database (PSD) has been developed with")
+          expect(page).to have_text("The Product Safety Database (PSD) has been developed with")
           expect(page).to have_link("Continue")
         end
       end
@@ -105,7 +105,7 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
             expect(page).to have_current_path(introduction_overview_path)
             expect_small_beta_phase_banner
             expect_header_to_have_signed_in_links
-            expect(page).to have_text("The Product safety database (PSD) has been developed with")
+            expect(page).to have_text("The Product Safety Database (PSD) has been developed with")
             expect(page).to have_link("Continue")
           end
         end
