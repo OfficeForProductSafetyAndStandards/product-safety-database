@@ -70,6 +70,8 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_e
         end
 
         context "when new recall info is not a valid url" do
+          let(:new_online_recall_information) { "not a URL" }
+
           it "does not display a link" do
             expect(decorated_activity.new_online_recall_information).to match(new_online_recall_information)
             expect(decorated_activity.new_online_recall_information).not_to match(/href/)
