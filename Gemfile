@@ -37,7 +37,6 @@ gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.2"
 gem "sidekiq-cron", "~> 1.2"
-gem "slim-rails", "~> 3.3"
 gem "sprockets", "4.0.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
@@ -89,7 +88,6 @@ group :test do
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
-  gem "slim_lint", "~> 0.22"
   gem "super_diff"
   gem "webmock", "~> 3.14"
 end
