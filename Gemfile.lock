@@ -638,6 +638,7 @@ DEPENDENCIES
   simplecov
   simplecov-console (~> 0.9)
   simplecov-lcov
+  slim-rails
   solargraph (~> 0.43)
   spring (~> 2.1)
   spring-commands-rspec (~> 1.0)
