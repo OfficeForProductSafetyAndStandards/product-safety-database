@@ -45,7 +45,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.3"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.5", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.7", require: "govuk_design_system"
 
 gem "bootsnap"
 
