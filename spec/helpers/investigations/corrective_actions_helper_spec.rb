@@ -64,7 +64,7 @@ RSpec.describe Investigations::CorrectiveActionsHelper, :with_stubbed_elasticsea
 
       context "when online_recall_information is a url" do
         it "displays online recall info" do
-          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: expected_online_recall_information.to_s })
+          expect(helper.corrective_action_summary_list_rows(corrective_action)).to include(key: { text: "Recall information" }, value: { html: /"#{expected_online_recall_information}"/ })
         end
 
         it "links to the recall information" do
