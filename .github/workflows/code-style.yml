@@ -34,9 +34,6 @@ jobs:
 
     - name: Run SCSS linter
       run: bundle exec  scss-lint .
-
-    - name: Run Slim Lint
-      run: bundle exec slim-lint app
   front_end:
     name: "Javascript"
     runs-on: ubuntu-latest
