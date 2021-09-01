@@ -177,7 +177,7 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
 
           visit edit_user_password_url_with_invalid_token
 
-          expect(page).to have_css("h1", text: "This link has expired")
+          expect(page).to have_css("h1", text: "Invalid link")
           expect(page).to have_link("sign in page", href: "/sign-in")
         end
       end
@@ -209,7 +209,6 @@ RSpec.feature "Resetting your password", :with_test_queue_adapter, :with_stubbed
       expect(page).to have_link("sign in page", href: "/sign-in")
     end
   end
-
 
   def request_password_reset
     user.update!(reset_password_token: reset_token)
