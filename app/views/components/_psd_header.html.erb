@@ -79,13 +79,7 @@
           <span class="psd-header__logotype-text">GOV.UK</span>
         </span>
 
-        <% if local_assigns[:productName] %>
-          <span class="psd-header__product-name"><%= local_assigns[:productName] %></span>
-        <% end %>
-
-        <% if local_assigns[:phaseBanner] %>
-          <span class="govuk-tag govuk-phase-banner__content__tag"><%= local_assigns[:phaseBanner] %></span>
-        <% end %>
+        <% if local_assigns[:productName] %><span class="psd-header__product-name"><%= local_assigns[:productName] %></span><% end %><% if local_assigns[:phaseBanner] %><span class="govuk-tag govuk-phase-banner__content__tag"><%= local_assigns[:phaseBanner] %></span><% end %>
       </a>
     </div>
 
