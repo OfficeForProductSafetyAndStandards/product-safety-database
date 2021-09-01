@@ -107,30 +107,30 @@
                 # rubocop:disable Rails/LinkToBlank
               %>
 
-              <li class="govuk-footer__inline-list-item">
-                <% html = capture do %>More information<span class="govuk-visually-hidden"> (opens in new tab)</span><% end %>
-                <%= link_to html,
-                            help_about_path,
-                            class: "govuk-footer__link govuk-!-margin-right-2",
-                            target: "_blank" %>
-              </li>
-              <li class="govuk-footer__inline-list-item">
-                <%= link_to "Accessibility", help_accessibility_path, class: "govuk-footer__link govuk-!-margin-right-2" %>
-              </li>
-              <li class="govuk-footer__inline-list-item">
-                <% html = capture do %>Privacy policy<span class="govuk-visually-hidden"> (opens in new tab)</span><% end %>
-                <%= link_to html,
-                            help_privacy_notice_path,
-                            class: "govuk-footer__link govuk-!-margin-right-2",
-                            target: "_blank" %>
-              </li>
-              <li class="govuk-footer__inline-list-item">
-                <% html = capture do %>Terms and conditions<span class="govuk-visually-hidden"> (opens in new tab)</span><% end %>
-                <%= link_to html,
-                            help_terms_and_conditions_path,
-                            class: "govuk-footer__link govuk-!-margin-right-2",
-                            target: "_blank" %>
-              </li>
+              <li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>More information<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_about_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
+              %></li><li class="govuk-footer__inline-list-item"><%=
+                link_to "Accessibility", help_accessibility_path, class: "govuk-footer__link govuk-!-margin-right-2"
+              %></li><li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>Privacy policy<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_privacy_notice_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
+              %></li><li class="govuk-footer__inline-list-item"><%
+                  html = capture do %>Terms and conditions<span class="govuk-visually-hidden"> (opens in new tab)</span><%
+                end %><%=
+                link_to html,
+                        help_terms_and_conditions_path,
+                        class: "govuk-footer__link govuk-!-margin-right-2",
+                        target: "_blank"
+              %></li>
             </ul>
 
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
