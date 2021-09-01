@@ -11,7 +11,7 @@ module Users
     before_action :require_secondary_authentication, only: :update
 
     def edit
-      return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if wrong_user?
+      return render :signed_in_as_another_user, locals: { reset_password_token: params[:reset_password_token] } if user_trying_to_sign_in_as_someone_else?
       return render :invalid_link, status: :not_found if reset_token_invalid?
       return render :expired, status: :gone if reset_token_expired?
 
@@ -60,8 +60,8 @@ module Users
 
   private
 
-    def wrong_user?
-      user_signed_in? && current_user != user_with_reset_token
+    def user_trying_to_sign_in_as_someone_else?
+      user_signed_in? && user_with_reset_token && current_user != user_with_reset_token
     end
 
     def passed_secondary_authentication?
