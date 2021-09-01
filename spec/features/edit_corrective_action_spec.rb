@@ -58,7 +58,7 @@ RSpec.feature "Edit corrective action", :with_stubbed_elasticsearch, :with_stubb
       click_link "Edit corrective action"
 
       # check error rendering and attachment details are retained
-      fill_in "Year", with: ""
+      fill_in "Year", with: "abcdefdef"
       click_on "Update corrective action"
 
       expect(page).to have_error_summary("The date the corrective action came into effect must include a year")
