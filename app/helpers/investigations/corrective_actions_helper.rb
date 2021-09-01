@@ -30,10 +30,21 @@ module Investigations
     end
 
     def online_recall_information_text_for(online_recall_information, has_online_recall_information:)
-      return link_to("#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank") if has_online_recall_information&.inquiry&.has_online_recall_information_yes?
+      if has_online_recall_information&.inquiry&.has_online_recall_information_yes?
+        return link_to("#{online_recall_information} (opens in new tab)", online_recall_information, rel: "noopener", target: "_blank") if valid_url?(online_recall_information)
+
+        return online_recall_information
+      end
       return I18n.t(".has_online_recall_information_not_provided", scope: %i[investigations corrective_actions helper has_online_recall_information]) if has_online_recall_information.nil?
 
       I18n.t(".#{has_online_recall_information}", scope: %i[investigations corrective_actions helper has_online_recall_information])
+    end
+
+    def valid_url?(online_recall_information)
+      uri = URI.parse(online_recall_information)
+      uri.is_a?(URI::HTTP) && !uri.host.nil?
+    rescue URI::InvalidURIError
+      false
     end
   end
 end
