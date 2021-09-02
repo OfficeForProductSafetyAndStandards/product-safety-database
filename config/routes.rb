@@ -204,7 +204,7 @@ Rails.application.routes.draw do
   resources :teams, only: %i[index show] do
     resources :invitations, only: %i[new create] do
       member do
-        put :resend
+        get :resend
       end
     end
   end
