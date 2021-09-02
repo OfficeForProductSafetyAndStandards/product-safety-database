@@ -210,9 +210,9 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
   end
 
   def enter_non_numeric_date_and_expect_correct_error_message
-    fill_in "Day",     with: "abc"   if date_decided
+    fill_in "Day",     with: "abc" if date_decided
     fill_in "Month",   with: "xyz" if date_decided
-    fill_in "Year",    with: "xxxxxx"  if date_decided
+    fill_in "Year",    with: "xxxxxx" if date_decided
 
     click_button "Continue"
 
