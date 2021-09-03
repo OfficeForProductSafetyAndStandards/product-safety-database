@@ -12,11 +12,17 @@ module SecondaryAuthenticationConcern
 
     if user_id_for_secondary_authentication && !secondary_authentication_present?
       user = User.find(user_id_for_secondary_authentication)
-      session[:secondary_authentication_redirect_to] = request.get? ? redirect_to : "/"
+      if request.get?
+        session[:secondary_authentication_redirect_to] = redirect_to
+      else
+        session[:secondary_authentication_redirect_to] ||= "/"
+      end
       session[:secondary_authentication_user_id] = user_id_for_secondary_authentication
       auth = SecondaryAuthentication.new(user)
       auth.generate_and_send_code(current_operation)
       redirect_to new_secondary_authentication_path
+    else
+      session[:secondary_authentication_redirect_to] = redirect_to
     end
   end
 
