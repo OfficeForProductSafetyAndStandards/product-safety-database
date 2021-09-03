@@ -51,7 +51,7 @@ private
 
   def redirect_to_saved_path
     session[:secondary_authentication_user_id] = nil
-    redirect_to_path = session[:secondary_authentication_redirect_to] ? session[:secondary_authentication_redirect_to] : root_path_for(current_user)
+    redirect_to_path = session[:secondary_authentication_redirect_to] || root_path_for(current_user)
     redirect_to redirect_to_path
   end
 
