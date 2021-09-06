@@ -56,6 +56,8 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
     expect(errors_list[6].text).to eq "Select the geographic scope of the action"
     expect(errors_list[7].text).to eq "Select whether you want to upload a related file"
 
+    enter_non_numeric_date_and_expect_correct_error_message
+
     # Test file attachments are retained on validation errors
     within_fieldset "Are there any files related to the action?" do
       choose "Yes"
@@ -205,5 +207,15 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_elasticsearc
 
     fill_in "Further details (optional)", with: "Urgent action following consumer reports"
     click_button "Continue"
+  end
+
+  def enter_non_numeric_date_and_expect_correct_error_message
+    fill_in "Day",     with: "abc" if date_decided
+    fill_in "Month",   with: "xyz" if date_decided
+    fill_in "Year",    with: "xxxxxx" if date_decided
+
+    click_button "Continue"
+
+    expect(page).to have_error_summary("Enter the date the corrective action came into effect")
   end
 end
