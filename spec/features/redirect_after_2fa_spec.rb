@@ -21,6 +21,7 @@ RSpec.feature "Redirecting after 2fa", :with_stubbed_mailer, :with_stubbed_notif
           visit "/cases"
           enter_secondary_authentication_code(admin.reload.direct_otp)
           expect(page).to have_current_path("/cases")
+          expect(page).not_to have_content "Request could not be completed. Please try again."
       end
     end
   end
@@ -36,6 +37,7 @@ RSpec.feature "Redirecting after 2fa", :with_stubbed_mailer, :with_stubbed_notif
         enter_secondary_authentication_code(admin.reload.direct_otp)
 
         expect(page).to have_current_path("/teams/#{team.id}/invitations/new")
+          expect(page).to have_content "Request could not be completed. Please try again."
       end
     end
   end

@@ -14,8 +14,10 @@ module SecondaryAuthenticationConcern
       user = User.find(user_id_for_secondary_authentication)
       if request.get?
         session[:secondary_authentication_redirect_to] = redirect_to
+        session[:secondary_authentication_redirect_to_post_blocked] = false
       else
         session[:secondary_authentication_redirect_to] ||= "/"
+        session[:secondary_authentication_redirect_to_post_blocked] = true
       end
       session[:secondary_authentication_user_id] = user_id_for_secondary_authentication
       auth = SecondaryAuthentication.new(user)
