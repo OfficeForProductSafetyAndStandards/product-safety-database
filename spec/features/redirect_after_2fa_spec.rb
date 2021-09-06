@@ -11,22 +11,22 @@ RSpec.feature "Redirecting after 2fa", :with_stubbed_mailer, :with_stubbed_notif
       .to receive(:secondary_authentication_enabled).and_return(true)
   end
 
-  context "after making a GET request" do
+  context "when making a GET request" do
     it "redirects user to the page they were trying to access" do
       sign_in(admin)
       visit "/"
 
       wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
       travel_to(Time.zone.now.utc + wait_time.seconds) do
-          visit "/cases"
-          enter_secondary_authentication_code(admin.reload.direct_otp)
-          expect(page).to have_current_path("/cases")
-          expect(page).not_to have_content "Request could not be completed. Please try again."
+        visit "/cases"
+        enter_secondary_authentication_code(admin.reload.direct_otp)
+        expect(page).to have_current_path("/cases")
+        expect(page).not_to have_content "Request could not be completed. Please try again."
       end
     end
   end
 
-  context "after making a different request" do
+  context "when making a different request" do
     it "redirects user back to the last page they were on" do
       sign_in(admin)
       visit "/teams/#{team.id}/invitations/new"
@@ -37,7 +37,7 @@ RSpec.feature "Redirecting after 2fa", :with_stubbed_mailer, :with_stubbed_notif
         enter_secondary_authentication_code(admin.reload.direct_otp)
 
         expect(page).to have_current_path("/teams/#{team.id}/invitations/new")
-          expect(page).to have_content "Request could not be completed. Please try again."
+        expect(page).to have_content "Request could not be completed. Please try again."
       end
     end
   end
