@@ -452,12 +452,12 @@ module PageExpectations
   end
 
   def expect_to_be_on_signed_in_as_another_user_page
-    expect(page).to have_h1("You are already signed in to the Product safety database")
+    expect(page).to have_h1("You are already signed in to the Product Safety Database")
   end
 
   def expect_to_be_on_declaration_page
     expect(page).to have_current_path(/^\/declaration$/)
-    expect(page).to have_title("Declaration - Product safety database - GOV.UK")
+    expect(page).to have_title("Declaration - Product Safety Database - GOV.UK")
   end
 
   def expect_to_be_on_reset_password_page
@@ -509,7 +509,7 @@ module PageExpectations
 
   def expect_to_be_on_edit_business_page(business_id:, business_name:)
     expect(page).to have_current_path("/businesses/#{business_id}/edit")
-    expect(page).to have_title("Edit business - Product safety database - GOV.UK")
+    expect(page).to have_title("Edit business - Product Safety Database - GOV.UK")
     expect(page).to have_selector("h1", text: business_name)
   end
 
