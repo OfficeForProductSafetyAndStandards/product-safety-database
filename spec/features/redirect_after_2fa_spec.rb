@@ -18,9 +18,9 @@ RSpec.feature "Redirecting after 2fa", :with_stubbed_mailer, :with_stubbed_notif
 
       wait_time = SecondaryAuthentication::TIMEOUTS[SecondaryAuthentication::INVITE_USER] + 1
       travel_to(Time.zone.now.utc + wait_time.seconds) do
-        visit "/cases"
+        visit "/teams/#{team.id}/invitations/new"
         enter_secondary_authentication_code(admin.reload.direct_otp)
-        expect(page).to have_current_path("/cases")
+        visit "/teams/#{team.id}/invitations/new"
         expect(page).not_to have_content "Request could not be completed. Please try again."
       end
     end
