@@ -14,7 +14,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   scenario "allows the user to generate an export" do
-    Product.import refresh: :wait_for
+    Investigation.import force: true, refresh: :wait_for
     visit investigations_path
 
     click_link "Export as spreadsheet"
