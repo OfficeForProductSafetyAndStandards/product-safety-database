@@ -82,6 +82,17 @@ RSpec.feature "Creating cases", :with_stubbed_elasticsearch, :with_stubbed_antiv
 
       expect_page_to_have_h1("Overview")
 
+      investigation = Investigation.last.decorate
+      expect(delivered_emails.last.personalization).to eq({
+          name: user.name,
+          case_title: investigation.decorate.title,
+          case_type: "allegation",
+          capitalized_case_type: "Allegation",
+          case_id: investigation.pretty_id,
+          investigation_url: investigation_url(investigation)
+        })
+      expect(delivered_emails.last.template).to eq "b5457546-9633-4a9c-a844-b61f2e818c24"
+
       expect_details_on_summary_page
       expect_protected_details_on_summary_page(**contact_details)
 
