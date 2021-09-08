@@ -2,7 +2,7 @@
 <h1 class="govuk-heading-l"><%= "Remove #{@product.name}" %></h1>
 <p>Remove a product from a case if it's not relevant to the investigation. Product details can be changed from the <%= link_to "Products tab", investigation_products_path(@investigation) %></p>
 
-<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
+<%= form_with scope: :investigation, model: @remove_product_form, url: unlink_investigation_product_path(@investigation), html: {novalidate: true}, builder: ApplicationFormBuilder, method: :delete, local: true do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
 
