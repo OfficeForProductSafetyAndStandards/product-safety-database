@@ -53,6 +53,7 @@ gem "bootsnap"
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
+  gem "capybara-mechanize"
   gem "dotenv-rails", "~> 2.7"
   gem "parallel_tests"
   gem "pry", "~> 0.13"
