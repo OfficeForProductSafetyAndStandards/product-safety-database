@@ -10,7 +10,7 @@ module SecondaryAuthenticationConcern
   def require_secondary_authentication(redirect_to: request.fullpath)
     return unless Rails.configuration.secondary_authentication_enabled
 
-    if request.get?
+    if request.get? || request.head?
       session[:secondary_authentication_redirect_to] = redirect_to
       session[:secondary_authentication_redirect_to_post_blocked] = false
     end
@@ -18,7 +18,7 @@ module SecondaryAuthenticationConcern
     if user_id_for_secondary_authentication && !secondary_authentication_present?
       user = User.find(user_id_for_secondary_authentication)
 
-      unless request.get?
+      unless request.get? || request.head?
         session[:secondary_authentication_redirect_to] ||= "/"
         session[:secondary_authentication_redirect_to_post_blocked] = true
       end
