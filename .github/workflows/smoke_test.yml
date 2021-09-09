@@ -88,7 +88,7 @@ jobs:
         ELASTICSEARCH_URL: localhost
         RAILS_ENV: test
         SMOKE_USER: ${{secrets.SMOKE_SEARCH_USER}}
-        SMOKE_SEARCH_PASSWORD: ${{secrets.SMOKE_SEARCH_PASSWORD}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
         SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
         SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
         SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
