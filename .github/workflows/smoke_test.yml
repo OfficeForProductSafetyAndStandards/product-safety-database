@@ -95,4 +95,4 @@ jobs:
         RUN_SMOKE: "true"
 
       run: |
-        bundle exec rspec spec/smoke/search_smoke_test_spec.rb
+        bundle exec rspec spec/smoke/smoke_test_spec.rb
