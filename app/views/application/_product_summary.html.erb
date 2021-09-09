@@ -1,0 +1,24 @@
+<div class="product-summary govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-m"><%= product.name %></h2>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <% if product.images.any? %>
+        <%= render "documents/document_preview",
+                   document: product.images.first,
+                   dimensions: "300x500",
+                   class_name: "product-image app-document-preview--medium" %>
+      <% else %>
+        <p class="govuk-body">No images</p>
+      <% end %>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+      <%= product.decorate.summary_list %>
+      <%= yield %>
+    </div>
+  </div>
+</div>

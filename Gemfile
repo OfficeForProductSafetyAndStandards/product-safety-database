@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.100"
+gem "aws-sdk-s3", "~> 1.102"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -37,7 +37,7 @@ gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.2"
 gem "sidekiq-cron", "~> 1.2"
-gem "slim-rails", "~> 3.3"
+gem "slim-rails"
 gem "sprockets", "4.0.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "strong_migrations", "~> 0.7"
@@ -46,7 +46,7 @@ gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
 gem "wicked", "~> 1.3"
 
-gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.5", require: "govuk_design_system"
+gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.7.8", require: "govuk_design_system"
 
 gem "bootsnap"
 
@@ -89,7 +89,6 @@ group :test do
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
-  gem "slim_lint", "~> 0.22"
   gem "super_diff"
   gem "webmock", "~> 3.14"
 end

@@ -104,8 +104,6 @@ bundle exec rspec
 
 You can run the Ruby linting with `bin/rubocop`. Running this with the `-a` flag set will cause Rubocop to attempt to fix as many of the issues as it can.
 
-You can run the Slim linting with `bin/slim-lint app`.
-
 You can run the Sass linting with `bin/yarn sass-lint -vq 'app/**/*.scss'`.
 
 You can run the JavaScript linting with `bin/yarn eslint app config`.
