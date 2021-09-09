@@ -53,11 +53,9 @@ private
     session[:secondary_authentication_user_id] = nil
     redirect_to_path = session[:secondary_authentication_redirect_to] || root_path_for(current_user)
 
-    if session[:secondary_authentication_redirect_to_post_blocked]
-      redirect_to redirect_to_path, flash: { warning: "Request could not be completed. Please try again." }
-    else
-      redirect_to redirect_to_path
-    end
+    flash[:warning] = "Request could not be completed. Please try again." if session[:secondary_authentication_redirect_to_post_blocked]
+
+    redirect_to redirect_to_path
   end
 
   def try_to_resend_code
