@@ -31,6 +31,8 @@ class Business < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  redacted_export_with :id, :company_number, :created_at, :legal_name, :trading_name, :updated_at
+
   def supporting_information
     corrective_actions + risk_assessments
   end

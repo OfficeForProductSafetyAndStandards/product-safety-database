@@ -15,6 +15,8 @@ class Team < ApplicationRecord
   validates :name, presence: true
   validates :country, presence: true
 
+  redacted_export_with :id, :country, :created_at, :deleted_at, :name, :organisation_id, :updated_at
+
   def display_name(*)
     name
   end

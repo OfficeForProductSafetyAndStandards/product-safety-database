@@ -1,6 +1,8 @@
 class ProductExport < ApplicationRecord
   has_one_attached :export_file
 
+  redacted_export_with :id, :created_at, :updated_at
+
   def export(products)
     Axlsx::Package.new do |p|
       book = p.workbook

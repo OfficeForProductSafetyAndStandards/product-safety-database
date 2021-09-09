@@ -37,6 +37,10 @@ class RiskAssessment < ApplicationRecord
     other: "other"
   }
 
+  redacted_export_with :id, :added_by_team_id, :added_by_user_id, :assessed_by_business_id,
+                       :assessed_by_other, :assessed_by_team_id, :assessed_on, :created_at,
+                       :custom_risk_level, :details, :investigation_id, :risk_level, :updated_at
+
 private
 
   def assessed_on_cannot_be_in_future

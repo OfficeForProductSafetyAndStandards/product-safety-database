@@ -6,6 +6,8 @@ class CaseExport < ApplicationRecord
 
   has_one_attached :export_file
 
+  redacted_export_with :id, :created_at, :updated_at
+
   def export(case_ids)
     activity_counts = Activity.group(:investigation_id).count
     business_counts = InvestigationBusiness.unscoped.group(:investigation_id).count
