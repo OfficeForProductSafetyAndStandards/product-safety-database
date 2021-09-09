@@ -1,5 +1,6 @@
 require "capybara/rspec"
 require "capybara-screenshot/rspec"
+require "capybara/mechanize"
 
 # Increase redirect limit (default is 5) due to wizard controller redirects
 Capybara.register_driver :rack_test do |app|
