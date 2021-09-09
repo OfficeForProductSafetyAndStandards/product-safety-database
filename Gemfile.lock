@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: cd2d3c722266a8575e0def9f3d01b563210e9146
-  tag: 0.7.7
+  revision: ef5d36bb050b8b9fba6f44e7b8cb0030ca888874
+  tag: 0.7.8
   specs:
-    govuk-design-system-rails (0.7.6)
+    govuk-design-system-rails (0.7.8)
       slim-rails
 
 GEM
@@ -265,10 +265,10 @@ GEM
     multipart-post (2.1.1)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.12.3)
+    nokogiri (1.12.4)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.12.3-x86_64-darwin)
+    nokogiri (1.12.4-x86_64-darwin)
       racc (~> 1.4)
     notifications-ruby-client (5.1.1)
       jwt (>= 1.5, < 3)
