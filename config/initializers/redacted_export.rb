@@ -8,7 +8,7 @@ end
 #     redacted_export_with :id, :created_at, :updated_at
 #   Rails internal or gem model fields are injected as below.
 
-Rails.configuration.to_prepare do
+Rails.configuration.after_initialize do
   ActiveStorage::Attachment.send(
     :redacted_export_with,
     :id, :blob_id, :created_at, :name, :record_id, :record_type
