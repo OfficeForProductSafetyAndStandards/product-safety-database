@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Search smoke test" do
   let(:session) { Capybara::Session.new :mechanize }
-  let(:smoke_env_url) { "https://staging.product-safety-database.service.gov.uk/" }
+  let(:smoke_env_url) { "https://www.product-safety-database.service.gov.uk/" }
 
   if ENV["RUN_SMOKE"] == "true"
     scenario "sign-in and search notification product as poison center user" do
