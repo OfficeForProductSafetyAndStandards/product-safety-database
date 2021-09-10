@@ -1,7 +1,5 @@
 name: Smoke test
-on:
-  schedule:
-    - cron: "*/5 * * * *"
+on: [push]
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
