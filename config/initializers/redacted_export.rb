@@ -1,6 +1,6 @@
 require "redacted_export"
 
-Rails.configuration.to_prepare do
+Rails.configuration.after_initialize do
   ActiveRecord::Base.include RedactedExport
 end
 
