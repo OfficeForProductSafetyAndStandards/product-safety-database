@@ -22,6 +22,8 @@ AllCops:
     - 'tmp/**/*'
     - 'vendor/bundle/**/*'
     - 'config/initializers/devise.rb'
+    - 'config/initializers/devise.rb'
+    - 'spec/smoke/**/*'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false

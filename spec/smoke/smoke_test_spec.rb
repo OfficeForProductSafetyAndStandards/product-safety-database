@@ -5,8 +5,6 @@ RSpec.feature "Search smoke test" do
   let(:smoke_env_url) { "https://www.product-safety-database.service.gov.uk/" }
 
   if ENV["RUN_SMOKE"] == "true"
-    # rubocop:disable RSpec/MultipleExpectations
-    # rubocop:disable RSpec/ExampleLength
     scenario "sign-in and visit case page" do
       WebMock.allow_net_connect!
       session.visit(smoke_env_url)
@@ -22,7 +20,6 @@ RSpec.feature "Search smoke test" do
       attempts = 0
       loop do
         code = get_code.scan(/\d{5}/).first
-        p code
         smoke_complete_secondary_authentication_with(code, session)
         attempts += 1
         break if session.has_content?("Open a new case")
@@ -35,8 +32,6 @@ RSpec.feature "Search smoke test" do
       expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
       expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(10)")
     end
-    # rubocopenable RSpec/MultipleExpectations
-    # rubocopenable RSpec/ExampleLength
   end
 end
 
