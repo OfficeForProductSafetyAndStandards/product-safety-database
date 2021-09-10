@@ -5,7 +5,9 @@ RSpec.feature "Search smoke test" do
   let(:smoke_env_url) { "https://www.product-safety-database.service.gov.uk/" }
 
   if ENV["RUN_SMOKE"] == "true"
-    scenario "sign-in and search notification product as poison center user" do
+    # rubocop:disable RSpec/MultipleExpectations
+    # rubocop:disable RSpec/ExampleLength
+    scenario "sign-in and visit case page" do
       WebMock.allow_net_connect!
       session.visit(smoke_env_url)
       expect(session).to have_css("h1", text: "Product Safety Database")
@@ -33,6 +35,8 @@ RSpec.feature "Search smoke test" do
       expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
       expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(10)")
     end
+    # rubocopenable RSpec/MultipleExpectations
+    # rubocopenable RSpec/ExampleLength
   end
 end
 
