@@ -2,14 +2,13 @@ require "rails_helper"
 
 RSpec.feature "Search smoke test" do
   let(:session) { Capybara::Session.new :mechanize }
-  let(:smoke_env_url) { "https://www.product-safety-database.service.gov.uk/" }
 
   if ENV["RUN_SMOKE"] == "true"
     scenario "sign-in and visit case page" do
       WebMock.allow_net_connect!
-      session.visit(smoke_env_url)
+      session.visit(ENV["SMOKE_TEST_URL"])
       expect(session).to have_css("h1", text: "Product Safety Database")
-      session.visit("#{smoke_env_url}/sign-in")
+      session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")
       session.fill_in "Email address", with: ENV["SMOKE_USER"]
       session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
       session.click_button "Continue"
