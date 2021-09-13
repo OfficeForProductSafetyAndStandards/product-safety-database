@@ -677,7 +677,7 @@ if run_seeds
 
     CorrectiveAction.create!(
       date_decided: rand(1..30).days.ago,
-      details: "Some corrective action.",
+      details: "Some corrective action",
       duration: CorrectiveAction::DURATION_TYPES.sample,
       geographic_scopes: CorrectiveAction::GEOGRAPHIC_SCOPES[0..rand(CorrectiveAction::GEOGRAPHIC_SCOPES.size - 1)],
       investigation: i,
