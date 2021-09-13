@@ -160,6 +160,7 @@ jobs:
         SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
         SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
         RUN_SMOKE: "true"
+        SMOKE_TEST_URL: "https://psd-pr-${PR_NUMBER}.london.cloudapps.digital/"
 
       run: |
         bundle exec rspec spec/smoke/smoke_test_spec.rb
