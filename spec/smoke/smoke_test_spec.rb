@@ -6,7 +6,7 @@ RSpec.feature "Search smoke test" do
   if ENV["RUN_SMOKE"] == "true"
     scenario "sign-in and visit case page" do
       WebMock.allow_net_connect!
-      session.driver.browser.agent.add_auth(ENV["SMOKE_TEST_URL"], ENV["REVIEW_APP_USER"], ENV["REVIEW_APP_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
+      session.driver.browser.agent.add_auth(ENV["SMOKE_TEST_URL"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
       session.visit(ENV["SMOKE_TEST_URL"])
       expect(session).to have_css("h1", text: "Product Safety Database")
       session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")

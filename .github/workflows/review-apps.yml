@@ -162,6 +162,8 @@ jobs:
         RUN_SMOKE: "true"
         IS_REVIEW_APP: "true"
         SMOKE_TEST_URL: https://psd-pr-${{ github.event.number }}.london.cloudapps.digital
+        SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER}}
+        SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD}}
 
       run: |
         bundle exec rspec spec/smoke/smoke_test_spec.rb
