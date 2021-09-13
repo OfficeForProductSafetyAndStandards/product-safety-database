@@ -51,11 +51,11 @@ private
 
   def redirect_to_saved_path
     session[:secondary_authentication_user_id] = nil
-    if session[:secondary_authentication_redirect_to]
-      redirect_to session.delete(:secondary_authentication_redirect_to)
-    else
-      redirect_to root_path_for(current_user)
-    end
+    redirect_to_path = session[:secondary_authentication_redirect_to] || root_path_for(current_user)
+
+    flash[:warning] = "Request could not be completed. Please try again." if session[:secondary_authentication_redirect_to_post_blocked]
+
+    redirect_to redirect_to_path
   end
 
   def try_to_resend_code
