@@ -10,6 +10,20 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:11.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: postgres
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      elasticsearch:
+        image: elasticsearch:7.9.2
+        ports: ["9200:9200"]
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+
     steps:
     - uses: actions/checkout@v1
 
@@ -106,28 +120,6 @@ jobs:
         source deploy-github-functions.sh
         gh_deploy_failure review-app-${PR_NUMBER} $LOG_URL
 
-  ruby:
-    name: "Ruby"
-    runs-on: ubuntu-latest
-
-    # Example for can be found here:
-    # https://github.com/actions/example-services/tree/master/.github/workflows
-    services:
-      postgres:
-        image: postgres:11.5
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: postgres
-        ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      elasticsearch:
-        image: elasticsearch:7.9.2
-        ports: ["9200:9200"]
-        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
-    steps:
-    - uses: actions/checkout@v1
-
     - name: Set up Ruby
       uses: actions/setup-ruby@v1
       with:
@@ -137,9 +129,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.17.x
-    # required to compile pg ruby gem
-    - name: install PostgreSQL client
-      run: sudo apt-get install libpq-dev
 
     - uses: actions/cache@v1
       with:
