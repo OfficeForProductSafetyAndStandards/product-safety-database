@@ -162,6 +162,7 @@ jobs:
         bundle exec rspec spec/smoke/smoke_test_spec.rb
 
     - name: Create GitHub deployment for Production
+      if: success()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         BRANCH: master
@@ -170,6 +171,7 @@ jobs:
         gh_deploy_create production
 
     - name: Initiate Production deployment status
+      if: success()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
       run: |
@@ -177,6 +179,7 @@ jobs:
         gh_deploy_initiate production $LOG_URL
 
     - name: Deploy to production
+      if: success()
       env:
         SPACE: prod
         APP_NAME: psd-web
