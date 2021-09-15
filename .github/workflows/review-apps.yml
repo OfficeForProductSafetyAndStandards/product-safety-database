@@ -113,12 +113,6 @@ jobs:
       with:
         ruby-version: 2.7.x
 
-    - name: Set up Node
-      if: success()
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.17.x
-
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
@@ -133,45 +127,19 @@ jobs:
         bundle config path vendor/bundle
         bundle check || bundle install --without development --jobs=4 --retry=3
 
-    - name: Install yarn
-      if: success()
-      run: npm install yarn -g
-
-    - name: Get yarn cache
-      if: success()
-      id: yarn-cache
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-
-    - uses: actions/cache@v1
-      with:
-        path: ${{ steps.yarn-cache.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
-
-    - name: Install Node.js dependencies
-      if: success()
-      run: yarn install
-
-    - name: Prepare database
-      if: success()
-      run: bin/rails parallel:load_schema
-
     - name: Run Smoke Tests
       if: success()
       env:
-        ELASTICSEARCH_URL: localhost
         RAILS_ENV: test
         SMOKE_USER: ${{secrets.SMOKE_USER}}
         SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
         SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
         SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
         SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
-        RUN_SMOKE: "true"
         IS_REVIEW_APP: "true"
         SMOKE_TEST_URL: https://psd-pr-${{ github.event.number }}.london.cloudapps.digital
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER}}
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD}}
 
       run: |
-        bundle exec rspec spec/smoke/smoke_test_spec.rb
+        bundle exec rspec ./smoke_test/cases_page_spec.rb
