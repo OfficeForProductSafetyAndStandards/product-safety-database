@@ -23,7 +23,7 @@ AllCops:
     - 'vendor/bundle/**/*'
     - 'config/initializers/devise.rb'
     - 'config/initializers/devise.rb'
-    - 'spec/smoke/**/*'
+    - 'smoke_test/**/*'
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
