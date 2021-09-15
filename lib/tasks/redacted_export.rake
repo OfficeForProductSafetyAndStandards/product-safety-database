@@ -12,14 +12,12 @@ namespace :redacted_export do
     SQL_OUTPUT
 
     Rails.application.eager_load!
-    RedactedExport.models.each do |model|
-      attributes = model.redacted_export_attributes.join ", "
-
+    RedactedExport.registry.each do |model, attributes|
       puts <<~SQL_OUTPUT
         --
         -- #{model.name}
         --
-        CREATE TABLE redacted.#{model.table_name} AS (SELECT #{attributes} FROM public.#{model.table_name});
+        CREATE TABLE redacted.#{model.table_name} AS (SELECT #{attributes.join ', '} FROM public.#{model.table_name});
 
       SQL_OUTPUT
     end

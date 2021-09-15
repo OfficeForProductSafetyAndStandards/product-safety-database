@@ -9,16 +9,17 @@ module RedactedExport
   protected
 
     def redacted_export_with(*attributes)
-      redacted_export_attributes.concat attributes
-      redacted_export_attributes.uniq!
+      RedactedExport.register_model_attributes self, *attributes
     end
   end
 
-  def self.models
-    ActiveRecord::Base.descendants.select do |model|
-      !model.abstract_class? &&
-        model.respond_to?(:redacted_export_attributes) &&
-        model.redacted_export_attributes&.try(:any?)
-    end
+  def self.registry
+    @registry ||= {}
+  end
+
+  def self.register_model_attributes(model, *attributes)
+    registry[model] ||= []
+    registry[model].concat attributes
+    registry[model].uniq!
   end
 end

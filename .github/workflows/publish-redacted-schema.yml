@@ -1,0 +1,54 @@
+name: Publish redacted export schema
+
+# TODO: Only publish for master
+on: [push]
+
+env:
+  # NOTE: These services do not need to be running for this job
+  DATABASE_URL: postgres://postgres@localhost:5432
+  ELASTICSEARCH_URL: http://localhost:9200
+  REDIS_URL: redis://localhost:6379
+  RAILS_ENV: test
+  ANTIVIRUS_URL: http://localhost:3006/safe
+  ANTIVIRUS_USERNAME: av
+  ANTIVIRUS_PASSWORD: password
+  PSD_HOST: example.com
+  EMAIL_WHITELIST_ENABLED: false
+  TWO_FACTOR_AUTHENTICATION_ENABLED: false
+  CI: true
+
+jobs:
+  create_artifact:
+    name: "Create schema artifact"
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+
+    - name: Install PostgreSQL client
+      run: sudo apt-get install libpq-dev
+
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Install RubyGems
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --without development --jobs=4 --retry=3
+
+    - name: Run redacted export rake task
+      run: |
+        bin/rails redacted_export:generate_sql > tmp/redacted_export.sql
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: redacted_export.sql
+        path: tmp/redacted_export.sql
