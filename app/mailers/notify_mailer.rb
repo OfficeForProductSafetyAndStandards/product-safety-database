@@ -7,7 +7,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       alert: "47fb7df9-2370-4307-9f86-69455597cdc1",
       case_risk_level_updated: "66c2f2dd-f3a1-4ef1-a9cc-a99a1b7dff22",
       expired_invitation: "e056e368-5abb-48f4-b98d-ad0933620cc2",
-      investigation_created: "6da8e1d5-eb4d-4f9a-9c3c-948ef57d6136",
+      investigation_created: "b5457546-9633-4a9c-a844-b61f2e818c24",
       investigation_updated: "10a5c3a6-9cc7-4edb-9536-37605e2c15ba",
       invitation: "7b80a680-f8b3-4032-982d-2a3a662b611a",
       reset_password_instruction: "cea1bb37-1d1c-4965-8999-6008d707b981",
@@ -90,6 +90,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       name: name,
       case_title: investigation_title,
       case_type: investigation_type,
+      capitalized_case_type: investigation_type.capitalize,
       case_id: investigation_pretty_id,
       investigation_url: investigation_url(pretty_id: investigation_pretty_id)
     )

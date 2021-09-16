@@ -51,6 +51,18 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
 
       click_on "Activity"
       expect_details_on_activity_page(title, summary)
+
+      investigation = Investigation.last
+
+      expect(delivered_emails.last.personalization).to eq({
+        name: User.first.name,
+        case_title: investigation.user_title,
+        case_type: "project",
+        capitalized_case_type: "Project",
+        case_id: investigation.pretty_id,
+        investigation_url: investigation_url(investigation)
+      })
+      expect(delivered_emails.last.template).to eq "b5457546-9633-4a9c-a844-b61f2e818c24"
     end
 
     def expect_details_on_activity_page(title, summary)

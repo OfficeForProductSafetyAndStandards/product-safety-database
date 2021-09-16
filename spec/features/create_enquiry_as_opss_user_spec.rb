@@ -112,6 +112,18 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
 
       expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
       expect_details_on_activity_page(contact_details, enquiry_details)
+
+      investigation = Investigation.last
+
+      expect(delivered_emails.last.personalization).to eq({
+        name: user.name,
+        case_title: investigation.user_title,
+        case_type: "enquiry",
+        capitalized_case_type: "Enquiry",
+        case_id: investigation.pretty_id,
+        investigation_url: investigation_url(investigation)
+      })
+      expect(delivered_emails.last.template).to eq "b5457546-9633-4a9c-a844-b61f2e818c24"
     end
 
     context "with enquiry date in the future" do
