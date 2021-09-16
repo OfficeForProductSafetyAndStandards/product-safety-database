@@ -56,5 +56,7 @@ module ProductSafetyDatabase
     config.whitelisted_2fa_code = ENV["WHITELISTED_2FA_CODE"]
     config.vcap_application = ENV["VCAP_APPLICATION"]
     config.two_factor_attempts = 10
+
+    config.assets.initialize_on_precompile = false
   end
 end
