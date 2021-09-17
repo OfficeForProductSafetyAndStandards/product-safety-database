@@ -1,0 +1,119 @@
+name: Publish Staging redacted export to S3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_schema:
+    name: Create schema artifact
+    runs-on: ubuntu-latest
+    env:
+      # NOTE: These services do not need to be running for this job
+      DATABASE_URL: postgres://postgres@localhost:5432
+      ELASTICSEARCH_URL: http://localhost:9200
+      REDIS_URL: redis://localhost:6379
+      RAILS_ENV: test
+      ANTIVIRUS_URL: http://localhost:3006/safe
+      ANTIVIRUS_USERNAME: av
+      ANTIVIRUS_PASSWORD: password
+      PSD_HOST: example.com
+      EMAIL_WHITELIST_ENABLED: false
+      TWO_FACTOR_AUTHENTICATION_ENABLED: false
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.17.x
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install libpq-dev
+
+      - uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install RubyGems
+        run: |
+          gem install bundler --no-doc
+          bundle config path vendor/bundle
+          bundle check || bundle install --without development --jobs=4 --retry=3
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Get yarn cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install Node.js dependencies
+        run: yarn install
+
+      - name: Run redacted export rake task
+        run: |
+          bin/rails redacted_export:generate_sql > tmp/redacted_export.sql
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: redacted_export.sql
+          path: tmp/redacted_export.sql
+          retention-days: 7
+
+  export_database:
+    name: Export and upload redacted database dump
+    runs-on: ubuntu-latest
+    needs: create_schema
+
+    steps:
+      - name: Install cf client
+        env:
+          CF_CLI_VERSION: v7
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install libpq-dev
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: redacted_export.sql
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.DB_UPLOAD_STAGING_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.DB_UPLOAD_STAGING_AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Export database
+        env:
+          SPACE: staging
+          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+          S3_BUCKET: psd-staging-database-dumps
+        run: |
+          export TIMESTAMP=$(date +'%F-%H-%M-%S')
+          cf api api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o 'beis-opss' -s $SPACE
+          cf logout
+          gzip --keep tmp/redacted_export.sql
+          aws s3 cp "tmp/redacted_export.sql.gz" "s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
