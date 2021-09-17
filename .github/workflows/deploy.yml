@@ -103,8 +103,6 @@ jobs:
     - name: Run Smoke Tests
       if: success()
       env:
-        ELASTICSEARCH_URL: localhost
-        RAILS_ENV: test
         SMOKE_USER: ${{secrets.SMOKE_USER}}
         SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
         SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
@@ -196,14 +194,11 @@ jobs:
     - name: Run Smoke Tests
       if: success()
       env:
-        ELASTICSEARCH_URL: localhost
-        RAILS_ENV: test
         SMOKE_USER: ${{secrets.SMOKE_USER}}
         SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
         SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
         SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
         SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
-        RUN_SMOKE: "true"
         IS_REVIEW_APP: "false"
         SMOKE_TEST_URL: "https://www.product-safety-database.service.gov.uk/"
 

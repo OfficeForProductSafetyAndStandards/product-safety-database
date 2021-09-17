@@ -116,7 +116,6 @@ jobs:
     - name: Run Smoke Tests
       if: success()
       env:
-        RAILS_ENV: test
         SMOKE_USER: ${{secrets.SMOKE_USER}}
         SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
         SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}

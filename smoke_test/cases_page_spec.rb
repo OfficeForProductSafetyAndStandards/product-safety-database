@@ -21,11 +21,10 @@ RSpec.feature "Search smoke test" do
 
     expect(session).to have_current_path(/\/two-factor/)
     expect(session).to have_content("Check your phone")
-    #
+
     attempts = 0
     loop do
-      code = get_code.scan(/\d{5}/).first
-      smoke_complete_secondary_authentication_with(code, session)
+      smoke_complete_secondary_authentication_with(get_code, session)
       attempts += 1
       break if session.has_content?("Open a new case")
       break if attempts > 3
@@ -39,8 +38,8 @@ RSpec.feature "Search smoke test" do
   end
 end
 
-def smoke_complete_secondary_authentication_with(fake_code, session)
-  session.fill_in "Enter security code", with: fake_code
+def smoke_complete_secondary_authentication_with(code, session)
+  session.fill_in "Enter security code", with: code
   session.click_on "Continue"
 end
 
@@ -53,5 +52,5 @@ def get_code
   http = Net::HTTP.new(uri.hostname, uri.port)
   http.use_ssl = true
   res = http.request(req)
-  res.body
+  res.body.scan(/\d{5}/).first
 end
