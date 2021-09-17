@@ -62,9 +62,9 @@ end
 
 group :development do
   gem "listen", "~> 3.7"
-  gem "m", "~> 1.5"
+  gem "m", "~> 1.6"
   gem "solargraph", "~> 0.43"
-  gem "spring", "~> 2.1"
+  gem "spring", "~> 3.0"
   gem "spring-commands-rspec", "~> 1.0"
 end
 
