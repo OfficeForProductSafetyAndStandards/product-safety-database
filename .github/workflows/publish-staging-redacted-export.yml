@@ -1,7 +1,9 @@
 name: Publish Staging redacted export to S3
 
 on:
-  workflow_dispatch:
+  pull_request:
+  # TODO: Set this to manual
+  # workflow_dispatch:
 
 jobs:
   create_schema:
