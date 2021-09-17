@@ -9,19 +9,6 @@ jobs:
   create_schema:
     name: Create schema artifact
     runs-on: ubuntu-latest
-    env:
-      # NOTE: These services do not need to be running for this job
-      DATABASE_URL: postgres://postgres@localhost:5432
-      ELASTICSEARCH_URL: http://localhost:9200
-      REDIS_URL: redis://localhost:6379
-      RAILS_ENV: test
-      ANTIVIRUS_URL: http://localhost:3006/safe
-      ANTIVIRUS_USERNAME: av
-      ANTIVIRUS_PASSWORD: password
-      PSD_HOST: example.com
-      EMAIL_WHITELIST_ENABLED: false
-      TWO_FACTOR_AUTHENTICATION_ENABLED: false
-      CI: true
 
     steps:
       - uses: actions/checkout@v1
@@ -68,10 +55,23 @@ jobs:
         run: yarn install
 
       - name: Run redacted export rake task
+        env:
+          # NOTE: These services do not need to be running for this job
+          DATABASE_URL: postgres://postgres@localhost:5432
+          ELASTICSEARCH_URL: http://localhost:9200
+          REDIS_URL: redis://localhost:6379
+          RAILS_ENV: test
+          ANTIVIRUS_URL: http://localhost:3006/safe
+          ANTIVIRUS_USERNAME: av
+          ANTIVIRUS_PASSWORD: password
+          PSD_HOST: example.com
+          EMAIL_WHITELIST_ENABLED: false
+          TWO_FACTOR_AUTHENTICATION_ENABLED: false
+          CI: true
         run: |
           bin/rails redacted_export:generate_sql > tmp/redacted_export.sql
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: redacted_export.sql
           path: tmp/redacted_export.sql
@@ -98,6 +98,9 @@ jobs:
         with:
           name: redacted_export.sql
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -117,5 +120,5 @@ jobs:
           cf auth
           cf target -o 'beis-opss' -s $SPACE
           cf logout
-          gzip --keep tmp/redacted_export.sql
-          aws s3 cp "tmp/redacted_export.sql.gz" "s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
+          gzip --keep redacted_export.sql
+          aws s3 cp redacted_export.sql.gz "s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
