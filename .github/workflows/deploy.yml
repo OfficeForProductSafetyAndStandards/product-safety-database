@@ -9,6 +9,7 @@ jobs:
   deploy:
     name: Deploy to Staging and Production
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v1
     - name: Install cf client
@@ -79,7 +80,42 @@ jobs:
         source deploy-github-functions.sh
         gh_deploy_failure staging $LOG_URL
 
+    - name: Set up Ruby
+      if: success()
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7.x
+
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Install RubyGems
+      if: success()
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --without development --jobs=4 --retry=3
+
+    - name: Run Smoke Tests
+      if: success()
+      env:
+        SMOKE_USER: ${{secrets.SMOKE_USER}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
+        SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
+        SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
+        SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
+        IS_REVIEW_APP: "false"
+        SMOKE_TEST_URL: "https://staging.product-safety-database.service.gov.uk"
+
+      run: |
+        bundle exec rspec ./smoke_test/cases_page_spec.rb
+
     - name: Create GitHub deployment for Production
+      if: success()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
         BRANCH: master
@@ -88,6 +124,7 @@ jobs:
         gh_deploy_create production
 
     - name: Initiate Production deployment status
+      if: success()
       env:
         GITHUB_TOKEN: ${{ secrets.GithubApiDeploymentToken }}
       run: |
@@ -95,6 +132,7 @@ jobs:
         gh_deploy_initiate production $LOG_URL
 
     - name: Deploy to production
+      if: success()
       env:
         SPACE: prod
         APP_NAME: psd-web
@@ -132,6 +170,20 @@ jobs:
       run: |
         source deploy-github-functions.sh
         gh_deploy_failure production $LOG_URL
+
+    - name: Run Smoke Tests
+      if: success()
+      env:
+        SMOKE_USER: ${{secrets.SMOKE_USER}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
+        SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
+        SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
+        SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
+        IS_REVIEW_APP: "false"
+        SMOKE_TEST_URL: "https://www.product-safety-database.service.gov.uk/"
+
+      run: |
+        bundle exec rspec ./smoke_test/cases_page_spec.rb
 
     - name: Alert team via Slack of deployment failure
       if: failure()
