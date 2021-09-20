@@ -13,6 +13,15 @@ module LoginHelpers
     end
   end
 
+  def sign_in_but_do_not_complete_2fa(user)
+    visit new_user_session_path
+
+    stub_request(:post, "https://api.notifications.service.gov.uk/v2/notifications/sms").and_return(body: {}.to_json, status: 200)
+    fill_in "user[email]", with: user.email
+    fill_in "user[password]", with: "2538fhdkvuULE36f"
+    click_on "Continue"
+  end
+
   def sign_out
     return if page.has_css?("a", text: "Sign in to your account")
 
