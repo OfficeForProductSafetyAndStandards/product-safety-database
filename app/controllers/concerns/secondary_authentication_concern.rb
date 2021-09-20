@@ -9,6 +9,7 @@ module SecondaryAuthenticationConcern
 
   def require_secondary_authentication(redirect_to: request.fullpath)
     return unless Rails.configuration.secondary_authentication_enabled
+
     session[:secondary_authentication_redirect_to] = redirect_to if path_can_be_redirected_to?
     session[:secondary_authentication_redirect_to_post_blocked] = !path_can_be_redirected_to? && !last_action_was_resending_2fa_code?
 
@@ -29,7 +30,6 @@ module SecondaryAuthenticationConcern
   def last_action_was_resending_2fa_code?
     request.fullpath == resend_secondary_authentication_code_path
   end
-
 
   # Use as `before_filter` in application_controller controller
   def ensure_secondary_authentication
