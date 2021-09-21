@@ -6,7 +6,7 @@ on:
   # workflow_dispatch:
 
 jobs:
-  create_schema:
+  create_redacted_schema_sql:
     name: Create schema artifact
     runs-on: ubuntu-latest
 
@@ -69,18 +69,18 @@ jobs:
           TWO_FACTOR_AUTHENTICATION_ENABLED: false
           CI: true
         run: |
-          bin/rails redacted_export:generate_sql > tmp/redacted_export.sql
+          bin/rails redacted_export:generate_sql > tmp/create_redacted_schema.sql
 
       - uses: actions/upload-artifact@v2
         with:
-          name: redacted_export.sql
-          path: tmp/redacted_export.sql
+          name: create_redacted_schema.sql
+          path: tmp/create_redacted_schema.sql
           retention-days: 7
 
   export_database:
     name: Export and upload redacted database dump
     runs-on: ubuntu-latest
-    needs: create_schema
+    needs: create_redacted_schema_sql
 
     steps:
       - name: Install cf client
@@ -91,15 +91,15 @@ jobs:
           curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}" | tar -zx -C $GITHUB_WORKSPACE/bin
           echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
+      - name: Install conduit plugin
+        run: cf install-plugin conduit
+
       - name: Install PostgreSQL client
         run: sudo apt-get install libpq-dev
 
       - uses: actions/download-artifact@v2
         with:
-          name: redacted_export.sql
-
-      - name: Display structure of downloaded files
-        run: ls -R
+          name: create_redacted_schema.sql
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -115,10 +115,19 @@ jobs:
           CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
           S3_BUCKET: psd-staging-database-dumps
         run: |
-          export TIMESTAMP=$(date +'%F-%H-%M-%S')
+          TIMESTAMP=$(date +'%F-%H-%M-%S')
+          TEMP_DB_SERVICE_NAME=redacted-export-$TIMESTAMP
+          echo Creating temporary export database $TEMP_DB_SERVICE_NAME
           cf api api.london.cloud.service.gov.uk
           cf auth
           cf target -o 'beis-opss' -s $SPACE
+          PSD_DATABASE_GUID=$(cf service psd-database --guid)
+          PSD_DATABASE_PLAN=$(cf service psd-database | awk -F ':' '$1=="plan" { gsub(/ /,"", $NF); print $NF }')
+          cf create-service postgres $PSD_DATABASE_PLAN $TEMP_DB_SERVICE_NAME -c "{\"restore_from_latest_snapshot_of\": \"$PSD_DATABASE_GUID\"}"
+          until cf service $TEMP_DB_SERVICE_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
+          cf conduit $TEMP_DB_SERVICE_NAME -- psql < create_redacted_schema.sql
+          cf conduit $TEMP_DB_SERVICE_NAME -- pg_dump --schema redacted --file psd_redacted_export.sql --no-acl --no-owner
+          cf delete-service $TEMP_DB_SERVICE_NAME -f
           cf logout
-          gzip --keep redacted_export.sql
-          aws s3 cp redacted_export.sql.gz "s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
+          gzip --keep psd_redacted_export.sql
+          aws s3 cp psd_redacted_export.sql.gz "s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
