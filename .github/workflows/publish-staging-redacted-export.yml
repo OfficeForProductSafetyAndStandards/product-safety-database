@@ -92,7 +92,7 @@ jobs:
           echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
 
       - name: Install conduit plugin
-        run: cf install-plugin conduit
+        run: cf install-plugin conduit -f
 
       - name: Install PostgreSQL client
         run: sudo apt-get install libpq-dev
