@@ -124,9 +124,11 @@ jobs:
           PSD_DATABASE_GUID=$(cf service psd-database --guid)
           PSD_DATABASE_PLAN=$(cf service psd-database | awk -F ':' '$1=="plan" { gsub(/ /,"", $NF); print $NF }')
           cf create-service postgres $PSD_DATABASE_PLAN $TEMP_DB_SERVICE_NAME -c "{\"restore_from_latest_snapshot_of\": \"$PSD_DATABASE_GUID\"}"
-          until cf service $TEMP_DB_SERVICE_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 20; echo "Waiting for db"; done
+          until cf service $TEMP_DB_SERVICE_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 30; echo "Waiting for db..."; done
           cf conduit $TEMP_DB_SERVICE_NAME -- psql < create_redacted_schema.sql
           cf conduit $TEMP_DB_SERVICE_NAME -- pg_dump --schema redacted --file psd_redacted_export.sql --no-acl --no-owner
+          echo Waiting for conduit app to terminate...
+          sleep 30
           cf delete-service $TEMP_DB_SERVICE_NAME -f
           cf logout
           gzip --keep psd_redacted_export.sql
