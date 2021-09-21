@@ -116,20 +116,26 @@ jobs:
           S3_BUCKET: psd-staging-database-dumps
         run: |
           TIMESTAMP=$(date +'%F-%H-%M-%S')
-          TEMP_DB_SERVICE_NAME=redacted-export-$TIMESTAMP
-          echo Creating temporary export database $TEMP_DB_SERVICE_NAME
+          TEMP_DB_SERVICE_NAME=psd-redacted-export-$TIMESTAMP
+          FINAL_S3_URL="s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
+          echo "::set-output name=temp_db_service_name::$TEMP_DB_SERVICE_NAME"
+          echo "::set-output name=final_s3_url::$FINAL_S3_URL"
           cf api api.london.cloud.service.gov.uk
           cf auth
           cf target -o 'beis-opss' -s $SPACE
           PSD_DATABASE_GUID=$(cf service psd-database --guid)
           PSD_DATABASE_PLAN=$(cf service psd-database | awk -F ':' '$1=="plan" { gsub(/ /,"", $NF); print $NF }')
           cf create-service postgres $PSD_DATABASE_PLAN $TEMP_DB_SERVICE_NAME -c "{\"restore_from_latest_snapshot_of\": \"$PSD_DATABASE_GUID\"}"
+          echo "::group::Waiting for db"
           until cf service $TEMP_DB_SERVICE_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 30; echo "Waiting for db..."; done
+          echo "::endgroup::"
+          echo "::group::Schema dump"
           cf conduit $TEMP_DB_SERVICE_NAME -- psql < create_redacted_schema.sql
           cf conduit $TEMP_DB_SERVICE_NAME -- pg_dump --schema redacted --file psd_redacted_export.sql --no-acl --no-owner
+          echo "::endgroup::"
           echo Waiting for conduit app to terminate...
           sleep 30
           cf delete-service $TEMP_DB_SERVICE_NAME -f
           cf logout
           gzip --keep psd_redacted_export.sql
-          aws s3 cp psd_redacted_export.sql.gz "s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
+          aws s3 cp psd_redacted_export.sql.gz $FINAL_S3_URL
