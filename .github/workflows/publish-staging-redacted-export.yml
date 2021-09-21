@@ -131,7 +131,7 @@ jobs:
           echo "::endgroup::"
           echo "::group::Schema dump"
           cf conduit $TEMP_DB_SERVICE_NAME -- psql < create_redacted_schema.sql
-          cf conduit $TEMP_DB_SERVICE_NAME -- pg_dump --schema redacted --file psd_redacted_export.sql --no-acl --no-owner
+          cf conduit $TEMP_DB_SERVICE_NAME -- pg_dump --schema=redacted --file=psd_redacted_export.sql --no-acl --no-owner --quote-all-identifiers --format=p --inserts --encoding=UTF8
           echo "::endgroup::"
           echo Waiting for conduit app to terminate...
           sleep 30
