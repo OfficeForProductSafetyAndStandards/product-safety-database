@@ -53,18 +53,19 @@ gem "bootsnap"
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
+  gem "capybara-mechanize"
   gem "dotenv-rails", "~> 2.7"
   gem "parallel_tests"
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
-  gem "pry-doc", "~> 1.1"
+  gem "pry-doc", "~> 1.2"
 end
 
 group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "solargraph", "~> 0.43"
-  gem "spring", "~> 2.1"
+  gem "spring", "~> 3.0"
   gem "spring-commands-rspec", "~> 1.0"
 end
 
