@@ -141,22 +141,22 @@ jobs:
           gzip --keep psd_redacted_export.sql
           aws s3 cp psd_redacted_export.sql.gz $FINAL_S3_URL
 
-    - name: Alert team via Slack of export failure
-      if: failure()
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
-      run: |
-        curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"exportbot\", \"text\": \"Redacted export has failed!\n\nCF Service: ${{ steps.export-database.outputs.temp-db-service-name }}\nS3 destination: ${{ steps.export-database.outputs.final-s3-url }}\", \"icon_emoji\": \":disappointed:\"}" $SLACK_WEBHOOK
+      - name: Alert team via Slack of export failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"exportbot\", \"text\": \"Redacted export has failed!\n\nCF Service: ${{ steps.export-database.outputs.temp-db-service-name }}\nS3 destination: ${{ steps.export-database.outputs.final-s3-url }}\", \"icon_emoji\": \":disappointed:\"}" $SLACK_WEBHOOK
 
-    - name: Try to delete the temporary DB
-      if: failure()
-      env:
-        SPACE: staging
-        CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
-        CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
-      run: |
-        cf api api.london.cloud.service.gov.uk
-        cf auth
-        cf target -o 'beis-opss' -s $SPACE
-        cf delete-service ${{ steps.export-database.outputs.temp-db-service-name }} -f
-        cf logout
+      - name: Try to delete the temporary DB
+        if: failure()
+        env:
+          SPACE: staging
+          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+        run: |
+          cf api api.london.cloud.service.gov.uk
+          cf auth
+          cf target -o 'beis-opss' -s $SPACE
+          cf delete-service ${{ steps.export-database.outputs.temp-db-service-name }} -f
+          cf logout
