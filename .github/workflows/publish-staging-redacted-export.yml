@@ -121,7 +121,6 @@ jobs:
           FINAL_S3_URL="s3://${S3_BUCKET}/${TIMESTAMP}.sql.gz"
           echo "::set-output name=temp-db-service-name::$TEMP_DB_SERVICE_NAME"
           echo "::set-output name=final-s3-url::$FINAL_S3_URL"
-          exit 1
           cf api api.london.cloud.service.gov.uk
           cf auth
           cf target -o 'beis-opss' -s $SPACE
