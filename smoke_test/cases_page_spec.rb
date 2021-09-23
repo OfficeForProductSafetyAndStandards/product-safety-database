@@ -1,6 +1,7 @@
 require 'capybara/rspec'
 require 'capybara/mechanize'
 require "webmock"
+require "capybara-screenshot/rspec"
 
 # we need to use machanize in order to make remote requests
 Capybara.register_driver :mechanize do |app|

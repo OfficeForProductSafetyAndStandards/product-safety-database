@@ -129,3 +129,9 @@ jobs:
 
       run: |
         bundle exec rspec ./smoke_test/cases_page_spec.rb
+
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: capybara screenshots
+        path: tmp/capybara
