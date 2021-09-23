@@ -128,7 +128,7 @@ jobs:
         SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD}}
 
       run: |
-        mkdir -p temp/capybara
+        mkdir -p tmp/capybara
         bundle exec rspec ./smoke_test/cases_page_spec.rb
 
     - uses: actions/upload-artifact@v1
