@@ -39,7 +39,7 @@ RSpec.feature "Search smoke test" do
     session.click_link "Cases"
   begin
     session.find(".govuk-grid-row.psd-case-card:nth-child(1)")
-    session.find(".govuk-grid-row.psd-case-card:nth-child(11)")
+    session.find(".govuk-grid-row.psd-case-card:nth-child(1000)")
   rescue
     session.save_page("tmp/capybara/screenshot")
   end
