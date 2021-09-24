@@ -7,7 +7,7 @@ Capybara.register_driver :mechanize do |app|
   Capybara::Mechanize::Driver.new(proc {})
 end
 
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.after { |example_group| save_page if example_group.exception }
 end
 
