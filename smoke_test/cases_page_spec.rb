@@ -38,15 +38,9 @@ RSpec.feature "Search smoke test" do
 
     session.click_link "Cases"
 
-  begin
-    session.find(".govuk-grid-row.psd-case-card:nth-child(1)")
-    session.find(".govuk-grid-row.psd-case-card:nth-child(1000)")
-  rescue
-    session.save_page("tmp/capybara/screenshot.html")
-  end
-
-    expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
-    expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1000)")
+    number_of_cases = session.all(".govuk-grid-row.psd-case-card:nth-child").count
+    session.save_page("tmp/capybara/screenshot.html") if number_of_cases < 10
+    expect(number_of_cases).to be > 9
   end
 end
 
