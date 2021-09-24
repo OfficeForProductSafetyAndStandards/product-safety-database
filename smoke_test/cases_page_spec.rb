@@ -38,7 +38,7 @@ RSpec.feature "Search smoke test" do
 
     session.click_link "Cases"
 
-    number_of_cases = session.all(".govuk-grid-row.psd-case-card:nth-child").count
+    number_of_cases = session.all(".govuk-grid-row.psd-case-card").count
     session.save_page("tmp/capybara/screenshot.html") if number_of_cases < 10
     expect(number_of_cases).to be > 9
   end
