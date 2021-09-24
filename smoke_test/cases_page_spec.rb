@@ -1,11 +1,14 @@
 require 'capybara/rspec'
 require 'capybara/mechanize'
 require "webmock"
-require "capybara-screenshot/rspec"
 
 # we need to use machanize in order to make remote requests
 Capybara.register_driver :mechanize do |app|
   Capybara::Mechanize::Driver.new(proc {})
+end
+
+Rspec.configure do |config|
+  config.after { |example_group| save_page if example_group.exception }
 end
 
 RSpec.feature "Search smoke test" do
@@ -28,7 +31,7 @@ RSpec.feature "Search smoke test" do
     loop do
       code = get_code
       break unless code
-      
+
       smoke_complete_secondary_authentication_with(code, session)
       attempts += 1
       break if session.has_content?("Open a new case")
