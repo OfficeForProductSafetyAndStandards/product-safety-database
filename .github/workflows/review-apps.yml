@@ -135,4 +135,4 @@ jobs:
       if: failure()
       with:
         name: capybara screenshots
-        path: tmp/capybara
+        path: tmp/capybara/screenshot
