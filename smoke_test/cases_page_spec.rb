@@ -41,7 +41,7 @@ RSpec.feature "Search smoke test" do
     session.find(".govuk-grid-row.psd-case-card:nth-child(1)")
     session.find(".govuk-grid-row.psd-case-card:nth-child(11)")
   rescue
-    session.save_page
+    session.save_page("tmp/capybara/screenshot")
   end
     expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
     expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1000)")
