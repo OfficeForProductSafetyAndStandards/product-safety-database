@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "will_paginate", "~> 3.3" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.102"
+gem "aws-sdk-s3", "~> 1.103"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -23,7 +23,7 @@ gem "lograge", "~> 0.11"
 gem "mini_magick", "~> 4.11"
 gem "pg", "~> 1.2"
 gem "pghero", "~> 2.8"
-gem "puma", "~> 5.4"
+gem "puma", "~> 5.5"
 gem "pundit", "~> 2.1"
 gem "rack", "~> 2.2"
 gem "rails", "~> 6.1.4"
@@ -53,18 +53,19 @@ gem "bootsnap"
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
+  gem "capybara-mechanize"
   gem "dotenv-rails", "~> 2.7"
   gem "parallel_tests"
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
-  gem "pry-doc", "~> 1.1"
+  gem "pry-doc", "~> 1.2"
 end
 
 group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "solargraph", "~> 0.43"
-  gem "spring", "~> 2.1"
+  gem "spring", "~> 3.0"
   gem "spring-commands-rspec", "~> 1.0"
 end
 
