@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def govuk_hr
-    tag(:hr, class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
+    tag.hr(class: "govuk-section-break govuk-section-break--m govuk-section-break--visible")
   end
 
   def markdown(text)
