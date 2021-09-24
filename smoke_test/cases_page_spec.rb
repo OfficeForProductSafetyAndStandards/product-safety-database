@@ -7,21 +7,17 @@ Capybara.register_driver :mechanize do |app|
   Capybara::Mechanize::Driver.new(proc {})
 end
 
-RSpec.configure do |config|
-  config.after { |example_group| save_page if example_group.exception }
-end
-
 RSpec.feature "Search smoke test" do
   let(:session) { Capybara::Session.new :mechanize }
 
   scenario "sign-in and visit case page" do
     WebMock.allow_net_connect!
-    session.driver.browser.agent.add_auth(ENV["SMOKE_TEST_URL"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
-    session.visit(ENV["SMOKE_TEST_URL"])
+    session.driver.browser.agent.add_auth("https://psd-pr-1599.london.cloudapps.digital/", "psd", "reviewAPP")
+    session.visit("https://psd-pr-1599.london.cloudapps.digital/")
     expect(session).to have_css("h1", text: "Product Safety Database")
-    session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")
-    session.fill_in "Email address", with: ENV["SMOKE_USER"]
-    session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
+    session.visit("#{"https://staging.product-safety-database.service.gov.uk/"}/sign-in")
+    session.fill_in "Email address", with: "smoketest@example.com"
+    session.fill_in "Password", with: "JHxztd534MeFw4Q"
     session.click_button "Continue"
 
     expect(session).to have_current_path(/\/two-factor/)
@@ -41,8 +37,14 @@ RSpec.feature "Search smoke test" do
     end
 
     session.click_link "Cases"
+  begin
+    session.find(".govuk-grid-row.psd-case-card:nth-child(1)")
+    session.find(".govuk-grid-row.psd-case-card:nth-child(1000)")
+  rescue
+    session.save_page
+  end
     expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
-    expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(10)")
+    expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1000)")
   end
 end
 
@@ -52,10 +54,10 @@ def smoke_complete_secondary_authentication_with(code, session)
 end
 
 def get_code
-  uri = URI(ENV["SMOKE_RELAY_CODE_URL"])
+  uri = URI("https://beis-opss-text-relay.london.cloudapps.digital/text")
 
   req = Net::HTTP::Get.new(uri)
-  req.basic_auth ENV["SMOKE_RELAY_CODE_USER"], ENV["SMOKE_RELAY_CODE_PASS"]
+  req.basic_auth "sendatext", "itsforsmoketest"
 
   http = Net::HTTP.new(uri.hostname, uri.port)
   http.use_ssl = true
