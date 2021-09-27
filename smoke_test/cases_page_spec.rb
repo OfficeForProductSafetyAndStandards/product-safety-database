@@ -50,10 +50,7 @@ RSpec.feature "Search smoke test" do
       sleep attempts * 10
     end
 
-    @session.click_link "Cases123"
-
-    @session.find(".govuk-grid-row.psd-case-card:nth-child(1)")
-    @session.find(".govuk-grid-row.psd-case-card:nth-child(10)")
+    @session.click_link "Cases"
 
     expect(@session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
     expect(@session).to have_css(".govuk-grid-row.psd-case-card:nth-child(10)")
