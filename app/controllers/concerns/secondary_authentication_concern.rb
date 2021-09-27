@@ -11,7 +11,7 @@ module SecondaryAuthenticationConcern
     return unless Rails.configuration.secondary_authentication_enabled
 
     session[:secondary_authentication_redirect_to] = redirect_to if path_can_be_redirected_to?
-    session[:secondary_authentication_redirect_to_post_blocked] = !path_can_be_redirected_to?
+    session[:secondary_authentication_redirect_to_post_blocked] = !path_can_be_redirected_to? && !last_action_was_resending_2fa_code?
 
     if user_id_for_secondary_authentication && !secondary_authentication_present?
       user = User.find(user_id_for_secondary_authentication)
@@ -25,6 +25,10 @@ module SecondaryAuthenticationConcern
 
   def path_can_be_redirected_to?
     request.get? || request.head?
+  end
+
+  def last_action_was_resending_2fa_code?
+    request.fullpath == resend_secondary_authentication_code_path
   end
 
   # Use as `before_filter` in application_controller controller
