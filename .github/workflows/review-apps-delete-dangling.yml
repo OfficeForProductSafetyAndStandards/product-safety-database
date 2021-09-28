@@ -3,6 +3,7 @@ name: Delete dangling review apps
 on:
   schedule:
     - cron: "0 1 * * *" # Every night at 1am
+  workflow_dispatch:
 
 jobs:
   cleanup_dangling_reviewapps:
