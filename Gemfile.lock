@@ -507,7 +507,7 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 5.0)
-    solargraph (0.43.2)
+    solargraph (0.44.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -659,7 +659,7 @@ DEPENDENCIES
   simplecov-console (~> 0.9)
   simplecov-lcov
   slim-rails
-  solargraph (~> 0.43)
+  solargraph (~> 0.44)
   spring (~> 3.0)
   spring-commands-rspec (~> 1.0)
   sprockets (= 4.0.2)
