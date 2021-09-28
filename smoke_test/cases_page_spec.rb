@@ -7,38 +7,53 @@ Capybara.register_driver :mechanize do |app|
   Capybara::Mechanize::Driver.new(proc {})
 end
 
-RSpec.feature "Search smoke test" do
-  let(:session) { Capybara::Session.new :mechanize }
+RSpec.configure do |config|
+  config.before do
+    @session = Capybara::Session.new :mechanize
+  end
 
+  config.after do |example|
+    take_screenshot_after_failed_example(example)
+  end
+end
+
+def take_screenshot_after_failed_example(example)
+  return unless example.exception
+  puts "Saving screenshot to screenshot.html"
+  @session.save_page("tmp/capybara/screenshot.html")
+end
+
+RSpec.feature "Search smoke test" do
   scenario "sign-in and visit case page" do
     WebMock.allow_net_connect!
-    session.driver.browser.agent.add_auth(ENV["SMOKE_TEST_URL"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
-    session.visit(ENV["SMOKE_TEST_URL"])
-    expect(session).to have_css("h1", text: "Product Safety Database")
-    session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")
-    session.fill_in "Email address", with: ENV["SMOKE_USER"]
-    session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
-    session.click_button "Continue"
+    @session.driver.browser.agent.add_auth(ENV["SMOKE_TEST_URL"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
+    @session.visit(ENV["SMOKE_TEST_URL"])
+    expect(@session).to have_css("h1", text: "Product Safety Database")
+    @session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")
+    @session.fill_in "Email address", with: ENV["SMOKE_USER"]
+    @session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
+    @session.click_button "Continue"
 
-    expect(session).to have_current_path(/\/two-factor/)
-    expect(session).to have_content("Check your phone")
+    expect(@session).to have_current_path(/\/two-factor/)
+    expect(@session).to have_content("Check your phone")
 
     attempts = 0
     loop do
       code = get_code
       break unless code
-      
-      smoke_complete_secondary_authentication_with(code, session)
+
+      smoke_complete_secondary_authentication_with(code, @session)
       attempts += 1
-      break if session.has_content?("Open a new case")
+      break if @session.has_content?("Open a new case")
       break if attempts > 3
 
       sleep attempts * 10
     end
 
-    session.click_link "Cases"
-    expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
-    expect(session).to have_css(".govuk-grid-row.psd-case-card:nth-child(10)")
+    @session.click_link "Cases"
+
+    expect(@session).to have_css(".govuk-grid-row.psd-case-card:nth-child(1)")
+    expect(@session).to have_css(".govuk-grid-row.psd-case-card:nth-child(10)")
   end
 end
 
