@@ -180,6 +180,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :business_relationships
+
   resources :businesses, except: %i[new create destroy], concerns: %i[document_attachable] do
     resources :locations do
       member do
