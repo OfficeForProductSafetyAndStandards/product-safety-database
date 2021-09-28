@@ -112,7 +112,14 @@ jobs:
         SMOKE_TEST_URL: "https://staging.product-safety-database.service.gov.uk"
 
       run: |
+        mkdir -p tmp/capybara
         bundle exec rspec ./smoke_test/cases_page_spec.rb
+
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: capybara screenshots
+        path: tmp/capybara/
 
     - name: Create GitHub deployment for Production
       if: success()
@@ -184,6 +191,12 @@ jobs:
 
       run: |
         bundle exec rspec ./smoke_test/cases_page_spec.rb
+
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: capybara screenshots
+        path: tmp/capybara/
 
     - name: Alert team via Slack of deployment failure
       if: failure()
