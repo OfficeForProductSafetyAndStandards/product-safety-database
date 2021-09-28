@@ -6,7 +6,6 @@ class BusinessRelationshipForm
 
   attribute :relationship
   attribute :relationship_other
-  attribute :id
 
   BUSINESS_TYPES = {
     "retailer" => "Retailer",
@@ -16,28 +15,16 @@ class BusinessRelationshipForm
     "fulfillment_house" => "Fulfillment house",
     "distributor" => "Distributor",
     "other" => "Other"
-
   }.freeze
 
   validates_inclusion_of :relationship, in: BUSINESS_TYPES.keys
   validates_presence_of :relationship_other, if: -> { relationship == "other" }
 
-  def attributes
-    byebug
-    calculate_relationship.merge(id: id)
-  end
-
-  def calculate_relationship
-    if relationship != "other"
-      {
-        relationship: relationship,
-        relationship_other: nil
-      }
+  def self.from(investigation_business)
+    if BUSINESS_TYPES.keys.include?(investigation_business.relationship.downcase)
+      new(relationship: investigation_business.relationship, relationship_other: nil)
     else
-      {
-        relationship: "other",
-        relationship_other: relationship
-      }
+      new(relationship: "other", relationship_other: investigation_business.relationship)
     end
   end
 end

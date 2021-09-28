@@ -1,4 +1,4 @@
-<%= page_title "Add business to case", errors: @business_relationship_form.errors.any? %>
+<%= page_title "Change business type", errors: @business_relationship_form.errors.any? %>
 <% content_for :back_link do %>
   <%= govukBackLink(
     text: "Back to #{@investigation.pretty_description.downcase}",
@@ -8,13 +8,13 @@
 
 <%= render "investigations/pages_top", investigation: @investigation %>
 
-<%= form_with(model: @business_relationship_form, local: true, url: business_relationship_path(id: @business_relationship_form.id, investigation_pretty_id: @investigation.pretty_id), method: :put) do |form| %>
+<%= form_with(model: @business_relationship_form, local: true, url: business_relationship_path(id: @investigation_business.id, investigation_pretty_id: @investigation.pretty_id), method: :put) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= render "form_components/govuk_error_summary", form: form %>
       <%= render "investigation_heading", investigation: @investigation %>
 
-      <h2 class="govuk-heading-m">Add business</h2>
+      <h2 class="govuk-heading-m">Change business type</h2>
 
       <%- other = capture do %>
         <%= render "form_components/govuk_input",

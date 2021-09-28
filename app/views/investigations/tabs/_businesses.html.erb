@@ -27,7 +27,7 @@
       </h2>
 
       <% if policy(@investigation).update? %>
-        <p class="govuk-body"><%= link_to "Change relationship", edit_business_relationship_path(id: ib.id, investigation_pretty_id:  @investigation.pretty_id), class: "govuk-link" %></p>
+        <p class="govuk-body"><%= link_to "Change business type", edit_business_relationship_path(id: ib.id, investigation_pretty_id:  @investigation.pretty_id), class: "govuk-link" %></p>
       <% end %>
 
       <%= business_summary_list ib.business %>
