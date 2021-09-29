@@ -21,7 +21,7 @@ class BusinessRelationshipsController < ApplicationController
       }
     ))
 
-    redirect_to investigation_businesses_path(@investigation), flash: { success: "Relationship was successfully updated" }
+    redirect_to investigation_businesses_path(@investigation), flash: { success: "Business type was successfully updated" }
   end
 
 private

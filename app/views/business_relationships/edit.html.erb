@@ -6,13 +6,11 @@
   ) %>
 <% end %>
 
-<%= render "investigations/pages_top", investigation: @investigation %>
-
 <%= form_with(model: @business_relationship_form, local: true, url: business_relationship_path(id: @investigation_business.id, investigation_pretty_id: @investigation.pretty_id), method: :put) do |form| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= render "form_components/govuk_error_summary", form: form %>
-      <%= render "investigation_heading", investigation: @investigation %>
+      <%= render "business_heading", business: @investigation_business.business %>
 
       <h2 class="govuk-heading-m">Change business type</h2>
 
