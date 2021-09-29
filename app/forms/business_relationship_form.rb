@@ -18,7 +18,7 @@ class BusinessRelationshipForm
   }.freeze
 
   validates_inclusion_of :relationship, in: BUSINESS_TYPES.keys
-  validates_presence_of :relationship_other, if: -> { relationship == "other" }
+  validates_presence_of  :relationship_other, if: -> { relationship == "other" }
 
   def self.from(investigation_business)
     if BUSINESS_TYPES.keys.include?(investigation_business.relationship.downcase)

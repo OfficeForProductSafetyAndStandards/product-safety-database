@@ -8,18 +8,18 @@ class BusinessRelationshipsController < ApplicationController
   end
 
   def update
-    investigation_business = InvestigationBusiness.find_by(id: params["id"])
+    @investigation_business = InvestigationBusiness.find_by(id: params["id"])
     @business_relationship_form = BusinessRelationshipForm.new(business_relationship_params)
 
-    if @business_relationship_form.valid?
-      UpdateBusinessRelationship.call!(@business_relationship_form.attributes.merge(
-        {
-          user: current_user,
-          investigation: @investigation,
-          investigation_business: investigation_business
-        }
-      ))
-    end
+    return render(:edit) if @business_relationship_form.invalid?
+
+    UpdateBusinessRelationship.call!(@business_relationship_form.attributes.merge(
+      {
+        user: current_user,
+        investigation: @investigation,
+        investigation_business: @investigation_business
+      }
+    ))
 
     redirect_to investigation_businesses_path(@investigation), flash: { success: "Relationship was successfully updated" }
   end
