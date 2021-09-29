@@ -93,7 +93,7 @@ private
     if @business.valid?
       AddBusinessToCase.call!(
         business: @business,
-        relationship: session[:type],
+        relationship: session[:relationship],
         investigation: @investigation,
         user: current_user
       )
@@ -108,7 +108,7 @@ private
   end
 
   def assign_type
-    session[:type] = business_type_params[:type] == "other" ? business_type_params[:type_other] : business_type_params[:type]
+    session[:relationship] = business_type_params[:relationship] == "other" ? business_type_params[:relationship_other] : business_type_params[:relationship]
   end
 
   def clear_session
@@ -119,10 +119,10 @@ private
 
   def business_valid?
     if step == :type
-      if business_type_params[:type].nil?
-        @business.errors.add(:type, "Please select a business type")
-      elsif business_type_params[:type] == "other" && business_type_params[:type_other].blank?
-        @business.errors.add(:type, 'Please enter a business type "Other"')
+      if business_type_params[:relationship].nil?
+        @business.errors.add(:relationship, "Please select a business type")
+      elsif business_type_params[:relationship] == "other" && business_type_params[:relationship_other].blank?
+        @business.errors.add(:relationship, 'Please enter a business type "Other"')
       end
     else
       @business.valid?
@@ -158,7 +158,7 @@ private
   end
 
   def business_type_params
-    params.require(:business).permit(:type, :type_other)
+    params.require(:business).permit(:relationship, :relationship_other)
   end
 
   def redirect_to_investigation_businesses_tab(flash)
