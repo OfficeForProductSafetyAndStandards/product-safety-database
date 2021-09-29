@@ -15,8 +15,8 @@ class UpdateBusinessRelationship
 
       investigation_business.save!
 
-      # create_audit_activity
-      # send_notification_email
+      create_audit_activity
+      send_notification_email
     end
   end
 
@@ -30,7 +30,31 @@ private
     end
   end
 
+  def business
+    investigation_business.business
+  end
+
   def no_changes?
     !investigation_business.changed?
+  end
+
+  def create_audit_activity
+    context.activity = AuditActivity::BusinessRelationship::Update.create!(
+      source: UserSource.new(user: user),
+      investigation: investigation,
+      metadata: AuditActivity::BusinessRelationship::Update.build_metadata(investigation_business)
+    )
+  end
+
+  def send_notification_email
+    email_recipients_for_case_owner.each do |recipient|
+      NotifyMailer.investigation_updated(
+        investigation.pretty_id,
+        recipient.name,
+        recipient.email,
+        "Business relationship between #{business.trading_name} and the #{investigation.case_type} was changed to #{investigation_business.relationship} by #{user}.",
+        "Business relationship updated"
+      ).deliver_later
+    end
   end
 end

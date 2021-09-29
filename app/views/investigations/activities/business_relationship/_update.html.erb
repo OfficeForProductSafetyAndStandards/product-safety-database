@@ -1,0 +1,8 @@
+<div class="govuk-body">
+  <p>Changes:</p>
+  <% if activity.relationship_changed? %>
+    Relationship: <b><%= activity.new_relationship  %></b><br>
+  <% end %>
+</div>
+
+<%= link_to "View business", investigation_businesses_path(activity.investigation, activity.business), class: "govuk-link psd-block-link" %>

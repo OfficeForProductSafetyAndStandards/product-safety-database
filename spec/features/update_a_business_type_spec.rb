@@ -26,6 +26,11 @@ RSpec.feature "Update a business type", :with_stubbed_elasticsearch, :with_stubb
       click_button "Continue"
 
       expect(page).to have_content(new_type.capitalize)
+
+      click_link "Activity"
+
+      expect(page).to have_content("Business relationship updated")
+      expect(page).to have_content("Relationship: #{new_type}")
     end
   end
 
@@ -52,6 +57,9 @@ RSpec.feature "Update a business type", :with_stubbed_elasticsearch, :with_stubb
       click_button "Continue"
 
       expect(page).to have_content("Manufacturer")
+
+      expect(page).to have_content("Business relationship updated")
+      expect(page).to have_content("Relationship: manufacturer")
     end
   end
 end
