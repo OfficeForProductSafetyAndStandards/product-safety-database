@@ -52,7 +52,7 @@ private
         investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "Business relationship between #{business.trading_name} and the #{investigation.case_type} was changed to #{investigation_business.relationship} by #{user}.",
+        "Business relationship between #{business.trading_name} and the #{investigation.case_type} was changed to #{investigation_business.relationship} by #{user.name}.",
         "Business relationship updated"
       ).deliver_later
     end
