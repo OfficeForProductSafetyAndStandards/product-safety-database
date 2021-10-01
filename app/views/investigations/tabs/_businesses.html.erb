@@ -11,7 +11,7 @@
 
     <% if policy(@investigation).update?(user: current_user) %>
       <p class="govuk-body">
-        <%= link_to "Add business", new_investigation_business_path(@investigation) %>
+        <%= link_to "Add business", new_business_path(investigation_id: @investigation.id) %>
       </p>
     <% end %>
 

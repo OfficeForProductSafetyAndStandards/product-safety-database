@@ -1,0 +1,28 @@
+<%= page_title "Create business", errors: @business_form.errors.any? %>
+
+<% if @investigation %>
+  <% content_for :back_link do %>
+    <%= govukBackLink(
+      text: "Back to #{@investigation.pretty_description.downcase}",
+      href: investigation_businesses_path(@investigation)
+    ) %>
+  <% end %>
+<% end %>
+
+<%= render "investigations/pages_top", investigation: @investigation %>
+
+<%= form_with(model: @business_form,
+              url: businesses_path,
+              method: :post,
+              local: true,
+              html: { autocomplete: :off }) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= render "investigation_heading", investigation: @investigation %>
+
+      <h2 class="govuk-heading-m">Add business</h2>
+      <%= render "businesses/form", form: form, investigation: @investigation %>
+    </div>
+  </div>
+<% end %>

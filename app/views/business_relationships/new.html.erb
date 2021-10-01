@@ -1,0 +1,18 @@
+<%= page_title "Change business type", errors: @business_relationship_form.errors.any? %>
+<% content_for :back_link do %>
+  <%= govukBackLink(
+    text: "Back to #{@investigation.pretty_description.downcase}",
+    href: investigation_businesses_path(@investigation)
+  ) %>
+<% end %>
+
+<%= form_with(model: @business_relationship_form, local: true, url: business_relationships_path(business_id: @business.id, investigation_pretty_id: @investigation.pretty_id), method: :post) do |form| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <%= render "form_components/govuk_error_summary", form: form %>
+      <%= render "business_heading", business: @business %>
+
+      <%= render "form", form: form %>
+  </div>
+  </div>
+<% end %>

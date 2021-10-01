@@ -3,7 +3,7 @@ class Investigations::BusinessesController < ApplicationController
   include CountriesHelper
   include Wicked::Wizard
   skip_before_action :setup_wizard, only: %i[remove destroy]
-  steps :type, :details
+  steps :details, :type
 
   before_action :set_investigation, only: %i[index update new show]
   before_action :set_countries, only: %i[update show]
@@ -40,7 +40,7 @@ class Investigations::BusinessesController < ApplicationController
   def update
     authorize @investigation, :update?
     if business_valid?
-      if step == :type
+      if step == :details
         assign_type
         redirect_to next_wizard_path
       else

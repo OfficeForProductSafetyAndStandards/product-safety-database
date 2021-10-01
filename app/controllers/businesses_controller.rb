@@ -29,6 +29,28 @@ class BusinessesController < ApplicationController
     end
   end
 
+  def new
+    @investigation = Investigation.find_by(id: params["investigation_id"]).decorate
+    @business_form = BusinessForm.new
+  end
+
+  def create
+    @business_form = BusinessForm.new(business_form_attributes)
+    @investigation = Investigation.find_by(id: params["investigation_id"])
+
+    if @business_form.valid?
+      CreateBusiness.call!(
+        @business_form.serializable_hash.except(:investigation_id).merge(user: current_user)
+      )
+    end
+
+    if @investigation
+      redirect_to new_business_relationship_path(business_id: Business.last.id, investigation_pretty_id: @investigation.pretty_id)
+    else
+      redirect_to businesses_path
+    end
+  end
+
   # GET /businesses/1
   # GET /businesses/1.json
   def show
@@ -56,6 +78,10 @@ class BusinessesController < ApplicationController
   end
 
 private
+
+  def business_form_attributes
+    params.require(:business_form).permit(:trading_name, :legal_name, :company_number)
+  end
 
   def update_business
     @business.assign_attributes(business_params)
