@@ -122,7 +122,7 @@ module Investigations::DisplayTextHelper
         value: { text: investigation_business.decorate.pretty_relationship },
         actions: [
           {
-            href: edit_business_relationship_path(id: investigation_business.id, investigation_pretty_id:  @investigation.pretty_id),
+            href: edit_business_relationship_path(id: investigation_business.id, investigation_pretty_id: @investigation.pretty_id),
             text: "Change role",
             classes: nil
           }

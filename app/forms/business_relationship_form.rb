@@ -21,7 +21,7 @@ class BusinessRelationshipForm
   validates_presence_of  :relationship_other, if: -> { relationship == "other" }
 
   def self.from(investigation_business)
-    if BUSINESS_TYPES.keys.include?(investigation_business.relationship.downcase)
+    if BUSINESS_TYPES.key?(investigation_business.relationship.downcase)
       new(relationship: investigation_business.relationship, relationship_other: nil)
     else
       new(relationship: "other", relationship_other: investigation_business.relationship)

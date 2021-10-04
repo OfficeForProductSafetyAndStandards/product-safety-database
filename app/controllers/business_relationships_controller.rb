@@ -37,12 +37,12 @@ class BusinessRelationshipsController < ApplicationController
     return render(:edit) if @business_relationship_form.invalid?
 
     UpdateBusinessRelationship.call!(@business_relationship_form.attributes.merge(
-      {
-        user: current_user,
-        investigation: @investigation,
-        investigation_business: @investigation_business
-      }
-    ))
+                                       {
+                                         user: current_user,
+                                         investigation: @investigation,
+                                         investigation_business: @investigation_business
+                                       }
+                                     ))
 
     redirect_to investigation_businesses_path(@investigation), flash: { success: "Business type was successfully updated" }
   end

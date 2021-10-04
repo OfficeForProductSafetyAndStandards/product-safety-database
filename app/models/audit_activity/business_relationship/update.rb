@@ -1,5 +1,4 @@
 class AuditActivity::BusinessRelationship::Update < AuditActivity::Base
-
   def self.build_metadata(investigation_business)
     {
       investigation_business_id: investigation_business.id,
