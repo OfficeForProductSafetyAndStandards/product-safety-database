@@ -123,8 +123,7 @@ module Investigations::DisplayTextHelper
         actions: [
           {
             href: edit_business_relationship_path(id: investigation_business.id, investigation_pretty_id:  @investigation.pretty_id),
-            text: "Change",
-            visuallyHiddenText: "business relationship",
+            text: "Change role",
             classes: nil
           }
         ]

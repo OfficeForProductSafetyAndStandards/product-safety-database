@@ -13,7 +13,7 @@ RSpec.feature "Update a business type", :with_stubbed_elasticsearch, :with_stubb
       sign_in same_team_user
       visit "/cases/#{investigation.pretty_id}/businesses"
 
-      click_link "Change business type"
+      click_link "Change role"
 
       within_fieldset "Select business type" do
         expect(page).to have_checked_field(investigation_business.relationship.capitalize)
@@ -45,7 +45,7 @@ RSpec.feature "Update a business type", :with_stubbed_elasticsearch, :with_stubb
       sign_in same_team_user
       visit "/cases/#{investigation.pretty_id}/businesses"
 
-      click_link "Change business type"
+      click_link "Change role"
 
       within_fieldset "Select business type" do
         expect(page).to have_checked_field("Other")
