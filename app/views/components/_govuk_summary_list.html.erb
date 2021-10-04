@@ -10,13 +10,13 @@
       <dt class="govuk-summary-list__key <%= row[:key][:classes] %>"><%= row[:key][:text] %></dt>
       <dd class="govuk-summary-list__value <%= row[:value][:classes] %>"><%= row[:value][:text] %></dd>
 
-      <% if row[:actions] %>
-        <dd class="govuk-summary-list__actions">
-          <% row[:actions].each do |action| %>
-            <a class="govuk-link <%= action[:classes] %>" href="<%= action[:href] %>"><%= action[:text] %><span class="govuk-visually-hidden"> <%= action[:visually_hidden_text] %></span></a>
-          <% end %>
-        </dd>
-      <% end %>
+      <dd class="govuk-summary-list__actions">
+        <% if row[:actions] %>
+            <% row[:actions].each do |action| %>
+              <a class="govuk-link <%= action[:classes] %>" href="<%= action[:href] %>"><%= action[:text] %><span class="govuk-visually-hidden"> <%= action[:visually_hidden_text] %></span></a>
+            <% end %>
+        <% end %>
+      </dd>
     </div>
   <% end %>
 </dl>

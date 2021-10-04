@@ -107,7 +107,7 @@ module Investigations::DisplayTextHelper
     safe_join(owner_names, "<br>".html_safe)
   end
 
-  def business_summary_list(business)
+  def business_summary_list(business, investigation_business = nil)
     rows = [
       { key: { text: "Trading name" }, value: { text: business.trading_name } },
       { key: { text: "Registered or legal name" }, value: { text: business.legal_name } },
@@ -115,6 +115,21 @@ module Investigations::DisplayTextHelper
       { key: { text: "Address" }, value: { text: business.primary_location&.summary } },
       { key: { text: "Contact" }, value: { text: business.primary_contact&.summary } }
     ]
+
+    if investigation_business && policy(@investigation).update?
+      rows << {
+        key: { text: "Role in supply chain" },
+        value: { text: investigation_business.decorate.pretty_relationship },
+        actions: [
+          {
+            href: edit_business_relationship_path(id: investigation_business.id, investigation_pretty_id:  @investigation.pretty_id),
+            text: "Change",
+            visuallyHiddenText: "business relationship",
+            classes: nil
+          }
+        ]
+      }
+    end
 
     # TODO: PSD-693 Add primary authorities to businesses
     # { key: { text: 'Primary authority' }, value: { text: 'Suffolk Trading Standards' } }
