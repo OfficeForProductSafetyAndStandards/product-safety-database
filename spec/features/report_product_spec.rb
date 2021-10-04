@@ -272,9 +272,9 @@ RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_
 
         click_link "Businesses (4)"
 
-        expect_case_businesses_page_to_show(label: "Retailer", business: business_details[:retailer])
-        expect_case_businesses_page_to_show(label: "Exporter", business: business_details[:exporter])
-        expect_case_businesses_page_to_show(label: "Advertiser", business: business_details[:advertiser])
+        expect_case_businesses_page_to_show(label: business_details[:retailer][:trading_name], business: business_details[:retailer])
+        expect_case_businesses_page_to_show(label: business_details[:exporter][:trading_name], business: business_details[:exporter])
+        expect_case_businesses_page_to_show(label: business_details[:advertiser][:trading_name], business: business_details[:advertiser])
 
         click_link "Supporting information (7)"
 
