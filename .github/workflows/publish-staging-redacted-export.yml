@@ -114,7 +114,7 @@ jobs:
           timeout 15m bash -c 'until cf tasks $TEMP_APP_NAME > /tmp/task_result && grep -E "SUCCEEDED" /tmp/task_result; do sleep 10; echo "Waiting for task..."; done'
           echo "::endgroup::"
 
-          cf delete-service $TEMP_APP_NAME -f
+          cf delete $TEMP_APP_NAME -f
           sleep 5
           cf delete-service $TEMP_DB_SERVICE_NAME -f
           cf logout
@@ -136,7 +136,7 @@ jobs:
           cf api api.london.cloud.service.gov.uk
           cf auth
           cf target -o 'beis-opss' -s $SPACE
-          cf delete-service ${{ steps.export-database.outputs.temp-app-name }} -f
+          cf delete ${{ steps.export-database.outputs.temp-app-name }} -f
           sleep 5
           cf delete-service ${{ steps.export-database.outputs.temp-db-service-name }} -f
           cf logout
