@@ -1,8 +1,8 @@
 name: Publish Staging redacted export to S3
 
 on:
-  # workflow_dispatch:
-  # TODO: Switch to manual dispatch
+  workflow_dispatch:
+  # TODO: Switch to manual dispatch only (remove the pull_request trigger)
   pull_request:
 
 jobs:
@@ -83,6 +83,8 @@ jobs:
         id: export-database
         env:
           SPACE: staging
+          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
         run: |
           MAIN_DATABASE_SERVICE_NAME=psd-database
           REDEX_ENV=psd-redex-env
