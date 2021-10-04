@@ -23,21 +23,17 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <% @investigation.investigation_businesses.each do |ib| %>
       <h2 class="govuk-heading-m">
-        <%= ib.decorate.pretty_relationship %>
+        <%= ib.business.trading_name %>
       </h2>
 
-      <% if policy(@investigation).update? %>
-        <p class="govuk-body"><%= link_to "Change business type", edit_business_relationship_path(id: ib.id, investigation_pretty_id:  @investigation.pretty_id), class: "govuk-link" %></p>
-      <% end %>
-
-      <%= business_summary_list ib.business %>
+      <%= business_summary_list(ib.business, ib) %>
 
       <%= link_with_hidden_text_to "View business",
          "(#{ib.business.trading_name})",
        ib.business,
        class: "govuk-link app-block-link govuk-!-margin-right-3" %>
 
-      <%= link_with_hidden_text_to t("change_business_details"), t("change_business_details"), edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
+      <%= link_with_hidden_text_to "Change business details", "Change business details", edit_business_path(ib.business), class: "govuk-link app-block-link govuk-!-margin-right-3" %>
       <% if policy(@investigation).update?(user: current_user) %>
         <div class="govuk-warning-text">
           <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
