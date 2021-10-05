@@ -7,6 +7,12 @@ class AuditActivity::BusinessRelationship::Update < AuditActivity::Base
   end
 
   def title(*)
-    "Business relationship updated"
+    "Business relationship with #{business_trading_name} updated"
+  end
+
+private
+
+  def business_trading_name
+    Business.find_by(id: business_id).trading_name
   end
 end

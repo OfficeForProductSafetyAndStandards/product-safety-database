@@ -42,7 +42,8 @@ private
     context.activity = AuditActivity::BusinessRelationship::Update.create!(
       source: UserSource.new(user: user),
       investigation: investigation,
-      metadata: AuditActivity::BusinessRelationship::Update.build_metadata(investigation_business)
+      metadata: AuditActivity::BusinessRelationship::Update.build_metadata(investigation_business),
+      business_id: business.id
     )
   end
 
