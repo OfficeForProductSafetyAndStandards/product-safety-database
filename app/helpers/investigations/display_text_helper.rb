@@ -108,12 +108,13 @@ module Investigations::DisplayTextHelper
   end
 
   def business_summary_list(business, investigation_business = nil)
+
     rows = [
       { key: { text: "Trading name" }, value: { text: business.trading_name } },
       { key: { text: "Registered or legal name" }, value: { text: business.legal_name } },
       { key: { text: "Company number" }, value: { text: business.company_number } },
-      { key: { text: "Address" }, value: { text: business.primary_location&.summary } },
-      { key: { text: "Contact" }, value: { text: business.primary_contact&.summary } }
+      { key: { text: "Address" }, value: { text: business.primary_location&.summary }, actions: location_row_actions(business) },
+      { key: { text: "Contact" }, value: { text: business.primary_contact&.summary }, actions: contact_row_actions(business) }
     ]
 
     if investigation_business && policy(@investigation).update?
@@ -135,6 +136,22 @@ module Investigations::DisplayTextHelper
     # { key: { text: 'Primary authority' }, value: { text: 'Suffolk Trading Standards' } }
 
     render "components/govuk_summary_list", rows: rows
+  end
+
+  def location_row_actions(business)
+    if business.primary_location
+      [{ href: edit_business_location_path(business, business.primary_location), text: "Edit location", hidden_text: "(#{business.trading_name})", classes: nil }]
+    else
+      [{ href: new_business_location_path(business), text: "Add location", hidden_text: "(#{business.trading_name})", classes: nil }]
+    end
+  end
+
+  def contact_row_actions(business)
+    if business.primary_contact
+      [{ href: edit_business_contact_path(business, business.primary_contact), text: "Edit contact", hidden_text: "(#{business.trading_name})", classes: nil }]
+    else
+      [{ href: new_business_contact_path(business), text: "Add contact", hidden_text: "(#{business.trading_name})", classes: nil }]
+    end
   end
 
   def correspondence_summary_list(correspondence, attachments: nil)

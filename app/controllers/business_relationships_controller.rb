@@ -21,7 +21,7 @@ class BusinessRelationshipsController < ApplicationController
       }
     ))
 
-    redirect_to new_business_location_path(@business), flash: { success: "Business relationship was successfully created" }
+    redirect_to investigation_businesses_path(@investigation), flash: { success: "Business relationship was successfully created" }
   end
 
   def edit
