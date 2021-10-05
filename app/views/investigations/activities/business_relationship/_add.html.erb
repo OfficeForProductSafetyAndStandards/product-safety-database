@@ -1,0 +1,6 @@
+<div class="govuk-body">
+  Trading name: <b><%= activity.trading_name %><b><br>
+  Relationship: <b><%= activity.relationship  %></b><br>
+</div>
+
+<%= link_to "View business", investigation_businesses_path(activity.investigation, activity.business_id), class: "govuk-link psd-block-link" %>

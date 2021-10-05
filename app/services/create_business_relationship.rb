@@ -9,11 +9,11 @@ class CreateBusinessRelationship
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     ActiveRecord::Base.transaction do
-      InvestigationBusiness.create!(relationship: calculate_relationship, investigation_id: investigation.id, business_id: business.id)
+      investigation_business = InvestigationBusiness.create!(relationship: calculate_relationship, investigation_id: investigation.id, business_id: business.id)
+      create_audit_activity(investigation_business)
     end
 
-    create_audit_activity
-    send_notification_email
+    # send_notification_email
   end
 
 private
@@ -26,12 +26,13 @@ private
     end
   end
 
-  def create_audit_activity_for_business_added(business)
+  def create_audit_activity(investigation_business)
+    byebug
     AuditActivity::BusinessRelationship::Add.create!(
       investigation: investigation,
       source: UserSource.new(user: user),
-      business: business,
-      metadata: AuditActivity::BusinessRelationship::Add.build_metadata(business)
+      business_id: business.id,
+      metadata: AuditActivity::BusinessRelationship::Add.build_metadata(investigation_business)
     )
   end
 end
