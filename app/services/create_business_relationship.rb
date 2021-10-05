@@ -27,7 +27,6 @@ private
   end
 
   def create_audit_activity(investigation_business)
-    byebug
     AuditActivity::BusinessRelationship::Add.create!(
       investigation: investigation,
       source: UserSource.new(user: user),
