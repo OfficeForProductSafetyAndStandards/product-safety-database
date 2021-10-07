@@ -44,7 +44,7 @@
     <%= will_paginate @businesses %>
 
     <% if @businesses.any? && policy(Business).export? %>
-      <%= link_to "Export as spreadsheet", businesses_path(format: :csv, params: business_export_params) %>
+      <%= link_to "Export as spreadsheet", generate_business_exports_path(params: business_export_params) %>
     <% end %>
   </div>
 </div>
