@@ -219,16 +219,16 @@ RSpec.describe Investigation, :with_stubbed_elasticsearch, :with_stubbed_mailer,
         specify { expect(investigation.categories).to eq([product_category, product_two.category]) }
       end
     end
+  end
 
-    describe "non_owner_teams_with_access" do
-      let(:user)             { create(:user, :activated, has_viewed_introduction: true) }
-      let(:read_only_team)   { create(:team) }
-      let(:edit_access_team) { create(:team) }
-      let(:investigation)    { create(:allegation, creator: user, read_only_teams: [read_only_team], edit_access_teams: [edit_access_team]) }
+  describe "#non_owner_teams_with_access" do
+    let(:user)             { create(:user, :activated, has_viewed_introduction: true) }
+    let(:read_only_team)   { create(:team) }
+    let(:edit_access_team) { create(:team) }
+    let(:investigation)    { create(:allegation, creator: user, read_only_teams: [read_only_team], edit_access_teams: [edit_access_team]) }
 
-      it "returns teams with read access or edit access but excludes the owner team" do
-        expect(investigation.non_owner_teams_with_access).to eq [read_only_team, edit_access_team]
-      end
+    it "returns teams with read access or edit access but excludes the owner team" do
+      expect(investigation.non_owner_teams_with_access).to match_array([read_only_team, edit_access_team])
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_28_005316) do
+ActiveRecord::Schema.define(version: 2021_09_23_145243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -308,6 +308,7 @@ ActiveRecord::Schema.define(version: 2021_07_28_005316) do
     t.index ["entity_id", "entity_type"], name: "index_roles_on_entity_id_and_entity_type"
     t.index ["entity_id", "name"], name: "index_roles_on_entity_id_and_name", unique: true
     t.index ["entity_id"], name: "index_roles_on_entity_id"
+    t.index ["name", "entity_type", "entity_id"], name: "index_roles_on_name_and_entity_type_and_entity_id", unique: true
   end
 
   create_table "sources", id: :serial, force: :cascade do |t|

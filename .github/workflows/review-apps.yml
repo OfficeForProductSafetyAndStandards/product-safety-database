@@ -72,7 +72,8 @@ jobs:
         cf auth
         cf target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
-        cf run-task $APP_NAME -c "export \$(./env/get-env-from-vcap.sh) && rails elasticsearch:index" -k 2G
+        cf run-task $APP_NAME -c "export \$(./env/get-env-from-vcap.sh) && rails elasticsearch:index" --name add-elasticsearch-indexes -k 2G
+        task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-$PR_NUMBER | grep add-elasticsearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
 
     - name: Update deployment status (success)
       if: success()
@@ -92,3 +93,46 @@ jobs:
       run: |
         source deploy-github-functions.sh
         gh_deploy_failure review-app-${PR_NUMBER} $LOG_URL
+
+    - name: Set up Ruby
+      if: success()
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7.x
+
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-no-dev-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Install RubyGems
+      if: success()
+      run: |
+        gem install bundler --no-doc
+        bundle config path vendor/bundle
+        bundle check || bundle install --without development --jobs=4 --retry=3
+
+    - name: Run Smoke Tests
+      if: success()
+      env:
+        SMOKE_USER: ${{secrets.SMOKE_USER}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
+        SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
+        SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
+        SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
+        IS_REVIEW_APP: "true"
+        SMOKE_TEST_URL: https://psd-pr-${{ github.event.number }}.london.cloudapps.digital
+        SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER}}
+        SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD: ${{secrets.SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD}}
+
+      run: |
+        mkdir -p tmp/capybara
+        bundle exec rspec ./smoke_test/cases_page_spec.rb
+
+    - uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: capybara screenshots
+        path: tmp/capybara/
