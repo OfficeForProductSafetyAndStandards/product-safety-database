@@ -1,13 +1,7 @@
 // TODO: This is a transitional step as we revert back to a 960px page width.
-//   Once transition is complete this import can be deleted and we can set
-//   $govuk-page-width: 960px; in main.scss.
+//   Once transition is complete this import can be deleted.
 
 @media (min-width: 40.0625em) {
-  .govuk-width-container {
-    // NOTE: This "override" reinstates the normal width
-    max-width: 960px !important;
-  }
-
   .govuk-header {
     border-bottom: 10px solid $govuk-brand-colour;
     padding-bottom: 10px;
