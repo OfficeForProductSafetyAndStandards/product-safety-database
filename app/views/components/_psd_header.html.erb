@@ -13,14 +13,14 @@
 <% attributes = (local_assigns[:attributes] || {}) %>
 
 <%= tag.header({
-  class: "psd-header #{local_assigns[:classes]}",
+  class: "govuk-header #{local_assigns[:classes]}",
   role: "banner",
   data: {
     module: "govuk-header"
   }
 }.merge(attributes)) do %>
-  <div class="psd-header__container <%= local_assigns[:containerClasses] || "govuk-width-container" %>">
-    <div class="psd-header__logo">
+  <div class="govuk-header__container <%= local_assigns[:containerClasses] || "govuk-width-container" %>">
+    <div class="govuk-header__logo">
       <a class="psd-header__link psd-header__link--homepage" href="<%= local_assigns[:containerClasses] || "/" %>">
         <span class="psd-header__logotype">
           <%
@@ -86,7 +86,7 @@
     <% has_nav = local_assigns[:navigation] || local_assigns[:secondary_navigation] %>
 
     <% if local_assigns[:serviceName] || has_nav %>
-      <div class="psd-header__content">
+      <div class="govuk-header__content">
         <% if local_assigns[:serviceName] %>
           <a class="psd-header__link psd-header__link--service-name" href="<%=local_assigns[:serviceUrl] %>"><%= local_assigns[:serviceName] %></a>
         <% end %>
