@@ -17,6 +17,7 @@ class BusinessRelationshipForm
     "other" => "Other"
   }.freeze
 
+
   validates_inclusion_of :relationship, in: BUSINESS_TYPES.keys
   validates_presence_of  :relationship_other, if: -> { relationship == "other" }
 
