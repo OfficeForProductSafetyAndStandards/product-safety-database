@@ -13,6 +13,6 @@ class BusinessExportsController < ApplicationController
   end
 
   def show
-    @case_export = BusinessExport.find(params[:id])
+    @business_export = BusinessExport.find(params[:id])
   end
 end
