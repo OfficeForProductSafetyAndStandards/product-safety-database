@@ -256,7 +256,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     mail(to: email)
   end
 
-  def export(email:, name:, business_export:)
+  def business_export(email:, name:, business_export:)
     set_template(TEMPLATES[:business_export])
     set_reference("Business Export")
 

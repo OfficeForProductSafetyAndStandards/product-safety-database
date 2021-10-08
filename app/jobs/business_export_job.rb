@@ -1,4 +1,4 @@
-class BusinessExportWorker < ApplicationJob
+class BusinessExportJob < ApplicationJob
   def perform(business_ids, business_export, user)
     business_export.export(business_ids)
 
