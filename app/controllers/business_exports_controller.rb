@@ -4,10 +4,10 @@ class BusinessExportsController < ApplicationController
   before_action :set_search_params, only: %i[generate]
 
   def generate
-    results = search_for_businesses.records.includes(:investigation_businesses, :locations, :contacts)
+    business_ids = search_for_businesses.records.ids
 
     business_export = BusinessExport.create!
-    BusinessExportJob.perform_later(results, business_export.id, current_user)
+    BusinessExportJob.perform_later(business_ids, business_export.id, current_user)
 
     redirect_to businesses_path(q: params[:q]), flash: { success: "Your business export is being prepared. You will receive an email when your export is ready to download." }
   end
