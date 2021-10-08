@@ -7,7 +7,7 @@ class BusinessExportsController < ApplicationController
     business_ids = search_for_businesses.records.ids
 
     business_export = BusinessExport.create!
-    BusinessExportJob.perform_later(business_ids, business_export.id, current_user)
+    BusinessExportJob.perform_later(business_ids, business_export, current_user)
 
     redirect_to businesses_path(q: params[:q]), flash: { success: "Your business export is being prepared. You will receive an email when your export is ready to download." }
   end
