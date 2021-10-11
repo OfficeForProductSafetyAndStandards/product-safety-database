@@ -5,7 +5,7 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
     scenario "shows the home page" do
       visit unauthenticated_root_path
 
-      expect(page).not_to have_css(".psd-header .govuk-phase-banner__content__tag")
+      expect(page).not_to have_css(".govuk-header .govuk-phase-banner__content__tag")
       expect(page).to have_css(".govuk-phase-banner")
 
       expect(page).to have_text("Report, track and share product safety information with the product safety community.")
@@ -27,7 +27,7 @@ RSpec.feature "Home page", :with_elasticsearch, type: :feature do
     end
 
     def expect_small_beta_phase_banner
-      expect(page).to have_css(".psd-header .govuk-phase-banner__content__tag")
+      expect(page).to have_css(".govuk-header .govuk-phase-banner__content__tag")
       expect(page).not_to have_css(".govuk-phase-banner")
     end
 
