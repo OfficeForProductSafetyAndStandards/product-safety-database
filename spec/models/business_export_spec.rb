@@ -4,16 +4,17 @@ RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_
   let(:organisation) { create(:organisation) }
   let(:team) { create(:team, organisation: organisation) }
   let(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let!(:business) { create(:business)}
-  let!(:business_2) { create(:business)}
-  let!(:location) { create(:location, business: business)}
-  let!(:contact) { create(:contact, business: business)}
-  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation)}
-  let!(:investigation) { create(:allegation)}
-  let(:business_export) { BusinessExport.create! }
+  let!(:business) { create(:business) }
+  let!(:business_2) { create(:business) }
+  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation) }
+  let!(:investigation) { create(:allegation) }
+  let(:business_export) { described_class.create! }
 
   describe "#export" do
     before do
+      create(:location, business: business)
+      create(:contact, business: business)
+
       business_export.export(Business.all.pluck(:id))
     end
 

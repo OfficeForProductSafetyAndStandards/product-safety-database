@@ -5,9 +5,9 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
   let(:user) { create :user, :activated, has_viewed_introduction: true }
   let(:business) { create(:business) }
   let(:investigation) { create(:allegation) }
-  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation) }
 
   before do
+    create(:investigation_business, business: business, investigation: investigation)
     user.roles.create!(name: "psd_admin")
     sign_in(user)
     allow(BusinessExportJob).to receive(:perform_later) do
