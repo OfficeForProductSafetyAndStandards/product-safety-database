@@ -14,6 +14,32 @@ module BusinessesHelper
       .records
   end
 
+  def search_for_businesses_in_batches(size = 1000)
+    businesses= []
+    after = 0
+
+    loop do
+      query = search_query.build_query([], [], [])
+
+      query.merge!({
+          sort: [
+            {id: "asc"}
+          ],
+          size: size,
+          search_after: [after]
+      })
+
+      results =  Business.search(query)
+      results_amount = results.size
+      businesses += results
+      after += size
+
+      break if results_amount == 0
+    end
+
+    businesses
+  end
+
   def business_export_params
     params.permit(:sort, :q)
   end
