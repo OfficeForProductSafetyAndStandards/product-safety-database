@@ -4,6 +4,8 @@ class BusinessExportsController < ApplicationController
   before_action :set_search_params, only: %i[generate]
 
   def generate
+    authorize Business, :export?
+    
     business_ids = search_for_businesses.records.ids
 
     business_export = BusinessExport.create!
@@ -13,6 +15,8 @@ class BusinessExportsController < ApplicationController
   end
 
   def show
+    authorize Business, :export?
+
     @business_export = BusinessExport.find(params[:id])
   end
 end
