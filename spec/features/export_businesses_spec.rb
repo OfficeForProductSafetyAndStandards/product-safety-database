@@ -1,38 +1,36 @@
 require "rails_helper"
+require "sidekiq/testing"
 
-RSpec.feature "Exporting businesses", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
-  let(:user) { create(:user, :activated, :psd_admin, has_viewed_introduction: true) }
+RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, :with_test_queue_adapter, type: :feature do
+  let(:user) { create :user, :activated, has_viewed_introduction: true }
+  let(:business) { create(:business) }
+  let(:investigation) { create(:allegation) }
 
-  # Set up a variety of scenarios; one with a case, one with locations/contacts, one with no cases or locations or contacts
-  let!(:investigation) { create(:allegation, :with_business) }
-  let(:business_1) { investigation.businesses.first }
-  let!(:business_2) { create(:business, trading_name: "ACME Ltd", locations: [location], contacts: [contact]).decorate }
-  let!(:business_3) { create(:business, trading_name: "OPSS").decorate }
-  let(:location) { build(:location, business: nil) }
-  let(:contact) { build(:contact, business: nil) }
-
-  scenario "all businesses" do
-    Business.import(force: true, refresh: :wait_for)
-
-    sign_in user
-    visit "/businesses"
-
-    click_link "Export as spreadsheet"
-
-    expect(page.body).to eq("case_ids,company_number,created_at,id,legal_name,primary_contact_email,primary_contact_job_title,primary_contact_name,primary_contact_phone_number,primary_location_address_line_1,primary_location_address_line_2,primary_location_city,primary_location_country,primary_location_county,primary_location_phone_number,primary_location_postal_code,trading_name,types,updated_at\n[],#{business_3.company_number},#{business_3.created_at},#{business_3.id},#{business_3.legal_name},,,,,,,,,,,,#{business_3.trading_name},[],#{business_3.updated_at}\n[],#{business_2.company_number},#{business_2.created_at},#{business_2.id},#{business_2.legal_name},#{contact.email},#{contact.job_title},#{contact.name},#{contact.phone_number},#{location.address_line_1},#{location.address_line_2},#{location.city},#{location.country},#{location.county},#{location.phone_number},#{location.postal_code},#{business_2.trading_name},[],#{business_2.updated_at}\n\"[\"\"#{investigation.pretty_id}\"\"]\",#{business_1.company_number},#{business_1.created_at},#{business_1.id},#{business_1.legal_name},,,,,,,,,,,,#{business_1.trading_name},\"[\"\"Manufacturer\"\"]\",#{business_1.updated_at}\n")
+  before do
+    create(:investigation_business, business: business, investigation: investigation)
+    user.roles.create!(name: "psd_admin")
+    sign_in(user)
+    allow(BusinessExportJob).to receive(:perform_later) do
+      BusinessExportJob.new.perform(Business.pluck(:id), BusinessExport.last, user)
+    end
   end
 
-  scenario "searching businesses" do
-    Business.import(force: true, refresh: :wait_for)
-
-    sign_in user
-    visit "/businesses"
-
-    fill_in "Keywords", with: "OPSS"
-    click_button "Search"
+  scenario "allows the user to generate an export" do
+    Investigation.import force: true, refresh: :wait_for
+    Business.import force: true, refresh: :wait_for
+    visit businesses_path
 
     click_link "Export as spreadsheet"
+    expect(page).to have_content "Your business export is being prepared. You will receive an email when your export is ready to download."
 
-    expect(page.body).to eq("case_ids,company_number,created_at,id,legal_name,primary_contact_email,primary_contact_job_title,primary_contact_name,primary_contact_phone_number,primary_location_address_line_1,primary_location_address_line_2,primary_location_city,primary_location_country,primary_location_county,primary_location_phone_number,primary_location_postal_code,trading_name,types,updated_at\n[],#{business_3.company_number},#{business_3.created_at},#{business_3.id},#{business_3.legal_name},,,,,,,,,,,,#{business_3.trading_name},[],#{business_3.updated_at}\n")
+    perform_enqueued_jobs
+
+    expect(BusinessExport.count).to eq 1
+    expect(BusinessExport.first.export_file.attached?).to eq true
+
+    business_export_email = delivered_emails.last
+    expect(business_export_email.action_name).to eq "business_export"
+    expect(business_export_email.personalization[:name]).to eq user.name
+    expect(business_export_email.personalization[:download_export_url]).to eq business_export_url(BusinessExport.first.id)
   end
 end
