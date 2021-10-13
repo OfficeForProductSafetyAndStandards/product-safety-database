@@ -326,6 +326,16 @@ module InvestigationsHelper
     end
   end
 
+  def search_result_statement(search_terms, number_of_results)
+    word = number_of_results == 1 ? "was" : "were"
+
+    if search_terms
+      "#{number_of_results} #{"cases".pluralize(number_of_results)} matching keyword(s) #{search_terms}, using the current filters, #{word} found."
+    else
+      "#{number_of_results} #{"cases".pluralize(number_of_results)} using the current filters, #{word} found."
+    end
+  end
+
   def safety_and_compliance_actions(investigation, user, field_name)
     if policy(investigation).update?(user: user)
       {
