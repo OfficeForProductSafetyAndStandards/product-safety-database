@@ -1,6 +1,6 @@
-@import "opss/opss-shared";
-@import "opss/opss-search";
-@import "opss/opss-pagination";
+@import "./opss-shared";
+@import "./opss-search";
+@import "./opss-pagination";
 
 main.govuk-main-wrapper {
     @include govuk-media-query($from: desktop) {
