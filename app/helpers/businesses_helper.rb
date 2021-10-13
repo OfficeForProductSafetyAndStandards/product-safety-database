@@ -19,15 +19,7 @@ module BusinessesHelper
     after = 0
 
     loop do
-      query = search_query.build_query([], [], [])
-
-      query.merge!({
-          sort: [
-            {id: "asc"}
-          ],
-          size: size,
-          search_after: [after]
-      })
+      query = search_after_query(search_query.build_query([], [], []), size, after)
 
       results =  Business.search(query)
       results_amount = results.size
@@ -105,5 +97,15 @@ private
         }
       ]
     }
+  end
+
+  def search_after_query(search_query, size, after)
+    query.merge!({
+        sort: [
+          {id: "asc"}
+        ],
+        size: size,
+        search_after: [after]
+    })
   end
 end
