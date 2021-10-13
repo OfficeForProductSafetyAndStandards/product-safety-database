@@ -5,7 +5,7 @@ class BusinessExportsController < ApplicationController
 
   def generate
     authorize Business, :export?
-    
+
     business_ids = search_for_businesses.records.ids
 
     business_export = BusinessExport.create!
