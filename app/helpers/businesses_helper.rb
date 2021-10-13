@@ -15,18 +15,18 @@ module BusinessesHelper
   end
 
   def search_for_businesses_in_batches(size = 1000)
-    businesses= []
+    businesses = []
     after = 0
 
     loop do
       query = search_after_query(search_query.build_query([], [], []), size, after)
 
-      results =  Business.search(query)
+      results = Business.search(query)
       results_amount = results.size
       businesses += results
       after += size
 
-      break if results_amount == 0
+      break if results_amount.zero?
     end
 
     businesses
@@ -99,13 +99,13 @@ private
     }
   end
 
-  def search_after_query(search_query, size, after)
+  def search_after_query(_search_query, size, after)
     query.merge!({
-        sort: [
-          {id: "asc"}
-        ],
-        size: size,
-        search_after: [after]
+      sort: [
+        { id: "asc" }
+      ],
+      size: size,
+      search_after: [after]
     })
   end
 end
