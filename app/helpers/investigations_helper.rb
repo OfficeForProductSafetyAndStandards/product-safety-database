@@ -326,8 +326,16 @@ module InvestigationsHelper
     end
   end
 
-  def search_result_statement(search_terms, number_of_results)
+  def search_result_values(search_terms, number_of_results)
     word = number_of_results == 1 ? "was" : "were"
+
+    number_of_cases_in_english = "#{number_of_results} #{"cases".pluralize(number_of_results)}"
+
+    {
+      search_terms: search_terms,
+      number_of_cases_in_english: number_of_cases_in_english,
+      word: word
+    }
 
     if search_terms
       "#{number_of_results} #{"cases".pluralize(number_of_results)} matching keyword(s) #{search_terms}, using the current filters, #{word} found."
