@@ -572,7 +572,7 @@ private
   def search_result_values(search_terms, number_of_results)
     word = number_of_results == 1 ? "was" : "were"
 
-    number_of_cases_in_english = "#{number_of_results} #{"cases".pluralize(number_of_results)}"
+    number_of_cases_in_english = "#{number_of_results} #{"case".pluralize(number_of_results)}"
 
     {
       number_of_cases_in_english: number_of_cases_in_english,
