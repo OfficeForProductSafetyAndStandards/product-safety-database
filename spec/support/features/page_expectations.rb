@@ -3,7 +3,7 @@ module PageExpectations
     expect(page).to have_current_path("/")
   end
 
-  def expect_to_be_on_cases_search_results_page(search_term:)
+  def expect_to_be_on_cases_search_results_page
     expect(page).to have_current_path("/cases/search", ignore_query: true)
   end
 

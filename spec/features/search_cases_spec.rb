@@ -52,7 +52,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
     fill_in "Keywords", with: "MyBrand"
     click_button "Search"
 
-    expect_to_be_on_cases_search_results_page(search_term: "MyBrand")
+    expect_to_be_on_cases_search_results_page
 
     expect(page).to have_content "1 case matching keyword(s) MyBrand, using the current filters, was found."
 
@@ -72,7 +72,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
     fill_in "Keywords", with: "MyBran"
     click_button "Search"
 
-    expect_to_be_on_cases_search_results_page(search_term: "MyBran")
+    expect_to_be_on_cases_search_results_page
 
     expect(page).to have_content "1 case matching keyword(s) MyBran, using the current filters, was found."
 
@@ -87,7 +87,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
     fill_in "Keywords", with: "W2020-10/1"
     click_button "Search"
 
-    expect_to_be_on_cases_search_results_page(search_term: "W2020-10/1")
+    expect_to_be_on_cases_search_results_page
 
     expect(page).to have_content "1 case matching keyword(s) W2020-10/1, using the current filters, was found."
 
@@ -103,7 +103,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
     fill_in "Keywords", with: "mybrand mobile phone"
     click_button "Search"
 
-    expect_to_be_on_cases_search_results_page(search_term: "mybrand mobile phone")
+    expect_to_be_on_cases_search_results_page
 
     expect(page).to have_content "2 cases matching keyword(s) mybrand mobile phone, using the current filters, was found."
 
@@ -123,7 +123,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
       fill_in "Keywords", with: "phone"
       click_button "Search"
 
-      expect_to_be_on_cases_search_results_page(search_term: "phone")
+      expect_to_be_on_cases_search_results_page
 
       expect(page).to have_content "1 case matching keyword(s) phone, using the current filters, was found."
 
@@ -141,7 +141,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
       fill_in "Keywords", with: "mobile"
       click_button "Search"
 
-      expect_to_be_on_cases_search_results_page(search_term: "mobile")
+      expect_to_be_on_cases_search_results_page
 
       expect(page).to have_content "2 cases matching keyword(s) mobile, using the current filters, were found."
 
@@ -159,7 +159,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
       fill_in "Keywords", with: "mobiee"
       click_button "Search"
 
-      expect_to_be_on_cases_search_results_page(search_term: "mobiee")
+      expect_to_be_on_cases_search_results_page
 
       expect(page).to have_content "1 case matching keyword(s) mobiee, using the current filters, was found."
 
@@ -177,7 +177,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
       fill_in "Keywords", with: "thirteenproduct"
       click_button "Search"
 
-      expect_to_be_on_cases_search_results_page(search_term: "thirteenproduct")
+      expect_to_be_on_cases_search_results_page
 
       expect(page).to have_content "2 cases matching keyword(s) thirteenproduct, using the current filters, were found."
 
@@ -195,7 +195,7 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
       fill_in "Keywords", with: "thirteenproduce"
       click_button "Search"
 
-      expect_to_be_on_cases_search_results_page(search_term: "thirteenproduce")
+      expect_to_be_on_cases_search_results_page
 
       expect(page).to have_content "1 case matching keyword(s) thirteenproduce, using the current filters, was found."
 
