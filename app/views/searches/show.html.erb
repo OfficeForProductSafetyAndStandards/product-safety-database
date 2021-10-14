@@ -26,11 +26,5 @@
     <% if @investigations.any? && policy(Investigation).export? %>
       <%= link_to "Export as spreadsheet", generate_case_exports_path(params: export_params), class: "govuk-link" %>
     <% end %>
-
-    <% unless @investigations.any? %>
-      <div style="text-align:center" class="govuk-heading-l">
-        No results
-      </div>
-    <% end %>
   </div>
 </div>
