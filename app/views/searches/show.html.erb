@@ -5,11 +5,7 @@
 <div class="govuk-grid-row">
   <%= render 'investigations/filters', search: @search, show_relevancy_radion_option: true, submitted_from: "investigation_search" %>
 
-  <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body">
-      <%= search_result_statement(@search.q, @answer.results.total_entries) %>
-    </p>
-  </div>
+  <%= search_result_statement(@search.q, @answer.results.total_entries) %>
 
   <div class="govuk-grid-column-three-quarters" id="results">
     <% @investigations.each do |investigation| %>

@@ -1,6 +1,15 @@
+<% if search_terms %>
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">
+      <p class="govuk-body">
+        <%= number_of_cases_in_english %> matching keyword(s) <span class="govuk-!-font-weight-bold"><%= search_terms %></span>,<span class="opss-filter-txt"> using the current filters,</span> <%= word %> found.
+      </p>
+  </div>
+<% else %>
 <div class="govuk-grid-column-two-thirds">
   <p class="govuk-body">
     <p class="govuk-body">
-      <%= number_of_cases_in_english %> matching keyword(s) <span class="govuk-!-font-weight-bold"><%= search_query %></span>,<span class="opss-filter-txt"> using the current filters,</span> <%= word %> found.
+      <%= number_of_cases_in_english %> <span class="opss-filter-txt"> using the current filters,</span> <%= word %> found.
     </p>
 </div>
+<% end %>

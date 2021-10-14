@@ -332,16 +332,15 @@ module InvestigationsHelper
     number_of_cases_in_english = "#{number_of_results} #{"cases".pluralize(number_of_results)}"
 
     {
-      search_terms: search_terms,
       number_of_cases_in_english: number_of_cases_in_english,
       word: word
     }
+  end
 
-    if search_terms
-      "#{number_of_results} #{"cases".pluralize(number_of_results)} matching keyword(s) #{search_terms}, using the current filters, #{word} found."
-    else
-      "#{number_of_results} #{"cases".pluralize(number_of_results)} using the current filters, #{word} found."
-    end
+  def search_result_statement(search_terms, number_of_results)
+    search_result_values = search_result_values(search_terms, number_of_results)
+
+    render "investigations/search_result", word: search_result_values[:word], number_of_cases_in_english: search_result_values[:number_of_cases_in_english], search_terms: search_terms
   end
 
   def safety_and_compliance_actions(investigation, user, field_name)

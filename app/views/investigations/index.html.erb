@@ -1,12 +1,13 @@
 <%= page_title "Cases" %>
 
-<%= render 'investigations/heading', answer: @answer %>
 <div class="govuk-grid-row">
   <%= render 'investigations/filters',
     search: @search,
     show_relevancy_radion_option: false,
     submitted_from: "investigation_listing"
   %>
+
+  <%= search_result_statement(@search.q, @answer.results.total_entries) %>
 
   <div id="results" class="govuk-grid-column-three-quarters">
     <% if @investigations.any? %>
