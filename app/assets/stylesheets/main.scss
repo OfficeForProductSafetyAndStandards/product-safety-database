@@ -49,8 +49,8 @@ $hmcts-images-path: '~@hmcts/frontend/assets/images/';
 @import "stylesheets/timeline";
 @import "stylesheets/psd_header";
 @import "stylesheets/menu";
-@import "stylesheets/opss";
 
+@import "stylesheets/opss/opss-psd";
 
 // Pages
 @import "stylesheets/investigation";
