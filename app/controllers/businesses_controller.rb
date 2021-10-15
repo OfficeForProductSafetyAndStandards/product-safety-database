@@ -18,14 +18,6 @@ class BusinessesController < ApplicationController
         results = search_for_businesses(20)
         @businesses = BusinessDecorator.decorate_collection(results)
       end
-      format.csv do
-        authorize Business, :export?
-
-        results = search_for_businesses.records.includes(:investigations, :locations, :contacts)
-        @businesses = BusinessDecorator.decorate_collection(results)
-
-        render csv: @businesses, filename: "businesses"
-      end
     end
   end
 
