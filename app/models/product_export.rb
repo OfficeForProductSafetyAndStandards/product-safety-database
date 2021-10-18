@@ -16,9 +16,9 @@ class ProductExport < ApplicationRecord
       add_corrective_actions_worksheet(book, products)
 
       p.serialize(Rails.root.join("product_export_#{id}.xlsx"))
-
-      export_file.attach(io: File.open(Rails.root.join("product_export_#{id}.xlsx")), filename: "products_export.xlsx")
     end
+
+    export_file.attach(io: File.open(Rails.root.join("product_export_#{id}.xlsx")), filename: "products_export.xlsx")
   end
 
 private
