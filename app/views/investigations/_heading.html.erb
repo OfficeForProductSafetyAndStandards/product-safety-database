@@ -1,19 +1,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if params[:q].present? %>
-      <span class="govuk-caption-l">
-        Case search results
-      </span>
-    <% end %>
     <h1 class="govuk-heading-l">
-      <% if params[:q].present? %>
-        <%= params[:q] %>
-        <span class="govuk-caption-m">
-          <%= "#{answer.results.total_entries} #{'result'.pluralize(answer.results.total_entries)}" %>
-        </span>
-      <% else %>
-        Cases
-      <% end %>
+      Cases
     </h1>
   </div>
 
