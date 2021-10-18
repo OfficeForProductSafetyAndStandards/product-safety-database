@@ -64,6 +64,32 @@ module Searchable
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 
+    def self.search_for_businesses_in_batches(search_query, size = 1000)
+      records = []
+      after = 0
+
+      loop do
+        query = search_query.build_query(highlighted_fields, fuzzy_fields, exact_fields)
+
+        query.merge!({
+          sort: [
+            { id: "asc" }
+          ],
+          size: size,
+          search_after: [after]
+        })
+
+        results = __elasticsearch__.search(query)
+        results_amount = results.size
+        records += results
+        after += size
+
+        break if results_amount.zero?
+      end
+
+      records
+    end
+
     # "prefix" may be changed to a more appropriate query. For alternatives see:
     # https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html
     def self.prefix_search(params, field)
@@ -99,6 +125,16 @@ module Searchable
       # To be overwritten by the model using it, defaults to all fields
       # Bear in mind that if you have a field both here and in fuzzy_fields, your result will just be fuzzy
       []
+    end
+
+    def search_after_query(query, size, after)
+      query.merge!({
+        sort: [
+          { id: "asc" }
+        ],
+        size: size,
+        search_after: [after]
+      })
     end
   end
 end
