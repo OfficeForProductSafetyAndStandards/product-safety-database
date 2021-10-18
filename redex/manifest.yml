@@ -2,7 +2,7 @@
 applications:
 - name: ((app-name))
   buildpacks:
-    - https://github.com/cloudfoundry/apt-buildpack.git#v0.2.6
+    - https://github.com/cloudfoundry/apt-buildpack.git#v0.2.7
     - https://github.com/cloudfoundry/binary-buildpack.git#v1.0.40
   path: .
   stack: cflinuxfs3
