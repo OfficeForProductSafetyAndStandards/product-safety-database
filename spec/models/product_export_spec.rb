@@ -203,7 +203,6 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       expect(risk_assessments_sheet.cell(2, 6)).to eq product.name
       expect(risk_assessments_sheet.cell(3, 6)).to eq product.name
 
-
       expect(corrective_actions_sheet.cell(1, 1)).to eq "product_id"
       expect(corrective_actions_sheet.cell(2, 1)).to eq product.id.to_s
       expect(corrective_actions_sheet.cell(3, 1)).to eq product.id.to_s
