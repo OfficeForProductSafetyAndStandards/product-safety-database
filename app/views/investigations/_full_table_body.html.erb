@@ -1,0 +1,59 @@
+<tbody class="govuk-table__body">
+  <tr class="govuk-table__row">
+    <th class="govuk-visually-hidden">
+      Case title
+    </th>
+    <th id="<%= dom_id investigation, :item %>" colspan="3" scope="colgroup" class="govuk-table__header">
+      <%= link_to investigation.title, investigation_path(investigation), class: "govuk-link govuk-link--no-visited-state" %>
+    </th>
+  </tr>
+  <tr class="govuk-table__row">
+    <th headers="<%= dom_id investigation, :item %>" id="<%= dom_id investigation, :meta %>" class="govuk-visually-hidden">
+      Metadata
+    </th>
+    <td headers="<%= investigation.case_type %> <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+      <%= investigation.pretty_id %>
+    </td>
+    <td headers="caseowner <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+      <%= investigation.owner_display_name_for(viewer: current_user) %>
+    </td>
+    <td headers="updated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
+      <%= "#{time_ago_in_words(investigation.updated_at)} ago" %>
+    </td>
+  </tr>
+  <%= render "investigations/status_table_row", investigation: investigation %>
+</tbody>
+
+<!-- <div class="govuk-grid-row psd-case-card card_classes">
+  <div class="govuk-grid-column-one-half">
+    <span class="govuk-caption-m govuk-!-font-size-16">
+      <%= investigation.pretty_description %>
+    </span>
+    <span>
+      <%= link_to investigation.title, investigation_path(investigation) %>
+    </span>
+    <%= render "investigations/case_card_status_area", investigation: investigation %>
+  </div>
+
+  <div class="govuk-grid-column-one-quarter">
+    <span class="govuk-caption-m govuk-!-font-size-16">Case owner</span>
+    <span>
+      <%= investigation.owner_display_name_for(viewer: current_user) %>
+    </span>
+  </div>
+  <% if sorted_by == SearchParams::NEWEST %>
+    <div class="govuk-grid-column-one-quarter">
+      <span class="govuk-caption-m govuk-!-font-size-16">
+        Date created
+      </span>
+      <span>
+        <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
+      </span>
+    </div>
+  <% elsif sorted_by == SearchParams::RECENT || SearchParams::OLDEST || sorted_by == SearchParams::RELEVANT %>
+    <div class="govuk-grid-column-one-quarter">
+      <span class="govuk-caption-m govuk-!-font-size-16">Last updated</span>
+      <span><%= "#{time_ago_in_words(investigation.updated_at)} ago" %></span>
+    </div>
+  <% end %>
+</div> -->

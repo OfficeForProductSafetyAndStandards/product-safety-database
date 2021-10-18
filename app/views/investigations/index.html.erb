@@ -8,22 +8,52 @@
     submitted_from: "investigation_listing"
   %>
 
-  <div id="results" class="govuk-grid-column-three-quarters">
-    <% if @investigations.any? %>
-      <%= render partial: "investigations/table",
-        collection: @investigations,
-        as: :investigation,
-        locals: { sorted_by: query_params[:sort_by] }
-      %>
-      <%= will_paginate @investigations %>
+  <section class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-row">
+      <% if @investigations.any? %>
+        <div class="govuk-grid-column-full" role="region" aria-label="Cases">
+          <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
+            <caption class="govuk-visually-hidden">
+              Cases data: 4 columns with each case described across rows within each table body.
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-visually-hidden">&nbsp;</th>
+                <th id="allegation" scope="col" class="govuk-table__header">Case number</th>
+                <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
+                <th id="updated" scope="col" class="govuk-table__header">Updated</th>
+              </tr>
+            </thead>
 
-      <% if policy(Investigation).export? %>
-        <%= link_to "Export as spreadsheet", generate_case_exports_path(params: export_params) %>
+            <%= render partial: "investigations/table_body",
+              collection: @investigations,
+              as: :investigation,
+              locals: { sorted_by: query_params[:sort_by] }
+            %>
+
+            <% if @investigations.size > 12 %>
+              <tfoot class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th class="govuk-visually-hidden">&nbsp;</th>
+                  <th scope="col" class="govuk-table__header">Case number</th>
+                  <th scope="col" class="govuk-table__header">Case owner</th>
+                  <th scope="col" class="govuk-table__header">Updated</th>
+                </tr>
+              </tfoot>
+            <% end %>
+          </table>
+        </div>
+
+        <%= will_paginate @investigations %>
+
+        <% if policy(Investigation).export? %>
+          <%= link_to "Export as spreadsheet", generate_case_exports_path(params: export_params) %>
+        <% end %>
+      <% else %>
+        <div class="govuk-heading-l" style="text-align:center">
+          No results
+        </div>
       <% end %>
-    <% else %>
-      <div class="govuk-heading-l" style="text-align:center">
-        No results
-      </div>
-    <% end %>
-  </div>
+    </div>
+  </section>
 </div>

@@ -5,30 +5,54 @@
 <div class="govuk-grid-row">
   <%= render 'investigations/filters', search: @search, show_relevancy_radion_option: true, submitted_from: "investigation_search" %>
 
-  <div class="govuk-grid-column-three-quarters" id="results">
-    <% @investigations.each do |investigation| %>
-      <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
-      <% if !policy(investigation).view_non_protected_details? %>
-        <%= render "investigations/restricted_card", investigation: investigation.decorate %>
-      <% elsif result.respond_to?(:highlight) %>
-        <%= render "investigations/highlight_card", investigation: investigation.decorate, highlights: result.highlight %>
-      <% else %>
-        <%= render "investigations/case_card", investigation: investigation.decorate, sorted_by: @search.sort_by %>
+  <% if @investigations.any? %>
+    <div class="govuk-grid-column-full" role="region" aria-label="Cases">
+      <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
+        <caption class="govuk-visually-hidden">
+          Cases data: 4 columns with each case described across rows within each table body.
+        </caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-visually-hidden">&nbsp;</th>
+            <th id="allegation" scope="col" class="govuk-table__header">Case number</th>
+            <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
+            <th id="updated" scope="col" class="govuk-table__header">Updated</th>
+          </tr>
+        </thead>
+
+        <% @investigations.each do |investigation| %>
+          <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
+          <% if !policy(investigation).view_non_protected_details? %>
+            <%= render "investigations/restricted_table_body", investigation: investigation.decorate %>
+          <% elsif result.respond_to?(:highlight) %>
+            <%= render "investigations/highlight_table_body", investigation: investigation.decorate, highlights: result.highlight %>
+          <% else %>
+            <%= render "investigations/full_table_body", investigation: investigation.decorate, sorted_by: @search.sort_by %>
+          <% end %>
+        <% end %>
+
+        <% if @investigations.size > 12 %>
+          <tfoot class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-visually-hidden">&nbsp;</th>
+              <th scope="col" class="govuk-table__header">Case number</th>
+              <th scope="col" class="govuk-table__header">Case owner</th>
+              <th scope="col" class="govuk-table__header">Updated</th>
+            </tr>
+          </tfoot>
+        <% end %>
+      </table>
+
+      <%= will_paginate @answer.results %>
+
+      <% policy(Investigation).export? %>
+        <%= link_to "Export as spreadsheet", generate_case_exports_path(params: export_params), class: "govuk-link" %>
       <% end %>
-    <% end %>
+    </div>
+  <% else %>
+    <div style="text-align:center" class="govuk-heading-l">
+      No results
+    </div>
+  <% end %>
 
-    <%= will_paginate @answer.results %>
-
-    <br />
-
-    <% if @investigations.any? && policy(Investigation).export? %>
-      <%= link_to "Export as spreadsheet", generate_case_exports_path(params: export_params), class: "govuk-link" %>
-    <% end %>
-
-    <% unless @investigations.any? %>
-      <div style="text-align:center" class="govuk-heading-l">
-        No results
-      </div>
-    <% end %>
-  </div>
 </div>
