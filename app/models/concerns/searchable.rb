@@ -126,15 +126,5 @@ module Searchable
       # Bear in mind that if you have a field both here and in fuzzy_fields, your result will just be fuzzy
       []
     end
-
-    def search_after_query(query, size, after)
-      query.merge!({
-        sort: [
-          { id: "asc" }
-        ],
-        size: size,
-        search_after: [after]
-      })
-    end
   end
 end
