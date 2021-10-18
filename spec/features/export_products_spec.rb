@@ -13,7 +13,7 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_antivirus, 
     end
   end
 
-  scenario "lists products according to search relevance" do
+  scenario "lists products" do
     Product.import refresh: :wait_for
     visit products_path
 
