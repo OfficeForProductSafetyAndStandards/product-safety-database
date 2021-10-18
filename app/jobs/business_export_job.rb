@@ -7,9 +7,8 @@ class BusinessExportJob < ApplicationJob
       name: user.name,
       business_export: business_export
     ).deliver_later
+  rescue StandardError => e
+    Sentry.capture_exception(e)
+    raise
   end
-
-rescue StandardError => e
-  Sentry.capture_exception(e)
-  raise
 end
