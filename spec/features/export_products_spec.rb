@@ -8,8 +8,8 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_antivirus, 
     create_list(:product, 18, created_at: 4.days.ago)
     user.roles.create!(name: "psd_admin")
     sign_in(user)
-    allow(ProductExportWorker).to receive(:perform_later) do
-      ProductExportWorker.new.perform(Product.all, ProductExport.last.id, user)
+    allow(ProductExportJob).to receive(:perform_later) do
+      ProductExportJob.new.perform(Product.all.ids, ProductExport.last, user)
     end
   end
 

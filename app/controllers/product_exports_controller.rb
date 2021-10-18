@@ -8,9 +8,9 @@ class ProductExportsController < ApplicationController
     authorize Product, :export?
 
     # TODO: move this query to the job once we are satisfied that this is working well.
-    @products = search_for_products(Product.count, [:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }]).sort
+    product_ids = search_for_products.ids
     product_export = ProductExport.create!
-    ProductExportWorker.perform_later(@products, product_export.id, current_user)
+    ProductExportJob.perform_later(product_ids, product_export, current_user)
     redirect_to products_path(q: params[:q]), flash: { success: "Your product export is being prepared. You will receive an email when your export is ready to download." }
   end
 

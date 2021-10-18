@@ -1,7 +1,9 @@
 class ProductExport < ApplicationRecord
   has_one_attached :export_file
 
-  def export(products)
+  def export(product_ids)
+    products = Product.find(product_ids).includes([:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }])
+
     Axlsx::Package.new do |p|
       book = p.workbook
 
