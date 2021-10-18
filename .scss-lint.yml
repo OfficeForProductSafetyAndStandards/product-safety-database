@@ -4,3 +4,4 @@ exclude:
   - 'node_modules/*'
   - 'coverage/*'
   - 'vendor/bundle/**/*'
+  - 'app/assets/stylesheets/opss/*'
