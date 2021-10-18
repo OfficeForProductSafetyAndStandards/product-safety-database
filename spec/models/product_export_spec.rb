@@ -16,20 +16,33 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
   let(:product_ids)            { products.pluck(:id) }
 
   describe "#export" do
-    before do
-      product_export.export(product_ids)
+    let(:result) { product_export.export(product_ids) }
+
+    context "with no product IDs" do
+      let(:product_ids) { [] }
+
+      it "raises an exception" do
+        expect(-> { result }).to raise_error(StandardError).with_message("No products to export")
+      end
     end
 
-    let!(:exported_data) { Roo::Excelx.new(Rails.root.join("product_export_#{product_export.id}.xlsx")) }
-
-    it "exports correct sheets" do
-      expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
+    it "attaches the spreadsheet as a file" do
+      result
+      expect(product_export.export_file).to be_attached
     end
+  end
 
+  describe "#to_spreadsheet" do
+    let(:spreadsheet) { product_export.to_spreadsheet(product_ids).to_stream }
+    let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:product_sheet) { exported_data.sheet("product_info") }
     let(:test_result_sheet) { exported_data.sheet("test_results") }
     let(:risk_assessments_sheet) { exported_data.sheet("risk_assessments") }
     let(:corrective_actions_sheet) { exported_data.sheet("corrective_actions") }
+
+    it "exports correct sheets" do
+      expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
+    end
 
     # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength
