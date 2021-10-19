@@ -15,7 +15,7 @@ module BusinessesHelper
   end
 
   def search_for_businesses_in_batches
-    Business.search_for_businesses_in_batches(search_query)
+    Business.search_in_batches(search_query)
   end
 
   def business_export_params

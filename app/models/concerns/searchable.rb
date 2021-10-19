@@ -64,7 +64,7 @@ module Searchable
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 
-    def self.search_for_businesses_in_batches(search_query, size = 1000)
+    def self.search_in_batches(search_query, size = 1000)
       records = []
       after = 0
 
