@@ -5,6 +5,8 @@
 <div class="govuk-grid-row">
   <%= render 'investigations/filters', search: @search, show_relevancy_radion_option: true, submitted_from: "investigation_search" %>
 
+  <%= search_result_statement(@search.q, @answer.results.total_entries) %>
+
   <div class="govuk-grid-column-three-quarters" id="results">
     <% @investigations.each do |investigation| %>
       <% result = @answer.results.find { |rs| rs.id.to_i == investigation.id } %>
@@ -23,12 +25,6 @@
 
     <% if @investigations.any? && policy(Investigation).export? %>
       <%= link_to "Export as spreadsheet", generate_case_exports_path(params: export_params), class: "govuk-link" %>
-    <% end %>
-
-    <% unless @investigations.any? %>
-      <div style="text-align:center" class="govuk-heading-l">
-        No results
-      </div>
     <% end %>
   </div>
 </div>
