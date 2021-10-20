@@ -163,11 +163,11 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       sleep 2
     end
 
-    context "when searching in batches of 1" do
+    context "when searching in batches of 2" do
       let(:query) { nil }
 
       it "returns the expected businesses" do
-        expect(Business.search_in_batches(subject, 1).map(&:id)).to eq Business.all.map {|b| b.id.to_s}
+        expect(Business.search_in_batches(subject, 2).map(&:id)).to eq Business.all.map {|b| b.id.to_s}
       end
     end
   end
