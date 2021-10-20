@@ -167,7 +167,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       let(:query) { nil }
 
       it "returns the expected businesses" do
-        expect(Business.search_in_batches(subject, 2).map(&:id)).to eq Business.all.map {|b| b.id.to_s}
+        expect(Business.search_in_batches(subject, Business.first.id - 1, 2).map(&:id)).to eq Business.all.map {|b| b.id.to_s}
       end
     end
   end

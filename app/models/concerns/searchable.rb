@@ -64,9 +64,9 @@ module Searchable
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 
-    def self.search_in_batches(search_query, size = 10_000)
+    def self.search_in_batches(search_query, search_from, size = 10_000)
       records = []
-      after = 0
+      after = search_from
 
       loop do
         query = search_query.build_query(highlighted_fields, fuzzy_fields, exact_fields)
