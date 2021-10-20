@@ -11,14 +11,14 @@ RSpec.shared_examples "finds the relevant investigation" do
 end
 
 RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
-  subject { described_class.new(query, filter_params, sorting_params) }
+  subject(:es_query) { described_class.new(query, filter_params, sorting_params) }
 
   let(:user)           { create(:user) }
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
   def perform_search
-    Investigation.full_search(subject)
+    Investigation.full_search(es_query)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
@@ -26,10 +26,10 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
   # needed to improve the relevance of the results. We should then add
   # assertions that irrelevant records are *not* returned here.
   describe "#build_query" do
-    let(:batch_number)      { SecureRandom.uuid }
-    let(:country_of_origin) { "United Kingdom" }
-    let(:product)           { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
-    let(:investigation)     { create(:allegation, creator: user, products: [product]) }
+    let(:batch_number)            { SecureRandom.uuid }
+    let(:country_of_origin)       { "United Kingdom" }
+    let(:product)                 { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
+    let(:investigation)           { create(:allegation, creator: user, products: [product]) }
 
     before do
       allow(NotifyMailer)
@@ -148,6 +148,39 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
             investigation_one,
             investigation_two
           )
+      end
+    end
+  end
+
+  describe "#search_in_batches" do
+    before do
+      create(:business, trading_name: "Applee")
+      create(:business, trading_name: "Amazon")
+      create(:business, trading_name: "Netflix")
+      create(:business, trading_name: "Google")
+      Business.__elasticsearch__.create_index! force: true
+      Business.import refresh: :wait_for
+    end
+
+    context "when searching in batches" do
+      let(:query) { nil }
+
+      context "when batch size is 1" do
+        it "returns the expected businesses" do
+          expect(Business.search_in_batches(es_query, Business.first.id - 1, 1).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
+        end
+      end
+
+      context "when batch size is 2" do
+        it "returns the expected businesses" do
+          expect(Business.search_in_batches(es_query, Business.first.id - 1, 2).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
+        end
+      end
+
+      context "when batch size is 100" do
+        it "returns the expected businesses" do
+          expect(Business.search_in_batches(es_query, Business.first.id - 1, 100).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
+        end
       end
     end
   end
