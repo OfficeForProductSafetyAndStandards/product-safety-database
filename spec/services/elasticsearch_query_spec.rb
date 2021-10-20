@@ -26,7 +26,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
   end
 
   def perform_batched_search
-    Investigation.full_search(subject)
+    Investigation.search_in_batches(subject)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
