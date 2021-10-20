@@ -157,8 +157,6 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       create(:business, trading_name: "Applee")
       create(:business, trading_name: "Amazon")
       create(:business, trading_name: "Netflix")
-      create(:business, trading_name: "Netflix2")
-      create(:business, trading_name: "Netflix3")
       create(:business, trading_name: "Google")
       Business.__elasticsearch__.create_index! force: true
       Business.import
