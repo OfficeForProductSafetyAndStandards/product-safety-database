@@ -7,6 +7,7 @@ RSpec.shared_examples "finds the relevant investigation" do
 
   it "finds the relevant investigation" do
     expect(perform_search.records.to_a).to include(investigation)
+    expect(perform_search.records.to_a).not_to include(other_investigation)
   end
 end
 
@@ -26,10 +27,13 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
   # needed to improve the relevance of the results. We should then add
   # assertions that irrelevant records are *not* returned here.
   describe "#build_query" do
-    let(:batch_number)      { SecureRandom.uuid }
-    let(:country_of_origin) { "United Kingdom" }
-    let(:product)           { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
-    let(:investigation)     { create(:allegation, creator: user, products: [product]) }
+    let(:batch_number)            { SecureRandom.uuid }
+    let!(:other_batch_number)     { SecureRandom.uuid }
+    let(:country_of_origin)       { "United Kingdom" }
+    let(:other_country_of_origin) { "France" }
+    let(:product)                 { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
+    let!(:other_product)          { create(:product, country_of_origin: country_of_origin, batch_number: other_batch_number) }
+    let(:investigation)           { create(:allegation, creator: user, products: [product]) }
 
     before do
       allow(NotifyMailer)
@@ -148,6 +152,27 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
             investigation_one,
             investigation_two
           )
+      end
+    end
+  end
+
+  describe "#search_in_batches" do
+    before do
+      create(:business, trading_name: "Applee")
+      create(:business, trading_name: "Amazon")
+      create(:business, trading_name: "Netflix")
+      create(:business, trading_name: "Netflix2")
+      create(:business, trading_name: "Netflix3")
+      create(:business, trading_name: "Google")
+      Business.__elasticsearch__.create_index! force: true
+      Business.import
+    end
+
+    context "when searching in batches of 1" do
+      let(:query) { nil }
+
+      it "returns the expected businesses" do
+        expect(Business.search_in_batches(subject, 1).map(&:ids)).to eq Business.all.map {|b| b.id.to_s}
       end
     end
   end
