@@ -5,6 +5,8 @@
 <div class="govuk-grid-row">
   <%= render 'investigations/filters', search: @search, show_relevancy_radion_option: true, submitted_from: "investigation_search" %>
 
+  <%= search_result_statement(@search.q, @answer.results.total_entries) %>
+
   <% if @investigations.any? %>
     <div class="govuk-grid-column-full" role="region" aria-label="Cases">
       <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
