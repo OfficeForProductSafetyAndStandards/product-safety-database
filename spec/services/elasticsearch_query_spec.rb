@@ -7,7 +7,6 @@ RSpec.shared_examples "finds the relevant investigation" do
 
   it "finds the relevant investigation" do
     expect(perform_search.records.to_a).to include(investigation)
-    expect(perform_search.records.to_a).not_to include(other_investigation)
   end
 end
 
@@ -28,11 +27,8 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
   # assertions that irrelevant records are *not* returned here.
   describe "#build_query" do
     let(:batch_number)            { SecureRandom.uuid }
-    let!(:other_batch_number)     { SecureRandom.uuid }
     let(:country_of_origin)       { "United Kingdom" }
-    let(:other_country_of_origin) { "France" }
     let(:product)                 { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
-    let!(:other_product)          { create(:product, country_of_origin: country_of_origin, batch_number: other_batch_number) }
     let(:investigation)           { create(:allegation, creator: user, products: [product]) }
 
     before do
