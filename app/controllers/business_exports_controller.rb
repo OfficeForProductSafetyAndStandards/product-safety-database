@@ -6,7 +6,7 @@ class BusinessExportsController < ApplicationController
   def generate
     authorize Business, :export?
 
-    business_ids = search_for_businesses.ids
+    business_ids = search_for_businesses_in_batches.map(&:id)
 
     business_export = BusinessExport.create!
     BusinessExportJob.perform_later(business_ids, business_export, current_user)
