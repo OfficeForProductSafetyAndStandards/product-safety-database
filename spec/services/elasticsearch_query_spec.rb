@@ -159,8 +159,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       create(:business, trading_name: "Netflix")
       create(:business, trading_name: "Google")
       Business.__elasticsearch__.create_index! force: true
-      Business.import
-      sleep 2
+      Business.import refresh: :wait_for
     end
 
     context "when searching in batches of 2" do

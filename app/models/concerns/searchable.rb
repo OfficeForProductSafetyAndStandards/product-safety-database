@@ -82,7 +82,7 @@ module Searchable
         results = __elasticsearch__.search(query)
         results_amount = results.size
         records += results
-        after += size
+        after = records.last.id.to_i
 
         break if results_amount.zero?
       end
