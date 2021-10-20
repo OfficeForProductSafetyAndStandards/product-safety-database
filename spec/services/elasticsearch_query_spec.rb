@@ -11,14 +11,14 @@ RSpec.shared_examples "finds the relevant investigation" do
 end
 
 RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
-  subject { described_class.new(query, filter_params, sorting_params) }
+  subject(:query) { described_class.new(query, filter_params, sorting_params) }
 
   let(:user)           { create(:user) }
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
   def perform_search
-    Investigation.full_search(subject)
+    Investigation.full_search(query)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
@@ -166,7 +166,7 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       let(:query) { nil }
 
       it "returns the expected businesses" do
-        expect(Business.search_in_batches(subject, Business.first.id - 1, 2).map(&:id)).to match_array(Business.all.map {|b| b.id.to_s})
+        expect(Business.search_in_batches(query, Business.first.id - 1, 2).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
       end
     end
   end
