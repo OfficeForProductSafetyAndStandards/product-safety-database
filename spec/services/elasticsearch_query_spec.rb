@@ -8,10 +8,6 @@ RSpec.shared_examples "finds the relevant investigation" do
   it "finds the relevant investigation" do
     expect(perform_search.records.to_a).to include(investigation)
   end
-
-  it "finds the relevant investigation in batches" do
-    expect(perform_batched_search.records.to_a).to include(investigation)
-  end
 end
 
 RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
@@ -23,10 +19,6 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
 
   def perform_search
     Investigation.full_search(subject)
-  end
-
-  def perform_batched_search
-    Investigation.search_in_batches(subject)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
