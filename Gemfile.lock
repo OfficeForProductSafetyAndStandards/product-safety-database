@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/UKGovernmentBEIS/govuk-design-system-rails
-  revision: ef5d36bb050b8b9fba6f44e7b8cb0030ca888874
-  tag: 0.7.8
+  revision: a80a606a9b01083de22f903a53a30433a626f1e1
+  tag: 0.8.0
   specs:
-    govuk-design-system-rails (0.7.8)
+    govuk-design-system-rails (0.8.0)
       slim-rails
 
 GEM
@@ -318,7 +318,7 @@ GEM
     pundit (2.1.1)
       activesupport (>= 3.0.0)
     raabro (1.1.6)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-proxy (0.7.0)
       rack
@@ -586,7 +586,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.26)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.0)
 
 PLATFORMS
   ruby
