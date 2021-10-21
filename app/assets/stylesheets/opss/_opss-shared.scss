@@ -1,3 +1,4 @@
+//$opss-error-colour: #d4351c;
 @mixin down-load-link($color,$size) {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="'+ $size +'px" viewBox="0 0 24 24" width="'+ $size +'px" fill="'+ $color +'"><g><rect fill="none" height="'+ $size +'" width="'+ $size +'"/></g><g><path d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z"/></g></svg>');
     background-position: center;
@@ -9,7 +10,6 @@
   $remSize: $s / 16px;
   @return #{$remSize}rem;
 }
-
 @mixin opss-font-size($s, $l) {
     font-size: $s !important;
     font-size: calculateRem($s) !important;
@@ -28,9 +28,12 @@ main.govuk-main-wrapper {
     @include govuk-clearfix;
 }
 
-h1, h2, h3, h4,
-.govuk-heading-xl,
-.govuk-heading-l,
+#main-content > div > div div {
+    .govuk-heading-xl,
+    .govuk-heading-l {
+      @include word-wrap;
+    }
+}
 .govuk-heading-m,
 .govuk-heading-s,
 .govuk-heading-l a,
@@ -41,8 +44,10 @@ h1, h2, h3, h4,
     @include word-wrap;
 }
 
+/*tbody th  {-webkit-hyphens: auto; -moz-hyphens: auto; -ms-hyphens: auto; hyphens: auto; }*/
 .govuk-summary-list .govuk-link,
 .opss-table td a,
+.opss-table tbody tr th:first-child,
 tbody th.govuk-table__header,
 tbody th.govuk-table__header a,
 tbody td a[href^="mailto:"] {
@@ -54,6 +59,12 @@ h1.govuk-label-wrapper label.govuk-label--l {
     overflow-wrap: normal; word-wrap: normal; word-break: normal; hyphens: unset;
 }
 
+/*.opss-secondary-text-colour {color: $govuk-secondary-text-colour; }
+.opss-weight-normal {font-weight: normal;
+    *[class^="govuk-heading"] & {
+        font-weight: 400;
+    }
+}*/
 .opss-no-wrap {
   white-space: nowrap;
 }
@@ -90,6 +101,7 @@ abbr[title]{
     text-decoration: none;
 
     @include govuk-media-query($from: desktop) {
+        .opss-switch-cols &,
         .govuk-summary-list__row & {
             border-bottom: 1px dotted $govuk-secondary-text-colour;
         }
@@ -150,7 +162,6 @@ abbr[title]{
     border-style: solid;
     border-width: 0;
 }
-
 .opss-border-top {border-top-width: 1px; }
 .opss-border-bottom {border-bottom-width: 1px; }
 .opss-border-left {border-left-width: 1px; }
@@ -387,6 +398,7 @@ dl.opss-summary-list-aside {
         thead tr th:first-child,
         tbody tr th:first-child {
             width: auto;
+            max-width: $govuk-page-width / 2;
         }
     }
 }
@@ -436,12 +448,17 @@ dl.opss-summary-list-aside {
     }
     tbody td {
         @include govuk-font($size: 19);
+
         mark {
             font-weight: bold;
             background: none;
             color: $govuk-text-colour;
         }
     }
+    /*tbody tr:last-child td a {
+        @include govuk-font($size: 16);
+    }*/
+    /*tbody tr:not(:first-child):not(:last-child) td, tbody tr:not(:first-child):not(:last-child) th, */
     tbody tr:nth-child(2) th, tbody tr:nth-child(2) td {
         padding-top: govuk-spacing(0);
         padding-bottom: govuk-spacing(2);
@@ -453,6 +470,7 @@ dl.opss-summary-list-aside {
     tbody tr:nth-child(4) th, tbody tr:nth-child(4) td {
         padding-top: govuk-spacing(0);
     }
+    /*th[colspan="3"], tfoot th {padding-top: govuk-spacing(7); }*/
     tbody tr:first-child th,
     tbody tr:not(:last-child) > *,
     tfoot tr th {
@@ -506,12 +524,12 @@ dl.opss-summary-list-aside {
 .opss-icon--tick {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABQUlEQVQ4jZXSMWhTURTG8V/SYkrpEwkiHZyapU4dOwkd8hydrLNL1xZ08EIo4iC8FkRwsODoLILzDbh0a8dCFaFooZuIcKGVIKVDEgivT5Kc7X7nfv/zcTgzpqisyJcb7dZeo9362euenEFtCjN8wRou8QHP61MEeDwwQx1PcDBRgqzI5/ENd0ut95Mm6FSY/6AzFpAV+RKeVrRepBB/TZLgDeZK2hHe0V/GcFKzYvoDPKyAbqUQ/8HM4OMj7DfarWaj3TrsdU8usiK/gc+4XTJ/TCHuDh+1rMhv4RiLA+03XmEBL0vmc9xLIZ4OhVnsjJihidcVsWFn1Ex/B3X9yxpXP7BbFuspxA2sYn8M4FkK8e81AKQQD3Ef64NJ5eriUxX12ilnRT6HTf3ru4keVlKIXycCjIDuYBvfU4hv//fvCi1WUVpTllRdAAAAAElFTkSuQmCC');
 }
-
 .opss-icon--alert {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA4klEQVQ4jaXTP0oDQRgF8B/DFlaeQYJYiIhnkFxFPImEYB1yjBwgKLZbppBgl9ZSJAQJQQu/hGV2lvXPg9fse9/33sywtHGCO9R4DdYYYVDwH1CF6QOfHdxiHN7W8Cwzb/Ac3GTaLF8yLqQtGvqioN/vxdOo9tsFW5wl3JbO9ANUuEkY/mF4j2HS8zQ9GKR/DENKWHWJOA52Ba0qPOGyIF7grafBI5xjp/1Ma1wH3wv6LkLApGCoG0l1QZ80qxxhXkgY+f6x8oYPMSNfMu04TnPptDTcxFXUW8Y9rPES31qX/QVUY2XWKh7oRgAAAABJRU5ErkJggg==');
 }
 
 .opss-icon {
+
     background-position: center center;
     background-size: contain;
     display: inline-block;
@@ -525,4 +543,5 @@ dl.opss-summary-list-aside {
         margin-bottom: -2px;
         margin-right: govuk-spacing(1) - 2;
     }
+
 }
