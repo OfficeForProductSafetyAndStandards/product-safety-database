@@ -13,8 +13,8 @@
     <div class="govuk-grid-row">
       <%= search_result_statement(@search.q, @answer.results.total_entries) %>
     </div>
-    <div class="govuk-grid-row">
-      <% if @investigations.any? %>
+    <% if @investigations.any? %>
+      <div class="govuk-grid-row">
         <div class="govuk-grid-column-full" role="region" aria-label="Cases">
           <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
             <caption class="govuk-visually-hidden">
@@ -68,7 +68,7 @@
             </p>
           <% end %>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </section>
 </div>
