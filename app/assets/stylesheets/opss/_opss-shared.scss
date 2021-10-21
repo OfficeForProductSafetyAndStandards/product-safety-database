@@ -104,6 +104,7 @@ abbr[title]{
         .opss-switch-cols &,
         .govuk-summary-list__row & {
             border-bottom: 1px dotted $govuk-secondary-text-colour;
+            cursor: help;
         }
     }
 }
@@ -449,7 +450,9 @@ dl.opss-summary-list-aside {
     tbody td {
         @include govuk-font($size: 19);
 
+        span > em,
         mark {
+            font-style: normal;
             font-weight: bold;
             background: none;
             color: $govuk-text-colour;
