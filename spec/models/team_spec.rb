@@ -69,4 +69,20 @@ RSpec.describe Team do
       expect(team).not_to be_deleted
     end
   end
+
+  describe "#users_alphabetically_with_users_without_names_first" do
+    let(:team) { create(:team) }
+
+    before do
+      create(:user, team: team, name: "Alan Smith" )
+      create(:user, team: team, name: "Bill Benjamin" )
+      create(:user, team: team, name: "Xavier Johnson" )
+      create(:user, team: team, name: nil)
+    end
+
+    it "returns ordered users" do
+      ordered_team_names = team.users_alphabetically_with_users_without_names_first.map(&:name)
+      expect(ordered_team_names).to eq ["", "Alan Smith", "Bill Benjamin", "Xavier Johnson"]
+    end
+  end
 end

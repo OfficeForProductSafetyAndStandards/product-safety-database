@@ -31,7 +31,7 @@
           </thead>
 
           <tbody class="govuk-table__body">
-            <% @team.users.not_deleted.sort_by(&:name).each do |user| %>
+            <% @team.users_alphabetically_with_users_without_names_first.each do |user| %>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
                   <%= user.name %>
@@ -46,7 +46,7 @@
                     <br>
                     <span class="govuk-!-font-size-16 govuk-!-font-weight-regular">
                       <span class="opss-icon opss-icon--alert opss-icon--16sm"></span>
-                      Awaiting confirmation
+                      Awaiting confirmation <span class="govuk-visually-hidden"> for <%= user.email %></span>
                     </span>
                   <% end %>
                 </th>
