@@ -30,7 +30,9 @@
             <% @team.users_alphabetically_with_users_without_names_first.each do |user| %>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                  <%= user.name %><span class="govuk-visually-hidden">:</span>
+                  <% if user.name %>
+                    <%= user.name %><span class="govuk-visually-hidden">:</span>
+                  <% end %>
                   <% if user.is_team_admin? %>
                     <br>
                     <span class="govuk-!-font-size-16 govuk-!-font-weight-regular">
