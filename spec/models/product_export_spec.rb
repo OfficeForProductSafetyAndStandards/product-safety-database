@@ -1,30 +1,24 @@
 require "rails_helper"
 
 RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let!(:product_export)        { described_class.create }
-  let!(:investigation)         { create(:allegation) }
-  let!(:other_investigation)   { create(:allegation) }
-  let!(:product)               { create(:product, investigations: [investigation], affected_units_status: "exact") }
-  let!(:other_product)         { create(:product, investigations: [other_investigation]) }
-  let!(:risk_assessment)       { create(:risk_assessment, investigation: investigation, products: [product]) }
-  let!(:risk_assessment_2)     { create(:risk_assessment, investigation: investigation, products: [product]) }
-  let!(:test)                  { create(:test_result, investigation: investigation, product: product, failure_details: "something bad") }
-  let!(:test_2)                { create(:test_result, investigation: investigation, product: product, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]) }
-  let!(:corrective_action)     { create(:corrective_action, investigation: investigation, product: product) }
-  let!(:corrective_action_2)   { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: %w[great_britain eea_wide worldwide]) }
-  let(:products)               { [product, other_product] }
-  let(:product_ids)            { products.pluck(:id) }
+  let!(:investigation)       { create(:allegation) }
+  let!(:other_investigation) { create(:allegation) }
+  let!(:product)             { create(:product, investigations: [investigation], affected_units_status: "exact") }
+  let!(:other_product)       { create(:product, investigations: [other_investigation]) }
+  let!(:risk_assessment)     { create(:risk_assessment, investigation: investigation, products: [product]) }
+  let!(:risk_assessment_2)   { create(:risk_assessment, investigation: investigation, products: [product]) }
+  let!(:test)                { create(:test_result, investigation: investigation, product: product, failure_details: "something bad") }
+  let!(:test_2)              { create(:test_result, investigation: investigation, product: product, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]) }
+  let!(:corrective_action)   { create(:corrective_action, investigation: investigation, product: product) }
+  let!(:corrective_action_2) { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: %w[great_britain eea_wide worldwide]) }
+  let!(:user)                { create(:user, :activated, has_viewed_introduction: true) }
+  let(:params)               { {} }
+  let(:product_export)       { described_class.create!(user: user, params: params) }
+
+  before { Product.__elasticsearch__.import force: true, refresh: :wait }
 
   describe "#export" do
-    let(:result) { product_export.export(product_ids) }
-
-    context "with no product IDs" do
-      let(:product_ids) { [] }
-
-      it "raises an exception" do
-        expect(-> { result }).to raise_error(StandardError).with_message("No products to export")
-      end
-    end
+    let(:result) { product_export.export! }
 
     it "attaches the spreadsheet as a file" do
       result
@@ -33,7 +27,7 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
   end
 
   describe "#to_spreadsheet" do
-    let(:spreadsheet) { product_export.to_spreadsheet(product_ids).to_stream }
+    let(:spreadsheet) { product_export.to_spreadsheet.to_stream }
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:product_sheet) { exported_data.sheet("product_info") }
     let(:test_result_sheet) { exported_data.sheet("test_results") }

@@ -1,13 +1,20 @@
 class ProductExport < ApplicationRecord
+  include ProductsHelper
+
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
 
+  belongs_to :user
   has_one_attached :export_file
 
-  def export(product_ids)
+  def params
+    self[:params].deep_symbolize_keys
+  end
+
+  def export!
     raise "No products to export" unless product_ids.length.positive?
 
-    spreadsheet = to_spreadsheet(product_ids).to_stream
+    spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "products_export.xlsx" }
 
     raise "No file attached" unless export_file.attached?
@@ -15,7 +22,7 @@ class ProductExport < ApplicationRecord
     save!
   end
 
-  def to_spreadsheet(product_ids)
+  def to_spreadsheet
     product_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_product_ids|
       find_products(batch_product_ids).each { |product| add_product_to_sheets(product) }
     end
@@ -24,6 +31,13 @@ class ProductExport < ApplicationRecord
   end
 
 private
+
+  def product_ids
+    return @product_ids if @product_ids
+
+    @search = SearchParams.new(params)
+    @product_ids = search_for_products.ids
+  end
 
   def find_products(ids)
     Product

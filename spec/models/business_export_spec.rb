@@ -1,23 +1,24 @@
 require "rails_helper"
 
 RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let(:organisation) { create(:organisation) }
-  let(:team) { create(:team, organisation: organisation) }
-  let(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
+  let!(:organisation) { create(:organisation) }
+  let!(:team) { create(:team, organisation: organisation) }
+  let!(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
   let!(:business) { create(:business) }
   let!(:business_2) { create(:business) }
   let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation) }
   let!(:investigation) { create(:allegation) }
-  let(:business_export) { described_class.create! }
-  let(:businesses) { Business.all }
-  let(:business_ids) { businesses.pluck(:id) }
+  let(:params) { {} }
+  let(:business_export) { described_class.create!(user: user, params: params) }
 
-  describe "#export" do
+  before { Business.__elasticsearch__.import force: true, refresh: :wait }
+
+  describe "#export!" do
     before do
       create(:location, business: business)
       create(:contact, business: business)
 
-      business_export.export(business_ids)
+      business_export.export!
     end
 
     let!(:exported_data) { business_export.export_file.open { |file| Roo::Excelx.new(file) } }

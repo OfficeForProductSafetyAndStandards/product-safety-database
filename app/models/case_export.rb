@@ -1,15 +1,21 @@
 class CaseExport < ApplicationRecord
   include CountriesHelper
+  include InvestigationsHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
 
+  belongs_to :user
   has_one_attached :export_file
 
-  def export(case_ids)
+  def params
+    self[:params].deep_symbolize_keys
+  end
+
+  def export!
     raise "No cases to export" unless case_ids.length.positive?
 
-    spreadsheet = to_spreadsheet(case_ids).to_stream
+    spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "cases_export.xlsx" }
 
     raise "No file attached" unless export_file.attached?
@@ -17,7 +23,7 @@ class CaseExport < ApplicationRecord
     save!
   end
 
-  def to_spreadsheet(case_ids)
+  def to_spreadsheet
     package = Axlsx::Package.new
     sheet = package.workbook.add_worksheet name: "Cases"
 
@@ -33,6 +39,13 @@ class CaseExport < ApplicationRecord
   end
 
 private
+
+  def case_ids
+    return @case_ids if @case_ids
+
+    @search = SearchParams.new(params)
+    @case_ids = search_for_investigations.records.ids
+  end
 
   def activity_counts
     @activity_counts ||= Activity.group(:investigation_id).count

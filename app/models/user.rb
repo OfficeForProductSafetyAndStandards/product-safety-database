@@ -18,6 +18,9 @@ class User < ApplicationRecord
   has_many :user_sources, dependent: :destroy
   has_many :roles, dependent: :destroy, as: :entity
   has_many :collaborations, dependent: :destroy, as: :collaborator
+  has_many :case_exports
+  has_many :business_exports
+  has_many :product_exports
 
   belongs_to :team
 

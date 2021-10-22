@@ -1,12 +1,18 @@
 class BusinessExport < ApplicationRecord
   include CountriesHelper
+  include BusinessesHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
 
+  belongs_to :user
   has_one_attached :export_file
 
-  def export(business_ids)
+  def params
+    self[:params].deep_symbolize_keys
+  end
+
+  def export!
     Axlsx::Package.new do |p|
       book = p.workbook
 
@@ -20,6 +26,13 @@ class BusinessExport < ApplicationRecord
   end
 
 private
+
+  def business_ids
+    return @business_ids if @business_ids
+
+    @search = SearchParams.new(params)
+    @business_ids = search_for_businesses_in_batches.map(&:id)
+  end
 
   def add_businesses_worksheet(business_ids, book)
     book.add_worksheet name: "Businesses" do |sheet_investigations|

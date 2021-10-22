@@ -1,26 +1,19 @@
 require "rails_helper"
 
 RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let(:organisation) { create(:organisation) }
-  let(:team) { create(:team, organisation: organisation) }
-  let(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
-  let(:investigation) { create(:allegation, creator: user) }
-  let(:other_user_investigation) { create(:allegation, creator: other_user_same_team) }
-  let(:cases) { [investigation, other_user_investigation] }
-  let(:case_ids) { cases.pluck(:id) }
-  let(:case_export) { described_class.create }
+  let!(:organisation) { create(:organisation) }
+  let!(:team) { create(:team, organisation: organisation) }
+  let!(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
+  let!(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
+  let!(:investigation) { create(:allegation, creator: user) }
+  let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team) }
+  let(:params) { {:enquiry=>"unchecked", :project=>"unchecked", :sort_by=>"recent", :allegation=>"unchecked", :created_by=>{:id=>"", :me=>"", :my_team=>"", :someone_else=>""}, :status_open=>"true", :teams_with_access=>{:my_team=>"", :other_team_with_access=>""}} }
+  let(:case_export) { described_class.create!(user: user, params: params) }
 
-  describe "#export" do
-    let(:result) { case_export.export(case_ids) }
+  before { Investigation.__elasticsearch__.import force: true, refresh: :wait }
 
-    context "with no case IDs" do
-      let(:case_ids) { [] }
-
-      it "raises an exception" do
-        expect(-> { result }).to raise_error(StandardError).with_message("No cases to export")
-      end
-    end
+  describe "#export!" do
+    let(:result) { case_export.export! }
 
     it "attaches the spreadsheet as a file" do
       result
@@ -29,7 +22,7 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
   end
 
   describe "#to_spreadsheet" do
-    let(:spreadsheet) { case_export.to_spreadsheet(case_ids).to_stream }
+    let(:spreadsheet) { case_export.to_spreadsheet.to_stream }
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:sheet) { exported_data.sheet("Cases") }
 
