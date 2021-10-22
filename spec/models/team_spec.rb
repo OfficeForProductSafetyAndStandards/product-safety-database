@@ -74,9 +74,9 @@ RSpec.describe Team do
     let(:team) { create(:team) }
 
     before do
-      create(:user, team: team, name: "Alan Smith" )
-      create(:user, team: team, name: "Bill Benjamin" )
-      create(:user, team: team, name: "Xavier Johnson" )
+      create(:user, team: team, name: "Alan Smith")
+      create(:user, team: team, name: "Bill Benjamin")
+      create(:user, team: team, name: "Xavier Johnson")
       create(:user, team: team, name: nil)
     end
 

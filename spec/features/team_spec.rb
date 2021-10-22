@@ -37,7 +37,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
 
       context "when team has 12 or more users" do
         before do
-          12.times { create(:user, organisation: user.organisation, team: team) }
+          create_list(:user, 12, organisation: user.organisation, team: team)
           visit "/teams/#{team.id}"
           expect_to_be_on_team_page(team)
         end
