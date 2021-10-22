@@ -32,7 +32,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_elasticsearc
         expect(page).not_to have_user(another_user_another_team)
         expect(page).not_to have_resend_link_button_for(another_inactive_user)
         expect(page).not_to have_link("Invite a team member")
-        expect(page).to_to have_css("tfoot", text: "Name Email")
+        expect(page).not_to have_css("tfoot", text: "Name Email")
       end
 
       context "when team has 12 or more users" do
