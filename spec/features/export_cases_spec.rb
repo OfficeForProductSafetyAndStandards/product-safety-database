@@ -17,7 +17,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     Investigation.import force: true, refresh: :wait_for
     visit investigations_path
 
-    click_link "Export as spreadsheet"
+    click_link "CSV file"
     expect(page).to have_content "Your case export is being prepared. You will receive an email when your export is ready to download."
 
     perform_enqueued_jobs
