@@ -31,7 +31,7 @@
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
                   <%= user.name %>
-                  <span class="govuk-visually-hidden"><%= user.name.blank? ? "-" : ":" </span>
+                  <span class="govuk-visually-hidden"><%= user.name.blank? ? "-" : ":" %></span>
                   <% if user.is_team_admin? %>
                     <br>
                     <span class="govuk-!-font-size-16 govuk-!-font-weight-regular">
