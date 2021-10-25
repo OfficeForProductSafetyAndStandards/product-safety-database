@@ -5,7 +5,7 @@ class ProductExport < ApplicationRecord
   has_one_attached :export_file
 
   redacted_export_with :id, :created_at, :updated_at
-  
+
   def export(product_ids)
     raise "No products to export" unless product_ids.length.positive?
 
