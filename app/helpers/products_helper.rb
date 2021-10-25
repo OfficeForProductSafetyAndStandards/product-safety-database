@@ -11,7 +11,7 @@ module ProductsHelper
   end
 
   def product_export_params
-    params.permit(:sort, :q)
+    params.permit(:q)
   end
 
   def search_for_products(page_size = Product.count)

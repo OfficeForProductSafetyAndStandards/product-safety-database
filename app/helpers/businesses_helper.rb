@@ -19,7 +19,7 @@ module BusinessesHelper
   end
 
   def business_export_params
-    params.permit(:sort, :q)
+    params.permit(:q)
   end
 
   def sorting_params
