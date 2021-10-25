@@ -11,10 +11,10 @@ export PGDATABASE=$(echo $VCAP_SERVICES | ./jq -r ".postgres[] | select(.name|te
 export PGUSER=$(echo $VCAP_SERVICES | ./jq -r ".postgres[] | select(.name|test(\"$DB_NAME\")) .credentials .username")
 export PGPASSWORD=$(echo $VCAP_SERVICES | ./jq -r ".postgres[] | select(.name|test(\"$DB_NAME\")) .credentials .password")
 
-export AWS_ACCESS_KEY_ID=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name==\"$ENV_NAME\") | .credentials .REDEX_AWS_KEY_ID")
-export AWS_SECRET_ACCESS_KEY=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name==\"$ENV_NAME\") | .credentials .REDEX_AWS_SECRET_KEY")
-export AWS_DEFAULT_REGION=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name==\"$ENV_NAME\") | .credentials .REDEX_AWS_REGION")
-export AWS_BUCKET=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name==\"$ENV_NAME\") | .credentials .REDEX_AWS_S3_BUCKET")
+export AWS_ACCESS_KEY_ID=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name|test(\"$ENV_NAME\")) .credentials .REDEX_AWS_KEY_ID")
+export AWS_SECRET_ACCESS_KEY=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name|test(\"$ENV_NAME\")) .credentials .REDEX_AWS_SECRET_KEY")
+export AWS_DEFAULT_REGION=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name|test(\"$ENV_NAME\")) .credentials .REDEX_AWS_REGION")
+export AWS_BUCKET=$(echo $VCAP_SERVICES | ./jq -r ".\"user-provided\"[] | select(.name|test(\"$ENV_NAME\")) .credentials .REDEX_AWS_S3_BUCKET")
 
 # NOTE: The apt buildpack installs into a non-globally-writable directory, so explicit paths
 #   must be used: https://stackoverflow.com/questions/68861126/getting-an-error-when-running-pg-dump-on-cloud-foundry#comment121702201_68861126
