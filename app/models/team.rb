@@ -25,4 +25,8 @@ class Team < ApplicationRecord
 
     where(name: team_names.first)
   end
+
+  def users_alphabetically_with_users_without_names_first
+    users.not_deleted.order(Arel.sql("name IS NOT NULL"), :name)
+  end
 end

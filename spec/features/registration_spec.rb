@@ -65,7 +65,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
   def expect_user_invited_successfully
     expect(page).to have_title(team.display_name)
-    expect(page).to have_css(".teams--user .teams--user-email:contains(\"#{invitee_email}\")")
+    expect(page).to have_link(invitee_email)
   end
 
   def fill_in_registration_form
