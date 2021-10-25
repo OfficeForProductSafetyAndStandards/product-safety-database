@@ -326,6 +326,12 @@ module InvestigationsHelper
     end
   end
 
+  def search_result_statement(search_terms, number_of_results)
+    search_result_values = search_result_values(search_terms, number_of_results)
+
+    render "investigations/search_result", word: search_result_values[:word], number_of_cases_in_english: search_result_values[:number_of_cases_in_english], search_terms: search_terms
+  end
+
   def safety_and_compliance_actions(investigation, user, field_name)
     if policy(investigation).update?(user: user)
       {
@@ -559,5 +565,18 @@ module InvestigationsHelper
       option[:selected] = true if notifying_country_form.country == text
       option
     end
+  end
+
+private
+
+  def search_result_values(_search_terms, number_of_results)
+    word = number_of_results == 1 ? "was" : "were"
+
+    number_of_cases_in_english = "#{number_of_results} #{'case'.pluralize(number_of_results)}"
+
+    {
+      number_of_cases_in_english: number_of_cases_in_english,
+      word: word
+    }
   end
 end

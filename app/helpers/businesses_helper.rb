@@ -14,6 +14,10 @@ module BusinessesHelper
       .records
   end
 
+  def search_for_businesses_in_batches
+    Business.search_in_batches(search_query, Business.first.id - 1)
+  end
+
   def business_export_params
     params.permit(:sort, :q)
   end

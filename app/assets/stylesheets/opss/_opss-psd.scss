@@ -2,6 +2,7 @@
 @import "./opss-search";
 @import "./opss-pagination";
 
+
 main.govuk-main-wrapper {
     @include govuk-media-query($from: desktop) {
         min-height: 500px;
@@ -126,6 +127,7 @@ main.govuk-main-wrapper {
     }
 }
 
+
 ul.opss-radio-list {
     margin-bottom: 0;
 
@@ -233,6 +235,9 @@ ul.opss-radio-list {
     background:
         linear-gradient(to top left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) calc(50% - 1px), $govuk-border-colour 50%, rgba(0,0,0,0) calc(50% + 1px), rgba(0,0,0,0) 100%),
         linear-gradient(to top right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) calc(50% - 1px), $govuk-border-colour 50%, rgba(0,0,0,0) calc(50% + 1px), rgba(0,0,0,0) 100%);
+}
+@media screen and (min-width:0\0) and (min-resolution: +72dpi) {//ie9+ only
+  .opss-cross-through {background: none !important; }
 }
 
 .opss-form-group {

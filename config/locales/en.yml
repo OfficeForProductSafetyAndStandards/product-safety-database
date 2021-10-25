@@ -81,7 +81,7 @@ en:
   case:
     badges:
       coronavirus_related: "COVID-19 related case"
-      closed: "Closed case"
+      closed: "Case closed"
       restricted: "Restricted case"
       risk_level_high: "High risk case"
       risk_level_serious: "Serious risk case"
