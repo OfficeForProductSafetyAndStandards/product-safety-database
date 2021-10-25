@@ -5,7 +5,7 @@ if [[ ! $VCAP_SERVICES ]]; then
     exit 1
 fi
 
-echo $VCAP_SERVICES | ./env/jq -r "
+echo $VCAP_SERVICES | ./jq -r "
     .\"user-provided\"
         | map(
             select(.name[-4:] == \"$ENV_NAME\")
@@ -26,7 +26,8 @@ export AWS_DEFAULT_REGION=$REDEX_AWS_REGION
 
 # NOTE: The apt buildpack installs into a non-globally-writable directory, so explicit paths
 #   must be used: https://stackoverflow.com/questions/68861126/getting-an-error-when-running-pg-dump-on-cloud-foundry#comment121702201_68861126
-export PERL5LIB=/home/vcap/deps/0/apt/usr/lib/x86_64-linux-gnu:/home/vcap/deps/0/apt/usr/share/perl5
+export PERL5LIB=/home/vcap/deps/0/apt/usr/lib/x86_64-linux-gnu:/home/vcap/deps/0/apt/usr/share/perl5:$PERL5LIB
+export PYTHONPATH=/home/vcap/deps/0/apt/usr/lib/python3/dist-packages:$PYTHONPATH
 
 TIMESTAMP=$(date +'%F-%H-%M-%S')
 FINAL_S3_URL="s3://${REDEX_AWS_S3_BUCKET}/${TIMESTAMP}.sql.gz"

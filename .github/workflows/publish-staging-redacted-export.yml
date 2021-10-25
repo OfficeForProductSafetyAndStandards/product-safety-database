@@ -90,7 +90,7 @@ jobs:
           CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
         run: |
           MAIN_DATABASE_SERVICE_NAME=psd-database
-          REDEX_ENV=psd-redex-env
+          SECRETS_SERVICE_NAME=psd-redex-env
 
           TIMESTAMP=$(date +'%F-%H-%M-%S')
           TEMP_DB_SERVICE_NAME=psd-redex-db-$TIMESTAMP
@@ -110,7 +110,7 @@ jobs:
           until cf service $TEMP_DB_SERVICE_NAME > /tmp/db_exists && grep -E "create succeeded|update succeeded" /tmp/db_exists; do sleep 30; echo "Waiting for db..."; done
           echo "::endgroup::"
 
-          cf push $TEMP_APP_NAME --task -f redex/manifest.yml --var app-name=$TEMP_APP_NAME --var db-name=$TEMP_DB_SERVICE_NAME --var env-name=$REDEX_ENV
+          cf push $TEMP_APP_NAME --task -f redex/manifest.yml --var app-name=$TEMP_APP_NAME --var db-name=$TEMP_DB_SERVICE_NAME --var env-name=$SECRETS_SERVICE_NAME
 
           cf run-task $TEMP_APP_NAME
           echo "::group::Waiting for task"
