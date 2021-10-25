@@ -114,6 +114,9 @@ jobs:
           timeout 15m bash -c 'until cf tasks $TEMP_APP_NAME > /tmp/task_result && grep -E "SUCCEEDED" /tmp/task_result; do sleep 10; echo "Waiting for task..."; done'
           echo "::endgroup::"
 
+          cf logs $TEMP_APP_NAME --recent
+          sleep 5
+
           cf delete $TEMP_APP_NAME -f
           sleep 5
           cf delete-service $TEMP_DB_SERVICE_NAME -f
