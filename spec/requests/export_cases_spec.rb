@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
+  let(:params) { { enquiry: "unchecked", project: "unchecked", sort_by: "recent", allegation: "unchecked", created_by: { id: "", me: "", my_team: "", someone_else: "" }, status_open: "true", teams_with_access: { my_team: "", other_team_with_access: "" } } }
+
   before do
     sign_in(user)
   end
@@ -19,7 +21,7 @@ RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_n
 
     context "when viewing a case export" do
       it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
-        case_export = CaseExport.create!
+        case_export = CaseExport.create!(user: user, params: params)
         get case_export_path(case_export)
 
         expect(response).to render_template("errors/forbidden")
@@ -41,7 +43,7 @@ RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_n
 
     context "when viewing a case export" do
       it "allows user to view a case export download link" do
-        case_export = CaseExport.create!
+        case_export = CaseExport.create!(user: user, params: params)
         get case_export_path(case_export)
 
         expect(response).to have_http_status(:ok)
@@ -133,8 +135,8 @@ RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_n
       it "exports owner team and user" do
         user = create(:user)
         team = create(:team)
-        case_with_user_owner = create(:allegation, creator: user)
         case_with_team_owner = create(:allegation, creator: user)
+        case_with_user_owner = create(:allegation, creator: user)
 
         ChangeCaseOwner.call!(investigation: case_with_team_owner, user: user, owner: team)
 

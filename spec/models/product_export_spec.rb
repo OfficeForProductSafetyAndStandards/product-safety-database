@@ -17,7 +17,7 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
 
   before { Product.__elasticsearch__.import force: true, refresh: :wait }
 
-  describe "#export" do
+  describe "#export!" do
     let(:result) { product_export.export! }
 
     it "attaches the spreadsheet as a file" do
@@ -33,10 +33,6 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
     let(:test_result_sheet) { exported_data.sheet("test_results") }
     let(:risk_assessments_sheet) { exported_data.sheet("risk_assessments") }
     let(:corrective_actions_sheet) { exported_data.sheet("corrective_actions") }
-
-    it "exports correct sheets" do
-      expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
-    end
 
     # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength

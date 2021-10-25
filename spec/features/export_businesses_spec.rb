@@ -11,7 +11,7 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
     user.roles.create!(name: "psd_admin")
     sign_in(user)
     allow(BusinessExportJob).to receive(:perform_later) do
-      BusinessExportJob.new.perform(Business.pluck(:id), BusinessExport.last, user)
+      BusinessExportJob.new.perform(BusinessExport.last)
     end
   end
 

@@ -7,7 +7,7 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
   let!(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
   let!(:investigation) { create(:allegation, creator: user) }
   let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team) }
-  let(:params) { {:enquiry=>"unchecked", :project=>"unchecked", :sort_by=>"recent", :allegation=>"unchecked", :created_by=>{:id=>"", :me=>"", :my_team=>"", :someone_else=>""}, :status_open=>"true", :teams_with_access=>{:my_team=>"", :other_team_with_access=>""}} }
+  let(:params) { { enquiry: "unchecked", project: "unchecked", sort_by: "recent", allegation: "unchecked", created_by: { id: "", me: "", my_team: "", someone_else: "" }, status_open: "true", teams_with_access: { my_team: "", other_team_with_access: "" } } }
   let(:case_export) { described_class.create!(user: user, params: params) }
 
   before { Investigation.__elasticsearch__.import force: true, refresh: :wait }
@@ -26,13 +26,11 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:sheet) { exported_data.sheet("Cases") }
 
-    it "exports one Cases sheet" do
-      expect(exported_data.sheets).to eq %w[Cases]
-    end
-
     # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength
     it "exports the case data" do
+      expect(exported_data.sheets).to eq %w[Cases]
+
       expect(sheet.cell(1, 1)).to eq "ID"
       expect(sheet.cell(2, 1)).to eq investigation.pretty_id
       expect(sheet.cell(3, 1)).to eq other_user_investigation.pretty_id

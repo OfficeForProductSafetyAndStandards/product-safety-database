@@ -24,10 +24,6 @@ RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_
     let!(:exported_data) { business_export.export_file.open { |file| Roo::Excelx.new(file) } }
     let!(:sheet) { exported_data.sheet("Businesses") }
 
-    it "exports one Businesses sheet" do
-      expect(exported_data.sheets).to eq %w[Businesses]
-    end
-
     # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength
     it "exports business data" do

@@ -9,7 +9,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     user.roles.create!(name: "psd_admin")
     sign_in(user)
     allow(CaseExportJob).to receive(:perform_later) do
-      CaseExportJob.new.perform(Investigation.pluck(:id), CaseExport.last, user)
+      CaseExportJob.new.perform(CaseExport.last)
     end
   end
 
