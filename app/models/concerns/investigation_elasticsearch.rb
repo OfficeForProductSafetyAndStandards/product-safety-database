@@ -20,7 +20,8 @@ module InvestigationElasticsearch
 
     def as_indexed_json(*)
       as_json(
-        only: %i[description
+        only: %i[id
+                 description
                  hazard_type
                  product_category
                  is_closed

@@ -19,6 +19,10 @@ module ProductsHelper
       .page(params[:page]).per_page(page_size).records
   end
 
+  def search_for_products_in_batches
+    Product.search_in_batches(search_query, Product.first.id - 1)
+  end
+
   def sorting_params
     return {} if params[:sort] == SearchParams::RELEVANT
 
