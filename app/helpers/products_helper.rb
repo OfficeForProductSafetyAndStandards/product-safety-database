@@ -23,7 +23,7 @@ module ProductsHelper
     Product.search_in_batches(search_query(user), Product.first.id - 1)
   end
 
-  def filter_params(user)
+  def filter_params(_user)
     if params[:hazard_type].present?
       { must: [{ match: { "investigations.hazard_type" => @search.hazard_type } }] }
     end

@@ -34,8 +34,8 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
     expect(email.personalization[:download_export_url]).to eq business_export_url(export)
 
     expect(spreadsheet.last_row).to eq(3)
-    expect(spreadsheet.cell(2,2)).to eq("ABC")
-    expect(spreadsheet.cell(3,2)).to eq("XYZ")
+    expect(spreadsheet.cell(2, 2)).to eq("ABC")
+    expect(spreadsheet.cell(3, 2)).to eq("XYZ")
   end
 
   scenario "with search query" do
@@ -50,6 +50,6 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
     click_link "Export as spreadsheet"
 
     expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2,2)).to eq("XYZ")
+    expect(spreadsheet.cell(2, 2)).to eq("XYZ")
   end
 end
