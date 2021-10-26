@@ -1,17 +1,17 @@
 module InvestigationsHelper
   include SearchHelper
 
-  def search_for_investigations(page_size = Investigation.count)
-    result = Investigation.full_search(search_query)
+  def search_for_investigations(page_size = Investigation.count, user = current_user)
+    result = Investigation.full_search(search_query(user))
     result.paginate(page: params[:page], per_page: page_size)
   end
 
-  def search_for_investigations_in_batches
-    Investigation.search_in_batches(search_query, Investigation.first.id - 1)
+  def search_for_investigations_in_batches(user)
+    Investigation.search_in_batches(search_query(user), Investigation.first.id - 1)
   end
 
-  def search_query
-    ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params, nested: nested_filters)
+  def search_query(user)
+    ElasticsearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters)
   end
 
   def set_search_params
@@ -22,10 +22,10 @@ module InvestigationsHelper
     store_previous_search_params
   end
 
-  def filter_params
+  def filter_params(user)
     filters = {}
     filters.merge!(get_type_filter)
-    filters.merge!(merged_must_filters) { |_key, current_filters, new_filters| current_filters + new_filters }
+    filters.merge!(merged_must_filters(user)) { |_key, current_filters, new_filters| current_filters + new_filters }
   end
 
   def nested_filters
@@ -43,12 +43,12 @@ module InvestigationsHelper
     filters
   end
 
-  def merged_must_filters
+  def merged_must_filters(user)
     must_filters = {
       must: [
         get_status_filter,
-        { bool: get_creator_filter },
-        { bool: get_owner_filter }
+        { bool: get_creator_filter(user) },
+        { bool: get_owner_filter(user) }
       ]
     }
 
@@ -80,21 +80,21 @@ module InvestigationsHelper
     { must: [{ terms: type }] }
   end
 
-  def get_owner_filter
+  def get_owner_filter(user)
     return { should: [], must_not: [] } if @search.no_owner_boxes_checked?
     return { should: [], must_not: compute_excluded_terms } if @search.owner_filter_exclusive?
 
-    { should: compute_included_terms, must_not: [] }
+    { should: compute_included_terms(user), must_not: [] }
   end
 
-  def compute_excluded_terms
-    format_owner_terms([current_user.id])
+  def compute_excluded_terms(user)
+    format_owner_terms([user.id])
   end
 
-  def compute_included_terms
+  def compute_included_terms(user)
     owners = []
-    owners << current_user.id if @search.case_owner_is_me?
-    owners += my_team_id_and_its_user_ids if @search.case_owner_is_my_team?
+    owners << user.id if @search.case_owner_is_me?
+    owners += my_team_id_and_its_user_ids(user) if @search.case_owner_is_my_team?
     owners += other_owner_ids if @search.case_owner_is_someone_else?
 
     format_owner_terms(owners.uniq)
@@ -114,18 +114,18 @@ module InvestigationsHelper
     end
   end
 
-  def get_creator_filter
+  def get_creator_filter(user)
     return { should: [], must_not: [] } if @search.no_created_by_checked?
-    return { should: [], must_not: { terms: { creator_id: current_user.team.user_ids } } } if @search.created_by_filter_exclusive?
+    return { should: [], must_not: { terms: { creator_id: user.team.user_ids } } } if @search.created_by_filter_exclusive?
 
-    { should: format_creator_terms(checked_team_creators), must_not: [] }
+    { should: format_creator_terms(checked_team_creators(user)), must_not: [] }
   end
 
-  def checked_team_creators
+  def checked_team_creators(user)
     ids = []
 
-    ids << current_user.id                       if @search.created_by.me?
-    ids += user_ids_from_team(current_user.team) if @search.created_by.my_team?
+    ids << user.id                       if @search.created_by.me?
+    ids += user_ids_from_team(user.team) if @search.created_by.my_team?
 
     if @search.created_by.someone_else? && @search.created_by.id.present?
       if (team = Team.find_by(id: @search.created_by.id))
@@ -151,14 +151,6 @@ module InvestigationsHelper
     end
   end
 
-  def creator_team_with_key
-    [
-      "created_by_team_0".to_sym,
-      current_user.team,
-      "My team"
-    ]
-  end
-
   def query_params
     set_default_type_filter
     params.permit(
@@ -182,7 +174,7 @@ module InvestigationsHelper
   end
 
   def export_params
-    query_params.except(:page)
+    query_params.except(:page, :sort_by)
   end
 
   def set_default_type_filter
@@ -550,8 +542,8 @@ module InvestigationsHelper
     data_attributes
   end
 
-  def my_team_id_and_its_user_ids
-    [current_user.team_id] + current_user.team.user_ids
+  def my_team_id_and_its_user_ids(user)
+    [user.team_id] + user.team.user_ids
   end
 
   def store_previous_search_params
