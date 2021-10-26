@@ -48,11 +48,11 @@
                   <% end %>
                 </th>
                 <td class="govuk-table__cell">
-                  <%= mail_to user.email, user.email %>
+                  <%= mail_to user.email, user.email, class: "govuk-link govuk-link--no-visited-state" %>
                   <% if !user.has_filled_out_account_setup_form_and_verified_number? && current_user.is_team_admin? %>
                     <br>
                     <%= link_to resend_team_invitation_path(@team, user), method: :put do %>
-                      <span class="govuk-link govuk-!-font-size-16 govuk-!-font-weight-bold">Resend invitation <span class="govuk-visually-hidden"> to <%= user.email %></span></span>
+                      <span class="govuk-link govuk-link--no-visited-state govuk-!-font-size-16 govuk-!-font-weight-bold">Resend invitation <span class="govuk-visually-hidden"> to <%= user.email %></span></span>
                     <% end %>
                   <% end %>
                 </td>
