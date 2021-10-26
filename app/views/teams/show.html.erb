@@ -21,8 +21,12 @@
           <caption class="govuk-table__caption govuk-visually-hidden">Your team members</caption>
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
+              <% column_width = current_user.is_team_admin? ? "one-third" : "one-half" %>
               <th scope="col" class="govuk-table__header">Name</th>
-              <th scope="col" class="govuk-table__header govuk-!-width-one-half">Email</th>
+              <th scope="col" class=<%="govuk-table__header govuk-!-width-#{column_width}"%>>Email</th>
+              <% if current_user.is_team_admin? %>
+                <th scope="col" class="govuk-table__header govuk-!-width-one-third"></th>
+              <% end %>
             </tr>
           </thead>
 
@@ -57,6 +61,11 @@
                     <% end %>
                   <% end %>
                 </td>
+                <% if current_user.is_team_admin? %>
+                  <td class="govuk-table__cell">
+                    Remove
+                  </td>
+                <% end %>
               </tr>
           <% end %>
         </tbody>
