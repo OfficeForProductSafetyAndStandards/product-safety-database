@@ -1,5 +1,5 @@
 module ProductsHelper
-  include SearchHelper
+  include ProductSearchHelper
 
   SUGGESTED_PRODUCTS_LIMIT = 4
 
@@ -10,23 +10,13 @@ module ProductsHelper
     ).with_defaults(markings: [])
   end
 
-  def product_export_params
-    params.permit(:q, :hazard_type)
-  end
-
   def search_for_products(page_size = Product.count, user = current_user)
     Product.full_search(search_query(user))
       .page(params[:page]).per_page(page_size).records
   end
 
-  def search_for_products_in_batches(user)
-    Product.search_in_batches(search_query(user), Product.first.id - 1)
-  end
-
-  def filter_params(_user)
-    if params[:hazard_type].present?
-      { must: [{ match: { "investigations.hazard_type" => @search.hazard_type } }] }
-    end
+  def product_export_params
+    params.permit(:q, :hazard_type)
   end
 
   def sorting_params

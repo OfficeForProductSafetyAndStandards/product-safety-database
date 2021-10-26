@@ -1,5 +1,5 @@
 class ProductExport < ApplicationRecord
-  include ProductsHelper
+  include ProductSearchHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
@@ -36,7 +36,8 @@ private
     return @product_ids if @product_ids
 
     @search = SearchParams.new(params)
-    @product_ids = search_for_products_in_batches(user).map(&:id)
+    query = search_query(user)
+    @product_ids = Product.search_in_batches(query, Product.first.id - 1).map(&:id)
   end
 
   def find_products(ids)

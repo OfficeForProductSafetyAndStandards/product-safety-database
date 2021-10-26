@@ -1,6 +1,6 @@
 class CaseExport < ApplicationRecord
   include CountriesHelper
-  include InvestigationsHelper
+  include InvestigationSearchHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
@@ -44,7 +44,8 @@ private
     return @case_ids if @case_ids
 
     @search = SearchParams.new(params)
-    @case_ids = search_for_investigations_in_batches(user).map(&:id)
+    query = search_query(user)
+    @case_ids = Investigation.search_in_batches(query, Investigation.first.id - 1).map(&:id)
   end
 
   def activity_counts

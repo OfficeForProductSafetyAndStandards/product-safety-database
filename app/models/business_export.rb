@@ -1,6 +1,6 @@
 class BusinessExport < ApplicationRecord
   include CountriesHelper
-  include BusinessesHelper
+  include SearchHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
@@ -31,7 +31,8 @@ private
     return @business_ids if @business_ids
 
     @search = SearchParams.new(params)
-    @business_ids = search_for_businesses_in_batches(user).map(&:id)
+    query = search_query(user)
+    @business_ids = Business.search_in_batches(query, Business.first.id - 1).map(&:id)
   end
 
   def add_businesses_worksheet(business_ids, book)
