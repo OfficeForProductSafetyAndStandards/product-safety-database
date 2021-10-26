@@ -5,8 +5,8 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
   let!(:team) { create(:team, organisation: organisation) }
   let!(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
   let!(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
-  let!(:investigation) { create(:allegation, creator: user) }
-  let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team) }
+  let!(:investigation) { create(:allegation, creator: user).decorate }
+  let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team).decorate }
   let(:params) { { enquiry: "unchecked", project: "unchecked", sort_by: "recent", allegation: "unchecked", created_by: { id: "", me: "", my_team: "", someone_else: "" }, status_open: "true", teams_with_access: { my_team: "", other_team_with_access: "" } } }
   let(:case_export) { described_class.create!(user: user, params: params) }
 

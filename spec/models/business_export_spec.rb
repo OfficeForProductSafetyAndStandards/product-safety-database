@@ -1,13 +1,11 @@
 require "rails_helper"
 
 RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let!(:organisation) { create(:organisation) }
-  let!(:team) { create(:team, organisation: organisation) }
-  let!(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let!(:business) { create(:business) }
-  let!(:business_2) { create(:business) }
-  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation) }
-  let!(:investigation) { create(:allegation) }
+  let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let!(:business) { create(:business).decorate }
+  let!(:business_2) { create(:business).decorate }
+  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation).decorate }
+  let!(:investigation) { create(:allegation).decorate }
   let(:params) { {} }
   let(:business_export) { described_class.create!(user: user, params: params) }
 

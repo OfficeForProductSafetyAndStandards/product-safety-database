@@ -31,7 +31,7 @@ class CaseExport < ApplicationRecord
 
     case_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_case_ids|
       find_cases(batch_case_ids).each do |investigation|
-        sheet.add_row(serialize_case(investigation), types: :text)
+        sheet.add_row(serialize_case(investigation.decorate), types: :text)
       end
     end
 
@@ -121,7 +121,7 @@ private
       investigation.categories.join(", "),
       investigation.hazard_type,
       investigation.coronavirus_related?,
-      investigation.decorate.risk_level_description,
+      investigation.risk_level_description,
       investigation.owner_team&.name,
       investigation.owner_user&.name,
       investigation.creator_user&.name,
