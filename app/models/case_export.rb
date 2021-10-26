@@ -117,7 +117,7 @@ private
       investigation.is_closed? ? "Closed" : "Open",
       investigation.title,
       investigation.type,
-      investigation.description,
+      investigation.object.description,
       investigation.categories.join(", "),
       investigation.hazard_type,
       investigation.coronavirus_related?,

@@ -48,8 +48,8 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
       expect(sheet.cell(3, 4)).to eq other_user_investigation.type
 
       expect(sheet.cell(1, 5)).to eq "Description"
-      expect(sheet.cell(2, 5)).to eq investigation.description
-      expect(sheet.cell(3, 5)).to eq other_user_investigation.description
+      expect(sheet.cell(2, 5)).to eq investigation.object.description
+      expect(sheet.cell(3, 5)).to eq other_user_investigation.object.description
 
       expect(sheet.cell(1, 6)).to eq "Product_Category"
       expect(sheet.cell(2, 6)).to eq investigation.categories.presence&.join(", ")
