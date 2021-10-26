@@ -7,15 +7,15 @@ module BusinessesHelper
     business
   end
 
-  def search_for_businesses(page_size = Business.count)
-    Business.full_search(search_query)
+  def search_for_businesses(page_size = Business.count, user = current_user)
+    Business.full_search(search_query(user))
       .page(params[:page])
       .per_page(page_size)
       .records
   end
 
-  def search_for_businesses_in_batches
-    Business.search_in_batches(search_query, Business.first.id - 1)
+  def search_for_businesses_in_batches(user)
+    Business.search_in_batches(search_query(user), Business.first.id - 1)
   end
 
   def business_export_params

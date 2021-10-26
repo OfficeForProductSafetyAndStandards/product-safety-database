@@ -31,7 +31,7 @@ private
     return @business_ids if @business_ids
 
     @search = SearchParams.new(params)
-    @business_ids = search_for_businesses_in_batches.map(&:id)
+    @business_ids = search_for_businesses_in_batches(user).map(&:id)
   end
 
   def add_businesses_worksheet(business_ids, book)

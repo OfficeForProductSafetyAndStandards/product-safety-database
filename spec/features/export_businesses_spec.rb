@@ -3,11 +3,17 @@ require "sidekiq/testing"
 
 RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user) { create :user, :psd_admin, :activated }
-  let(:export) { BusinessExport.find_by(user: user) }
   let(:email) { delivered_emails.last }
+  let(:export) { BusinessExport.find_by(user: user) }
+  let(:spreadsheet) do
+    export.export_file.blob.open do |file|
+      Roo::Excelx.new(file).sheet("Businesses")
+    end
+  end
 
   before do
-    create(:investigation_business)
+    create(:business, trading_name: "ABC")
+    create(:business, trading_name: "XYZ")
     Investigation.import force: true, refresh: :wait_for
     Business.import force: true, refresh: :wait_for
 
@@ -17,11 +23,33 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
   scenario "with no filters selected" do
     visit businesses_path
 
+    expect(page).to have_text "ABC"
+    expect(page).to have_text "XYZ"
+
     click_link "Export as spreadsheet"
     expect(page).to have_content "Your business export is being prepared. You will receive an email when your export is ready to download."
 
     expect(email.action_name).to eq "business_export"
     expect(email.personalization[:name]).to eq user.name
     expect(email.personalization[:download_export_url]).to eq business_export_url(export)
+
+    expect(spreadsheet.last_row).to eq(3)
+    expect(spreadsheet.cell(2,2)).to eq("ABC")
+    expect(spreadsheet.cell(3,2)).to eq("XYZ")
+  end
+
+  scenario "with search query" do
+    visit businesses_path
+
+    fill_in "Keywords", with: "XYZ"
+    click_button "Search"
+
+    expect(page).not_to have_text "ABC"
+    expect(page).to have_text "XYZ"
+
+    click_link "Export as spreadsheet"
+
+    expect(spreadsheet.last_row).to eq(2)
+    expect(spreadsheet.cell(2,2)).to eq("XYZ")
   end
 end

@@ -79,7 +79,7 @@ class ProductsController < ApplicationController
     end
   end
 
-  def filter_params
+  def filter_params(user)
     if params["hazard_type"].present?
       { must: [{ match: { "investigations.hazard_type" => @search.hazard_type } }] }
     end
