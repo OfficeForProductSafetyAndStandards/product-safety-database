@@ -35,30 +35,30 @@ private
   end
 
   def add_businesses_worksheet(business_ids, book)
-    book.add_worksheet name: "Businesses" do |sheet_investigations|
-      sheet_investigations.add_row %w[ID
-                                      trading_name
-                                      legal_name
-                                      company_number
-                                      types
-                                      primary_contact_email
-                                      primary_contact_job_title
-                                      primary_contact_phone_number
-                                      primary_location_address_line_1
-                                      primary_location_address_line_2
-                                      primary_location_city
-                                      primary_location_country
-                                      primary_location_county
-                                      primary_location_phone_number
-                                      primary_location_postal_code
-                                      created_at
-                                      updated_at]
+    book.add_worksheet name: "Businesses" do |sheet|
+      sheet.add_row %w[ID
+                       trading_name
+                       legal_name
+                       company_number
+                       types
+                       primary_contact_email
+                       primary_contact_job_title
+                       primary_contact_phone_number
+                       primary_location_address_line_1
+                       primary_location_address_line_2
+                       primary_location_city
+                       primary_location_country
+                       primary_location_county
+                       primary_location_phone_number
+                       primary_location_postal_code
+                       created_at
+                       updated_at]
 
       business_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_business_ids|
         Business
           .includes(:investigations, :locations, :contacts)
           .find(batch_business_ids).each do |business|
-          sheet_investigations.add_row [
+          sheet.add_row [
             business.id,
             business.trading_name,
             business.legal_name,
