@@ -31,8 +31,8 @@
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
                   <%= user.name %>
-                  <span class="govuk-visually-hidden"><%= user.name.blank? ? "-" : ":" %></span>
                   <% if user.is_team_admin? %>
+                    <span class="govuk-visually-hidden">:</span>
                     <br>
                     <span class="govuk-!-font-size-16 govuk-!-font-weight-regular">
                       <span class="opss-icon opss-icon--tick opss-icon--16sm"></span>
@@ -40,6 +40,7 @@
                     </span>
                   <% end %>
                   <% if !user.has_filled_out_account_setup_form_and_verified_number? %>
+                    <span class="govuk-visually-hidden">-</span>
                     <br>
                     <span class="govuk-!-font-size-16 govuk-!-font-weight-regular">
                       <span class="opss-icon opss-icon--alert opss-icon--16sm"></span>
