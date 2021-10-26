@@ -51,20 +51,6 @@ module BusinessesHelper
     )
   end
 
-  def create_business
-    if params[:business]
-      @business = Business.new(business_params)
-      @business.locations.build unless @business.locations.any?
-      defaults_on_primary_location(@business)
-      @business.contacts.build unless @business.contacts.any?
-      @business.source = UserSource.new(user: current_user)
-    else
-      @business = Business.new
-      @business.locations.build
-      @business.contacts.build
-    end
-  end
-
   def set_business
     @business = Business.find(params[:id])
   end
