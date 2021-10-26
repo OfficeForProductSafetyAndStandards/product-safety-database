@@ -82,7 +82,7 @@ module InvestigationsHelper
 
   def get_owner_filter(user)
     return { should: [], must_not: [] } if @search.no_owner_boxes_checked?
-    return { should: [], must_not: compute_excluded_terms } if @search.owner_filter_exclusive?
+    return { should: [], must_not: compute_excluded_terms(user) } if @search.owner_filter_exclusive?
 
     { should: compute_included_terms(user), must_not: [] }
   end

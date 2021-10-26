@@ -36,7 +36,7 @@ private
     return @product_ids if @product_ids
 
     @search = SearchParams.new(params)
-    @product_ids = search_for_products_in_batches.map(&:id)
+    @product_ids = search_for_products_in_batches(user).map(&:id)
   end
 
   def find_products(ids)
