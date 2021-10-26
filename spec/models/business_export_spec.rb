@@ -56,6 +56,34 @@ RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_
       expect(sheet.cell(1, 8)).to eq "primary_contact_phone_number"
       expect(sheet.cell(2, 8)).to eq business.primary_contact.try(:phone_number)
       expect(sheet.cell(3, 8)).to eq business_2.primary_contact.try(:phone_number)
+
+      expect(sheet.cell(1, 9)).to eq "primary_location_address_line_1"
+      expect(sheet.cell(2, 9)).to eq business.primary_location.try(:address_line_1)
+      expect(sheet.cell(3, 9)).to eq business_2.primary_location.try(:address_line_1)
+
+      expect(sheet.cell(1, 10)).to eq "primary_location_address_line_2"
+      expect(sheet.cell(2, 10)).to eq business.primary_location.try(:address_line_2)
+      expect(sheet.cell(3, 10)).to eq business_2.primary_location.try(:address_line_2)
+
+      expect(sheet.cell(1, 11)).to eq "primary_location_city"
+      expect(sheet.cell(2, 11)).to eq business.primary_location.try(:city)
+      expect(sheet.cell(3, 11)).to eq business_2.primary_location.try(:city)
+
+      expect(sheet.cell(1, 12)).to eq "primary_location_country"
+      expect(sheet.cell(2, 12)).to eq business.primary_location.try(:country)
+      expect(sheet.cell(3, 12)).to eq business_2.primary_location.try(:country)
+
+      expect(sheet.cell(1, 13)).to eq "primary_location_county"
+      expect(sheet.cell(2, 13)).to eq business.primary_location.try(:county)
+      expect(sheet.cell(3, 13)).to eq business_2.primary_location.try(:county)
+
+      expect(sheet.cell(1, 14)).to eq "primary_location_phone_number"
+      expect(sheet.cell(2, 14)).to eq business.primary_location.try(:phone_number)
+      expect(sheet.cell(3, 14)).to eq business_2.primary_location.try(:phone_number)
+
+      expect(sheet.cell(1, 15)).to eq "primary_location_postal_code"
+      expect(sheet.cell(2, 15)).to eq business.primary_location.try(:postal_code)
+      expect(sheet.cell(3, 15)).to eq business_2.primary_location.try(:postal_code)
     end
     # rubocop:enable RSpec/MultipleExpectations
     # rubocop:enable RSpec/ExampleLength
