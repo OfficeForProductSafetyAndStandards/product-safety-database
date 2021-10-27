@@ -32,7 +32,7 @@ private
 
     @search = SearchParams.new(params)
     query = search_query(user)
-    @business_ids = Business.search_in_batches(query, Business.first.id - 1).map(&:id)
+    @business_ids = Business.search_in_batches(query).map(&:id)
   end
 
   def add_businesses_worksheet(business_ids, book)

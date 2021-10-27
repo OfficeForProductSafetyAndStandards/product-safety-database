@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
+RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:investigation)       { create(:allegation).decorate }
   let!(:other_investigation) { create(:allegation).decorate }
   let!(:product)             { create(:product, investigations: [investigation], affected_units_status: "exact").decorate }

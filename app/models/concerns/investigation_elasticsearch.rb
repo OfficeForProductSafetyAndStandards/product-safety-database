@@ -20,8 +20,7 @@ module InvestigationElasticsearch
 
     def as_indexed_json(*)
       as_json(
-        only: %i[id
-                 description
+        only: %i[description
                  hazard_type
                  product_category
                  is_closed
@@ -33,7 +32,7 @@ module InvestigationElasticsearch
                  non_compliant_reason
                  coronavirus_related
                  risk_level],
-        methods: %i[title creator_id owner_id],
+        methods: %i[title creator_id owner_id tiebreaker_id],
         include: {
           teams_with_access: { only: %i[id name] },
           documents: {

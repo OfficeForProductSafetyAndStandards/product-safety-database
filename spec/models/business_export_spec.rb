@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
+RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let!(:business) { create(:business).decorate }
   let!(:business_2) { create(:business).decorate }

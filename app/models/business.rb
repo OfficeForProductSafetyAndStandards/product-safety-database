@@ -29,6 +29,10 @@ class Business < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  def as_indexed_json(*)
+    as_json(methods: [:tiebreaker_id])
+  end
+
   def supporting_information
     corrective_actions + risk_assessments
   end

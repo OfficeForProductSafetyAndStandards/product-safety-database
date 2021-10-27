@@ -45,7 +45,7 @@ private
 
     @search = SearchParams.new(params)
     query = search_query(user)
-    @case_ids = Investigation.search_in_batches(query, Investigation.first.id - 1).map(&:id)
+    @case_ids = Investigation.search_in_batches(query).map(&:id)
   end
 
   def activity_counts

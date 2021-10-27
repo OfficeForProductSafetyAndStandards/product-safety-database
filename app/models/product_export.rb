@@ -37,7 +37,7 @@ private
 
     @search = SearchParams.new(params)
     query = search_query(user)
-    @product_ids = Product.search_in_batches(query, Product.first.id - 1).map(&:id)
+    @product_ids = Product.search_in_batches(query).map(&:id)
   end
 
   def find_products(ids)
