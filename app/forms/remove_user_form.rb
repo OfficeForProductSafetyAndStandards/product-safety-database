@@ -3,8 +3,9 @@ class RemoveUserForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  attribute :type, :string, default: nil
+  attribute :remove, :string, default: nil
+  attribute :user_id, :string, default: nil
 
-  validates :type,
-            inclusion: { in: %w[Accident Incident], message: I18n.t(".accident_or_incident_type_form.type.inclusion") }
+  validates :remove, inclusion: { in: %w[yes no], message: "Select an option" }
+  validates :user_id, presence: true
 end

@@ -61,9 +61,9 @@
                     <% end %>
                   <% end %>
                 </td>
-                <% if current_user.is_team_admin? %>
+                <% if current_user.is_team_admin? && current_user != user %>
                   <td class="govuk-table__cell">
-                    Remove
+                    <%= link_to "Remove", remove_user_path(user_id: user.id) %>
                   </td>
                 <% end %>
               </tr>
