@@ -9,8 +9,6 @@ class Business < ApplicationRecord
   settings do
     mappings do
       indexes :company_number, type: :keyword
-      indexes :company_type_code, type: :keyword, fields: { sort: { type: "keyword" } }
-      indexes :company_status_code, type: :keyword, fields: { sort: { type: "keyword" } }
     end
   end
 
