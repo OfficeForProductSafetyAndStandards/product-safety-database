@@ -6,6 +6,6 @@ class RemoveUserForm
   attribute :remove, :string, default: nil
   attribute :user_id, :string, default: nil
 
-  validates :remove, inclusion: { in: %w[yes no], message: "Select an option" }
+  validates :remove, inclusion: { in: %w[yes no], message: "Select yes if you want to remove the team member from your team" }
   validates :user_id, presence: true
 end
