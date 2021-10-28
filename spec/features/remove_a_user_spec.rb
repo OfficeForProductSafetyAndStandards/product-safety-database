@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_errors_rendered, type: :feature do
   let(:team) { create(:team) }
   let(:email) { Faker::Internet.safe_email }
-  let!(:other_user) { create(:user, :activated, team: team, has_viewed_introduction: true, name: "BBBBB") }
+  let!(:other_user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
 
   context "when the user is a team admin" do
-    let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true, name: "AAAAA") }
+    let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true) }
 
     before do
       sign_in(user)
@@ -65,7 +65,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
         end
       end
 
-      context "when user to be removed is activated and not an admin" do
+      context "when user to be removed is nor activated and not an admin" do
         let!(:other_user) { create(:user, team: team, has_viewed_introduction: true, name: "BBBBB") }
 
         context "when admin clicks yes to remove user" do
@@ -90,6 +90,17 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
     context "when the user is not a team admin" do
       let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true, name: "AAAAA") }
+
+      scenario "does not allow user to remove other users" do
+        visit "/teams/#{team.id}"
+        expect(page).not_to have_link "Remove"
+      end
+    end
+
+    context "when the user to be removed is a team admin" do
+      before do
+        other_user.roles.create!(name: "team_admin")
+      end
 
       scenario "does not allow user to remove other users" do
         visit "/teams/#{team.id}"
