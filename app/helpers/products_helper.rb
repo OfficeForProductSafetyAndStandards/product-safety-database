@@ -16,7 +16,7 @@ module ProductsHelper
 
   def search_for_products(page_size = Product.count)
     Product.full_search(search_query)
-      .page(params[:page]).per_page(page_size).records
+      .page(params[:page]).per(page_size).records
   end
 
   def sorting_params
@@ -33,7 +33,7 @@ module ProductsHelper
         must_not: have_excluded_id(excluded_ids),
       }
     })
-      .paginate(per_page: SUGGESTED_PRODUCTS_LIMIT)
+      .page(1).per(SUGGESTED_PRODUCTS_LIMIT)
       .records
   end
 

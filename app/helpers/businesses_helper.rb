@@ -10,7 +10,7 @@ module BusinessesHelper
   def search_for_businesses(page_size = Business.count)
     Business.full_search(search_query)
       .page(params[:page])
-      .per_page(page_size)
+      .per(page_size)
       .records
   end
 
