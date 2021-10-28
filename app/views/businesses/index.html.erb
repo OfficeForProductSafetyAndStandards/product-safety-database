@@ -12,7 +12,7 @@
       <% if params[:q].present? %>
         <%= params[:q] %>
         <span class="govuk-caption-m">
-          <%= "#{@businesses.total_entries} #{'result'.pluralize(@businesses.total_entries)}" %>
+          <%= "#{@businesses.object.total_count} #{'result'.pluralize(@businesses.object.total_count)}" %>
         </span>
       <% else %>
         Businesses
