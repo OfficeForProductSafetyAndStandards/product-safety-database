@@ -49,15 +49,20 @@ class UsersController < ApplicationController
   end
 
   def delete
-    @remove_user_form = RemoveUserForm.new(remove_user_params)
-    @team = User.find_by(id: @remove_user_form.user_id).team
+    @user = User.find_by(id: remove_user_params["user_id"])
+    team = @user.team
 
-    if @remove_user_form.valid?
-      if @remove_user_form.remove == "yes"
-        redirect_to team_path(@team), flash: { success: "The team member was removed" }
-      else
-        redirect_to team_path(@team)
-      end
+    authorize team, :invite_or_remove_user?
+
+    @remove_user_form = RemoveUserForm.new(remove_user_params)
+
+    return render(:remove) if @remove_user_form.invalid?
+
+    if @remove_user_form.remove == "yes"
+      DeleteUser.call!(user: @user)
+      redirect_to team_path(team), flash: { success: "The team member was removed" }
+    else
+      redirect_to team_path(team)
     end
   end
 
