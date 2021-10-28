@@ -48,6 +48,21 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
             expect(page).to have_content other_user.name
           end
         end
+
+        context "when admin does not select an option" do
+          scenario "shows error message" do
+            visit "/teams/#{team.id}"
+            click_link "Remove"
+
+            expect(page.current_path).to eq "/remove_user"
+
+            expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
+
+            click_button("Save and continue")
+
+            expect(page).to have_content "Select yes if you want to remove the team member from your team"
+          end
+        end
       end
 
       context "when user to be removed is activated and not an admin" do
