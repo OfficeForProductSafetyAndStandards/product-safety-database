@@ -24,7 +24,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
           click_button("Save and continue")
 
-          expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
+          expect(page.current_path).to eq "/teams/#{team.id}"
           expect(page).to have_content "The team member was removed"
           expect(page).not_to have_content other_user.name
         end
@@ -40,7 +40,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
             click_button("Save and continue")
 
-            expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
+            expect(page.current_path).to eq "/teams/#{team.id}"
             expect(page).to have_content other_user.name
           end
         end
@@ -59,21 +59,21 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
         end
       end
 
-      context "when user to be removed is nor activated and not an admin" do
-        let!(:other_user) { create(:user, team: team, has_viewed_introduction: true) }
+      context "when user to be removed is not activated and not an admin" do
+        let!(:other_user) { create(:user, team: team, has_viewed_introduction: true, name: nil) }
 
         context "when admin clicks yes to remove user" do
           scenario "user is deleted" do
             visit "/teams/#{team.id}"
             click_link "Remove"
 
-            expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
+            expect(page).to have_content "Do you want to remove the team member from your team"
 
             choose("Yes")
 
             click_button("Save and continue")
 
-            expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
+            expect(page.current_path).to eq "/teams/#{team.id}"
             expect(page).to have_content "The team member was removed"
           end
         end
