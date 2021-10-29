@@ -206,7 +206,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_radios(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", classes: "")
+  def govuk_radios(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", classes: "", hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -236,6 +236,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      errorMessage: error_message,
                      items: @items,
                      classes: classes,
+                     hint: hint,
                      fieldset: {
                        legend: {
                          text: legend,
