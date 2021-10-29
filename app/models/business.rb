@@ -9,8 +9,6 @@ class Business < ApplicationRecord
   settings do
     mappings do
       indexes :company_number, type: :keyword
-      indexes :company_type_code, type: :keyword, fields: { sort: { type: "keyword" } }
-      indexes :company_status_code, type: :keyword, fields: { sort: { type: "keyword" } }
     end
   end
 
@@ -32,6 +30,10 @@ class Business < ApplicationRecord
   has_one :source, as: :sourceable, dependent: :destroy
 
   redacted_export_with :id, :company_number, :created_at, :legal_name, :trading_name, :updated_at
+
+  def as_indexed_json(*)
+    as_json(methods: [:tiebreaker_id])
+  end
 
   def supporting_information
     corrective_actions + risk_assessments

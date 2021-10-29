@@ -1,17 +1,23 @@
 class CaseExport < ApplicationRecord
   include CountriesHelper
+  include InvestigationSearchHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
 
+  belongs_to :user
   has_one_attached :export_file
 
   redacted_export_with :id, :created_at, :updated_at
 
-  def export(case_ids)
+  def params
+    self[:params].deep_symbolize_keys
+  end
+
+  def export!
     raise "No cases to export" unless case_ids.length.positive?
 
-    spreadsheet = to_spreadsheet(case_ids).to_stream
+    spreadsheet = to_spreadsheet.to_stream
     self.export_file = { io: spreadsheet, filename: "cases_export.xlsx" }
 
     raise "No file attached" unless export_file.attached?
@@ -19,7 +25,7 @@ class CaseExport < ApplicationRecord
     save!
   end
 
-  def to_spreadsheet(case_ids)
+  def to_spreadsheet
     package = Axlsx::Package.new
     sheet = package.workbook.add_worksheet name: "Cases"
 
@@ -27,7 +33,7 @@ class CaseExport < ApplicationRecord
 
     case_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_case_ids|
       find_cases(batch_case_ids).each do |investigation|
-        sheet.add_row(serialize_case(investigation), types: :text)
+        sheet.add_row(serialize_case(investigation.decorate), types: :text)
       end
     end
 
@@ -35,6 +41,14 @@ class CaseExport < ApplicationRecord
   end
 
 private
+
+  def case_ids
+    return @case_ids if @case_ids
+
+    @search = SearchParams.new(params)
+    query = search_query(user)
+    @case_ids = Investigation.search_in_batches(query).map(&:id)
+  end
 
   def activity_counts
     @activity_counts ||= Activity.group(:investigation_id).count
@@ -106,11 +120,11 @@ private
       investigation.is_closed? ? "Closed" : "Open",
       investigation.title,
       investigation.type,
-      investigation.description,
+      investigation.object.description,
       investigation.categories.join(", "),
       investigation.hazard_type,
       investigation.coronavirus_related?,
-      investigation.decorate.risk_level_description,
+      investigation.risk_level_description,
       investigation.owner_team&.name,
       investigation.owner_user&.name,
       investigation.creator_user&.name,

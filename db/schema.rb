@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_125538) do
+ActiveRecord::Schema.define(version: 2021_10_22_135737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -84,7 +84,10 @@ ActiveRecord::Schema.define(version: 2021_10_07_125538) do
 
   create_table "business_exports", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
+    t.jsonb "params"
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_business_exports_on_user_id"
   end
 
   create_table "businesses", id: :serial, force: :cascade do |t|
@@ -97,7 +100,10 @@ ActiveRecord::Schema.define(version: 2021_10_07_125538) do
 
   create_table "case_exports", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
+    t.jsonb "params"
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_case_exports_on_user_id"
   end
 
   create_table "collaborations", force: :cascade do |t|
@@ -250,7 +256,10 @@ ActiveRecord::Schema.define(version: 2021_10_07_125538) do
 
   create_table "product_exports", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
+    t.jsonb "params"
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "user_id"
+    t.index ["user_id"], name: "index_product_exports_on_user_id"
   end
 
   create_table "products", id: :serial, force: :cascade do |t|

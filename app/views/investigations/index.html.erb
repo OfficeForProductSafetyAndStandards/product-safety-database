@@ -11,7 +11,7 @@
 
   <section class="govuk-grid-column-three-quarters">
     <div class="govuk-grid-row">
-      <%= search_result_statement(@search.q, @answer.results.total_entries) %>
+      <%= search_result_statement(@search.q, @answer.results.total_count) %>
     </div>
     <% if @investigations.any? %>
       <div class="govuk-grid-row">
@@ -55,7 +55,7 @@
             <% end %>
           </table>
 
-          <%= will_paginate @investigations %>
+          <%= paginate @investigations.object %>
 
           <% if policy(Investigation).export? %>
             <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">

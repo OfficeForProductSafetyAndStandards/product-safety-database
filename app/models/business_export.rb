@@ -1,12 +1,18 @@
 class BusinessExport < ApplicationRecord
   include CountriesHelper
+  include SearchHelper
 
   # Helps to manage the database query execution time within the PaaS imposed limits
   FIND_IN_BATCH_SIZE = 1000
 
+  belongs_to :user
   has_one_attached :export_file
 
-  def export(business_ids)
+  def params
+    self[:params].deep_symbolize_keys
+  end
+
+  def export!
     Axlsx::Package.new do |p|
       book = p.workbook
 
@@ -21,31 +27,39 @@ class BusinessExport < ApplicationRecord
 
 private
 
+  def business_ids
+    return @business_ids if @business_ids
+
+    @search = SearchParams.new(params)
+    query = search_query(user)
+    @business_ids = Business.search_in_batches(query).map(&:id)
+  end
+
   def add_businesses_worksheet(business_ids, book)
-    book.add_worksheet name: "Businesses" do |sheet_investigations|
-      sheet_investigations.add_row %w[ID
-                                      trading_name
-                                      legal_name
-                                      company_number
-                                      types
-                                      primary_contact_email
-                                      primary_contact_job_title
-                                      primary_contact_phone_number
-                                      primary_location_address_line_1
-                                      primary_location_address_line_2
-                                      primary_location_city
-                                      primary_location_country
-                                      primary_location_county
-                                      primary_location_phone_number
-                                      primary_location_postal_code
-                                      created_at
-                                      updated_at]
+    book.add_worksheet name: "Businesses" do |sheet|
+      sheet.add_row %w[ID
+                       trading_name
+                       legal_name
+                       company_number
+                       types
+                       primary_contact_email
+                       primary_contact_job_title
+                       primary_contact_phone_number
+                       primary_location_address_line_1
+                       primary_location_address_line_2
+                       primary_location_city
+                       primary_location_country
+                       primary_location_county
+                       primary_location_phone_number
+                       primary_location_postal_code
+                       created_at
+                       updated_at]
 
       business_ids.each_slice(FIND_IN_BATCH_SIZE) do |batch_business_ids|
         Business
           .includes(:investigations, :locations, :contacts)
           .find(batch_business_ids).each do |business|
-          sheet_investigations.add_row [
+          sheet.add_row [
             business.id,
             business.trading_name,
             business.legal_name,

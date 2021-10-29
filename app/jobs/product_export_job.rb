@@ -1,10 +1,10 @@
 class ProductExportJob < ApplicationJob
-  def perform(product_ids, product_export, user)
-    product_export.export(product_ids)
+  def perform(product_export)
+    product_export.export!
 
     NotifyMailer.product_export(
-      email: user.email,
-      name: user.name,
+      email: product_export.user.email,
+      name: product_export.user.name,
       product_export: product_export
     ).deliver_later
   rescue StandardError => e

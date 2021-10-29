@@ -12,7 +12,7 @@
       <% if params[:q].present? %>
         <%= params[:q] %>
         <span class="govuk-caption-m">
-          <%= "#{@businesses.total_entries} #{'result'.pluralize(@businesses.total_entries)}" %>
+          <%= "#{@businesses.object.total_count} #{'result'.pluralize(@businesses.object.total_count)}" %>
         </span>
       <% else %>
         Businesses
@@ -41,7 +41,7 @@
 
   <div class="govuk-grid-column-three-quarters">
     <%= render "table", businesses: @businesses %>
-    <%= will_paginate @businesses %>
+    <%= paginate @businesses.object %>
 
     <% if @businesses.any? && policy(Business).export? %>
       <%= link_to "Export as spreadsheet", generate_business_exports_path(params: business_export_params) %>
