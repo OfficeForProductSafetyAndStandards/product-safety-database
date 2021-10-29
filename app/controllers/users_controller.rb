@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   end
 
   def remove
-    @user = User.find_by(id: remove_user_params[:user_id])
+    @user = User.find_by(id: params[:user_id])
     @remove_user_form = RemoveUserForm.new
   end
 
