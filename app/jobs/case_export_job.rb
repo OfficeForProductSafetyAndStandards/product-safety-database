@@ -1,10 +1,10 @@
 class CaseExportJob < ApplicationJob
-  def perform(case_ids, case_export, user)
-    case_export.export case_ids
+  def perform(case_export)
+    case_export.export!
 
     NotifyMailer.case_export(
-      email: user.email,
-      name: user.name,
+      email: case_export.user.email,
+      name: case_export.user.name,
       case_export: case_export
     ).deliver_later
   rescue StandardError => e

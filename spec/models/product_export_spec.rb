@@ -1,30 +1,24 @@
 require "rails_helper"
 
-RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let!(:product_export)        { described_class.create }
-  let!(:investigation)         { create(:allegation) }
-  let!(:other_investigation)   { create(:allegation) }
-  let!(:product)               { create(:product, investigations: [investigation], affected_units_status: "exact") }
-  let!(:other_product)         { create(:product, investigations: [other_investigation]) }
-  let!(:risk_assessment)       { create(:risk_assessment, investigation: investigation, products: [product]) }
-  let!(:risk_assessment_2)     { create(:risk_assessment, investigation: investigation, products: [product]) }
-  let!(:test)                  { create(:test_result, investigation: investigation, product: product, failure_details: "something bad") }
-  let!(:test_2)                { create(:test_result, investigation: investigation, product: product, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]) }
-  let!(:corrective_action)     { create(:corrective_action, investigation: investigation, product: product) }
-  let!(:corrective_action_2)   { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: %w[great_britain eea_wide worldwide]) }
-  let(:products)               { [product, other_product] }
-  let(:product_ids)            { products.pluck(:id) }
+RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+  let!(:investigation)       { create(:allegation).decorate }
+  let!(:other_investigation) { create(:allegation).decorate }
+  let!(:product)             { create(:product, investigations: [investigation], affected_units_status: "exact").decorate }
+  let!(:other_product)       { create(:product, investigations: [other_investigation]).decorate }
+  let!(:risk_assessment)     { create(:risk_assessment, investigation: investigation, products: [product]).decorate }
+  let!(:risk_assessment_2)   { create(:risk_assessment, investigation: investigation, products: [product]).decorate }
+  let!(:test)                { create(:test_result, investigation: investigation, product: product, failure_details: "something bad").decorate }
+  let!(:test_2)              { create(:test_result, investigation: investigation, product: product, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]).decorate }
+  let!(:corrective_action)   { create(:corrective_action, investigation: investigation, product: product).decorate }
+  let!(:corrective_action_2) { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: %w[great_britain eea_wide worldwide]).decorate }
+  let!(:user)                { create(:user, :activated, has_viewed_introduction: true) }
+  let(:params)               { {} }
+  let(:product_export)       { described_class.create!(user: user, params: params) }
 
-  describe "#export" do
-    let(:result) { product_export.export(product_ids) }
+  before { Product.__elasticsearch__.import force: true, refresh: :wait }
 
-    context "with no product IDs" do
-      let(:product_ids) { [] }
-
-      it "raises an exception" do
-        expect(-> { result }).to raise_error(StandardError).with_message("No products to export")
-      end
-    end
+  describe "#export!" do
+    let(:result) { product_export.export! }
 
     it "attaches the spreadsheet as a file" do
       result
@@ -33,16 +27,12 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
   end
 
   describe "#to_spreadsheet" do
-    let(:spreadsheet) { product_export.to_spreadsheet(product_ids).to_stream }
+    let(:spreadsheet) { product_export.to_spreadsheet.to_stream }
     let(:exported_data) { Roo::Excelx.new(spreadsheet) }
     let(:product_sheet) { exported_data.sheet("product_info") }
     let(:test_result_sheet) { exported_data.sheet("test_results") }
     let(:risk_assessments_sheet) { exported_data.sheet("risk_assessments") }
     let(:corrective_actions_sheet) { exported_data.sheet("corrective_actions") }
-
-    it "exports correct sheets" do
-      expect(exported_data.sheets).to eq %w[product_info test_results risk_assessments corrective_actions]
-    end
 
     # rubocop:disable RSpec/MultipleExpectations
     # rubocop:disable RSpec/ExampleLength
@@ -72,8 +62,8 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       expect(product_sheet.cell(3, 6)).to eq other_product.brand
 
       expect(product_sheet.cell(1, 7)).to eq "case_ids"
-      expect(product_sheet.cell(2, 7)).to eq product.investigations.map(&:pretty_id).join(",")
-      expect(product_sheet.cell(3, 7)).to eq other_product.investigations.map(&:pretty_id).join(",")
+      expect(product_sheet.cell(2, 7)).to eq product.case_ids.to_s
+      expect(product_sheet.cell(3, 7)).to eq other_product.case_ids.to_s
 
       expect(product_sheet.cell(1, 8)).to eq "category"
       expect(product_sheet.cell(2, 8)).to eq product.category
@@ -100,8 +90,8 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       expect(product_sheet.cell(3, 13)).to eq other_product.has_markings
 
       expect(product_sheet.cell(1, 14)).to eq "markings"
-      expect(product_sheet.cell(2, 14)).to eq product.markings.join(",")
-      expect(product_sheet.cell(3, 14)).to eq other_product.markings.join(",")
+      expect(product_sheet.cell(2, 14)).to eq product.markings
+      expect(product_sheet.cell(3, 14)).to eq other_product.markings
 
       expect(product_sheet.cell(1, 15)).to eq "name"
       expect(product_sheet.cell(2, 15)).to eq product.name
@@ -156,12 +146,12 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       expect(test_result_sheet.cell(3, 2)).to eq test_2.legislation
 
       expect(test_result_sheet.cell(1, 3)).to eq "standards"
-      expect(test_result_sheet.cell(2, 3)).to eq test.standards_product_was_tested_against.join
-      expect(test_result_sheet.cell(3, 3)).to eq test_2.standards_product_was_tested_against.join
+      expect(test_result_sheet.cell(2, 3)).to eq test.standards_product_was_tested_against
+      expect(test_result_sheet.cell(3, 3)).to eq test_2.standards_product_was_tested_against
 
       expect(test_result_sheet.cell(1, 4)).to eq "date_of_test"
-      expect(test_result_sheet.cell(2, 4)).to eq test.date.to_s
-      expect(test_result_sheet.cell(3, 4)).to eq test_2.date.to_s
+      expect(test_result_sheet.cell(2, 4)).to eq test.date_of_activity
+      expect(test_result_sheet.cell(3, 4)).to eq test_2.date_of_activity
 
       expect(test_result_sheet.cell(1, 5)).to eq "result"
       expect(test_result_sheet.cell(2, 5)).to eq test.result.to_s
@@ -212,8 +202,8 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       expect(corrective_actions_sheet.cell(3, 2)).to eq CorrectiveAction.actions[corrective_action_2.action]
 
       expect(corrective_actions_sheet.cell(1, 3)).to eq "date_of_action"
-      expect(corrective_actions_sheet.cell(2, 3)).to eq corrective_action.date_decided.to_s
-      expect(corrective_actions_sheet.cell(3, 3)).to eq corrective_action_2.date_decided.to_s
+      expect(corrective_actions_sheet.cell(2, 3)).to eq corrective_action.date_of_activity
+      expect(corrective_actions_sheet.cell(3, 3)).to eq corrective_action_2.date_of_activity
 
       expect(corrective_actions_sheet.cell(1, 4)).to eq "legislation"
       expect(corrective_actions_sheet.cell(2, 4)).to eq corrective_action.legislation
@@ -236,8 +226,8 @@ RSpec.describe ProductExport, :with_elasticsearch, :with_stubbed_notify, :with_s
       expect(corrective_actions_sheet.cell(3, 8)).to eq corrective_action_2.duration
 
       expect(corrective_actions_sheet.cell(1, 9)).to eq "geographic_scope"
-      expect(corrective_actions_sheet.cell(2, 9)).to eq corrective_action.geographic_scopes.join(",")
-      expect(corrective_actions_sheet.cell(3, 9)).to eq corrective_action_2.geographic_scopes.join(",")
+      expect(corrective_actions_sheet.cell(2, 9)).to eq corrective_action.geographic_scopes
+      expect(corrective_actions_sheet.cell(3, 9)).to eq corrective_action_2.geographic_scopes
 
       expect(corrective_actions_sheet.cell(1, 10)).to eq "further_details"
       expect(corrective_actions_sheet.cell(2, 10)).to eq corrective_action.details
