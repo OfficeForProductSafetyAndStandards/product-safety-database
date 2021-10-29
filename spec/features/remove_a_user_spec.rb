@@ -66,7 +66,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
       end
 
       context "when user to be removed is nor activated and not an admin" do
-        let!(:other_user) { create(:user, team: team, has_viewed_introduction: true, name: "BBBBB") }
+        let!(:other_user) { create(:user, team: team, has_viewed_introduction: true) }
 
         context "when admin clicks yes to remove user" do
           scenario "user is deleted" do
@@ -89,7 +89,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     end
 
     context "when the user is not a team admin" do
-      let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true, name: "AAAAA") }
+      let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
 
       scenario "does not allow user to remove other users" do
         visit "/teams/#{team.id}"
