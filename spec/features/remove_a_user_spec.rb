@@ -18,7 +18,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
           visit "/teams/#{team.id}"
           click_link "Remove"
 
-          expect(page.current_path).to eq "/remove_user"
+          expect(page).to have_current_path "/remove_user"
 
           expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
 
@@ -26,7 +26,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
           click_button("Save and continue")
 
-          expect(page.current_path).to eq "/teams/#{team.id}"
+          expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
           expect(page).to have_content "The team member was removed"
           expect(page).not_to have_content other_user.name
         end
@@ -36,7 +36,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
             visit "/teams/#{team.id}"
             click_link "Remove"
 
-            expect(page.current_path).to eq "/remove_user"
+            expect(page).to have_current_path "/remove_user"
 
             expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
 
@@ -44,7 +44,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
             click_button("Save and continue")
 
-            expect(page.current_path).to eq "/teams/#{team.id}"
+            expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
             expect(page).to have_content other_user.name
           end
         end
@@ -54,7 +54,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
             visit "/teams/#{team.id}"
             click_link "Remove"
 
-            expect(page.current_path).to eq "/remove_user"
+            expect(page).to have_current_path "/remove_user"
 
             expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
 
@@ -73,7 +73,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
             visit "/teams/#{team.id}"
             click_link "Remove"
 
-            expect(page.current_path).to eq "/remove_user"
+            expect(page).to have_current_path "/remove_user"
 
             expect(page).to have_content "Do you want to remove #{other_user.name} from your team"
 
@@ -81,7 +81,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
             click_button("Save and continue")
 
-            expect(page.current_path).to eq "/teams/#{team.id}"
+            expect(page).to have_current_path "/teams/#{team.id}", ignore_query: true
             expect(page).to have_content "The team member was removed"
           end
         end
