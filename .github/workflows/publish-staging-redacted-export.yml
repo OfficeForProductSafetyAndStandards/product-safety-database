@@ -2,8 +2,6 @@ name: Publish Staging redacted export to S3
 
 on:
   workflow_dispatch:
-  # TODO: Switch to manual dispatch only (remove the pull_request trigger)
-  pull_request:
 
 jobs:
   redact_and_upload_export:
