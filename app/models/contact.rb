@@ -4,6 +4,8 @@ class Contact < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  redacted_export_with :id, :business_id, :created_at, :updated_at
+
   def summary
     [
       name,

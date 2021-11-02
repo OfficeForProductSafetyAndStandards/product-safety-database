@@ -3,6 +3,9 @@ class Activity < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  redacted_export_with :id, :business_id, :correspondence_id, :created_at,
+                       :investigation_id, :product_id, :type, :updated_at
+
   def has_attachment?
     false
   end
