@@ -229,6 +229,22 @@ RSpec.describe User do
       end
     end
 
+    it "sets the user 'deleted_by' to id of the user that made the deletion if supplied" do
+      user = create(:user)
+      deletor = create(:user)
+      freeze_time do
+        expect { user.mark_as_deleted!(deletor) }.to change { user.deleted_by }.from(nil).to(deletor.id)
+      end
+    end
+
+    it "sets the user 'account_activated' to false" do
+      user = create(:user, :activated)
+
+      freeze_time do
+        expect { user.mark_as_deleted! }.to change { user.account_activated }.from(true).to(false)
+      end
+    end
+
     it "does not change the flag if was already enabled" do
       user = create(:user, :deleted)
       expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)

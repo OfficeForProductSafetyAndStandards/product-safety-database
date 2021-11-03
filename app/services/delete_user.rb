@@ -9,8 +9,7 @@ class DeleteUser
 
     ActiveRecord::Base.transaction do
       user.mark_as_deleted!
-      user.update!(deleted_by: deleted_by.id) if deleted_by
-      user.update!(account_activated: false)
+
       change_user_investigations_ownership_to_their_team
     end
   end
