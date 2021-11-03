@@ -56,14 +56,6 @@ class User < ApplicationRecord
     where(account_activated: true).not_deleted
   end
 
-  def self.current
-    RequestStore.store[:current_user]
-  end
-
-  def self.current=(user)
-    RequestStore.store[:current_user] = user
-  end
-
   def in_same_team_as?(user)
     team == user.team
   end
@@ -219,10 +211,6 @@ private
     NotifyMailer.reset_password_instructions(self, token).deliver_later
   end
   # END: Devise methods
-
-  def current_user?
-    User.current&.id == id
-  end
 
   def password_required?
     return false if skip_password_validation

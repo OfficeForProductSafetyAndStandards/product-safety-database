@@ -27,8 +27,6 @@ class ApplicationController < ActionController::Base
       sign_out current_user
       redirect_to "/"
     end
-
-    User.current = current_user
   end
 
   def authorize_user
