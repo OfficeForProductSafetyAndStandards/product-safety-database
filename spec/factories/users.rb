@@ -50,6 +50,7 @@ FactoryBot.define do
       password_confirmation { nil }
       mobile_number { nil }
       mobile_number_verified { false }
+      last_activity_at_approx { nil }
       name { nil }
     end
 

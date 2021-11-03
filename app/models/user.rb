@@ -66,6 +66,10 @@ class User < ApplicationRecord
     active.where(arel_table[:last_activity_at_approx].lt(INACTIVE_THRESHOLD.ago))
   end
 
+  def self.lock_inactive_users!
+    inactive.each { |user| user.lock_access!(send_instructions: false) }
+  end
+
   def in_same_team_as?(user)
     team == user.team
   end

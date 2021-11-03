@@ -436,6 +436,30 @@ RSpec.describe User do
     end
   end
 
+  describe ".lock_inactive_users!", :with_stubbed_mailer do
+    let!(:inactive_user) { create(:user, :activated, last_activity_at_approx: 5.months.ago) }
+    let!(:active_user) { create(:user, :activated, last_activity_at_approx: 1.day.ago) }
+    let!(:invited_user) { create(:user, :invited) }
+
+    before { described_class.lock_inactive_users! }
+
+    it "locks inactive users" do
+      expect(inactive_user.reload).to be_access_locked
+    end
+
+    it "does not lock active users" do
+      expect(active_user.reload).not_to be_access_locked
+    end
+
+    it "does not lock invited users" do
+      expect(invited_user.reload).not_to be_access_locked
+    end
+
+    it "does not send emails with unlock instructions immediately" do
+      expect(delivered_emails).to be_empty
+    end
+  end
+
   describe "#update_last_activity_time!" do
     subject(:user) { create(:user, last_activity_at_approx: last_activity_at_approx) }
 
