@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_29_085258) do
+ActiveRecord::Schema.define(version: 2021_11_03_133814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -403,6 +403,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_085258) do
     t.text "invitation_token"
     t.datetime "invited_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "keycloak_created_at"
+    t.datetime "last_activity_at_approx"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.datetime "locked_at"
@@ -425,6 +426,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_085258) do
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
+    t.index ["last_activity_at_approx"], name: "index_users_on_last_activity_at_approx"
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

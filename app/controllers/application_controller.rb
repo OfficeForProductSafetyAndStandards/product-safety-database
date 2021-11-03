@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :check_current_user_status
+  before_action :set_user_last_activity_time
   before_action :ensure_secondary_authentication
   before_action :require_secondary_authentication
   before_action :set_sentry_context
@@ -26,6 +27,12 @@ class ApplicationController < ActionController::Base
       sign_out current_user
       redirect_to "/"
     end
+  end
+
+  def set_user_last_activity_time
+    return unless user_signed_in?
+
+    current_user.update_last_activity_time!
   end
 
   def has_accepted_declaration

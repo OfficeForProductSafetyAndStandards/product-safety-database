@@ -6,6 +6,9 @@ class User < ApplicationRecord
   COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
   TWO_FACTOR_LOCK_TIME = 1.hour
 
+  # Limits the frequency of database updates so they don't happen on each request which would affect performance
+  LAST_ACTIVITY_TIME_UPDATE_THRESHOLD = 5.minutes
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable, :trackable and :omniauthable
   devise :database_authenticatable, :timeoutable, :trackable, :rememberable, :validatable, :recoverable, :encryptable, :lockable
@@ -187,6 +190,13 @@ class User < ApplicationRecord
     self.mobile_number = nil
 
     save!
+  end
+
+  def update_last_activity_time!
+    if !last_activity_at_approx || (last_activity_at_approx < LAST_ACTIVITY_TIME_UPDATE_THRESHOLD.ago)
+      self.last_activity_at_approx = Time.zone.now
+      save!(validate: false)
+    end
   end
 
 private

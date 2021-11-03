@@ -386,4 +386,38 @@ RSpec.describe User do
       end
     end
   end
+
+  describe "#update_last_activity_time!" do
+    subject(:user) { create(:user, last_activity_at_approx: last_activity_at_approx) }
+
+    context "when last_activity_at_approx is nil" do
+      let(:last_activity_at_approx) { nil }
+
+      it "updates last_activity_at_approx" do
+        freeze_time do
+          expect { user.update_last_activity_time! }.to change(user, :last_activity_at_approx).from(nil).to(Time.zone.now)
+        end
+      end
+    end
+
+    context "when last_activity_at_approx is within 5 minutes" do
+      let(:last_activity_at_approx) { 3.minutes.ago }
+
+      it "does not update last_activity_at_approx" do
+        freeze_time do
+          expect { user.update_last_activity_time! }.not_to change(user, :last_activity_at_approx)
+        end
+      end
+    end
+
+    context "when last_activity_at_approx is more than 5 minutes ago" do
+      let(:last_activity_at_approx) { 10.minutes.ago }
+
+      it "updates last_activity_at_approx" do
+        freeze_time do
+          expect { user.update_last_activity_time! }.to change(user, :last_activity_at_approx).from(last_activity_at_approx).to(Time.zone.now)
+        end
+      end
+    end
+  end
 end
