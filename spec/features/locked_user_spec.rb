@@ -20,7 +20,7 @@ RSpec.feature "Locked user", :with_stubbed_mailer, :with_stubbed_elasticsearch, 
 
     sign_in(user)
 
-    expect(page).to have_text("We’ve locked this account to protect its security.")
+    expect(page).to have_text("Your account has been locked because it has not been used for a long time.")
 
     expect(delivered_emails.last.personalization[:name]).to eq(user.name)
     expect(delivered_emails.last.personalization[:unlock_user_url_token]).to be_present

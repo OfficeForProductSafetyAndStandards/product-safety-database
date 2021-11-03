@@ -48,8 +48,12 @@ module Users
 
     def handle_authentication_failure(user)
       if user&.reload&.access_locked?
-        user.send_unlock_instructions_after_inactivity if !user.unlock_email_sent?
-        return render "account_locked"
+        if !user.unlock_email_sent?
+          user.send_unlock_instructions_after_inactivity
+          return render "account_locked_inactivity"
+        else
+          return render "account_locked"
+        end
       end
 
       set_resource_as_new_user_from_params
