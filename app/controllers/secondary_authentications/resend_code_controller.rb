@@ -1,10 +1,9 @@
 module SecondaryAuthentications
   class ResendCodeController < ApplicationController
     skip_before_action :authenticate_user!,
-                       :set_current_user,
+                       :check_current_user_status,
                        :require_secondary_authentication,
                        :set_sentry_context,
-                       :authorize_user,
                        :has_accepted_declaration,
                        :has_viewed_introduction,
                        :set_cache_headers
