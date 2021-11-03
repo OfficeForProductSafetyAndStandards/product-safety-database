@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   def check_current_user_status
     return unless user_signed_in?
 
-    if current_user.deleted?
+    if current_user.access_locked? || current_user.deleted?
       sign_out current_user
       redirect_to "/"
     end
