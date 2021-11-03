@@ -493,4 +493,56 @@ RSpec.describe User do
       end
     end
   end
+
+  describe "#send_unlock_instructions", :with_stubbed_mailer do
+    subject(:user) { create(:user, :activated) }
+
+    before { user.send_unlock_instructions }
+
+    it "populates the unlock token" do
+      expect(user.reload.unlock_token).not_to be_nil
+    end
+
+    it "populates the reset password token" do
+      expect(user.reload.reset_password_token).not_to be_nil
+    end
+
+    it "sends the email" do
+      expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked]
+    end
+  end
+
+  describe "#send_unlock_instructions_after_inactivity", :with_stubbed_mailer do
+    subject(:user) { create(:user, :activated) }
+
+    before { user.send_unlock_instructions_after_inactivity }
+
+    it "populates the unlock token" do
+      expect(user.reload.unlock_token).not_to be_nil
+    end
+
+    it "sends the email" do
+      expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked_inactive]
+    end
+  end
+
+  describe "#unlock_email_sent?", :with_stubbed_mailer do
+    subject(:user) { create(:user, :activated) }
+
+    context "when locked normally" do
+      before { user.lock_access! }
+
+      it "returns true" do
+        expect(user.reload.unlock_email_sent?).to be true
+      end
+    end
+
+    context "when locked without sending an email immediately" do
+      before { user.lock_access!(send_instructions: false) }
+
+      it "returns false" do
+        expect(user.reload.unlock_email_sent?).to be false
+      end
+    end
+  end
 end

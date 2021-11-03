@@ -136,16 +136,15 @@ class User < ApplicationRecord
   # Devise::Models::Lockable
 
   def send_unlock_instructions
-    raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
-    self.unlock_token = enc
-    save!(validate: false)
-    reset_password_token = set_reset_password_token
-    NotifyMailer.account_locked(
-      self,
-      unlock_token: raw,
-      reset_password_token: reset_password_token
-    ).deliver_later
-    raw
+    token = generate_unlock_token
+    send_account_locked_email(token)
+    token
+  end
+
+  def send_unlock_instructions_after_inactivity
+    token = generate_unlock_token
+    send_account_locked_inactive_email(token)
+    token
   end
 
   def increment_failed_attempts
@@ -210,7 +209,31 @@ class User < ApplicationRecord
     end
   end
 
+  def unlock_email_sent?
+    access_locked? && unlock_token.present?
+  end
+
 private
+
+  def generate_unlock_token
+    raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
+    self.unlock_token = enc
+    save!(validate: false)
+    raw
+  end
+
+  def send_account_locked_email(token)
+    reset_password_token = set_reset_password_token
+    NotifyMailer.account_locked(
+      self,
+      unlock_token: token,
+      reset_password_token: reset_password_token
+    ).deliver_later
+  end
+
+  def send_account_locked_inactive_email(token)
+    NotifyMailer.account_locked_inactive(self, token).deliver_later
+  end
 
   def lock_two_factor!
     update_column(:second_factor_attempts_locked_at, Time.zone.now)
