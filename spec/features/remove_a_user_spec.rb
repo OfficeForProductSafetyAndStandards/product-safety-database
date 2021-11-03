@@ -61,7 +61,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
       context "when user to be removed is not activated and not an admin" do
         before do
-          create(:user, team: team, has_viewed_introduction: true, name: nil)
+          other_user.update!(account_activated: false, name: nil)
         end
 
         context "when admin clicks yes to remove user" do
