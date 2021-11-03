@@ -44,6 +44,12 @@ class User < ApplicationRecord
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
   attribute :invited_at, :datetime, default: -> { Time.zone.now }
 
+  redacted_export_with :id, :account_activated, :created_at, :deleted_at, :failed_attempts,
+                       :has_accepted_declaration, :has_been_sent_welcome_email, :has_viewed_introduction,
+                       :invited_at, :keycloak_created_at, :last_sign_in_at, :locked_at, :mobile_number_verified,
+                       :organisation_id, :remember_created_at, :second_factor_attempts_locked_at,
+                       :secondary_authentication_operation, :sign_in_count, :team_id, :updated_at
+
   # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
   # and who have accepted the user declaration
   def self.active

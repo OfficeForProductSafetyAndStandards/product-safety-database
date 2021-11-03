@@ -18,6 +18,9 @@ class Correspondence < ApplicationRecord
   },
        _suffix: true
 
+  redacted_export_with :id, :contact_method, :correspondence_date, :correspondent_type,
+                       :created_at, :email_direction, :investigation_id, :type, :updated_at
+
   def strip_whitespace
     changed.each do |attribute|
       if send(attribute).respond_to?(:strip)

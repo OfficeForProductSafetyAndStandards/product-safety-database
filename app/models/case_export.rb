@@ -8,6 +8,8 @@ class CaseExport < ApplicationRecord
   belongs_to :user
   has_one_attached :export_file
 
+  redacted_export_with :id, :created_at, :updated_at
+
   def params
     self[:params].deep_symbolize_keys
   end

@@ -29,6 +29,8 @@ class Business < ApplicationRecord
 
   has_one :source, as: :sourceable, dependent: :destroy
 
+  redacted_export_with :id, :company_number, :created_at, :legal_name, :trading_name, :updated_at
+
   def as_indexed_json(*)
     as_json(methods: [:tiebreaker_id])
   end

@@ -1,6 +1,9 @@
 class Source < ApplicationRecord
   belongs_to :sourceable, polymorphic: true
 
+  redacted_export_with :id, :created_at, :name, :sourceable_id, :sourceable_type, :type,
+                       :updated_at, :user_id
+
   def show(*)
     nil
   end
