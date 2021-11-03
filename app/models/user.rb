@@ -6,6 +6,9 @@ class User < ApplicationRecord
   COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
   TWO_FACTOR_LOCK_TIME = 1.hour
 
+  # Time at which a user who has completed registration is considered inactive if they have not used the service
+  INACTIVE_THRESHOLD = 3.months
+
   # Limits the frequency of database updates so they don't happen on each request which would affect performance
   LAST_ACTIVITY_TIME_UPDATE_THRESHOLD = 5.minutes
 
@@ -57,6 +60,10 @@ class User < ApplicationRecord
   # and who have accepted the user declaration
   def self.active
     where(account_activated: true).not_deleted
+  end
+
+  def self.inactive
+    active.where(arel_table[:last_activity_at_approx].lt(INACTIVE_THRESHOLD.ago))
   end
 
   def in_same_team_as?(user)

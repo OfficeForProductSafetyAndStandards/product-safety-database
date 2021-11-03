@@ -387,6 +387,55 @@ RSpec.describe User do
     end
   end
 
+  describe ".inactive" do
+    subject(:users) { described_class.inactive }
+
+    let!(:user) { create(:user, trait, last_activity_at_approx: last_activity_at_approx) }
+    let(:trait) { :activated }
+
+    context "when last_activity_at_approx is nil" do
+      let(:last_activity_at_approx) { nil }
+
+      it "is not included in the results" do
+        expect(users).not_to include(user)
+      end
+    end
+
+    context "when last_activity_at_approx is within 3 months" do
+      let(:last_activity_at_approx) { 2.months.ago }
+
+      it "is not included in the results" do
+        expect(users).not_to include(user)
+      end
+    end
+
+    context "when last_activity_at_approx is more than 3 months ago" do
+      let(:last_activity_at_approx) { 4.months.ago }
+
+      context "when user is activated" do
+        it "is included in the results" do
+          expect(users).to include(user)
+        end
+      end
+
+      context "when user is deleted" do
+        let(:trait) { :deleted }
+
+        it "is not included in the results" do
+          expect(users).not_to include(user)
+        end
+      end
+
+      context "when user is not activated" do
+        let(:trait) { :inactive }
+
+        it "is not included in the results" do
+          expect(users).not_to include(user)
+        end
+      end
+    end
+  end
+
   describe "#update_last_activity_time!" do
     subject(:user) { create(:user, last_activity_at_approx: last_activity_at_approx) }
 
