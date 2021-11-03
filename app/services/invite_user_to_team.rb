@@ -16,6 +16,7 @@ private
 
   def find_or_create_user
     existing_user = User.find_by email: email
+    reset_user_info(existing_user) if existing_user
     existing_user&.team == team ? existing_user : create_user
   end
 
@@ -26,6 +27,16 @@ private
       skip_password_validation: true,
       team: team
     )
+  end
+
+  def reset_user_info(user)
+    user.deleted_at = nil
+    user.account_activated = nil
+    user.mobile_number_verified = false
+    user.has_accepted_declaration = false
+    user.has_been_sent_welcome_email = false
+    user.has_viewed_introduction = false
+    user.save!
   end
 
   def send_invite
