@@ -179,6 +179,7 @@ class User < ApplicationRecord
     self.deleted_at = Time.zone.now
     self.deleted_by = deleted_by.id if deleted_by
     self.account_activated = false
+    self.invitation_token = nil
 
     save!
   end

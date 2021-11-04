@@ -249,6 +249,11 @@ RSpec.describe User do
       user = create(:user, :deleted)
       expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)
     end
+
+    it "sets invitation_token to nil" do
+      user = create(:user, :activated, invitation_token: "xyz")
+      expect { user.mark_as_deleted! }.to change { user.invitation_token }.from("xyz").to(nil)
+    end
   end
 
   describe "#deleted?" do

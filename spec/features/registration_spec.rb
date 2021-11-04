@@ -11,6 +11,38 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       .to receive(:secondary_authentication_enabled).and_return(true)
   end
 
+  context "when a user is invited, but deleted before they can accept" do
+    it "does not allow user to register" do
+      sign_in(admin)
+
+      visit "/teams/#{team.id}/invitations/new"
+
+      # enter_secondary_authentication_code(admin.reload.direct_otp)
+
+      invite_user_to_team
+
+      expect_user_invited_successfully
+
+      invitation_token = User.find_by!(email: invitee_email).invitation_token
+
+      click_link "Remove"
+
+      choose("Yes")
+
+      click_button("Save and continue")
+
+      expect(page).to have_content "The team member was removed"
+
+      sign_out
+
+      invitee = User.find_by!(email: invitee_email)
+
+      visit "/users/#{invitee.id}/complete-registration?invitation=#{invitation_token}"
+
+      expect(page).to have_content "Page not found"
+    end
+  end
+
   context "when a previously deleted user is invited back" do
     let!(:deleted_user) { create(:user, :deleted, team: team) }
 
