@@ -183,6 +183,19 @@ class User < ApplicationRecord
     save!
   end
 
+  def reset_to_invited_state!
+    self.deleted_at = nil
+    self.account_activated = false
+    self.mobile_number_verified = false
+    self.has_accepted_declaration = false
+    self.has_been_sent_welcome_email = false
+    self.has_viewed_introduction = false
+    self.name = nil
+    self.mobile_number = nil
+
+    save!
+  end
+
 private
 
   def lock_two_factor!
