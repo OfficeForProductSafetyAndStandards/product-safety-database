@@ -108,13 +108,15 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
               existing_user.mark_as_deleted!
             end
 
-            it "resassigns the new team to the user and enqueues the SendUserInvitationJob with the existing user ID" do
+            # rubocop:disable RSpec/MultipleExpectations
+            it "reassigns user to new team and enqueues the SendUserInvitationJob with the existing user ID" do
               expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
                 expect(recipient_id).to eq existing_user.id
                 expect(inviting_user_id).to be_nil
               end
 
               expect(existing_user.reload.team).to eq team
+              # rubocop:enable RSpec/MultipleExpectations
             end
 
             it "resets user to the state that it was in when initially invited" do
