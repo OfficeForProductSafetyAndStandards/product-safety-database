@@ -275,45 +275,45 @@ RSpec.describe User do
     end
   end
 
-  describe "#reset_to_invited_state" do
+  describe "#reset_to_invited_state!" do
     it "sets deleted_at to nil" do
       user = create(:user, :deleted)
-      expect { user.reset_to_invited_state }.to change { user.deleted_at }.from(user.deleted_at).to(nil)
+      expect { user.reset_to_invited_state! }.to change { user.deleted_at }.from(user.deleted_at).to(nil)
     end
 
     it "sets account_activated to false" do
       user = create(:user, :activated)
-      expect { user.reset_to_invited_state }.to change { user.account_activated }.from(true).to(false)
+      expect { user.reset_to_invited_state! }.to change { user.account_activated }.from(true).to(false)
     end
 
     it "sets mobile_number_verified to false" do
       user = create(:user, :activated)
-      expect { user.reset_to_invited_state }.to change { user.mobile_number_verified }.from(true).to(false)
+      expect { user.reset_to_invited_state! }.to change { user.mobile_number_verified }.from(true).to(false)
     end
 
     it "sets has_accepted_declaration to false" do
       user = create(:user, :activated)
-      expect { user.reset_to_invited_state }.to change { user.has_accepted_declaration }.from(true).to(false)
+      expect { user.reset_to_invited_state! }.to change { user.has_accepted_declaration }.from(true).to(false)
     end
 
     it "sets has_been_sent_welcome_email to false" do
       user = create(:user, :activated)
-      expect { user.reset_to_invited_state }.to change { user.has_been_sent_welcome_email }.from(true).to(false)
+      expect { user.reset_to_invited_state! }.to change { user.has_been_sent_welcome_email }.from(true).to(false)
     end
 
     it "sets has_viewed_introduction to false" do
       user = create(:user, :activated)
-      expect { user.reset_to_invited_state }.to change { user.has_viewed_introduction }.from(true).to(false)
+      expect { user.reset_to_invited_state! }.to change { user.has_viewed_introduction }.from(true).to(false)
     end
 
     it "sets name to blank" do
       user = create(:user, :activated, name: "A User")
-      expect { user.reset_to_invited_state }.to change { user.name }.from("A User").to("")
+      expect { user.reset_to_invited_state! }.to change { user.name }.from("A User").to("")
     end
 
     it "sets name to nil" do
       user = create(:user, :activated, mobile_number: "07777777777")
-      expect { user.reset_to_invited_state }.to change { user.mobile_number }.from("07777777777").to(nil)
+      expect { user.reset_to_invited_state! }.to change { user.mobile_number }.from("07777777777").to(nil)
     end
   end
 
