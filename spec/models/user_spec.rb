@@ -447,6 +447,10 @@ RSpec.describe User do
       expect(inactive_user.reload).to be_access_locked
     end
 
+    it "sets the locked reason" do
+      expect(inactive_user.reload.locked_reason).to eq(described_class.locked_reasons[:inactivity])
+    end
+
     it "does not lock active users" do
       expect(active_user.reload).not_to be_access_locked
     end
@@ -495,7 +499,7 @@ RSpec.describe User do
   end
 
   describe "#send_unlock_instructions", :with_stubbed_mailer do
-    subject(:user) { create(:user, :activated) }
+    subject(:user) { create(:user, :activated, :locked) }
 
     before { user.send_unlock_instructions }
 
@@ -526,22 +530,42 @@ RSpec.describe User do
     end
   end
 
-  describe "#unlock_email_sent?", :with_stubbed_mailer do
+  describe "#lock_access!", :with_stubbed_mailer do
     subject(:user) { create(:user, :activated) }
 
-    context "when locked normally" do
+    context "with no reason supplied" do
       before { user.lock_access! }
 
-      it "returns true" do
-        expect(user.reload.unlock_email_sent?).to be true
+      it "defaults to failed_attempts" do
+        expect(user.reload.locked_reason).to eq(described_class.locked_reasons[:failed_attempts])
+      end
+
+      it "sends the email" do
+        expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked]
       end
     end
 
-    context "when locked without sending an email immediately" do
-      before { user.lock_access!(send_instructions: false) }
+    context "with reason failed_attempts" do
+      before { user.lock_access!(reason: :failed_attempts) }
 
-      it "returns false" do
-        expect(user.reload.unlock_email_sent?).to be false
+      it "saves the reason" do
+        expect(user.reload.locked_reason).to eq(described_class.locked_reasons[:failed_attempts])
+      end
+
+      it "sends the email" do
+        expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked]
+      end
+    end
+
+    context "with reason inactivity" do
+      before { user.lock_access!(reason: :inactivity) }
+
+      it "saves the reason" do
+        expect(user.reload.locked_reason).to eq(described_class.locked_reasons[:inactivity])
+      end
+
+      it "does not send the email" do
+        expect(delivered_emails).to be_empty
       end
     end
   end

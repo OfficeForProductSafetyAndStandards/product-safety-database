@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_03_133814) do
+ActiveRecord::Schema.define(version: 2021_11_05_102709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   # These are custom enum types that must be created before they can be used in the schema definition
+  create_enum "account_locked_reasons", ["failed_attempts", "inactivity"]
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
   create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
@@ -407,6 +408,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_133814) do
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.datetime "locked_at"
+    t.enum "locked_reason", as: "account_locked_reasons"
     t.text "mobile_number"
     t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"

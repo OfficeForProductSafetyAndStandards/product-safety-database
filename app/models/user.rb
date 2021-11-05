@@ -2,6 +2,11 @@ class User < ApplicationRecord
   include Deletable
   include UserCollaboratorInterface
 
+  enum locked_reason: {
+    failed_attempts: "failed_attempts",
+    inactivity: "inactivity"
+  }
+
   INVITATION_EXPIRATION_DAYS = 14
   COMMON_PASSWORDS_FILE_PATH = "app/assets/10-million-password-list-top-1000000.txt".freeze
   TWO_FACTOR_LOCK_TIME = 1.hour
@@ -67,7 +72,7 @@ class User < ApplicationRecord
   end
 
   def self.lock_inactive_users!
-    inactive.each { |user| user.lock_access!(send_instructions: false) }
+    inactive.each { |user| user.lock_access!(reason: locked_reasons[:inactivity]) }
   end
 
   def in_same_team_as?(user)
@@ -136,21 +141,30 @@ class User < ApplicationRecord
   # Devise::Models::Lockable
 
   def send_unlock_instructions
-    token = generate_unlock_token
+    token = set_unlock_token
     send_account_locked_email(token)
     token
   end
 
   def send_unlock_instructions_after_inactivity
-    token = generate_unlock_token
+    token = set_unlock_token
     send_account_locked_inactive_email(token)
-    token
   end
 
   def increment_failed_attempts
     return unless mobile_number_verified?
 
     super
+  end
+
+  def lock_access!(opts = {})
+    self.locked_reason = opts.fetch(:reason, self.class.locked_reasons[:failed_attempts])
+
+    # Only send the email immediately if the account was locked due to failed attempts. Otherwise it will be sent when the user next logs in
+    opts[:send_instructions] = false if locked_reason == self.class.locked_reasons[:inactivity]
+
+    super(opts)
+    save!(validate: false)
   end
 
   # Don't reset password attempts yet, it will happen on next successful login
@@ -209,13 +223,9 @@ class User < ApplicationRecord
     end
   end
 
-  def unlock_email_sent?
-    access_locked? && unlock_token.present?
-  end
-
 private
 
-  def generate_unlock_token
+  def set_unlock_token
     raw, enc = Devise.token_generator.generate(self.class, :unlock_token)
     self.unlock_token = enc
     save!(validate: false)

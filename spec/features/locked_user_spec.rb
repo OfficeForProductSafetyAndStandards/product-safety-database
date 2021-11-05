@@ -10,7 +10,7 @@ RSpec.feature "Locked user", :with_stubbed_mailer, :with_stubbed_elasticsearch, 
 
     expect(page).to have_link "Sign out"
 
-    user.lock_access!(send_instructions: false)
+    user.lock_access!(reason: User.locked_reasons[:inactivity])
     expect(delivered_emails).to be_empty
 
     click_link "All cases"

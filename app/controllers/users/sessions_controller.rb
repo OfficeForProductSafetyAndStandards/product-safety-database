@@ -48,12 +48,10 @@ module Users
 
     def handle_authentication_failure(user)
       if user&.reload&.access_locked?
-        if !user.unlock_email_sent?
-          user.send_unlock_instructions_after_inactivity
-          return render "account_locked_inactivity"
-        else
-          return render "account_locked"
-        end
+        return render "account_locked" if user.locked_reason == User.locked_reasons[:failed_attempts]
+
+        user.send_unlock_instructions_after_inactivity
+        return render "account_locked_inactivity"
       end
 
       set_resource_as_new_user_from_params
