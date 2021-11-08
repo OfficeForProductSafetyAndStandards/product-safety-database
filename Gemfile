@@ -35,7 +35,7 @@ gem "sass-rails", "~> 6.0"
 gem "scout_apm", "~> 5.0"
 gem "sentry-rails"
 gem "sentry-sidekiq"
-gem "sidekiq", "~> 6.2"
+gem "sidekiq", "~> 6.3"
 gem "sidekiq-cron", "~> 1.2"
 gem "slim-rails"
 gem "sprockets", "4.0.2" # Unable to upgrade until https://github.com/rails/sprockets/issues/633 is resolved
