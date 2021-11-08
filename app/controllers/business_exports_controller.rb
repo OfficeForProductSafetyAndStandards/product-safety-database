@@ -1,15 +1,11 @@
 class BusinessExportsController < ApplicationController
   include BusinessesHelper
 
-  before_action :set_search_params, only: %i[generate]
-
   def generate
     authorize Business, :export?
 
-    business_ids = search_for_businesses_in_batches.map(&:id)
-
-    business_export = BusinessExport.create!
-    BusinessExportJob.perform_later(business_ids, business_export, current_user)
+    business_export = BusinessExport.create!(params: business_export_params, user: current_user)
+    BusinessExportJob.perform_later(business_export)
 
     redirect_to businesses_path(q: params[:q]), flash: { success: "Your business export is being prepared. You will receive an email when your export is ready to download." }
   end
@@ -17,6 +13,6 @@ class BusinessExportsController < ApplicationController
   def show
     authorize Business, :export?
 
-    @business_export = BusinessExport.find(params[:id])
+    @business_export = BusinessExport.find_by!(id: params[:id], user: current_user)
   end
 end

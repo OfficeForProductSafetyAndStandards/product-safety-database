@@ -15,6 +15,8 @@ class Team < ApplicationRecord
   validates :name, presence: true
   validates :country, presence: true
 
+  redacted_export_with :id, :country, :created_at, :deleted_at, :name, :organisation_id, :updated_at
+
   def display_name(*)
     name
   end
@@ -24,5 +26,9 @@ class Team < ApplicationRecord
     return where(name: team_names) if user.is_opss?
 
     where(name: team_names.first)
+  end
+
+  def users_alphabetically_with_users_without_names_first
+    users.not_deleted.order(Arel.sql("name IS NOT NULL"), :name)
   end
 end

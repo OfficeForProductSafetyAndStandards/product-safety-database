@@ -12,7 +12,7 @@ FactoryBot.define do
     non_compliant_reason  {}
 
     transient do
-      creator { create(:user, :activated, has_viewed_introduction: true) }
+      creator { create(:user, :activated) }
       read_only_teams { [] }
       edit_access_teams { [] }
     end
