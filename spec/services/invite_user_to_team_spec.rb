@@ -70,6 +70,24 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
             end
           end
 
+          context "when the user is deleted" do
+            before do
+              existing_user.mark_as_deleted!
+            end
+
+            it "enqueues the SendUserInvitationJob with the existing user ID", :aggregate_failures do
+              expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+                expect(recipient_id).to eq existing_user.id
+                expect(inviting_user_id).to be_nil
+              end
+            end
+
+            it "resets user to the state that it was in when initially invited" do
+              result
+              expect_user_to_have_been_reset_to_invited_state(existing_user)
+            end
+          end
+
           context "when the email supplied is in a different case to the existing user" do
             let(:email) { "TEst@example.com" }
 
@@ -85,8 +103,32 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
         context "when the existing user is on a different team" do
           let(:existing_user_team) { create(:team) }
 
-          it "raises a ActiveRecord::RecordInvalid exception" do
-            expect { result }.to raise_error(ActiveRecord::RecordInvalid)
+          context "when the user is deleted" do
+            before do
+              existing_user.mark_as_deleted!
+            end
+
+            # rubocop:disable RSpec/MultipleExpectations
+            it "reassigns user to new team and enqueues the SendUserInvitationJob with the existing user ID" do
+              expect { result }.to have_enqueued_job(SendUserInvitationJob).at(:no_wait).on_queue("psd").with do |recipient_id, inviting_user_id|
+                expect(recipient_id).to eq existing_user.id
+                expect(inviting_user_id).to be_nil
+              end
+
+              expect(existing_user.reload.team).to eq team
+              # rubocop:enable RSpec/MultipleExpectations
+            end
+
+            it "resets user to the state that it was in when initially invited" do
+              result
+              expect_user_to_have_been_reset_to_invited_state(existing_user)
+            end
+          end
+
+          context "when the user is not deleted" do
+            it "raises a ActiveRecord::RecordInvalid exception" do
+              expect { result }.to raise_error(ActiveRecord::RecordInvalid)
+            end
           end
         end
       end
@@ -175,6 +217,18 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_elasticsear
       it "returns a failure" do
         expect(result).to be_failure
       end
+    end
+
+    def expect_user_to_have_been_reset_to_invited_state(existing_user)
+      existing_user.reload
+      expect(existing_user.name).to eq ""
+      expect(existing_user.deleted_at).to eq nil
+      expect(existing_user.account_activated).to eq false
+      expect(existing_user.mobile_number_verified).to eq false
+      expect(existing_user.has_accepted_declaration).to eq false
+      expect(existing_user.has_been_sent_welcome_email).to eq false
+      expect(existing_user.has_viewed_introduction).to eq false
+      expect(existing_user.mobile_number).to eq nil
     end
   end
 end

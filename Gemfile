@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.103"
+gem "aws-sdk-s3", "~> 1.105"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -32,7 +32,7 @@ gem "redis-rails", "~> 5.0"
 gem "request_store", "~> 1.5"
 gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
-gem "scout_apm", "~> 4.1"
+gem "scout_apm", "~> 5.0"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.2"
@@ -70,7 +70,7 @@ group :development do
 end
 
 group :test do
-  gem "capybara", "~> 3.35"
+  gem "capybara", "~> 3.36"
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.2"
@@ -83,7 +83,7 @@ group :test do
   gem "rspec-rails"
   gem "rubocop", "~> 1.21"
   gem "rubocop-govuk", "~> 4.1"
-  gem "rubocop-performance", "~> 1.11"
+  gem "rubocop-performance", "~> 1.12"
   gem "rubocop-rspec", "~> 2.4", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "shoulda-matchers"

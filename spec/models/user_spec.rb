@@ -229,9 +229,30 @@ RSpec.describe User do
       end
     end
 
+    it "sets the user 'deleted_by' to id of the user that made the deletion if supplied" do
+      user = create(:user)
+      deletor = create(:user)
+      freeze_time do
+        expect { user.mark_as_deleted!(deletor) }.to change { user.deleted_by }.from(nil).to(deletor.id)
+      end
+    end
+
+    it "sets the user 'account_activated' to false" do
+      user = create(:user, :activated)
+
+      freeze_time do
+        expect { user.mark_as_deleted! }.to change { user.account_activated }.from(true).to(false)
+      end
+    end
+
     it "does not change the flag if was already enabled" do
       user = create(:user, :deleted)
       expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)
+    end
+
+    it "sets invitation_token to nil" do
+      user = create(:user, :activated, invitation_token: "xyz")
+      expect { user.mark_as_deleted! }.to change { user.invitation_token }.from("xyz").to(nil)
     end
   end
 
@@ -256,6 +277,48 @@ RSpec.describe User do
     it "is not allowed for users that have verified their mobile number" do
       user = build_stubbed(:user, mobile_number_verified: true)
       expect(user).not_to be_mobile_number_change_allowed
+    end
+  end
+
+  describe "#reset_to_invited_state!" do
+    it "sets deleted_at to nil" do
+      user = create(:user, :deleted)
+      expect { user.reset_to_invited_state! }.to change { user.deleted_at }.from(user.deleted_at).to(nil)
+    end
+
+    it "sets account_activated to false" do
+      user = create(:user, :activated)
+      expect { user.reset_to_invited_state! }.to change { user.account_activated }.from(true).to(false)
+    end
+
+    it "sets mobile_number_verified to false" do
+      user = create(:user, :activated)
+      expect { user.reset_to_invited_state! }.to change { user.mobile_number_verified }.from(true).to(false)
+    end
+
+    it "sets has_accepted_declaration to false" do
+      user = create(:user, :activated)
+      expect { user.reset_to_invited_state! }.to change { user.has_accepted_declaration }.from(true).to(false)
+    end
+
+    it "sets has_been_sent_welcome_email to false" do
+      user = create(:user, :activated)
+      expect { user.reset_to_invited_state! }.to change { user.has_been_sent_welcome_email }.from(true).to(false)
+    end
+
+    it "sets has_viewed_introduction to false" do
+      user = create(:user, :activated)
+      expect { user.reset_to_invited_state! }.to change { user.has_viewed_introduction }.from(true).to(false)
+    end
+
+    it "sets name to blank" do
+      user = create(:user, :activated, name: "A User")
+      expect { user.reset_to_invited_state! }.to change { user.name }.from("A User").to("")
+    end
+
+    it "sets name to nil" do
+      user = create(:user, :activated, mobile_number: "07777777777")
+      expect { user.reset_to_invited_state! }.to change { user.mobile_number }.from("07777777777").to(nil)
     end
   end
 
