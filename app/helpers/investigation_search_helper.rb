@@ -7,7 +7,7 @@ module InvestigationSearchHelper
 
   def set_search_params
     params_to_save = params.dup
-    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
+    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT || params[:sort_by] == SearchParams::BLANK
     @search = SearchParams.new(query_params.except(:case_owner_is_team_0, :created_by_team_0))
 
     store_previous_search_params

@@ -38,7 +38,7 @@ class SearchParams
   alias_method :coronavirus_related_only?, :coronavirus_related_only
   attribute :serious_and_high_risk_level_only, :boolean
   alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
-  attribute :sort_by, default: RECENT
+  attribute :sort_by, default: BLANK
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
@@ -79,8 +79,16 @@ class SearchParams
     !status_open?
   end
 
+  def sort_by_option
+    if sort_by == BLANK || !sort_by.present?
+      return RELEVANT if q.present?
+      return RECENT
+    end
+    sort_by
+  end
+
   def sorting_params
-    case sort_by
+    case sort_by_option
     when NEWEST
       { created_at: "desc" }
     when OLDEST

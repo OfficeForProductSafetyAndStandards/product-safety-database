@@ -24,7 +24,7 @@
                   <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
                   <% if query_params[:sort_by] == SearchParams::NEWEST %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
-                  <% elsif query_params[:sort_by] == SearchParams::RECENT || SearchParams::OLDEST || query_params[:sort_by] == SearchParams::RELEVANT %>
+                  <% else %>
                     <th id="updated" scope="col" class="govuk-table__header">Updated</th>
                   <% end %>
                 </tr>
@@ -44,7 +44,7 @@
                     <th scope="col" class="govuk-table__header">Case owner</th>
                     <% if query_params[:sort_by] == SearchParams::NEWEST %>
                       <th scope="col" class="govuk-table__header">Created</th>
-                    <% elsif query_params[:sort_by] == SearchParams::RECENT || SearchParams::OLDEST || query_params[:sort_by] == SearchParams::RELEVANT %>
+                    <% else %>
                       <th scope="col" class="govuk-table__header">Updated</th>
                     <% end %>
                   </tr>
