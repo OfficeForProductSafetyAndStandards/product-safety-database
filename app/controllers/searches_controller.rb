@@ -18,7 +18,7 @@ private
 
   def search_params
     query_params.tap do |p|
-      p[:sort_by] = SearchParams::RELEVANT if p[:q].present?
+      p[:sort_by] = SearchParams::RELEVANT if p[:q].present? && p[:sort_by] == SearchParams::BLANK
     end
   end
 end

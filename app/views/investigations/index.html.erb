@@ -3,67 +3,69 @@
 <%= render 'investigations/heading', answer: @answer %>
 
 <div class="govuk-grid-row">
-  <%= render 'investigations/filters',
-    search: @search,
-    show_relevancy_radion_option: false,
-    submitted_from: "investigation_listing"
-  %>
-
-  <section class="govuk-grid-column-three-quarters">
-    <div class="govuk-grid-row">
-      <%= search_result_statement(@search.q, @answer.results.total_count) %>
-    </div>
-    <% if @investigations.any? %>
+  <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form") do |form| %>
+    <%= render 'investigations/filters', search: @search, form: form %>
+    <section class="govuk-grid-column-three-quarters">
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full" role="region" aria-label="Cases">
-          <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
-            <caption class="govuk-visually-hidden">
-              Cases data: 4 columns with each case described across rows within each table body.
-            </caption>
-            <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th class="govuk-visually-hidden">&nbsp;</th>
-                <th id="case" scope="col" class="govuk-table__header">Case number</th>
-                <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
-                <% if query_params[:sort_by] == SearchParams::NEWEST %>
-                  <th id="created" scope="col" class="govuk-table__header">Created</th>
-                <% elsif query_params[:sort_by] == SearchParams::RECENT || SearchParams::OLDEST || query_params[:sort_by] == SearchParams::RELEVANT %>
-                  <th id="updated" scope="col" class="govuk-table__header">Updated</th>
-                <% end %>
-              </tr>
-            </thead>
-
-            <%= render partial: "investigations/table_body",
-              collection: @investigations,
-              as: :investigation,
-              locals: { sorted_by: query_params[:sort_by] }
-            %>
-
-            <% if @investigations.size > 12 %>
-              <tfoot class="govuk-table__head">
+        <%= search_result_statement(@search.q, @answer.results.total_count) %>
+        <%= render 'investigations/sort_dropdown', search: @search, form: form %>
+      </div>
+      <% if @investigations.any? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full" role="region" aria-label="Cases">
+            <table id="results" class="govuk-table opss-table-items opss-table-items--sm">
+              <caption class="govuk-visually-hidden">
+                Cases data: 4 columns with each case described across rows within each table body.
+              </caption>
+              <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th class="govuk-visually-hidden">&nbsp;</th>
-                  <th scope="col" class="govuk-table__header">Case number</th>
-                  <th scope="col" class="govuk-table__header">Case owner</th>
+                  <th id="case" scope="col" class="govuk-table__header">Case number</th>
+                  <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
                   <% if query_params[:sort_by] == SearchParams::NEWEST %>
-                    <th scope="col" class="govuk-table__header">Created</th>
+                    <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% elsif query_params[:sort_by] == SearchParams::RECENT || SearchParams::OLDEST || query_params[:sort_by] == SearchParams::RELEVANT %>
-                    <th scope="col" class="govuk-table__header">Updated</th>
+                    <th id="updated" scope="col" class="govuk-table__header">Updated</th>
                   <% end %>
                 </tr>
-              </tfoot>
+              </thead>
+
+              <%= render partial: "investigations/table_body",
+                collection: @investigations,
+                as: :investigation,
+                locals: { sorted_by: query_params[:sort_by] }
+              %>
+
+              <% if @investigations.size > 12 %>
+                <tfoot class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th class="govuk-visually-hidden">&nbsp;</th>
+                    <th scope="col" class="govuk-table__header">Case number</th>
+                    <th scope="col" class="govuk-table__header">Case owner</th>
+                    <% if query_params[:sort_by] == SearchParams::NEWEST %>
+                      <th scope="col" class="govuk-table__header">Created</th>
+                    <% elsif query_params[:sort_by] == SearchParams::RECENT || SearchParams::OLDEST || query_params[:sort_by] == SearchParams::RELEVANT %>
+                      <th scope="col" class="govuk-table__header">Updated</th>
+                    <% end %>
+                  </tr>
+                </tfoot>
+              <% end %>
+            </table>
+
+            <%= paginate @investigations.object %>
+
+            <% if policy(Investigation).export? %>
+              <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
+
+
+
+
+                Request this list as a downloadable <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+              </p>
             <% end %>
-          </table>
-
-          <%= paginate @investigations.object %>
-
-          <% if policy(Investigation).export? %>
-            <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
-              Request this list as a downloadable <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Comma-Separated Values">CSV</abbr> file<%- end -%>.
-            </p>
-          <% end %>
+          </div>
         </div>
-      </div>
-    <% end %>
-  </section>
+      <% end %>
+    </section>
+  <% end %>
 </div>

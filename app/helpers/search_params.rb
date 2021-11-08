@@ -6,6 +6,7 @@ class SearchParams
   include ActiveModel::Serialization
 
   SORT_BY_OPTIONS = [
+    BLANK    = "blank",
     NEWEST   = "newest",
     OLDEST   = "oldest",
     RECENT   = "recent",
@@ -25,7 +26,6 @@ class SearchParams
   attribute :created_by_someone_else, :boolean
   alias_method :created_by_someone_else?, :created_by_someone_else
   attribute :created_by_someone_else_ids, default: []
-  attribute :override_sort_by
   attribute :direction
   attribute :enquiry
   attribute :project
@@ -92,17 +92,12 @@ class SearchParams
     end
   end
 
-  def sort_by_items(with_relevant_option: false)
-    items = [
-      { text: "Most recently updated",  value: RECENT, unchecked_value: "unchecked" },
-      { text: "Least recently updated", value: OLDEST, unchecked_value: "unchecked" },
-      { text: "Most recently created",  value: NEWEST, unchecked_value: "unchecked" }
+  def sort_by_items
+    [
+      { text: "", value: BLANK, unchecked_value: "unchecked" },
+      { text: "Recent updates", value: RECENT, unchecked_value: "unchecked" },
+      { text: "Oldest updates", value: OLDEST, unchecked_value: "unchecked" },
+      { text: "Newest cases", value: NEWEST, unchecked_value: "unchecked" }
     ]
-
-    if with_relevant_option
-      items.unshift(text: "Relevance", value: RELEVANT, unchecked_value: "unchecked")
-    end
-
-    items
   end
 end

@@ -1,0 +1,15 @@
+<div class="govuk-grid-column-one-third">
+  <div class="govuk-form-group opss-text-align-right">
+    <%= render "form_components/govuk_select",
+      form: form,
+      key: :sort_by,
+      classes: 'govuk-!-margin-bottom-1',
+      items: search.sort_by_items,
+      id: "results-sort",
+      label: { text: "Sort by", classes: "govuk-body-s" }
+    %>
+    <button class="govuk-button opss-js-enabled-hidden" data-module="govuk-button">
+      Sort
+    </button>
+  </div>
+</div>
