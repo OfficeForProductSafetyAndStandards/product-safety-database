@@ -80,8 +80,9 @@ class SearchParams
   end
 
   def sort_by_option
-    if sort_by == BLANK || !sort_by.present?
+    if sort_by == BLANK || sort_by.blank?
       return RELEVANT if q.present?
+
       return RECENT
     end
     sort_by
