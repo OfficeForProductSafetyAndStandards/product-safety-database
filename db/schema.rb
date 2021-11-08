@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_22_135737) do
+ActiveRecord::Schema.define(version: 2021_10_29_085258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -387,6 +387,7 @@ ActiveRecord::Schema.define(version: 2021_10_22_135737) do
     t.datetime "current_sign_in_at"
     t.inet "current_sign_in_ip"
     t.datetime "deleted_at"
+    t.string "deleted_by"
     t.string "direct_otp"
     t.datetime "direct_otp_sent_at"
     t.string "email"

@@ -6,7 +6,6 @@ class InviteUserToTeamForm
   attribute :team
 
   validates :email, email: { if: ->(form) { form.email.present? } }
-  validate :cannot_be_existing_deleted_user
   validate :cannot_be_existing_activated_user_on_same_team
   validate :cannot_be_existing_user_on_another_team
   validate :email_domain_must_be_whitelisted, if: :enforce_whitelist?
@@ -15,10 +14,6 @@ class InviteUserToTeamForm
   validates_presence_of :team
 
 private
-
-  def cannot_be_existing_deleted_user
-    errors.add(:email, :user_deleted) if existing_user&.deleted?
-  end
 
   def cannot_be_existing_activated_user_on_same_team
     if existing_user&.account_activated? && existing_user.team == team
