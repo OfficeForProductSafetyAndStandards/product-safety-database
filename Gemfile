@@ -83,7 +83,7 @@ group :test do
   gem "rspec-rails"
   gem "rubocop", "~> 1.21"
   gem "rubocop-govuk", "~> 4.1"
-  gem "rubocop-performance", "~> 1.11"
+  gem "rubocop-performance", "~> 1.12"
   gem "rubocop-rspec", "~> 2.4", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "shoulda-matchers"
