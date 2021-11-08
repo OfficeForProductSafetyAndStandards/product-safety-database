@@ -93,7 +93,7 @@ RSpec.describe InviteUserToTeamForm do
       context "when the user is deleted" do
         let(:user_trait) { :deleted }
 
-        include_examples "invalid form", [:email, "Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored."]
+        include_examples "valid form", [:email, "Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored."]
       end
 
       context "when the user is on a different team" do

@@ -28,7 +28,7 @@ module Users
     end
 
     def create
-      user = User.find_by(email: params[:user][:email])
+      user = User.find_by(email: params[:user][:email], deleted_at: nil)
       return resend_invitation_link_for(user) if user && !user.has_completed_registration?
 
       super do |resource|
