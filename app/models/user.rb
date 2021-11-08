@@ -173,6 +173,30 @@ class User < ApplicationRecord
     name.present? && mobile_number_verified?
   end
 
+  def mark_as_deleted!(deleted_by = nil)
+    return if deleted?
+
+    self.deleted_at = Time.zone.now
+    self.deleted_by = deleted_by.id if deleted_by
+    self.account_activated = false
+    self.invitation_token = nil
+
+    save!
+  end
+
+  def reset_to_invited_state!
+    self.deleted_at = nil
+    self.account_activated = false
+    self.mobile_number_verified = false
+    self.has_accepted_declaration = false
+    self.has_been_sent_welcome_email = false
+    self.has_viewed_introduction = false
+    self.name = nil
+    self.mobile_number = nil
+
+    save!
+  end
+
 private
 
   def lock_two_factor!

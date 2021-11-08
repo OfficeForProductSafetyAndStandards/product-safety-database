@@ -81,8 +81,10 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
       context "when the user is deleted" do
         let(:existing_user_trait) { :deleted }
 
-        scenario "shows an error message" do
-          expect(page).to have_summary_error("Email address belongs to a user that has been deleted. Email OPSS if you would like their account restored.")
+        scenario "reinvites the user" do
+          expect_to_be_on_team_page(team)
+          expect_confirmation_banner("Invite sent to #{email}")
+          expect_invitation_email_sent(to: email, inviting_user: user)
         end
       end
     end
