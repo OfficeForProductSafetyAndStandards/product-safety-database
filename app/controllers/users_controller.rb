@@ -43,10 +43,37 @@ class UsersController < ApplicationController
     end
   end
 
+  def remove
+    @user = User.find_by(id: params[:user_id])
+    @remove_user_form = RemoveUserForm.new
+  end
+
+  def delete
+    @user = User.find_by(id: remove_user_params["user_id"])
+    team = @user.team
+
+    authorize team, :invite_or_remove_user?
+
+    @remove_user_form = RemoveUserForm.new(remove_user_params)
+
+    return render(:remove) if @remove_user_form.invalid?
+
+    if @remove_user_form.remove == "yes"
+      DeleteUser.call!(user: @user, deleted_by: current_user)
+      redirect_to team_path(team), flash: { success: "The team member was removed" }
+    else
+      redirect_to team_path(team)
+    end
+  end
+
 private
 
   def new_user_attributes
     params.require(:user).permit(:name, :password, :mobile_number)
+  end
+
+  def remove_user_params
+    params.require(:remove_user_form).permit(:remove, :user_id)
   end
 
   def signed_in_as?(user)
