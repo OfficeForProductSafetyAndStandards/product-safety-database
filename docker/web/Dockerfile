@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /psd
 
-RUN gem install bundler:2.2.28
+RUN gem install bundler:2.2.29
 COPY Gemfile /psd/
 COPY Gemfile.lock /psd/
 

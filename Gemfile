@@ -70,7 +70,7 @@ group :development do
 end
 
 group :test do
-  gem "capybara", "~> 3.35"
+  gem "capybara", "~> 3.36"
   gem "capybara-screenshot", "~> 1.0"
   gem "database_cleaner", "~> 2.0"
   gem "factory_bot_rails", "~> 6.2"
@@ -83,7 +83,7 @@ group :test do
   gem "rspec-rails"
   gem "rubocop", "~> 1.21"
   gem "rubocop-govuk", "~> 4.1"
-  gem "rubocop-performance", "~> 1.11"
+  gem "rubocop-performance", "~> 1.12"
   gem "rubocop-rspec", "~> 2.4", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "shoulda-matchers"
