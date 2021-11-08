@@ -58,33 +58,42 @@ module Searchable
           }
         }
       ]
+
+      mappings do
+        indexes :tiebreaker_id, type: :keyword
+      end
+    end
+
+    # Creates a unique ID for the document that cannot be partially matched. Required for search_after functionality used in #search_in_batches
+    def tiebreaker_id
+      "#{sprintf('%010d', id)}-#{created_at.to_i}"
     end
 
     def self.full_search(query)
       __elasticsearch__.search(query.build_query(highlighted_fields, fuzzy_fields, exact_fields))
     end
 
-    def self.search_in_batches(search_query, search_from, size = 10_000)
+    # _Default_ value of search_from should never match a valid tiebreaker_id
+    def self.search_in_batches(search_query, size = 10_000, search_from = "")
       records = []
-      after = search_from
 
       loop do
         query = search_query.build_query(highlighted_fields, fuzzy_fields, exact_fields)
 
         query.merge!({
           sort: [
-            { id: "asc" }
+            { tiebreaker_id: "asc" }
           ],
           size: size,
-          search_after: [after]
+          search_after: [search_from]
         })
 
         results = __elasticsearch__.search(query)
-        results_amount = results.size
-        records += results
-        after = records.last.id.to_i
 
-        break if results_amount.zero?
+        break if results.size.zero?
+
+        records += results
+        search_from = records.last.tiebreaker_id
       end
 
       records

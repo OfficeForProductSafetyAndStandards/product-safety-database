@@ -151,37 +151,4 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
       end
     end
   end
-
-  describe "#search_in_batches" do
-    before do
-      create(:business, trading_name: "Applee")
-      create(:business, trading_name: "Amazon")
-      create(:business, trading_name: "Netflix")
-      create(:business, trading_name: "Google")
-      Business.__elasticsearch__.create_index! force: true
-      Business.import refresh: :wait_for
-    end
-
-    context "when searching in batches" do
-      let(:query) { nil }
-
-      context "when batch size is 1" do
-        it "returns the expected businesses" do
-          expect(Business.search_in_batches(es_query, Business.first.id - 1, 1).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
-        end
-      end
-
-      context "when batch size is 2" do
-        it "returns the expected businesses" do
-          expect(Business.search_in_batches(es_query, Business.first.id - 1, 2).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
-        end
-      end
-
-      context "when batch size is 100" do
-        it "returns the expected businesses" do
-          expect(Business.search_in_batches(es_query, Business.first.id - 1, 100).map(&:id)).to match_array(Business.all.map { |b| b.id.to_s })
-        end
-      end
-    end
-  end
 end

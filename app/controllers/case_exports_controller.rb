@@ -1,15 +1,11 @@
 class CaseExportsController < ApplicationController
   include InvestigationsHelper
 
-  before_action :set_search_params, only: %i[generate]
-
   def generate
     authorize Investigation, :export?
 
-    investigation_ids = search_for_investigations.records.ids
-
-    case_export = CaseExport.create!
-    CaseExportJob.perform_later(investigation_ids, case_export, current_user)
+    case_export = CaseExport.create!(params: export_params, user: current_user)
+    CaseExportJob.perform_later(case_export)
 
     redirect_to investigations_path(q: params[:q]), flash: { success: "Your case export is being prepared. You will receive an email when your export is ready to download." }
   end
@@ -17,6 +13,6 @@ class CaseExportsController < ApplicationController
   def show
     authorize Investigation, :export?
 
-    @case_export = CaseExport.find(params[:id])
+    @case_export = CaseExport.find_by!(id: params[:id], user: current_user)
   end
 end

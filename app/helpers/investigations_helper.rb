@@ -1,155 +1,9 @@
 module InvestigationsHelper
-  include SearchHelper
+  include InvestigationSearchHelper
 
-  def search_for_investigations(page_size = Investigation.count)
-    query  = ElasticsearchQuery.new(@search.q, filter_params, @search.sorting_params, nested: nested_filters)
-    result = Investigation.full_search(query)
-    result.paginate(page: params[:page], per_page: page_size)
-  end
-
-  def set_search_params
-    params_to_save = params.dup
-    params_to_save.delete(:sort_by) if params[:sort_by] == SearchParams::RELEVANT
-    @search = SearchParams.new(query_params.except(:case_owner_is_team_0, :created_by_team_0))
-
-    store_previous_search_params
-  end
-
-  def filter_params
-    filters = {}
-    filters.merge!(get_type_filter)
-    filters.merge!(merged_must_filters) { |_key, current_filters, new_filters| current_filters + new_filters }
-  end
-
-  def nested_filters
-    filters = []
-
-    if @search.filter_teams_with_access?
-      filters << {
-        nested: {
-          path: :teams_with_access,
-          query: { bool: { must: { terms: { "teams_with_access.id" => @search.teams_with_access_ids } } } }
-        }
-      }
-    end
-
-    filters
-  end
-
-  def merged_must_filters
-    must_filters = {
-      must: [
-        get_status_filter,
-        { bool: get_creator_filter },
-        { bool: get_owner_filter }
-      ]
-    }
-
-    if @search.coronavirus_related_only?
-      must_filters[:must] << { term: { coronavirus_related: true } }
-    end
-
-    if @search.serious_and_high_risk_level_only?
-      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
-    end
-
-    must_filters
-  end
-
-  def get_status_filter
-    return unless @search.filter_status?
-
-    { term: { is_closed: @search.is_closed? } }
-  end
-
-  def get_type_filter
-    return {} if params[:allegation] == "unchecked" && params[:enquiry] == "unchecked" && params[:project] == "unchecked"
-
-    types = []
-    types << "Investigation::Allegation" if params[:allegation] == "checked"
-    types << "Investigation::Enquiry" if params[:enquiry] == "checked"
-    types << "Investigation::Project" if params[:project] == "checked"
-    type = { type: types }
-    { must: [{ terms: type }] }
-  end
-
-  def get_owner_filter
-    return { should: [], must_not: [] } if @search.no_owner_boxes_checked?
-    return { should: [], must_not: compute_excluded_terms } if @search.owner_filter_exclusive?
-
-    { should: compute_included_terms, must_not: [] }
-  end
-
-  def compute_excluded_terms
-    format_owner_terms([current_user.id])
-  end
-
-  def compute_included_terms
-    owners = []
-    owners << current_user.id if @search.case_owner_is_me?
-    owners += my_team_id_and_its_user_ids if @search.case_owner_is_my_team?
-    owners += other_owner_ids if @search.case_owner_is_someone_else?
-
-    format_owner_terms(owners.uniq)
-  end
-
-  def other_owner_ids
-    if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
-      return user_ids_from_team(team)
-    end
-
-    [@search.case_owner_is_someone_else_id]
-  end
-
-  def format_owner_terms(owner_array)
-    owner_array.map do |a|
-      { term: { owner_id: a } }
-    end
-  end
-
-  def get_creator_filter
-    return { should: [], must_not: [] } if @search.no_created_by_checked?
-    return { should: [], must_not: { terms: { creator_id: current_user.team.user_ids } } } if @search.created_by_filter_exclusive?
-
-    { should: format_creator_terms(checked_team_creators), must_not: [] }
-  end
-
-  def checked_team_creators
-    ids = []
-
-    ids << current_user.id                       if @search.created_by.me?
-    ids += user_ids_from_team(current_user.team) if @search.created_by.my_team?
-
-    if @search.created_by.someone_else? && @search.created_by.id.present?
-      if (team = Team.find_by(id: @search.created_by.id))
-        ids += user_ids_from_team(team)
-      else
-        ids << @search.created_by.id
-      end
-    end
-
-    ids
-  end
-
-  def someone_else_creators
-    return [] unless params[:created_by_someone_else] == "checked"
-
-    team = Team.find_by(id: params[:created_by_someone_else_id])
-    team.present? ? user_ids_from_team(team) : [params[:created_by_someone_else_id]]
-  end
-
-  def format_creator_terms(creator_array)
-    creator_array.map do |a|
-      { term: { creator_id: a } }
-    end
-  end
-
-  def creator_team_with_key
-    [
-      "created_by_team_0".to_sym,
-      current_user.team,
-      "My team"
-    ]
+  def search_for_investigations(page_size = Investigation.count, user = current_user)
+    result = Investigation.full_search(search_query(user))
+    result.page(params[:page]).per(page_size)
   end
 
   def query_params
@@ -175,7 +29,7 @@ module InvestigationsHelper
   end
 
   def export_params
-    query_params.except(:page)
+    query_params.except(:page, :sort_by)
   end
 
   def set_default_type_filter
@@ -196,10 +50,6 @@ module InvestigationsHelper
         }
       ]
     }
-  end
-
-  def user_ids_from_team(team)
-    [team.id] + team.users.map(&:id)
   end
 
   def risks_and_issues_rows(investigation, user)
@@ -541,10 +391,6 @@ module InvestigationsHelper
     end
 
     data_attributes
-  end
-
-  def my_team_id_and_its_user_ids
-    [current_user.team_id] + current_user.team.user_ids
   end
 
   def store_previous_search_params

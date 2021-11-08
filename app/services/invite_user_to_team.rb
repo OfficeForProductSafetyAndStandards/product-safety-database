@@ -16,7 +16,14 @@ private
 
   def find_or_create_user
     existing_user = User.find_by email: email
-    existing_user&.team == team ? existing_user : create_user
+
+    if existing_user&.deleted?
+      reinstate_and_update_deleted_user(existing_user)
+    elsif existing_user&.team == team
+      existing_user
+    else
+      create_user
+    end
   end
 
   def create_user
@@ -26,6 +33,12 @@ private
       skip_password_validation: true,
       team: team
     )
+  end
+
+  def reinstate_and_update_deleted_user(existing_user)
+    existing_user.reset_to_invited_state!
+    existing_user.update!(team: team)
+    existing_user
   end
 
   def send_invite

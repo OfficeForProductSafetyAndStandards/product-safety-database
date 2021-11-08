@@ -3,7 +3,7 @@ module UsersHelper
 
   def search_for_users(page_size)
     User.prefix_search(search_params, :email)
-        .paginate(page: params[:page], per_page: page_size)
+        .page(params[:page]).per(page_size)
         .records
   end
 

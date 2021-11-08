@@ -2,6 +2,10 @@ class UnexpectedEvent < ApplicationRecord
   belongs_to :investigation
   belongs_to :product
 
+  redacted_export_with :id, :additional_info, :created_at, :date, :investigation_id,
+                       :is_date_known, :product_id, :severity, :severity_other, :type,
+                       :updated_at, :usage
+
   enum usage: {
     "during_normal_use" => "during_normal_use",
     "during_misuse" => "during_misuse",

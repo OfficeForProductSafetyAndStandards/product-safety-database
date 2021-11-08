@@ -43,9 +43,8 @@ RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, typ
       expect(page).to have_link(washing_machine.name, href: product_path(washing_machine))
     end
 
-    expect(page).to have_css(".pagination em.current", text: 1)
-    expect(page).to have_link("2", href: products_path(page: 2))
-    expect(page).to have_link("Next →", href: products_path(page: 2))
+    expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
+    expect(page).to have_link("Next page", href: products_path(page: 2))
 
     pending 'this will be fixed once we re-add fuzzy "or" matching on'
 
