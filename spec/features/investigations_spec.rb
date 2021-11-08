@@ -34,22 +34,21 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
 
     # Expect investigations to be in reverse chronological order
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_1_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_1_days_ago.pretty_id)
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(2) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_2_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(3) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
-    expect(page).to have_css(".pagination em.current", text: 1)
-    expect(page).to have_link("2",      href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
-    expect(page).to have_link("Next →", href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
+    expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
+    expect(page).to have_link("Next page", href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
 
     fill_in "Keywords", with: "electric skateboard"
     click_on "Apply filters"
 
     # Expect only the single relevant investigation to be returned
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
     expect(page.find("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")).to be_checked
 
@@ -62,11 +61,11 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
 
     # Expect investigations to be back in reverse chronological order again
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(1) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_1_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_1_days_ago.pretty_id)
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(2) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_2_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(4) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_2_days_ago.pretty_id)
     expect(page)
-      .to have_css(".govuk-grid-row.psd-case-card:nth-child(3) .govuk-grid-column-one-half span.govuk-caption-m", text: investigation_last_updated_3_days_ago.pretty_description)
+      .to have_css("table#results tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
     expect(page).to have_current_path(investigations_path, ignore_query: true)
 

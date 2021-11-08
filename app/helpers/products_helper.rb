@@ -1,5 +1,5 @@
 module ProductsHelper
-  include SearchHelper
+  include ProductSearchHelper
 
   SUGGESTED_PRODUCTS_LIMIT = 4
 
@@ -10,13 +10,13 @@ module ProductsHelper
     ).with_defaults(markings: [])
   end
 
-  def product_export_params
-    params.permit(:sort, :q)
+  def search_for_products(page_size = Product.count, user = current_user)
+    Product.full_search(search_query(user))
+      .page(params[:page]).per(page_size).records
   end
 
-  def search_for_products(page_size = Product.count, include_models = [])
-    Product.includes(include_models).full_search(search_query)
-      .page(params[:page]).per_page(page_size).records
+  def product_export_params
+    params.permit(:q, :hazard_type)
   end
 
   def sorting_params
@@ -33,7 +33,7 @@ module ProductsHelper
         must_not: have_excluded_id(excluded_ids),
       }
     })
-      .paginate(per_page: SUGGESTED_PRODUCTS_LIMIT)
+      .page(1).per(SUGGESTED_PRODUCTS_LIMIT)
       .records
   end
 

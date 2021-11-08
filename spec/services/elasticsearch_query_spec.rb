@@ -11,14 +11,14 @@ RSpec.shared_examples "finds the relevant investigation" do
 end
 
 RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
-  subject { described_class.new(query, filter_params, sorting_params) }
+  subject(:es_query) { described_class.new(query, filter_params, sorting_params) }
 
   let(:user)           { create(:user) }
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
   def perform_search
-    Investigation.full_search(subject)
+    Investigation.full_search(es_query)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.
@@ -26,10 +26,10 @@ RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
   # needed to improve the relevance of the results. We should then add
   # assertions that irrelevant records are *not* returned here.
   describe "#build_query" do
-    let(:batch_number)      { SecureRandom.uuid }
-    let(:country_of_origin) { "United Kingdom" }
-    let(:product)           { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
-    let(:investigation)     { create(:allegation, creator: user, products: [product]) }
+    let(:batch_number)            { SecureRandom.uuid }
+    let(:country_of_origin)       { "United Kingdom" }
+    let(:product)                 { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
+    let(:investigation)           { create(:allegation, creator: user, products: [product]) }
 
     before do
       allow(NotifyMailer)

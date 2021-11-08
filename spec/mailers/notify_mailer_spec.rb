@@ -25,8 +25,9 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   end
 
   describe "#product_export" do
-    let(:user)           { build(:user) }
-    let(:product_export) { ProductExport.create }
+    let(:user)           { create(:user) }
+    let(:params)         { {} }
+    let(:product_export) { ProductExport.create!(user: user, params: params) }
 
     let(:mail) { described_class.product_export(email: user.email, name: user.name, product_export: product_export) }
 
@@ -49,8 +50,9 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
   end
 
   describe "#case_export" do
-    let(:user) { build(:user) }
-    let(:case_export) { CaseExport.create }
+    let(:user) { create(:user) }
+    let(:params) { {} }
+    let(:case_export) { CaseExport.create!(user: user, params: params) }
 
     let(:mail) { described_class.case_export(email: user.email, name: user.name, case_export: case_export) }
 

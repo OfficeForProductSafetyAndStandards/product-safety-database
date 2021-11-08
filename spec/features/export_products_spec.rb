@@ -1,33 +1,78 @@
 require "rails_helper"
 require "sidekiq/testing"
 
-RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, :with_test_queue_adapter, type: :feature do
-  let(:user) { create :user, :activated, has_viewed_introduction: true }
-
-  before do
-    create_list(:product, 18, created_at: 4.days.ago)
-    user.roles.create!(name: "psd_admin")
-    sign_in(user)
-    allow(ProductExportWorker).to receive(:perform_later) do
-      ProductExportWorker.new.perform(Product.all, ProductExport.last.id, user)
+RSpec.feature "Product export", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
+  let(:user) { create :user, :psd_admin, :activated }
+  let(:email) { delivered_emails.last }
+  let(:export) { ProductExport.find_by(user: user) }
+  let(:spreadsheet) do
+    export.export_file.blob.open do |file|
+      Roo::Excelx.new(file).sheet("product_info")
     end
   end
 
-  scenario "lists products according to search relevance" do
-    Product.import refresh: :wait_for
+  let!(:product_1) { create(:product, name: "ABC") }
+  let!(:product_2) { create(:product, name: "XYZ") }
+  let!(:hazardous_product) { create(:product, name: "STU") }
+  let!(:investigation) { create(:allegation, :reported_unsafe, :with_products, products: [hazardous_product]) }
+  let(:hazard_type) { investigation.hazard_type }
+
+  before do
+    Product.import force: true, refresh: :wait_for
+    Investigation.import force: true, refresh: :wait_for
+
+    sign_in(user)
+  end
+
+  scenario "with no filters selected" do
     visit products_path
+
+    expect(page).to have_text product_1.name
+    expect(page).to have_text product_2.name
+    expect(page).to have_text hazardous_product.name
 
     click_link "Export as spreadsheet"
     expect(page).to have_content "Your product export is being prepared. You will receive an email when your export is ready to download."
 
-    perform_enqueued_jobs
+    expect(email.action_name).to eq "product_export"
+    expect(email.personalization[:name]).to eq user.name
+    expect(email.personalization[:download_export_url]).to eq product_export_url(export)
 
-    expect(ProductExport.count).to eq 1
-    expect(ProductExport.first.export_file.attached?).to eq true
+    expect(spreadsheet.last_row).to eq(4)
+    expect(spreadsheet.cell(2, 15)).to eq(product_1.name)
+    expect(spreadsheet.cell(3, 15)).to eq(product_2.name)
+    expect(spreadsheet.cell(4, 15)).to eq(hazardous_product.name)
+  end
 
-    product_export_email = delivered_emails.last
-    expect(product_export_email.action_name).to eq "product_export"
-    expect(product_export_email.personalization[:name]).to eq user.name
-    expect(product_export_email.personalization[:download_export_url]).to eq product_export_url(1)
+  scenario "with search query" do
+    visit products_path
+
+    fill_in "Keywords", with: product_2.name
+    click_button "Search"
+
+    expect(page).not_to have_text product_1.name
+    expect(page).not_to have_text hazardous_product.name
+    expect(page).to have_text product_2.name
+
+    click_link "Export as spreadsheet"
+
+    expect(spreadsheet.last_row).to eq(2)
+    expect(spreadsheet.cell(2, 15)).to eq(product_2.name)
+  end
+
+  scenario "with hazard type filter" do
+    visit products_path
+
+    select hazard_type, from: "Hazard type"
+    click_button "Search"
+
+    expect(page).not_to have_text product_1.name
+    expect(page).not_to have_text product_2.name
+    expect(page).to have_text hazardous_product.name
+
+    click_link "Export as spreadsheet"
+
+    expect(spreadsheet.last_row).to eq(2)
+    expect(spreadsheet.cell(2, 15)).to eq(hazardous_product.name)
   end
 end

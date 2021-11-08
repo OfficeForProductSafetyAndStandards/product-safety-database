@@ -1,22 +1,17 @@
 class ProductExportsController < ApplicationController
   include ProductsHelper
-  helper_method :sort_column, :sort_direction
-
-  before_action :set_search_params, only: %i[generate]
 
   def generate
     authorize Product, :export?
 
-    # TODO: move this query to the job once we are satisfied that this is working well.
-    @products = search_for_products(Product.count, [:investigations, :test_results, { corrective_actions: [:business], risk_assessments: %i[assessed_by_business assessed_by_team] }]).sort
-    product_export = ProductExport.create!
-    ProductExportWorker.perform_later(@products, product_export.id, current_user)
+    product_export = ProductExport.create!(params: product_export_params, user: current_user)
+    ProductExportJob.perform_later(product_export)
     redirect_to products_path(q: params[:q]), flash: { success: "Your product export is being prepared. You will receive an email when your export is ready to download." }
   end
 
   def show
     authorize Product, :export?
 
-    @product_export = ProductExport.find(params[:id])
+    @product_export = ProductExport.find_by!(id: params[:id], user: current_user)
   end
 end

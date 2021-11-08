@@ -1,83 +1,91 @@
 require "rails_helper"
 
-RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let(:organisation) { create(:organisation) }
-  let(:team) { create(:team, organisation: organisation) }
-  let(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let!(:business) { create(:business) }
-  let!(:business_2) { create(:business) }
-  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation) }
-  let!(:investigation) { create(:allegation) }
-  let(:business_export) { described_class.create! }
+RSpec.describe BusinessExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+  let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let!(:business) { create(:business).decorate }
+  let!(:business_2) { create(:business).decorate }
+  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation).decorate }
+  let!(:investigation) { create(:allegation).decorate }
+  let(:params) { {} }
+  let(:business_export) { described_class.create!(user: user, params: params) }
 
-  describe "#export" do
+  before { Business.__elasticsearch__.import force: true, refresh: :wait }
+
+  describe "#export!" do
     before do
       create(:location, business: business)
       create(:contact, business: business)
 
-      business_export.export(Business.all.pluck(:id))
+      business_export.export!
     end
 
     let!(:exported_data) { business_export.export_file.open { |file| Roo::Excelx.new(file) } }
-
-    it "exports one Cases sheet" do
-      expect(exported_data.sheets).to eq %w[Businesses]
-    end
+    let!(:sheet) { exported_data.sheet("Businesses") }
 
     # rubocop:disable RSpec/MultipleExpectations
+    # rubocop:disable RSpec/ExampleLength
+    it "exports business data" do
+      expect(sheet.cell(1, 1)).to eq "ID"
+      expect(sheet.cell(2, 1)).to eq business.id.to_s
+      expect(sheet.cell(3, 1)).to eq business_2.id.to_s
 
-    context "with Cases sheet" do
-      let!(:sheet) { exported_data.sheet("Businesses") }
+      expect(sheet.cell(1, 2)).to eq "trading_name"
+      expect(sheet.cell(2, 2)).to eq business.trading_name
+      expect(sheet.cell(3, 2)).to eq business_2.trading_name
 
-      it "exports ID" do
-        expect(sheet.cell(1, 1)).to eq "ID"
-        expect(sheet.cell(2, 1)).to eq business.id.to_s
-        expect(sheet.cell(3, 1)).to eq business_2.id.to_s
-      end
+      expect(sheet.cell(1, 3)).to eq "legal_name"
+      expect(sheet.cell(2, 3)).to eq business.legal_name
+      expect(sheet.cell(3, 3)).to eq business_2.legal_name
 
-      it "exports trading_name" do
-        expect(sheet.cell(1, 2)).to eq "trading_name"
-        expect(sheet.cell(2, 2)).to eq business.trading_name
-        expect(sheet.cell(3, 2)).to eq business_2.trading_name
-      end
+      expect(sheet.cell(1, 4)).to eq "company_number"
+      expect(sheet.cell(2, 4)).to eq business.company_number
+      expect(sheet.cell(3, 4)).to eq business_2.company_number
 
-      it "exports legal_name" do
-        expect(sheet.cell(1, 3)).to eq "legal_name"
-        expect(sheet.cell(2, 3)).to eq business.legal_name
-        expect(sheet.cell(3, 3)).to eq business_2.legal_name
-      end
+      expect(sheet.cell(1, 5)).to eq "types"
+      expect(sheet.cell(2, 5)).to eq investigation_business.relationship
+      expect(sheet.cell(3, 5)).to eq nil
 
-      it "exports company_number" do
-        expect(sheet.cell(1, 4)).to eq "company_number"
-        expect(sheet.cell(2, 4)).to eq business.company_number
-        expect(sheet.cell(3, 4)).to eq business_2.company_number
-      end
+      expect(sheet.cell(1, 6)).to eq "primary_contact_email"
+      expect(sheet.cell(2, 6)).to eq business.primary_contact.try(:email)
+      expect(sheet.cell(3, 6)).to eq business_2.primary_contact.try(:email)
 
-      it "exports type" do
-        expect(sheet.cell(1, 5)).to eq "types"
-        expect(sheet.cell(2, 5)).to eq investigation_business.relationship
-        expect(sheet.cell(3, 5)).to eq nil
-      end
+      expect(sheet.cell(1, 7)).to eq "primary_contact_job_title"
+      expect(sheet.cell(2, 7)).to eq business.primary_contact.try(:job_title)
+      expect(sheet.cell(3, 7)).to eq business_2.primary_contact.try(:job_title)
 
-      it "exports primary_contact_email" do
-        expect(sheet.cell(1, 6)).to eq "primary_contact_email"
-        expect(sheet.cell(2, 6)).to eq business.primary_contact.try(:email)
-        expect(sheet.cell(3, 6)).to eq business_2.primary_contact.try(:email)
-      end
+      expect(sheet.cell(1, 8)).to eq "primary_contact_phone_number"
+      expect(sheet.cell(2, 8)).to eq business.primary_contact.try(:phone_number)
+      expect(sheet.cell(3, 8)).to eq business_2.primary_contact.try(:phone_number)
 
-      it "exports primary_contact_job_title" do
-        expect(sheet.cell(1, 7)).to eq "primary_contact_job_title"
-        expect(sheet.cell(2, 7)).to eq business.primary_contact.try(:job_title)
-        expect(sheet.cell(3, 7)).to eq business_2.primary_contact.try(:job_title)
-      end
+      expect(sheet.cell(1, 9)).to eq "primary_location_address_line_1"
+      expect(sheet.cell(2, 9)).to eq business.primary_location.try(:address_line_1)
+      expect(sheet.cell(3, 9)).to eq business_2.primary_location.try(:address_line_1)
 
-      it "exports primary_contact_phone_number" do
-        expect(sheet.cell(1, 8)).to eq "primary_contact_phone_number"
-        expect(sheet.cell(2, 8)).to eq business.primary_contact.try(:phone_number)
-        expect(sheet.cell(3, 8)).to eq business_2.primary_contact.try(:phone_number)
-      end
+      expect(sheet.cell(1, 10)).to eq "primary_location_address_line_2"
+      expect(sheet.cell(2, 10)).to eq business.primary_location.try(:address_line_2)
+      expect(sheet.cell(3, 10)).to eq business_2.primary_location.try(:address_line_2)
+
+      expect(sheet.cell(1, 11)).to eq "primary_location_city"
+      expect(sheet.cell(2, 11)).to eq business.primary_location.try(:city)
+      expect(sheet.cell(3, 11)).to eq business_2.primary_location.try(:city)
+
+      expect(sheet.cell(1, 12)).to eq "primary_location_country"
+      expect(sheet.cell(2, 12)).to eq business.primary_location.try(:country)
+      expect(sheet.cell(3, 12)).to eq business_2.primary_location.try(:country)
+
+      expect(sheet.cell(1, 13)).to eq "primary_location_county"
+      expect(sheet.cell(2, 13)).to eq business.primary_location.try(:county)
+      expect(sheet.cell(3, 13)).to eq business_2.primary_location.try(:county)
+
+      expect(sheet.cell(1, 14)).to eq "primary_location_phone_number"
+      expect(sheet.cell(2, 14)).to eq business.primary_location.try(:phone_number)
+      expect(sheet.cell(3, 14)).to eq business_2.primary_location.try(:phone_number)
+
+      expect(sheet.cell(1, 15)).to eq "primary_location_postal_code"
+      expect(sheet.cell(2, 15)).to eq business.primary_location.try(:postal_code)
+      expect(sheet.cell(3, 15)).to eq business_2.primary_location.try(:postal_code)
     end
-
     # rubocop:enable RSpec/MultipleExpectations
+    # rubocop:enable RSpec/ExampleLength
   end
 end

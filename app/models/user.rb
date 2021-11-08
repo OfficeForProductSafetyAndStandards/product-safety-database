@@ -18,6 +18,9 @@ class User < ApplicationRecord
   has_many :user_sources, dependent: :destroy
   has_many :roles, dependent: :destroy, as: :entity
   has_many :collaborations, dependent: :destroy, as: :collaborator
+  has_many :case_exports
+  has_many :business_exports
+  has_many :product_exports
 
   belongs_to :team
 
@@ -40,6 +43,12 @@ class User < ApplicationRecord
   attribute :skip_password_validation, :boolean, default: false
   attribute :invitation_token, :string, default: -> { SecureRandom.hex(15) }
   attribute :invited_at, :datetime, default: -> { Time.zone.now }
+
+  redacted_export_with :id, :account_activated, :created_at, :deleted_at, :failed_attempts,
+                       :has_accepted_declaration, :has_been_sent_welcome_email, :has_viewed_introduction,
+                       :invited_at, :keycloak_created_at, :last_sign_in_at, :locked_at, :mobile_number_verified,
+                       :organisation_id, :remember_created_at, :second_factor_attempts_locked_at,
+                       :secondary_authentication_operation, :sign_in_count, :team_id, :updated_at
 
   # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
   # and who have accepted the user declaration
@@ -162,6 +171,30 @@ class User < ApplicationRecord
 
   def has_filled_out_account_setup_form_and_verified_number?
     name.present? && mobile_number_verified?
+  end
+
+  def mark_as_deleted!(deleted_by = nil)
+    return if deleted?
+
+    self.deleted_at = Time.zone.now
+    self.deleted_by = deleted_by.id if deleted_by
+    self.account_activated = false
+    self.invitation_token = nil
+
+    save!
+  end
+
+  def reset_to_invited_state!
+    self.deleted_at = nil
+    self.account_activated = false
+    self.mobile_number_verified = false
+    self.has_accepted_declaration = false
+    self.has_been_sent_welcome_email = false
+    self.has_viewed_introduction = false
+    self.name = nil
+    self.mobile_number = nil
+
+    save!
   end
 
 private

@@ -35,7 +35,8 @@ class Product < ApplicationRecord
 
   def as_indexed_json(*)
     as_json(
-      include: { investigations: { only: :hazard_type } }
+      include: { investigations: { only: :hazard_type } },
+      methods: [:tiebreaker_id]
     )
   end
 
@@ -52,6 +53,11 @@ class Product < ApplicationRecord
   has_many :risk_assessments, through: :risk_assessed_products
 
   has_one :source, as: :sourceable, dependent: :destroy
+
+  redacted_export_with :id, :affected_units_status, :authenticity, :barcode, :batch_number,
+                       :brand, :category, :country_of_origin, :created_at, :customs_code, :description,
+                       :has_markings, :markings, :name, :number_of_affected_units, :product_code,
+                       :subcategory, :updated_at, :webpage, :when_placed_on_market
 
   def supporting_information
     tests + corrective_actions + unexpected_events + risk_assessments

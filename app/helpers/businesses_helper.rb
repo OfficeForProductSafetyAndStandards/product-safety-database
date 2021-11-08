@@ -7,15 +7,15 @@ module BusinessesHelper
     business
   end
 
-  def search_for_businesses(page_size = Business.count)
-    Business.full_search(search_query)
+  def search_for_businesses(page_size = Business.count, user = current_user)
+    Business.full_search(search_query(user))
       .page(params[:page])
-      .per_page(page_size)
+      .per(page_size)
       .records
   end
 
   def business_export_params
-    params.permit(:sort, :q)
+    params.permit(:q)
   end
 
   def sorting_params
@@ -45,20 +45,6 @@ module BusinessesHelper
       locations_attributes: %i[id name address_line_1 address_line_2 phone_number city county country postal_code],
       contacts_attributes: %i[id name email phone_number job_title]
     )
-  end
-
-  def create_business
-    if params[:business]
-      @business = Business.new(business_params)
-      @business.locations.build unless @business.locations.any?
-      defaults_on_primary_location(@business)
-      @business.contacts.build unless @business.contacts.any?
-      @business.source = UserSource.new(user: current_user)
-    else
-      @business = Business.new
-      @business.locations.build
-      @business.contacts.build
-    end
   end
 
   def set_business
