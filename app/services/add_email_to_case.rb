@@ -38,7 +38,7 @@ private
   def create_audit_activity(correspondence, investigation)
     activity = AuditActivity::Correspondence::AddEmail.create!(
       metadata: audit_activity_metadata,
-      source: UserSource.new(user: User.current),
+      source: source,
       investigation: investigation,
       title: nil,
       correspondence: correspondence

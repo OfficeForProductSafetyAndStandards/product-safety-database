@@ -1,10 +1,9 @@
 # Dont inherit from authentication controller
 class SecondaryAuthenticationsController < ApplicationController
   skip_before_action :authenticate_user!
-  skip_before_action :set_current_user
+  skip_before_action :check_current_user_status
   skip_before_action :require_secondary_authentication
   skip_before_action :set_sentry_context
-  skip_before_action :authorize_user
   skip_before_action :has_accepted_declaration
   skip_before_action :has_viewed_introduction
   skip_before_action :set_cache_headers
