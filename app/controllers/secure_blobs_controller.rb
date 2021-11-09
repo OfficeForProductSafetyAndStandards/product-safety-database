@@ -1,4 +1,4 @@
-class SecureBlobsController < ActiveStorage::BaseController
+class SecureBlobsController < ApplicationController
   include ActiveStorage::SetBlob
 
   def show
