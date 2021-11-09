@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_29_085258) do
+ActiveRecord::Schema.define(version: 2021_11_05_102709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   # These are custom enum types that must be created before they can be used in the schema definition
+  create_enum "account_locked_reasons", ["failed_attempts", "inactivity"]
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
   create_enum "has_markings_values", ["markings_yes", "markings_no", "markings_unknown"]
@@ -403,9 +404,11 @@ ActiveRecord::Schema.define(version: 2021_10_29_085258) do
     t.text "invitation_token"
     t.datetime "invited_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "keycloak_created_at"
+    t.datetime "last_activity_at_approx"
     t.datetime "last_sign_in_at"
     t.inet "last_sign_in_ip"
     t.datetime "locked_at"
+    t.enum "locked_reason", as: "account_locked_reasons"
     t.text "mobile_number"
     t.boolean "mobile_number_verified", default: false, null: false
     t.string "name"
@@ -425,6 +428,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_085258) do
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["encrypted_otp_secret_key"], name: "index_users_on_encrypted_otp_secret_key", unique: true
+    t.index ["last_activity_at_approx"], name: "index_users_on_last_activity_at_approx"
     t.index ["name"], name: "index_users_on_name"
     t.index ["organisation_id"], name: "index_users_on_organisation_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

@@ -4,7 +4,7 @@ module Users
     skip_before_action :has_viewed_introduction
     # These methods trigger Warden authentication.
     # We don't want this to happen until we explicitly attempt to authenticate the user.
-    skip_before_action :set_current_user, :set_sentry_context, :authorize_user, only: :create
+    skip_before_action :check_current_user_status, :set_sentry_context, only: :create
     skip_before_action :require_secondary_authentication
 
     def new
@@ -40,15 +40,19 @@ module Users
     def handle_authentication_success
       return redirect_to missing_mobile_number_path unless resource.mobile_number?
 
-      set_current_user
+      check_current_user_status
       set_sentry_context
-      authorize_user
       sign_in(resource_name, resource)
       respond_with resource, location: after_sign_in_path_for(resource)
     end
 
     def handle_authentication_failure(user)
-      return render "account_locked" if user&.reload&.access_locked?
+      if user&.reload&.access_locked?
+        return render "account_locked" if user.locked_reason == User.locked_reasons[:failed_attempts]
+
+        user.send_unlock_instructions_after_inactivity
+        return render "account_locked_inactivity"
+      end
 
       set_resource_as_new_user_from_params
       add_wrong_credentials_errors(resource)

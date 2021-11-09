@@ -74,6 +74,25 @@ RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
     end
   end
 
+  describe "#account_locked_inactive" do
+    let(:user) { create(:user) }
+    let(:token) { "abc" }
+    let(:mail) { described_class.account_locked_inactive(user, token) }
+
+    it "sets the recipient of the email" do
+      expect(mail.to).to eq([user.email])
+    end
+
+    it "sets the template ID" do
+      expect(mail.govuk_notify_template).to eq(described_class::TEMPLATES[:account_locked_inactive])
+    end
+
+    it "sets the personalisation attributes" do
+      expect(mail.govuk_notify_personalisation)
+        .to eq(name: user.name, unlock_user_url_token: user_unlock_url(unlock_token: token))
+    end
+  end
+
   describe "#invitation_email" do
     context "when called with a user and an inviting user" do
       let(:user)  { create(:user, :invited) }
