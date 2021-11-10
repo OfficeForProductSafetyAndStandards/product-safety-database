@@ -31,7 +31,7 @@ private
   def create_audit_activity
     AuditActivity::Alert::Add.create!(
       metadata: audit_activity_metadata,
-      source: UserSource.new(user: User.current),
+      source: source,
       investigation: investigation
     )
   end

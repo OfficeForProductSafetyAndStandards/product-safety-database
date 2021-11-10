@@ -184,6 +184,7 @@ Devise.setup do |config|
   # :failed_attempts = Locks an account after a number of failed attempts to sign in.
   # :none            = No lock strategy. You should handle locking by yourself.
   # config.lock_strategy = :failed_attempts
+  config.lock_strategy = :failed_attempts
 
   # Defines which key will be used when locking and unlocking an account
   # config.unlock_keys = [:email]
@@ -194,10 +195,16 @@ Devise.setup do |config|
   # :both  = Enables both strategies
   # :none  = No unlock strategy. You should handle unlocking by yourself.
   # config.unlock_strategy = :both
+  config.unlock_strategy = :email
 
   # Number of authentication tries before locking an account if lock_strategy
   # is failed attempts.
   # config.maximum_attempts = 20
+  if Rails.env.test?
+    config.maximum_attempts = 2
+  else
+    config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
+  end
 
   # Time interval to unlock the account if :time is enabled as unlock_strategy.
   # config.unlock_in = 1.hour
@@ -242,6 +249,9 @@ Devise.setup do |config|
   # Set this configuration to false if you want /users/sign_out to sign out
   # only the current scope. By default, Devise signs out all scopes.
   # config.sign_out_all_scopes = true
+  # to prevent devise to destroying entire session object
+  # need to be false as secondary authentication relies on session
+  config.sign_out_all_scopes = false
 
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like
@@ -293,19 +303,6 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 
-
-  config.lock_strategy = :failed_attempts
-  config.unlock_strategy = :email
-  if Rails.env.test?
-    config.maximum_attempts = 2
-  else
-    config.maximum_attempts = ENV.fetch("LOCK_MAXIMUM_ATTEMPTS", 10).to_i
-  end
-
-
-  # to prevent devise to destroying entire session object
-  # need to be false as secondary authentication relies on session
-  config.sign_out_all_scopes = false
   # Devise secondary_authentication gem
   # config.max_login_attempts = 10  # Maximum second factor attempts count.
   # config.direct_otp_valid_for = 5.minutes  # Time before direct OTP becomes invalid

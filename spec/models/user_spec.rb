@@ -386,4 +386,187 @@ RSpec.describe User do
       end
     end
   end
+
+  describe ".inactive" do
+    subject(:users) { described_class.inactive }
+
+    let!(:user) { create(:user, trait, last_activity_at_approx: last_activity_at_approx) }
+    let(:trait) { :activated }
+
+    context "when last_activity_at_approx is nil" do
+      let(:last_activity_at_approx) { nil }
+
+      it "is not included in the results" do
+        expect(users).not_to include(user)
+      end
+    end
+
+    context "when last_activity_at_approx is within 3 months" do
+      let(:last_activity_at_approx) { 2.months.ago }
+
+      it "is not included in the results" do
+        expect(users).not_to include(user)
+      end
+    end
+
+    context "when last_activity_at_approx is more than 3 months ago" do
+      let(:last_activity_at_approx) { 4.months.ago }
+
+      context "when user is activated" do
+        it "is included in the results" do
+          expect(users).to include(user)
+        end
+      end
+
+      context "when user is deleted" do
+        let(:trait) { :deleted }
+
+        it "is not included in the results" do
+          expect(users).not_to include(user)
+        end
+      end
+
+      context "when user is not activated" do
+        let(:trait) { :inactive }
+
+        it "is not included in the results" do
+          expect(users).not_to include(user)
+        end
+      end
+    end
+  end
+
+  describe ".lock_inactive_users!", :with_stubbed_mailer do
+    let!(:inactive_user) { create(:user, :activated, last_activity_at_approx: 5.months.ago) }
+    let!(:active_user) { create(:user, :activated, last_activity_at_approx: 1.day.ago) }
+    let!(:invited_user) { create(:user, :invited) }
+
+    before { described_class.lock_inactive_users! }
+
+    it "locks inactive users" do
+      expect(inactive_user.reload).to be_access_locked
+    end
+
+    it "sets the locked reason" do
+      expect(inactive_user.reload.locked_reason).to eq(described_class.locked_reasons[:inactivity])
+    end
+
+    it "does not lock active users" do
+      expect(active_user.reload).not_to be_access_locked
+    end
+
+    it "does not lock invited users" do
+      expect(invited_user.reload).not_to be_access_locked
+    end
+
+    it "does not send emails with unlock instructions immediately" do
+      expect(delivered_emails).to be_empty
+    end
+  end
+
+  describe "#update_last_activity_time!" do
+    subject(:user) { create(:user, last_activity_at_approx: last_activity_at_approx) }
+
+    context "when last_activity_at_approx is nil" do
+      let(:last_activity_at_approx) { nil }
+
+      it "updates last_activity_at_approx" do
+        freeze_time do
+          expect { user.update_last_activity_time! }.to change(user, :last_activity_at_approx).from(nil).to(Time.zone.now)
+        end
+      end
+    end
+
+    context "when last_activity_at_approx is within 5 minutes" do
+      let(:last_activity_at_approx) { 3.minutes.ago }
+
+      it "does not update last_activity_at_approx" do
+        freeze_time do
+          expect { user.update_last_activity_time! }.not_to change(user, :last_activity_at_approx)
+        end
+      end
+    end
+
+    context "when last_activity_at_approx is more than 5 minutes ago" do
+      let(:last_activity_at_approx) { 10.minutes.ago }
+
+      it "updates last_activity_at_approx" do
+        freeze_time do
+          expect { user.update_last_activity_time! }.to change(user, :last_activity_at_approx).from(last_activity_at_approx).to(Time.zone.now)
+        end
+      end
+    end
+  end
+
+  describe "#send_unlock_instructions", :with_stubbed_mailer do
+    subject(:user) { create(:user, :activated, :locked) }
+
+    before { user.send_unlock_instructions }
+
+    it "populates the unlock token" do
+      expect(user.reload.unlock_token).not_to be_nil
+    end
+
+    it "populates the reset password token" do
+      expect(user.reload.reset_password_token).not_to be_nil
+    end
+
+    it "sends the email" do
+      expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked]
+    end
+  end
+
+  describe "#send_unlock_instructions_after_inactivity", :with_stubbed_mailer do
+    subject(:user) { create(:user, :activated) }
+
+    before { user.send_unlock_instructions_after_inactivity }
+
+    it "populates the unlock token" do
+      expect(user.reload.unlock_token).not_to be_nil
+    end
+
+    it "sends the email" do
+      expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked_inactive]
+    end
+  end
+
+  describe "#lock_access!", :with_stubbed_mailer do
+    subject(:user) { create(:user, :activated) }
+
+    context "with no reason supplied" do
+      before { user.lock_access! }
+
+      it "defaults to failed_attempts" do
+        expect(user.reload.locked_reason).to eq(described_class.locked_reasons[:failed_attempts])
+      end
+
+      it "sends the email" do
+        expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked]
+      end
+    end
+
+    context "with reason failed_attempts" do
+      before { user.lock_access!(reason: :failed_attempts) }
+
+      it "saves the reason" do
+        expect(user.reload.locked_reason).to eq(described_class.locked_reasons[:failed_attempts])
+      end
+
+      it "sends the email" do
+        expect(delivered_emails.last.template).to eq NotifyMailer::TEMPLATES[:account_locked]
+      end
+    end
+
+    context "with reason inactivity" do
+      before { user.lock_access!(reason: :inactivity) }
+
+      it "saves the reason" do
+        expect(user.reload.locked_reason).to eq(described_class.locked_reasons[:inactivity])
+      end
+
+      it "does not send the email" do
+        expect(delivered_emails).to be_empty
+      end
+    end
+  end
 end
