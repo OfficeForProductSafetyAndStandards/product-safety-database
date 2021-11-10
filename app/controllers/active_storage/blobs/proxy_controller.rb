@@ -5,11 +5,12 @@
 # factor of the signed blob and variation reference.
 # Only owners and search users have access to files.
 
-class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
+class ActiveStorage::Blobs::ProxyController < ApplicationController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
   include Pundit
 
+  skip_before_action :authenticate_user!
   before_action :authorize_blob
 
   def show
@@ -19,7 +20,13 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
     end
   end
 
+  private
+
+  def pundit_user
+    current_user
+  end
+
   def authorize_blob
-    raise Pundit::NotAuthorizedError unless user_signed_in?
+    redirect_to new_user_session_path unless user_signed_in?
   end
 end
