@@ -103,10 +103,10 @@ class SearchParams
 
   def sort_by_items
     [
-      { text: "", value: BLANK, unchecked_value: "unchecked" },
-      { text: "Recent updates", value: RECENT, unchecked_value: "unchecked" },
-      { text: "Oldest updates", value: OLDEST, unchecked_value: "unchecked" },
-      { text: "Newest cases", value: NEWEST, unchecked_value: "unchecked" }
+      ["", BLANK],
+      ["Recent updates", RECENT],
+      ["Oldest updates", OLDEST],
+      ["Newest cases", NEWEST]
     ]
   end
 end

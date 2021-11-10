@@ -11,7 +11,7 @@ import 'javascripts/cookie_banner'
 import 'javascripts/_menu'
 
 import 'javascripts/investigations/attachment_description'
-import 'javascripts/investigations/search_sort'
+import 'javascripts/investigations/sort_dropdown'
 import 'javascripts/investigations/ts_investigations/which_businesses'
 import 'javascripts/mutually_exclusive'
 import 'javascripts/close_page_button'
