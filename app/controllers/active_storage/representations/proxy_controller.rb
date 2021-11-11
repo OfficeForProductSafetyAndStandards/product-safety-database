@@ -6,6 +6,9 @@
 class ActiveStorage::Representations::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
+  include Pundit
+
+  before_action :authorize_blob
 
   def show
     http_cache_forever public: true do

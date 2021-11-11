@@ -5,12 +5,11 @@
 # factor of the signed blob and variation reference.
 # Only owners and search users have access to files.
 
-class ActiveStorage::Blobs::ProxyController < ApplicationController
+class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
   include Pundit
 
-  skip_before_action :authenticate_user!
   before_action :authorize_blob
 
   def show
