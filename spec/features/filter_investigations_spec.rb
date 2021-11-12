@@ -332,6 +332,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     def select_sorting_option(option)
       within "#sort-by-fieldset" do
         select option
+        click_on "Sort"
       end
     end
 
