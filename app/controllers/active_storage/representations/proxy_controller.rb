@@ -13,10 +13,8 @@ class ActiveStorage::Representations::ProxyController < ActiveStorage::BaseContr
   before_action :authorize_blob
 
   def show
-    http_cache_forever public: true do
-      set_content_headers_from representation.image
-      stream representation
-    end
+    set_content_headers_from representation.image
+    stream representation
   end
 
 private
