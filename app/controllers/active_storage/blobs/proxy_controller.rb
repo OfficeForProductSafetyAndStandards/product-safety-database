@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+#
 # Proxy files through application. This avoids having a redirect and makes files easier to cache.
 # Overrides Rails Controller to enforce access protection beyond the security-through-obscurity
 # factor of the signed blob and variation reference.
@@ -19,7 +20,7 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
     end
   end
 
-  private
+private
 
   def pundit_user
     current_user
