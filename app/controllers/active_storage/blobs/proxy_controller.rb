@@ -9,7 +9,6 @@
 class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
-  include Pundit
 
   before_action :authorize_blob
 
@@ -19,10 +18,6 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   end
 
 private
-
-  def pundit_user
-    current_user
-  end
 
   def authorize_blob
     redirect_to "/sign-in" unless user_signed_in?

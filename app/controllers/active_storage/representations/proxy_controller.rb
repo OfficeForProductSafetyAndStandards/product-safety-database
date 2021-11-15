@@ -8,7 +8,6 @@
 class ActiveStorage::Representations::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
-  include Pundit
 
   before_action :authorize_blob
 
@@ -19,15 +18,11 @@ class ActiveStorage::Representations::ProxyController < ActiveStorage::BaseContr
 
 private
 
-  def pundit_user
-    current_user
-  end
-
   def authorize_blob
     redirect_to "/sign-in" unless user_signed_in?
   end
 
   def representation
-    @representation ||= @blob.representation(params[:variation_key]).processed
+    @blob.representation(params[:variation_key]).processed
   end
 end
