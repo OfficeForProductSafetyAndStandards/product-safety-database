@@ -9,5 +9,6 @@ Rails.application.configure do
     config.send_default_pii = false
     config.breadcrumbs_logger << :sentry_logger
     config.excluded_exceptions += ["Pundit::NotAuthorizedError"]
+    config.capture_exception_frame_locals = true
   end
 end

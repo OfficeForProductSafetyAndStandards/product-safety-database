@@ -7,11 +7,11 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   before_action :authenticate_user!
-  before_action :set_current_user
+  before_action :check_current_user_status
+  before_action :set_user_last_activity_time
   before_action :ensure_secondary_authentication
   before_action :require_secondary_authentication
   before_action :set_sentry_context
-  before_action :authorize_user
   before_action :has_accepted_declaration
   before_action :has_viewed_introduction
   before_action :set_cache_headers
@@ -20,19 +20,19 @@ class ApplicationController < ActionController::Base
 
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
 
-  def set_current_user
+  def check_current_user_status
     return unless user_signed_in?
 
-    if current_user.deleted?
+    if current_user.access_locked? || current_user.deleted?
       sign_out current_user
       redirect_to "/"
     end
-
-    User.current = current_user
   end
 
-  def authorize_user
+  def set_user_last_activity_time
     return unless user_signed_in?
+
+    current_user.update_last_activity_time!
   end
 
   def has_accepted_declaration

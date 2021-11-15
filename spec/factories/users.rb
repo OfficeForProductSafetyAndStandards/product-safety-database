@@ -39,6 +39,11 @@ FactoryBot.define do
       deleted_at { Time.zone.now }
     end
 
+    trait :locked do
+      locked_at { Time.zone.now }
+      locked_reason { User.locked_reasons.keys.sample }
+    end
+
     trait :inactive do
       account_activated { false }
     end
@@ -50,6 +55,7 @@ FactoryBot.define do
       password_confirmation { nil }
       mobile_number { nil }
       mobile_number_verified { false }
+      last_activity_at_approx { nil }
       name { nil }
     end
 
