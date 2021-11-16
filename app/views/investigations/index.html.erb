@@ -2,6 +2,21 @@
 
 <%= render 'investigations/heading', answer: @answer %>
 
+<% html = capture do %>
+  <p class="govuk-body-s">
+    Cases are used to record findings of investigations and to notify the <abbr title="Office for Product Safety and Standards">OPSS</abbr> about unsafe and non-compliant products.
+  </p>
+  <p class="govuk-body-s govuk-!-margin-bottom-1">
+    <span id="search-hint">You can search for a case using the keywords that describe it and by filtering the results.</span> You can also filter all case records without a keyword search.
+  </p>
+  <p class="govuk-body-s govuk-visually-hidden">
+    Search results appear within the following <code>form</code> and within the <code>role = region</code>.
+  </p>
+<% end %>
+
+<%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm", html: html) do %>
+<% end %>
+
 <div class="govuk-grid-row">
   <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true }) do |form| %>
     <%= render 'investigations/filters', search: @search, form: form %>
