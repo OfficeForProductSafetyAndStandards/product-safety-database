@@ -6,10 +6,9 @@
   </div>
 
   <div class="govuk-grid-column-one-third" style="text-align:right">
-    <%= link_to "Open a new case",
+    <%= link_to "Create a case",
       current_user.is_opss? ? new_investigation_path : new_ts_investigation_path,
-      class: "govuk-button govuk-!-margin-bottom-3",
-      role: "button"
+      class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-align-right opss-text-underline-offset"
     %>
   </div>
 </div>
