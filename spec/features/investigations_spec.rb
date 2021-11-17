@@ -50,15 +50,14 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     expect(page)
       .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
-    expect(page.find("select[name='sort_by'] option[value='#{SearchParams::BLANK}']")).to be_selected
+    expect(page.find("select[name='sort_by'] option[value='#{SearchParams::RELEVANT}']")).to be_selected
 
     expect(page).to have_current_path(investigations_search_path, ignore_query: true)
 
     fill_in "Keywords", with: ""
     click_on "Apply filters"
 
-    # Expect blank sort selection to be maintained
-    expect(page.find("select[name='sort_by'] option[value='#{SearchParams::BLANK}']")).to be_selected
+    expect(page).not_to have_css("select[name='sort_by'] option[value='#{SearchParams::RELEVANT}']")
 
     # Expect investigations to be back in reverse chronological order again
     expect(page)
