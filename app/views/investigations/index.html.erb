@@ -19,14 +19,19 @@
 
 <div class="govuk-grid-row">
   <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true }) do |form| %>
-    <div class="search-box">
-      <%= render "form_components/govuk_input",
-        key: :q,
-        form: form,
-        label: { text: "Keywords", classes: "govuk-label--s" }
-      %>
-      <%= form.submit "Search", name: nil, class: "search-box--submit" %>
+    <div class="govuk-form-group govuk-!-padding-top-4 govuk-!-padding-bottom-7">
+      <label class="govuk-label" for=q">
+          Keywords search
+      </label>
+
+      <div class="govuk-input__wrapper opss-search__wrapper">
+          <input class="govuk-input govuk-!-width-one-half" type="text" id="q" name="q" spellcheck="false" aria-describedby="search-hint">
+          <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
+              <span class="govuk-visually-hidden">Search</span>
+          </button>
+      </div>
     </div>
+
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters">
       <div class="govuk-grid-row">
