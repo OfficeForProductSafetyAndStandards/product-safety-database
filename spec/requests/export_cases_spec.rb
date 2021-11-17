@@ -54,8 +54,7 @@ RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_n
     context "when downloading the export file" do
       let(:exported_data) do
         perform_enqueued_jobs
-        get rails_blob_path(CaseExport.last.export_file)
-        follow_redirect!
+        get rails_storage_proxy_path(CaseExport.last.export_file)
 
         Tempfile.create("export_cases_spec", Rails.root.join("tmp"), encoding: "ascii-8bit") do |file|
           file.write response.body
