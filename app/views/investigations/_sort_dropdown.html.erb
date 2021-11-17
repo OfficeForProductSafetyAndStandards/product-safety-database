@@ -2,7 +2,10 @@
   <div class="govuk-form-group opss-text-align-right">
     <fieldset id="sort-by-fieldset" class="opss-border-none govuk-!-padding-0">
       <%= form.label :sort_by, class: "govuk-label govuk-body-s" %>
-      <%= form.select :sort_by, search.sort_by_items, {}, { class: "govuk-select govuk-!-margin-bottom-1" } %>
+      <%= form.select :sort_by, search.sort_by_items(with_relevant_option: with_relevant_option), {}, { class: "govuk-select govuk-!-margin-bottom-1" } %>
+      <% if local_assigns[:change_sort_by_on_submit_to].present? %>
+        <%= form.hidden_field :override_sort_by, value: change_sort_by_on_submit_to %>
+      <% end %>
       <button class="govuk-button opss-js-enabled-hidden" data-module="govuk-button">
         Sort
       </button>

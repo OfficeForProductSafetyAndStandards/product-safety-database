@@ -399,7 +399,7 @@ module InvestigationsHelper
 
   def form_serialisation_option
     options = { include: %i[teams_with_access created_by] }
-    options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT || params[:sort_by] == SearchParams::BLANK
+    options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
 
     options
   end

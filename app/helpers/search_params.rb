@@ -6,7 +6,6 @@ class SearchParams
   include ActiveModel::Serialization
 
   SORT_BY_OPTIONS = [
-    BLANK    = "blank",
     NEWEST   = "newest",
     OLDEST   = "oldest",
     RECENT   = "recent",
@@ -26,6 +25,7 @@ class SearchParams
   attribute :created_by_someone_else, :boolean
   alias_method :created_by_someone_else?, :created_by_someone_else
   attribute :created_by_someone_else_ids, default: []
+  attribute :override_sort_by
   attribute :direction
   attribute :enquiry
   attribute :project
@@ -38,7 +38,7 @@ class SearchParams
   alias_method :coronavirus_related_only?, :coronavirus_related_only
   attribute :serious_and_high_risk_level_only, :boolean
   alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
-  attribute :sort_by, default: BLANK
+  attribute :sort_by, default: RECENT
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
@@ -79,17 +79,8 @@ class SearchParams
     !status_open?
   end
 
-  def sort_by_option
-    if sort_by == BLANK || sort_by.blank?
-      return RELEVANT if q.present?
-
-      return RECENT
-    end
-    sort_by
-  end
-
   def sorting_params
-    case sort_by_option
+    case sort_by
     when NEWEST
       { created_at: "desc" }
     when OLDEST
@@ -101,12 +92,13 @@ class SearchParams
     end
   end
 
-  def sort_by_items
-    [
-      ["", BLANK],
+  def sort_by_items(with_relevant_option: false)
+    items = [
       ["Recent updates", RECENT],
       ["Oldest updates", OLDEST],
       ["Newest cases", NEWEST]
     ]
+    items.unshift(["Relevance", RELEVANT]) if with_relevant_option
+    items
   end
 end
