@@ -122,7 +122,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     end
 
     within "#sort-by-fieldset" do
-      expect(page).to have_select("Sort by", selected: "")
+      expect(page).to have_select("Sort by", selected: "Recent updates")
     end
   end
 
