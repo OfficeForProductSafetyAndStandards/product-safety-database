@@ -9,8 +9,12 @@
 class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
+  include ActiveStorage::SetCurrent
   include HttpAuthConcern
   include SentryConfigurationConcern
+  include Pundit
+
+  self.etag_with_template_digest = false
 
   before_action :authorize_blob
 
@@ -22,6 +26,7 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
 private
 
   def authorize_blob
-    redirect_to "/sign-in" unless user_signed_in?
+    investigation = Investigation::Enquiry.find(319)
+    redirect_to "/sign-in" unless user_signed_in? && InvestigationPolicy.new(current_user, investigation).view_protected_details?
   end
 end
