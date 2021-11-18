@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: true do
   let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
+  let!(:other_team) { create(:team) }
   let(:investigation) { create(:allegation, :with_document, creator: user) }
   let!(:document) { investigation.documents.first }
 
@@ -72,14 +73,60 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
     end
 
     context "when user is logged in" do
-      before do
-        sign_in(user)
+      context "when the attachment is an investigation" do
+        context "when the user has access to the investigation" do
+          before do
+            sign_in(user)
+          end
+
+          it "returns file" do
+            get asset_url
+            expect(response.content_type).to eq(document.blob.content_type)
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user does not have access to the investigation" do
+          let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
+
+          before do
+            sign_in(other_user)
+          end
+
+          it "returns file" do
+            get asset_url
+            expect(response).to redirect_to("/")
+            expect(response.status).to eq(302)
+          end
+        end
       end
 
-      it "returns file" do
-        get asset_url
-        expect(response.content_type).to eq(document.blob.content_type)
-        expect(response.status).to eq(200)
+      context "when the attachment is an product" do
+        let(:asset_url) { rails_storage_proxy_path(document) }
+        let(:product) { create(:product, investigations: [investigation])}
+
+        before do
+          document.update!(record_type: "Product", record_id: product.id)
+        end
+        context "when the user has access to the product" do
+          it "returns file" do
+            sign_in(user)
+            get asset_url
+            expect(response.content_type).to eq(document.blob.content_type)
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user does not have access to the product" do
+          let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
+
+          it "returns file" do
+            sign_in(other_user)
+            get asset_url
+            expect(response).to redirect_to("/")
+            expect(response.status).to eq(302)
+          end
+        end
       end
     end
   end
