@@ -26,7 +26,11 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
 private
 
   def authorize_blob
-    investigation = Investigation::Enquiry.find(319)
-    redirect_to "/sign-in" unless user_signed_in? && InvestigationPolicy.new(current_user, investigation).view_protected_details?
+    return redirect_to "/sign-in" unless user_signed_in?
+
+    investigation_id = @blob.attachments.find_by(record_type: "Investigation").record_id
+    investigation = Investigation.find(investigation_id)
+
+    return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } if investigation && !InvestigationPolicy.new(current_user, investigation).view_protected_details?
   end
 end
