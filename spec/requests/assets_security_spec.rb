@@ -128,6 +128,35 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           end
         end
       end
+
+      context "when the attachment is an correspondence" do
+        let(:asset_url) { rails_storage_proxy_path(document) }
+        let(:correspondence) { create(:correspondence, investigation_id: investigation.id) }
+
+        before do
+          document.update!(record_type: "Correspondence", record_id: correspondence.id)
+        end
+
+        context "when the user has access to the product" do
+          it "returns file" do
+            sign_in(user)
+            get asset_url
+            expect(response.content_type).to eq(document.blob.content_type)
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user does not have access to the product" do
+          let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
+
+          it "returns file" do
+            sign_in(other_user)
+            get asset_url
+            expect(response).to redirect_to("/")
+            expect(response.status).to eq(302)
+          end
+        end
+      end
     end
   end
   # rubocop:enable RSpec/MultipleExpectations

@@ -41,11 +41,18 @@ private
     Product.find(product_id) if product_id
   end
 
+  def related_correspondence
+    correspondence_id = @blob.attachments.find_by(record_type: "Correspondence").try(:record_id)
+    Correspondence.find(correspondence_id) if correspondence_id
+  end
+
   def investigation
     if related_investigation
       related_investigation
     elsif related_product
       related_product.investigations.first
+    elsif related_correspondence
+      related_correspondence.investigation
     end
   end
 end
