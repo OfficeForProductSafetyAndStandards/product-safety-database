@@ -37,11 +37,11 @@ private
 
   def investigation
     investigation_id = @blob.attachments.find_by(record_type: "Investigation").try(:record_id)
-    investigation = Investigation.find(investigation_id) if investigation_id
+    Investigation.find(investigation_id) if investigation_id
   end
 
   def product
     product_id = @blob.attachments.find_by(record_type: "Product").try(:record_id)
-    product = Product.find(product_id) if product_id
+    Product.find(product_id) if product_id
   end
 end

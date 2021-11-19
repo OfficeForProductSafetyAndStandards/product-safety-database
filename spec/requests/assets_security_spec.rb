@@ -33,7 +33,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
   end
 
   # rubocop:disable RSpec/MultipleExpectations
-  # rubocop:disable RSpec/RepeatedExampleGroupBody
   context "when using representations proxy controller" do
     # /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)      active_storage/representations/proxy#show
     let(:asset_url) { rails_storage_proxy_path(document) }
@@ -103,11 +102,12 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
       context "when the attachment is an product" do
         let(:asset_url) { rails_storage_proxy_path(document) }
-        let(:product) { create(:product, investigations: [investigation])}
+        let(:product) { create(:product, investigations: [investigation]) }
 
         before do
           document.update!(record_type: "Product", record_id: product.id)
         end
+
         context "when the user has access to the product" do
           it "returns file" do
             sign_in(user)
@@ -131,5 +131,4 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
     end
   end
   # rubocop:enable RSpec/MultipleExpectations
-  # rubocop:enable RSpec/RepeatedExampleGroupBody
 end
