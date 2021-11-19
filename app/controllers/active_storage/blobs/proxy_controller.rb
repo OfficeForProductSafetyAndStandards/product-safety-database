@@ -28,19 +28,17 @@ private
   def authorize_blob
     return redirect_to "/sign-in" unless user_signed_in?
 
-    return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } if investigation && !InvestigationPolicy.new(current_user, investigation).view_protected_details?
-
-    investigation = product.investigations.first if product
+    investigation = related_investigation ? related_investigation : related_product.investigations.first
 
     return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } if investigation && !InvestigationPolicy.new(current_user, investigation).view_protected_details?
   end
 
-  def investigation
+  def related_investigation
     investigation_id = @blob.attachments.find_by(record_type: "Investigation").try(:record_id)
     Investigation.find(investigation_id) if investigation_id
   end
 
-  def product
+  def related_product
     product_id = @blob.attachments.find_by(record_type: "Product").try(:record_id)
     Product.find(product_id) if product_id
   end
