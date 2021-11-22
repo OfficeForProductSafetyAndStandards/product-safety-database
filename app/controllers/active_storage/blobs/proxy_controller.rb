@@ -29,8 +29,8 @@ private
     return redirect_to "/sign-in" unless user_signed_in?
 
     if investigation
-      if attachment_is_correspondence_or_generic_investigation_attachment?
-        return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } unless InvestigationPolicy.new(current_user, investigation).view_protected_details?
+      if attachment_is_correspondence_or_non_image_investigation_attachment? && !InvestigationPolicy.new(current_user, investigation).view_protected_details?
+        return redirect_to "/", flash: { warning: "Not authorized to view this attachment" }
       end
 
       return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } unless InvestigationPolicy.new(current_user, investigation).view_non_protected_details?
@@ -75,7 +75,7 @@ private
     end
   end
 
-  def attachment_is_correspondence_or_generic_investigation_attachment?
+  def attachment_is_correspondence_or_non_image_investigation_attachment?
     related_correspondence || investigation && !is_an_investigation_image?
   end
 end
