@@ -31,28 +31,25 @@ private
     return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } if investigation && !InvestigationPolicy.new(current_user, investigation).view_protected_details?
   end
 
-  def related_investigation
-    investigation_id = @blob.attachments.find_by(record_type: "Investigation").try(:record_id)
-    Investigation.find(investigation_id) if investigation_id
-  end
-
-  def related_product
-    product_id = @blob.attachments.find_by(record_type: "Product").try(:record_id)
-    Product.find(product_id) if product_id
-  end
-
   def related_correspondence
     correspondence_id = @blob.attachments.find_by(record_type: "Correspondence").try(:record_id)
     Correspondence.find(correspondence_id) if correspondence_id
   end
 
+  def related_investigation
+    investigation_id = @blob.attachments.find_by(record_type: "Investigation").try(:record_id)
+    Investigation.find(investigation_id) if investigation_id
+  end
+
+  def is_an_investigation_image?
+    @blob.attachments.find_by(record_type: "Investigation").content_type.include?("image")
+  end
+
   def investigation
-    if related_investigation
-      related_investigation
-    elsif related_product
-      related_product.investigations.first
-    elsif related_correspondence
+    if related_correspondence
       related_correspondence.investigation
+    elsif related_investigation && !is_an_investigation_image?
+      related_investigation
     end
   end
 end

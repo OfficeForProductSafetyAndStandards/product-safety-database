@@ -5,6 +5,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
   let!(:other_team) { create(:team) }
   let(:investigation) { create(:allegation, :with_document, creator: user) }
   let!(:document) { investigation.documents.first }
+  let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
 
   context "when using generic active storage urls" do
     context "when using blobs redirect controller" do
@@ -72,30 +73,73 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
     end
 
     context "when user is logged in" do
-      context "when the attachment is an investigation" do
-        context "when the user has access to the investigation" do
-          before do
-            sign_in(user)
+      context "when the attachment is generic on an investigation" do
+        context "when attachment is not an image" do
+          context "when the user's team has access to the investigation" do
+            before do
+              sign_in(user)
+            end
+
+            it "returns file" do
+              get asset_url
+              expect(response.status).to eq(200)
+            end
           end
 
-          it "returns file" do
-            get asset_url
-            expect(response.content_type).to eq(document.blob.content_type)
-            expect(response.status).to eq(200)
+          context "when user's team does not have access to the investigation" do
+            before do
+              sign_in(other_user)
+            end
+
+            context "when the user does not have the can_view_restricted_cases role" do
+
+              it "does not return the file" do
+                get asset_url
+                expect(response).to redirect_to("/")
+                expect(response.status).to eq(302)
+              end
+            end
+
+            context "when user does have the can_view_restricted_cases role" do
+              before do
+                other_user.roles.create!(name: "restricted_case_viewer")
+              end
+
+              it "returns file" do
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
           end
         end
 
-        context "when user does not have access to the investigation" do
-          let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
-
+        context "when attachment is an image" do
           before do
-            sign_in(other_user)
+            document.update!(content_type: "image/png")
           end
 
-          it "returns file" do
-            get asset_url
-            expect(response).to redirect_to("/")
-            expect(response.status).to eq(302)
+          context "when the user's team has access to the investigation" do
+            before do
+              sign_in(user)
+            end
+
+            it "returns file" do
+              get asset_url
+              expect(response.content_type).to eq(document.blob.content_type)
+              expect(response.status).to eq(200)
+            end
+          end
+
+          context "when user's team does not have access to the investigation" do
+            before do
+              sign_in(other_user)
+            end
+
+            it "returns file" do
+              get asset_url
+              expect(response.content_type).to eq(document.blob.content_type)
+              expect(response.status).to eq(200)
+            end
           end
         end
       end
@@ -108,7 +152,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           document.update!(record_type: "Product", record_id: product.id)
         end
 
-        context "when the user has access to the product" do
+        context "when the user's team has access to the product investigation" do
           it "returns file" do
             sign_in(user)
             get asset_url
@@ -117,14 +161,12 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           end
         end
 
-        context "when user does not have access to the product" do
-          let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
-
+        context "when user does not have access to the product investigation" do
           it "returns file" do
-            sign_in(other_user)
+            sign_in(user)
             get asset_url
-            expect(response).to redirect_to("/")
-            expect(response.status).to eq(302)
+            expect(response.content_type).to eq(document.blob.content_type)
+            expect(response.status).to eq(200)
           end
         end
       end
@@ -137,7 +179,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           document.update!(record_type: "Correspondence", record_id: correspondence.id)
         end
 
-        context "when the user has access to the product" do
+        context "when the user's team has access to the correspondence investigation" do
           it "returns file" do
             sign_in(user)
             get asset_url
@@ -146,14 +188,29 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           end
         end
 
-        context "when user does not have access to the product" do
-          let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
-
-          it "returns file" do
+        context "when user's team does not have access to the product" do
+          before do
             sign_in(other_user)
-            get asset_url
-            expect(response).to redirect_to("/")
-            expect(response.status).to eq(302)
+          end
+
+          context "when the user does not have the can_view_restricted_cases role" do
+
+            it "does not return the file" do
+              get asset_url
+              expect(response).to redirect_to("/")
+              expect(response.status).to eq(302)
+            end
+          end
+
+          context "when user does have the can_view_restricted_cases role" do
+            before do
+              other_user.roles.create!(name: "restricted_case_viewer")
+            end
+
+            it "returns file" do
+              get asset_url
+              expect(response.status).to eq(200)
+            end
           end
         end
       end
