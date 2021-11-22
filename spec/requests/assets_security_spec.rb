@@ -4,7 +4,10 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
   let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let!(:other_team) { create(:team) }
   let(:investigation) { create(:allegation, :with_document, creator: user) }
-  let!(:document) { investigation.documents.first }
+  let!(:document) do
+    investigation.documents.first.update(content_type: "image/png")
+    investigation.documents.first
+  end
   let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
 
   context "when using generic active storage urls" do
@@ -54,7 +57,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
       it "returns file" do
         get asset_url
-        expect(response.content_type).to eq(document.blob.content_type)
         expect(response.status).to eq(200)
       end
     end
@@ -73,12 +75,14 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
     end
 
     context "when user is logged in" do
-      context "when the attachment is generic on an investigation" do
+      context "when the attachment is directly on an investigation" do
         context "when attachment is not an image" do
+          before do
+            sign_in(user)
+            document.blob.update(content_type: "pdf")
+          end
+
           context "when the user's team has access to the investigation" do
-            before do
-              sign_in(user)
-            end
 
             it "returns file" do
               get asset_url
@@ -92,7 +96,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             end
 
             context "when the user does not have the can_view_restricted_cases role" do
-
               it "does not return the file" do
                 get asset_url
                 expect(response).to redirect_to("/")
@@ -114,10 +117,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         end
 
         context "when attachment is an image" do
-          before do
-            document.update!(content_type: "image/png")
-          end
-
           context "when the user's team has access to the investigation" do
             before do
               sign_in(user)
@@ -125,7 +124,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
             it "returns file" do
               get asset_url
-              expect(response.content_type).to eq(document.blob.content_type)
+
               expect(response.status).to eq(200)
             end
           end
@@ -137,7 +136,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
             it "returns file" do
               get asset_url
-              expect(response.content_type).to eq(document.blob.content_type)
+
               expect(response.status).to eq(200)
             end
           end
@@ -156,7 +155,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           it "returns file" do
             sign_in(user)
             get asset_url
-            expect(response.content_type).to eq(document.blob.content_type)
             expect(response.status).to eq(200)
           end
         end
@@ -165,7 +163,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           it "returns file" do
             sign_in(user)
             get asset_url
-            expect(response.content_type).to eq(document.blob.content_type)
             expect(response.status).to eq(200)
           end
         end
@@ -183,12 +180,97 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           it "returns file" do
             sign_in(user)
             get asset_url
-            expect(response.content_type).to eq(document.blob.content_type)
             expect(response.status).to eq(200)
           end
         end
 
-        context "when user's team does not have access to the product" do
+        context "when user's team does not have access to the correspondence investigation" do
+          before do
+            sign_in(other_user)
+          end
+
+          context "when the user does not have the can_view_restricted_cases role" do
+
+            it "does not return the file" do
+              get asset_url
+              expect(response).to redirect_to("/")
+              expect(response.status).to eq(302)
+            end
+          end
+
+          context "when user does have the can_view_restricted_cases role" do
+            before do
+              other_user.roles.create!(name: "restricted_case_viewer")
+            end
+
+            it "returns file" do
+              get asset_url
+              expect(response.status).to eq(200)
+            end
+          end
+        end
+      end
+
+      context "when the attachment is an test" do
+        let(:asset_url) { rails_storage_proxy_path(document) }
+        let(:test) { create(:test_result, investigation_id: investigation.id) }
+
+        before do
+          document.update!(record_type: "Test", record_id: test.id)
+        end
+
+        context "when the user's team has access to the correspondence investigation" do
+          it "returns file" do
+            sign_in(user)
+            get asset_url
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user's team does not have access to the correspondence investigation" do
+          before do
+            sign_in(other_user)
+          end
+
+          context "when the user does not have the can_view_restricted_cases role" do
+
+            it "does not return the file" do
+              get asset_url
+              expect(response).to redirect_to("/")
+              expect(response.status).to eq(302)
+            end
+          end
+
+          context "when user does have the can_view_restricted_cases role" do
+            before do
+              other_user.roles.create!(name: "restricted_case_viewer")
+            end
+
+            it "returns file" do
+              get asset_url
+              expect(response.status).to eq(200)
+            end
+          end
+        end
+      end
+
+      context "when the attachment is an test" do
+        let(:asset_url) { rails_storage_proxy_path(document) }
+        let(:corrective_action) { create(:corrective_action, investigation_id: investigation.id) }
+
+        before do
+          document.update!(record_type: "CorrectiveAction", record_id: corrective_action.id)
+        end
+
+        context "when the user's team has access to the correspondence investigation" do
+          it "returns file" do
+            sign_in(user)
+            get asset_url
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user's team does not have access to the correspondence investigation" do
           before do
             sign_in(other_user)
           end
