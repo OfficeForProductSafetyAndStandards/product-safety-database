@@ -2,7 +2,8 @@ class SearchesController < ApplicationController
   include InvestigationsHelper
 
   def show
-    @search = SearchParams.new(search_params)
+    @search = SearchParams.new(query_params)
+    @search.sort_by = SearchParams::RELEVANT if @search.q.present? && @search.sort_by.blank?
 
     store_previous_search_params
 
@@ -11,14 +12,6 @@ class SearchesController < ApplicationController
     else
       @answer = search_for_investigations(20)
       @investigations = @answer.records(includes: [{ owner_team: :organisation, owner_user: :organisation }, :products])
-    end
-  end
-
-private
-
-  def search_params
-    query_params.tap do |p|
-      p[:sort_by] = SearchParams::RELEVANT if p[:q].present?
     end
   end
 end

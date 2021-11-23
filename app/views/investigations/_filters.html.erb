@@ -55,6 +55,8 @@
              { key: "status_closed", value: true, unchecked_value: "off", text: "Closed" }]
     %>
 
+    <%= form.hidden_field :sort_by %>
+
     <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
   </div>
 </div>

@@ -413,6 +413,26 @@ module InvestigationsHelper
     end
   end
 
+  def case_sort_by_url(sort_by_value)
+    url_for(request.params.merge(sort_by: sort_by_value))
+  end
+
+  def case_sort_by_options(sort_by_items, selected_value)
+    safe_join(sort_by_items.map do |(text, value)|
+      tag.option(text, value: value, selected: value == selected_value, data: { url: case_sort_by_url(value) })
+    end)
+  end
+
+  def case_sort_by_definition_list_items(sort_by_items, selected_value)
+    safe_join(sort_by_items.map do |(text, value)|
+      active = value == selected_value
+      tag.dd(link_to(safe_join([
+        active.presence && tag.span("Active: ", class: "govuk-visually-hidden"),
+        text
+      ]), case_sort_by_url(value)), class: active.presence && "opss-dl-select__active")
+    end)
+  end
+
 private
 
   def search_result_values(_search_terms, number_of_results)

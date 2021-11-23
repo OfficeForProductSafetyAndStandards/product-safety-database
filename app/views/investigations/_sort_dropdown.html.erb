@@ -1,14 +1,16 @@
 <div class="govuk-grid-column-one-third">
   <div class="govuk-form-group opss-text-align-right">
-    <fieldset id="sort-by-fieldset" class="opss-border-none govuk-!-padding-0">
-      <%= form.label :sort_by, class: "govuk-label govuk-body-s" %>
-      <%= form.select :sort_by, search.sort_by_items(with_relevant_option: with_relevant_option), {}, { class: "govuk-select govuk-!-margin-bottom-1" } %>
-      <% if local_assigns[:change_sort_by_on_submit_to].present? %>
-        <%= form.hidden_field :override_sort_by, value: change_sort_by_on_submit_to %>
-      <% end %>
-      <button class="govuk-button opss-js-enabled-hidden" data-module="govuk-button">
-        Sort
-      </button>
+    <fieldset id="sort-by-fieldset" class="opss-border-none govuk-!-padding-0 opss-nojs-hide">
+      <label class="govuk-label govuk-body-s" for="sort_by">
+          Sort <span class="govuk-visually-hidden">the results</span> by
+      </label>
+      <select class="govuk-select govuk-!-margin-bottom-1" id="sort_by">
+        <%= case_sort_by_options(search.sort_by_items(with_relevant_option: with_relevant_option), search.sort_by) %>
+      </select>
     </fieldset>
+    <dl class="govuk-list opss-float-right opss-dl-select opss-js-enabled-hidden">
+      <dt>Sort <span class="govuk-visually-hidden">the results</span> by</dt>
+      <%= case_sort_by_definition_list_items(search.sort_by_items(with_relevant_option: with_relevant_option), search.sort_by) %>
+    </dl>
   </div>
 </div>

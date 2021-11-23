@@ -56,8 +56,14 @@ h1.govuk-fieldset__heading,
 h1.govuk-label-wrapper label.govuk-label--l {
     overflow-wrap: normal; word-wrap: normal; word-break: normal; hyphens: unset;
 }
+
 .opss-no-wrap {
   white-space: nowrap;
+}
+@include govuk-media-query($from: desktop) {
+    .opss-no-wrap-desktop {
+        white-space: nowrap;
+    }
 }
 .opss-nojs-hide {
     display: none;
@@ -77,6 +83,13 @@ body.js-enabled .opss-nojs-hide {
         display: block;
     }
 }
+.opss-float-left {
+    float: left;
+}
+.opss-float-right {
+    float: right;
+}
+
 .opss-skip-link:focus {
     &.opss-skip-link--mb {
         margin-bottom: govuk-spacing(4) !important;
@@ -454,6 +467,7 @@ dl.opss-summary-list-aside {
             color: $govuk-text-colour;
         }
     }
+
     tbody tr:nth-child(2) th, tbody tr:nth-child(2) td {
         padding-top: govuk-spacing(0);
         padding-bottom: govuk-spacing(2);
@@ -521,15 +535,19 @@ dl.opss-summary-list-aside {
     }
 }
 
+@media only screen and (min-width:641px) and (max-width: 961px) {/* jump to mobile sizing at tablet size for tight cols */
+    .govuk-grid-column-three-quarters .govuk-grid-column-one-third .opss-text-align-right select {
+        @include govuk-font($size: 16);
+    }
+}
+
 .opss-icon--tick {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABQUlEQVQ4jZXSMWhTURTG8V/SYkrpEwkiHZyapU4dOwkd8hydrLNL1xZ08EIo4iC8FkRwsODoLILzDbh0a8dCFaFooZuIcKGVIKVDEgivT5Kc7X7nfv/zcTgzpqisyJcb7dZeo9362euenEFtCjN8wRou8QHP61MEeDwwQx1PcDBRgqzI5/ENd0ut95Mm6FSY/6AzFpAV+RKeVrRepBB/TZLgDeZK2hHe0V/GcFKzYvoDPKyAbqUQ/8HM4OMj7DfarWaj3TrsdU8usiK/gc+4XTJ/TCHuDh+1rMhv4RiLA+03XmEBL0vmc9xLIZ4OhVnsjJihidcVsWFn1Ex/B3X9yxpXP7BbFuspxA2sYn8M4FkK8e81AKQQD3Ef64NJ5eriUxX12ilnRT6HTf3ru4keVlKIXycCjIDuYBvfU4hv//fvCi1WUVpTllRdAAAAAElFTkSuQmCC');
 }
 .opss-icon--alert {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA4klEQVQ4jaXTP0oDQRgF8B/DFlaeQYJYiIhnkFxFPImEYB1yjBwgKLZbppBgl9ZSJAQJQQu/hGV2lvXPg9fse9/33sywtHGCO9R4DdYYYVDwH1CF6QOfHdxiHN7W8Cwzb/Ac3GTaLF8yLqQtGvqioN/vxdOo9tsFW5wl3JbO9ANUuEkY/mF4j2HS8zQ9GKR/DENKWHWJOA52Ba0qPOGyIF7grafBI5xjp/1Ma1wH3wv6LkLApGCoG0l1QZ80qxxhXkgY+f6x8oYPMSNfMu04TnPptDTcxFXUW8Y9rPES31qX/QVUY2XWKh7oRgAAAABJRU5ErkJggg==');
 }
-
 .opss-icon {
-
     background-position: center center;
     background-size: contain;
     display: inline-block;
@@ -543,5 +561,4 @@ dl.opss-summary-list-aside {
         margin-bottom: -2px;
         margin-right: govuk-spacing(1) - 2;
     }
-
 }
