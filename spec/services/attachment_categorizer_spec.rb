@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BlobCategorizer, :with_stubbed_elasticsearch, :with_test_queue_adapter do
+RSpec.describe AttachmentCategorizer, :with_stubbed_elasticsearch, :with_test_queue_adapter do
 
 
   context "#related_investigation" do
@@ -15,7 +15,7 @@ RSpec.describe BlobCategorizer, :with_stubbed_elasticsearch, :with_test_queue_ad
       end
 
       it "returns the investigation" do
-        expect(BlobCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe BlobCategorizer, :with_stubbed_elasticsearch, :with_test_queue_ad
       end
 
       it "returns the investigation" do
-        expect(BlobCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe BlobCategorizer, :with_stubbed_elasticsearch, :with_test_queue_ad
       end
 
       it "returns the investigation" do
-        expect(BlobCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe BlobCategorizer, :with_stubbed_elasticsearch, :with_test_queue_ad
       end
 
       it "returns the investigation" do
-        expect(BlobCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
       end
     end
   end

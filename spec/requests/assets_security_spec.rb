@@ -82,14 +82,14 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             document.blob.update!(content_type: "pdf")
           end
 
-          context "when the user's team has access to the investigation" do
+          context "when the user's team owns the investigation" do
             it "returns file" do
               get asset_url
               expect(response.status).to eq(200)
             end
           end
 
-          context "when user's team does not have access to the investigation" do
+          context "when user's team does not own the investigation" do
             before do
               sign_in(other_user)
             end
@@ -118,7 +118,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         end
 
         context "when attachment is an image" do
-          context "when the user's team has access to the investigation" do
+          context "when the user's team owns to the investigation" do
             before do
               sign_in(user)
             end
@@ -130,7 +130,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             end
           end
 
-          context "when user's team does not have access to the investigation" do
+          context "when user's team does not own the investigation" do
             before do
               sign_in(other_user)
             end
@@ -155,13 +155,13 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         end
         # rubocop:disable RSpec/RepeatedExampleGroupBody
 
-        context "when the user's team has access to the product investigation" do
+        context "when the user's team owns the product investigation" do
           it "returns file" do
             expect(response.status).to eq(200)
           end
         end
 
-        context "when user's team does not have access to the product investigation" do
+        context "when user's team does not own the product investigation" do
           it "returns file" do
             expect(response.status).to eq(200)
           end
@@ -177,7 +177,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           document.update!(record_type: "Correspondence", record_id: correspondence.id)
         end
 
-        context "when the user's team has access to the correspondence investigation" do
+        context "when the user's team has owns the correspondence investigation" do
           it "returns file" do
             sign_in(user)
             get asset_url
@@ -185,7 +185,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           end
         end
 
-        context "when user's team does not have access to the correspondence investigation" do
+        context "when user's team does not own to the correspondence investigation" do
           before do
             sign_in(other_user)
           end
@@ -219,7 +219,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           document.update!(record_type: "Test", record_id: test.id)
         end
 
-        context "when the user's team has access to the test investigation" do
+        context "when the user's team owns the test investigation" do
           it "returns file" do
             sign_in(user)
             get asset_url
@@ -227,28 +227,14 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           end
         end
 
-        context "when user's team does not have access to the test investigation" do
+        context "when user's team does not own to the test investigation" do
           before do
             sign_in(other_user)
           end
 
-          context "when the user does not have the can_view_restricted_cases role" do
-            it "does not return the file" do
-              get asset_url
-              expect(response).to redirect_to("/")
-              expect(response.status).to eq(302)
-            end
-          end
-
-          context "when user does have the can_view_restricted_cases role" do
-            before do
-              other_user.roles.create!(name: "restricted_case_viewer")
-            end
-
-            it "returns file" do
-              get asset_url
-              expect(response.status).to eq(200)
-            end
+          it "returns the file" do
+            get asset_url
+            expect(response.status).to eq(200)
           end
         end
       end
@@ -261,7 +247,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           document.update!(record_type: "CorrectiveAction", record_id: corrective_action.id)
         end
 
-        context "when the user's team has access to the corrective action investigation" do
+        context "when the user's team owns the corrective action investigation" do
           it "returns file" do
             sign_in(user)
             get asset_url
@@ -269,28 +255,14 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           end
         end
 
-        context "when user's team does not have access to the corrective action investigation" do
+        context "when user's team does not have own the corrective action investigation" do
           before do
             sign_in(other_user)
           end
 
-          context "when the user does not have the can_view_restricted_cases role" do
-            it "does not return the file" do
-              get asset_url
-              expect(response).to redirect_to("/")
-              expect(response.status).to eq(302)
-            end
-          end
-
-          context "when user does have the can_view_restricted_cases role" do
-            before do
-              other_user.roles.create!(name: "restricted_case_viewer")
-            end
-
-            it "returns file" do
-              get asset_url
-              expect(response.status).to eq(200)
-            end
+          it "returns the file" do
+            get asset_url
+            expect(response.status).to eq(200)
           end
         end
       end

@@ -37,45 +37,27 @@ private
     end
   end
 
-  def related_correspondence
-    correspondence_id = @blob.attachments.find_by(record_type: "Correspondence").try(:record_id)
-    Correspondence.find(correspondence_id) if correspondence_id
-  end
-
-  def related_corrective_action
-    corrective_action_id = @blob.attachments.find_by(record_type: "CorrectiveAction").try(:record_id)
-    CorrectiveAction.find(corrective_action_id) if corrective_action_id
-  end
-
-  def related_test
-    test_id = @blob.attachments.find_by(record_type: "Test").try(:record_id)
-    Test.find(test_id) if test_id
-  end
-
-  def related_investigation
-    investigation_id = @blob.attachments.find_by(record_type: "Investigation").try(:record_id)
-    Investigation.find(investigation_id) if investigation_id
-  end
-
-  def is_an_investigation_image?
-    investigation_attachment = @blob.attachments.find_by(record_type: "Investigation")
-    return false unless investigation_attachment
-    return true if investigation_attachment.content_type.include?("image")
+  def attachment_categorizer
+    AttachmentCategorizer.new(@blob)
   end
 
   def investigation
-    if related_correspondence
-      related_correspondence.investigation
-    elsif related_corrective_action
-      related_corrective_action.investigation
-    elsif related_test
-      related_test.investigation
-    elsif related_investigation
-      related_investigation
-    end
+    attachment_categorizer.related_investigation
+  end
+
+  def non_activity_attachment
+    attachment_categorizer.non_activity_attachment
+  end
+
+  def is_an_image?
+    attachment_categorizer.is_an_image?
+  end
+
+  def is_an_investigation_image?
+    non_activity_attachment.record_type == "Investigation" && is_an_image?
   end
 
   def attachment_is_correspondence_or_non_image_investigation_attachment?
-    related_correspondence || investigation && !is_an_investigation_image?
+    non_activity_attachment.record_type == "Correspondence" || investigation && !is_an_image?
   end
 end
