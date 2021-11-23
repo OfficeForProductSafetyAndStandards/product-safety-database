@@ -140,6 +140,18 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
               expect(response.status).to eq(200)
             end
+
+            context "when the investigation is restricted" do
+              before do
+                investigation.update(is_private: true)
+              end
+
+              it "does not return file" do
+                get asset_url
+                expect(response).to redirect_to("/")
+                expect(response.status).to eq(302)
+              end
+            end
           end
         end
       end
@@ -236,6 +248,18 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             get asset_url
             expect(response.status).to eq(200)
           end
+
+          context "when the investigation is restricted" do
+            before do
+              investigation.update(is_private: true)
+            end
+
+            it "does not return file" do
+              get asset_url
+              expect(response).to redirect_to("/")
+              expect(response.status).to eq(302)
+            end
+          end
         end
       end
 
@@ -263,6 +287,18 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           it "returns the file" do
             get asset_url
             expect(response.status).to eq(200)
+          end
+
+          context "when the investigation is restricted" do
+            before do
+              investigation.update(is_private: true)
+            end
+
+            it "does not return file" do
+              get asset_url
+              expect(response).to redirect_to("/")
+              expect(response.status).to eq(302)
+            end
           end
         end
       end
