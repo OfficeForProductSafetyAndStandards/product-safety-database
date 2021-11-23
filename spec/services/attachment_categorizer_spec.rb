@@ -1,12 +1,10 @@
 require "rails_helper"
 
 RSpec.describe AttachmentCategorizer, :with_stubbed_elasticsearch, :with_test_queue_adapter do
+  describe "#related_investigation" do
+    let(:investigation) { create(:allegation) }
 
-
-  context "#related_investigation" do
-    let(:investigation)  { create(:allegation) }
-
-    context "attachment is on a correspondence" do
+    context "when attachment is on a correspondence" do
       let(:correspondence) { create(:correspondence, :with_document, investigation_id: investigation.id) }
       let(:document) { correspondence.documents.first }
 
@@ -15,11 +13,11 @@ RSpec.describe AttachmentCategorizer, :with_stubbed_elasticsearch, :with_test_qu
       end
 
       it "returns the investigation" do
-        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(described_class.new(document.blob).related_investigation).to eq investigation
       end
     end
 
-    context "attachment is on a test result" do
+    context "when attachment is on a test result" do
       let(:test_result) { create(:test_result, :with_document, investigation_id: investigation.id) }
       let(:document) { test_result.document }
 
@@ -28,12 +26,12 @@ RSpec.describe AttachmentCategorizer, :with_stubbed_elasticsearch, :with_test_qu
       end
 
       it "returns the investigation" do
-        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(described_class.new(document.blob).related_investigation).to eq investigation
       end
     end
 
-    context "attachment is on an investigation" do
-      let(:investigation)  { create(:allegation, :with_document) }
+    context "when attachment is on an investigation" do
+      let(:investigation) { create(:allegation, :with_document) }
       let(:document) { investigation.documents.first }
 
       before do
@@ -41,11 +39,11 @@ RSpec.describe AttachmentCategorizer, :with_stubbed_elasticsearch, :with_test_qu
       end
 
       it "returns the investigation" do
-        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(described_class.new(document.blob).related_investigation).to eq investigation
       end
     end
 
-    context "attachment is on a corrective_action" do
+    context "when attachment is on a corrective_action" do
       let(:corrective_action) { create(:corrective_action, :with_document, investigation_id: investigation.id) }
       let(:document) { corrective_action.document }
 
@@ -54,7 +52,7 @@ RSpec.describe AttachmentCategorizer, :with_stubbed_elasticsearch, :with_test_qu
       end
 
       it "returns the investigation" do
-        expect(AttachmentCategorizer.new(document.blob).related_investigation).to eq investigation
+        expect(described_class.new(document.blob).related_investigation).to eq investigation
       end
     end
   end

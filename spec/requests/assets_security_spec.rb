@@ -140,6 +140,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
               expect(response.status).to eq(200)
             end
+            # rubocop:disable RSpec/NestedGroups
 
             context "when the investigation is restricted" do
               before do
@@ -152,6 +153,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
                 expect(response.status).to eq(302)
               end
             end
+            # rubocop:enable RSpec/NestedGroups
           end
         end
       end
