@@ -28,12 +28,12 @@ private
   def authorize_blob
     return redirect_to "/sign-in" unless user_signed_in?
 
-    if investigation
-      if attachment_is_correspondence_or_non_image_investigation_attachment? && !InvestigationPolicy.new(current_user, investigation).view_protected_details?
+    if related_investigation
+      if attachment_is_correspondence_or_non_image_investigation_attachment? && !InvestigationPolicy.new(current_user, related_investigation).view_protected_details?
         return redirect_to "/", flash: { warning: "Not authorized to view this attachment" }
       end
 
-      return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } unless InvestigationPolicy.new(current_user, investigation).view_non_protected_details?
+      return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } unless InvestigationPolicy.new(current_user, related_investigation).view_non_protected_details?
     end
   end
 
@@ -41,7 +41,7 @@ private
     AttachmentCategorizer.new(@blob)
   end
 
-  def investigation
+  def related_investigation
     attachment_categorizer.related_investigation
   end
 
@@ -58,6 +58,6 @@ private
   end
 
   def attachment_is_correspondence_or_non_image_investigation_attachment?
-    non_activity_attachment.record_type == "Correspondence" || investigation && !is_an_image?
+    non_activity_attachment.record_type == "Correspondence" || non_activity_attachment.record_type == "Investigation" && !is_an_image?
   end
 end
