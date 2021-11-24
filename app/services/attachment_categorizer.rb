@@ -15,8 +15,9 @@ class AttachmentCategorizer
     klass = Object.const_get(non_activity_attachment.record_type)
     instance_of_klass = klass.find(non_activity_attachment.record_id)
 
-    instance_of_klass.is_a?(Investigation) ? instance_of_klass : instance_of_klass.investigation
-  rescue NoMethodError
+    return instance_of_klass if instance_of_klass.is_a?(Investigation)
+
     # if instance_of_klass does not implement #investigation then we do not need to return an investigation.
+    instance_of_klass.respond_to? :investigation ? instance_of_klass.investigation : nil
   end
 end
