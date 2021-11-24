@@ -29,11 +29,11 @@ private
     return redirect_to "/sign-in" unless user_signed_in?
 
     if related_investigation
-      if attachment_is_correspondence_or_non_image_investigation_attachment? && !InvestigationPolicy.new(current_user, related_investigation).view_protected_details?
-        return redirect_to "/", flash: { warning: "Not authorized to view this attachment" }
+      if attachment_is_protected_type? && !InvestigationPolicy.new(current_user, related_investigation).view_protected_details?
+        return redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") }
       end
 
-      return redirect_to "/", flash: { warning: "Not authorized to view this attachment" } unless InvestigationPolicy.new(current_user, related_investigation).view_non_protected_details?
+      return redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") } unless InvestigationPolicy.new(current_user, related_investigation).view_non_protected_details?
     end
   end
 
@@ -57,7 +57,7 @@ private
     non_activity_attachment.record_type == "Investigation" && is_an_image?
   end
 
-  def attachment_is_correspondence_or_non_image_investigation_attachment?
+  def attachment_is_protected_type?
     non_activity_attachment.record_type == "Correspondence" || non_activity_attachment.record_type == "Investigation" && !is_an_image?
   end
 end
