@@ -17,7 +17,6 @@ class AttachmentCategorizer
 
     return instance_of_klass if instance_of_klass.is_a?(Investigation)
 
-    # if instance_of_klass does not implement #investigation then we do not need to return an investigation.
-    instance_of_klass.respond_to? :investigation ? instance_of_klass.investigation : nil
+    instance_of_klass.try(:investigation)
   end
 end
