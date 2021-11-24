@@ -3,7 +3,6 @@ class SearchesController < ApplicationController
 
   def show
     @search = SearchParams.new(query_params)
-    @search.sort_by = SearchParams::RELEVANT if @search.q.present? && @search.sort_by.blank?
 
     store_previous_search_params
 

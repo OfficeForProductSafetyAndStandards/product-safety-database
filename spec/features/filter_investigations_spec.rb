@@ -122,8 +122,9 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     end
 
     within "#sort-by-fieldset" do
-      expect(page).to have_select("Sort by", selected: "Recent updates")
+      expect(page).to have_select("Sort the results by", selected: "Recent updates")
     end
+    expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
   end
 
   scenario "filtering for both open and closed cases" do
@@ -330,9 +331,8 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
     def select_sorting_option(option)
-      within "#sort-by-fieldset" do
-        select option
-        click_on "Sort"
+      within("form#cases-search-form dl.opss-dl-select") do
+        click_on option
       end
     end
 

@@ -79,6 +79,15 @@ class SearchParams
     !status_open?
   end
 
+  def selected_sort_by
+    if sort_by.blank?
+      return RELEVANT if q.present?
+
+      return RECENT
+    end
+    sort_by
+  end
+
   def sorting_params
     case sort_by
     when NEWEST
