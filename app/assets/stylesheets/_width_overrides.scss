@@ -16,12 +16,7 @@
   }
 
   .psd-header__secondary-navigation {
-    margin-right: 15px !important;
     margin-left: 0 !important;
-  }
-
-  .psd-header__navigation-item--right {
-    margin-right: 15px !important;
   }
 
   .psd-header__navigation {
@@ -88,7 +83,10 @@
   }
 }
 
-.govuk-width-container {
-  padding-left: 15px;
-  padding-right: 15px;
+// scss-lint:disable QualifyingElement
+select.govuk-select {
+  // return to default setting
+  width: auto;
+  max-width: 100%;
 }
+// scss-lint:enable QualifyingElement

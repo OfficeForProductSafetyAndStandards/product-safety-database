@@ -38,7 +38,7 @@ class SearchParams
   alias_method :coronavirus_related_only?, :coronavirus_related_only
   attribute :serious_and_high_risk_level_only, :boolean
   alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
-  attribute :sort_by, default: RECENT
+  attribute :sort_by
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
   attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
@@ -79,6 +79,15 @@ class SearchParams
     !status_open?
   end
 
+  def selected_sort_by
+    if sort_by.blank?
+      return RELEVANT if q.present?
+
+      return RECENT
+    end
+    sort_by
+  end
+
   def sorting_params
     case sort_by
     when NEWEST
@@ -94,15 +103,11 @@ class SearchParams
 
   def sort_by_items(with_relevant_option: false)
     items = [
-      { text: "Most recently updated",  value: RECENT, unchecked_value: "unchecked" },
-      { text: "Least recently updated", value: OLDEST, unchecked_value: "unchecked" },
-      { text: "Most recently created",  value: NEWEST, unchecked_value: "unchecked" }
+      ["Recent updates", RECENT],
+      ["Oldest updates", OLDEST],
+      ["Newest cases", NEWEST]
     ]
-
-    if with_relevant_option
-      items.unshift(text: "Relevance", value: RELEVANT, unchecked_value: "unchecked")
-    end
-
+    items.unshift(["Relevance", RELEVANT]) if with_relevant_option
     items
   end
 end
