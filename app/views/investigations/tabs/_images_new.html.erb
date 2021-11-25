@@ -1,8 +1,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <h2 class="govuk-heading-m">Images</h2>
-
     <% if policy(@investigation).update?(user: current_user) %>
       <p class="govuk-body">
         <%= link_to "Add image", new_investigation_document_path(@investigation) %>
@@ -21,4 +19,4 @@
   </div>
 </div>
 
-<%= render partial: "documents/document_card", collection: @investigation.images, as: :document, locals: { parent: @investigation } %>
+<%= render partial: "documents/document_card", collection: @investigation.images, as: :document, locals: { parent: @investigation, heading_classes: "govuk-heading-s govuk-!-margin-bottom-1" } %>
