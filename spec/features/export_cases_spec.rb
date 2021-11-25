@@ -31,7 +31,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).to have_text allegation_other_team.pretty_id
     expect(page).not_to have_text allegation_closed.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
     expect(page).to have_content "Your case export is being prepared. You will receive an email when your export is ready to download."
 
     expect(email.action_name).to eq "case_export"
@@ -53,7 +53,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_other_team.pretty_id
     expect(page).to have_text allegation_serious.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_serious.pretty_id)
@@ -68,7 +68,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
@@ -83,7 +83,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_other_team.pretty_id
     expect(page).to have_text allegation_serious.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_serious.pretty_id)
@@ -98,7 +98,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
@@ -114,7 +114,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_other_team.pretty_id
     expect(page).to have_text allegation_closed.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_closed.pretty_id)
@@ -132,7 +132,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
@@ -150,7 +150,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(3)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
@@ -170,7 +170,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)
@@ -188,7 +188,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(4)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
@@ -209,7 +209,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)
@@ -228,7 +228,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(3)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
@@ -248,7 +248,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).to have_text allegation_other_team.pretty_id
 
-    click_link "CSV file"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)

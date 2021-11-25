@@ -23,7 +23,7 @@
       <td headers="created <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
       </td>
-    <% elsif sorted_by == SearchParams::RECENT || SearchParams::OLDEST || sorted_by == SearchParams::RELEVANT %>
+    <% else %>
       <td headers="updated <%= dom_id investigation, :item %> <%= dom_id investigation, :meta %>" class="govuk-table__cell">
         <%= "#{time_ago_in_words(investigation.updated_at)} ago" %>
       </td>

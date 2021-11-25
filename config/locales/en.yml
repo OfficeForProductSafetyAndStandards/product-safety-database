@@ -769,6 +769,8 @@ en:
     array:
       two_words_connector: " and "
       last_word_connector: " and "
+  attachments:
+    unauthorised: "Not authorised to view this attachment"
   business:
     type:
       retailer: "Retailer"
