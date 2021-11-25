@@ -16,19 +16,19 @@
   </div>
 </div>
 
-<% @product = @investigation.products.first %>
+<% @products = @investigation.products %>
 
 <%= render "components/govuk_tabs",
 items: [
   {
     id: "case-images",
-    label: "Case images (?)",
-    panel: { html: render("products/tabs/images") }
+    label: "Case images (#{@investigation.images.count})",
+    panel: { html: render("investigations/tabs/images_new") }
   },
   {
     id: "product-images",
-    label: "Product images (?)",
-    panel: { html: render("investigations/tabs/images_new") }
+    label: "Product images (#{@products.flat_map(&:images).count})",
+    panel: { html: render("investigations/tabs/product_images") }
   }
 ]
 %>
