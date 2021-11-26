@@ -275,7 +275,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           sign_in(user)
           get asset_url
         end
-        # rubocop:disable RSpec/RepeatedExampleGroupBody
 
         context "when the user's team owns the product investigation" do
           it "returns file" do
@@ -289,7 +288,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             expect(response.status).to eq(200)
           end
         end
-        # rubocop:enable RSpec/RepeatedExampleGroupBody
       end
 
       context "when the attachment is a corrective_action" do
