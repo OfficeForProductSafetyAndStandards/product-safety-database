@@ -272,16 +272,27 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
         before do
           document.update!(record_type: "Activity", record_id: activity.id)
+<<<<<<< cede1af901558bafd16ef5fe00a431d532021c1f
         end
 
         context "when the user's team owns the investigation" do
           it "returns file" do
             sign_in(user)
             get asset_url
+=======
+          sign_in(user)
+          get asset_url
+        end
+        # rubocop:disable RSpec/RepeatedExampleGroupBody
+
+        context "when the user's team owns the product investigation" do
+          it "returns file" do
+>>>>>>> Fix bug around activity attachments
             expect(response.status).to eq(200)
           end
         end
 
+<<<<<<< cede1af901558bafd16ef5fe00a431d532021c1f
         context "when user's team does not own the investigation" do
           it "returns file" do
             sign_in(other_user)
@@ -289,6 +300,14 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             expect(response.status).to eq(200)
           end
         end
+=======
+        context "when user's team does not own the product investigation" do
+          it "returns file" do
+            expect(response.status).to eq(200)
+          end
+        end
+        # rubocop:enable RSpec/RepeatedExampleGroupBody
+>>>>>>> Fix bug around activity attachments
       end
 
       context "when the attachment is a corrective_action" do
