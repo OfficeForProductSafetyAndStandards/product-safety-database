@@ -61,7 +61,6 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
     end
 
     scenario "case images tab shows number of product images and number of case images" do
-      create(:product) {  }
       visit "/cases/#{investigation.pretty_id}"
 
       expect(page).to have_content "Images (0)"
@@ -110,7 +109,6 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
       expect(page).to have_content "Product images (1)"
     end
   end
-
 
   def expect_case_activity_page_to_show_entered_information
     expect(page).to have_selector("h1", text: "Activity")
