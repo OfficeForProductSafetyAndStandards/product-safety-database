@@ -272,12 +272,12 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
         before do
           document.update!(record_type: "Activity", record_id: activity.id)
-          sign_in(user)
-          get asset_url
         end
 
         context "when the user's team owns the investigation" do
           it "returns file" do
+            sign_in(user)
+            get asset_url
             expect(response.status).to eq(200)
           end
         end
@@ -285,6 +285,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         context "when user's team does not own the investigation" do
           it "returns file" do
             sign_in(other_user)
+            get asset_url
             expect(response.status).to eq(200)
           end
         end
