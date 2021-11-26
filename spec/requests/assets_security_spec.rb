@@ -277,7 +277,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           get asset_url
         end
 
-        context "when the user's team owns the  investigation" do
+        context "when the user's team owns the investigation" do
           it "returns file" do
             expect(response.status).to eq(200)
           end
