@@ -10,13 +10,10 @@
     </div>
   </div>
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-6">
-    <div class="govuk-grid-column-two-thirds">
-      <% if product.images.empty? %>
-        <p class="govuk-body">No attachments</p>
-      <% end %>
 
-    <%= render partial: "documents/document_card", collection: product.images, as: :document, locals: { parent: product, heading_classes: "govuk-heading-s govuk-!-margin-bottom-1", do_not_show_edit_and_remove_links: true }  %>
-    </div>
-  </div>
+  <% if product.images.empty? %>
+    <p class="govuk-body">No attachments</p>
+  <% end %>
+
+  <%= render partial: "documents/document_card", collection: product.images, as: :document, locals: { parent: product, heading_classes: "govuk-heading-s govuk-!-margin-bottom-1", do_not_show_edit_and_remove_links: true }  %>
 <% end %>

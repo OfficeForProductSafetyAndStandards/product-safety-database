@@ -17,12 +17,12 @@ items: [
   {
     id: "case-images",
     label: "Case images (#{@investigation.images.count})",
-    panel: { html: render("investigations/tabs/images_new") }
+    panel: { html: render("investigations/tabs/images/images") }
   },
   {
     id: "product-images",
     label: "Product images (#{@products.flat_map(&:images).count})",
-    panel: { html: render("investigations/tabs/product_images") }
+    panel: { html: render("investigations/tabs/images/product_images") }
   }
 ]
 %>
