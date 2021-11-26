@@ -177,6 +177,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
         context "when user's team does not own the product investigation" do
           it "returns file" do
+            sign_in(other_user)
             expect(response.status).to eq(200)
           end
         end
