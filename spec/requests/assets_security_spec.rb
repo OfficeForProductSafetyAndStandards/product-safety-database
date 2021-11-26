@@ -265,6 +265,32 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         end
       end
 
+      context "when the attachment is on an activity" do
+        let(:asset_url) { rails_storage_proxy_path(document) }
+        let(:product) { create(:product, investigations: [investigation]) }
+        let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
+
+        before do
+          document.update!(record_type: "Activity", record_id: activity.id)
+        end
+
+        context "when the user's team owns the investigation" do
+          it "returns file" do
+            sign_in(user)
+            get asset_url
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user's team does not own the investigation" do
+          it "returns file" do
+            sign_in(other_user)
+            get asset_url
+            expect(response.status).to eq(200)
+          end
+        end
+      end
+
       context "when the attachment is a corrective_action" do
         let(:asset_url) { rails_storage_proxy_path(document) }
         let(:corrective_action) { create(:corrective_action, investigation_id: investigation.id) }
