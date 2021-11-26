@@ -265,6 +265,32 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         end
       end
 
+      context "when the attachment is on an activity" do
+        let(:asset_url) { rails_storage_proxy_path(document) }
+        let(:product) { create(:product, investigations: [investigation]) }
+        let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
+
+        before do
+          document.update!(record_type: "Activity", record_id: activity.id)
+          sign_in(user)
+          get asset_url
+        end
+        # rubocop:disable RSpec/RepeatedExampleGroupBody
+
+        context "when the user's team owns the product investigation" do
+          it "returns file" do
+            expect(response.status).to eq(200)
+          end
+        end
+
+        context "when user's team does not own the product investigation" do
+          it "returns file" do
+            expect(response.status).to eq(200)
+          end
+        end
+        # rubocop:enable RSpec/RepeatedExampleGroupBody
+      end
+
       context "when the attachment is a corrective_action" do
         let(:asset_url) { rails_storage_proxy_path(document) }
         let(:corrective_action) { create(:corrective_action, investigation_id: investigation.id) }
