@@ -6,12 +6,6 @@
     <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
     <h1 class="govuk-heading-l"><%= page_heading %></h1>
 
-    <% if policy(@investigation).update?(user: current_user) %>
-      <p class="govuk-body">
-        <%= link_to "Add image", new_investigation_document_path(@investigation) %>
-      </p>
-    <% end %>
-
     <hr class="govuk-section-break govuk-section-break--l">
   </div>
 </div>
