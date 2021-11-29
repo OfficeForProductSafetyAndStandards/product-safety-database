@@ -2,8 +2,9 @@
 
 <%= render 'investigations/heading', answer: @answer %>
 
-<div class="govuk-grid-row">
-  <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true }) do |form| %>
+<%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true }) do |form| %>
+  <%= render 'investigations/search_bar', form: form %>
+  <div class="govuk-grid-row">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters">
       <div class="govuk-grid-row">
@@ -68,5 +69,5 @@
         </div>
       <% end %>
     </section>
-  <% end %>
-</div>
+  </div>
+<% end %>
