@@ -5,6 +5,7 @@ module Investigations::DisplayTextHelper
 
   def investigation_sub_nav(investigation, current_tab: "overview")
     is_current_tab = ActiveSupport::StringInquirer.new(current_tab)
+
     items = [
       {
         href: investigation_path(investigation),
@@ -26,7 +27,7 @@ module Investigations::DisplayTextHelper
       {
         href: investigation_images_path(investigation),
         text: "Images",
-        count: " (#{investigation.images.size})",
+        count: " (#{investigation.images.size + investigation.products.flat_map(&:images).count})",
         active: is_current_tab.images?
       },
       {
