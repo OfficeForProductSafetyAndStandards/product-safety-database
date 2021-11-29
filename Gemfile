@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.105"
+gem "aws-sdk-s3", "~> 1.107"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -64,7 +64,7 @@ group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "solargraph", "~> 0.44"
-  gem "spring", "~> 3.0"
+  gem "spring", "~> 3.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
 

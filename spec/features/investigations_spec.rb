@@ -50,14 +50,18 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     expect(page)
       .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
-    expect(page.find("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")).to be_checked
+    expect(page.find("select#sort_by option[value='#{SearchParams::RELEVANT}']")).to be_selected
+    expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Relevance")
 
     expect(page).to have_current_path(investigations_search_path, ignore_query: true)
 
     fill_in "Keywords", with: ""
     click_on "Apply filters"
 
-    expect(page).not_to have_css("input[name='sort_by'][value='#{SearchParams::RELEVANT}']")
+    expect(page).not_to have_css("select#sort_by option[value='#{SearchParams::RELEVANT}']")
+
+    expect(page.find("select#sort_by option[value='#{SearchParams::RECENT}']")).to be_selected
+    expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
 
     # Expect investigations to be back in reverse chronological order again
     expect(page)
@@ -69,9 +73,12 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
 
     expect(page).to have_current_path(investigations_path, ignore_query: true)
 
-    choose "Least recently updated"
-    click_on "Apply filters"
+    within("form#cases-search-form dl.opss-dl-select") do
+      click_on "Oldest updates"
+    end
+    expect(page).to have_current_path(/sort_by=oldest/, ignore_query: false)
 
-    expect(page.find("input[name='sort_by'][value='#{SearchParams::OLDEST}']")).to be_checked
+    expect(page.find("select#sort_by option[value='#{SearchParams::OLDEST}']")).to be_selected
+    expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Oldest updates")
   end
 end

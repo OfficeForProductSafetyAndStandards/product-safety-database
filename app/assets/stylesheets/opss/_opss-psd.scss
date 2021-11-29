@@ -246,7 +246,6 @@ ul.opss-radio-list {
             .govuk-radios--small,
             .govuk-checkboxes--small {
                 label {
-                    //@include opss-font-size($s: 16px, $l: 1.2);
                     @include opss-font-size($s: 17px, $l: 1.2);
                     margin-top: 0;
                     padding-right: 1px;
@@ -265,5 +264,56 @@ ul.opss-radio-list {
 
     label:before {
         background: govuk-colour("white");
+    }
+}
+
+.opss-dl-select {/* non-js select */
+    & dt, & dd {
+        padding: 0; margin: 0;
+    }
+
+    border: 2px solid $govuk-input-border-colour;
+    margin-top: govuk-spacing(6);
+    margin-bottom: govuk-spacing(1);
+    min-width: 165px;
+    overflow-x: clip;
+
+    dt {
+        margin-top: - govuk-spacing(6);
+        padding-bottom: govuk-spacing(1);
+    }
+
+    dd {
+        width: 100% !important;
+        overflow: clip;
+
+        a {
+            padding: 0 0 0 govuk-spacing(2) - 2;
+            line-height: inherit;
+            display: inline-block;
+            text-align: left;
+            cursor: default;
+            width: 100%;
+        }
+
+        a, a:visited, a:active, a:focus {
+            color: $govuk-text-colour;
+            text-decoration: none;
+        }
+
+        a:hover,
+        &.opss-dl-select__active a {
+            color: govuk-colour("white");
+            background-color: $govuk-link-colour;
+        }
+
+        a:focus,
+        .opss-dl-select__active a:focus {
+            box-shadow: none;
+            outline: none;
+            font-weight: bold;
+            color: $govuk-text-colour;
+            background-color: $govuk-focus-colour;
+        }
     }
 }

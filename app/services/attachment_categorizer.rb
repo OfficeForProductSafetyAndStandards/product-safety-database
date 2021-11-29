@@ -12,7 +12,10 @@ class AttachmentCategorizer
   end
 
   def related_investigation
+    return if non_activity_attachment.blank?
+
     klass = Object.const_get(non_activity_attachment.record_type)
+
     instance_of_klass = klass.find(non_activity_attachment.record_id)
 
     return instance_of_klass if instance_of_klass.is_a?(Investigation)
