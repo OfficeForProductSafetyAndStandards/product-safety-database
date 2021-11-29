@@ -1,0 +1,16 @@
+<div class="govuk-grid-column-one-third">
+  <div class="govuk-form-group opss-text-align-right">
+    <fieldset id="sort-by-fieldset" class="opss-border-none govuk-!-padding-0 opss-nojs-hide">
+      <label class="govuk-label govuk-body-s" for="sort_by">
+          Sort <span class="govuk-visually-hidden">the results</span> by
+      </label>
+      <select class="govuk-select govuk-!-margin-bottom-1" id="sort_by">
+        <%= case_sort_by_options(search.sort_by_items(with_relevant_option: with_relevant_option), search.selected_sort_by) %>
+      </select>
+    </fieldset>
+    <dl class="govuk-list opss-float-right opss-dl-select opss-js-enabled-hidden">
+      <dt>Sort <span class="govuk-visually-hidden">the results</span> by</dt>
+      <%= case_sort_by_definition_list_items(search.sort_by_items(with_relevant_option: with_relevant_option), search.selected_sort_by) %>
+    </dl>
+  </div>
+</div>
