@@ -269,25 +269,55 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
       context "when the attachment is on an activity" do
         let(:asset_url) { rails_storage_proxy_path(document) }
         let(:product) { create(:product, investigations: [investigation]) }
-        let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
 
-        before do
-          document.update!(record_type: "Activity", record_id: activity.id)
-        end
 
-        context "when the user's team owns the investigation" do
-          it "returns file" do
-            sign_in(user)
-            get asset_url
-            expect(response.status).to eq(200)
+        context "when the activity is not a correspondence" do
+          let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
+
+          before do
+            document.update!(record_type: "Activity", record_id: activity.id)
+          end
+
+          context "when the user's team owns the investigation" do
+            it "returns file" do
+              sign_in(user)
+              get asset_url
+              expect(response.status).to eq(200)
+            end
+          end
+
+          context "when user's team does not own the investigation" do
+            it "returns file" do
+              sign_in(other_user)
+              get asset_url
+              expect(response.status).to eq(200)
+            end
           end
         end
 
-        context "when user's team does not own the investigation" do
-          it "returns file" do
-            sign_in(other_user)
-            get asset_url
-            expect(response.status).to eq(200)
+        context "when the activity is a correspondence" do
+          let(:product) { create(:product, investigations: [investigation]) }
+          let(:correspondence) { create(:correspondence_meeting, investigation: investigation.id) }
+          let!(:activity) { create(:audit_activity_correspondence, investigation: investigation, product: product, correspondence_id: correspondence.id) }
+
+          before do
+            document.update!(record_type: "Activity", record_id: activity.id)
+          end
+
+          context "when the user's team owns the investigation" do
+            it "returns file" do
+              sign_in(user)
+              get asset_url
+              expect(response.status).to eq(200)
+            end
+          end
+
+          context "when user's team does not own the investigation" do
+            it "returns file" do
+              sign_in(other_user)
+              get asset_url
+              expect(response.status).to eq(302)
+            end
           end
         end
       end
