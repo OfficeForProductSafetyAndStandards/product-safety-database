@@ -323,7 +323,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             document.update!(record_type: "Activity", record_id: activity.id)
           end
 
-          context "when the documents is an image" do
+          context "when the document is an image" do
             context "when the user's team owns the investigation" do
               it "returns file" do
                 sign_in(user)
@@ -341,7 +341,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             end
           end
 
-          context "when the documents is not an image" do
+          context "when the document is not an image" do
             before do
               document.blob.update!(content_type: "pdf")
             end
