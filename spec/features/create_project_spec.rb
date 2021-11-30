@@ -13,7 +13,7 @@ RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_ant
     scenario "can create a project" do
       visit "/cases"
 
-      click_link "Open a new case"
+      click_link "Create a case"
 
       expect_page_to_have_h1("Create new")
       choose "Project"
