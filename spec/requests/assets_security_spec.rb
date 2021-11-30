@@ -271,7 +271,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         let(:product) { create(:product, investigations: [investigation]) }
 
 
-        context "when the activity is not a correspondence" do
+        context "when the activity is not a correspondence or investigation document related" do
           let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
 
           before do
@@ -296,9 +296,9 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         end
 
         context "when the activity is a correspondence" do
-          let(:product) { create(:product, investigations: [investigation]) }
-          let(:correspondence) { create(:correspondence_meeting, investigation: investigation.id) }
-          let!(:activity) { create(:audit_activity_correspondence, investigation: investigation, product: product, correspondence_id: correspondence.id) }
+          let!(:product) { create(:product, investigations: [investigation]) }
+          let!(:correspondence) { create(:correspondence_meeting, investigation: investigation) }
+          let!(:activity) { AuditActivity::Correspondence::Base.create(investigation: investigation, product: product, correspondence: correspondence) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)
@@ -317,6 +317,71 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
               sign_in(other_user)
               get asset_url
               expect(response.status).to eq(302)
+            end
+          end
+        end
+
+        context "when the activity is related to a document" do
+          let!(:product) { create(:product, investigations: [investigation]) }
+          let!(:activity) { AuditActivity::Document::Base.create(investigation: investigation, product: product) }
+
+          before do
+            document.update!(record_type: "Activity", record_id: activity.id)
+          end
+
+          context "when the documents is an image" do
+            context "when the user's team owns the investigation" do
+              it "returns file" do
+                sign_in(user)
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
+
+            context "when user's team does not own the investigation" do
+              it "returns file" do
+                sign_in(other_user)
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
+          end
+
+          context "when the documents is not an image" do
+            before do
+              document.blob.update!(content_type: "pdf")
+            end
+
+            context "when the user's team owns the investigation" do
+
+              it "returns file" do
+                sign_in(user)
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
+
+            context "when user's team does not own the investigation" do
+              context "when the user does not have the can_view_restricted_cases role" do
+                it "does not return the file" do
+                  sign_in(other_user)
+                  get asset_url
+                  expect(response).to redirect_to("/")
+                  expect(response.status).to eq(302)
+                end
+              end
+
+              context "when user does have the can_view_restricted_cases role" do
+                before do
+                  other_user.roles.create!(name: "restricted_case_viewer")
+                end
+
+                it "returns file" do
+                  sign_in(other_user)
+                  get asset_url
+                  expect(response.status).to eq(200)
+                end
+              end
             end
           end
         end
