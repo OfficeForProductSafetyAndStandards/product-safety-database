@@ -10,6 +10,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
   end
   let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
 
+  # rubocop:disable RSpec/NestedGroups
   context "when using generic active storage urls" do
     context "when using blobs redirect controller" do
       # /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)                                 active_storage/blobs/redirect#show
@@ -93,7 +94,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             before do
               sign_in(other_user)
             end
-            # rubocop:disable RSpec/NestedGroups
 
             context "when the user does not have the can_view_restricted_cases role" do
               it "does not return the file" do
@@ -113,7 +113,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
                 expect(response.status).to eq(200)
               end
             end
-            # rubocop:enable RSpec/NestedGroups
           end
         end
 
@@ -140,7 +139,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
               expect(response.status).to eq(200)
             end
-            # rubocop:disable RSpec/NestedGroups
 
             context "when the investigation is restricted" do
               before do
@@ -153,7 +151,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
                 expect(response.status).to eq(302)
               end
             end
-            # rubocop:enable RSpec/NestedGroups
           end
         end
       end
@@ -270,7 +267,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
         let(:asset_url) { rails_storage_proxy_path(document) }
         let(:product) { create(:product, investigations: [investigation]) }
 
-
         context "when the activity is not a correspondence or investigation document related" do
           let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
 
@@ -353,7 +349,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             end
 
             context "when the user's team owns the investigation" do
-
               it "returns file" do
                 sign_in(user)
                 get asset_url
@@ -428,5 +423,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
       end
     end
   end
+  # rubocop:enable RSpec/NestedGroups
   # rubocop:enable RSpec/MultipleExpectations
 end
