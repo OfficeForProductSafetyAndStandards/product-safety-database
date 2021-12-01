@@ -5,48 +5,6 @@
     <%= govukSkipLink(text: "Skip to results", href: "#results") %>
 
     <%= render "investigations/coronavirus_and_risk_level_checkbox", form: form %>
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :case_owner,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
-      items: case_owner_is(form)
-    %>
-
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :teams_with_access,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: t(".teams_added_to_case"), classes: "govuk-fieldset__legend--s" } },
-      items: teams_added_to_case_items(form)
-    %>
-
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :created_by,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Created by", classes: "govuk-fieldset__legend--s" } },
-      items: created_by(form)
-    %>
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :type,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Type", classes: "govuk-fieldset__legend--s" } },
-      items: [{ key: "allegation", value: "checked", unchecked_value: "unchecked", text: "Allegation" },
-             { key: "enquiry", value: "checked", unchecked_value: "unchecked", text: "Enquiry" },
-             { key: "project", value: "checked", unchecked_value: "unchecked", text: "Project" }]
-    %>
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :status,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Status", classes: "govuk-fieldset__legend--s" } },
-      items: [{ key: "status_open", value: true, unchecked_value: "off", text: "Open" },
-             { key: "status_closed", value: true, unchecked_value: "off", text: "Closed" }]
-    %>
-
-    <%= form.hidden_field :sort_by %>
 
     <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
   </div>

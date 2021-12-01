@@ -38,6 +38,10 @@ class SearchParams
   alias_method :coronavirus_related_only?, :coronavirus_related_only
   attribute :serious_and_high_risk_level_only, :boolean
   alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
+  attribute :coronavirus_and_serious_and_high_risk, :boolean
+  alias_method :coronavirus_and_serious_and_high_risk?, :coronavirus_and_serious_and_high_risk
+  attribute :priority_all, :boolean
+  attribute :priority
   attribute :sort_by
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new

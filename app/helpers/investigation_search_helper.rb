@@ -42,13 +42,16 @@ module InvestigationSearchHelper
         { bool: get_owner_filter(user) }
       ]
     }
+    byebug
+    return must_filters if @search.priority == "priority_all"
 
-    if @search.coronavirus_related_only?
+    case @search.priority
+    when "coronavirus_related_only"
       must_filters[:must] << { term: { coronavirus_related: true } }
-    end
-
-    if @search.serious_and_high_risk_level_only?
+    when "serious_and_high_risk_level_only"
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
+    when "coronavirus_and_serious_and_high_risk"
+      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high), coronavirus_related: true } }
     end
 
     must_filters

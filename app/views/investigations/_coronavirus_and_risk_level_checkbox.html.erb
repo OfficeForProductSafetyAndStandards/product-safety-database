@@ -1,18 +1,35 @@
-<%= render "form_components/govuk_checkboxes",
-           form: form,
-           classes: "govuk-checkboxes--small",
-           key: :base,
-           items: [
-             {
-               key: "coronavirus_related_only",
-               value: true,
-               unchecked_value: "off",
-               text: t(:coronavirus_cases_only, scope: "cases.filters")
-             },
-             {
-               key: "serious_and_high_risk_level_only",
-               value: true,
-               unchecked_value: "off",
-               text: t(:serious_and_high_risk_level_only, scope: "cases.filters")
-             }
-           ] %>
+ <%= render "form_components/govuk_radios",
+   form: form,
+   key: :priority,
+   classes: "",
+   fieldset: {
+     legend: {
+       text: "Case priority",
+       is_page_heading: false,
+       classes: "govuk-fieldset__legend--m"
+     }
+   },
+   items: [
+     {
+       id: "priority_all",
+       text: "All",
+       value: "priority_all"
+     },
+     {
+       id: "coronavirus_related_only",
+       text: "Coronavirus",
+       value: "coronavirus_related_only"
+     },
+     {
+       id: "serious_and_high_risk_level_only",
+       text: "Serious and high risk",
+       value: "serious_and_high_risk_level_only"
+     },
+     {
+       id: "coronavirus_and_high_risk",
+       text: "Coronavirus and serious and high risk",
+       value: "coronavirus_and_serious_and_high_risk"
+     },
+
+   ]
+ %>
