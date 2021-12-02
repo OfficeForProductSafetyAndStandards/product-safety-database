@@ -12,14 +12,7 @@ class SearchParams
     RELEVANT = "relevant"
   ].freeze
 
-  attribute :allegation
-  attribute :case_owner_is_me, :boolean
-  alias_method :case_owner_is_me?, :case_owner_is_me
-  attribute :case_owner_is_my_team, :boolean
-  alias_method :case_owner_is_my_team?, :case_owner_is_my_team
-  attribute :case_owner_is_someone_else, :boolean
-  alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
-  attribute :case_owner_is_someone_else_id
+  attribute :allegation  
   attribute :created_by_me, :boolean
   alias_method :created_by_me?, :created_by_me
   attribute :created_by_someone_else, :boolean
@@ -35,6 +28,7 @@ class SearchParams
   alias_method :status_open?, :status_open
   attribute :status_closed, :boolean
   attribute :priority
+  attribute :case_owner
   attribute :sort_by
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new

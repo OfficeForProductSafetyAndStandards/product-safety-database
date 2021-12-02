@@ -42,7 +42,7 @@ module InvestigationSearchHelper
         { bool: get_owner_filter(user) }
       ]
     }
-    byebug
+
     return must_filters if @search.priority == "priority_all"
 
     case @search.priority
@@ -76,8 +76,8 @@ module InvestigationSearchHelper
   end
 
   def get_owner_filter(user)
-    return { should: [], must_not: [] } if @search.no_owner_boxes_checked?
-    return { should: [], must_not: compute_excluded_terms(user) } if @search.owner_filter_exclusive?
+    return { should: [], must_not: [] } if @search.case_owner == "all"
+    return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others"
 
     { should: compute_included_terms(user), must_not: [] }
   end
@@ -88,20 +88,34 @@ module InvestigationSearchHelper
 
   def compute_included_terms(user)
     owners = []
-    owners << user.id if @search.case_owner_is_me?
-    owners += my_team_id_and_its_user_ids(user) if @search.case_owner_is_my_team?
-    owners += other_owner_ids if @search.case_owner_is_someone_else?
+    case @search.case_owner
+    when "me"
+      owners << user.id
+    when "my_team"
+      owners += my_team_id_and_its_user_ids(user)
+    when "me_and_my_team"
+      owners += my_team_id_and_its_user_ids(user)
+      owners << user.id
+    when "others"
+      # owners += other_owner_ids
+    end
+
+    # byebug
+
+    # owners << user.id if @search.case_owner_is_me?
+    # owners += my_team_id_and_its_user_ids(user) if @search.case_owner_is_my_team?
+    # owners += other_owner_ids if @search.case_owner_is_someone_else?
 
     format_owner_terms(owners.uniq)
   end
 
-  def other_owner_ids
-    if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
-      return user_ids_from_team(team)
-    end
-
-    [@search.case_owner_is_someone_else_id]
-  end
+  # def other_owner_ids
+  #   if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+  #     return user_ids_from_team(team)
+  #   end
+  #
+  #   [@search.case_owner_is_someone_else_id]
+  # end
 
   def format_owner_terms(owner_array)
     owner_array.map do |a|
@@ -151,6 +165,6 @@ module InvestigationSearchHelper
   end
 
   def my_team_id_and_its_user_ids(user)
-    [user.team_id] + user.team.user_ids
+    [user.team_id] + user.team.user_ids - [user.id]
   end
 end
