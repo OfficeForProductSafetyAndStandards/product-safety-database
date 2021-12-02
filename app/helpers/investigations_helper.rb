@@ -19,8 +19,8 @@ module InvestigationsHelper
       :case_owner,
       :sort_by,
       :priority,
-      created_by: %i[me someone_else my_team id],
-      teams_with_access: [:other_team_with_access, :my_team, { id: [] }]
+      :teams_with_access,
+      created_by: %i[me someone_else my_team id]
     )
   end
 

@@ -97,7 +97,7 @@ module InvestigationSearchHelper
       owners += my_team_id_and_its_user_ids(user)
       owners << user.id
     when "others"
-      # owners += other_owner_ids
+      owners += other_owner_ids
     end
 
     # byebug
@@ -109,13 +109,13 @@ module InvestigationSearchHelper
     format_owner_terms(owners.uniq)
   end
 
-  # def other_owner_ids
-  #   if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
-  #     return user_ids_from_team(team)
-  #   end
-  #
-  #   [@search.case_owner_is_someone_else_id]
-  # end
+  def other_owner_ids
+    if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
+      return user_ids_from_team(team)
+    end
+
+    [@search.case_owner_is_someone_else_id]
+  end
 
   def format_owner_terms(owner_array)
     owner_array.map do |a|

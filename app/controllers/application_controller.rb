@@ -77,7 +77,8 @@ class ApplicationController < ActionController::Base
         status_closed: s[:status_closed],
         sort_by: s[:sort_by],
         priority: s[:priority],
-        case_owner: s[:case_owner]
+        case_owner: s[:case_owner],
+        case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id]
       }
     else
       {}
