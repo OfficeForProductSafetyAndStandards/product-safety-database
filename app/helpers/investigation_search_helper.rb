@@ -51,7 +51,8 @@ module InvestigationSearchHelper
     when "serious_and_high_risk_level_only"
       must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
     when "coronavirus_and_serious_and_high_risk"
-      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high), coronavirus_related: true } }
+      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
+      must_filters[:must] << { term: { coronavirus_related: true } }
     end
 
     must_filters

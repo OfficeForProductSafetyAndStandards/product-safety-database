@@ -21,10 +21,6 @@ module InvestigationsHelper
       :case_owner_is_someone_else,
       :case_owner_is_someone_else_id,
       :sort_by,
-      :coronavirus_related_only,
-      :serious_and_high_risk_level_only,
-      :priority_all,
-      :coronavirus_and_serious_and_high_risk,
       :priority,
       created_by: %i[me someone_else my_team id],
       teams_with_access: [:other_team_with_access, :my_team, { id: [] }]

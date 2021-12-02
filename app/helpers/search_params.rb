@@ -34,13 +34,6 @@ class SearchParams
   attribute :status_open, :boolean, default: true
   alias_method :status_open?, :status_open
   attribute :status_closed, :boolean
-  attribute :coronavirus_related_only, :boolean
-  alias_method :coronavirus_related_only?, :coronavirus_related_only
-  attribute :serious_and_high_risk_level_only, :boolean
-  alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
-  attribute :coronavirus_and_serious_and_high_risk, :boolean
-  alias_method :coronavirus_and_serious_and_high_risk?, :coronavirus_and_serious_and_high_risk
-  attribute :priority_all, :boolean
   attribute :priority
   attribute :sort_by
   attribute :page, :integer
