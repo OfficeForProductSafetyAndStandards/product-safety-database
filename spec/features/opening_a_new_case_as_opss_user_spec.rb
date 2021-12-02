@@ -8,7 +8,7 @@ RSpec.feature "Opening a new case", :with_stubbed_elasticsearch, :with_stubbed_a
 
     visit "/cases"
 
-    click_link "Open a new case"
+    click_link "Create a case"
 
     expect_to_be_on_new_case_page
 
