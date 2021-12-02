@@ -1,14 +1,25 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
       Cases
     </h1>
+    <%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm") do %>
+      <p class="govuk-body-s">
+        Cases are used to record findings of investigations and to notify the <abbr title="Office for Product Safety and Standards">OPSS</abbr> about unsafe and non-compliant products.
+      </p>
+      <p class="govuk-body-s govuk-!-margin-bottom-1">
+        <span id="search-hint">You can search for a case using the keywords that describe it and by filtering the results.</span> You can also filter all case records without a keyword search.
+      </p>
+      <p class="govuk-body-s govuk-visually-hidden">
+        Search results appear within the following <code>form</code> and within the <code>role = region</code>.
+      </p>
+    <% end %>
   </div>
 
-  <div class="govuk-grid-column-one-third" style="text-align:right">
-    <%= link_to "Open a new case",
+  <div class="govuk-grid-column-one-third govuk-!-margin-top-8">
+    <%= link_to "Create a case",
       current_user.is_opss? ? new_investigation_path : new_ts_investigation_path,
-      class: "govuk-button govuk-!-margin-bottom-3",
+      class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-align-right opss-text-underline-offset",
       role: "button"
     %>
   </div>
