@@ -21,7 +21,7 @@ module InvestigationSearchHelper
 
   def nested_filters
     filters = []
-
+    return filters unless @search.teams_with_access == "my_team" || @search.teams_with_access == "other"
 
     teams_with_access = [current_user.team.id] if @search.teams_with_access == "my_team"
     teams_with_access = [@search.teams_with_access_other_id] if @search.teams_with_access == "other"
