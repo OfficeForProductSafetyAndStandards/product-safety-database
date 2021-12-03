@@ -12,7 +12,7 @@ class SearchParams
     RELEVANT = "relevant"
   ].freeze
 
-  attribute :allegation  
+  attribute :allegation
   attribute :created_by_me, :boolean
   alias_method :created_by_me?, :created_by_me
   attribute :created_by_someone_else, :boolean
@@ -29,10 +29,12 @@ class SearchParams
   attribute :status_closed, :boolean
   attribute :priority
   attribute :case_owner
+  attribute :case_owner_is_someone_else_id
   attribute :sort_by
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
-  attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
+  attribute :teams_with_access
+  attribute :teams_with_access_other_id
   attribute :hazard_type
 
   def owner_filter_exclusive?

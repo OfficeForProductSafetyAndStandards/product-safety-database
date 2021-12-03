@@ -22,14 +22,17 @@ module InvestigationSearchHelper
   def nested_filters
     filters = []
 
-    if @search.filter_teams_with_access?
+
+    teams_with_access = [current_user.team.id] if @search.teams_with_access == "my_team"
+    teams_with_access = [@search.teams_with_access_other_id] if @search.teams_with_access == "other"
+    teams_with_access = []
+
       filters << {
         nested: {
           path: :teams_with_access,
-          query: { bool: { must: { terms: { "teams_with_access.id" => @search.teams_with_access_ids } } } }
+          query: { bool: { must: { terms: { "teams_with_access.id" => teams_with_access } } } }
         }
       }
-    end
 
     filters
   end

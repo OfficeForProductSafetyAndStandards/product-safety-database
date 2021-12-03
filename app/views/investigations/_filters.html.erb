@@ -51,6 +51,39 @@
       ]
     %>
 
+    <%= render "form_components/govuk_radios",
+      form: form,
+      key: :teams_with_access,
+      classes: "",
+      fieldset: {
+        legend: {
+          text: "Teams added to cases",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      items: [
+        {
+          id: "teams_with_access_all",
+          text: "All",
+          value: "all"
+        },
+        {
+          id: "teams_with_access_my_team",
+          text: "My team",
+          value: "my_team"
+        },
+        {
+          id: "teams_with_access_other",
+          text: "Other",
+          value: "other",
+          conditional: {
+            html: other_teams(form)
+          }
+        }
+      ]
+    %>
+
     <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
   </div>
 </div>

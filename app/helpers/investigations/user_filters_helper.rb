@@ -3,20 +3,6 @@ module Investigations::UserFiltersHelper
     User.get_owners(except: current_user).decorate + Team.not_deleted.decorate
   end
 
-  def teams_added_to_case_items(form)
-    [
-      { key: "teams_with_access[my_team]", value: current_user.team_id, text: t(".my_team"), unchecked_value: "", checked: form.object.teams_with_access_ids.detect { |team_with_access_id| team_with_access_id == current_user.team_id } },
-      {
-        key: "teams_with_access[other_team_with_access]",
-        value: true,
-        unchecked_value: "off",
-        checked: form.object.teams_with_access.other_team_with_access,
-        text: t(".other_team"),
-        conditional: { html: other_teams(form) }
-      }
-    ]
-  end
-
   def case_owner_is(form)
     case_owner_is_items = [{ key: "case_owner_is_me", value: true, unchecked_value: "off", text: "Me" }]
     case_owner_is_items << { key: "case_owner_is_my_team", value: true, unchecked_value: "off", text: "My team", checked: form.object.case_owner_is_my_team? }
@@ -51,16 +37,16 @@ module Investigations::UserFiltersHelper
     other_teams = Team.not_deleted.where.not(id: current_user.team)
 
     render "form_components/govuk_select",
-           key: "teams_with_access[id][]",
+           key: :teams_with_access_other_id,
            form: form,
-           items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_ids.detect { |team_with_access_id| team_with_access_id == e.id } } },
+           items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
            label: { text: "Name" },
            is_autocomplete: true
   end
 
   def other_creator(form)
     render "form_components/govuk_select",
-           key: "created_by[id]",
+           key: :created_by_other,
            form: form,
            items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.created_by.id == e.id } },
            label: { text: "Name" },

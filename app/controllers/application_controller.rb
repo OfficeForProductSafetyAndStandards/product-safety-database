@@ -70,6 +70,7 @@ class ApplicationController < ActionController::Base
       {
         created_by: s[:created_by],
         teams_with_access: s[:teams_with_access],
+        teams_with_access_other_id: s[:teams_with_access_other_id],
         allegation: s[:allegation],
         enquiry: s[:enquiry],
         project: s[:project],
