@@ -27,13 +27,13 @@ class SearchParams
   attribute :status_open, :boolean, default: true
   alias_method :status_open?, :status_open
   attribute :status_closed, :boolean
-  attribute :priority
-  attribute :case_owner
+  attribute :priority, default: "all"
+  attribute :case_owner, default: "all"
   attribute :case_owner_is_someone_else_id
   attribute :sort_by
   attribute :page, :integer
   attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
-  attribute :teams_with_access
+  attribute :teams_with_access, default: "all"
   attribute :teams_with_access_other_id
   attribute :hazard_type
 
