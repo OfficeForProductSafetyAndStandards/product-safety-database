@@ -68,12 +68,17 @@ module InvestigationSearchHelper
   end
 
   def get_type_filter
-    return {} if params[:allegation] == "unchecked" && params[:enquiry] == "unchecked" && params[:project] == "unchecked"
+    case @search.case_type
+    when "allegation"
+      types = ["Investigation::Allegation"]
+    when "project"
+      types = ["Investigation::Project"]
+    when "enquiry"
+      types = ["Investigation::Enquiry"]
+    else
+      types = ["Investigation::Allegation", "Investigation::Project", "Investigation::Enquiry"]
+    end
 
-    types = []
-    types << "Investigation::Allegation" if params[:allegation] == "checked"
-    types << "Investigation::Enquiry" if params[:enquiry] == "checked"
-    types << "Investigation::Project" if params[:project] == "checked"
     type = { type: types }
     { must: [{ terms: type }] }
   end

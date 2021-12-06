@@ -127,6 +127,41 @@
       ]
     %>
 
+    <%= render "form_components/govuk_radios",
+      form: form,
+      key: :case_type,
+      classes: "",
+      fieldset: {
+        legend: {
+          text: "Teams added to cases",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      items: [
+        {
+          id: "case_type_all",
+          text: "All",
+          value: "all"
+        },
+        {
+          id: "case_type_allegation",
+          text: "Allegation",
+          value: "allegation"
+        },
+        {
+          id: "case_type_enquiry",
+          text: "Enquiry",
+          value: "enquiry"
+        },
+        {
+          id: "case_type_project",
+          text: "Project",
+          value: "project"
+        }
+      ]
+    %>
+
     <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
   </div>
 </div>

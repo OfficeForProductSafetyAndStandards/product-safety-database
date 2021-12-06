@@ -12,13 +12,11 @@ class SearchParams
     RELEVANT = "relevant"
   ].freeze
 
-  attribute :allegation
   attribute :created_by, default: "all"
   attribute :created_by_other_id
   attribute :override_sort_by
   attribute :direction
-  attribute :enquiry
-  attribute :project
+  attribute :case_type, default: "all"
   attribute :q
   attribute :status
   attribute :status_open, :boolean, default: true
