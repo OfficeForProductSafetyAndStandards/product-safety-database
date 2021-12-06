@@ -3,23 +3,37 @@ class AttachmentCategorizer
     @blob = blob
   end
 
-  def non_activity_attachment
-    @blob.attachments.where.not(record_type: "Activity").first
+  def attachment
+    @blob.attachments.first
   end
 
   def is_an_image?
-    non_activity_attachment.content_type.include?("image")
+    attachment.content_type.include?("image")
+  end
+
+  def related_activity_type
+    return unless attachment.record_type == "Activity"
+
+    Activity.find(attachment.record_id).type
   end
 
   def related_investigation
-    return if non_activity_attachment.blank?
+    return if attachment.blank?
 
-    klass = Object.const_get(non_activity_attachment.record_type)
+    klass = Object.const_get(attachment.record_type)
 
-    instance_of_klass = klass.find(non_activity_attachment.record_id)
+    instance_of_klass = klass.find(attachment.record_id)
 
     return instance_of_klass if instance_of_klass.is_a?(Investigation)
 
     instance_of_klass.try(:investigation)
+  end
+
+  def is_a_correspondence_activity?
+    related_activity_type.try(:include?, "Correspondence")
+  end
+
+  def is_an_investigation_document?
+    related_activity_type.try(:include?, "AuditActivity::Document")
   end
 end

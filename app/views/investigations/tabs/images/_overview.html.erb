@@ -1,0 +1,28 @@
+<% page_heading = "Images" %>
+<%= page_title "#{page_heading} - #{@investigation.pretty_id}" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <span class="govuk-caption-l"><%= @investigation.pretty_description %></span>
+    <h1 class="govuk-heading-l"><%= page_heading %></h1>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+  </div>
+</div>
+
+<% @products = @investigation.products %>
+
+<%= render "components/govuk_tabs",
+items: [
+  {
+    id: "case-images",
+    label: "Case images (#{@investigation.images.count})",
+    panel: { html: render("investigations/tabs/images/images") }
+  },
+  {
+    id: "product-images",
+    label: "Product images (#{@products.flat_map(&:images).count})",
+    panel: { html: render("investigations/tabs/images/product_images") }
+  }
+]
+%>

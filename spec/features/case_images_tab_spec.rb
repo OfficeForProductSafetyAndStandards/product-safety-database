@@ -53,6 +53,63 @@ RSpec.feature "Manage Images", :with_stubbed_elasticsearch, :with_stubbed_antivi
     expect_case_activity_page_to_show_entered_information
   end
 
+  context "when case has products" do
+    let(:product) { create(:product) }
+
+    before do
+      InvestigationProduct.create(investigation_id: investigation.id, product_id: product.id)
+    end
+
+    scenario "case images tab shows number of product images and number of case images" do
+      visit "/cases/#{investigation.pretty_id}"
+
+      expect(page).to have_content "Images (0)"
+
+      click_link "Images"
+
+      expect(page).to have_content "Case images (0)"
+      expect(page).to have_content "Product images (0)"
+
+      click_link "Add image"
+
+      expect_to_be_on_add_image_page
+
+      click_button "Save attachment"
+
+      expect(page).to have_error_summary("Select a file", "Enter a document title")
+
+      attach_and_submit_file
+
+      expect_to_be_on_images_page
+      expect_confirmation_banner("File has been added to the allegation")
+
+      expect(page).to have_content "Images (1)"
+      expect(page).to have_content "Case images (1)"
+      expect(page).to have_content "Product images (0)"
+
+      click_link "Product images"
+
+      expect(page).to have_content "No attachments"
+
+      click_link "Go to the #{product.name} product page"
+
+      click_link "Images"
+
+      click_link "Add image"
+
+      attach_and_submit_file
+
+      visit "/cases/#{investigation.pretty_id}"
+
+      expect(page).to have_content "Images (2)"
+
+      click_link "Images"
+
+      expect(page).to have_content "Case images (1)"
+      expect(page).to have_content "Product images (1)"
+    end
+  end
+
   def expect_case_activity_page_to_show_entered_information
     expect(page).to have_selector("h1", text: "Activity")
     item = page.find("h3", text: title).find(:xpath, "..")
