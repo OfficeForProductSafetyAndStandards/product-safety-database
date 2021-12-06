@@ -69,6 +69,7 @@ class ApplicationController < ActionController::Base
       s = session[:previous_search_params]
       {
         created_by: s[:created_by],
+        created_by_other_id: s[:created_by_other_id],
         teams_with_access: s[:teams_with_access],
         teams_with_access_other_id: s[:teams_with_access_other_id],
         allegation: s[:allegation],

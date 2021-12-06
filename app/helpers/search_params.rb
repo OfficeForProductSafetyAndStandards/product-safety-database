@@ -13,11 +13,8 @@ class SearchParams
   ].freeze
 
   attribute :allegation
-  attribute :created_by_me, :boolean
-  alias_method :created_by_me?, :created_by_me
-  attribute :created_by_someone_else, :boolean
-  alias_method :created_by_someone_else?, :created_by_someone_else
-  attribute :created_by_someone_else_ids, default: []
+  attribute :created_by, default: "all"
+  attribute :created_by_other_id
   attribute :override_sort_by
   attribute :direction
   attribute :enquiry
@@ -32,7 +29,6 @@ class SearchParams
   attribute :case_owner_is_someone_else_id
   attribute :sort_by
   attribute :page, :integer
-  attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
   attribute :teams_with_access, default: "all"
   attribute :teams_with_access_other_id
   attribute :hazard_type

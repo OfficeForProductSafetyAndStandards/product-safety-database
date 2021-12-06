@@ -22,7 +22,8 @@ module InvestigationsHelper
       :teams_with_access,
       :case_owner_is_someone_else_id,
       :teams_with_access_other_id,
-      created_by: %i[me someone_else my_team id]
+      :created_by,
+      :created_by_other_id
     )
   end
 
@@ -396,7 +397,7 @@ module InvestigationsHelper
   end
 
   def form_serialisation_option
-    options = { include: %i[created_by] }
+    options = {}
     options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
 
     options

@@ -127,8 +127,7 @@ module InvestigationSearchHelper
   end
 
   def get_creator_filter(user)
-    return { should: [], must_not: [] } if @search.no_created_by_checked?
-    return { should: [], must_not: { terms: { creator_id: user.team.user_ids } } } if @search.created_by_filter_exclusive?
+    return { should: [], must_not: [] } if @search.created_by == "all"
 
     { should: format_creator_terms(checked_team_creators(user)), must_not: [] }
   end
@@ -136,14 +135,14 @@ module InvestigationSearchHelper
   def checked_team_creators(user)
     ids = []
 
-    ids << user.id                       if @search.created_by.me?
-    ids += user_ids_from_team(user.team) if @search.created_by.my_team?
+    ids << user.id                       if @search.created_by == "me"
+    ids += user_ids_from_team(user.team) if @search.created_by == "me_and_my_team"
+    ids += my_team_id_and_its_user_ids(user) if @search.created_by == "my_team"
 
-    if @search.created_by.someone_else? && @search.created_by.id.present?
-      if (team = Team.find_by(id: @search.created_by.id))
+
+    if @search.created_by == "others" && @search.created_by_other_id
+      if (team = Team.find_by(id: @search.created_by_other_id))
         ids += user_ids_from_team(team)
-      else
-        ids << @search.created_by.id
       end
     end
 
