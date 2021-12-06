@@ -18,10 +18,7 @@ class SearchParams
   attribute :direction
   attribute :case_type, default: "all"
   attribute :q
-  attribute :status
-  attribute :status_open, :boolean, default: true
-  alias_method :status_open?, :status_open
-  attribute :status_closed, :boolean
+  attribute :case_status, default: "open"
   attribute :priority, default: "all"
   attribute :case_owner, default: "all"
   attribute :case_owner_is_someone_else_id
@@ -56,14 +53,6 @@ class SearchParams
 
   def filter_teams_with_access?
     teams_with_access_ids.any?
-  end
-
-  def filter_status?
-    status_open != status_closed
-  end
-
-  def is_closed?
-    !status_open?
   end
 
   def selected_sort_by

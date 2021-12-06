@@ -7,11 +7,9 @@ module InvestigationsHelper
   end
 
   def query_params
-    set_default_type_filter
     params.permit(
       :q,
-      :status_open,
-      :status_closed,
+      :case_status,
       :case_type,
       :page,
       :case_owner,
@@ -27,12 +25,6 @@ module InvestigationsHelper
 
   def export_params
     query_params.except(:page, :sort_by)
-  end
-
-  def set_default_type_filter
-    params[:allegation] = "unchecked" if params[:allegation].blank?
-    params[:enquiry] = "unchecked" if params[:enquiry].blank?
-    params[:project] = "unchecked" if params[:project].blank?
   end
 
   def build_breadcrumb_structure

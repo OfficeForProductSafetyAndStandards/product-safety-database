@@ -62,9 +62,9 @@ module InvestigationSearchHelper
   end
 
   def get_status_filter
-    return unless @search.filter_status?
-
-    { term: { is_closed: @search.is_closed? } }
+    return if @search.case_status == "all"
+    is_closed = @search.case_status == "closed"
+    { term: { is_closed: is_closed } }
   end
 
   def get_type_filter

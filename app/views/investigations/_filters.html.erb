@@ -133,7 +133,7 @@
       classes: "",
       fieldset: {
         legend: {
-          text: "Teams added to cases",
+          text: "Case type",
           is_page_heading: false,
           classes: "govuk-fieldset__legend--m"
         }
@@ -158,6 +158,36 @@
           id: "case_type_project",
           text: "Project",
           value: "project"
+        }
+      ]
+    %>
+
+    <%= render "form_components/govuk_radios",
+      form: form,
+      key: :case_status,
+      classes: "",
+      fieldset: {
+        legend: {
+          text: "Case status",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--m"
+        }
+      },
+      items: [
+        {
+          id: "case_status_open",
+          text: "Open",
+          value: "open"
+        },
+        {
+          id: "case_status_closed",
+          text: "Closed",
+          value: "closed"
+        },
+        {
+          id: "case_status_all",
+          text: "All",
+          value: "all"
         }
       ]
     %>
