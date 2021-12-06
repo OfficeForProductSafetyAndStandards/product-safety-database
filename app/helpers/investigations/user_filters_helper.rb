@@ -14,12 +14,10 @@ module Investigations::UserFiltersHelper
   end
 
   def created_by(form)
-    other_teams = Team.not_deleted.where.not(id: current_user.team)
-
     render "form_components/govuk_select",
            key: :created_by_other_id,
            form: form,
-           items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
+           items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
            label: { text: "Name" },
            is_autocomplete: true
   end
