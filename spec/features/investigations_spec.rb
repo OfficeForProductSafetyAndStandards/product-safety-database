@@ -4,10 +4,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
   let(:user) { create :user, :activated, has_viewed_introduction: true }
   let(:pagination_link_params) do
     {
-      allegation: :unchecked,
-      enquiry: :unchecked,
-      page: 2,
-      project: :unchecked
+      page: 2
     }
   end
 
@@ -41,6 +38,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
       .to have_css("table#results tbody.govuk-table__body:nth-child(5) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
     expect(page).to have_css("nav.opss-pagination-link .opss-pagination-link--text", text: "Page 1")
+
     expect(page).to have_link("Next page", href: /#{Regexp.escape(investigations_path(pagination_link_params))}/)
 
     fill_in "Keywords", with: "electric skateboard"
