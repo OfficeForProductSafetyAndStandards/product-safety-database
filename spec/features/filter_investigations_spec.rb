@@ -42,8 +42,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filter investigations created by another team" do
+    find(".govuk-details__summary-text").click
+
     within_fieldset("Created by") do
-      check "Other person or team"
+      choose "Others"
       select other_team.name, from: "Name"
     end
     click_button "Apply filters"
@@ -54,7 +56,9 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filter investigations created by my team" do
-    within_fieldset("Created by") { check "My team" }
+    find(".govuk-details__summary-text").click
+
+    within_fieldset("Created by") { choose "My team" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -63,6 +67,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filter investigations created by anybody but my team" do
+    find(".govuk-details__summary-text").click
     within_fieldset("Created by") { check "Other person or team" }
     click_button "Apply filters"
 
@@ -77,8 +82,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filter investigations created by a different user" do
+    find(".govuk-details__summary-text").click
+
     within_fieldset("Created by") do
-      check "Other person or team"
+      choose "Other person or team"
       select other_user_other_team.name, from: "Name"
     end
     click_button "Apply filters"
@@ -137,8 +144,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   scenario "filtering only closed cases" do
     within_fieldset "Status" do
-      uncheck "Open"
-      check "Closed"
+      choose "Open"
     end
     click_button "Apply filters"
 
@@ -148,19 +154,17 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   scenario "filtering for projects and enquiries" do
     within_fieldset "Type" do
-      uncheck "Allegation"
-      check "Enquiry"
-      check "Project"
+      choose "Project"
     end
     click_button "Apply filters"
 
     expect(page).not_to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(project.pretty_id)
-    expect(page).to have_listed_case(enquiry.pretty_id)
+    expect(page).not_to have_listed_case(enquiry.pretty_id)
   end
 
   scenario "filtering cases where the user is the owner" do
-    check "Me", id: "case_owner_is_me"
+    choose "Me", id: "case_owner_is_me"
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -183,7 +187,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       let(:chosen_team) { team }
 
       scenario "filtering cases having a given team a collaborator" do
-        within_fieldset("Teams added to case") { check "My team" }
+        within_fieldset("Teams added to case") { choose "My team" }
         click_button "Apply filters"
 
         expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
@@ -198,7 +202,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
       scenario "filters the cases by other team with access" do
         within_fieldset("Teams added to case") do
-          check "Other team"
+          choose "Other team"
           select other_team.name, from: "Name"
         end
         click_button "Apply filters"
@@ -212,8 +216,8 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
           expect(page).to have_select("Name", with_options: [other_team.name])
         end
 
-        within_fieldset("Teams added to case") { uncheck "Other team" }
-        within_fieldset("Case owner")          { check "My team" }
+        within_fieldset("Teams added to case") { choose "All" }
+        within_fieldset("Case owner")          { choose "My team" }
         click_button "Apply filters"
 
         expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
@@ -224,7 +228,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where the user’s team is the owner" do
-    within_fieldset("Case owner") { check "My team" }
+    within_fieldset("Case owner") { choose "My team" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -234,7 +238,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where the owner is someone else" do
-    check "Other person or team", id: "case_owner_is_someone_else"
+    choose "Other person or team", id: "case_owner_is_someone_else"
     click_button "Apply filters"
     expect(page).not_to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(other_user_investigation.pretty_id)
