@@ -121,9 +121,10 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
       expect(page).to have_unchecked_field("Closed")
     end
 
-    within_fieldset "Sort by" do
-      expect(page).to have_checked_field("Most recently updated")
+    within "#sort-by-fieldset" do
+      expect(page).to have_select("Sort the results by", selected: "Recent updates")
     end
+    expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
   end
 
   scenario "filtering for both open and closed cases" do
@@ -330,8 +331,9 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
     def select_sorting_option(option)
-      within_fieldset("Sort by") { choose(option) }
-      click_button "Apply filters"
+      within("form#cases-search-form dl.opss-dl-select") do
+        click_on option
+      end
     end
 
     context "with no sort by option selected" do
@@ -341,7 +343,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     end
 
     context "with sort by most recently updated option selected" do
-      before { select_sorting_option("Most recently updated") }
+      before { select_sorting_option("Recent updates") }
 
       it "shows results by most recently updated" do
         expect(page).to list_cases_in_order(cases.map(&:pretty_id))
@@ -351,7 +353,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     context "with sort by least recently updated option selected" do
       let(:cases) { default_filtered_cases.order(updated_at: :asc) }
 
-      before { select_sorting_option("Least recently updated") }
+      before { select_sorting_option("Oldest updates") }
 
       it "shows results by least recently updated" do
         expect(page).to list_cases_in_order(cases.map(&:pretty_id))
@@ -361,7 +363,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     context "with sort by most recently created option selected" do
       let(:cases) { default_filtered_cases.order(created_at: :desc) }
 
-      before { select_sorting_option("Most recently created") }
+      before { select_sorting_option("Newest cases") }
 
       it "shows results by most recently created" do
         expect(page).to list_cases_in_order(cases.map(&:pretty_id))

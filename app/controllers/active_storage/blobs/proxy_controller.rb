@@ -9,8 +9,12 @@
 class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
   include ActiveStorage::SetHeaders
+  include ActiveStorage::SetCurrent
   include HttpAuthConcern
   include SentryConfigurationConcern
+  include Pundit
+
+  self.etag_with_template_digest = false
 
   before_action :authorize_blob
 
@@ -22,6 +26,42 @@ class ActiveStorage::Blobs::ProxyController < ActiveStorage::BaseController
 private
 
   def authorize_blob
-    redirect_to "/sign-in" unless user_signed_in?
+    return redirect_to "/sign-in" unless user_signed_in?
+
+    if related_investigation
+      if attachment_is_protected_type? && !InvestigationPolicy.new(current_user, related_investigation).view_protected_details?
+        return redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") }
+      end
+
+      return redirect_to "/", flash: { warning: I18n.t("attachments.unauthorised") } unless InvestigationPolicy.new(current_user, related_investigation).view_non_protected_details?
+    end
+  end
+
+  def attachment_categorizer
+    AttachmentCategorizer.new(@blob)
+  end
+
+  def related_investigation
+    attachment_categorizer.related_investigation
+  end
+
+  def attachment
+    attachment_categorizer.attachment
+  end
+
+  def is_an_image?
+    attachment_categorizer.is_an_image?
+  end
+
+  def is_a_correspondence_or_correspondence_activity_document?
+    attachment.record_type == "Correspondence" || attachment_categorizer.is_a_correspondence_activity?
+  end
+
+  def is_a_non_image_investigation_document?
+    attachment.record_type == "Investigation" && !is_an_image? || attachment_categorizer.is_an_investigation_document? && !is_an_image?
+  end
+
+  def attachment_is_protected_type?
+    is_a_correspondence_or_correspondence_activity_document? || is_a_non_image_investigation_document?
   end
 end

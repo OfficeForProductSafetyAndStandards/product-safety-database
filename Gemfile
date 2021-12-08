@@ -5,7 +5,7 @@ ruby "~> 2.7"
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
 gem "activerecord-pg_enum", "~> 1.2"
-gem "aws-sdk-s3", "~> 1.105"
+gem "aws-sdk-s3", "~> 1.109"
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -31,7 +31,7 @@ gem "redcarpet", "~> 3.5"
 gem "redis-rails", "~> 5.0"
 gem "rest-client", "~> 2.1"
 gem "sass-rails", "~> 6.0"
-gem "scout_apm", "~> 5.0"
+gem "scout_apm", "~> 5.1"
 gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.3"
@@ -43,7 +43,7 @@ gem "strong_migrations", "~> 0.7"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
-gem "wicked", "~> 1.3"
+gem "wicked", "~> 1.4"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.8.1", require: "govuk_design_system"
 
@@ -64,7 +64,7 @@ group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "solargraph", "~> 0.44"
-  gem "spring", "~> 3.0"
+  gem "spring", "~> 3.1"
   gem "spring-commands-rspec", "~> 1.0"
 end
 

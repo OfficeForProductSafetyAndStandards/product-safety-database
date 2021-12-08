@@ -30,7 +30,7 @@
         <%= "#{time_ago_in_words(investigation.created_at)} ago" %>
       </span>
     </div>
-  <% elsif sorted_by == SearchParams::RECENT || SearchParams::OLDEST || sorted_by == SearchParams::RELEVANT %>
+  <% else %>
     <div class="govuk-grid-column-one-quarter">
       <span class="govuk-caption-m govuk-!-font-size-16">Last updated</span>
       <span><%= "#{time_ago_in_words(investigation.updated_at)} ago" %></span>
