@@ -162,7 +162,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where the user is the owner" do
-    choose "Me", id: "case_owner_is_me"
+    within_fieldset("Case owner") { choose "My team" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)

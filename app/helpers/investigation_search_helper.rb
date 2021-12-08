@@ -91,7 +91,7 @@ module InvestigationSearchHelper
 
   def get_owner_filter(user)
     return { should: [], must_not: [] } if @search.case_owner == "all"
-    # return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others"
+    return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others" && @search.case_owner_is_someone_else_id.blank?
 
     { should: compute_included_terms(user), must_not: [] }
   end
