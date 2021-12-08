@@ -46,7 +46,7 @@ module InvestigationSearchHelper
       ]
     }
 
-    return must_filters if @search.priority == "priority_all"
+    return must_filters if @search.priority == "all"
 
     case @search.priority
     when "coronavirus_related_only"
@@ -84,8 +84,9 @@ module InvestigationSearchHelper
   end
 
   def get_owner_filter(user)
+    byebug
     return { should: [], must_not: [] } if @search.case_owner == "all"
-    return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others"
+    # return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others"
 
     { should: compute_included_terms(user), must_not: [] }
   end
@@ -96,6 +97,7 @@ module InvestigationSearchHelper
 
   def compute_included_terms(user)
     owners = []
+
     case @search.case_owner
     when "me"
       owners << user.id
@@ -105,7 +107,7 @@ module InvestigationSearchHelper
       owners += my_team_id_and_its_user_ids(user)
       owners << user.id
     when "others"
-      owners += other_owner_ids
+      owners << @search.case_owner_is_someone_else_id
     end
 
     # byebug
@@ -143,7 +145,6 @@ module InvestigationSearchHelper
     ids << user.id                       if @search.created_by == "me"
     ids += user_ids_from_team(user.team) if @search.created_by == "me_and_my_team"
     ids += my_team_id_and_its_user_ids(user) if @search.created_by == "my_team"
-
 
     if @search.created_by == "others" && @search.created_by_other_id
       if (team = Team.find_by(id: @search.created_by_other_id))
