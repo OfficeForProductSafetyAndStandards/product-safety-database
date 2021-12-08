@@ -112,10 +112,8 @@ module InvestigationSearchHelper
       owners += my_team_id_and_its_user_ids(user)
       owners << user.id
     when "others"
-      owners << @search.case_owner_is_someone_else_id
+      owners += other_owner_ids
     end
-
-    # byebug
 
     # owners << user.id if @search.case_owner_is_me?
     # owners += my_team_id_and_its_user_ids(user) if @search.case_owner_is_my_team?
