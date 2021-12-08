@@ -10,6 +10,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
   end
   let(:other_user) { create(:user, :activated, has_viewed_introduction: true, team: other_team) }
 
+  # rubocop:disable RSpec/NestedGroups
   context "when using generic active storage urls" do
     context "when using blobs redirect controller" do
       # /rails/active_storage/blobs/redirect/:signed_id/*filename(.:format)                                 active_storage/blobs/redirect#show
@@ -93,7 +94,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
             before do
               sign_in(other_user)
             end
-            # rubocop:disable RSpec/NestedGroups
 
             context "when the user does not have the can_view_restricted_cases role" do
               it "does not return the file" do
@@ -113,7 +113,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
                 expect(response.status).to eq(200)
               end
             end
-            # rubocop:enable RSpec/NestedGroups
           end
         end
 
@@ -140,7 +139,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
               expect(response.status).to eq(200)
             end
-            # rubocop:disable RSpec/NestedGroups
 
             context "when the investigation is restricted" do
               before do
@@ -153,7 +151,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
                 expect(response.status).to eq(302)
               end
             end
-            # rubocop:enable RSpec/NestedGroups
           end
         end
       end
@@ -167,7 +164,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
           sign_in(user)
           get asset_url
         end
-        # rubocop:disable RSpec/RepeatedExampleGroupBody
 
         context "when the user's team owns the product investigation" do
           it "returns file" do
@@ -177,10 +173,10 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
 
         context "when user's team does not own the product investigation" do
           it "returns file" do
+            sign_in(other_user)
             expect(response.status).to eq(200)
           end
         end
-        # rubocop:enable RSpec/RepeatedExampleGroupBody
       end
 
       context "when the attachment is an correspondence" do
@@ -268,25 +264,118 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
       context "when the attachment is on an activity" do
         let(:asset_url) { rails_storage_proxy_path(document) }
         let(:product) { create(:product, investigations: [investigation]) }
-        let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
 
-        before do
-          document.update!(record_type: "Activity", record_id: activity.id)
-        end
+        context "when the activity is not a correspondence or investigation document related" do
+          let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
 
-        context "when the user's team owns the investigation" do
-          it "returns file" do
-            sign_in(user)
-            get asset_url
-            expect(response.status).to eq(200)
+          before do
+            document.update!(record_type: "Activity", record_id: activity.id)
+          end
+
+          context "when the user's team owns the investigation" do
+            it "returns file" do
+              sign_in(user)
+              get asset_url
+              expect(response.status).to eq(200)
+            end
+          end
+
+          context "when user's team does not own the investigation" do
+            it "returns file" do
+              sign_in(other_user)
+              get asset_url
+              expect(response.status).to eq(200)
+            end
           end
         end
 
-        context "when user's team does not own the investigation" do
-          it "returns file" do
-            sign_in(other_user)
-            get asset_url
-            expect(response.status).to eq(200)
+        context "when the activity is a correspondence" do
+          let!(:product) { create(:product, investigations: [investigation]) }
+          let!(:correspondence) { create(:correspondence_meeting, investigation: investigation) }
+          let!(:activity) { AuditActivity::Correspondence::Base.create(investigation: investigation, product: product, correspondence: correspondence) }
+
+          before do
+            document.update!(record_type: "Activity", record_id: activity.id)
+          end
+
+          context "when the user's team owns the investigation" do
+            it "returns file" do
+              sign_in(user)
+              get asset_url
+              expect(response.status).to eq(200)
+            end
+          end
+
+          context "when user's team does not own the investigation" do
+            it "returns file" do
+              sign_in(other_user)
+              get asset_url
+              expect(response.status).to eq(302)
+            end
+          end
+        end
+
+        context "when the activity is related to a document" do
+          let!(:product) { create(:product, investigations: [investigation]) }
+          let!(:activity) { AuditActivity::Document::Base.create(investigation: investigation, product: product) }
+
+          before do
+            document.update!(record_type: "Activity", record_id: activity.id)
+          end
+
+          context "when the document is an image" do
+            context "when the user's team owns the investigation" do
+              it "returns file" do
+                sign_in(user)
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
+
+            context "when user's team does not own the investigation" do
+              it "returns file" do
+                sign_in(other_user)
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
+          end
+
+          context "when the document is not an image" do
+            before do
+              document.blob.update!(content_type: "pdf")
+            end
+
+            context "when the user's team owns the investigation" do
+              it "returns file" do
+                sign_in(user)
+                get asset_url
+                expect(response.status).to eq(200)
+              end
+            end
+
+            context "when user's team does not own the investigation" do
+              context "when the user does not have the can_view_restricted_cases role" do
+                it "does not return the file" do
+                  sign_in(other_user)
+                  get asset_url
+                  expect(response).to redirect_to("/")
+                  expect(response.status).to eq(302)
+                end
+              end
+
+              context "when user does have the can_view_restricted_cases role" do
+                before do
+                  other_user.roles.create!(name: "restricted_case_viewer")
+                end
+
+                it "returns file" do
+                  sign_in(other_user)
+                  get asset_url
+                  expect(response.status).to eq(200)
+                end
+              end
+            end
           end
         end
       end
@@ -332,5 +421,6 @@ RSpec.describe "Asset security", type: :request, with_stubbed_elasticsearch: tru
       end
     end
   end
+  # rubocop:enable RSpec/NestedGroups
   # rubocop:enable RSpec/MultipleExpectations
 end

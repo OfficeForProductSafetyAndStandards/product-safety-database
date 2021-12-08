@@ -45,19 +45,23 @@ private
     attachment_categorizer.related_investigation
   end
 
-  def non_activity_attachment
-    attachment_categorizer.non_activity_attachment
+  def attachment
+    attachment_categorizer.attachment
   end
 
   def is_an_image?
     attachment_categorizer.is_an_image?
   end
 
-  def is_an_investigation_image?
-    non_activity_attachment.record_type == "Investigation" && is_an_image?
+  def is_a_correspondence_or_correspondence_activity_document?
+    attachment.record_type == "Correspondence" || attachment_categorizer.is_a_correspondence_activity?
+  end
+
+  def is_a_non_image_investigation_document?
+    attachment.record_type == "Investigation" && !is_an_image? || attachment_categorizer.is_an_investigation_document? && !is_an_image?
   end
 
   def attachment_is_protected_type?
-    non_activity_attachment.record_type == "Correspondence" || non_activity_attachment.record_type == "Investigation" && !is_an_image?
+    is_a_correspondence_or_correspondence_activity_document? || is_a_non_image_investigation_document?
   end
 end
