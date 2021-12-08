@@ -37,7 +37,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_
     scenario "is able to report an enquiry" do
       visit "/cases"
 
-      click_link "Open a new case"
+      click_link "Create a case"
       choose "type_enquiry"
       click_button "Continue"
 
