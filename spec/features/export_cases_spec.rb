@@ -203,7 +203,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     end
 
     click_button "Apply filters"
-    byebug
+
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
     expect(page).not_to have_text allegation_closed.pretty_id
@@ -241,8 +241,6 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     end
 
     click_button "Apply filters"
-
-    byebug
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id

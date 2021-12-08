@@ -68,6 +68,8 @@ module InvestigationSearchHelper
   end
 
   def get_type_filter
+    return {} if @search.case_type == "all"
+    
     case @search.case_type
     when "allegation"
       types = ["Investigation::Allegation"]
@@ -75,8 +77,6 @@ module InvestigationSearchHelper
       types = ["Investigation::Project"]
     when "enquiry"
       types = ["Investigation::Enquiry"]
-    else
-      types = ["Investigation::Allegation", "Investigation::Project", "Investigation::Enquiry"]
     end
 
     type = { type: types }
@@ -84,7 +84,6 @@ module InvestigationSearchHelper
   end
 
   def get_owner_filter(user)
-    byebug
     return { should: [], must_not: [] } if @search.case_owner == "all"
     # return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others"
 
