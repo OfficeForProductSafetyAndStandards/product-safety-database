@@ -66,7 +66,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
 
   scenario "filter investigations created by anybody but my team" do
-    within_fieldset("Created by") { check "Others" }
+    within_fieldset("Created by") { choose "Others" }
     click_button "Apply filters"
 
     expect(page).not_to have_listed_case(investigation.pretty_id)
@@ -212,7 +212,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
         find(".govuk-details").click
 
         within_fieldset("Teams added to cases") do
-          expect(page).to have_checked_field("Other team")
+          expect(page).to have_checked_field("Other")
           expect(page).to have_select("Name", with_options: [other_team.name])
         end
 
