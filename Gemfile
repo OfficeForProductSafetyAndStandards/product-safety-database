@@ -43,7 +43,7 @@ gem "strong_migrations", "~> 0.7"
 gem "tty-table", require: false
 gem "validate_email", "~> 0.1"
 gem "webpacker", "~> 5.4"
-gem "wicked", "~> 1.3"
+gem "wicked", "~> 1.4"
 
 gem "govuk-design-system-rails", git: "https://github.com/UKGovernmentBEIS/govuk-design-system-rails", tag: "0.8.1", require: "govuk_design_system"
 
