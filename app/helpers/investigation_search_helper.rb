@@ -2,7 +2,7 @@ module InvestigationSearchHelper
   include SearchHelper
 
   def search_query(user)
-    ElasticsearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters)
+    ElasticsearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters(user))
   end
 
   def set_search_params
@@ -19,13 +19,19 @@ module InvestigationSearchHelper
     filters.merge!(merged_must_filters(user)) { |_key, current_filters, new_filters| current_filters + new_filters }
   end
 
-  def nested_filters
+  def nested_filters(user)
     filters = []
+
     return filters unless @search.teams_with_access == "my_team" || @search.teams_with_access == "other"
 
-    teams_with_access = [current_user.team.id] if @search.teams_with_access == "my_team"
-    teams_with_access = [@search.teams_with_access_other_id] if @search.teams_with_access == "other"
-    teams_with_access = []
+    case @search.teams_with_access
+    when "my_team"
+      teams_with_access = [user.team.id]
+    when @search.teams_with_access == "other"
+      teams_with_access = [@search.teams_with_access_other_id]
+    else
+      teams_with_access = []
+    end
 
       filters << {
         nested: {
@@ -69,7 +75,7 @@ module InvestigationSearchHelper
 
   def get_type_filter
     return {} if @search.case_type == "all"
-    
+
     case @search.case_type
     when "allegation"
       types = ["Investigation::Allegation"]
