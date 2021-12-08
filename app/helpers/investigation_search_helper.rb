@@ -27,7 +27,7 @@ module InvestigationSearchHelper
     case @search.teams_with_access
     when "my_team"
       teams_with_access = [user.team.id]
-    when @search.teams_with_access == "other"
+    when "other"
       teams_with_access = [@search.teams_with_access_other_id]
     else
       teams_with_access = []
