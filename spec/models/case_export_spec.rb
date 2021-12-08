@@ -7,7 +7,7 @@ RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stub
   let!(:other_user_same_team) { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
   let!(:investigation) { create(:allegation, creator: user).decorate }
   let!(:other_user_investigation) { create(:allegation, creator: other_user_same_team).decorate }
-  let(:params) { { enquiry: "unchecked", project: "unchecked", sort_by: "recent", allegation: "unchecked", created_by: { id: "", me: "", my_team: "", someone_else: "" }, status_open: "true", teams_with_access: { my_team: "", other_team_with_access: "" } } }
+  let(:params) { { case_type: "all", sort_by: "recent", created_by: "all", case_status: "open", teams_with_access: "all" } }
   let(:case_export) { described_class.create!(user: user, params: params) }
 
   before { Investigation.__elasticsearch__.import force: true, refresh: :wait }
