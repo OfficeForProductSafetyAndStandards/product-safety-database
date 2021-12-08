@@ -133,7 +133,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering for both open and closed cases" do
-    within_fieldset("Case status") { choose "Closed" }
+    within_fieldset("Case status") { choose "All" }
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -142,7 +142,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   scenario "filtering only closed cases" do
     within_fieldset "Case status" do
-      choose "Open"
+      choose "Closed"
     end
     click_button "Apply filters"
 
