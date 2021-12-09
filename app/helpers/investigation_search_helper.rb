@@ -143,7 +143,7 @@ module InvestigationSearchHelper
     ids = []
 
     ids << user.id                       if @search.created_by == "me"
-    ids += user_ids_from_team(team) if @search.created_by == "my_team"
+    ids += user_ids_from_team(user.team) if @search.created_by == "my_team"
 
     if @search.created_by == "others" && @search.created_by_other_id
       if (team = Team.find_by(id: @search.created_by_other_id))
