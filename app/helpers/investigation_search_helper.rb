@@ -107,10 +107,7 @@ module InvestigationSearchHelper
     when "me"
       owners << user.id
     when "my_team"
-      owners += my_team_id_and_its_user_ids(user)
-    when "me_and_my_team"
-      owners += my_team_id_and_its_user_ids(user)
-      owners << user.id
+      owners += user_ids_from_team
     when "others"
       owners += other_owner_ids
     end
@@ -146,8 +143,7 @@ module InvestigationSearchHelper
     ids = []
 
     ids << user.id                       if @search.created_by == "me"
-    ids += user_ids_from_team(user.team) if @search.created_by == "me_and_my_team"
-    ids += my_team_id_and_its_user_ids(user) if @search.created_by == "my_team"
+    ids += user_ids_from_team(team) if @search.created_by == "my_team"
 
     if @search.created_by == "others" && @search.created_by_other_id
       if (team = Team.find_by(id: @search.created_by_other_id))

@@ -156,25 +156,6 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
     expect(spreadsheet.cell(2, 1)).to eq(allegation_serious.pretty_id)
   end
 
-  scenario "with filtering on cases created by user and their  team" do
-    within_fieldset "Created by" do
-      choose "Me and my team"
-    end
-
-    click_button "Apply filters"
-
-    expect(page).to have_text enquiry_coronavirus.pretty_id
-    expect(page).to have_text allegation_serious.pretty_id
-    expect(page).not_to have_text allegation_closed.pretty_id
-    expect(page).not_to have_text allegation_other_team.pretty_id
-
-    click_link "XLSX (spreadsheet)"
-
-    expect(spreadsheet.last_row).to eq(3)
-    expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
-    expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
-  end
-
   scenario "with filtering on cases created by another user or team" do
     within_fieldset "Created by" do
       choose "Others"
@@ -235,7 +216,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases owned by the user" do
     within_fieldset "Case owner" do
-      choose "Me and my team"
+      choose "Me"
     end
 
     click_button "Apply filters"
