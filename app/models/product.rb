@@ -4,6 +4,12 @@ class Product < ApplicationRecord
   include Searchable
   include AttachmentConcern
 
+  SORT_BY_ITEMS = [
+    ["Relevance", SearchParams::RELEVANT],
+    ["Newest cases", SearchParams::NEWEST],
+    ["Name", SearchParams::NAME]
+  ].freeze
+
   enum authenticity: {
     "counterfeit" => "counterfeit",
     "genuine" => "genuine",
