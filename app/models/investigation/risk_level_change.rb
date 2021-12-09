@@ -11,7 +11,8 @@ class Investigation::RiskLevelChange
     if !any_changes? then nil
     elsif set? then :set
     elsif remove? then :removed
-    else :changed
+    else
+      :changed
     end
   end
 

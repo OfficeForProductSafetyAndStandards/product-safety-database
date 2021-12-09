@@ -1,6 +1,5 @@
 require "rails_helper"
 
-# rubocop:disable RSpec/DescribeClass
 RSpec.describe "Health Check", :with_elasticsearch, :with_stubbed_mailer, :with_2fa do
   describe "/health/all" do
     let(:sidekiq_latency) { 29 }
@@ -27,4 +26,3 @@ RSpec.describe "Health Check", :with_elasticsearch, :with_stubbed_mailer, :with_
     end
   end
 end
-# rubocop:enable RSpec/DescribeClass
