@@ -655,7 +655,7 @@ DEPENDENCIES
   rspec
   rspec-mocks (~> 3.10)
   rspec-rails
-  rubocop (= 1.23.0)
+  rubocop (~> 1.23)
   rubocop-govuk (~> 4.2)
   rubocop-performance (~> 1.12)
   rubocop-rspec (~> 2.6)
