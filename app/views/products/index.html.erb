@@ -65,12 +65,14 @@
 
     <section class="govuk-grid-column-three-quarters">
       <%= render "controls", count: @products.size, keywords: params[:q], filter: params[:hazard_type] %>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full" role="region" aria-label="Products">
-          <%= render "table", products: @products %>
-          <%= paginate @products.object %>
+      <% unless @products.empty? %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full" role="region" aria-label="Products">
+            <%= render "table", products: @products %>
+            <%= paginate @products.object %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </section>
   </div>
 <% end %>
