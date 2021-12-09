@@ -43,7 +43,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filter investigations created by another team" do
-
     within_fieldset("Created by") do
       choose "Others"
       select other_team.name, from: "Name"
@@ -63,7 +62,6 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
-
 
   scenario "filter investigations created by anybody but my team" do
     within_fieldset("Created by") { choose "Others" }

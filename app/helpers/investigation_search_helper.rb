@@ -24,21 +24,21 @@ module InvestigationSearchHelper
 
     return filters unless @search.teams_with_access == "my_team" || @search.teams_with_access == "other"
 
-    case @search.teams_with_access
-    when "my_team"
-      teams_with_access = [user.team.id]
-    when "other"
-      teams_with_access = [@search.teams_with_access_other_id]
-    else
-      teams_with_access = []
-    end
+    teams_with_access = case @search.teams_with_access
+                        when "my_team"
+                          [user.team.id]
+                        when "other"
+                          [@search.teams_with_access_other_id]
+                        else
+                          []
+                        end
 
-      filters << {
-        nested: {
-          path: :teams_with_access,
-          query: { bool: { must: { terms: { "teams_with_access.id" => teams_with_access } } } }
-        }
+    filters << {
+      nested: {
+        path: :teams_with_access,
+        query: { bool: { must: { terms: { "teams_with_access.id" => teams_with_access } } } }
       }
+    }
 
     filters
   end
@@ -69,6 +69,7 @@ module InvestigationSearchHelper
 
   def get_status_filter
     return if @search.case_status == "all"
+
     is_closed = @search.case_status == "closed"
     { term: { is_closed: is_closed } }
   end
