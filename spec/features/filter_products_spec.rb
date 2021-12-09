@@ -29,7 +29,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
   scenario "filtering by hazard type" do
     select "Fire", from: "Hazard type"
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_content(fire_product_1.name)
     expect(page).to have_content(fire_product_2.name)
