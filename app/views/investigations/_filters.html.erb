@@ -46,7 +46,7 @@
     ]
   %>
 
-  <%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm") do %>
+  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain") do %>
     <%= render "form_components/govuk_radios",
       form: form,
       key: :teams_with_access,
@@ -196,5 +196,5 @@
     %>
   <% end %>
 
-  <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
+  <%= form.submit "Apply", name: nil, class: "govuk-button" %>
 </section>
