@@ -113,17 +113,11 @@ module InvestigationSearchHelper
       owners += other_owner_ids
     end
 
-    # owners << user.id if @search.case_owner_is_me?
-    # owners += my_team_id_and_its_user_ids(user) if @search.case_owner_is_my_team?
-    # owners += other_owner_ids if @search.case_owner_is_someone_else?
-
     format_owner_terms(owners.uniq)
   end
 
   def other_owner_ids
-    if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
-      return user_ids_from_team(team)
-    end
+    return user_ids_from_team(team) if (team = Team.find_by(id: @search.case_owner_is_someone_else_id))
 
     [@search.case_owner_is_someone_else_id]
   end
@@ -142,20 +136,16 @@ module InvestigationSearchHelper
   end
 
   def checked_team_creators(user)
-    ids = []
-
-    ids << user.id                       if @search.created_by == "me"
-    ids += user_ids_from_team(user.team) if @search.created_by == "my_team"
+    return [user.id]                     if @search.created_by == "me"
+    return user_ids_from_team(user.team) if @search.created_by == "my_team"
 
     if @search.created_by == "others" && @search.created_by_other_id
       if (team = Team.find_by(id: @search.created_by_other_id))
-        ids += user_ids_from_team(team)
+        return user_ids_from_team(team)
       else
-        ids << @search.created_by_other_id
+        return [@search.created_by_other_id]
       end
     end
-
-    ids
   end
 
   def someone_else_creators
@@ -173,9 +163,5 @@ module InvestigationSearchHelper
 
   def user_ids_from_team(team)
     [team.id] + team.users.map(&:id)
-  end
-
-  def my_team_id_and_its_user_ids(user)
-    [user.team_id] + user.team.user_ids - [user.id]
   end
 end

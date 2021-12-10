@@ -28,33 +28,6 @@ class SearchParams
   attribute :teams_with_access_other_id
   attribute :hazard_type
 
-  def owner_filter_exclusive?
-    case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
-  end
-
-  def created_by_filter_exclusive?
-    created_by.someone_else? && created_by.id.blank?
-  end
-
-  def no_owner_boxes_checked?
-    return false if case_owner_is_me?
-    return false if case_owner_is_my_team?
-
-    !case_owner_is_someone_else?
-  end
-
-  def no_created_by_checked?
-    !created_by.me? && !created_by.my_team? && !created_by.someone_else?
-  end
-
-  def teams_with_access_ids
-    @teams_with_access_ids ||= teams_with_access.ids
-  end
-
-  def filter_teams_with_access?
-    teams_with_access_ids.any?
-  end
-
   def selected_sort_by
     if sort_by.blank?
       return RELEVANT if q.present?
