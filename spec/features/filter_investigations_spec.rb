@@ -73,8 +73,9 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).to have_listed_case(other_team_investigation.pretty_id)
     expect(page).to have_listed_case(another_team_investigation.pretty_id)
+    find(".govuk-details").click
 
-    within_fieldset("Created by") { expect(page).to have_checked_field "Other person or team" }
+    within_fieldset("Created by") { expect(page).to have_checked_field "Others" }
   end
 
   scenario "filter investigations created by a different user" do

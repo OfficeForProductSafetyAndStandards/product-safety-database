@@ -136,6 +136,7 @@ module InvestigationSearchHelper
 
   def get_creator_filter(user)
     return { should: [], must_not: [] } if @search.created_by == "all"
+    return { should: [], must_not: { terms: { creator_id: user.team.user_ids } } } if @search.created_by == "others" && @search.created_by_other_id.blank?
 
     { should: format_creator_terms(checked_team_creators(user)), must_not: [] }
   end
