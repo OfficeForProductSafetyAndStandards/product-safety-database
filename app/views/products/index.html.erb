@@ -26,7 +26,7 @@
         <%= form.label :q, "Keywords search", class: "govuk-label" %>
         <div class="govuk-input__wrapper opss-search__wrapper">
           <%= form.hidden_field :sort, value: SearchParams::RELEVANT %>
-          <%= form.search_field :q, class: "govuk-input govuk-!-width-one-half", html: { spellcheck: false, "aria-describedby" => "search-hint" } %>
+          <%= form.search_field :q, class: "govuk-input govuk-!-width-one-half", data: { "opss-clear-on-reset" => "element" }, html: { spellcheck: false, "aria-describedby" => "search-hint" } %>
           <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
             <span class="govuk-visually-hidden">Search</span>
           </button>
@@ -46,11 +46,12 @@
            items: hazard_types.map {|type| {text: type, value: type}},
            label: { text: "Hazard type" },
            formGroup: { classes: "govuk-!-margin-right-1" },
-           is_autocomplete: true %>
+           is_autocomplete: true,
+           attributes: { "data-opss-clear-on-reset" => "autocomplete" } %>
 
         <div class="govuk-button-group">
           <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
-          <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide" %>
+          <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
         </div>
 
         <% if @products.any? && policy(Product).export? %>
