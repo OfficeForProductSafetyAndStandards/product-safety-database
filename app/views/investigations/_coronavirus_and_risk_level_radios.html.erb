@@ -1,12 +1,15 @@
  <%= render "form_components/govuk_radios",
    form: form,
    key: :priority,
-   classes: "",
+   classes: "govuk-radios govuk-radios--small",
+   formGroup: {
+     classes: "opss-form-group opss-form-group--sm-labels"
+   },
    fieldset: {
      legend: {
        text: "Case priority",
        is_page_heading: false,
-       classes: "govuk-fieldset__legend--m"
+       classes: "govuk-fieldset__legend--s"
      }
    },
    items: [

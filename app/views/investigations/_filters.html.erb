@@ -1,189 +1,200 @@
-<div class="govuk-grid-column-one-quarter govuk-!-padding-right-1">
-  <div class="govuk-!-margin-bottom-0">
-    <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
+<section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+  <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
 
-    <%= govukSkipLink(text: "Skip to results", href: "#results") %>
+  <%= govukSkipLink(text: "Skip to results", href: "#results") %>
 
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
 
-    <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
+  <%= render "form_components/govuk_radios",
+    form: form,
+    key: :case_owner,
+    classes: "govuk-radios govuk-radios--small",
+    formGroup: {
+      classes: "opss-form-group opss-form-group--sm-labels"
+    },
+    fieldset: {
+      legend: {
+        text: "Case owner",
+        is_page_heading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    items: [
+      {
+        id: "case_owner_all",
+        text: "All",
+        value: "all"
+      },
+      {
+        id: "case_owner_me",
+        text: "Me",
+        value: "me"
+      },
+      {
+        id: "case_owner_me_my_team",
+        text: "My team",
+        value: "my_team"
+      },
+      {
+        id: "case_owner_others",
+        text: "Others",
+        value: "others",
+        conditional: {
+          html: other_owner(form)
+        }
+      }
+    ]
+  %>
 
+  <%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm") do %>
     <%= render "form_components/govuk_radios",
       form: form,
-      key: :case_owner,
-      classes: "",
+      key: :teams_with_access,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
       fieldset: {
         legend: {
-          text: "Case owner",
+          text: "Teams added to cases",
           is_page_heading: false,
-          classes: "govuk-fieldset__legend--m"
+          classes: "govuk-fieldset__legend--s"
         }
       },
       items: [
         {
-          id: "case_owner_all",
+          id: "teams_with_access_all",
           text: "All",
           value: "all"
         },
         {
-          id: "case_owner_me",
-          text: "Me",
-          value: "me"
-        },
-        {
-          id: "case_owner_me_my_team",
+          id: "teams_with_access_my_team",
           text: "My team",
           value: "my_team"
         },
         {
-          id: "case_owner_others",
-          text: "Others",
-          value: "others",
+          id: "teams_with_access_other",
+          text: "Other",
+          value: "other",
           conditional: {
-            html: other_owner(form)
+            html: other_teams(form)
           }
         }
       ]
     %>
 
-    <%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm") do %>
-      <%= render "form_components/govuk_radios",
-        form: form,
-        key: :teams_with_access,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Teams added to cases",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
+    <%= render "form_components/govuk_radios",
+      form: form,
+      key: :created_by,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
+      fieldset: {
+        legend: {
+          text: "Created by",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          id: "created_by_all",
+          text: "All",
+          value: "all"
         },
-        items: [
-          {
-            id: "teams_with_access_all",
-            text: "All",
-            value: "all"
-          },
-          {
-            id: "teams_with_access_my_team",
-            text: "My team",
-            value: "my_team"
-          },
-          {
-            id: "teams_with_access_other",
-            text: "Other",
-            value: "other",
-            conditional: {
-              html: other_teams(form)
-            }
-          }
-        ]
-      %>
-
-      <%= render "form_components/govuk_radios",
-        form: form,
-        key: :created_by,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Created by",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
+        {
+          id: "created_by_me",
+          text: "Me",
+          value: "me"
         },
-        items: [
-          {
-            id: "created_by_all",
-            text: "All",
-            value: "all"
-          },
-          {
-            id: "created_by_me",
-            text: "Me",
-            value: "me"
-          },
-          {
-            id: "created_by_my_team",
-            text: "My team",
-            value: "my_team"
-          },
-          {
-            id: "created_by_others",
-            text: "Others",
-            value: "others",
-            conditional: {
-              html: created_by(form)
-            }
-          }
-        ]
-      %>
-
-      <%= render "form_components/govuk_radios",
-        form: form,
-        key: :case_type,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Case type",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
+        {
+          id: "created_by_my_team",
+          text: "My team",
+          value: "my_team"
         },
-        items: [
-          {
-            id: "case_type_all",
-            text: "All",
-            value: "all"
-          },
-          {
-            id: "case_type_allegation",
-            text: "Allegation",
-            value: "allegation"
-          },
-          {
-            id: "case_type_enquiry",
-            text: "Enquiry",
-            value: "enquiry"
-          },
-          {
-            id: "case_type_project",
-            text: "Project",
-            value: "project"
+        {
+          id: "created_by_others",
+          text: "Others",
+          value: "others",
+          conditional: {
+            html: created_by(form)
           }
-        ]
-      %>
+        }
+      ]
+    %>
 
-      <%= render "form_components/govuk_radios",
-        form: form,
-        key: :case_status,
-        classes: "",
-        fieldset: {
-          legend: {
-            text: "Case status",
-            is_page_heading: false,
-            classes: "govuk-fieldset__legend--m"
-          }
+    <%= render "form_components/govuk_radios",
+      form: form,
+      key: :case_type,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
+      fieldset: {
+        legend: {
+          text: "Case type",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          id: "case_type_all",
+          text: "All",
+          value: "all"
         },
-        items: [
-          {
-            id: "case_status_open",
-            text: "Open",
-            value: "open"
-          },
-          {
-            id: "case_status_closed",
-            text: "Closed",
-            value: "closed"
-          },
-          {
-            id: "case_status_all",
-            text: "All",
-            value: "all"
-          }
-        ]
-      %>
-    <% end %>
+        {
+          id: "case_type_allegation",
+          text: "Allegation",
+          value: "allegation"
+        },
+        {
+          id: "case_type_enquiry",
+          text: "Enquiry",
+          value: "enquiry"
+        },
+        {
+          id: "case_type_project",
+          text: "Project",
+          value: "project"
+        }
+      ]
+    %>
 
-    <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
-  </div>
-</div>
+    <%= render "form_components/govuk_radios",
+      form: form,
+      key: :case_status,
+      formGroup: {
+        classes: "opss-form-group opss-form-group--sm-labels"
+      },
+      classes: "govuk-radios govuk-radios--small",
+      fieldset: {
+        legend: {
+          text: "Case status",
+          is_page_heading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          id: "case_status_open",
+          text: "Open",
+          value: "open"
+        },
+        {
+          id: "case_status_closed",
+          text: "Closed",
+          value: "closed"
+        },
+        {
+          id: "case_status_all",
+          text: "All",
+          value: "all"
+        }
+      ]
+    %>
+  <% end %>
+
+  <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
+</section>
