@@ -108,7 +108,7 @@ module InvestigationSearchHelper
     when "me"
       owners << user.id
     when "my_team"
-      owners += user_ids_from_team
+      owners += user_ids_from_team(user.team)
     when "others"
       owners += other_owner_ids
     end

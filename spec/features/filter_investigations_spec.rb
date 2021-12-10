@@ -58,7 +58,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     within_fieldset("Created by") { choose "My team" }
     click_button "Apply filters"
 
-    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
@@ -164,7 +164,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     click_button "Apply filters"
 
     expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
@@ -281,7 +281,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "Filtering by risk-level cases only" do
-    check "Serious and high risk cases only"
+    choose "Serious and high risk"
     click_on "Apply filters"
     expect(page).to have_checked_field("Serious and high risk")
 
