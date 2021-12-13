@@ -57,7 +57,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_elasticsea
 
     fill_in "Keywords", with: "NewCo"
     sleep 1
-    click_on "Apply filters"
+    click_on "Apply"
 
     expect(page).to have_listed_case(investigation.pretty_id)
   end

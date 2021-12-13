@@ -174,7 +174,7 @@ RSpec.feature "Editing a product", :with_elasticsearch, :with_stubbed_mailer, :w
       fill_in "Keywords", with: new_name
       # sleep in order to wait for the changes to be indexed
       sleep 1
-      click_on "Apply filters"
+      click_on "Apply"
 
       expect(page).to have_listed_case(investigation.pretty_id)
     end
