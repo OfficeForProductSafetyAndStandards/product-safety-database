@@ -3,16 +3,6 @@ module Investigations::UserFiltersHelper
     User.get_owners(except: current_user).decorate + Team.not_deleted.decorate
   end
 
-  def case_owner_is(form)
-    case_owner_is_items = [{ key: "case_owner_is_me", value: true, unchecked_value: "off", text: "Me" }]
-    case_owner_is_items << { key: "case_owner_is_my_team", value: true, unchecked_value: "off", text: "My team", checked: form.object.case_owner_is_my_team? }
-    case_owner_is_items << { key: "case_owner_is_someone_else",
-                             value: true,
-                             unchecked_value: "off",
-                             text: "Other person or team",
-                             conditional: { html: other_owner(form) } }
-  end
-
   def created_by(form)
     render "form_components/govuk_select",
            key: :created_by_other_id,
