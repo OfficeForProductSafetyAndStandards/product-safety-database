@@ -143,9 +143,9 @@ module InvestigationSearchHelper
 
     if @search.created_by == "others" && @search.created_by_other_id
       if (team = Team.find_by(id: @search.created_by_other_id))
-        return user_ids_from_team(team)
+        user_ids_from_team(team)
       else
-        return [@search.created_by_other_id]
+        [@search.created_by_other_id]
       end
     end
   end
