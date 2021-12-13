@@ -24,6 +24,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
   let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
   let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
+  let!(:coronavirus_and_high_risk_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
 
   let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team: team) }
   let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team: team) }
@@ -149,7 +150,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(closed_investigation.pretty_id)
   end
 
-  scenario "filtering for projects and enquiries" do
+  scenario "filtering for projects" do
     within_fieldset "Case type" do
       choose "Project"
     end
@@ -157,6 +158,28 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     expect(page).not_to have_listed_case(investigation.pretty_id)
     expect(page).to have_listed_case(project.pretty_id)
+    expect(page).not_to have_listed_case(enquiry.pretty_id)
+  end
+
+  scenario "filtering for enquiries" do
+    within_fieldset "Case type" do
+      choose "Enquiry"
+    end
+    click_button "Apply"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(project.pretty_id)
+    expect(page).to have_listed_case(enquiry.pretty_id)
+  end
+
+  scenario "filtering for allegations" do
+    within_fieldset "Case type" do
+      choose "Allegation"
+    end
+    click_button "Apply"
+
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(project.pretty_id)
     expect(page).not_to have_listed_case(enquiry.pretty_id)
   end
 
@@ -281,7 +304,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
-  scenario "Filtering by risk-level cases only" do
+  scenario "Filtering by serious and high risk-level cases only" do
     choose "Serious and high risk"
     click_on "Apply"
     expect(page).to have_checked_field("Serious and high risk")
@@ -289,6 +312,23 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
     expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
     expect(page).to have_css(".opss-tag--risk1", text: "High risk case")
+
+    expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+  end
+
+  scenario "Filtering by serious and risk-level and coronavirus cases only" do
+    choose "Coronavirus and serious and high risk"
+    click_on "Apply"
+    expect(page).to have_checked_field("Coronavirus and serious and high risk")
+
+    expect(page).to have_listed_case(coronavirus_and_high_risk_investigation.pretty_id)
+    expect(page).not_to have_listed_case(serious_risk_level_investigation.pretty_id)
+    expect(page).not_to have_listed_case(high_risk_level_investigation.pretty_id)
+    expect(page).not_to have_css(".opss-tag--risk1", text: "High risk case")
 
     expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
     expect(page).not_to have_listed_case(investigation.pretty_id)
