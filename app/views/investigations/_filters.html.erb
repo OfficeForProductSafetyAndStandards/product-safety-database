@@ -46,7 +46,7 @@
     ]
   %>
 
-  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain") do %>
+  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details") do %>
     <%= render "form_components/govuk_radios",
       form: form,
       key: :teams_with_access,
