@@ -19,16 +19,18 @@
         classes: "govuk-fieldset__legend--s"
       }
     },
+    attributes: { "data-opss-reset-to-default" => "element" },
     items: [
       {
         id: "case_owner_all",
         text: "All",
-        value: "all"
+        value: "all",
+        checked: true
       },
       {
         id: "case_owner_me",
         text: "Me",
-        value: "me"
+        value: "me",
       },
       {
         id: "case_owner_me_my_team",
@@ -61,11 +63,13 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
+      attributes: { "data-opss-reset-to-default" => "element" },
       items: [
         {
           id: "teams_with_access_all",
           text: "All",
-          value: "all"
+          value: "all",
+          checked: true
         },
         {
           id: "teams_with_access_my_team",
@@ -97,11 +101,13 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
+      attributes: { "data-opss-reset-to-default" => "element" },
       items: [
         {
           id: "created_by_all",
           text: "All",
-          value: "all"
+          value: "all",
+          checked: true
         },
         {
           id: "created_by_me",
@@ -138,11 +144,13 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
+      attributes: { "data-opss-reset-to-default" => "element" },
       items: [
         {
           id: "case_type_all",
           text: "All",
-          value: "all"
+          value: "all",
+          checked: true
         },
         {
           id: "case_type_allegation",
@@ -176,11 +184,13 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
+      attributes: { "data-opss-reset-to-default" => "element" },
       items: [
         {
           id: "case_status_open",
           text: "Open",
-          value: "open"
+          value: "open",
+          checked: true
         },
         {
           id: "case_status_closed",
@@ -196,5 +206,10 @@
     %>
   <% end %>
 
-  <%= form.submit "Apply", name: nil, class: "govuk-button" %>
+  <div class="govuk-button-group">
+    <%= form.submit "Apply", name: nil, class: "govuk-button" %>
+
+    <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
+  </div>
+
 </section>
