@@ -62,7 +62,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on coronavirus status" do
     choose "Coronavirus"
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -77,7 +77,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on risk level" do
     choose "Serious and high risk"
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_closed.pretty_id
@@ -92,7 +92,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on case type" do
     choose "Enquiry"
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -107,7 +107,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on case status" do
     choose "Closed"
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -125,7 +125,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       choose "Me"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -143,7 +143,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       choose "My team"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text allegation_serious.pretty_id
     expect(page).to have_text enquiry_coronavirus.pretty_id
@@ -163,7 +163,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       select other_user.name
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -181,7 +181,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       choose "My team"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).to have_text allegation_serious.pretty_id
@@ -202,7 +202,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       select other_user.team.name
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -220,7 +220,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       choose "Me"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -239,7 +239,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
       select other_user.team.name
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -253,6 +253,6 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   def expand_filters
-    find(".govuk-details__summary-text").click
+    find("#filter-details").click
   end
 end
