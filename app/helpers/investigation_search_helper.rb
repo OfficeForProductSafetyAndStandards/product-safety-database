@@ -134,10 +134,10 @@ module InvestigationSearchHelper
     return { should: [], must_not: [] } if @search.created_by == "all"
     return { should: [], must_not: { terms: { creator_id: user.team.user_ids } } } if @search.created_by == "others" && @search.created_by_other_id.blank?
 
-    { should: format_creator_terms(checked_team_creators(user)), must_not: [] }
+    { should: format_creator_terms(selected_team_creator(user)), must_not: [] }
   end
 
-  def checked_team_creators(user)
+  def selected_team_creator(user)
     return [user.id]                     if @search.created_by == "me"
     return user_ids_from_team(user.team) if @search.created_by == "my_team"
 
@@ -148,13 +148,6 @@ module InvestigationSearchHelper
         return [@search.created_by_other_id]
       end
     end
-  end
-
-  def someone_else_creators
-    return [] unless params[:created_by_someone_else] == "checked"
-
-    team = Team.find_by(id: params[:created_by_someone_else_id])
-    team.present? ? user_ids_from_team(team) : [params[:created_by_someone_else_id]]
   end
 
   def format_creator_terms(creator_array)

@@ -11,7 +11,6 @@ class InvestigationsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        # ok currently passing the params["priority"] to here
         @answer         = search_for_investigations(20)
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
