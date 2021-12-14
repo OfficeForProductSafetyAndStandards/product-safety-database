@@ -1,0 +1,16 @@
+<p class="govuk-body">
+  <% if keywords.blank? && filter.blank? %>
+    There are currently <%= pluralize count, "product" %>.
+  <% else %>
+    <% if keywords.present? || filter.present? %>
+      <%= pluralize count, "product" %>
+      <% if keywords.present? %>
+        matching keyword(s) <span class="govuk-!-font-weight-bold"><%= sanitize keywords %></span>,
+      <% end %>
+      <% if filter.present? %>
+        using the current filter,
+      <% end %>
+      <%= count == 1 ? "was" : "were" %> found.
+    <% end %>
+  <% end %>
+</p>

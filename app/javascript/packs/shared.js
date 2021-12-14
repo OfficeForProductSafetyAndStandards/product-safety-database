@@ -16,6 +16,7 @@ import 'javascripts/investigations/ts_investigations/which_businesses'
 import 'javascripts/mutually_exclusive'
 import 'javascripts/close_page_button'
 import 'javascripts/date_input'
+import 'javascripts/clear_on_reset'
 
 // CSS
 import 'accessible-autocomplete/src/autocomplete.css'
