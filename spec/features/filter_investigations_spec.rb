@@ -24,7 +24,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
   let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
   let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
-  let!(:coronavirus_and_high_risk_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
+  let!(:coronavirus_and_high_risk_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
 
   let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team: team) }
   let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team: team) }
