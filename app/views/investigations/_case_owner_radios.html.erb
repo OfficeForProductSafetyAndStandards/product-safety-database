@@ -1,0 +1,42 @@
+<%= render "form_components/govuk_radios",
+  form: form,
+  key: :case_owner,
+  classes: "govuk-radios govuk-radios--small",
+  formGroup: {
+    classes: "opss-form-group opss-form-group--sm-labels"
+  },
+  fieldset: {
+    legend: {
+      text: "Case owner",
+      is_page_heading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  attributes: { "data-opss-reset-to-default" => "element" },
+  items: [
+    {
+      id: "case_owner_all",
+      text: "All",
+      value: "all",
+      checked: true
+    },
+    {
+      id: "case_owner_me",
+      text: "Me",
+      value: "me",
+    },
+    {
+      id: "case_owner_me_my_team",
+      text: "My team",
+      value: "my_team"
+    },
+    {
+      id: "case_owner_others",
+      text: "Others",
+      value: "others",
+      conditional: {
+        html: other_owner(form)
+      }
+    }
+  ]
+%>
