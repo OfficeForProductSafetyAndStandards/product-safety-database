@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Product filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
   let(:organisation)          { create(:organisation) }
   let(:user)                  { create(:user, :activated, organisation: organisation, has_viewed_introduction: true) }
 
@@ -20,11 +20,12 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     visit products_path
   end
 
-  scenario "no filters applied shows all open cases" do
+  scenario "no filters applied shows all products" do
     expect(page).to have_content(fire_product_1.name)
     expect(page).to have_content(fire_product_2.name)
     expect(page).to have_content(chemical_product.name)
     expect(page).to have_content(drowning_product.name)
+    expect(page).to have_content("There are currently 4 products.")
   end
 
   scenario "filtering by hazard type" do
@@ -35,5 +36,29 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
     expect(page).to have_content(fire_product_2.name)
     expect(page).not_to have_content(chemical_product.name)
     expect(page).not_to have_content(drowning_product.name)
+    expect(page).to have_content("2 products using the current filter, were found.")
+  end
+
+  scenario "filtering by hazard type and a keyword" do
+    select "Fire", from: "Hazard type"
+    fill_in "Keywords search", with: "Fire"
+    click_button "Apply"
+
+    expect(page).to have_content(fire_product_1.name)
+    expect(page).to have_content(fire_product_2.name)
+    expect(page).not_to have_content(chemical_product.name)
+    expect(page).not_to have_content(drowning_product.name)
+    expect(page).to have_content("2 products matching keyword(s) Fire, using the current filter, were found.")
+  end
+
+  scenario "filtering by a keyword" do
+    fill_in "Keywords search", with: "Dangerous"
+    click_button "Apply"
+
+    expect(page).to have_content(drowning_product.name)
+    expect(page).not_to have_content(fire_product_1.name)
+    expect(page).not_to have_content(fire_product_2.name)
+    expect(page).not_to have_content(chemical_product.name)
+    expect(page).to have_content("1 product matching keyword(s) Dangerous, was found.")
   end
 end
