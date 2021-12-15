@@ -13,28 +13,32 @@ module InvestigationSearchHelper
     store_previous_search_params
   end
 
+  private
+
   def nested_filters(user)
-    filters = []
+    return [] if @search.teams_with_access == "all"
 
-    return filters unless @search.teams_with_access == "my_team" || @search.teams_with_access == "other"
+    [{ nested: { path: :teams_with_access, query: teams_with_access_query(user) }}]
+  end
 
-    teams_with_access = case @search.teams_with_access
-                        when "my_team"
-                          [user.team.id]
-                        when "other"
-                          [@search.teams_with_access_other_id]
-                        else
-                          []
-                        end
+  def teams_with_access_query(user)
+    query = {}
 
-    filters << {
-      nested: {
-        path: :teams_with_access,
-        query: { bool: { must: { terms: { "teams_with_access.id" => teams_with_access } } } }
-      }
-    }
+    query[:must] = { terms: { "teams_with_access.id" => teams_with_access(user) } }
+    query[:must_not] = { term: { owner_id: user.team.id } } if @search.teams_with_access == "other"
 
-    filters
+    { bool: query }
+  end
+
+  def teams_with_access(user)
+    case @search.teams_with_access
+    when "my_team"
+      [user.team.id]
+    when "other"
+      [@search.teams_with_access_other_id]
+    else
+      []
+    end
   end
 
   def filter_params(user)
