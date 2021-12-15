@@ -33,6 +33,12 @@ class Product < ApplicationRecord
 
   index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
+  settings do
+    mappings do
+      indexes :name, type: :keyword
+    end
+  end
+
   def as_indexed_json(*)
     as_json(
       include: { investigations: { only: :hazard_type } },
@@ -69,5 +75,14 @@ class Product < ApplicationRecord
 
   def non_image_documents
     documents.includes(:blob).joins(:blob).where("left(content_type, 5) != 'image'")
+  end
+
+  def self.sort_by_items(with_relevant_option)
+    items = [
+      ["Newly added", SearchParams::NEWEST],
+      ["Name", SearchParams::NAME]
+    ]
+    items.unshift(["Relevance", SearchParams::RELEVANT]) if with_relevant_option
+    items
   end
 end

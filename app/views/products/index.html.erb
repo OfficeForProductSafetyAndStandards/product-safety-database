@@ -25,7 +25,7 @@
       <div class="govuk-form-group govuk-!-padding-top-4 govuk-!-padding-bottom-7">
         <%= form.label :q, "Keywords search", class: "govuk-label" %>
         <div class="govuk-input__wrapper opss-search__wrapper">
-          <%= form.hidden_field :sort, value: SearchParams::RELEVANT %>
+          <%= form.hidden_field :sort_by, value: SearchParams::RELEVANT %>
           <%= form.search_field :q, class: "govuk-input govuk-!-width-one-half", data: { "opss-clear-on-reset" => "element" }, spellcheck: false, "aria-describedby" => "search-hint" %>
           <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
             <span class="govuk-visually-hidden">Search</span>
@@ -65,7 +65,14 @@
     </section>
 
     <section class="govuk-grid-column-three-quarters">
-      <%= render "controls", count: @products.size, keywords: params[:q], filter: params[:hazard_type] %>
+      <%= render "controls",
+        count: @products.size,
+        keywords: params[:q],
+        filter: params[:hazard_type],
+        form: form,
+        sort_by_items: @sort_by_items,
+        selected_sort_by: @selected_sort_by
+      %>
       <% unless @products.empty? %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full" role="region" aria-label="Products">

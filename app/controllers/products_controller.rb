@@ -8,6 +8,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update]
   before_action :set_countries, only: %i[update edit]
   before_action :build_breadcrumbs, only: %i[show]
+  before_action :set_sort_by_items, only: %i[index]
 
   # GET /products
   # GET /products.json
@@ -83,5 +84,10 @@ private
 
   def build_breadcrumbs
     @breadcrumbs = build_back_link_to_case || build_breadcrumb_structure
+  end
+
+  def set_sort_by_items
+    @sort_by_items = Product.sort_by_items(params[:q].present?)
+    @selected_sort_by = params[:sort_by].presence || SearchParams::NEWEST
   end
 end
