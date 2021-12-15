@@ -47,8 +47,8 @@ module InvestigationSearchHelper
     must_filters = {
       must: [
         get_status_filter,
-        { bool: get_creator_filter(user) },
-        { bool: get_owner_filter(user) }
+        get_creator_filter(user),
+        get_owner_filter(user)
       ]
     }
 
@@ -91,10 +91,10 @@ module InvestigationSearchHelper
   end
 
   def get_owner_filter(user)
-    return { should: [], must_not: [] } if @search.case_owner == "all"
-    return { should: [], must_not: compute_excluded_terms(user) } if @search.case_owner == "others" && @search.case_owner_is_someone_else_id.blank?
+    return { bool: { should: [], must_not: [] } } if @search.case_owner == "all"
+    return { bool: { should: [], must_not: compute_excluded_terms(user) } } if @search.case_owner == "others" && @search.case_owner_is_someone_else_id.blank?
 
-    { should: compute_included_terms(user), must_not: [] }
+    { bool: { should: compute_included_terms(user), must_not: [] } }
   end
 
   def compute_excluded_terms(user)
@@ -131,10 +131,10 @@ module InvestigationSearchHelper
   end
 
   def get_creator_filter(user)
-    return { should: [], must_not: [] } if @search.created_by == "all"
-    return { should: [], must_not: { terms: { creator_id: user.team.user_ids } } } if @search.created_by == "others" && @search.created_by_other_id.blank?
+    return { bool: { should: [], must_not: [] } } if @search.created_by == "all"
+    return { bool: { should: [], must_not: { terms: { creator_id: user.team.user_ids } } } } if @search.created_by == "others" && @search.created_by_other_id.blank?
 
-    { should: format_creator_terms(selected_team_creator(user)), must_not: [] }
+    { bool: { should: format_creator_terms(selected_team_creator(user)), must_not: [] } }
   end
 
   def selected_team_creator(user)
