@@ -308,7 +308,7 @@ GEM
     parallel (1.21.0)
     parallel_tests (3.7.3)
       parallel
-    parser (3.0.2.0)
+    parser (3.0.3.2)
       ast (~> 2.4.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
@@ -477,7 +477,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    scout_apm (5.1.0)
+    scout_apm (5.1.1)
       parser
     scss_lint (0.59.0)
       sass (~> 3.5, >= 3.5.5)
