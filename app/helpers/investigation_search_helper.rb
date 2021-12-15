@@ -13,12 +13,12 @@ module InvestigationSearchHelper
     store_previous_search_params
   end
 
-  private
+private
 
   def nested_filters(user)
     return [] if @search.teams_with_access == "all"
 
-    [{ nested: { path: :teams_with_access, query: teams_with_access_query(user) }}]
+    [{ nested: { path: :teams_with_access, query: teams_with_access_query(user) } }]
   end
 
   def teams_with_access_query(user)
@@ -85,7 +85,7 @@ module InvestigationSearchHelper
       types = ["Investigation::Enquiry"]
     end
 
-    { terms: { type: types }}
+    { terms: { type: types } }
   end
 
   def get_owner_filter(user)
