@@ -13,12 +13,6 @@ module InvestigationSearchHelper
     store_previous_search_params
   end
 
-  def filter_params(user)
-    filters = {}
-    filters.merge!(get_type_filter)
-    filters.merge!(merged_must_filters(user)) { |_key, current_filters, new_filters| current_filters + new_filters }
-  end
-
   def nested_filters(user)
     filters = []
 
@@ -43,28 +37,17 @@ module InvestigationSearchHelper
     filters
   end
 
-  def merged_must_filters(user)
-    must_filters = {
-      must: [
-        get_status_filter,
-        get_creator_filter(user),
-        get_owner_filter(user)
-      ]
-    }
+  def filter_params(user)
+    filters_to_apply = [
+      get_type_filter,
+      get_status_filter,
+      get_creator_filter(user),
+      get_owner_filter(user),
+      get_coronavirus_filter,
+      get_serious_and_high_risk_filter
+    ].compact
 
-    return must_filters if @search.priority == "all"
-
-    case @search.priority
-    when "coronavirus_related_only"
-      must_filters[:must] << { term: { coronavirus_related: true } }
-    when "serious_and_high_risk_level_only"
-      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
-    when "coronavirus_and_serious_and_high_risk"
-      must_filters[:must] << { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
-      must_filters[:must] << { term: { coronavirus_related: true } }
-    end
-
-    must_filters
+    { must: filters_to_apply }
   end
 
   def get_status_filter
@@ -74,8 +57,20 @@ module InvestigationSearchHelper
     { term: { is_closed: is_closed } }
   end
 
+  def get_coronavirus_filter
+    if @search.priority == "coronavirus_related_only" || @search.priority == "coronavirus_and_serious_and_high_risk"
+      { term: { coronavirus_related: true } }
+    end
+  end
+
+  def get_serious_and_high_risk_filter
+    if @search.priority == "serious_and_high_risk_level_only" || @search.priority == "coronavirus_and_serious_and_high_risk"
+      { terms: { risk_level: Investigation.risk_levels.values_at(:serious, :high) } }
+    end
+  end
+
   def get_type_filter
-    return {} if @search.case_type == "all"
+    return if @search.case_type == "all"
 
     case @search.case_type
     when "allegation"
@@ -86,8 +81,7 @@ module InvestigationSearchHelper
       types = ["Investigation::Enquiry"]
     end
 
-    type = { type: types }
-    { must: [{ terms: type }] }
+    { terms: { type: types }}
   end
 
   def get_owner_filter(user)
