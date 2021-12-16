@@ -24,21 +24,19 @@ private
   def teams_with_access_query(user)
     query = {}
 
-    query[:must] = { terms: { "teams_with_access.id" => teams_with_access(user) } }
-    query[:must_not] = { term: { owner_id: user.team.id } } if @search.teams_with_access == "other"
+    query[:must] = { terms: { "teams_with_access.id" => teams_with_access(user) } } if @search.teams_with_access == "my_team" || other_team_with_access_specified?
+    query[:must_not] = { term: { "teams_with_access.id" => user.team.id } } if @search.teams_with_access == "other"
 
-    { bool: query }
+    query.blank? ? {} : { bool: query }
   end
 
   def teams_with_access(user)
-    case @search.teams_with_access
-    when "my_team"
-      [user.team.id]
-    when "other"
-      [@search.teams_with_access_other_id]
-    else
-      []
-    end
+    return [user.team.id] if @search.teams_with_access == "my_team"
+    return [@search.teams_with_access_other_id] if other_team_with_access_specified?
+  end
+
+  def other_team_with_access_specified?
+    @search.teams_with_access == "other" && !@search.teams_with_access_other_id.blank?
   end
 
   def filter_params(user)

@@ -247,6 +247,22 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
         expect(page).to have_listed_case(other_user_investigation.pretty_id)
       end
     end
+
+    context "when filtering case where any other team has access" do
+      let(:chosen_team) { other_team }
+
+      scenario "filters the cases by other team with access but do not specify team" do
+        within_fieldset("Teams added to cases") do
+          choose "Other"
+        end
+        click_button "Apply"
+
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+      end
+    end
   end
 
   scenario "filtering cases where the user’s team is the owner" do
