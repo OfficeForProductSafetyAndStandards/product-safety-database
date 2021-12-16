@@ -1,7 +1,24 @@
-<% products.each do |product| %>
-  <%= render "product_card", product: product %>
-<% end %>
-
-<% if products.empty? %>
-  <p class="govuk-!-font-weight-bold">No products found.</p>
-<% end %>
+<table id="results" class="govuk-table opss-table opss-table--last-col-right">
+  <caption class="govuk-table__caption govuk-visually-hidden">Products: a simple data table.</caption>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Name</th>
+      <th scope="col" class="govuk-table__header">Type</th>
+      <th scope="col" class="govuk-table__header">Category</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <% products.each do |product| %>
+      <%= render "table_row", product: product %>
+    <% end %>
+  </tbody>
+  <% if products.size > 11 %>
+    <tfoot class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Name</th>
+        <th scope="col" class="govuk-table__header">Type</th>
+        <th scope="col" class="govuk-table__header">Category</th>
+      </tr>
+    </tfoot>
+  <% end %>
+</table>

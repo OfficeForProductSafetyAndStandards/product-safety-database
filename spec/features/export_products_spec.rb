@@ -31,7 +31,8 @@ RSpec.feature "Product export", :with_elasticsearch, :with_stubbed_antivirus, :w
     expect(page).to have_text product_2.name
     expect(page).to have_text hazardous_product.name
 
-    click_link "Export as spreadsheet"
+    click_link "XLSX (spreadsheet)"
+
     expect(page).to have_content "Your product export is being prepared. You will receive an email when your export is ready to download."
 
     expect(email.action_name).to eq "product_export"
@@ -54,7 +55,7 @@ RSpec.feature "Product export", :with_elasticsearch, :with_stubbed_antivirus, :w
     expect(page).not_to have_text hazardous_product.name
     expect(page).to have_text product_2.name
 
-    click_link "Export as spreadsheet"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 15)).to eq(product_2.name)
@@ -70,7 +71,7 @@ RSpec.feature "Product export", :with_elasticsearch, :with_stubbed_antivirus, :w
     expect(page).not_to have_text product_2.name
     expect(page).to have_text hazardous_product.name
 
-    click_link "Export as spreadsheet"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 15)).to eq(hazardous_product.name)
