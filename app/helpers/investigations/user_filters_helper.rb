@@ -8,7 +8,7 @@ module Investigations::UserFiltersHelper
            key: :created_by_other_id,
            form: form,
            items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
-           label: { text: "Name" },
+           label: { text: "Person or team name" },
            is_autocomplete: true,
            attributes: { "data-opss-clear-on-reset" => "autocomplete" }
   end
@@ -18,7 +18,7 @@ module Investigations::UserFiltersHelper
            key: :case_owner_is_someone_else_id,
            form: form,
            items: entities.map { |e| { text: e.display_name(viewer: current_user), value: e.id } },
-           label: { text: "Name" },
+           label: { text: "Person or team name" },
            is_autocomplete: true,
            attributes: { "data-opss-clear-on-reset" => "autocomplete" }
   end
@@ -30,7 +30,7 @@ module Investigations::UserFiltersHelper
            key: :teams_with_access_other_id,
            form: form,
            items: other_teams.map { |e| { text: e.display_name(viewer: current_user), value: e.id, selected: form.object.teams_with_access_other_id == e.id } },
-           label: { text: "Name" },
+           label: { text: "Team name" },
            is_autocomplete: true,
            attributes: { "data-opss-clear-on-reset" => "autocomplete" }
   end
