@@ -1,4 +1,9 @@
- <%= render "form_components/govuk_radios",
+
+<% coronavirus_and_high_risk_label = capture do %>
+  Coronavirus and <br class="opss-br-desktop">serious and high risk
+<% end %>
+
+<%= render "form_components/govuk_radios",
    form: form,
    key: :priority,
    classes: "govuk-radios govuk-radios--small",
@@ -31,7 +36,7 @@
      },
      {
        id: "coronavirus_and_high_risk",
-       text: "Coronavirus and serious and high risk",
+       html: coronavirus_and_high_risk_label,
        value: "coronavirus_and_serious_and_high_risk"
      },
    ]
