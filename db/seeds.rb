@@ -658,7 +658,7 @@ if run_seeds
         organisation: trading_standards,
         mobile_number_verified: true,
         team: ts_team,
-        mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
+        mobile_number: "07595299795"
       )
     end
 

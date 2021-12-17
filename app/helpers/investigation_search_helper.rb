@@ -36,7 +36,7 @@ private
   end
 
   def other_team_with_access_specified?
-    @search.teams_with_access == "other" && !@search.teams_with_access_other_id.blank?
+    @search.teams_with_access == "other" && @search.teams_with_access_other_id.present?
   end
 
   def filter_params(user)
