@@ -87,6 +87,9 @@ private
   end
 
   def set_sort_by_items
+    params[:sort_by] = SearchParams::RELEVANT if params[:sort_by].blank? && params[:q].present?
+    params[:sort_by] = nil if params[:sort_by] == SearchParams::RELEVANT && params[:q].blank?
+
     @sort_by_items = Product.sort_by_items(params[:q].present?)
     @selected_sort_by = params[:sort_by].presence || SearchParams::NEWEST
   end

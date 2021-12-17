@@ -35,14 +35,14 @@ class Product < ApplicationRecord
 
   settings do
     mappings do
-      indexes :name, type: :keyword
+      indexes :name_for_sorting, type: :keyword
     end
   end
 
   def as_indexed_json(*)
     as_json(
       include: { investigations: { only: :hazard_type } },
-      methods: [:tiebreaker_id]
+      methods: %i[tiebreaker_id name_for_sorting]
     )
   end
 
@@ -75,6 +75,10 @@ class Product < ApplicationRecord
 
   def non_image_documents
     documents.includes(:blob).joins(:blob).where("left(content_type, 5) != 'image'")
+  end
+
+  def name_for_sorting
+    name
   end
 
   def self.sort_by_items(with_relevant_option)
