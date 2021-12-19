@@ -46,7 +46,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   scenario "filter investigations created by another team" do
     within_fieldset("Created by") do
       choose "Others"
-      select other_team.name, from: "Name"
+      select other_team.name, from: "Person or team name"
     end
     click_button "Apply"
 
@@ -56,7 +56,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filter investigations created by my team" do
-    within_fieldset("Created by") { choose "My team" }
+    within_fieldset("Created by") { choose "Me and my team" }
     click_button "Apply"
 
     expect(page).to have_listed_case(investigation.pretty_id)
@@ -82,7 +82,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   scenario "filter investigations created by a different user" do
     within_fieldset("Created by") do
       choose "Others"
-      select other_user_other_team.name, from: "Name"
+      select other_user_other_team.name, from: "Person or team name"
     end
     click_button "Apply"
 
@@ -97,19 +97,19 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
     within_fieldset("Created by") do
       expect(page).to have_checked_field "Others"
-      expect(page).to have_select "Name", with_options: [other_user_other_team.name]
+      expect(page).to have_select "Person or team name", with_options: [other_user_other_team.name]
     end
   end
 
   scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
     within_fieldset("Case owner") do
-      expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])
-      expect(page).not_to have_select("Name", with_options: [another_inactive_user.name, other_deleted_team.name])
+      expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
+      expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
     end
 
     within_fieldset("Created by") do
-      expect(page).to have_select("Name", with_options: [team.name, other_team.name, another_active_user.name])
-      expect(page).not_to have_select("Name", with_options: [another_inactive_user.name, other_deleted_team.name])
+      expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
+      expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
     end
   end
 
@@ -222,8 +222,8 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
       scenario "filters the cases by other team with access" do
         within_fieldset("Teams added to cases") do
-          choose "Other"
-          select other_team.name, from: "Name"
+          choose "Others"
+          select other_team.name, from: "Team name"
         end
         click_button "Apply"
 
@@ -235,11 +235,11 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
 
         within_fieldset("Teams added to cases") do
           expect(page).to have_checked_field("Other")
-          expect(page).to have_select("Name", with_options: [other_team.name])
+          expect(page).to have_select("Team name", with_options: [other_team.name])
         end
 
         within_fieldset("Teams added to cases") { choose "All" }
-        within_fieldset("Case owner")           { choose "My team" }
+        within_fieldset("Case owner")           { choose "Me and my team" }
         click_button "Apply"
 
         expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
@@ -266,7 +266,7 @@ RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering cases where the user’s team is the owner" do
-    within_fieldset("Case owner") { choose "My team" }
+    within_fieldset("Case owner") { choose "Me and my team" }
     click_button "Apply"
 
     expect(page).to have_listed_case(investigation.pretty_id)

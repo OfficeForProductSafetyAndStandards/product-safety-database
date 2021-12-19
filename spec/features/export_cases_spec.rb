@@ -140,7 +140,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases created by another user on the same team" do
     within_fieldset "Created by" do
-      choose "My team"
+      choose "Me and my team"
     end
 
     click_button "Apply"
