@@ -9,11 +9,7 @@
     <section class="govuk-grid-column-three-quarters">
       <div class="govuk-grid-row">
         <%= search_result_statement(@search.q, @answer.results.total_count) %>
-        <%= render 'investigations/sort_dropdown',
-          search: @search,
-          form: form,
-          with_relevant_option: true
-        %>
+        <%= render_sort_by form, @search.sort_by_items(with_relevant_option: true), @search.selected_sort_by %>
       </div>
       <% if @investigations.any? %>
         <div class="govuk-grid-row">
