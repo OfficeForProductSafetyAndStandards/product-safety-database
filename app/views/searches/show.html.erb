@@ -59,12 +59,6 @@
             </table>
 
             <%= paginate @answer.results %>
-
-            <% if policy(Investigation).export? %>
-              <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
-                Request this list as a downloadable <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
-              </p>
-            <% end %>
           </div>
         </div>
       <% end %>

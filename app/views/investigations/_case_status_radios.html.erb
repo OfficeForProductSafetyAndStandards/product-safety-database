@@ -1,0 +1,34 @@
+<%= render "form_components/govuk_radios",
+  form: form,
+  key: :case_status,
+  formGroup: {
+    classes: "opss-form-group opss-form-group--sm-labels"
+  },
+  classes: "govuk-radios govuk-radios--small",
+  fieldset: {
+    legend: {
+      text: "Case status",
+      is_page_heading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  attributes: { "data-opss-reset-to-default" => "element" },
+  items: [
+    {
+      id: "case_status_open",
+      text: "Open",
+      value: "open",
+      checked: true
+    },
+    {
+      id: "case_status_closed",
+      text: "Closed",
+      value: "closed"
+    },
+    {
+      id: "case_status_all",
+      text: "All",
+      value: "all"
+    }
+  ]
+%>

@@ -13,72 +13,21 @@ class SearchParams
     NAME     = "name"
   ].freeze
 
-  attribute :allegation
-  attribute :case_owner_is_me, :boolean
-  alias_method :case_owner_is_me?, :case_owner_is_me
-  attribute :case_owner_is_my_team, :boolean
-  alias_method :case_owner_is_my_team?, :case_owner_is_my_team
-  attribute :case_owner_is_someone_else, :boolean
-  alias_method :case_owner_is_someone_else?, :case_owner_is_someone_else
-  attribute :case_owner_is_someone_else_id
-  attribute :created_by_me, :boolean
-  alias_method :created_by_me?, :created_by_me
-  attribute :created_by_someone_else, :boolean
-  alias_method :created_by_someone_else?, :created_by_someone_else
-  attribute :created_by_someone_else_ids, default: []
+  attribute :created_by, default: "all"
+  attribute :created_by_other_id
   attribute :override_sort_by
   attribute :direction
-  attribute :enquiry
-  attribute :project
+  attribute :case_type, default: "all"
   attribute :q
-  attribute :status
-  attribute :status_open, :boolean, default: true
-  alias_method :status_open?, :status_open
-  attribute :status_closed, :boolean
-  attribute :coronavirus_related_only, :boolean
-  alias_method :coronavirus_related_only?, :coronavirus_related_only
-  attribute :serious_and_high_risk_level_only, :boolean
-  alias_method :serious_and_high_risk_level_only?, :serious_and_high_risk_level_only
+  attribute :case_status, default: "open"
+  attribute :priority, default: "all"
+  attribute :case_owner, default: "all"
+  attribute :case_owner_is_someone_else_id
   attribute :sort_by
   attribute :page, :integer
-  attribute :created_by, :created_by_search_params, default: CreatedBySearchFormFields.new
-  attribute :teams_with_access, :teams_with_access_search_params, default: TeamsWithAccessSearchFormFields.new
+  attribute :teams_with_access, default: "all"
+  attribute :teams_with_access_other_id
   attribute :hazard_type
-
-  def owner_filter_exclusive?
-    case_owner_is_someone_else? && case_owner_is_someone_else_id.blank?
-  end
-
-  def created_by_filter_exclusive?
-    created_by.someone_else? && created_by.id.blank?
-  end
-
-  def no_owner_boxes_checked?
-    return false if case_owner_is_me?
-    return false if case_owner_is_my_team?
-
-    !case_owner_is_someone_else?
-  end
-
-  def no_created_by_checked?
-    !created_by.me? && !created_by.my_team? && !created_by.someone_else?
-  end
-
-  def teams_with_access_ids
-    @teams_with_access_ids ||= teams_with_access.ids
-  end
-
-  def filter_teams_with_access?
-    teams_with_access_ids.any?
-  end
-
-  def filter_status?
-    status_open != status_closed
-  end
-
-  def is_closed?
-    !status_open?
-  end
 
   def selected_sort_by
     if sort_by.blank?

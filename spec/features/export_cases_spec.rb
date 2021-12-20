@@ -23,6 +23,7 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
     sign_in(user)
     visit investigations_path
+    expand_filters
   end
 
   scenario "with no filters selected" do
@@ -60,8 +61,8 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   scenario "with filtering on coronavirus status" do
-    check "Coronavirus cases only"
-    click_button "Apply filters"
+    choose "Coronavirus"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -75,8 +76,8 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   scenario "with filtering on risk level" do
-    check "Serious and high risk cases only"
-    click_button "Apply filters"
+    choose "Serious and high risk"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_closed.pretty_id
@@ -90,8 +91,8 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   scenario "with filtering on case type" do
-    check "Enquiry"
-    click_button "Apply filters"
+    choose "Enquiry"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -105,9 +106,8 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   scenario "with filtering on case status" do
-    uncheck "Open"
-    check "Closed"
-    click_button "Apply filters"
+    choose "Closed"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -122,10 +122,10 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases created by current user" do
     within_fieldset "Created by" do
-      check "Me"
+      choose "Me"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -140,13 +140,13 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases created by another user on the same team" do
     within_fieldset "Created by" do
-      check "My team"
+      choose "Me and my team"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
-    expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).to have_text allegation_serious.pretty_id
+    expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
@@ -159,11 +159,11 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases created by another user or team" do
     within_fieldset "Created by" do
-      check "Other person or team"
+      choose "Others"
       select other_user.name
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -178,10 +178,10 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases with the user's team added to the case" do
     within_fieldset "Teams added to case" do
-      check "My team"
+      choose "My team"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
     expect(page).to have_text allegation_serious.pretty_id
@@ -197,12 +197,12 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
   end
 
   scenario "with filtering on cases with another user or team added to the case" do
-    within_fieldset "Teams added to case" do
-      check "Other team"
+    within_fieldset "Teams added to cases" do
+      choose "Other"
       select other_user.team.name
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -217,31 +217,29 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
   scenario "with filtering on cases owned by the user" do
     within_fieldset "Case owner" do
-      check "Me"
-      check "My team"
+      choose "Me"
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).to have_text enquiry_coronavirus.pretty_id
-    expect(page).to have_text allegation_serious.pretty_id
+    expect(page).not_to have_text allegation_serious.pretty_id
     expect(page).not_to have_text allegation_closed.pretty_id
     expect(page).not_to have_text allegation_other_team.pretty_id
 
     click_link "XLSX (spreadsheet)"
 
-    expect(spreadsheet.last_row).to eq(3)
+    expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(enquiry_coronavirus.pretty_id)
-    expect(spreadsheet.cell(3, 1)).to eq(allegation_serious.pretty_id)
   end
 
   scenario "with filtering on cases owned by another team" do
     within_fieldset "Case owner" do
-      check "Other person or team"
+      choose "Others"
       select other_user.team.name
     end
 
-    click_button "Apply filters"
+    click_button "Apply"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
     expect(page).not_to have_text allegation_serious.pretty_id
@@ -252,5 +250,9 @@ RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 1)).to eq(allegation_other_team.pretty_id)
+  end
+
+  def expand_filters
+    find("#filter-details").click
   end
 end

@@ -7,35 +7,24 @@ module InvestigationsHelper
   end
 
   def query_params
-    set_default_type_filter
     params.permit(
       :q,
-      :status_open,
-      :status_closed,
+      :case_status,
+      :case_type,
       :page,
-      :allegation,
-      :enquiry,
-      :project,
-      :case_owner_is_me,
-      :case_owner_is_my_team,
-      :case_owner_is_someone_else,
-      :case_owner_is_someone_else_id,
+      :case_owner,
       :sort_by,
-      :coronavirus_related_only,
-      :serious_and_high_risk_level_only,
-      created_by: %i[me someone_else my_team id],
-      teams_with_access: [:other_team_with_access, :my_team, { id: [] }]
+      :priority,
+      :teams_with_access,
+      :case_owner_is_someone_else_id,
+      :teams_with_access_other_id,
+      :created_by,
+      :created_by_other_id
     )
   end
 
   def export_params
     query_params.except(:page, :sort_by)
-  end
-
-  def set_default_type_filter
-    params[:allegation] = "unchecked" if params[:allegation].blank?
-    params[:enquiry] = "unchecked" if params[:enquiry].blank?
-    params[:project] = "unchecked" if params[:project].blank?
   end
 
   def build_breadcrumb_structure
@@ -398,7 +387,7 @@ module InvestigationsHelper
   end
 
   def form_serialisation_option
-    options = { include: %i[teams_with_access created_by] }
+    options = {}
     options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
 
     options

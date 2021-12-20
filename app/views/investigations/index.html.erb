@@ -4,7 +4,7 @@
 
 <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true, role: "search" }) do |form| %>
   <%= render 'investigations/search_bar', form: form %>
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters">
       <div class="govuk-grid-row">
@@ -54,12 +54,6 @@
             </table>
 
             <%= paginate @investigations.object %>
-
-            <% if policy(Investigation).export? %>
-              <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
-                Request this list as a downloadable <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
-              </p>
-            <% end %>
           </div>
         </div>
       <% end %>
