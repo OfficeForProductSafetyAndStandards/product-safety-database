@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, type: :request do
-  let(:params) { { enquiry: "unchecked", project: "unchecked", sort_by: "recent", allegation: "unchecked", created_by: { id: "", me: "", my_team: "", someone_else: "" }, status_open: "true", teams_with_access: { my_team: "", other_team_with_access: "" } } }
+  let(:params) { { sort_by: "recent", case_type: "all", created_by: "all", case_status: "open", teams_with_access: "all" } }
 
   before do
     sign_in(user)
@@ -278,7 +278,7 @@ RSpec.describe "Export cases as XLSX file", :with_elasticsearch, :with_stubbed_n
 
           Investigation.import refresh: true, force: true
 
-          get generate_case_exports_path, params: { status_closed: "checked", format: :xlsx }
+          get generate_case_exports_path, params: { case_status: "closed", format: :xlsx }
 
           aggregate_failures do
             expect(exported_data.cell(1, 23)).to eq "Date_Closed"

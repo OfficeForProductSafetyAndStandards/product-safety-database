@@ -1,53 +1,31 @@
-<div class="govuk-grid-column-one-quarter govuk-!-padding-right-1">
-  <div class="govuk-!-margin-bottom-0">
-    <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
+<section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+  <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
 
-    <%= govukSkipLink(text: "Skip to results", href: "#results") %>
+  <%= govukSkipLink(text: "Skip to results", href: "#results") %>
 
-    <%= render "investigations/coronavirus_and_risk_level_checkbox", form: form %>
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :case_owner,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Case owner", classes: "govuk-fieldset__legend--s" } },
-      items: case_owner_is(form)
-    %>
+  <%= render "investigations/coronavirus_and_risk_level_radios", form: form %>
+  <%= render "investigations/case_owner_radios", form: form %>
 
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :teams_with_access,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: t(".teams_added_to_case"), classes: "govuk-fieldset__legend--s" } },
-      items: teams_added_to_case_items(form)
-    %>
 
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :created_by,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Created by", classes: "govuk-fieldset__legend--s" } },
-      items: created_by(form)
-    %>
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :type,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Type", classes: "govuk-fieldset__legend--s" } },
-      items: [{ key: "allegation", value: "checked", unchecked_value: "unchecked", text: "Allegation" },
-             { key: "enquiry", value: "checked", unchecked_value: "unchecked", text: "Enquiry" },
-             { key: "project", value: "checked", unchecked_value: "unchecked", text: "Project" }]
-    %>
-    <%= render "form_components/govuk_checkboxes",
-      form: form,
-      key: :status,
-      classes: "govuk-checkboxes--small",
-      fieldset: { legend: { text: "Status", classes: "govuk-fieldset__legend--s" } },
-      items: [{ key: "status_open", value: true, unchecked_value: "off", text: "Open" },
-             { key: "status_closed", value: true, unchecked_value: "off", text: "Closed" }]
-    %>
+  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details") do %>
+    <%= render "investigations/teams_with_access_radios", form: form %>
+    <%= render "investigations/case_creator_radios", form: form %>
+    <%= render "investigations/case_type_radios", form: form %>
+    <%= render "investigations/case_status_radios", form: form %>
+  <% end %>
 
-    <%= form.hidden_field :sort_by %>
+  <div class="govuk-button-group">
+    <%= form.submit "Apply", name: nil, class: "govuk-button" %>
 
-    <%= form.submit "Apply filters", name: nil, class: "govuk-button" %>
+    <%= form.button "Reset", name: nil, type: "reset", class: "govuk-button opss-button-link govuk-!-font-size-16 opss-nojs-hide", data: { "opss-clear-on-reset" => "trigger" } %>
   </div>
-</div>
+
+  <% if policy(Investigation).export? %>
+    <div class="govuk-!-padding-top-2 govuk-!-padding-right-0 govuk-!-padding-bottom-1 govuk-!-padding-left-3 govuk-!-margin-bottom-3 opss-desktop-margin-bottom-220px opss-full-height__col--bottom opss-right-box-arrow">
+      <p class="govuk-body govuk-!-padding-bottom-1 govuk-!-margin-bottom-0 govuk-!-font-size-14">
+          Request this list as a downloadable <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+      </p>
+    </div>
+  <% end %>
+
+</section>
