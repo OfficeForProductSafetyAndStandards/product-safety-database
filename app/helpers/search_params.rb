@@ -9,7 +9,8 @@ class SearchParams
     NEWEST   = "newest",
     OLDEST   = "oldest",
     RECENT   = "recent",
-    RELEVANT = "relevant"
+    RELEVANT = "relevant",
+    NAME     = "name"
   ].freeze
 
   attribute :allegation
