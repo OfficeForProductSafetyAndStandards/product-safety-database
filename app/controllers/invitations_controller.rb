@@ -38,6 +38,6 @@ private
   end
 
   def form_params
-    params.require(:invite_user_to_team_form).permit(:email).merge({ team: @team })
+    params.require(:invite_user_to_team_form).permit(:email, :name).merge({ team: @team })
   end
 end

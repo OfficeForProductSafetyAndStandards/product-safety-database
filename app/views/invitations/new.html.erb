@@ -11,6 +11,9 @@
 
       <h1 class="govuk-heading-l">Invite a team member</h1>
 
+      <%= render "form_components/govuk_input", form: form, key: :name,
+              label: { text: "Full name", classes: "govuk-label--m" } %>
+
       <%= render "form_components/govuk_input", form: form, key: :email,
               label: { text: "Email address", classes: "govuk-label--m" },
               hint: { text: "This should be their work address" } %>
