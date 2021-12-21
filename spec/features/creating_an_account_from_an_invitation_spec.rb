@@ -72,54 +72,6 @@ RSpec.feature "Creating an account from an invitation", :with_stubbed_elasticsea
     expect_to_be_signed_in
   end
 
-  context "when a previous registration was abandoned before verifying mobile number" do
-    let(:invited_user) do
-      create(
-        :user,
-        :invited,
-        name: "Bob Jones",
-        mobile_number: "07700 900 982",
-        mobile_number_verified: false
-      )
-    end
-
-    scenario "it shouldn’t show values entered previously" do
-      visit "/users/#{invited_user.id}/complete-registration?invitation=#{invited_user.invitation_token}"
-
-      expect_to_be_on_complete_registration_page
-
-      # Form should NOT contain values from previous abandoned registration
-      expect(find_field("Full name").value).to eq ""
-      expect(find_field("Mobile number").value).to eq ""
-
-      click_button "Continue"
-
-      expect_ordered_error_list
-
-      # Deliberately leave password blank
-      fill_in_account_details_with full_name: "Bob Jones", mobile_number: "07731123345", password: ""
-
-      click_button "Continue"
-
-      # Form SHOULD now contain pre-filled values from previous submission
-      expect(find_field("Full name").value).to eq("Bob Jones")
-      expect(find_field("Mobile number").value).to eq("07731123345")
-
-      # Now add a password
-      fill_in "Password", with: "testpassword123@"
-
-      click_button "Continue"
-
-      expect_to_be_on_secondary_authentication_page
-
-      fill_in "Enter security code", with: otp_code
-      click_on "Continue"
-
-      expect_to_be_on_declaration_page
-      expect_to_be_signed_in
-    end
-  end
-
   def expect_to_be_signed_in
     expect(page).to have_content("Sign out")
   end
