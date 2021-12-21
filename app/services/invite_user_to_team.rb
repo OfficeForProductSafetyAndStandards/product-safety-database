@@ -1,7 +1,7 @@
 class InviteUserToTeam
   include Interactor
 
-  delegate :user, :team, :inviting_user, to: :context
+  delegate :user, :team, :inviting_user, :name, to: :context
 
   def call
     context.fail!(error: "No email or user supplied") unless email || user
@@ -31,7 +31,8 @@ private
       email: email,
       organisation: team.organisation,
       skip_password_validation: true,
-      team: team
+      team: team,
+      name: name
     )
   end
 

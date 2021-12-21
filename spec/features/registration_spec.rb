@@ -4,6 +4,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
   let(:team) { create(:team) }
   let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, team: team) }
   let(:invitee_email) { Faker::Internet.safe_email }
+  let(:name) { "Bill Smith" }
 
   before do
     set_whitelisting_enabled(false)
@@ -110,6 +111,9 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
       invitee = User.find_by!(email: invitee_email)
 
       visit "/users/#{invitee.id}/complete-registration?invitation=#{invitee.invitation_token}"
+
+      expect(page).to have_field("Full name", with: name)
+
       fill_in_registration_form
 
       expect_to_be_on_secondary_authentication_page
@@ -137,6 +141,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
 
   def invite_user_to_team(email = invitee_email)
     fill_in "Email address", with: email
+    fill_in "Full name", with: name
     click_on "Send invitation email"
   end
 
