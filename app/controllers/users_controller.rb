@@ -18,7 +18,6 @@ class UsersController < ApplicationController
     # Reset name and mobile number in case they've been remembered
     # from a previous registration that was abandoned before the mobile number
     # was verified via two-factor authentication.
-    @user.name = ""
     @user.mobile_number = ""
 
     render :complete_registration
