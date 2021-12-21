@@ -4,6 +4,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
   let(:team) { create(:team) }
   let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
   let(:email) { Faker::Internet.safe_email }
+  let(:name) { "Named User" }
 
   context "when the user is not a team admin" do
     before do
@@ -28,6 +29,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
 
       scenario "sends an invitation" do
         expect_to_be_on_team_page(team)
+        expect(page).to have_content name
         expect_confirmation_banner("Invite sent to #{email}")
         expect_invitation_email_sent(to: email, inviting_user: user)
       end
@@ -168,6 +170,7 @@ RSpec.feature "Inviting a user", :with_stubbed_mailer, :with_stubbed_elasticsear
     expect_to_be_on_invite_a_team_member_page
 
     fill_in "invite_user_to_team_form_email", with: email
+    fill_in "invite_user_to_team_form_name", with: name
     click_button "Send invitation email"
   end
 

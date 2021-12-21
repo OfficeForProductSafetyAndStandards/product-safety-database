@@ -4,6 +4,7 @@ class InviteUserToTeamForm
 
   attribute :email
   attribute :team
+  attribute :name
 
   validates :email, email: { if: ->(form) { form.email.present? } }
   validate :cannot_be_existing_activated_user_on_same_team
