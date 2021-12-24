@@ -48,7 +48,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     expect(page)
       .to have_css("table#results tbody.govuk-table__body:nth-child(3) tr.govuk-table__row td.govuk-table__cell", text: investigation_last_updated_3_days_ago.pretty_id)
 
-    expect(page.find("select#sort_by option[value='#{SortByHelper::SORT_BY_RELEVANT}']")).to be_selected
+    expect(page.find("select#sort_by option", text: "Relevance")).to be_selected
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Relevance")
 
     expect(page).to have_current_path(investigations_search_path, ignore_query: true)
@@ -56,9 +56,9 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     fill_in "Keywords", with: ""
     click_on "Apply"
 
-    expect(page).not_to have_css("select#sort_by option[value='#{SortByHelper::SORT_BY_RELEVANT}']")
+    expect(page).not_to have_css("select#sort_by option", text: "Relevance")
 
-    expect(page.find("select#sort_by option[value='#{SortByHelper::SORT_BY_RECENT}']")).to be_selected
+    expect(page.find("select#sort_by option", text: "Recent updates")).to be_selected
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
 
     # Expect investigations to be back in reverse chronological order again
@@ -76,7 +76,7 @@ RSpec.feature "Investigation listing", :with_elasticsearch, :with_stubbed_mailer
     end
     expect(page).to have_current_path(/sort_by=oldest/, ignore_query: false)
 
-    expect(page.find("select#sort_by option[value='#{SortByHelper::SORT_BY_OLDEST}']")).to be_selected
+    expect(page.find("select#sort_by option", text: "Oldest updates")).to be_selected
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Oldest updates")
   end
 end

@@ -26,7 +26,8 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
     expect(page).to have_text "ABC"
     expect(page).to have_text "XYZ"
 
-    click_link "Export as spreadsheet"
+    click_link "XLSX (spreadsheet)"
+
     expect(page).to have_content "Your business export is being prepared. You will receive an email when your export is ready to download."
 
     expect(email.action_name).to eq "business_export"
@@ -47,7 +48,7 @@ RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :
     expect(page).not_to have_text "ABC"
     expect(page).to have_text "XYZ"
 
-    click_link "Export as spreadsheet"
+    click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
     expect(spreadsheet.cell(2, 2)).to eq("XYZ")
