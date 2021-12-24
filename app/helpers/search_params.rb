@@ -5,14 +5,6 @@ class SearchParams
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
-  SORT_BY_OPTIONS = [
-    NEWEST   = "newest",
-    OLDEST   = "oldest",
-    RECENT   = "recent",
-    RELEVANT = "relevant",
-    NAME     = "name"
-  ].freeze
-
   attribute :created_by, default: "all"
   attribute :created_by_other_id
   attribute :override_sort_by
@@ -31,20 +23,20 @@ class SearchParams
 
   def selected_sort_by
     if sort_by.blank?
-      return RELEVANT if q.present?
+      return SortByHelper::SORT_BY_RELEVANT if q.present?
 
-      return RECENT
+      return SortByHelper::SORT_BY_RECENT
     end
     sort_by
   end
 
   def sorting_params
     case sort_by
-    when NEWEST
+    when SortByHelper::SORT_BY_NEWEST
       { created_at: "desc" }
-    when OLDEST
+    when SortByHelper::SORT_BY_OLDEST
       { updated_at: "asc" }
-    when RECENT
+    when SortByHelper::SORT_BY_RECENT
       { updated_at: "desc" }
     else
       { updated_at: "desc" }
@@ -53,11 +45,11 @@ class SearchParams
 
   def sort_by_items(with_relevant_option: false)
     items = [
-      ["Recent updates", RECENT],
-      ["Oldest updates", OLDEST],
-      ["Newest cases", NEWEST]
+      SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_RECENT, SortByHelper::SORT_DIR_DEFAULT),
+      SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_OLDEST, SortByHelper::SORT_DIR_DEFAULT),
+      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIR_DEFAULT)
     ]
-    items.unshift(["Relevance", RELEVANT]) if with_relevant_option
+    items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIR_DEFAULT)) if with_relevant_option
     items
   end
 end

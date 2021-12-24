@@ -2,7 +2,6 @@ class ProductsController < ApplicationController
   include CountriesHelper
   include ProductsHelper
   include UrlHelper
-  helper_method :sort_column, :sort_direction
 
   before_action :set_search_params, only: %i[index]
   before_action :set_product, only: %i[show edit update]
@@ -87,10 +86,19 @@ private
   end
 
   def set_sort_by_items
-    params[:sort_by] = SearchParams::RELEVANT if params[:sort_by].blank? && params[:q].present?
-    params[:sort_by] = nil if params[:sort_by] == SearchParams::RELEVANT && params[:q].blank?
+    params[:sort_by] = SortByHelper::SORT_BY_RELEVANT if params[:sort_by].blank? && params[:q].present?
+    params[:sort_by] = nil if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT && params[:q].blank?
 
-    @sort_by_items = Product.sort_by_items(params[:q].present?)
-    @selected_sort_by = params[:sort_by].presence || SearchParams::NEWEST
+    @sort_by_items = sort_by_items
+    @selected_sort_by = params[:sort_by].presence || SortByHelper::SORT_BY_NEWEST
+  end
+
+  def sort_by_items
+    items = [
+      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIR_DEFAULT),
+      SortByHelper::SortByItem.new("Name", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIR_DEFAULT)
+    ]
+    items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIR_DEFAULT)) if params[:q].present?
+    items
   end
 end
