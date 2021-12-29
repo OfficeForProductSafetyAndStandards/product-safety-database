@@ -1,7 +1,7 @@
 class Investigation < ApplicationRecord
   include Documentable
   include SanitizationHelper
-  include InvestigationElasticsearch
+  include InvestigationOpensearch
 
   attr_accessor :visibility_rationale, :owner_rationale
 

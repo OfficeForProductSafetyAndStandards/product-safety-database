@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProductDecorator, :with_stubbed_elasticsearch do
+RSpec.describe ProductDecorator, :with_stubbed_opensearch do
   subject(:decorated_product) { product.decorate }
 
   let(:product) { build(:product) }

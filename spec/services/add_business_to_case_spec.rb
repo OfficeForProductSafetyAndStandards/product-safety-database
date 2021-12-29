@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddBusinessToCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
+RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_adapter do
   subject(:result) { described_class.call(investigation: investigation, business: business, user: user) }
 
   let(:investigation) { create(:allegation, creator: creator) }

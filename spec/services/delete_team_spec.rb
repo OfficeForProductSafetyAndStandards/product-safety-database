@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe DeleteTeam, :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:team) { create(:team) }
   let(:new_team) { create(:team) }
 

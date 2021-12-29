@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter, type: :feature do
+RSpec.feature "Adding new data to a case from the add new page", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_test_queue_adapter, type: :feature do
   let(:user)          { create(:user, :activated) }
   let(:investigation) { create(:enquiry, creator: user, products: [product1]) }
   let(:product1) { create(:product_washing_machine, name: "MyBrand Washing Machine") }

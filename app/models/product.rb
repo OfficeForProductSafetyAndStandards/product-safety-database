@@ -31,7 +31,7 @@ class Product < ApplicationRecord
 
   MARKINGS = %w[UKCA UKNI CE].freeze
 
-  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
+  index_name [ENV.fetch("OS_NAMESPACE", "default_namespace"), Rails.env, "products"].join("_")
 
   settings do
     mappings do

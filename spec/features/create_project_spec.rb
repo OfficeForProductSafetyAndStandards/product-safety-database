@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Creating project", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   context "when logged in as an OPSS user" do
     let(:title) { Faker::Lorem.sentence }
     let(:summary) { Faker::Lorem.paragraph }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_opensearch do
   describe ".call" do
     context "with no parameters" do
       subject(:delete_call) { described_class.call }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::ChangeNotifyingCountry, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe AuditActivity::Investigation::ChangeNotifyingCountry, :with_stubbed_mailer, :with_stubbed_opensearch do
   subject(:metadata) { described_class.build_metadata(investigation) }
 
   let(:audit_activity) { described_class.from(investigation) }

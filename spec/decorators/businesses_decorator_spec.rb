@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BusinessesDecorator, :with_stubbed_elasticsearch do
+RSpec.describe BusinessesDecorator, :with_stubbed_opensearch do
   subject(:decorated_businesses) { Business.all.decorate }
 
   let!(:business_1) { create(:business).decorate }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notification do
+RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notification do
   let(:reference_number) { Faker::Number.number(digits: 10) }
   let(:hazard_type) { Rails.application.config.hazard_constants["hazard_type"].sample }
   let(:hazard_description) { Faker::Lorem.paragraph }

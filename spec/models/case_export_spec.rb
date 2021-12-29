@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CaseExport, :with_elasticsearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe CaseExport, :with_opensearch, :with_stubbed_notify, :with_stubbed_mailer, :with_stubbed_antivirus do
   let!(:organisation) { create(:organisation) }
   let!(:team) { create(:team, organisation: organisation) }
   let!(:user) { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }

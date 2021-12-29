@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Opening a new case", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Opening a new case", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, type: :feature do
   let(:user) { create(:user, :activated, :opss_user) }
 
   scenario "Opening a new case (with validation error)" do

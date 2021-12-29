@@ -1,4 +1,4 @@
-class ElasticsearchQuery
+class OpensearchQuery
   attr_accessor :query, :filters, :sorting, :nested
 
   def initialize(query, filters, sorting, nested: [])

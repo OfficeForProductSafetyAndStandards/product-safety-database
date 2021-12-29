@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AddProductToCase, :with_stubbed_elasticsearch, :with_test_queue_adapter do
+RSpec.describe AddProductToCase, :with_stubbed_opensearch, :with_test_queue_adapter do
   let(:investigation) { create(:allegation, creator: creator) }
   let(:attributes) { attributes_for(:product_washing_machine) }
 
