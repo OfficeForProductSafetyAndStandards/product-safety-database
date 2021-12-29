@@ -100,21 +100,21 @@ jobs:
         bundle config path vendor/bundle
         bundle check || bundle install --without development --jobs=4 --retry=3
 
-    # Temporarily disabled due to unreliability of login flow steps
-    #
-    # - name: Run Smoke Tests
-    #   if: success()
-    #   env:
-    #     SMOKE_USER: ${{secrets.SMOKE_USER}}
-    #     SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
-    #     SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
-    #     SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
-    #     SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
-    #     IS_REVIEW_APP: "false"
-    #     SMOKE_TEST_URL: "https://staging.product-safety-database.service.gov.uk"
+    Temporarily disabled due to unreliability of login flow steps
 
-    #   run: |
-    #     bundle exec rspec ./smoke_test/cases_page_spec.rb
+    - name: Run Smoke Tests
+      if: success()
+      env:
+        SMOKE_USER: ${{secrets.SMOKE_USER}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
+        SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
+        SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
+        SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
+        IS_REVIEW_APP: "false"
+        SMOKE_TEST_URL: "https://staging.product-safety-database.service.gov.uk"
+
+      run: |
+        bundle exec rspec ./smoke_test/cases_page_spec.rb
 
     - name: Create GitHub deployment for Production
       if: success()
@@ -173,19 +173,19 @@ jobs:
         source deploy-github-functions.sh
         gh_deploy_failure production $LOG_URL
 
-    # - name: Run Smoke Tests
-    #   if: success()
-    #   env:
-    #     SMOKE_USER: ${{secrets.SMOKE_USER}}
-    #     SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
-    #     SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
-    #     SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
-    #     SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
-    #     IS_REVIEW_APP: "false"
-    #     SMOKE_TEST_URL: "https://www.product-safety-database.service.gov.uk/"
-    #
-    #   run: |
-    #     bundle exec rspec ./smoke_test/cases_page_spec.rb
+    - name: Run Smoke Tests
+      if: success()
+      env:
+        SMOKE_USER: ${{secrets.SMOKE_USER}}
+        SMOKE_PASSWORD: ${{secrets.SMOKE_PASSWORD}}
+        SMOKE_RELAY_CODE_URL: ${{secrets.SMOKE_RELAY_CODE_URL}}
+        SMOKE_RELAY_CODE_USER: ${{secrets.SMOKE_RELAY_CODE_USER}}
+        SMOKE_RELAY_CODE_PASS: ${{secrets.SMOKE_RELAY_CODE_PASS}}
+        IS_REVIEW_APP: "false"
+        SMOKE_TEST_URL: "https://www.product-safety-database.service.gov.uk/"
+
+      run: |
+        bundle exec rspec ./smoke_test/cases_page_spec.rb
 
     - name: Alert team via Slack of deployment failure
       if: failure()
