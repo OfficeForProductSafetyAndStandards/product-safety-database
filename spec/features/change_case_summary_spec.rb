@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Changing the case summary", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Changing the case summary", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:investigation) { create(:project, creator: user) }
   let(:user) { create(:user, :activated) }
   let(:other_user) { create(:user, :activated) }

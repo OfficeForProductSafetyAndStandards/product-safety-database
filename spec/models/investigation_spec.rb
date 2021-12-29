@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
   subject(:investigation) { create(:allegation) }
 
-  describe "#build_owner_collaborations_from", :with_stubbed_elasticsearch do
+  describe "#build_owner_collaborations_from", :with_stubbed_opensearch do
     subject(:investigation) { Investigation::Allegation.new.build_owner_collaborations_from(user) }
 
     let(:user) { create(:user) }
@@ -14,7 +14,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "supporting information", :with_stubbed_elasticsearch do
+  describe "supporting information", :with_stubbed_opensearch do
     let(:user)                                    { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation)                           { create(:allegation, creator: user) }
     let(:generic_supporting_information_filename) { "a generic supporting information" }
@@ -43,7 +43,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#teams_with_access", :with_stubbed_elasticsearch do
+  describe "#teams_with_access", :with_stubbed_opensearch do
     let(:owner)  { investigation.owner_team }
     let(:user)   { create(:user, team: owner) }
     let(:team_a) { create(:team, name: "a team") }
@@ -61,7 +61,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#risk_level_currently_validated?", :with_stubbed_elasticsearch do
+  describe "#risk_level_currently_validated?", :with_stubbed_opensearch do
     it "returns true if risk_validated_by is not nil" do
       investigation.update!(risk_validated_by: "Anyone")
       expect(investigation).to be_risk_level_currently_validated
@@ -72,7 +72,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#owner_team", :with_stubbed_elasticsearch do
+  describe "#owner_team", :with_stubbed_opensearch do
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }
       let(:investigation) { create(:allegation, creator: create(:user, team: team)) }
@@ -97,7 +97,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "ownership", :with_stubbed_elasticsearch do
+  describe "ownership", :with_stubbed_opensearch do
     let(:user)          { create(:user, :activated, has_viewed_introduction: true) }
     let(:investigation) { create(:project, creator: user) }
 
@@ -113,7 +113,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "custom_risk_level validity", :with_stubbed_elasticsearch do
+  describe "custom_risk_level validity", :with_stubbed_opensearch do
     let(:investigation) do
       build_stubbed(:allegation, custom_risk_level: custom_risk_level, risk_level: risk_level)
     end
@@ -184,7 +184,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#categories", :with_stubbed_elasticsearch do
+  describe "#categories", :with_stubbed_opensearch do
     let(:product_category) { Faker::Hipster.unique.word }
 
     before do
@@ -221,7 +221,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     end
   end
 
-  describe "#non_owner_teams_with_access", :with_stubbed_elasticsearch do
+  describe "#non_owner_teams_with_access", :with_stubbed_opensearch do
     let(:user)             { create(:user, :activated, has_viewed_introduction: true) }
     let(:read_only_team)   { create(:team) }
     let(:edit_access_team) { create(:team) }

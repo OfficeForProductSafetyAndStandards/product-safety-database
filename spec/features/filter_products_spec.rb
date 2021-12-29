@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Product filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:organisation)          { create(:organisation) }
   let(:user)                  { create(:user, :activated, organisation: organisation, has_viewed_introduction: true) }
 

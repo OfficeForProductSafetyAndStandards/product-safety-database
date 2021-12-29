@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UrlHelper do
-  describe "#path_for_model", :with_stubbed_elasticsearch, :with_stubbed_mailer do
+  describe "#path_for_model", :with_stubbed_opensearch, :with_stubbed_mailer do
     subject(:path) { helper.path_for_model(object, slug) }
 
     let(:slug) { nil }
@@ -35,7 +35,7 @@ RSpec.describe UrlHelper do
     end
   end
 
-  describe "#associated_documents_path", :with_stubbed_elasticsearch, :with_stubbed_mailer do
+  describe "#associated_documents_path", :with_stubbed_opensearch, :with_stubbed_mailer do
     subject(:path) { helper.associated_documents_path(object) }
 
     context "with an instance of Business" do
@@ -47,7 +47,7 @@ RSpec.describe UrlHelper do
     end
   end
 
-  describe "#associated_document_path", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+  describe "#associated_document_path", :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
     subject(:path) { helper.associated_document_path(object, document) }
 
     let(:document) { object.documents.first }
@@ -69,7 +69,7 @@ RSpec.describe UrlHelper do
     end
   end
 
-  describe "#attachments_tab_path", :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+  describe "#attachments_tab_path", :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
     subject(:path) { helper.attachments_tab_path(object, document) }
 
     let(:document) { object.documents.first }

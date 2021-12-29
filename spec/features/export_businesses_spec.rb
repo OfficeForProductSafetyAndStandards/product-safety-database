@@ -1,7 +1,7 @@
 require "rails_helper"
 require "sidekiq/testing"
 
-RSpec.feature "Business export", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
+RSpec.feature "Business export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user) { create :user, :psd_admin, :activated }
   let(:email) { delivered_emails.last }
   let(:export) { BusinessExport.find_by(user: user) }

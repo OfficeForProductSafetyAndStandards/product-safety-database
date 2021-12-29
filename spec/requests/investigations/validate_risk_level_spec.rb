@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Validate risk level", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
+RSpec.describe "Validate risk level", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user) { create(:user, :activated) }
   let(:other_user) { create(:user, :activated) }
 

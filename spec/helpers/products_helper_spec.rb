@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProductsHelper, :with_stubbed_elasticsearch do
+RSpec.describe ProductsHelper, :with_stubbed_opensearch do
   describe "#items_for_authenticity" do
     let(:product)      { build(:product, authenticity: authenticity) }
     let(:product_form) { ProductForm.from(product) }

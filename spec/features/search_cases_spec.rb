@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user) { create :user, :activated, has_viewed_introduction: true }
 
   let(:product) do
@@ -41,8 +41,8 @@ RSpec.feature "Searching cases", :with_elasticsearch, :with_stubbed_mailer, type
   let!(:eeirteenproduct_investigation) { create(:allegation, products: [eeirteenproduct]) }
 
   before do
-    # Import products syncronously into ElasticSearch
-    Investigation.import refresh: :wait_for
+    # Import products syncronously into Opensearch
+    Investigation.__elasticsearch__.import refresh: :wait_for
   end
 
   scenario "searching for a case using a keyword from a product name" do

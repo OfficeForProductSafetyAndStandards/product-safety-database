@@ -16,7 +16,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
   let(:investigation) { create(:enquiry, creator: creator) }
 
   describe ".call" do
-    context "without search index", :with_stubbed_elasticsearch do
+    context "without search index", :with_stubbed_opensearch do
       before { set_old_owner }
 
       context "with no parameters" do
@@ -126,7 +126,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
           ]))
         end
 
-        context "when no rationale is supplied", :with_stubbed_elasticsearch do
+        context "when no rationale is supplied", :with_stubbed_opensearch do
           let(:rationale) { nil }
 
           it "does not add a message to the notification email" do
@@ -300,7 +300,7 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
       end
     end
 
-    context "with search index", :with_elasticsearch do
+    context "with search index", :with_opensearch do
       before { set_old_owner }
 
       it "indexes correctly the new owner" do

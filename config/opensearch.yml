@@ -1,0 +1,22 @@
+default: &default
+  :url: <%= ENV.fetch('OPENSEARCH_URL', "https://localhost:9200") %>
+  :transport_options:
+    :request:
+      :timeout: 5
+
+development:
+  <<: *default
+  :transport_options:
+    :ssl:
+      :verify: false
+
+test:
+  <<: *default
+  :transport_options:
+    :request:
+      :timeout: 3000
+    :ssl:
+      :verify: false
+
+production:
+  :url: <%= ENV["VCAP_SERVICES"] && CF::App::Credentials.find_by_service_name("psd-opensearch-1")["uri"] %>

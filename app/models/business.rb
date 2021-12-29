@@ -4,7 +4,7 @@ class Business < ApplicationRecord
   include Documentable
   include AttachmentConcern
 
-  index_name [ENV.fetch("ES_NAMESPACE", "default_namespace"), Rails.env, "business"].join("_")
+  index_name [ENV.fetch("OS_NAMESPACE", "default_namespace"), Rails.env, "business"].join("_")
 
   settings do
     mappings do

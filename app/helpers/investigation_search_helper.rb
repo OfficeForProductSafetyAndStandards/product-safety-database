@@ -2,7 +2,7 @@ module InvestigationSearchHelper
   include SearchHelper
 
   def search_query(user)
-    ElasticsearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters(user))
+    OpensearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters(user))
   end
 
   def set_search_params

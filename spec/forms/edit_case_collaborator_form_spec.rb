@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EditCaseCollaboratorForm, :with_elasticsearch, :with_stubbed_mailer do
+RSpec.describe EditCaseCollaboratorForm, :with_opensearch, :with_stubbed_mailer do
   subject(:form) { described_class.new(params) }
 
   let!(:investigation) { create(:allegation, creator: user, edit_access_teams: [team]) }

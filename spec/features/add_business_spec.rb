@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :with_stubbed_opensearch do
   let(:city)             { Faker::Address.city }
   let(:trading_name)     { Faker::Company.name }
   let(:business_details) { Faker::Company.buzzword }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Deleting an attachment from a product", :with_stubbed_elasticsearch, :with_stubbed_antivirus, type: :feature do
+RSpec.feature "Deleting an attachment from a product", :with_stubbed_opensearch, :with_stubbed_antivirus, type: :feature do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product, :with_document) }
   let(:document) { product.documents.first }
