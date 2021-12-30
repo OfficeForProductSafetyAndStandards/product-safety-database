@@ -2,7 +2,7 @@ class SecondaryAuthenticationForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  INTEGER_REGEX = /\A\d+\z/.freeze
+  INTEGER_REGEX = /\A\d+\z/
 
   attribute :otp_code
   attribute :user_id
