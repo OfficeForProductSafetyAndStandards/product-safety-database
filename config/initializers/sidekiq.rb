@@ -1,7 +1,7 @@
 def create_log_db_metrics_job
   log_db_metrics_job = Sidekiq::Cron::Job.new(
-    name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: log db metrics, every day at 1am",
-    cron: "0 1 * * *",
+    name: "#{ENV['SIDEKIQ_QUEUE'] || 'psd'}: log db metrics, every 15 minutes",
+    cron: "*/15 * * * *",
     class: "LogDbMetricsJob",
     queue: ENV["SIDEKIQ_QUEUE"] || "psd"
   )
