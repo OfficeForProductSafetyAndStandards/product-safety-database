@@ -1,15 +1,11 @@
 class LogDbMetricsJob < ApplicationJob
   def perform
-    open_investigations_count = Investigation.where(is_closed: false).count
-    investigations_count = Investigation.count
-    activities_count = Activity.count
-    alerts_count = Alert.count
+    stats = {
+      total_number_of_cases: Investigation.count,
+      total_number_of_users: User.count,
+      total_number_of_products: Product.count,
+      total_number_of_businesses: Business.count
+    }
 
-    Sidekiq.logger.info "{
-      openInvestigationsCount: #{open_investigations_count},
-      investigationsCount: #{investigations_count},
-      activitiesCount: #{activities_count},
-      alertsCount: #{alerts_count}
-      }"
-  end
+    Sidekiq.logger.info "PsdStatistics #{stats.to_a.map { |x| x.join('=') }.join(' ')}"
 end
