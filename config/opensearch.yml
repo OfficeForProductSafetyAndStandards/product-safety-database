@@ -13,8 +13,6 @@ development:
 test:
   <<: *default
   :transport_options:
-    :request:
-      :timeout: 3000
     :ssl:
       :verify: false
 
