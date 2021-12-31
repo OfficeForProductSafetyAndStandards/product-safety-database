@@ -8,4 +8,5 @@ class LogDbMetricsJob < ApplicationJob
     }
 
     Sidekiq.logger.info "PsdStatistics #{stats.to_a.map { |x| x.join('=') }.join(' ')}"
+  end
 end
