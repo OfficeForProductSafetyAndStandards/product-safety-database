@@ -105,14 +105,15 @@ jobs:
     - name: Prepare database
       run: bin/rails parallel:load_schema
 
-    - name: Dump docker logs
-      uses: jwalton/gh-docker-logs@v1
-      with:
-        images: 'opensearchproject/opensearch'
-
     - name: Run Specs
       run: |
         bundle exec rspec ${{ matrix.rspec-folder }} --format documentation
+
+    - name: Dump docker logs
+      uses: jwalton/gh-docker-logs@v1
+      if: always()
+      with:
+        images: 'opensearchproject/opensearch'
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
