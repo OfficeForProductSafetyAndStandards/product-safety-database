@@ -104,6 +104,11 @@ jobs:
     - name: Prepare database
       run: bin/rails parallel:load_schema
 
+    - name: Dump docker logs
+      uses: jwalton/gh-docker-logs@v1
+      with:
+        images: 'opensearchproject/opensearch'
+
     - name: Run Specs
       run: |
         bundle exec rspec ${{ matrix.rspec-folder }}
