@@ -11,35 +11,66 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation: organisation, team: other_team) }
   let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, team: other_team) }
 
-  let!(:investigation)                       { create(:allegation, creator: user) }
-  let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
-  let!(:other_user_other_team_investigation) { create(:allegation, creator: other_user_other_team) }
-  let!(:other_team_investigation)            { create(:allegation, creator: yet_another_user_same_team) }
-  let!(:another_team_investigation)          { create(:allegation, creator: create(:user)) }
+  let!(:investigation)                       { puts "1"; create(:allegation, creator: user) }
+  let!(:other_user_investigation)            { puts "2"; create(:allegation, creator: other_user_same_team) }
+  let!(:other_user_other_team_investigation) { puts "3"; create(:allegation, creator: other_user_other_team) }
+  let!(:other_team_investigation)            { puts "4"; create(:allegation, creator: yet_another_user_same_team) }
+  let!(:another_team_investigation)          { puts "5"; create(:allegation, creator: create(:user)) }
 
-  let!(:closed_investigation) { create(:allegation, :closed) }
-  let!(:project) { create(:project) }
-  let!(:enquiry) { create(:enquiry) }
+  let!(:closed_investigation) { puts "6"; create(:allegation, :closed) }
+  let!(:project) { puts "7"; create(:project) }
+  let!(:enquiry) { puts "8"; create(:enquiry) }
 
-  let!(:coronavirus_investigation)        { create(:allegation, creator: user, coronavirus_related: true) }
-  let!(:serious_risk_level_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
-  let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
-  let!(:coronavirus_and_high_risk_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
+  let!(:coronavirus_investigation)        { puts "9"; create(:allegation, creator: user, coronavirus_related: true) }
+  let!(:serious_risk_level_investigation) { puts "10"; create(:allegation, creator: user, risk_level: Investigation.risk_levels[:serious]) }
+  let!(:high_risk_level_investigation)    { puts "11"; create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
+  let!(:coronavirus_and_high_risk_investigation) { puts "12"; create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
 
-  let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team: team) }
-  let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team: team) }
-  let!(:other_deleted_team)    { create(:team, :deleted) }
+  let!(:another_active_user)   { puts "13"; create(:user, :activated, organisation: user.organisation, team: team) }
+  let!(:another_inactive_user) { puts "14"; create(:user, :inactive,  organisation: user.organisation, team: team) }
+  let!(:other_deleted_team)    { puts "15"; create(:team, :deleted) }
 
   let(:restricted_case_title) { "Restricted case title" }
   let(:restricted_case_team) { create(:team, organisation: other_organisation) }
   let(:restricted_case_team_user) { create(:user, team: restricted_case_team, organisation: other_organisation) }
-  let!(:restricted_case) { create(:allegation, creator: restricted_case_team_user, is_private: true, description: restricted_case_title).decorate }
+  let!(:restricted_case) { puts "16"; create(:allegation, creator: restricted_case_team_user, is_private: true, description: restricted_case_title).decorate }
 
   before do
+    puts "
+
+    ====
+    other_team_investigation.touch
+    ====
+
+    "
     other_team_investigation.touch # Tests sort order
+    puts "
+
+    ====
+    DEBUG: Investigation.import refresh: :wait_for
+    ====
+
+    "
     Investigation.import refresh: :wait_for
     sign_in(user)
+
+    puts "
+
+    ====
+    DEBUG: visit investigations_path
+    ====
+
+    "
     visit investigations_path
+
+
+    puts "
+
+    ====
+    DEBUG: find(#filter-details).click
+    ====
+
+    "
     find("#filter-details").click
   end
 
