@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         rspec-folder:
-          - spec/features/filter_investigations_spec.rb:77
+          - spec/features/filter_investigations_spec.rb
           # - spec/active_model
           # - spec/decorators
           # - spec/forms
