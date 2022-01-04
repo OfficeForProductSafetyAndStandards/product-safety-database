@@ -4,7 +4,7 @@ on: [push]
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
-  OPENSEARCH_URL: https://admin:admin@localhost:9200
+  OPENSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
   ANTIVIRUS_URL: http://localhost:3006/safe
