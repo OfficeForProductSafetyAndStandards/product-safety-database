@@ -4,7 +4,7 @@ on: [push]
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
-  OPENSEARCH_URL: https://admin:admin@localhost:9200
+  OPENSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
   ANTIVIRUS_URL: http://localhost:3006/safe
@@ -33,8 +33,10 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       opensearch:
         image: opensearchproject/opensearch:latest
+        env:
+          DISABLE_SECURITY_PLUGIN: true
         ports: ["9200:9200"]
-        options: -e="discovery.type=single-node" --health-cmd="curl -XGET https://localhost:9200/_cluster/health -u admin:admin --insecure" --health-interval=10s --health-timeout=5s --health-retries=10
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
       redis:
         image: redis
         ports:
@@ -104,14 +106,15 @@ jobs:
     - name: Prepare database
       run: bin/rails parallel:load_schema
 
-    - name: Dump docker logs
-      uses: jwalton/gh-docker-logs@v1
-      with:
-        images: 'opensearchproject/opensearch'
-
     - name: Run Specs
       run: |
         bundle exec rspec ${{ matrix.rspec-folder }}
+
+    - name: Dump docker logs
+      uses: jwalton/gh-docker-logs@v1
+      if: always()
+      with:
+        images: 'opensearchproject/opensearch'
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1

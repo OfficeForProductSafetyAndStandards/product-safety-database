@@ -1,6 +1,5 @@
 RSpec.shared_context "with stubbed Opensearch", shared_context: :metadata do
   before do
-    # Strip the HTTP basic auth credentials from the URI to allow stubbing
     uri = URI(ENV.fetch("OPENSEARCH_URL"))
     stub_request(:any, /#{Regexp.quote("#{uri.host}:#{uri.port}")}/)
       .to_return(body: { hits: { hits: [{ error: "Opensearch disabled in Rspec" }] } }.to_json, status: 200, headers: { "Content-Type" => "application/json" })
@@ -27,7 +26,6 @@ RSpec.shared_context "with Opensearch", shared_context: :metadata do
   end
 
   before do
-    # Strip the HTTP basic auth credentials from the URI to allow stubbing
     uri = URI(ENV.fetch("OPENSEARCH_URL"))
     WebMock.disable_net_connect!(allow: "#{uri.host}:#{uri.port}")
     create_opensearch_indices!

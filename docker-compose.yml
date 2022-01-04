@@ -24,7 +24,8 @@ services:
     image: opensearchproject/opensearch:latest
     environment:
       - "discovery.type=single-node"
-      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+      - "OPENSEARCH_JAVA_OPTS=-Xms750m -Xmx750m"
+      - "DISABLE_SECURITY_PLUGIN=true"
     volumes:
       - opensearch-volume:/usr/share/opensearch/data
     ports:
