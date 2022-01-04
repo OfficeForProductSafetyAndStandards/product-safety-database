@@ -388,7 +388,7 @@ module InvestigationsHelper
 
   def form_serialisation_option
     options = {}
-    options[:except] = :sort_by if params[:sort_by] == SearchParams::RELEVANT
+    options[:except] = :sort_by if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
 
     options
   end

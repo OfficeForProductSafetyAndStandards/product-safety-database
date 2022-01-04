@@ -80,13 +80,4 @@ class Product < ApplicationRecord
   def name_for_sorting
     name
   end
-
-  def self.sort_by_items(with_relevant_option)
-    items = [
-      ["Newly added", SearchParams::NEWEST],
-      ["Name", SearchParams::NAME]
-    ]
-    items.unshift(["Relevance", SearchParams::RELEVANT]) if with_relevant_option
-    items
-  end
 end

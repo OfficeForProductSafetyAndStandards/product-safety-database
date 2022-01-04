@@ -19,17 +19,19 @@ module BusinessesHelper
   end
 
   def sorting_params
-    return {} if params[:sort] == "relevance"
+    return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
+    return { name_for_sorting: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
+    return { name_for_sorting: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
 
     { created_at: :desc }
   end
 
   def sort_column
-    Business.column_names.include?(params[:sort]) ? params[:sort] : :created_at
+    Business.column_names.include?(params[:sort_by]) ? params[:sort_by] : :created_at
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : :desc
+    SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
   end
 
   def set_countries

@@ -15,15 +15,15 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
     Business.import refresh: :wait_for
     visit businesses_path
 
-    within ".govuk-grid-row.psd-case-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(1) span:nth-child(2)" do
+    within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
     end
 
-    within ".govuk-grid-row.psd-case-card:nth-child(2) > .govuk-grid-column-one-half:nth-child(1) span:nth-child(2)" do
+    within "table#results tbody.govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
       expect(page).to have_link(business_two.trading_name, href: business_path(business_two))
     end
 
-    within ".govuk-grid-row.psd-case-card:nth-child(3) > .govuk-grid-column-one-half:nth-child(1) span:nth-child(2)" do
+    within "table#results tbody.govuk-table__body > tr:nth-child(3) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
 
@@ -33,7 +33,7 @@ RSpec.feature "Business listing", :with_elasticsearch, :with_stubbed_mailer, typ
     fill_in "Keywords", with: business_three.trading_name
     click_on "Search"
 
-    within ".govuk-grid-row.psd-case-card:nth-child(1) > .govuk-grid-column-one-half:nth-child(1) span:nth-child(2)" do
+    within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
     end
   end

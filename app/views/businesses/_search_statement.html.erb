@@ -1,0 +1,9 @@
+<p class="govuk-body">
+  <% if keywords.blank? && filter.blank? %>
+    There are currently <%= pluralize count, "business" %>.
+  <% else %>
+    <% if keywords.present? %>
+      <%= pluralize count, "business" %> matching keyword(s) <span class="govuk-!-font-weight-bold"><%= sanitize keywords %></span>, <%= count == 1 ? "was" : "were" %> found.
+    <% end %>
+  <% end %>
+</p>
