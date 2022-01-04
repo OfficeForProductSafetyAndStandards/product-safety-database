@@ -45,18 +45,17 @@ jobs:
       fail-fast: false
       matrix:
         rspec-folder:
-          - spec/features/filter_investigations_spec.rb
-          # - spec/active_model
-          # - spec/decorators
-          # - spec/forms
-          # - spec/helpers spec/jobs spec/mailers spec/policies
-          # - spec/models spec/validators
-          # - spec/requests
-          # - --tag with_opensearch spec/features
-          # - --tag ~with_opensearch spec/features
-          # - --tag with_opensearch spec/services
-          # - --tag ~with_opensearch spec/services
-          # - $(ls -d spec/*/ | grep -v -E 'decorators|models|active_model|forms|jobs|mailers|requests|features|policies|services|helpers|validators')
+          - spec/active_model
+          - spec/decorators
+          - spec/forms
+          - spec/helpers spec/jobs spec/mailers spec/policies
+          - spec/models spec/validators
+          - spec/requests
+          - --tag with_opensearch spec/features
+          - --tag ~with_opensearch spec/features
+          - --tag with_opensearch spec/services
+          - --tag ~with_opensearch spec/services
+          - $(ls -d spec/*/ | grep -v -E 'decorators|models|active_model|forms|jobs|mailers|requests|features|policies|services|helpers|validators')
 
     steps:
     - uses: actions/checkout@v1
