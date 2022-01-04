@@ -4,7 +4,7 @@ on: [push]
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
-  OPENSEARCH_URL: http://localhost:9200
+  OPENSEARCH_URL: https://admin:admin@localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
   ANTIVIRUS_URL: http://localhost:3006/safe
@@ -32,9 +32,9 @@ jobs:
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       opensearch:
-        image: elasticsearch:7.9.2
+        image: opensearchproject/opensearch:1.0.0
         ports: ["9200:9200"]
-        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+        options: -e="discovery.type=single-node" --health-cmd="curl -XGET https://localhost:9200/_cluster/health -u admin:admin --insecure" --health-interval=10s --health-timeout=5s --health-retries=10
       redis:
         image: redis
         ports:
@@ -45,17 +45,18 @@ jobs:
       fail-fast: false
       matrix:
         rspec-folder:
-          - spec/active_model
-          - spec/decorators
-          - spec/forms
-          - spec/helpers spec/jobs spec/mailers spec/policies
-          - spec/models spec/validators
-          - spec/requests
-          - --tag with_opensearch spec/features
-          - --tag ~with_opensearch spec/features
-          - --tag with_opensearch spec/services
-          - --tag ~with_opensearch spec/services
-          - $(ls -d spec/*/ | grep -v -E 'decorators|models|active_model|forms|jobs|mailers|requests|features|policies|services|helpers|validators')
+          - spec/features/filter_investigations_spec.rb
+          # - spec/active_model
+          # - spec/decorators
+          # - spec/forms
+          # - spec/helpers spec/jobs spec/mailers spec/policies
+          # - spec/models spec/validators
+          # - spec/requests
+          # - --tag with_opensearch spec/features
+          # - --tag ~with_opensearch spec/features
+          # - --tag with_opensearch spec/services
+          # - --tag ~with_opensearch spec/services
+          # - $(ls -d spec/*/ | grep -v -E 'decorators|models|active_model|forms|jobs|mailers|requests|features|policies|services|helpers|validators')
 
     steps:
     - uses: actions/checkout@v1
