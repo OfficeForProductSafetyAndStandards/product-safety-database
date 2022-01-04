@@ -20,7 +20,7 @@ module BusinessesHelper
 
   def sorting_params
     return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
-    return { name_for_sorting: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIR_DESC
+    return { name_for_sorting: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
     return { name_for_sorting: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
 
     { created_at: :desc }

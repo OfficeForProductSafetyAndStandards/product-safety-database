@@ -5,12 +5,12 @@
           Sort <span class="govuk-visually-hidden">the results</span> by
       </label>
       <select class="govuk-select govuk-!-margin-bottom-1" id="sort_by">
-        <%= sort_by_options(sort_by_items, selected_value, sort_direction) %>
+        <%= options_for_sort_by(sort_by_items, selected_value, sort_direction) %>
       </select>
     </fieldset>
     <dl class="govuk-list opss-float-right opss-dl-select opss-js-enabled-hidden">
       <dt>Sort <span class="govuk-visually-hidden">the results</span> by</dt>
-      <%= sort_by_definition_list_items(sort_by_items, selected_value, sort_direction) %>
+      <%= definition_list_items_for_sort_by(sort_by_items, selected_value, sort_direction) %>
     </dl>
   </div>
 </div>

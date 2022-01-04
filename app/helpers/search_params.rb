@@ -45,11 +45,11 @@ class SearchParams
 
   def sort_by_items(with_relevant_option: false)
     items = [
-      SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_RECENT, SortByHelper::SORT_DIR_DEFAULT),
-      SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_OLDEST, SortByHelper::SORT_DIR_DEFAULT),
-      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIR_DEFAULT)
+      SortByHelper::SortByItem.new("Recent updates", SortByHelper::SORT_BY_RECENT, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Oldest updates", SortByHelper::SORT_BY_OLDEST, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Newest cases", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIRECTION_DEFAULT)
     ]
-    items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIR_DEFAULT)) if with_relevant_option
+    items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if with_relevant_option
     items
   end
 end

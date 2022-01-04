@@ -95,10 +95,10 @@ private
 
   def sort_by_items
     items = [
-      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIR_DEFAULT),
-      SortByHelper::SortByItem.new("Name", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIR_DEFAULT)
+      SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIRECTION_DEFAULT),
+      SortByHelper::SortByItem.new("Name", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DEFAULT)
     ]
-    items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIR_DEFAULT)) if params[:q].present?
+    items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if params[:q].present?
     items
   end
 end
