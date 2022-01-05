@@ -84,7 +84,7 @@ jobs:
       if: success()
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.7.x
+        ruby-version: 3.0.x
 
     - uses: actions/cache@v1
       with:

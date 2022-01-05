@@ -114,9 +114,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    capybara-mechanize (1.11.0)
-      capybara (>= 2.4.4, < 4)
-      mechanize (~> 2.7.0)
     capybara-screenshot (1.0.25)
       capybara (>= 1.0, < 4)
       launchy
@@ -129,6 +126,7 @@ GEM
       actionpack (>= 3.1)
       caxlsx (>= 3.0)
     cf-app-utils (0.6)
+    childprocess (4.1.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
     connection_pool (2.2.5)
@@ -270,16 +268,6 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
     matrix (0.4.2)
-    mechanize (2.7.7)
-      domain_name (~> 0.5, >= 0.5.1)
-      http-cookie (~> 1.0)
-      mime-types (>= 1.17.2)
-      net-http-digest_auth (~> 1.1, >= 1.1.1)
-      net-http-persistent (>= 2.5.2)
-      nokogiri (~> 1.6)
-      ntlm-http (~> 0.1, >= 0.1.1)
-      webrick (~> 1.7)
-      webrobots (>= 0.0.9, < 0.2)
     method_source (1.0.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
@@ -291,9 +279,6 @@ GEM
     msgpack (1.4.2)
     multi_json (1.15.0)
     multipart-post (2.1.1)
-    net-http-digest_auth (1.4.1)
-    net-http-persistent (4.0.1)
-      connection_pool (~> 2.2)
     netrc (0.11.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
@@ -303,7 +288,6 @@ GEM
       racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
-    ntlm-http (0.1.1)
     optimist (3.0.1)
     orm_adapter (0.5.0)
     parallel (1.21.0)
@@ -484,6 +468,10 @@ GEM
       sass (~> 3.5, >= 3.5.5)
     scss_lint-govuk (0.2.0)
       scss_lint
+    selenium-webdriver (4.1.0)
+      childprocess (>= 0.5, < 5.0)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     sentry-rails (4.8.1)
       railties (>= 5.0)
@@ -589,8 +577,6 @@ GEM
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
-    webrick (1.7.0)
-    webrobots (0.1.2)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -612,7 +598,6 @@ DEPENDENCIES
   bootsnap
   byebug (~> 11.1)
   capybara (~> 3.36)
-  capybara-mechanize
   capybara-screenshot (~> 1.0)
   caxlsx
   caxlsx_rails
@@ -663,6 +648,7 @@ DEPENDENCIES
   sass-rails (~> 6.0)
   scout_apm (~> 5.1)
   scss_lint-govuk (~> 0.2)
+  selenium-webdriver (~> 4.1)
   sentry-rails
   sentry-sidekiq
   shoulda-matchers
@@ -686,7 +672,7 @@ DEPENDENCIES
   wicked (~> 1.4)
 
 RUBY VERSION
-   ruby 2.7.4p191
+   ruby 3.0.3p157
 
 BUNDLED WITH
    2.2.33
