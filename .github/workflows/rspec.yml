@@ -109,10 +109,10 @@ jobs:
       run: |
         bundle exec rspec spec/features/filter_investigations_spec.rb:81
 
-    - name: Run Specs 2
-      run: |
-        bundle exec rspec spec/features/filter_investigations_spec.rb:95
-
+        #   - name: Run Specs 2
+        #     run: |
+        #       bundle exec rspec spec/features/filter_investigations_spec.rb:95
+        #
     - name: Dump docker logs
       uses: jwalton/gh-docker-logs@v1
       if: always()
