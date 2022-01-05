@@ -107,7 +107,7 @@ jobs:
 
     - name: Run Specs
       run: |
-        bundle exec rspec spec/features/filter_investigations_spec.rb:81
+        bundle exec rspec spec/features/filter_investigations_spec.rb
 
     - name: Run Specs again
       run: |

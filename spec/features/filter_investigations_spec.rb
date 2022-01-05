@@ -78,29 +78,30 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     end
   end
 
-  scenario "filter investigations created by another team" do
+  around(:each) do |example|
     Timeout::timeout(30) do
-      within_fieldset("Created by") do
-        choose "Others"
-        select other_team.name, from: "Person or team name"
-      end
-      click_button "Apply"
-
-      expect(page).not_to have_listed_case(investigation.pretty_id)
-      expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).to have_listed_case(other_team_investigation.pretty_id)
+      example.run
     end
+  end
+  scenario "filter investigations created by another team" do
+    within_fieldset("Created by") do
+      choose "Others"
+      select other_team.name, from: "Person or team name"
+    end
+    click_button "Apply"
+
+    expect(page).not_to have_listed_case(investigation.pretty_id)
+    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "filter investigations created by my team" do
-    Timeout::timeout(30) do
-      within_fieldset("Created by") { choose "Me and my team" }
-      click_button "Apply"
+    within_fieldset("Created by") { choose "Me and my team" }
+    click_button "Apply"
 
-      expect(page).to have_listed_case(investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-    end
+    expect(page).to have_listed_case(investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
   end
 
   scenario "filter investigations created by anybody but my team" do
