@@ -23,7 +23,7 @@
                   <th class="govuk-visually-hidden">&nbsp;</th>
                   <th id="case" scope="col" class="govuk-table__header">Case number</th>
                   <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
-                  <% if @search.sort_by == SearchParams::NEWEST %>
+                  <% if @search.sort_by == SortByHelper::SORT_BY_NEWEST %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% else %>
                     <th id="updated" scope="col" class="govuk-table__header">Updated</th>
@@ -48,7 +48,7 @@
                     <th class="govuk-visually-hidden">&nbsp;</th>
                     <th scope="col" class="govuk-table__header">Case number</th>
                     <th scope="col" class="govuk-table__header">Case owner</th>
-                    <% if @search.sort_by == SearchParams::NEWEST %>
+                    <% if @search.sort_by == SortByHelper::SORT_BY_NEWEST %>
                       <th scope="col" class="govuk-table__header">Created</th>
                     <% else %>
                       <th scope="col" class="govuk-table__header">Updated</th>

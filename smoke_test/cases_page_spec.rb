@@ -40,12 +40,10 @@ RSpec.feature "Search smoke test" do
     attempts = 0
     loop do
       code = get_code
-      break unless code
+      break unless code && @session.has_current_path?(/\/two-factor/) && attempts < 4
 
       smoke_complete_secondary_authentication_with(code, @session)
       attempts += 1
-      break if @session.has_content?("Open a new case")
-      break if attempts > 3
 
       sleep attempts * 10
     end

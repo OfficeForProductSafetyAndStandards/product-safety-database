@@ -21,7 +21,7 @@
       <%= investigation.owner_display_name_for(viewer: current_user) %>
     </span>
   </div>
-  <% if sorted_by == SearchParams::NEWEST %>
+  <% if sorted_by == SortByHelper::SORT_BY_NEWEST %>
     <div class="govuk-grid-column-one-quarter">
       <span class="govuk-caption-m govuk-!-font-size-16">
         Date created
