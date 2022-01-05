@@ -31,8 +31,14 @@ class Business < ApplicationRecord
 
   redacted_export_with :id, :company_number, :created_at, :legal_name, :trading_name, :updated_at
 
+  settings do
+    mappings do
+      indexes :name_for_sorting, type: :keyword
+    end
+  end
+
   def as_indexed_json(*)
-    as_json(methods: [:tiebreaker_id])
+    as_json(methods: %i[tiebreaker_id name_for_sorting])
   end
 
   def supporting_information
@@ -57,5 +63,9 @@ class Business < ApplicationRecord
 
   def locations_have_errors?
     locations&.any? { |location| location.errors.any? } || false
+  end
+
+  def name_for_sorting
+    trading_name
   end
 end

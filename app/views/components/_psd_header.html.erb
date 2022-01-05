@@ -12,7 +12,7 @@
 
 <% attributes = (local_assigns[:attributes] || {}) %>
 
-<%= tag.header({
+<%= content_tag(:header, {
   class: "govuk-header #{local_assigns[:classes]}",
   role: "banner",
   data: {
@@ -102,7 +102,7 @@
                   <% if item[:href] && item[:text] %>
                     <li class="psd-header__navigation-item <%= "psd-header__navigation-item--active" if item[:active] %>">
                       <% item_attributes = (item[:attributes] || {}) %>
-                      <%= tag.a({
+                      <%= content_tag(:a, {
                         class: "psd-header__link",
                         href: item[:href]
                       }.merge(item_attributes)) do %><%= item[:text] %><% end %>
@@ -119,7 +119,7 @@
                   <% if item[:href] && item[:text] %>
                     <li class="psd-header__navigation-item psd-header__secondary-navigation-item<%= " psd-header__navigation-item--active" if item[:active] %>">
                       <% item_attributes = (item[:attributes] || {}) %>
-                      <%= tag.a({
+                      <%= content_tag(:a, {
                         class: "psd-header__link",
                         href: item[:href]
                       }.merge(item_attributes)) do %><%= item[:text] %><% end %>
@@ -137,7 +137,7 @@
                     item_attributes = (item[:attributes] || {})
                 %>
                   <li class="psd-header__navigation-item <%= item_classes.join(" ") %>">
-                      <%= tag.a({
+                      <%= content_tag(:a, {
                         class: "psd-header__link",
                         href: item[:href]
                       }.merge(item_attributes)) do %><%= item[:text] %><% end %>

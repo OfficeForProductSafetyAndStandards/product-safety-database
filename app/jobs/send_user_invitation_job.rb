@@ -17,6 +17,9 @@ class SendUserInvitationJob < ApplicationJob
     user_inviting = user_inviting_id ? User.find(user_inviting_id) : nil
 
     NotifyMailer.invitation_email(user, user_inviting).deliver_now
+
+    Sidekiq.logger.info "Forgotten password email sent to user: #{user.id}" if user_inviting.nil?
+
     user.update!(has_been_sent_welcome_email: true)
   end
 end

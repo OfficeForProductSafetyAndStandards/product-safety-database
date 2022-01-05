@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "~> 2.7"
+ruby "~> 3.0"
 
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
@@ -52,7 +52,6 @@ gem "bootsnap"
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
-  gem "capybara-mechanize"
   gem "dotenv-rails", "~> 2.7"
   gem "parallel_tests"
   gem "pry", "~> 0.13"
@@ -85,6 +84,7 @@ group :test do
   gem "rubocop-performance", "~> 1.13"
   gem "rubocop-rspec", "~> 2.6", require: false
   gem "scss_lint-govuk", "~> 0.2"
+  gem "selenium-webdriver", "~> 4.1"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"

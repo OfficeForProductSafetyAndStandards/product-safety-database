@@ -2,7 +2,7 @@ class SecondaryAuthenticationForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  INTEGER_REGEX = /\A\d+\z/.freeze
+  INTEGER_REGEX = /\A\d+\z/
 
   attribute :otp_code
   attribute :user_id
@@ -34,6 +34,7 @@ class SecondaryAuthenticationForm
     return if errors.present?
 
     unless secondary_authentication.valid_otp? otp_code
+      Rails.logger.info "Failed 2FA attempt for user: #{user_id}"
       errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
     end
   end

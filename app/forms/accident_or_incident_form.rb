@@ -42,14 +42,14 @@ class AccidentOrIncidentForm
   end
 
   def severity_inclusion
-    errors.add(:severity, :inclusion, { type: type.downcase }) unless UnexpectedEvent.severities.value?(severity)
+    errors.add(:severity, :inclusion, type: type.downcase) unless UnexpectedEvent.severities.value?(severity)
   end
 
   def is_date_known_inclusion
-    errors.add(:is_date_known, :inclusion, { type: type.downcase }) unless [true, false].include?(is_date_known)
+    errors.add(:is_date_known, :inclusion, type: type.downcase) unless [true, false].include?(is_date_known)
   end
 
   def presence_of_product
-    errors.add(:product_id, :blank, { type: type.downcase }) if product_id.blank?
+    errors.add(:product_id, :blank, type: type.downcase) if product_id.blank?
   end
 end
