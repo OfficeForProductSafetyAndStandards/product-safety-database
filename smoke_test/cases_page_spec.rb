@@ -1,15 +1,9 @@
 require 'capybara/rspec'
-require 'capybara/mechanize'
 require "webmock"
-
-# we need to use machanize in order to make remote requests
-Capybara.register_driver :mechanize do |app|
-  Capybara::Mechanize::Driver.new(proc {})
-end
 
 RSpec.configure do |config|
   config.before do
-    @session = Capybara::Session.new :mechanize
+    @session = Capybara::Session.new :selenium_headless
   end
 
   config.after do |example|
@@ -26,7 +20,7 @@ end
 RSpec.feature "Search smoke test" do
   scenario "sign-in and visit case page" do
     WebMock.allow_net_connect!
-    @session.driver.browser.agent.add_auth(ENV["SMOKE_TEST_URL"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
+    @session.driver.browser.authorize(ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
     @session.visit(ENV["SMOKE_TEST_URL"])
     expect(@session).to have_css("h1", text: "Product Safety Database")
     @session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")

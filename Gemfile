@@ -52,7 +52,6 @@ gem "bootsnap"
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
   gem "byebug", "~> 11.1"
-  gem "capybara-mechanize"
   gem "dotenv-rails", "~> 2.7"
   gem "parallel_tests"
   gem "pry", "~> 0.13"
@@ -63,6 +62,7 @@ end
 group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
+  gem "selenium-webdriver", "~> 4.1"
   gem "solargraph", "~> 0.44"
   gem "spring", "~> 4.0"
   gem "spring-commands-rspec", "~> 1.0"
