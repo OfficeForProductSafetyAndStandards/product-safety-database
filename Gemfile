@@ -62,7 +62,6 @@ end
 group :development do
   gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
-  gem "selenium-webdriver", "~> 4.1"
   gem "solargraph", "~> 0.44"
   gem "spring", "~> 4.0"
   gem "spring-commands-rspec", "~> 1.0"
@@ -85,6 +84,7 @@ group :test do
   gem "rubocop-performance", "~> 1.13"
   gem "rubocop-rspec", "~> 2.6", require: false
   gem "scss_lint-govuk", "~> 0.2"
+  gem "selenium-webdriver", "~> 4.1"
   gem "shoulda-matchers"
   gem "simplecov"
   gem "simplecov-console", "~> 0.9"
