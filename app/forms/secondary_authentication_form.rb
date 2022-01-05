@@ -34,6 +34,7 @@ class SecondaryAuthenticationForm
     return if errors.present?
 
     unless secondary_authentication.valid_otp? otp_code
+      Rails.logger.info "Failed 2FA attempt for user: #{user_id}"
       errors.add(:otp_code, I18n.t(".otp_code.incorrect"))
     end
   end
