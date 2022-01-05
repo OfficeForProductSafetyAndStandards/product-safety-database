@@ -8,36 +8,36 @@ RSpec.shared_context "with stubbed Opensearch", shared_context: :metadata do
 end
 
 RSpec.shared_context "with Opensearch", shared_context: :metadata do
-  def clean_opensearch_indices!
-    opensearch_models.each do |model|
-      model.__elasticsearch__.delete_index!
-    rescue Elasticsearch::Transport::Transport::Errors::NotFound
-      # Ideally the index should not exist before the test run but this guards against unclean state
-    end
-  end
+  # def clean_opensearch_indices!
+  #   opensearch_models.each do |model|
+  #     model.__elasticsearch__.delete_index!
+  #   rescue Elasticsearch::Transport::Transport::Errors::NotFound
+  #     # Ideally the index should not exist before the test run but this guards against unclean state
+  #   end
+  # end
 
-  def create_opensearch_indices!
-    opensearch_models.each do |model|
-      model.__elasticsearch__.import force: true, refresh: :wait
-    end
-  end
+  # def create_opensearch_indices!
+  #   opensearch_models.each do |model|
+  #     model.__elasticsearch__.import force: true, refresh: :wait
+  #   end
+  # end
 
-  def opensearch_models
-    [Investigation, Product, Business]
-  end
+  # def opensearch_models
+  #   [Investigation, Product, Business]
+  # end
 
-  before do
-    # Strip the HTTP basic auth credentials from the URI to allow stubbing
-    uri = URI(ENV.fetch("OPENSEARCH_URL"))
-    WebMock.disable_net_connect!(allow: "#{uri.host}:#{uri.port}")
-    create_opensearch_indices!
-  end
+  # before do
+  #   # Strip the HTTP basic auth credentials from the URI to allow stubbing
+  #   uri = URI(ENV.fetch("OPENSEARCH_URL"))
+  #   WebMock.disable_net_connect!(allow: "#{uri.host}:#{uri.port}")
+  #   create_opensearch_indices!
+  # end
 
-  after do
-    clean_opensearch_indices!
-    WebMock.disable_net_connect!
-  end
-end
+  # after do
+  #   clean_opensearch_indices!
+  #   WebMock.disable_net_connect!
+  # end
+en# d
 
 RSpec.configure do |rspec|
   rspec.include_context "with stubbed Opensearch", with_stubbed_opensearch: true
