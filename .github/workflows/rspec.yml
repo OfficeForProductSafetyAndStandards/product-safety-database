@@ -107,7 +107,11 @@ jobs:
 
     - name: Run Specs
       run: |
-        bundle exec rspec ${{ matrix.rspec-folder }} --format documentation
+        bundle exec rspec spec/features/filter_investigations_spec.rb:77
+
+    - name: Run Specs 2
+      run: |
+        bundle exec rspec spec/features/filter_investigations_spec.rb:89
 
     - name: Dump docker logs
       uses: jwalton/gh-docker-logs@v1
