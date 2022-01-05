@@ -19,11 +19,11 @@ end
 
 RSpec.feature "Search smoke test" do
   scenario "sign-in and visit case page" do
+
     WebMock.allow_net_connect!
-    @session.driver.browser.authorize(ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"], ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]) if ENV["IS_REVIEW_APP"] == "true"
-    @session.visit(ENV["SMOKE_TEST_URL"])
+    @session.visit(smoke_uri)
     expect(@session).to have_css("h1", text: "Product Safety Database")
-    @session.visit("#{ENV["SMOKE_TEST_URL"]}/sign-in")
+    @session.visit(smoke_uri('/sign-in'))
     @session.fill_in "Email address", with: ENV["SMOKE_USER"]
     @session.fill_in "Password", with: ENV["SMOKE_PASSWORD"]
     @session.click_button "Continue"
@@ -46,6 +46,16 @@ RSpec.feature "Search smoke test" do
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(3)")
     expect(@session).to have_css("tbody.govuk-table__body:nth-child(13)")
   end
+end
+
+def smoke_uri(path = nil)
+  uri = URI.parse ENV["SMOKE_TEST_URL"]
+  if ENV["IS_REVIEW_APP"] == "true"
+    uri.user = ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_USER"]
+    uri.password = ENV["SMOKE_TEST_REVIEW_APP_BASIC_AUTH_PASSWORD"]
+  end
+  uri = URI.join(uri, path) if path
+  uri.to_s
 end
 
 def smoke_complete_secondary_authentication_with(code, session)
