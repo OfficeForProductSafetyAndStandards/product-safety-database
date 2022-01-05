@@ -37,7 +37,7 @@ RSpec.shared_context "with Opensearch", shared_context: :metadata do
   #   clean_opensearch_indices!
   #   WebMock.disable_net_connect!
   # end
-en# d
+end
 
 RSpec.configure do |rspec|
   rspec.include_context "with stubbed Opensearch", with_stubbed_opensearch: true
