@@ -91,12 +91,14 @@ private
 
     @sort_by_items = sort_by_items
     @selected_sort_by = params[:sort_by].presence || SortByHelper::SORT_BY_NEWEST
+    @selected_sort_direction = params[:sort_dir]
   end
 
   def sort_by_items
     items = [
       SortByHelper::SortByItem.new("Newly added", SortByHelper::SORT_BY_NEWEST, SortByHelper::SORT_DIRECTION_DEFAULT),
-      SortByHelper::SortByItem.new("Name", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DEFAULT)
+      SortByHelper::SortByItem.new("Name A–Z", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_ASC),
+      SortByHelper::SortByItem.new("Name Z–A", SortByHelper::SORT_BY_NAME, SortByHelper::SORT_DIRECTION_DESC)
     ]
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if params[:q].present?
     items
