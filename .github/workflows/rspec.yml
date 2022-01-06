@@ -105,6 +105,14 @@ jobs:
     - name: Prepare database
       run: bin/rails parallel:load_schema
 
+    - name: Run Specs again
+      run: |
+        bundle exec rspec spec/features/filter_investigations_spec.rb:95
+
+    - name: Run Specs again 2
+      run: |
+        bundle exec rspec spec/features/filter_investigations_spec.rb:108
+
     - name: Run Specs
       run: |
         bundle exec rspec spec/features/filter_investigations_spec.rb

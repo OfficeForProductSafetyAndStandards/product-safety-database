@@ -83,6 +83,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       example.run
     end
   end
+
   scenario "filter investigations created by another team" do
     within_fieldset("Created by") do
       choose "Others"
