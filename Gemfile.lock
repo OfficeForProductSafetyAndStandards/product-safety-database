@@ -301,6 +301,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.12.5-x86_64-linux)
+      racc (~> 1.4)
     notifications-ruby-client (5.3.0)
       jwt (>= 1.5, < 3)
     ntlm-http (0.1.1)
@@ -604,6 +606,7 @@ GEM
 PLATFORMS
   ruby
   x86_64-darwin-19
+  x86_64-linux
 
 DEPENDENCIES
   activerecord-pg_enum (~> 1.2)

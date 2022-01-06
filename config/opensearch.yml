@@ -15,7 +15,7 @@ test:
   :log: true
   :transport_options:
     :request:
-      :timeout: 3000
+      :timeout: 15
     :ssl:
       :verify: false
 
