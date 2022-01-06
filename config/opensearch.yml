@@ -12,7 +12,7 @@ development:
 
 test:
   <<: *default
-  :log: true
+#  :log: true
   :transport_options:
     :request:
       :timeout: 15

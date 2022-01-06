@@ -317,6 +317,7 @@ GEM
       tty-color (~> 0.5)
     patience_diff (1.2.0)
       optimist (~> 3.0)
+    patron (0.13.3)
     pg (1.2.3)
     pghero (2.8.2)
       activerecord (>= 5)
@@ -642,6 +643,7 @@ DEPENDENCIES
   m (~> 1.6)
   mini_magick (~> 4.11)
   parallel_tests
+  patron
   pg (~> 1.2)
   pghero (~> 2.8)
   pry (~> 0.13)

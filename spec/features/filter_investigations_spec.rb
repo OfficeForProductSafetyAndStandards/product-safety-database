@@ -1,7 +1,8 @@
 require "rails_helper"
 
+$timeout = 20
 RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :feature do
-  Timeout::timeout(30) do
+  Timeout::timeout($timeout) do
     let(:other_organisation) { create(:organisation) }
 
     let(:organisation)          { create(:organisation) }
@@ -38,7 +39,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   end
 
   before do
-    Timeout::timeout(30) do
+    Timeout::timeout($timeout) do
       puts "
 
       ====
@@ -79,7 +80,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   end
 
   around(:each) do |example|
-    Timeout::timeout(30) do
+    Timeout::timeout($timeout) do
       example.run
     end
   end
