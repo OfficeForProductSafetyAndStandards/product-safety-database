@@ -72,6 +72,10 @@ jobs:
     - name: Install PostgreSQL client
       run: sudo apt-get install libpq-dev
 
+    - name: Install curl headers
+      run: sudo apt-get install libcurl4-gnutls-dev
+
+
     - uses: actions/cache@v1
       with:
         path: vendor/bundle
