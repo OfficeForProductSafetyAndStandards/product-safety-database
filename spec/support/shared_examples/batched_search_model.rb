@@ -1,4 +1,4 @@
-RSpec.shared_examples "a batched search model", :with_elasticsearch do
+RSpec.shared_examples "a batched search model", :with_opensearch do
   describe "#search_in_batches" do
     before do
       create_list(factory_name, 4)
@@ -7,7 +7,7 @@ RSpec.shared_examples "a batched search model", :with_elasticsearch do
     end
 
     context "when searching in batches" do
-      let(:es_query) { ElasticsearchQuery.new(nil, {}, {}) }
+      let(:es_query) { OpensearchQuery.new(nil, {}, {}) }
       let(:expected_ids) { described_class.all.map(&:id).map(&:to_s) }
 
       # rubocop:disable RSpec/MultipleExpectations

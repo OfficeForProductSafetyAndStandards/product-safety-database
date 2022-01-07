@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Case filtering", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:other_organisation) { create(:organisation) }
 
   let(:organisation)          { create(:organisation) }

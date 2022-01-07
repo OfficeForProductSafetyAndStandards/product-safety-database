@@ -1,5 +1,5 @@
 require "rails_helper"
-RSpec.feature "Manage supporting information", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Manage supporting information", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   include_context "with read only team and user"
   let(:user)           { create(:user, :activated, has_viewed_introduction: true) }
   let(:investigation)  { create(:allegation, :with_document, creator: user, read_only_teams: read_only_team) }

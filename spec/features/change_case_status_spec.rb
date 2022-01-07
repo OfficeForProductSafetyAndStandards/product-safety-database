@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Changing the status of a case", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let!(:investigation) { create(:allegation, creator: creator_user, is_closed: false) }
   let(:user) { create(:user, :activated, name: "Jane Jones") }
   let(:creator_user) { create(:user, email: "test@example.com") }

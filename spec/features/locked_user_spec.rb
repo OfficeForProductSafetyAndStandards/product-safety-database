@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Locked user", :with_stubbed_mailer, :with_stubbed_elasticsearch, type: :feature do
+RSpec.feature "Locked user", :with_stubbed_mailer, :with_stubbed_opensearch, type: :feature do
   let(:user) { create(:user, :activated) }
 
   before { delivered_emails.clear }

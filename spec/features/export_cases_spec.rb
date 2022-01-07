@@ -1,7 +1,7 @@
 require "rails_helper"
 require "sidekiq/testing"
 
-RSpec.feature "Case export", :with_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
+RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user) { create :user, :psd_admin, :activated }
   let(:other_user_same_team) { create :user, :activated, team: user.team, organisation: user.organisation }
   let(:other_user) { create :user, :activated }

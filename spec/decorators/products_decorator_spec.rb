@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe ProductsDecorator, :with_stubbed_elasticsearch, :with_stubbed_mailer do
+RSpec.describe ProductsDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
   subject(:decorated_products) { Product.all.decorate }
 
   let(:product_1)      { create(:product, brand: "Brand 1", category: "Motor vehicles") }

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Investigations::DisplayTextHelper, type: :helper do
-  describe "#investigation_owner", :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_elasticsearch do
+  describe "#investigation_owner", :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_opensearch do
     context "when the case owner is a user" do
       let(:team) { create(:team, name: "Southampton Council") }
       let(:user) { create(:user, team: team, name: "John Doe") }

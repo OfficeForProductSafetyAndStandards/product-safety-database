@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Products listing", :with_elasticsearch, :with_stubbed_mailer, type: :feature do
+RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:user)             { create :user, :activated, has_viewed_introduction: true }
   let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago) }
   let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago) }

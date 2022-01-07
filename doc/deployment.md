@@ -50,12 +50,12 @@ To create a database for the current space:
     cf create-service postgres small-ha-11 psd-database -c '{"enable_extensions": ["pgcrypto"]}'
 
 
-#### Elasticsearch
+#### Opensearch
 
-To create an Elasticsearch instance for the current space:
+To create an Opensearch instance for the current space:
 
-    cf marketplace -s elasticsearch
-    cf create-service elasticsearch tiny-7.x psd-elasticsearch-7
+    cf marketplace -s opensearch
+    cf create-service opensearch tiny-1 psd-opensearch-1
 
 
 #### Redis

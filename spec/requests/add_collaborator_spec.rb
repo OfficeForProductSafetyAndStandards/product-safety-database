@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
+RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user_team) { create(:team) }
   let(:user) { create(:user, :activated, has_viewed_introduction: true, team: user_team) }
 

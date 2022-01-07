@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_elasticsearch do
+RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_opensearch do
   subject(:audit_activity) { described_class.create(investigation: investigation, metadata: metadata) }
 
   let(:metadata) { described_class.build_metadata(investigation, update_verb) }

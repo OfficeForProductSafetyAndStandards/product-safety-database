@@ -11,7 +11,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
   let(:owner)         { user }
 
   describe ".call" do
-    context "with stubbed elasticsearh", :with_stubbed_elasticsearch do
+    context "with stubbed opensearch", :with_stubbed_opensearch do
       context "with no parameters" do
         let(:result) { described_class.call }
 
@@ -73,8 +73,8 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
       end
     end
 
-    context "when searching for product once removed from the case", :with_elasticsearch do
-      let(:records) { Product.full_search(ElasticsearchQuery.new(product.name, {}, {})).records }
+    context "when searching for product once removed from the case", :with_opensearch do
+      let(:records) { Product.full_search(OpensearchQuery.new(product.name, {}, {})).records }
 
       before do
         product

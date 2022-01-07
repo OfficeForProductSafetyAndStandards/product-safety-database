@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Market Surveillance Authority case creation wizard", :with_stubbed_elasticsearch, type: :request do
+RSpec.describe "Market Surveillance Authority case creation wizard", :with_stubbed_opensearch, type: :request do
   let(:user) { create(:user, :activated) }
 
   before { sign_in(user) }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateProduct, :with_elasticsearch, :with_stubbed_mailer do
+RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
   subject(:result) { described_class.call(product: product, product_params: product_params) }
 
   let(:investigation)  { create(:allegation) }
@@ -21,7 +21,7 @@ RSpec.describe UpdateProduct, :with_elasticsearch, :with_stubbed_mailer do
     end
 
     context "with all the required parameters" do
-      let(:perform_product_search) { Product.full_search(ElasticsearchQuery.new(product_params[:name], {}, {})) }
+      let(:perform_product_search) { Product.full_search(OpensearchQuery.new(product_params[:name], {}, {})) }
 
       before do
         allow(product.__elasticsearch__).to receive(:update_document)
