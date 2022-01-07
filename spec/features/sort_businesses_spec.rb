@@ -14,7 +14,7 @@ RSpec.feature "Business sorting", :with_elasticsearch, :with_stubbed_mailer, typ
 
   before do
     Investigation.import refresh: :wait_for
-    Product.import refresh: :wait_for
+    Business.import refresh: :wait_for
     sign_in(user)
     visit businesses_path
   end
