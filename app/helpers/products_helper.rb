@@ -21,9 +21,14 @@ module ProductsHelper
 
   def sorting_params
     return {} if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
+    return { name_for_sorting: :desc } if params[:sort_by] == SortByHelper::SORT_BY_NAME && params[:sort_dir] == SortByHelper::SORT_DIRECTION_DESC
     return { name_for_sorting: :asc } if params[:sort_by] == SortByHelper::SORT_BY_NAME
 
     { created_at: :desc }
+  end
+
+  def sort_direction
+    SortByHelper::SORT_DIRECTIONS.include?(params[:sort_dir]) ? params[:sort_dir] : :desc
   end
 
   def search_for_product_code(product_code, excluded_ids)
