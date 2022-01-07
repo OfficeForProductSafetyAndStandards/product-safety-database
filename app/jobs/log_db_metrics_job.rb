@@ -5,7 +5,7 @@ class LogDbMetricsJob < ApplicationJob
       total_number_of_users: User.where(deleted_at: nil).count,
       total_number_of_products: Product.count,
       total_number_of_businesses: Business.count,
-      total_number_of_locked_users: User.where.not(locked_at: nil).where(deleted_at: nil).count,
+      total_number_of_locked_users: User.where.not(locked_at: nil).not_deleted.count,
       total_number_of_deleted_users: User.where.not(deleted_at: nil).count
     }
 
