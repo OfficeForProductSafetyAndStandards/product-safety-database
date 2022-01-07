@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Adding a risk assessment to a case", type: :request, with_stubbed_mailer: true, with_stubbed_elasticsearch: true do
+RSpec.describe "Adding a risk assessment to a case", type: :request, with_stubbed_mailer: true, with_stubbed_opensearch: true do
   let(:user_from_owner_team) { create(:user, :activated) }
   let(:user_from_team_with_read_only_access) { create(:user, :activated) }
   let(:user_from_team_with_edit_access) { create(:user, :activated) }

@@ -13,10 +13,11 @@ applications:
     SIDEKIQ_QUEUE: ((sidekiq-queue))
     SENTRY_CURRENT_ENV: ((sentry-current-env))
     LOCK_MAXIMUM_ATTEMPTS: 3
+    OS_NAMESPACE: ((app-name))
   timeout: 180
   services:
     - ((psd-db-name))
-    - psd-elasticsearch-7
+    - psd-opensearch-1
     - psd-queue-5
     - psd-session-5
     - opss-log-drain
@@ -36,7 +37,8 @@ applications:
     - type: web
       env:
         RAILS_MAX_THREADS: ((web-max-threads))
-      command: export $(./env/get-env-from-vcap.sh) && STATEMENT_TIMEOUT=60s ES_NAMESPACE=((app-name)) bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
+        STATEMENT_TIMEOUT: 60s
+      command: export $(./env/get-env-from-vcap.sh) && bin/rake cf:on_first_instance db:migrate db:seed && bin/rails server -b 0.0.0.0 -p $PORT -e $RAILS_ENV
       instances: 1
       memory: 2G
     - type: worker

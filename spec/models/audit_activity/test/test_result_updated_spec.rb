@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   let(:product) { create(:product) }
   let(:test_result) do
     create(:test_result,

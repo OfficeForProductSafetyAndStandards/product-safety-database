@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Reporting enquiries", :with_stubbed_elasticsearch, :with_stubbed_antivirus, :with_stubbed_mailer do
+RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer do
   let(:date) { Faker::Date.backward(days: 14) }
   let(:received_type) { "enquiry_received_type_email" }
   let(:other_received_type) { Faker::Hipster.word }

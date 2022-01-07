@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Home page", :with_elasticsearch, type: :feature do
+RSpec.feature "Home page", :with_opensearch, type: :feature do
   context "when user is signed out" do
     scenario "shows the home page" do
       visit unauthenticated_root_path

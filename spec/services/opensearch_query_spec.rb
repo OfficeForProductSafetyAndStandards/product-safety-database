@@ -10,15 +10,15 @@ RSpec.shared_examples "finds the relevant investigation" do
   end
 end
 
-RSpec.describe ElasticsearchQuery, :with_elasticsearch, :with_stubbed_mailer do
-  subject(:es_query) { described_class.new(query, filter_params, sorting_params) }
+RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
+  subject(:os_query) { described_class.new(query, filter_params, sorting_params) }
 
   let(:user)           { create(:user) }
   let(:filter_params)  { {} }
   let(:sorting_params) { {} }
 
   def perform_search
-    Investigation.full_search(es_query)
+    Investigation.full_search(os_query)
   end
 
   # TODO: these specs are a port of the deprecated (and flaky) Minitest tests.

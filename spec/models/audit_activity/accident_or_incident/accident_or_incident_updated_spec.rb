@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus do
+RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   include ActionDispatch::TestProcess::FixtureFile
 
   subject(:activity) { investigation.reload.activities.first }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe NotifyMailer, :with_stubbed_elasticsearch do
+RSpec.describe NotifyMailer, :with_stubbed_opensearch do
   describe "#reset_password_instruction" do
     let(:user)  { build(:user) }
     let(:token) { SecureRandom.hex }

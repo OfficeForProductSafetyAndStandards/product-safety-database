@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Investigations::ActivitiesController, :with_stubbed_elasticsearch, type: :request do
+RSpec.describe Investigations::ActivitiesController, :with_stubbed_opensearch, type: :request do
   let(:product)       { create(:product) }
   let(:investigation) { create(:allegation, products: [product]) }
   let(:legacy_title)  { "legacy title" }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UpdateRiskAssessment, :with_stubbed_elasticsearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
+RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus, :with_test_queue_adapter do
   let(:product1) { create(:product) }
   let(:product2) { create(:product) }
   let(:team) { create(:team, name: "Team 2") }

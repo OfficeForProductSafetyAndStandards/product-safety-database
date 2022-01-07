@@ -39,7 +39,7 @@ RSpec.describe ProductForm do
       it { is_expected.not_to be_authenticity_not_provided }
     end
 
-    context "when it an existing product", :with_stubbed_elasticsearch do
+    context "when it an existing product", :with_stubbed_opensearch do
       subject(:form) { described_class.from(create(:product, authenticity: authenticity)) }
 
       context "when no authenticity was given" do

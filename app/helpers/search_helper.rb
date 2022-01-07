@@ -8,7 +8,7 @@ module SearchHelper
   end
 
   def search_query(user)
-    ElasticsearchQuery.new(@search.q, filter_params(user), sorting_params)
+    OpensearchQuery.new(@search.q, filter_params(user), sorting_params)
   end
 
   def query_params

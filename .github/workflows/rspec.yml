@@ -4,7 +4,7 @@ on: [push]
 
 env:
   DATABASE_URL: postgres://postgres@localhost:5432
-  ELASTICSEARCH_URL: http://localhost:9200
+  OPENSEARCH_URL: http://localhost:9200
   REDIS_URL: redis://localhost:6379
   RAILS_ENV: test
   ANTIVIRUS_URL: http://localhost:3006/safe
@@ -31,8 +31,10 @@ jobs:
           POSTGRES_DB: postgres
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      elasticsearch:
-        image: elasticsearch:7.9.2
+      opensearch:
+        image: opensearchproject/opensearch:latest
+        env:
+          DISABLE_SECURITY_PLUGIN: true
         ports: ["9200:9200"]
         options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
       redis:
@@ -51,10 +53,10 @@ jobs:
           - spec/helpers spec/jobs spec/mailers spec/policies
           - spec/models spec/validators
           - spec/requests
-          - --tag with_elasticsearch spec/features
-          - --tag ~with_elasticsearch spec/features
-          - --tag with_elasticsearch spec/services
-          - --tag ~with_elasticsearch spec/services
+          - --tag with_opensearch spec/features
+          - --tag ~with_opensearch spec/features
+          - --tag with_opensearch spec/services
+          - --tag ~with_opensearch spec/services
           - $(ls -d spec/*/ | grep -v -E 'decorators|models|active_model|forms|jobs|mailers|requests|features|policies|services|helpers|validators')
 
     steps:
@@ -107,6 +109,12 @@ jobs:
     - name: Run Specs
       run: |
         bundle exec rspec ${{ matrix.rspec-folder }}
+
+    - name: Dump docker logs
+      uses: jwalton/gh-docker-logs@v1
+      if: always()
+      with:
+        images: 'opensearchproject/opensearch'
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1

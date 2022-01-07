@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_elasticsearch, :with_product_form_helper do
+RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch, :with_product_form_helper do
   let(:user)          { create(:user, :activated) }
   let(:investigation) { create(:enquiry, creator: user) }
   let(:attributes)    do
