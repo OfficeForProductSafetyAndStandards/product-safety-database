@@ -2,7 +2,7 @@ class LogDbMetricsJob < ApplicationJob
   def perform
     stats = {
       total_number_of_cases: Investigation.count,
-      total_number_of_users: User.where(deleted_at: nil).count,
+      total_number_of_users: User.not_deleted.count,
       total_number_of_products: Product.count,
       total_number_of_businesses: Business.count,
       total_number_of_locked_users: User.where.not(locked_at: nil).not_deleted.count,
