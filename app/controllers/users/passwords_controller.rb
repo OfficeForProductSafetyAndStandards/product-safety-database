@@ -40,7 +40,7 @@ module Users
           return render :new
         end
 
-        Rails.logger.info "Forgotten password email sent to user: #{user.id}"
+        Rails.logger.info "Forgotten password email sent to user: #{user.try(:id)}"
       end
     end
 
