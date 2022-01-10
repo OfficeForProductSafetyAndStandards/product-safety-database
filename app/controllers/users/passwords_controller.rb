@@ -39,6 +39,8 @@ module Users
           resource.errors.merge!(reset_password_form.errors)
           return render :new
         end
+
+        Rails.logger.info "Forgotten password email sent to user: #{user.id}"
       end
     end
 
