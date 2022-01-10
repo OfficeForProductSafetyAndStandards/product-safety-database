@@ -47,6 +47,8 @@ module Users
     end
 
     def handle_authentication_failure(user)
+      Rails.logger.info "Failed sign in attempt for email address: #{email}"
+
       if user&.reload&.access_locked?
         return render "account_locked" if user.locked_reason == User.locked_reasons[:failed_attempts]
 
@@ -60,7 +62,6 @@ module Users
     end
 
     def handle_invalid_form(resource, email)
-      Rails.logger.info "Failed sign in attempt for email address: #{email}"
       resource.errors.merge!(sign_in_form.errors)
     end
 
