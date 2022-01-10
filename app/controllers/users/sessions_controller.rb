@@ -47,7 +47,7 @@ module Users
     end
 
     def handle_authentication_failure(user)
-      Rails.logger.info "Failed sign in attempt for email address: #{user.try(:email)}"
+      Rails.logger.info "Failed sign in attempt for user: #{user.try(:id)}"
 
       if user&.reload&.access_locked?
         return render "account_locked" if user.locked_reason == User.locked_reasons[:failed_attempts]
