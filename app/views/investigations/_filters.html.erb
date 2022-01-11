@@ -7,7 +7,7 @@
   <%= render "investigations/case_owner_radios", form: form %>
 
 
-  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details") do %>
+  <%= govukDetails(summaryText: "More options", classes: "opss-details--plain", id: "filter-details", open: search.uses_expanded_filter_options?) do %>
     <%= render "investigations/teams_with_access_radios", form: form %>
     <%= render "investigations/case_creator_radios", form: form %>
     <%= render "investigations/case_type_radios", form: form %>
