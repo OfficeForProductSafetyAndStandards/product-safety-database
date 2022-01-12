@@ -52,4 +52,9 @@ class SearchParams
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if with_relevant_option
     items
   end
+
+  def uses_expanded_filter_options?
+    teams_with_access != "all" || created_by != "all" ||
+      case_type != "all" || case_status != "open"
+  end
 end
