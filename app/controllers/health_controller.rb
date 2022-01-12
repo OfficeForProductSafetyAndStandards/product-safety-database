@@ -12,6 +12,7 @@ class HealthController < ApplicationController
     ActiveRecord::Migrator.current_version
 
     opensearch_client = Elasticsearch::Client.new(Rails.application.config_for(:opensearch))
+    opensearch_client.instance_variable_set("@verified", true)
 
     # Check Opensearch cluster health
     raise "Opensearch is down" if opensearch_client.cluster.health[:status] == "red"
