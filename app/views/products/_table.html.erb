@@ -1,23 +1,27 @@
-<table id="results" class="govuk-table opss-table opss-table--last-col-right">
-  <caption class="govuk-table__caption govuk-visually-hidden">Products: a simple data table.</caption>
+<table id="results" class="govuk-table opss-table-items opss-table-items--first-col-33 opss-table-items--sm">
+  <caption class="govuk-visually-hidden">
+      Products: 4 columns with each case described across rows within each table body.
+  </caption>
   <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header">Name</th>
-      <th scope="col" class="govuk-table__header">Type</th>
-      <th scope="col" class="govuk-table__header">Category</th>
-    </tr>
+      <tr class="govuk-table__row">
+          <th class="govuk-visually-hidden">&nbsp;</th>
+          <th id="prodtype" scope="col" class="govuk-table__header">Type</th>
+          <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
+          <th id="cat" scope="col" class="govuk-table__header">Category</th>
+      </tr>
   </thead>
-  <tbody class="govuk-table__body">
-    <% products.each do |product| %>
-      <%= render "table_row", product: product %>
-    <% end %>
-  </tbody>
+
+  <% products.each do |product| %>
+    <%= render "table_row", product: product %>
+  <% end %>
+  
   <% if products.size > 11 %>
     <tfoot class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">Name</th>
-        <th scope="col" class="govuk-table__header">Type</th>
-        <th scope="col" class="govuk-table__header">Category</th>
+          <th class="govuk-visually-hidden">&nbsp;</th>
+          <th id="prodtype" scope="col" class="govuk-table__header">Type</th>
+          <th id="haztype" scope="col" class="govuk-table__header">Hazard type</th>
+          <th id="cat" scope="col" class="govuk-table__header">Category</th>
       </tr>
     </tfoot>
   <% end %>
