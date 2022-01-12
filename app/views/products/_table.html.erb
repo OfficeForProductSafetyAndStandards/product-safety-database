@@ -11,10 +11,10 @@
       </tr>
   </thead>
 
-  <% products.each do |product| %>
-    <%= render "table_row", product: product %>
+  <% products.each_with_index do |product, index| %>
+    <%= render "table_row", product: product, index: index%>
   <% end %>
-  
+
   <% if products.size > 11 %>
     <tfoot class="govuk-table__head">
       <tr class="govuk-table__row">

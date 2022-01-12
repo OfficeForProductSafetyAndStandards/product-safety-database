@@ -33,23 +33,23 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       Product.import refresh: :wait_for
       visit products_path
 
-      within ".govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      within "#product_0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within ".govuk-table__body > tr:nth-child(1) > td:nth-child(2)" do
+      within "#product_subcategory_0" do
         expect(page).to have_content(iphone.subcategory)
       end
 
-      within ".govuk-table__body > tr:nth-child(1) > td:nth-child(3)" do
+      within "#product_category_0" do
         expect(page).to have_content(iphone.category)
       end
 
-      within ".govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
+      within "#product_1" do
         expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
       end
 
-      within ".govuk-table__body > tr:nth-child(3) > th:nth-child(1)" do
+      within "#product_2" do
         expect(page).to have_link(washing_machine.name, href: product_path(washing_machine))
       end
 
@@ -63,12 +63,12 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       fill_in "Keywords", with: iphone.name
       click_on "Search"
 
-      within ".govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      within "#product_0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within ".govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
-        expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
+      within "#product_1" do
+        expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
     end
 
