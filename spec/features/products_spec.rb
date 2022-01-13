@@ -38,9 +38,9 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      expect(subcategory_at(0).text).to eq iphone.subcategory
-      expect(category_at(0).text).to eq iphone.category
-      expect(hazard_type_at(0).text).to eq investigation.hazard_type
+      expect(subcategory.text).to eq iphone.subcategory
+      expect(category.text).to eq iphone.category
+      expect(hazard_type.text).to eq investigation.hazard_type
 
       within "#item-1" do
         expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
@@ -81,15 +81,15 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       end
     end
 
-    def subcategory_at(index)
+    def subcategory
       find('[headers="prodtype item-0 meta-0"]')
     end
 
-    def hazard_type_at(index)
+    def hazard_type
       find('[headers="haztype item-0 meta-0"]')
     end
 
-    def category_at(index)
+    def category
       find('[headers="cat item-0 meta-0"]')
     end
   end
