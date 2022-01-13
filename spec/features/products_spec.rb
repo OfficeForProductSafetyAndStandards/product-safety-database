@@ -5,6 +5,7 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
   let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago) }
   let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago) }
   let!(:washing_machine) { create(:product_washing_machine, created_at: 3.days.ago) }
+  let!(:investigation)    { create(:allegation, products: [iphone], hazard_type: "Cuts") }
 
   context "with less than 12 products" do
     before do
@@ -45,6 +46,10 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
         expect(page).to have_content(iphone.category)
       end
 
+      within "#product_hazard_type_0" do
+        expect(page).to have_content(investigation.hazard_type)
+      end
+
       within "#product_1" do
         expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
       end
@@ -73,7 +78,6 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
     end
 
     scenario "displays cases for product" do
-      investigation = create(:allegation, :with_products, products: [iphone])
       visit "/products/#{iphone.id}"
       within ".psd-case-card" do
         expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
