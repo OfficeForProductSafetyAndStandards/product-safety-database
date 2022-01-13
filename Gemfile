@@ -12,9 +12,9 @@ gem "cf-app-utils", "~> 0.6"
 gem "devise", "~> 4.8"
 gem "devise-encryptable", "~> 0.2"
 gem "draper", "~> 4.0"
-gem "elasticsearch", "< 7.14"
-gem "elasticsearch-model", "< 7.2"
-gem "elasticsearch-rails", "< 7.2"
+gem "elasticsearch"
+gem "elasticsearch-model"
+gem "elasticsearch-rails"
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
 gem "interactor", "~> 3.1"
@@ -56,7 +56,7 @@ group :development, :test do
   gem "parallel_tests"
   gem "pry", "~> 0.13"
   gem "pry-byebug", "~> 3.9"
-  gem "pry-doc", "~> 1.2"
+  gem "pry-doc", "~> 1.3"
 end
 
 group :development do

@@ -40,77 +40,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     Investigation.import refresh: :wait_for
     sign_in(user)
     visit investigations_path
-    find("#filter-details").click
-  end
-
-  scenario "filter investigations created by another team" do
-    within_fieldset("Created by") do
-      choose "Others"
-      select other_team.name, from: "Person or team name"
-    end
-    click_button "Apply"
-
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).to have_listed_case(other_team_investigation.pretty_id)
-  end
-
-  scenario "filter investigations created by my team" do
-    within_fieldset("Created by") { choose "Me and my team" }
-    click_button "Apply"
-
-    expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-  end
-
-  scenario "filter investigations created by anybody but my team" do
-    within_fieldset("Created by") { choose "Others" }
-    click_button "Apply"
-
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-
-    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).to have_listed_case(other_team_investigation.pretty_id)
-    expect(page).to have_listed_case(another_team_investigation.pretty_id)
-    find("#filter-details").click
-
-    within_fieldset("Created by") { expect(page).to have_checked_field "Others" }
-  end
-
-  scenario "filter investigations created by a different user" do
-    within_fieldset("Created by") do
-      choose "Others"
-      select other_user_other_team.name, from: "Person or team name"
-    end
-    click_button "Apply"
-
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
-
-    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-
-    find("#filter-details").click
-
-    within_fieldset("Created by") do
-      expect(page).to have_checked_field "Others"
-      expect(page).to have_select "Person or team name", with_options: [other_user_other_team.name]
-    end
-  end
-
-  scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
-    within_fieldset("Case owner") do
-      expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
-      expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
-    end
-
-    within_fieldset("Created by") do
-      expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
-      expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
-    end
   end
 
   scenario "no filters applied shows all open cases" do
@@ -121,6 +50,9 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
     expect(page).not_to have_listed_case(closed_investigation.pretty_id)
 
+    expect(find("details#filter-details")["open"]).to eq(nil)
+
+    find("details#filter-details").click
     within_fieldset "Case status" do
       expect(page).to have_checked_field("Open")
       expect(page).to have_unchecked_field("Closed")
@@ -132,224 +64,347 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
   end
 
-  scenario "filtering for both open and closed cases" do
-    within_fieldset("Case status") { choose "All" }
-    click_button "Apply"
+  describe "Case priority" do
+    scenario "filtering to coronavirus-related cases only" do
+      choose "Coronavirus"
+      click_on "Apply"
 
-    expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(closed_investigation.pretty_id)
-  end
+      expect(page.find_field("Coronavirus")).to be_checked
 
-  scenario "filtering only closed cases" do
-    within_fieldset "Case status" do
-      choose "Closed"
-    end
-    click_button "Apply"
+      expect(page).to have_listed_case(coronavirus_investigation.pretty_id)
 
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(closed_investigation.pretty_id)
-  end
+      expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
 
-  scenario "filtering for projects" do
-    within_fieldset "Case type" do
-      choose "Project"
-    end
-    click_button "Apply"
-
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(project.pretty_id)
-    expect(page).not_to have_listed_case(enquiry.pretty_id)
-  end
-
-  scenario "filtering for enquiries" do
-    within_fieldset "Case type" do
-      choose "Enquiry"
-    end
-    click_button "Apply"
-
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(project.pretty_id)
-    expect(page).to have_listed_case(enquiry.pretty_id)
-  end
-
-  scenario "filtering for allegations" do
-    within_fieldset "Case type" do
-      choose "Allegation"
-    end
-    click_button "Apply"
-
-    expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(project.pretty_id)
-    expect(page).not_to have_listed_case(enquiry.pretty_id)
-  end
-
-  scenario "filtering cases where the user is the owner" do
-    within_fieldset("Case owner") { choose "Me" }
-    click_button "Apply"
-
-    expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-  end
-
-  describe "collaborators with case access", :with_stubbed_mailer do
-    before do
-      AddTeamToCase.call!(
-        investigation: other_user_other_team_investigation,
-        user: user,
-        team: chosen_team,
-        collaboration_class: Collaboration::Access::Edit
-      )
+      expect(find("details#filter-details")["open"]).to eq(nil)
     end
 
-    context "when filtering case where my team has access" do
-      let(:chosen_team) { team }
+    scenario "filtering by serious and high risk-level cases only" do
+      choose "Serious and high risk"
+      click_on "Apply"
+      expect(page).to have_checked_field("Serious and high risk")
 
-      scenario "filtering cases having a given team a collaborator" do
-        within_fieldset("Teams added to cases") { choose "My team" }
-        click_button "Apply"
+      expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
+      expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
+      expect(page).to have_css(".opss-tag--risk1", text: "High risk case")
 
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).to have_listed_case(investigation.pretty_id)
-      end
+      expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
+      expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+      expect(find("details#filter-details")["open"]).to eq(nil)
     end
 
-    context "when filtering case where another team has access" do
-      let(:chosen_team) { other_team }
+    scenario "filtering by serious and risk-level and coronavirus cases only" do
+      choose "Coronavirus and serious and high risk"
+      click_on "Apply"
+      expect(page).to have_checked_field("Coronavirus and serious and high risk")
 
-      scenario "filters the cases by other team with access" do
-        within_fieldset("Teams added to cases") do
-          choose "Others"
-          select other_team.name, from: "Team name"
-        end
-        click_button "Apply"
+      expect(page).to have_listed_case(coronavirus_and_high_risk_investigation.pretty_id)
+      expect(page).not_to have_listed_case(serious_risk_level_investigation.pretty_id)
+      expect(page).not_to have_listed_case(high_risk_level_investigation.pretty_id)
 
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
+      expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
 
-        find("#filter-details").click
-
-        within_fieldset("Teams added to cases") do
-          expect(page).to have_checked_field("Other")
-          expect(page).to have_select("Team name", with_options: [other_team.name])
-        end
-
-        within_fieldset("Teams added to cases") { choose "All" }
-        within_fieldset("Case owner")           { choose "Me and my team" }
-        click_button "Apply"
-
-        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_investigation.pretty_id)
-      end
-    end
-
-    context "when filtering case where any other team has access" do
-      let(:chosen_team) { other_team }
-
-      scenario "filters the cases by other team with access but do not specify team" do
-        within_fieldset("Teams added to cases") do
-          choose "Other"
-        end
-        click_button "Apply"
-
-        expect(page).to have_listed_case(other_team_investigation.pretty_id)
-        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-        expect(page).not_to have_listed_case(investigation.pretty_id)
-      end
+      expect(find("details#filter-details")["open"]).to eq(nil)
     end
   end
 
-  scenario "filtering cases where the user’s team is the owner" do
-    within_fieldset("Case owner") { choose "Me and my team" }
-    click_button "Apply"
+  describe "Case owner" do
+    scenario "filtering cases where the user is the owner" do
+      within_fieldset("Case owner") { choose "Me" }
+      click_button "Apply"
 
-    expect(page).to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-  end
+      expect(page).to have_listed_case(investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
 
-  scenario "filtering cases where the owner is someone else" do
-    choose "Others", id: "case_owner_others"
-    click_button "Apply"
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).to have_listed_case(other_team_investigation.pretty_id)
-  end
+      expect(find("details#filter-details")["open"]).to eq(nil)
+    end
 
-  scenario "filtering cases where another person or team is the owner" do
-    within_fieldset("Case owner") do
+    scenario "filtering cases where the user’s team is the owner" do
+      within_fieldset("Case owner") { choose "Me and my team" }
+      click_button "Apply"
+
+      expect(page).to have_listed_case(investigation.pretty_id)
+      expect(page).to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+      expect(find("details#filter-details")["open"]).to eq(nil)
+    end
+
+    scenario "filtering cases where the owner is someone else" do
       choose "Others", id: "case_owner_others"
-      select other_team.name, from: "case_owner_is_someone_else_id"
+      click_button "Apply"
+      expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).to have_listed_case(other_team_investigation.pretty_id)
+
+      expect(find("details#filter-details")["open"]).to eq(nil)
     end
-    click_button "Apply"
 
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).to have_listed_case(other_team_investigation.pretty_id)
+    scenario "filtering cases where another person or team is the owner" do
+      within_fieldset("Case owner") do
+        choose "Others", id: "case_owner_others"
+        select other_team.name, from: "case_owner_is_someone_else_id"
+      end
+      click_button "Apply"
 
-    choose "Others", id: "case_owner_others"
-    select other_user_same_team.name, from: "case_owner_is_someone_else_id"
-    click_button "Apply"
+      expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).to have_listed_case(other_team_investigation.pretty_id)
 
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+      expect(find("details#filter-details")["open"]).to eq(nil)
+
+      choose "Others", id: "case_owner_others"
+      select other_user_same_team.name, from: "case_owner_is_someone_else_id"
+      click_button "Apply"
+
+      expect(page).not_to have_listed_case(investigation.pretty_id)
+      expect(page).to have_listed_case(other_user_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+      expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+      expect(find("details#filter-details")["open"]).to eq(nil)
+    end
   end
 
-  scenario "Filtering to coronavirus-related cases only" do
-    choose "Coronavirus"
-    click_on "Apply"
+  context "with 'more options' expanded" do
+    before do
+      find("details#filter-details").click
+    end
 
-    expect(page.find_field("Coronavirus")).to be_checked
+    scenario "selecting filters only shows other active users and teams in the case owner and created by filters" do
+      within_fieldset("Case owner") do
+        expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
+        expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
+      end
 
-    expect(page).to have_listed_case(coronavirus_investigation.pretty_id)
+      within_fieldset("Created by") do
+        expect(page).to have_select("Person or team name", with_options: [team.name, other_team.name, another_active_user.name])
+        expect(page).not_to have_select("Person or team name", with_options: [another_inactive_user.name, other_deleted_team.name])
+      end
+    end
 
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-  end
+    describe "Teams added to cases", :with_stubbed_mailer do
+      before do
+        AddTeamToCase.call!(
+          investigation: other_user_other_team_investigation,
+          user: user,
+          team: chosen_team,
+          collaboration_class: Collaboration::Access::Edit
+        )
+      end
 
-  scenario "Filtering by serious and high risk-level cases only" do
-    choose "Serious and high risk"
-    click_on "Apply"
-    expect(page).to have_checked_field("Serious and high risk")
+      context "when filtering case where my team has access" do
+        let(:chosen_team) { team }
 
-    expect(page).to have_listed_case(serious_risk_level_investigation.pretty_id)
-    expect(page).to have_listed_case(high_risk_level_investigation.pretty_id)
-    expect(page).to have_css(".opss-tag--risk1", text: "High risk case")
+        scenario "filtering cases having a given team a collaborator" do
+          within_fieldset("Teams added to cases") { choose "My team" }
+          click_button "Apply"
 
-    expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-  end
+          expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+          expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+          expect(page).to have_listed_case(other_user_investigation.pretty_id)
+          expect(page).to have_listed_case(investigation.pretty_id)
 
-  scenario "Filtering by serious and risk-level and coronavirus cases only" do
-    choose "Coronavirus and serious and high risk"
-    click_on "Apply"
-    expect(page).to have_checked_field("Coronavirus and serious and high risk")
+          expect(find("details#filter-details")["open"]).to eq("open")
+        end
+      end
 
-    expect(page).to have_listed_case(coronavirus_and_high_risk_investigation.pretty_id)
-    expect(page).not_to have_listed_case(serious_risk_level_investigation.pretty_id)
-    expect(page).not_to have_listed_case(high_risk_level_investigation.pretty_id)
+      context "when filtering case where another team has access" do
+        let(:chosen_team) { other_team }
 
-    expect(page).not_to have_listed_case(coronavirus_investigation.pretty_id)
-    expect(page).not_to have_listed_case(investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
-    expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        scenario "filters the cases by other team with access" do
+          within_fieldset("Teams added to cases") do
+            choose "Others"
+            select other_team.name, from: "Team name"
+          end
+          click_button "Apply"
+
+          expect(page).to have_listed_case(other_team_investigation.pretty_id)
+          expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+          expect(page).not_to have_listed_case(investigation.pretty_id)
+
+          expect(find("details#filter-details")["open"]).to eq("open")
+
+          within_fieldset("Teams added to cases") do
+            expect(page).to have_checked_field("Other")
+            expect(page).to have_select("Team name", with_options: [other_team.name])
+          end
+
+          within_fieldset("Teams added to cases") { choose "All" }
+          within_fieldset("Case owner")           { choose "Me and my team" }
+          click_button "Apply"
+
+          expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+          expect(page).to have_listed_case(investigation.pretty_id)
+          expect(page).to have_listed_case(other_user_investigation.pretty_id)
+
+          expect(find("details#filter-details")["open"]).to eq(nil)
+        end
+      end
+
+      context "when filtering case where any other team has access" do
+        let(:chosen_team) { other_team }
+
+        scenario "filters the cases by other team with access but do not specify team" do
+          within_fieldset("Teams added to cases") do
+            choose "Other"
+          end
+          click_button "Apply"
+
+          expect(page).to have_listed_case(other_team_investigation.pretty_id)
+          expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+          expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+          expect(page).not_to have_listed_case(investigation.pretty_id)
+
+          expect(find("details#filter-details")["open"]).to eq("open")
+        end
+      end
+    end
+
+    describe "Created by" do
+      scenario "filtering investigations created by another team" do
+        within_fieldset("Created by") do
+          choose "Others"
+          select other_team.name, from: "Person or team name"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering investigations created by my team" do
+        within_fieldset("Created by") { choose "Me and my team" }
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering investigations created by anybody but my team" do
+        within_fieldset("Created by") { choose "Others" }
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+
+        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).to have_listed_case(another_team_investigation.pretty_id)
+
+        within_fieldset("Created by") { expect(page).to have_checked_field "Others" }
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering investigations created by a different user" do
+        within_fieldset("Created by") do
+          choose "Others"
+          select other_user_other_team.name, from: "Person or team name"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
+        expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+        expect(page).not_to have_listed_case(another_team_investigation.pretty_id)
+
+        expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+
+        within_fieldset("Created by") do
+          expect(page).to have_checked_field "Others"
+          expect(page).to have_select "Person or team name", with_options: [other_user_other_team.name]
+        end
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+    end
+
+    describe "Case type" do
+      scenario "filtering for projects" do
+        within_fieldset "Case type" do
+          choose "Project"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering for enquiries" do
+        within_fieldset "Case type" do
+          choose "Enquiry"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).to have_listed_case(enquiry.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering for allegations" do
+        within_fieldset "Case type" do
+          choose "Allegation"
+        end
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).not_to have_listed_case(project.pretty_id)
+        expect(page).not_to have_listed_case(enquiry.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+    end
+
+    describe "Case status" do
+      scenario "filtering for both open and closed cases" do
+        within_fieldset("Case status") { choose "All" }
+        click_button "Apply"
+
+        expect(page).to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(closed_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+
+      scenario "filtering only closed cases" do
+        within_fieldset "Case status" do
+          choose "Closed"
+        end
+        click_button "Apply"
+
+        expect(page).not_to have_listed_case(investigation.pretty_id)
+        expect(page).to have_listed_case(closed_investigation.pretty_id)
+
+        expect(find("details#filter-details")["open"]).to eq("open")
+      end
+    end
   end
 
   scenario "filtering cases assigned to me via homepage link" do
@@ -361,6 +416,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
+
+    expect(find("details#filter-details")["open"]).to eq(nil)
   end
 
   scenario "search returning a restricted cases" do
@@ -368,9 +425,11 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     click_on "Search"
 
     expect(page).not_to have_link(restricted_case.title, href: "/cases/#{restricted_case.pretty_id}")
+
+    expect(find("details#filter-details")["open"]).to eq(nil)
   end
 
-  describe "sorting" do
+  describe "Sorting" do
     let(:default_filtered_cases) { Investigation.where(is_closed: false) }
     let(:cases) { default_filtered_cases.order(updated_at: :desc) }
 
