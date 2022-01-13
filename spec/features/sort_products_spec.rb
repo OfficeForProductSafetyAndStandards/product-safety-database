@@ -23,10 +23,10 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
   scenario "no filters applied sorts by Newly added" do
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Newly added")
 
-    expect(page).to have_css("#product_name_0", text: drowning_product.name)
-    expect(page).to have_css("#product_name_1", text: chemical_product.name)
-    expect(page).to have_css("#product_name_2", text: fire_product_2.name)
-    expect(page).to have_css("#product_name_3", text: fire_product_1.name)
+    expect(page).to have_css("#item-0", text: drowning_product.name)
+    expect(page).to have_css("#item-1", text: chemical_product.name)
+    expect(page).to have_css("#item-2", text: fire_product_2.name)
+    expect(page).to have_css("#item-3", text: fire_product_1.name)
   end
 
   scenario "selecting Name A–Z sorts ascending by name" do
@@ -37,10 +37,10 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_current_path(/sort_dir=asc/, ignore_query: false)
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name A–Z")
 
-    expect(page).to have_css("#product_name_0", text: drowning_product.name)
-    expect(page).to have_css("#product_name_1", text: fire_product_1.name)
-    expect(page).to have_css("#product_name_2", text: chemical_product.name)
-    expect(page).to have_css("#product_name_3", text: fire_product_2.name)
+    expect(page).to have_css("#item-0", text: drowning_product.name)
+    expect(page).to have_css("#item-1", text: fire_product_1.name)
+    expect(page).to have_css("#item-2", text: chemical_product.name)
+    expect(page).to have_css("#item-3", text: fire_product_2.name)
   end
 
   scenario "selecting Name Z–A sorts descending by name" do
@@ -51,10 +51,10 @@ RSpec.feature "Product sorting", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_current_path(/sort_dir=desc/, ignore_query: false)
     expect(page).to have_css("form dl.opss-dl-select dd", text: "Active: Name Z–A")
 
-    expect(page).to have_css("#product_name_0", text: fire_product_2.name)
-    expect(page).to have_css("#product_name_1", text: chemical_product.name)
-    expect(page).to have_css("#product_name_2", text: fire_product_1.name)
-    expect(page).to have_css("#product_name_3", text: drowning_product.name)
+    expect(page).to have_css("#item-0", text: fire_product_2.name)
+    expect(page).to have_css("#item-1", text: chemical_product.name)
+    expect(page).to have_css("#item-2", text: fire_product_1.name)
+    expect(page).to have_css("#item-3", text: drowning_product.name)
   end
 
   scenario "selected sort order is persisted when filtering by hazard type" do
