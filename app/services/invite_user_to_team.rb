@@ -47,6 +47,8 @@ private
       user.update! invitation_token: (user.invitation_token || SecureRandom.hex(15)), invited_at: Time.zone.now
     end
 
+    Rails.logger.info "Invitation sent to user: #{user.id} by #{inviting_user&.id}"
+
     SendUserInvitationJob.perform_later(user.id, inviting_user&.id)
   end
 

@@ -15,7 +15,7 @@ module Users
       set_resource_as_new_user_from_params
 
       if sign_in_form.invalid?
-        handle_invalid_form(resource, sign_in_form.email)
+        handle_invalid_form(resource)
         return render :new
       end
 
@@ -47,6 +47,8 @@ module Users
     end
 
     def handle_authentication_failure(user)
+      Rails.logger.info "Failed sign in attempt for user: #{user.try(:id)}"
+
       if user&.reload&.access_locked?
         return render "account_locked" if user.locked_reason == User.locked_reasons[:failed_attempts]
 
@@ -59,8 +61,7 @@ module Users
       render :new
     end
 
-    def handle_invalid_form(resource, email)
-      Rails.logger.info "Failed sign in attempt for email address: #{email}"
+    def handle_invalid_form(resource)
       resource.errors.merge!(sign_in_form.errors)
     end
 
