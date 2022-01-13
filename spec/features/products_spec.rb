@@ -34,27 +34,19 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       Product.import refresh: :wait_for
       visit products_path
 
-      within "#product_0" do
+      within "#item-0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within "#product_subcategory_0" do
-        expect(page).to have_content(iphone.subcategory)
-      end
+      expect(subcategory_at(0).text).to eq iphone.subcategory
+      expect(category_at(0).text).to eq iphone.category
+      expect(hazard_type_at(0).text).to eq investigation.hazard_type
 
-      within "#product_category_0" do
-        expect(page).to have_content(iphone.category)
-      end
-
-      within "#product_hazard_type_0" do
-        expect(page).to have_content(investigation.hazard_type)
-      end
-
-      within "#product_1" do
+      within "#item-1" do
         expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
       end
 
-      within "#product_2" do
+      within "#item-2" do
         expect(page).to have_link(washing_machine.name, href: product_path(washing_machine))
       end
 
@@ -68,11 +60,11 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       fill_in "Keywords", with: iphone.name
       click_on "Search"
 
-      within "#product_0" do
+      within "#item-0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within "#product_1" do
+      within "#item-1" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
     end
@@ -87,6 +79,18 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       within ".psd-case-card" do
         expect(page).to have_css("span", text: "Allegation restricted")
       end
+    end
+
+    def subcategory_at(index)
+      find('[headers="prodtype item-0 meta-0"]')
+    end
+
+    def hazard_type_at(index)
+      find('[headers="haztype item-0 meta-0"]')
+    end
+
+    def category_at(index)
+      find('[headers="cat item-0 meta-0"]')
     end
   end
 end

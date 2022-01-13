@@ -1,23 +1,23 @@
-<tbody class="govuk-table__body" id=<%="product_#{index}"%>>
+<tbody class="govuk-table__body">
   <tr class="govuk-table__row">
       <th class="govuk-visually-hidden">
           Product
       </th>
-      <th colspan="3" scope="colgroup" class="govuk-table__header">
-          <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state", id: "product_name_#{index}" %>
+      <th id=<%="item-#{index}"%> colspan="3" scope="colgroup" class="govuk-table__header">
+        <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %>
       </th>
   </tr>
   <tr class="govuk-table__row">
-      <th class="govuk-visually-hidden">
+      <th headers=<%="item-#{index}"%> id=<%="meta-#{index}"%> class="govuk-visually-hidden">
           Metadata
       </th>
-      <td id=<%="product_subcategory_#{index}"%> class="govuk-table__cell">
+      <td headers="prodtype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
         <%= product.subcategory %>
       </td>
-      <td id=<%="product_hazard_type_#{index}"%> class="govuk-table__cell">
+      <td headers="haztype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
         <%= product.investigations.first.try(:hazard_type) %>
       </td>
-      <td id=<%="product_category_#{index}"%> class="govuk-table__cell">
+      <td headers="cat item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
         <%= product.category %>
       </td>
   </tr>
