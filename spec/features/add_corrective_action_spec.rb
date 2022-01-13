@@ -11,6 +11,11 @@ RSpec.feature "Adding a correcting action to a case", :with_stubbed_opensearch, 
 
       expect(page).not_to have_link("Add supporting information")
     end
+
+    scenario "cannot view the new corrective action form" do
+      sign_in(read_only_user)
+      expect { visit "/cases/#{investigation.pretty_id}/corrective-actions/new" }.to raise_error(Pundit::NotAuthorizedError)
+    end
   end
 
   context "with no product added to the case" do
