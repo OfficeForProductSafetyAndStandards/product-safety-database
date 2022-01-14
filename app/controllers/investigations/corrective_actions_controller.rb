@@ -4,14 +4,14 @@ module Investigations
 
     def new
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize investigation, :view_non_protected_details?
+      authorize investigation, :update?
       @corrective_action_form = CorrectiveActionForm.new
       @investigation = investigation.decorate
     end
 
     def create
       investigation = Investigation.find_by!(pretty_id: params[:investigation_pretty_id])
-      authorize investigation, :view_non_protected_details?
+      authorize investigation, :update?
 
       @corrective_action_form = CorrectiveActionForm.new(corrective_action_params)
 
