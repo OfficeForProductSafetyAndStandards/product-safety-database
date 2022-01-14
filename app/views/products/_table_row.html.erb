@@ -1,11 +1,24 @@
-<tr class="govuk-table__row">
-  <th scope="row" class="govuk-table__header">
-    <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %>
-  </th>
-  <td class="govuk-table__cell">
-    <%= product.subcategory %>
-  </td>
-  <td class="govuk-table__cell">
-    <%= product.category %>
-  </td>
-</tr>
+<tbody class="govuk-table__body">
+  <tr class="govuk-table__row">
+      <th class="govuk-visually-hidden">
+          Product
+      </th>
+      <th id=<%="item-#{index}"%> colspan="3" scope="colgroup" class="govuk-table__header">
+        <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %>
+      </th>
+  </tr>
+  <tr class="govuk-table__row">
+      <th headers=<%="item-#{index}"%> id=<%="meta-#{index}"%> class="govuk-visually-hidden">
+          Metadata
+      </th>
+      <td headers="prodtype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.subcategory %>
+      </td>
+      <td headers="haztype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.investigations.first.try(:hazard_type) %>
+      </td>
+      <td headers="cat item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
+        <%= product.category %>
+      </td>
+  </tr>
+</tbody>

@@ -5,6 +5,7 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
   let!(:iphone)          { create(:product_iphone,          created_at: 1.day.ago) }
   let!(:iphone_3g)       { create(:product_iphone_3g,       created_at: 2.days.ago) }
   let!(:washing_machine) { create(:product_washing_machine, created_at: 3.days.ago) }
+  let!(:investigation)    { create(:allegation, products: [iphone], hazard_type: "Cuts") }
 
   context "with less than 12 products" do
     before do
@@ -33,23 +34,19 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       Product.import refresh: :wait_for
       visit products_path
 
-      within ".govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      within "#item-0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within ".govuk-table__body > tr:nth-child(1) > td:nth-child(2)" do
-        expect(page).to have_content(iphone.subcategory)
-      end
+      expect(subcategory.text).to eq iphone.subcategory
+      expect(category.text).to eq iphone.category
+      expect(hazard_type.text).to eq investigation.hazard_type
 
-      within ".govuk-table__body > tr:nth-child(1) > td:nth-child(3)" do
-        expect(page).to have_content(iphone.category)
-      end
-
-      within ".govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
+      within "#item-1" do
         expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
       end
 
-      within ".govuk-table__body > tr:nth-child(3) > th:nth-child(1)" do
+      within "#item-2" do
         expect(page).to have_link(washing_machine.name, href: product_path(washing_machine))
       end
 
@@ -63,17 +60,16 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       fill_in "Keywords", with: iphone.name
       click_on "Search"
 
-      within ".govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      within "#item-0" do
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
-      within ".govuk-table__body > tr:nth-child(2) > th:nth-child(1)" do
-        expect(page).to have_link(iphone_3g.name, href: product_path(iphone_3g))
+      within "#item-1" do
+        expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
     end
 
     scenario "displays cases for product" do
-      investigation = create(:allegation, :with_products, products: [iphone])
       visit "/products/#{iphone.id}"
       within ".psd-case-card" do
         expect(page).to have_link(investigation.title, href: "/cases/#{investigation.pretty_id}")
@@ -83,6 +79,18 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       within ".psd-case-card" do
         expect(page).to have_css("span", text: "Allegation restricted")
       end
+    end
+
+    def subcategory
+      find('[headers="prodtype item-0 meta-0"]')
+    end
+
+    def hazard_type
+      find('[headers="haztype item-0 meta-0"]')
+    end
+
+    def category
+      find('[headers="cat item-0 meta-0"]')
     end
   end
 end
