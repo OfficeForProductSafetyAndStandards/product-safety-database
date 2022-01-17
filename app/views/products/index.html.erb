@@ -40,7 +40,6 @@
     <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
         <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
         <%= govukSkipLink(text: "Skip to results", href: "#results") %>
-        <% byebug %>
         <%= render "form_components/govuk_select",
            key: "hazard_type",
            form: form,
