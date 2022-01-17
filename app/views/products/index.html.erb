@@ -10,7 +10,7 @@
         <span id="search-hint">You can search for one or more products by using the keywords that describe them.</span> You can also sort the ordering of the search results.
       </p>
       <p class="govuk-body-s govuk-!-margin-bottom-1">
-        You can filter the results by hazard type..
+        You can filter the results by hazard type.
       </p>
       <p class="govuk-body-s govuk-visually-hidden">
         Search results appear within the following <code>form</code> and within the <code>role = region</code>.
@@ -43,7 +43,7 @@
         <%= render "form_components/govuk_select",
            key: "hazard_type",
            form: form,
-           items: [text: "All", value: ""] + hazard_types.map {|type| {text: type, value: type}},
+           items: [text: "All", value: ""] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
            label: { text: "Hazard type" },
            formGroup: { classes: "govuk-!-margin-right-1" },
            is_autocomplete: false,
