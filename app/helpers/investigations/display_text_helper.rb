@@ -92,7 +92,7 @@ module Investigations::DisplayTextHelper
   def get_highlighted_team_name(highlighted_result)
     team_id = sanitize(highlighted_result, tags: [])
     team = Team.find(team_id)
-    content_tag(:em, team.name).html_safe
+    content_tag(:em, team.decorate.display_name).html_safe
   end
 
   def should_be_hidden?(source, investigation)
