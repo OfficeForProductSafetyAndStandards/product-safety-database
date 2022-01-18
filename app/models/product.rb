@@ -80,4 +80,8 @@ class Product < ApplicationRecord
   def name_for_sorting
     name
   end
+
+  def psd_ref
+    "psd-#{id}"
+  end
 end
