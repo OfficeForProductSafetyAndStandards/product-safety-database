@@ -71,7 +71,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
   end
 
   scenario "filtering by a PSD ref" do
-    psd_ref = "psd-#{chemical_product.id}"
+    psd_ref = chemical_product.psd_ref
     fill_in "Keywords search", with: psd_ref
     click_button "Apply"
 
