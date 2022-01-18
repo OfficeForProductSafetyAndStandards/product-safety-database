@@ -3,14 +3,17 @@
       <th class="govuk-visually-hidden">
           Product
       </th>
-      <th id=<%="item-#{index}"%> colspan="3" scope="colgroup" class="govuk-table__header">
+      <th id="item-<%= index %>" colspan="4" scope="colgroup" class="govuk-table__header">
         <%= link_to product.name, product, class: "govuk-link govuk-link--no-visited-state" %>
       </th>
   </tr>
   <tr class="govuk-table__row">
-      <th headers=<%="item-#{index}"%> id=<%="meta-#{index}"%> class="govuk-visually-hidden">
+      <th headers="item-<%= index %>" id="meta-<%= index %>" class="govuk-visually-hidden">
           Metadata
       </th>
+      <td headers="psdref item-<%= index %> meta-<%= index %>" class="govuk-table__cell opss-no-wrap">
+        <%= product.psd_ref %>
+      </td>
       <td headers="prodtype item-<%= index %> meta-<%= index %>" class="govuk-table__cell">
         <%= product.subcategory %>
       </td>
