@@ -7,6 +7,7 @@ gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 gem "activerecord-pg_enum", "~> 2.0"
 gem "aws-sdk-s3", "~> 1.117"
 gem "aws-sdk-s3control", "~> 1.58"
+gem "bootsnap", require: false
 gem "caxlsx"
 gem "caxlsx_rails"
 gem "cf-app-utils", "~> 0.6"
@@ -18,6 +19,7 @@ gem "elasticsearch-model"
 gem "elasticsearch-rails"
 gem "govuk_notify_rails", "~> 2.2"
 gem "image_processing"
+gem "importmap-rails"
 gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
 gem "jsbundling-rails"
@@ -38,16 +40,17 @@ gem "sentry-rails"
 gem "sentry-sidekiq"
 gem "sidekiq", "~> 6.5"
 gem "sidekiq-scheduler", "~> 4.0.3"
+gem "slim-rails"
 gem "sprockets", "~> 4.2.0"
 gem "sprockets-rails", require: "sprockets/railtie"
+gem "stimulus-rails"
 gem "strong_migrations", "~> 1.4"
 gem "tty-table", require: false
+gem "turbo-rails"
 gem "validate_email", "~> 0.1"
 gem "wicked", "~> 2.0"
 
 gem "govuk-design-system-rails", git: "https://github.com/OfficeForProductSafetyAndStandards/govuk-design-system-rails", tag: "0.9.7", require: "govuk_design_system"
-
-gem "bootsnap"
 
 group :development, :test do
   gem "awesome_print", "~> 1.9", require: "ap"
@@ -60,12 +63,12 @@ group :development, :test do
 end
 
 group :development do
-  gem "listen", "~> 3.7"
   gem "m", "~> 1.6"
   gem "rails-erd"
   gem "solargraph", "~> 0.48"
   gem "spring", "~> 4.1"
   gem "spring-commands-rspec", "~> 1.0"
+  gem "web-console"
 end
 
 group :test do
@@ -91,5 +94,6 @@ group :test do
   gem "simplecov-console", "~> 0.9"
   gem "simplecov-lcov"
   gem "super_diff"
+  gem "webdrivers"
   gem "webmock", "~> 3.18"
 end
