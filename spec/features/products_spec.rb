@@ -38,6 +38,7 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
         expect(page).to have_link(iphone.name, href: product_path(iphone))
       end
 
+      expect(psd_ref.text).to eq iphone.psd_ref
       expect(subcategory.text).to eq iphone.subcategory
       expect(category.text).to eq iphone.category
       expect(hazard_type.text).to eq investigation.hazard_type
@@ -79,6 +80,10 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       within ".psd-case-card" do
         expect(page).to have_css("span", text: "Allegation restricted")
       end
+    end
+
+    def psd_ref
+      find('[headers="psdref item-0 meta-0"]')
     end
 
     def subcategory
