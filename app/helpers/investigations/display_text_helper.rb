@@ -61,7 +61,7 @@ module Investigations::DisplayTextHelper
 
     highlight[1].each do |result|
       unless should_be_hidden?(source, investigation)
-        best_highlight[:content] = get_highlight_content(result)
+        best_highlight[:content] = get_highlight_content(source, result)
         return best_highlight
       end
     end
@@ -76,14 +76,23 @@ module Investigations::DisplayTextHelper
   def replace_unsightly_field_names(field_name)
     pretty_field_names = {
       pretty_id: "Case ID",
-      "activities.search_index": "Activities, comment"
+      "activities.search_index": "Activities, comment",
+      "teams_with_access.id": "Team added to the case"
     }
     pretty_field_names[field_name.to_sym] || field_name.humanize
   end
 
-  def get_highlight_content(result)
+  def get_highlight_content(source, result)
+    return get_highlighted_team_name(result) if source == "teams_with_access.id"
+
     sanitized_content = sanitize(result, tags: %w[em])
     sanitized_content.html_safe
+  end
+
+  def get_highlighted_team_name(highlighted_result)
+    team_id = sanitize(highlighted_result, tags: [])
+    team = Team.find(team_id)
+    content_tag(:em, team.name).html_safe
   end
 
   def should_be_hidden?(source, investigation)
