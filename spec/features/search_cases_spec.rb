@@ -95,6 +95,21 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     expect(page).to have_text("MyBrand washing machine")
   end
 
+  scenario "searching for a case using a query string that includes trailing or leading whitespaces" do
+    sign_in(user)
+    visit "/cases"
+
+    fill_in "Keywords", with: " W2020-10/1   "
+    click_button "Search"
+
+    expect_to_be_on_cases_search_results_page
+
+    expect(page).to have_content "1 case matching keyword(s) W2020-10/1, using the current filters, was found."
+
+    expect(page).to have_text(investigation.pretty_id)
+    expect(page).to have_text("MyBrand washing machine")
+  end
+
   scenario "searching for cases using multiple keywords" do
     pending 'this will be fixed once we re-add fuzzy "or" matching on'
     sign_in(user)
