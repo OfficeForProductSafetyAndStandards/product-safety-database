@@ -11,7 +11,9 @@
         </h1>
       </div>
       <div class="govuk-grid-column-one-third govuk-!-margin-bottom-2">
-        <%= link_to "Invite another team member", new_team_invitation_path(@team), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-align-right opss-text-underline-offset" if current_user.is_team_admin? %>
+        <div class="opss-text-align-right">
+          <%= link_to "Invite another team member", new_team_invitation_path(@team), class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset" if current_user.is_team_admin? %>
+        </div>
       </div>
     </div>
   </div>
