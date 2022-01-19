@@ -8,6 +8,7 @@ module SearchHelper
   end
 
   def search_query(user)
+    @search.q.strip! if @search.q
     OpensearchQuery.new(@search.q, filter_params(user), sorting_params)
   end
 

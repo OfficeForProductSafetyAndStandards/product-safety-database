@@ -77,6 +77,7 @@ en:
     email_subject_text: "%{case_type} updated"
   update_phone_call:
     email_subject_text: "%{case_type} updated"
+  create_case: "Create a case"
 
   case:
     badges:
