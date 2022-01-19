@@ -4,9 +4,11 @@
       <h2 class="govuk-heading-s"><%= product.name %></h2>
     </div>
     <div class="govuk-grid-column-one-third">
-      <a href=<%=product_path(product)%> class="govuk-link govuk-link--no-visited-state opss-text-align-right">
-        Go to the <span class="govuk-visually-hidden"><%= product.name %></span> product page
-      </a>
+      <div class="opss-text-align-right">
+        <a href=<%=product_path(product)%> class="govuk-link govuk-link--no-visited-state">
+          Go to the <span class="govuk-visually-hidden"><%= product.name %></span> product page
+        </a>
+      </div>
     </div>
   </div>
 

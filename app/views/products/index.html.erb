@@ -40,15 +40,15 @@
     <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
         <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
         <%= govukSkipLink(text: "Skip to results", href: "#results") %>
-
         <%= render "form_components/govuk_select",
            key: "hazard_type",
            form: form,
-           items: hazard_types.map {|type| {text: type, value: type}},
+           items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
            label: { text: "Hazard type" },
            formGroup: { classes: "govuk-!-margin-right-1" },
-           is_autocomplete: true,
-           attributes: { "data-opss-clear-on-reset" => "autocomplete" } %>
+           is_autocomplete: false,
+           attributes: { "data-opss-clear-on-reset" => "element" }
+        %>
 
         <div class="govuk-button-group">
           <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
