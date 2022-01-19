@@ -38,6 +38,18 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
     end
   end
 
+  scenario "strips leading and trailing whitespace from search queries" do
+    Business.import refresh: :wait_for
+    visit businesses_path
+
+    fill_in "Keywords", with: "  #{business_three.trading_name} "
+    click_on "Search"
+
+    within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
+      expect(page).to have_link(business_three.trading_name, href: business_path(business_three))
+    end
+  end
+
   scenario "displays cases for business" do
     investigation = create(:allegation, :with_business, business_to_add: business_one)
     visit "/businesses/#{business_one.id}"

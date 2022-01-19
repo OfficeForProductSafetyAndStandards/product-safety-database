@@ -25,7 +25,7 @@
       <div class="govuk-form-group govuk-!-padding-top-4 govuk-!-padding-bottom-7">
         <%= form.label :q, "Keywords search", class: "govuk-label" %>
         <div class="govuk-input__wrapper opss-search__wrapper">
-          <%= form.hidden_field :sort_by, value: params[:sort_by] %>
+          <%= form.hidden_field :sort_by, id: "sort_by_current", value: params[:sort_by] %>
           <%= form.hidden_field :sort_dir, value: params[:sort_dir] %>
           <%= form.search_field :q, class: "govuk-input govuk-!-width-one-half", data: { "opss-clear-on-reset" => "element" }, spellcheck: false, "aria-describedby" => "search-hint" %>
           <button class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button">
@@ -40,15 +40,15 @@
     <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
         <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
         <%= govukSkipLink(text: "Skip to results", href: "#results") %>
-
         <%= render "form_components/govuk_select",
            key: "hazard_type",
            form: form,
-           items: hazard_types.map {|type| {text: type, value: type}},
+           items: [{ text: "All", value: "", attributes: { class: "govuk-!-font-size-16" }}] + hazard_types.map {|type| {text: type, value: type, attributes: {class: "govuk-!-font-size-16"}}},
            label: { text: "Hazard type" },
            formGroup: { classes: "govuk-!-margin-right-1" },
-           is_autocomplete: true,
-           attributes: { "data-opss-clear-on-reset" => "autocomplete" } %>
+           is_autocomplete: false,
+           attributes: { "data-opss-clear-on-reset" => "element" }
+        %>
 
         <div class="govuk-button-group">
           <%= form.button "Apply", name: nil, type: "submit", class: "govuk-button" %>
