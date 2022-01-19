@@ -2,6 +2,7 @@ module InvestigationSearchHelper
   include SearchHelper
 
   def search_query(user)
+    @search.q.strip! if @search.q
     OpensearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters(user))
   end
 
