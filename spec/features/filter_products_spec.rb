@@ -67,15 +67,12 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     click_button "Apply"
 
     expect(page).to have_content(chemical_product.name)
-    expect(page).to have_content("1 product matching keyword(s) #{chemical_product.id}, was found.")
   end
 
   scenario "filtering by a PSD ref" do
-    psd_ref = chemical_product.psd_ref
-    fill_in "Keywords search", with: psd_ref
+    fill_in "Keywords search", with: chemical_product.psd_ref
     click_button "Apply"
 
     expect(page).to have_content(chemical_product.name)
-    expect(page).to have_content("1 product matching keyword(s) #{psd_ref}, was found.")
   end
 end
