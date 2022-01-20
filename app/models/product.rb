@@ -36,7 +36,6 @@ class Product < ApplicationRecord
   settings do
     mappings do
       indexes :name_for_sorting, type: :keyword
-      indexes :psd_ref, type: :keyword
     end
   end
 
