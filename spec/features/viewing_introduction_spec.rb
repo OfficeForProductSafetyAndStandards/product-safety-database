@@ -19,7 +19,7 @@ RSpec.feature "Viewing the introduction", :with_stubbed_opensearch, :with_stubbe
     expect(page).to have_current_path("/introduction/share_data")
     click_on "Get started"
 
-    expect(page).to have_content("Open a new case")
+    expect(page).to have_content("Create a case")
     expect(page).to have_current_path("/")
   end
 

@@ -255,6 +255,22 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
           expect(find("details#filter-details")["open"]).to eq(nil)
         end
+
+        scenario "with keywords entered" do
+          fill_in "Keywords", with: other_user_other_team_investigation.description
+          click_on "Search"
+
+          find("#filter-details").click
+
+          within_fieldset("Teams added to cases") do
+            choose "Others"
+            select other_team.name, from: "Team name"
+          end
+          click_button "Apply"
+
+          expect(page).to have_listed_case(other_user_other_team_investigation.pretty_id)
+          expect(page).to have_text("Team added to the case: #{chosen_team.name}")
+        end
       end
 
       context "when filtering case where any other team has access" do

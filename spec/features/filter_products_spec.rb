@@ -61,4 +61,29 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     expect(page).not_to have_content(chemical_product.name)
     expect(page).to have_content("1 product matching keyword(s) Dangerous, was found.")
   end
+
+  scenario "filtering by a keyword with whitespaces" do
+    fill_in "Keywords search", with: "   Dangerous    "
+    click_button "Apply"
+
+    expect(page).to have_content(drowning_product.name)
+    expect(page).not_to have_content(fire_product_1.name)
+    expect(page).not_to have_content(fire_product_2.name)
+    expect(page).not_to have_content(chemical_product.name)
+    expect(page).to have_content("1 product matching keyword(s) Dangerous, was found.")
+  end
+
+  scenario "filtering by an ID" do
+    fill_in "Keywords search", with: chemical_product.id
+    click_button "Apply"
+
+    expect(page).to have_content(chemical_product.name)
+  end
+
+  scenario "filtering by a PSD ref" do
+    fill_in "Keywords search", with: chemical_product.psd_ref
+    click_button "Apply"
+
+    expect(page).to have_content(chemical_product.name)
+  end
 end
