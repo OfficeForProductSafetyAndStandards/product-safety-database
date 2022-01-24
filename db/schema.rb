@@ -16,7 +16,8 @@ ActiveRecord::Schema.define(version: 2021_11_05_102709) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  # These are custom enum types that must be created before they can be used in the schema definition
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "account_locked_reasons", ["failed_attempts", "inactivity"]
   create_enum "affected_units_statuses", ["exact", "approx", "unknown", "not_relevant"]
   create_enum "authenticities", ["counterfeit", "genuine", "unsure"]
