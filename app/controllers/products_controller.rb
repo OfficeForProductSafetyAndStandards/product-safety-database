@@ -14,8 +14,8 @@ class ProductsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        results = search_for_products(20)
-        @products = ProductDecorator.decorate_collection(results)
+        @results = search_for_products(20)
+        @products = ProductDecorator.decorate_collection(@results)
       end
       format.csv do
         authorize Product, :export?

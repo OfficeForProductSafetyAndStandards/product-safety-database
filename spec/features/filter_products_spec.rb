@@ -28,6 +28,18 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     expect(page).to have_content("There are currently 4 products.")
   end
 
+  context "when there are multiple pages of products" do
+    before do
+      17.times {Product.create(name: "QQQQQQ")}
+      Product.import refresh: :wait_for
+      visit products_path
+    end
+
+    it "shows total number of products regardless of how many are on the current page" do
+      expect(page).to have_content("There are currently #{Product.count} products.")
+    end
+  end
+
   scenario "filtering by hazard type" do
     select "Fire", from: "Hazard type"
     click_button "Apply"
