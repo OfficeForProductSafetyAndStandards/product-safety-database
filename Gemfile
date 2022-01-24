@@ -4,7 +4,6 @@ ruby "~> 3.0"
 
 gem "kaminari", "~> 1.2" # Must be loaded before elasticsearch gems
 
-gem "activerecord-pg_enum", "~> 1.2"
 gem "aws-sdk-s3", "~> 1.111"
 gem "caxlsx"
 gem "caxlsx_rails"

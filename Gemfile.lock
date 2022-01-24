@@ -66,10 +66,6 @@ GEM
     activerecord (7.0.1)
       activemodel (= 7.0.1)
       activesupport (= 7.0.1)
-    activerecord-pg_enum (1.2.2)
-      activerecord (>= 4.1.0)
-      activesupport
-      pg
     activestorage (7.0.1)
       actionpack (= 7.0.1)
       activejob (= 7.0.1)
@@ -638,7 +634,6 @@ PLATFORMS
   x86_64-darwin-19
 
 DEPENDENCIES
-  activerecord-pg_enum (~> 1.2)
   awesome_print (~> 1.9)
   aws-sdk-s3 (~> 1.111)
   bootsnap
