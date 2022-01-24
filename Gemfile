@@ -75,12 +75,12 @@ group :test do
   gem "rails-controller-testing", "~> 1.0"
   gem "roo", "~> 2.8"
   gem "rspec"
-  gem "rspec-mocks", "~> 3.10"
+  gem "rspec-mocks"
   gem "rspec-rails"
   gem "rubocop", "~> 1.23"
   gem "rubocop-govuk", "~> 4.2"
   gem "rubocop-performance", "~> 1.13"
-  gem "rubocop-rspec", "~> 2.6", require: false
+  gem "rubocop-rspec", require: false
   gem "scss_lint-govuk", "~> 0.2"
   gem "selenium-webdriver", "~> 4.1"
   gem "shoulda-matchers"
