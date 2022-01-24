@@ -30,7 +30,7 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
 
   context "when there are multiple pages of products" do
     before do
-      17.times {Product.create(name: "QQQQQQ")}
+      17.times { Product.create(name: "TestProduct") }
       Product.import refresh: :wait_for
       visit products_path
     end
