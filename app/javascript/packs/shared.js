@@ -18,6 +18,9 @@ import 'javascripts/close_page_button'
 import 'javascripts/date_input'
 import 'javascripts/clear_on_reset'
 
+// Stimulus
+import '../controllers'
+
 // CSS
 import 'accessible-autocomplete/src/autocomplete.css'
 
