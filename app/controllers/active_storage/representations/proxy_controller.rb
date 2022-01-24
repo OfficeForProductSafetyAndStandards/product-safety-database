@@ -7,7 +7,6 @@
 
 class ActiveStorage::Representations::ProxyController < ActiveStorage::BaseController
   include ActiveStorage::SetBlob
-  include ActiveStorage::SetHeaders
   include HttpAuthConcern
   include SentryConfigurationConcern
 
