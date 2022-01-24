@@ -9,12 +9,17 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
   before do
     create_list :business, 18, created_at: 4.days.ago
     sign_in(user)
+    Business.import refresh: :wait_for
+    visit businesses_path
+  end
+
+  context "when no keywords are entered" do
+    it "shows total number of businesses" do
+      expect(page).to have_content "There are currently #{Business.count} businesses."
+    end
   end
 
   scenario "lists business according to search relevance" do
-    Business.import refresh: :wait_for
-    visit businesses_path
-
     within "table#results tbody.govuk-table__body > tr:nth-child(1) > th:nth-child(1)" do
       expect(page).to have_link(business_one.trading_name, href: business_path(business_one))
     end
@@ -39,9 +44,6 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
   end
 
   scenario "strips leading and trailing whitespace from search queries" do
-    Business.import refresh: :wait_for
-    visit businesses_path
-
     fill_in "Keywords", with: "  #{business_three.trading_name} "
     click_on "Search"
 
