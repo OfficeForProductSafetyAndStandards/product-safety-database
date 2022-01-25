@@ -26,7 +26,7 @@
     <% if @product.images.any? %>
       <%= render "documents/document_preview",
                document: @product.images.first,
-               dimensions: "400x300",
+               dimensions: [400, 300],
                class_name: "product-image app-document-preview--inherit" %>
     <% else %>
       <div class="app-document-preview__image-without-preview app-document-preview--add-image-prompt">
