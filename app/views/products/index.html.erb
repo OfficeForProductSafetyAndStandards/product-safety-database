@@ -67,7 +67,7 @@
 
     <section class="govuk-grid-column-three-quarters">
       <%= render "controls",
-        count: @products.size,
+        count: @results.total_count,
         keywords: params[:q],
         filter: params[:hazard_type],
         form: form,

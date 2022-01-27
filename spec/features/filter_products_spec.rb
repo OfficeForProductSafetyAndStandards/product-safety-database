@@ -28,6 +28,18 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     expect(page).to have_content("There are currently 4 products.")
   end
 
+  context "when there are multiple pages of products" do
+    before do
+      17.times { Product.create(name: "TestProduct") }
+      Product.import refresh: :wait_for
+      visit products_path
+    end
+
+    it "shows total number of products regardless of how many are on the current page" do
+      expect(page).to have_content("There are currently #{Product.count} products.")
+    end
+  end
+
   scenario "filtering by hazard type" do
     select "Fire", from: "Hazard type"
     click_button "Apply"
@@ -71,5 +83,19 @@ RSpec.feature "Product filtering", :with_opensearch, :with_stubbed_mailer, type:
     expect(page).not_to have_content(fire_product_2.name)
     expect(page).not_to have_content(chemical_product.name)
     expect(page).to have_content("1 product matching keyword(s) Dangerous, was found.")
+  end
+
+  scenario "filtering by an ID" do
+    fill_in "Keywords search", with: chemical_product.id
+    click_button "Apply"
+
+    expect(page).to have_content(chemical_product.name)
+  end
+
+  scenario "filtering by a PSD ref" do
+    fill_in "Keywords search", with: chemical_product.psd_ref
+    click_button "Apply"
+
+    expect(page).to have_content(chemical_product.name)
   end
 end

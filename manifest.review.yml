@@ -18,8 +18,8 @@ applications:
   services:
     - ((psd-db-name))
     - psd-opensearch-1
-    - psd-queue-5
-    - psd-session-5
+    - psd-queue-6
+    - psd-session-6
     - opss-log-drain
     - psd-aws-env
     - psd-auth-env
