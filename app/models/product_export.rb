@@ -72,7 +72,8 @@ private
     return @product_info_sheet if @product_info_sheet
 
     sheet = package.workbook.add_worksheet name: "product_info"
-    sheet.add_row %w[ID
+    sheet.add_row %w[psd_ref
+                     ID
                      affected_units_status
                      authenticity
                      barcode
@@ -106,7 +107,7 @@ private
     return @test_results_sheet if @test_results_sheet
 
     sheet = package.workbook.add_worksheet name: "test_results"
-    sheet.add_row %w[product_id legislation standards date_of_test result how_product_failed further_details product_name]
+    sheet.add_row %w[psd_ref product_id legislation standards date_of_test result how_product_failed further_details product_name]
 
     @test_results_sheet = sheet
   end
@@ -115,7 +116,7 @@ private
     return @risk_assessments_sheet if @risk_assessments_sheet
 
     sheet = package.workbook.add_worksheet name: "risk_assessments"
-    sheet.add_row %w[product_id date_of_assessment risk_level assessed_by further_details product_name]
+    sheet.add_row %w[psd_ref product_id date_of_assessment risk_level assessed_by further_details product_name]
 
     @risk_assessments_sheet = sheet
   end
@@ -124,7 +125,8 @@ private
     return @corrective_actions_sheet if @corrective_actions_sheet
 
     sheet = package.workbook.add_worksheet name: "corrective_actions"
-    sheet.add_row %w[product_id
+    sheet.add_row %w[psd_ref
+                     product_id
                      action_taken
                      date_of_action
                      legislation
@@ -141,6 +143,7 @@ private
 
   def attributes_for_info_sheet(product)
     [
+      product.psd_ref,
       product.id,
       product.affected_units_status,
       product.authenticity,
@@ -171,6 +174,7 @@ private
 
   def attributes_for_test_results_sheet(product, test_result)
     [
+      product.psd_ref,
       product.id,
       test_result.legislation,
       test_result.standards_product_was_tested_against,
@@ -184,6 +188,7 @@ private
 
   def attributes_for_risk_assessments_sheet(product, risk_assessment)
     [
+      product.psd_ref,
       product.id,
       risk_assessment.assessed_on,
       risk_assessment.risk_level,
@@ -195,6 +200,7 @@ private
 
   def attributes_for_corrective_actions_sheet(product, corrective_action)
     [
+      product.psd_ref,
       product.id,
       corrective_action.decorate.page_title,
       corrective_action.date_of_activity,

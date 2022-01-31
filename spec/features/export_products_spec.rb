@@ -40,9 +40,9 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     expect(email.personalization[:download_export_url]).to eq product_export_url(export)
 
     expect(spreadsheet.last_row).to eq(4)
-    expect(spreadsheet.cell(2, 15)).to eq(product_1.name)
-    expect(spreadsheet.cell(3, 15)).to eq(product_2.name)
-    expect(spreadsheet.cell(4, 15)).to eq(hazardous_product.name)
+    expect(spreadsheet.cell(2, 16)).to eq(product_1.name)
+    expect(spreadsheet.cell(3, 16)).to eq(product_2.name)
+    expect(spreadsheet.cell(4, 16)).to eq(hazardous_product.name)
   end
 
   scenario "with search query" do
@@ -58,7 +58,7 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2, 15)).to eq(product_2.name)
+    expect(spreadsheet.cell(2, 16)).to eq(product_2.name)
   end
 
   scenario "with hazard type filter" do
@@ -74,6 +74,6 @@ RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with
     click_link "XLSX (spreadsheet)"
 
     expect(spreadsheet.last_row).to eq(2)
-    expect(spreadsheet.cell(2, 15)).to eq(hazardous_product.name)
+    expect(spreadsheet.cell(2, 16)).to eq(hazardous_product.name)
   end
 end
