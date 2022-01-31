@@ -7,8 +7,17 @@
 <dl class="<%= dl_wrapper_class.join(" ") %>">
   <% rows.each do |row| %>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key <%= row[:key][:classes] %>"><%= row[:key][:text] %></dt>
-      <dd class="govuk-summary-list__value <%= row[:value][:classes] %>"><%= row[:value][:text] %></dd>
+      <dt class="govuk-summary-list__key <%= row[:key][:classes] %>">
+        <%= row[:key][:text] ? row[:key][:text] : sanitize(row[:key][:html]) %>
+      </dt>
+      <dd class="govuk-summary-list__value <%= row[:value][:classes] %>">
+        <%= row[:value][:text] %>
+        <% if row[:value][:secondary_text] %>
+          <span class='govuk-!-font-size-16 govuk-!-padding-left-2 opss-secondary-text'>
+            <%= row[:value][:secondary_text][:text] ? row[:value][:secondary_text][:text] : sanitize(row[:value][:secondary_text][:html]) %>
+          <span>
+        <% end %>
+      </dd>
 
       <% if row[:actions] %>
         <dd class="govuk-summary-list__actions">

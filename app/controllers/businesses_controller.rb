@@ -15,8 +15,8 @@ class BusinessesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        results = search_for_businesses(20)
-        @businesses = BusinessDecorator.decorate_collection(results)
+        @results = search_for_businesses(20)
+        @businesses = BusinessDecorator.decorate_collection(@results)
       end
     end
   end
