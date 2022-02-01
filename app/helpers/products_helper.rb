@@ -12,7 +12,7 @@ module ProductsHelper
 
   def search_for_products(page_size = Product.count, user = current_user)
     Product.full_search(search_query(user))
-      .page(params[:page]).per(page_size).records
+      .page(page_number).per(page_size).records
   end
 
   def product_export_params
