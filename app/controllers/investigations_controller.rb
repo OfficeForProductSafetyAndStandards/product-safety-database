@@ -95,6 +95,6 @@ private
 
   def default_params
     params[:case_owner] == "all" && params[:case_status] == "open" && params[:case_type] == "all" &&
-     params[:created_by] == 'all' && params[:priority] == "all" && params[:teams_with_access] == "all"
+      params[:created_by] == "all" && params[:priority] == "all" && params[:teams_with_access] == "all"
   end
 end
