@@ -16,6 +16,7 @@ class BusinessesController < ApplicationController
     respond_to do |format|
       format.html do
         @results = search_for_businesses(20)
+        @count = count_to_display
         @businesses = BusinessDecorator.decorate_collection(@results)
       end
     end
@@ -75,5 +76,9 @@ private
     ]
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if params[:q].present?
     items
+  end
+
+  def count_to_display
+    params[:q].blank? ? Business.count : @results.total_count
   end
 end

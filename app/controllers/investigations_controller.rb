@@ -12,6 +12,7 @@ class InvestigationsController < ApplicationController
     respond_to do |format|
       format.html do
         @answer         = search_for_investigations(20)
+        @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
       end
@@ -86,5 +87,14 @@ private
 
   def build_breadcrumbs
     @breadcrumbs = build_breadcrumb_structure
+  end
+
+  def count_to_display
+    default_params ? Investigation.count : @answer.total_count
+  end
+
+  def default_params
+    params[:case_owner] == "all" && params[:case_status] == "open" && params[:case_type] == "all" &&
+     params[:created_by] == 'all' && params[:priority] == "all" && params[:teams_with_access] == "all"
   end
 end
