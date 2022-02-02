@@ -94,7 +94,10 @@ private
   end
 
   def default_params
-    params[:case_owner] == "all" && params[:case_status] == "open" && params[:case_type] == "all" &&
-      params[:created_by] == "all" && params[:priority] == "all" && params[:teams_with_access] == "all" && params[:q].blank?
+    [params[:case_owner], params[:case_type], params[:created_by], params[:priority], params[:teams_with_access]].each do |param_value|
+      return false unless ["all", nil].include? param_value
+    end
+
+    ["open", nil].include?(params["case_status"]) && params[:q].blank?
   end
 end
