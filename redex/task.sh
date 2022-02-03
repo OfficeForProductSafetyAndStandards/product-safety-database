@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [[ ! $VCAP_SERVICES ]]; then
     >&2 echo "\$VCAP_SERVICES not found"
     exit 1
@@ -24,12 +26,11 @@ export PYTHONPATH=/home/vcap/deps/0/apt/usr/lib/python3/dist-packages:$PYTHONPAT
 TIMESTAMP=$(date +'%F-%H-%M-%S')
 FINAL_S3_URL="s3://${AWS_BUCKET}/${TIMESTAMP}.sql.gz"
 
-/home/vcap/deps/0/apt/usr/lib/postgresql/11/bin/psql < create_redacted_schema.sql
-/home/vcap/deps/0/apt/usr/lib/postgresql/11/bin/pg_dump --table='redacted.*' --file=psd_redacted_export.sql --no-acl --no-owner --quote-all-identifiers --format=p --inserts --encoding=UTF8
+set -x
 
-echo "Copying to $FINAL_S3_URL"
-
+/home/vcap/deps/0/apt/usr/lib/postgresql/13/bin/psql < create_redacted_schema.sql
+/home/vcap/deps/0/apt/usr/lib/postgresql/13/bin/pg_dump --table='redacted.*' --file=psd_redacted_export.sql --no-acl --no-owner --quote-all-identifiers --format=p --inserts --encoding=UTF8
 gzip --keep psd_redacted_export.sql
 aws s3 cp psd_redacted_export.sql.gz $FINAL_S3_URL
 
-echo "Done."
+echo "TASK SCRIPT COMPLETED"
