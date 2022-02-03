@@ -136,7 +136,7 @@ private
   end
 
   def skip_selected_item_for_selected_option?(item, product_form)
-    item[:divider] || item[:value].inquiry.missing? && product_form.id.nil?
+    item == :or || item[:divider] || item[:value].inquiry.missing? && product_form.id.nil?
   end
 
   def have_excluded_id(excluded_ids)

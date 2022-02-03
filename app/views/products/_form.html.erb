@@ -45,12 +45,13 @@
 
 <%= form.govuk_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
 
-<%= render "form_components/govuk_input",
-  key: :brand,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Product brand (if branded)", classes: label_class },
-  hint: { text: "For example, ‘Dyson’ or ‘Sony’" } %>
+<%= render "govuk_publishing_components/components/input",
+  label: { text: "Product brand (if branded)" },
+  name: "product[:brand]",
+  heading_size: "m",
+  hint: "For example, ‘Dyson’ or ‘Sony’",
+  width: 20
+%>
 
 
 <%= render "form_components/govuk_input",
