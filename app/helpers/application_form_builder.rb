@@ -217,6 +217,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     # Set item as checked if the value matches the method from the model
     @items.each_with_index do |item, index|
+      next if item == :or
       selected_no = object.public_send(attribute) == false && ActiveRecord::Type::Boolean.new.cast(item[:value]) == false
       selected_yes = object.public_send(attribute) == true && ActiveRecord::Type::Boolean.new.cast(item[:value]) == true
 
@@ -231,12 +232,13 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                   end
     end
 
-    @template.render "components/govuk_radios",
+    @template.render "govuk_publishing_components/components/radio",
                      name: input_name(attribute),
                      errorMessage: error_message,
                      items: @items,
                      classes: classes,
                      hint: hint,
+                     heading: legend,
                      fieldset: {
                        legend: {
                          text: legend,

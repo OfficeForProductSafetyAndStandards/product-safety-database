@@ -36,7 +36,7 @@
 <%= form.govuk_radios :has_markings,
   legend: "Does the product have UKCA, UKNI, or CE marking?",
   items: [
-    { text: "Yes", value: "markings_yes", conditional: { html: product_marking_fields } },
+    { text: "Yes", value: "markings_yes", conditional: product_marking_fields },
     { text: "No", value: "markings_no" },
     { text: "Unknown", value: "markings_unknown" }
   ]
