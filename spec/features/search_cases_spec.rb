@@ -258,13 +258,6 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
           visit "/cases"
           expect(page).to have_content "10001 cases using the current filters, were found."
         end
-
-        context "when navigating beyond the maximum number of pages provided by elastic search" do
-          it "the page does not crash" do
-            visit "/cases?page=501"
-            expect(page).to have_content "fdsafdas"
-          end
-        end
       end
     end
   end
