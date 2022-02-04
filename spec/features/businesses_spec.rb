@@ -66,9 +66,9 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
     end
   end
 
-  context "over 10k cases exist" do
+  context "when over 10k cases exist" do
     before do
-      allow(Business).to receive(:count) {10001}
+      allow(Business).to receive(:count).and_return(10_001)
     end
 
     it "shows total number of cases" do

@@ -221,8 +221,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       expect(page).not_to have_text("eeirteenproduct")
     end
 
-    context "no search term is used" do
-
+    context "when no search term is used" do
       it "shows all results if no word is searched for" do
         sign_in(user)
         visit "/cases"
@@ -248,9 +247,9 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         expect(page).to have_text("MyBrand washing machine")
       end
 
-      context "over 10k cases exist" do
+      context "when over 10k cases exist" do
         before do
-          allow(Investigation).to receive(:count) {10001}
+          allow(Investigation).to receive(:count).and_return(10_001)
           sign_in(user)
         end
 
