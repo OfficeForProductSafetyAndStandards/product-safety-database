@@ -5,4 +5,4 @@ repos:
 - deb http://apt.postgresql.org/pub/repos/apt bionic-pgdg main
 packages:
 - awscli
-- postgresql-client-11
+- postgresql-client-13
