@@ -1,4 +1,4 @@
-name: Publish Staging redacted export to S3
+name: Publish Production redacted export to S3
 
 on:
   schedule:
@@ -85,9 +85,9 @@ jobs:
       - name: Export database
         id: export-database
         env:
-          SPACE: staging
-          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
-          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+          SPACE: prod
+          CF_USERNAME: ${{ secrets.PaaSUsernameProduction }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordProduction }}
         run: |
           MAIN_DATABASE_SERVICE_NAME=psd-database
           SECRETS_SERVICE_NAME=psd-redex-env
@@ -131,14 +131,14 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SlackWebhookUrl }}
         run: |
-          curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"exportbot\", \"text\": \"Staging redacted export has failed!\n\nCF Service: ${{ steps.export-database.outputs.temp-db-service-name }}\nCF App: ${{ steps.export-database.outputs.temp-app-name }}\", \"icon_emoji\": \":disappointed:\"}" $SLACK_WEBHOOK
+          curl -X POST --data-urlencode "payload={\"channel\": \"#alerts\", \"username\": \"exportbot\", \"text\": \"Production redacted export has failed!\n\nCF Service: ${{ steps.export-database.outputs.temp-db-service-name }}\nCF App: ${{ steps.export-database.outputs.temp-app-name }}\", \"icon_emoji\": \":disappointed:\"}" $SLACK_WEBHOOK
 
       - name: Try to delete the temporary DB
         if: failure()
         env:
-          SPACE: staging
-          CF_USERNAME: ${{ secrets.PaaSUsernameStaging }}
-          CF_PASSWORD: ${{ secrets.PaaSPasswordStaging }}
+          SPACE: prod
+          CF_USERNAME: ${{ secrets.PaaSUsernameProduction }}
+          CF_PASSWORD: ${{ secrets.PaaSPasswordProduction }}
         run: |
           cf api api.london.cloud.service.gov.uk
           cf auth
