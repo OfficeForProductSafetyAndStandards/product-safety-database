@@ -3,7 +3,7 @@ module InvestigationsHelper
 
   def search_for_investigations(page_size = Investigation.count, user = current_user)
     result = Investigation.full_search(search_query(user))
-    result.page(params[:page]).per(page_size)
+    result.page(page_number).per(page_size)
   end
 
   def query_params

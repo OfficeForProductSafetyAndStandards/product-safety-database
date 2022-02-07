@@ -8,7 +8,7 @@
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters">
       <div class="govuk-grid-row">
-        <%= search_result_statement(@search.q, @answer.results.total_count) %>
+        <%= search_result_statement(@search.q, @count) %>
         <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by %>
       </div>
       <% if @investigations.any? %>

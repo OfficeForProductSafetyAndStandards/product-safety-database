@@ -24,4 +24,8 @@ module SearchHelper
   def filter_params(user)
     # Default empty filter params. To be overridden by the controller.
   end
+
+  def page_number
+    params[:page].to_i > 500 ? "500" : params[:page]
+  end
 end
