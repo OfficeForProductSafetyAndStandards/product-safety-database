@@ -233,7 +233,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     hint = { text: hint } if hint
 
-    @template.render "components/govuk_radios",
+    @template.render "govuk_publishing_components/components/checkboxes",
                       errorMessage: error_message,
                       items: @items,
                       hint: hint,

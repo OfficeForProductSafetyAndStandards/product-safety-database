@@ -5,7 +5,7 @@
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
         Businesses
     </h1>
-    <%= govukDetails(summaryText: "Help with the Businesses page", classes: "opss-details--sm") do %>
+    <%= render "govuk_publishing_components/components/details", title: "Help with the Businesses page" do %>
       <p class="govuk-body-s govuk-!-margin-bottom-1">
           <span id="search-hint">You can search for one or more businesses using the keywords that describe them or search for a specific business by using its company number.</span> You can also sort the ordering of the search results.
       </p>
@@ -13,7 +13,6 @@
         Search results appear within the following <code>form</code> and within the <code>role = region</code>.
       </p>
     <% end %>
-  </div>
 </div>
 
 <%= form_with(model: @search, scope: "", url: businesses_path, method: :get, local: true, html: { novalidate: true, role: "search" }) do |form| %>
