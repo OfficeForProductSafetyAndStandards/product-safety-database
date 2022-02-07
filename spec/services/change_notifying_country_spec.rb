@@ -78,13 +78,13 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
         end
 
         it "sends an email to notify of the change" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
             investigation.pretty_id,
             investigation.owner_team.name,
             investigation.owner_team.email,
             "#{user.name} (#{user.team.name}) edited notifying country on the #{investigation.case_type}.",
             "Notifying country edited for #{investigation.case_type.upcase_first}"
-          ]))
+          )
         end
       end
     end

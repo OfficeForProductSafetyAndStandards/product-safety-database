@@ -107,36 +107,36 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
         end
 
         it "sends a notification email to the new owner" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
             investigation.pretty_id,
             new_owner.name,
             new_owner.email,
             expected_email_body,
             expected_email_subject
-          ]))
+          )
         end
 
         it "sends a notification email to the old owner" do
-          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+          expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
             investigation.pretty_id,
             old_owner.name,
             old_owner.email,
             expected_email_body,
             expected_email_subject
-          ]))
+          )
         end
 
         context "when no rationale is supplied", :with_stubbed_opensearch do
           let(:rationale) { nil }
 
           it "does not add a message to the notification email" do
-            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+            expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
               investigation.pretty_id,
               old_owner.name,
               old_owner.email,
               "Case owner changed on enquiry to #{new_owner.name} by #{user.name}.",
               expected_email_subject
-            ]))
+            )
           end
         end
 
@@ -144,13 +144,13 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
           let(:user) { old_owner }
 
           it "does not send a notification email to the old owner" do
-            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+            expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
               investigation.pretty_id,
               old_owner.name,
               old_owner.email,
               expected_email_body,
               expected_email_subject
-            ]))
+            )
           end
         end
 
@@ -161,13 +161,13 @@ RSpec.describe ChangeCaseOwner, :with_test_queue_adapter do
             let(:team) { create(:team, team_recipient_email: Faker::Internet.email) }
 
             it "sends a notification email to the team" do
-              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+              expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
                 investigation.pretty_id,
                 team.name,
                 team.team_recipient_email,
                 expected_email_body,
                 expected_email_subject
-              ]))
+              )
             end
           end
 
