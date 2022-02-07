@@ -206,7 +206,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_publishing_component_checkboxes(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", hint: nil)
+  def govuk_publishing_component_checkboxes(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", hint: nil, heading_size: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -238,6 +238,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                       items: @items,
                       hint: hint,
                       heading:legend,
+                      heading_size: heading_size,
                       name: input_name(attribute)
   end
 
