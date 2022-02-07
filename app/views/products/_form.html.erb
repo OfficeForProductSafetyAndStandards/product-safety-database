@@ -78,12 +78,11 @@
   width: 20
 %>
 
-<%= render "form_components/govuk_textarea",
-  key: :product_code,
-  form: form,
-  classes: "app-!-max-width-one-half",
-  label: { text: "Other product identifiers", classes: label_class },
-  hint: { text: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges." } %>
+<%= render "govuk_publishing_components/components/textarea",
+  label: { text:  "Other product identifiers", heading_size: "m", is_page_heading: true },
+  name: "product[product_code]",
+  hint: "For example, serial number, Amazon ID (ASIN) or eBay ID. Use a comma to separate multiple identifiers, and a hyphen to indicate ranges."
+%>
 
 <%= render "govuk_publishing_components/components/input",
   label: { text:  "Webpage" },
@@ -111,12 +110,11 @@
   width: 20
 %>
 
-<%= render "form_components/govuk_textarea",
-  key: :description,
-  form: form,
-  attributes: { maxlength: 10_000 },
-  classes: "app-!-max-width-three-quarters",
-  label: { text: "Description of product", classes: label_class },
-  hint: { text: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents" } %>
+<%= render "govuk_publishing_components/components/textarea",
+  label: { text:  "Description of product", heading_size: "m", is_page_heading: true },
+  name: "product[description]",
+  hint: "Details about the product you haven’t included above. For example, colour, size, packaging description. You don’t need to include details of damage or incidents",
+  maxlength: 10_000
+%>
 
 <%= form.submit local_assigns[:submit_text] || "Save product", class: "govuk-button" %>
