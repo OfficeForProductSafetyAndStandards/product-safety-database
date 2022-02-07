@@ -24,7 +24,7 @@
   width: 20
 %>
 
-<%= form.govuk_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
+<%= form.govuk_publishing_component_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
 
 <% product_marking_fields = capture do %>
   <%= form.govuk_checkboxes :markings,
@@ -33,7 +33,7 @@
                             items: Product::MARKINGS.map { |value| { text: value, value: value} } %>
 <% end %>
 
-<%= form.govuk_radios :has_markings,
+<%= form.govuk_publishing_component_radios :has_markings,
   legend: "Does the product have UKCA, UKNI, or CE marking?",
   items: [
     { text: "Yes", value: "markings_yes", conditional: product_marking_fields },
@@ -43,7 +43,7 @@
 %>
 
 
-<%= form.govuk_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
+<%= form.govuk_publishing_component_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
 
 <%= render "govuk_publishing_components/components/input",
   label: { text: "Product brand (if branded)" },
@@ -61,7 +61,7 @@
   width: 20
 %>
 
-<%= form.govuk_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
+<%= form.govuk_publishing_component_radios :when_placed_on_market, legend: "Was the product placed on the market before 1 January 2021?", items: items_for_before_2021_radio(product_form) %>
 
 <%= render "govuk_publishing_components/components/input",
   label: { text:  "Barcode number (GTIN, EAN or UPC)" },

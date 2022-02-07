@@ -217,6 +217,46 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
 
     # Set item as checked if the value matches the method from the model
     @items.each_with_index do |item, index|
+      selected_no = object.public_send(attribute) == false && ActiveRecord::Type::Boolean.new.cast(item[:value]) == false
+      selected_yes = object.public_send(attribute) == true && ActiveRecord::Type::Boolean.new.cast(item[:value]) == true
+
+      item[:checked] = (object.public_send(attribute) == item[:value].to_s) || selected_no || selected_yes
+
+      item[:id] = if index.zero?
+                    # First item should have the ID of the attribute, so that it gets
+                    # focused when the error message anchor link is clicked.
+                    attribute.to_s
+                  else
+                    "#{attribute}-#{index}"
+                  end
+    end
+
+    @template.render "components/govuk_radios",
+                     name: input_name(attribute),
+                     errorMessage: error_message,
+                     items: @items,
+                     classes: classes,
+                     hint: hint,
+                     fieldset: {
+                       legend: {
+                         text: legend,
+                         classes: legend_classes,
+                         isPageHeading: is_page_heading
+                       }
+                     }
+  end
+
+  def govuk_publishing_component_radios(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", classes: "", hint: nil, is_page_heading: false)
+    if object.errors.include?(attribute)
+      error_message = {
+        text: object.errors.full_messages_for(attribute).first
+      }
+    end
+
+    @items = items
+
+    # Set item as checked if the value matches the method from the model
+    @items.each_with_index do |item, index|
       next if item == :or
       selected_no = object.public_send(attribute) == false && ActiveRecord::Type::Boolean.new.cast(item[:value]) == false
       selected_yes = object.public_send(attribute) == true && ActiveRecord::Type::Boolean.new.cast(item[:value]) == true
