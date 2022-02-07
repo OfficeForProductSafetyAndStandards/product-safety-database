@@ -206,6 +206,41 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
+  def govuk_publishing_component_checkboxes(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", hint: nil)
+    if object.errors.include?(attribute)
+      error_message = {
+        text: object.errors.full_messages_for(attribute).first
+      }
+    end
+
+    @items = items
+
+    # Set item as checked if the value matches the method from the model
+    @items.each_with_index do |item, index|
+      item[:checked] = true if object.public_send(attribute).to_a.include?(item[:value].to_s)
+
+      item[:name] = "#{input_name(attribute)}[]"
+      # item[:value] = "1"
+
+      item[:id] = if index.zero?
+                    # First item should have the ID of the attribute, so that it gets
+                    # focused when the error message anchor link is clicked.
+                    attribute.to_s
+                  else
+                    "#{attribute}-#{index}"
+                  end
+    end
+
+    hint = { text: hint } if hint
+
+    @template.render "components/govuk_radios",
+                      errorMessage: error_message,
+                      items: @items,
+                      hint: hint,
+                      heading:legend,
+                      name: input_name(attribute)
+  end
+
   def govuk_radios(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", classes: "", hint: nil, is_page_heading: false)
     if object.errors.include?(attribute)
       error_message = {

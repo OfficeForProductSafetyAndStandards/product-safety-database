@@ -27,10 +27,10 @@
 <%= form.govuk_publishing_component_radios :authenticity, legend: "Is the product counterfeit?", items: items_for_authenticity(product_form) %>
 
 <% product_marking_fields = capture do %>
-  <%= form.govuk_checkboxes :markings,
-                            legend: "Select product marking",
-                            legend_classes: "govuk-fieldset__legend--s",
-                            items: Product::MARKINGS.map { |value| { text: value, value: value} } %>
+  <%= form.govuk_publishing_component_checkboxes :markings,
+                                                  legend: "Select product marking",
+                                                  legend_classes: "govuk-fieldset__legend--s",
+                                                  items: Product::MARKINGS.map { |value| { text: value, value: value} } %>
 <% end %>
 
 <%= form.govuk_publishing_component_radios :has_markings,
@@ -43,7 +43,7 @@
 %>
 
 
-<%= form.govuk_publishing_component_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units(product_form, form) %>
+<%= form.govuk_publishing_component_radios :affected_units_status, legend: "How many units are affected?", items: items_for_affected_units_component_gem(product_form, form) %>
 
 <%= render "govuk_publishing_components/components/input",
   label: { text: "Product brand (if branded)" },

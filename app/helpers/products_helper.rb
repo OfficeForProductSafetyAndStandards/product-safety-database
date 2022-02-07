@@ -77,6 +77,20 @@ module ProductsHelper
     set_affected_selected_units_status_option(items, product_form)
   end
 
+  def items_for_affected_units_component_gem(product_form, form)
+    items = [
+      { text: "Exact number known",       value: "exact", conditional: form.govuk_input(:exact_units, label: "How many units?") },
+      { text: "Approximate number known", value: "approx", conditional: form.govuk_input(:approx_units, label: "How many units?") },
+      { text: "Unknown",                  value: "unknown" },
+      :or,
+      { text: "Not relevant", value: "not_relevant" }
+    ]
+
+    return items if product_form.affected_units_status.blank?
+
+    set_affected_selected_units_status_option(items, product_form)
+  end
+
   def items_for_before_2021_radio(product_form)
     items = [
       { text: "Yes",    value: "before_2021" },
