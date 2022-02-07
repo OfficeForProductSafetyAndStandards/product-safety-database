@@ -82,6 +82,17 @@ RSpec.feature "Products listing", :with_opensearch, :with_stubbed_mailer, type: 
       end
     end
 
+    context "when over 10k cases exist" do
+      before do
+        allow(Product).to receive(:count).and_return(10_001)
+      end
+
+      it "shows total number of cases" do
+        visit products_path
+        expect(page).to have_content "There are currently 10001 products."
+      end
+    end
+
     def psd_ref
       find('[headers="psdref item-0 meta-0"]')
     end

@@ -221,29 +221,43 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       expect(page).not_to have_text("eeirteenproduct")
     end
 
-    it "shows all results if no word is searched for" do
-      sign_in(user)
-      visit "/cases"
+    context "when no search term is used" do
+      it "shows all results if no word is searched for" do
+        sign_in(user)
+        visit "/cases"
 
-      fill_in "Keywords", with: ""
-      click_button "Search"
+        fill_in "Keywords", with: ""
+        click_button "Search"
 
-      expect(page).to have_content "5 cases using the current filters, were found."
+        expect(page).to have_content "5 cases using the current filters, were found."
 
-      expect(page).to have_text(thirteenproduct_investigation.pretty_id)
-      expect(page).to have_text("thirteenproduct")
+        expect(page).to have_text(thirteenproduct_investigation.pretty_id)
+        expect(page).to have_text("thirteenproduct")
 
-      expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
-      expect(page).to have_text("eeirteenproduct")
+        expect(page).to have_text(eeirteenproduct_investigation.pretty_id)
+        expect(page).to have_text("eeirteenproduct")
 
-      expect(page).to have_text(mobile_phone_investigation.pretty_id)
-      expect(page).to have_text("T12 mobile phone")
+        expect(page).to have_text(mobile_phone_investigation.pretty_id)
+        expect(page).to have_text("T12 mobile phone")
 
-      expect(page).to have_text(mobilz_phont_investigation.pretty_id)
-      expect(page).to have_text("T12 mobilz phont")
+        expect(page).to have_text(mobilz_phont_investigation.pretty_id)
+        expect(page).to have_text("T12 mobilz phont")
 
-      expect(page).to have_text(investigation.pretty_id)
-      expect(page).to have_text("MyBrand washing machine")
+        expect(page).to have_text(investigation.pretty_id)
+        expect(page).to have_text("MyBrand washing machine")
+      end
+
+      context "when over 10k cases exist" do
+        before do
+          allow(Investigation).to receive(:count).and_return(10_001)
+          sign_in(user)
+        end
+
+        it "shows total number of cases" do
+          visit "/cases"
+          expect(page).to have_content "10001 cases using the current filters, were found."
+        end
+      end
     end
   end
 end

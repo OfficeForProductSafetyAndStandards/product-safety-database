@@ -47,13 +47,13 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_opensearch, :with_stubbed_maile
     end
 
     it "notifies the relevant users", :with_test_queue_adapter do
-      expect { described_class.call(params) }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+      expect { described_class.call(params) }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
         investigation.pretty_id,
         investigation.owner_team.name,
         investigation.owner_team.email,
         "Phone call details added to the Allegation by #{result.correspondence.activities.find_by!(type: 'AuditActivity::Correspondence::AddPhoneCall').source.show}.",
         "Allegation updated"
-      ]))
+      )
     end
   end
 end
