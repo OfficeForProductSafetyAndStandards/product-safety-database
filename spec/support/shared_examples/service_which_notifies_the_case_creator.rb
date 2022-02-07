@@ -13,13 +13,13 @@ RSpec.shared_examples "a service which notifies the case creator", :with_test_qu
     let(:creator_user) { create(:user, :activated, team: user.team, organisation: user.organisation) }
 
     it "sends an email to the user" do
-      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(a_hash_including(args: [
+      expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
         investigation.pretty_id,
         creator_user.name,
         creator_user.email,
         expected_email_body(user.name),
         expected_email_subject
-      ]))
+      )
     end
   end
 end

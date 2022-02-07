@@ -59,7 +59,8 @@ class User < ApplicationRecord
                        :has_accepted_declaration, :has_been_sent_welcome_email, :has_viewed_introduction,
                        :invited_at, :keycloak_created_at, :last_sign_in_at, :locked_at, :mobile_number_verified,
                        :organisation_id, :remember_created_at, :second_factor_attempts_locked_at,
-                       :secondary_authentication_operation, :sign_in_count, :team_id, :updated_at
+                       :secondary_authentication_operation, :sign_in_count, :team_id, :updated_at,
+                       :last_activity_at_approx, :locked_reason
 
   # Active users are those with current access to the service (ie have set up an account and haven't been deleted)
   # and who have accepted the user declaration
