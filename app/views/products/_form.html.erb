@@ -29,7 +29,7 @@
 <% product_marking_fields = capture do %>
   <%= form.govuk_publishing_component_checkboxes :markings,
                                                   legend: "Select product marking",
-                                                  legend_classes: "govuk-fieldset__legend--s",
+                                                  heading_size: "s",
                                                   items: Product::MARKINGS.map { |value| { label: value, value: value} } %>
 <% end %>
 

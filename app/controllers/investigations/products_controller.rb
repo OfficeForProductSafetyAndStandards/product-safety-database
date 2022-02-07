@@ -20,7 +20,6 @@ class Investigations::ProductsController < ApplicationController
   # POST /cases/1/products
   def create
     authorize @investigation, :update?
-    byebug
     @product_form = ProductForm.new(product_params)
 
     respond_to do |format|
