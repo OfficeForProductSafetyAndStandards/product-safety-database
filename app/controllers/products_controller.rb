@@ -15,6 +15,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html do
         @results = search_for_products(20)
+        @count = count_to_display
         @products = ProductDecorator.decorate_collection(@results)
       end
       format.csv do
@@ -102,5 +103,9 @@ private
     ]
     items.unshift(SortByHelper::SortByItem.new("Relevance", SortByHelper::SORT_BY_RELEVANT, SortByHelper::SORT_DIRECTION_DEFAULT)) if params[:q].present?
     items
+  end
+
+  def count_to_display
+    params[:hazard_type].blank? && params[:q].blank? ? Product.count : @results.total_count
   end
 end

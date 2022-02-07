@@ -65,4 +65,15 @@ RSpec.feature "Business listing", :with_opensearch, :with_stubbed_mailer, type: 
       expect(page).to have_css("span", text: "Allegation restricted")
     end
   end
+
+  context "when over 10k cases exist" do
+    before do
+      allow(Business).to receive(:count).and_return(10_001)
+    end
+
+    it "shows total number of cases" do
+      visit businesses_path
+      expect(page).to have_content "There are currently 10001 businesses."
+    end
+  end
 end
