@@ -72,7 +72,6 @@ jobs:
         cf auth
         cf target -o 'beis-opss' -s $SPACE
         export APP_NAME=psd-pr-$PR_NUMBER
-        export GOVUK_APP_DOMAIN=$APP-NAME.london.cloudapps.digital
         cf run-task $APP_NAME -c "export \$(./env/get-env-from-vcap.sh) && rails opensearch:index" --name add-opensearch-indexes -k 2G
         task_status=0; until [ $task_status = "SUCCEEDED" ]; do task_status="$(cf tasks psd-pr-$PR_NUMBER | grep add-opensearch-indexes | awk '{print $3}')" && if [ "$task_status" = "FAILED" ]; then break; else echo "waiting" && sleep 10; fi; done;
 
