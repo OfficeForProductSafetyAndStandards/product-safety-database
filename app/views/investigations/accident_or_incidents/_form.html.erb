@@ -1,4 +1,4 @@
-<%= form.govuk_radios :is_date_known, legend: "Do you know when the #{form.object.type.downcase} happened?", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_date_input(:date, legend: "Date of #{form.object.type.downcase}", hint: "For example, 12 11 2020", classes: "govuk-fieldset__legend") } }, { text: "No", value: "false" }] %>
+<%= form.govuk_radios :is_date_known, legend: "Do you know when the #{form.object.type.downcase} happened?", items: [{ text: "Yes", value: "true", conditional: { html: form.govuk_publishing_component_date_input(:date, legend: "Date of #{form.object.type.downcase}", hint: "For example, 12 11 2020", classes: "govuk-fieldset__legend") } }, { text: "No", value: "false" }] %>
 
 <% if  investigation.products.size == 1 %>
   <h2 class="govuk-heading-m"><%= "Product involved" %></h2>

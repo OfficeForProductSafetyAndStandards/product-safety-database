@@ -43,6 +43,41 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      ]
   end
 
+  def govuk_publishing_component_date_input(attribute, legend:, hint: nil, classes: "govuk-fieldset__legend--m")
+    if object.errors.include?(attribute)
+      error_message = {
+        text: object.errors.full_messages_for(attribute).first
+      }
+    end
+
+    @template.render "govuk_publishing_components/components/date_input",
+                     id: "#{attribute}-fieldset",
+                     errorMessage: error_message,
+                     hint: hint,
+                     legend_text: legend,
+                     items: [
+                       {
+                         label: "Day",
+                         id: attribute,
+                         name: "#{input_name(attribute)}[day]",
+                         value: object.public_send(attribute)&.day,
+                         width: 2
+                       },
+                       {
+                         label: "Month",
+                         name: "#{input_name(attribute)}[month]",
+                         value: object.public_send(attribute)&.month,
+                         width: 2
+                       },
+                       {
+                         label: "Year",
+                         name: "#{input_name(attribute)}[year]",
+                         value: object.public_send(attribute)&.year,
+                         width: 4
+                       }
+                     ]
+  end
+
   def govuk_text_area(attribute, label:, label_classes: "govuk-label--m", hint: nil, attributes: {})
     if object.errors.include?(attribute)
       error_message = {
