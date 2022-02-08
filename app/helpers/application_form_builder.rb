@@ -43,7 +43,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      ]
   end
 
-  def govuk_publishing_component_date_input(attribute, legend:, hint: nil, classes: "govuk-fieldset__legend--m")
+  def govuk_publishing_component_date_input(attribute, legend:, hint: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -241,7 +241,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     )
   end
 
-  def govuk_publishing_component_checkboxes(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", hint: nil, heading_size: nil)
+  def govuk_publishing_component_checkboxes(attribute, legend:, items:, hint: nil, heading_size: nil)
     if object.errors.include?(attribute)
       error_message = {
         text: object.errors.full_messages_for(attribute).first
@@ -269,12 +269,12 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     hint = { text: hint } if hint
 
     @template.render "govuk_publishing_components/components/checkboxes",
-                      errorMessage: error_message,
-                      items: @items,
-                      hint: hint,
-                      heading:legend,
-                      heading_size: heading_size,
-                      name: input_name(attribute)
+                     errorMessage: error_message,
+                     items: @items,
+                     hint: hint,
+                     heading: legend,
+                     heading_size: heading_size,
+                     name: input_name(attribute)
   end
 
   def govuk_radios(attribute, legend:, items:, legend_classes: "govuk-fieldset__legend--m", classes: "", hint: nil, is_page_heading: false)
@@ -329,6 +329,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     # Set item as checked if the value matches the method from the model
     @items.each_with_index do |item, index|
       next if item == :or
+
       selected_no = object.public_send(attribute) == false && ActiveRecord::Type::Boolean.new.cast(item[:value]) == false
       selected_yes = object.public_send(attribute) == true && ActiveRecord::Type::Boolean.new.cast(item[:value]) == true
 

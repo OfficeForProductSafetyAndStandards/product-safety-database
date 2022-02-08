@@ -12,21 +12,21 @@ class ProductDecorator < ApplicationDecorator
     # psd_secondary_text_html = "<span class='govuk-visually-hidden'> - </span>The <abbr>PSD</abbr> reference for this product record"
     rows = [
       { field: "PSD (Product Safety Database) ref", value: psd_ref },
-      { field: "Category", value: category  },
-      { field: "Product subcategory", value: subcategory  },
-      { field: "Product authenticity", value: authenticity  },
-      { field: "Product marking", value: markings  },
-      { field: "Units affected", value: units_affected  },
-      { field: "Product brand", value: object.brand  },
-      { field: "Product name", value: object.name  },
-      { field: "When placed on market", value: when_placed_on_market  },
-      { field: "Barcode number", value: barcode  },
-      { field: "Batch number", value: batch_number  },
-      { field: "Other product identifiers", value: product_code  },
-      { field: "Webpage", value: object.webpage  },
-      { field: "Description", value: description  },
-      { field: "Country of origin", value: country_from_code(country_of_origin)  },
-      { field: "Customs code", value: object.customs_code  }
+      { field: "Category", value: category },
+      { field: "Product subcategory", value: subcategory },
+      { field: "Product authenticity", value: authenticity },
+      { field: "Product marking", value: markings },
+      { field: "Units affected", value: units_affected },
+      { field: "Product brand", value: object.brand },
+      { field: "Product name", value: object.name },
+      { field: "When placed on market", value: when_placed_on_market },
+      { field: "Barcode number", value: barcode },
+      { field: "Batch number", value: batch_number },
+      { field: "Other product identifiers", value: product_code },
+      { field: "Webpage", value: object.webpage },
+      { field: "Description", value: description },
+      { field: "Country of origin", value: country_from_code(country_of_origin) },
+      { field: "Customs code", value: object.customs_code }
     ]
     rows.compact!
     h.render "govuk_publishing_components/components/summary_list", items: rows
