@@ -64,6 +64,26 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
   end
 
+  context "when there are multiple pages of cases" do
+    before do
+      20.times do
+        create(:allegation, creator: user, coronavirus_related: true)
+        Investigation.import refresh: :wait_for
+      end
+    end
+
+    it "maintains the filters when clicking on additional pages" do
+      choose "Coronavirus"
+      click_on "Apply"
+
+      expect(page.find_field("Coronavirus")).to be_checked
+
+      click_link("page-2-link")
+
+      expect(page.find_field("Coronavirus")).not_to be_checked
+    end
+  end
+
   describe "Case priority" do
     scenario "filtering to coronavirus-related cases only" do
       choose "Coronavirus"
