@@ -64,3 +64,6 @@ config/master.key
 
 # Redis snapshots. See https://redis.io/topics/persistence
  dump.rdb
+
+# Entity relationship diagram
+erd.pdf
