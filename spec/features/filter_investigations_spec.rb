@@ -80,7 +80,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
 
       click_link("page-2-link")
 
-      expect(page.find_field("Coronavirus")).not_to be_checked
+      expect(page.find_field("Coronavirus")).to be_checked
     end
   end
 
