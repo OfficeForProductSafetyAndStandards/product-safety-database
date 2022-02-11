@@ -1,6 +1,6 @@
 module SearchHelper
   def set_search_params
-    @search = SearchParams.new(query_params)
+    @search = SearchParams.new(query_params.except(:show_filters))
   end
 
   def search_params
@@ -13,7 +13,7 @@ module SearchHelper
   end
 
   def query_params
-    params.permit(:q, :sort_by, :direction, :hazard_type)
+    params.permit(:q, :sort_by, :direction, :hazard_type, :show_filters)
   end
 
   def sorting_params
