@@ -2,19 +2,18 @@
   <nav aria-label="Secondary">
       <ul class="govuk-list opss-left-nav">
           <li>
-            <%= link_to "Your cases", investigations_path(case_owner: "me", show_filters: "false"), class: "govuk-link govuk-link--no-visited-state" %>
+            <%= link_to "Your cases", investigations_path(case_owner: "me", page_name: "your_cases"), class: "govuk-link govuk-link--no-visited-state" %>
           </li>
           <li>
-            <%= link_to "Team cases", investigations_path(case_owner: "my_team", show_filters: "false"), class: "govuk-link govuk-link--no-visited-state" %>
+            <%= link_to "Team cases", investigations_path(case_owner: "my_team", page_name: "team_cases"), class: "govuk-link govuk-link--no-visited-state" %>
           </li>
           <li class="opss-left-nav__active">
-            <%= link_to "All cases", investigations_path(show_filters: "true"), class: "govuk-link govuk-link--no-visited-state" %>
+            <%= link_to "All cases", investigations_path(page_name: "true", page_name: "all_cases" ), class: "govuk-link govuk-link--no-visited-state" %>
           </li>
       </ul>
   </nav>
   <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-6 govuk-!-margin-right-6">
-  <% byebug %>
-  <% if @show_filters %>
+  <% if @page_name == "all_cases" %>
     <h2 class="govuk-heading-m">Filters<span class="govuk-visually-hidden">:</span></h2>
 
     <%= govukSkipLink(text: "Skip to results", href: "#results") %>

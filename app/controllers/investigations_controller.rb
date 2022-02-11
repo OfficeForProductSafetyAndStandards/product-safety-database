@@ -15,7 +15,7 @@ class InvestigationsController < ApplicationController
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
-        @show_filters = params["show_filters"] != "false"
+        @page_name = params["page_name"]
       end
     end
   end
