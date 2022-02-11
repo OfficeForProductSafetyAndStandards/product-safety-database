@@ -20,12 +20,12 @@ module InvestigationsHelper
       :teams_with_access_other_id,
       :created_by,
       :created_by_other_id,
-      :show_filters
+      :page_name
     )
   end
 
   def export_params
-    query_params.except(:page, :sort_by, :show_filters)
+    query_params.except(:page, :sort_by, :page_name)
   end
 
   def build_breadcrumb_structure
