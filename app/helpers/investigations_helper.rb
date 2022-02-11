@@ -32,7 +32,7 @@ module InvestigationsHelper
       items: [
         {
           text: "Cases",
-          href: investigations_path(previous_search_params)
+          href: investigations_path
         },
         {
           text: @investigation.pretty_description
@@ -380,10 +380,6 @@ module InvestigationsHelper
     end
 
     data_attributes
-  end
-
-  def store_previous_search_params
-    session[:previous_search_params] = @search.serializable_hash(form_serialisation_option).symbolize_keys
   end
 
   def form_serialisation_option

@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   before_action :has_viewed_introduction
   before_action :set_cache_headers
 
-  helper_method :nav_items, :secondary_nav_items, :previous_search_params, :current_user, :root_path_for
+  helper_method :nav_items, :secondary_nav_items, :current_user, :root_path_for
 
   rescue_from Wicked::Wizard::InvalidStepError, with: :render_404_page
 
@@ -55,33 +55,11 @@ class ApplicationController < ActionController::Base
     unless current_user.is_opss?
       items.push text: "Home", href: authenticated_opss_root_path, active: params[:controller] == "homepage"
     end
-    items.push text: "Cases", href: investigations_path(previous_search_params), active: highlight_cases?
+    items.push text: "Cases", href: investigations_path, active: highlight_cases?
     items.push text: "Businesses", href: businesses_path, active: highlight_businesses?
     items.push text: "Products", href: products_path, active: highlight_products?
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true
     items
-  end
-
-  def previous_search_params
-    # No clear way to only replace search params, as they are seperate from each other and not easily identifiable.
-    # This list will have to be updated when new search filters are added.
-    if session[:previous_search_params].present?
-      s = session[:previous_search_params]
-      {
-        created_by: s[:created_by],
-        created_by_other_id: s[:created_by_other_id],
-        teams_with_access: s[:teams_with_access],
-        teams_with_access_other_id: s[:teams_with_access_other_id],
-        case_type: s[:case_type],
-        case_status: s[:case_status],
-        sort_by: s[:sort_by],
-        priority: s[:priority],
-        case_owner: s[:case_owner],
-        case_owner_is_someone_else_id: s[:case_owner_is_someone_else_id]
-      }
-    else
-      {}
-    end
   end
 
   def secondary_nav_items
