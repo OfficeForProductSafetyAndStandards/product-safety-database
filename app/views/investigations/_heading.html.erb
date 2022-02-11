@@ -1,23 +1,28 @@
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds opss-desktop-min-height--s">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-      Cases
+      All cases – Search
     </h1>
+    <p class="govuk-body opss-secondary-text">
+      Search all cases in the Product Safety Database (<abbr>PSD</abbr>).
+    </p>
     <%= govukDetails(summaryText: "Help with the cases page", classes: "opss-details--sm") do %>
-      <p class="govuk-body-s">
-        Cases are used to record findings of investigations and to notify the <abbr title="Office for Product Safety and Standards">OPSS</abbr> about unsafe and non-compliant products.
+      <p class="govuk-body-s govuk-!-margin-bottom-4">
+          <span id="search-hint">You can search for a case using a case number or the keywords that describe it and by filtering the results.</span> You can also filter all case records without a case number or a keyword search.
       </p>
+
       <p class="govuk-body-s govuk-!-margin-bottom-1">
-        <span id="search-hint">You can search for a case using the keywords that describe it and by filtering the results.</span> You can also filter all case records without a keyword search.
+          When viewing a list of search results you can <a href="/psd-general/cases-page-banner" class="govuk-link govuk-link--no-visited-state">request the list</a> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
       </p>
+
       <p class="govuk-body-s govuk-visually-hidden">
         Search results appear within the following <code>form</code> and within the <code>role = region</code>.
       </p>
     <% end %>
   </div>
 
-  <div class="govuk-grid-column-one-third govuk-!-margin-top-8">
-    <div class="opss-text-align-right">
+  <div class="govuk-grid-column-one-third">
+    <div class="opss-text-align-right govuk-!-margin-bottom-8">
       <%= link_to "Create a case",
         current_user.is_opss? ? new_investigation_path : new_ts_investigation_path,
         class: "govuk-link govuk-link--no-visited-state govuk-!-font-size-19 opss-text-underline-offset",
