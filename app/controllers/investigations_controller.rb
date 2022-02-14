@@ -15,7 +15,7 @@ class InvestigationsController < ApplicationController
         @count          = count_to_display
         @investigations = InvestigationDecorator
                             .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
-        @page_name = params["page_name"]
+        @page_name = "all_cases"
       end
     end
   end
@@ -48,6 +48,28 @@ class InvestigationsController < ApplicationController
 
   def created
     authorize @investigation, :view_non_protected_details?
+  end
+
+  def your_cases
+    @search = SearchParams.new({"case_owner"=>"me"})
+    @answer         = search_for_investigations(20)
+    @count          = count_to_display
+    @investigations = InvestigationDecorator
+                        .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+    @page_name = "your_cases"
+
+    render "investigations/index.html.erb"
+  end
+
+  def team_cases
+    @search = SearchParams.new({"case_owner"=>"my_team"})
+    @answer         = search_for_investigations(20)
+    @count          = count_to_display
+    @investigations = InvestigationDecorator
+                        .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
+    @page_name = "team_cases"
+
+    render "investigations/index.html.erb"
   end
 
 private
