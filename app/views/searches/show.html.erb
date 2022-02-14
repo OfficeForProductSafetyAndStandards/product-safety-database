@@ -1,6 +1,6 @@
 <% page_title "Case search results" %>
 
-<%= render 'investigations/heading', answer: @answer %>
+<%= render 'investigations/heading/all_cases', answer: @answer %>
 
 <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true, role: "search" }) do |form| %>
   <%= render 'investigations/search_bar', form: form %>
