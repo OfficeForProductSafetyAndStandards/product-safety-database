@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     unless current_user.is_opss?
       items.push text: "Home", href: authenticated_opss_root_path, active: params[:controller] == "homepage"
     end
-    items.push text: "Cases", href: investigations_path, active: highlight_cases?
+    items.push text: "Cases", href: all_cases_investigations_path, active: highlight_cases?
     items.push text: "Businesses", href: businesses_path, active: highlight_businesses?
     items.push text: "Products", href: products_path, active: highlight_products?
     items.push text: "Your team", href: team_path(current_user.team), active: params[:controller].start_with?("teams"), right: true

@@ -1,6 +1,6 @@
 RSpec::Matchers.define :have_listed_case do |pretty_id|
   match do |element|
-    element.has_selector?("table#results td.govuk-table__cell", text: pretty_id)
+    element.has_selector?("td.govuk-table__cell", text: pretty_id)
   end
 end
 
