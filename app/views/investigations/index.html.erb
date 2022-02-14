@@ -6,7 +6,7 @@
   <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
     <section class="govuk-grid-column-three-quarters" id="page-content">
-      <% if @page_name == "all_cases" ||  @investigations.size > 11 %>
+      <% if ["team_cases", "your_cases"].exclude? @page_name  ||  @investigations.size > 11 %>
         <div class="govuk-grid-row">
           <%= render 'investigations/search_bar', form: form if @page_name == "all_cases" %>
           <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by if @investigations.size > 11 %>
