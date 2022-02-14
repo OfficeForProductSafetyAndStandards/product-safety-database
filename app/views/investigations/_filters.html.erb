@@ -1,14 +1,14 @@
 <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
   <nav aria-label="Secondary">
       <ul class="govuk-list opss-left-nav">
-          <li>
-            <%= link_to "Your cases", investigations_path(case_owner: "me", page_name: "your_cases"), class: "govuk-link govuk-link--no-visited-state" %>
+          <li class=<%= "opss-left-nav__active" if @page_name == "your_cases"%>>
+            <%= link_to "Your cases", your_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
-          <li>
-            <%= link_to "Team cases", investigations_path(case_owner: "my_team", page_name: "team_cases"), class: "govuk-link govuk-link--no-visited-state" %>
+          <li class=<%= "opss-left-nav__active" if @page_name == "team_cases"%>>
+            <%= link_to "Team cases", team_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
-          <li class="opss-left-nav__active">
-            <%= link_to "All cases", investigations_path(page_name: "true", page_name: "all_cases" ), class: "govuk-link govuk-link--no-visited-state" %>
+          <li class=<%= "opss-left-nav__active" if @page_name == "all_cases"%>>
+            <%= link_to "All cases", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
       </ul>
   </nav>
