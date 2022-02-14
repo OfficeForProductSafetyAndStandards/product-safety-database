@@ -39,7 +39,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     other_team_investigation.touch # Tests sort order
     Investigation.import refresh: :wait_for
     sign_in(user)
-    visit investigations_path
+    visit all_cases_investigations_path
   end
 
   scenario "no filters applied shows all open cases" do
