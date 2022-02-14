@@ -5,8 +5,7 @@
 <%= form_with(model: @search, scope: "", url: investigations_search_path, method: :get, local: true, id: "cases-search-form", html: { novalidate: true, role: "search" }) do |form| %>
   <div class="govuk-grid-row opss-full-height">
     <%= render 'investigations/filters', search: @search, form: form %>
-    <section class="govuk-grid-column-three-quarters" id=<%= "page-content">>
-      <% byebug %>
+    <section class="govuk-grid-column-three-quarters" id="page-content">
       <% if @page_name == "all_cases" ||  @investigations.size > 11 %>
         <div class="govuk-grid-row">
           <%= render 'investigations/search_bar', form: form if @page_name == "all_cases" %>
