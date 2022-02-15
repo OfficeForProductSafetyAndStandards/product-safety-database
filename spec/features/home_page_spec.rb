@@ -55,7 +55,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
           check "I agree"
           click_button "Continue"
 
-          expect(page).to have_current_path(investigations_path)
+          expect(page).to have_current_path(your_cases_investigations_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("Cases")
@@ -65,7 +65,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
 
       context "when the user has previously accepted the declaration" do
         scenario "shows the case list" do
-          expect(page).to have_current_path(investigations_path)
+          expect(page).to have_current_path(your_cases_investigations_path)
           expect_small_beta_phase_banner
           expect_header_to_have_signed_in_links
           expect(page).to have_text("Cases")
