@@ -11,9 +11,11 @@
           <span id="search-hint">You can search for a case using a case number or the keywords that describe it and by filtering the results.</span> You can also filter all case records without a case number or a keyword search.
       </p>
 
-      <p class="govuk-body-s govuk-!-margin-bottom-1">
-          When viewing a list of search results you can <a href="/psd-general/cases-page-banner" class="govuk-link govuk-link--no-visited-state">request the list</a> as a downloadable <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
-      </p>
+      <% if policy(Investigation).export? %>
+        <p class="govuk-body-s govuk-!-margin-bottom-1">
+            When viewing a list of search results you can <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+        <p>
+      <% end %>
 
       <p class="govuk-body-s govuk-visually-hidden">
         Search results appear within the following <code>form</code> and within the <code>role = region</code>.
