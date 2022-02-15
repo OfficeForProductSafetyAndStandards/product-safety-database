@@ -41,7 +41,7 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
     expect(page).to have_link("Next page", href: /#{Regexp.escape(all_cases_investigations_path(pagination_link_params))}/)
 
-    fill_in "Keywords", with: "electric skateboard"
+    fill_in "Search", with: "electric skateboard"
     click_on "Apply"
 
     # Expect only the single relevant investigation to be returned
@@ -53,7 +53,7 @@ RSpec.feature "Investigation listing", :with_opensearch, :with_stubbed_mailer, t
 
     expect(page).to have_current_path(investigations_search_path, ignore_query: true)
 
-    fill_in "Keywords", with: ""
+    fill_in "Search", with: ""
     click_on "Apply"
 
     expect(page).not_to have_css("select#sort_by option", text: "Relevance")

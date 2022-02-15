@@ -49,7 +49,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     sign_in(user)
     visit "/cases"
 
-    fill_in "Keywords", with: "MyBrand"
+    fill_in "Search", with: "MyBrand"
     click_button "Search"
 
     expect_to_be_on_cases_search_results_page
@@ -69,7 +69,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     sign_in(user)
     visit "/cases"
 
-    fill_in "Keywords", with: "MyBran"
+    fill_in "Search", with: "MyBran"
     click_button "Search"
 
     expect_to_be_on_cases_search_results_page
@@ -84,7 +84,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     sign_in(user)
     visit "/cases"
 
-    fill_in "Keywords", with: "W2020-10/1"
+    fill_in "Search", with: "W2020-10/1"
     click_button "Search"
 
     expect_to_be_on_cases_search_results_page
@@ -99,7 +99,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     sign_in(user)
     visit "/cases"
 
-    fill_in "Keywords", with: " W2020-10/1   "
+    fill_in "Search", with: " W2020-10/1   "
     click_button "Search"
 
     expect_to_be_on_cases_search_results_page
@@ -115,7 +115,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
     sign_in(user)
     visit "/cases"
 
-    fill_in "Keywords", with: "mybrand mobile phone"
+    fill_in "Search", with: "mybrand mobile phone"
     click_button "Search"
 
     expect_to_be_on_cases_search_results_page
@@ -135,7 +135,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       sign_in(user)
       visit "/cases"
 
-      fill_in "Keywords", with: "phone"
+      fill_in "Search", with: "phone"
       click_button "Search"
 
       expect_to_be_on_cases_search_results_page
@@ -153,7 +153,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       sign_in(user)
       visit "/cases"
 
-      fill_in "Keywords", with: "mobile"
+      fill_in "Search", with: "mobile"
       click_button "Search"
 
       expect_to_be_on_cases_search_results_page
@@ -171,7 +171,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       sign_in(user)
       visit "/cases"
 
-      fill_in "Keywords", with: "mobiee"
+      fill_in "Search", with: "mobiee"
       click_button "Search"
 
       expect_to_be_on_cases_search_results_page
@@ -189,7 +189,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       sign_in(user)
       visit "/cases"
 
-      fill_in "Keywords", with: "thirteenproduct"
+      fill_in "Search", with: "thirteenproduct"
       click_button "Search"
 
       expect_to_be_on_cases_search_results_page
@@ -207,7 +207,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
       sign_in(user)
       visit "/cases"
 
-      fill_in "Keywords", with: "thirteenproduce"
+      fill_in "Search", with: "thirteenproduce"
       click_button "Search"
 
       expect_to_be_on_cases_search_results_page
@@ -226,7 +226,7 @@ RSpec.feature "Searching cases", :with_opensearch, :with_stubbed_mailer, type: :
         sign_in(user)
         visit "/cases"
 
-        fill_in "Keywords", with: ""
+        fill_in "Search", with: ""
         click_button "Search"
 
         expect(page).to have_content "5 cases using the current filters, were found."

@@ -277,7 +277,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
         end
 
         scenario "with keywords entered" do
-          fill_in "Keywords", with: other_user_other_team_investigation.description
+          fill_in "Search", with: other_user_other_team_investigation.description
           click_on "Search"
 
           find("#filter-details").click
@@ -455,7 +455,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   end
 
   scenario "search returning a restricted cases" do
-    fill_in "Keywords", with: restricted_case_title
+    fill_in "Search", with: restricted_case_title
     click_on "Search"
 
     expect(page).not_to have_link(restricted_case.title, href: "/cases/#{restricted_case.pretty_id}")
