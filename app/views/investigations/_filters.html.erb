@@ -7,7 +7,7 @@
           <li class=<%= "opss-left-nav__active" if @page_name == "team_cases"%>>
             <%= link_to "Team cases", team_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
-          <li class=<%= "opss-left-nav__active" if @page_name == "all_cases"%>>
+          <li class=<%= "opss-left-nav__active" unless ["team_cases, your_cases"].include? @page_name %>>
             <%= link_to "All cases", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
       </ul>

@@ -11,6 +11,9 @@
           <%= render 'investigations/search_bar', form: form if @page_name == "all_cases" %>
           <%= render_sort_by form, @search.sort_by_items(with_relevant_option: false), @search.selected_sort_by if @investigations.size > 11 %>
         </div>
+        <div class="govuk-grid-row">
+          <%= search_result_statement(@search.q, @count) %>
+        </div>
       <% end %>
 
       <% if @investigations.any? %>
