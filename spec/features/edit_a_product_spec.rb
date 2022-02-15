@@ -171,7 +171,9 @@ RSpec.feature "Editing a product", :with_opensearch, :with_stubbed_mailer, :with
 
       within("header") { click_on "Cases" }
 
-      fill_in "Keywords", with: new_name
+      click_on "All cases - Search"
+
+      fill_in "Search", with: new_name
       # sleep in order to wait for the changes to be indexed
       sleep 1
       click_on "Apply"

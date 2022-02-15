@@ -452,8 +452,6 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
     expect(page).not_to have_listed_case(other_user_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_user_other_team_investigation.pretty_id)
     expect(page).not_to have_listed_case(other_team_investigation.pretty_id)
-
-    expect(find("details#filter-details")["open"]).to eq(nil)
   end
 
   scenario "search returning a restricted cases" do
