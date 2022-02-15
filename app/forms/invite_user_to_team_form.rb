@@ -18,13 +18,13 @@ private
 
   def cannot_be_existing_activated_user_on_same_team
     if existing_user&.account_activated? && existing_user.team == team
-      errors.add(:email, :already_in_team, email: email, team: team_name)
+      errors.add(:email, :already_in_team, email:, team: team_name)
     end
   end
 
   def cannot_be_existing_user_on_another_team
     if existing_user && !existing_user.deleted? && existing_user.team != team
-      errors.add(:email, :existing_user, opss_enquiries_email: opss_enquiries_email)
+      errors.add(:email, :existing_user, opss_enquiries_email:)
     end
   end
 
@@ -33,7 +33,7 @@ private
   rescue Mail::Field::IncompleteParseError
     # This error will be thrown when an email address is incorrectly formatted. The form will be invalid based on that so no need to do add error here.
   else
-    errors.add(:email, :not_whitelisted, opss_enquiries_email: opss_enquiries_email) unless whitelisted_domains.include?(address.domain.to_s.downcase)
+    errors.add(:email, :not_whitelisted, opss_enquiries_email:) unless whitelisted_domains.include?(address.domain.to_s.downcase)
   end
 
   def team_name

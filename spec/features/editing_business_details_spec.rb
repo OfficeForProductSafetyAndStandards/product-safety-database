@@ -6,7 +6,7 @@ RSpec.feature "Editing business details", :with_stubbed_mailer, :with_opensearch
   let!(:investigation) { create(:allegation, businesses: [business]) }
 
   before do
-    create(:contact, business: business)
+    create(:contact, business:)
   end
 
   scenario "Updating a business’s details" do

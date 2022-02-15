@@ -22,7 +22,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
            product: doll,
            severity: "serious",
            usage: "during_normal_use",
-           investigation: investigation)
+           investigation:)
   end
 
   let!(:accident) do
@@ -33,7 +33,7 @@ RSpec.feature "Editing an accident or incident on a case", :with_stubbed_opensea
            severity: "other",
            severity_other: "very extreme",
            usage: "during_normal_use",
-           investigation: investigation)
+           investigation:)
   end
 
   scenario "Editing an incident, setting date to known, (with validation errors)" do

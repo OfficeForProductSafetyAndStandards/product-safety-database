@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Complainant do
-  subject(:complainant) { build(:complainant, investigation: investigation, email_address: nil, name: nil, other_details: nil, phone_number: nil) }
+  subject(:complainant) { build(:complainant, investigation:, email_address: nil, name: nil, other_details: nil, phone_number: nil) }
 
   let(:investigation) { build(:allegation) }
 

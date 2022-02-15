@@ -32,7 +32,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       expect_full_error_list
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
-      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Pass", file: file, standards: "EN71, EN73")
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Pass", file:, standards: "EN71, EN73")
 
       expect_confirmation_banner("Test result was successfully recorded.")
       expect_page_to_have_h1("Supporting information")
@@ -86,7 +86,7 @@ RSpec.feature "Adding a test result", :with_stubbed_opensearch, :with_stubbed_an
       expect(errors_list[3].text).to eq "Enter details about how the product failed to meet the requirements"
 
       fill_in "Further details", with: "Test result includes certificate of conformity"
-      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date: date, test_result: "Fail", failure_details: failure_details, file: file, standards: "EN71, EN73")
+      fill_in_test_result_submit_form(legislation: "General Product Safety Regulations 2005", date:, test_result: "Fail", failure_details:, file:, standards: "EN71, EN73")
 
       expect_confirmation_banner("Test result was successfully recorded.")
       expect_page_to_have_h1("Supporting information")

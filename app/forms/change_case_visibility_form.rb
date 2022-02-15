@@ -13,12 +13,12 @@ class ChangeCaseVisibilityForm
 
   def self.from(investigation)
     old_visibility = investigation.is_private? ? "restricted" : "unrestricted"
-    new(case_type: investigation.case_type, old_visibility: old_visibility)
+    new(case_type: investigation.case_type, old_visibility:)
   end
 
 private
 
   def new_visibility_is_different
-    errors.add(:new_visibility, :same_as_existing, case_type: case_type, visibility: new_visibility) if new_visibility == old_visibility
+    errors.add(:new_visibility, :same_as_existing, case_type:, visibility: new_visibility) if new_visibility == old_visibility
   end
 end

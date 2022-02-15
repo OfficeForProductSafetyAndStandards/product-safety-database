@@ -4,7 +4,7 @@ require "sidekiq/testing"
 RSpec.feature "Product export", :with_opensearch, :with_stubbed_antivirus, :with_stubbed_mailer, :with_stubbed_notify, type: :feature do
   let(:user) { create :user, :psd_admin, :activated }
   let(:email) { delivered_emails.last }
-  let(:export) { ProductExport.find_by(user: user) }
+  let(:export) { ProductExport.find_by(user:) }
   let(:spreadsheet) do
     export.export_file.blob.open do |file|
       Roo::Excelx.new(file).sheet("product_info")

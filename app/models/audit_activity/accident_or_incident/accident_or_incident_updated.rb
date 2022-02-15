@@ -12,7 +12,7 @@ class AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated < AuditActivi
 
     {
       accident_or_incident_id: accident_or_incident.id,
-      updates: updates,
+      updates:,
       type: accident_or_incident.type
     }
   end

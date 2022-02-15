@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify do
   let(:team) { create(:team) }
-  let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, team: team) }
+  let(:admin) { create(:user, :team_admin, has_accepted_declaration: true, has_viewed_introduction: true, team:) }
   let(:invitee_email) { Faker::Internet.safe_email }
   let(:name) { "Bill Smith" }
 
@@ -45,7 +45,7 @@ RSpec.feature "Registration process", :with_stubbed_mailer, :with_stubbed_notify
   end
 
   context "when a previously deleted user is invited back" do
-    let!(:deleted_user) { create(:user, :deleted, team: team) }
+    let!(:deleted_user) { create(:user, :deleted, team:) }
 
     it "allows deleted user to sign up again" do
       sign_in(admin)

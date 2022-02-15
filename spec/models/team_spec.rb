@@ -10,7 +10,7 @@ RSpec.describe Team do
       org = Organisation.create!(name: "test")
 
       (important_team_names + %w[bobbins cribbins]).map do |name|
-        described_class.create!(id: SecureRandom.uuid, name: name, organisation: org, country: "country:GB")
+        described_class.create!(id: SecureRandom.uuid, name:, organisation: org, country: "country:GB")
       end
     end
 
@@ -74,10 +74,10 @@ RSpec.describe Team do
     let(:team) { create(:team) }
 
     before do
-      create(:user, team: team, name: "Alan Smith")
-      create(:user, team: team, name: "Bill Benjamin")
-      create(:user, team: team, name: "Xavier Johnson")
-      create(:user, team: team, name: nil)
+      create(:user, team:, name: "Alan Smith")
+      create(:user, team:, name: "Bill Benjamin")
+      create(:user, team:, name: "Xavier Johnson")
+      create(:user, team:, name: nil)
     end
 
     it "returns ordered users" do

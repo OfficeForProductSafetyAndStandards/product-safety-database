@@ -151,9 +151,9 @@ RSpec.feature "Reporting a product", :with_stubbed_opensearch, :with_stubbed_ant
         expect_to_be_on_why_reporting_page
         fill_in_why_reporting_page(
           reporting_reasons: ["It’s unsafe (or suspected to be)", "It’s non-compliant (or suspected to be)"],
-          hazard_type: hazard_type,
-          hazard_description: hazard_description,
-          non_compliance_details: non_compliance_details
+          hazard_type:,
+          hazard_description:,
+          non_compliance_details:
         )
 
         expect_to_be_on_supply_chain_page

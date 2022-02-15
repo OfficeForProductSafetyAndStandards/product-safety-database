@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Business sorting", :with_opensearch, :with_stubbed_mailer, type: :feature do
   let(:organisation)          { create(:organisation) }
-  let(:user)                  { create(:user, :activated, organisation: organisation, has_viewed_introduction: true) }
+  let(:user)                  { create(:user, :activated, organisation:, has_viewed_introduction: true) }
 
   let!(:chemical_investigation)              { create(:allegation, hazard_type: "Chemical") }
   let!(:fire_investigation)                  { create(:allegation, hazard_type: "Fire") }

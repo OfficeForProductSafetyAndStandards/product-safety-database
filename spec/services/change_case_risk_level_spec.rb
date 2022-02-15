@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe ChangeCaseRiskLevel, :with_stubbed_opensearch, :with_test_queue_adapter do
   describe ".call" do
     subject(:result) do
-      described_class.call(investigation: investigation,
-                           user: user,
+      described_class.call(investigation:,
+                           user:,
                            risk_level: new_level,
                            custom_risk_level: new_custom)
     end
@@ -22,7 +22,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_opensearch, :with_test_queue_a
 
     context "with no investigation parameter" do
       subject(:result) do
-        described_class.call(user: user, risk_level: new_level, custom_risk_level: new_custom)
+        described_class.call(user:, risk_level: new_level, custom_risk_level: new_custom)
       end
 
       it "fails" do
@@ -32,7 +32,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_opensearch, :with_test_queue_a
 
     context "with no user parameter" do
       subject(:result) do
-        described_class.call(investigation: investigation, risk_level: new_level, custom_risk_level: new_custom)
+        described_class.call(investigation:, risk_level: new_level, custom_risk_level: new_custom)
       end
 
       it "fails" do
@@ -93,7 +93,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_opensearch, :with_test_queue_a
           expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
             email: creator_team.team_recipient_email,
             name: creator_team.name,
-            investigation: investigation,
+            investigation:,
             update_verb: "set",
             level: "High risk"
           )
@@ -165,7 +165,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_opensearch, :with_test_queue_a
           expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
             email: creator_team.team_recipient_email,
             name: creator_team.name,
-            investigation: investigation,
+            investigation:,
             update_verb: "changed",
             level: new_custom
           )
@@ -214,7 +214,7 @@ RSpec.describe ChangeCaseRiskLevel, :with_stubbed_opensearch, :with_test_queue_a
           expect { result }.to have_enqueued_mail(NotifyMailer, :case_risk_level_updated).with(
             email: creator_team.team_recipient_email,
             name: creator_team.name,
-            investigation: investigation,
+            investigation:,
             update_verb: "removed",
             level: "Not set"
           )

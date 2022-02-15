@@ -10,7 +10,7 @@ RSpec.feature "Deleting a user while they are in an active session", :with_stubb
     expect(page).to have_link "Your account"
     expect(page).to have_link "Sign out"
 
-    DeleteUser.call!(user: user)
+    DeleteUser.call!(user:)
 
     click_link "Create a case"
 

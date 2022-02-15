@@ -102,7 +102,7 @@ module Investigations::DisplayTextHelper
 
   def protected_details_text(source, investigation)
     data_type = source.include?("correspondences") ? "correspondence" : "#{investigation.case_type} contact details"
-    t("case.protected_details", data_type: data_type)
+    t("case.protected_details", data_type:)
   end
 
   def investigation_owner(investigation)

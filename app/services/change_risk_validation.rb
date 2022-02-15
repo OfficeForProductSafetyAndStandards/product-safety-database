@@ -29,9 +29,9 @@ private
     metadata = activity_class.build_metadata(investigation, risk_validation_change_rationale)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
-      metadata: metadata
+      source: UserSource.new(user:),
+      investigation:,
+      metadata:
     )
   end
 
@@ -41,7 +41,7 @@ private
 
   def assign_risk_validation_attributes
     if is_risk_validated
-      investigation.assign_attributes(risk_validated_at: risk_validated_at, risk_validated_by: risk_validated_by)
+      investigation.assign_attributes(risk_validated_at:, risk_validated_by:)
       context.change_action = I18n.t("change_risk_validation.validated")
     else
       investigation.assign_attributes(risk_validated_at: nil, risk_validated_by: nil)
@@ -53,10 +53,10 @@ private
     email_recipients_for_team_with_access(investigation, user).each do |entity|
       email = entity.is_a?(Team) ? entity.team_recipient_email : entity.email
       NotifyMailer.risk_validation_updated(
-        email: email,
+        email:,
         updater: user,
         name: entity.name,
-        investigation: investigation,
+        investigation:,
         action: change_action.to_s,
       ).deliver_later
     end

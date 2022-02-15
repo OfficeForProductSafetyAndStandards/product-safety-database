@@ -22,7 +22,7 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
     end
 
     context "with no admin_email parameter" do
-      let(:result) { described_class.call(org_name: org_name) }
+      let(:result) { described_class.call(org_name:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -30,7 +30,7 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
     end
 
     context "with no country" do
-      let(:result) { described_class.call(org_name: org_name, admin_email: email) }
+      let(:result) { described_class.call(org_name:, admin_email: email) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -38,7 +38,7 @@ RSpec.describe CreateOrganisationWithTeamAndAdminUser, :with_stubbed_mailer do
     end
 
     context "with required parameters" do
-      let(:result) { described_class.call(org_name: org_name, admin_email: email, country: "country:GB") }
+      let(:result) { described_class.call(org_name:, admin_email: email, country: "country:GB") }
       let(:created_org) { Organisation.find_by name: org_name }
       let(:created_team) { Team.find_by name: org_name }
       let(:created_user) { User.find_by email: email }

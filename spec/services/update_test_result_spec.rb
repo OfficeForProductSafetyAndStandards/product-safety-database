@@ -6,7 +6,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
   let(:user)                                     { create(:user, :activated) }
   let(:investigation)                            { create(:allegation) }
   let(:product)                                  { create(:product) }
-  let(:test_result)                              { create(:test_result, investigation: investigation, product: product) }
+  let(:test_result)                              { create(:test_result, investigation:, product:) }
 
   let(:new_details)                              { Faker::Hipster.sentence }
   let(:new_legislation) do
@@ -33,10 +33,10 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
     test_result_form
       .serializable_hash
       .merge(
-        test_result: test_result,
-        user: user,
-        investigation: investigation,
-        changes: changes
+        test_result:,
+        user:,
+        investigation:,
+        changes:
       )
   end
 
@@ -52,7 +52,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
       end
 
       context "when missing the investigation" do
-        let(:params) { new_attributes.merge(test_result: test_result, user: user) }
+        let(:params) { new_attributes.merge(test_result:, user:) }
 
         it "returns a failure indicating an investigation was not supplied", :aggregate_failures do
           expect(result).to be_failure
@@ -61,7 +61,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
       end
 
       context "when missing the test result" do
-        let(:params) { new_attributes.merge(user: user, investigation: investigation, changes: changes) }
+        let(:params) { new_attributes.merge(user:, investigation:, changes:) }
 
         it "returns a failure indicating a test result was not supplied", :aggregate_failures do
           expect(result).to be_failure
@@ -124,7 +124,7 @@ RSpec.describe UpdateTestResult, :with_stubbed_mailer, :with_stubbed_opensearch,
           }
         end
 
-        let(:result) { described_class.call(test_result: test_result, new_attributes: new_attributes, user: user) }
+        let(:result) { described_class.call(test_result:, new_attributes:, user:) }
 
         before do
           # Have to do this after setup as attaching the document also updates the

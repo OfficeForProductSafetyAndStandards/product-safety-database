@@ -8,10 +8,10 @@ module Investigations
 
     def create
       authorize investigation, :update?
-      @accident_or_incident_type_form = AccidentOrIncidentTypeForm.new(type: type)
+      @accident_or_incident_type_form = AccidentOrIncidentTypeForm.new(type:)
       return render(:new) if @accident_or_incident_type_form.invalid?
 
-      redirect_to new_investigation_accident_or_incident_path(@investigation, type: type)
+      redirect_to new_investigation_accident_or_incident_path(@investigation, type:)
     end
 
   private

@@ -33,24 +33,24 @@ class AddProductToCase
 
     Product.transaction do
       context.product = investigation.products.create!(
-        authenticity: authenticity,
-        has_markings: has_markings,
-        markings: markings,
-        batch_number: batch_number,
-        brand: brand,
-        country_of_origin: country_of_origin,
-        description: description,
-        barcode: barcode,
-        name: name,
-        product_code: product_code,
-        subcategory: subcategory,
-        category: category,
-        webpage: webpage,
+        authenticity:,
+        has_markings:,
+        markings:,
+        batch_number:,
+        brand:,
+        country_of_origin:,
+        description:,
+        barcode:,
+        name:,
+        product_code:,
+        subcategory:,
+        category:,
+        webpage:,
         source: build_user_source,
-        affected_units_status: affected_units_status,
-        number_of_affected_units: number_of_affected_units,
-        when_placed_on_market: when_placed_on_market,
-        customs_code: customs_code
+        affected_units_status:,
+        number_of_affected_units:,
+        when_placed_on_market:,
+        customs_code:
       )
 
       context.activity = create_audit_activity_for_product_added
@@ -64,9 +64,9 @@ private
   def create_audit_activity_for_product_added
     AuditActivity::Product::Add.create!(
       source: build_user_source,
-      investigation: investigation,
+      investigation:,
       title: product.name,
-      product: product
+      product:
     )
   end
 
@@ -83,6 +83,6 @@ private
   end
 
   def build_user_source
-    UserSource.new(user: user)
+    UserSource.new(user:)
   end
 end

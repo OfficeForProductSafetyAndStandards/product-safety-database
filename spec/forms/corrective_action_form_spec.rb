@@ -4,21 +4,21 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mai
   include ActionDispatch::TestProcess::FixtureFile
   subject(:corrective_action_form) do
     described_class.new(
-      action: action,
-      other_action: other_action,
-      date_decided: date_decided,
-      legislation: legislation,
-      measure_type: measure_type,
-      duration: duration,
-      geographic_scopes: geographic_scopes,
-      details: details,
-      related_file: related_file,
-      product_id: product_id,
+      action:,
+      other_action:,
+      date_decided:,
+      legislation:,
+      measure_type:,
+      duration:,
+      geographic_scopes:,
+      details:,
+      related_file:,
+      product_id:,
       business_id: create(:business).id,
-      has_online_recall_information: has_online_recall_information,
-      online_recall_information: online_recall_information,
+      has_online_recall_information:,
+      online_recall_information:,
       file: file_form,
-      further_corrective_action: further_corrective_action
+      further_corrective_action:
     ).tap(&:valid?)
   end
 
@@ -292,7 +292,7 @@ RSpec.describe CorrectiveActionForm, :with_stubbed_opensearch, :with_stubbed_mai
       let(:corrective_action) { create(:corrective_action, :with_document) }
 
       before do
-        corrective_action_form.assign_attributes(related_file: related_file, file: file_form)
+        corrective_action_form.assign_attributes(related_file:, file: file_form)
         corrective_action_form.valid?
       end
 

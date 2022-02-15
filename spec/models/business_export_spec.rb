@@ -4,17 +4,17 @@ RSpec.describe BusinessExport, :with_opensearch, :with_stubbed_notify, :with_stu
   let!(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let!(:business) { create(:business).decorate }
   let!(:business_2) { create(:business).decorate }
-  let!(:investigation_business) { create(:investigation_business, business: business, investigation: investigation).decorate }
+  let!(:investigation_business) { create(:investigation_business, business:, investigation:).decorate }
   let!(:investigation) { create(:allegation).decorate }
   let(:params) { {} }
-  let(:business_export) { described_class.create!(user: user, params: params) }
+  let(:business_export) { described_class.create!(user:, params:) }
 
   before { Business.__elasticsearch__.import force: true, refresh: :wait }
 
   describe "#export!" do
     before do
-      create(:location, business: business)
-      create(:contact, business: business)
+      create(:location, business:)
+      create(:contact, business:)
 
       business_export.export!
     end

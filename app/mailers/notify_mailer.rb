@@ -40,7 +40,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     invited_by = inviting_user.try(&:name) || "a colleague"
 
-    set_personalisation(invitation_url: invitation_url, inviting_team_member_name: invited_by)
+    set_personalisation(invitation_url:, inviting_team_member_name: invited_by)
     mail(to: user.email)
   end
 
@@ -53,7 +53,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_template(TEMPLATES[:welcome])
     set_reference("Welcome")
 
-    set_personalisation(name: name)
+    set_personalisation(name:)
 
     mail(to: email)
   end
@@ -63,10 +63,10 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Case updated")
 
     set_personalisation(
-      name: name,
+      name:,
       investigation_url: investigation_url(pretty_id: investigation_pretty_id),
-      update_text: update_text,
-      subject_text: subject_text
+      update_text:,
+      subject_text:
     )
 
     mail(to: email)
@@ -77,7 +77,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Alert")
 
     set_personalisation(
-      subject_text: subject_text,
+      subject_text:,
       email_text: body_text
     )
 
@@ -89,7 +89,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Case created")
 
     set_personalisation(
-      name: name,
+      name:,
       case_title: investigation_title,
       case_type: investigation_type,
       capitalized_case_type: investigation_type.capitalize,
@@ -132,7 +132,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                          [
                            I18n.t(
                              :message_from,
-                             user_name: user_name,
+                             user_name:,
                              scope: "mail.team_added_to_case"
                            ),
                            inset_text_for_notify(message)
@@ -143,7 +143,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
 
     set_personalisation(
       updater_name: user_name,
-      optional_message: optional_message,
+      optional_message:,
       investigation_url: investigation_url(investigation)
     )
 
@@ -159,7 +159,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                          [
                            I18n.t(
                              :message_from,
-                             user_name: user_name,
+                             user_name:,
                              scope: "mail.team_removed_from_case"
                            ),
                            inset_text_for_notify(message)
@@ -173,7 +173,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
-      optional_message: optional_message,
+      optional_message:,
     )
 
     mail(to: to_email)
@@ -187,8 +187,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
       case_id: investigation.pretty_id,
       updater_name: updater.name,
       updater_team_name: updater.team.name,
-      action: action,
-      name: name,
+      action:,
+      name:,
       investigation_url: investigation_url(pretty_id: investigation.pretty_id)
     )
 
@@ -204,7 +204,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
                          [
                            I18n.t(
                              :message_from,
-                             user_name: user_name,
+                             user_name:,
                              scope: "mail.case_permission_changed_for_team"
                            ),
                            inset_text_for_notify(message)
@@ -218,7 +218,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
       updater_name: user_name,
-      optional_message: optional_message,
+      optional_message:,
       old_permission: I18n.t(".permission.#{old_permission}", scope: "mail.case_permission_changed_for_team"),
       new_permission: I18n.t(".permission.#{new_permission}", scope: "mail.case_permission_changed_for_team")
     )
@@ -233,8 +233,8 @@ class NotifyMailer < GovukNotifyRails::Mailer
                              scope: "mail.case_risk_level_updated.verb_with_level")
 
     set_personalisation(
-      verb_with_level: verb_with_level,
-      name: name,
+      verb_with_level:,
+      name:,
       case_type: investigation.case_type.to_s.downcase,
       case_title: investigation.decorate.title,
       case_id: investigation.pretty_id,
@@ -249,7 +249,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Product Export")
 
     set_personalisation(
-      name: name,
+      name:,
       download_export_url: product_export_url(product_export)
     )
 
@@ -261,7 +261,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Case Export")
 
     set_personalisation(
-      name: name,
+      name:,
       download_export_url: case_export_url(case_export)
     )
 
@@ -273,7 +273,7 @@ class NotifyMailer < GovukNotifyRails::Mailer
     set_reference("Business Export")
 
     set_personalisation(
-      name: name,
+      name:,
       download_export_url: business_export_url(business_export)
     )
 

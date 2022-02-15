@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearch, :with_stubbed_mailer, type: :feature do
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
   let(:investigation) { create(:allegation, creator: user) }
 
-  let!(:another_active_user) { create(:user, :activated, name: "other user same team", organisation: user.organisation, team: team) }
-  let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team: team) }
+  let!(:another_active_user) { create(:user, :activated, name: "other user same team", organisation: user.organisation, team:) }
+  let!(:another_inactive_user) { create(:user, :inactive, organisation: user.organisation, team:) }
   let!(:another_active_user_another_team) { create(:user, :activated, name: "another user in another team", organisation: user.organisation, team: create(:team)) }
   let!(:another_inactive_user_another_team) { create(:user, :inactive, organisation: user.organisation, team: create(:team)) }
   let!(:deleted_team) { create(:team, :deleted) }
@@ -134,18 +134,18 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
       AddTeamToCase.call(
         team: other_team_with_edit_access,
         message: "na",
-        investigation: investigation,
+        investigation:,
         collaboration_class: Collaboration::Access::Edit,
-        user: user,
+        user:,
         silent: true
       )
 
       AddTeamToCase.call(
         team: other_team_with_read_only_access,
         message: "na",
-        investigation: investigation,
+        investigation:,
         collaboration_class: Collaboration::Access::ReadOnly,
-        user: user,
+        user:,
         silent: true
       )
     end
@@ -187,7 +187,7 @@ RSpec.feature "Changing ownership for an investigation", :with_stubbed_opensearc
 
   def create_opss_teams
     ["OPSS Enforcement", "OPSS Incident Management", "OPSS Trading Standards Co-ordination", "OPSS Operational support unit"].each do |name|
-      create(:team, name: name)
+      create(:team, name:)
     end
   end
 end

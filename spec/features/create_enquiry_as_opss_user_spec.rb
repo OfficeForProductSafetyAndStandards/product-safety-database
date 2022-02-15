@@ -27,7 +27,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   end
 
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, :opss_user, team: team) }
+  let(:user) { create(:user, :activated, :opss_user, team:) }
   let(:other_user_same_team) { create(:user, :activated, organisation: user.organisation, team: user.team) }
   let(:other_user_different_org) { create(:user, :activated) }
 
@@ -54,7 +54,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
       check_invalid_date
       check_the_other_received_type_field_has_retained_its_value
 
-      fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+      fill_in_when_and_how_was_it_received(received_type:, day: date.day, month: date.month, year: date.year)
       click_button "Continue"
 
       expect_to_be_on_complainant_page
@@ -133,7 +133,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
         visit "/enquiry/about_enquiry"
         expect_to_be_on_about_enquiry_page
 
-        fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+        fill_in_when_and_how_was_it_received(received_type:, day: date.day, month: date.month, year: date.year)
         expect(page).to have_summary_error("Date enquiry received must be today or in the past")
       end
     end
@@ -156,7 +156,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
         visit "/enquiry/about_enquiry"
         expect_to_be_on_about_enquiry_page
 
-        fill_in_when_and_how_was_it_received(received_type: received_type, day: date.day, month: date.month, year: date.year)
+        fill_in_when_and_how_was_it_received(received_type:, day: date.day, month: date.month, year: date.year)
 
         expect(page).to have_summary_error("Enter a received type \"Other\"")
       end
@@ -232,7 +232,7 @@ RSpec.feature "Reporting enquiries", :with_stubbed_opensearch, :with_stubbed_ant
   end
 
   def check_invalid_date
-    fill_in_when_and_how_was_it_received(received_type: "Other", day: "", month: "", year: date.year, other_received_type: other_received_type)
+    fill_in_when_and_how_was_it_received(received_type: "Other", day: "", month: "", year: date.year, other_received_type:)
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Date enquiry received must include a day and month"
   end

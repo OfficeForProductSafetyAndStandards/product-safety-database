@@ -25,7 +25,7 @@ RSpec.describe Collaboration::Access::OwnerTeam, :with_stubbed_opensearch, :with
 
     context "when the previous owner was a team" do
       before do
-        ChangeCaseOwner.call!(investigation: investigation, owner: team, user: user)
+        ChangeCaseOwner.call!(investigation:, owner: team, user:)
         investigation.reload
       end
 

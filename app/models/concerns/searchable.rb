@@ -84,7 +84,7 @@ module Searchable
           sort: [
             { tiebreaker_id: "asc" }
           ],
-          size: size,
+          size:,
           search_after: [search_from]
         })
 

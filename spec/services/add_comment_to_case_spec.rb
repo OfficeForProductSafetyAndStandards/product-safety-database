@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AddCommentToCase, :with_stubbed_opensearch, :with_test_queue_adapter do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
+  let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team) }
@@ -24,7 +24,7 @@ RSpec.describe AddCommentToCase, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation: investigation) }
+      let(:result) { described_class.call(investigation:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -32,7 +32,7 @@ RSpec.describe AddCommentToCase, :with_stubbed_opensearch, :with_test_queue_adap
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -52,9 +52,9 @@ RSpec.describe AddCommentToCase, :with_stubbed_opensearch, :with_test_queue_adap
 
       let(:result) do
         described_class.call(
-          user: user,
-          investigation: investigation,
-          body: body
+          user:,
+          investigation:,
+          body:
         )
       end
 

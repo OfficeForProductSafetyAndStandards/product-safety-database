@@ -4,7 +4,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
   let(:product1) { create(:product) }
   let(:product2) { create(:product) }
   let(:team) { create(:team, name: "Team 2") }
-  let(:user) { create(:user, name: "User 2", team: team) }
+  let(:user) { create(:user, name: "User 2", team:) }
 
   let(:investigation) { create(:allegation) }
 
@@ -18,7 +18,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
 
   let(:risk_assessment) do
     create(:risk_assessment,
-           investigation: investigation,
+           investigation:,
            assessed_on: Date.parse("2019-01-01"),
            risk_level: :low,
            custom_risk_level: nil,
@@ -40,7 +40,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(risk_assessment: risk_assessment) }
+      let(:result) { described_class.call(risk_assessment:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -48,7 +48,7 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
     end
 
     context "with no risk_assessment parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -58,17 +58,17 @@ RSpec.describe UpdateRiskAssessment, :with_stubbed_opensearch, :with_stubbed_mai
     context "with the required parameters" do
       let(:result) do
         described_class.call(
-          risk_assessment: risk_assessment,
-          user: user,
-          assessed_on: assessed_on,
-          risk_level: risk_level,
-          custom_risk_level: custom_risk_level,
-          assessed_by_team_id: assessed_by_team_id,
-          assessed_by_business_id: assessed_by_business_id,
-          assessed_by_other: assessed_by_other,
-          details: details,
-          product_ids: product_ids,
-          risk_assessment_file: risk_assessment_file
+          risk_assessment:,
+          user:,
+          assessed_on:,
+          risk_level:,
+          custom_risk_level:,
+          assessed_by_team_id:,
+          assessed_by_business_id:,
+          assessed_by_other:,
+          details:,
+          product_ids:,
+          risk_assessment_file:
         )
       end
 

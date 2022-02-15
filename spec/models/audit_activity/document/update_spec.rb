@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Document::Update, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  subject(:activity) { described_class.new(metadata: activity_metadata, title: title, body: description) }
+  subject(:activity) { described_class.new(metadata: activity_metadata, title:, body: description) }
 
   let(:file) { fixture_file_upload("testImage.png") }
   let(:blob) do
@@ -119,7 +119,7 @@ RSpec.describe AuditActivity::Document::Update, :with_stubbed_opensearch, :with_
           updates: {
             metadata: [
               { title: nil, description: nil },
-              { title: nil, description: description }
+              { title: nil, description: }
             ]
           }
         }.deep_stringify_keys

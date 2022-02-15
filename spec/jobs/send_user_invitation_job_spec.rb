@@ -7,7 +7,7 @@ RSpec.describe SendUserInvitationJob do
     context "with a valid user id" do
       let(:user_id) { SecureRandom.uuid }
       let(:message_delivery_instance) { instance_double(ActionMailer::MessageDelivery, deliver_now: true) }
-      let!(:user) { create(:user, id: user_id, invitation_token: SecureRandom.hex(10), invited_at: invited_at, has_been_sent_welcome_email: false) }
+      let!(:user) { create(:user, id: user_id, invitation_token: SecureRandom.hex(10), invited_at:, has_been_sent_welcome_email: false) }
       let(:invited_at) { 1.hour.ago }
 
       context "with a user inviting id" do

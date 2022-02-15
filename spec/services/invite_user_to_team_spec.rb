@@ -6,7 +6,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
 
     let(:email) { Faker::Internet.safe_email }
     let(:team) { create(:team) }
-    let(:inviting_user) { create(:user, :activated, team: team) }
+    let(:inviting_user) { create(:user, :activated, team:) }
 
     context "when there is no existing user" do
       let(:params) { { email: email, team: team } }
@@ -26,11 +26,11 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
 
       it "sets the correct user properties", :aggregate_failures do
         expect(result.user).to have_attributes(
-          email: email,
+          email:,
           organisation: team.organisation,
           invitation_token: new_token,
           invited_at: kind_of(Time),
-          team: team
+          team:
         )
       end
 
@@ -54,7 +54,7 @@ RSpec.describe InviteUserToTeam, :with_stubbed_mailer, :with_stubbed_opensearch,
     end
 
     context "when there is an existing user" do
-      let!(:existing_user) { create(:user, email: email, team: existing_user_team, invitation_token: invitation_token, invited_at: invited_at) }
+      let!(:existing_user) { create(:user, email:, team: existing_user_team, invitation_token:, invited_at:) }
       let(:existing_user_team) { team }
       let(:invitation_token) { "test" }
       let(:invited_at) { Time.zone.now }

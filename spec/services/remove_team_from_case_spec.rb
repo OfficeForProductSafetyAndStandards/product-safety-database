@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearch do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator: user, read_only_teams: read_only_teams) }
+  let!(:investigation) { create(:allegation, creator: user, read_only_teams:) }
 
   let(:collaboration) { investigation.read_only_collaborations.last }
   let(:user) { create(:user) }
@@ -21,7 +21,7 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearc
     end
 
     context "with no collaboration parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -29,7 +29,7 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearc
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(collaboration: collaboration) }
+      let(:result) { described_class.call(collaboration:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -39,9 +39,9 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearc
     context "with required parameters" do
       let(:result) do
         described_class.call(
-          collaboration: collaboration,
-          message: message,
-          user: user
+          collaboration:,
+          message:,
+          user:
         )
       end
 
@@ -65,8 +65,8 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearc
 
       context "when the team does not have an email address" do
         let(:team) { create(:team, team_recipient_email: nil) }
-        let!(:active_team_user) { create(:user, :activated, team: team, organisation: team.organisation) }
-        let!(:inactive_team_user) { create(:user, :inactive, team: team, organisation: team.organisation) }
+        let!(:active_team_user) { create(:user, :activated, team:, organisation: team.organisation) }
+        let!(:inactive_team_user) { create(:user, :inactive, team:, organisation: team.organisation) }
 
         before { result }
 
@@ -84,9 +84,9 @@ RSpec.describe RemoveTeamFromCase, :with_stubbed_mailer, :with_stubbed_opensearc
       context "when the silent parameter is true", :with_test_queue_adapter do
         let(:result) do
           described_class.call(
-            collaboration: collaboration,
-            message: message,
-            user: user,
+            collaboration:,
+            message:,
+            user:,
             silent: true
           )
         end

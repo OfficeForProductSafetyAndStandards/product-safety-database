@@ -33,7 +33,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
   end
 
   describe "#create" do
-    let(:params) { { invite_user_to_team_form: { email: email } } }
+    let(:params) { { invite_user_to_team_form: { email: } } }
     let(:email) { Faker::Internet.safe_email }
     let(:form_errors_double) { instance_double(ActiveModel::Errors).as_null_object }
 
@@ -146,7 +146,7 @@ RSpec.describe "Inviting users to your team", :with_stubbed_mailer, :with_stubbe
       end
 
       it "calls the InviteUserToTeam service" do
-        expect(InviteUserToTeam).to have_received(:call).with({ user: existing_user, team: team, inviting_user: user })
+        expect(InviteUserToTeam).to have_received(:call).with({ user: existing_user, team:, inviting_user: user })
       end
 
       it "redirects to the team page" do

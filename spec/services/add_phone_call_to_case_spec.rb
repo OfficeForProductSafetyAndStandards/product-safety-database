@@ -30,10 +30,10 @@ RSpec.describe AddPhoneCallToCase, :with_stubbed_opensearch, :with_stubbed_maile
     it "creates a correspondence" do
       expect(result.correspondence).to have_attributes(
         transcript: instance_of(ActiveStorage::Attached::One),
-        correspondence_date: correspondence_date,
-        correspondent_name: correspondent_name,
-        overview: overview,
-        details: details
+        correspondence_date:,
+        correspondent_name:,
+        overview:,
+        details:
       )
     end
 

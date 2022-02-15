@@ -74,7 +74,7 @@ RSpec.describe "User requests new secondary authentication code", type: :request
 
     context "with an user session corresponding to an user who haven't verified their mobile number" do
       subject(:request_code) do
-        post resend_secondary_authentication_code_path, params: { user: { mobile_number: mobile_number } }
+        post resend_secondary_authentication_code_path, params: { user: { mobile_number: } }
       end
 
       let(:user) { create(:user, mobile_number_verified: false) }

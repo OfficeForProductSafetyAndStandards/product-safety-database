@@ -13,14 +13,14 @@ class AddRiskAssessmentToCase
       context.risk_assessment = investigation.risk_assessments.create!(
         added_by_user: user,
         added_by_team: user.team,
-        assessed_on: assessed_on,
-        risk_level: risk_level,
+        assessed_on:,
+        risk_level:,
         custom_risk_level: custom_risk_level.presence,
         assessed_by_team_id: assessed_by_team_id.presence,
         assessed_by_business_id: assessed_by_business_id.presence,
         assessed_by_other: assessed_by_other.presence,
-        details: details,
-        product_ids: product_ids
+        details:,
+        product_ids:
       )
 
       context.risk_assessment.risk_assessment_file.attach(risk_assessment_file)
@@ -33,8 +33,8 @@ private
 
   def create_audit_activity
     AuditActivity::RiskAssessment::RiskAssessmentAdded.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       metadata: audit_activity_metadata,
       title: nil,
       body: nil

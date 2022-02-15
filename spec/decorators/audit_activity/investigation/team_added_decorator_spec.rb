@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe AuditActivity::Investigation::TeamAddedDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
   subject(:activity) do
     AuditActivity::Investigation::TeamAdded.create!(
-      investigation: investigation,
+      investigation:,
       metadata: described_class.build_metadata(collaboration, message),
-      source: UserSource.new(user: user)
+      source: UserSource.new(user:)
     ).decorate
   end
 

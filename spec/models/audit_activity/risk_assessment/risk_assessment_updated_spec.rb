@@ -12,8 +12,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
   let(:file) { fixture_file_upload("risk_assessment.txt") }
   let(:risk_assessment) do
     AddRiskAssessmentToCase.call!(
-      investigation: investigation,
-      user: user,
+      investigation:,
+      user:,
       assessed_on: date,
       assessed_by_team_id: user.team.id,
       risk_level: "high",
@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
   end
 
   describe ".build_metadata" do
-    subject(:metadata) { described_class.build_metadata(risk_assessment: risk_assessment, previous_product_ids: investigation.product_ids, attachment_changed: attachment_changed, previous_attachment_filename: previous_attachment_filename) }
+    subject(:metadata) { described_class.build_metadata(risk_assessment:, previous_product_ids: investigation.product_ids, attachment_changed:, previous_attachment_filename:) }
 
     context "when the attachment has not changed" do
       let(:attachment_changed) { false }
@@ -67,8 +67,8 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentUpdated, :with_stubb
   describe "#new_assessed_on" do
     before do
       UpdateRiskAssessment.call!(
-        risk_assessment: risk_assessment,
-        user: user,
+        risk_assessment:,
+        user:,
         assessed_on: new_date,
         assessed_by_team_id: user.team.id,
         risk_level: "serious",

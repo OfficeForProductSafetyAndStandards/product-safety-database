@@ -4,10 +4,10 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_opensearch, :
   subject(:audit_activity) do
     create(
       :legacy_audit_add_activity_corrective_action,
-      metadata: metadata,
-      product: product,
+      metadata:,
+      product:,
       investigation: corrective_action.investigation,
-      body: body,
+      body:,
       title: legacy_title
     )
   end
@@ -20,9 +20,9 @@ RSpec.describe AuditActivity::CorrectiveAction::Add, :with_stubbed_opensearch, :
     create(
       :corrective_action,
       action: action_key,
-      other_action: other_action,
-      geographic_scope: geographic_scope,
-      geographic_scopes: geographic_scopes
+      other_action:,
+      geographic_scope:,
+      geographic_scopes:
     )
   end
   let(:legacy_title) { Faker::Hipster.sentence }

@@ -28,7 +28,7 @@ RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
   describe "#build_query" do
     let(:batch_number)            { SecureRandom.uuid }
     let(:country_of_origin)       { "United Kingdom" }
-    let(:product)                 { create(:product, country_of_origin: country_of_origin, batch_number: batch_number) }
+    let(:product)                 { create(:product, country_of_origin:, batch_number:) }
     let(:investigation)           { create(:allegation, creator: user, products: [product]) }
 
     before do
@@ -72,7 +72,7 @@ RSpec.describe OpensearchQuery, :with_opensearch, :with_stubbed_mailer do
     end
 
     context "when searching on an investigation's correspondence" do
-      let!(:correspondence) { create(:email, investigation: investigation) }
+      let!(:correspondence) { create(:email, investigation:) }
 
       context "when searching for the overview" do
         let(:query) { correspondence.overview }

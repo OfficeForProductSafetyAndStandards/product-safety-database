@@ -18,4 +18,5 @@ Rails.application.config.whitelisted_emails = YAML.load_file(
 )
 Rails.application.config.domains_allowing_otp_whitelisting = YAML.load_file(
   Rails.root.join("config/constants/domains_allowing_otp_whitelisting.yml"),
-permitted_classes: [Regexp])
+  permitted_classes: [Regexp]
+)

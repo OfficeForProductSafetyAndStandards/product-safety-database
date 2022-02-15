@@ -32,9 +32,9 @@ RSpec.describe "Secondary Authentication submit", :with_stubbed_notify, type: :r
         :user,
         :activated,
         mobile_number_verified: false,
-        direct_otp_sent_at: direct_otp_sent_at,
+        direct_otp_sent_at:,
         second_factor_attempts_count: attempts,
-        second_factor_attempts_locked_at: second_factor_attempts_locked_at
+        second_factor_attempts_locked_at:
       )
     end
 

@@ -4,15 +4,15 @@ RSpec.describe RiskAssessment, type: :model do
   describe "validations", :aggregate_failures do
     let(:risk_assessment) do
       described_class.new(
-        investigation: investigation,
-        risk_level: risk_level,
-        custom_risk_level: custom_risk_level,
-        products: products,
-        added_by_user: added_by_user,
-        added_by_team: added_by_team,
-        assessed_by_team: assessed_by_team,
-        assessed_by_business: assessed_by_business,
-        assessed_by_other: assessed_by_other,
+        investigation:,
+        risk_level:,
+        custom_risk_level:,
+        products:,
+        added_by_user:,
+        added_by_team:,
+        assessed_by_team:,
+        assessed_by_business:,
+        assessed_by_other:,
         assessed_on: assessment_date
       )
     end

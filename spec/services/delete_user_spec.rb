@@ -15,7 +15,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_opensearch do
     end
 
     context "when given an user that is already deleted" do
-      subject(:delete_call) { described_class.call(user: user) }
+      subject(:delete_call) { described_class.call(user:) }
 
       let(:user) { create(:user, :deleted) }
 
@@ -29,7 +29,7 @@ RSpec.describe DeleteUser, :with_stubbed_mailer, :with_stubbed_opensearch do
     end
 
     context "when given an user that is not already deleted" do
-      subject(:delete_call) { described_class.call(user: user) }
+      subject(:delete_call) { described_class.call(user:) }
 
       let(:user)        { create(:user) }
       let!(:allegation) { create(:allegation, creator: user) }

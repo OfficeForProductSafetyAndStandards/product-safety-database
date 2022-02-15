@@ -53,7 +53,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     expect(page).to have_error_summary "Date of call must be today or in the past"
     # End test date validation
 
-    fill_in_record_phone_call_form(name: name, phone: phone, date: date)
+    fill_in_record_phone_call_form(name:, phone:, date:)
 
     expect_to_be_on_record_phone_call_details_page
 
@@ -72,7 +72,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, file: file)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, phone:, date:, file:)
 
     click_link "View phone call"
 
@@ -100,7 +100,7 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     visit "/cases/#{investigation.pretty_id}/activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, file: file)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, phone:, date:, file:)
   end
 
   scenario "with summary and notes" do
@@ -116,18 +116,18 @@ RSpec.feature "Adding a record phone call activity to a case", :with_stubbed_ope
     click_button "Continue"
 
     expect_to_be_on_record_phone_call_page
-    fill_in_record_phone_call_form(name: name, phone: phone, date: date)
+    fill_in_record_phone_call_form(name:, phone:, date:)
 
     expect_to_be_on_record_phone_call_details_page
 
-    fill_in_record_phone_call_details_form(summary: summary, notes: notes)
+    fill_in_record_phone_call_details_form(summary:, notes:)
     click_button "Add phone call"
 
     click_on "Back to allegation: #{investigation.pretty_id}"
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, phone: phone, date: date, summary: summary, notes: notes)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, phone:, date:, summary:, notes:)
 
     # Test that another user in a different organisation cannot see correspondence info
     sign_out

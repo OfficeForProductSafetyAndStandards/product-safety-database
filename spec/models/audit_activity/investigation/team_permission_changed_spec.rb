@@ -13,7 +13,7 @@ RSpec.describe AuditActivity::Investigation::TeamPermissionChanged, :with_stubbe
       expect(result).to eq({
         team: { id: team.id, name: team.display_name },
         permission: { old: old_permission, new: new_permission },
-        message: message
+        message:
       })
     end
   end

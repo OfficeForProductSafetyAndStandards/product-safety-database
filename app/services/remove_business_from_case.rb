@@ -23,9 +23,9 @@ private
 
   def create_audit_activity_for_business_removed
     AuditActivity::Business::Destroy.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
-      business: business,
+      source: UserSource.new(user:),
+      investigation:,
+      business:,
       metadata: AuditActivity::Business::Destroy.build_metadata(business, reason)
     )
   end
@@ -43,6 +43,6 @@ private
   end
 
   def attached_to_supporting_information?
-    investigation.corrective_actions.where(business: business).exists? || investigation.risk_assessments.where(assessed_by_business: business).exists?
+    investigation.corrective_actions.where(business:).exists? || investigation.risk_assessments.where(assessed_by_business: business).exists?
   end
 end
