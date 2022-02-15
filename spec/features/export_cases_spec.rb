@@ -46,7 +46,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
   end
 
   scenario "with search query" do
-    fill_in "Keywords", with: "Serious"
+    fill_in "Search", with: "Serious"
     click_button "Search"
 
     expect(page).not_to have_text enquiry_coronavirus.pretty_id
