@@ -100,7 +100,6 @@ Rails.application.routes.draw do
       get :created
     end
 
-
     resource :status, only: %i[], controller: "investigations/status" do
       get :close
       get :reopen

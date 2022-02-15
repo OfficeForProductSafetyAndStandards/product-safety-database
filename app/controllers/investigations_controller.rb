@@ -51,7 +51,7 @@ class InvestigationsController < ApplicationController
   end
 
   def your_cases
-    @search = SearchParams.new({"case_owner"=>"me"})
+    @search = SearchParams.new({ "case_owner" => "me" })
     @answer         = search_for_investigations(20)
     @count          = count_to_display
     @investigations = InvestigationDecorator
@@ -62,7 +62,7 @@ class InvestigationsController < ApplicationController
   end
 
   def team_cases
-    @search = SearchParams.new({"case_owner"=>"my_team"})
+    @search = SearchParams.new({ "case_owner" => "my_team" })
     @answer         = search_for_investigations(20)
     @count          = count_to_display
     @investigations = InvestigationDecorator
