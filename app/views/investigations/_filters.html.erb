@@ -1,4 +1,7 @@
 <section class="govuk-grid-column-one-quarter govuk-!-padding-right-1 opss-full-height__col">
+  <a href="#page-content" class="govuk-skip-link opss-skip-link">
+    Skip to the main content
+  </a>
   <nav aria-label="Secondary">
       <ul class="govuk-list opss-left-nav">
           <li class=<%= "opss-left-nav__active" if @page_name == "your_cases"%>>
@@ -7,7 +10,7 @@
           <li class=<%= "opss-left-nav__active" if @page_name == "team_cases"%>>
             <%= link_to "Team cases", team_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
-          <li class=<%= "opss-left-nav__active" unless ["team_cases, your_cases"].include? @page_name %>>
+          <li class=<%= "opss-left-nav__active" unless ["team_cases", "your_cases"].include? @page_name %>>
             <%= link_to "All cases - Search", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %>
           </li>
       </ul>
