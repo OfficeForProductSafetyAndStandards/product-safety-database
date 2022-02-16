@@ -4,7 +4,7 @@ RSpec.describe AuditActivity::Test::TestResultUpdated, :with_stubbed_opensearch,
   let(:product) { create(:product) }
   let(:test_result) do
     create(:test_result,
-           product: product,
+           product:,
            investigation: create(:allegation))
   end
 

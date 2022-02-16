@@ -5,7 +5,7 @@ namespace :team do
     new_team = Team.find(ENV.fetch("NEW_TEAM_ID"))
     user = User.find_by!(email: ENV.fetch("EMAIL"))
 
-    result = DeleteTeam.call(team: team, new_team: new_team, user: user)
+    result = DeleteTeam.call(team:, new_team:, user:)
 
     raise result.error unless result.success?
 

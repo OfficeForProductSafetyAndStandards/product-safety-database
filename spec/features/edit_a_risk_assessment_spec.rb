@@ -19,12 +19,12 @@ RSpec.feature "Editing a risk assessment on a case", :with_stubbed_opensearch, :
 
   let!(:risk_assessment) do
     create(:risk_assessment,
-           investigation: investigation,
+           investigation:,
            assessed_on: Date.parse("2020-01-02"),
            assessed_by_team: team,
            risk_level: :serious,
            products: [teddy_bear],
-           risk_assessment_file: risk_assessment_file)
+           risk_assessment_file:)
   end
 
   scenario "Editing a risk assessment (with validation errors)" do

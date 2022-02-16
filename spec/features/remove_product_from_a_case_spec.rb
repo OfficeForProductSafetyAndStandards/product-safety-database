@@ -50,9 +50,9 @@ RSpec.feature "Remove product from investigation", :with_stubbed_opensearch, :wi
 
   context "when product has linked supporting information" do
     before do
-      create(:accident, product: product)
+      create(:accident, product:)
       create(:risk_assessment, products: [product])
-      create(:corrective_action, product: product)
+      create(:corrective_action, product:)
     end
 
     it "does not allow user to remove product from investigation" do

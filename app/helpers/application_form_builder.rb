@@ -16,7 +16,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
                      hint: hint,
                      fieldset: {
                        legend: {
-                         classes: classes,
+                         classes:,
                          text: legend
                        }
                      },
@@ -102,7 +102,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
       id: attribute,
       name: input_name(attribute),
       errorMessage: error_message,
-      classes: classes,
+      classes:,
       hint: {
         text: hint
       },
@@ -196,7 +196,7 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     @template.govukCheckboxes(
       errorMessage: error_message,
       items: @items,
-      hint: hint,
+      hint:,
       fieldset: {
         legend: {
           html: legend,

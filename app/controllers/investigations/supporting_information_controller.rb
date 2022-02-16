@@ -8,7 +8,7 @@ module Investigations
 
       @breadcrumbs = {
         items: [
-          { text: "Cases", href: investigations_path(previous_search_params) },
+          { text: "Cases", href: investigations_path },
           { text: @investigation.pretty_description }
         ]
       }
@@ -67,7 +67,7 @@ module Investigations
                   SupportingInformationTypeForm::MAIN_TYPES
                 end
 
-      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type], options: options)
+      @supporting_information_type_form ||= SupportingInformationTypeForm.new(type: params[:type], options:)
     end
   end
 end

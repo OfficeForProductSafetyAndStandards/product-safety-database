@@ -32,7 +32,7 @@ module InvestigationsHelper
       items: [
         {
           text: "Cases",
-          href: investigations_path(previous_search_params)
+          href: investigations_path
         },
         {
           text: @investigation.pretty_description
@@ -49,7 +49,7 @@ module InvestigationsHelper
       value: { text: investigation.risk_level_description }
     }
 
-    if policy(investigation).update?(user: user)
+    if policy(investigation).update?(user:)
       risk_level_row[:actions] = { items: [
         href: investigation_risk_level_path(investigation),
         text: t(
@@ -78,7 +78,7 @@ module InvestigationsHelper
       }
     }
 
-    if policy(investigation).update?(user: user) || most_recent_risk_assessment
+    if policy(investigation).update?(user:) || most_recent_risk_assessment
 
       risk_assessment_href =
         case investigation.risk_assessments.count
@@ -172,7 +172,7 @@ module InvestigationsHelper
   end
 
   def safety_and_compliance_actions(investigation, user, field_name)
-    if policy(investigation).update?(user: user)
+    if policy(investigation).update?(user:)
       {
         items: [
           href: edit_investigation_safety_and_compliance_path(investigation.pretty_id),
@@ -197,7 +197,7 @@ module InvestigationsHelper
     activity_actions = { items: [] }
     notifying_country_actions = { items: [] }
 
-    if policy(investigation).update?(user: user)
+    if policy(investigation).update?(user:)
       activity_actions[:items] << {
         href: new_investigation_supporting_information_path(investigation),
         text: "Add supporting information"
@@ -209,7 +209,7 @@ module InvestigationsHelper
       }
     end
 
-    if policy(investigation).change_owner_or_status?(user: user)
+    if policy(investigation).change_owner_or_status?(user:)
       status_actions[:items] << if investigation.is_closed?
                                   {
                                     href: reopen_investigation_status_path(investigation),
@@ -225,7 +225,7 @@ module InvestigationsHelper
                                 end
     end
 
-    if policy(investigation).change_notifying_country?(user: user)
+    if policy(investigation).change_notifying_country?(user:)
       notifying_country_actions[:items] << {
         href: edit_investigation_notifying_country_path(investigation),
         text: "Change",
@@ -382,10 +382,6 @@ module InvestigationsHelper
     data_attributes
   end
 
-  def store_previous_search_params
-    session[:previous_search_params] = @search.serializable_hash(form_serialisation_option).symbolize_keys
-  end
-
   def form_serialisation_option
     options = {}
     options[:except] = :sort_by if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
@@ -396,7 +392,7 @@ module InvestigationsHelper
   def options_for_notifying_country(countries, notifying_country_form)
     countries.map do |country|
       text = country[0]
-      option = { text: text, value: country[1] }
+      option = { text:, value: country[1] }
       option[:selected] = true if notifying_country_form.country == text
       option
     end
@@ -410,8 +406,8 @@ private
     number_of_cases_in_english = "#{number_of_results} #{'case'.pluralize(number_of_results)}"
 
     {
-      number_of_cases_in_english: number_of_cases_in_english,
-      word: word
+      number_of_cases_in_english:,
+      word:
     }
   end
 end

@@ -5,7 +5,7 @@ class CaseExportJob < ApplicationJob
     NotifyMailer.case_export(
       email: case_export.user.email,
       name: case_export.user.name,
-      case_export: case_export
+      case_export:
     ).deliver_later
   rescue StandardError => e
     Sentry.capture_exception(e)

@@ -26,8 +26,8 @@ private
 
     activity_class.create!(
       source: user_source,
-      investigation: investigation,
-      metadata: metadata
+      investigation:,
+      metadata:
     )
   end
 
@@ -40,7 +40,7 @@ private
   end
 
   def user_source
-    @user_source ||= UserSource.new(user: user)
+    @user_source ||= UserSource.new(user:)
   end
 
   def send_notification_email(investigation, user)

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Location do
-  subject(:location) { described_class.new(county: county, country: country) }
+  subject(:location) { described_class.new(county:, country:) }
 
   let(:county) { "L" }
   let(:country) { "C" }

@@ -6,7 +6,7 @@ RSpec.feature "Case export", :with_opensearch, :with_stubbed_antivirus, :with_st
   let(:other_user_same_team) { create :user, :activated, team: user.team, organisation: user.organisation }
   let(:other_user) { create :user, :activated }
   let(:email) { delivered_emails.last }
-  let(:export) { CaseExport.find_by(user: user) }
+  let(:export) { CaseExport.find_by(user:) }
   let(:spreadsheet) do
     export.export_file.blob.open do |file|
       Roo::Excelx.new(file).sheet("Cases")

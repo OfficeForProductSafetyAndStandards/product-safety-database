@@ -6,7 +6,7 @@ class AuditActivity::Investigation::RiskLevelUpdated < AuditActivity::Investigat
     updated_values = investigation.previous_changes.slice(:risk_level, :custom_risk_level)
     {
       updates: updated_values,
-      update_verb: update_verb
+      update_verb:
     }
   end
 

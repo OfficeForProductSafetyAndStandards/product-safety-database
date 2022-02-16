@@ -6,14 +6,6 @@ module InvestigationSearchHelper
     OpensearchQuery.new(@search.q, filter_params(user), @search.sorting_params, nested: nested_filters(user))
   end
 
-  def set_search_params
-    params_to_save = params.dup
-    params_to_save.delete(:sort_by) if params[:sort_by] == SortByHelper::SORT_BY_RELEVANT
-    @search = SearchParams.new(query_params)
-
-    store_previous_search_params
-  end
-
 private
 
   def nested_filters(user)
@@ -57,7 +49,7 @@ private
     return if @search.case_status == "all"
 
     is_closed = @search.case_status == "closed"
-    { term: { is_closed: is_closed } }
+    { term: { is_closed: } }
   end
 
   def get_coronavirus_filter

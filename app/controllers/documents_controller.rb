@@ -112,7 +112,7 @@ private
 
   def get_parent
     if (pretty_id = params[:investigation_pretty_id] || params[:allegation_id] || params[:project_id] || params[:enquiry_id])
-      return Investigation.find_by!(pretty_id: pretty_id)
+      return Investigation.find_by!(pretty_id:)
     end
 
     return Product.find(params[:product_id]) if params[:product_id]

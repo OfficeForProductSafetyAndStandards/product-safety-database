@@ -42,11 +42,11 @@ private
     metadata = activity_class.build_metadata(owner, rationale)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       title: nil,
       body: nil,
-      metadata: metadata
+      metadata:
     )
   end
 
@@ -79,8 +79,8 @@ private
   end
 
   def email_body(viewer = nil)
-    user_name = user.decorate.display_name(viewer: viewer)
-    body = "Case owner changed on #{investigation.case_type} to #{owner.decorate.display_name(viewer: viewer)} by #{user_name}."
+    user_name = user.decorate.display_name(viewer:)
+    body = "Case owner changed on #{investigation.case_type} to #{owner.decorate.display_name(viewer:)} by #{user_name}."
     body << "\n\nMessage from #{user_name}: #{inset_text_for_notify(rationale)}" if rationale
     body
   end

@@ -5,7 +5,7 @@ RSpec.feature "Deleting a business location", :with_stubbed_opensearch, :with_st
   let(:business) { create(:business, trading_name: "Acme Ltd") }
   let!(:location) do
     create(:location,
-           business: business,
+           business:,
            name: "Headquarters",
            address_line_1: "Unit 1",
            postal_code: "ABC 123",

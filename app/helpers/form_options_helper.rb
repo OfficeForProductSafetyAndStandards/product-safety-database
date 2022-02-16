@@ -21,7 +21,7 @@ module FormOptionsHelper
 
   def corrective_action_summary_radio_items(form)
     CorrectiveAction.actions.map do |value, text|
-      item = { text: text, value: value }
+      item = { text:, value: }
 
       if value == "other"
         item[:conditional] = {

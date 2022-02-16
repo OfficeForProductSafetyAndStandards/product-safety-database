@@ -90,7 +90,7 @@ class AuditActivity::Correspondence::EmailUpdated < AuditActivity::Correspondenc
 
     {
       email_id: email.id,
-      updates: updates
+      updates:
     }
   end
 

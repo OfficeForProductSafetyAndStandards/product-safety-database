@@ -28,17 +28,17 @@ private
 
   def create_user
     User.create!(
-      email: email,
+      email:,
       organisation: team.organisation,
       skip_password_validation: true,
-      team: team,
-      name: name
+      team:,
+      name:
     )
   end
 
   def reinstate_and_update_deleted_user(existing_user)
     existing_user.reset_to_invited_state!
-    existing_user.update!(team: team)
+    existing_user.update!(team:)
     existing_user
   end
 

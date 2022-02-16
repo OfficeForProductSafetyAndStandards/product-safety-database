@@ -40,7 +40,7 @@ RSpec.feature "Adding an activity to a case", :with_stubbed_opensearch, :with_st
       create(:user, :inactive, email: "not_activated@example.com", team: team_without_email, organisation: team_without_email.organisation)
       create(:user, :activated, :deleted, email: "deleted@example.com", team: team_without_email, organisation: team_without_email.organisation)
 
-      ChangeCaseOwner.call!(investigation: investigation, owner: investigation_owner, user: creator_user, old_owner: creator_user)
+      ChangeCaseOwner.call!(investigation:, owner: investigation_owner, user: creator_user, old_owner: creator_user)
       delivered_emails.clear
     end
 

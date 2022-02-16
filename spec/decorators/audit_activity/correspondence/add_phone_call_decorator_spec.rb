@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::Correspondence::AddPhoneCall, :with_stubbed_opense
 
   include_context "with phone call correspondence setup"
 
-  let!(:correspondence) { AddPhoneCallToCase.call!(params.merge(investigation: investigation, user: user)).correspondence }
+  let!(:correspondence) { AddPhoneCallToCase.call!(params.merge(investigation:, user:)).correspondence }
   let(:reporting_user)  { user }
   let(:viewing_user)    { create(:user) }
   let(:activity) { correspondence.activities.find_by!(type: "AuditActivity::Correspondence::AddPhoneCall") }

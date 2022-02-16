@@ -4,7 +4,7 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_open
   subject(:decorated_activity) do
     described_class.decorate(
       AuditActivity::CorrectiveAction::Add.new(
-        business: business,
+        business:,
         metadata: AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action)
       )
     )
@@ -14,10 +14,10 @@ RSpec.describe AuditActivity::CorrectiveAction::AddDecorator, :with_stubbed_open
   let(:corrective_action)             do
     create(
       :corrective_action,
-      business: business,
-      has_online_recall_information: has_online_recall_information,
-      online_recall_information: online_recall_information,
-      geographic_scopes: geographic_scopes
+      business:,
+      has_online_recall_information:,
+      online_recall_information:,
+      geographic_scopes:
     )
   end
   let(:online_recall_information)     { Faker::Internet.url(host: "example.com") }

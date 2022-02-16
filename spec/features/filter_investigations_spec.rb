@@ -4,12 +4,12 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let(:other_organisation) { create(:organisation) }
 
   let(:organisation)          { create(:organisation) }
-  let(:team)                  { create(:team, organisation: organisation) }
-  let(:other_team)            { create(:team, organisation: organisation, name: "other team") }
-  let(:user)                  { create(:user, :activated, organisation: organisation, team: team, has_viewed_introduction: true) }
-  let(:other_user_same_team)  { create(:user, :activated, name: "other user same team", organisation: organisation, team: team) }
-  let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation: organisation, team: other_team) }
-  let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation: organisation, team: other_team) }
+  let(:team)                  { create(:team, organisation:) }
+  let(:other_team)            { create(:team, organisation:, name: "other team") }
+  let(:user)                  { create(:user, :activated, organisation:, team:, has_viewed_introduction: true) }
+  let(:other_user_same_team)  { create(:user, :activated, name: "other user same team", organisation:, team:) }
+  let(:yet_another_user_same_team) { create(:user, :activated, name: "yet another user same team", organisation:, team: other_team) }
+  let(:other_user_other_team) { create(:user, :activated, name: "other user other team", organisation:, team: other_team) }
 
   let!(:investigation)                       { create(:allegation, creator: user) }
   let!(:other_user_investigation)            { create(:allegation, creator: other_user_same_team) }
@@ -26,8 +26,8 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
   let!(:high_risk_level_investigation)    { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high]) }
   let!(:coronavirus_and_high_risk_investigation) { create(:allegation, creator: user, risk_level: Investigation.risk_levels[:high], coronavirus_related: true) }
 
-  let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team: team) }
-  let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team: team) }
+  let!(:another_active_user)   { create(:user, :activated, organisation: user.organisation, team:) }
+  let!(:another_inactive_user) { create(:user, :inactive,  organisation: user.organisation, team:) }
   let!(:other_deleted_team)    { create(:team, :deleted) }
 
   let(:restricted_case_title) { "Restricted case title" }
@@ -62,6 +62,26 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       expect(page).to have_select("Sort the results by", selected: "Recent updates")
     end
     expect(page).to have_css("form#cases-search-form dl.opss-dl-select dd", text: "Active: Recent updates")
+  end
+
+  context "when there are multiple pages of cases" do
+    before do
+      20.times do
+        create(:allegation, creator: user, coronavirus_related: true)
+        Investigation.import refresh: :wait_for
+      end
+    end
+
+    it "maintains the filters when clicking on additional pages" do
+      choose "Coronavirus"
+      click_on "Apply"
+
+      expect(page.find_field("Coronavirus")).to be_checked
+
+      click_link("page-2-link")
+
+      expect(page.find_field("Coronavirus")).to be_checked
+    end
   end
 
   describe "Case priority" do
@@ -202,7 +222,7 @@ RSpec.feature "Case filtering", :with_opensearch, :with_stubbed_mailer, type: :f
       before do
         AddTeamToCase.call!(
           investigation: other_user_other_team_investigation,
-          user: user,
+          user:,
           team: chosen_team,
           collaboration_class: Collaboration::Access::Edit
         )

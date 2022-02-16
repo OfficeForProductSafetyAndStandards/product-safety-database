@@ -9,7 +9,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentAddedDecorat
     )
   end
 
-  let(:accident) { create(:accident, date: date, is_date_known: is_date_known, usage: usage, severity: severity, severity_other: severity_other, additional_info: additional_info) }
+  let(:accident) { create(:accident, date:, is_date_known:, usage:, severity:, severity_other:, additional_info:) }
   let(:date) { nil }
   let(:is_date_known) { "no" }
   let(:severity) { "serious" }

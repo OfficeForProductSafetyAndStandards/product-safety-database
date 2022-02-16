@@ -15,12 +15,12 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
   let(:product) { create(:product) }
   let(:accident_or_incident) do
     AddAccidentOrIncidentToCase.call!(
-      investigation: investigation,
-      user: user,
+      investigation:,
+      user:,
       date: nil,
       is_date_known: "false",
-      severity: severity,
-      usage: usage,
+      severity:,
+      usage:,
       product_id: product.id,
       type: "Accident",
       additional_info: nil
@@ -31,7 +31,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
     subject(:metadata) { described_class.build_metadata(accident_or_incident) }
 
     context "when fields have changed" do
-      before { accident_or_incident.update!(severity: new_severity, date: date, is_date_known: "yes", usage: new_usage, additional_info: "wow") }
+      before { accident_or_incident.update!(severity: new_severity, date:, is_date_known: "yes", usage: new_usage, additional_info: "wow") }
 
       let(:updates) do
         {
@@ -45,7 +45,7 @@ RSpec.describe AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated, :wi
 
       it "builds a list of changes" do
         expect(metadata).to eq({
-          updates: updates,
+          updates:,
           type: accident_or_incident.type,
           accident_or_incident_id: accident_or_incident.id
         })

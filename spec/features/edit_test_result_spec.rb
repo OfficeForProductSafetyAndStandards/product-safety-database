@@ -13,15 +13,15 @@ RSpec.feature "Editing a test result", :with_stubbed_opensearch, :with_stubbed_a
 
   let!(:test_result) do
     AddTestResultToInvestigation.call!(
-      investigation: investigation,
-      user: user,
+      investigation:,
+      user:,
       date: Date.parse("2019-05-01"),
       legislation: "General Product Safety Regulations 2005",
       details: "Provisional",
-      result: result,
+      result:,
       product_id: product1.id,
       document: fixture_file_upload("test_result.txt"),
-      standards_product_was_tested_against: standards_product_was_tested_against
+      standards_product_was_tested_against:
     ).test_result
   end
 

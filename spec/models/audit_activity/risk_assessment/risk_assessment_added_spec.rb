@@ -5,11 +5,11 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
     described_class.create!(
       source: UserSource.new(user: risk_assessment.added_by_user),
       investigation: risk_assessment.investigation,
-      metadata: metadata
+      metadata:
     )
   end
 
-  let(:risk_assessment) { create(:risk_assessment, trait, assessed_by_team: assessed_by_team, assessed_by_business: assessed_by_business, assessed_by_other: assessed_by_other, products: products) }
+  let(:risk_assessment) { create(:risk_assessment, trait, assessed_by_team:, assessed_by_business:, assessed_by_other:, products:) }
   let(:trait) { :without_file }
   let(:assessed_by_team) { nil }
   let(:assessed_by_business) { nil }
@@ -75,7 +75,7 @@ RSpec.describe AuditActivity::RiskAssessment::RiskAssessmentAdded, :with_stubbed
         before do
           UpdateRiskAssessment.call!(
             user: risk_assessment.added_by_user,
-            risk_assessment: risk_assessment,
+            risk_assessment:,
             details: "test update",
             assessed_on: risk_assessment.assessed_on,
             risk_level: risk_assessment.risk_level,

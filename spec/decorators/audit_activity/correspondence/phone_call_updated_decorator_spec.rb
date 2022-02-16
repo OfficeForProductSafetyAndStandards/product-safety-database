@@ -7,20 +7,20 @@ RSpec.describe AuditActivity::Correspondence::PhoneCallUpdatedDecorator, :with_s
 
   let(:phone_call) do
     AddPhoneCallToCase.call!(
-      user: user,
-      investigation: investigation,
-      correspondence_date: correspondence_date,
-      correspondent_name: correspondent_name,
-      overview: overview,
-      details: details,
-      phone_number: phone_number
+      user:,
+      investigation:,
+      correspondence_date:,
+      correspondent_name:,
+      overview:,
+      details:,
+      phone_number:
     ).correspondence
   end
 
   let(:params) do
     {
-      user: user,
-      investigation: investigation,
+      user:,
+      investigation:,
       correspondence: phone_call,
       correspondence_date: new_correspondence_date,
       correspondent_name: new_correspondent_name,

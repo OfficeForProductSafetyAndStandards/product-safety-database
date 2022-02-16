@@ -6,7 +6,7 @@ RSpec.feature "Changing the status of a case", :with_opensearch, :with_stubbed_m
   let(:creator_user) { create(:user, email: "test@example.com") }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user, user:)
     delivered_emails.clear
   end
 

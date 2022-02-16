@@ -24,7 +24,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     include_context "with all types of supporting information"
 
     before do
-      ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+      ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
       investigation.documents.attach(io: StringIO.new, filename: generic_supporting_information_filename)
       investigation.documents.attach(io: File.open(image), filename: generic_image_filename, content_type: "image/png")
       investigation.save!
@@ -52,7 +52,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
     before do
       owner.update!(name: "z to ensure the sorting is correct")
       [team_a, team_b].each do |team|
-        AddTeamToCase.call(user: user, investigation: investigation, team: team, collaboration_class: Collaboration::Access::Edit)
+        AddTeamToCase.call(user:, investigation:, team:, collaboration_class: Collaboration::Access::Edit)
       end
     end
 
@@ -75,7 +75,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
   describe "#owner_team", :with_stubbed_opensearch do
     context "when there is a team as the case owner" do
       let(:team) { create(:team) }
-      let(:investigation) { create(:allegation, creator: create(:user, team: team)) }
+      let(:investigation) { create(:allegation, creator: create(:user, team:)) }
 
       it "is is the team" do
         expect(investigation.owner_team).to eq(team)
@@ -84,11 +84,11 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
 
     context "when there is a user who belongs to a team that is the case owner" do
       let(:team) { create(:team) }
-      let(:user) { create(:user, team: team) }
+      let(:user) { create(:user, team:) }
       let(:investigation) { create(:allegation, creator: user) }
 
       before do
-        ChangeCaseOwner.call!(investigation: investigation, user: user, owner: team)
+        ChangeCaseOwner.call!(investigation:, user:, owner: team)
       end
 
       it "is is the team the user belongs to" do
@@ -115,7 +115,7 @@ RSpec.describe Investigation, :with_stubbed_mailer, :with_stubbed_notify do
 
   describe "custom_risk_level validity", :with_stubbed_opensearch do
     let(:investigation) do
-      build_stubbed(:allegation, custom_risk_level: custom_risk_level, risk_level: risk_level)
+      build_stubbed(:allegation, custom_risk_level:, risk_level:)
     end
 
     context "with a custom risk level" do

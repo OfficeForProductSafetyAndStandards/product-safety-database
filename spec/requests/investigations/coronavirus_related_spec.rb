@@ -5,7 +5,7 @@ RSpec.describe "Managing a case’s coronavirus status", :with_stubbed_opensearc
   let(:investigation) { create(:enquiry, creator: user) }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
     sign_in user
   end
 

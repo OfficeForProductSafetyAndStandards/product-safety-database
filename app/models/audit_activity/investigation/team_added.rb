@@ -7,7 +7,7 @@ class AuditActivity::Investigation::TeamAdded < AuditActivity::Investigation::Ba
         name: team.display_name
       },
       permission: collaboration.model_name.human,
-      message: message
+      message:
     }
   end
 

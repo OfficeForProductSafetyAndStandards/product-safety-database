@@ -18,7 +18,7 @@ RSpec.feature "Adding and removing business to a case", :with_stubbed_mailer, :w
   let(:other_user)       { create(:user, :activated) }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
   end
 
   scenario "Adding a business" do

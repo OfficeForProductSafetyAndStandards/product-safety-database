@@ -1,6 +1,6 @@
 RSpec.shared_examples "a service which notifies the case owner", :with_test_queue_adapter do
   context "when the user is the case owner" do
-    before { ChangeCaseOwner.call!(investigation: investigation, owner: user, user: user) }
+    before { ChangeCaseOwner.call!(investigation:, owner: user, user:) }
 
     it "does not send an email" do
       expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
@@ -8,7 +8,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
   end
 
   context "when the user's team is the case owner" do
-    before { ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user) }
+    before { ChangeCaseOwner.call!(investigation:, owner: user.team, user:) }
 
     it "does not send an email" do
       expect { result }.not_to have_enqueued_mail(NotifyMailer, :investigation_updated)
@@ -18,7 +18,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
   context "when the case owner is a user on the same team" do
     let(:user_same_team) { create(:user, :activated, team: user.team, organisation: user.organisation) }
 
-    before { ChangeCaseOwner.call!(investigation: investigation, owner: user_same_team, user: user) }
+    before { ChangeCaseOwner.call!(investigation:, owner: user_same_team, user:) }
 
     it "sends an email to the user" do
       expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
@@ -36,7 +36,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
     let(:other_team) { create(:team) }
 
     context "when the owner is a user" do
-      before { ChangeCaseOwner.call!(investigation: investigation, owner: user_other_team, user: user) }
+      before { ChangeCaseOwner.call!(investigation:, owner: user_other_team, user:) }
 
       it "sends an email to the user" do
         expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(
@@ -50,7 +50,7 @@ RSpec.shared_examples "a service which notifies the case owner", :with_test_queu
     end
 
     context "when the owner is a team" do
-      before { ChangeCaseOwner.call!(investigation: investigation, owner: other_team, user: user) }
+      before { ChangeCaseOwner.call!(investigation:, owner: other_team, user:) }
 
       it "sends an email to the team email" do
         expect { result }.to have_enqueued_mail(NotifyMailer, :investigation_updated).with(

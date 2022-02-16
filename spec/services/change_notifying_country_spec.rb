@@ -14,7 +14,7 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -22,7 +22,7 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation: investigation) }
+      let(:result) { described_class.call(investigation:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -32,9 +32,9 @@ RSpec.describe ChangeNotifyingCountry, :with_stubbed_opensearch, :with_stubbed_m
     context "with the required parameters" do
       let(:result) do
         described_class.call(
-          user: user,
-          investigation: investigation,
-          country: country
+          user:,
+          investigation:,
+          country:
         )
       end
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ChangeCaseOwnerForm do
-  subject(:form) { described_class.new(owner_id: owner_id, owner_rationale: rationale) }
+  subject(:form) { described_class.new(owner_id:, owner_rationale: rationale) }
 
   let(:owner) { create(:team) }
 

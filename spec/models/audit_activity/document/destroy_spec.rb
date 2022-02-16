@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Document::Destroy, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
-  subject(:activity) { described_class.new(metadata: metadata, title: title, body: description) }
+  subject(:activity) { described_class.new(metadata:, title:, body: description) }
 
   let(:blob) { instance_double(ActiveStorage::Blob, id: 1, metadata: { title: "test", description: "test", created_by: "123" }) }
   let(:metadata) { described_class.build_metadata(blob) }

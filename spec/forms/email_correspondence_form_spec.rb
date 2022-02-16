@@ -3,18 +3,18 @@ require "rails_helper"
 RSpec.describe EmailCorrespondenceForm, :with_stubbed_opensearch, :with_stubbed_mailer do
   subject(:form) do
     described_class.new(
-      attachment_description: attachment_description,
-      correspondence_date: correspondence_date,
-      correspondent_name: correspondent_name,
-      details: details,
-      email_address: email_address,
-      email_attachment: email_attachment,
-      email_direction: email_direction,
-      email_file: email_file,
-      email_subject: email_subject,
-      email_attachment_id: email_attachment_id,
-      email_file_id: email_file_id,
-      overview: overview
+      attachment_description:,
+      correspondence_date:,
+      correspondent_name:,
+      details:,
+      email_address:,
+      email_attachment:,
+      email_direction:,
+      email_file:,
+      email_subject:,
+      email_attachment_id:,
+      email_file_id:,
+      overview:
     )
   end
 

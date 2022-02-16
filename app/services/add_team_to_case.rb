@@ -11,10 +11,10 @@ class AddTeamToCase
     begin
       ActiveRecord::Base.transaction do
         context.collaboration = collaboration_class.create!(
-          investigation: investigation,
+          investigation:,
           collaborator: team,
           added_by_user: user,
-          message: message
+          message:
         )
 
         create_activity_for_team_added!
@@ -39,10 +39,10 @@ private
   def send_notification_email
     entities_to_notify.each do |entity|
       NotifyMailer.team_added_to_case_email(
-        investigation: investigation,
-        team: team,
+        investigation:,
+        team:,
         added_by_user: user,
-        message: message,
+        message:,
         to_email: entity.email
       ).deliver_later
     end
@@ -56,9 +56,9 @@ private
     metadata = activity_class.build_metadata(collaboration, message)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
-      metadata: metadata
+      source: UserSource.new(user:),
+      investigation:,
+      metadata:
     )
   end
 end

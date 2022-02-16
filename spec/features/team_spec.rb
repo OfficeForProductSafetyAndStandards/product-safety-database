@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_opensearch, type: :feature do
   let(:team) { create(:team) }
-  let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
+  let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
 
-  let!(:another_active_user) { create(:user, :activated, email: "active.sameteam@example.com", organisation: user.organisation, team: team, has_viewed_introduction: true) }
-  let!(:another_inactive_user) { create(:user, email: "inactive.sameteam@example.com", invited_at: 1.year.ago, organisation: user.organisation, team: team) }
-  let!(:user_without_details) { create(:user, name: nil, email: "mr.no.details.sameteam@example.com", invited_at: 1.year.ago, organisation: user.organisation, team: team) }
+  let!(:another_active_user) { create(:user, :activated, email: "active.sameteam@example.com", organisation: user.organisation, team:, has_viewed_introduction: true) }
+  let!(:another_inactive_user) { create(:user, email: "inactive.sameteam@example.com", invited_at: 1.year.ago, organisation: user.organisation, team:) }
+  let!(:user_without_details) { create(:user, name: nil, email: "mr.no.details.sameteam@example.com", invited_at: 1.year.ago, organisation: user.organisation, team:) }
   let!(:another_user_another_team) { create(:user, :activated, email: "active.otherteam@example.com", organisation: user.organisation, team: create(:team)) }
 
   context "when signed in as a member of another team" do
@@ -37,7 +37,7 @@ RSpec.feature "Your team page", :with_stubbed_mailer, :with_stubbed_opensearch, 
 
       context "when team has 12 or more users" do
         before do
-          create_list(:user, 12, organisation: user.organisation, team: team)
+          create_list(:user, 12, organisation: user.organisation, team:)
           visit "/teams/#{team.id}"
           expect_to_be_on_team_page(team)
         end

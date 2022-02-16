@@ -9,11 +9,11 @@ class UpdatePhoneCall
     context.fail!(error: "No phone call supplied") unless correspondence.is_a?(Correspondence::PhoneCall)
 
     correspondence.assign_attributes(
-      correspondence_date: correspondence_date,
-      phone_number: phone_number,
-      correspondent_name: correspondent_name,
-      overview: overview,
-      details: details
+      correspondence_date:,
+      phone_number:,
+      correspondent_name:,
+      overview:,
+      details:
     )
 
     return unless any_changes?
@@ -49,9 +49,9 @@ private
 
   def create_audit_activity
     context.activity = AuditActivity::Correspondence::PhoneCallUpdated.create!(
-      source: UserSource.new(user: user),
+      source: UserSource.new(user:),
       investigation: correspondence.investigation,
-      correspondence: correspondence,
+      correspondence:,
       metadata: AuditActivity::Correspondence::PhoneCallUpdated.build_metadata(correspondence)
     )
   end

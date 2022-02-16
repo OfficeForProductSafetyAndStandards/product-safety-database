@@ -9,7 +9,7 @@ RSpec.describe Investigation::EnquiryDecorator, :with_stubbed_opensearch, :with_
   let(:investigation) { create(:enquiry) }
 
   before do
-    create(:complainant, investigation: investigation)
+    create(:complainant, investigation:)
   end
 
   describe "#source_details_summary_list" do
