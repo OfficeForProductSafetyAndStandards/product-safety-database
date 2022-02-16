@@ -5,7 +5,7 @@ class Collaboration < ApplicationRecord
         transaction do
           destroy!
           investigation.owner_user_collaboration&.destroy!
-          investigation.edit_access_collaborations.create!(collaborator: collaborator)
+          investigation.edit_access_collaborations.create!(collaborator:)
         end
       end
     end

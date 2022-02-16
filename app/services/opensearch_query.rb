@@ -84,7 +84,7 @@ private
   def match_exact_fields
     {
       multi_match: {
-        query: query,
+        query:,
         fields: @exact_fields,
         type: "phrase",
         fuzzy_transpositions: "false"
@@ -95,7 +95,7 @@ private
   def match_fuzzy_fields
     {
       multi_match: {
-        query: query,
+        query:,
         fields: @fuzzy_fields,
         fuzziness: "AUTO:6,12",
         operator: "and"

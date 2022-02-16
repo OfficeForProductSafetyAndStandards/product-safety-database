@@ -20,7 +20,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
     let(:has_accepted_declaration) { true }
     let(:has_viewed_introduction) { true }
     let(:user_state) { :activated }
-    let(:user) { create(:user, user_state, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction) }
+    let(:user) { create(:user, user_state, has_accepted_declaration:, has_viewed_introduction:) }
 
     before do
       sign_in user
@@ -39,7 +39,7 @@ RSpec.feature "Home page", :with_opensearch, type: :feature do
     end
 
     context "with OPSS user role" do
-      let(:user) { create(:user, :opss_user, user_state, has_accepted_declaration: has_accepted_declaration, has_viewed_introduction: has_viewed_introduction) }
+      let(:user) { create(:user, :opss_user, user_state, has_accepted_declaration:, has_viewed_introduction:) }
 
       context "when the user has not previously accepted the declaration" do
         let(:has_accepted_declaration) { false }

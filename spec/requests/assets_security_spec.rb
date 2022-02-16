@@ -266,7 +266,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
         let(:product) { create(:product, investigations: [investigation]) }
 
         context "when the activity is not a correspondence or investigation document related" do
-          let(:activity) { create(:audit_activity_test_result, investigation: investigation, product: product) }
+          let(:activity) { create(:audit_activity_test_result, investigation:, product:) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)
@@ -291,8 +291,8 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
 
         context "when the activity is a correspondence" do
           let!(:product) { create(:product, investigations: [investigation]) }
-          let!(:correspondence) { create(:correspondence_meeting, investigation: investigation) }
-          let!(:activity) { AuditActivity::Correspondence::Base.create(investigation: investigation, product: product, correspondence: correspondence) }
+          let!(:correspondence) { create(:correspondence_meeting, investigation:) }
+          let!(:activity) { AuditActivity::Correspondence::Base.create(investigation:, product:, correspondence:) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)
@@ -317,7 +317,7 @@ RSpec.describe "Asset security", type: :request, with_stubbed_opensearch: true d
 
         context "when the activity is related to a document" do
           let!(:product) { create(:product, investigations: [investigation]) }
-          let!(:activity) { AuditActivity::Document::Base.create(investigation: investigation, product: product) }
+          let!(:activity) { AuditActivity::Document::Base.create(investigation:, product:) }
 
           before do
             document.update!(record_type: "Activity", record_id: activity.id)

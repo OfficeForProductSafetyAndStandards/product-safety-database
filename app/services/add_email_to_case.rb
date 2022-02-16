@@ -9,15 +9,15 @@ class AddEmailToCase
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     context.email = investigation.emails.create!(
-      correspondent_name: correspondent_name,
-      correspondence_date: correspondence_date,
-      email_address: email_address,
-      email_direction: email_direction,
-      overview: overview,
-      details: details,
-      email_subject: email_subject,
-      email_file: email_file,
-      email_attachment: email_attachment
+      correspondent_name:,
+      correspondence_date:,
+      email_address:,
+      email_direction:,
+      overview:,
+      details:,
+      email_subject:,
+      email_file:,
+      email_attachment:
     )
 
     if email.email_attachment.attached? && attachment_description.present?
@@ -38,10 +38,10 @@ private
   def create_audit_activity(correspondence, investigation)
     activity = AuditActivity::Correspondence::AddEmail.create!(
       metadata: audit_activity_metadata,
-      source: source,
-      investigation: investigation,
+      source:,
+      investigation:,
       title: nil,
-      correspondence: correspondence
+      correspondence:
     )
 
     activity.attach_blob(correspondence.email_file.blob, :email_file) if correspondence.email_file.attached?
@@ -54,7 +54,7 @@ private
   end
 
   def source
-    UserSource.new(user: user)
+    UserSource.new(user:)
   end
 
   def send_notification_email(investigation, _user)

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CorrespondenceDecorator, :with_stubbed_opensearch, :with_stubbed_mailer do
-  subject { build(:email, investigation: investigation).decorate }
+  subject { build(:email, investigation:).decorate }
 
   let(:user)          { create(:user) }
   let(:investigation) { create(:allegation) }
@@ -14,8 +14,8 @@ RSpec.describe CorrespondenceDecorator, :with_stubbed_opensearch, :with_stubbed_
 
       before do
         AddTeamToCase.call!(
-          user: user,
-          investigation: investigation,
+          user:,
+          investigation:,
           team: viewing_user.team,
           collaboration_class: Collaboration::Access::Edit
         )

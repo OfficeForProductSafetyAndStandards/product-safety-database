@@ -22,18 +22,18 @@ module PageMatchers
   # TODO: remove once all summary lists have been switched to definition list markup
   def have_summary_table_item(key:, value:)
     Rails.logger.warn "#have_summary_table_item is deprecated: use #have_summary_item instead"
-    HaveSummaryItem.new(key: key, value: value, table: true)
+    HaveSummaryItem.new(key:, value:, table: true)
   end
 
   def have_summary_item(key:, value:)
-    HaveSummaryItem.new(key: key, value: value)
+    HaveSummaryItem.new(key:, value:)
   end
 
   def have_summary_error(text)
-    have_css(".govuk-error-summary__list", text: text)
+    have_css(".govuk-error-summary__list", text:)
   end
 
   def have_h1(text)
-    have_selector("h1", text: text)
+    have_selector("h1", text:)
   end
 end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mailer, :with_stubbed_opensearch do
-  subject(:audit_activity) { described_class.create(investigation: investigation, metadata: metadata) }
+  subject(:audit_activity) { described_class.create(investigation:, metadata:) }
 
   let(:metadata) { described_class.build_metadata(investigation, update_verb) }
   let(:update_verb) { "changed" }
@@ -23,7 +23,7 @@ RSpec.describe AuditActivity::Investigation::RiskLevelUpdated, :with_stubbed_mai
 
     it "generates a hash with metadata for the activity" do
       expect(metadata).to eq(
-        update_verb: update_verb,
+        update_verb:,
         updates: { "risk_level" => [previous_risk, new_risk],
                    "custom_risk_level" => [previous_custom, new_custom] }
       )

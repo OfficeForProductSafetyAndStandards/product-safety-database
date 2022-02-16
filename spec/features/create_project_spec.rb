@@ -7,7 +7,7 @@ RSpec.feature "Creating project", :with_stubbed_opensearch, :with_stubbed_antivi
     let(:team) { create(:team) }
 
     before do
-      sign_in(create(:user, :activated, :opss_user, team: team))
+      sign_in(create(:user, :activated, :opss_user, team:))
     end
 
     scenario "can create a project" do

@@ -2,7 +2,7 @@ RSpec.shared_context "with add corrective action setup" do
   let(:user) { create(:user, :activated, has_viewed_introduction: true) }
   let(:product) { create(:product_washing_machine, name: "MyBrand Washing Machine") }
   let(:products) { [product] }
-  let(:investigation) { create(:allegation, :with_business, products: products, creator: user, read_only_teams: read_only_team) }
+  let(:investigation) { create(:allegation, :with_business, products:, creator: user, read_only_teams: read_only_team) }
   let(:business) { investigation.businesses.first }
   let(:action_key) { (CorrectiveAction.actions.keys - %w[other]).sample }
   let(:action) { CorrectiveAction.actions[action_key] }
@@ -27,15 +27,15 @@ RSpec.shared_context "with add corrective action setup" do
       business_id: business.id,
       product_id: product.id,
       action: action_key,
-      other_action: other_action,
-      date_decided: date_decided,
-      legislation: legislation,
-      has_online_recall_information: has_online_recall_information,
-      online_recall_information: online_recall_information,
-      details: details,
-      measure_type: measure_type,
-      duration: duration,
-      geographic_scopes: geographic_scopes,
+      other_action:,
+      date_decided:,
+      legislation:,
+      has_online_recall_information:,
+      online_recall_information:,
+      details:,
+      measure_type:,
+      duration:,
+      geographic_scopes:,
       file: {
         file: Rack::Test::UploadedFile.new(file),
         description: file_description,

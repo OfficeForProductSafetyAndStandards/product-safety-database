@@ -10,13 +10,13 @@ class UpdateTestResult
     context.fail!(error: "No user supplied")          unless user.is_a?(User)
 
     test_result.assign_attributes(
-      date: date,
-      details: details,
-      legislation: legislation,
-      result: result,
+      date:,
+      details:,
+      legislation:,
+      result:,
       failure_details: updated_failure_details,
-      standards_product_was_tested_against: standards_product_was_tested_against,
-      product_id: product_id,
+      standards_product_was_tested_against:,
+      product_id:,
     )
 
     test_result.transaction do
@@ -38,10 +38,10 @@ private
     metadata = AuditActivity::Test::TestResultUpdated.build_metadata(test_result, changes)
 
     context.activity = AuditActivity::Test::TestResultUpdated.create!(
-      source: UserSource.new(user: user),
+      source: UserSource.new(user:),
       investigation: test_result.investigation,
       product: test_result.product,
-      metadata: metadata
+      metadata:
     )
   end
 
@@ -51,7 +51,7 @@ private
         test_result.investigation.pretty_id,
         recipient.name,
         recipient.email,
-        "#{UserSource.new(user: user).show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
+        "#{UserSource.new(user:).show(recipient)} edited a test result on the #{test_result.investigation.case_type}.",
         "Test result edited for #{test_result.investigation.case_type.upcase_first}"
       ).deliver_later
     end

@@ -11,7 +11,7 @@ class ConvertActivityMetadataForCaseSummaryChange < ActiveRecord::Migration[5.2]
       }
 
       activity.update!(
-        metadata: metadata,
+        metadata:,
         body: nil,
         title: nil
       )

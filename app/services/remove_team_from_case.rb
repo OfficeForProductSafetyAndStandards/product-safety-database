@@ -35,9 +35,9 @@ private
     metadata = activity_class.build_metadata(team, message)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
-      metadata: metadata
+      source: UserSource.new(user:),
+      investigation:,
+      metadata:
     )
   end
 
@@ -50,8 +50,8 @@ private
   def send_notification_email
     entities_to_notify.each do |entity|
       NotifyMailer.team_deleted_from_case_email(
-        message: message,
-        investigation: investigation,
+        message:,
+        investigation:,
         team_deleted: team,
         user_who_deleted: user,
         to_email: entity.email

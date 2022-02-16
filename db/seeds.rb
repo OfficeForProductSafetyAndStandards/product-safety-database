@@ -4,11 +4,11 @@ ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapte
 def create_blob(filename, title: nil, description: nil)
   ActiveStorage::Blob.create_and_upload!(
     io: File.open("./db/seed_files/#{filename}"),
-    filename: filename,
+    filename:,
     content_type: "image/jpeg",
     metadata: {
       title: title || filename,
-      description: description,
+      description:,
       updated: Time.zone.now.iso8601
     }
   )
@@ -30,8 +30,8 @@ if run_seeds
     email: "seed_user@example.com",
     password: "testpassword",
     password_confirmation: "testpassword",
-    organisation: organisation,
-    team: team,
+    organisation:,
+    team:,
   )
 
   # First investigation
@@ -55,7 +55,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "",
@@ -69,7 +69,7 @@ if run_seeds
     has_markings: "markings_unknown"
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
   investigation.products.first.documents.attach(create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."))
 
   accident_params = {
@@ -90,8 +90,8 @@ if run_seeds
     is_date_known: false
   }
 
-  AddAccidentOrIncidentToCase.call!(accident_params.merge(investigation: investigation, user: user))
-  AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation: investigation, user: user))
+  AddAccidentOrIncidentToCase.call!(accident_params.merge(investigation:, user:))
+  AddAccidentOrIncidentToCase.call!(incident_params.merge(investigation:, user:))
 
   AddTestResultToInvestigation.call!(
     date: 15.days.ago,
@@ -101,7 +101,7 @@ if run_seeds
     result: "failed",
     created_at: 3.days.ago,
     document: create_blob("2019-w6_27505-1f.jpg", title: "Photo of Pretty dolls", description: "4 designs of doll, blonde hair, different coloured dresses."),
-    investigation: investigation,
+    investigation:,
     user: investigation.owner_user
   )
 
@@ -128,7 +128,7 @@ if run_seeds
 
   investigation.documents.attach(create_blob("putty 2.jpg"))
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   blob = create_blob("putty.jpg", title: "Crazy Geezer's putty world", description: "Top")
   investigation.documents.attach(blob)
@@ -150,7 +150,7 @@ if run_seeds
     has_markings: "markings_no"
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   risk_assessment_params = {
     assessed_on: Time.zone.today,
@@ -158,7 +158,7 @@ if run_seeds
     product_ids: [investigation.products.first.id]
   }
 
-  AddRiskAssessmentToCase.call!(risk_assessment_params.merge(investigation: investigation, user: user, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
+  AddRiskAssessmentToCase.call!(risk_assessment_params.merge(investigation:, user:, assessed_by_team_id: Team.find_by(name: "Seed Team").id))
 
   RiskAssessment.first.risk_assessment_file.attach(create_blob("bike fork 2.jpg", title: "Fork close up"))
 
@@ -183,7 +183,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "Unknown",
@@ -198,7 +198,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   investigation.products.first.documents.attach(create_blob("bike fork 1.jpg", title: "Suspension forks"))
 
@@ -225,7 +225,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "Batch 105R sold between February and May 2018",
@@ -240,7 +240,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   investigation.products.first.documents.attach(create_blob("demister.jpg", title: "Fogbusters"))
 
@@ -267,7 +267,7 @@ if run_seeds
 
   investigation.documents.attach(create_blob("2019-w6_27550-1f.jpg"))
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "",
@@ -282,7 +282,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   investigation.products.first.documents.attach(create_blob("2019-w6_27550-2f.jpg", title: "Photo of tree candle", description: "White Christmas-tree shaped candle with gold logo reading 'Let it snow', in plastic wrapping with white ribbon."))
 
@@ -307,7 +307,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "",
@@ -322,7 +322,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-1f.jpg", title: "Triangle"))
   investigation.products.first.documents.attach(create_blob("2018-w48_26634-2f.jpg", title: "Xylophone"))
@@ -355,7 +355,7 @@ if run_seeds
     job_title: ""
   )
 
-  investigation.investigation_businesses.create!(business: business, relationship: "Manufacturer")
+  investigation.investigation_businesses.create!(business:, relationship: "Manufacturer")
 
   # Seventh investigation
   investigation = Investigation::Allegation.new(
@@ -378,7 +378,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "8710447348123 (LynxThe Golden Year); 8710522349168 (Lynx Black)",
@@ -393,7 +393,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   product = investigation.products.first
 
@@ -423,7 +423,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "X00076P3WF",
@@ -438,7 +438,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   product = investigation.products.first
 
@@ -447,8 +447,8 @@ if run_seeds
   product.documents.attach(create_blob("2019-w3_27167-2f.jpg", title: "stickers and serial"))
 
   AddTestResultToInvestigation.call!(
-    investigation: investigation,
-    user: user,
+    investigation:,
+    user:,
     date: 2.days.ago.to_date,
     legislation: Rails.application.config.legislation_constants["legislation"].sample,
     details: "Passed tests 1 to 4 and failed test 5",
@@ -479,7 +479,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "3105 & 1109",
@@ -494,7 +494,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
@@ -518,7 +518,7 @@ if run_seeds
     other_details: ""
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   product_params = {
     batch_number: "11",
@@ -533,7 +533,7 @@ if run_seeds
     markings: [Product::MARKINGS.sample]
   }
 
-  AddProductToCase.call!(product_params.merge({ investigation: investigation, user: user }))
+  AddProductToCase.call!(product_params.merge({ investigation:, user: }))
 
   investigation.products.first.documents.attach(create_blob("2019-w2_27234-1f.jpg", title: "babygro"))
 
@@ -550,7 +550,7 @@ if run_seeds
     complainant_reference: nil
   )
 
-  CreateCase.call!(investigation: investigation, user: user)
+  CreateCase.call!(investigation:, user:)
 
   if Rails.env.production? && (organisations = CF::App::Credentials.find_by_service_tag("psd-seeds-v2").try(:[], "organisations"))
     # The structure is as follows:
@@ -628,7 +628,7 @@ if run_seeds
         email: "user@example.com",
         password: "testpassword",
         password_confirmation: "testpassword",
-        organisation: organisation,
+        organisation:,
         mobile_number_verified: true,
         team: enforcement,
         mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
@@ -641,7 +641,7 @@ if run_seeds
         email: "admin@example.com",
         password: "testpassword",
         password_confirmation: "testpassword",
-        organisation: organisation,
+        organisation:,
         mobile_number_verified: true,
         team: operational_support,
         mobile_number: ENV.fetch("TWO_FACTOR_AUTH_MOBILE_NUMBER")
@@ -684,7 +684,7 @@ if run_seeds
       investigation: i,
       legislation: "Merchant Shipping (Marine Equipment) Regulations 2016",
       measure_type: CorrectiveAction::MEASURE_TYPES.sample,
-      product: product,
+      product:,
       action: "other",
       other_action: "First corrective action",
       created_at: 2.days.ago

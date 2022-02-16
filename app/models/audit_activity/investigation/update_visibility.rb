@@ -4,7 +4,7 @@ class AuditActivity::Investigation::UpdateVisibility < AuditActivity::Investigat
 
     {
       updates: updated_values,
-      rationale: rationale
+      rationale:
     }
   end
 

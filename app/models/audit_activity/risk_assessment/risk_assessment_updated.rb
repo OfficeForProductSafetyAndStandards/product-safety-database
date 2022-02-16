@@ -21,7 +21,7 @@ class AuditActivity::RiskAssessment::RiskAssessmentUpdated < AuditActivity::Base
 
     {
       risk_assessment_id: risk_assessment.id,
-      updates: updates
+      updates:
     }
   end
 

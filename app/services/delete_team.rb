@@ -32,7 +32,7 @@ private
     ChangeCaseOwner.call!(
       investigation: collaboration.investigation,
       owner: new_team,
-      user: user,
+      user:,
       rationale: change_case_owner_rationale,
       silent: true
     )
@@ -46,11 +46,11 @@ private
     metadata = update_owner_activity_class.build_metadata(new_team, change_case_owner_rationale)
 
     update_owner_activity_class.create!(
-      source: UserSource.new(user: user),
+      source: UserSource.new(user:),
       investigation: collaboration.investigation,
       title: nil,
       body: nil,
-      metadata: metadata
+      metadata:
     )
   end
 
@@ -74,7 +74,7 @@ private
       investigation: collaboration.investigation,
       team: new_team,
       collaboration_class: collaboration.class,
-      user: user,
+      user:,
       message: add_remove_team_message,
       silent: true
     )
@@ -82,8 +82,8 @@ private
 
   def remove_team_from_case(collaboration)
     RemoveTeamFromCase.call!(
-      collaboration: collaboration,
-      user: user,
+      collaboration:,
+      user:,
       message: add_remove_team_message,
       silent: true
     )

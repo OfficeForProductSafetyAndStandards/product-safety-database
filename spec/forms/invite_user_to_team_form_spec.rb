@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe InviteUserToTeamForm do
-  subject(:form) { described_class.new(email: email, team: team) }
+  subject(:form) { described_class.new(email:, team:) }
 
   let(:email) { "test@example.com" }
   let(:team) { create(:team, name: "Test Team") }

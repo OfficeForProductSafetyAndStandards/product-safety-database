@@ -17,7 +17,7 @@ RSpec.describe AuditActivity::Investigation::UpdateStatus, :with_stubbed_opensea
         updates: {
           "is_closed" => [false, true]
         },
-        rationale: rationale
+        rationale:
       })
     end
   end

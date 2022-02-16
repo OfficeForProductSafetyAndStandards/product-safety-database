@@ -24,7 +24,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_o
         duration: new_duration,
         details: new_details,
         business_id: corrective_action.business_id,
-        existing_document_file_id: existing_document_file_id,
+        existing_document_file_id:,
         related_file: true,
         file: file_form
       )
@@ -35,7 +35,7 @@ RSpec.describe AuditActivity::CorrectiveAction::UpdateDecorator, :with_stubbed_o
   before do
     UpdateCorrectiveAction.call!(
       corrective_action_attributes
-        .merge(corrective_action: corrective_action, user: user, changes: changes)
+        .merge(corrective_action:, user:, changes:)
     )
   end
 

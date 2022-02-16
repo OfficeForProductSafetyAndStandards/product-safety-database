@@ -27,11 +27,11 @@ private
     metadata = activity_class.build_metadata(investigation, rationale)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       title: nil,
       body: nil,
-      metadata: metadata
+      metadata:
     )
   end
 
@@ -56,7 +56,7 @@ private
   end
 
   def email_body(viewer = nil)
-    user_name = user.decorate.display_name(viewer: viewer)
+    user_name = user.decorate.display_name(viewer:)
     I18n.t(
       "change_case_visibility.email_update_text",
       case_type: email_case_type,

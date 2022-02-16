@@ -16,7 +16,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
            params: {
              add_team_to_case_form: {
                include_message: "true",
-               message: message,
+               message:,
                team_id: other_team.id,
                permission_level: "edit"
              }
@@ -100,7 +100,7 @@ RSpec.describe "Adding a collaborator to a case", type: :request, with_stubbed_m
     let(:investigation) { create(:allegation) }
 
     before do
-      ChangeCaseOwner.call!(investigation: investigation, owner: create(:team), user: user)
+      ChangeCaseOwner.call!(investigation:, owner: create(:team), user:)
       sign_in user
       post investigation_collaborators_path(investigation.pretty_id)
     end

@@ -17,14 +17,14 @@ RSpec.describe AuditActivity::Investigation::UpdateVisibility, :with_stubbed_ope
         updates: {
           "is_private" => [false, true]
         },
-        rationale: rationale
+        rationale:
       })
     end
   end
 
   describe "#metadata" do
     context "with legacy audit" do
-      subject(:audit_activity) { create(:legacy_audit_investigation_visibility_status, title: title) }
+      subject(:audit_activity) { create(:legacy_audit_investigation_visibility_status, title:) }
 
       context "with restricted status" do
         let(:title) { "Allegation visibility\n            Restricted" }

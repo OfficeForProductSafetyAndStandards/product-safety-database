@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_adapter do
-  subject(:result) { described_class.call(investigation: investigation, business: business, user: user) }
+  subject(:result) { described_class.call(investigation:, business:, user:) }
 
-  let(:investigation) { create(:allegation, creator: creator) }
+  let(:investigation) { create(:allegation, creator:) }
   let(:business)      { build(:business) }
   let(:user)          { create(:user) }
   let(:creator)       { user }
@@ -27,7 +27,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(business: business, user: user) }
+      let(:result) { described_class.call(business:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -35,7 +35,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     context "with no product parameter" do
-      let(:result) { described_class.call(investigation: investigation, user: user) }
+      let(:result) { described_class.call(investigation:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -65,7 +65,7 @@ RSpec.describe AddBusinessToCase, :with_stubbed_opensearch, :with_test_queue_ada
 
         business = Business.last
         activity = investigation.reload.activities.find_by!(type: AuditActivity::Business::Add.name)
-        expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation: investigation).attributes.to_json) })
+        expect(activity).to have_attributes(title: nil, body: nil, business_id: business.id, metadata: { "business" => JSON.parse(business.attributes.to_json), "investigation_business" => JSON.parse(business.investigation_businesses.find_by!(investigation:).attributes.to_json) })
         expect(activity.source.user).to eq(user)
       end
 

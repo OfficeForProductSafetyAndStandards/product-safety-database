@@ -10,18 +10,18 @@ class AddPhoneCallToCase
 
     Correspondence.transaction do
       context.correspondence = investigation.phone_calls.create!(
-        transcript: transcript,
-        correspondence_date: correspondence_date,
-        phone_number: phone_number,
-        correspondent_name: correspondent_name,
-        overview: overview,
-        details: details
+        transcript:,
+        correspondence_date:,
+        phone_number:,
+        correspondent_name:,
+        overview:,
+        details:
       )
 
       context.activity = AuditActivity::Correspondence::AddPhoneCall.create!(
-        source: UserSource.new(user: user),
-        investigation: investigation,
-        correspondence: correspondence,
+        source: UserSource.new(user:),
+        investigation:,
+        correspondence:,
         metadata: AuditActivity::Correspondence::AddPhoneCall.build_metadata(correspondence)
       )
 

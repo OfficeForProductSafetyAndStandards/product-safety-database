@@ -10,7 +10,7 @@ RSpec.feature "Manage Images", :with_stubbed_opensearch, :with_stubbed_antivirus
   let(:description)   { Faker::Lorem.paragraph }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
     sign_in user
   end
 
