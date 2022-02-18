@@ -33,7 +33,7 @@ applications:
     - psd-two-factor-auth-env
     - antivirus-auth-env
     - psd-seeds-v2
-    - psd-redex-s3-env
+    - psd-redacted-export-env
   processes:
     - type: web
       env:

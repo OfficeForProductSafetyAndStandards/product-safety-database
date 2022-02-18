@@ -29,6 +29,7 @@ applications:
     - psd-two-factor-auth-env
     - psd-web-scout-env
     - antivirus-auth-env
+    - psd-redacted-export-env
   processes:
     - type: web
       env:
