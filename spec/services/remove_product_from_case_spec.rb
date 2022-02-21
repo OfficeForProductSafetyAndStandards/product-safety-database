@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
-  subject(:result) { described_class.call(investigation: investigation, product: product, user: user, reason: reason) }
+  subject(:result) { described_class.call(investigation:, product:, user:, reason:) }
 
-  let(:investigation) { create(:allegation, products: [product], creator: creator) }
+  let(:investigation) { create(:allegation, products: [product], creator:) }
   let(:product)       { create(:product_washing_machine) }
   let(:reason)        { Faker::Hipster.sentence }
   let(:user)          { create(:user) }
@@ -21,7 +21,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
       end
 
       context "with no investigation parameter" do
-        let(:result) { described_class.call(product: product, user: user) }
+        let(:result) { described_class.call(product:, user:) }
 
         it "returns a failure" do
           expect(result).to be_failure
@@ -29,7 +29,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
       end
 
       context "with no product parameter" do
-        let(:result) { described_class.call(investigation: investigation, user: user) }
+        let(:result) { described_class.call(investigation:, user:) }
 
         it "returns a failure" do
           expect(result).to be_failure
@@ -37,7 +37,7 @@ RSpec.describe RemoveProductFromCase, :with_test_queue_adapter do
       end
 
       context "with no user parameter" do
-        let(:result) { described_class.call(investigation: investigation, product: product) }
+        let(:result) { described_class.call(investigation:, product:) }
 
         it "returns a failure" do
           expect(result).to be_failure

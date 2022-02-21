@@ -21,6 +21,12 @@ gem "interactor", "~> 3.1"
 gem "jbuilder", "~> 2.11"
 gem "lograge", "~> 0.11"
 gem "mini_magick", "~> 4.11"
+
+# ActionMailer dependencies
+gem "net-imap"
+gem "net-pop"
+gem "net-smtp"
+
 gem "pg", "~> 1.3"
 gem "pghero", "~> 2.8"
 gem "puma", "~> 5.6"

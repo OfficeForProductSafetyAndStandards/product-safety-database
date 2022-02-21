@@ -22,9 +22,9 @@ private
 
   def create_audit_activity_for_product_removed
     AuditActivity::Product::Destroy.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
-      product: product,
+      source: UserSource.new(user:),
+      investigation:,
+      product:,
       metadata: AuditActivity::Product::Destroy.build_metadata(product, reason)
     )
   end

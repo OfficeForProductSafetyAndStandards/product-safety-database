@@ -12,7 +12,7 @@ class MoveUpdateOwnerActivityMetadata < ActiveRecord::Migration[5.2]
 
       metadata = klass.build_metadata(owner, activity[:body])
 
-      activity.update!(metadata: metadata, title: nil, body: nil)
+      activity.update!(metadata:, title: nil, body: nil)
     end
 
     klass = AuditActivity::Investigation::AutomaticallyUpdateOwner
@@ -27,7 +27,7 @@ class MoveUpdateOwnerActivityMetadata < ActiveRecord::Migration[5.2]
 
       metadata = klass.build_metadata(owner)
 
-      activity.update!(metadata: metadata, title: nil, body: nil)
+      activity.update!(metadata:, title: nil, body: nil)
     end
   end
 end

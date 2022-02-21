@@ -17,8 +17,8 @@ RSpec.feature "Validate risk level", :with_stubbed_opensearch, :with_stubbed_ant
   context "when user has `risk_level_validator` role" do
     before do
       AddTeamToCase.call!(
-        user: user,
-        investigation: investigation,
+        user:,
+        investigation:,
         team: user.team,
         collaboration_class: Collaboration::Access::Edit
       )
@@ -129,7 +129,7 @@ RSpec.feature "Validate risk level", :with_stubbed_opensearch, :with_stubbed_ant
         case_id: investigation.pretty_id,
         updater_name: user.name,
         updater_team_name: user.team.name,
-        action: action
+        action:
       )
     end
   end

@@ -9,7 +9,7 @@ module Devise
         def self.digest(password, _stretches, salt, _pepper)
           hashed_password = OpenSSL::KDF.pbkdf2_hmac(
             password,
-            salt: salt,
+            salt:,
             iterations: 27_500,
             length: KEY_LEN,
             hash: HASH_FUNCTION

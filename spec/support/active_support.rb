@@ -6,7 +6,7 @@ module_function
       io: File.open(evaluator.document_file),
       filename: File.basename(evaluator.document_file),
       content_type: "text/plain",
-      metadata: metadata
+      metadata:
     )
   end
 end

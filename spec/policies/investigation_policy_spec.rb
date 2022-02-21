@@ -4,7 +4,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
   subject(:policy) { described_class.new(user, investigation) }
 
   let(:team) { create(:team) }
-  let(:user) { create(:user, team: team) }
+  let(:user) { create(:user, team:) }
   let(:investigation) { create(:allegation, is_private: false) }
 
   context "when the investigation is not restricted" do
@@ -32,7 +32,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
 
     context "when the user’s has been given read-only access" do
       before do
-        create(:read_only_collaboration, investigation: investigation, collaborator: team)
+        create(:read_only_collaboration, investigation:, collaborator: team)
         investigation.reload
       end
 
@@ -63,7 +63,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
 
     context "when the user’s has been given edit access" do
       before do
-        create(:collaboration_edit_access, investigation: investigation, collaborator: team)
+        create(:collaboration_edit_access, investigation:, collaborator: team)
         investigation.reload
       end
 
@@ -94,7 +94,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
 
     context "when the user’s team is the current case owner" do
       before do
-        ChangeCaseOwner.call!(investigation: investigation, owner: team, user: create(:user))
+        ChangeCaseOwner.call!(investigation:, owner: team, user: create(:user))
       end
 
       it "can update the case" do
@@ -148,7 +148,7 @@ RSpec.describe InvestigationPolicy, :with_stubbed_opensearch, :with_stubbed_mail
       end
 
       context "when the user has the restricted_case_viewer role" do
-        let(:user) { create(:user, :restricted_case_viewer, team: team) }
+        let(:user) { create(:user, :restricted_case_viewer, team:) }
 
         it "can view non-protected details" do
           expect(policy.view_non_protected_details?).to be true

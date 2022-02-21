@@ -5,7 +5,7 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
   let(:investigation) { create(:allegation, creator: user) }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
     sign_in(user)
   end
 
@@ -26,7 +26,7 @@ RSpec.describe "Adding correspondence to a case", type: :request, with_stubbed_m
   context  "when choosing a correspondence type" do
     before do
       post investigation_correspondence_index_path(investigation),
-           params: { type: type }
+           params: { type: }
     end
 
     context "when adding an email" do

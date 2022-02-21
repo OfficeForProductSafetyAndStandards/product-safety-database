@@ -15,7 +15,7 @@ RSpec.describe AuditActivity::Investigation::TeamAdded, :with_stubbed_opensearch
       expect(result).to eq({
         team: { id: team.id, name: team.display_name },
         permission: "edit",
-        message: message
+        message:
       })
     end
   end

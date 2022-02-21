@@ -5,7 +5,7 @@ RSpec.describe Investigations::ActivitiesController, :with_stubbed_opensearch, t
   let(:investigation) { create(:allegation, products: [product]) }
   let(:legacy_title)  { "legacy title" }
   let!(:legacy_audit_activity_test_result) do
-    create(:legacy_audit_activity_test_result, title: legacy_title, investigation: investigation)
+    create(:legacy_audit_activity_test_result, title: legacy_title, investigation:)
   end
 
   before { sign_in investigation.owner_user }

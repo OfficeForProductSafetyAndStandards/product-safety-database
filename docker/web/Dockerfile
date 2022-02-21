@@ -1,4 +1,4 @@
-FROM ruby:3.0.3
+FROM ruby:3.1.0
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /psd
 
-RUN gem install bundler:2.3.4
+RUN gem install bundler:2.3.7
 COPY Gemfile /psd/
 COPY Gemfile.lock /psd/
 

@@ -5,7 +5,7 @@ class BusinessExportJob < ApplicationJob
     NotifyMailer.business_export(
       email: business_export.user.email,
       name: business_export.user.name,
-      business_export: business_export
+      business_export:
     ).deliver_later
   rescue StandardError => e
     Sentry.capture_exception(e)

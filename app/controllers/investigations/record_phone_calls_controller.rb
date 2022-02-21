@@ -23,7 +23,7 @@ class Investigations::RecordPhoneCallsController < ApplicationController
       @correspondence_form
         .attributes
         .except("existing_transcript_file_id")
-        .merge(investigation: investigation, user: current_user)
+        .merge(investigation:, user: current_user)
     )
 
     redirect_to investigation_phone_call_path(@investigation.pretty_id, result.correspondence)

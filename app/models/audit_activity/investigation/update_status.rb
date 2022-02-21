@@ -4,7 +4,7 @@ class AuditActivity::Investigation::UpdateStatus < AuditActivity::Investigation:
 
     {
       updates: updated_values,
-      rationale: rationale
+      rationale:
     }
   end
 end

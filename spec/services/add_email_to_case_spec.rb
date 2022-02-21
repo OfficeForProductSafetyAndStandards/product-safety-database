@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :with_stubbed_antivirus do
   # Create the case before running tests so that we can check which emails are sent by the service
-  let!(:investigation) { create(:allegation, creator: creator, owner_team: team, owner_user: nil) }
+  let!(:investigation) { create(:allegation, creator:, owner_team: team, owner_user: nil) }
   let(:product) { create(:product_washing_machine) }
 
   let(:team) { create(:team) }
@@ -23,7 +23,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :
     context "with no investigation parameter" do
       let(:result) do
         described_class.call(
-          user: user
+          user:
         )
       end
 
@@ -35,7 +35,7 @@ RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :
     context "with no user parameter" do
       let(:result) do
         described_class.call(
-          investigation: investigation
+          investigation:
         )
       end
 
@@ -47,8 +47,8 @@ RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :
     context "with the minimum required parameters" do
       let(:result) do
         described_class.call(
-          investigation: investigation,
-          user: user,
+          investigation:,
+          user:,
           correspondence_date: Date.new(2020, 1, 2),
           email_subject: "Re: safety issue",
           details: "Please call me."
@@ -95,8 +95,8 @@ RSpec.describe AddEmailToCase, :with_stubbed_opensearch, :with_stubbed_mailer, :
     context "with an email file and an attachment" do
       let(:result) do
         described_class.call(
-          investigation: investigation,
-          user: user,
+          investigation:,
+          user:,
           correspondence_date: Date.new(2020, 1, 2),
           email_subject: "",
           details: "",

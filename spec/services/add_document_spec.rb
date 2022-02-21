@@ -31,7 +31,7 @@ RSpec.describe AddDocument, :with_stubbed_opensearch, :with_test_queue_adapter d
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(parent: parent, document: document) }
+      let(:result) { described_class.call(parent:, document:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -39,7 +39,7 @@ RSpec.describe AddDocument, :with_stubbed_opensearch, :with_test_queue_adapter d
     end
 
     context "with no document parameter" do
-      let(:result) { described_class.call(parent: parent, user: user) }
+      let(:result) { described_class.call(parent:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -47,7 +47,7 @@ RSpec.describe AddDocument, :with_stubbed_opensearch, :with_test_queue_adapter d
     end
 
     context "with no parent parameter" do
-      let(:result) { described_class.call(document: document, user: user) }
+      let(:result) { described_class.call(document:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -57,9 +57,9 @@ RSpec.describe AddDocument, :with_stubbed_opensearch, :with_test_queue_adapter d
     context "with required parameters" do
       let(:result) do
         described_class.call(
-          user: user,
-          parent: parent,
-          document: document
+          user:,
+          parent:,
+          document:
         )
       end
 

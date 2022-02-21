@@ -18,13 +18,13 @@ class UpdateEmail
 
     ActiveRecord::Base.transaction do
       email.attributes = {
-        correspondent_name: correspondent_name,
-        correspondence_date: correspondence_date,
-        email_address: email_address,
-        email_direction: email_direction,
-        overview: overview,
-        details: details,
-        email_subject: email_subject
+        correspondent_name:,
+        correspondence_date:,
+        email_address:,
+        email_direction:,
+        overview:,
+        details:,
+        email_subject:
       }
 
       if email_file_action == "remove"
@@ -110,12 +110,12 @@ private
   end
 
   def user_source
-    @user_source ||= UserSource.new(user: user)
+    @user_source ||= UserSource.new(user:)
   end
 
   def audit_activity_metadata
     AuditActivity::Correspondence::EmailUpdated.build_metadata(
-      email: email,
+      email:,
       email_changed: email_file_changed?,
       previous_email_filename: @previous_email_filename,
       email_attachment_changed: (email_attachment.present? || email_attachment_action == "remove"),

@@ -15,7 +15,7 @@ module Investigations
       if @why_reporting_form.valid?
         result = ChangeSafetyAndComplianceData.call!(
           @why_reporting_form.serializable_hash.merge({
-            investigation: investigation,
+            investigation:,
             user: current_user
           })
         )

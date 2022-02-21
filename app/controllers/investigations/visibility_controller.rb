@@ -21,7 +21,7 @@ module Investigations
       authorize @investigation, :change_owner_or_status?
 
       @change_case_visibility_form = ChangeCaseVisibilityForm.from(@investigation)
-      @change_case_visibility_form.assign_attributes(change_case_visibility_form_params.merge(new_visibility: new_visibility))
+      @change_case_visibility_form.assign_attributes(change_case_visibility_form_params.merge(new_visibility:))
 
       # If not a PATCH request we should escape now and just display the form.
       if !@change_case_visibility_form.valid? || !request.patch?

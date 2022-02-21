@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_opensearch, :with_errors_rendered, type: :feature do
   let(:team) { create(:team) }
   let(:email) { Faker::Internet.safe_email }
-  let!(:other_user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
+  let!(:other_user) { create(:user, :activated, team:, has_viewed_introduction: true) }
 
   context "when the user is a team admin" do
-    let(:user) { create(:user, :activated, :team_admin, team: team, has_viewed_introduction: true) }
+    let(:user) { create(:user, :activated, :team_admin, team:, has_viewed_introduction: true) }
 
     before do
       sign_in(user)
@@ -83,7 +83,7 @@ RSpec.feature "Removing a user", :with_stubbed_mailer, :with_stubbed_opensearch,
     end
 
     context "when the user is not a team admin" do
-      let(:user) { create(:user, :activated, team: team, has_viewed_introduction: true) }
+      let(:user) { create(:user, :activated, team:, has_viewed_introduction: true) }
 
       scenario "does not allow user to remove other users" do
         visit "/teams/#{team.id}"

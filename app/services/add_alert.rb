@@ -9,8 +9,8 @@ class AddAlert
     context.fail!(error: "No user supplied") unless user.is_a?(User)
 
     context.alert = Alert.create!(
-      description: description,
-      summary: summary,
+      description:,
+      summary:,
       investigation_id: investigation.id,
     )
 
@@ -31,12 +31,12 @@ private
   def create_audit_activity
     AuditActivity::Alert::Add.create!(
       metadata: audit_activity_metadata,
-      source: source,
-      investigation: investigation
+      source:,
+      investigation:
     )
   end
 
   def source
-    UserSource.new(user: user)
+    UserSource.new(user:)
   end
 end

@@ -27,7 +27,7 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
   let(:file) { parent.documents.first.blob }
 
   before do
-    AddDocument.call!(parent: parent, document: uploaded_document, user: user)
+    AddDocument.call!(parent:, document: uploaded_document, user:)
   end
 
   describe ".call" do
@@ -40,7 +40,7 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(parent: parent, file: file) }
+      let(:result) { described_class.call(parent:, file:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -48,7 +48,7 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
     end
 
     context "with no document parameter" do
-      let(:result) { described_class.call(parent: parent, user: user) }
+      let(:result) { described_class.call(parent:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -56,7 +56,7 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
     end
 
     context "with no parent parameter" do
-      let(:result) { described_class.call(file: file, user: user) }
+      let(:result) { described_class.call(file:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -67,9 +67,9 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
       context "with no changes" do
         let(:result) do
           described_class.call(
-            user: user,
-            parent: parent,
-            file: file,
+            user:,
+            parent:,
+            file:,
             title: old_title,
             description: old_description
           )
@@ -105,9 +105,9 @@ RSpec.describe UpdateDocument, :with_stubbed_opensearch, :with_test_queue_adapte
       context "with changes" do
         let(:result) do
           described_class.call(
-            user: user,
-            parent: parent,
-            file: file,
+            user:,
+            parent:,
+            file:,
             title: new_title,
             description: new_description
           )

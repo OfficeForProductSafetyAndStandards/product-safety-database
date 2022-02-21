@@ -12,7 +12,7 @@ RSpec.describe DocumentForm, :with_stubbed_opensearch, :with_test_queue_adapter 
       filename: new_document.original_filename,
       content_type: new_document.content_type
     )
-    document.update!(metadata: { title: title, description: description })
+    document.update!(metadata: { title:, description: })
     document
   end
   let(:document) { new_document }

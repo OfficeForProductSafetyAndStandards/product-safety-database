@@ -49,7 +49,7 @@ private
     return if @search.case_status == "all"
 
     is_closed = @search.case_status == "closed"
-    { term: { is_closed: is_closed } }
+    { term: { is_closed: } }
   end
 
   def get_coronavirus_filter

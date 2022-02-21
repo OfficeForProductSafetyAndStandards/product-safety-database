@@ -20,7 +20,7 @@ class WhyReportingForm
     investigation.assign_attributes(
       attributes
         .slice("hazard_description", "hazard_type", "non_compliant_reason")
-        .merge(reported_reason: reported_reason, description: reason_created)
+        .merge(reported_reason:, description: reason_created)
     )
   end
 

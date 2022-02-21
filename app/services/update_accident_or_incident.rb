@@ -11,12 +11,12 @@ class UpdateAccidentOrIncident
     ActiveRecord::Base.transaction do
       accident_or_incident.assign_attributes(
         date: updated_date,
-        is_date_known: is_date_known,
-        product_id: product_id,
-        severity: severity,
+        is_date_known:,
+        product_id:,
+        severity:,
         severity_other: updated_custom_severity,
-        usage: usage,
-        additional_info: additional_info
+        usage:,
+        additional_info:
       )
 
       break if no_changes?
@@ -31,11 +31,11 @@ class UpdateAccidentOrIncident
   def create_audit_activity
     AuditActivity::AccidentOrIncident::AccidentOrIncidentUpdated.create!(
       source: user_source,
-      investigation: investigation,
+      investigation:,
       metadata: audit_activity_metadata,
       title: nil,
       body: nil,
-      product_id: product_id
+      product_id:
     )
   end
 
@@ -44,7 +44,7 @@ class UpdateAccidentOrIncident
   end
 
   def user_source
-    @user_source ||= UserSource.new(user: user)
+    @user_source ||= UserSource.new(user:)
   end
 
   def no_changes?

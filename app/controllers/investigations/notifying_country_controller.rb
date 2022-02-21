@@ -15,7 +15,7 @@ module Investigations
       if @notifying_country_form.valid?
         ChangeNotifyingCountry.call!(
           @notifying_country_form.serializable_hash.merge({
-            investigation: investigation,
+            investigation:,
             user: current_user
           })
         )

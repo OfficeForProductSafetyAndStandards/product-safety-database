@@ -62,7 +62,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
       expect(page).to have_content "Currently selected file: email_file.txt"
     end
 
-    fill_in_record_email_form(name: name, email: email, date: date)
+    fill_in_record_email_form(name:, email:, date:)
     fill_in "Summary", with: "Test summary"
 
     click_button "Add email"
@@ -80,7 +80,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
 
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, email:, date:, file:)
 
     # Test that another user in a different organisation cannot see correspondence
     sign_out
@@ -100,7 +100,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     visit "/cases/#{investigation.pretty_id}/activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, file: file)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, email:, date:, file:)
   end
 
   scenario "with summary and subject and body and attachment" do
@@ -128,8 +128,8 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     expect(page).to have_error_messages
     expect(page).to have_error_summary "Enter the date sent"
 
-    fill_in_record_email_form(name: name, email: email, date: date)
-    fill_in_record_email_details_form(summary: summary, subject: email_subject, body: body)
+    fill_in_record_email_form(name:, email:, date:)
+    fill_in_record_email_details_form(summary:, subject: email_subject, body:)
 
     click_button "Add email"
 
@@ -144,7 +144,7 @@ RSpec.feature "Adding a record email activity to a case", :with_stubbed_opensear
     click_on "Activity"
 
     expect_to_be_on_case_activity_page(case_id: investigation.pretty_id)
-    expect_case_activity_page_to_show_entered_information(user_name: user.name, name: name, email: email, date: date, summary: summary, subject: email_subject, body: body)
+    expect_case_activity_page_to_show_entered_information(user_name: user.name, name:, email:, date:, summary:, subject: email_subject, body:)
 
     # Test that another user in a different organisation cannot see correspondence
     sign_out

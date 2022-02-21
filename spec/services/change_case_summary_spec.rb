@@ -17,7 +17,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(summary: new_summary, user: user) }
+      let(:result) { described_class.call(summary: new_summary, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -25,7 +25,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(summary: new_summary, investigation: investigation) }
+      let(:result) { described_class.call(summary: new_summary, investigation:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -33,7 +33,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_opensearch, :with_test_queue_ada
     end
 
     context "with no summary parameter" do
-      let(:result) { described_class.call(investigation: investigation, user: user) }
+      let(:result) { described_class.call(investigation:, user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -49,7 +49,7 @@ RSpec.describe ChangeCaseSummary, :with_stubbed_opensearch, :with_test_queue_ada
         "Enquiry summary was updated by #{name}."
       end
 
-      let(:result) { described_class.call(investigation: investigation, user: user, summary: new_summary) }
+      let(:result) { described_class.call(investigation:, user:, summary: new_summary) }
 
       it "returns success" do
         expect(result).to be_success

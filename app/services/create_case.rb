@@ -47,20 +47,20 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       title: nil,
       body: nil,
-      metadata: metadata
+      metadata:
     )
   end
 
   def create_audit_activity_for_product_added(product)
     AuditActivity::Product::Add.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       title: product.name,
-      product: product
+      product:
     )
   end
 

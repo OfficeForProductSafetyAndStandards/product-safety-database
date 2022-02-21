@@ -5,9 +5,9 @@ namespace :user do
     # the task block.
     # rubocop:disable Rake/MethodDefinitionInTask
     def delete_user(id, email)
-      user = id ? User.find(id) : User.find_by!(email: email)
+      user = id ? User.find(id) : User.find_by!(email:)
 
-      result = DeleteUser.call(user: user)
+      result = DeleteUser.call(user:)
       if result.success?
         puts "User #{id.presence || email} successfully marked as deleted."
         puts "User investigations assigned to #{result.team.name}"

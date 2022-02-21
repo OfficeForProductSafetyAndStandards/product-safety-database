@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CoronavirusRelatedForm do
-  subject(:form) { described_class.new(coronavirus_related: coronavirus_related) }
+  subject(:form) { described_class.new(coronavirus_related:) }
 
   describe "#valid?" do
     before { form.validate }

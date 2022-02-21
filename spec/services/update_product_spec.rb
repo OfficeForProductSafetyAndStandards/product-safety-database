@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe UpdateProduct, :with_opensearch, :with_stubbed_mailer do
-  subject(:result) { described_class.call(product: product, product_params: product_params) }
+  subject(:result) { described_class.call(product:, product_params:) }
 
   let(:investigation)  { create(:allegation) }
   let(:product)        { create(:product, investigations: [investigation]) }

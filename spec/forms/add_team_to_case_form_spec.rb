@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AddTeamToCaseForm, :with_stubbed_opensearch, :with_stubbed_mailer do
-  subject(:form) { described_class.new(team_id: team_id, message: message, include_message: include_message, permission_level: permission_level) }
+  subject(:form) { described_class.new(team_id:, message:, include_message:, permission_level:) }
 
   let(:team) { create(:team) }
 

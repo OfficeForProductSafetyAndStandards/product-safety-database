@@ -6,24 +6,24 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
   subject(:decorated_investigation) { investigation.decorate }
 
   let(:organisation)  { create :organisation }
-  let(:user)          { create(:user, organisation: organisation).decorate }
+  let(:user)          { create(:user, organisation:).decorate }
   let(:team)          { create(:team) }
-  let(:creator)       { create(:user, organisation: organisation, team: team) }
+  let(:creator)       { create(:user, organisation:, team:) }
   let(:products)      { [] }
   let(:risk_level)    { :serious }
   let(:coronavirus_related) { false }
   let(:investigation) do
     create(:allegation,
            :reported_unsafe_and_non_compliant,
-           products: products,
-           coronavirus_related: coronavirus_related,
-           creator: creator,
-           risk_level: risk_level)
+           products:,
+           coronavirus_related:,
+           creator:,
+           risk_level:)
   end
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, user: creator, owner: user)
-    create(:complainant, investigation: investigation)
+    ChangeCaseOwner.call!(investigation:, user: creator, owner: user)
+    create(:complainant, investigation:)
   end
 
   describe "#display_product_summary_list?" do
@@ -127,7 +127,7 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
 
   describe "#source_details_summary_list" do
     let(:view_protected_details) { true }
-    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details: view_protected_details) }
+    let(:source_details_summary_list) { decorated_investigation.source_details_summary_list(view_protected_details:) }
 
     it "does not display the Received date" do
       expect(source_details_summary_list).not_to summarise("Received date", text: investigation.date_received.to_s(:govuk))
@@ -234,8 +234,8 @@ RSpec.describe InvestigationDecorator, :with_stubbed_opensearch, :with_stubbed_m
     let(:viewer) { build(:user) }
 
     it "displays the owner name" do
-      expect(decorated_investigation.owner_display_name_for(viewer: viewer))
-        .to eq(user.owner_short_name(viewer: viewer))
+      expect(decorated_investigation.owner_display_name_for(viewer:))
+        .to eq(user.owner_short_name(viewer:))
     end
   end
 
