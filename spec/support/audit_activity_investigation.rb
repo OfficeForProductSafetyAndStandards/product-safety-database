@@ -33,7 +33,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
   describe "#owner" do
     subject(:owner) { activity.owner }
 
-    let(:activity) { described_class.create(investigation: investigation, metadata: metadata) }
+    let(:activity) { described_class.create(investigation:, metadata:) }
 
     # Old records prior to implementation of metadata. In this case this attribute is never used
     context "when there is no metadata" do
@@ -65,7 +65,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
   describe "#complainant" do
     subject(:complainant) { activity.complainant }
 
-    let(:activity) { described_class.create(investigation: investigation, metadata: metadata) }
+    let(:activity) { described_class.create(investigation:, metadata:) }
 
     # Old records prior to implementation of metadata. In this case this attribute is never used
     context "when there is no metadata" do
@@ -97,7 +97,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
   describe "#title" do
     subject(:title) { activity.title(nil) }
 
-    let(:activity) { described_class.create(investigation: investigation, metadata: metadata, title: test_title) }
+    let(:activity) { described_class.create(investigation:, metadata:, title: test_title) }
     let(:test_title) { nil }
 
     # Old records prior to implementation of metadata. In this case the title is pre-generated and stored in the database
@@ -128,7 +128,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
   describe "#can_display_all_data?" do
     subject(:can_display) { activity.can_display_all_data?(user) }
 
-    let(:activity) { described_class.create(investigation: investigation, metadata: metadata) }
+    let(:activity) { described_class.create(investigation:, metadata:) }
     let(:user) { create(:user) }
 
     context "when metadata is present" do
@@ -158,7 +158,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
 
         context "when the user is on a team collaborating on the case" do
           before do
-            create(:collaboration_edit_access, investigation: investigation, collaborator: user.team)
+            create(:collaboration_edit_access, investigation:, collaborator: user.team)
             investigation.reload
           end
 
@@ -180,7 +180,7 @@ RSpec.shared_examples "an audit activity for investigation added" do
     # This method will only ever be called for older records with no metadata,
     # where the title is pre-generated and stored in the database, so we will
     # set the title here
-    subject(:activity) { described_class.create(investigation: investigation, title: "Test title") }
+    subject(:activity) { described_class.create(investigation:, title: "Test title") }
 
     # titles never contain GDPR data for these activity classes so just return the title
     it "returns the title" do

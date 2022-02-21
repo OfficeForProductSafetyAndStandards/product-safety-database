@@ -5,7 +5,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_opensearch, 
 
   include_context "with corrective action setup for updates"
 
-  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
+  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation:, product:, business:) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
 
   before do
@@ -14,7 +14,7 @@ RSpec.describe AuditActivity::CorrectiveAction::Base, :with_stubbed_opensearch, 
     UpdateCorrectiveAction.call!(
       corrective_action_form
         .serializable_hash
-        .merge(corrective_action: corrective_action, user: user, changes: corrective_action_form.changes)
+        .merge(corrective_action:, user:, changes: corrective_action_form.changes)
     )
   end
 

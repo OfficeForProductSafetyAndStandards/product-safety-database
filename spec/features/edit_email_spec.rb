@@ -15,7 +15,7 @@ RSpec.feature "Editing an email associated with a case", :with_stubbed_opensearc
   let(:email) do
     create(
       :email,
-      investigation: investigation,
+      investigation:,
       correspondence_date: Date.new(2020, 3, 4),
       correspondent_name: "Bob Jones",
       email_direction: :outbound,

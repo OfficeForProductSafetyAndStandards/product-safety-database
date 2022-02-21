@@ -13,7 +13,7 @@ RSpec.describe AuditActivity::Investigation::TeamDeleted, :with_stubbed_opensear
           id: team.id,
           name: team.display_name
         },
-        message: message
+        message:
       })
     end
   end

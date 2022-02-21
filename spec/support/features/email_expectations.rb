@@ -47,6 +47,6 @@ module EmailExpectations
   end
 
   def have_email(to:, subject:, with_text:)
-    HaveEmail.new(to: to, subject: subject, with_text: with_text)
+    HaveEmail.new(to:, subject:, with_text:)
   end
 end

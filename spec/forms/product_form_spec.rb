@@ -40,7 +40,7 @@ RSpec.describe ProductForm do
     end
 
     context "when it an existing product", :with_stubbed_opensearch do
-      subject(:form) { described_class.from(create(:product, authenticity: authenticity)) }
+      subject(:form) { described_class.from(create(:product, authenticity:)) }
 
       context "when no authenticity was given" do
         let(:authenticity) { nil }

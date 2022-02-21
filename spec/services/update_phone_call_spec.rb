@@ -23,13 +23,13 @@ RSpec.describe UpdatePhoneCall, :with_stubbed_opensearch, :with_stubbed_mailer, 
 
   let!(:phone_call) do
     AddPhoneCallToCase.call!(
-      user: user,
-      investigation: investigation,
-      correspondence_date: correspondence_date,
-      correspondent_name: correspondent_name,
-      overview: overview,
-      details: details,
-      phone_number: phone_number
+      user:,
+      investigation:,
+      correspondence_date:,
+      correspondent_name:,
+      overview:,
+      details:,
+      phone_number:
     ).correspondence
   end
 

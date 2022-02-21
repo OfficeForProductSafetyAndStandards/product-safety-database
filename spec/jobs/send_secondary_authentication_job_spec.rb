@@ -11,6 +11,6 @@ RSpec.describe SendSecondaryAuthenticationJob do
 
     expect(SendSMS)
       .to have_received(:otp_code)
-      .with(mobile_number: user.mobile_number, code: code)
+      .with(mobile_number: user.mobile_number, code:)
   end
 end

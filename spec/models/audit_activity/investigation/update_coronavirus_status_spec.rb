@@ -10,7 +10,7 @@ RSpec.describe AuditActivity::Investigation::UpdateCoronavirusStatus, :with_stub
   let(:previous_status) { false }
   let(:new_status) { true }
 
-  let(:activity) { described_class.create(metadata: metadata) }
+  let(:activity) { described_class.create(metadata:) }
 
   before { investigation.update!(coronavirus_related: new_status) }
 

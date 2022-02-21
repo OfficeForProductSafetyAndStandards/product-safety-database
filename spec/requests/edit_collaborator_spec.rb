@@ -7,7 +7,7 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
   let(:team) { create(:team) }
   let(:investigation) { create(:allegation, creator: user) }
   let(:edit_access_collaboration) do
-    create(:collaboration_edit_access, investigation: investigation, collaborator: team, added_by_user: user)
+    create(:collaboration_edit_access, investigation:, collaborator: team, added_by_user: user)
   end
 
   before do
@@ -34,9 +34,9 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
 
     let(:params) do
       { edit_case_collaborator_form: {
-        permission_level: permission_level,
-        message: message,
-        include_message: include_message,
+        permission_level:,
+        message:,
+        include_message:,
       } }
     end
 
@@ -91,10 +91,10 @@ RSpec.describe "Editing a collaborator for a case", type: :request, with_stubbed
 
   context "when the user isn't part of the team assigned", :with_errors_rendered do
     let(:creator) { create(:user) }
-    let(:investigation) { create(:allegation, creator: creator) }
+    let(:investigation) { create(:allegation, creator:) }
 
     before do
-      ChangeCaseOwner.call!(investigation: investigation, owner: creator.team, user: creator)
+      ChangeCaseOwner.call!(investigation:, owner: creator.team, user: creator)
     end
 
     it "responds with a 403 (Forbidden) status code on update" do

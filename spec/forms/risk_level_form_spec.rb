@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe RiskLevelForm do
-  subject(:form) { described_class.new(risk_level: risk_level, custom_risk_level: custom_risk_level) }
+  subject(:form) { described_class.new(risk_level:, custom_risk_level:) }
 
   let(:standard_level_key) { Investigation.risk_levels.keys.first }
   let(:standard_level_text) do
@@ -16,7 +16,7 @@ RSpec.describe RiskLevelForm do
         let(:custom_risk_level) { "very very risky" }
 
         it "keeps custom risk level " do
-          expect(form.attributes).to eq(custom_risk_level: custom_risk_level, risk_level: Investigation.risk_levels[:other])
+          expect(form.attributes).to eq(custom_risk_level:, risk_level: Investigation.risk_levels[:other])
         end
       end
 
@@ -35,7 +35,7 @@ RSpec.describe RiskLevelForm do
       let(:custom_risk_level) { "whatever level" }
 
       it "keeps the value for risk level attribute" do
-        expect(form.attributes).to eq(risk_level: risk_level, custom_risk_level: nil)
+        expect(form.attributes).to eq(risk_level:, custom_risk_level: nil)
       end
     end
   end

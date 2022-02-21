@@ -238,7 +238,7 @@ private
     NotifyMailer.account_locked(
       self,
       unlock_token: token,
-      reset_password_token: reset_password_token
+      reset_password_token:
     ).deliver_later
   end
 

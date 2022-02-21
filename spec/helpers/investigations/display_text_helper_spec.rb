@@ -4,7 +4,7 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
   describe "#investigation_owner", :with_stubbed_mailer, :with_stubbed_notify, :with_stubbed_opensearch do
     context "when the case owner is a user" do
       let(:team) { create(:team, name: "Southampton Council") }
-      let(:user) { create(:user, team: team, name: "John Doe") }
+      let(:user) { create(:user, team:, name: "John Doe") }
       let(:investigation) { create(:allegation, creator: user) }
 
       it "displays their team name as well as their name" do
@@ -18,7 +18,7 @@ RSpec.describe Investigations::DisplayTextHelper, type: :helper do
       let(:investigation) { create(:allegation) }
 
       before do
-        ChangeCaseOwner.call!(investigation: investigation, owner: team, user: create(:user))
+        ChangeCaseOwner.call!(investigation:, owner: team, user: create(:user))
       end
 
       it "displays the team name once" do

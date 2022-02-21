@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "license": "MIT",
   "engines": {
-    "node": "14.18.x",
+    "node": "16.14.x",
     "yarn": "1.22.x"
   },
   "dependencies": {
     "@hmcts/frontend": "^0.0.41-alpha",
     "@rails/webpacker": "5.4.3",
-    "accessible-autocomplete": "2.0.3",
+    "accessible-autocomplete": "2.0.4",
     "copy-webpack-plugin": "6.4.1",
     "core-js": "^3.21.0",
     "govuk-country-and-territory-autocomplete": "1.0.1",

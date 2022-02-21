@@ -75,7 +75,7 @@ class FixTestResultAuditActivityMetadata < ActiveRecord::Migration[6.1]
   end
 
   def get_blob_metadata_by_filename(filename)
-    blobs = ActiveStorage::Blob.where(filename: filename)
+    blobs = ActiveStorage::Blob.where(filename:)
 
     raise "Ambiguous file match or file not found: #{filename} (#{blobs.size} matches)" unless blobs.size == 1
 

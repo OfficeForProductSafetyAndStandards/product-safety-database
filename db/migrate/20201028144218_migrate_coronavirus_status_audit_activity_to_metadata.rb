@@ -12,7 +12,7 @@ class MigrateCoronavirusStatusAuditActivityToMetadata < ActiveRecord::Migration[
         }
       }
 
-      activity.update!(metadata: metadata, body: nil, title: nil)
+      activity.update!(metadata:, body: nil, title: nil)
     end
   end
 end

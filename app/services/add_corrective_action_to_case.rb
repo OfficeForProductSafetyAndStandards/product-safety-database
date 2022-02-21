@@ -10,18 +10,18 @@ class AddCorrectiveActionToCase
 
     CorrectiveAction.transaction do
       context.corrective_action = investigation.corrective_actions.create!(
-        date_decided: date_decided,
-        business_id: business_id,
-        details: details,
-        legislation: legislation,
-        measure_type: measure_type,
-        duration: duration,
-        geographic_scopes: geographic_scopes,
-        other_action: other_action,
-        action: action,
-        product_id: product_id,
-        online_recall_information: online_recall_information,
-        has_online_recall_information: has_online_recall_information
+        date_decided:,
+        business_id:,
+        details:,
+        legislation:,
+        measure_type:,
+        duration:,
+        geographic_scopes:,
+        other_action:,
+        action:,
+        product_id:,
+        online_recall_information:,
+        has_online_recall_information:
       )
       corrective_action.document.attach(document)
       create_audit_activity
@@ -35,16 +35,16 @@ private
     metadata = AuditActivity::CorrectiveAction::Add.build_metadata(corrective_action)
 
     AuditActivity::CorrectiveAction::Add.create!(
-      investigation: investigation,
-      business_id: business_id,
-      product_id: product_id,
-      source: source,
-      metadata: metadata
+      investigation:,
+      business_id:,
+      product_id:,
+      source:,
+      metadata:
     )
   end
 
   def source
-    @source ||= UserSource.new(user: user)
+    @source ||= UserSource.new(user:)
   end
 
   def send_notification_email

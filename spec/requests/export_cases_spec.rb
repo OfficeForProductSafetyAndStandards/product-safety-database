@@ -21,7 +21,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
     context "when viewing a case export" do
       it "shows a forbidden error", :with_errors_rendered, :aggregate_failures do
-        case_export = CaseExport.create!(user: user, params: params)
+        case_export = CaseExport.create!(user:, params:)
         get case_export_path(case_export)
 
         expect(response).to render_template("errors/forbidden")
@@ -43,7 +43,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
 
     context "when viewing a case export" do
       it "allows user to view a case export download link" do
-        case_export = CaseExport.create!(user: user, params: params)
+        case_export = CaseExport.create!(user:, params:)
         get case_export_path(case_export)
 
         expect(response).to have_http_status(:ok)
@@ -96,7 +96,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       it "exports categories" do
         product_category = Faker::Hipster.unique.word
         category = Faker::Hipster.unique.word
-        create(:allegation, product_category: product_category, products: [create(:product, category: category)])
+        create(:allegation, product_category:, products: [create(:product, category:)])
         Investigation.import refresh: true, force: true
 
         get generate_case_exports_path
@@ -113,8 +113,8 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       it "exports the case risk level" do
         investigation = create(:allegation)
         ChangeCaseRiskLevel.call!(
-          investigation: investigation,
-          user: user,
+          investigation:,
+          user:,
           risk_level: (Investigation.risk_levels.values - %w[other]).sample
         )
 
@@ -137,7 +137,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
         case_with_team_owner = create(:allegation, creator: user)
         case_with_user_owner = create(:allegation, creator: user)
 
-        ChangeCaseOwner.call!(investigation: case_with_team_owner, user: user, owner: team)
+        ChangeCaseOwner.call!(investigation: case_with_team_owner, user:, owner: team)
 
         Investigation.import refresh: true, force: true
 
@@ -242,7 +242,7 @@ RSpec.describe "Export cases as XLSX file", :with_opensearch, :with_stubbed_noti
       context "when case has a creator user" do
         it "exports Case_Creator_Team" do
           team = create(:team)
-          creator_user = create(:user, team: team)
+          creator_user = create(:user, team:)
           create(:allegation, creator: creator_user)
 
           Investigation.import refresh: true, force: true

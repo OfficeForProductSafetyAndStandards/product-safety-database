@@ -5,15 +5,15 @@ RSpec.describe ProductExport, :with_opensearch, :with_stubbed_notify, :with_stub
   let!(:other_investigation) { create(:allegation).decorate }
   let!(:product)             { create(:product, investigations: [investigation], affected_units_status: "exact").decorate }
   let!(:other_product)       { create(:product, investigations: [other_investigation]).decorate }
-  let!(:risk_assessment)     { create(:risk_assessment, investigation: investigation, products: [product]).decorate }
-  let!(:risk_assessment_2)   { create(:risk_assessment, investigation: investigation, products: [product]).decorate }
-  let!(:test)                { create(:test_result, investigation: investigation, product: product, failure_details: "something bad").decorate }
-  let!(:test_2)              { create(:test_result, investigation: investigation, product: product, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]).decorate }
-  let!(:corrective_action)   { create(:corrective_action, investigation: investigation, product: product).decorate }
-  let!(:corrective_action_2) { create(:corrective_action, investigation: investigation, product: product, geographic_scopes: %w[great_britain eea_wide worldwide]).decorate }
+  let!(:risk_assessment)     { create(:risk_assessment, investigation:, products: [product]).decorate }
+  let!(:risk_assessment_2)   { create(:risk_assessment, investigation:, products: [product]).decorate }
+  let!(:test)                { create(:test_result, investigation:, product:, failure_details: "something bad").decorate }
+  let!(:test_2)              { create(:test_result, investigation:, product:, failure_details: "uh oh", standards_product_was_tested_against: ["EN71, EN72, test"]).decorate }
+  let!(:corrective_action)   { create(:corrective_action, investigation:, product:).decorate }
+  let!(:corrective_action_2) { create(:corrective_action, investigation:, product:, geographic_scopes: %w[great_britain eea_wide worldwide]).decorate }
   let!(:user)                { create(:user, :activated, has_viewed_introduction: true) }
   let(:params)               { {} }
-  let(:product_export)       { described_class.create!(user: user, params: params) }
+  let(:product_export)       { described_class.create!(user:, params:) }
 
   before { Product.__elasticsearch__.import force: true, refresh: :wait }
 

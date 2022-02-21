@@ -43,7 +43,7 @@ jobs:
     - name: Set up Nodejs
       uses: actions/setup-node@v1
       with:
-        node-version: 14.18.x
+        node-version: 16.14.x
     - uses: actions/cache@v1
       with:
         path: node_modules

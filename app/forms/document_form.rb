@@ -42,7 +42,7 @@ class DocumentForm
         content_type: document.content_type
       )
 
-      document.update!(metadata: { title: title, description: description, created_by: user.id, updated: Time.zone.now })
+      document.update!(metadata: { title:, description:, created_by: user.id, updated: Time.zone.now })
       document.analyze_later
 
       self.existing_document_file_id = document.signed_id

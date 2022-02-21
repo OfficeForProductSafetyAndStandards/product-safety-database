@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe RemoveBusinessFromCase, :with_opensearch, :with_test_queue_adapter do
-  subject(:result) { described_class.call({ business: business, reason: reason }.merge(common_context)) }
+  subject(:result) { described_class.call({ business:, reason: }.merge(common_context)) }
 
   let(:business)                 { create(:business) }
   let(:user)                     { create(:user) }
   let(:creator)                  { user }
   let(:owner)                    { user }
   let(:product)                  { create(:product, investigations: [investigation]) }
-  let(:investigation)            { create(:allegation, :with_business, creator: creator, business_to_add: business) }
+  let(:investigation)            { create(:allegation, :with_business, creator:, business_to_add: business) }
   let(:common_context)           { { user: user, investigation: investigation } }
   let(:reason)                   { Faker::Hipster.sentence }
 

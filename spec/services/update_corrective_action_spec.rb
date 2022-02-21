@@ -5,7 +5,7 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
   subject(:result) do
     described_class.call(
       corrective_action_attributes
-        .merge(corrective_action: corrective_action, user: user, changes: changes)
+        .merge(corrective_action:, user:, changes:)
     )
   end
 
@@ -17,15 +17,15 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
   let(:editor_team)      do
     create(:team).tap do |t|
       AddTeamToCase.call!(
-        investigation: investigation,
+        investigation:,
         team: t,
         collaboration_class: Collaboration::Access::Edit,
-        user: user
+        user:
       )
     end
   end
   let(:case_editor)               { create(:user, :activated, team: editor_team) }
-  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation: investigation, product: product, business: business) }
+  let!(:corrective_action)        { create(:corrective_action, :with_file, investigation:, product:, business:) }
   let(:corrective_action_form)    { CorrectiveActionForm.from(corrective_action) }
   let(:corrective_action_attributes) do
     corrective_action_form.tap { |form|
@@ -42,8 +42,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
         duration: new_duration,
         details: new_details,
         business_id: corrective_action.business_id,
-        existing_document_file_id: existing_document_file_id,
-        related_file: related_file,
+        existing_document_file_id:,
+        related_file:,
         file: file_form
       )
     }.serializable_hash
@@ -60,8 +60,8 @@ RSpec.describe UpdateCorrectiveAction, :with_stubbed_mailer, :with_stubbed_opens
     context "when missing parameters" do
       let(:params) do
         {
-          corrective_action: corrective_action,
-          user: user,
+          corrective_action:,
+          user:,
           file: { description: new_file_description }
         }
       end

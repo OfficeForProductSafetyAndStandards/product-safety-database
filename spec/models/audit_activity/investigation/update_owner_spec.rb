@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_opensearch, :with_stubbed_mailer do
-  subject(:activity) { described_class.create(investigation: investigation, metadata: described_class.build_metadata(owner, rationale)) }
+  subject(:activity) { described_class.create(investigation:, metadata: described_class.build_metadata(owner, rationale)) }
 
   let(:investigation) { create(:allegation, creator: create(:user, team: owner)) }
   let(:owner) { create(:team) }
@@ -14,7 +14,7 @@ RSpec.describe AuditActivity::Investigation::UpdateOwner, :with_stubbed_opensear
     it "returns a Hash of the arguments" do
       expect(result).to eq({
         owner_id: owner.id,
-        rationale: rationale
+        rationale:
       })
     end
   end

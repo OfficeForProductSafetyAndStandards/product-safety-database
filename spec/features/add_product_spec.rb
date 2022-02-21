@@ -11,7 +11,7 @@ RSpec.feature "Adding a product", :with_stubbed_mailer, :with_stubbed_opensearch
   let(:other_user) { create(:user, :activated) }
 
   before do
-    ChangeCaseOwner.call!(investigation: investigation, owner: user.team, user: user)
+    ChangeCaseOwner.call!(investigation:, owner: user.team, user:)
   end
 
   scenario "Adding a product to a case" do

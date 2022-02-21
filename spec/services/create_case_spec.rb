@@ -14,7 +14,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
     end
 
     context "with no investigation parameter" do
-      let(:result) { described_class.call(user: user) }
+      let(:result) { described_class.call(user:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -22,7 +22,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
     end
 
     context "with no user parameter" do
-      let(:result) { described_class.call(investigation: investigation) }
+      let(:result) { described_class.call(investigation:) }
 
       it "returns a failure" do
         expect(result).to be_failure
@@ -30,7 +30,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
     end
 
     context "with required parameters" do
-      let(:result) { described_class.call(investigation: investigation, user: user) }
+      let(:result) { described_class.call(investigation:, user:) }
 
       it "returns success" do
         expect(result).to be_success
@@ -68,7 +68,7 @@ RSpec.describe CreateCase, :with_stubbed_opensearch, :with_test_queue_adapter do
       context "with previous investigations" do
         let(:investigations) { build_list(:enquiry, 3, creator: user) }
 
-        before { investigations.each { |i| described_class.call(investigation: i, user: user) } }
+        before { investigations.each { |i| described_class.call(investigation: i, user:) } }
 
         it "generates a successive pretty_id", :aggregate_failures do
           expect(Investigation.pluck(:pretty_id).map { |id| id.split("-").last })

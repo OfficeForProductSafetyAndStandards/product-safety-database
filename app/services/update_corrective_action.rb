@@ -31,18 +31,18 @@ private
 
   def assign_attributes
     corrective_action.assign_attributes(
-      action: action,
-      business_id: business_id,
-      date_decided: date_decided,
-      details: details,
-      duration: duration,
-      geographic_scopes: geographic_scopes,
-      online_recall_information: online_recall_information,
-      has_online_recall_information: has_online_recall_information,
-      legislation: legislation,
-      measure_type: measure_type,
-      other_action: other_action,
-      product_id: product_id
+      action:,
+      business_id:,
+      date_decided:,
+      details:,
+      duration:,
+      geographic_scopes:,
+      online_recall_information:,
+      has_online_recall_information:,
+      legislation:,
+      measure_type:,
+      other_action:,
+      product_id:
     )
   end
 
@@ -94,11 +94,11 @@ private
     metadata = AuditActivity::CorrectiveAction::Update.build_metadata(corrective_action, changes)
 
     AuditActivity::CorrectiveAction::Update.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       product: corrective_action.product,
       business: corrective_action.business,
-      metadata: metadata,
+      metadata:,
       title: nil,
       body: nil,
     )

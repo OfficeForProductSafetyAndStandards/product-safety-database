@@ -10,13 +10,13 @@ class AddTestResultToInvestigation
 
     Test::Result.transaction do
       context.test_result = investigation.test_results.create!(
-        date: date,
-        details: details,
-        legislation: legislation,
-        result: result,
-        failure_details: failure_details,
-        standards_product_was_tested_against: standards_product_was_tested_against,
-        product_id: product_id
+        date:,
+        details:,
+        legislation:,
+        result:,
+        failure_details:,
+        standards_product_was_tested_against:,
+        product_id:
       )
 
       context.test_result.document.attach(document)
@@ -29,8 +29,8 @@ private
 
   def create_audit_activity
     AuditActivity::Test::Result.create!(
-      source: source,
-      investigation: investigation,
+      source:,
+      investigation:,
       product: context.test_result.product,
       metadata: AuditActivity::Test::Result.build_metadata(context.test_result)
     )
@@ -49,6 +49,6 @@ private
   end
 
   def source
-    @source ||= UserSource.new(user: user)
+    @source ||= UserSource.new(user:)
   end
 end

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ProductsHelper, :with_stubbed_opensearch do
   describe "#items_for_authenticity" do
-    let(:product)      { build(:product, authenticity: authenticity) }
+    let(:product)      { build(:product, authenticity:) }
     let(:product_form) { ProductForm.from(product) }
 
     context "when the product has no authenticity set" do

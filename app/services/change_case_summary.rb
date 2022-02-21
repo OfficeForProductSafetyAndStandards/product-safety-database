@@ -26,11 +26,11 @@ private
     metadata = activity_class.build_metadata(investigation)
 
     activity_class.create!(
-      source: UserSource.new(user: user),
-      investigation: investigation,
+      source: UserSource.new(user:),
+      investigation:,
       title: nil,
       body: nil,
-      metadata: metadata
+      metadata:
     )
   end
 
@@ -51,7 +51,7 @@ private
   end
 
   def email_body(viewer = nil)
-    user_name = user.decorate.display_name(viewer: viewer)
+    user_name = user.decorate.display_name(viewer:)
     "#{investigation.case_type.upcase_first} summary was updated by #{user_name}."
   end
 end

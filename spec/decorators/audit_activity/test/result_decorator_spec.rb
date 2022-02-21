@@ -6,11 +6,11 @@ RSpec.describe AuditActivity::Test::ResultDecorator, :with_stubbed_opensearch, :
       investigation: test_result.investigation,
       product: test_result.product,
       metadata: described_class.build_metadata(test_result),
-      source: UserSource.new(user: user)
+      source: UserSource.new(user:)
     ).decorate
   end
 
-  let(:test_result) { create(:test_result, result: :passed, standards_product_was_tested_against: standards_product_was_tested_against) }
+  let(:test_result) { create(:test_result, result: :passed, standards_product_was_tested_against:) }
   let(:user) { test_result.investigation.creator_user }
   let(:standards_product_was_tested_against) { %w[test1 test2] }
 

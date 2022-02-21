@@ -23,7 +23,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed
     context "when the user is the owner of the investigation but not an OPSS user" do
       let(:user) { create(:user, :activated) }
       let(:investigation) { create(:allegation, creator: user) }
-      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+      let(:form) { described_class.new(investigation:, current_user: user) }
 
       it "contains four possible actions" do
         expect(form.actions).to eq({
@@ -40,7 +40,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed
       let(:investigation) do
         create(:allegation, :restricted, :closed, creator: user)
       end
-      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+      let(:form) { described_class.new(investigation:, current_user: user) }
 
       it "contains four actions with alternative labels" do
         expect(form.actions).to eq({
@@ -57,7 +57,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed
       let(:investigation) do
         create(:allegation, :restricted, :closed, creator: user, risk_level: "high")
       end
-      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+      let(:form) { described_class.new(investigation:, current_user: user) }
 
       it "contains four actions with alternative labels" do
         expect(form.actions).to eq({
@@ -72,7 +72,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed
     context "when the user is the owner of the investigation and is an OPSS user" do
       let(:user) { create(:user, :activated, :opss_user) }
       let(:investigation) { create(:allegation, creator: user) }
-      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+      let(:form) { described_class.new(investigation:, current_user: user) }
 
       it "contains four possible actions" do
         expect(form.actions).to eq({
@@ -87,7 +87,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed
     context "when the user is not involved with the investigation but can send email alerts" do
       let(:user) { create(:user, :activated, :email_alert_sender) }
       let(:investigation) { create(:allegation) }
-      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+      let(:form) { described_class.new(investigation:, current_user: user) }
 
       it "contains only the 'send email alert' action" do
         expect(form.actions).to eq({ send_email_alert: "Send email alert" })
@@ -97,7 +97,7 @@ RSpec.describe InvestigationActionsForm, :with_stubbed_opensearch, :with_stubbed
     context "when the user is not involved with the investigation and is not an OPSS user" do
       let(:user) { create(:user, :activated) }
       let(:investigation) { create(:allegation) }
-      let(:form) { described_class.new(investigation: investigation, current_user: user) }
+      let(:form) { described_class.new(investigation:, current_user: user) }
 
       it "contains no actions" do
         expect(form.actions).to eq({})

@@ -6,7 +6,7 @@ module Investigations
       authorize @investigation, :risk_level_validation?
 
       @risk_validation_form = RiskValidationForm.new(is_risk_validated: investigation_params["is_risk_validated"], risk_validated_by: current_user.team.name,
-                                                     risk_validated_at: Date.current, risk_validation_change_rationale: risk_validation_change_rationale,
+                                                     risk_validated_at: Date.current, risk_validation_change_rationale:,
                                                      previous_risk_validated_at: @investigation.risk_validated_at)
 
       return render :edit unless @risk_validation_form.valid?

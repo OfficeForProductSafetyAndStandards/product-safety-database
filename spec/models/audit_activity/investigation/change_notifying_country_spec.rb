@@ -10,7 +10,7 @@ RSpec.describe AuditActivity::Investigation::ChangeNotifyingCountry, :with_stubb
   let(:previous_country) { "country:GB-ENG" }
   let(:new_country) { "country:GB-SCT" }
 
-  let(:activity) { described_class.create(metadata: metadata) }
+  let(:activity) { described_class.create(metadata:) }
 
   before { investigation.update!(notifying_country: new_country) }
 

@@ -13,20 +13,20 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
       scenario "user can change the restriction status of the case" do
         visit "/cases/#{case_id}"
 
-        expect_to_be_on_case_page(case_id: case_id)
+        expect_to_be_on_case_page(case_id:)
         expect(page).to have_summary_item(key: "Case restriction", value: "Unrestricted")
         expect(page).to have_link "Change case restriction"
         click_link "Change case restriction"
 
-        expect_to_be_on_case_visiblity_page(case_id: case_id, status: "unrestricted", action: "restrict")
+        expect_to_be_on_case_visiblity_page(case_id:, status: "unrestricted", action: "restrict")
 
         click_on "Continue"
 
-        expect_to_be_on_change_case_visiblity_page(case_id: case_id, future_status: "restricted", action: "restrict")
+        expect_to_be_on_change_case_visiblity_page(case_id:, future_status: "restricted", action: "restrict")
         fill_in "Why is the case being restricted?", with: "Restriction reason"
         click_button "Restrict this case"
 
-        expect_to_be_on_case_page(case_id: case_id)
+        expect_to_be_on_case_page(case_id:)
         expect_confirmation_banner("Allegation was restricted")
         expect(page).to have_summary_item(key: "Case restriction", value: "Restricted")
         click_link "Activity"
@@ -47,20 +47,20 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
       scenario "user can change the restriction status of the case" do
         visit "/cases/#{case_id}"
 
-        expect_to_be_on_case_page(case_id: case_id)
+        expect_to_be_on_case_page(case_id:)
         expect(page).to have_summary_item(key: "Case restriction", value: "Restricted")
         expect(page).to have_link "Change case restriction"
         click_link "Change case restriction"
 
-        expect_to_be_on_case_visiblity_page(case_id: case_id, status: "restricted", action: "unrestrict")
+        expect_to_be_on_case_visiblity_page(case_id:, status: "restricted", action: "unrestrict")
 
         click_on "Continue"
 
-        expect_to_be_on_change_case_visiblity_page(case_id: case_id, future_status: "unrestricted", action: "unrestrict")
+        expect_to_be_on_change_case_visiblity_page(case_id:, future_status: "unrestricted", action: "unrestrict")
         fill_in "Why is the case being unrestricted?", with: "Unrestricted reason"
         click_button "Unrestrict this case"
 
-        expect_to_be_on_case_page(case_id: case_id)
+        expect_to_be_on_case_page(case_id:)
         expect_confirmation_banner("Allegation was unrestricted")
         expect(page).to have_summary_item(key: "Case restriction", value: "Unrestricted")
 
@@ -79,7 +79,7 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
     it "the can view restricted details" do
       visit "/cases/#{case_id}"
 
-      expect_to_be_on_case_page(case_id: case_id)
+      expect_to_be_on_case_page(case_id:)
       expect(page).to have_summary_item(key: "Contact details", value: /#{Regexp.escape(investigation.complainant.name)}/)
       expect(page).to have_summary_item(key: "Case restriction", value: "Restricted")
     end
@@ -90,7 +90,7 @@ RSpec.feature "Change case restriction status", :with_stubbed_opensearch, :with_
 
     scenario "user can’t change the restriction status of the case" do
       visit "/cases/#{case_id}"
-      expect_to_be_on_case_page(case_id: case_id)
+      expect_to_be_on_case_page(case_id:)
       expect(page).to have_summary_item(key: "Case restriction", value: "Unrestricted")
       expect(page).not_to have_link "Change case restriction"
     end

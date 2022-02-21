@@ -12,7 +12,7 @@ module Investigations
 
       AddAccidentOrIncidentToCase.call!(
         @accident_or_incident_form.attributes.merge({
-          investigation: investigation,
+          investigation:,
           user: current_user,
         })
       )
@@ -47,7 +47,7 @@ module Investigations
         result = UpdateAccidentOrIncident.call!(
           @accident_or_incident_form.serializable_hash.merge({
             accident_or_incident: @accident_or_incident,
-            investigation: investigation,
+            investigation:,
             user: current_user
           })
         )

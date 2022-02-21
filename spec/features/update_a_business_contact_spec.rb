@@ -5,7 +5,7 @@ RSpec.feature "Update a business contact", :with_stubbed_opensearch, :with_stubb
   let(:business) { create(:business, trading_name: "Acme Ltd") }
   let!(:contact) do
     create(:contact,
-           business: business,
+           business:,
            name: "Mr Smith",
            email: "smith@example.com",
            job_title: "Manager",
