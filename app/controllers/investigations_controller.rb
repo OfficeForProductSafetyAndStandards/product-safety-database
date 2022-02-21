@@ -53,7 +53,6 @@ class InvestigationsController < ApplicationController
   def your_cases
     @search = SearchParams.new({ "case_owner" => "me" })
     @answer         = search_for_investigations(20)
-    @count          = count_to_display
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
     @page_name = "your_cases"
@@ -64,7 +63,6 @@ class InvestigationsController < ApplicationController
   def team_cases
     @search = SearchParams.new({ "case_owner" => "my_team" })
     @answer         = search_for_investigations(20)
-    @count          = count_to_display
     @investigations = InvestigationDecorator
                         .decorate_collection(@answer.records(includes: [{ owner_user: :organisation, owner_team: :organisation }, :products]))
     @page_name = "team_cases"
