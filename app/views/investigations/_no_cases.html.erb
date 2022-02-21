@@ -1,8 +1,9 @@
 <% owner_name = @page_name == "team_cases" ? "The team" : "You" %>
-
-<div class="govuk-grid-column-full" role="region" aria-label="Cases">
-  <p class="govuk-body opss-text-align-center">
-     <%=owner_name %> has no open cases.<br>
-     You can find all other cases in the <%= link_to "all cases", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %> search page.
-  </p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full" role="region" aria-label="Cases">
+    <p class="govuk-body opss-text-align-center">
+       <%=owner_name %> has no open cases.<br>
+       You can find all other cases in the <%= link_to "all cases", all_cases_investigations_path, class: "govuk-link govuk-link--no-visited-state" %> search page.
+    </p>
+  </div>
 </div>

@@ -27,7 +27,11 @@
                 <tr class="govuk-table__row">
                   <th class="govuk-visually-hidden">&nbsp;</th>
                   <th id="case" scope="col" class="govuk-table__header">Case number</th>
-                  <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
+                  <% if ["team_cases", "your_cases"].include? @page_name %>
+                    <th id="casecreated" scope="col" class="govuk-table__header">Case created</th>
+                  <% else %>
+                    <th id="caseowner" scope="col" class="govuk-table__header">Case owner</th>
+                  <% end %>
                   <% if query_params[:sort_by] == SortByHelper::SORT_BY_NEWEST %>
                     <th id="created" scope="col" class="govuk-table__header">Created</th>
                   <% else %>
@@ -39,7 +43,7 @@
               <%= render partial: "investigations/table_body",
                 collection: @investigations,
                 as: :investigation,
-                locals: { sorted_by: query_params[:sort_by] }
+                locals: { sorted_by: query_params[:sort_by], page_name: @page_name }
               %>
 
               <% if @investigations.size > 11 %>
