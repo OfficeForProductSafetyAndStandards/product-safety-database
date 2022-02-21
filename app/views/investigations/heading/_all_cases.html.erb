@@ -13,7 +13,7 @@
 
       <% if policy(Investigation).export? %>
         <p class="govuk-body-s govuk-!-margin-bottom-1">
-            When viewing a list of search results you can <%= link_to generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" do -%><abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet)<%- end -%> file.
+            When viewing a list of search results you can <%= link_to  "request the list", generate_case_exports_path(params: export_params), class: "govuk-link govuk-link--no-visited-state" %> as a downloadable <br class="opss-br-desktop"> <abbr title="Microsoft Excel Open XML Format Spreadsheet">XLSX</abbr> (spreadsheet) file.
         </p>
       <% end %>
 
